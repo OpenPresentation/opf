@@ -131,7 +131,9 @@ export function createDeckTitle(container, options = {}) {
     if (event.isComposing || event.keyCode === 229) return;
     if (event.key === "Enter") {
       event.preventDefault();
-      if (commit() === "done") input.blur();
+      // The focus stays in the field (the name selected, so typing again replaces it); Escape or Tab leaves it. Moving it would drop it on
+      // the page's body, where neither the editor's keys nor a screen reader's place in the bar survive.
+      if (commit() === "done") input.select();
     } else if (event.key === "Escape") {
       event.preventDefault();
       event.stopPropagation();

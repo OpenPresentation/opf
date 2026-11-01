@@ -124,7 +124,7 @@ try {
   await page.keyboard.press('Enter');
   assert.equal(await name(), 'New name', 'Enter commits the trimmed name');
   assert.equal(await field(), 'New name', 'the field shows the trimmed name');
-  assert.equal(await page.evaluate(() => document.activeElement === window.title.input), false, 'Enter leaves the field');
+  assert.equal(await page.evaluate(() => document.activeElement === window.title.input && window.title.input.selectionStart === 0 && window.title.input.selectionEnd === window.title.input.value.length), true, 'Enter keeps the focus in the field, the name selected');
   let seen = await events();
   assert.equal(seen.length, 1, 'one edit');
   assert.equal(seen[0].source, 'deck-name', 'the edit carries source deck-name');

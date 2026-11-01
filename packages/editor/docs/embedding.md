@@ -113,7 +113,7 @@ createOpfEditor(el, { document, fonts, catalogs, toolbar: false, slots: { title:
 
 | Item | What it is | Priority | In ⋯ when collapsed |
 | --- | --- | --- | --- |
-| `title` | the deck's `name`, edited in place (Enter or blur renames, Escape puts it back; an empty name removes it) | 95, fixed: it shrinks instead | – |
+| `title` | the deck's `name`, edited in place (Enter renames and keeps the focus in the field, blur renames, Escape puts it back; an empty name removes it) | 95, fixed: it shrinks instead | – |
 | `history` | Undo and Redo | 80 | Undo, Redo |
 | `counter` | previous, the counter, next: a second slide navigator on the one slide index (it binds the arrow keys only when there is no slide row) | 85 | Previous slide, Next slide |
 | `views` | the view switch (only with more than one view) | 40 | each view, the one on show checked |
@@ -125,7 +125,7 @@ createOpfEditor(el, { document, fonts, catalogs, toolbar: false, slots: { title:
 | `design` | the Design quick menu: theme, colors, fonts and this slide's layout, each one undoable edit; "More design options…" opens the Design panel when there is one, or yours (`designMenu.onOpenPanel`). A preset leaves it out where the Design side panel is on (not in `embed`) | 35 | Design… |
 | `review` | the review pill ("Valid", "3 issues"), fed by the Review counts; it opens the Review panel. Listed in a layout without one (the embed), the review runs headless for it and pressing it emits `review-open` (`{ counts, findings }`) for you to show the findings | 30 | Review (3) |
 | `help` | the keyboard shortcuts sheet, listing `editor.shortcuts()` (the bindings this editor has); "?" opens it, except in `embed` and `viewer` | 10 | Keyboard shortcuts |
-| `actions` | your own buttons (`actions`, `setActions`); hidden while there are none | 25 | one entry per action |
+| `actions` | your own buttons (`actions`, `setActions`); hidden while there are none | 25; 90 while one action is `primary` (unless `toolbar` gives it a priority) | one entry per action |
 | `more` | the ⋯ menu, shown only while something is in it | fixed | – |
 | `spacer`, `\|` | the free space; a divider, shown only between two visible items | – | – |
 | `zoom` | the Studio's own; left out by the workspace | – | – |
@@ -154,11 +154,11 @@ const editor = createOpfEditor(el, {
 editor.setActions([...]); // replace them later
 ```
 
-Each `enabled()` and `pressed()` is read again after every change, selection and read-only switch; the buttons are disabled while the source text is not a valid deck. In the ⋯ menu each action is one entry.
+Each `enabled()` and `pressed()` is read again after every change, selection, read-only switch, `dirty` change, expand and slide change; the buttons are disabled while the source text is not a valid deck. In the ⋯ menu each action is one entry.
 
 ### Unsaved changes and save
 
-`editor.dirty` is true while the document differs from the baseline (what was last loaded with `setDocument` or `setSourceText`, or saved), or while the source pane holds a draft that is not a valid deck (it never reaches the document) whose text differs from the baseline's; `dirty` (`{ dirty }`) is told on every change of it. A copy or a download of the source (and a JSON, YAML or Markdown export) counts as saved. Ctrl/Cmd+S inside the editor emits `save` with `{ document, text, format, draft }` (`text` is the pane's text, a draft too, so you can keep it as a file) and keeps the browser's Save page from opening, only while something listens to `save`; `editor.save()` does the same from your own button. Call `editor.markSaved()` once you have stored it: it records the baseline and, with `persistence`, tells autosave too. `guardUnload: true` makes the browser ask before the page closes while dirty; a function `(editor) => boolean` decides itself, for a host with state of its own. React: `useOpfDirty(editor)`; Svelte: `opfDirty(editor)`.
+`editor.dirty` is true while the document differs from the baseline (what was last loaded with `setDocument` or `setSourceText`, or saved), or while the source pane holds a draft that is not a valid deck (it never reaches the document) whose text differs from the baseline's; `dirty` (`{ dirty }`) is told on every change of it. A copy or a download of the source (and a JSON, YAML or Markdown export) counts as saved. Ctrl/Cmd+S inside the editor (or on the page's body in `full`, `canvas` and the Studio, as Undo) emits `save` with `{ document, text, format, draft }` (`text` is the pane's text, a draft too, so you can keep it as a file) and keeps the browser's Save page from opening, only while something listens to `save`; `editor.save()` does the same from your own button. Call `editor.markSaved()` once you have stored it: it records the baseline and, with `persistence`, tells autosave too. `guardUnload: true` makes the browser ask before the page closes while dirty; a function `(editor) => boolean` decides itself, for a host with state of its own. React: `useOpfDirty(editor)`; Svelte: `opfDirty(editor)`.
 
 ```js
 const editor = createOpfEditor(el, { document, fonts, catalogs, guardUnload: true });

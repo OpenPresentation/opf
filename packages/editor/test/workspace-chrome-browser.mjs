@@ -89,7 +89,21 @@ try {
   assert.equal(await ev(() => document.querySelector('#host [data-opf-slot=actions]').hidden), true, 'no actions: the item is hidden');
   await ev(() => window.ed.setActions([{ id: 'only', label: 'Only', run: () => {} }]));
   assert.deepEqual(await actionState(), ['only:on:-']);
-  mark('`actions` puts the host\'s buttons in the bar, re-reads enabled() and pressed() after every change, and setActions replaces them');
+  // A primary action keeps the item in the bar of a 1024px full editor (priority 90 while one is primary); dirty re-reads enabled().
+  await ev((d) => window.mountEditor({ document: d, actions: [
+    { id: 'save', label: 'Save', primary: true, enabled: () => window.ed?.dirty === true, run: () => window.ed.save() },
+    { id: 'share', label: 'Share', run: () => {} },
+  ] }, 1024), deck(3));
+  const primary = await ev(() => ({ collapsed: window.ed.toolbar.collapsed, priority: window.ed.toolbar.items.find((item) => item.id === 'actions').priority, visible: document.querySelector('#host .opf-actions-button[data-action=save]').getClientRects().length > 0 }));
+  assert.ok(!primary.collapsed.includes('actions') && primary.visible && primary.priority === 90, JSON.stringify(primary));
+  assert.deepEqual(await actionState(), ['save:off:-', 'share:on:-']);
+  await ev(() => window.ed.setDeckName('Changed'));
+  assert.deepEqual(await actionState(), ['save:on:-', 'share:on:-']);
+  await ev(() => window.ed.markSaved());
+  assert.deepEqual(await actionState(), ['save:off:-', 'share:on:-'], 'markSaved (no document change) re-reads enabled() through dirty');
+  await ev(() => window.ed.setActions([{ id: 'share', label: 'Share', run: () => {} }]));
+  assert.equal(await ev(() => window.ed.toolbar.items.find((item) => item.id === 'actions').priority), 25, 'no primary action: the item is back at 25');
+  mark('`actions` puts the host\'s buttons in the bar, re-reads enabled() and pressed() after every change and dirty switch, keeps a primary action in a 1024px bar, and setActions replaces them');
 
   // ---- slide management on the strip -------------------------------------------------------------------------------------------------------
   await ev((d) => window.mountEditor({ document: d }), deck(3));
@@ -138,6 +152,15 @@ try {
   await ev(() => window.ed.setDocument({ name: 'Loaded', slides: [{ id: 'l', title: 'L' }] }));
   assert.equal(await ev(() => window.ed.dirty), false, 'setDocument resets the baseline');
   assert.deepEqual(await ev(() => window.dirt), [true, false, true, false, true, false]);
+  // Ctrl/Cmd+S on the page's body counts in the full layout (as Undo); Enter in the title keeps the focus there.
+  await ev(() => window.ed.setDeckName('Body save'));
+  const bodySave = await ev(() => { document.activeElement?.blur(); const event = new KeyboardEvent('keydown', { key: 's', ctrlKey: true, bubbles: true, cancelable: true }); document.body.dispatchEvent(event); return { prevented: event.defaultPrevented, saves: window.saves.length }; });
+  assert.deepEqual(bodySave, { prevented: true, saves: 2 });
+  await page.locator('#host .opf-title-input').fill('Typed then Enter');
+  await page.keyboard.press('Enter');
+  assert.equal(await ev(() => document.activeElement?.classList.contains('opf-title-input') && window.ed.getDeckName() === 'Typed then Enter'), true, 'Enter renames and keeps the focus in the title');
+  await page.keyboard.press('Control+s');
+  await page.waitForFunction(() => window.saves.length === 3);
   // Without a save listener Ctrl/Cmd+S is left to the browser.
   const unprevented = await ev(async (d) => {
     window.ed.destroy();

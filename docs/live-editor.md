@@ -1,6 +1,6 @@
 # Browser preview and live editing
 
-Editor 0.26.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+The editor (`@openpresentation/opf-editor`) provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
@@ -17,13 +17,13 @@ The same editor is one HTML tag, `<opf-editor layout="embed" toolbar="title,hist
 
 ## Install the published packages
 
-Use Node 24 with Core, editor, PPTX, renderer and Gallery 0.26.1. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
+Use Node 24. Core, editor, PPTX, renderer and Gallery are released together at one shared version, so install them in one command and keep them on the same version (pin it with `--save-exact` once you have one). The toolbar, the presets, the save contract and the web component above are in the releases after 0.29.1. The [quickstart](quickstart.md) is the shared command-line first run:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.26.1 @openpresentation/opf-render@0.26.1 @openpresentation/opf-editor@0.26.1 @openpresentation/opf-pptx@0.26.1 @openpresentation/gallery@0.26.1
+npm install @openpresentation/opf @openpresentation/opf-render @openpresentation/opf-editor @openpresentation/opf-pptx @openpresentation/gallery
 ```
 
-No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.20.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
+No paid service or provider account is required. The agent skills install with `npx @openpresentation/cli skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, call `convert("deck.opf.json", "deck.pdf")` (or `convert(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` for the bytes) from `@openpresentation/opf` in Node, which draws with the same engines and the bundled fonts; `open("deck.pptx")` reads a PowerPoint file back into a presentation for the editor ([OPF files in Node](node.md)).
 

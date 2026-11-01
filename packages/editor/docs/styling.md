@@ -72,7 +72,7 @@ A dark toolbar over a light page: the tokens go on the bar and on every part ins
 
 ## Deck title
 
-The `title` item: an input that looks like text until it is hovered or focused. Enter or blur commits, Escape reverts.
+The `title` item: an input that looks like text until it is hovered or focused. Enter commits and keeps the focus in the field, blur commits, Escape reverts.
 
 | Hook | Kind | What it is |
 | --- | --- | --- |

@@ -13,7 +13,7 @@ import { createSourcePane } from "./source-pane.js";
 import { createPersistence } from "./persistence.js";
 import { createPersistenceUi } from "./persistence-ui.js";
 import { ITEM_SLOTS, TOOLBAR_PRESETS, buildItemControls, buildToolbar, buildWorkspaceShell, viewLabel } from "./workspace-shell.js";
-import { createToolbar, normalizeToolbarItems } from "./toolbar.js";
+import { TOOLBAR_ITEMS, createToolbar, normalizeToolbarItems } from "./toolbar.js";
 import { normalizeIcons } from "./icons.js";
 import { deckNamePatch } from "./deck-title.js";
 import { fontSubstitutionNotes, layoutOptionsFor } from "./workspace-measure.js";
@@ -238,6 +238,9 @@ export function createOpfEditor(element, options = {}) {
   function emit(name, detail = {}) {
     // A copy or a download of the source (or a JSON, YAML or Markdown export) is the person's work kept somewhere: no longer dirty.
     if (name === "kept") recordBaseline();
+    // The host's actions read state the editor does not change through the document: whether it is saved, expanded, the slide on show.
+    // `ready` too: a host's `enabled: () => editor.dirty` reads its own `editor` variable, assigned only once `createOpfEditor` has returned.
+    if (name === "dirty" || name === "expand" || name === "slide" || name === "ready") actionsPart?.refresh();
     for (const listener of [...(listeners.get(name) ?? [])]) {
       try {
         listener(detail);
@@ -1376,6 +1379,7 @@ export function createOpfEditor(element, options = {}) {
     if (slots.actions && createToolbarActions) {
       actionsPart = createToolbarActions(slots.actions, { actions: hostActions, density, ...(labels.actions ? { labels: labels.actions } : {}) });
       slots.actions.hidden = hostActions.length === 0;
+      syncActionsPriority();
     }
   }
 
@@ -1400,7 +1404,9 @@ export function createOpfEditor(element, options = {}) {
     if (options.shortcuts !== false && layout !== "viewer") {
       const onSave = (event) => {
         if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "s" || event.defaultPrevented) return;
-        if (!element.contains(event.target) || !listeners.get("save")?.size) return;
+        // As for Undo: the editor's own element, or the page's body (nothing focused) where the editor owns the page; embed and viewer stay scoped.
+        if (!listeners.get("save")?.size) return;
+        if (!element.contains(event.target) && (event.target !== doc.body || scopedKeys)) return;
         event.preventDefault();
         requestSave();
       };
@@ -1617,8 +1623,16 @@ export function createOpfEditor(element, options = {}) {
     if (actionsPart) {
       actionsPart.setActions(hostActions);
       slots.actions.hidden = hostActions.length === 0;
+      syncActionsPriority();
       toolbar?.update();
     }
+  }
+  // A primary action (Save) stays in the bar: while one is listed the item's priority is 90, above everything but the title and the counter
+  // (85 < 90 < 95), unless the host gave the item a priority of its own in `toolbar`.
+  const explicitActionsPriority = Array.isArray(options.toolbar) && options.toolbar.some((item) => item && typeof item === "object" && item.id === "actions" && item.priority !== undefined);
+  function syncActionsPriority() {
+    if (!toolbar || explicitActionsPriority) return;
+    toolbar.setItem("actions", { priority: hostActions.some((action) => action?.primary) ? 90 : TOOLBAR_ITEMS.actions.priority });
   }
   /** The keyboard shortcuts this editor binds now, for the help sheet (and, in the Studio, beside its command registry). */
   function shortcuts() {

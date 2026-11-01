@@ -14,8 +14,6 @@ const editor = createOpfEditor(document.querySelector("#editor"), {
   fonts: loadPreviewFonts("./opf-fonts/"),
   layout: "full",
   guardUnload: true,
-  // The full preset, with the host's buttons kept in the bar longer than anything but the title when space runs out.
-  toolbar: ["title", "history", "find", "views", "spacer", { id: "actions", priority: 90 }, "design", "review", "autosave", "export", "present", "help", "expand", "more"],
   actions: [
     { id: "save", label: "Save", primary: true, enabled: () => editor.dirty, run: () => editor.save() },
     { id: "share", label: "Share", run: () => { status.textContent = "Share clicked: open your own dialog here."; } },
@@ -40,7 +38,6 @@ const badge = document.querySelector("#dirty");
 editor.on("dirty", ({ dirty }) => {
   badge.dataset.dirty = String(dirty);
   badge.textContent = dirty ? "Unsaved changes" : "All changes saved";
-  editor.toolbarActions?.refresh(); // the Save button reads editor.dirty again; markSaved is not a document change
 });
 // #endregion
 

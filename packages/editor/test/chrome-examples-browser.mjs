@@ -117,8 +117,8 @@ try {
     assert.equal(await page.locator('#dirty').getAttribute('data-dirty'), 'true');
     assert.equal(await saveButton.isDisabled(), false);
     assert.equal(await unload(), true, 'guardUnload asks while the editor is dirty');
-    // Ctrl/Cmd+S is heard while the focus is inside the editor (Enter in the title leaves the focus on the page, so put it back).
-    await page.locator('.opf-workspace .opf-title-input').focus();
+    // Enter keeps the focus in the title, so Ctrl/Cmd+S is heard right away.
+    assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('opf-title-input')), true, 'Enter keeps the focus in the title');
     await page.keyboard.press('Control+s');
     await page.waitForFunction(() => document.querySelector('#dirty').textContent === 'All changes saved');
     const stored = await page.evaluate(() => JSON.parse(localStorage.getItem('opf-chrome-example-full')));

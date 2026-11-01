@@ -330,7 +330,7 @@ export function createToolbar(container, options = {}) {
   return {
     element: bar,
     get items() {
-      return items.map((item) => ({ ...item }));
+      return entries.map(({ id, priority, collapsible }) => ({ id, priority, collapsible }));
     },
     slots,
     slot(name) {
@@ -342,6 +342,18 @@ export function createToolbar(container, options = {}) {
     },
     get menuOpen() {
       return menuOpen;
+    },
+    /** Change an item's priority or whether it collapses (the workspace raises `actions` while one of them is primary). */
+    setItem(name, { priority, collapsible } = {}) {
+      const entry = entries.find((candidate) => candidate.id === name);
+      if (!entry || REPEATABLE.has(name) || name === "more") return false;
+      if (priority !== undefined) {
+        if (!Number.isFinite(priority)) throw new TypeError(`the priority of the toolbar item "${name}" must be a number.`);
+        entry.priority = priority;
+      }
+      if (collapsible !== undefined) entry.collapsible = Boolean(collapsible);
+      schedule();
+      return true;
     },
     mount(name, part) {
       if (destroyed || !slots[name] || REPEATABLE.has(name) || name === "more") return () => {};

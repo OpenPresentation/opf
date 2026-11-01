@@ -80,6 +80,8 @@ export interface Toolbar {
   /** The items in the more menu now, in bar order. */
   readonly collapsed: ToolbarItemName[];
   readonly menuOpen: boolean;
+  /** Change an item's priority or whether it collapses; false for an item that is not in the bar (or `more`, `spacer`, `|`). */
+  setItem(name: ToolbarItemName, change: { priority?: number; collapsible?: boolean }): boolean;
   /** Register the part mounted in a slot, for its menu items. Returns the function that unregisters it. */
   mount(name: ToolbarItemName, part: ToolbarPart): () => void;
   /** What the more menu would list now, one group per collapsed part. */

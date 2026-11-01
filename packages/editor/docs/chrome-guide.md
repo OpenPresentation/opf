@@ -273,13 +273,12 @@ const badge = document.querySelector("#dirty");
 editor.on("dirty", ({ dirty }) => {
   badge.dataset.dirty = String(dirty);
   badge.textContent = dirty ? "Unsaved changes" : "All changes saved";
-  editor.toolbarActions?.refresh(); // the Save button reads editor.dirty again; markSaved is not a document change
 });
 ```
 
 `guardUnload: true` makes the browser ask before the page closes while `dirty`; a function `(editor) => boolean` decides for a host with state of its own. In React, `useOpfDirty(editor)`; in Svelte, `opfDirty(editor)`.
 
-Notes: Ctrl/Cmd+S is heard while the focus is inside the editor's element (pressing Enter in the title field moves the focus to the page, so a `Save` button of yours, calling `editor.save()`, is the dependable path). A copy or a download of the source counts as saved. [`full.html`](../examples/chrome/full.html) is the page.
+Notes: Ctrl/Cmd+S is heard while the focus is inside the editor's element, or on the page's body (nothing focused) in the `full`, `canvas` and Studio layouts; `embed` and `viewer` hear it only inside. Enter in the title renames and keeps the focus in the field. A copy or a download of the source counts as saved. [`full.html`](../examples/chrome/full.html) is the page.
 
 ## Host buttons
 
@@ -293,8 +292,6 @@ const editor = createOpfEditor(document.querySelector("#editor"), {
   fonts: loadPreviewFonts("./opf-fonts/"),
   layout: "full",
   guardUnload: true,
-  // The full preset, with the host's buttons kept in the bar longer than anything but the title when space runs out.
-  toolbar: ["title", "history", "find", "views", "spacer", { id: "actions", priority: 90 }, "design", "review", "autosave", "export", "present", "help", "expand", "more"],
   actions: [
     { id: "save", label: "Save", primary: true, enabled: () => editor.dirty, run: () => editor.save() },
     { id: "share", label: "Share", run: () => { status.textContent = "Share clicked: open your own dialog here."; } },
@@ -302,9 +299,9 @@ const editor = createOpfEditor(document.querySelector("#editor"), {
 });
 ```
 
-- `primary: true` fills the button with the accent color; `pressed()` makes it a toggle (`aria-pressed`); `enabled()` is read again after every change, selection and read-only switch, not when your own state changes (call `editor.toolbarActions.refresh()`, or `editor.setActions([...])` to replace the list).
+- `primary: true` fills the button with the accent color; `pressed()` makes it a toggle (`aria-pressed`); `enabled()` and `pressed()` are read again after every change, selection, read-only switch, `dirty` change (so `enabled: () => editor.dirty` just works), expand and slide change; for state of your own, call `editor.toolbarActions.refresh()` (or `editor.setActions([...])` to replace the list).
 - The buttons are disabled while the source text is not a valid deck, and each is one entry in `⋯`.
-- `actions` has a low priority (25), so on a narrow bar it is among the first things to move into `⋯`. A primary action should stay: give it a priority in the `toolbar` list, as above.
+- `actions` has a low priority (25), so on a narrow bar it is among the first things to move into `⋯`; while one of the actions is `primary` (Save above) the item's priority is 90, so it stays in the bar after everything but the title and the counter. A priority you give the item in `toolbar` wins.
 - In the viewer, the same option adds a "Download" for the person looking at the deck. The converter is the host's (`@openpresentation/opf-pptx`); the editor just gives the button a place:
 
 ```js viewer.js#download
