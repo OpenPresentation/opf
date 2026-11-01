@@ -129,7 +129,8 @@
       "setup": [
         "pnpm run build:deps",
         "pnpm run build",
-        "pnpm run build:playground"
+        "pnpm run build:playground",
+        "pnpm run build:chrome-examples"
       ],
       "tests": [
         {
@@ -299,6 +300,10 @@
         {
           "id": "browser:styling-hooks",
           "command": "node test/styling-hooks-browser.mjs"
+        },
+        {
+          "id": "browser:chrome-examples",
+          "command": "node test/chrome-examples-browser.mjs"
         },
         {
           "id": "browser:studio-kit",

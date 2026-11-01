@@ -6,6 +6,25 @@ Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs
 
 One call mounts the whole editor, over one session and one fonts handle: the source pane, the canvas, the slide row, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave, each part optional.
 
+**Quick start: a deck in a card.** The `embed` layout is the slide alone under a compact bar (the deck's name, Undo and Redo, the slide counter, Design, Expand and Present), for a page that shows a deck:
+
+```js
+import "@openpresentation/opf-editor/styles.css";
+import { createOpfEditor } from "@openpresentation/opf-editor/workspace";
+import { gallery } from "@openpresentation/gallery";
+import { loadPreviewFonts } from "@openpresentation/opf-render/preview-fonts";
+
+const editor = createOpfEditor(document.querySelector("#card"), {
+  document: deck, catalogs: [gallery], layout: "embed",
+  fonts: loadPreviewFonts("/opf-fonts/"),   // npx opf-preview-fonts public/opf-fonts
+});
+editor.on("deckName", ({ name }) => (label.textContent = name));
+```
+
+The bar is a list of named items (`toolbar: ["title", "history", "counter", "spacer", "expand"]`), and each item can sit in your own header instead (`toolbar: false`, `slots: { title, history, counter, expand }`) or be replaced by your own controls through the handle (`getDeckName`, `setDeckName`, `undo`, `setSlide`, `expand`, `markSaved`) and its events (`deckName`, `slide`, `dirty`, `save`). The same editor is a tag (`<opf-editor layout="embed" toolbar="title,history,counter,expand">`), a React component and a Svelte store. [docs/chrome-guide.md](docs/chrome-guide.md) walks through each task with code from eight runnable pages in [`examples/chrome/`](examples/chrome) (`pnpm run build:chrome-examples`, then open `artifacts/chrome-examples/index.html` from a static server): the presets and the bar of each, choosing and ordering items, items in your own header, headless, renaming, expand, unsaved changes and Ctrl/Cmd+S, host buttons, restyling with the layered stylesheet and tokens, the web component, React and Svelte, and an iframe.
+
+**The whole editor in one call.**
+
 ```js
 import "@openpresentation/opf-editor/styles.css";
 import { createOpfEditor } from "@openpresentation/opf-editor/workspace";
