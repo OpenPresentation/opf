@@ -110,7 +110,7 @@ try {
     const bar = window.ed.toolbar.element;
     const priority = Object.fromEntries(window.ed.toolbar.items.map((item) => [item.id, item]));
     const collapsed = window.ed.toolbar.collapsed;
-    const visible = window.ed.toolbar.items.filter((item) => item.collapsible && !collapsed.includes(item.id) && bar.querySelector(`[data-opf-toolbar-item=${item.id}]`)?.childNodes.length);
+    const visible = window.ed.toolbar.items.filter((item) => item.collapsible && !collapsed.includes(item.id) && bar.querySelector(`[data-opf-toolbar-item=${item.id}]`)?.childNodes.length && !bar.querySelector(`[data-opf-toolbar-item=${item.id}]`).hidden);
     return {
       collapsed,
       hiddenOk: collapsed.every((id) => { const style = getComputedStyle(bar.querySelector(`[data-opf-toolbar-item=${id}]`)); return style.display === 'none' || style.visibility === 'hidden'; }),

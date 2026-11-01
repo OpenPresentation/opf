@@ -119,8 +119,9 @@ assert.throws(() => normalizeToolbarItems(['nope']), /"nope" is not a toolbar it
 assert.throws(() => normalizeToolbarItems(['find', 'find']), /given twice/);
 assert.throws(() => normalizeToolbarItems([{ id: 'find', priority: 'high' }]), /must be a number/);
 assert.throws(() => normalizeToolbarItems('title'), /must be an array/);
-assert.deepEqual([...TOOLBAR_PRESETS.full], ['title', 'history', 'find', 'views', 'spacer', 'autosave', 'export', 'present', 'expand', 'more']);
-assert.deepEqual([...TOOLBAR_PRESETS.embed], ['title', 'history', 'counter', 'spacer', 'expand', 'present', 'more']);
+assert.deepEqual([...TOOLBAR_PRESETS.full], ['title', 'history', 'find', 'views', 'spacer', 'actions', 'design', 'review', 'autosave', 'export', 'present', 'help', 'expand', 'more']);
+assert.deepEqual([...TOOLBAR_PRESETS.embed], ['title', 'history', 'counter', 'spacer', 'actions', 'design', 'expand', 'present', 'more']);
+assert.deepEqual([...TOOLBAR_PRESETS.viewer], ['title', 'counter', 'spacer', 'actions', 'present', 'expand', 'more']);
 for (const preset of Object.values(TOOLBAR_PRESETS)) normalizeToolbarItems(preset);
 {
   const listeners = new Set();
