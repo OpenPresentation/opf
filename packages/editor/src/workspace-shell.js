@@ -142,7 +142,7 @@ export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, t
   if (main) body.append(main);
 
   // The side panel: Review and Design as tabs.
-  const tabs = ["design", "review"].filter((name) => parts[name]);
+  const tabs = ["design", "review"].filter((name) => parts[name] && !(name === "review" && parts.reviewHeadless));
   if (tabs.length) {
     controls.tabs = {};
     const list = make(doc, "div", { class: "opf-ws-tabs", role: "tablist", "aria-label": text.inspector });

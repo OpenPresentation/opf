@@ -261,6 +261,10 @@
           "command": "node test/workspace-toolbar-browser.mjs"
         },
         {
+          "id": "browser:workspace-chrome",
+          "command": "node test/workspace-chrome-browser.mjs"
+        },
+        {
           "id": "browser:element",
           "command": "node test/element-browser.mjs"
         },

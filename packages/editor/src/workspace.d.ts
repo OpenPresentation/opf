@@ -14,10 +14,10 @@ import type { SlideManager } from "./slide-manager.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 import type { Toolbar, ToolbarItemName, ToolbarItemSpec } from "./toolbar.js";
 import type { DeckTitle } from "./deck-title.js";
-import type { DesignMenuLabels } from "./design-menu.js";
-import type { ReviewPillCounts, ReviewPillLabels } from "./review-pill.js";
-import type { HelpButtonLabels, HelpShortcut } from "./shortcuts-sheet.js";
-import type { ToolbarAction, ToolbarActionsLabels } from "./toolbar-actions.js";
+import type { DesignMenu, DesignMenuLabels } from "./design-menu.js";
+import type { ReviewPill, ReviewPillCounts, ReviewPillLabels } from "./review-pill.js";
+import type { HelpButton, HelpButtonLabels, HelpShortcut } from "./shortcuts-sheet.js";
+import type { ToolbarAction, ToolbarActions, ToolbarActionsLabels } from "./toolbar-actions.js";
 
 /** CE-28: `"embed"` is the slide alone under a compact toolbar (title, history, counter, expand, Present), for a page that shows a deck. */
 export type OpfEditorLayout = "full" | "canvas" | "embed" | "viewer" | "source" | "studio" | "playground";
@@ -492,6 +492,11 @@ export interface OpfEditor {
   readonly toolbar: Toolbar | undefined;
   /** CE-28: the deck title part (the `title` item), once mounted. */
   readonly deckTitle: DeckTitle | undefined;
+  /** CE-28 wave 2: the toolbar's other parts once mounted. A host that runs its own Review (the playground) feeds `reviewPill.update(counts)`. */
+  readonly designMenu: DesignMenu | undefined;
+  readonly reviewPill: ReviewPill | undefined;
+  readonly helpButton: HelpButton | undefined;
+  readonly toolbarActions: ToolbarActions | undefined;
   /** CE-28: the deck's `name` (`""` without one). Not the source pane's file name (`getName`). */
   getDeckName(): string;
   /**

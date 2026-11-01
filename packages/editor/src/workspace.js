@@ -153,7 +153,11 @@ function resolveParts(options, layout, slots, asked = []) {
   // has none, so the pill has counts) wherever it is listed.
   const listed = (id) => asked.some((item) => item.id === id) || Boolean(slots[itemSlot(id)]);
   if (panels.export === undefined && listed("export")) parts.export = true;
-  if (panels.review === undefined && listed("review")) parts.review = true;
+  if (panels.review === undefined && listed("review") && !parts.review) {
+    parts.review = true;
+    // A layout without a Review panel gets none: the review runs headless for the pill.
+    parts.reviewHeadless = true;
+  }
   return parts;
 }
 
@@ -1078,11 +1082,14 @@ export function createOpfEditor(element, options = {}) {
     if (parts.find && slots.find) mountFind();
     // CE-28 wave 2: a `review` item without a Review panel (the embed) runs the review in a hidden element, so the pill has its counts.
     if (parts.review && !slots.review && slots.reviewPill) {
+      // The panel owns its container's attributes; the hidden wrapper keeps it out of sight.
+      const hidden = doc.createElement("div");
+      hidden.hidden = true;
+      hidden.setAttribute("data-opf-headless", "review");
       slots.review = doc.createElement("div");
-      slots.review.hidden = true;
       slots.review.setAttribute("data-opf-slot", "review");
-      slots.review.setAttribute("data-opf-headless", "");
-      root.append(slots.review);
+      hidden.append(slots.review);
+      root.append(hidden);
     }
     if (parts.review && slots.review) mountReview();
     if (parts.design && slots.design) {
