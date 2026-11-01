@@ -227,6 +227,26 @@ try {
   await page.keyboard.press('Escape');
   mark('the Studio bar has the deck title and expand before topbarEnd, and its shortcut sheet and shortcuts() share one list');
 
+  // ---- icons: one flat map, each part takes its names ------------------------------------------------------------------------------------
+  const iconCheck = await ev(async (d) => {
+    window.ed.destroy();
+    const host = window.makeHost('host', 1600);
+    const path = 'M4 4h16v16H4z';
+    window.ed = window.opfWs.createOpfEditor(host, { document: d, ...window.base(), icons: { more: path, previous: path, next: path, add: path, expand: path, help: path, present: path, valid: path, trigger: path } });
+    await window.ed.ready;
+    await window.ed.whenIdle();
+    const drawn = (selector) => [...host.querySelectorAll(selector)].map((node) => node.querySelector('svg path')?.getAttribute('d') === path);
+    const out = {
+      more: drawn('.opf-tb-more-button'), nav: drawn('.opf-nav-button'), add: drawn('.opf-thumbs-add'), expand: drawn('.opf-expand-button'),
+      help: drawn('.opf-help-button'), present: drawn('.opf-present-button'), design: drawn('.opf-design-menu-trigger'),
+    };
+    try { window.opfWs.createOpfEditor(window.makeHost('bad'), { document: d, icons: { nope: path } }); } catch (error) { out.unknown = error instanceof RangeError; }
+    document.querySelector('#bad')?.remove();
+    return out;
+  }, deck(2));
+  assert.deepEqual(iconCheck, { more: [true], nav: [true, true], add: [true], expand: [true], help: [true], present: [true], design: [true], unknown: true });
+  mark('the flat icons option reaches the ⋯ button, both navigator buttons, "+", expand, help, Present and the Design trigger; an unknown name throws');
+
   // ---- <opf-editor> with the new layouts ---------------------------------------------------------------------------------------------------
   const element = await ev(async (d) => {
     window.ed.destroy();

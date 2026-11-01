@@ -76,9 +76,9 @@ const STRUCTURE = new Set(["spacer", "|", "more"]);
  * Build the toolbar in `host` (the shell's bar, or the host's `slots.toolbar`) from `items` (already filtered to what this editor fills).
  * Returns the toolbar, the slots of the parts that mount in it and the controls the shell built in it; nothing when no item shows anything.
  */
-export function buildToolbar(host, { items, views, labels = {}, density, createToolbar, onError, onCollapse }) {
+export function buildToolbar(host, { items, views, labels = {}, density, createToolbar, onError, onCollapse, icons }) {
   if (!items.some((item) => !STRUCTURE.has(item.id))) return { toolbar: undefined, slots: {}, controls: {} };
-  const toolbar = createToolbar(host, { items, density, onError, onCollapse, labels: { ...(labels.more ? { more: labels.more } : {}), ...(labels.moreMenu ? { menu: labels.moreMenu } : {}) } });
+  const toolbar = createToolbar(host, { items, density, onError, onCollapse, ...(icons ? { icons } : {}), labels: { ...(labels.more ? { more: labels.more } : {}), ...(labels.moreMenu ? { menu: labels.moreMenu } : {}) } });
   const slots = {};
   const controls = {};
   for (const [name, element] of Object.entries(toolbar.slots)) {
@@ -98,7 +98,7 @@ export function buildToolbar(host, { items, views, labels = {}, density, createT
  * items (`createToolbar` builds them; `toolbarHost`, the host's own element for the bar, replaces the shell's `header`). Returns the slots (one
  * element per mounted part), the controls and the toolbar.
  */
-export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, toolbar: items = [], createToolbar, density, toolbarHost, onError, onCollapse }) {
+export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, toolbar: items = [], createToolbar, density, toolbarHost, onError, onCollapse, icons }) {
   const doc = root.ownerDocument;
   const text = shellText(labels);
   const slots = {};
@@ -107,7 +107,7 @@ export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, t
 
   // The bar: the toolbar, in the shell's header unless the host gave its own element for it.
   const bar = toolbarHost ?? make(doc, "header", { class: "opf-ws-bar" });
-  const built = buildToolbar(bar, { items, views, labels, density, createToolbar, onError, onCollapse });
+  const built = buildToolbar(bar, { items, views, labels, density, createToolbar, onError, onCollapse, icons });
   Object.assign(slots, built.slots);
   Object.assign(controls, built.controls);
 

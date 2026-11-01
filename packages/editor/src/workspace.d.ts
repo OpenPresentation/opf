@@ -14,6 +14,7 @@ import type { SlideManager } from "./slide-manager.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 import type { Toolbar, ToolbarItemName, ToolbarItemSpec } from "./toolbar.js";
 import type { DeckTitle } from "./deck-title.js";
+import type { OpfIcons } from "./icons.js";
 import type { DesignMenu, DesignMenuLabels } from "./design-menu.js";
 import type { ReviewPill, ReviewPillCounts, ReviewPillLabels } from "./review-pill.js";
 import type { HelpButton, HelpButtonLabels, HelpShortcut } from "./shortcuts-sheet.js";
@@ -24,6 +25,8 @@ export type OpfEditorLayout = "full" | "canvas" | "embed" | "viewer" | "source" 
 export type { ToolbarAction, HelpShortcut };
 /** CE-28: a toolbar item by name, or `{ id, priority, collapsible }` (see `toolbar.d.ts`). */
 export type OpfToolbarItem = ToolbarItemSpec;
+/** CE-29: the names of the `icons` option. */
+export type OpfEditorIconName = "more" | "expand" | "collapse" | "valid" | "error" | "warning" | "info" | "checking" | "unavailable" | "help" | "close" | "trigger" | "check" | "previous" | "next" | "add" | "present";
 export type { Toolbar, ToolbarItemName };
 export type OpfEditorView = "slide" | "sorter" | "outline" | "layouts";
 export type OpfEditorDensity = "comfortable" | "touch";
@@ -323,6 +326,13 @@ export interface OpfEditorOptions {
    * `false` turns it off.
    */
   expand?: false | { target?: HTMLElement; fullscreen?: boolean };
+  /**
+   * CE-29: the icons of the chrome's parts, by name, in one flat map (see docs/styling.md): `more` (the ⋯ button), `expand` and `collapse`,
+   * `valid`, `error`, `warning`, `info`, `checking` and `unavailable` (the review pill), `help` and `close` (the help sheet; `close` is also
+   * the Design menu's), `trigger` and `check` (the Design menu), `previous` and `next` (both slide navigators), `add` (the strip's "+"), `present`.
+   * An icon is an SVG element, a function returning one, or 24x24 path data; an unknown name throws.
+   */
+  icons?: OpfIcons<OpfEditorIconName>;
   /** CE-28 wave 2: the host's own buttons in the toolbar (the `actions` item); `editor.setActions` replaces them. Each `enabled()` and `pressed()` is read again after every change, selection and read-only switch. */
   actions?: ToolbarAction[];
   /** CE-28 wave 2: "+" and the context menu on the thumbnail strip (default true in `full` and `embed`, false elsewhere). */

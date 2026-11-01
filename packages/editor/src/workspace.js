@@ -14,6 +14,7 @@ import { createPersistence } from "./persistence.js";
 import { createPersistenceUi } from "./persistence-ui.js";
 import { ITEM_SLOTS, TOOLBAR_PRESETS, buildItemControls, buildToolbar, buildWorkspaceShell, viewLabel } from "./workspace-shell.js";
 import { createToolbar, normalizeToolbarItems } from "./toolbar.js";
+import { normalizeIcons } from "./icons.js";
 import { deckNamePatch } from "./deck-title.js";
 import { fontSubstitutionNotes, layoutOptionsFor } from "./workspace-measure.js";
 import { SOURCE_CHECKS, copyText, downloadSourceFile, lf, reportSource } from "./workspace-source.js";
@@ -94,6 +95,20 @@ const itemSlot = (id) => ITEM_SLOTS[id]?.[0] ?? id;
 const ITEM_SLOT_NAMES = new Set(["title", "history", "counter", "views", "expand", "autosave", "export", "present", "design", "review", "help", "actions"]);
 // Reserved (accepted and left out): `zoom` is the Studio's own.
 const RESERVED_ITEMS = new Set(["zoom"]);
+// CE-29 styling hooks: the icon names of every part the editor mounts, for the one flat `icons` option (`close` is the help sheet's and the
+// Design menu's both). Each part gets the names it has.
+const PART_ICONS = Object.freeze({
+  toolbar: ["more"],
+  expand: ["expand", "collapse"],
+  reviewPill: ["valid", "error", "warning", "info", "checking", "unavailable"],
+  help: ["help", "close"],
+  designMenu: ["trigger", "close", "check"],
+  navigator: ["previous", "next"],
+  strip: ["add"],
+  present: ["present"],
+});
+const ICON_NAMES = [...new Set(Object.values(PART_ICONS).flat())];
+
 /** The `toolbar` option as the list of items it asks for (the layout's preset when it is not given). */
 function toolbarSpec(options, layout) {
   if (STUDIO_LAYOUTS.has(layout)) return [];
@@ -259,6 +274,12 @@ export function createOpfEditor(element, options = {}) {
   if (!LAYOUTS.includes(layout)) throw new RangeError('layout must be "full", "canvas", "embed", "viewer", "source", "studio" or "playground", or pass `slots`.');
   const studioLayout = STUDIO_LAYOUTS.has(layout);
   const asked = toolbarSpec(options, layout);
+  const icons = normalizeIcons(options.icons, ICON_NAMES, "createOpfEditor icons");
+  // The icons one part takes, or nothing (the part keeps its own) when the host gave none of its names.
+  const iconsFor = (part) => {
+    const picked = Object.fromEntries(PART_ICONS[part].filter((name) => name in icons).map((name) => [name, icons[name]]));
+    return Object.keys(picked).length ? { icons: picked } : {};
+  };
   const parts = resolveParts(options, layout, given, asked);
   const views = VIEWS.filter((view) => view === "slide" || parts[view]);
   const toolbarItems = resolveToolbar(options, layout, parts, views, given, asked);
@@ -296,14 +317,14 @@ export function createOpfEditor(element, options = {}) {
   }
   if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
   else if (!studioLayout) {
-    const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels, toolbar: toolbarItems, createToolbar, density: densityFor(options.density), toolbarHost: given.toolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail) });
+    const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels, toolbar: toolbarItems, createToolbar, density: densityFor(options.density), toolbarHost: given.toolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail), ...iconsFor("toolbar") });
     slots = { ...built.slots, ...given };
     controls = built.controls;
     toolbar = built.toolbar;
   }
   // CE-28: a host that arranges the page itself and gives `slots.toolbar` gets the toolbar there.
   if (layout === "slots" && given.toolbar && toolbarItems.length) {
-    const built = buildToolbar(given.toolbar, { items: toolbarItems, views, labels: options.labels, density: densityFor(options.density), createToolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail) });
+    const built = buildToolbar(given.toolbar, { items: toolbarItems, views, labels: options.labels, density: densityFor(options.density), createToolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail), ...iconsFor("toolbar") });
     slots = { ...built.slots, ...given };
     Object.assign(controls, built.controls);
     toolbar = built.toolbar;
@@ -682,6 +703,7 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         slideIndex,
         density,
+        ...iconsFor("navigator"),
         ...(options.labels?.navigator ? { labels: { navigation: options.labels.navigator } } : {}),
         onChange: (index) => {
           go(index);
@@ -695,6 +717,7 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         slideIndex,
         density,
+        ...iconsFor("navigator"),
         ...(options.labels?.counter ? { labels: { navigation: options.labels.counter } } : {}),
         onChange: (index) => {
           go(index);
@@ -708,6 +731,7 @@ export function createOpfEditor(element, options = {}) {
         fonts,
         slideIndex,
         density,
+        ...iconsFor("strip"),
         ...(options.labels?.thumbnails ? { labels: { navigation: options.labels.thumbnails } } : {}),
         renderOptions: renderOptions(),
         onSelect: (index) => {
@@ -1071,6 +1095,7 @@ export function createOpfEditor(element, options = {}) {
             present();
           },
           density,
+          ...iconsFor("present"),
         });
       }
       cleanups.push(
@@ -1244,7 +1269,7 @@ export function createOpfEditor(element, options = {}) {
           emit("expand", { expanded });
         },
       });
-      if (slots.expand && createExpandButton) expandButton = createExpandButton(slots.expand, { controller: expandCtl, density, labels });
+      if (slots.expand && createExpandButton) expandButton = createExpandButton(slots.expand, { controller: expandCtl, density, labels, ...iconsFor("expand") });
     }
     mountChromeParts();
     if (!toolbar) return;
@@ -1292,6 +1317,7 @@ export function createOpfEditor(element, options = {}) {
         getSlideIndex: () => slideIndex,
         density,
         readOnly,
+        ...iconsFor("designMenu"),
         ...(labels.designMenu ? { labels: labels.designMenu } : {}),
         ...(designPanel() ? { onOpenPanel: () => showPanel("design", true) } : {}),
         onStatus: say,
@@ -1300,6 +1326,7 @@ export function createOpfEditor(element, options = {}) {
     if (slots.reviewPill && createReviewPill) {
       reviewPill = createReviewPill(slots.reviewPill, {
         density,
+        ...iconsFor("reviewPill"),
         ...(labels.reviewPill ? { labels: labels.reviewPill } : {}),
         // The Review panel when there is one; without it (the embed) the host hears `review-open` and shows the findings its own way.
         onOpen: () => {
@@ -1314,6 +1341,7 @@ export function createOpfEditor(element, options = {}) {
         overlay,
         getShortcuts: () => shortcuts(),
         density,
+        ...iconsFor("help"),
         ...(labels.help ? { labels: labels.help } : {}),
         // "?" opens it from anywhere in a page the editor owns; an embedded editor or a viewer only from inside it (the button still works).
         bindKey: !scopedKeys,
