@@ -19,9 +19,11 @@ export const viewLabel = (view) => VIEW_LABELS[view] ?? view;
 
 /** CE-28: the toolbar of each built layout. `"source"` has none (the pane has its own bar), nor has `slots`; the Studio builds its own topbar. */
 export const TOOLBAR_PRESETS = Object.freeze({
-  full: Object.freeze(["title", "history", "find", "views", "spacer", "autosave", "export", "present", "expand", "more"]),
-  canvas: Object.freeze(["title", "history", "spacer", "expand", "more"]),
-  embed: Object.freeze(["title", "history", "counter", "spacer", "expand", "present", "more"]),
+  full: Object.freeze(["title", "history", "find", "views", "spacer", "actions", "design", "review", "autosave", "export", "present", "help", "expand", "more"]),
+  canvas: Object.freeze(["title", "history", "spacer", "actions", "expand", "more"]),
+  embed: Object.freeze(["title", "history", "counter", "spacer", "actions", "design", "expand", "present", "more"]),
+  // CE-28 wave 2: a deck to look at, read-only.
+  viewer: Object.freeze(["title", "counter", "spacer", "actions", "present", "expand", "more"]),
   source: Object.freeze([]),
   slots: Object.freeze([]),
 });
@@ -54,24 +56,37 @@ export function buildItemControls(name, container, { views = [], labels = {} } =
   return controls;
 }
 
-// The toolbar items whose slot is a part's mount element, with the class the default layout gives it (`data-opf-slot` is the item's name).
-const ITEM_SLOTS = { autosave: "opf-ws-autosave", export: "opf-ws-export", present: "opf-ws-present", title: "opf-ws-title", counter: "opf-ws-counter", expand: "opf-ws-expand" };
+// The toolbar items whose slot is a part's mount element: the slot's name (`data-opf-slot`; `design` and `review` already name the side panels,
+// so their items' slots are `designMenu` and `reviewPill`) and the class the default layout gives it.
+export const ITEM_SLOTS = Object.freeze({
+  autosave: ["autosave", "opf-ws-autosave"],
+  export: ["export", "opf-ws-export"],
+  present: ["present", "opf-ws-present"],
+  title: ["title", "opf-ws-title"],
+  counter: ["counter", "opf-ws-counter"],
+  expand: ["expand", "opf-ws-expand"],
+  design: ["designMenu", "opf-ws-design-menu"],
+  review: ["reviewPill", "opf-ws-review-pill"],
+  help: ["help", "opf-ws-help"],
+  actions: ["actions", "opf-ws-actions"],
+});
 const STRUCTURE = new Set(["spacer", "|", "more"]);
 
 /**
  * Build the toolbar in `host` (the shell's bar, or the host's `slots.toolbar`) from `items` (already filtered to what this editor fills).
  * Returns the toolbar, the slots of the parts that mount in it and the controls the shell built in it; nothing when no item shows anything.
  */
-export function buildToolbar(host, { items, views, labels = {}, density, createToolbar, onError }) {
+export function buildToolbar(host, { items, views, labels = {}, density, createToolbar, onError, onCollapse }) {
   if (!items.some((item) => !STRUCTURE.has(item.id))) return { toolbar: undefined, slots: {}, controls: {} };
-  const toolbar = createToolbar(host, { items, density, onError, labels: { ...(labels.more ? { more: labels.more } : {}), ...(labels.moreMenu ? { menu: labels.moreMenu } : {}) } });
+  const toolbar = createToolbar(host, { items, density, onError, onCollapse, labels: { ...(labels.more ? { more: labels.more } : {}), ...(labels.moreMenu ? { menu: labels.moreMenu } : {}) } });
   const slots = {};
   const controls = {};
   for (const [name, element] of Object.entries(toolbar.slots)) {
     if (ITEM_SLOTS[name]) {
-      element.setAttribute("data-opf-slot", name);
-      element.classList.add(ITEM_SLOTS[name]);
-      slots[name] = element;
+      const [slotName, className] = ITEM_SLOTS[name];
+      element.setAttribute("data-opf-slot", slotName);
+      element.classList.add(className);
+      slots[slotName] = element;
     } else if (!STRUCTURE.has(name)) Object.assign(controls, buildItemControls(name, element, { views, labels }));
   }
   return { toolbar, slots, controls };
@@ -83,7 +98,7 @@ export function buildToolbar(host, { items, views, labels = {}, density, createT
  * items (`createToolbar` builds them; `toolbarHost`, the host's own element for the bar, replaces the shell's `header`). Returns the slots (one
  * element per mounted part), the controls and the toolbar.
  */
-export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, toolbar: items = [], createToolbar, density, toolbarHost, onError }) {
+export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, toolbar: items = [], createToolbar, density, toolbarHost, onError, onCollapse }) {
   const doc = root.ownerDocument;
   const text = shellText(labels);
   const slots = {};
@@ -92,7 +107,7 @@ export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, t
 
   // The bar: the toolbar, in the shell's header unless the host gave its own element for it.
   const bar = toolbarHost ?? make(doc, "header", { class: "opf-ws-bar" });
-  const built = buildToolbar(bar, { items, views, labels, density, createToolbar, onError });
+  const built = buildToolbar(bar, { items, views, labels, density, createToolbar, onError, onCollapse });
   Object.assign(slots, built.slots);
   Object.assign(controls, built.controls);
 

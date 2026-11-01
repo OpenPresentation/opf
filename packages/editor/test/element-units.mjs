@@ -26,7 +26,7 @@ for (const line of block.slice(0, block.indexOf('\n}\n')).split('\n')) {
 }
 assert.ok(keys.length >= 30 && keys.includes('ready') && keys.includes('review-goto') && keys.includes('layoutStudio'), `read the event keys: ${keys.join(', ')}`);
 for (const key of keys) assert.ok(element.OPF_EDITOR_EVENTS.includes(key), `OPF_EDITOR_EVENTS lacks the workspace event "${key}": add it to src/element.js and docs/web-component.md`);
-for (const name of ['deck-name', 'expand']) assert.ok(element.OPF_EDITOR_EVENTS.includes(name), `the chrome's "${name}" event is forwarded`);
+for (const name of ['deckName', 'expand', 'dirty', 'save', 'review-open']) assert.ok(element.OPF_EDITOR_EVENTS.includes(name), `the chrome's "${name}" event is forwarded`);
 assert.deepEqual([...new Set(element.OPF_EDITOR_EVENTS)], [...element.OPF_EDITOR_EVENTS], 'no event twice');
 assert.equal(Object.isFrozen(element.OPF_EDITOR_EVENTS), true);
 

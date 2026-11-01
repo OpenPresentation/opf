@@ -258,6 +258,12 @@ export function useOpfCursor(editor) {
   return useSyncExternalStore(subscribe, () => (editor ? editor.sourceCursor : null), () => null);
 }
 
+/** CE-28 wave 2: whether the editor has unsaved changes, following its `dirty` event. */
+export function useOpfDirty(editor) {
+  const subscribe = useCallback(subscribeTo(editor, "dirty"), [editor]);
+  return useSyncExternalStore(subscribe, () => Boolean(editor?.dirty), () => false);
+}
+
 /**
  * CE-28: the deck's name and a setter, `[name, setName]`. `name` is the document's `name` (`""` without one), read again on every `deckName`
  * event (a rename from the title, the source pane, undo or the host); `setName(next)` is `editor.setDeckName(next)`: one undoable edit through

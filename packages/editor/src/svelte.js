@@ -111,6 +111,17 @@ function replaceOptions(node, options) {
   }
 }
 
+/** CE-28 wave 2: a readable Svelte store of `editor.dirty`, following its `dirty` event. */
+export function opfDirty(editor) {
+  if (!editor || typeof editor.on !== "function") throw new TypeError("opfDirty needs an editor from createOpfEditor.");
+  return {
+    subscribe(run) {
+      run(Boolean(editor.dirty));
+      return editor.on("dirty", ({ dirty }) => run(dirty));
+    },
+  };
+}
+
 /**
  * CE-28: the deck's name as a Svelte store (the store contract, so `$name` and `bind:value={$name}` work): it holds the document's `name` (`""`
  * without one) and follows every `deckName` event of the editor; `set(name)` renames through `editor.setDeckName` (one undoable edit, an empty

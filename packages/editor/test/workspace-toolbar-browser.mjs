@@ -22,8 +22,8 @@ try {
   });
 
   // ---- the default items of each layout -------------------------------------------------------------------------------------------------
-  await ev((d) => window.mountEditor({ document: d, persistence: { key: 'tb', storage: 'memory' } }), deck());
-  assert.deepEqual(await items(), ['title', 'history', 'find', 'views', 'spacer', 'autosave', 'export', 'present', 'expand', 'more']);
+  await ev((d) => window.mountEditor({ document: d, persistence: { key: 'tb', storage: 'memory' } }, 1600), deck());
+  assert.deepEqual(await items(), ['title', 'history', 'find', 'views', 'spacer', 'actions', 'design', 'review', 'autosave', 'export', 'present', 'help', 'expand', 'more']);
   const full = await ev(() => {
     const bar = document.querySelector('.opf-ws-bar');
     return {
@@ -36,7 +36,7 @@ try {
   });
   assert.deepEqual(full, { title: 'Workspace fixture', undo: true, redo: true, find: true, views: ['slide', 'sorter', 'outline', 'layouts'], slots: [true, true, true], expand: true, moreHidden: true, collapsed: [] });
   await ev((d) => window.mountEditor({ document: d, layout: 'canvas' }), deck());
-  assert.deepEqual(await items(), ['title', 'history', 'spacer', 'expand', 'more']);
+  assert.deepEqual(await items(), ['title', 'history', 'spacer', 'actions', 'expand', 'more']);
   await ev((d) => window.mountEditor({ document: d, layout: 'source' }), deck());
   assert.equal(await ev(() => document.querySelector('#host .opf-ws-bar, #host .opf-tb')), null, 'the source layout has no toolbar');
   mark('full and canvas build their preset toolbars (title, history, find, views, autosave, Export, Present, expand, more); source builds none');
@@ -113,7 +113,7 @@ try {
     const visible = window.ed.toolbar.items.filter((item) => item.collapsible && !collapsed.includes(item.id) && bar.querySelector(`[data-opf-toolbar-item=${item.id}]`)?.childNodes.length);
     return {
       collapsed,
-      hiddenOk: collapsed.every((id) => getComputedStyle(bar.querySelector(`[data-opf-toolbar-item=${id}]`)).display === 'none'),
+      hiddenOk: collapsed.every((id) => { const style = getComputedStyle(bar.querySelector(`[data-opf-toolbar-item=${id}]`)); return style.display === 'none' || style.visibility === 'hidden'; }),
       lowestFirst: collapsed.every((id) => visible.every((item) => priority[id].priority <= item.priority)),
       more: !bar.querySelector('[data-opf-toolbar-item=more]').hidden,
       fits: [...bar.children].every((node) => node.hidden || getComputedStyle(node).display === 'none' || node.getBoundingClientRect().right <= bar.getBoundingClientRect().right + 0.5),
@@ -168,7 +168,7 @@ try {
   assert.equal(await ev(() => document.querySelector('.opf-tb-menu').hidden), true, 'a press outside closes the menu');
   mark('the ⋯ menu is a role=menu built from the collapsed parts: arrows, Home/End, Escape back to ⋯, Enter runs, a press outside closes');
 
-  await ev(() => { document.querySelector('#host').style.width = '1200px'; });
+  await ev(() => { document.querySelector('#host').style.width = '1600px'; });
   await page.waitForFunction(() => window.ed.toolbar.collapsed.length === 0, undefined, { timeout: 5000 });
   await ev(() => window.frames());
   assert.deepEqual(await state(), { collapsed: [], hiddenOk: true, lowestFirst: true, more: false, fits: true });
@@ -194,7 +194,7 @@ try {
 
   // ---- layout: "embed" ---------------------------------------------------------------------------------------------------------------------
   await ev((d) => window.mountEditor({ document: d, layout: 'embed' }, 900), deck());
-  assert.deepEqual(await items(), ['title', 'history', 'counter', 'spacer', 'expand', 'present', 'more']);
+  assert.deepEqual(await items(), ['title', 'history', 'counter', 'spacer', 'actions', 'design', 'expand', 'present', 'more']);
   await page.waitForFunction(() => document.querySelector('#host .opf-ws-canvas').getBoundingClientRect().width > 100, undefined, { timeout: 10000 });
   const embed = await ev(() => {
     const host = document.querySelector('#host');

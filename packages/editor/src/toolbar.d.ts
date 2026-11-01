@@ -5,7 +5,7 @@
  * its own and mount the editor's parts in its slots. CSS: `src/styles/toolbar.css`, classes `opf-tb-*`.
  */
 
-/** The item names. `zoom` is the Studio's; `design`, `review`, `actions` and `help` are reserved for parts that are not shipped yet. */
+/** The item names. `zoom` is the Studio's own (the workspace leaves it out). */
 export type ToolbarItemName =
   | "title"
   | "history"

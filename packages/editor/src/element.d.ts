@@ -1,7 +1,7 @@
 import type { Catalog } from "@openpresentation/opf";
 import type { OpfEditor, OpfEditorEvents, OpfEditorFontsOption, OpfEditorOptions } from "./workspace.js";
 
-/** Every workspace event the element re-dispatches (the keys of `OpfEditorEvents`, plus the chrome's `deck-name` and `expand`). */
+/** Every workspace event the element re-dispatches: the keys of `OpfEditorEvents` (the chrome's `deckName`, `expand`, `dirty`, `save` and `review-open` among them). */
 export declare const OPF_EDITOR_EVENTS: readonly string[];
 /** The DOM event type of a workspace event name: `opfEventType("layoutStudio")` is `"opf-layout-studio"`. */
 export declare function opfEventType(name: string): string;

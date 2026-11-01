@@ -68,7 +68,8 @@ export function buildStudioShell(root, { parts, layout, labels = {}, studio: con
   // The bar.
   const bar = el("div", `${PREFIX}-bar`, { role: "toolbar", "aria-label": labels.studio ?? "Studio" });
   const file = dom.button(`${PREFIX}-barbutton`, { text: "File", iconName: "Menu", size: 16, attributes: { "aria-haspopup": "menu", "data-studio": "file" } });
-  const name = el("input", `${PREFIX}-name`, { type: "text", "aria-label": "Presentation name", spellcheck: "false", autocomplete: "off", "data-studio": "name" });
+  // CE-28 wave 2: the deck name is the workspace's title part (src/deck-title.js), mounted in this slot; the expand button sits before topbarEnd.
+  const name = slot("title", "div", `${PREFIX}-title`);
   const tools = el("div", `${PREFIX}-tools`, { role: "group", "aria-label": "Tools" });
   const toolButtons = {};
   for (const [id, text, icon, key] of [["select", "Select", "MousePointer2", "V"], ["hand", "Hand", "Hand", "H"], ["text", "Text", "Type", "T"]]) {
@@ -97,6 +98,7 @@ export function buildStudioShell(root, { parts, layout, labels = {}, studio: con
   bar.append(file, name, tools, insert, addSlideButton, history, views, spacer, zoom);
   if (parts.source) bar.append(source);
   if (parts.present) bar.append(slot("present", "div", `${PREFIX}-present`));
+  bar.append(slot("expand", "div", `${PREFIX}-expand`));
   const topbarEnd = el("div", `${PREFIX}-topbar-end`, { "data-opf-slot": "topbarEnd" });
   if (given.topbarEnd) topbarEnd.append(given.topbarEnd);
   bar.append(topbarEnd);
@@ -1304,7 +1306,9 @@ export function createStudio(ctx) {
     dialog.append(head, search, list);
     const draw = () => {
       const query = search.value.trim().toLowerCase();
-      const entries = commands.list(s, { win }).filter((entry) => (entry.keys.length || query) && (!query || `${entry.label} ${entry.group} ${entry.id}`.toLowerCase().includes(query)));
+      // The workspace's own keys (save, the title, expand) are listed with the commands, as the help item lists them (CE-28).
+      const extra = (ctx.extraShortcuts?.() ?? []).map((entry) => ({ id: entry.id, label: entry.label, group: entry.group ?? "General", keys: entry.keys, enabled: true, plain: true }));
+      const entries = [...commands.list(s, { win }), ...extra].filter((entry) => (entry.keys.length || query) && (!query || `${entry.label} ${entry.group} ${entry.id}`.toLowerCase().includes(query)));
       const groups = new Map();
       for (const entry of entries) { if (!groups.has(entry.group)) groups.set(entry.group, []); groups.get(entry.group).push(entry); }
       list.replaceChildren(...[...groups].map(([group, rows]) => {
@@ -1314,9 +1318,12 @@ export function createStudio(ctx) {
           const keys = el("dd", "");
           for (const key of row.keys.slice(0, 2)) keys.append(el("kbd", "", { text: formatKey(key, win) }));
           const term = el("dt", "");
-          const run = dom.button(`${PREFIX}-linkbutton`, { text: row.label, attributes: { "aria-disabled": row.enabled ? undefined : "true", title: row.reason || undefined } });
-          run.addEventListener("click", () => { if (!row.enabled) { announce(row.reason); return; } closeSheetDialog(); runCommand(row.id); });
-          term.append(run);
+          if (row.plain) term.append(el("span", "", { text: row.label }));
+          else {
+            const run = dom.button(`${PREFIX}-linkbutton`, { text: row.label, attributes: { "aria-disabled": row.enabled ? undefined : "true", title: row.reason || undefined } });
+            run.addEventListener("click", () => { if (!row.enabled) { announce(row.reason); return; } closeSheetDialog(); runCommand(row.id); });
+            term.append(run);
+          }
           table.append(term, keys);
         }
         section.append(el("h3", `${PREFIX}-section-title`, { text: group }), table);
@@ -1434,15 +1441,7 @@ export function createStudio(ctx) {
     if (!ctx.inSync() && ctx.pane) { if (sourceMode === "off") s.toggleSource(); ctx.pane.editor?.api?.focus?.(); return; }
     if (shell.tabs.review) { if (root.dataset.width === "narrow") openSheet("review"); else showTab("review", { focus: true }); }
   });
-  // The name: the presentation's `name`, one undoable change (the source pane keeps its own file name).
-  const deckName = () => { const value = ui.get("/name"); return typeof value === "string" ? value : ""; };
-  listen(shell.name, "change", () => {
-    const value = shell.name.value.trim();
-    if (value === deckName()) return;
-    if (s.writeValue("/name", value || undefined, value ? `Renamed to ${value}` : "Name removed")) return;
-    shell.name.value = deckName();
-  });
-  listen(shell.name, "keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); shell.name.blur(); } if (event.key === "Escape") { shell.name.value = deckName(); shell.name.blur(); } });
+  // The name: the workspace's title part in `shell.name` (CE-28), one undoable change through the session (the source pane keeps its own file name).
   function syncBar() {
     const list = commands.list(s, { win });
     const state = (id) => list.find((entry) => entry.id === id);
@@ -1452,8 +1451,6 @@ export function createStudio(ctx) {
     const slideState = state("studio.slide.new");
     shell.addSlide.disabled = !slideState?.enabled;
     shell.addSlide.title = slideState?.enabled ? "Add a slide" : slideState?.reason ?? "";
-    if (doc.activeElement !== shell.name) shell.name.value = deckName();
-    shell.name.readOnly = s.readOnly;
   }
 
   // ---- the status line ----------------------------------------------------------------------------------------------------------------

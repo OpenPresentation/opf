@@ -18,6 +18,11 @@ export { mergeSlides, splitSlideByBlocks } from "./content-actions.js";
 export { installCanvasVariableEditing } from "./canvas-variables.js";
 export { createLayoutStudio } from "./workspace-layouts.js";
 export { buildStudioShell, createStudio } from "./studio.js";
-// CE-28: the toolbar's deck title and expand button.
+// CE-28: the toolbar's parts: the deck title, the expand button, the Design quick menu, the review pill, the help sheet and the host's actions.
 export { createDeckTitle } from "./deck-title.js";
 export { createExpandButton, createExpandController } from "./editor-expand.js";
+export { createDesignMenu } from "./design-menu.js";
+export { createReviewPill } from "./review-pill.js";
+export { createHelpButton } from "./shortcuts-sheet.js";
+export { createToolbarActions } from "./toolbar-actions.js";
+export { listSwitchOptions } from "./switches.js";

@@ -24,6 +24,19 @@
   border-bottom: 1px solid var(--opf-ui-border);
   background: var(--opf-ui-surface);
 }
+/* CE-28 wave 2: Export collapsed into the ⋯ menu stays in the page, out of sight and out of the row, so the sheet it opens from there (fixed on
+   screen) and its progress and result are visible. */
+.opf-tb > .opf-ws-export[data-collapsed] {
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.opf-tb > .opf-ws-export[data-collapsed] :is(.opf-export-sheet, .opf-export-scrim, .opf-export-status) {
+  visibility: visible;
+}
 /* CE-28, `layout: "embed"`: the slide alone under a compact bar, for a page that shows a deck. The status line is read, not shown. */
 .opf-workspace[data-opf-layout="embed"] .opf-ws-bar {
   padding: 4px 8px;

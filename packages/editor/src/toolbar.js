@@ -241,8 +241,8 @@ export function createToolbar(container, options = {}) {
   }
 
   // ---- fitting the row ----------------------------------------------------------------------------------------------------------------
-  // An item counts when it shows something: a slot with content or a registered part (an empty slot takes no room and no gap).
-  const present = (entry) => entry.id !== "spacer" && entry.id !== "|" && entry.id !== "more" && (entry.element.childNodes.length > 0 || parts.has(entry.id));
+  // An item counts when it shows something: a slot with content or a registered part (an empty or hidden slot takes no room and no gap).
+  const present = (entry) => entry.id !== "spacer" && entry.id !== "|" && entry.id !== "more" && !entry.element.hidden && (entry.element.childNodes.length > 0 || parts.has(entry.id));
   const shown = (entry) => present(entry) && !entry.element.hasAttribute("data-collapsed");
   function syncDividers() {
     for (const [at, entry] of entries.entries()) {
@@ -268,7 +268,9 @@ export function createToolbar(container, options = {}) {
     let needed = 0;
     let count = 0;
     for (const child of bar.children) {
-      if (child.hidden || win.getComputedStyle(child).display === "none") continue;
+      const style = win.getComputedStyle(child);
+      // Hidden, and taken out of the row (a collapsed part that keeps a sheet on screen is laid out out of flow): no room and no gap.
+      if (child.hidden || style.display === "none" || style.position === "absolute" || style.position === "fixed") continue;
       needed += child.getBoundingClientRect().width;
       count++;
     }

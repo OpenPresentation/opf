@@ -82,3 +82,6 @@ export type { OpfEditorHandle };
  * empty name removes it; false when it was refused). `["", () => false]` while `editor` is `null`.
  */
 export declare function useOpfDeckName(editor: OpfEditorHandle | null | undefined): [name: string, setName: (name: string) => boolean];
+
+/** CE-28 wave 2: whether the editor has unsaved changes (the `dirty` event); false while there is no editor. */
+export declare function useOpfDirty(editor: OpfEditorHandle | null | undefined): boolean;

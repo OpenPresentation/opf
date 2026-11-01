@@ -12,7 +12,7 @@ import { whenFontsReady } from "./font-gate.js";
 import { createSourcePane } from "./source-pane.js";
 import { createPersistence } from "./persistence.js";
 import { createPersistenceUi } from "./persistence-ui.js";
-import { TOOLBAR_PRESETS, buildItemControls, buildToolbar, buildWorkspaceShell, viewLabel } from "./workspace-shell.js";
+import { ITEM_SLOTS, TOOLBAR_PRESETS, buildItemControls, buildToolbar, buildWorkspaceShell, viewLabel } from "./workspace-shell.js";
 import { createToolbar, normalizeToolbarItems } from "./toolbar.js";
 import { deckNamePatch } from "./deck-title.js";
 import { fontSubstitutionNotes, layoutOptionsFor } from "./workspace-measure.js";
@@ -31,7 +31,7 @@ export { layoutOptionsFor } from "./workspace-measure.js";
 let toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu;
 let bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls;
 let prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio;
-let createDeckTitle, createExpandController, createExpandButton;
+let createDeckTitle, createExpandController, createExpandButton, createDesignMenu, createReviewPill, createHelpButton, createToolbarActions, listSwitchOptions;
 let partsModule;
 let partsLoaded = false;
 function loadParts() {
@@ -39,7 +39,7 @@ function loadParts() {
     ({ toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu } = parts);
     ({ bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls } = parts);
     ({ prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio } = parts);
-    ({ createDeckTitle, createExpandController, createExpandButton } = parts);
+    ({ createDeckTitle, createExpandController, createExpandButton, createDesignMenu, createReviewPill, createHelpButton, createToolbarActions, listSwitchOptions } = parts);
     partsLoaded = true;
   });
   // A chunk that failed to load is asked for again by the next editor.
@@ -53,7 +53,7 @@ function loadParts() {
  * mount in (the presenter mounts in the overlay).
  */
 const SOURCE_ONLY_PARTS = new Set(["source", "persistence", "history"]);
-const CHROME_PARTS = ["title", "counter", "expand"];
+const CHROME_PARTS = ["title", "counter", "expand", "designMenu", "reviewPill", "help", "actions"];
 const needsSlideParts = (parts, slots) => CHROME_PARTS.some((name) => slots[name]) || Object.entries(parts).some(([name, on]) => on && !SOURCE_ONLY_PARTS.has(name) && (name === "present" || Boolean(slots[name])));
 
 const VIEWS = Object.freeze(["slide", "sorter", "outline", "layouts"]);
@@ -75,19 +75,32 @@ const LAYOUT_PARTS = {
   canvas: { navigator: true, thumbnails: true, history: true },
   // CE-28: the slide alone, for a page that shows a deck (the homepage hero): its toolbar has the title, the history, the counter and Present.
   embed: { history: true, present: true },
+  // CE-28 wave 2: a deck to look at: read-only, the slide and its counter, Present (Export when the toolbar lists it).
+  viewer: { present: true },
   source: { source: true },
   // CE-20: the Studio and its Playground preset arrange the same parts; the Studio mounts its own Design panel.
   studio: { source: true, navigator: true, thumbnails: true, history: true, find: true, present: true, export: true, review: true, layouts: true, slides: true },
   playground: { source: true, navigator: true, thumbnails: true, history: true, find: true, present: true, export: true, review: true, layouts: true, slides: true },
 };
 const STUDIO_LAYOUTS = new Set(["studio", "playground"]);
-const LAYOUTS = ["full", "canvas", "embed", "source", "slots", "studio", "playground"];
+const LAYOUTS = ["full", "canvas", "embed", "viewer", "source", "slots", "studio", "playground"];
+// The layouts that live inside a page: their keys (arrows, F5, Ctrl/Cmd Z and S, "?") act only while the focus is inside the editor.
+const SCOPED_LAYOUTS = new Set(["embed", "viewer"]);
 // CE-28: the toolbar items a host can place in its own element (`slots.<item>`); `autosave`, `export` and `present` were slots already.
 // The slots that hold only the toolbar or its items: given alone, the layout is still built.
-const CHROME_SLOTS = new Set(["title", "history", "counter", "views", "expand", "toolbar"]);
-const ITEM_SLOT_NAMES = new Set(["title", "history", "counter", "views", "expand", "autosave", "export", "present"]);
-// Reserved names (accepted, and left out until their parts ship): `zoom` is the Studio's.
-const RESERVED_ITEMS = new Set(["zoom", "design", "review", "actions", "help"]);
+const CHROME_SLOTS = new Set(["title", "history", "counter", "views", "expand", "designMenu", "reviewPill", "help", "actions", "toolbar"]);
+// The slot that places an item in the host's own element: the item's name, but `designMenu` and `reviewPill` for `design` and `review`.
+const itemSlot = (id) => ITEM_SLOTS[id]?.[0] ?? id;
+const ITEM_SLOT_NAMES = new Set(["title", "history", "counter", "views", "expand", "autosave", "export", "present", "design", "review", "help", "actions"]);
+// Reserved (accepted and left out): `zoom` is the Studio's own.
+const RESERVED_ITEMS = new Set(["zoom"]);
+/** The `toolbar` option as the list of items it asks for (the layout's preset when it is not given). */
+function toolbarSpec(options, layout) {
+  if (STUDIO_LAYOUTS.has(layout)) return [];
+  const spec = options.toolbar === false ? [] : options.toolbar === undefined || options.toolbar === true ? (TOOLBAR_PRESETS[layout] ?? []) : options.toolbar;
+  if (!Array.isArray(spec)) throw new TypeError("toolbar must be false or an array of toolbar items.");
+  return normalizeToolbarItems(spec);
+}
 
 const isThenable = (value) => value !== null && typeof value === "object" && typeof value.then === "function";
 
@@ -125,7 +138,7 @@ function guardSession(session, isReadOnly) {
   });
 }
 
-function resolveParts(options, layout, slots) {
+function resolveParts(options, layout, slots, asked = []) {
   const panels = options.panels ?? {};
   const base = LAYOUT_PARTS[layout];
   const parts = {};
@@ -136,6 +149,11 @@ function resolveParts(options, layout, slots) {
   }
   // The slide is the editor; a source-only layout has none.
   parts.canvas = layout === "source" ? false : panels.canvas !== false;
+  // CE-28 wave 2: an item the toolbar lists brings the part it shows: Export in the viewer, and Review (run without its panel where the layout
+  // has none, so the pill has counts) wherever it is listed.
+  const listed = (id) => asked.some((item) => item.id === id) || Boolean(slots[itemSlot(id)]);
+  if (panels.export === undefined && listed("export")) parts.export = true;
+  if (panels.review === undefined && listed("review")) parts.review = true;
   return parts;
 }
 
@@ -143,12 +161,15 @@ function resolveParts(options, layout, slots) {
  * CE-28: the toolbar items this editor builds: the preset of the layout, or the `toolbar` option, without the items it has nothing for (Export
  * when there is no Export, the views with one view, a reserved name) and without the ones the host placed in its own element (`slots.<item>`).
  */
-function resolveToolbar(options, layout, parts, views, given) {
+function resolveToolbar(options, layout, parts, views, given, items) {
   if (STUDIO_LAYOUTS.has(layout)) return [];
-  const spec = options.toolbar === false ? [] : options.toolbar === undefined || options.toolbar === true ? (TOOLBAR_PRESETS[layout] ?? []) : options.toolbar;
-  if (!Array.isArray(spec)) throw new TypeError("toolbar must be false or an array of toolbar items.");
-  const items = normalizeToolbarItems(spec);
+  const preset = options.toolbar === undefined || options.toolbar === true;
   const available = {
+    // The Design quick menu stands in for the Design side panel: a preset leaves it out where that panel is on (the embed has none).
+    design: !(preset && parts.design && layout !== "embed"),
+    review: parts.review,
+    help: true,
+    actions: true,
     title: true,
     // A host that arranges the page itself and asks for the history in its toolbar gets it (there is no other slot to name it by).
     history: parts.history || (layout === "slots" && options.panels?.history !== false),
@@ -163,7 +184,7 @@ function resolveToolbar(options, layout, parts, views, given) {
     spacer: true,
     "|": true,
   };
-  return items.filter((item) => !RESERVED_ITEMS.has(item.id) && available[item.id] && !(ITEM_SLOT_NAMES.has(item.id) && given[item.id]));
+  return items.filter((item) => !RESERVED_ITEMS.has(item.id) && available[item.id] && !(ITEM_SLOT_NAMES.has(item.id) && given[itemSlot(item.id)]));
 }
 
 /**
@@ -180,7 +201,8 @@ export function createOpfEditor(element, options = {}) {
   const cleanups = [];
   let destroyed = false;
   let mounted = false;
-  let readOnly = Boolean(options.readOnly);
+  // The viewer is read-only unless the host says otherwise.
+  let readOnly = Boolean(options.readOnly ?? options.layout === "viewer");
   let lastError;
   const densityFor = (setting) => (setting === "touch" || setting === "comfortable" ? setting : win?.matchMedia?.("(pointer: coarse)").matches ? "touch" : "comfortable");
 
@@ -195,6 +217,8 @@ export function createOpfEditor(element, options = {}) {
     return () => off(name, listener);
   }
   function emit(name, detail = {}) {
+    // A copy or a download of the source (or a JSON, YAML or Markdown export) is the person's work kept somewhere: no longer dirty.
+    if (name === "kept") recordBaseline();
     for (const listener of [...(listeners.get(name) ?? [])]) {
       try {
         listener(detail);
@@ -228,13 +252,17 @@ export function createOpfEditor(element, options = {}) {
   // CE-28: slots for the toolbar's items only (mode B: the title in the host's own header) keep the built layout.
   const chromeOnly = Boolean(options.slots) && Object.keys(options.slots).every((name) => CHROME_SLOTS.has(name));
   const layout = options.slots && !STUDIO_LAYOUTS.has(options.layout) && !chromeOnly ? "slots" : (options.layout ?? "full");
-  if (!LAYOUTS.includes(layout)) throw new RangeError('layout must be "full", "canvas", "embed", "source", "studio" or "playground", or pass `slots`.');
+  if (!LAYOUTS.includes(layout)) throw new RangeError('layout must be "full", "canvas", "embed", "viewer", "source", "studio" or "playground", or pass `slots`.');
   const studioLayout = STUDIO_LAYOUTS.has(layout);
-  const parts = resolveParts(options, layout, given);
+  const asked = toolbarSpec(options, layout);
+  const parts = resolveParts(options, layout, given, asked);
   const views = VIEWS.filter((view) => view === "slide" || parts[view]);
-  const toolbarItems = resolveToolbar(options, layout, parts, views, given);
-  // CE-28: an embedded editor keeps its keys (the arrows, F5, Ctrl/Cmd Z) to itself; the other layouts own the page.
-  const keyTarget = layout === "embed" ? element : doc;
+  const toolbarItems = resolveToolbar(options, layout, parts, views, given, asked);
+  // CE-28: an embedded editor or a viewer keeps its keys (the arrows, F5, Ctrl/Cmd Z) to itself; the other layouts own the page.
+  const scopedKeys = SCOPED_LAYOUTS.has(layout);
+  // CE-28 wave 2: slide management on the thumbnail strip, in the layouts the editor arranges for editing (a host's own arrangement opts in).
+  const slideActions = options.slideActions ?? (layout === "full" || layout === "embed");
+  const keyTarget = scopedKeys ? element : doc;
   if (options.view !== undefined && !views.includes(options.view)) throw new RangeError(`view "${options.view}" is not available in this layout (${views.join(", ")}).`);
   if (options.persistence && parts.persistence && (typeof options.persistence !== "object" || typeof options.persistence.key !== "string" || !options.persistence.key)) {
     throw new TypeError("persistence needs a `key` that names the document.");
@@ -264,14 +292,14 @@ export function createOpfEditor(element, options = {}) {
   }
   if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
   else if (!studioLayout) {
-    const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels, toolbar: toolbarItems, createToolbar, density: densityFor(options.density), toolbarHost: given.toolbar, onError: (error) => report(error) });
+    const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels, toolbar: toolbarItems, createToolbar, density: densityFor(options.density), toolbarHost: given.toolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail) });
     slots = { ...built.slots, ...given };
     controls = built.controls;
     toolbar = built.toolbar;
   }
   // CE-28: a host that arranges the page itself and gives `slots.toolbar` gets the toolbar there.
   if (layout === "slots" && given.toolbar && toolbarItems.length) {
-    const built = buildToolbar(given.toolbar, { items: toolbarItems, views, labels: options.labels, density: densityFor(options.density), createToolbar, onError: (error) => report(error) });
+    const built = buildToolbar(given.toolbar, { items: toolbarItems, views, labels: options.labels, density: densityFor(options.density), createToolbar, onError: (error) => report(error), onCollapse: (detail) => onToolbarCollapse(detail) });
     slots = { ...built.slots, ...given };
     Object.assign(controls, built.controls);
     toolbar = built.toolbar;
@@ -295,6 +323,13 @@ export function createOpfEditor(element, options = {}) {
   let expandCtl;
   let expandButton;
   let deckName;
+  let designMenu;
+  let reviewPill;
+  let helpButton;
+  let actionsPart;
+  let hostActions = Array.isArray(options.actions) ? [...options.actions] : [];
+  let reviewCounts = null;
+  let exportCollapsed = false;
   let strip;
   let slideManager;
   let sorter;
@@ -505,6 +540,9 @@ export function createOpfEditor(element, options = {}) {
     if (controls.redo) controls.redo.disabled = !inSync || readOnly || !session.canRedo;
     // The deck name is not renamed over text in the source pane that is not a valid deck (that would replace the person's draft).
     deckTitle?.setDisabled(!inSync);
+    designMenu?.setDisabled(!inSync);
+    actionsPart?.setDisabled(!inSync);
+    actionsPart?.refresh();
     // Text in the source pane that is not a valid deck: the slide shows the last valid one and is not editable until the text is fixed.
     const frame = slots.canvas && (slots.slide ?? slots.canvas);
     // The Studio keeps selection, zoom and Present while read-only (its commands say why they are off); only invalid text locks the slide.
@@ -672,6 +710,10 @@ export function createOpfEditor(element, options = {}) {
           if (index !== slideIndex) go(index);
         },
         onError: (error) => report(error instanceof Error ? error : new Error("Thumbnails unavailable")),
+        // CE-28 wave 2: "+" and the thumbnail menu (duplicate, delete, hide, move), each one undoable change; "+" offers the deck's layouts.
+        ...(slideActions
+          ? { actions: true, readOnly, onStatus: say, ...(listSwitchOptions ? { layoutOptions: (presentation) => listSwitchOptions(presentation, "layouts", { catalogs: catalogs() }) } : {}) }
+          : {}),
       });
     }
   }
@@ -744,6 +786,7 @@ export function createOpfEditor(element, options = {}) {
         sourceState = { status: made.status, format, text: shown };
         syncChrome();
         emit("source", sourceState);
+        updateDirty();
         return made.findings;
       },
       onCopy: async (file) => {
@@ -823,6 +866,7 @@ export function createOpfEditor(element, options = {}) {
       },
       onSelect: (value) => {
         selection = { path: value.path, value: value.value };
+        actionsPart?.refresh();
         // The Studio emits its own selection (a list of nodes); the canvas's single selection is internal there.
         if (!studioLayout) emit("selection", { path: value.path, value: value.value, slideIndex, element: value.element });
         design?.refresh();
@@ -968,6 +1012,8 @@ export function createOpfEditor(element, options = {}) {
           tab.textContent = found ? `${name} (${counts.total})` : name;
           tab.setAttribute("aria-label", found ? `${name}, ${counts.total} finding${counts.total === 1 ? "" : "s"}` : name);
         }
+        reviewCounts = counts;
+        reviewPill?.update(counts);
         emit("review", counts);
       },
     });
@@ -1030,6 +1076,14 @@ export function createOpfEditor(element, options = {}) {
       );
     }
     if (parts.find && slots.find) mountFind();
+    // CE-28 wave 2: a `review` item without a Review panel (the embed) runs the review in a hidden element, so the pill has its counts.
+    if (parts.review && !slots.review && slots.reviewPill) {
+      slots.review = doc.createElement("div");
+      slots.review.hidden = true;
+      slots.review.setAttribute("data-opf-slot", "review");
+      slots.review.setAttribute("data-opf-headless", "");
+      root.append(slots.review);
+    }
     if (parts.review && slots.review) mountReview();
     if (parts.design && slots.design) {
       const configured = typeof options.design === "object" ? options.design : {};
@@ -1071,6 +1125,7 @@ export function createOpfEditor(element, options = {}) {
             deckName = name;
             emit("deckName", { name, previous });
           }
+          updateDirty();
         }
         refresh();
       }),
@@ -1137,6 +1192,8 @@ export function createOpfEditor(element, options = {}) {
       getName: () => pane?.getName(),
       setName: (name) => pane?.setName(name),
       layoutStudio: () => studio,
+      // CE-28 wave 2: the rows the Studio's shortcut sheet adds to its commands, the same the help item lists.
+      extraShortcuts: () => chromeShortcuts(),
       mountSlideRow: () => mountSlideRow(),
     });
   }
@@ -1163,7 +1220,7 @@ export function createOpfEditor(element, options = {}) {
       });
     }
     // The editor fills the window (or, with `expand.fullscreen`, the screen): the mount element becomes a fixed overlay, in place.
-    if (!studioLayout && createExpandController && options.expand !== false) {
+    if (createExpandController && options.expand !== false) {
       const labels = { ...(chromeLabels().expand ? { expand: chromeLabels().expand } : {}), ...(chromeLabels().collapse ? { collapse: chromeLabels().collapse } : {}) };
       const configured = typeof options.expand === "object" && options.expand ? options.expand : {};
       const target = configured.target ?? element;
@@ -1182,6 +1239,7 @@ export function createOpfEditor(element, options = {}) {
       });
       if (slots.expand && createExpandButton) expandButton = createExpandButton(slots.expand, { controller: expandCtl, density, labels });
     }
+    mountChromeParts();
     if (!toolbar) return;
     // What each item offers in the more menu once it has collapsed into it, read when the menu opens (so always the current state).
     const text = { undo: "Undo", redo: "Redo", find: "Find", ...chromeLabels() };
@@ -1201,21 +1259,63 @@ export function createOpfEditor(element, options = {}) {
       ],
     });
     register("present", { menuItems: () => (presenter ? [{ id: "present", label: "Present", disabled: !inSync || slides.length === 0, run: () => present() }] : []) });
-    // Export's formats, each one the Export menu's own item (the same checks, the same export).
-    register("export", {
-      menuItems: () => {
-        if (!exportMenu) return [];
-        exportMenu.refresh();
-        return [...exportMenu.element.querySelectorAll(".opf-export-item")].map((item) => ({
-          id: `export:${item.dataset.format}`,
-          label: `Export ${item.querySelector(".opf-export-item-label")?.textContent ?? item.dataset.format}`,
-          disabled: item.getAttribute("aria-disabled") === "true",
-          run: () => item.click(),
-        }));
-      },
-    });
+    // Export: one entry that opens the Export menu as its sheet (while Export is in ⋯ the menu is a sheet, so its progress and result stay on screen).
+    register("export", { menuItems: () => (exportMenu ? [{ id: "export", label: text.exportItem ?? "Export…", run: () => exportMenu.open("first") }] : []) });
     if (deckTitle) register("title", deckTitle);
     if (expandButton) register("expand", expandButton);
+    if (designMenu) register("design", designMenu);
+    if (reviewPill) register("review", reviewPill);
+    if (helpButton) register("help", helpButton);
+    if (actionsPart) register("actions", actionsPart);
+  }
+  // While Export is collapsed into ⋯ its menu opens as the bottom sheet (fixed on screen); back in the bar it is the editor's mode again.
+  function onToolbarCollapse({ collapsed }) {
+    exportCollapsed = collapsed.includes("export");
+    exportMenu?.setMode(exportCollapsed ? "sheet" : exportMode);
+  }
+
+  // CE-28 wave 2: the Design quick menu, the review pill, the help sheet and the host's actions.
+  function mountChromeParts() {
+    const labels = chromeLabels();
+    const designPanel = () => Boolean(design || controls.tabs?.design || studioShell?.tabs?.design);
+    if (slots.designMenu && createDesignMenu) {
+      designMenu = createDesignMenu(slots.designMenu, {
+        editor: ui,
+        catalogs,
+        getSlideIndex: () => slideIndex,
+        density,
+        readOnly,
+        ...(labels.designMenu ? { labels: labels.designMenu } : {}),
+        ...(designPanel() ? { onOpenPanel: () => showPanel("design", true) } : {}),
+        onStatus: say,
+      });
+    }
+    if (slots.reviewPill && createReviewPill) {
+      reviewPill = createReviewPill(slots.reviewPill, {
+        density,
+        ...(labels.reviewPill ? { labels: labels.reviewPill } : {}),
+        // The Review panel when there is one; without it (the embed) the host hears `review-open` and shows the findings its own way.
+        onOpen: () => {
+          if (controls.tabs?.review || studioShell?.tabs?.review) showPanel("review", true);
+          else emit("review-open", { counts: reviewCounts, findings: review?.findings ?? [] });
+        },
+      });
+      reviewPill.update(reviewCounts);
+    }
+    if (slots.help && createHelpButton) {
+      helpButton = createHelpButton(slots.help, {
+        overlay,
+        getShortcuts: () => shortcuts(),
+        density,
+        ...(labels.help ? { labels: labels.help } : {}),
+        // "?" opens it from anywhere in a page the editor owns; an embedded editor or a viewer only from inside it (the button still works).
+        bindKey: !scopedKeys,
+      });
+    }
+    if (slots.actions && createToolbarActions) {
+      actionsPart = createToolbarActions(slots.actions, { actions: hostActions, density, ...(labels.actions ? { labels: labels.actions } : {}) });
+      slots.actions.hidden = hostActions.length === 0;
+    }
   }
 
   // The shell's own controls: history, views, tabs.
@@ -1235,12 +1335,24 @@ export function createOpfEditor(element, options = {}) {
       });
     }
     if (controls.tabs) showPanelNow(options.panel && controls.tabs[options.panel] ? options.panel : Object.keys(controls.tabs)[0]);
-    if (options.shortcuts !== false) {
+    // CE-28 wave 2: Ctrl/Cmd+S inside the editor asks the host to save (`save`); the browser's own Save page is kept unless a host listens.
+    if (options.shortcuts !== false && layout !== "viewer") {
+      const onSave = (event) => {
+        if (!(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey || event.key.toLowerCase() !== "s" || event.defaultPrevented) return;
+        if (!element.contains(event.target) || !listeners.get("save")?.size) return;
+        event.preventDefault();
+        requestSave();
+      };
+      doc.addEventListener("keydown", onSave);
+      cleanups.push(() => doc.removeEventListener("keydown", onSave));
+    }
+    // The viewer edits nothing, so it has no Undo keys.
+    if (options.shortcuts !== false && layout !== "viewer") {
       // Ctrl/Cmd+Z and +Shift+Z undo and redo when nothing that edits text has focus (the code editor and the canvas's inputs keep their own).
       const onKey = (event) => {
         if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "z" || event.defaultPrevented) return;
         if (event.target?.closest?.("input,textarea,select,[contenteditable],.cm-editor,dialog[open]")) return;
-        if (!element.contains(event.target) && (event.target !== doc.body || layout === "embed")) return;
+        if (!element.contains(event.target) && (event.target !== doc.body || scopedKeys)) return;
         event.preventDefault();
         if (event.shiftKey) redo();
         else undo();
@@ -1304,6 +1416,8 @@ export function createOpfEditor(element, options = {}) {
     pane?.setReadOnly(readOnly);
     studio?.setReadOnly(readOnly);
     deckTitle?.setReadOnly(readOnly);
+    designMenu?.setReadOnly(readOnly);
+    strip?.setReadOnly?.(readOnly);
     root.toggleAttribute("data-readonly", readOnly);
     syncChrome();
     studioCtl?.refresh();
@@ -1328,6 +1442,10 @@ export function createOpfEditor(element, options = {}) {
     studio?.setDensity(density);
     deckTitle?.setDensity(density);
     expandButton?.setDensity(density);
+    designMenu?.setDensity(density);
+    reviewPill?.setDensity(density);
+    helpButton?.setDensity(density);
+    actionsPart?.setDensity(density);
     toolbar?.setDensity(density);
     mountSlideRow();
   }
@@ -1335,7 +1453,7 @@ export function createOpfEditor(element, options = {}) {
     if (destroyed) return;
     if (!partsReady) requested.exportMode = setting;
     exportMode = exportModeFor(setting);
-    exportMenu?.setMode(exportMode);
+    exportMenu?.setMode(exportCollapsed ? "sheet" : exportMode);
   }
   function setDocument(document, openOptions = {}) {
     if (destroyed || !mounted) throw new OPFEditorError("not-ready", "The editor is not mounted yet. Await `ready` first.");
@@ -1353,7 +1471,10 @@ export function createOpfEditor(element, options = {}) {
         openedText = text !== undefined && pane.getFormat() === "json" ? openOptions.text : undefined;
       } else session.replaceDocument(document, { source: "load" });
       // A document the host loaded is not the person's work: it is not autosaved or warned about until it is edited.
-      if (openOptions.rebase !== false) persistence?.rebase();
+      if (openOptions.rebase !== false) {
+        persistence?.rebase();
+        recordBaseline();
+      }
       return true;
     } catch (error) {
       if (error?.code !== "invalid-opf-edit") throw error;
@@ -1378,7 +1499,10 @@ export function createOpfEditor(element, options = {}) {
       ...(openOptions.name !== undefined ? { name: openOptions.name } : {}),
     });
     // Text the host loaded is not the person's work: it is not autosaved or warned about until it is edited.
-    if (applied && openOptions.rebase !== false) persistence?.rebase();
+    if (applied && openOptions.rebase !== false) {
+      persistence?.rebase();
+      recordBaseline();
+    }
     return applied;
   }
 
@@ -1387,6 +1511,92 @@ export function createOpfEditor(element, options = {}) {
     const name = session.snapshot().presentation?.name;
     return typeof name === "string" ? name : "";
   }
+  // ---- CE-28 wave 2: unsaved changes, save, the host's actions and the shortcuts ----------------------------------------------------
+  // The baseline is what was last loaded or saved: the document (as JSON) and the text of the source pane. Dirty is the document differing from
+  // it, or the pane holding a draft that is not a valid deck (it never reaches the document) whose text differs from the baseline's.
+  let baseline = null;
+  let dirty = false;
+  const documentKey = () => JSON.stringify(session.snapshot().presentation);
+  const paneText = () => pane?.editor?.api?.getValue?.() ?? "";
+  function recordBaseline() {
+    if (!partsReady || destroyed) return;
+    baseline = { document: documentKey(), text: paneText() };
+    updateDirty();
+  }
+  function updateDirty() {
+    if (!baseline || destroyed) return;
+    const next = documentKey() !== baseline.document || Boolean(pane && !inSync && paneText() !== baseline.text);
+    if (next === dirty) return;
+    dirty = next;
+    root.toggleAttribute("data-dirty", dirty);
+    emit("dirty", { dirty });
+  }
+  function markSaved() {
+    if (destroyed) return false;
+    if (!mounted) return true;
+    commitPending();
+    recordBaseline();
+    persistence?.markSaved();
+    return true;
+  }
+  /** What a save writes: the document, and the source pane's text as it is (a draft too, so a host can keep it as text). */
+  function saveDetail() {
+    commitPending();
+    const source = handle.readSource();
+    return { document: session.snapshot().presentation, text: source.text, format: source.format, draft: Boolean(source.draft) };
+  }
+  function requestSave() {
+    if (!mounted || destroyed) return false;
+    emit("save", saveDetail());
+    return true;
+  }
+  function setActions(list) {
+    if (!Array.isArray(list)) throw new TypeError("setActions needs an array of actions.");
+    hostActions = [...list];
+    if (actionsPart) {
+      actionsPart.setActions(hostActions);
+      slots.actions.hidden = hostActions.length === 0;
+      toolbar?.update();
+    }
+  }
+  /** The keyboard shortcuts this editor binds now, for the help sheet (and, in the Studio, beside its command registry). */
+  function shortcuts() {
+    const list = [];
+    const add = (id, label, keys, group) => list.push({ id, label, keys, group });
+    if (studioCtl) {
+      // The Studio's registry: every command with a key, as its own sheet lists them; then what the registry does not hold.
+      for (const entry of studioCtl.commands.list()) if (entry.keys.length) add(entry.id, entry.label, entry.keys, entry.group ?? "Studio");
+    } else {
+      if (parts.history && layout !== "viewer" && options.shortcuts !== false) {
+        add("undo", "Undo", ["Mod-z"], "Edit");
+        add("redo", "Redo", ["Shift-Mod-z"], "Edit");
+      }
+      if (find) {
+        add("find", "Find", ["Mod-f"], "Edit");
+        add("replace", "Find and replace", ["Mod-h"], "Edit");
+      }
+      if (slideNav || counterNav) {
+        add("previous", "Previous slide", ["ArrowLeft"], "Slides");
+        add("next", "Next slide", ["ArrowRight"], "Slides");
+      }
+      if (presenter) add("present", "Present from this slide", ["F5"], "Slides");
+      if (helpButton && !scopedKeys) add("help", "Keyboard shortcuts", ["?"], "Window");
+    }
+    return [...list, ...chromeShortcuts()];
+  }
+  /** The shortcuts of the chrome itself (save, the title, expand): the help sheet lists them, and so does the Studio's own sheet. */
+  function chromeShortcuts() {
+    const list = [];
+    const add = (id, label, keys, group) => list.push({ id, label, keys, group });
+    if (listeners.get("save")?.size && layout !== "viewer" && options.shortcuts !== false) add("save", "Save", ["Mod-s"], "Edit");
+    if (deckTitle && !readOnly) {
+      add("title-commit", "Rename: keep the name typed in the title", ["Enter"], "Presentation name");
+      add("title-cancel", "Rename: put the name back", ["Escape"], "Presentation name");
+    }
+    if (expandCtl) add("expand-exit", "Leave the expanded editor", ["Escape"], "Window");
+    return list;
+  }
+
   function setDeckName(name) {
     if (destroyed) return false;
     if (typeof name !== "string") throw new TypeError("setDeckName needs the name as a string.");
@@ -1407,7 +1617,7 @@ export function createOpfEditor(element, options = {}) {
     }
   }
   function expand(on = true) {
-    if (destroyed || studioLayout || options.expand === false) return false;
+    if (destroyed || options.expand === false) return false;
     if (waiting()) {
       queue("expand", () => expand(on));
       return true;
@@ -1564,7 +1774,28 @@ export function createOpfEditor(element, options = {}) {
     get deckTitle() {
       return deckTitle;
     },
+    /** CE-28 wave 2: the toolbar's other parts, once mounted (a host that runs its own Review feeds `reviewPill.update(counts)`). */
+    get designMenu() {
+      return designMenu;
+    },
+    get reviewPill() {
+      return reviewPill;
+    },
+    get helpButton() {
+      return helpButton;
+    },
+    get toolbarActions() {
+      return actionsPart;
+    },
     getDeckName: currentDeckName,
+    /** CE-28 wave 2: whether the document (or a source draft) differs from what was last loaded or saved. */
+    get dirty() {
+      return dirty;
+    },
+    markSaved,
+    save: requestSave,
+    setActions,
+    shortcuts,
     setDeckName,
     expand,
     get expanded() {
@@ -1665,6 +1896,10 @@ export function createOpfEditor(element, options = {}) {
       expandButton?.destroy();
       expandCtl?.destroy();
       deckTitle?.destroy();
+      designMenu?.destroy();
+      reviewPill?.destroy();
+      helpButton?.destroy();
+      actionsPart?.destroy();
       counterNav?.destroy();
       toolbar?.destroy();
       unbindKeys?.();
@@ -1710,9 +1945,35 @@ export function createOpfEditor(element, options = {}) {
     if (wantedView && wantedView !== "slide") setView(wantedView);
     else markView("slide");
     syncChrome();
+    // The document as it was opened is the baseline of `dirty`; calls queued before mount (a rename) are changes after it.
+    recordBaseline();
+    if (options.guardUnload) mountUnloadGuard();
     flushQueued();
     // The bar's parts are in their slots now: fit the row at once rather than on the next frame.
     toolbar?.update();
+  }
+  // CE-28 wave 2 (promoted from openpresentation.org's source unload guard): the browser asks before the page closes while there is unsaved work.
+  // `guardUnload: true` asks while `dirty`; a function decides itself (a host with state of its own), given the editor.
+  function mountUnloadGuard() {
+    if (!win?.addEventListener) return;
+    const decide = typeof options.guardUnload === "function" ? () => Boolean(options.guardUnload(handle)) : () => dirty;
+    const onBeforeUnload = (event) => {
+      if (destroyed) return;
+      // Text typed a moment ago is applied first, so its verdict counts.
+      pane?.getText();
+      updateDirty();
+      let warn = false;
+      try {
+        warn = decide();
+      } catch (error) {
+        report(error);
+      }
+      if (!warn) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    win.addEventListener("beforeunload", onBeforeUnload);
+    cleanups.push(() => win.removeEventListener("beforeunload", onBeforeUnload));
   }
   readyPromise = new Promise((resolve, reject) => {
     const start = (arrived) => {

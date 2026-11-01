@@ -147,7 +147,9 @@ el.addEventListener("opf-slide", ({ detail }) => console.log(detail.index, detai
 | `opf-error` | `{ error, message, ... }`; see [Errors](#errors) |
 | `opf-kept`, `opf-rename`, `opf-export` | the source was copied or downloaded; the file was renamed; an export finished |
 | `opf-persistence`, `opf-review`, `opf-review-goto`, `opf-review-focus` | autosave status; Review counts and its go-to and focus requests |
-| `opf-deck-name`, `opf-expand` | the editor chrome's events (CE-28), forwarded once the editor emits them |
+| `opf-deck-name`, `opf-expand` | the deck's name changed (`{ name, previous }`); the editor was expanded or returned (`{ expanded }`) |
+| `opf-dirty`, `opf-save` | unsaved changes appeared or were saved (`{ dirty }`); Ctrl/Cmd+S inside the editor (`{ document, text, format, draft }`) |
+| `opf-review-open` | the review pill was pressed in a layout without a Review panel (`{ counts, findings }`) |
 | `opf-destroy` | the editor was destroyed (the element was removed, or remounted) |
 
 `opf-render`, `opf-sync`, `opf-geometry` and `opf-status` fire on every update; listen only to the ones you need. `OPF_EDITOR_EVENTS` and `opfEventType(name)` are exported from `@openpresentation/opf-editor/element`, and `OpfEditorElementEventMap` types the events for `addEventListener`.

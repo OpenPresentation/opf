@@ -99,22 +99,19 @@
   opacity: 0.45;
   cursor: default;
 }
-.opf-studio-name {
+/* CE-28: the deck title part (src/deck-title.js) and the expand button in the bar. */
+.opf-studio-title {
+  display: flex;
   flex: 0 1 200px;
   min-width: 80px;
-  height: 28px;
-  padding: 0 8px;
-  border: 1px solid transparent;
-  border-radius: var(--opf-ui-radius-sm);
-  background: transparent;
-  color: var(--opf-ui-fg);
-  font: 600 13px var(--opf-ui-font);
-  text-overflow: ellipsis;
 }
-.opf-studio-name:hover,
-.opf-studio-name:focus {
-  border-color: var(--opf-ui-border);
-  background: var(--opf-ui-surface);
+.opf-studio-title:empty,
+.opf-studio-expand:empty {
+  display: none;
+}
+.opf-studio-expand {
+  display: inline-flex;
+  flex: none;
 }
 .opf-studio-views {
   padding: 2px;
@@ -1206,7 +1203,7 @@
 .opf-studio[data-width="narrow"][data-preset="studio"] .opf-studio-sheetbar {
   display: inline-flex;
 }
-.opf-studio[data-width="narrow"] :is(.opf-studio-format, .opf-studio-counter, .opf-studio-zoombar, .opf-studio-name) {
+.opf-studio[data-width="narrow"] :is(.opf-studio-format, .opf-studio-counter, .opf-studio-zoombar, .opf-studio-title) {
   display: none;
 }
 .opf-studio[data-width="narrow"][data-sheet="slides"] .opf-studio-left,
@@ -1256,7 +1253,7 @@
   .opf-studio .opf-studio-design-advanced > summary {
     padding-block: calc((44px - 1lh) / 2);
   }
-  .opf-studio :is(.opf-studio-number, .opf-studio-input, .opf-studio-name) {
+  .opf-studio :is(.opf-studio-number, .opf-studio-input) {
     min-height: 44px;
     font-size: 16px;
   }

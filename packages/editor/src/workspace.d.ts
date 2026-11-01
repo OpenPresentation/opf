@@ -14,9 +14,14 @@ import type { SlideManager } from "./slide-manager.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 import type { Toolbar, ToolbarItemName, ToolbarItemSpec } from "./toolbar.js";
 import type { DeckTitle } from "./deck-title.js";
+import type { DesignMenuLabels } from "./design-menu.js";
+import type { ReviewPillCounts, ReviewPillLabels } from "./review-pill.js";
+import type { HelpButtonLabels, HelpShortcut } from "./shortcuts-sheet.js";
+import type { ToolbarAction, ToolbarActionsLabels } from "./toolbar-actions.js";
 
 /** CE-28: `"embed"` is the slide alone under a compact toolbar (title, history, counter, expand, Present), for a page that shows a deck. */
-export type OpfEditorLayout = "full" | "canvas" | "embed" | "source" | "studio" | "playground";
+export type OpfEditorLayout = "full" | "canvas" | "embed" | "viewer" | "source" | "studio" | "playground";
+export type { ToolbarAction, HelpShortcut };
 /** CE-28: a toolbar item by name, or `{ id, priority, collapsible }` (see `toolbar.d.ts`). */
 export type OpfToolbarItem = ToolbarItemSpec;
 export type { Toolbar, ToolbarItemName };
@@ -161,6 +166,11 @@ export interface OpfEditorSlots {
   counter?: HTMLElement;
   views?: HTMLElement;
   expand?: HTMLElement;
+  /** CE-28 wave 2: the Design quick menu (the `design` item; `design` is the side panel's slot), the review pill (`review` item), the help button and the host's actions. */
+  designMenu?: HTMLElement;
+  reviewPill?: HTMLElement;
+  help?: HTMLElement;
+  actions?: HTMLElement;
   /** CE-28: the element the toolbar is built in, instead of the default layout's bar (with your own `slots` arrangement, the only place it goes). */
   toolbar?: HTMLElement;
 }
@@ -302,6 +312,12 @@ export interface OpfEditorOptions {
    * `false` turns it off.
    */
   expand?: false | { target?: HTMLElement; fullscreen?: boolean };
+  /** CE-28 wave 2: the host's own buttons in the toolbar (the `actions` item); `editor.setActions` replaces them. Each `enabled()` and `pressed()` is read again after every change, selection and read-only switch. */
+  actions?: ToolbarAction[];
+  /** CE-28 wave 2: "+" and the context menu on the thumbnail strip (default true in `full` and `embed`, false elsewhere). */
+  slideActions?: boolean;
+  /** CE-28 wave 2: the browser asks before the page closes while the editor is `dirty` (`true`), or while the function says so (default false). */
+  guardUnload?: boolean | ((editor: OpfEditor) => boolean);
 
   source?: OpfEditorSourceOptions;
   canvas?: Omit<CanvasEditorOptions, "editor" | "fonts" | "renderOptions" | "slideIndex" | "presentation" | "catalogs" | "propertiesContainer">;
@@ -326,7 +342,13 @@ export interface OpfEditorOptions {
    * button, default "Expand editor" and "Exit expanded editor"), `more` (the ⋯ button, default "More"), `moreMenu` (its menu, default "More
    * actions") and `counter` (the toolbar counter's landmark, default "Slide navigation").
    */
-  labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>>;
+  labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>> & {
+    /** CE-28 wave 2: the labels of the Design quick menu, the review pill, the help sheet and the actions group. */
+    designMenu?: DesignMenuLabels;
+    reviewPill?: ReviewPillLabels;
+    help?: HelpButtonLabels;
+    actions?: ToolbarActionsLabels;
+  };
   /**
    * Which slide stays on show when the document changes outside the canvas: `"id"` (default) follows the slide by its id (a reorder in the source
    * pane keeps it), `"position"` keeps the position and clamps it to the deck.
@@ -346,7 +368,7 @@ export interface OpfEditorOptions {
 }
 
 /** CE-28: the labels of the toolbar's parts. */
-export type OpfEditorChromeLabel = "title" | "untitled" | "expand" | "collapse" | "more" | "moreMenu" | "counter";
+export type OpfEditorChromeLabel = "title" | "untitled" | "expand" | "collapse" | "more" | "moreMenu" | "counter" | "exportItem";
 
 export interface OpfEditorSourceState {
   /** `valid`, `invalid` (the document has errors) or `syntax` (the text does not read as a document in `format`). */
@@ -412,6 +434,12 @@ export interface OpfEditorEvents {
   deckName: { name: string; previous: string };
   /** CE-28: the editor was expanded to fill the window, or returned (the button, `expand()`, Escape, the browser leaving full screen). */
   expand: { expanded: boolean };
+  /** CE-28 wave 2: the document, or a source draft, now differs from what was last loaded or saved (`true`), or no longer does. */
+  dirty: { dirty: boolean };
+  /** CE-28 wave 2: Ctrl/Cmd+S inside the editor (or `editor.save()`): save this. `text` is the source pane's text, a draft too (`draft`). Call `markSaved()` once saved. */
+  save: { document: unknown; text: string; format: SourceFormat; draft: boolean };
+  /** CE-28 wave 2: the review pill was pressed in a layout without a Review panel (the embed): show the findings your own way. */
+  "review-open": { counts: ReviewPillCounts | null; findings: ReviewFinding[] };
   destroy: Record<string, never>;
 }
 
@@ -474,6 +502,16 @@ export interface OpfEditor {
   /** CE-28: expand the editor to fill the window (`false` returns it). Returns the resulting state; queued (true) before mount; false with `expand: false` and in the Studio. */
   expand(on?: boolean): boolean;
   readonly expanded: boolean;
+  /** CE-28 wave 2: the document, or a source draft that is not a valid deck, differs from what was last loaded (`setDocument`, `setSourceText`) or saved. */
+  readonly dirty: boolean;
+  /** CE-28 wave 2: the host saved the document: it becomes the baseline of `dirty` (and autosave records it, with `persistence`). */
+  markSaved(): boolean;
+  /** CE-28 wave 2: emit `save` now, as Ctrl/Cmd+S does. False before mount. */
+  save(): boolean;
+  /** CE-28 wave 2: replace the host's toolbar actions. */
+  setActions(actions: ToolbarAction[]): void;
+  /** CE-28 wave 2: the keyboard shortcuts this editor binds now (what the help sheet lists; in the Studio, its commands and the chrome's keys). */
+  shortcuts(): HelpShortcut[];
   setLayout(layout: "studio" | "playground"): boolean;
   /** CE-20: the Studio's zoom (1 is the slide fitted), `setZoom` and `fit` ("slide" or "width"). */
   readonly zoom: number;

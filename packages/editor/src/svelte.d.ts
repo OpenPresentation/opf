@@ -42,3 +42,5 @@ export interface OpfDeckNameStore {
   update(updater: (name: string) => string): boolean;
 }
 export declare function opfDeckName(editor: OpfDeckNameEditor): OpfDeckNameStore;
+/** CE-28 wave 2: a readable store of `editor.dirty`. */
+export declare function opfDirty(editor: { readonly dirty: boolean; on(name: "dirty", listener: (detail: { dirty: boolean }) => void): () => void }): { subscribe(run: (dirty: boolean) => void): () => void };
