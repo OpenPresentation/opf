@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Headless: the host's own controls</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./page.css">
+<style>
+  #app { width: 860px; max-width: 100%; background: var(--page-card); }
+  #app header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 14px; border-bottom: 1px solid var(--page-line); }
+  #editor { height: 440px; }
+</style>
+</head>
+<body>
+<h1>Headless</h1>
+<p class="lead">The editor builds no bar. The page has its own title field and buttons, driven only by the handle's methods and events.</p>
+<!-- #region markup -->
+<div id="app" class="card">
+  <header>
+    <input id="title" class="host-field" aria-label="Deck name">
+    <button id="undo" class="host-button" type="button">Undo</button>
+    <button id="redo" class="host-button" type="button">Redo</button>
+    <button id="previous" class="host-button" type="button">Previous</button>
+    <span id="counter" class="note" aria-live="polite"></span>
+    <button id="next" class="host-button" type="button">Next</button>
+    <button id="expand" class="host-button" type="button" aria-pressed="false">Expand</button>
+    <span id="dirty" class="badge" data-dirty="false">Saved</span>
+  </header>
+  <div id="editor"></div>
+</div>
+<!-- #endregion -->
+<script type="module" src="./headless.js"></script>
+</body>
+</html>

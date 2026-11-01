@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Web component: the editor as one tag</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./page.css">
+<style>
+  opf-editor { width: 720px; max-width: 100%; height: 420px; border: 1px solid var(--page-line); border-radius: 12px; overflow: hidden; }
+</style>
+</head>
+<body>
+<h1>The &lt;opf-editor&gt; element</h1>
+<p class="lead">No framework and no bundle of your own beyond one import: the tag, its attributes and an inline deck. The page hears the deck's name through the <code>opf-deck-name</code> event.</p>
+<!-- #region element -->
+<opf-editor id="hero" layout="embed" toolbar="title,history,counter,spacer,expand" fonts="./opf-fonts/">
+  <script type="application/json">
+    {
+      "name": "Launch plan",
+      "language": "en-US",
+      "design": { "theme": "classic", "fontScheme": "roboto" },
+      "slides": [
+        { "id": "why", "title": "Why now", "text": "The category is moving, and we are early." },
+        { "id": "how", "title": "How we get there", "items": ["Ship the beta", "Land three design partners", "Open the waitlist"] }
+      ]
+    }
+  </script>
+</opf-editor>
+<p>The deck is called <strong id="deck-name">Launch plan</strong>.</p>
+<!-- #endregion -->
+<script type="module" src="./element.js"></script>
+</body>
+</html>

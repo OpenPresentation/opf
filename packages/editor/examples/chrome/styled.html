@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Styling hooks: a dark bar, a serif title, your icons</title>
+<!-- The layered sheet: any rule of yours outside a layer beats the package's, whatever its specificity. -->
+<link rel="stylesheet" href="./styles.layered.css">
+<link rel="stylesheet" href="./page.css">
+<!-- #region css -->
+<style>
+  /* A dark bar: each part redeclares the tokens on itself, so set them on the bar and on every part inside it. */
+  .opf-ws-bar,
+  .opf-ws-bar .opf-ui {
+    --opf-ui-bar-bg: #111827;
+    --opf-ui-bar-fg: #f9fafb;
+    --opf-ui-bar-border: #374151;
+    --opf-ui-surface: #1f2937;
+    --opf-ui-fg: #f9fafb;
+    --opf-ui-muted: #374151;
+    --opf-ui-muted-fg: #d1d5db;
+    --opf-ui-border: #374151;
+  }
+
+  /* A pill-shaped review status, filled when there are errors. */
+  .opf-review-pill {
+    border-radius: 999px;
+    padding-inline: 14px;
+  }
+  .opf-review-pill[data-severity="error"] {
+    background: var(--opf-ui-danger);
+    color: var(--opf-ui-surface);
+  }
+</style>
+<!-- #endregion -->
+<style>
+  #card { width: 720px; max-width: 100%; height: 420px; }
+</style>
+</head>
+<body>
+<h1>Styling hooks</h1>
+<p class="lead">Plain CSS on the editor's stable classes and tokens, the title's font through <code>theme.tokens</code>, and three icons of the page's own.</p>
+<div id="card" class="card"></div>
+<script type="module" src="./styled.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Toolbar items in your own header</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./page.css">
+<style>
+  #app { width: 860px; max-width: 100%; background: var(--page-card); }
+  #app header { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-bottom: 1px solid var(--page-line); }
+  #app header .brand { font-weight: 700; margin-right: 8px; }
+  #app header .grow { flex: 1; }
+  #editor { height: 440px; }
+</style>
+</head>
+<body>
+<h1>Items in your own header</h1>
+<p class="lead">The editor builds no toolbar. The title, history, counter, design menu and expand button are mounted in this page's header, and Expand covers the whole card, header included.</p>
+<!-- #region markup -->
+<div id="app" class="card">
+  <header>
+    <span class="brand">Acme Decks</span>
+    <div id="header-title"></div>
+    <div id="header-history"></div>
+    <span class="grow"></span>
+    <div id="header-counter"></div>
+    <div id="header-design"></div>
+    <div id="header-expand"></div>
+  </header>
+  <div id="editor"></div>
+</div>
+<!-- #endregion -->
+<script type="module" src="./own-header.js"></script>
+</body>
+</html>

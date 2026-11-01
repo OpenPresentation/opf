@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Embed layout: a deck in a card</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./page.css">
+<style>
+  #card { width: 720px; max-width: 100%; height: 420px; }
+</style>
+</head>
+<body>
+<h1>Embed layout</h1>
+<p class="lead">The slide alone under a compact bar: the deck name, Undo and Redo, the slide counter, Expand and Present. This is the homepage-hero use case.</p>
+<!-- #region markup -->
+<div id="card" class="card"></div>
+<p>The deck is called <strong id="deck-name"></strong>.</p>
+<!-- #endregion -->
+<p class="note">Rename the deck in the bar: the label above follows, because it listens to the <code>deckName</code> event.</p>
+<script type="module" src="./embed.js"></script>
+</body>
+</html>
