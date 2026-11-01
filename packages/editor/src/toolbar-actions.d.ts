@@ -1,11 +1,15 @@
+import type { OpfIcon } from "./icons.js";
 /** One host button in the toolbar. */
 export interface ToolbarAction {
   /** Unique within the list. Becomes `data-action` on the button and `actions:<id>` in the overflow menu. */
   id: string;
   /** The visible text of the button (and its accessible name). */
   label: string;
-  /** An SVG element (copied into the toolbar's document) or SVG path data for a 24x24 stroked icon (`"M5 12h14"`). Optional. */
-  icon?: SVGElement | string;
+  /**
+   * The button's icon: an SVG element (copied into the toolbar's document), a function returning one, or SVG path data for a 24x24 stroked icon
+   * (`"M5 12h14"`); see `OpfIcon`. Optional. The icon is `.opf-actions-icon`; its name is the action id (`data-opf-icon`).
+   */
+  icon?: OpfIcon;
   /** The tooltip. */
   title?: string;
   /** What the button does. Called on a click, and from the overflow menu, only while the action is enabled. The button refreshes afterwards. */

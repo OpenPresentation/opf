@@ -18,8 +18,8 @@
   border: 1px solid transparent;
   border-radius: var(--opf-ui-radius);
   background: transparent;
-  color: var(--opf-ui-fg);
-  font: 600 15px/1.2 var(--opf-ui-font);
+  color: var(--opf-ui-title-fg);
+  font: var(--opf-ui-title-weight) var(--opf-ui-title-size)/1.2 var(--opf-ui-title-font);
   text-overflow: ellipsis;
   transition: border-color var(--opf-ui-ease), background-color var(--opf-ui-ease);
 }

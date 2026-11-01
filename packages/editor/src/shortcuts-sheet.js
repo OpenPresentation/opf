@@ -2,11 +2,14 @@
 // in, grouped and filterable by typing. The rows, the classes and the look are the source pane's shortcuts dialog (source-shortcuts.js,
 // styles/shortcuts.css); the key names come from the studio kit's `formatKey` (⌘ on a Mac, Ctrl elsewhere) so the three sheets agree. Plain DOM,
 // no framework, no network. The icon is the Lucide CircleHelp path (ISC license), inlined.
+import { normalizeIcons, resolveIcon } from "./icons.js";
 import { matches } from "./source-shortcuts.js";
 import { formatKey, isHandled, markHandled } from "./studio-kit/commands.js";
 import { isMac, isTypingTarget } from "./studio-kit/dom.js";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
+const ICON_NAMES = ["help", "close"];
+// The help glyph is Lucide CircleHelp: a ring, a question mark and a dot.
+const HELP_ICON = [["circle", { cx: 12, cy: 12, r: 10 }], ["path", { d: "M9.09 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" }], ["path", { d: "M12 17h.01" }]];
 const FOCUSABLE = 'button, input, [tabindex]:not([tabindex="-1"])';
 let counter = 0;
 
@@ -66,25 +69,6 @@ export function opensOnKey(event) {
   return true;
 }
 
-function icon(doc) {
-  const svg = doc.createElementNS(SVG_NS, "svg");
-  svg.setAttribute("class", "opf-help-icon");
-  svg.setAttribute("viewBox", "0 0 24 24");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("stroke-width", "2");
-  svg.setAttribute("stroke-linecap", "round");
-  svg.setAttribute("stroke-linejoin", "round");
-  for (const [tag, attributes] of [["circle", { cx: 12, cy: 12, r: 10 }], ["path", { d: "M9.09 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" }], ["path", { d: "M12 17h.01" }]]) {
-    const node = doc.createElementNS(SVG_NS, tag);
-    for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
-    svg.append(node);
-  }
-  return svg;
-}
-
 function node(doc, tag, className, attributes = {}, text) {
   const made = doc.createElement(tag);
   if (className) made.className = className;
@@ -108,6 +92,7 @@ export function createHelpButton(container, options = {}) {
   const win = doc.defaultView;
   const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
   const bindKey = options.bindKey !== false;
+  const icons = normalizeIcons(options.icons, ICON_NAMES, "createHelpButton icons");
   let density = options.density === "touch" ? "touch" : "comfortable";
   let disabled = false;
   let destroyed = false;
@@ -116,7 +101,7 @@ export function createHelpButton(container, options = {}) {
   const element = node(doc, "button", "opf-help-button", { type: "button", "aria-label": labels.button, "aria-haspopup": "dialog", "aria-expanded": "false" });
   element.title = bindKey ? `${labels.title} (?)` : labels.title;
   element.dataset.density = density;
-  element.append(icon(doc));
+  element.append(resolveIcon(doc, icons.help, HELP_ICON, { name: "help", className: "opf-help-icon" }));
   container.append(element);
 
   const overlayHost = () => options.overlay ?? container.closest?.(".opf-ui") ?? doc.body;
@@ -133,6 +118,9 @@ export function createHelpButton(container, options = {}) {
     const dialog = node(doc, "div", "opf-shortcuts-dialog", { role: "dialog", "aria-modal": "true", "aria-labelledby": `${id}-title`, "aria-describedby": `${id}-help`, tabindex: "-1" });
     const head = node(doc, "div", "opf-shortcuts-head");
     const closeButton = node(doc, "button", "opf-shortcuts-close", { type: "button", "aria-label": labels.close }, "×");
+    // The close button reads "×" unless the host gives a `close` icon.
+    const closeIcon = resolveIcon(doc, icons.close, null, { name: "close", className: "opf-help-close-icon", size: 16 });
+    if (closeIcon) closeButton.replaceChildren(closeIcon);
     head.append(node(doc, "h2", "opf-shortcuts-title", { id: `${id}-title` }, labels.heading), closeButton);
     const help = node(doc, "p", "opf-shortcuts-help", { id: `${id}-help` }, labels.description(isMac(win) ? "macOS" : "Windows or Linux"));
     const search = node(doc, "input", "opf-shortcuts-search", { type: "search", "aria-label": labels.search, placeholder: labels.searchPlaceholder, autocomplete: "off", spellcheck: "false" });

@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 /** What the workspace's `review` event carries (and the Review panel's `onChange`). */
 export interface ReviewPillCounts {
   error: number;
@@ -48,6 +49,11 @@ export interface ReviewPillOptions {
   /** `"comfortable"` (32px, default) or `"touch"` (40px; 44px under a coarse pointer either way). */
   density?: "comfortable" | "touch";
   labels?: ReviewPillLabels;
+  /**
+   * Replace the glyph of a state: `valid` (no findings), `error`, `warning` and `info` (the most severe level present), `checking` (before the
+   * first update) and `unavailable` (the review could not run). See `OpfIcon`. The glyph is `.opf-review-pill-icon`; `data-opf-icon` names it.
+   */
+  icons?: OpfIcons<"valid" | "error" | "warning" | "info" | "checking" | "unavailable">;
 }
 export interface ReviewPillMenuItem {
   id: "review";

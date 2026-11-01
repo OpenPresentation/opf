@@ -4,6 +4,8 @@
 // It only arranges: the parts (the deck title, the history buttons, the counter, Export, Present, the expand button) are mounted in its slots by
 // the workspace (src/workspace.js) or by a host, and registered with `mount(id, part)`. Plain DOM, styled by src/styles/toolbar.css (tokens only).
 
+import { normalizeIcons, resolveIcon } from "./icons.js";
+
 /**
  * The items a toolbar knows, with their default priority (higher stays visible longer) and whether they can move into the `more` menu.
  * `spacer` takes the free space; `|` is a divider, shown only between two visible items.
@@ -65,24 +67,8 @@ const make = (doc, tag, attributes = {}, ...children) => {
   node.append(...children);
   return node;
 };
-const SVG = "http://www.w3.org/2000/svg";
-function dotsIcon(doc) {
-  const svg = doc.createElementNS(SVG, "svg");
-  svg.setAttribute("viewBox", "0 0 16 16");
-  svg.setAttribute("width", "16");
-  svg.setAttribute("height", "16");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  for (const cx of [3, 8, 13]) {
-    const dot = doc.createElementNS(SVG, "circle");
-    dot.setAttribute("cx", String(cx));
-    dot.setAttribute("cy", "8");
-    dot.setAttribute("r", "1.5");
-    dot.setAttribute("fill", "currentColor");
-    svg.append(dot);
-  }
-  return svg;
-}
+// The ⋯ glyph: three filled dots in a 24x24 box. A host replaces it with `icons: { more }` (src/icons.js).
+const MORE_ICON = [4.5, 12, 19.5].map((cx) => ["circle", { cx, cy: 12, r: 2.25, fill: "currentColor", stroke: "none" }]);
 
 let toolbarIds = 0;
 
@@ -95,6 +81,7 @@ export function createToolbar(container, options = {}) {
   const win = doc.defaultView;
   const text = { ...LABELS, ...(options.labels ?? {}) };
   const items = normalizeToolbarItems(options.items ?? []);
+  const icons = normalizeIcons(options.icons, ["more"], "createToolbar icons");
   const id = `opf-tb-${++toolbarIds}`;
   let density = options.density === "touch" ? "touch" : "comfortable";
   let destroyed = false;
@@ -119,7 +106,7 @@ export function createToolbar(container, options = {}) {
   let trigger;
   let menu;
   if (moreEntry) {
-    trigger = make(doc, "button", { type: "button", class: "opf-tb-more-button", "aria-label": text.more, title: text.more, "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": `${id}-menu` }, dotsIcon(doc));
+    trigger = make(doc, "button", { type: "button", class: "opf-tb-more-button", "aria-label": text.more, title: text.more, "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": `${id}-menu` }, resolveIcon(doc, icons.more, MORE_ICON, { name: "more", className: "opf-tb-more-icon", size: 16 }));
     menu = make(doc, "div", { class: "opf-tb-menu", role: "menu", id: `${id}-menu`, "aria-label": text.menu, hidden: true });
     moreEntry.element.classList.add("opf-tb-more");
     moreEntry.element.append(trigger, menu);

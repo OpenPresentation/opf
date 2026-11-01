@@ -34,12 +34,14 @@ export async function bundleWorkspace({ extraEntry = '', alias } = {}) {
   return result.outputFiles[0].text;
 }
 
-export async function startWorkspacePage({ viewport = { width: 1280, height: 860 }, body = '<div id="host" style="width:1200px;height:800px"></div>', colorScheme, bundle: bundleOptions = {}, context = {}, args = [] } = {}) {
+export async function startWorkspacePage({ viewport = { width: 1280, height: 860 }, body = '<div id="host" style="width:1200px;height:800px"></div>', colorScheme, bundle: bundleOptions = {}, context = {}, args = [], layered = false } = {}) {
   const key = JSON.stringify(bundleOptions);
   if (!bundles.has(key)) bundles.set(key, await bundleWorkspace(bundleOptions));
   const bundle = bundles.get(key);
   const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter((face) => face.family === 'Roboto' && [400, 700].includes(face.weight) && !face.italic);
-  const css = (await buildStyles(new URL('../../src/styles/', import.meta.url))).css;
+  // CE-29: `layered` loads dist's styles.layered.css text (the same sheet inside `@layer opf`) instead of styles.css.
+  const styles = await buildStyles(new URL('../../src/styles/', import.meta.url));
+  const css = layered ? styles.layered : styles.css;
   const browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined, args });
   // `context` adds page options (CE-20: `hasTouch` and `isMobile` for a coarse pointer); `args` adds browser flags (`--js-flags=--expose-gc`).
   const page = await browser.newPage({ viewport, ...(colorScheme ? { colorScheme } : {}), ...context });

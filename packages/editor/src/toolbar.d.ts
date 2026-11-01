@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 /**
  * CE-28: the editor's title bar. Named items in order, each in its own slot element; when the row does not fit the width of the bar (its
  * container decides, not the window), the collapsible items are hidden lowest priority first and what they offer is listed in the `more` (⋯)
@@ -61,6 +62,8 @@ export interface ToolbarOptions {
   density?: "comfortable" | "touch";
   /** `more`: the name of the ⋯ button (default "More"); `menu`: the name of its menu (default "More actions"). */
   labels?: { more?: string; menu?: string };
+  /** Replace the ⋯ glyph: `more` (`.opf-tb-more-icon`). See `OpfIcon`. */
+  icons?: OpfIcons<"more">;
   /** The set of collapsed items changed. */
   onCollapse?(detail: { collapsed: ToolbarItemName[] }): void;
   /** A part's `menuItems()` or an item's `run()` threw. */

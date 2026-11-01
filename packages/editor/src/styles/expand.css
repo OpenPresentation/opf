@@ -2,12 +2,12 @@
 
 /* ---- the expanded editor -------------------------------------------------------------------------------------------------------------- */
 /* The editor's host element becomes a fixed overlay over the viewport; it stays where it is in the DOM. !important beats the sizes a host sets
-   inline or by class on the element. A host can raise or lower the overlay with --opf-expand-z (default 1000: above page chrome, below the
-   presenter at 2000). An ancestor with a transform, filter or containment would make "fixed" relative to itself; the host owns that. */
+   inline or by class on the element. A host can raise or lower the overlay with --opf-ui-z-overlay (default 1000: above page chrome, below the
+   presenter at 2000); --opf-expand-z is the older name and still wins when set. An ancestor with a transform, filter or containment would make "fixed" relative to itself; the host owns that. */
 [data-opf-expanded] {
   position: fixed !important;
   inset: 0 !important;
-  z-index: var(--opf-expand-z, 1000) !important;
+  z-index: var(--opf-expand-z, var(--opf-ui-z-overlay)) !important;
   box-sizing: border-box !important;
   width: auto !important;
   height: auto !important;

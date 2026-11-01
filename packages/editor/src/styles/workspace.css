@@ -20,9 +20,11 @@
   display: block;
   flex: none;
   min-width: 0;
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--opf-ui-border);
-  background: var(--opf-ui-surface);
+  min-height: var(--opf-ui-bar-height);
+  padding: var(--opf-ui-bar-padding);
+  border-bottom: 1px solid var(--opf-ui-bar-border);
+  background: var(--opf-ui-bar-bg);
+  color: var(--opf-ui-bar-fg);
 }
 /* CE-28 wave 2: Export collapsed into the ⋯ menu stays in the page, out of sight and out of the row, so the sheet it opens from there (fixed on
    screen) and its progress and result are visible. */
@@ -38,8 +40,9 @@
   visibility: visible;
 }
 /* CE-28, `layout: "embed"`: the slide alone under a compact bar, for a page that shows a deck. The status line is read, not shown. */
-.opf-workspace[data-opf-layout="embed"] .opf-ws-bar {
-  padding: 4px 8px;
+/* The compact bar is the embed default of --opf-ui-bar-padding; a host sets the token with a selector as specific as this one, or in `theme.tokens`. */
+.opf-workspace[data-opf-layout="embed"] {
+  --opf-ui-bar-padding: 4px 8px;
 }
 .opf-workspace[data-opf-layout="embed"] .opf-ws-stage {
   padding: 8px;

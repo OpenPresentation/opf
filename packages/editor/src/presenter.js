@@ -7,6 +7,7 @@ import { toSvg } from "@openpresentation/opf-render/svg";
 import { mergeCatalogs } from "./catalogs.js";
 import { el, icon } from "./export-dom.js";
 import { whenFontsReady } from "./font-gate.js";
+import { normalizeIcons, resolveIcon } from "./icons.js";
 import { formatSlideCounter } from "./slide-navigator.js";
 
 const COUNTER_MS = 2000;
@@ -439,7 +440,7 @@ function isInteractiveTarget(target) {
  *
  * Options: `onPresent(event)`, `disabled` (`true`, or a string that says why and is the title), `density` (`"comfortable"` 32px, or `"touch"` 40px)
  * `label` (the accessible name, default "Present") and `variant` (`"quiet"`, the default: a transparent icon button like the toolbar's undo and redo,
- * or `"primary"`: the filled accent look of the Export trigger). A disabled button stays focusable (`aria-disabled`) and does nothing.
+ * or `"primary"`: the filled accent look of the Export trigger) and `icons` (`{ present }`, see `src/icons.js`). A disabled button stays focusable (`aria-disabled`) and does nothing.
  *
  * Returns `{ element, setDisabled(reason), setDensity(density), setVariant(variant), destroy() }`.
  */
@@ -447,12 +448,15 @@ export function createPresentButton(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
   const doc = container.ownerDocument;
   const label = options.label ?? "Present";
+  const icons = normalizeIcons(options.icons, ["present"], "createPresentButton icons");
+  const glyph = resolveIcon(doc, icons.present, null, { name: "present", size: 16 }) ?? icon(doc, "Presentation", 16);
+  glyph.setAttribute("data-opf-icon", "present");
   let disabledReason = options.disabled === true ? "Nothing to present." : typeof options.disabled === "string" && options.disabled ? options.disabled : undefined;
   let destroyed = false;
   const button = el(doc, "button", {
     type: "button", class: "opf-present-button opf-ui", "aria-label": label, title: "Present (F5)", "aria-keyshortcuts": "F5",
     "data-density": options.density === "touch" ? "touch" : "comfortable", "data-variant": options.variant === "primary" ? "primary" : "quiet",
-  }, icon(doc, "Presentation", 16));
+  }, glyph);
   const paint = () => {
     if (disabledReason) { button.setAttribute("aria-disabled", "true"); button.title = disabledReason; }
     else { button.removeAttribute("aria-disabled"); button.title = "Present (F5)"; }

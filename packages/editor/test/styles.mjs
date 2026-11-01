@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSy
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { buildStyles } from "../scripts/build-styles.mjs";
+import { buildStyles, layerStyles } from "../scripts/build-styles.mjs";
 
 // RR-98: dist/styles.css is generated from src/styles/*.css (tokens first, then the other files alphabetically), defines the whole
 // --opf-ui-* contract for light and dark, uses only those tokens, and is exported as `@openpresentation/opf-editor/styles.css`.
@@ -45,6 +45,18 @@ const OTHER = {
   "--opf-ui-control-h": "32px",
   "--opf-ui-shadow-pop": ["0 8px 24px rgba(0, 0, 0, 0.1)", "0 8px 24px rgba(0, 0, 0, 0.4)"],
   "--opf-ui-ease": "120ms ease",
+  // CE-29: the component tokens. They derive from the tokens above (var(...)), so the dark scheme and a host's theme reach them without a dark block.
+  "--opf-ui-bar-bg": "var(--opf-ui-surface)",
+  "--opf-ui-bar-fg": "var(--opf-ui-fg)",
+  "--opf-ui-bar-border": "var(--opf-ui-border)",
+  "--opf-ui-bar-gap": "8px",
+  "--opf-ui-bar-padding": "6px 12px",
+  "--opf-ui-bar-height": "0px",
+  "--opf-ui-title-font": "var(--opf-ui-font)",
+  "--opf-ui-title-size": "15px",
+  "--opf-ui-title-weight": "600",
+  "--opf-ui-title-fg": "var(--opf-ui-fg)",
+  "--opf-ui-z-overlay": "1000",
 };
 
 const strip = (css) => css.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -158,12 +170,25 @@ assert.ok(paneEditor, "source-pane.css styles the pane's editor");
 assert.match(declared(paneEditor.body, "border") ?? "", /^(0|none)\b/, "the pane's editor resets the border panels.css draws");
 assert.match(declared(paneEditor.body, "border-radius") ?? "", /^0\b/, "the pane's editor resets the radius panels.css draws");
 
+// 5c. CE-29: dist/styles.layered.css is the same stylesheet inside `@layer opf` (a host's unlayered rule then wins at any specificity).
+const layeredPath = path.join(root, "dist", "styles.layered.css");
+assert.ok(existsSync(layeredPath), "npm run build writes dist/styles.layered.css");
+const layered = readFileSync(layeredPath, "utf8");
+assert.equal(layered, `@layer opf {\n${css.trimEnd()}\n}\n`, "the layered file is the plain file inside one @layer opf block");
+assert.equal(layered.split("{").length, layered.split("}").length, "the layered file has balanced braces");
+assert.ok(!/@import\b/.test(layered), "no @import, which may not sit inside a layer");
+assert.equal(layerStyles('@charset "utf-8";\n.a{color:red}\n'), '@charset "utf-8";\n@layer opf {\n.a{color:red}\n}\n', "an @charset rule stays first, above the layer");
+
 // 6. The package exports resolve.
 assert.deepEqual(pkg.exports["./styles.css"], { style: "./dist/styles.css", default: "./dist/styles.css" });
 assert.ok(pkg.files.includes("dist"), "dist (with dist/styles.css) is published");
 assert.ok(existsSync(path.join(root, pkg.exports["./styles.css"].default)));
+assert.deepEqual(pkg.exports["./styles.layered.css"], { style: "./dist/styles.layered.css", default: "./dist/styles.layered.css" });
+assert.ok(existsSync(path.join(root, pkg.exports["./styles.layered.css"].default)));
+assert.equal(fileURLToPath(import.meta.resolve("@openpresentation/opf-editor/styles.layered.css")), layeredPath, "the package resolves its ./styles.layered.css export");
 assert.equal(fileURLToPath(import.meta.resolve("@openpresentation/opf-editor/styles.css")), built, "the package resolves its own ./styles.css export");
 const listed = JSON.parse(execFileSync("npm", ["pack", "--dry-run", "--json", "--ignore-scripts"], { cwd: root, encoding: "utf8", shell: process.platform === "win32" }));
 assert.ok(listed[0].files.some((file) => file.path === "dist/styles.css"), "npm pack includes dist/styles.css");
+assert.ok(listed[0].files.some((file) => file.path === "dist/styles.layered.css"), "npm pack includes dist/styles.layered.css");
 
 console.log("editor stylesheet checks passed");

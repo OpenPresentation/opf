@@ -25,4 +25,7 @@ for (const folder of ["studio-kit"]) {
 }
 
 // RR-98: dist/styles.css is the token layer plus the component styles, generated from src/styles/*.css (see scripts/build-styles.mjs).
-await writeFile(new URL("styles.css", dist), (await buildStyles(new URL("styles/", src))).css);
+// CE-29: dist/styles.layered.css is the same file inside `@layer opf`.
+const styles = await buildStyles(new URL("styles/", src));
+await writeFile(new URL("styles.css", dist), styles.css);
+await writeFile(new URL("styles.layered.css", dist), styles.layered);

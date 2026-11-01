@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 import type { EditorSession } from "./index.js";
 import type { ThumbnailCache } from "./thumbnail-cache.js";
 
@@ -66,6 +67,8 @@ export interface ThumbnailStripOptions {
   /** `"horizontal"` (default) scrolls sideways; `"vertical"` scrolls down. */
   orientation?: "horizontal" | "vertical";
   labels?: ThumbnailStripLabels;
+  /** With `actions`, replace the icon of the add button: `add` (`.opf-thumbs-add-icon`). See `OpfIcon`. */
+  icons?: OpfIcons<"add">;
   /** A thumbnail cache to share with other views. Default: the strip's own. */
   cache?: ThumbnailCache;
   /** False to draw every thumbnail at once instead of those near the viewport. Default true; also off without IntersectionObserver. */

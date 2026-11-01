@@ -8,8 +8,8 @@
 // open after a choice so people can try several, and on a phone (`(max-width: 600px)`) it is a bottom sheet. Plain DOM; styles in
 // src/styles/design-menu.css (classes `opf-design-menu-*`); touch sizes in touch.css.
 import { currentSwitchValue, listSwitchOptions, switchDimension } from "./switches.js";
+import { normalizeIcons, resolveIcon } from "./icons.js";
 
-const SVG_NS = "http://www.w3.org/2000/svg";
 const SHEET_QUERY = "(max-width: 600px)";
 const GAP = 4;
 const MARGIN = 8;
@@ -53,6 +53,9 @@ const ICONS = {
   Check: [["path", { d: "M20 6 9 17l-5-5" }]],
   X: [["path", { d: "M18 6 6 18" }], ["path", { d: "m6 6 12 12" }]],
 };
+// The built-in icon behind each `icons` name.
+const ICON_KEYS = { Palette: "trigger", X: "close", Check: "check" };
+const ICON_NAMES = Object.values(ICON_KEYS);
 let counter = 0;
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -71,15 +74,9 @@ function el(doc, tag, props = {}, ...children) {
 }
 
 // An inline Lucide icon (ISC license; the path data is inlined, nothing is fetched). Decorative: the control that holds it carries the name.
-function icon(doc, name, size = 14) {
-  const svg = doc.createElementNS(SVG_NS, "svg");
-  for (const [key, value] of Object.entries({ width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", focusable: "false", class: "opf-icon" })) svg.setAttribute(key, String(value));
-  for (const [tag, attributes] of ICONS[name]) {
-    const child = doc.createElementNS(SVG_NS, tag);
-    for (const [key, value] of Object.entries(attributes)) child.setAttribute(key, value);
-    svg.append(child);
-  }
-  return svg;
+// `given` is the host's replacement from `options.icons` (see src/icons.js); the part's own names are trigger, close and check.
+function icon(doc, name, size, given) {
+  return resolveIcon(doc, given, ICONS[name], { name: ICON_KEYS[name], size });
 }
 
 const idOf = (reference) => (isObject(reference) ? reference.id : reference);
@@ -96,6 +93,7 @@ export function createDesignMenu(container, options = {}) {
   const doc = container.ownerDocument;
   const win = doc.defaultView;
   const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
+  const icons = normalizeIcons(options.icons, ICON_NAMES, "createDesignMenu icons");
   const id = `opf-design-menu-${++counter}`;
   let density = options.density === "touch" ? "touch" : "comfortable";
   let readOnly = options.readOnly === true;
@@ -121,8 +119,8 @@ export function createDesignMenu(container, options = {}) {
 
   // ---- the DOM ------------------------------------------------------------------------------------------------------------------------
   const trigger = el(doc, "button", { type: "button", class: "opf-design-menu-trigger", "aria-haspopup": "dialog", "aria-expanded": "false", "aria-controls": `${id}-popover` },
-    icon(doc, "Palette"), el(doc, "span", { class: "opf-design-menu-trigger-label", text: labels.trigger }));
-  const closeButton = el(doc, "button", { type: "button", class: "opf-design-menu-close", "aria-label": labels.close }, icon(doc, "X", 18));
+    icon(doc, "Palette", 14, icons.trigger), el(doc, "span", { class: "opf-design-menu-trigger-label", text: labels.trigger }));
+  const closeButton = el(doc, "button", { type: "button", class: "opf-design-menu-close", "aria-label": labels.close }, icon(doc, "X", 18, icons.close));
   const head = el(doc, "div", { class: "opf-design-menu-head" }, el(doc, "span", { class: "opf-design-menu-title", text: labels.title }), closeButton);
   const menu = el(doc, "div", { class: "opf-design-menu-menu", role: "menu", "aria-label": labels.title, id: `${id}-menu` });
   const empty = el(doc, "p", { class: "opf-design-menu-empty", text: labels.empty, hidden: true });
@@ -184,7 +182,7 @@ export function createDesignMenu(container, options = {}) {
     else if (section.key === "theme") hint = swatches(schemeRecords.get(idOf(record.colorScheme)), ["accent1", "accent2", "accent3"]);
     const tip = [record.summary, record.description].find((text) => typeof text === "string" && text) ?? "";
     const row = el(doc, "button", { type: "button", class: "opf-design-menu-item", role: "menuitemradio", "aria-checked": "false", tabindex: "-1", "data-section": section.key, "data-value": option.id, title: tip || false },
-      hint, el(doc, "span", { class: "opf-design-menu-label", text: option.label }), el(doc, "span", { class: "opf-design-menu-check" }, icon(doc, "Check")));
+      hint, el(doc, "span", { class: "opf-design-menu-label", text: option.label }), el(doc, "span", { class: "opf-design-menu-check" }, icon(doc, "Check", 14, icons.check)));
     if (section.key === "fonts" && typeof record.major === "string") row.dataset.major = record.major;
     row.addEventListener("click", () => choose(section, option));
     return row;
