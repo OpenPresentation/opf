@@ -1292,13 +1292,34 @@ export function createOpfEditor(element, options = {}) {
     });
     register("present", { menuItems: () => (presenter ? [{ id: "present", label: "Present", disabled: !inSync || slides.length === 0, run: () => present() }] : []) });
     // Export: one entry that opens the Export menu as its sheet (while Export is in ⋯ the menu is a sheet, so its progress and result stay on screen).
-    register("export", { menuItems: () => (exportMenu ? [{ id: "export", label: text.exportItem ?? "Export…", run: () => exportMenu.open("first") }] : []) });
+    register("export", { menuItems: () => (exportMenu ? [{ id: "export", label: text.exportItem ?? "Export…", run: () => openExportFromMore() }] : []) });
     if (deckTitle) register("title", deckTitle);
     if (expandButton) register("expand", expandButton);
     if (designMenu) register("design", designMenu);
     if (reviewPill) register("review", reviewPill);
     if (helpButton) register("help", helpButton);
     if (actionsPart) register("actions", actionsPart);
+  }
+  // The Export sheet opened from ⋯ gives the focus back to ⋯ when it closes (its own trigger is out of sight there), or, when ⋯ is gone (the
+  // bar widened meanwhile), to the Export button back in the bar, else to the first control of the bar: never to the body.
+  function openExportFromMore() {
+    if (!exportMenu) return;
+    const shown = (node) => Boolean(node?.isConnected && node.getClientRects().length && win.getComputedStyle(node).visibility !== "hidden");
+    const back = () => {
+      const more = toolbar?.element.querySelector(".opf-tb-more-button");
+      const candidates = [more, exportMenu?.trigger, ...(toolbar ? toolbar.element.querySelectorAll("button, input") : [])];
+      candidates.find((node) => shown(node) && !node.disabled)?.focus();
+    };
+    const watch = new win.MutationObserver(() => {
+      if (exportMenu?.trigger.getAttribute("aria-expanded") === "true") return;
+      watch.disconnect();
+      if (destroyed) return;
+      const active = doc.activeElement;
+      if (!active || active === doc.body || !shown(active)) back();
+    });
+    watch.observe(exportMenu.trigger, { attributes: true, attributeFilter: ["aria-expanded"] });
+    cleanups.push(() => watch.disconnect());
+    exportMenu.open("first");
   }
   // While Export is collapsed into ⋯ its menu opens as the bottom sheet (fixed on screen); back in the bar it is the editor's mode again.
   function onToolbarCollapse({ collapsed }) {
@@ -1319,7 +1340,12 @@ export function createOpfEditor(element, options = {}) {
         readOnly,
         ...iconsFor("designMenu"),
         ...(labels.designMenu ? { labels: labels.designMenu } : {}),
-        ...(designPanel() ? { onOpenPanel: () => showPanel("design", true) } : {}),
+        // "More design options…": the workspace's Design panel when there is one, else the host's (`designMenu.onOpenPanel`), else no row.
+        ...(designPanel()
+          ? { onOpenPanel: () => showPanel("design", true) }
+          : typeof options.designMenu?.onOpenPanel === "function"
+            ? { onOpenPanel: () => options.designMenu.onOpenPanel() }
+            : {}),
         onStatus: say,
       });
     }

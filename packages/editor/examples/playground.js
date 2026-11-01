@@ -110,6 +110,8 @@ ed = createOpfEditor(document.body, {
   persistence: hostPersistence,
   // The page runs its own Review tab (review-controls.js) and feeds the pill its counts; the editor runs no second review.
   panels: { review: false },
+  // The Design menu's "More design options…" opens the page's Design tab.
+  designMenu: { onOpenPanel: () => showPanel('design', true) },
   // The title's field keeps the id the page and its tests have always used.
   on: { mounted: ({ editor: handle }) => handle.deckTitle?.input.setAttribute('id', 'document-name') },
   export: { exportPptx: (deck, request) => pptxExporter({ editor, fonts, measurementFor: value => layoutFor(value, 0).fonts.textMeasurement })(deck, request) },

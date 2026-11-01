@@ -35,7 +35,12 @@ try {
   await page.locator('#host .opf-design-menu-trigger').click();
   await page.locator('#host .opf-design-menu button', { hasText: 'More design options' }).click();
   await page.waitForFunction(() => document.querySelector('#host [data-opf-tab=design]')?.getAttribute('aria-selected') === 'true', undefined, { timeout: 5000 });
-  mark('the Design quick menu is in the full bar where there is no Design panel, lists the choices, and opens the panel when one exists');
+  // Without a Design panel, the host's own hook gets the row.
+  await ev((d) => { window.opens = 0; return window.mountEditor({ document: d, designMenu: { onOpenPanel: () => { window.opens += 1; } } }); }, deck());
+  await page.locator('#host .opf-design-menu-trigger').click();
+  await page.locator('#host .opf-design-menu button', { hasText: 'More design options' }).click();
+  assert.equal(await ev(() => window.opens), 1, 'designMenu.onOpenPanel opens the host panel');
+  mark('the Design quick menu is in the full bar where there is no Design panel, lists the choices, and opens the editor panel or the host one (designMenu.onOpenPanel)');
 
   // The review pill follows the Review panel's counts and opens it.
   await ev((d) => window.mountEditor({ document: d, panels: { design: true }, panel: 'design' }), deck());
@@ -196,9 +201,11 @@ try {
   await page.waitForFunction(() => { const sheet = document.querySelector('#host .opf-export-sheet'); return sheet && !sheet.hidden && sheet.getBoundingClientRect().height > 40 && getComputedStyle(sheet).visibility === 'visible'; }, undefined, { timeout: 5000 });
   assert.equal(await ev(() => document.querySelector('#host .opf-export').dataset.mode), 'sheet');
   await page.keyboard.press('Escape');
+  await page.waitForFunction(() => document.querySelector('#host .opf-export-sheet').hidden, undefined, { timeout: 5000 });
+  await page.waitForFunction(() => document.activeElement?.classList.contains('opf-tb-more-button'), undefined, { timeout: 5000 }).catch(async () => { throw new Error(`focus after the sheet: ${await ev(() => document.activeElement?.outerHTML.slice(0, 100))}`); });
   await ev(() => { document.querySelector('#host').style.width = '1600px'; });
   await page.waitForFunction(() => !window.ed.toolbar.collapsed.includes('export') && document.querySelector('#host .opf-export').dataset.mode === 'menu', undefined, { timeout: 5000 });
-  mark('Export collapsed into ⋯ is one "Export…" entry that opens the Export sheet on screen; back in the bar it is a menu again');
+  mark('Export collapsed into ⋯ is one "Export…" entry that opens the Export sheet on screen, gives the focus back to ⋯ when it closes, and is a menu again back in the bar');
 
   // ---- the Studio: title, expand and one shortcut list -----------------------------------------------------------------------------------
   const studio = await ev(async (d) => {

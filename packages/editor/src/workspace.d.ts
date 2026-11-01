@@ -335,6 +335,8 @@ export interface OpfEditorOptions {
   icons?: OpfIcons<OpfEditorIconName>;
   /** CE-28 wave 2: the host's own buttons in the toolbar (the `actions` item); `editor.setActions` replaces them. Each `enabled()` and `pressed()` is read again after every change, selection and read-only switch. */
   actions?: ToolbarAction[];
+  /** CE-28 wave 2: the Design quick menu (the `design` item). `onOpenPanel` adds its "More design options…" row for your own Design panel; the editor's own Design panel wins when it has one. */
+  designMenu?: { onOpenPanel?: () => void };
   /** CE-28 wave 2: "+" and the context menu on the thumbnail strip (default true in `full` and `embed`, false elsewhere). */
   slideActions?: boolean;
   /** CE-28 wave 2: the browser asks before the page closes while the editor is `dirty` (`true`), or while the function says so (default false). */
