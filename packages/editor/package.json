@@ -43,6 +43,14 @@
       "style": "./dist/styles.css",
       "default": "./dist/styles.css"
     },
+    "./styles.layered.css": {
+      "style": "./dist/styles.layered.css",
+      "default": "./dist/styles.layered.css"
+    },
+    "./icons": {
+      "types": "./dist/icons.d.ts",
+      "default": "./dist/icons.js"
+    },
     "./canvas": {
       "types": "./dist/canvas.d.ts",
       "default": "./dist/canvas.js"
@@ -324,6 +332,7 @@
   "sideEffects": [
     "./dist/source-worker.js",
     "./dist/styles.css",
+    "./dist/styles.layered.css",
     "./dist/element-define.js"
   ],
   "scripts": {

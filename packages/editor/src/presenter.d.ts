@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 import type { EditorSession } from "./index.js";
 import type { ToSvgOptions } from "@openpresentation/opf-render";
 import type { EditorFonts } from "./canvas.js";
@@ -85,6 +86,8 @@ export interface PresentButtonOptions {
   label?: string;
   /** `"quiet"` (default): a transparent icon button like the toolbar's undo and redo. `"primary"`: the filled accent look of the Export trigger. */
   variant?: "quiet" | "primary";
+  /** Replace the icon: `present` (the slide on a stand). See `OpfIcon`. */
+  icons?: OpfIcons<"present">;
 }
 
 export interface PresentButton {

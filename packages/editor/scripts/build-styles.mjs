@@ -5,7 +5,20 @@ import { readdir, readFile } from "node:fs/promises";
 
 const TOKENS = "tokens.css";
 
-// Returns the stylesheet text and the file names it was built from, in order.
+// CE-29: the same stylesheet inside `@layer opf { ... }` (dist/styles.layered.css), for hosts that want any unlayered rule of theirs to win
+// without raising its specificity. A `@charset` rule must be first in a file and an `@import` rule may not be inside a layer, so those are
+// hoisted above the layer (the build rejects an `@import` today, so only `@charset` can occur); `@font-face` and `@media` are valid inside it.
+export const LAYER_NAME = "opf";
+export function layerStyles(css) {
+  const hoisted = [];
+  const body = css.replace(/^[ \t]*@(?:charset|import)\b[^;]*;[ \t]*\n?/gm, (rule) => {
+    hoisted.push(rule.trim());
+    return "";
+  });
+  return `${hoisted.map((rule) => `${rule}\n`).join("")}@layer ${LAYER_NAME} {\n${body.trimEnd()}\n}\n`;
+}
+
+// Returns the stylesheet text, the same text wrapped in the `opf` layer, and the file names it was built from, in order.
 export async function buildStyles(stylesDirectory) {
   const names = (await readdir(stylesDirectory)).filter((name) => name.endsWith(".css")).sort();
   if (!names.includes(TOKENS)) throw new Error(`${TOKENS} is missing from ${stylesDirectory}`);
@@ -17,5 +30,6 @@ export async function buildStyles(stylesDirectory) {
     const body = text.replace(/\r\n/g, "\n").trimEnd();
     parts.push(name === TOKENS ? body : `/* ${name} */\n${body}`);
   }
-  return { css: `${parts.join("\n\n")}\n`, files: ordered };
+  const css = `${parts.join("\n\n")}\n`;
+  return { css, layered: layerStyles(css), files: ordered };
 }

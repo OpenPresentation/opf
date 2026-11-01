@@ -24,6 +24,7 @@
 .opf-help-icon { width: 18px; height: 18px; }
 .opf-help-button[data-density="touch"] .opf-help-icon { width: 20px; height: 20px; }
 .opf-help-sheet { z-index: 80; }
+.opf-help-close-icon { width: 16px; height: 16px; flex: none; }
 @media (prefers-reduced-motion: reduce) {
   .opf-help-button { transition: none; }
 }

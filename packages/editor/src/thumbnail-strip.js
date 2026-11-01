@@ -10,6 +10,7 @@
 import { mergeCatalogs } from "./index.js";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import { whenFontsReady } from "./font-gate.js";
+import { normalizeIcons, resolveIcon } from "./icons.js";
 import { addSlide, duplicateSlides, moveSlidesBy, removeSlides, setHidden, slideTitle } from "./slides.js";
 import { groupLayoutChoices } from "./layout-templates.js";
 import { createThumbnailCache } from "./thumbnail-cache.js";
@@ -40,7 +41,6 @@ const DEFAULT_LABELS = {
   atEnd: "Already the last slide",
   lastSlide: "A presentation needs at least one slide",
 };
-const SVG_NS = "http://www.w3.org/2000/svg";
 const META = { source: "thumbnail-strip", rejectInvalid: true };
 const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (match, key) => (key in values ? String(values[key]) : match));
 const pad = (value, count) => String(value).padStart(Math.max(2, String(count).length), "0");
@@ -68,6 +68,7 @@ export function createThumbnailStrip(container, options = {}) {
   const doc = container.ownerDocument;
   const win = doc.defaultView;
   const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
+  const icons = normalizeIcons(options.icons, ["add"], "createThumbnailStrip icons");
   const density = options.density === "touch" ? "touch" : "comfortable";
   const orientation = options.orientation === "vertical" ? "vertical" : "horizontal";
   const size = Number(options.size) > 0 ? Number(options.size) : density === "touch" ? 104 : 128;
@@ -399,15 +400,7 @@ export function createThumbnailStrip(container, options = {}) {
         addButton.setAttribute("aria-haspopup", "menu");
         addButton.setAttribute("aria-expanded", "false");
       }
-      const svg = doc.createElementNS(SVG_NS, "svg");
-      svg.setAttribute("viewBox", "0 0 24 24");
-      svg.setAttribute("class", "opf-thumbs-add-icon");
-      svg.setAttribute("aria-hidden", "true");
-      svg.setAttribute("focusable", "false");
-      const path = doc.createElementNS(SVG_NS, "path");
-      path.setAttribute("d", "M12 5v14M5 12h14");
-      svg.append(path);
-      addButton.append(svg);
+      addButton.append(resolveIcon(doc, icons.add, "M12 5v14M5 12h14", { name: "add", className: "opf-thumbs-add-icon" }));
       addSlot.append(addButton);
       addButton.addEventListener("click", onAddClick);
     }

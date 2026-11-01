@@ -1,7 +1,7 @@
 // CE-29, toolbar actions: the `actions` item. The host's own buttons in the editor's toolbar ("Share", "Publish", "Save as template"), each with a visible
 // label, an optional icon and optional enabled and pressed state. The editor never decides what they do: `run()` is the host's. Plain DOM, no framework,
 // no network. An icon is an SVG element (copied into the toolbar's document) or SVG path data (24x24, stroked like the editor's own icons).
-const SVG_NS = "http://www.w3.org/2000/svg";
+import { resolveIcon } from "./icons.js";
 
 const DEFAULT_LABELS = {
   /** The accessible name of the group of buttons. */
@@ -17,29 +17,8 @@ function checkAction(action, seen) {
   seen.add(action.id);
 }
 
-function iconNode(doc, icon) {
-  if (!icon) return null;
-  if (typeof icon === "string") {
-    const svg = doc.createElementNS(SVG_NS, "svg");
-    svg.setAttribute("viewBox", "0 0 24 24");
-    svg.setAttribute("fill", "none");
-    svg.setAttribute("stroke", "currentColor");
-    svg.setAttribute("stroke-width", "2");
-    svg.setAttribute("stroke-linecap", "round");
-    svg.setAttribute("stroke-linejoin", "round");
-    const path = doc.createElementNS(SVG_NS, "path");
-    path.setAttribute("d", icon);
-    svg.append(path);
-    return decorate(svg);
-  }
-  if (typeof icon === "object" && icon.nodeType === 1 && String(icon.localName).toLowerCase() === "svg") return decorate(doc.importNode(icon, true));
-  throw new TypeError("An action icon is an SVG element or SVG path data.");
-}
-function decorate(svg) {
-  svg.classList.add("opf-actions-icon");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  return svg;
+function iconNode(doc, action) {
+  return action.icon ? resolveIcon(doc, action.icon, null, { name: action.id, className: "opf-actions-icon" }) : null;
 }
 
 /**
@@ -101,7 +80,7 @@ export function createToolbarActions(container, options = {}) {
     button.className = `opf-actions-button${action.primary ? " is-primary" : ""}`;
     button.dataset.action = action.id;
     if (action.title) button.title = action.title;
-    const icon = iconNode(doc, action.icon);
+    const icon = iconNode(doc, action);
     if (icon) button.append(icon);
     const label = doc.createElement("span");
     label.className = "opf-actions-label";

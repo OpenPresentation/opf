@@ -293,6 +293,10 @@
           "command": "node test/toolbar-actions-browser.mjs"
         },
         {
+          "id": "browser:styling-hooks",
+          "command": "node test/styling-hooks-browser.mjs"
+        },
+        {
           "id": "browser:studio-kit",
           "command": "node test/studio-kit-browser.mjs"
         },

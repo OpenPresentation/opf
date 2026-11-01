@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 import type { Catalog } from "@openpresentation/opf";
 import type { EditorSession } from "./index.js";
 
@@ -40,6 +41,11 @@ export interface DesignMenuOptions {
   /** `"comfortable"` (default) or `"touch"` (40px rows; a coarse pointer always gets 44px). */
   density?: "comfortable" | "touch";
   labels?: DesignMenuLabels;
+  /**
+   * Replace an icon: `trigger` (the palette on the button), `close` (the X in the phone sheet) and `check` (the mark on the chosen row). See `OpfIcon`.
+   * The icons carry `class="opf-icon"` and `data-opf-icon`.
+   */
+  icons?: OpfIcons<"trigger" | "close" | "check">;
   /** True to disable the button (the document cannot be edited). Default false. */
   readOnly?: boolean;
   /** Adds a "More design options…" row that closes the menu and calls this, to open the host's full Design panel. Hidden when not given. */

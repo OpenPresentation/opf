@@ -54,6 +54,17 @@ export declare const THEME_TOKENS: Readonly<{
   controlHeight: "--opf-ui-control-h";
   shadow: "--opf-ui-shadow-pop";
   motion: "--opf-ui-ease";
+  barBackground: "--opf-ui-bar-bg";
+  barText: "--opf-ui-bar-fg";
+  barBorder: "--opf-ui-bar-border";
+  barGap: "--opf-ui-bar-gap";
+  barPadding: "--opf-ui-bar-padding";
+  barHeight: "--opf-ui-bar-height";
+  titleFont: "--opf-ui-title-font";
+  titleSize: "--opf-ui-title-size";
+  titleWeight: "--opf-ui-title-weight";
+  titleText: "--opf-ui-title-fg";
+  overlayZ: "--opf-ui-z-overlay";
 }>;
 export type ThemeTokenName = keyof typeof THEME_TOKENS;
 /** Token values by short name or by full custom-property name: `{ accent: "#0a7", "--opf-ui-border": "#ddd" }`. */

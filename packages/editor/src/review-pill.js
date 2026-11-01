@@ -2,7 +2,7 @@
 // and opens the Review panel when pressed. It owns no findings: the host feeds it the counts that the workspace's `review` event carries
 // (`{ error, warning, info, total, all, sources, unavailable }`) through `update(counts)`. Not color alone: every state has a glyph and words.
 // Plain DOM, no framework, no network. Icons are Lucide paths (ISC license), inlined.
-const SVG_NS = "http://www.w3.org/2000/svg";
+import { normalizeIcons, resolveIcon } from "./icons.js";
 
 // Each glyph is a list of [tag, attributes]. "valid" is a filled success dot (the words carry the meaning), "checking" a ring.
 const GLYPHS = {
@@ -13,6 +13,8 @@ const GLYPHS = {
   checking: [["circle", { cx: 12, cy: 12, r: 8, "stroke-dasharray": "3 3" }]],
   unavailable: [["circle", { cx: 12, cy: 12, r: 10 }], ["path", { d: "M8 12h8" }]],
 };
+
+const ICON_NAMES = Object.keys(GLYPHS);
 
 const count = (value) => (Number.isFinite(Number(value)) && Number(value) > 0 ? Math.trunc(Number(value)) : 0);
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -36,23 +38,8 @@ const DEFAULT_LABELS = {
   menu: (total) => (total > 0 ? `Review (${total})` : "Review"),
 };
 
-function glyph(doc, name) {
-  const svg = doc.createElementNS(SVG_NS, "svg");
-  svg.setAttribute("class", "opf-review-pill-icon");
-  svg.setAttribute("viewBox", "0 0 24 24");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("stroke-width", "2");
-  svg.setAttribute("stroke-linecap", "round");
-  svg.setAttribute("stroke-linejoin", "round");
-  for (const [tag, attributes] of GLYPHS[name]) {
-    const node = doc.createElementNS(SVG_NS, tag);
-    for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
-    svg.append(node);
-  }
-  return svg;
+function glyph(doc, name, icons) {
+  return resolveIcon(doc, icons[name], GLYPHS[name], { name, className: "opf-review-pill-icon" });
 }
 
 /**
@@ -89,6 +76,7 @@ export function createReviewPill(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
   const doc = container.ownerDocument;
   const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
+  const icons = normalizeIcons(options.icons, ICON_NAMES, "createReviewPill icons");
   let density = options.density === "touch" ? "touch" : "comfortable";
   let disabled = false;
   let destroyed = false;
@@ -106,7 +94,7 @@ export function createReviewPill(container, options = {}) {
   function draw() {
     element.dataset.state = view.state;
     if (view.severity) element.dataset.severity = view.severity; else delete element.dataset.severity;
-    const next = glyph(doc, view.state === "issues" ? view.severity ?? "info" : view.state);
+    const next = glyph(doc, view.state === "issues" ? view.severity ?? "info" : view.state, icons);
     if (icon) icon.replaceWith(next); else element.prepend(next);
     icon = next;
     text.textContent = view.text;

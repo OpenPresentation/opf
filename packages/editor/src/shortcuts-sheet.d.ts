@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 /** One row of the sheet. Keys are CodeMirror-style names ("Mod-z", "Shift-Mod-z", "Ctrl-y", "F1", "?"); `Mod` is Cmd on a Mac and Ctrl elsewhere. */
 export interface HelpShortcut {
   label: string;
@@ -40,6 +41,11 @@ export interface HelpButtonOptions {
   /** `"comfortable"` (32px, default) or `"touch"` (40px; 44px under a coarse pointer either way). */
   density?: "comfortable" | "touch";
   labels?: HelpButtonLabels;
+  /**
+   * Replace an icon. `help` is the question mark on the toolbar button (`.opf-help-icon`); `close` replaces the "×" in the dialog's close
+   * button (`.opf-help-close-icon`; without it the button reads "×"). See `OpfIcon`.
+   */
+  icons?: OpfIcons<"help" | "close">;
   /** Bind "?" and "Shift-?" on the document to open the sheet when focus is not in a field, an editor, a menu or a dialog. Default true. */
   bindKey?: boolean;
 }

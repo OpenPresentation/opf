@@ -24,7 +24,7 @@ for (const name of ["createExpandController", "createExpandButton", "ExpandContr
 const css = read("src/styles/expand.css").replace(/\/\*[\s\S]*?\*\//g, "");
 assert.match(css, /\[data-opf-expanded\]\s*\{[^}]*position:\s*fixed\s*!important/, "the attribute makes a fixed overlay");
 assert.match(css, /inset:\s*0\s*!important/);
-assert.match(css, /z-index:\s*var\(--opf-expand-z,\s*1000\)/, "the z-index is a custom property with a default");
+assert.match(css, /z-index:\s*var\(--opf-expand-z,\s*var\(--opf-ui-z-overlay\)\)/, "the z-index is the --opf-ui-z-overlay token, with the older --opf-expand-z first");
 assert.match(css, /background:\s*var\(--opf-ui-bg\)/, "the background is a token");
 assert.ok(!/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/.test(css), "no color literal");
 assert.ok([...css.matchAll(/\.(opf-[a-z]+)-/g)].every(([, prefix]) => prefix === "opf-expand"), "every class has the opf-expand- prefix");

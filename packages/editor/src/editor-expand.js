@@ -4,10 +4,13 @@
 // bonus on top of the overlay, because it is refused without a user gesture, in an iframe without `allow="fullscreen"` and on iPhone Safari.
 // Plain DOM, no framework, no network. `target.ownerDocument` is the document, so it works in iframes. Icons are the Lucide Maximize2 and Minimize2
 // paths (ISC license), inlined.
-const SVG_NS = "http://www.w3.org/2000/svg";
+import { normalizeIcons, resolveIcon } from "./icons.js";
+
+// Each icon is a list of [tag, attributes]; a host replaces one with `icons: { expand, collapse }`.
+const ICON_NAMES = ["expand", "collapse"];
 const ICONS = {
-  expand: ["M15 3h6v6", "m21 3-7 7", "m3 21 7-7", "M9 21H3v-6"],
-  collapse: ["m14 10 7-7", "M20 10h-6V4", "m3 21 7-7", "M4 14h6v6"],
+  expand: ["M15 3h6v6", "m21 3-7 7", "m3 21 7-7", "M9 21H3v-6"].map((d) => ["path", { d }]),
+  collapse: ["m14 10 7-7", "M20 10h-6V4", "m3 21 7-7", "M4 14h6v6"].map((d) => ["path", { d }]),
 };
 
 const DEFAULT_LABELS = {
@@ -294,25 +297,8 @@ export function createExpandController(target, options = {}) {
 }
 
 // ---- the button ---------------------------------------------------------------------------------------------------------------------------
-function icon(doc, name) {
-  const svg = doc.createElementNS(SVG_NS, "svg");
-  svg.setAttribute("class", "opf-expand-icon");
-  svg.setAttribute("viewBox", "0 0 24 24");
-  svg.setAttribute("width", "16");
-  svg.setAttribute("height", "16");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("stroke-width", "2");
-  svg.setAttribute("stroke-linecap", "round");
-  svg.setAttribute("stroke-linejoin", "round");
-  for (const d of ICONS[name]) {
-    const path = doc.createElementNS(SVG_NS, "path");
-    path.setAttribute("d", d);
-    svg.append(path);
-  }
-  return svg;
+function icon(doc, name, given) {
+  return resolveIcon(doc, given[name], ICONS[name], { name, className: "opf-expand-icon", size: 16 });
 }
 
 /**
@@ -333,6 +319,7 @@ export function createExpandButton(container, options = {}) {
   if (!link) throw new TypeError("createExpandButton needs a controller from createExpandController.");
   const doc = container.ownerDocument;
   const labels = { ...link.labels, ...(options.labels ?? {}) };
+  const icons = normalizeIcons(options.icons, ICON_NAMES, "createExpandButton icons");
   let disabled = false, destroyed = false;
 
   const button = doc.createElement("button");
@@ -352,7 +339,7 @@ export function createExpandButton(container, options = {}) {
     if (disabled && !on) button.setAttribute("aria-disabled", "true"); else button.removeAttribute("aria-disabled");
     if (shown !== on) {
       shown = on;
-      button.replaceChildren(icon(doc, on ? "collapse" : "expand"));
+      button.replaceChildren(icon(doc, on ? "collapse" : "expand", icons));
     }
   };
   button.addEventListener("click", () => {

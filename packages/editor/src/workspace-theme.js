@@ -35,6 +35,17 @@ export const THEME_TOKENS = Object.freeze({
   controlHeight: "--opf-ui-control-h",
   shadow: "--opf-ui-shadow-pop",
   motion: "--opf-ui-ease",
+  barBackground: "--opf-ui-bar-bg",
+  barText: "--opf-ui-bar-fg",
+  barBorder: "--opf-ui-bar-border",
+  barGap: "--opf-ui-bar-gap",
+  barPadding: "--opf-ui-bar-padding",
+  barHeight: "--opf-ui-bar-height",
+  titleFont: "--opf-ui-title-font",
+  titleSize: "--opf-ui-title-size",
+  titleWeight: "--opf-ui-title-weight",
+  titleText: "--opf-ui-title-fg",
+  overlayZ: "--opf-ui-z-overlay",
 });
 
 const FULL_NAMES = new Set(Object.values(THEME_TOKENS));

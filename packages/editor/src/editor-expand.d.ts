@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 export interface ExpandLabels {
   /** The accessible name of the button while the editor is not expanded. Default: "Expand editor". */
   expand?: string;
@@ -54,8 +55,8 @@ export interface ExpandController {
 /**
  * Make `target` (the editor's host element) fill the viewport for editing. Not the presenter: this edits, it does not present.
  *
- * Expanding sets `data-opf-expanded` on `target` (`src/styles/expand.css` turns it into a fixed overlay; `--opf-expand-z` sets its z-index, default
- * 1000), locks page scroll on the document element (the previous inline `overflow` is restored exactly), makes the rest of the page `inert` (`inertOutside`, `keep`),
+ * Expanding sets `data-opf-expanded` on `target` (`src/styles/expand.css` turns it into a fixed overlay; `--opf-ui-z-overlay` sets its z-index, default
+ * 1000; the older `--opf-expand-z` still wins when set), locks page scroll on the document element (the previous inline `overflow` is restored exactly), makes the rest of the page `inert` (`inertOutside`, `keep`),
  * moves the focus into `target` and listens for Escape. The element is never moved in the DOM, so the editor keeps its state. Collapsing returns the focus to the control that expanded.
  *
  * Escape collapses unless the event was already handled (`defaultPrevented`), the focus is in a text input, textarea, select, contenteditable,
@@ -72,6 +73,8 @@ export interface ExpandButtonOptions {
   density?: "comfortable" | "touch";
   /** Overrides the controller's labels (`expand`, `collapse`, `escape`). */
   labels?: ExpandLabels;
+  /** Replace the button's icons: `expand` (shown while the editor is not expanded) and `collapse` (while it is). See `OpfIcon`. */
+  icons?: OpfIcons<"expand" | "collapse">;
 }
 
 export interface ExpandMenuItem {

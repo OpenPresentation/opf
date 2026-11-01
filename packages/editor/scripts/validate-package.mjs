@@ -68,6 +68,8 @@ for (const [entry, file] of [["./numbering", "numbering"], ["./numbering-panel",
 
 assert.ok(pkg.exports?.["./styles.css"], "Must expose the RR-98 editor stylesheet as ./styles.css.");
 assert.equal(pkg.exports["./styles.css"].default, "./dist/styles.css");
+assert.equal(pkg.exports["./styles.layered.css"]?.default, "./dist/styles.layered.css", "Must expose the CE-29 layered stylesheet as ./styles.layered.css.");
+assert.equal(pkg.exports["./icons"]?.default, "./dist/icons.js", "Must expose the CE-29 icon helper as ./icons.");
 assert.ok(pkg.files.includes("dist"), "Must publish dist, which holds styles.css.");
 
 for (const [entry, file] of [["./export-menu", "export-menu"], ["./agent-handoff", "agent-handoff"], ["./agent-handoff-dialog", "agent-handoff-dialog"], ["./presenter", "presenter"], ["./read-deck-file", "read-deck-file"]]) {

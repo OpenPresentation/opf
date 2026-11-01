@@ -113,7 +113,7 @@ try {
     const made = window.bar.element.querySelector('svg');
     return { copied: made !== svg, circle: !!made.querySelector('circle'), cls: made.getAttribute('class'), aria: made.getAttribute('aria-hidden'), width: made.getBoundingClientRect().width, original: svg.parentNode === null };
   });
-  assert.deepEqual(icon, { copied: true, circle: true, cls: 'opf-actions-icon', aria: 'true', width: 16, original: true });
+  assert.deepEqual(icon, { copied: true, circle: true, cls: 'opf-icon opf-actions-icon', aria: 'true', width: 16, original: true });
   const badIcon = await ev(() => { try { window.bar.setActions([{ id: 'x', label: 'x', icon: 42, run() {} }]); return 'ok'; } catch (error) { return error.name; } });
   assert.equal(badIcon, 'TypeError');
   await ev(() => window.bar.setActions(window.makeActions()));
