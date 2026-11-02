@@ -3696,6 +3696,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (ends) ({layer, valueAxis} = ends);
     const slices = drawn.data.ok ? chartSliceLabels(drawn.chart, drawn.data, geometry) : undefined;
     if (slices) layer = {...layer, slices};
+    // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
+    // ends, names on the slices); an unlabeled context is read against the axis and keeps 3:1.
+    if (layer?.focus) {
+      const record = node.value as Record<string, unknown>;
+      const labeled = Boolean(layer.small?.labels || layer.endLabels || layer.slices || (record?.dataLabels !== undefined && record.dataLabels !== false));
+      layer = {...layer, focus: {...layer.focus, ...(labeled ? {labeled} : {})}};
+    }
     return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}), ...(layer ? {layer} : {})} : undefined;
   };
   // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
@@ -4665,7 +4672,7 @@ export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlo
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
 export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
 export {chartTitleFocus,type ChartLayerFocus} from './chart-focus.js';
-export {chartContextColor,CHART_CONTEXT_MIN_CONTRAST} from './color.js';
+export {chartContextColor,chartContextColors,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';

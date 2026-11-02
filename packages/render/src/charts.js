@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColor, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -37,18 +37,28 @@ function emphasisFor(c, layer) {
   return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
 }
 
-// LH-105: the series or categories the slide title names (core chart-focus.ts) take their full-strength colour, every other mark the
-// context neutral (core chartContextColor: the backdrop mixed towards the text colour, 3:1). It is drawn as a highlight whose accent is
-// each series' own colour (and each slice's, on a pie).
+// LH-105: the series or categories the slide title names (core chart-focus.ts) take their full-strength colour, the other marks the
+// context neutrals (core chartContextColors: one gray per context series or slice, 11 L* apart, the first the strongest; 3:1 against the
+// backdrop, or 1.6:1 when every context mark carries its text). It is drawn as a highlight whose accent is each series' own colour (and
+// each slice's, on a pie) and whose muted colour is each context series' (or slice's) own gray.
 function focusFor(c, layer, spec) {
   const focus = layer?.focus;
   if (!focus) return undefined;
-  const muted = chartContextColor(c.surface, c.labelColor);
   const strong = (index) => c.strongColors[index % c.strongColors.length];
+  const context = (count, avoid) => chartContextColors(c.surface, c.labelColor, count, { labeled: focus.labeled === true, avoid });
   const categories = c.rows.map((_, i) => focus.categories?.includes(i) === true);
-  if (spec.kind === "pie" || spec.kind === "doughnut") return { series: [false], categories, accent: strong(0), muted, sliceAccents: c.rows.map((_, i) => strong(i)) };
+  if (spec.kind === "pie" || spec.kind === "doughnut") {
+    const rest = c.rows.map((_, i) => i).filter((i) => !categories[i]);
+    const grays = context(rest.length, c.rows.map((_, i) => i).filter((i) => categories[i]).map(strong));
+    const sliceMuted = c.rows.map((_, i) => grays[Math.max(0, rest.indexOf(i))]);
+    return { series: [false], categories, accent: strong(0), muted: grays[0], sliceAccents: c.rows.map((_, i) => strong(i)), sliceMuted };
+  }
   const series = c.columns.slice(1).map((_, j) => focus.series?.includes(j) === true);
-  return { series, categories, accent: strong(0), muted, accents: series.map((_, j) => strong(j)) };
+  // A series focus: the unnamed series are the context, in order. A category focus: every series has context marks.
+  const rest = series.map((_, j) => j).filter((j) => !series[j]);
+  const grays = context(rest.length, series.map((_, j) => j).filter((j) => focus.categories ? true : series[j]).map(strong));
+  const mutedSeries = series.map((_, j) => grays[Math.max(0, rest.indexOf(j))]);
+  return { series, categories, accent: strong(0), muted: grays[0], accents: series.map((_, j) => strong(j)), mutedSeries };
 }
 
 // LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
@@ -79,17 +89,17 @@ function drawHeader(c, spec, header) {
 
 /** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
 function seriesColor(c, j) {
-  return c.highlight ? (c.highlight.series[j] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+  return c.highlight ? (c.highlight.series[j] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
 /** The colour of the mark of series `j` at row `i`: highlighted when its series or its category is named. */
 function markColor(c, j, i) {
-  return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+  return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
 /** The colour of the pie or doughnut slice of row `i`. */
 function sliceColor(c, i) {
-  return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.muted) : c.colors[i % c.colors.length];
+  return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.sliceMuted?.[i] ?? c.highlight.muted) : c.colors[i % c.colors.length];
 }
 
 const bar = (dir, grouping) => ({ kind: "bar", dir, grouping });

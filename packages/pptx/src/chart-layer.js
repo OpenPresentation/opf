@@ -17,7 +17,7 @@
 // header legend (chart-options.js `chartOptionsFromClassic`) import as no option, so a deck exported and imported again keeps its
 // authored options only.
 import {schemeColorXml} from './chart-scheme-colors.js';
-import {chartContextColor, chartEmphasisColors, chartOptionSupport, chartOptionTarget, resolveChartData, smallChart} from '@openpresentation/opf/composition';
+import {chartContextColors, chartEmphasisColors, chartOptionSupport, chartOptionTarget, resolveChartData, smallChart} from '@openpresentation/opf/composition';
 
 const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
@@ -119,15 +119,22 @@ export function chartEmphasisPlan({layer, data, panelFill, palette, strong, sche
 export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong}) {
   const focus = layer?.focus;
   if (!focus || !data?.rows || !strong?.length) return undefined;
-  const srgb = hex => ({hex, xml: `<a:srgbClr val="${hex}"/>`});
-  const mutedHex = chartContextColor(panelFill, `#${labelColor}`).replace(/^#/, '').toUpperCase();
-  const muted = srgb(mutedHex), strongOf = index => srgb(String(strong[index % strong.length]).toUpperCase());
+  const srgb = hex => ({hex: String(hex).replace(/^#/, '').toUpperCase(), xml: `<a:srgbClr val="${String(hex).replace(/^#/, '').toUpperCase()}"/>`});
+  const strongOf = index => srgb(strong[index % strong.length]);
   const circular = kind === 'pie' || kind === 'doughnut';
   const seriesCount = Math.max(1, data.columns.length - 1 - (data.hasX ? 1 : 0));
   const marks = {series: circular ? [false] : Array.from({length: seriesCount}, (_, index) => focus.series?.includes(index) === true), categories: data.rows.map((_, row) => focus.categories?.includes(row) === true)};
-  const seriesColor = index => marks.series[index] ? strongOf(index) : muted;
-  const markColor = (series, row) => marks.series[series] || marks.categories[row] ? strongOf(series) : muted;
-  const sliceColor = row => marks.categories[row] ? strongOf(row) : muted;
+  // The context neutrals, one per context series (or slice) in order, as the preview draws them (core chartContextColors).
+  const context = (count, avoid) => chartContextColors(panelFill, `#${labelColor}`, count, {labeled: focus.labeled === true, avoid: avoid.map(index => `#${strong[index % strong.length]}`)}).map(srgb);
+  const indexes = length => Array.from({length}, (_, index) => index);
+  const restSeries = indexes(seriesCount).filter(index => !marks.series[index]), restRows = indexes(data.rows.length).filter(row => !marks.categories[row]);
+  const seriesGrays = circular ? [] : context(restSeries.length, indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]));
+  const sliceGrays = circular ? context(restRows.length, indexes(data.rows.length).filter(row => marks.categories[row])) : [];
+  const muted = (circular ? sliceGrays : seriesGrays)[0];
+  const mutedOf = index => seriesGrays[Math.max(0, restSeries.indexOf(index))];
+  const seriesColor = index => marks.series[index] ? strongOf(index) : mutedOf(index);
+  const markColor = (series, row) => marks.series[series] || marks.categories[row] ? strongOf(series) : mutedOf(series);
+  const sliceColor = row => marks.categories[row] ? strongOf(row) : sliceGrays[Math.max(0, restRows.indexOf(row))];
   return {
     kind, marks, accent: strongOf(0), muted, seriesColor, markColor, sliceColor, circular,
     seriesFills: marks.series.map((_, index) => seriesColor(index).hex),

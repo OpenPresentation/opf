@@ -7,7 +7,7 @@ import {
   CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_MAX_INTERVALS, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_SOFT_MIX,
   chartCategoriesInTime, chartEmphasisColors, chartEndLabels, chartLayer, chartPaletteForFill, chartSchemeSeries, chartSeriesLabelColor, chartSeriesPalette,
   chartSliceLabels, chartValueAxis, colorContrast, composeSlide, isTimeFieldTitle, maxIntervalsFor, niceScale, resolveChartData, smallChart,
-  chartTitleFocus, chartContextColor, CHART_CONTEXT_MIN_CONTRAST,
+  chartTitleFocus, chartContextColor, chartContextColors, CHART_CONTEXT_MIN_CONTRAST, CHART_CONTEXT_LABELED_MIN_CONTRAST,
 } from "../dist/composition.js";
 import { validate } from "../dist/index.js";
 import { colorSchemes } from "./support/catalog.mjs";
@@ -96,11 +96,29 @@ describe("title-driven focus (what the slide title names)", () => {
   test("composition puts the focus on the layer and drops the last-point emphasis; context marks take a 3:1 neutral", () => {
     const slide = { title: "North America still leads", chart: { type: "column", data: { columns: ["Region", "Bookings"], rows: [["North America", 48], ["Europe", 31], ["Asia", 27]] } } };
     const [item] = chartItems(slide);
-    assert.deepEqual(item.chart.layer.focus, { categories: [0] });
+    // A small chart labels every bar, so its context may be light (`labeled`).
+    assert.deepEqual(item.chart.layer.focus, { categories: [0], labeled: true });
     const quarter = chartItems({ title: "Revenue peaked in Q2", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 4], ["Q2", 9], ["Q3", 6]] } } })[0];
-    assert.deepEqual(quarter.chart.layer.focus, { categories: [1] });
+    assert.deepEqual(quarter.chart.layer.focus, { categories: [1], labeled: true });
+    const unlabeled = chartItems({ title: "Revenue peaked in Q2", chart: { type: "column", dataLabels: false, data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 4], ["Q2", 9], ["Q3", 6]] } } })[0];
+    assert.deepEqual(unlabeled.chart.layer.focus, { categories: [1] });
     assert.equal(quarter.chart.layer.small.emphasis, undefined, "the title wins over the last point");
     for (const backdrop of ["#FFFFFF", "#011842", "#F4F4F4"]) assert.ok(colorContrast(chartContextColor(backdrop, lightness(backdrop) > 50 ? "#000000" : "#FFFFFF"), backdrop) >= CHART_CONTEXT_MIN_CONTRAST - 1e-6, backdrop);
+  });
+
+  test("several context series take distinct grays, 11 L* apart, the first the strongest; labeled context may be light", () => {
+    for (const [backdrop, text] of [["#FFFFFF", "#000000"], ["#011842", "#FFFFFF"], ["#F4F4F4", "#1F2937"]]) for (const labeled of [false, true]) {
+      const focus = "#2874A6";
+      const grays = chartContextColors(backdrop, text, 3, { labeled, avoid: [focus] });
+      assert.equal(new Set(grays).size, 3, `${backdrop} ${labeled}: ${grays}`);
+      const floor = labeled ? CHART_CONTEXT_LABELED_MIN_CONTRAST : CHART_CONTEXT_MIN_CONTRAST;
+      for (const gray of grays) assert.ok(colorContrast(gray, backdrop) >= floor - 1e-6, `${gray} on ${backdrop}`);
+      for (let index = 1; index < grays.length; index++) assert.ok(Math.abs(lightness(grays[index]) - lightness(grays[index - 1])) >= 11 - 1e-6);
+      assert.ok(colorContrast(grays[0], backdrop) > colorContrast(grays[2], backdrop), "the first context series is the strongest");
+    }
+    // Labeled, the lightest context is light: about 1.6:1 on white (it is 3:1 unlabeled).
+    const light = chartContextColors("#FFFFFF", "#000000", 1, { labeled: true })[0], solid = chartContextColors("#FFFFFF", "#000000", 1)[0];
+    assert.ok(colorContrast(light, "#FFFFFF") < 2 && colorContrast(solid, "#FFFFFF") >= 3);
   });
 });
 

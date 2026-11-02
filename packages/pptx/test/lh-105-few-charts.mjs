@@ -46,14 +46,18 @@ let checks = 0;
 {
   const quarters = ["Q1 '24", "Q2 '24", "Q3 '24", "Q4 '24", "Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25"];
   const slide = {title: 'Enterprise satisfaction pulled ahead of mid-market', chart: {type: 'line', data: {columns: ['Quarter', 'Enterprise NPS', 'Mid-market NPS'], rows: quarters.map((q, i) => [q, 38 + i * 3, 40 + (i % 3)])}}};
-  const {xml, chart} = await exported(deckOf(slide));
+  const {xml, chart, theme, map} = await exported(deckOf(slide));
   assert.doesNotMatch(xml, /<c:legend>/, 'no legend');
   const labels = [...xml.matchAll(/<c:dLbl><c:idx val="(\d+)"\/>([\s\S]*?)<\/c:dLbl>/g)].map(([, idx, body]) => ({idx: Number(idx), text: body.match(/<a:t>([^<]*)<\/a:t>/)?.[1], bold: /<a:rPr [^>]*b="1"/.test(body), position: body.match(/<c:dLblPos val="(\w+)"\/>/)?.[1], serName: /<c:showSerName val="1"\/>/.test(body)}));
   assert.deepEqual(labels, [{idx: 7, text: '59 Enterprise NPS', bold: true, position: 'r', serName: true}, {idx: 7, text: '41 Mid-market NPS', bold: false, position: 'r', serName: true}]);
   assert.equal(chart.legend, undefined, 'no legend option on import');
   assert.equal(chart.dataLabels, undefined, 'no data labels option on import');
-  // The title names Enterprise: it keeps its colour, Mid-market takes the context neutral (a literal).
-  assert.match(xml.match(/<c:ser>[\s\S]*?<\/c:ser>/g)[1], /<a:ln\b[^>]*>\s*<a:solidFill>\s*<a:srgbClr val="\w{6}"\/>/);
+  // The title names Enterprise: it keeps its colour, Mid-market takes the light context neutral (its line is labeled at its end), the
+  // preview's gray; the export writes it as the tx1 neutral it equals.
+  const midMarket = xml.match(/<c:ser>[\s\S]*?<\/c:ser>/g)[1].match(/<a:ln\b[^>]*>\s*<a:solidFill>([\s\S]*?)<\/a:solidFill>/)[1];
+  const lineColor = colorsInXml(midMarket, theme, map)[0].hex;
+  const preview = toSvg(deckOf(slide), 1, {trace: true}).match(/<polyline\b([^>]*data-opf-path="slides\.0\.chart\.data\.columns\.2"[^>]*)>/)[1];
+  assert.equal(`#${lineColor}`, attrs(preview).stroke.toUpperCase(), 'the preview draws the same context gray');
   const rtl = await exported(deckOf(slide, {language: 'ar'}));
   assert.ok([...rtl.xml.matchAll(/<c:dLblPos val="(\w+)"\/>/g)].every(([, position]) => position === 'l'), 'right to left: before the point');
   checks += 5;

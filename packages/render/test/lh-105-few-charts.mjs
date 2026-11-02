@@ -1,7 +1,7 @@
 // LH-105: chart defaults that follow Stephen Few, in the preview. Composition decides them (core chart-focus.ts, chart-direct-labels.ts,
 // chart-time-order.ts, softenChartPalette); this asserts what the preview draws from them.
 import assert from 'node:assert/strict';
-import { chartContextColor, chartPaletteForFill, chartSeriesLabelColor, chartSeriesPalette, colorContrast, textColorForFill } from '@openpresentation/opf/composition';
+import { chartContextColors, chartPaletteForFill, chartSeriesLabelColor, chartSeriesPalette, colorContrast, textColorForFill } from '@openpresentation/opf/composition';
 import { resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
@@ -36,10 +36,17 @@ for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
   const svg = toSvg(input, 1, { trace: true });
   const backdrop = backdropOf(input), design = designOf(input);
   const strong = chartPaletteForFill(backdrop, chartSeriesPalette(design.colorScheme), { legible: Array(12).fill(true) })[0].toUpperCase();
-  const context = chartContextColor(backdrop, textColorForFill(backdrop, design.colors.text)).toUpperCase();
+  // A small chart labels every bar, so the context is the light neutral (1.6:1), apart from the focused colour.
+  const context = chartContextColors(backdrop, textColorForFill(backdrop, design.colors.text), 1, { labeled: true, avoid: [strong] })[0].toUpperCase();
   const fills = tags(svg, 'rect').filter((rect) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(rect['data-opf-path'] ?? '')).map((rect) => rect.fill.toUpperCase());
   assert.deepEqual(fills, [strong, context, context, context, context, context]);
-  assert.ok(colorContrast(context, backdrop) >= 3);
+  assert.ok(colorContrast(context, backdrop) >= 1.6);
+  // Unlabeled context bars (dataLabels: false) keep 3:1; two context series of a stacked chart take two grays.
+  const stacked = toSvg(deck({ title: 'Subscriptions drive the growth', chart: { type: 'stacked-column', data: { columns: ['Quarter', 'Subscriptions', 'Services', 'Hardware'], rows: [['Q1', 12, 8, 4], ['Q2', 14, 9, 4], ['Q3', 16, 9, 4], ['Q4', 19, 9, 5]] } } }), 1, { trace: true });
+  const segment = (column) => tags(stacked, 'rect').find((rect) => rect['data-opf-path'] === `slides.0.chart.data.rows.0.${column}`).fill.toUpperCase();
+  assert.equal(segment(1), strong);
+  assert.notEqual(segment(2), segment(3), 'the two context segments differ');
+  for (const column of [2, 3]) assert.ok(colorContrast(segment(column), backdrop) >= 3, 'unlabeled context at 3:1');
   // An explicit highlight wins over the title.
   const highlighted = toSvg(deck({ ...input.slides[0], chart: { ...input.slides[0].chart, highlight: { categories: ['Europe'] } } }), 1, { trace: true });
   assert.notEqual(tags(highlighted, 'rect').find((rect) => rect['data-opf-path'] === 'slides.0.chart.data.rows.1.1').fill.toUpperCase(), context);

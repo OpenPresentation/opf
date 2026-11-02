@@ -951,20 +951,67 @@ export const CHART_HIGHLIGHT_MUTED_MIN_CONTRAST = 1.6;
 const mixChannels = (from: readonly number[], to: readonly number[], amount: number): string =>
   hexOfChannels(from.map((channel, index) => channel + (to[index]! - channel) * amount));
 
+/** LH-105: the colour difference (CIE76) a context gray keeps from every focused colour. */
+export const CHART_CONTEXT_FOCUS_DIFFERENCE = 20;
+
 /** LH-105: the contrast the context colour of a focused chart keeps against its backdrop (a mark is a graphical object, WCAG 1.4.11). */
 export const CHART_CONTEXT_MIN_CONTRAST = 3;
+
+/**
+ * LH-105: the contrast the context colour keeps when every context mark carries its value or name as text (a small chart's value labels,
+ * the names at the line ends, the names on the slices): WCAG 1.4.11 does not ask 3:1 of a graphic whose information the text gives, so the
+ * context can be the light neutral Few draws, still clearly visible.
+ */
+export const CHART_CONTEXT_LABELED_MIN_CONTRAST = 1.6;
 
 /**
  * LH-105: the neutral of the marks a chart does not focus on (the title names other series or categories, chart-focus.ts): the backdrop
  * mixed towards the text colour (tx1), from {@link CHART_HIGHLIGHT_MUTED_MIX} in 2% steps until it reaches
  * {@link CHART_CONTEXT_MIN_CONTRAST} against the backdrop. A grey in the backdrop's own hue, quieter than the text, visible as a mark.
+ * The first of {@link chartContextColors}.
  */
 export function chartContextColor(surface: string, text: string): string {
+  return chartContextColors(surface, text, 1)[0]!;
+}
+
+/**
+ * LH-105: the neutrals of `count` context series (or slices) of a focused chart, in the order the context series come: grays in the
+ * backdrop's hue, the backdrop mixed towards the text colour. The lightest step is the first mix (from {@link CHART_HIGHLIGHT_MUTED_MIX}, or from the backdrop when `labeled`, in
+ * 1% steps) that reaches the contrast floor against the backdrop ({@link CHART_CONTEXT_MIN_CONTRAST}, or
+ * {@link CHART_CONTEXT_LABELED_MIN_CONTRAST} when `labeled`: every context mark carries its text) and keeps a colour difference of
+ * {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from each `avoid` colour (the focused colours: a gray stands apart from a coloured focus by
+ * its chroma); each further step is the next mix that stands {@link CHART_SERIES_MIN_LIGHTNESS_STEP} L* from the one before and keeps that
+ * difference from the `avoid` colours. The first context series takes the strongest step and the last the lightest,
+ * so neighbouring context series (stacked segments, slices) are told apart by lightness, as the focused series are by hue. When the mix
+ * runs out of room (a dark text colour close to the backdrop), the remaining series repeat the strongest step.
+ */
+export function chartContextColors(surface: string, text: string, count: number, options: { labeled?: boolean; avoid?: readonly string[] } = {}): string[] {
   const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
   const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');
   const from = opaqueChannels(fill)!, to = opaqueChannels(ink)!;
+  const floor = options.labeled ? CHART_CONTEXT_LABELED_MIN_CONTRAST : CHART_CONTEXT_MIN_CONTRAST;
+  const lightness = (hex: string) => labOf(opaqueChannels(hex)!)[0];
+  const avoid = (options.avoid ?? []).flatMap(color => { const hex = normalizeHexColor(color)?.slice(0, 7); return hex && opaqueChannels(hex) ? [labOf(opaqueChannels(hex)!)] : []; });
+  const steps: string[] = [];
+  // Labeled, the context may be as light as its floor allows: the search starts at the backdrop itself.
+  for (let percent = options.labeled ? 1 : Math.round(CHART_HIGHLIGHT_MUTED_MIX * 100); percent <= 100 && steps.length < Math.max(1, count); percent++) {
+    const candidate = mixChannels(from, to, percent / 100), l = lightness(candidate);
+    if ((colorContrast(candidate, fill) ?? Infinity) < floor) continue;
+    // A gray is told from a coloured focus by its chroma as much as by its lightness: it keeps a colour difference (CIE76) of
+    // CHART_CONTEXT_FOCUS_DIFFERENCE from every focused colour, which near a gray-ish focus means as many L*.
+    if (avoid.some(other => labDifference(other, labOf(opaqueChannels(candidate)!)) < CHART_CONTEXT_FOCUS_DIFFERENCE)) continue;
+    if (steps.length && Math.abs(lightness(steps[steps.length - 1]!) - l) < CHART_SERIES_MIN_LIGHTNESS_STEP) continue;
+    steps.push(candidate);
+  }
+  // Out of room: the floor alone (no step met the separations), else the strongest step for the rest.
+  if (!steps.length) steps.push(chartContextFloor(from, to, fill, floor));
+  while (steps.length < Math.max(1, count)) steps.push(steps[steps.length - 1]!);
+  return steps.slice(0, Math.max(1, count)).reverse();
+}
+
+function chartContextFloor(from: readonly number[], to: readonly number[], fill: string, floor: number): string {
   let amount = CHART_HIGHLIGHT_MUTED_MIX, muted = mixChannels(from, to, amount);
-  while ((colorContrast(muted, fill) ?? Infinity) < CHART_CONTEXT_MIN_CONTRAST && amount < 1) {
+  while ((colorContrast(muted, fill) ?? Infinity) < floor && amount < 1) {
     amount = Math.min(1, amount + 0.02);
     muted = mixChannels(from, to, amount);
   }

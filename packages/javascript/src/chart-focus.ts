@@ -18,12 +18,19 @@
 // (Platform); when it names every series, the one it names first (the subject: "Enterprise satisfaction pulled ahead of mid-market").
 // On a one-series chart and a pie, the categories it names or whose values it prints. Naming nothing (or everything) is no focus, and
 // the chart falls back to the small chart's last-point emphasis over time (chart-layer.ts). An explicit `highlight` or `colors` wins.
-// The engines draw the focused marks in their full-strength colour and every other mark in the context neutral (core `chartContextColor`).
+// The engines draw the focused marks in their full-strength colour and the other marks in the context neutrals (core `chartContextColors`):
+// one gray per context series (or slice), stepped 11 L* apart in the order they come (the first the strongest), so stacked segments and
+// neighbouring slices stay apart; at 3:1 against the backdrop, or at 1.6:1 when every context mark carries its text (`labeled`).
 import {chartNumber, type ResolvedChartData} from './chart-data.js';
 import {monthOf} from './chart-time-order.js';
 
 /** LH-105: what the slide title names: series (indices among the plotted series) or categories (row indices). */
-export interface ChartLayerFocus { series?: number[]; categories?: number[] }
+export interface ChartLayerFocus {
+  series?: number[];
+  categories?: number[];
+  /** True when every context mark carries its text (composition sets it): the context neutrals may be light (`chartContextColors`). */
+  labeled?: boolean;
+}
 
 const FOCUS_TYPES = new Set(['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers',
   'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut']);
