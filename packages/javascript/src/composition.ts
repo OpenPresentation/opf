@@ -3345,6 +3345,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const quoteRefits = new Map<number, (bodySize: number) => QuoteLayout>();
   // LH-67: the items of the leads of lead plus stack arrangements, which keep their own size.
   const leadItems = new Set<number>();
+  // LH-78: the items whose card a quote beside other blocks got; hugQuoteCards fits each card to its quote.
+  const quoteHugs = new Set<number>();
   // LH-72: the items startAlignedCentre start-aligned; their siblings follow them (shareStartAlignment).
   const startAligned = new Set<number>();
   const bodyStarts = new Map<number, number>();
@@ -3794,6 +3796,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-40: a part that still has no room is drawn at the readability floor, overflowing, with its finding: the export never fails on it
     // (a strict composition still does, on the finding).
     if (unfit(quoteLayout) || unfit(codeLayout) || unfit(metricLayout)) [quoteLayout, codeLayout, metricLayout] = measureInternal(true);
+    // LH-78: the card a quote beside other blocks gets hugs it once sibling sizes are shared (hugQuoteCards).
+    if (quoteCard && frameBox) quoteHugs.add(items.length);
     if (caption) diagnostics.push(...caption.diagnostics);
     const timelineLayout = node.field === 'timeline' ? placeTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
@@ -4724,6 +4728,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-43: metrics share too, role by role (value, label, description and the rest), each at the smallest size a sibling fitted it.
   // LH-72: siblings read with one alignment, so when any text or list of a sibling set was start-aligned (startAlignedCentre), its centred
   // siblings are start-aligned too, at their size and in their cells.
+  // LH-78: a card the slide does not otherwise draw hugs its quote (the inset above it repeated below its lowest part), so a tall cell
+  // draws no empty card.
+  const hugQuoteCards = (): void => {
+    for (const index of quoteHugs) {
+      const item = items[index]!, layout = item.quoteLayout, frame = item.frameBox;
+      if (!layout || !frame || layout.overflow) continue;
+      const bottom = Math.max(layout.bounds.y + layout.bounds.height, ...layout.parts.map(part => part.box.y + part.box.height), ...(layout.photo ? [layout.photo.box.y + layout.photo.box.height] : []));
+      item.frameBox = acceptedBox({ ...frame, height: Math.min(frame.height, bottom - frame.y + (item.box.y - frame.y)) });
+    }
+  };
   const shareStartAlignment = (): void => {
     if (!startAligned.size) return;
     for (const set of peerSets) {
@@ -4820,6 +4834,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   sharePeerSizes();
   shareStartAlignment();
+  hugQuoteCards();
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts).
   shareSiblingChartAxes(items, options.presentation);
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
