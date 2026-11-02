@@ -13,10 +13,16 @@ name: Merge OPF bump
 # It runs when one of the listed workflows completes (workflow_run, on the default branch's copy of this file: it executes no code from
 # the pull request, only the GitHub API). The pull request is merged by whichever completion comes last, because it needs every check in
 # REQUIRED_CHECKS to be green for the pull request's head commit. A red or missing check leaves the pull request open.
-# Checks: `build-and-smoke` is the job of build-and-smoke.yml, drafted beside this file: pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes to main). Everything the bump regenerates (the vendored editor under public/opf-editor and data/opf-spec.json, the preview fonts, the catalog and the previews) is written by the site's own `pnpm opf:bump` (scripts/opf-bump.mjs of the site, run by bump-sites.yml) and committed into the bump pull request, which is why ALLOWED_FILES below lists them.
+# Checks: `build-and-smoke` is the job of build-and-smoke.yml (added with this file; it runs for bump branches only). This site's
+# pull request CI also runs `verify` (validate-gallery-registry.yml, every pull request: audit, unit tests, build, browser editor workflow)
+# and `worker-build` (cloudflare-worker.yml, the OpenNext build that is deployed; it runs for a bump because a bump changes package.json).
+# None of them is a required check (Free-plan organization, no ruleset), so all three are listed in REQUIRED_CHECKS and the merge waits for
+# each of them: it runs when any of the three workflows completes and the last one to finish decides. Everything the bump regenerates (the
+# vendored editor under public/opf-editor and data/opf-spec.json, the preview fonts, the catalog and the previews) is written by the site's
+# own `pnpm opf:bump` (scripts/opf-bump.mjs, run by bump-sites.yml) and committed into the bump pull request, which is why ALLOWED_FILES lists them.
 on:
   workflow_run:
-    workflows: ["Build and smoke"]
+    workflows: ["Build and smoke", "Validate gallery registry", "Cloudflare Worker build"]
     types: [completed]
 
 permissions:
@@ -50,9 +56,11 @@ jobs:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
-          # One check name per line: the checks that make a bump safe to merge (this site's build and smoke).
+          # One check name per line: the checks that make a bump safe to merge (this site's build and smoke, its full pull request CI and the Worker build).
           REQUIRED_CHECKS: |
             build-and-smoke
+            verify
+            worker-build
           # The only files a bump may touch (extended regular expression, matched against each changed path).
           # what the site's own `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site): the pins, the generated catalog, preview and font files
           # and the vendored editor.
