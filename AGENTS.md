@@ -68,6 +68,7 @@ Cross-repository work is tracked in `docs/programs/`. Before starting program wo
 - [Format audit](docs/programs/format-audit/README.md) (opened 2026-10-06, branches `codex/fa-<nn>-<slug>`, PR titles `FA-<nn>: `): every OPF key good, useful and true; one content-kind vocabulary; layout records in the deck's design vocabulary; pre-v1, so renames and removals land without deprecations.
 - [Cloudflare hosting](docs/programs/cloudflare-hosting/README.md) (opened 2026-10-04, branches `codex/cf-<nn>-<slug>`, PR titles `CF-<nn>: `): the three sites move from Vercel to Cloudflare Workers without downtime and without changing a public contract; agents build and preview on localhost only and never deploy, log in or change DNS.
 - [Cloud-ready engine and editor](docs/programs/cloud-editor/README.md) (opened 2026-10-25, branches `codex/ce-<nn>-<slug>`, PR titles `CE-<nn>: `): the engine runs unchanged on edge runtimes, and the editor is embeddable (one call or React) with ids, transactions, proposals, diff, permissions, comment anchors and merge, so any host can build a Figma-class product on the open packages; pptx.dev adopts each piece first.
+- [Layout harvest](docs/programs/layout-harvest/README.md) (opened 2026-11-02, branches `codex/lh-<nn>-<slug>`, PR titles `LH-<nn>: `): default slides as good as Claude Design's version of the same content, compared slide by slide, plus the design and export guidance of Claude's Slides type and pptx skill; [burndown.md](docs/programs/layout-harvest/burndown.md) is the catalog of improvements built and to build.
 
 ## Fonts
 
