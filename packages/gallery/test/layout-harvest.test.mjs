@@ -7,7 +7,8 @@ import { test } from 'node:test';
 import { composeSlide } from '@openpresentation/opf/composition';
 import { gallery } from '../dist/index.js';
 
-const compose = (id, slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, layout: gallery.layouts[id], ...options });
+// The records' own card rules at the role sizes (`fill: false`): LH-48 grows an under-filled body and centers it (core lone-fill.test.mjs).
+const compose = (id, slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, layout: gallery.layouts[id], fill: false, ...options });
 const labelled = (text, description) => ({ items: [{ text, description }] });
 const bottomOf = (box) => box.y + box.height;
 const carded = (result) => result.items.filter((item) => item.frameBox);
