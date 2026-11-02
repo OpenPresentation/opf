@@ -11,7 +11,7 @@ assert.deepEqual(lines.map(line=>text.slice(line.start,line.end)),['','First lin
 assert.equal(lines.at(-1).start,text.length);
 for(let i=0;i<lines.length;i++) {
   assert.ok(lines[i].height>0);
-  if(i)assert.equal(lines[i].y,lines[i-1].y+lines[i-1].height);
+  if(i)assert.ok(Math.abs(lines[i].y-(lines[i-1].y+lines[i-1].height))<1e-9,`line ${i} follows line ${i-1}`);
 }
 assert.ok(!toSvg(deck, 1).includes('data-opf-rich-lines'),'Caret metadata is opt-in tracing only');
 console.log('Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.');

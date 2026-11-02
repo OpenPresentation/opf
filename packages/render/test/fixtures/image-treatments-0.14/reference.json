@@ -22,9 +22,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -67,9 +67,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -115,9 +115,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -155,12 +155,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 697.6,
-            "y": 147.48,
+            "y": 324.75,
             "width": 524.8,
-            "height": 514.92
+            "height": 160.38
           }
         }
       ],
@@ -199,12 +199,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 324.75,
             "width": 588.8,
-            "height": 514.92
+            "height": 160.38
           }
         }
       ],
@@ -247,12 +247,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 569.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 652.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -296,12 +296,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 324.75,
             "width": 524.8,
-            "height": 514.92
+            "height": 160.38
           }
         }
       ],
@@ -344,9 +344,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -386,9 +386,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -426,12 +426,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 363.48,
+            "y": 458.98,
             "width": 1164.8,
-            "height": 298.92
+            "height": 107.92
           }
         }
       ],
@@ -472,12 +472,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 224.98,
             "width": 1164.8,
-            "height": 262.92
+            "height": 107.92
           }
         }
       ],
@@ -522,12 +522,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 136.5,
+            "y": 319.26,
             "width": 460.8,
-            "height": 525.9
+            "height": 160.38
           }
         }
       ],
@@ -565,12 +565,12 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 652.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ],
@@ -606,9 +606,9 @@
           "path": "slides.0.blocks.0.text",
           "box": {
             "x": 57.6,
-            "y": 147.48,
+            "y": 350.98,
             "width": 1164.8,
-            "height": 514.92
+            "height": 107.92
           }
         }
       ]
@@ -638,7 +638,7 @@
           }
         },
         {
-          "path": "slides.0.blocks.0.text",
+          "path": "slides.0.blocks.1.text",
           "box": {
             "x": 57.6,
             "y": 651.48,

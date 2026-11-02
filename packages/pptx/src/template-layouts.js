@@ -222,7 +222,8 @@ export function layoutPlaceholders(template) {
     if (region) result.push({name: region.name, type: region.name === template.nativeBodyRegion ? 'body' : placeholderType(region), idx: indexes[region.name],
       ...(region.name === template.nativeBodyRegion ? {anchor: {top: 't', middle: 'ctr', bottom: 'b'}[region.anchor]} : {}), ...emu(area.box)});
   }
-  const sample = composeSlide({title: 'Title', subtitle: 'Subtitle', blocks: [{text: 'Body'}]}, {...template.areaOptions, layout: record, textMeasurement: undefined});
+  // The placeholder's default type is the role size: `fill: false`, since a lone one-word sample would grow (LH-48).
+  const sample = composeSlide({title: 'Title', subtitle: 'Subtitle', blocks: [{text: 'Body'}]}, {...template.areaOptions, layout: record, textMeasurement: undefined, fill: false});
   for (const placeholder of result) {
     const field = placeholder.type === 'title' || placeholder.type === 'ctrTitle' ? 'title' : placeholder.type === 'subTitle' ? 'subtitle' : 'text';
     const item = sample.items.find(item => item.field === field);

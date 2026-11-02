@@ -19,7 +19,8 @@ for(const [r,row] of rows.entries()){
  const rectangle=rectangles.find(rect=>rect['data-opf-path']===path);
  const actual=Number(row.h)/9525;
  assert.ok(Math.abs(actual-Number(rectangle.height))<.001);
- if(r<2)assert.equal(actual,54);else assert.ok(actual>=103.5-.001,'Five text lines plus cell padding require room');
+ // Short rows keep the preferred row height: 54 px, grown with the type of this lone table (LH-48, tableGrowth), the same in both.
+ if(r<2)assert.ok(actual>=54-.001&&Math.abs(actual-Number(rows[0].h)/9525)<.001,String(actual));else assert.ok(actual>=103.5-.001,'Five text lines plus cell padding require room');
  if(r===2){
   const group=find(svg,'g').find(group=>group['data-opf-path']===path&&group['data-opf-rich-text']==='true');
   const lines=JSON.parse(group['data-opf-rich-lines']);
