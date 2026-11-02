@@ -3018,7 +3018,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
   // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
   // LH-03, LH-81: the chart layer composition decided (src/chart-layer.js); a small chart's default value labels count as data labels.
-  const layer = chartData.chartex ? undefined : chartLayout?.layer;
+  // LH-107: a waterfall's layer (roles, labels, caption) belongs to the native waterfall; its clustered-column fallback takes none of it.
+  const layer = chartData.chartex || chartLayout?.layer?.waterfall ? undefined : chartLayout?.layer;
   const authoredOptions = resolveChartOptionsFor(chart);
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
   let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);

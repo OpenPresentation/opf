@@ -308,6 +308,7 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
     for (const key of Object.keys(result)) if (result[key] === undefined) delete result[key];
     if (content.length && !(isDefault && !result.separator)) out.dataLabels = Object.keys(result).length ? result : true;
     else if (!content.length && defaultContent) out.dataLabels = false;
-  } else if (defaultContent) out.dataLabels = false;
+  // LH-107: a waterfall without labels was exported with `dataLabels: false` (or with labels too wide to fit, which draws the same).
+  } else if (!signed && (defaultContent || type === 'waterfall')) out.dataLabels = false;
   return {options: out, notes};
 }

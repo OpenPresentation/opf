@@ -108,8 +108,12 @@ for (const [design, label] of [[LIGHT, 'light'], [undefined, 'navy']]) {
   assert.equal(right.imported.legend, 'right', 'a right legend is not the default of a two-series column chart: it imports as an option');
   const stacked = await exported({type: 'stacked-column', data: two});
   assert.doesNotMatch(stacked.xml, /<c:chart>\s*<c:title>/, 'two series and no value axis title: no generated caption');
-  assert.match(stacked.xml, /<c:legend><c:legendPos val="t"\/><c:layout><c:manualLayout>/, 'the header legend');
-  assert.ok(!valueAxisDeleted(stacked.xml) && shownValues(stacked.xml) === 0, 'a stacked chart keeps its value axis and draws no labels');
+  // LH-109: a stacked chart names its series beside its last column (no legend) and prints its segment values; it keeps its value axis.
+  assert.doesNotMatch(stacked.xml, /<c:legend>/, 'names instead of the header legend');
+  assert.ok(!valueAxisDeleted(stacked.xml) && shownValues(stacked.xml) > 0, 'a stacked chart keeps its value axis and labels its segments');
+  // With a legend option it keeps that legend and draws no default labels.
+  const legend = await exported({type: 'stacked-column', data: two, legend: 'top'});
+  assert.ok(shownValues(legend.xml) === 0, 'an explicit legend: no default labels');
   checks += 7;
 }
 

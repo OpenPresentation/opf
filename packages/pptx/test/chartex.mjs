@@ -59,7 +59,8 @@ const expectedLayout = {
   histogram: {layoutIds: ['clusteredColumn'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 2},
   pareto: {layoutIds: ['clusteredColumn', 'paretoLine'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 3},
   'box-and-whisker': {layoutIds: ['boxWhisker', 'boxWhisker'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"\/><cx:statistics quartileMethod="exclusive"\/><\/cx:layoutPr>/, axes: 2},
-  waterfall: {layoutIds: ['waterfall'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility connectorLines="1"\/><\/cx:layoutPr>/, axes: 2},
+  // LH-107: a waterfall labels every bar with its signed value by default (a total unsigned) and drops its value axis.
+  waterfall: {layoutIds: ['waterfall'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility connectorLines="1"\/><\/cx:layoutPr>/, axes: 2, dataLabels: /<cx:dataLabels pos="outEnd"><cx:numFmt formatCode="&quot;\+&quot;General;&quot;−&quot;General;General" sourceLinked="0"\/>/},
   funnel: {layoutIds: ['funnel'], dimension: 'val', requires: 'cx2', layoutPr: null, axes: 2, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="0" value="1"\/><\/cx:dataLabels>/},
   world: {layoutIds: ['regionMap'], dimension: 'colorVal', requires: 'cx4', layoutPr: /<cx:layoutPr><cx:geography cultureLanguage="en-US" cultureRegion="US" attribution="Powered by Bing"\/><\/cx:layoutPr>/, axes: 0},
 };
@@ -170,9 +171,9 @@ for (const id of chartexIds) {
     assert.deepEqual(axes.map(([, axisId]) => axisId), ['0', '1', '2'].slice(0, want.axes));
     // CT_Axis order: scaling, gridlines, tickLabels, then the axis's own txPr (PowerPoint does not inherit the chartSpace txPr for axis labels).
     assert.match(axes[0][2], /^<cx:catScaling gapWidth="[0-9.]+"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: category axis`);
-    assert.match(axes[1][2], id === 'funnel' ? /^<cx:valScaling\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
+    assert.match(axes[1][2], id === 'funnel' || id === 'waterfall' ? /^<cx:valScaling\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/ : /^<cx:valScaling\/><cx:majorGridlines><cx:spPr>[\s\S]*<\/cx:spPr><\/cx:majorGridlines><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, `${id}: value axis`);
     for (const [, axisId, body] of axes) assert.equal([...body.matchAll(/<cx:txPr>/g)].length, 1, `${id}: axis ${axisId} carries one txPr`);
-    if (id === 'funnel') assert.match(axes[1][0], /<cx:axis id="1" hidden="1">/, 'funnel value axis is hidden');
+    if (id === 'funnel' || id === 'waterfall') assert.match(axes[1][0], /<cx:axis id="1" hidden="1">/, `${id} value axis is hidden (LH-107: a labeled waterfall)`);
     assert.match(owner[2], /<cx:axisId val="0"\/><cx:axisId val="1"\/>$/, `${id}: the series names its axes`);
   } else {
     assert.doesNotMatch(owner[2], /<cx:axisId/, `${id}: no axes`);
@@ -198,7 +199,9 @@ for (const id of chartexIds) {
     assert.equal(new Set(pointFills.map(([, color]) => color)).size, data.rows.length, 'distinct tile colours');
     assert.equal(pointFills[0][1], classicSeriesColor);
   } else if (id === 'waterfall') {
-    assert.deepEqual(pointFills.map(([, color]) => color === classicSeriesColor ? 'up' : 'down'), data.rows.map((row) => row[1] < 0 ? 'down' : 'up'), 'increase and decrease colours by sign');
+    // LH-107: increases in the series colour at full strength, decreases in the context gray: one colour per sign.
+    const up = pointFills[data.rows.findIndex((row) => row[1] >= 0)][1];
+    assert.deepEqual(pointFills.map(([, color]) => color === up ? 'up' : 'down'), data.rows.map((row) => row[1] < 0 ? 'down' : 'up'), 'increase and decrease colours by sign');
   } else {
     assert.deepEqual(pointFills, [], `${id}: series colour only`);
   }
@@ -207,7 +210,8 @@ for (const id of chartexIds) {
   const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill>${labelColor}</a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
   // LH-56: the labels inside treemap tiles and funnel bars take a colour per fill (test/chart-fallbacks.mjs); every other text element
   // keeps the deck's label colour.
-  const inside = id === 'treemap' || id === 'funnel';
+  // LH-107: a waterfall's default labels sit outside its bars in the full text colour, as the preview draws value labels.
+  const inside = id === 'treemap' || id === 'funnel' || id === 'waterfall';
   const textBlocks = [...(inside ? cx.replace(/<cx:dataLabels\b[\s\S]*?<\/cx:dataLabels>/g, '') : cx).matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
   assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels && !inside ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);

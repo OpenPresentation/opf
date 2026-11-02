@@ -5875,9 +5875,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   shareSiblingPlots(shareSiblingChartAxes(items, options.presentation), plotGeometry, options.presentation);
   // LH-105: a shared plot moves the line ends, so their names are placed again.
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
-  // LH-109, LH-110: and so does a stacked chart's names and the reference marks.
-  const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
-  refreshChartMarks(items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references), item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
+  // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
+  // (a deck without a bold body face must not fail on a slide that never draws one).
+  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references);
+  if (marked.length) {
+    const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
+    refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
+  }
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
