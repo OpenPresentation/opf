@@ -9,7 +9,8 @@
   "design": {
     "titleAlignment": "center",
     "contentAlignment": "center",
-    "imageFit": "contain"
+    "imageFit": "contain",
+    "variant": "dark1"
   },
   "direction": "column",
   "anchor": "middle",

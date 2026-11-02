@@ -57,7 +57,7 @@
     },
     "design": {
       "$ref": "#/$defs/DesignHints",
-      "description": "The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Per key the slide's design wins, then the deck's design, then the resolved theme's design, then this record's design, then the engine default. Composition, the renderer and the PPTX exporter all read the one result."
+      "description": "The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Per key the slide's design wins, then the deck's design, then the resolved theme's design, then this record's design, then the engine default; 'variant' alone ranks this record above the deck and the theme (see DesignHints.variant). Composition, the renderer and the PPTX exporter all read the one result."
     },
     "direction": {
       "type": "string",
@@ -475,6 +475,14 @@
         "mirror": {
           "type": "boolean",
           "description": "Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change."
+        },
+        "variant": {
+          "oneOf": [
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariantSlot" },
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant" }
+          ],
+          "description": "The color variant slides on this layout draw on (LH-01): a background slot ('light2', 'dark1', 'accent1', ...) or the ColorVariant object, as design.variant. Unlike the other keys it outranks the deck's design and the theme: the slide's own design.variant or design.background wins, then this, then the deck's variant or background, then the theme's. It hides a background of the deck or theme (the slide is the variant's bg1), and without an accent order of its own it keeps the deck's.",
+          "examples": ["accent1", "light2", "dark1"]
         }
       }
     },

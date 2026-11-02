@@ -367,6 +367,7 @@ _No named properties._
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | The color variant slides on this layout draw on (LH-01): a background slot ('light2', 'dark1', 'accent1', ...) or the ColorVariant object, as design.variant. Unlike the other keys it outranks the deck's design and the... |
 
 #### Composition
 
@@ -502,7 +503,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | yes | `string` | The variant's id within the theme, lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable variant name shown in pickers. |
-| `variant` | yes | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent... |
+| `variant` | yes | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the ColorVariant object of... |
 
 #### ThemeBackgroundSlot
 

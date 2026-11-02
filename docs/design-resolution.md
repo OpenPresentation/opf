@@ -227,15 +227,18 @@ A deck has one color scheme of twelve slots. A **variant** is a mapping over tho
 | `dark1` | `dark1` | `light1` | `dark2` | `light2` |
 | `light2` | `light2` | `dark1` | `light2` | `dark2` |
 | `dark2` | `dark2` | `light1` | `dark2` | `light2` |
+| `accent1` to `accent6` (LH-01) | the accent | `light1` or `dark1` | the accent | `light2` or `dark2`, else tx1's slot |
 
-(`light2` and `dark2` keep the background slot as the surface too, as a slide with that theme background has always been drawn, so the engine default theme, whose background is `dark2`, is unchanged.) `variant.accents` (object form) is a permutation of `accent1` to `accent6`; entry `i` is the slot drawn as accent `i + 1`, which reorders `primary`, `secondary`, `accent` and the chart series colors.
+(`light2` and `dark2` keep the background slot as the surface too, as a slide with that theme background has always been drawn, so the engine default theme, whose background is `dark2`, is unchanged.) An accent variant draws the slide on that accent with the scheme's light family (`light1`, `light2`) or dark family (`dark1`, `dark2`), whichever text slot has the higher contrast on the accent; where the family's tx2 is under 4.5:1 on it, tx2 maps to tx1's slot. No colour is invented: the PowerPoint export writes it as a `clrMapOvr` with `bg1="accent1"`. `variant.accents` (object form) is a permutation of `accent1` to `accent6`; entry `i` is the slot drawn as accent `i + 1`, which reorders `primary`, `secondary`, `accent` and the chart series colors.
 
-Which variant a slide has, from the most specific to the least (slide design, deck design, then the theme record), at the first level that says anything:
+Which variant a slide has, from the most specific to the least (slide design, the slide's layout record's `design.variant`, deck design, then the theme record), at the first level that says anything:
 
 1. a `variant`;
 2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
 3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone only a variant of a less specific level can apply; with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
+
+A layout record's `design.variant` (LH-01) ranks above the deck and the theme and below the slide, unlike the layout's other design keys (docs/programs/layout-harvest/README.md, Decisions): the default `section` draws on `accent1`, `statement` and `quote` on `light2` and `closing` on `dark1` in any deck, light or dark, while a slide's own `variant` or `background` wins. It hides the deck's and the theme's background (a deck picture too: the slide is the variant's bg1), and without an accent order of its own it keeps the deck's. `resolveSlideContext(...).resolved.layoutVariant` is the variant when it decides the slide.
 
 A theme record can list the variants it offers (`variants`, from gallery 4): named values of `variant`, such as `light`, `light-alt`, `dark` and `dark-alt` on `minimal`, `classic` and `bold`. They are for pickers: choosing one writes its `variant` into `design.variant` (or a slide's), and the document keeps that value, not the entry id. The engines read only `design.variant`. There is no `dark` theme in the default catalog: a dark deck is a theme with a dark variant, for example `{ "theme": "classic", "variant": "dark1" }`.
 

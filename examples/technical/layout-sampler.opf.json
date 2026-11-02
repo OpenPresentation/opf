@@ -1384,7 +1384,8 @@
           ],
           "design": {
             "titleAlignment": "center",
-            "contentAlignment": "center"
+            "contentAlignment": "center",
+            "variant": "accent1"
           },
           "direction": "column",
           "regions": [
@@ -1461,7 +1462,8 @@
           ],
           "design": {
             "titleAlignment": "center",
-            "contentAlignment": "center"
+            "contentAlignment": "center",
+            "variant": "light2"
           },
           "direction": "column",
           "anchor": "middle",
@@ -1495,7 +1497,8 @@
           "design": {
             "titleAlignment": "center",
             "contentAlignment": "center",
-            "imageFit": "contain"
+            "imageFit": "contain",
+            "variant": "dark1"
           },
           "direction": "column",
           "anchor": "middle",
@@ -1583,6 +1586,9 @@
           "tags": [
             "Text"
           ],
+          "design": {
+            "variant": "light2"
+          },
           "direction": "column",
           "anchor": "middle",
           "regions": [
