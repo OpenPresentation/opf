@@ -165,12 +165,12 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 
 // ---- 4. Picture effects. PowerPoint applies opacity (a:alphaModFix), grayscale (a:grayscl) and a border (a:ln) to an SVG picture
 // (native check 2026-10-01), so those stay native, the effect before the SVG extension; a duotone recolor and a non-rectangular mask
-// are unconfirmed on an SVG picture and keep the PNG (svg-image-rasterized). A picture bullet is a raster (a:buBlip).
+// are unconfirmed on an SVG picture and keep the PNG (export-lossy, feature svg-rasterized). A picture bullet is a raster (a:buBlip).
 {
   const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, opacity: .5, recolor: 'grayscale', border: {color: '#c0392b', width: 6}}]}]};
   const {entries, diagnostics, bytes} = await open(deck);
   const xml = slideXml(entries);
-  assert.deepEqual(diagnostics.filter(item => item.code === 'svg-image-rasterized'), []);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'export-lossy'), []);
   const watermark = pictures(xml).find(item => item.name === 'OPF watermark'), image = pictures(xml).find(item => /^OPF image \d+$/.test(item.name));
   assert.ok(watermark.svgEmbed && image.svgEmbed, 'both stay native SVG pictures');
   assert.match(watermark.xml, /<a:blip r:embed="rId\d+"><a:alphaModFix amt="30000"\/><a:extLst>/);
@@ -188,7 +188,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   for (const treatment of [{recolor: {dark: '#102030', light: '#f0e0d0'}}, {shape: 'circle'}]) {
     const result = await open({design: {background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, ...treatment}]}]});
     assert.ok(!/svgBlip/.test(slideXml(result.entries)), `${Object.keys(treatment)}: raster`);
-    assert.deepEqual(result.diagnostics.filter(item => item.code === 'svg-image-rasterized').map(item => item.path), ['slides.0.blocks.0.image']);
+    assert.deepEqual(result.diagnostics.filter(item => item.code === 'export-lossy').map(item => [item.feature, item.path]), [['svg-rasterized', 'slides.0.blocks.0.image']]);
   }
   checked++;
 }
@@ -203,6 +203,8 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   assert.match(part, /\.png$/, 'a bullet references the PNG fallback (a:buBlip cannot reference an SVG)');
   assert.ok(!/svgBlip/.test(xml));
   assert.deepEqual(diagnostics.filter(item => item.code === 'unresolved-asset'), []);
+  // LH-29: the preview draws the icon as vectors, so the PNG bullet is reported once.
+  assert.deepEqual(diagnostics.filter(item => item.code === 'export-lossy').map(item => item.feature), ['svg-rasterized']);
   const raster = await pixels(entries[part]);
   assert.deepEqual(raster.at(raster.width >> 1, raster.height >> 1), [0xcc, 0, 0, 255]);
   checked++;
