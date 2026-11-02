@@ -16,8 +16,8 @@ describe('bundled layout records are described', () => {
   });
 
   test('a design is stated only where the gallery layout data states one', () => {
-    // Owner decision (FA-24): the image grid layouts show the whole picture.
-    for (const id of ['image']) assert.deepEqual(layouts.find(record => record.id === id).design, {imageFit: 'contain'}, id);
+    // Owner decision (FA-24, superseded by LH-104 on 2026-11-02): the image layout shows a near-fitting picture full frame and any other whole.
+    for (const id of ['image']) assert.deepEqual(layouts.find(record => record.id === id).design, {imageFit: 'auto'}, id);
     // FA-22: a full-bleed photo is a background, not a layout; no record reserves a slide image any more.
     assert.equal(layouts.find(record => record.id === 'image-bleed'), undefined);
     assert.ok(layouts.every(record => record.design?.slideImage === undefined && record.design?.imageFill === undefined));
