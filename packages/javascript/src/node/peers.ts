@@ -26,10 +26,14 @@ export function atLeast(version: string, minimum: string): boolean {
 }
 
 /** Refuse `bodyText: "native"` and `slideNumbers` on an opf-pptx that predates them: it would write the default and say nothing. */
-export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: string; slideNumbers?: string }, flags = false) {
+export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: string; slideNumbers?: string; typefaces?: string; as?: string }, flags = false) {
 	const asked = [options.bodyText === "native" ? (flags ? "--body-text native" : "bodyText: \"native\"") : undefined, options.slideNumbers ? (flags ? "--slide-numbers" : "slideNumbers") : undefined].filter(Boolean);
 	if (asked.length && pptx.version !== "unknown" && !atLeast(pptx.version, PPTX_TEXT_OPTIONS_FROM))
 		throw new OPFApiError(`${asked.join(" and ")} needs ${pptx.name}@${PPTX_TEXT_OPTIONS_FROM} or later; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
+	// LH-28 and LH-20: the opf-pptx that reads `typefaces` and `as` is the one that exports typefacesNotOfficeSafe.
+	const newer = [options.typefaces === "safe" ? (flags ? "--typefaces safe" : "typefaces: \"safe\"") : undefined, options.as === "images" ? (flags ? "--as images" : "as: \"images\"") : undefined].filter(Boolean);
+	if (newer.length && typeof (pptx.module as Partial<PptxModule> | undefined)?.typefacesNotOfficeSafe !== "function")
+		throw new OPFApiError(`${newer.join(" and ")} needs a newer ${pptx.name}; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
 }
 
 export interface Diagnostic {
@@ -81,6 +85,8 @@ export interface PptxModule {
 	toPptx(presentation: unknown, options?: Record<string, unknown>): Promise<Uint8Array>;
 	/** Without `signals` the presentation itself; with `signals: true`, `{ presentation, signals }`. */
 	fromPptx(input: Uint8Array, options?: Record<string, unknown>): Promise<Record<string, unknown>>;
+	/** LH-28: the Latin text typefaces of a PPTX that are not Office-safe. Absent from releases before LH-28. */
+	typefacesNotOfficeSafe?(input: Uint8Array): string[];
 }
 export interface Peer<T> {
 	module: T;
