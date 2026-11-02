@@ -582,7 +582,7 @@ export function defaultDeps(env = process.env, { fetchImpl } = {}) {
   return {
     registry: npmRegistry(fetchImpl ? { fetchImpl } : {}),
     npm: (args, options) => run('npm', args, { ...options, env }),
-    pnpm: (args, options) => run(process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm', args, { ...options, env }),
+    pnpm: (args, options) => run('pnpm', args, { ...options, env }),
     runStability,
     now: () => Date.now(),
     sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),

@@ -34,7 +34,7 @@ import {
   verifyRelease,
   waitForRegistry,
 } from './release.mjs';
-import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, npmRegistry, publishedRange, satisfies, verifyPackage } from './release-registry.mjs';
+import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, npmRegistry, publishedRange, run, satisfies, verifyPackage } from './release-registry.mjs';
 
 const GALLERY = '@openpresentation/gallery';
 const CORE = '@openpresentation/opf';
@@ -787,4 +787,13 @@ test('satisfies: caret, tilde, exact, comparators, x-ranges, hyphen and ||', () 
   assert.equal(satisfies('0.14.0', '^0.13.1 || ^0.14.0'), true);
   assert.equal(satisfies('0.14.0-dev.0', '^0.14.0'), false);
   assert.throws(() => satisfies('0.14.0', 'latest'), /Unsupported version or range/);
+});
+
+test('run starts pnpm and npm by their bare names on every platform', () => {
+  // On Windows both are .cmd files; `release.mjs prepare` spawned pnpm.cmd without a shell and failed with EINVAL.
+  for (const command of ['pnpm', 'npm']) {
+    const result = run(command, ['--version']);
+    assert.equal(result.status, 0, `${command}: ${result.stderr}`);
+    assert.match(result.stdout.trim(), /^\d+\.\d+\.\d+/);
+  }
 });

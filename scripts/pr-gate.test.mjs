@@ -162,6 +162,14 @@ test('checks: only the newest report of a name counts; a required check that is 
   assert.match(describeChecks(evaluateChecks({ checks: normalizeContexts([check('verify', 'FAILURE')]), required: ['verify'] }).failing), /verify: FAILURE https:\/\/github\.com\/o\/r\/actions/);
 });
 
+test('checks: a required name covers the legs of a matrix job of that name', () => {
+  // The site repositories' verify is a one-leg matrix, reported as "verify (ubuntu-latest)"; the gate used to wait on it until timeout.
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify (ubuntu-latest)'), check('build')]), required: ['verify'] }).state, 'green');
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify (ubuntu-latest)'), check('verify (windows-latest)', null)]), required: ['verify'] }).state, 'pending', 'every leg must finish');
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify (ubuntu-latest)'), check('verify (windows-latest)', 'FAILURE')]), required: ['verify'] }).state, 'red', 'one red leg is red');
+  for (const other of ['verify-docs', 'verifying (x)', 'verify (x) extra', 'pre verify (x)']) assert.equal(evaluateChecks({ checks: normalizeContexts([check(other)]), required: ['verify'] }).state, 'pending', other);
+});
+
 test('one batched query names every target and the rate limit', () => {
   const query = buildPollQuery([parseTarget('o/r#7'), parseTarget('o/s@abcdef1234', { commit: true })]);
   assert.match(query, /t0: repository\(owner: "o", name: "r"\) \{ pullRequest\(number: 7\)/);
