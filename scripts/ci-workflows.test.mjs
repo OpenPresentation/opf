@@ -2,7 +2,7 @@
 // (docs/programs/monorepo/README.md, section 4) and against scripts/ci-scope.mjs, whose output decides which jobs run.
 // Text-level on purpose: the repository has no YAML parser dependency. actionlint covers the syntax.
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -46,8 +46,9 @@ const workflows = readdirSync(workflowDir).filter((name) => name.endsWith('.yml'
 // this list (and to the plan, docs/programs/monorepo/README.md, section 2).
 test('the workflows and actions are the monorepo set; the retired coordination machinery stays deleted', () => {
   assert.deepEqual(workflows, ['bump-sites.yml', 'ci.yml', 'full-ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
-  // ecosystem-refs is the frozen shim the archived repositories' CI still calls until MR-60.
-  assert.deepEqual(readdirSync(path.join(root, '.github/actions')).sort(), ['ecosystem-refs', 'setup-workspace']);
+  // MR-60: the old repositories are archived, so the ecosystem-refs shim and the lock it read are gone too.
+  assert.deepEqual(readdirSync(path.join(root, '.github/actions')).sort(), ['setup-workspace']);
+  for (const file of ['ecosystem.lock.json', 'scripts/ecosystem-lock.mjs']) assert.equal(existsSync(path.join(root, file)), false, file);
 });
 
 test('every job has a timeout-minutes (a hung job must not hold a runner for six hours)', () => {
