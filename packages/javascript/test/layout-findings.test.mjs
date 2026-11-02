@@ -48,7 +48,8 @@ test('opf/centered-body: long centered paragraphs and lists; titles, statements,
 	assert.deepEqual(findings(deck([{ title: 'Thank you', layout: 'closing', text: `${statement} ${statement}` }]), 'opf/centered-body'), []);
 	// Several centered paragraphs side by side are one finding at the longest, which counts the rest.
 	const [several] = findings(deck([{ title: 'Three views', design: centered, blocks: [{ text: statement }, { text: statement }, { text: `${statement} ${statement}` }] }]), 'opf/centered-body');
-	assert.equal(several.path, '/slides/0/blocks/2/text');
+	// LH-47 widened: the long third paragraph spans the short last row, so the first one runs the most lines.
+	assert.equal(several.path, '/slides/0/blocks/0/text');
 	assert.equal(several.measured.blocks, 3);
 	// Metrics center by design and are never checked.
 	assert.deepEqual(findings(deck([{ title: 'Numbers', layout: 'metrics', blocks: [{ metric: { value: '31%', label: 'Conversion', description: 'Up from 24% after the new onboarding flow shipped in May' } }] }]), 'opf/centered-body'), []);

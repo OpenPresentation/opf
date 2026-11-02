@@ -318,3 +318,39 @@ test('LH-48 with LH-86: long texts drawn as full-width rows grow together when t
     assert.ok(Math.abs(rows[0].frameBox.width - rows[1].frameBox.width) < 1e-6 && rows[0].frameBox.width > result.contentBox.width * 0.9, `${direction}: across the region`);
   }
 });
+
+test('LH-10 with LH-48: a paragraph a layout region sets at the reading measure still grows with an under-filled body, wide', () => {
+  // Two long texts in two-column (the second column gives way, LH-65): the measure made them tall enough to stop LH-48's growth; the
+  // grown body without the measure wins, since a readable size outranks the measure.
+  for (const direction of ['ltr', 'rtl']) {
+    const slide = sampleSlide(layouts['two-column'], 2, 'long'), result = composeSlide(slide, { layout: layouts['two-column'], direction });
+    const sizes = result.items.filter((item) => item.path.includes('blocks')).map((item) => item.text.fontSize);
+    assert.ok(sizes.every((size) => size >= 32), `${direction}: ${sizes}`);
+    assert.deepEqual(overflow(result), []);
+  }
+});
+
+test('LH-102 with LH-48: a layout\'s lone block is centered once (fillLone), and a centered body keeps every size', () => {
+  const lone = composeSlide({ title: 'Next steps', items: ['Agree on the owner.', 'Confirm the cadence.', 'Return with a readout.'] }, { layout: layouts.list });
+  const list = lone.items.find((item) => item.field === 'items'), title = lone.items.find((item) => item.field === 'title');
+  const above = list.box.y - (title.box.y + title.box.height), below = lone.contentBox.y + lone.contentBox.height - (list.box.y + list.box.height);
+  assert.ok(Math.abs(above - below) < 40, `${above} above, ${below} below`);
+  for (const count of [3, 5]) {
+    const slide = sampleSlide(layouts['table-beside'], count, 'short'), centered = composeSlide(slide, { layout: layouts['table-beside'] });
+    const top = composeSlide(slide, { layout: layouts['table-beside'], fill: false });
+    for (const item of centered.items.filter((entry) => entry.text)) assert.ok(item.text.fontSize >= top.items.find((entry) => entry.path === item.path).text.fontSize - 1e-9, item.path);
+    assert.deepEqual(overflow(centered), []);
+  }
+});
+
+test('LH-116 with LH-80 and LH-51: a picture track spans the title band only beside a one-line title', () => {
+  const picture = { image: `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000"><rect width="1600" height="1000" fill="#3f8a55"/></svg>').toString('base64')}` };
+  const text = { text: 'In its fifth year, the Riverbank Cleanup mobilized 1,900 volunteers, who removed 38 tons of debris along 22 miles of shoreline.' };
+  for (const direction of ['ltr', 'rtl']) {
+    const long = composeSlide({ title: 'Volunteers keep the river clean this year', blocks: [text, picture] }, { direction });
+    const short = composeSlide({ title: 'River cleanup', blocks: [text, picture] }, { direction });
+    const image = (result) => result.items.find((item) => item.field === 'image').image.box;
+    assert.ok(image(long).y > 100 && image(short).y === 0, `${direction}: ${image(long).y}, ${image(short).y}`);
+    assert.equal(long.items.find((item) => item.field === 'title').text.lines.length, 1);
+  }
+});

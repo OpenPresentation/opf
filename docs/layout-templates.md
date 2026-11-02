@@ -414,6 +414,16 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.
+- **A lone code panel (LH-101)** takes the whole body, its lines in the middle of the panel (`layoutCode`'s `fill`), after it
+  grows as above.
+- **A body of other kinds (LH-102).** A body of text, lists, quotes, metrics, code, tables or timelines (a picture only in a bled
+  region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
+  of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
+  the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+- **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
+  kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
+- **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that
+  measure at the start edge, unless the body would then fill too much to grow: a readable size outranks the measure.
 
 ### Recomposition at the readability floor (LH-83)
 
