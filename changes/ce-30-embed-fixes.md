@@ -2,6 +2,4 @@
 type: fixed
 packages: [editor]
 ---
-CE-30: `styles.layered.css` no longer cuts the source pane's code off on the left: CodeMirror's own theme is unlayered and beat every rule in the `opf` layer, so the rules for CodeMirror's elements (a `.cm-` class in the selector) now follow the layer unlayered, and the source pane and the JSON editor look the same under either stylesheet.
-
-A `present` item in the `toolbar` list of a host that arranges the parts with `slots` is no longer dropped: it brings the Present button and the presenter, as a listed `export` brings Export (`panels.present: false` still turns it off).
+CE-30, found by openpresentation.org adopting the editor: `styles.layered.css` no longer cuts the source pane's code off on the left; CodeMirror's own theme is unlayered and beat every rule in the `opf` layer, so the rules for CodeMirror's elements (a `.cm-` class in the selector) now follow the layer unlayered, and the source pane and the JSON editor look the same under either stylesheet. A `present` item in the `toolbar` list of a host that arranges the parts with `slots` is no longer dropped: it brings the Present button and the presenter, as a listed `export` brings Export (`panels.present: false` still turns it off). The `embed`, `viewer` and `canvas` layouts fit their slide in a box of any height below 760px: the phone rules that stack the source, the slide and the side panel (a stage of at least 40vh) now apply only to the layouts that have several parts, and the slide row's thumbnail strip scrolls inside the editor instead of widening it.
