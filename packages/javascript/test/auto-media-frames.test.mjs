@@ -67,8 +67,12 @@ test('a portrait picture frames to its width and gives the rest of the row to th
 });
 
 test('a chart beside a takeaway is at most 4:3; one chart alone is unchanged', () => {
-  const beside = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.', emphasis: false }] }).items.find((item) => item.field === 'chart');
-  assert.ok(beside.box.height <= beside.box.width * 0.75 + 0.01, `${beside.box.width} x ${beside.box.height}`);
+  // Wave 3 (LH-71 with LH-49): a split stacks the chart above a one-line takeaway (it fills more), which leaves its plot wider than 3:1,
+  // so the chart takes the filling track beside the text at full height (the root's first column, as design.chartPrimary splits it).
+  const tracked = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.', emphasis: false }] });
+  const beside = tracked.items.find((item) => item.field === 'chart'), text = tracked.items.find((item) => item.field === 'text');
+  assert.equal(tracked.track?.kind, 'chart');
+  assert.ok(beside.box.x + beside.box.width <= text.box.x && beside.box.height > beside.box.width * 0.7, `${beside.box.width} x ${beside.box.height}`);
   const alone = composeSlide({ title: 'T', blocks: [chart] }).items.find((item) => item.field === 'chart');
   assert.ok(alone.box.height <= alone.box.width * 0.75 + 0.01 || alone.box.width > alone.box.height * 1.3);
   const layout = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell.', emphasis: false }] }, { layout: gallery.layouts['chart-beside'] }).items.find((item) => item.field === 'chart');

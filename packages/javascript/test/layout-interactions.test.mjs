@@ -1,4 +1,4 @@
-// LH wave 2: the rules the integration added where two wave 2 features meet (packages/render/test/golden/notes/LH-wave-2.md).
+// The rules where two layout-harvest features meet: wave 2 (packages/render/test/golden/notes/LH-wave-2.md) and wave 3 (LH-wave-3.md).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
@@ -191,4 +191,84 @@ test('LH-48 with LH-43 and LH-64: an under-filled row of cards grows at one size
     const card = cards[0].frameBox, above = card.y - (title.y + title.height), below = end - (card.y + card.height);
     assert.ok(Math.abs(above - below) < 30, `${direction}: centered (${above} above, ${below} below)`);
   }
+});
+
+// Wave 3 integration: the combined rules (packages/render/test/golden/notes/LH-wave-3.md).
+const longText = (name) => ({ text: `${name} should focus the next cycle on one measurable change while making the operating tradeoffs clear to every stakeholder and owner.` });
+const bodySizes = (result) => new Map(result.items.filter((item) => !['title', 'subtitle', 'tag'].includes(item.field)).flatMap((item) => {
+  const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+  return internal ? internal.parts.filter((part) => part.visible !== false && part.fit && ['body', 'value', 'label', 'what'].includes(part.role)).map((part) => [`${item.path}#${part.role}`, part.fit.fontSize]) : item.text ? [[item.path, item.text.fontSize]] : [];
+}));
+
+test('wave 3 guard: no rule sets a block smaller than the slide without the wave 3 rules, in both directions', () => {
+  // A quote beside a metric (LH-78), long text in a centered statement (LH-72), two short texts in three columns (LH-65, LH-48) and a
+  // short takeaway after long text (LH-06): each slide is compared with itself composed with `fill: false` and no automatic band, the
+  // nearest public form of wave 2. A rule may only be kept where no block is smaller.
+  const quote = { quote: { text: 'The path is workable if we keep the metric simple and the decision owner visible.', attribution: 'Working group' } };
+  const slides = [
+    [{ title: 'Signal', blocks: [{ metric: { value: '31%', label: 'Signal' } }, quote] }, {}],
+    [{ title: 'Statement', blocks: [longText('Northwind'), longText('Contoso')] }, { layout: layouts.statement }],
+    [{ title: 'Options', blocks: [longText('Northwind'), { text: 'Keep it short.' }] }, {}],
+  ];
+  for (const direction of ['ltr', 'rtl']) for (const [slide, options] of slides) {
+    const result = composeSlide(slide, { ...options, direction }), plain = composeSlide({ ...slide, blocks: slide.blocks.map((block) => ({ ...block, emphasis: false })) }, { ...options, direction, fill: false });
+    assert.deepEqual(overflow(result), [], slide.title);
+    for (const [key, size] of bodySizes(plain)) assert.ok((bodySizes(result).get(key) ?? Infinity) >= size - 1e-6, `${direction} ${slide.title}: ${key} keeps ${size}`);
+  }
+});
+
+test('LH-52 with LH-78: a quote beside another block in a centered split takes its card and sits in the middle of its cell', () => {
+  const quote = { quote: { text: 'The path is workable if we keep the metric simple and the decision owner visible.', attribution: 'Working group' } };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Signal', blocks: [{ metric: { value: '31%', label: 'Signal' } }, quote] }, { direction });
+    const said = result.items.find((item) => item.field === 'quote'), metric = result.items.find((item) => item.field === 'metric');
+    assert.ok(said.frameBox, `${direction}: the quote has its card`);
+    const middle = (box) => box.y + box.height / 2;
+    assert.ok(Math.abs(middle(said.frameBox) - middle(metric.box)) < 30, `${direction}: the card is in the middle like the metric`);
+    assert.deepEqual(overflow(result), []);
+  }
+});
+
+test('LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep their own cells; LH-48 does not grow them', () => {
+  const lead = { text: `${longText('Ironwood Devices').text} ${longText('Ironwood Devices').text}` };
+  const result = composeSlide({ title: 'Signal trend', blocks: [lead, { text: 'The deck-level language can be a catalog id.' }, { text: 'The new checklist reached both teams.' }] }, { explain: true });
+  assert.equal(result.explanation.decisions[0].reason, 'lead-stack');
+  const [first, ...stack] = result.items.filter((item) => item.field === 'text');
+  assert.ok(first.box.height > stack[0].box.height, 'the lead keeps its full-height cell');
+  assert.equal(stack[0].text.fontSize, stack[1].text.fontSize, 'the stack shares one size');
+});
+
+test('LH-86 with LH-70 and LH-06: long texts moved into one region stay rows; a short last text is the foot band below them', () => {
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Decision options', blocks: [longText('Evergreen CRM'), longText('Asteria Robotics'), longText('Lumina Foods'), { text: 'Decide by Friday.' }] }, { layout: layouts['three-column'], direction });
+    assert.deepEqual(overflow(result), []);
+    const texts = result.items.filter((item) => item.field === 'text' && !item.emphasis);
+    assert.equal(texts.length, 3);
+    assert.ok(texts.every((item, index) => index === 0 || item.frameBox.y > texts[index - 1].frameBox.y), `${direction}: one card per row, in reading order`);
+    assert.equal(new Set(texts.map((item) => Math.round(item.frameBox.width))).size, 1, `${direction}: rows across the region`);
+    assert.equal(result.emphasis?.shape, 'band', `${direction}: the short text is the band`);
+    assert.ok(result.emphasis.box.y >= Math.max(...texts.map((item) => item.frameBox.y + item.frameBox.height)), `${direction}: below the rows`);
+  }
+});
+
+test('LH-71 with LH-49 and LH-80: a split that stacks a chart above a takeaway gives it the filling track; a picture keeps the rules that read well beside it', () => {
+  const chart = { chart: { type: 'line', data: { columns: ['Month', 'Minutes'], rows: [['Apr', 44], ['May', 39], ['Jun', 33], ['Jul', 29], ['Aug', 24], ['Sep', 19]] } } };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.', emphasis: false }] }, { direction });
+    assert.equal(result.track?.kind, 'chart', direction);
+    assert.equal(result.track.edge, direction === 'rtl' ? 'right' : 'left');
+  }
+});
+
+test('LH-93 with LH-49: charts a template slide is recomposed for share one plot height', () => {
+  const result = composeSlide({ ...sampleSlide(layouts['chart-beside'], 3, 'long') }, { layout: layouts['chart-beside'] });
+  const charts = result.items.filter((item) => item.field === 'chart');
+  assert.ok(result.recomposed?.chart && charts.length > 1 && charts.every((item) => item.chart.layer?.plot), 'recomposed for its charts, each with a shared plot');
+  {
+    const heights = charts.map((item) => item.box.height - item.chart.layer.plot.top - item.chart.layer.plot.bottom);
+    const rows = new Map();
+    charts.forEach((item, index) => rows.set(Math.round(item.box.y), [...(rows.get(Math.round(item.box.y)) ?? []), heights[index]]));
+    for (const row of rows.values()) assert.ok(Math.max(...row) - Math.min(...row) < 1e-6, 'one plot height per row');
+  }
+  assert.deepEqual(overflow(result), []);
 });

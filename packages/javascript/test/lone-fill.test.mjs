@@ -73,7 +73,9 @@ test('a layout\'s lone block takes the body: its region reaches the foot when th
 });
 
 test('LH-65: two blocks in three columns draw 1:1; the empty column gives way', () => {
-  const blocks = [{ text: statement }, { text: 'This fixture keeps identity and attribution metadata separate from slide content.' }];
+  // The second text is under 80 characters: two long texts would be full-width rows instead (LH-86), which collapse the other columns;
+  // `emphasis: false` keeps it out of LH-06's foot band.
+  const blocks = [{ text: statement }, { text: 'This fixture keeps identity metadata separate.', emphasis: false }];
   for (const direction of ['ltr', 'rtl']) {
     const result = composeSlide({ title: 'Decision options', blocks }, { layout: layouts['three-column'], direction, fill: false });
     const [first, second, third] = ['first', 'second', 'third'].map((name) => result.regions.find((entry) => entry.name === name));

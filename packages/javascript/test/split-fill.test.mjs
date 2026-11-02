@@ -31,7 +31,8 @@ for (const direction of ['ltr', 'rtl']) {
 }
 
 test('LH-52: a picture and a quote in a row sit in the middle of the body; a row that fills more is unchanged', () => {
-  const image = { image: { src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIi8+', alt: 'Hills' } };
+  // `fit: 'contain'` keeps the picture whole in the flow (a cover picture takes a track, LH-80).
+  const image = { image: { src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIi8+', alt: 'Hills' }, fit: 'contain' };
   const quote = { quote: { text: 'The path is workable if we keep the metric simple and the decision owner visible.', attribution: 'Working group' } };
   const result = composeSlide({ title: 'Signal trend', composition: { mode: 'grid' }, blocks: [quote, image] }, {});
   assert.deepEqual(findings(result), []);
@@ -85,7 +86,7 @@ test('LH-86: two long texts in cards side by side are drawn one card per row, ac
     }
   }
   // A short text (under 80 characters) beside a long one, or a slide without cards, keeps the layout's columns.
-  const short = composeSlide({ title: 'Mixed', blocks: [paragraph('Evergreen CRM'), { text: 'Keep the recommendation short.' }] }, { layout: layouts['two-column'] });
+  const short = composeSlide({ title: 'Mixed', blocks: [paragraph('Evergreen CRM'), { text: 'Keep the recommendation short.', emphasis: false }] }, { layout: layouts['two-column'] });
   assert.equal(short.regions.filter((entry) => entry.content.length).length, 2);
   const plain = composeSlide({ title: 'Plain', blocks: [paragraph('Evergreen CRM'), paragraph('Asteria Robotics')] }, { layout: { ...layouts['two-column'], design: { ...layouts['two-column'].design, contentBox: false } } });
   assert.equal(plain.regions.filter((entry) => entry.content.length).length, 2);
@@ -93,7 +94,8 @@ test('LH-86: two long texts in cards side by side are drawn one card per row, ac
 
 test('LH-86: a few short paragraphs hug their text and center, and five long rows share the body at one size', () => {
   const brief = (name) => ({ text: `${name}: test with two teams for six weeks and measure task completion first.` });
-  const hugged = composeSlide({ title: 'Opportunity', blocks: [brief('Northwind'), brief('Contoso')] }, { layout: layouts['two-column'] });
+  // `fill: false`: at their role size (LH-48 would grow the two short rows and center them as a body).
+  const hugged = composeSlide({ title: 'Opportunity', blocks: [brief('Northwind'), brief('Contoso')] }, { layout: layouts['two-column'], fill: false });
   const cards = hugged.items.filter((item) => item.field === 'text').map((item) => item.frameBox);
   const region = hugged.regions.find((entry) => entry.arrangement === 'column').box;
   assert.ok(cards[0].y - region.y > 40, 'the stack does not start at the top');

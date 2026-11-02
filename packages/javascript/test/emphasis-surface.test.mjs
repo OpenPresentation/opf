@@ -145,7 +145,8 @@ test('LH-06, LH-68: no rule costs a block its size; the pill follows its text', 
   // The pill sits one gap under the long text's last line, in the text's column, at the size the short text has without it.
   const pillSlide = { title: 'Decision options', blocks: [{ text: long('North Metro') }, { text: 'Signal' }] };
   for (const layout of [undefined, layouts.hero, layouts['two-column'], layouts.closing]) for (const direction of ['ltr', 'rtl']) {
-    const options = { direction, ...(layout ? { layout } : {}) }, result = composeSlide(pillSlide, options), plain = composeSlide(without(pillSlide), options);
+    // The comparison is wave 2's slide: without the pill and without LH-48's growth of a short body (the band or pill takes precedence).
+    const options = { direction, ...(layout ? { layout } : {}) }, result = composeSlide(pillSlide, options), plain = composeSlide(without(pillSlide), { ...options, fill: false });
     assert.equal(result.emphasis?.shape, 'pill');
     const body = result.items.find((item) => item.path === 'slides.0.blocks.0.text'), pill = result.emphasis.box;
     const bottom = body.box.y + (body.text.placement?.height ?? body.text.lines.length * body.text.lineHeight);
@@ -155,7 +156,7 @@ test('LH-06, LH-68: no rule costs a block its size; the pill follows its text', 
   }
   // A band that would shrink the blocks above it is not drawn.
   const tight = { title: 'Tight', blocks: [{ text: `${long('A')} ${long('B')} ${long('C')}` }, { text: `${long('D')} ${long('E')}` }, { text: 'Next step: name the pilot lead.' }] };
-  const banded = composeSlide(tight), plainTight = composeSlide(without(tight));
+  const banded = composeSlide(tight), plainTight = composeSlide(without(tight), { fill: false });
   for (const [path, size] of sizes(plainTight)) assert.ok((sizes(banded).get(path) ?? Infinity) >= size - 1e-6, `${path} keeps ${size}`);
   // A scorecard tile never fits a role smaller than the stacked metric did.
   const metric = (value, description) => ({ metric: { value, label: 'Primary signal', description, trend: 'down' } });

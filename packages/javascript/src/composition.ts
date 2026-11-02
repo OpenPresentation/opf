@@ -3307,16 +3307,26 @@ function composeArranged(input: unknown, options: ComposeSlideOptions): SlideCom
 /**
  * Wave 3: one more arrangement of a slide that composeSlide already composed under the guard (a track, LH-80 and LH-49, or a larger body,
  * LH-48), composed with the guarded rules (GuardedRule) and, when one of them changed something and that reads less well than `before`
- * (the slide's own guarded composition), without them. The caller keeps it only when it reads as well as `before`, so neither the
- * arrangement nor a rule leaves a block smaller than wave 2 did, and each arrangement keeps the rules that read well in it.
+ * (the slide's own guarded composition), without them and then with each rule that fired added on its own while it reads as well as
+ * `before`. The caller keeps it only when it reads as well as `before`, so neither the arrangement nor a rule leaves a block smaller
+ * than wave 2 did, and each arrangement keeps the rules that read well in it.
  */
 function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number): SlideComposition | undefined {
   const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
     try { return composeLayout(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
+  const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
   const ruled = compose(ALL_RULES, fired);
-  return !fired.size || (ruled && readsAsWell(before, trackQuality(ruled, options), floor)) ? ruled : compose(NO_RULES);
+  if (!fired.size || reads(ruled)) return ruled;
+  // As guardedCompose: without the rules, then each rule that fired added on its own while the arrangement still reads as well.
+  let kept: ReadonlySet<GuardedRule> = NO_RULES, best = compose(NO_RULES);
+  for (const rule of GUARDED_RULES) {
+    if (!fired.has(rule)) continue;
+    const rules = new Set([...kept, rule]), trial = compose(rules);
+    if (reads(trial)) { kept = rules; best = trial; }
+  }
+  return best;
 }
 /**
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
@@ -4272,6 +4282,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A card fills its cell; what it holds is centered inside the card's own insets (those of the whole card, not of a card as short
     // as the payload), so it is placed without a card of its own and given the cell as its frame.
     const inner = hasCards ? payloadBox(cell) : cell;
+    // LH-78 with LH-52: a quote beside other blocks takes its own card (placeNode), measured with the card's insets, in the middle of its cell.
+    if (!hasCards && besideQuote(node)) {
+      const need = naturalHeight(node, cell.width, true, undefined, settings) + 2 * rasterPadding + scale;
+      if (need >= cell.height) { placeNode(node, cell, settings); return; }
+      contentSized.add(node);
+      placeNode(node, { ...cell, y: cell.y + (cell.height - need) / 2, height: need }, settings);
+      return;
+    }
     if (node.field === 'image' || node.field === 'video') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
       const height = modeFor(settings) === 'auto' && inner.height > inner.width * CHART_MAX_ASPECT_RATIO ? inner.width * CHART_MAX_ASPECT_RATIO : inner.height;
