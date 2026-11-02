@@ -16,8 +16,8 @@ const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing
 
 The namespace is all of core (`validate`, `parse`, `stringify`, `paginate`, `parseSlideSelection`, the types and the error
 classes), so one import covers an application. The pptx.gallery catalog is the package `@openpresentation/gallery` (`gallery`, a
-dependency of core, RR-78); in Node, `open`, `save` and `convert` register it when no `catalogs` are passed. A gallery that targets
-another catalog record schema than core reads (`CATALOG_SCHEMA`) is refused with `gallery-schema-mismatch`.
+dependency of core, RR-78); in Node, `open`, `save` and `convert` register it when no `catalogs` are passed. Core and the gallery release together and
+`pnpm check:catalog-schema` holds their `CATALOG_SCHEMA` constants equal, so Node does not check it at runtime.
 
 ## The CLI's verbs, with the CLI's defaults
 

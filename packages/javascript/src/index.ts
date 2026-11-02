@@ -36,8 +36,7 @@ export type { FontsHandle } from "./node/peers.js";
 
 /**
  * The options with the gallery registered when they name no catalogs (an explicit `catalogs: []` registers none). Options that
- * are not an object are passed on as they are, so the function's own check rejects them. A gallery that targets another catalog
- * schema than this core throws `gallery-schema-mismatch` (OPFApiError) here.
+ * are not an object are passed on as they are, so the function's own check rejects them.
  */
 const withDefaultCatalog = <T extends { catalogs?: readonly Catalog[] }>(options: T | undefined): T => {
 	if (options === undefined) return { catalogs: defaultCatalogs() } as T;

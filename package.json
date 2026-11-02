@@ -110,6 +110,7 @@
     "check:catalog": "node --test packages/gallery/test/sync-gallery-catalog.test.mjs && node packages/gallery/scripts/sync-gallery-catalog.mjs --verify",
     "check:catalog-free": "node scripts/check-catalog-free.mjs",
     "check:browser-safe": "node --test scripts/check-browser-safe.test.mjs && node scripts/check-browser-safe.mjs",
+    "check:catalog-schema": "node --test scripts/check-catalog-schema.test.mjs && node scripts/check-catalog-schema.mjs",
     "check:one-core": "node --test scripts/check-one-core.test.mjs",
     "check:examples-convert": "node scripts/check-examples-convert.mjs && node --test scripts/check-examples-convert.test.mjs",
     "check:examples": "node scripts/validate-examples.mjs && node scripts/inspect-example-findings.mjs && node scripts/check-generated-examples.mjs && node scripts/generate-example-suite.mjs --check",
