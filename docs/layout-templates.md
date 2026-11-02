@@ -67,7 +67,7 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
     { "direction": "column", "size": 3, "regions": [
       { "name": "title" },
       { "name": "lead", "size": "auto", "accepts": ["text", "quote", "metric"], "flow": "none" },
-      { "name": "support", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "column" }
+      { "name": "support", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
     ] },
     { "name": "media", "size": 2, "accepts": ["image", "video"], "role": "media", "flow": "none", "bleed": true }
   ]

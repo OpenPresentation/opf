@@ -17,9 +17,9 @@ const old = JSON.parse(readFileSync(path.join(root, "test", "fixtures", "layouts
 const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts");
 // WI-2 (whole-group placement): four records were redrawn on purpose (their grid is an all-auto stack the 4.0.0 form could not
 // express) and one record is new. They are tested by single-message-layouts.test.mjs; every other record must still compile to
-// exactly its 4.0.0 grid. The layout harvest redrew four more on purpose (a centred row of equal cards in pillars, team and
-// scorecard; a full-height picture beside a text column in hero), tested by layout-harvest.test.mjs.
-const REDESIGNED = new Set(["statement", "closing", "quote", "comparison", "pillars", "team", "scorecard", "hero"]);
+// exactly its 4.0.0 grid. The layout harvest redrew five more on purpose (full-height cards in pillars, team, scorecard and
+// two-column; a full-height picture beside a text column in hero), tested by layout-harvest.test.mjs.
+const REDESIGNED = new Set(["statement", "closing", "quote", "comparison", "pillars", "team", "scorecard", "hero", "two-column"]);
 const sameAsBefore = (record) => !ADDED.has(record.id) && !REDESIGNED.has(record.id);
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */

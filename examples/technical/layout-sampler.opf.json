@@ -4,14 +4,22 @@
   "language": "en",
   "description": "One slide for each of the 30 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
   "design": {
-    "background": "light1"
+    "background": "light1",
+    "footer": {
+      "left": {
+        "text": "Illustrative example • fictional data"
+      },
+      "right": {
+        "text": "{{slide.number}}"
+      }
+    }
   },
   "slides": [
     {
       "id": "layout-cover",
       "layout": "cover",
       "title": "A smaller pilot. A clearer decision.",
-      "subtitle": "Illustrative example • fictional data",
+      "subtitle": "A six-week pilot with two teams",
       "blocks": [
         {
           "region": "media",
@@ -20,19 +28,24 @@
             "alt": "Illustrative landscape with two green ridges"
           }
         }
-      ]
+      ],
+      "design": {
+        "footer": false
+      }
     },
     {
       "id": "layout-section",
       "layout": "section",
       "title": "Test before scaling",
-      "subtitle": "Illustrative example • fictional data"
+      "subtitle": "Part 2: the evidence",
+      "design": {
+        "footer": false
+      }
     },
     {
       "id": "layout-agenda",
       "layout": "agenda",
       "title": "From the problem to the next decision",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "items",
@@ -48,7 +61,6 @@
       "id": "layout-agenda-split",
       "layout": "agenda-split",
       "title": "Three parts, one decision",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "items",
@@ -64,7 +76,6 @@
       "id": "layout-statement",
       "layout": "statement",
       "title": "Start small enough to learn quickly",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "message",
@@ -76,7 +87,6 @@
       "id": "layout-closing",
       "layout": "closing",
       "title": "Agree the pilot team and start date",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "details",
@@ -88,7 +98,6 @@
       "id": "layout-text",
       "layout": "text",
       "title": "Learn before scaling",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "body",
@@ -108,7 +117,6 @@
       "id": "layout-list",
       "layout": "list",
       "title": "Make the next step explicit",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "body",
@@ -140,7 +148,6 @@
       "id": "layout-quote",
       "layout": "quote",
       "title": "A shared view makes decisions easier",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "quotes",
@@ -156,7 +163,6 @@
       "id": "layout-two-column",
       "layout": "two-column",
       "title": "Opportunity and constraints",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "first",
@@ -172,7 +178,6 @@
       "id": "layout-three-column",
       "layout": "three-column",
       "title": "Scope, evidence and the next decision",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "first",
@@ -192,7 +197,6 @@
       "id": "layout-pillars",
       "layout": "pillars",
       "title": "Three conditions for a useful pilot",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "pillars",
@@ -227,7 +231,6 @@
       "id": "layout-comparison",
       "layout": "comparison",
       "title": "Choose the smallest useful test",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "first",
@@ -247,7 +250,6 @@
       "id": "layout-process",
       "layout": "process",
       "title": "Three steps from evidence to decision",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "steps",
@@ -288,7 +290,6 @@
       "id": "layout-timeline",
       "layout": "timeline",
       "title": "Six weeks to an informed decision",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "timeline",
@@ -319,7 +320,6 @@
       "id": "layout-faq",
       "layout": "faq",
       "title": "What the pilot involves",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "questions",
@@ -354,7 +354,6 @@
       "id": "layout-metrics",
       "layout": "metrics",
       "title": "Pilot outcomes in three measures",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "metrics",
@@ -394,7 +393,6 @@
       "id": "layout-scorecard",
       "layout": "scorecard",
       "title": "Track performance against a target",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "cards",
@@ -427,7 +425,6 @@
       "id": "layout-image",
       "layout": "image",
       "title": "Give the visual room to speak",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "media",
@@ -442,7 +439,6 @@
       "id": "layout-image-beside",
       "layout": "image-beside",
       "title": "Explain what the audience should notice",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "media",
@@ -461,7 +457,6 @@
       "id": "layout-gallery",
       "layout": "gallery",
       "title": "Compare three visual directions",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "pictures",
@@ -490,7 +485,7 @@
       "id": "layout-chart",
       "layout": "chart",
       "title": "Completion rose through the pilot",
-      "subtitle": "Illustrative example • fictional data",
+      "subtitle": "Share of tasks completed, by week of the pilot",
       "blocks": [
         {
           "region": "charts",
@@ -539,7 +534,6 @@
       "id": "layout-chart-beside",
       "layout": "chart-beside",
       "title": "The largest gain came in week four",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "chart",
@@ -588,7 +582,6 @@
       "id": "layout-table",
       "layout": "table",
       "title": "Compare outcomes on consistent measures",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "table",
@@ -634,7 +627,6 @@
       "id": "layout-table-beside",
       "layout": "table-beside",
       "title": "Team B needs targeted support",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "table",
@@ -680,7 +672,6 @@
       "id": "layout-code",
       "layout": "code",
       "title": "Keep the implementation easy to inspect",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "code",
@@ -699,7 +690,6 @@
       "id": "layout-hero",
       "layout": "hero",
       "title": "One team. One outcome.",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "lead",
@@ -730,7 +720,6 @@
       "id": "layout-dashboard",
       "layout": "dashboard",
       "title": "Pilot performance at a glance",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "kpis",
@@ -828,7 +817,6 @@
       "id": "layout-team",
       "layout": "team",
       "title": "Give each workstream a clear owner",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "people",
@@ -863,7 +851,6 @@
       "id": "layout-logos",
       "layout": "logos",
       "title": "Recognize the partners",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "region": "logos",
@@ -891,7 +878,6 @@
     {
       "id": "dynamic-row-weighted",
       "title": "Lead with the recommendation",
-      "subtitle": "Illustrative example • fictional data",
       "composition": {
         "mode": "row",
         "weights": [
@@ -911,7 +897,6 @@
     {
       "id": "dynamic-auto-three",
       "title": "What makes a pilot worth running",
-      "subtitle": "Illustrative example • fictional data",
       "composition": {
         "mode": "auto",
         "columns": 3
@@ -946,7 +931,6 @@
     {
       "id": "dynamic-metric-grid",
       "title": "Pilot outcomes in four measures",
-      "subtitle": "Illustrative example • fictional data",
       "composition": {
         "mode": "grid",
         "columns": 2
@@ -986,7 +970,6 @@
     {
       "id": "dynamic-column",
       "title": "Completion rose every week",
-      "subtitle": "Illustrative example • fictional data",
       "composition": {
         "mode": "column",
         "weights": [
@@ -1039,7 +1022,6 @@
     {
       "id": "dynamic-chart-list",
       "title": "What the first four weeks show",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "chart": {
@@ -1089,7 +1071,6 @@
     {
       "id": "dynamic-nested-group",
       "title": "Week four brought the biggest gain",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "chart": {
@@ -1149,7 +1130,6 @@
     {
       "id": "dynamic-promoted-columns",
       "title": "What the pilot asks of us",
-      "subtitle": "Illustrative example • fictional data",
       "left": {
         "text": "The pilot shows a clear gain in completion with modest effort."
       },
@@ -1164,7 +1144,6 @@
     {
       "id": "dynamic-promoted-grid",
       "title": "From baseline to decision in six weeks",
-      "subtitle": "Illustrative example • fictional data",
       "top:left": {
         "metric": {
           "value": 52,
@@ -1206,7 +1185,6 @@
     {
       "id": "dynamic-image-text-quote",
       "title": "What participants noticed",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "image": {
@@ -1229,7 +1207,7 @@
     {
       "id": "dynamic-table-text",
       "title": "Where Team B falls behind",
-      "subtitle": "Illustrative example • fictional data",
+      "subtitle": "Results to the end of week four",
       "blocks": [
         {
           "table": {
@@ -1272,7 +1250,6 @@
     {
       "id": "dynamic-six-points",
       "title": "Six lessons from the pilot",
-      "subtitle": "Illustrative example • fictional data",
       "blocks": [
         {
           "text": "Start with a baseline."
@@ -1297,7 +1274,6 @@
     {
       "id": "dynamic-code-text",
       "title": "How the running total works",
-      "subtitle": "Illustrative example • fictional data",
       "composition": {
         "mode": "row",
         "weights": [
@@ -1320,7 +1296,6 @@
     {
       "id": "dynamic-chart-quote",
       "title": "The numbers and the voice agree",
-      "subtitle": "Illustrative example • fictional data",
       "left+center": {
         "chart": {
           "type": "column",
@@ -1637,9 +1612,11 @@
             "Text"
           ],
           "design": {
-            "imageFit": "contain"
+            "imageFit": "contain",
+            "contentBox": true
           },
           "direction": "column",
+          "anchor": "bottom",
           "regions": [
             {
               "name": "title"
@@ -1698,9 +1675,11 @@
             "Text"
           ],
           "design": {
-            "imageFit": "contain"
+            "imageFit": "contain",
+            "contentBox": true
           },
           "direction": "column",
+          "anchor": "bottom",
           "regions": [
             {
               "name": "title"
@@ -1781,7 +1760,7 @@
             "listBullet": "none"
           },
           "direction": "column",
-          "anchor": "middle",
+          "anchor": "bottom",
           "regions": [
             {
               "name": "title"
@@ -2377,7 +2356,7 @@
                     "group"
                   ],
                   "role": "supporting",
-                  "flow": "column"
+                  "flow": "auto"
                 }
               ]
             },
@@ -2448,7 +2427,7 @@
             "contentBox": true
           },
           "direction": "column",
-          "anchor": "middle",
+          "anchor": "bottom",
           "regions": [
             {
               "name": "title"

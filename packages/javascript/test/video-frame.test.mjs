@@ -6,11 +6,13 @@ import { composeSlide } from '../dist/composition.js';
 // WI-3 (P23): a video is drawn in a 16:9 frame, the largest that fits its cell, placed by the region's anchor like a contained
 // picture. A portrait cell no longer holds a mostly empty 372 x 515 box around a play button.
 const { layouts } = gallery;
+// Since the layout harvest three-column draws bottom-anchored cards; the top-anchored test reads the plain form it had.
+const plain = (id) => ({ ...layouts[id], anchor: 'top', design: { ...layouts[id].design, contentBox: false } });
 const videos = (count) => Array.from({ length: count }, (_, index) => ({ video: { src: `https://example.com/clip-${index}.mp4`, title: `Walkthrough ${index + 1}` } }));
 const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ?? ''} ${a} vs ${b}`);
 
 test('three columns: each video is 16:9 at the top of its portrait cell', () => {
-  const result = composeSlide({ title: 'Three peer columns of video', blocks: videos(3) }, { layout: layouts['three-column'] });
+  const result = composeSlide({ title: 'Three peer columns of video', blocks: videos(3) }, { layout: plain('three-column') });
   const items = result.items.filter((item) => item.field === 'video');
   assert.equal(items.length, 3);
   for (const [index, item] of items.entries()) {

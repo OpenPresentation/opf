@@ -6,152 +6,152 @@
     {
       "id": "cover",
       "file": "cover.svg",
-      "bytes": 1688
+      "bytes": 1925
     },
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 702
+      "bytes": 926
     },
     {
       "id": "agenda",
       "file": "agenda.svg",
-      "bytes": 2013
+      "bytes": 2032
     },
     {
       "id": "agenda-split",
       "file": "agenda-split.svg",
-      "bytes": 2176
+      "bytes": 2196
     },
     {
       "id": "statement",
       "file": "statement.svg",
-      "bytes": 969
+      "bytes": 988
     },
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 975
+      "bytes": 995
     },
     {
       "id": "text",
       "file": "text.svg",
-      "bytes": 3346
+      "bytes": 3365
     },
     {
       "id": "list",
       "file": "list.svg",
-      "bytes": 4824
+      "bytes": 4843
     },
     {
       "id": "quote",
       "file": "quote.svg",
-      "bytes": 1210
+      "bytes": 1229
     },
     {
       "id": "two-column",
       "file": "two-column.svg",
-      "bytes": 1982
+      "bytes": 2230
     },
     {
       "id": "three-column",
       "file": "three-column.svg",
-      "bytes": 3380
+      "bytes": 4135
     },
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 5067
+      "bytes": 5059
     },
     {
       "id": "comparison",
       "file": "comparison.svg",
-      "bytes": 2429
+      "bytes": 2448
     },
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 5328
+      "bytes": 5348
     },
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 2864
+      "bytes": 2819
     },
     {
       "id": "faq",
       "file": "faq.svg",
-      "bytes": 2644
+      "bytes": 2662
     },
     {
       "id": "metrics",
       "file": "metrics.svg",
-      "bytes": 3764
+      "bytes": 3783
     },
     {
       "id": "scorecard",
       "file": "scorecard.svg",
-      "bytes": 3681
+      "bytes": 3688
     },
     {
       "id": "image",
       "file": "image.svg",
-      "bytes": 1496
+      "bytes": 1515
     },
     {
       "id": "image-beside",
       "file": "image-beside.svg",
-      "bytes": 2148
+      "bytes": 2165
     },
     {
       "id": "gallery",
       "file": "gallery.svg",
-      "bytes": 3017
+      "bytes": 3033
     },
     {
       "id": "chart",
       "file": "chart.svg",
-      "bytes": 4663
+      "bytes": 4910
     },
     {
       "id": "chart-beside",
       "file": "chart-beside.svg",
-      "bytes": 5026
+      "bytes": 5040
     },
     {
       "id": "table",
       "file": "table.svg",
-      "bytes": 6377
+      "bytes": 6396
     },
     {
       "id": "table-beside",
       "file": "table-beside.svg",
-      "bytes": 6719
+      "bytes": 6738
     },
     {
       "id": "code",
       "file": "code.svg",
-      "bytes": 2961
+      "bytes": 2980
     },
     {
       "id": "hero",
       "file": "hero.svg",
-      "bytes": 3661
+      "bytes": 3680
     },
     {
       "id": "dashboard",
       "file": "dashboard.svg",
-      "bytes": 8353
+      "bytes": 8351
     },
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 5362
+      "bytes": 5351
     },
     {
       "id": "logos",
       "file": "logos.svg",
-      "bytes": 2274
+      "bytes": 2293
     }
   ]
 }

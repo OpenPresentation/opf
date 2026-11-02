@@ -1077,6 +1077,11 @@ export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
  * (36 px at 1080) follows the ~40 px card padding of Claude's Slides type; the former 12 px set text close to the edge.
  */
 export const CARD_INSET = 24;
+/**
+ * A card that fills its cell starts this fraction of a gap below the cell's top (12 px at 720), so a row of full-height cards stands
+ * clear of the heading above it (1.5 gaps in all, near the 56 px at 1080 of Claude's Slides type).
+ */
+export const CARD_FILL_SPACE = 0.5;
 /** The code body size before WI-4: the size taken when the 22 px request would wrap lines it keeps whole. */
 const LEGACY_CODE_NOMINAL_SIZE = 18;
 /** Joins a quote's attribution and source (an en dash with a space on each side); import reads the older ' - ' too. */
@@ -3203,14 +3208,21 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     caption.box = { ...caption.box, y: target };
     caption.fit = translateTextFit(caption.fit, dy);
   };
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top'): void => {
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
       return;
     }
-    const frameBox = cards ? acceptedBox(box) : undefined;
+    // A card fills its whole cell (`frame`) even when the region's anchor places a shorter payload inside it. Every filled card starts
+    // CARD_FILL_SPACE of a gap down, so cards side by side keep one top edge; a payload that reached higher is trimmed to the card.
+    if (frame) {
+      const top = frame.y + gap * CARD_FILL_SPACE;
+      frame = { ...frame, y: top, height: Math.max(scale, frame.y + frame.height - top) };
+      if (box.y < top) box = { ...box, y: top, height: Math.max(scale, box.y + box.height - top) };
+    }
+    const frameBox = cards ? acceptedBox(frame ?? box) : undefined;
     const metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
     box = payloadBox(box, cards);
     const caption = captionOf(node, box);
@@ -3565,6 +3577,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const arrangement = arrangementOf(region, units, cell);
         let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
         const referenceHeights = boxes.map(box => box.height);
+        let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
         // instead of giving every block an equal share. A lone block at the top keeps the whole cell, as before.
         const stacked = arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
@@ -3587,7 +3600,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
           });
         }
         // Right to left: the flow inside a region runs from the right (RR-05).
-        if (rtl) boxes = boxes.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
+        const mirrored = (list: LayoutBox[]) => list.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
+        if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); }
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
@@ -3595,7 +3609,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor);
+          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));

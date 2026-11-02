@@ -11,7 +11,7 @@
     "contentBox": true
   },
   "direction": "column",
-  "anchor": "middle",
+  "anchor": "bottom",
   "regions": [
     {
       "name": "title"

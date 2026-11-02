@@ -11,7 +11,7 @@ for (const [id, record] of Object.entries(gallery.layouts)) {
     const deck = editorialDeck(id, record);
     const result = validate(deck, {catalogs: [gallery]});
     assert.equal(result.valid, true, JSON.stringify(result));
-    assert.match(deck.slides[0].subtitle, /Illustrative/);
+    assert.match(deck.design.footer.left.text, /Illustrative example • fictional data/, 'the footer discloses the fictional data');
     assert.equal(templateDeck(id, record).slides.length, 2, 'stability fixtures remain exhaustive');
   });
 }
@@ -27,7 +27,11 @@ test('FAQ and process teach their intent; team does not mislabel landscape pictu
 });
 test('only compact presentation intents opt into vertical centering', () => {
   for (const id of ['metrics', 'quote', 'image-beside']) assert.ok(bodyRegions(gallery.layouts[id]).some(([, region]) => region.anchor === 'middle'));
-  for (const id of ['two-column', 'three-column', 'chart', 'table', 'dashboard', 'list', 'faq']) {
+  for (const id of ['chart', 'table', 'dashboard', 'list', 'faq']) {
     assert.ok(bodyRegions(gallery.layouts[id]).every(([, region]) => !region.anchor || region.anchor === 'top'), id);
+  }
+  // The layout harvest: the column layouts draw full-height cards, and their anchor places the text at the card's foot.
+  for (const id of ['two-column', 'three-column']) {
+    assert.ok(gallery.layouts[id].design?.contentBox === true && bodyRegions(gallery.layouts[id]).every(([, region]) => region.anchor === 'bottom'), id);
   }
 });

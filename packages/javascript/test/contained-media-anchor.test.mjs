@@ -7,12 +7,14 @@ import { composeSlide } from '../dist/composition.js';
 // frame, instead of being centered in a cell taller than it. Cover and stretch keep the whole cell.
 const svg = (width, height) => `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="#3f8a55"/></svg>`).toString('base64')}`;
 const { layouts } = gallery;
+// Since the layout harvest two-column draws bottom-anchored cards; these tests read the top-anchored plain form it had.
+const plain = (id) => ({ ...layouts[id], anchor: 'top', design: { ...layouts[id].design, contentBox: false } });
 const body = 'Keep a named owner from intake through the final decision. The owner collects the evidence, explains exceptions, and records what happens next.';
 const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ?? ''} ${a} vs ${b}`);
 const columns = (anchor) => ({ name: 'Columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second'].map((name) => ({ name, accepts: ['text', 'image', 'video'], role: 'primary', flow: 'none', ...(anchor ? { anchor } : {}) })) }], design: { imageFit: 'contain' } });
 
 test('mixed image and text: the picture top equals the neighbouring text top', () => {
-  const result = composeSlide({ title: 'Review visual context beside its explanation', blocks: [{ image: svg(1600, 1000) }, { text: body }] }, { layout: layouts['two-column'] });
+  const result = composeSlide({ title: 'Review visual context beside its explanation', blocks: [{ image: svg(1600, 1000) }, { text: body }] }, { layout: plain('two-column') });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text');
   assert.equal(image.image.fit, 'contain');
   near(image.image.box.y, text.box.y, 'the frame starts at the cell top');
