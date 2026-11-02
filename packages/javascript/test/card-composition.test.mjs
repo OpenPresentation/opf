@@ -10,8 +10,10 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
     assert.deepEqual(boxed.flows,plain.flows);assert.deepEqual(boxed.items[0],plain.items[0]);assert.deepEqual(slide,before);
     for(const [index,item]of boxed.items.entries())if(index){
       assert.deepEqual(item.frameBox,plain.items[index].box);
-      // CARD_INSET (24 px at 720) across, at most a quarter of the card; down, at most a tenth of its height.
-      const frame=item.frameBox,pad=Math.min(24*Math.min(dimensions.width,dimensions.height)/720,frame.width/4,frame.height/4),down=Math.min(pad,frame.height/10);
+      // A sixteenth of the card's shorter side, between 12 and CARD_INSET (24) px at 720, at most a quarter of the card; down, at most a
+      // tenth of its height.
+      const frame=item.frameBox,unit=Math.min(dimensions.width,dimensions.height)/720,side=Math.max(12*unit,Math.min(frame.width,frame.height)/16);
+      const pad=Math.min(24*unit,side,frame.width/4,frame.height/4),down=Math.min(pad,frame.height/10);
       assert.ok(Math.abs(item.box.x-frame.x-pad)<1e-3);
       assert.ok(Math.abs(item.box.y-frame.y-down)<1e-3);
       assert.ok(Math.abs(item.box.width+2*pad-frame.width)<1e-3);

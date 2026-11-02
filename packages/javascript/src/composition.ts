@@ -1073,8 +1073,8 @@ export const PROSE_NOMINAL_SIZE = 28, LIST_NOMINAL_SIZE = 32, LEAD_NOMINAL_SIZE 
 /** WI-4: a quote body asks for 40 px and fits down (to 28 px and below); a code body asks for 22 px and fits down to the floor. */
 export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
 /**
- * The inset between a content card's edge and its payload, in reference pixels, at most a quarter of the card. 24 px
- * (36 px at 1080) follows the ~40 px card padding of Claude's Slides type; the former 12 px set text close to the edge.
+ * The largest inset between a content card's edge and its payload, in reference pixels: a card insets a sixteenth of its shorter side,
+ * at least the former 12 px and at most this. 24 px (36 px at 1080) follows the ~40 px card padding of Claude's Slides type.
  */
 export const CARD_INSET = 24;
 /**
@@ -2982,8 +2982,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // use the same rounded interior, including strict overflow and pagination.
   const payloadBox = (box: LayoutBox, cards = hasCards): LayoutBox => {
     if (!cards) return box;
-    // The vertical inset is at most a tenth of the card's height, so a short card (a KPI tile) keeps the room its payload needs.
-    const frame = acceptedBox(box), padding = Math.min(CARD_INSET * scale, frame.width / 4, frame.height / 4), vertical = Math.min(padding, frame.height / 10);
+    // The inset is a sixteenth of the card's shorter side, between the former 12 px and CARD_INSET, so a small card (a KPI tile) keeps
+    // the room its payload needs; down, it is at most a tenth of the card's height.
+    const frame = acceptedBox(box), side = Math.max(12 * scale, Math.min(frame.width, frame.height) / 16);
+    const padding = Math.min(CARD_INSET * scale, side, frame.width / 4, frame.height / 4), vertical = Math.min(padding, frame.height / 10);
     return acceptedBox({x:frame.x+padding,y:frame.y+vertical,width:frame.width-2*padding,height:frame.height-2*vertical});
   };
   // The deck language tag the quote marks follow, resolved on first use.
