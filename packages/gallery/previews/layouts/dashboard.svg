@@ -22,10 +22,10 @@
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="140.5" xml:space="preserve" y="518.49">50%</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="146.8" x2="609" y1="427.26" y2="427.26"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="140.5" xml:space="preserve" y="434.28">100%</text></g>
-<rect fill="#649BBF" height="114.526" width="46.22" x="181.465" y="481.154"/>
-<rect fill="#649BBF" height="121.262" width="46.22" x="297.015" y="474.418"/>
-<rect fill="#649BBF" height="127.999" width="46.22" x="412.565" y="467.681"/>
-<rect fill="#2874A6" height="141.473" width="46.22" x="528.115" y="454.207"/>
+<rect fill="#5998C1" height="114.526" width="46.22" x="181.465" y="481.154"/>
+<rect fill="#5998C1" height="121.262" width="46.22" x="297.015" y="474.418"/>
+<rect fill="#5998C1" height="127.999" width="46.22" x="412.565" y="467.681"/>
+<rect fill="#266F9F" height="141.473" width="46.22" x="528.115" y="454.207"/>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="204.575" xml:space="preserve" y="474.674">68%</text></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="320.125" xml:space="preserve" y="467.938">72%</text></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="435.675" xml:space="preserve" y="461.201">76%</text></g>
@@ -47,8 +47,8 @@
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1067.59" xml:space="preserve" y="616.2">6.0</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="1194.4" x2="1194.4" y1="427.26" y2="595.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1194.4" xml:space="preserve" y="616.2">8.0</text></g>
-<rect fill="#649BBF" height="33.684" width="367.749" x="687.16" y="452.523"/>
-<rect fill="#2874A6" height="33.684" width="424.814" x="687.16" y="536.733"/>
+<rect fill="#2874A6" height="33.684" width="367.749" x="687.16" y="452.523"/>
+<rect fill="#CCCCCC" height="33.684" width="424.814" x="687.16" y="536.733"/>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1075.429" xml:space="preserve" y="476.385">5.8</text></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1132.494" xml:space="preserve" y="560.595">6.7</text></g>
 <line stroke="#BFBFBF" stroke-width="1.333" x1="687.16" x2="687.16" y1="427.26" y2="595.68"/>

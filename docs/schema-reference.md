@@ -833,6 +833,7 @@ _No named properties._
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table or video payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
 | `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
+| `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
 
 
 ### Quote

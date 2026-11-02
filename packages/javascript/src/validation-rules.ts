@@ -3,6 +3,7 @@ import { accessibilityRules } from './rules-accessibility.js';
 import { languageTagRules } from './rules-language.js';
 import { layoutContentRules } from './rules-layout-content.js';
 import { layoutFindingRules } from './rules-layout-findings.js';
+import { chartFindingRules } from './rules-chart-findings.js';
 
 /**
  * The rule registry's implementations: the accessibility, layout and content rules that run a check, in report order.
@@ -18,4 +19,4 @@ export {
 } from './validation-rule-info.js';
 
 /** The rule implementations of the accessibility, layout and content categories, in report order. */
-export const ruleImplementations: readonly ValidationRule[] = [...accessibilityRules, ...layoutContentRules, ...languageTagRules, ...layoutFindingRules];
+export const ruleImplementations: readonly ValidationRule[] = [...accessibilityRules, ...layoutContentRules, ...languageTagRules, ...layoutFindingRules, ...chartFindingRules];

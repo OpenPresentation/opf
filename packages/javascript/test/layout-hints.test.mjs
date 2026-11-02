@@ -96,7 +96,7 @@ test('chartPrimary splits the first chart from a synthetic container of the othe
   assert.equal(rootDecision(none).reason, 'lowest-score');
   assert.deepEqual(composeSlide(slide, {presentation: {design: {chartPrimary: 'middle'}}}).items.map(item => item.box), control.items.map(item => item.box));
   // A root chart payload beside nothing else is a single cell; two root blocks (chart and text) split 3:2.
-  const pair = composeSlide({title: 'Pair', blocks: [chart, {text: 'Support'}]}, {presentation: {design: {chartPrimary: 'right'}}});
+  const pair = composeSlide({title: 'Pair', blocks: [chart, {text: 'Support', emphasis: false}]}, {presentation: {design: {chartPrimary: 'right'}}});
   const [chartBox, textBox] = [pair.items.find(item => item.field === 'chart').box, pair.items.find(item => item.field === 'text').box];
   assert.ok(textBox.x < chartBox.x && Math.abs(textBox.width / chartBox.width - 2 / 3) < 1e-6);
 });
@@ -106,11 +106,12 @@ test('chartPrimary does not apply with regions, an explicit mode, no chart, only
   const cases = [
     [{title: 'Regions', left: chart, right: {text: 'R'}}, 'promoted-regions'],
     [{title: 'Explicit', composition: {mode: 'grid', columns: 2}, blocks: [chart, {text: 'a'}]}, 'configured-mode'],
-    [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a'}]}, 'lowest-score'],
+    // LH-71: a chart above a one-letter text fills more of the body than beside it (LH-06: not a foot band).
+    [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a', emphasis: false}]}, 'split-fill'],
     [{title: 'No chart', blocks}, 'lowest-score'],
     [{title: 'Only charts', blocks: [chart, chart]}, 'lowest-score'],
     [{title: 'One chart', chart: chart.chart}, 'lowest-score'],
-    [{title: 'Nested', blocks: [{blocks: [chart, {text: 'a'}]}, {text: 'b'}]}, 'lowest-score'],
+    [{title: 'Nested', blocks: [{blocks: [chart, {text: 'a'}]}, {text: 'b', emphasis: false}]}, 'lowest-score'],
   ];
   for (const [slide, reason] of cases) {
     const control = composeSlide(slide, {explain: true}), hinted = composeSlide(slide, {...side, explain: true});
@@ -119,7 +120,7 @@ test('chartPrimary does not apply with regions, an explicit mode, no chart, only
     assert.deepEqual(hinted.groups, control.groups);
   }
   // contentDirection yields to chartPrimary at the root, since both only apply without an explicit mode.
-  const both = composeSlide({title: 'Both', blocks: [chart, {text: 'a'}]}, {presentation: {design: {chartPrimary: 'top', contentDirection: 'horizontal'}}, explain: true});
+  const both = composeSlide({title: 'Both', blocks: [chart, {text: 'a', emphasis: false}]}, {presentation: {design: {chartPrimary: 'top', contentDirection: 'horizontal'}}, explain: true});
   assert.equal(rootDecision(both).mode, 'column');
   assert.equal(rootDecision(both).reason, 'chart-primary');
 });

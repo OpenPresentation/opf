@@ -50,12 +50,13 @@ describe('niceScale', () => {
 });
 
 describe('maxIntervalsFor', () => {
-	test('one interval per label extent, between 1 and 10', () => {
-		assert.equal(maxIntervalsFor(500, 30), 10);
+	// LH-105: at most six intervals (it was ten), a few well-rounded ticks.
+	test('one interval per label extent, between 1 and 6', () => {
+		assert.equal(maxIntervalsFor(500, 30), 6);
 		assert.equal(maxIntervalsFor(100, 30), 3);
 		assert.equal(maxIntervalsFor(10, 30), 1);
 		assert.equal(maxIntervalsFor(0, 0), 1);
-		assert.equal(maxIntervalsFor(50, 0), 10);
+		assert.equal(maxIntervalsFor(50, 0), 6);
 	});
 });
 
@@ -97,7 +98,8 @@ describe('chartTextSize', () => {
 describe('chartValueAxis', () => {
 	test('a column chart gets min, max and majorUnit; a bar and a line chart too', () => {
 		const axis = axisOf(chartOf([[120, 480, 760, 310]]));
-		assert.deepEqual(axis, { min: 0, max: 800, majorUnit: 100 });
+		// LH-105: at most six intervals, so 0 to 800 in steps of 200 (it was eight steps of 100).
+		assert.deepEqual(axis, { min: 0, max: 800, majorUnit: 200 });
 		// a horizontal bar chart's value axis runs along the width, over wider labels: fewer intervals at 800 px
 		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'bar')), { min: 0, max: 800, majorUnit: 200 });
 		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'bar'), { width: 1200, height: 450, scale: 1 }), axis);
@@ -120,13 +122,13 @@ describe('chartValueAxis', () => {
 		const chart = chartOf([[120, 480, 760, 310]]);
 		const tall = axisOf(chart, { width: 800, height: 450, scale: 1 });
 		const short = axisOf(chart, { width: 800, height: 200, scale: 1 });
-		assert.equal(tall.majorUnit, 100);
+		assert.equal(tall.majorUnit, 200);
 		assert.equal(axisOf(chart, { width: 800, height: 300, scale: 1 }).majorUnit, 200);
 		// LH-59: a short axis ends near the data: 0 to 800 in two or one intervals, not 0 to 1000 in steps of 500 or 1000.
 		assert.deepEqual(short, { min: 0, max: 800, majorUnit: 400 });
 		assert.deepEqual(axisOf(chart, { width: 800, height: 150, scale: 1 }), { min: 0, max: 800, majorUnit: 800 });
 		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSize: 40 }).majorUnit, 200);
-		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 100);
+		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 200);
 		assert.equal(CHART_TEXT_PX, 20);
 	});
 
@@ -162,7 +164,7 @@ describe('composition exposes the axis on the chart item', () => {
 		const item = chartItem(compose({ slides: [slide(chart)] }));
 		assert.deepEqual(item.chart.valueAxis, axisOf(chart, { width: item.box.width, height: item.box.height, scale: 1 }));
 		assert.equal(item.chart.valueAxis.max, 800);
-		assert.equal(item.chart.valueAxis.majorUnit, 100);
+		assert.equal(item.chart.valueAxis.majorUnit, 200);
 	});
 
 	test('a half-height box (chart beside a text block, or below one) gets fewer intervals than a full one', () => {
@@ -181,8 +183,10 @@ describe('composition exposes the axis on the chart item', () => {
 	});
 
 	test('other chart types and non-chart items carry no chart', () => {
-		const composed = compose({ slides: [slide(chartOf([[1, 2, 3]], 'pie'), { bullets: ['One'] })] });
+		const composed = compose({ slides: [slide(chartOf([[1, 2, 3]], 'scatter'), { bullets: ['One'] })] });
 		assert.equal(chartItem(composed).chart, undefined);
+		// LH-105: a pie carries no axis, only its slice labels.
+		assert.equal(chartItem(compose({ slides: [slide(chartOf([[1, 2, 3]], 'pie'), { bullets: ['One'] })] })).chart.valueAxis, undefined);
 		assert.ok(composed.items.filter((item) => item.field !== 'chart').every((item) => item.chart === undefined));
 	});
 

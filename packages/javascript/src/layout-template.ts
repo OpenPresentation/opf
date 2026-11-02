@@ -48,6 +48,8 @@ export interface LayoutRegion {
   max: number;
   bleed: boolean;
   listColumns: 'auto' | 1;
+  /** LH-68: `tile` when a metric in the region is laid out from its whole card; absent for the default `stack` (value, label and the rest as one block). */
+  metrics?: 'tile';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -136,6 +138,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     max,
     bleed: entry.bleed === true,
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
+    ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

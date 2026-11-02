@@ -184,7 +184,8 @@ for (const name of names) {
           weights.add(run.weight);
           runChecks += 1;
         }
-        assert.ok(runs.some((run) => squash(run.text) === squash(sample.text)), `${where}: a run carries the whole sample`);
+        // The sample is drawn whole, in order (a lone body that fills little grows, LH-48, so an unspaced sample may wrap across runs).
+        assert.ok(squash(runs.map((run) => run.text).join('')).includes(squash(sample.text)), `${where}: the runs carry the whole sample`);
         for (const bold of [false, true]) assert.ok(weights.has(expectedWeight(script.route, bold)), `${where}: the ${bold ? "bold" : "regular"} weight of ${script.route} is drawn`);
       }
       row.samples.push(sample.id);

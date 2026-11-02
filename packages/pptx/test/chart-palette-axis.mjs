@@ -75,7 +75,8 @@ let checked = 0;
   assert.ok(expected, 'composition exposes the value axis');
   const found = axis(await chartXml({type: 'column', data: small}));
   assert.deepEqual(found, {min: String(expected.min), max: String(expected.max), majorUnit: String(expected.majorUnit)});
-  assert.deepEqual(found, {min: '0', max: '800', majorUnit: '100'});
+  // LH-105: at most six intervals, so 0 to 800 in steps of 200.
+  assert.deepEqual(found, {min: '0', max: '800', majorUnit: '200'});
   checked += 2;
 }
 
@@ -84,7 +85,7 @@ let checked = 0;
   assert.deepEqual(axis(await chartXml({type: 'line', data: {columns: ['Q', 'A'], rows: [['Q1', 980], ['Q2', 1000]]}})), {min: '975', max: '1005', majorUnit: '5'});
   assert.deepEqual(axis(await chartXml({type: 'stacked-column', data: {columns: ['Q', 'A', 'B'], rows: [['Q1', 100, 300], ['Q2', 200, 150]]}})), {min: '0', max: '500', majorUnit: '100'});
   assert.deepEqual(axis(await chartXml({type: '100pct-stacked-column', data: small})), {min: '0', max: '1', majorUnit: '0.2'});
-  assert.deepEqual(axis(await chartXml({type: 'area', data: small})), {min: '0', max: '800', majorUnit: '100'});
+  assert.deepEqual(axis(await chartXml({type: 'area', data: small})), {min: '0', max: '800', majorUnit: '200'});
   const bar = axis(await chartXml({type: 'bar', data: small}));
   assert.equal(bar.min, '0');
   assert.ok(bar.majorUnit && bar.max);

@@ -222,11 +222,22 @@ export function layoutPlaceholders(template) {
     if (region) result.push({name: region.name, type: region.name === template.nativeBodyRegion ? 'body' : placeholderType(region), idx: indexes[region.name],
       ...(region.name === template.nativeBodyRegion ? {anchor: {top: 't', middle: 'ctr', bottom: 'b'}[region.anchor]} : {}), ...emu(area.box)});
   }
-  const sample = composeSlide({title: 'Title', subtitle: 'Subtitle', blocks: [{text: 'Body'}]}, {...template.areaOptions, layout: record, textMeasurement: undefined});
+  // The placeholder's default type is the role size: `fill: false`, since a lone one-word sample would grow (LH-48).
+  const sample = composeSlide({title: 'Title', subtitle: 'Subtitle', blocks: [{text: 'Body'}]}, {...template.areaOptions, layout: record, textMeasurement: undefined, fill: false});
   for (const placeholder of result) {
     const field = placeholder.type === 'title' || placeholder.type === 'ctrTitle' ? 'title' : placeholder.type === 'subTitle' ? 'subtitle' : 'text';
     const item = sample.items.find(item => item.field === field);
     if (item?.textStyle && item.text?.fontSize) placeholder.style = {...item.textStyle, fontSize: item.text.fontSize, alignment: item.alignment};
+  }
+  // LH-91: a slide recomposed at the readability floor draws the automatic grid, not the template's regions: its variant keeps the
+  // headings and gives the native body one Body placeholder at the recomposed body's box. Its index is one no region uses and the
+  // layout tag does not list, so import pins no block to a region for it.
+  if (template.recomposedBody) {
+    const used = new Set(Object.values(indexes));
+    let idx = REGION_IDX_BASE.body;
+    while (used.has(idx)) idx++;
+    const {box, anchor, style} = template.recomposedBody;
+    return [...result.filter(placeholder => !regions.has(placeholder.name)), {name: 'Body', type: 'body', idx, anchor: {top: 't', middle: 'ctr', bottom: 'b'}[anchor], ...emu(box), style}];
   }
   return result;
 }
@@ -308,6 +319,7 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
       const path = `ppt/slideLayouts/slideLayout${nextLayout++}.xml`, tagPath = `ppt/tags/opfLayout${nextTag++}.xml`;
       let name = typeof template.record.name === 'string' && template.record.name.trim() ? template.record.name : template.id;
       if (template.nativeBodyRegion) name += ' (native body)';
+      else if (template.recomposedBody) name += ' (automatic grid)';
       if (taken.has(name)) name = `${name} (${template.group}:${template.id})`;
       taken.add(name);
       const type = POWERPOINT_LAYOUT_TYPES[template.id] ?? 'cust';

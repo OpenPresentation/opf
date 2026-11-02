@@ -11,8 +11,10 @@ const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ??
 const note = 'The pilot team reviews the site context alongside the proposed work. A shared visual reference helps explain access constraints, seasonal conditions, and the sequence of activities.';
 const chart = { chart: { type: 'line', data: { columns: ['Month', 'Minutes'], rows: [['Apr', 44], ['May', 39], ['Jun', 33], ['Jul', 29], ['Aug', 24], ['Sep', 19]] } } };
 
+// LH-80: one picture among other blocks now takes a cover-cropped side track (lh-80-media-tracks.test.mjs); `fit: 'contain'` on the
+// block keeps it whole in the flow, as below.
 test('an image and an explanation: the picture is whole, 16:9, at the cell top; the text keeps its 28 px', () => {
-  const result = composeSlide({ title: 'Keep field context visible during planning', blocks: [{ image: svg(1600, 900) }, { text: note }] });
+  const result = composeSlide({ title: 'Keep field context visible during planning', blocks: [{ image: svg(1600, 900), fit: 'contain' }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   assert.equal(image.image.fit, 'contain');
   near(image.image.box.width / image.image.box.height, 16 / 9);
@@ -29,7 +31,8 @@ test('an image pair and a note: both pictures are whole and frame to the picture
   for (const image of images) {
     assert.equal(image.image.fit, 'contain');
     near(image.image.box.width / image.image.box.height, 16 / 9);
-    near(image.image.box.y, image.box.y);
+    // LH-52: the row fills under 55% of the body, so each frame sits in the middle of its cell.
+    near(image.image.box.y + image.image.box.height / 2, image.box.y + image.box.height / 2);
   }
   assert.equal(result.items.find((item) => item.field === 'text' && item.text.fontSize < 54).text.fontSize, 28);
 });
@@ -51,8 +54,10 @@ test('a layout keeps the engine default, and a placed picture still bleeds as a 
 });
 
 test('a portrait picture frames to its width and gives the rest of the row to the text', () => {
-  const equal = composeSlide({ title: 'T', blocks: [{ image: svg(1600, 900) }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
-  const result = composeSlide({ title: 'T', blocks: [{ image: svg(600, 1200) }, { text: note }] });
+  // The equal row of a landscape picture and the note (LH-71 would stack these two: the picture fills more above the text). The pictures
+  // are shown whole (`contain`), which keeps them in the flow (LH-80 gives a cover picture a track).
+  const equal = composeSlide({ title: 'T', composition: { mode: 'row' }, blocks: [{ image: svg(1600, 900), fit: 'contain' }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
+  const result = composeSlide({ title: 'T', blocks: [{ image: svg(600, 1200), fit: 'contain' }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   near(image.box.width, image.image.box.width, 'the cell is as wide as the frame');
   near(image.image.box.height, image.box.height, 'the frame fills the cell height');
@@ -62,11 +67,15 @@ test('a portrait picture frames to its width and gives the rest of the row to th
 });
 
 test('a chart beside a takeaway is at most 4:3; one chart alone is unchanged', () => {
-  const beside = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.' }] }).items.find((item) => item.field === 'chart');
-  assert.ok(beside.box.height <= beside.box.width * 0.75 + 0.01, `${beside.box.width} x ${beside.box.height}`);
+  // Wave 3 (LH-71 with LH-49): a split stacks the chart above a one-line takeaway (it fills more), which leaves its plot wider than 3:1,
+  // so the chart takes the filling track beside the text at full height (the root's first column, as design.chartPrimary splits it).
+  const tracked = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.', emphasis: false }] });
+  const beside = tracked.items.find((item) => item.field === 'chart'), text = tracked.items.find((item) => item.field === 'text');
+  assert.equal(tracked.track?.kind, 'chart');
+  assert.ok(beside.box.x + beside.box.width <= text.box.x && beside.box.height > beside.box.width * 0.7, `${beside.box.width} x ${beside.box.height}`);
   const alone = composeSlide({ title: 'T', blocks: [chart] }).items.find((item) => item.field === 'chart');
   assert.ok(alone.box.height <= alone.box.width * 0.75 + 0.01 || alone.box.width > alone.box.height * 1.3);
-  const layout = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell.' }] }, { layout: gallery.layouts['chart-beside'] }).items.find((item) => item.field === 'chart');
+  const layout = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell.', emphasis: false }] }, { layout: gallery.layouts['chart-beside'] }).items.find((item) => item.field === 'chart');
   assert.ok(layout.box.height > layout.box.width * 0.75, 'a layout region keeps its own cell');
 });
 

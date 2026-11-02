@@ -29,7 +29,8 @@ test('the cards of a grid share one size across its rows', () => {
 });
 
 test('the rows of a grid without cards fill the region as before when their needs are equal', () => {
-  const result = composeSlide({ title: 'Points', blocks: ['Point 1', 'Point 2', 'Point 3', 'Point 4'].map((text) => ({ text })) }, { layout: layouts.text });
+  // At the role size (`fill: false`): LH-48 grows four short points and centers them, so their rows hug their text.
+  const result = composeSlide({ title: 'Points', blocks: ['Point 1', 'Point 2', 'Point 3', 'Point 4'].map((text) => ({ text })) }, { layout: layouts.text, fill: false });
   const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.'));
   assert.equal(texts[0].box.height, texts[2].box.height, 'equal needs, equal rows');
   assert.ok(texts[2].box.y + texts[2].box.height > 650, 'the rows fill the region');
@@ -106,8 +107,8 @@ test('a shrunk text or list takes a size of the type scale, and unshrunk blocks 
 });
 
 test('the scale follows a raised floor and the canvas scale, and keeps a start that is off it', () => {
-  // A 20 px floor: 20, 23, 26, 30 and 35 px; a 28 px paragraph that fits keeps 28.
-  const fits = composeSlide({ title: 'Short', composition: { minFontSize: 20 }, blocks: [{ text: 'A short point.' }, { text: 'Another one.' }] }, { layout: layouts['two-column'] });
+  // A 20 px floor: 20, 23, 26, 30 and 35 px; a 28 px paragraph that fits keeps 28 (`fill: false`: LH-48 would grow the short body).
+  const fits = composeSlide({ title: 'Short', composition: { minFontSize: 20 }, blocks: [{ text: 'A short point.' }, { text: 'Another one.' }] }, { layout: layouts['two-column'], fill: false });
   assert.deepEqual(sizesOf(fits), [28, 28]);
   const dense = composeSlide({ title: 'Dense', composition: { minFontSize: 20 }, blocks: Array.from({ length: 4 }, (_, index) => ({ text: long(`Team ${index}`).repeat(2) })) }, { layout: layouts['two-column'] });
   for (const size of sizesOf(dense)) assert.ok([20, 23, 26, 28].includes(size), String(size));

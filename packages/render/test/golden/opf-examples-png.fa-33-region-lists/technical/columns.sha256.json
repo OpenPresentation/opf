@@ -2,12 +2,12 @@
   "deck": "technical/columns.opf.json",
   "entries": {
     "technical/columns.opf.json#0": {
-      "sha256": "ba9f7d22feb1eb5e4155953f99346bc5267317d799c7d021122b66ce34a0903c",
-      "bytes": 4960
+      "sha256": "1c88a8ae20e65c9f65fc1e4b915750d43728bd13df5e40268425b4381107f45d",
+      "bytes": 5556
     },
     "technical/columns.opf.json#1": {
-      "sha256": "dd78340022d41f081300333d2b92fea4cecbd118050fb45faa485803d5ed72d5",
-      "bytes": 5395
+      "sha256": "5ec8f38cba34a930db80ddddbbd53c07b2c03401bb02ff087e0fc805b4042a97",
+      "bytes": 6511
     }
   }
 }

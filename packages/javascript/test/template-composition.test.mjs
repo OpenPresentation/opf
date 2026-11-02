@@ -15,7 +15,8 @@ const statementBefore = { id: 'statement', design: { titleAlignment: 'center', c
 // Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
 const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
-const text = (value) => ({ text: value });
+// LH-06: these blocks test region geometry, so they opt out of the automatic foot band and pill (`emphasis: false`).
+const text = (value) => ({ text: value, emphasis: false });
 const short = (count) => Array.from({ length: count }, (_, index) => text(`Point ${index + 1}`));
 const long = 'Our customers told us the onboarding flow took too long, so we rebuilt it around three steps, measured every one of them and removed the two that nobody needed. The result is a flow that takes four minutes instead of twenty.';
 const compose = (slide, layout, options = {}) => composeSlide(slide, { layout, ...options });
@@ -47,7 +48,8 @@ describe('the grid flow by count', () => {
   });
 
   test('adding a block reflows the region and nothing else moves', () => {
-    const three = compose({ title: 'x', blocks: short(3) }, layouts.pillars), four = compose({ title: 'x', blocks: short(4) }, layouts.pillars);
+    // At the role sizes (`fill: false`): LH-48 centers an under-filled body, whose height depends on its blocks.
+    const three = compose({ title: 'x', blocks: short(3) }, layouts.pillars, { fill: false }), four = compose({ title: 'x', blocks: short(4) }, layouts.pillars, { fill: false });
     assert.deepEqual(region(three, 'pillars').box, region(four, 'pillars').box);
     assert.equal(rows(cells(three, 'pillars')), 1);
     assert.equal(rows(cells(four, 'pillars')), 2);
@@ -63,7 +65,9 @@ describe('the grid flow by count', () => {
 
   test('auto: a grid when every block is short, a column when any block is long (more than 6 estimated lines)', () => {
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text), 'body').arrangement, 'grid');
-    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'column');
+    assert.equal(region(compose({ title: 'x', blocks: [text(long), text(`${long} Again.`), text('c')] }, layouts.text), 'body').arrangement, 'column');
+    // LH-67: one long block beside short ones leads beside a stack of them (a row of two cells).
+    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'row');
     // The estimate, never the host's measurement: a wide measurement does not change the decision.
     const wide = { measure: (value, size) => value.length * size * 2 };
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text, { textMeasurement: wide }), 'body').arrangement, 'grid');
@@ -83,7 +87,7 @@ describe('tracks', () => {
   });
 
   test('an auto row whose areas are all empty has no height and no gap', () => {
-    const result = compose({ title: 'x', blocks: [text('a'), text('b')] }, comparisonBefore);
+    const result = compose({ title: 'x', blocks: [text('a'), text('b')] }, comparisonBefore, { fill: false });
     const verdict = region(result, 'verdict'), first = region(result, 'first');
     assert.equal(verdict.box.height, 0);
     assert.ok(near(first.box.y + first.box.height, result.contentBox.y + result.contentBox.height, 1e-6));
@@ -345,7 +349,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     }
     // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
-    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison });
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
     const verdictItem = filled.items.find((item) => item.region === 'verdict');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');

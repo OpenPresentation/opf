@@ -2,12 +2,12 @@
   "deck": "technical/narrative-beats.opf.json",
   "entries": {
     "technical/narrative-beats.opf.json#0": {
-      "sha256": "5a8a9c5d36bd148328395a4351540634b2bb8a24a2e0db63abfdc0d70baf2c94",
-      "bytes": 4225
+      "sha256": "4e5fafd83f70ef9de6a7292451ef65d5c821ab3e438ba0078ad5f9dd25c4fe4d",
+      "bytes": 5674
     },
     "technical/narrative-beats.opf.json#1": {
-      "sha256": "4416b42a4c84b4aa133bf12394c1e3c3c6330884bcf64171421f1acc68debc50",
-      "bytes": 6590
+      "sha256": "71fa3cde7cfaa343aa39471afe18baa387c9519e877b72169dd5c167d9b1d5c2",
+      "bytes": 8141
     }
   }
 }

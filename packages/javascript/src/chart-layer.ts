@@ -5,7 +5,7 @@
 //
 //   small chart (LH-03)   a clustered column, bar or line chart of one or two series with eight or fewer points labels every mark with
 //                         its value and drops the value axis, its gridlines and the grey chart panel; a one-series column or bar chart
-//                         draws its last point in the accent and the others in a quieter tint of it.
+//                         draws its last point in a stronger shade of the series colour and the others in the series colour (LH-95).
 //   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption when it adds to the
 //                         legend ("Revenue by quarter")
 //                         at the start of a row above the plot and its series legend (two to four swatches) in that row or the next,
@@ -17,6 +17,8 @@
 import {chartOptionTarget, chartLabelText, formatChartLabelNumber} from './chart-options.js';
 import {chartTextSize} from './chart-axis.js';
 import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-data.js';
+import {chartCategoriesInTime} from './chart-time-order.js';
+import type {ChartLayerFocus} from './chart-focus.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -33,7 +35,7 @@ export interface ChartLayerSmall {
   labels: boolean;
   /** False when the value axis is dropped: no tick labels, no gridlines, no value axis line (the labels carry the values). */
   valueAxis: boolean;
-  /** Row index of the mark drawn in the accent; every other mark takes the quieter tint (`chartEmphasisColors`). One-series column and bar charts only. */
+  /** Row index of the mark drawn in the stronger shade; every other mark keeps the series colour (`chartEmphasisColors`). One-series column and bar charts only. */
   emphasis?: number;
 }
 
@@ -57,11 +59,70 @@ export interface ChartLayerHeader {
   height: number;
 }
 
-/** What composition decides for a chart beyond its value axis (LH-03, LH-81). */
+/** LH-92: one ring of a doughnut of nested rings and the slice that carries its series name. */
+export interface ChartLayerRing {
+  /** Index of the series among the plotted series (0 is the innermost ring). */
+  series: number;
+  name: string;
+  /** Row index of the slice whose label names the ring: its largest. */
+  row: number;
+  /**
+   * The label's rotation in degrees (clockwise, -90 to 90): along the ring at the slice's middle, so a ring thinner than the name is long
+   * still holds it, and never upside down.
+   */
+  rotation: number;
+}
+
+/** LH-93: the inner plot area (the plot without its tick and category labels) as an inset from each edge of the chart box, slide pixels. */
+export interface ChartPlotInset { left: number; top: number; right: number; bottom: number }
+
+/** What composition decides for a chart beyond its value axis (LH-03, LH-81, LH-92, LH-93). */
 export interface ChartLayer {
   small?: ChartLayerSmall;
   header?: ChartLayerHeader;
+  /** LH-92: a doughnut of two or more rings names each ring on one of its slices. */
+  rings?: ChartLayerRing[];
+  /**
+   * LH-93: the plot of a chart that shares its value axis with siblings, of one height across them (chart-plot.ts `shareSiblingPlots`).
+   * LH-105: also the plot of a line chart whose series are named at their line ends, which keeps a gutter for the names.
+   */
+  plot?: ChartPlotInset;
+  /** LH-105: a line chart of two to four series names each series at the end of its line instead of drawing a legend (chart-direct-labels.ts). */
+  endLabels?: ChartLayerEndLabels;
+  /** LH-105: a pie or one-series doughnut names its categories on its slices instead of drawing a legend (chart-direct-labels.ts). */
+  slices?: ChartLayerSlices;
+  /**
+   * LH-105: the series or categories the slide title names (chart-focus.ts): drawn in their full-strength colour, every other mark in the
+   * context neutral. A focus replaces the small chart's last-point emphasis.
+   */
+  focus?: ChartLayerFocus;
 }
+
+/** LH-105: one series name at the end of its line. Lengths are slide pixels. */
+export interface ChartEndLabel {
+  /** Index of the series among the plotted series. */
+  series: number;
+  name: string;
+  /** Row index of the series' last point (the last row: every series has a value there). */
+  row: number;
+  /** The last point, where the line ends. */
+  point: {x: number; y: number};
+  /** The label: the last value as the series' data labels print it, then the series name ("61 Enterprise NPS"). */
+  text: string;
+  /** True for a series the title names (ChartLayer.focus): its label is bold. */
+  bold?: boolean;
+  /** The label's box: beside the point (after it, before it right to left), moved up or down only to keep clear of the other names. */
+  box: Box;
+}
+
+/** LH-105: the names at the line ends and the gutter the plot leaves for them at its end (slide pixels). */
+export interface ChartLayerEndLabels { gutter: number; entries: ChartEndLabel[] }
+
+/** LH-105: one slice's category label: inside the slice when it fits there, else outside its end (a pie only). */
+export interface ChartSliceLabel { row: number; position: 'inside' | 'outside' }
+
+/** LH-105: the category labels of a pie or one-series doughnut; every slice with a value has one. */
+export interface ChartLayerSlices { labels: ChartSliceLabel[] }
 
 /** The geometry and text a chart layer is decided with. Lengths are slide pixels. */
 export interface ChartLayerGeometry {
@@ -134,7 +195,7 @@ export function chartHeaderCaption(chart: unknown, columns: readonly string[], l
 }
 
 /** The label text of a value as the engines draw a default value label: the column's number format, else the General form. */
-function valueLabel(value: number, format: string | undefined): string {
+export function valueLabel(value: number, format: string | undefined): string {
   return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value)}, ['value']);
 }
 
@@ -174,8 +235,12 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
     }
   }
   const out: ChartLayerSmall = {labels: !explicit, valueAxis: !showsValue || titled};
-  // The accent goes to the last point that has a value; a highlight or authored colours keep their own colours.
-  if (spec.kind === 'bar' && seriesCount === 1 && chart.highlight === undefined && chart.colors === undefined) {
+  // The accent goes to the last point that has a value; a highlight or authored colours keep their own colours. LH-105: only when the
+  // categories run forward in time, where the last point is the latest one (chart-time-order.ts); the last of nominal categories (stages,
+  // regions, products) is only the last one written, and emphasising it would invent a message.
+  const titles = record(chart.axisTitles) ? chart.axisTitles : {};
+  const inTime = () => chartCategoriesInTime(data.rows.map(row => row[0]), {title: nonBlank(titles.category) ?? label(data.columns[0]), language: geometry?.language});
+  if (spec.kind === 'bar' && seriesCount === 1 && chart.highlight === undefined && chart.colors === undefined && inTime()) {
     const last = values.map(row => row[0] !== null).lastIndexOf(true);
     if (last >= 0 && count > 1) out.emphasis = last;
   }
@@ -192,7 +257,7 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
  * chart is not moved into the header (the side legend stays). Each entry is its key (a swatch 0.6 text sizes square, or a line key
  * 1.4 wide), 0.4 text sizes of space and its name, entries 0.8 text sizes apart, the metrics of the preview's legends.
  */
-export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry): ChartLayerHeader | undefined {
+export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, options: {legend?: boolean} = {}): ChartLayerHeader | undefined {
   if (!record(chart) || !data.ok) return undefined;
   const spec = categorySpec(chart);
   if (!spec || chart.legend !== undefined) return undefined;
@@ -206,7 +271,8 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   const names = data.columns.slice(1).map(label);
   let legend: ChartLayerHeader['legend'];
   let rows = text ? 1 : 0;
-  if (names.length >= 2 && names.length <= CHART_HEADER_MAX_LEGEND) {
+  // LH-105: `legend: false` lays out the caption alone, for a chart that names its series at their line ends.
+  if (options.legend !== false && names.length >= 2 && names.length <= CHART_HEADER_MAX_LEGEND) {
     const lineKey = (index: number) => spec.kind === 'line' || (spec.kind === 'combo' && data.combo?.[index]?.role === 'line');
     const spacing = fontPx * 0.8;
     const sized = names.map((name, series) => ({series, name, key: lineKey(series) ? 'line' as const : undefined,
@@ -243,7 +309,33 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
 export function chartLayer(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry): ChartLayer | undefined {
   const header = chartHeader(chart, data, geometry);
   const small = smallChart(chart, data, header ? {...geometry, box: {...geometry.box, y: geometry.box.y + header.height, height: Math.max(1, geometry.box.height - header.height)}} : geometry);
-  return small || header ? {...(small ? {small} : {}), ...(header ? {header} : {})} : undefined;
+  const rings = chartRingLabels(chart, data);
+  return small || header || rings ? {...(small ? {small} : {}), ...(header ? {header} : {}), ...(rings ? {rings} : {})} : undefined;
+}
+
+/**
+ * LH-92: the ring names of a doughnut of two or more rings (LH-60's nested rings, the first series innermost, every ring coloured by
+ * category). The side legend names the categories only, so each ring's series name is written inside the ring, on its largest slice
+ * (the one with the most room; the first of equals), as that slice's label: the name alone, or before the slice's own label text with
+ * the labels' separator, as PowerPoint orders a label's parts (series name first). The label runs along the ring (`rotation`), so a
+ * ring as thin as one line of text holds a name longer than the ring is thick. `chart` is the drawn chart (core `chartDrawPlan`'s
+ * type), so a pie of several series is a doughnut here. A ring without a positive value has no slice and no name.
+ */
+export function chartRingLabels(chart: unknown, data: ResolvedChartData): ChartLayerRing[] | undefined {
+  if (!record(chart) || !data.ok || typeof chart.type !== 'string' || chart.type.trim().toLowerCase() !== 'doughnut' || data.columns.length < 3) return undefined;
+  const rings: ChartLayerRing[] = [];
+  data.columns.slice(1).forEach((name, series) => {
+    const values = data.rows.map(row => Math.abs(chartNumber(row[series + 1]) ?? 0));
+    const largest = Math.max(0, ...values), total = values.reduce((sum, value) => sum + value, 0);
+    if (!(largest > 0) || !Number.isFinite(total)) return;
+    const row = values.indexOf(largest);
+    // Slices run clockwise from 12 o'clock; the text runs along the ring at the slice's middle (the tangent), turned the right way up.
+    const middle = -90 + 360 * (values.slice(0, row).reduce((sum, value) => sum + value, 0) + largest / 2) / total;
+    let rotation = ((middle + 90) % 180 + 180) % 180;
+    if (rotation > 90) rotation -= 180;
+    rings.push({series, name: label(name), row, rotation: Math.round(rotation * 100) / 100});
+  });
+  return rings.length >= 2 ? rings : undefined;
 }
 
 /**

@@ -40,8 +40,11 @@ const CHART_FLOOR_MIN_HEIGHT = 12 * CHART_TEXT_FLOOR_PX;
 const CHART_FLOOR_MIN_WIDTH = 16 * CHART_TEXT_FLOOR_PX;
 /** WI-5: value-axis intervals are at least this far apart (reference pixels), so a short axis shows fewer ticks instead of a crowded scale. */
 export const CHART_MIN_TICK_SPACING_PX = 48;
-/** WI-5: a value axis has at most this many intervals (nine labels), however long it is: 0 to 100% in fives is a scale, 0 to 90% in tens is a ruler. */
-export const CHART_MAX_INTERVALS = 8;
+/**
+ * WI-5: a value axis has at most this many intervals, however long it is: 0 to 100% in fives is a scale, 0 to 90% in tens is a ruler.
+ * LH-105: six (seven labels; it was eight): a few well-rounded ticks, as Few asks of a graph, and the 1, 2 or 5 step of niceScale.
+ */
+export const CHART_MAX_INTERVALS = 6;
 
 /**
  * RR-90: the unscaled chart text size for a chart box: {@link CHART_TEXT_PX}, shrunk only when the box is small (the text is at most
@@ -153,11 +156,13 @@ function tighten(scale: ChartScale, top: number, bound: number, limit: number, m
     const kept = scaleFrom(scale.min, end, scale.step);
     if (kept.ticks.length > 1 && end - kept.ticks.at(-1)! <= scale.step / 2 + 1e-9 * scale.step) return kept;
     const whole = (value: number, of: number) => Math.abs(value / of - Math.round(value / of)) < 1e-9;
-    for (let intervals = limit; intervals >= 1; intervals--) {
+    // LH-105: an axis with room for three intervals or more is not cut down to one (0 and 140 where 0, 50, 100 fit); a finer end is tried.
+    const fewest = limit >= 3 ? 2 : 1;
+    for (let intervals = limit; intervals >= fewest; intervals--) {
       const step = clean((end - scale.min) / intervals);
       if (step > 0 && whole(step, unit) && whole(scale.min, step)) return scaleFrom(scale.min, end, step);
     }
-    return kept.ticks.length > 1 ? kept : scale;
+    if (fewest === 1) return kept.ticks.length > 1 ? kept : scale;
   }
   return scale;
 }
@@ -178,9 +183,9 @@ function normalizedScale(dataMin: number, dataMax: number, limit: number): Chart
   return { min, max, step: restore(normalized.step) || Number.MIN_VALUE, ticks };
 }
 
-/** How many intervals a value axis `length` pixels long can carry when each tick label needs `labelExtent` pixels: 1 to 10. */
+/** How many intervals a value axis `length` pixels long can carry when each tick label needs `labelExtent` pixels: 1 to {@link CHART_MAX_INTERVALS} (LH-105: it was 10). */
 export function maxIntervalsFor(length: number, labelExtent: number): number {
-  return Math.max(1, Math.min(10, Math.floor(length / Math.max(1, labelExtent))));
+  return Math.max(1, Math.min(CHART_MAX_INTERVALS, Math.floor(length / Math.max(1, labelExtent))));
 }
 
 /**
@@ -371,10 +376,11 @@ export interface SiblingChart {
  * are both 100% stacked or both not, and their first series has the same number format; without a format, when they plot the same series
  * names (Current and Baseline in both). Each set of two or more is given one axis, `niceScale` from the lowest minimum to the highest
  * maximum with the fewest intervals any member had (its plot is the shortest), and both engines draw it (the preview draws `valueAxis`, the
- * PPTX export writes it). `document` resolves dataset references. The axes are changed in place.
+ * PPTX export writes it). `document` resolves dataset references. The axes are changed in place; the sets of two or more are returned
+ * (LH-93 gives each one plot height, chart-plot.ts).
  */
-export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?: unknown): void {
-  const sets = new Map<string, SiblingChart[]>();
+export function shareSiblingChartAxes<T extends SiblingChart>(charts: readonly T[], document?: unknown): T[][] {
+  const sets = new Map<string, T[]>();
   for (const item of charts) {
     const axis = item.chart?.valueAxis;
     if (!axis) continue;
@@ -387,8 +393,10 @@ export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?
     const key = JSON.stringify([spec.horizontal, axis.percent === true, format ?? null, format === undefined ? resolved.columns.slice(1) : null]);
     sets.set(key, [...sets.get(key) ?? [], item]);
   }
+  const out: T[][] = [];
   for (const members of sets.values()) {
     if (members.length < 2) continue;
+    out.push(members);
     const axes = members.map(item => item.chart!.valueAxis!);
     const min = Math.min(...axes.map(axis => axis.min)), max = Math.max(...axes.map(axis => axis.max));
     if (axes.every(axis => axis.min === min && axis.max === max)) continue;
@@ -397,4 +405,5 @@ export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?
     const shared = niceScale(min, max, intervals, { percent });
     for (const item of members) item.chart!.valueAxis = { min: shared.min, max: shared.max, majorUnit: shared.step, ...(percent ? { percent: true as const } : {}) };
   }
+  return out;
 }

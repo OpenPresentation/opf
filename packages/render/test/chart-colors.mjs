@@ -12,30 +12,33 @@ const cases=[
 let checked=0;
 for(const fixture of cases)for(const type of ['column','bar','line','area','pie','doughnut','stacked-column']){
  const circular=['pie','doughnut'].includes(type);
- // LH-03: `dataLabels: false` keeps the panel of a small chart (two series of two points), whose colours this checks.
+ // LH-03: `dataLabels: false` keeps the value axis and the colours of a small chart (two series of two points), which this checks.
  const chart={type,dataLabels:false,data:{columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]}};
  const input={design:{background:fixture.background,colorScheme:{id:'cool-horizon',dark1:fixture.text,light1:fixture.text,dark2:fixture.surface,light2:fixture.surface}},slides:[{chart}]},original=structuredClone(input);
  const svg=toSvg(input, 1,{trace:true}),bound=resolvePresentation(input).slides[0];
  assert.equal(bound.design.colors.surface,fixture.surface);
  const chartPath='slides.0.chart';
- const panel=[...svg.matchAll(/<rect\b([^>]*)>/g)].find(([,a])=>a.includes(`data-opf-path="${chartPath}"`));assert.ok(panel);assert.ok(panel[1].includes(`fill="${fixture.surface}"`));
+ // LH-105: no chart draws a panel; its colours are judged against the slide background it stands on.
+ const panel=[...svg.matchAll(/<rect\b([^>]*)>/g)].find(([,a])=>a.includes(`data-opf-path="${chartPath}"`));assert.equal(panel,undefined,'no chart panel');
+ const backdrop=fixture.background;
  // LH-81: the header caption is drawn in the full text colour (as the PPTX chart title); every other chart text is the chart-text neutral.
- const labels=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(([,,text])=>text!=='Current, Baseline by Quarter');assert.ok(labels.length>0);
+ const labels=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(([,a,text])=>text!=='Current, Baseline by Quarter'&&!/data-opf-path="slides\.0\.chart\.data\.columns\.\d+"/.test(a));assert.ok(labels.length>0);
+ // LH-105: a series named at its line end takes its own colour, legible as text on the backdrop.
+ for(const [,a]of [...svg.matchAll(/<text\b([^>]*)>/g)].filter(([,a])=>/data-opf-path="slides\.0\.chart\.data\.columns\.\d+"/.test(a)))assert.ok(colorContrast(a.match(/\bfill="(#[0-9a-f]{6})"/i)[1],backdrop)>=4.5,`${type}: end label ${a}`);
  // RR-96: chart text is the scheme-derived chart-text neutral (tx1 mixed into bg1), kept legible on the panel by core's textColorForFill.
- const labelFill=textColorForFill(bound.design.colors.surface,bound.design.roles.neutrals.chartText.hex);
- for(const [,a]of labels)assert.ok(a.toLowerCase().includes(`fill="${labelFill.toLowerCase()}"`),`${type} ${fixture.surface}: ${a}`);
- if(fixture.surface.length===7)assert.ok(colorContrast(labelFill,fixture.surface)>=4.5,`${type} ${fixture.surface}: chart text ${labelFill} contrast`);
+ const labelFill=textColorForFill(backdrop,bound.design.roles.neutrals.chartText.hex);
+ for(const [,a]of labels)assert.ok(a.toLowerCase().includes(`fill="${labelFill.toLowerCase()}"`),`${type} ${backdrop}: ${a}`);
+ assert.ok(colorContrast(labelFill,backdrop)>=4.5,`${type} ${backdrop}: chart text ${labelFill} contrast`);
  const marks=[...svg.matchAll(/<(?:rect|path|circle|polyline)\b([^>]*)>/g)].filter(([,a])=>/data-opf-path="slides\.0\.chart\.data(?:\.|"|$)/.test(a));assert.ok(marks.length);
- for(const [,a]of marks){const color=(a.match(/\bfill="(#[0-9a-f]+)"/i)??a.match(/\bstroke="(#[0-9a-f]+)"/i))?.[1];assert.ok(color);if(fixture.surface.length===7)assert.ok(colorContrast(color,fixture.surface)>=3,`${type}: mark ${color} against ${fixture.surface}`);}
- if(fixture.surface.length===7)assert.ok(colorContrast(fixture.expected,fixture.surface)>=4.5);
- else assert.equal(colorContrast(fixture.expected,fixture.surface),undefined);
+ for(const [,a]of marks){const color=(a.match(/\bfill="(#[0-9a-f]+)"/i)??a.match(/\bstroke="(#[0-9a-f]+)"/i))?.[1];assert.ok(color);assert.ok(colorContrast(color,backdrop)>=3,`${type}: mark ${color} against ${backdrop}`);}
  assert.deepEqual(input,original);checked++;
 }
 // RR-29: on a dark card the default series colours stay distinguishable (two dark blues must not merge into one colour), by the same
 // palette function the PPTX exporter calls, so preview and export draw the same series colours.
 {
  const lightness=hex=>{const c=[1,3,5].map(i=>Number.parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);const y=.2126729*c[0]+.7151522*c[1]+.072175*c[2];return 116*(y>216/24389?Math.cbrt(y):(24389/27*y+16)/116)-16;};
- const schemeInput=(surface,type)=>({design:{background:'#000000',colorScheme:{id:'cool-horizon',dark1:'#FFFFFF',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data:{columns:['Quarter','Current','Baseline','Third'],rows:[['Q1',2,1,3],['Q2',3,2,1]]}}}]});
+ // LH-105: the backdrop is the slide background (no chart has a panel), so the dark tone is the background here.
+ const schemeInput=(surface,type)=>({design:{background:surface,colorScheme:{id:'cool-horizon',dark1:'#FFFFFF',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data:{columns:['Quarter','Current','Baseline','Third'],rows:[['Q1',2,1,3],['Q2',3,2,1]]}}}]});
  const seriesFills=(surface,type)=>{
   const input=schemeInput(surface,type);
   const svg=toSvg(input, 1,{trace:true});
@@ -49,7 +52,7 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
   assert.equal(new Set(fills).size,3,'distinct series colours on '+surface+': '+fills);
   for(const [a,b] of [[0,1],[1,2]])assert.ok(Math.abs(lightness(fills[a])-lightness(fills[b]))>=9,surface+': series '+(a+1)+' and '+(b+1)+' are '+fills[a]+' and '+fills[b]+', too close in lightness');
   for(const color of fills)assert.ok(colorContrast(color,surface)>=3,color+' on '+surface);
-  assert.deepEqual(fills,chartPaletteForFill(surface,chartSeriesPalette(resolvePresentation(schemeInput(surface,'column')).slides[0].design.colorScheme),{legible:Array(12).fill(true)}).slice(0,3),'preview colours are the shared palette function colours');
+  assert.deepEqual(fills,chartPaletteForFill(surface,chartSeriesPalette(resolvePresentation(schemeInput(surface,'column')).slides[0].design.colorScheme),{legible:Array(12).fill(true),soften:true}).slice(0,3),'preview colours are the shared palette function colours');
   checked++;
  }
 }

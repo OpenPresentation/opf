@@ -22,10 +22,12 @@ const deck = {
       items: ['فتح الملف في PowerPoint 365 والتحقق من الخطوط', 'إطلاق الإصدار v2.0 في الربع الثالث', 'نشر الدليل على https://openpresentation.org', 'التحقق من اتجاه النص (RTL) في كل شريحة']},
     // WI-4: the paragraph's body is 28 px and wraps; the file name sits in a paragraph of its own so its run boundary stays on one line.
     {id: 'tail', title: 'الملف', text: ['وراجع الملف ', {text: 'report-2026.pptx', bold: true}, ' المرفق.']},
+    // LH-48: the lone paragraph grows when it fills little of the body, so the link's run boundary also gets a paragraph of its own.
+    {id: 'link', title: 'الموقع', text: ['زر الموقع ', {text: 'https://openpresentation.org/docs', underline: true}, ' للمزيد.']},
   ],
 };
 const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, renderOptions: {catalogs}});
-const [paragraphSvg, listSvg, tailSvg] = toSvg(structuredClone(deck), {fonts, trace: true});
+const [paragraphSvg, listSvg, tailSvg, linkSvg] = toSvg(structuredClone(deck), {fonts, trace: true});
 
 const ARABIC = /\p{Script=Arabic}/u, LATIN = /[A-Za-z0-9]/;
 const ISOLATES = /[⁦-⁩]/gu;
@@ -81,7 +83,7 @@ function chunks(svg) {
   }
   const all = chunks(paragraphSvg);
   // Arabic run "... X " then Latin run "Y": in a right-to-left line the Latin run sits left of the Arabic one, a space apart.
-  const pairs = [['ملخص الإصدار', 'PowerPoint 365', 'title'], ['إلى', 'PowerPoint 365', 'body'], ['الموقع', 'https://openpresentation.org/docs', 'body'], ['الملف', 'report-2026.pptx', 'body', chunks(tailSvg)]];
+  const pairs = [['ملخص الإصدار', 'PowerPoint 365', 'title'], ['إلى', 'PowerPoint 365', 'body'], ['الموقع', 'https://openpresentation.org/docs', 'body', chunks(linkSvg)], ['الملف', 'report-2026.pptx', 'body', chunks(tailSvg)]];
   for (const [arabic, latin, field, source = all] of pairs) {
     const inField = source.filter(chunk => chunk.path?.endsWith(field === 'title' ? '.title' : '.text'));
     const before = inField.find(chunk => chunk.visible.trimEnd().endsWith(arabic) && ARABIC.test(chunk.visible));

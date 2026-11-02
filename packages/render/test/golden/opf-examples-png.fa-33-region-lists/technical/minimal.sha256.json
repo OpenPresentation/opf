@@ -6,12 +6,12 @@
       "bytes": 2352
     },
     "technical/minimal.opf.json#1": {
-      "sha256": "b0ed03170d6ccbe30973aff33f5bdd1ad3d501c3f53545772902f84e52d3da2d",
-      "bytes": 3814
+      "sha256": "c2f1994a81c9706f2aa1c8e7cb6c24d5216b4ae64815b927a307b0d6ec900321",
+      "bytes": 4586
     },
     "technical/minimal.opf.json#2": {
-      "sha256": "949632a75602f9e9851fc9c221a6a3be731cbf04a33973f685303f1dcfffe7ed",
-      "bytes": 3199
+      "sha256": "53e34b99017a25e14f459872c8e26cccfba16fee7ecabd492c0eaae8b07966af",
+      "bytes": 4011
     }
   }
 }

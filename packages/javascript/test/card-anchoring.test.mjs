@@ -1,6 +1,7 @@
 // LH-64 and LH-04: how a row of cards stands in a template region. Body-text cards in a bottom- or middle-anchored region hug a
 // short text and the row centres; very unequal texts start at the card's top; a heading line, a picture or a metric keeps the
-// anchor (LH-22). Top-anchored cards hug their content with one height per row.
+// anchor (LH-22). Top-anchored cards hug their content with one height per row. Short bodies are checked with `fill: false`: LH-48
+// grows an under-filled body and centers it (lone-fill.test.mjs).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
@@ -20,7 +21,7 @@ for (const anchor of ['bottom', 'middle']) {
     ['regions side by side', columns(anchor), [{ text: 'Two teams.' }, { items: ['Six weeks', 'One workflow'] }, { text: 'A named owner.' }]],
   ]) {
     test(`${anchor} anchor, ${shape}: short body-text cards hug the tallest text and the row centres`, () => {
-      const result = composeSlide({ title: 'Cards', blocks }, { layout });
+      const result = composeSlide({ title: 'Cards', blocks }, { layout, fill: false });
       assert.deepEqual(result.diagnostics, []);
       const items = cards(result), area = body(result);
       assert.equal(items.length, 3);
@@ -46,7 +47,8 @@ test('right to left: hugging cards keep their cells, mirrored', () => {
 });
 
 test('long body text keeps the filled card at its anchor; very unequal texts start at the card top', () => {
-  const even = composeSlide({ title: 'Cards', blocks: [{ text: `${sentence} ${sentence}` }, { text: `${sentence} ${sentence}` }, { text: `${sentence} ${sentence}` }] }, { layout: columns('bottom') });
+  // Plain lists of long entries: three long paragraphs side by side are drawn one card per row instead (LH-86, split-fill.test.mjs).
+  const even = composeSlide({ title: 'Cards', blocks: [{ bullets: [sentence, sentence] }, { bullets: [sentence, sentence] }, { bullets: [sentence, sentence] }] }, { layout: columns('bottom') });
   for (const item of cards(even)) {
     assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(even))) < 1, `${item.path}: the card fills its region`);
     assert.ok(item.box.y - item.frameBox.y > bottomOf(item.frameBox) - bottomOf(item.box), `${item.path}: at the foot`);
@@ -67,7 +69,7 @@ test('a heading line, a picture or a metric on the row keeps the anchor and the 
 
 test('top anchor: cards hug their content with one height per row; a chart or picture keeps the filled cell', () => {
   for (const layout of [grid('top'), columns('top')]) {
-    const result = composeSlide({ title: 'Cards', blocks: [{ text: 'Two teams.' }, { text: sentence }, { text: 'Six weeks.' }] }, { layout });
+    const result = composeSlide({ title: 'Cards', blocks: [{ text: 'Two teams.' }, { text: sentence }, { text: 'Six weeks.' }] }, { layout, fill: false });
     assert.deepEqual(result.diagnostics, []);
     const items = cards(result), area = body(result);
     assert.equal(new Set(items.map((item) => item.frameBox.height)).size, 1, 'one height per row');

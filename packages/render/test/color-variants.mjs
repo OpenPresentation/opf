@@ -61,9 +61,10 @@ const rolesOf = (input) => resolvePresentation(input).slides[0].design.roles;
   assert.deepEqual(roles.map.accents, accents);
   const svg = toSvg(input, 1, {trace: true});
   const fills = new Map(tags(svg, 'rect').filter((rect) => /\.chart\.data\.rows\.\d+\.[12]$/.test(rect['data-opf-path'] ?? '')).map((rect) => [Number(rect['data-opf-path'].split('.').at(-1)), rect.fill.toUpperCase()]));
-  const expected = chartPaletteForFill(roles.surface, chartSeriesPalette(colors, undefined, {accents})).slice(0, 2).map((color) => color.toUpperCase());
+  // LH-105: judged against the slide background (no chart has a panel) and softened towards it.
+  const expected = chartPaletteForFill(roles.background, chartSeriesPalette(colors, undefined, {accents}), {legible: Array(12).fill(true), soften: true}).slice(0, 2).map((color) => color.toUpperCase());
   assert.deepEqual([fills.get(1), fills.get(2)], expected, 'series follow the variant accent order');
-  assert.equal(fills.get(1), colors.accent3.toUpperCase());
+  assert.equal(chartPaletteForFill(roles.background, chartSeriesPalette(colors, undefined, {accents}))[0].toUpperCase(), colors.accent3.toUpperCase(), 'series 1 is accent3 at full strength');
 }
 
 // A picture that names its tone gets the tone's variant and a scrim of its bg1; without a tone there is none.

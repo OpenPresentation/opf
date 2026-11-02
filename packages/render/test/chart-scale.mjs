@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { Worker } from "node:worker_threads";
 import { validate } from "@openpresentation/opf/validator";
+import { composeSlide } from "@openpresentation/opf/composition";
 
 // Exercise the public renderer in a bounded worker: a scale-search regression
 // must fail this test rather than freeze the test runner/browser event loop.
@@ -43,14 +44,16 @@ const elements = (svg) => [...svg.matchAll(/<(rect|circle|line|polyline|path)\b(
 }));
 const pointPath = /^slides\.0\.chart\.data\.rows\.\d+\.1$/;
 const coordinateKeys = ["x", "y", "width", "height", "cx", "cy", "r", "x1", "x2", "y1", "y2", "stroke-width"];
-function finiteGeometry(svg) {
+// LH-105: no chart draws a panel, so the chart's frame is the box composition gave it.
+const chartFrame = (input) => composeSlide(input.slides[0], { width: 1280, height: 720, presentation: input, slideIndex: 0 }).items.find((item) => item.field === "chart").box;
+function finiteGeometry(svg, input) {
   assert.doesNotMatch(svg, /NaN|Infinity/, "no non-finite SVG values");
   const shapes = elements(svg);
   for (const shape of shapes) {
     for (const key of coordinateKeys) if (shape[key] !== undefined) assert.ok(Number.isFinite(Number(shape[key])), `${shape.tag}.${key} is finite`);
   }
-  const frame = shapes.find((shape) => shape.tag === "rect" && shape["data-opf-path"] === "slides.0.chart");
-  assert.ok(frame, "real chart frame is present");
+  assert.equal(shapes.find((shape) => shape.tag === "rect" && shape["data-opf-path"] === "slides.0.chart"), undefined, "no chart panel");
+  const frame = chartFrame(input);
   return { shapes, frame };
 }
 
@@ -68,10 +71,11 @@ for (const [name, values] of ranges) {
     const data = type === "scatter"
       ? { columns: ["Category", "X", "Y"], rows: values.map((v, i) => [`point ${i}`, v, v]) }
       : { columns: ["Category", "Value"], rows: values.map((v, i) => [`point ${i}`, v]) };
-    // LH-03: `dataLabels: false` keeps the panel and value axis of a small chart (one series of three points).
-    const { svg, error } = await render({ slides: [{ chart: { type, data, dataLabels: false } }] });
+    // LH-03: `dataLabels: false` keeps the value axis of a small chart (one series of three points).
+    const input = { slides: [{ chart: { type, data, dataLabels: false } }] };
+    const { svg, error } = await render(input);
     assert.equal(error, undefined, `${type}/${name}: finite input renders`);
-    const { shapes, frame } = finiteGeometry(svg);
+    const { shapes, frame } = finiteGeometry(svg, input);
     assert.match(svg, new RegExp(`data-opf-chart="${type}"`));
     assert.doesNotMatch(svg, /No chart data|No positive chart values/);
     const marks = shapes.filter((s) => type === "scatter" ? /^slides\.0\.chart\.data\.rows\.\d+\.2$/.test(s["data-opf-path"] ?? "") : pointPath.test(s["data-opf-path"] ?? ""));

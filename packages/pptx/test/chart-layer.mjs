@@ -4,16 +4,17 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
-import {chartEmphasisColors, composeSlide} from '@openpresentation/opf/composition';
-import {toSvg} from '@openpresentation/opf-render';
+import {chartEmphasisColors, chartPaletteForFill, chartSeriesPalette, composeSlide} from '@openpresentation/opf/composition';
+import {resolvePresentation, toSvg} from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ''});
 const two = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 28, 25], ['Q2', 32, 27], ['Q3', 35, 29], ['Q4', 39, 31]]};
-const one = {columns: ['Stage', 'Count'], rows: [['Lead', 120], ['Qualified', 64], ['Proposal', 31], ['Won', 12]]};
+// LH-105: the last point is emphasised only when the categories run in time, so they are quarters.
+const one = {columns: ['Quarter', 'Count'], rows: [['Q1', 120], ['Q2', 64], ['Q3', 31], ['Q4', 12]]};
 const deckOf = (chart, design = {}) => ({design: {fontScheme: 'roboto', ...design}, slides: [{title: 'Chart', chart}]});
-// A light deck whose series colour leaves room for the quieter tint (3:1 and 15 L*).
+// A light deck (LH-95: the emphasis is a darker shade here, a lighter one on the default navy).
 const LIGHT = {colorScheme: 'cool-horizon', variant: 'light1'};
 const attrs = text => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 let checks = 0;
@@ -42,50 +43,47 @@ const shownValues = xml => [...xml.matchAll(/<c:showVal val="1"\/>/g)].length;
   checks += 7;
 }
 
-// 2. Explicit options win: dataLabels false keeps the axis, gridlines and panel; a value axis title keeps the axis.
+// 2. Explicit options win: dataLabels false keeps the axis and gridlines (LH-105: no chart has a panel); a value axis title keeps the axis.
 {
   const off = await exported({type: 'column', data: two, dataLabels: false});
   assert.ok(!valueAxisDeleted(off.xml) && /<c:majorGridlines/.test(off.xml), 'dataLabels false keeps the value axis');
   assert.equal(shownValues(off.xml), 0);
-  assert.match(off.xml, /<\/c:chart>\s*<c:spPr>\s*<a:solidFill>/, 'and the panel');
+  assert.match(off.xml, /<\/c:chart>\s*<c:spPr>\s*<a:noFill\/>/, 'and no panel (LH-105)');
   const titled = await exported({type: 'column', data: two, axisTitles: {value: 'Signal'}});
   assert.ok(!valueAxisDeleted(titled.xml) && shownValues(titled.xml) > 0, 'a value axis title keeps the axis; the labels stay');
   assert.deepEqual(titled.imported.axisTitles, {value: 'Signal'});
   checks += 5;
 }
 
-// 3. The emphasis of a one-series bar chart: the series keeps its colour (the last point), every other point is the quieter tint, and
-// the preview draws the same two colours.
-{
-  const {xml} = await exported({type: 'bar', data: one}, LIGHT);
+// 3. LH-95: the emphasis of a one-series bar chart: the series keeps its colour, the last point is one c:dPt in core's stronger shade of it,
+// and the preview draws the same two colours. On the default navy, where LH-03's faded tint found no room, the shade is lighter.
+for (const [design, label] of [[LIGHT, 'light'], [undefined, 'navy']]) {
+  const {xml} = await exported({type: 'bar', data: one}, design);
   const ser = xml.match(/<c:ser>[\s\S]*?<\/c:ser>/)[0];
   const points = [...ser.matchAll(/<c:dPt><c:idx val="(\d+)"\/>[\s\S]*?<a:srgbClr val="(\w{6})"\/>[\s\S]*?<\/c:dPt>/g)].map(([, idx, hex]) => [Number(idx), hex]);
-  assert.deepEqual(points.map(([idx]) => idx), [0, 1, 2], 'one c:dPt per quieter point');
-  assert.equal(new Set(points.map(([, hex]) => hex)).size, 1, 'one tint');
-  const svg = toSvg(deckOf({type: 'bar', data: one}, LIGHT), 1, {trace: true});
+  assert.deepEqual(points.map(([idx]) => idx), [3], `${label}: one c:dPt, the emphasised point`);
+  const svg = toSvg(deckOf({type: 'bar', data: one}, design), 1, {trace: true});
   const fills = [...svg.matchAll(/<rect\b([^>]*)\/>/g)].map(([, a]) => attrs(a)).filter(a => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(a['data-opf-path'] ?? '')).map(a => a.fill.toUpperCase());
   assert.equal(fills.length, 4);
-  assert.equal(fills[0], `#${points[0][1]}`, 'the preview tints the same points with the same colour');
-  assert.equal(new Set(fills.slice(0, 3)).size, 1);
-  // The tint is core's for the last point's colour on the slide background.
+  assert.equal(fills[3], `#${points[0][1]}`, `${label}: the preview shades the same point with the same colour`);
+  assert.equal(new Set(fills.slice(0, 3)).size, 1, `${label}: the other bars keep one colour`);
+  // The shade is core's for the series colour on the slide background.
   const background = svg.match(/<rect\b[^>]*data-opf-path="slides\.0"[^>]*fill="(#[0-9A-Fa-f]{6})"/)?.[1] ?? svg.match(/<rect\b[^>]*fill="(#[0-9A-Fa-f]{6})"/)[1];
-  const {accent, muted} = chartEmphasisColors(background, fills[3]);
+  // LH-105: the other bars keep the soft series colour; the emphasised one takes the full-strength colour, or a shade of it.
+  const bound = resolvePresentation(deckOf({type: 'bar', data: one}, design)).slides[0].design;
+  const strong = chartPaletteForFill(background, chartSeriesPalette(bound.colorScheme, undefined, {accents: bound.roles.map.accents}), {legible: Array(12).fill(true)})[0];
+  const {accent, muted} = chartEmphasisColors(background, fills[0], strong);
   assert.equal(muted.toUpperCase(), fills[0]);
-  assert.notEqual(accent, muted);
-  // On the default navy a mid blue leaves no room for a tint at 3:1 and 15 L*: every bar keeps the series colour, in both engines.
-  const navy = await exported({type: 'bar', data: one});
-  assert.doesNotMatch(navy.xml, /<c:dPt>/, 'no emphasis on the default navy');
-  const navySvg = toSvg(deckOf({type: 'bar', data: one}), 1, {trace: true});
-  const navyFills = [...navySvg.matchAll(/<rect\b([^>]*)\/>/g)].map(([, a]) => attrs(a)).filter(a => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(a['data-opf-path'] ?? '')).map(a => a.fill);
-  assert.equal(new Set(navyFills).size, 1);
-  checks += 8;
+  assert.equal(accent.toUpperCase(), fills[3]);
+  checks += 5;
 }
 
 // 4. The header row: the caption is the chart title at core's position, the legend sits at the top at core's position, and the plot
 // area takes the chart below them; the chart frame carries no alt title.
 {
+  // LH-105: a line chart names its series at the line ends instead, so the header legend is shown on a column chart.
   // Two series: the caption comes from the value axis title (the legend names the series); its category is in sentence case.
-  const {xml, slide} = await exported({type: 'line', data: two, axisTitles: {value: 'Signal'}});
+  const {xml, slide} = await exported({type: 'column', data: two, axisTitles: {value: 'Signal'}});
   const title = xml.match(/<c:chart>\s*<c:title>[\s\S]*?<\/c:title>/)?.[0];
   assert.ok(title, 'a chart title');
   assert.match(title, /<a:t>Signal by quarter<\/a:t>/);
@@ -95,7 +93,7 @@ const shownValues = xml => [...xml.matchAll(/<c:showVal val="1"\/>/g)].length;
   assert.match(xml, /<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="outer"\/>/);
   assert.doesNotMatch(slide.match(/<p:cNvPr\b[^>]*name="OPF chart 1"[^>]*>/)[0], /\btitle=/, 'no alt title on the frame');
   // The caption's position is core's: the composed caption box over the composed chart box.
-  const item = composeSlide(deckOf({type: 'line', data: two, axisTitles: {value: 'Signal'}}).slides[0], {dimensions: {width: 1280, height: 720}, fontFamilies: {body: 'Roboto', heading: 'Roboto'}}).items.find(entry => entry.field === 'chart');
+  const item = composeSlide(deckOf({type: 'column', data: two, axisTitles: {value: 'Signal'}}).slides[0], {dimensions: {width: 1280, height: 720}, fontFamilies: {body: 'Roboto', heading: 'Roboto'}}).items.find(entry => entry.field === 'chart');
   const x = Number(title.match(/<c:x val="([\d.]+)"\/>/)[1]);
   assert.ok(Math.abs(x - (item.chart.layer.header.caption.box.x - item.box.x) / item.box.width) < 0.01, 'the caption sits where core put it');
   checks += 8;

@@ -34,23 +34,23 @@ test('opf/text-shrunk: one finding per slide at the block shrunk the most, with 
 	assert.deepEqual(findings(deck([{ title: 'Wall', text: 'word '.repeat(1200) }]), 'opf/text-shrunk'), []);
 });
 
-test('opf/centered-body: long centred paragraphs and lists; titles, statements, metrics and short notes are exempt', () => {
-	const centred = { contentAlignment: 'center' };
-	const [list] = findings(deck([{ title: 'Why now', items: LONG.slice(0, 3), design: centred }]), 'opf/centered-body');
+test('opf/centered-body: long centered paragraphs and lists; titles, statements, metrics and short notes are exempt', () => {
+	const centered = { contentAlignment: 'center' };
+	const [list] = findings(deck([{ title: 'Why now', items: LONG.slice(0, 3), design: centered }]), 'opf/centered-body');
 	assert.equal(list.path, '/slides/0/items');
 	assert.ok(list.measured.lines > 2);
 	// Two short lines are fine; a left-aligned list is fine.
-	assert.deepEqual(findings(deck([{ title: 'Why now', items: ['Faster', 'Cheaper'], design: centred }]), 'opf/centered-body'), []);
+	assert.deepEqual(findings(deck([{ title: 'Why now', items: ['Faster', 'Cheaper'], design: centered }]), 'opf/centered-body'), []);
 	assert.deepEqual(findings(deck([{ title: 'Why now', items: LONG.slice(0, 3) }]), 'opf/centered-body'), []);
-	// A lone statement may run three lines, and the statement layout centres it on purpose.
+	// A lone statement may run three lines, and the statement layout centers it on purpose.
 	const statement = 'We grew in every region this year, but the growth came from a handful of large accounts, and next year we need a broader base.';
 	assert.deepEqual(findings(deck([{ title: 'The point', layout: 'statement', text: statement }]), 'opf/centered-body'), []);
 	assert.deepEqual(findings(deck([{ title: 'Thank you', layout: 'closing', text: `${statement} ${statement}` }]), 'opf/centered-body'), []);
-	// Several centred paragraphs side by side are one finding at the longest, which counts the rest.
-	const [several] = findings(deck([{ title: 'Three views', design: centred, blocks: [{ text: statement }, { text: statement }, { text: `${statement} ${statement}` }] }]), 'opf/centered-body');
+	// Several centered paragraphs side by side are one finding at the longest, which counts the rest.
+	const [several] = findings(deck([{ title: 'Three views', design: centered, blocks: [{ text: statement }, { text: statement }, { text: `${statement} ${statement}` }] }]), 'opf/centered-body');
 	assert.equal(several.path, '/slides/0/blocks/2/text');
 	assert.equal(several.measured.blocks, 3);
-	// Metrics centre by design and are never checked.
+	// Metrics center by design and are never checked.
 	assert.deepEqual(findings(deck([{ title: 'Numbers', layout: 'metrics', blocks: [{ metric: { value: '31%', label: 'Conversion', description: 'Up from 24% after the new onboarding flow shipped in May' } }] }]), 'opf/centered-body'), []);
 });
 

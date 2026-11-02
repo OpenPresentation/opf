@@ -147,7 +147,7 @@ function titleString(title) {
  * The options of a parsed classic chart (fast-xml-parser, prefixes kept, attributes plain): `{axisTitles?, legend?, dataLabels?}`
  * plus `notes` naming what the three fields cannot express. `defaults` is what an export writes without the field:
  * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind. `layer` says what an
- * export of the LH-81 header row left in the part: `{header, headerLegend}`.
+ * export of the LH-81 header row left in the part: `{header, headerLegend}`, and `direct` when its labels are LH-105's direct labels.
  */
 export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo, layer = {}}) {
   const chart = chartSpace?.['c:chart'];
@@ -185,9 +185,11 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     if (layer.header) {
       if (!(position === 'right' || (position === 'top' && layer.headerLegend))) out.legend = position;
     } else if (headerKind || !(defaultLegend && position === 'right')) out.legend = position;
-  } else if (defaultLegend) out.legend = 'none';
+  } else if (defaultLegend && !layer.direct) out.legend = 'none';
 
-  const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats, combo);
+  // LH-105: the direct labels an export writes in place of a legend (series names at the line ends, category names on the slices) are
+  // the default, not an option (src/chart-direct-labels.js `directLabelDefaults`).
+  const dataLabels = layer.direct ? undefined : classicDataLabels(chartNode, target, notes, seriesFormats, combo);
   if (dataLabels !== undefined) out.dataLabels = dataLabels;
   return {options: out, notes};
 }
@@ -200,7 +202,10 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) 
   const block = serLabels ?? chartNode?.['c:dLbls'];
   if (!block) return undefined;
   const points = asArray(block['c:dLbl']);
-  const source = points.length ? points.find(point => String(point?.['c:idx']?.val) === '0') ?? points[0] : block;
+  // LH-92: a point that names its doughnut ring (the series name on one slice) is not the labels' pattern; read another point.
+  const pattern = points.filter(point => !flag(point?.['c:showSerName']));
+  const pool = pattern.length ? pattern : points;
+  const source = points.length ? pool.find(point => String(point?.['c:idx']?.val) === '0') ?? pool[0] : block;
   const content = [];
   if (flag(source['c:showCatName'])) content.push('category');
   if (flag(source['c:showVal'])) content.push('value');

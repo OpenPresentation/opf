@@ -1,14 +1,16 @@
 <svg aria-label="Choose the smallest useful test" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
 <rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
 <g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Choose the smallest useful test</text></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="175.48">Option A: focused pilot</text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="209.64">Two teams, six weeks. Low setup cost and </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="243.8">a clear baseline.</text></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="175.48">Option B: broad rollout</text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="209.64">All teams, three months. Wider reach </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="243.8">with greater coordination needs.</text></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="301.96">Recommendation: establish the evidence with Option A before committing to Option </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="336.12">B.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="293.16">Option A: focused pilot</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="338.3">Two teams, six weeks. Low </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="383.44">setup cost and a clear </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="428.58">baseline.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="293.16">Option B: broad rollout</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="338.3">All teams, three months. </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="383.44">Wider reach with greater </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="428.58">coordination needs.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="497.72">Recommendation: establish the evidence with Option A before </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="542.86">committing to Option B.</text></g>
 <g/>
 <g><g><g><text fill="#011842" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>

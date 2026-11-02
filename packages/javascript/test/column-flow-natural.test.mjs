@@ -46,7 +46,8 @@ test('a chart in a column takes what the measured blocks leave', () => {
 test('under overflow a chart keeps at least the equal share it had before', () => {
   const chart = { chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } };
   const record = { name: 'Column', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['text', 'chart'], role: 'primary', flow: 'column' }] };
-  const result = composeSlide({ title: 'T', blocks: [{ text: long.repeat(3) }, chart, { text: long.repeat(3) }] }, { layout: record });
+  // The layout's own column is tested: LH-49 would compose this slide again for the chart's short plot (recompose: false keeps the layout).
+  const result = composeSlide({ title: 'T', blocks: [{ text: long.repeat(3) }, chart, { text: long.repeat(3) }] }, { layout: record, recompose: false });
   const region = result.regions.find((entry) => entry.name === 'body').box;
   const drawn = result.items.find((item) => item.field === 'chart');
   assert.ok(drawn.box.height >= (region.height - 2 * gap) / 3 - 0.01, `${drawn.box.height}`);
@@ -80,7 +81,8 @@ test('a stacked one-line block is not a small cell; a squeezed or equal-share ce
   const short = (count) => Array.from({ length: count }, (_, index) => ({ text: `Note ${index + 1}.` }));
   const nested = { title: 'Give the main idea room', composition: { mode: 'row', weights: [2, 1], overflow: 'error' }, blocks: [{ composition: { mode: 'column' }, blocks: [{ text: 'Recommendation: fund the next milestone.' }, { text: 'The implementation stays shared across browser preview and PowerPoint export.' }] }, { text: 'Context, constraints, and the next decision.' }] };
   for (const slide of [{ title: 'Two notes', composition: { mode: 'column' }, blocks: short(2) }, nested]) {
-    const result = composeSlide(slide);
+    // At their role sizes (`fill: false`; LH-48 would grow the two short notes).
+    const result = composeSlide(slide, { fill: false });
     assert.ok(result.items.some((item) => item.field === 'text' && item.box.height < 60), 'a stacked one-line cell is shorter than the small-cell height');
     assert.deepEqual(result.diagnostics, []);
     assert.equal(paginateSlide(slide).slides.length, 1);

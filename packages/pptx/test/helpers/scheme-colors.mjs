@@ -1,7 +1,7 @@
 // RR-96: tests that read a colour from exported PresentationML. A colour is `a:srgbClr` (a literal), or `a:schemeClr` (a role or slot of the
 // deck theme through the clrMap, with the luminance transforms of a derived neutral). `colorHex` returns the RRGGBB either one stands for,
 // so a test can say what the colour is without caring whether it was written as a literal or as a scheme colour.
-import {applyLuminance} from '@openpresentation/opf/composition';
+import {applyHslTransforms} from '@openpresentation/opf/composition';
 
 const OOXML_SLOT = {dk1: 'dark1', lt1: 'light1', dk2: 'dark2', lt2: 'light2'};
 const DEFAULT_MAP = {bg1: 'lt1', tx1: 'dk1', bg2: 'lt2', tx2: 'dk2'};
@@ -19,8 +19,9 @@ export function colorHex(node, theme, clrMap = {}) {
   const slot = map[scheme.val] ?? scheme.val;
   let hex = theme[slot] ?? theme[OOXML_SLOT[slot]];
   if (!hex) return undefined;
-  const mod = scheme['a:lumMod'] ? Number(scheme['a:lumMod'].val) : undefined, off = scheme['a:lumOff'] ? Number(scheme['a:lumOff'].val) : undefined;
-  if (mod !== undefined || off !== undefined) hex = applyLuminance(`#${hex}`, mod ?? 100000, off ?? 0).slice(1);
+  // LH-105: a softened series also carries a:satMod.
+  const mod = scheme['a:lumMod'] ? Number(scheme['a:lumMod'].val) : undefined, off = scheme['a:lumOff'] ? Number(scheme['a:lumOff'].val) : undefined, sat = scheme['a:satMod'] ? Number(scheme['a:satMod'].val) : undefined;
+  if (mod !== undefined || off !== undefined || sat !== undefined) hex = applyHslTransforms(`#${hex}`, {satMod: sat, lumMod: mod, lumOff: off}).slice(1);
   return hex.toUpperCase();
 }
 
@@ -36,7 +37,7 @@ export function colorsInXml(xml, theme, clrMap = {}) {
   for (const match of xml.matchAll(/<a:srgbClr val="(\w{6})"(?:\/>|>[\s\S]*?<\/a:srgbClr>)|<a:schemeClr val="(\w+)"(?:\/>|>([\s\S]*?)<\/a:schemeClr>)/g)) {
     if (match[1]) { found.push({hex: match[1].toUpperCase(), role: undefined}); continue; }
     const mods = match[3] ?? '';
-    const node = {'a:schemeClr': {val: match[2], ...(/<a:lumMod val="(\d+)"/.test(mods) && {'a:lumMod': {val: /<a:lumMod val="(\d+)"/.exec(mods)[1]}}), ...(/<a:lumOff val="(\d+)"/.test(mods) && {'a:lumOff': {val: /<a:lumOff val="(\d+)"/.exec(mods)[1]}})}};
+    const node = {'a:schemeClr': {val: match[2], ...(/<a:satMod val="(\d+)"/.test(mods) && {'a:satMod': {val: /<a:satMod val="(\d+)"/.exec(mods)[1]}}), ...(/<a:lumMod val="(\d+)"/.test(mods) && {'a:lumMod': {val: /<a:lumMod val="(\d+)"/.exec(mods)[1]}}), ...(/<a:lumOff val="(\d+)"/.test(mods) && {'a:lumOff': {val: /<a:lumOff val="(\d+)"/.exec(mods)[1]}})}};
     found.push({hex: colorHex(node, theme, clrMap), role: match[2]});
   }
   return found;

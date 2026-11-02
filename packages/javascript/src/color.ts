@@ -575,6 +575,64 @@ function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2
   };
 }
 
+/** LH-06: the contrast every text role drawn on the emphasis surface keeps against its fill (WCAG AA for body text). */
+export const EMPHASIS_TEXT_MIN_CONTRAST = 4.5;
+/** LH-06: the contrast the emphasis surface keeps against the slide background, so it reads as a surface of its own (WCAG non-text contrast). */
+export const EMPHASIS_SURFACE_MIN_CONTRAST = 3;
+
+/** LH-06: the one contrasting surface a slide may draw a block, a group, a foot band or a pill on, and the roles of what is drawn on it. */
+export interface EmphasisSurface {
+  /** The variant the surface is drawn in: its bg1 is the fill, its map gives the text (the slide's accent order is kept). */
+  variant: ColorVariant;
+  /** The surface fill, uppercase #RRGGBB: `roles.background`. */
+  fill: string;
+  /**
+   * The roles of the content on the surface: {@link resolveColorRoles} for `variant`, with every text role (text, textSecondary, primary,
+   * secondary, accent) under {@link EMPHASIS_TEXT_MIN_CONTRAST} on the fill replaced by `text`, so a metric value in the primary color on an
+   * accent card does not vanish into it. `dark` is whether the surface takes light text.
+   */
+  roles: ResolvedColorRoles;
+}
+
+/**
+ * LH-06: the emphasis surface of a slide whose roles are `slide`, from the slide's own scheme slots through the LH-01 variant machinery
+ * (no color is invented). A light slide takes the brand dark (dark2, as the `brand` layout variant), then dark1, then the accents in the
+ * slide's order; a dark slide takes its accents in order (Claude Design's accent card on a dark deck, with the text the accent's map
+ * gives: dark1 where it reads better), then light1. The first candidate whose text reaches {@link EMPHASIS_TEXT_MIN_CONTRAST} on its fill and
+ * whose fill reaches {@link EMPHASIS_SURFACE_MIN_CONTRAST} against the slide background is the surface; with none, the candidate with the most
+ * text contrast is (the last candidates are the opposite text family, so a scheme with readable text always has one).
+ */
+export function emphasisSurface(colorScheme: Record<string, unknown>, slide: Pick<ResolvedColorRoles, 'dark' | 'map' | 'background'>): EmphasisSurface {
+  const accents = slide.map.accents;
+  const candidates: ColorVariantBackground[] = slide.dark ? [...accents, 'light1'] : ['dark2', 'dark1', ...accents];
+  const backdrop = normalizeHexColor(slide.background) ?? '#FFFFFF';
+  const hex = (color: string) => normalizeHexColor(color) ?? color;
+  let best: { surface: EmphasisSurface; contrast: number } | undefined;
+  for (const background of candidates) {
+    if (background === slide.map.bg1) continue;
+    const variant: ColorVariant = { background, accents: [...accents] };
+    const roles = resolveColorRoles(colorScheme, { variant });
+    const fill = hex(roles.background);
+    const readable = (color: string) => (colorContrast(hex(color), fill) ?? 0) >= EMPHASIS_TEXT_MIN_CONTRAST;
+    const text = colorContrast(hex(roles.text), fill) ?? 0;
+    const surface: EmphasisSurface = {
+      variant,
+      fill,
+      roles: {
+        ...roles,
+        background: fill,
+        textSecondary: readable(roles.textSecondary) ? roles.textSecondary : roles.text,
+        primary: readable(roles.primary) ? roles.primary : roles.text,
+        secondary: readable(roles.secondary) ? roles.secondary : roles.text,
+        accent: readable(roles.accent) ? roles.accent : roles.text,
+      },
+    };
+    if (text >= EMPHASIS_TEXT_MIN_CONTRAST && (colorContrast(fill, backdrop) ?? 0) >= EMPHASIS_SURFACE_MIN_CONTRAST) return surface;
+    if (!best || text > best.contrast) best = { surface, contrast: text };
+  }
+  return best!.surface;
+}
+
 /**
  * The scheme color, bg1 or tx1 of the roles, that reads best on `fill`: for table header text, text on a mark and anything else that
  * sits on a color the scheme does not name. Returned as a {@link SchemeColor} (slot `bg1` or `tx1`) so the export can write a theme color.
@@ -717,6 +775,12 @@ export interface ChartPaletteOptions {
    * when both are listed. An authored `chart.colors` entry and a host palette (omit the option) keep the 3:1 floor.
    */
   legible?: readonly boolean[];
+  /**
+   * LH-105: soften the series `legible` lists (the scheme's): each is mixed up to {@link CHART_SERIES_SOFT_MIX} of the way towards `fill`
+   * after the contrast placement, as far as it keeps its contrast floor and its lightness step from its neighbours ({@link softenChartPalette}).
+   * Ordinary data then reads in soft colours and the full-strength colour is left for emphasis (Few). An authored colour is never softened.
+   */
+  soften?: boolean;
 }
 
 /** Series colours for a chart drawn on `fill`: the palette in order, each colour adjusted for contrast
@@ -810,7 +874,91 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
     placed[index] = best.color;
     placedLab[index] = best.lab;
   });
-  return placed as string[];
+  return options.soften && opaqueFill ? softenChartPalette(fill, placed as string[], { legible: options.legible, floor: floorOf, lead: leadPair }) : placed as string[];
+}
+
+/** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */
+export const CHART_SERIES_SOFT_MIX = 0.25;
+
+/** LH-105: a softened series colour and the DrawingML HSL transforms (thousandths of a percent) that make it of its full-strength colour. */
+export interface ChartSoftColor { hex: string; satMod: number; lumMod?: number; lumOff?: number }
+
+/**
+ * LH-105: the colour DrawingML's HSL transforms make of `hex`: its saturation times `satMod`, its lightness times `lumMod` plus `lumOff`
+ * (thousandths of a percent, each clamped to 0 to 1), as PowerPoint applies `<a:satMod>`, `<a:lumMod>` and `<a:lumOff>` to a scheme colour.
+ */
+export function applyHslTransforms(hex: string, transforms: { satMod?: number; lumMod?: number; lumOff?: number }): string {
+  const channels = opaqueChannels(hex);
+  if (!channels) return hex;
+  const [h, s, l] = rgbToHsl(channels);
+  const clamp = (value: number) => Math.min(1, Math.max(0, value));
+  return hexOfChannels(hslToRgb([h, clamp(s * (transforms.satMod ?? 100000) / 100000), clamp(l * (transforms.lumMod ?? 100000) / 100000 + (transforms.lumOff ?? 0) / 100000)]));
+}
+
+function softTransforms(fill: string, palette: readonly string[], options: { legible?: readonly boolean[]; floor?: (index: number) => number; lead?: boolean }): (ChartSoftColor | undefined)[] {
+  const backdrop = opaqueChannels(fill);
+  if (!backdrop) return palette.map(() => undefined);
+  const lightness = (color: string | undefined) => { const channels = color === undefined ? undefined : opaqueChannels(color); return channels ? labOf(channels)[0] : undefined; };
+  const placedL = palette.map(lightness);
+  const soft: (ChartSoftColor | undefined)[] = palette.map(() => undefined);
+  const current = (index: number) => soft[index]?.hex ?? palette[index];
+  palette.forEach((color, index) => {
+    const from = opaqueChannels(color);
+    if (!from || options.legible?.[index] !== true) return;
+    const floor = options.floor?.(index) ?? 3;
+    const steps = [index - 1, index + 1].filter(other => other >= 0 && other < palette.length && placedL[other] !== undefined).map(other => ({
+      other,
+      step: Math.min(Math.abs(placedL[index]! - placedL[other]!), options.lead && Math.min(index, other) === 0 && Math.max(index, other) === 1 ? CHART_LEAD_LIGHTNESS_STEP : CHART_SERIES_MIN_LIGHTNESS_STEP),
+    }));
+    for (let percent = Math.round(CHART_SERIES_SOFT_MIX * 100); percent > 0; percent--) {
+      // The colour's HSL lightness moved `percent` of the way to the backdrop's, as a lumMod/lumOff pair: the transform the PPTX export
+      // writes on the accent's theme colour (as the neutrals are written, RR-96), so re-theming in PowerPoint keeps the soft series.
+      // Its HSL saturation is lowered by the same share (satMod), so the soft colour is quieter, not only lighter.
+      const base = normalizeHexColor(color)!.slice(0, 7), move = mixTowardsBackground('', base, normalizeHexColor(fill)!.slice(0, 7), 1 - percent / 100);
+      if (move.lumMod === undefined && move.lumOff === undefined) continue;
+      const satMod = 100000 - percent * 1000, hex = applyHslTransforms(base, { satMod, lumMod: move.lumMod, lumOff: move.lumOff });
+      if ((colorContrast(hex, fill) ?? 0) < floor - 1e-9) continue;
+      const l = lightness(hex)!;
+      if (steps.some(({ other, step }) => Math.abs(l - lightness(current(other))!) < step - 1e-9)) continue;
+      soft[index] = { hex, satMod, ...(move.lumMod !== undefined ? { lumMod: move.lumMod } : {}), ...(move.lumOff !== undefined ? { lumOff: move.lumOff } : {}) };
+      return;
+    }
+  });
+  return soft;
+}
+
+/**
+ * LH-105: the soft series colours of a palette already placed for `fill` ({@link chartPaletteForFill}). Each series `legible` lists (the
+ * scheme's; an authored colour stays as written) has its HSL lightness moved {@link CHART_SERIES_SOFT_MIX} of the way towards the
+ * backdrop's (a DrawingML lumMod/lumOff pair on the colour, which keeps its hue and saturation), or less (in steps of 1%) when the full
+ * move would take it under its contrast floor against `fill` (`floor`: 3:1, or 4.5:1 for a scheme series on a dark fill) or closer in
+ * lightness to a neighbouring series than the placed palette had them, capped at {@link CHART_SERIES_MIN_LIGHTNESS_STEP} (series 1 and 2
+ * of a dark scheme chart: {@link CHART_LEAD_LIGHTNESS_STEP}, `lead`). The neighbours are the series before (already softened) and after
+ * (still placed). A colour no move keeps within those bounds stays at full strength. In series order and deterministic.
+ */
+export function softenChartPalette(fill: string, palette: readonly string[], options: { legible?: readonly boolean[]; floor?: (index: number) => number; lead?: boolean } = {}): string[] {
+  return softTransforms(fill, palette, options).map((soft, index) => soft?.hex ?? palette[index]!);
+}
+
+/**
+ * LH-105: the transform of each softened series of `chartPaletteForFill(fill, palette, {...options, soften: true})`, or undefined for a series
+ * drawn at full strength: the PPTX export writes a softened scheme accent as `<a:schemeClr val="accentN"><a:lumMod/><a:lumOff/></a:schemeClr>`.
+ */
+export function chartSoftColors(fill: string, palette: readonly string[], options: ChartPaletteOptions = {}): (ChartSoftColor | undefined)[] {
+  const placed = chartPaletteForFill(fill, palette, { legible: options.legible });
+  const dark = colorContrast(fill, fill) !== undefined && isDarkColor(fill);
+  const legibleAt = (index: number) => dark && options.legible?.[index] === true && opaqueChannels(palette[index]!) !== undefined;
+  return softTransforms(fill, placed, { legible: options.legible, floor: index => legibleAt(index) ? CHART_DARK_SERIES_MIN_CONTRAST : 3, lead: legibleAt(0) && legibleAt(1) });
+}
+
+/**
+ * LH-105: the colour of a series' direct label (its name at the end of its line): the series colour at full strength, made legible as
+ * text on `backdrop` (4.5:1, WCAG 1.4.3) by moving its lightness only, so the label keeps the hue of its line.
+ */
+export function chartSeriesLabelColor(backdrop: string, color: string): string {
+  const fill = normalizeHexColor(backdrop)?.slice(0, 7), base = normalizeHexColor(color)?.slice(0, 7);
+  if (!fill || !base) return base ?? color;
+  return legible(base.toUpperCase(), fill.toUpperCase(), 4.5);
 }
 
 // --------------------------------------------------------------- chart series palette (RR-89)
@@ -894,6 +1042,73 @@ export const CHART_HIGHLIGHT_MUTED_MIN_CONTRAST = 1.6;
 const mixChannels = (from: readonly number[], to: readonly number[], amount: number): string =>
   hexOfChannels(from.map((channel, index) => channel + (to[index]! - channel) * amount));
 
+/** LH-105: the colour difference (CIE76) a context gray keeps from every focused colour. */
+export const CHART_CONTEXT_FOCUS_DIFFERENCE = 20;
+
+/** LH-105: the contrast the context colour of a focused chart keeps against its backdrop (a mark is a graphical object, WCAG 1.4.11). */
+export const CHART_CONTEXT_MIN_CONTRAST = 3;
+
+/**
+ * LH-105: the contrast the context colour keeps when every context mark carries its value or name as text (a small chart's value labels,
+ * the names at the line ends, the names on the slices): WCAG 1.4.11 does not ask 3:1 of a graphic whose information the text gives, so the
+ * context can be the light neutral Few draws, still clearly visible.
+ */
+export const CHART_CONTEXT_LABELED_MIN_CONTRAST = 1.6;
+
+/**
+ * LH-105: the neutral of the marks a chart does not focus on (the title names other series or categories, chart-focus.ts): the backdrop
+ * mixed towards the text colour (tx1), from {@link CHART_HIGHLIGHT_MUTED_MIX} in 2% steps until it reaches
+ * {@link CHART_CONTEXT_MIN_CONTRAST} against the backdrop. A grey in the backdrop's own hue, quieter than the text, visible as a mark.
+ * The first of {@link chartContextColors}.
+ */
+export function chartContextColor(surface: string, text: string): string {
+  return chartContextColors(surface, text, 1)[0]!;
+}
+
+/**
+ * LH-105: the neutrals of `count` context series (or slices) of a focused chart, in the order the context series come: grays in the
+ * backdrop's hue, the backdrop mixed towards the text colour. The lightest step is the first mix (from {@link CHART_HIGHLIGHT_MUTED_MIX}, or from the backdrop when `labeled`, in
+ * 1% steps) that reaches the contrast floor against the backdrop ({@link CHART_CONTEXT_MIN_CONTRAST}, or
+ * {@link CHART_CONTEXT_LABELED_MIN_CONTRAST} when `labeled`: every context mark carries its text) and keeps a colour difference of
+ * {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from each `avoid` colour (the focused colours: a gray stands apart from a coloured focus by
+ * its chroma); each further step is the next mix that stands {@link CHART_SERIES_MIN_LIGHTNESS_STEP} L* from the one before and keeps that
+ * difference from the `avoid` colours. The first context series takes the strongest step and the last the lightest,
+ * so neighbouring context series (stacked segments, slices) are told apart by lightness, as the focused series are by hue. When the mix
+ * runs out of room (a dark text colour close to the backdrop), the remaining series repeat the strongest step.
+ */
+export function chartContextColors(surface: string, text: string, count: number, options: { labeled?: boolean; avoid?: readonly string[] } = {}): string[] {
+  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
+  const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');
+  const from = opaqueChannels(fill)!, to = opaqueChannels(ink)!;
+  const floor = options.labeled ? CHART_CONTEXT_LABELED_MIN_CONTRAST : CHART_CONTEXT_MIN_CONTRAST;
+  const lightness = (hex: string) => labOf(opaqueChannels(hex)!)[0];
+  const avoid = (options.avoid ?? []).flatMap(color => { const hex = normalizeHexColor(color)?.slice(0, 7); return hex && opaqueChannels(hex) ? [labOf(opaqueChannels(hex)!)] : []; });
+  const steps: string[] = [];
+  // Labeled, the context may be as light as its floor allows: the search starts at the backdrop itself.
+  for (let percent = options.labeled ? 1 : Math.round(CHART_HIGHLIGHT_MUTED_MIX * 100); percent <= 100 && steps.length < Math.max(1, count); percent++) {
+    const candidate = mixChannels(from, to, percent / 100), l = lightness(candidate);
+    if ((colorContrast(candidate, fill) ?? Infinity) < floor) continue;
+    // A gray is told from a coloured focus by its chroma as much as by its lightness: it keeps a colour difference (CIE76) of
+    // CHART_CONTEXT_FOCUS_DIFFERENCE from every focused colour, which near a gray-ish focus means as many L*.
+    if (avoid.some(other => labDifference(other, labOf(opaqueChannels(candidate)!)) < CHART_CONTEXT_FOCUS_DIFFERENCE)) continue;
+    if (steps.length && Math.abs(lightness(steps[steps.length - 1]!) - l) < CHART_SERIES_MIN_LIGHTNESS_STEP) continue;
+    steps.push(candidate);
+  }
+  // Out of room: the floor alone (no step met the separations), else the strongest step for the rest.
+  if (!steps.length) steps.push(chartContextFloor(from, to, fill, floor));
+  while (steps.length < Math.max(1, count)) steps.push(steps[steps.length - 1]!);
+  return steps.slice(0, Math.max(1, count)).reverse();
+}
+
+function chartContextFloor(from: readonly number[], to: readonly number[], fill: string, floor: number): string {
+  let amount = CHART_HIGHLIGHT_MUTED_MIX, muted = mixChannels(from, to, amount);
+  while ((colorContrast(muted, fill) ?? Infinity) < floor && amount < 1) {
+    amount = Math.min(1, amount + 0.02);
+    muted = mixChannels(from, to, amount);
+  }
+  return muted;
+}
+
 /**
  * The two colours of a chart that highlights marks (`chart.highlight`), derived from the theme only: `accent` for the highlighted
  * marks, `muted` for every other mark.
@@ -921,31 +1136,42 @@ export function chartHighlightColors(surface: string, primary: string, text: str
   return { accent, muted };
 }
 
-/** LH-03: share of the way the quieter marks of a small chart move from the accent towards the surface, at most. */
-export const CHART_EMPHASIS_TINT_MIX = 0.55;
-/** LH-03: smallest contrast the quieter tint keeps against the surface: a bar is a graphical object (WCAG 1.4.11, 3:1). */
-export const CHART_EMPHASIS_TINT_MIN_CONTRAST = 3;
-/** LH-03: smallest CIE L* step between the emphasised colour and the quieter tint, so the emphasis is visible. */
+/** LH-03: smallest contrast every mark of an emphasised small chart keeps against its backdrop: a bar is a graphical object (WCAG 1.4.11, 3:1). */
+export const CHART_EMPHASIS_MIN_CONTRAST = 3;
+/** LH-03: smallest CIE L* step between the emphasised mark and the other marks, so the emphasis is visible. */
 export const CHART_EMPHASIS_MIN_LIGHTNESS_STEP = 15;
 
 /**
- * LH-03: the two colours of a small chart's emphasis, or undefined when the surface leaves no room for them. `accent` is the series
- * colour (`color`, already adjusted for the surface by `chartPaletteForFill`) and marks the emphasised point; `muted` is that colour mixed
- * towards the surface, a quieter tint of the same hue for every other point. The mix is the largest, up to
- * {@link CHART_EMPHASIS_TINT_MIX}, that keeps {@link CHART_EMPHASIS_TINT_MIN_CONTRAST} against the surface; when that tint is not
- * {@link CHART_EMPHASIS_MIN_LIGHTNESS_STEP} L* away from the accent (an accent with little contrast to spare, as a mid blue on a dark
- * navy), there is no emphasis and every point keeps the series colour. The preview and the PPTX export call it with the same pair.
+ * LH-03, LH-95: the two colours of a small chart's emphasis, in the shape of a highlight: `accent` for the emphasised point, `muted` for
+ * every other point. The other points keep the series colour (`color`, already adjusted for the backdrop by `chartPaletteForFill`), and
+ * the emphasised point takes a stronger shade of it: the series colour mixed away from the backdrop (towards black on a light backdrop,
+ * towards white on a dark one) just far enough to stand {@link CHART_EMPHASIS_MIN_LIGHTNESS_STEP} L* from it. Moving away from the
+ * backdrop only raises the contrast, so the shade keeps the series colour's. A series colour too close to black (or white) for that
+ * step is shaded the other way instead, while the shade keeps {@link CHART_EMPHASIS_MIN_CONTRAST} against the backdrop.
+ *
+ * LH-105: `strong` is the series colour at full strength when `color` is its soft form ({@link softenChartPalette}). The emphasised point
+ * then takes the full-strength colour itself when that already stands the step from the soft one, and a shade of it otherwise, so the
+ * strong colour is kept for the emphasis.
+ *
+ * A faded tint of the other points (LH-03's first rule) needed room between the series colour and the backdrop, and emphasised only 36
+ * of the 84 gallery theme x scheme x variant charts; a stronger shade has room in all of them. Undefined only for an unresolved colour or
+ * when neither direction keeps both floors. The preview and the PPTX export call it with the same pair.
  */
-export function chartEmphasisColors(surface: string, color: string): { accent: string; muted: string } | undefined {
+export function chartEmphasisColors(surface: string, color: string, strong?: string): { accent: string; muted: string } | undefined {
   const fill = (normalizeHexColor(surface) ?? '#FFFFFF').slice(0, 7);
-  const accent = (normalizeHexColor(color) ?? '#000000').slice(0, 7).toUpperCase();
-  const from = opaqueChannels(accent), to = opaqueChannels(fill);
-  if (!from || !to) return undefined;
-  for (let step = Math.round(CHART_EMPHASIS_TINT_MIX * 50); step > 0; step--) {
-    const muted = mixChannels(from, to, step / 50);
-    if ((colorContrast(muted, fill) ?? 0) < CHART_EMPHASIS_TINT_MIN_CONTRAST) continue;
-    const mutedChannels = opaqueChannels(muted);
-    return mutedChannels && Math.abs(labOf(from)[0] - labOf(mutedChannels)[0]) >= CHART_EMPHASIS_MIN_LIGHTNESS_STEP ? { accent, muted } : undefined;
+  const base = (normalizeHexColor(color) ?? '#000000').slice(0, 7).toUpperCase();
+  const full = strong === undefined ? undefined : normalizeHexColor(strong)?.slice(0, 7).toUpperCase();
+  const from = opaqueChannels(base), start = full !== undefined && full !== base ? opaqueChannels(full) : from, backdrop = luminance(fill), own = luminance(base);
+  if (!from || !start || backdrop === undefined || own === undefined) return undefined;
+  const lightness = labOf(from)[0];
+  const black: [number, number, number] = [0, 0, 0], white: [number, number, number] = [255, 255, 255];
+  for (const target of backdrop >= own ? [black, white] : [white, black]) {
+    for (let step = start === from ? 1 : 0; step <= 100; step++) {
+      const shade = mixChannels(start, target, step / 100).toUpperCase();
+      // Towards the backdrop the contrast only falls: once it is under the floor, no further step holds it.
+      if ((colorContrast(shade, fill) ?? 0) < CHART_EMPHASIS_MIN_CONTRAST) break;
+      if (Math.abs(labOf(opaqueChannels(shade)!)[0] - lightness) >= CHART_EMPHASIS_MIN_LIGHTNESS_STEP) return { accent: shade, muted: base };
+    }
   }
   return undefined;
 }

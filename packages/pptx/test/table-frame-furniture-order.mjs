@@ -29,8 +29,12 @@ const drawnExtent = (svg, path) => {
   return {y: top, height: bottom - top};
 };
 let checked = 0, slack = 0, packed = 0;
-for (const [label, table] of [['short', short], ['tall', tall]]) for (const scale of [1, 0.5]) for (const withText of [false, true]) {
-  const slide = withText
+// Wave 3: a lone table grows (LH-48) and a two-block row places it at its need (LH-52), so a weighted column keeps a table cell
+// taller than its rows.
+for (const [label, table] of [['short', short], ['tall', tall]]) for (const scale of [1, 0.5]) for (const withText of [false, true, 'column']) {
+  const slide = withText === 'column'
+    ? {title: 'Frame', composition: {mode: 'column', weights: [1, 3]}, blocks: [{text: 'Context'}, {table}]}
+    : withText
     ? {title: 'Frame', composition: {mode: 'row', weights: [1, 3]}, blocks: [{text: 'Context'}, {table}]}
     : {title: 'Frame', table};
   const deck = {design: {dimensions: {widthInches: 1280 * scale / 96, heightInches: 720 * scale / 96}}, slides: [slide]};
@@ -40,7 +44,8 @@ for (const [label, table] of [['short', short], ['tall', tall]]) for (const scal
   const note = `${label} scale ${scale} text ${withText}`;
   for (const [actual, expected, name] of [[frame.x, item.box.x, 'x'], [frame.y, item.box.y, 'y'], [frame.cx, item.box.width, 'width']])
     assert.ok(Math.abs(actual - expected * EMU) <= TOLERANCE_EMU, `${note}: frame ${name} ${actual / EMU} equals composed box ${expected}`);
-  const measured = layoutTable(table, item.box, {scale}), rows = measured.rows.reduce((sum, row) => sum + row.box.height, 0);
+  // As composed: a lone table that fills little of the body is laid out grown (LH-48, `tableGrowth`).
+  const measured = layoutTable(table, item.box, {scale, ...(item.tableGrowth ? {growth: item.tableGrowth} : {})}), rows = measured.rows.reduce((sum, row) => sum + row.box.height, 0);
   const drawn = drawnExtent(toSvg(deck, 1, {trace: true}), item.path);
   // Each row is rounded to whole EMU independently, hence the per-row allowance.
   const allowance = TOLERANCE_EMU + frame.rows;

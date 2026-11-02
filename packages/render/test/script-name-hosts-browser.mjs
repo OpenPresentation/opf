@@ -166,7 +166,8 @@ try {
           runChecks += 1;
         }
         if (codeTable) { const mapped = squash(mappedText(name, sample.codes)); assert.equal(squash(runs.map(run => run.text).join('')), mapped + mapped, `${where}: every code is drawn, regular and bold`); }
-        else assert.ok(runs.some(run => squash(run.text) === squash(sample.text)), `${where}: a run carries the whole sample`);
+        // A lone text grows to fill the body (LH-48), so a long sample without spaces may wrap: its lines carry it whole, in order.
+        else assert.ok(runs.some(run => squash(run.text) === squash(sample.text)) || squash(runs.map(run => run.text).join('')).includes(squash(sample.text)), `${where}: the runs carry the whole sample`);
         // Paint: the first drawn line has ink, and the colour emoji face paints saturated pixels.
         const first = codeTable ? runs.reduce((box, run) => ({x: Math.min(box.x, run.box.x), y: Math.min(box.y, run.box.y), right: Math.max(box.right, run.box.x + run.box.width), bottom: Math.max(box.bottom, run.box.y + run.box.height)}), {x: Infinity, y: Infinity, right: 0, bottom: 0}) : null;
         const target = first ? {x: first.x, y: first.y, width: first.right - first.x, height: first.bottom - first.y} : (runs.find(run => run.size === Math.max(...runs.map(item => item.size))) ?? runs[0]).box;

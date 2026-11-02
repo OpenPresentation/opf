@@ -4,7 +4,8 @@ import { test } from 'node:test';
 import { composeSlide, fitText, fitRichText, LIST_NOMINAL_SIZE, PROSE_NOMINAL_SIZE, TABLE_NOMINAL_SIZE } from '../dist/composition.js';
 
 // WI-4 (P16, owner decision D2): body prose asks for 28 px (21 pt), up from 25 px; list items stay at 32 px; a table keeps its
-// 25 px data role. Every size fits down to the readability floor (16 px by default), and an explicit run size wins.
+// 25 px data role. Every size fits down to the readability floor (16 px by default), and an explicit run size wins. The role sizes
+// are checked with `fill: false`: LH-48 grows an under-filled body from them (lone-fill.test.mjs).
 const { layouts } = gallery;
 const columns = { name: 'Three columns', direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: ['first', 'second', 'third'].map((name) => ({ name, accepts: ['text', 'list'], role: 'primary', flow: 'none' })) }] };
 const words = (count) => Array.from({ length: count }, (_, index) => `word${index % 7}`).join(' ');
@@ -18,10 +19,10 @@ test('the role sizes: prose 28 px, lists 32 px, tables 25 px', () => {
 });
 
 test('prose and lists on a slide request their role sizes; the subtitle follows the prose size', () => {
-  const text = composeSlide({ title: 'Prose', subtitle: 'A subtitle', blocks: [{ text: 'Test with two teams for six weeks.' }, { text: 'Keep the scope narrow.' }] }, { layout: layouts.text });
+  const text = composeSlide({ title: 'Prose', subtitle: 'A subtitle', blocks: [{ text: 'Test with two teams for six weeks.' }, { text: 'Keep the scope narrow.' }] }, { layout: layouts.text, fill: false });
   assert.deepEqual(text.items.filter((item) => item.field === 'text').map((item) => item.text.fontSize), [28, 28]);
   assert.equal(text.items.find((item) => item.field === 'subtitle').text.fontSize, 28);
-  const list = composeSlide({ title: 'List', items: ['Close the audit gaps', 'Pilot with two teams', 'Report every week'] }, { layout: layouts.list });
+  const list = composeSlide({ title: 'List', items: ['Close the audit gaps', 'Pilot with two teams', 'Report every week'] }, { layout: layouts.list, fill: false });
   assert.equal(list.items.find((item) => item.field === 'items').text.fontSize, 32);
   const table = composeSlide({ title: 'Table', table: { columns: ['Plan', 'Seats'], rows: [['A', '10'], ['B', '20']] } }, { layout: layouts.table });
   const tableItem = table.items.find((item) => item.field === 'table');
@@ -38,7 +39,7 @@ test('dense three-column prose fits down together without overflow', () => {
 });
 
 test('a size the author wrote wins over the role size', () => {
-  const result = composeSlide({ title: 'Explicit', blocks: [{ text: [{ text: 'Large ', fontSize: 30 }, { text: 'and plain' }] }, { text: 'Second paragraph.' }] }, { layout: layouts.text });
+  const result = composeSlide({ title: 'Explicit', blocks: [{ text: [{ text: 'Large ', fontSize: 30 }, { text: 'and plain' }] }, { text: 'Second paragraph.' }] }, { layout: layouts.text, fill: false });
   const item = result.items.find((entry) => entry.field === 'text');
   const sizes = new Set(item.text.richLines.flatMap((line) => line.fragments.map((fragment) => fragment.fontSize)));
   assert.ok(sizes.has(40), `30 pt is 40 px: ${[...sizes]}`);

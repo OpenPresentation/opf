@@ -521,7 +521,8 @@ try {
   assert.match(imageOptions.find(entry => entry[0] === 'watermark')[1], /loses image alt text/, 'what a destination loses is on the option');
   // FA-22: the selected image block's fit, focus, treatments and placement.
   await step('image block fit', () => field(selection, 'Fit').selectOption('contain'), current => current.slides[4].blocks[0].fit === 'contain', { preview: true });
-  await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('left'), current => current.slides[4].blocks[0].placement?.edge === 'left', { preview: true });
+  // The first block's picture already takes a track at the left edge (LH-80), so the authored band goes to the right.
+  await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('right'), current => current.slides[4].blocks[0].placement?.edge === 'right', { preview: true });
   await step('image block shape', () => field(selection, 'Shape').selectOption('circle'), current => current.slides[4].blocks[0].shape === 'circle', { preview: true });
   mark('an image block sets its fit, shape and placement');
   await step('image to background', () => imageUse.selectOption('background'), current => current.slides[4].design?.background?.type === 'image' && current.slides[4].design.background.alt === 'A pixel' && current.slides[4].blocks.length === 1, { preview: true });

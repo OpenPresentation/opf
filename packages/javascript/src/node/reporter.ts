@@ -32,6 +32,7 @@ const INFO = new Set([
 const HELP: Record<string, string> = {
 	"text-overflow": "Shorten the text, or split the slide: add --paginate (measured with the same fonts) or run opf paginate.",
 	"small-cell": "Give the table more room or fewer columns, or run opf paginate.",
+	"slide-continued": "To keep one slide, shorten or remove blocks or choose a layout with more room. opf paginate writes the split into the deck; --keep-slides (paginate: false) draws the slide as written, overlapping.",
 	"unresolved-asset": "Embed the image as a data URI, or keep the file inside the deck folder (see --asset-dir). URLs are never fetched.",
 	"asset-blocked": "Move the file under the deck folder or pass --asset-dir <directory> that contains it.",
 	"script-font-not-installed": "Install the Noto script package named in the message next to the CLI, then run the command again.",

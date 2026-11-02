@@ -33,7 +33,7 @@ Both fields draw the same bulleted (or numbered) list: one marker, the same nest
 
 **The rule.** Use `bullets` for plain talking points: short lines that each stand alone. Use `items` when the entries share a shape (features, steps, options, risks) or any entry needs a `description`; never fold a heading and its detail into one string with a separator, that is what `description` is for. When in doubt, use `items`, because it can grow a `description` later without changing the payload kind. The editor helper `convertListForm` switches a payload between the two; going to `bullets` drops the descriptions.
 
-**How entries draw.** A nested entry steps in by one marker width. The bullets alternate `•` and an en dash `–` by level (`•` at level 0, `–` at 1, `•` at 2), as PowerPoint's default levels do: glyphs every bundled face has (`◦` and `▪` are missing from most of them, Roboto among them, and drew as a missing-glyph box). A description draws under its entry at 0.82 of the list size in the secondary text colour. A list of exactly one entry that has a description, with no `numbering`, draws as a heading over its text: the entry bold at 1.25 times the list size with no bullet and no indent, the description at the list size. The preview and the PowerPoint export draw the same.
+**How entries draw.** A nested entry steps in by one marker width. The bullets alternate `•` and an en dash `–` by level (`•` at level 0, `–` at 1, `•` at 2), as PowerPoint's default levels do: glyphs every bundled face has (`◦` and `▪` are missing from most of them, Roboto among them, and drew as a missing-glyph box). A description draws under its entry at 0.82 of the list size in the secondary text color. A list of exactly one entry that has a description, with no `numbering`, draws as a heading over its text: the entry bold at 1.25 times the list size with no bullet and no indent, the description at the list size. The preview and the PowerPoint export draw the same.
 
 Do not give one payload both. In a block or a promoted region, `items` next to `bullets` is the error "content payload mixes fields from incompatible content types". At slide root it validates, as the shorthand for two blocks, and composes as two lists side by side; write two blocks on purpose if you want that. `numbering` applies to every list in the payload.
 
@@ -79,6 +79,8 @@ Prefer names and variables over literal hex: re-theming the deck updates every n
 ## Blocks
 
 Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.
+
+Mark the one block or group that carries the slide's takeaway with `"emphasis": true`: it is drawn on a contrasting card (a dark card on a light slide, an accent card on a dark one) whose text reads at 4.5:1 or more. A slide has one emphasis; without one, a short last text after longer blocks is drawn as a band at the foot of the body, and a very short one after a lone long text as a pill (`"emphasis": false` opts a block out). See [Emphasis surface](dynamic-composition.md#emphasis-surface-lh-06).
 
 ```json
 {

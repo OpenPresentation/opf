@@ -64,7 +64,7 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Trend", chart: { type: "line", alt: "Two series", data: SERIES(2) } },
   ),
   "opf/chart-colors-adjusted": ex(
-    "Use a color that resolves (a hex color, a scheme color or a declared `var:`) and has at least 3:1 contrast against the chart panel, or remove `colors` to use the palette.",
+    "Use a color that resolves (a hex color, a scheme color or a declared `var:`) and has at least 3:1 contrast against the slide background, or remove `colors` to use the palette.",
     { title: "Revenue", chart: { ...CHART, colors: ["var:missing"] } },
     { title: "Revenue", chart: { ...CHART, colors: ["accent1"] } },
   ),
@@ -85,7 +85,7 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/text-overflow": ex(
     "Shorten the text, give it more space (fewer blocks, a different composition) or split the slide. Raising the readable minimum makes it worse.",
-    { title: "Notes", composition: { minFontSize: 16 }, blocks: [{ text: "word ".repeat(600).trim() }, { text: "More" }] },
+    { title: "Notes", composition: { minFontSize: 16 }, blocks: [{ text: "word ".repeat(900).trim() }] },
     { title: "Notes", blocks: [{ text: "The three points that matter." }, { text: "More" }] },
   ),
   "opf/unresolved-content": ex(

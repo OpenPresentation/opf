@@ -32,17 +32,18 @@ let checked = 0;
     const unit = Number(xml.match(/<c:valAx>[\s\S]*?<c:majorUnit val="([^"]+)"/)?.[1]);
     assert.equal(unit, expected.majorUnit, `slide ${index}: the exported major unit is core's`);
     assert.equal(Number(xml.match(/<c:valAx>[\s\S]*?<c:max val="([^"]+)"/)?.[1]), expected.max);
-    assert.ok((expected.max - expected.min) / unit <= 8, 'at most eight intervals');
+    assert.ok((expected.max - expected.min) / unit <= 6, 'at most six intervals (LH-105)');
     steps.push({unit, height: item.box.height});
     checked++;
   }
   assert.ok(steps[1].height < steps[0].height && steps[1].unit > steps[0].unit, `a shorter axis has a wider step: ${JSON.stringify(steps)}`);
-  assert.equal(steps[0].unit, 100);
+  assert.equal(steps[0].unit, 200);
 }
 
 // --- Series 1 on the default navy.
 {
-  // LH-03: `dataLabels: false` keeps the panel and the one series colour of a small chart (no emphasis), which this checks.
+  // LH-03: `dataLabels: false` keeps the one series colour of a small chart (no emphasis), which this checks. LH-105: no chart draws a panel;
+  // the series stands on the slide background.
   const deck = {slides: [{title: 'Completion', chart: {type: 'column', dataLabels: false, data: {columns: ['Week', 'Task completion'], rows: [['1', 68], ['2', 72]]}}}]};
   const entries = await parts(deck);
   const xml = text(entries, 'ppt/charts/chart1.xml');
@@ -51,9 +52,9 @@ let checked = 0;
   const previewSvg = toSvg(deck, 1, {trace: true});
   const bars = rects(previewSvg).filter((rect) => /^slides\.0\.chart\.data\.rows\.\d+\.1$/.test(rect['data-opf-path'] ?? ''));
   assert.ok(bars.length === 2 && bars.every((bar) => bar.fill.toUpperCase() === `#${fill}`), `native ${fill} is the preview's ${bars.map((bar) => bar.fill)}`);
-  const panel = rects(previewSvg).find((rect) => rect['data-opf-path'] === 'slides.0.chart').fill;
-  assert.ok(colorContrast(`#${fill}`, panel) >= 4.5, `${fill} on ${panel}`);
-  assert.equal(rects(previewSvg).find((rect) => rect['data-opf-path'] === 'slides.0.chart').stroke, undefined, 'the preview panel has no frame');
+  assert.equal(rects(previewSvg).find((rect) => rect['data-opf-path'] === 'slides.0.chart'), undefined, 'the preview draws no panel');
+  const panel = rects(previewSvg)[0].fill;
+  assert.ok(colorContrast(`#${fill}`, panel) >= 4.5, `${fill} on the background ${panel}`);
   assert.doesNotMatch(xml, /<c:chartSpace[\s\S]*<\/c:chart>\s*<c:spPr>[\s\S]*?<a:ln w="[1-9]/, 'the native chart area has no frame either');
   // an authored colour is not lifted
   const explicit = text(await parts({slides: [{title: 'Completion', chart: {...deck.slides[0].chart, colors: ['#2874A6']}}]}), 'ppt/charts/chart1.xml');

@@ -2,20 +2,20 @@
   "deck": "technical/dynamic-composition.opf.json",
   "entries": {
     "technical/dynamic-composition.opf.json#0": {
-      "sha256": "affba3e09c240c202403aab28fc809163fe9d66eda6ab1d33bfeb3ae7dc8f170",
-      "bytes": 8514
+      "sha256": "5ea2bf43074043b0c18096dd225da450964f52c100827ac49fa5b0ac1e4a4346",
+      "bytes": 11364
     },
     "technical/dynamic-composition.opf.json#1": {
-      "sha256": "a55f14c711b3ca6f59300d36ae8f8a444c2cc8259c5a370b3761a34f04634e87",
-      "bytes": 7595
+      "sha256": "d067cd3b6b7202b76ae1e4616d077fab3aa1e81417dcf90852f8e49de3d102e2",
+      "bytes": 10061
     },
     "technical/dynamic-composition.opf.json#2": {
-      "sha256": "d966e191e052997e1a46688ad8f151e25e0a1bd925269b9fc9c134cb7267c85d",
-      "bytes": 5601
+      "sha256": "7f85c470ee088ed579afce6a28e944e51b793c9f6a22e198a5f21826a0e094af",
+      "bytes": 6524
     },
     "technical/dynamic-composition.opf.json#3": {
-      "sha256": "de2401592035c54632644fd1b8f0e44bd36b3d55ccc4bed8c25bda851e4aff2b",
-      "bytes": 8651
+      "sha256": "c51f8009f111e440c1343989e3ac0c4cce8f489e1a54c0861f219623b3eb8168",
+      "bytes": 9798
     }
   }
 }

@@ -247,7 +247,8 @@ try {
     assert.deepEqual(drawn.pending, [], `${sample.id}: the editor has loaded the document's fonts`);
     assert.deepEqual(drawn.errors, [], `${sample.id}: no canvas error`);
     assert.ok(drawn.runs.length >= 3 && drawn.runs.every(run => run.family === 'Noto Sans JP' && Number.isFinite(run.advance) && run.advance > 0), `${sample.id}: actual SVG runs draw in the pinned Japanese face`);
-    assert.ok(drawn.runs.some(run => run.text === sample.text), `${sample.id}: complete original corpus text`);
+    // A lone text grows to fill the body (LH-48), so a long sample may wrap: its lines carry it whole, in order.
+    assert.ok(drawn.runs.some(run => run.text === sample.text) || drawn.runs.map(run => run.text).join('').includes(sample.text), `${sample.id}: complete original corpus text`);
     for (const weight of [400, 700]) {
       assert.ok(drawn.runs.some(run => run.weight === weight), `${sample.id}: ${weight} is drawn`);
       const byPath = new Map();

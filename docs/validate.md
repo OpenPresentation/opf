@@ -290,7 +290,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
 | [`opf/text-shrunk`](#opftext-shrunk) | Layout | info | composition | Text is fitted far below its role's starting size (under 70%). |
-| [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centred. |
+| [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centered. |
 | [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
@@ -308,6 +308,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/empty-slide`](#opfempty-slide) | Content | warning | structure | A slide has no content at all. |
 | [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region or is not in canonical case. |
 | [`opf/straight-quotes`](#opfstraight-quotes) | Content | info | structure | Text uses straight quotation marks (" or ') where the language has typographic ones. |
+| [`opf/chart-dual-axis`](#opfchart-dual-axis) | Content | info | structure | A combo chart plots a series on a secondary value axis. |
+| [`opf/chart-pie-many-slices`](#opfchart-pie-many-slices) | Content | info | structure | A pie or doughnut chart has more than 5 slices. |
 
 ## Format rules
 
@@ -754,17 +756,17 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-colors-adjusted`
 
 Default severity: **warning**. Cost: structure. A chart colour cannot be used as authored.
 
-**Why.** `chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the chart panel is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.
+**Why.** `chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.
 
 **Basis.** WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA
 
-**Approximations.** Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide's scheme and compares it with the chart panel (the slide surface colour) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved panels are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.
+**Approximations.** Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide's scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved backgrounds are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.
 
 ### `opf/chart-text-alternative`
 
@@ -893,13 +895,13 @@ Default severity: **info**. Cost: composition. Text is fitted far below its role
 
 ### `opf/centered-body`
 
-Default severity: **info**. Cost: composition. A paragraph or list of more than 2 lines or 120 characters is centred.
+Default severity: **info**. Cost: composition. A paragraph or list of more than 2 lines or 120 characters is centered.
 
-**Why.** Each line of centred text starts at a different place, so the eye has to search for the next line. Centring suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.
+**Why.** Each line of centered text starts at a different place, so the eye has to search for the next line. Centering suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.
 
 **Basis.** Typographic convention for running text: a straight start edge. The alignment and the line count are those composeSlide computed; more than 2 lines or 120 characters.
 
-**Approximations.** Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centred blocks.
+**Approximations.** Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centered blocks.
 
 ### `opf/tight-spacing`
 
@@ -1047,5 +1049,25 @@ Default severity: **info**. Cost: structure. Text uses straight quotation marks 
 **Basis.** The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).
 
 **Approximations.** Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language's marks.
+
+### `opf/chart-dual-axis`
+
+Default severity: **info**. Cost: structure. A combo chart plots a series on a secondary value axis.
+
+**Why.** Two value scales in one plot invite the reader to compare heights that are not comparable: where the lines cross, and which is higher, depends only on how each axis was scaled. Two charts side by side, each with its own axis, read more truly than one chart with two scales (Few, Show Me the Numbers).
+
+**Basis.** Stephen Few, Show Me the Numbers (2012), on dual-scaled graphs.
+
+**Approximations.** Reports a `combo` chart whose `secondaryAxis` names at least one plotted line series (the axis core resolves). A combo chart on one axis is not reported.
+
+### `opf/chart-pie-many-slices`
+
+Default severity: **info**. Cost: structure. A pie or doughnut chart has more than 5 slices.
+
+**Why.** People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labelled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).
+
+**Basis.** Stephen Few, Show Me the Numbers (2012), on pie charts; more than 5 categories.
+
+**Approximations.** Counts the rows (categories) of a `pie` or `doughnut` chart as its data resolves; a doughnut of several series (nested rings) counts the categories of a ring. Treemaps and funnels are not checked.
 
 <!-- validate-rules:end -->

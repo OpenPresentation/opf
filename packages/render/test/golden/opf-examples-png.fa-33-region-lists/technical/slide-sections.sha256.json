@@ -2,20 +2,20 @@
   "deck": "technical/slide-sections.opf.json",
   "entries": {
     "technical/slide-sections.opf.json#0": {
-      "sha256": "b4d7987165d851c9fb1f5f9f9725ceff033c61ea5d345b4666d3a9748758fc8a",
-      "bytes": 4780
+      "sha256": "ed740bfdf71d6a8d9e96e8c2deeccbcf2f3bbe61a40de1fa46faae370bede91f",
+      "bytes": 6235
     },
     "technical/slide-sections.opf.json#1": {
-      "sha256": "41092ba78fc8a3be84808336f12eb97f3715edfa67e79f51ee8a21d42b6527e6",
-      "bytes": 5084
+      "sha256": "cb87ad41d58315e56ada63ecd32afd9c80c2085ae2f9e0d63e1670752abcfbc5",
+      "bytes": 6196
     },
     "technical/slide-sections.opf.json#2": {
-      "sha256": "f93c762ad18b34afde9bbc293c490f1603834eec4e2d447c9090e4b1c3294323",
-      "bytes": 4213
+      "sha256": "1581a0a804bb7bcb88952252e8747ccb1b3b2c01abb14bd197f2ed8d47729e59",
+      "bytes": 5484
     },
     "technical/slide-sections.opf.json#3": {
-      "sha256": "50e1137473ac6710cb88e00011d54c3fd46d8f325f7105839b2df8319a9296ee",
-      "bytes": 4163
+      "sha256": "e208fe879f30afa4e6e16e2006223c406b58ccffb20e4798df6307b42b7ff1f8",
+      "bytes": 5006
     }
   }
 }

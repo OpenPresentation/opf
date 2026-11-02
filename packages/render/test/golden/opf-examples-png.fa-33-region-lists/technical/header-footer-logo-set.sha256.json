@@ -2,12 +2,12 @@
   "deck": "technical/header-footer-logo-set.opf.json",
   "entries": {
     "technical/header-footer-logo-set.opf.json#0": {
-      "sha256": "a9f231ba78cf822cc0d66f150e0c791b619faf56fc9a403eeecae1094a5e0319",
-      "bytes": 7693
+      "sha256": "8f4c4ad0113edb3a92fe27657dda30c92e5a7448deb0412655068cbaa4cbfdb6",
+      "bytes": 10479
     },
     "technical/header-footer-logo-set.opf.json#1": {
-      "sha256": "8aab07909fb0d324b5aa877f815fe21c1dd2123fd643a319e32c030f6314fd4f",
-      "bytes": 3733
+      "sha256": "dd763e8e8c8d7526eedc2f7bbc23448978ea675bb736423b35d893cb7d416d5b",
+      "bytes": 4973
     }
   }
 }

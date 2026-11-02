@@ -279,7 +279,8 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
     `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0])}</cx:plotArea>${legend}</cx:chart>` +
-    `<cx:spPr>${solidFill(fill.color, alpha)}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
+    // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
+    `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
 }
 

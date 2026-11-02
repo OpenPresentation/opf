@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {chartHighlightColors, textColorForFill} from '@openpresentation/opf/composition';
-import {toSvg} from '@openpresentation/opf-render';
+import {resolvePresentation, toSvg} from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
 import {clrMapOf, colorsInXml, themeColorsOf} from './helpers/scheme-colors.mjs';
 
@@ -39,11 +39,12 @@ const themeAccent1 = theme => /<a:accent1><a:srgbClr val="(\w{6})"/.exec(theme)?
 const chartOf = imported => imported.slides[0].chart ?? imported.slides[0].blocks?.find(block => block.chart)?.chart;
 const ACCENT = '<a:schemeClr val="accent1"/>';
 
-// The preview's own accent and muted colours for the same deck, read from its SVG: the chart panel fill and the first chart marks.
+// The preview's own accent and muted colours for the same deck, read from its SVG, and the backdrop it judges them against (LH-105: no chart
+// draws a panel; it stands on the slide background).
 function previewColors(chart, design) {
   const svg = toSvg(deckOf(chart, design), 1, {trace: true});
-  const panel = /<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/.exec(svg)[0].match(/fill="([^"]+)"/)[1];
-  return {svg, panel};
+  const bound = resolvePresentation(deckOf(chart, design)).slides[0].design;
+  return {svg, panel: bound.backgroundColor ?? bound.colors.background};
 }
 
 // 1. Without a highlight nothing changes, and a construct that cannot highlight exports byte-identically and says so.

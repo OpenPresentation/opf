@@ -21,7 +21,8 @@ assert.equal(boxStatistics([null]),null);
 // These ordinary SVG hashes were captured before this arithmetic-only fix and re-captured for RR-89 and RR-90 (series colours from the
 // colour scheme, 20 px chart text), RR-96 (scheme-derived neutrals) and WI-5 (the chart panel has no outer frame), which change every chart's bytes on purpose.
 // LH-60: the map is captured over region codes (DE, FR), since a map over A and B is drawn as columns; LH-56 gave its tile labels a colour per tile.
-const ordinary={'box-and-whisker':'c8e5eda684548294ccb223b87e1871d80300173d467f570932ef5d0778890727',world:'1c73cddd4f061dff4bfee0cc0ec01d0d2b0ec4b807a9275b1e7bccce9d2d90f2'};
+// LH-105: no chart draws a panel and the scheme series are softened towards the slide background, so both moved again.
+const ordinary={'box-and-whisker':'91c2ddc5dd9d7e2817ca8e4236999bca3f6af705637a6623ac946a758a924853',world:'95707f71f8a40ec54d81167152f7e4b83974948a9a4b727e36723ddbc189033b'};
 const labels={'box-and-whisker':['A','B'],world:['DE','FR']};
 for(const [type,expected] of Object.entries(ordinary)) {
   const [a,b]=labels[type];

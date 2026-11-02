@@ -66,7 +66,10 @@ for (const [index, slide] of slides.entries()) {
     const typefaces = archive => new Set(Object.keys(archive).filter(name => name.endsWith('.xml')).flatMap(name => [...strFromU8(archive[name]).matchAll(/typeface="([^"]*)"/g)].map(match => match[1])));
     assert.deepEqual([...typefaces(measured)].sort(), [...typefaces(entries)].sort(), 'a symbol-previewing renderer changes no typeface');
     assert.ok(registry.substitutions.some(entry => entry.symbolEncoding === 'Wingdings'), 'the preview resolved Wingdings through its encoding');
-    for (const [index] of slides.entries()) assert.equal(slideXml(index + 1).replace(/<a:t>[^<]*<\/a:t>/g, ''), strFromU8(measured[`ppt/slides/slide${index + 1}.xml`]).replace(/<a:t>[^<]*<\/a:t>/g, ''), 'the measured export writes the same run properties');
+    // Run properties, not positions: a lone short paragraph sits in the middle of the body at its measured height (LH-48), so the
+    // measured and estimated exports may place it a pixel apart.
+    const properties = xml => xml.replace(/<a:t>[^<]*<\/a:t>/g, '').replace(/<a:(?:off|ext) [^>]*\/>/g, '');
+    for (const [index] of slides.entries()) assert.equal(properties(slideXml(index + 1)), properties(strFromU8(measured[`ppt/slides/slide${index + 1}.xml`])), 'the measured export writes the same run properties');
     console.log('Symbol fonts: measured export (opf-render FF-45) names the chosen families and keeps the codes.');
   }
 }

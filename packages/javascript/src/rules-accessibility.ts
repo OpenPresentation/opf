@@ -1,4 +1,4 @@
-import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
+import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
@@ -92,10 +92,16 @@ function collectSamples(context: RuleSlide): TextSample[] {
 	const samples: TextSample[] = [];
 	// LH-54: text in a card (`frameBox`) sits on the card fill, which on a dark slide is the mixed card surface, not the scheme surface.
 	const surface: BackdropSample = { colors: [design.neutrals.card.hex], unknown: false };
+	// LH-06: the slide's emphasis surface (core emphasisSurface), the backdrop and the colors of every item drawn on it.
+	const emphasis = composition.emphasis ? emphasisSurface(design.colorScheme, { dark: design.dark, map: design.map, background: design.colors.background }) : undefined;
+	const surfaceDesign: ResolvedDesign | undefined = emphasis ? { ...design, colors: { ...design.colors, background: emphasis.fill, surface: emphasis.roles.surface, text: emphasis.roles.text, mutedText: emphasis.roles.textSecondary, primary: emphasis.roles.primary, secondary: emphasis.roles.secondary, accent: emphasis.roles.accent } } : undefined;
+	const emphasisBackdrop: BackdropSample | undefined = emphasis ? { colors: [emphasis.fill], unknown: false } : undefined;
 	const scale = Math.min(design.dimensions.width, design.dimensions.height) / 720;
 	for (const item of composition.items) {
+		// LH-06: an item on the emphasis surface is drawn in the surface's roles on its fill.
+		const itemDesign = item.emphasis && surfaceDesign ? surfaceDesign : design;
 		if (['chart', 'image', 'video', 'code'].includes(item.field) || item.type === 'chart' || item.type === 'image' || item.type === 'video' || item.type === 'code') continue;
-		const backdrop = item.frameBox ? surface : slideBackdrop(context, inkBox(item, measurement));
+		const backdrop = item.emphasis && emphasisBackdrop ? emphasisBackdrop : item.frameBox ? surface : slideBackdrop(context, inkBox(item, measurement));
 		const itemPath = pointerOfDotted(item.path);
 		const heading = item.field === 'title' || item.field === 'subtitle' || item.field === 'tag';
 		const baseSize = (item.text?.fontSize ?? 25 * scale) / scale;
@@ -105,20 +111,20 @@ function collectSamples(context: RuleSlide): TextSample[] {
 			const grid = tableGrid(item.value, item.path);
 			for (const row of grid.rows)
 				for (const cell of row) {
-					const fillRef = resolveTextColor(cell.style.fill, design, '');
-					const fill = fillRef || (cell.header ? design.colors.primary : design.colors.surface);
+					const fillRef = resolveTextColor(cell.style.fill, itemDesign, '');
+					const fill = fillRef || (cell.header ? itemDesign.colors.primary : itemDesign.colors.surface);
 					const cellBackdrop: BackdropSample = { colors: [fill], unknown: false };
 					const cellPath = pointerOfDotted(cell.valuePath);
 					const stylePath = pointerOfDotted(cell.path) + '/style/color';
 					if (cell.style.color != null) {
-						const color = resolveTextColor(cell.style.color, design, design.colors.text);
+						const color = resolveTextColor(cell.style.color, itemDesign, itemDesign.colors.text);
 						if (color) samples.push({ path: stylePath, color, sizePx: 15, bold: cell.header, backdrop: cellBackdrop, source: 'override', colorPath: stylePath, label: 'Table cell text' });
 					}
 					if (Array.isArray(cell.value))
 						cell.value.forEach((run: unknown, index: number) => {
 							const colorRef = rec(run).color;
 							if (typeof colorRef !== 'string') return;
-							const color = resolveTextColor(colorRef, design, design.colors.text);
+							const color = resolveTextColor(colorRef, itemDesign, itemDesign.colors.text);
 							if (color) samples.push({ path: `${cellPath}/${index}/color`, color, sizePx: rec(run).fontSize ? Number(rec(run).fontSize) / PX_TO_PT : 15, bold: Boolean(rec(run).bold) || cell.header, backdrop: cellBackdrop, source: 'override', colorPath: `${cellPath}/${index}/color`, label: 'Table cell text' });
 						});
 				}
@@ -133,11 +139,11 @@ function collectSamples(context: RuleSlide): TextSample[] {
 				parts.push({
 					path: typeof part.path === 'string' && part.path.startsWith('slides.') ? pointerOfDotted(part.path) : itemPath,
 					sizePx: part.fit.fontSize / scale,
-					color: role === 'footer' ? design.colors.mutedText : role === 'value' && item.metricLayout ? design.colors.primary : item.timelineLayout ? timelineTextColor(part as { status?: 'done' | 'current' | 'planned' }, { background: design.colors.background, primary: design.colors.primary, text: design.colors.text, mutedText: design.colors.mutedText }) : design.colors.text,
+					color: role === 'footer' ? itemDesign.colors.mutedText : role === 'value' && item.metricLayout ? itemDesign.colors.primary : item.timelineLayout ? timelineTextColor(part as { status?: 'done' | 'current' | 'planned' }, { background: itemDesign.colors.background, primary: itemDesign.colors.primary, text: itemDesign.colors.text, mutedText: itemDesign.colors.mutedText }) : itemDesign.colors.text,
 					label: item.field === 'quote' ? (role === 'footer' ? 'Quote attribution' : 'Quote') : item.field === 'metric' ? (role === 'value' ? 'Metric value' : 'Metric label') : 'Timeline text',
 				});
 			}
-		else parts.push({ path: itemPath, sizePx: baseSize, color: design.colors.text, label: heading || item.field === 'text' ? label : item.field === 'items' || item.field === 'bullets' ? 'List text' : label });
+		else parts.push({ path: itemPath, sizePx: baseSize, color: itemDesign.colors.text, label: heading || item.field === 'text' ? label : item.field === 'items' || item.field === 'bullets' ? 'List text' : label });
 		for (const part of parts) samples.push({ path: part.path, color: part.color, sizePx: part.sizePx, bold, backdrop, source: 'default', label: part.label });
 		// Explicit run colours in rich text, list entries and similar.
 		const owners = textValues({ [item.field]: item.value }, '');
@@ -148,7 +154,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 			const base = pointer(...splitPointer(itemPath), ...relative);
 			for (const run of runsOf({ ...owner, path: base })) {
 				if (typeof run.style.color !== 'string') continue;
-				const color = resolveTextColor(run.style.color, design, design.colors.text);
+				const color = resolveTextColor(run.style.color, itemDesign, itemDesign.colors.text);
 				if (!color) continue;
 				const size = typeof run.style.fontSize === 'number' ? run.style.fontSize / PX_TO_PT : baseSize;
 				samples.push({ path: `${run.path}/color`, color, sizePx: size, bold: Boolean(run.style.bold) || bold, backdrop, source: 'override', colorPath: `${run.path}/color`, label: 'Coloured text' });
@@ -489,9 +495,10 @@ const chartRules: ValidationRule[] = [
 					const slices = perCategory.test(type);
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
-					const surface = slide.design.colors.surface;
+					// LH-105: a chart has no panel; its series stand on the slide background, softened as the engines draw them.
+					const surface = slide.design.colors.background;
 					const paletteContext = chartColorContext(slide.design);
-					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined });
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined, soften: context.chartPalette === undefined });
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
@@ -532,7 +539,8 @@ const chartRules: ValidationRule[] = [
 				for (const payload of slidePayloads(slide.slide, slide.path)) {
 					const chart = rec(payload.node.chart);
 					if (!Array.isArray(chart.colors)) continue;
-					const surface = normalizeHexColor(slide.design.colors.surface);
+					// LH-105: judged against the slide background the chart stands on (no chart has a panel).
+					const surface = normalizeHexColor(slide.design.colors.background);
 					const resolved = resolveChartColors(chart.colors, slide.design.colorScheme, chartColorContext(slide.design));
 					resolved.forEach((color, index) => {
 						const path = `${payload.path === slide.path ? slide.path : payload.path}/chart/colors/${index}`;
@@ -551,8 +559,8 @@ const chartRules: ValidationRule[] = [
 						context.report(chartColorsRule, {
 							path,
 							slide,
-							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the chart panel (${surface}); it is drawn lighter or darker to reach 3:1.`,
-							help: 'Choose a colour that already has at least 3:1 contrast against the slide surface, so the chart shows the colour you wrote.',
+							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the slide background (${surface}); it is drawn lighter or darker to reach 3:1.`,
+							help: 'Choose a colour that already has at least 3:1 contrast against the slide background, so the chart shows the colour you wrote.',
 							measured: { contrast: round(contrast), panel: surface! },
 						});
 					});

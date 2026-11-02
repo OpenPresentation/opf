@@ -28,10 +28,16 @@ test('the gallery layouts at their sample content: a slide the layout fits above
       continue;
     }
     recomposed.push(key);
-    // Recomposed only from the floor, to a larger smallest size, with no more overflow and every block still drawn.
-    assert.ok(result.recomposed.layoutSize <= FLOOR + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
-    // Larger, or (wave 2, sibling sets share one size) as large with less overflow.
-    assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
+    if (result.recomposed.chart) {
+      // LH-49: a chart the layout left a plot shorter than its minimum (120 px here) is drawn taller, no block smaller.
+      assert.ok(result.recomposed.chart.layoutPlot < 120 && result.recomposed.chart.plot > result.recomposed.chart.layoutPlot, `${key}: a short plot grows (${JSON.stringify(result.recomposed.chart)})`);
+      assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6 || overflows(result) < overflows(kept), `${key}: no smaller body unless it overflows less`);
+    } else {
+      // Recomposed only from the floor, to a larger smallest size, with no more overflow and every block still drawn.
+      assert.ok(result.recomposed.layoutSize <= FLOOR + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
+      // Larger, or (wave 2, sibling sets share one size) as large with less overflow.
+      assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
+    }
     assert.ok(overflows(result) <= overflows(kept), `${key}: no more overflow`);
     assert.deepEqual(blocksDrawn(result), blocksDrawn(kept), `${key}: no block is lost`);
     assert.equal(result.regions, undefined, `${key}: no regions`);
@@ -82,7 +88,9 @@ test('the recomposition keeps the layout record\'s design and composition', () =
   assert.ok(result.recomposed);
   const body = result.items.filter((item) => !HEADINGS.has(item.field));
   assert.ok(body.every((item) => item.frameBox), 'cards from the record\'s design');
-  assert.ok(body.every((item) => item.alignment === 'center'), 'alignment from the record\'s design');
+  // LH-72: the record centers, and the lists that run over two lines are start-aligned in a centered column.
+  assert.equal(result.design.contentAlignment, 'center', 'alignment from the record\'s design');
+  assert.ok(body.every((item) => item.alignment === 'center' || item.text.lines.length > 2), 'only long text is start-aligned');
   assert.equal(result.items.find((item) => item.field === 'title').box.x, Math.round(0.06 * 720 * 10) / 10, 'padding from the record\'s composition');
 });
 

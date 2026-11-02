@@ -6,12 +6,12 @@
       "bytes": 3395
     },
     "technical/root-content.opf.json#1": {
-      "sha256": "026d3ba9bf185f3e69123e2aca217b0f194b62bbfd5c5edc6fee679f7b125116",
-      "bytes": 5598
+      "sha256": "b783b8e4cb1d768ea9fbd85d11d05df675c6c518f1d592114c06d511d046e7e9",
+      "bytes": 6619
     },
     "technical/root-content.opf.json#2": {
-      "sha256": "3f7087c7bfe62f90843e10352acedadebd527f1b4cd0c27b0af9d4746c9dd2ff",
-      "bytes": 4263
+      "sha256": "0eed99f27db3883746e6d19a43117bad26bae38c7009094d818a09c7a2074290",
+      "bytes": 5679
     }
   }
 }
