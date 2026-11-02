@@ -312,6 +312,8 @@ export interface ChartAxisGeometry {
   minFontSize?: number;
   /** LH-60: the deck language, which names the places a map chart plots (a map over other categories is drawn as columns). */
   language?: string;
+  /** LH-110: values the axis must hold besides the data (the reference lines the title names). */
+  include?: readonly number[];
 }
 
 /**
@@ -351,8 +353,9 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const stackedGrouping = spec.grouping === 'stacked' || percent;
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
-  const dataMin = extents.length ? Math.min(...extents, ...anchor) : 0;
-  const dataMax = extents.length ? Math.max(...extents, ...anchor) : 1;
+  const include = (geometry.include ?? []).filter(Number.isFinite);
+  const dataMin = extents.length ? Math.min(...extents, ...anchor, ...include) : 0;
+  const dataMax = extents.length ? Math.max(...extents, ...anchor, ...include) : 1;
   const pad = 10 * scale;
   const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;

@@ -278,7 +278,8 @@ describe("pie and doughnut: names on the slices", () => {
   });
 
   test("composition puts the slice labels on the chart layer", () => {
-    const [item] = chartItems({ title: "Budget", chart: pie([["Engineering", 45], ["Sales", 25], ["Marketing", 18], ["Support", 12]]) });
+    // LH-108: in the whole body a pie lists its values beside it instead; beside a text block its names stay on the slices.
+    const [item] = chartItems({ title: "Budget", composition: { mode: "row" }, chart: pie([["Engineering", 45], ["Sales", 25], ["Marketing", 18], ["Support", 12]]), text: "Engineering takes almost half of the budget this year." });
     assert.equal(item.chart.layer.slices.labels.length, 4);
     assert.equal(item.chart.valueAxis, undefined);
   });

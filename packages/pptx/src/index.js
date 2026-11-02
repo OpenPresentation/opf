@@ -18,6 +18,7 @@ import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
+import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -57,7 +58,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartWaterfallColors, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -334,6 +335,8 @@ export async function toPptx(input, options = {}) {
   context.nativeBodies = new Map();
   context.nativeTitles = new Set();
   context.timelineTags = new Map();
+  // LH-108 to LH-110: the shapes a chart's value list, stacked names and reference marks are drawn with (src/chart-marks.js).
+  context.chartMarkTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
@@ -1118,6 +1121,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
+  const chartMarks=importChartMarks(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
     picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
       // The recorded crop is re-derived from the circular frame of the quote photo.
@@ -1159,6 +1164,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (role) roles.set(shapeKeys.get(shape), role);
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
+    if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
@@ -1181,7 +1187,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
-  const dataContext = label => ({datasets: options.dataProvenance?.datasets, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
+  const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
@@ -1285,7 +1291,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   if (chartRelId) {
     const imported = chartExRelId
       ? chartexFromRelationship(entries, relationships, chartExRelId, report)
-      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report);
+      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report, {marked: data.markedCharts?.has(name) === true});
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
@@ -1654,7 +1660,7 @@ function payloadFromSlideItem(item, report) {
   return null;
 }
 
-function chartFromRelationship(entries, slidePath, relationships, relId, report) {
+function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
   const doc = parseRequiredXml(entries, relationship.path);
@@ -1684,7 +1690,10 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
     // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
-    const direct = !nativeLegend && directLabelDefaults(chartNode.node, String(chartNode.type).includes('line') ? 'line' : chartNode.type);
+    // LH-109: a stacked chart's values inside its segments are the default whether its names stand beside it or its legend stayed.
+    // LH-108, LH-109: a chart whose value list or series names were drawn as tagged shapes (`marked`) has no legend by default.
+    const stacked = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'}[chartNode.type];
+    const direct = marked || ((!nativeLegend || stacked !== undefined) && directLabelDefaults(chartNode.node, stacked ?? (String(chartNode.type).includes('line') ? 'line' : chartNode.type)));
     const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
@@ -3012,7 +3021,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const layer = chartData.chartex ? undefined : chartLayout?.layer;
   const authoredOptions = resolveChartOptionsFor(chart);
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
-  const chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  // LH-109: a stacked column or area chart labels its segments with their values by default (in the middle of a column; an area point
+  // has no position); the values that do not fit are hidden per point after the labels are written (src/chart-marks.js).
+  const stackLabels = Boolean(layer?.stack?.values.some(row => row.some(Boolean)) && !chartOptions.dataLabels);
+  if (stackLabels) chartOptions = {...chartOptions, active: true, dataLabels: {content: ['value'], position: chartTargetFor(chart.type)?.kind === 'area' ? null : 'center', separator: ', '}};
 
   // LH-03, LH-105: no chart has a panel (the chart and plot areas are unfilled); its colours are judged against the card or the slide
   // background it stands on, as the preview does.
@@ -3062,7 +3075,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     chartSoftColors(panelFill, preferredPalette, {legible: legibleSeries}));
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {}),
     // LH-105: the series names at the line ends and the category names on the slices (src/chart-direct-labels.js).
-    ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {})});
+    ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {}),
+    ...(stackLabels ? {stackValues: layer.stack.values} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
@@ -3081,7 +3095,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
+    // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colours the preview draws.
+    const waterfall = chartLayout?.layer?.waterfall;
+    const waterfallInfo = waterfall ? {...waterfall, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
+      ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3102,7 +3120,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     w: region.w,
     h: region.h,
     // LH-105: a line chart that names its series at the line ends and a pie that names its slices draw no legend.
-    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
+    // LH-108, LH-109: nor does a pie with its value list, or a stacked chart that names its series beside the last column.
+    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && !layer?.valueList && !layer?.stack?.names && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
     ...classicChartOptions(chartOptions, {labelColor, font: context.fonts.body, textSize}),
     showTitle: false,
     chartColors,
@@ -3157,7 +3176,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     slide.addChart(...comboChart(chartData, chartOptionsXml, {palette, chartOptions, labelColor, font: context.fonts.body, textSize}));
     return;
   }
+  // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
+  const marks = layer && (layer.references || layer.valueList || layer.stack?.names) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
+    paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
+      slice: row => (highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length],
+      series: index => (highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length]}} : undefined;
+  if (marks) addChartMarks(slide, layer, 'under', marks);
   slide.addChart(chartData.type, chartData.series, chartOptionsXml);
+  if (marks) addChartMarks(slide, layer, 'over', marks);
 }
 
 // FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with
@@ -4529,6 +4555,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachChartMarkTags(entries,context.chartMarkTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);
@@ -4571,6 +4598,9 @@ async function normalizePptxZip(raw, context) {
       // colour that contrasts with each slice, as the preview draws them.
       const ringed=optionKind==='pie'&&/<c:doughnutChart>/.test(decodeText(entries[chartPart]));
       if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:ringed?{...chartOptions,dataLabels:{...chartOptions.dataLabels,position:null}}:chartOptions,kind:ringed?'doughnut':optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
+      // LH-109: the segment values that do not fit their segments are hidden, point by point.
+      const {stackValues}=context.chartHeadings.get(name);
+      if(stackValues&&chartOptions?.dataLabels)entries[chartPart]=encodeText(applyStackValueDeletes(decodeText(entries[chartPart]),stackValues));
       // LH-92: each ring of a nested-ring doughnut names its series on the slice core chose, after the data labels it may join.
       const {ringNames,palette:slicePalette}=context.chartHeadings.get(name);
       if(ringNames)entries[chartPart]=encodeText(applyRingLabels(decodeText(entries[chartPart]),ringNames,{labels:chartOptions?.dataLabels,fills:series=>highlight?.pointFills(series)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));
