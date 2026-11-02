@@ -1,6 +1,7 @@
 // Current ordinary native body text only. This reader never reads OPF tags or
 // recovers authoring boundaries across separate native text shapes.
 import {XMLParser} from 'fast-xml-parser';
+import {unbindNoBreak} from '@openpresentation/opf/composition';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
 import {nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native-text-style.js';
@@ -8,7 +9,8 @@ import {nativeRunStyle, mergeNativeRunProperties, nativeTypeface} from './native
 const parser = new XMLParser({ignoreAttributes:false, attributeNamePrefix:'', preserveOrder:true, parseAttributeValue:false, parseTagValue:false, trimValues:false, htmlEntities:true});
 const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag));
 const child = (tree, tag) => nodes(tree, tag)[0]?.[tag];
-const text = tree => (tree ?? []).map(node => node['#text'] ?? '').join('');
+// LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again.
+const text = tree => unbindNoBreak((tree ?? []).map(node => node['#text'] ?? '').join(''));
 // Match nativeTextShapes/nativeShapeParagraphs indexing; positional ordering is
 // still performed by the existing slide importer, not by this reader.
 const shapes = tree => [...nodes(tree, 'p:sp').map(node => node['p:sp']), ...nodes(tree, 'p:grpSp').flatMap(node => shapes(node['p:grpSp']))];

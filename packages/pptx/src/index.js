@@ -53,7 +53,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
-  ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -1376,7 +1376,8 @@ function readParagraphs(txBody) {
       const linear = zones.map(choice => keyedMathText(choice["a14:m"])).join("");
       if (zones.length && !fallbackRuns.some(run => scalarText(run?.["a:t"]))) texts.push(linear);
       return {
-        text: texts.join(""),
+        // LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again.
+        text: unbindNoBreak(texts.join("")),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buBlip"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
         maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0,
@@ -3113,13 +3114,14 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
       // PptxGenJS marks every part of a newline-containing run as a paragraph
       // break, including its final part. Split explicitly so the next styled
       // run stays on that final line, and preserve empty/trailing lines.
-      const parts = run.text.split(/\r*\n/);
+      // LH-11: PowerPoint wraps a table cell itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
+      const parts = bindNoBreak(run.text).split(/\r*\n/);
       return parts.map((text, part) => ({text,options:{...runOptions,breakLine:part < parts.length - 1}}));
     }) : null;
     return {
       // Keep native wrapping and the original cell value: inserting measured
       // soft wraps into the text would change a later import or copy operation.
-      text: rich ? runs : text,
+      text: rich ? runs : bindNoBreak(text),
       options: {
         ...nativeFontOptions(style),
         fontSize: fit.fontSize * 0.75,
@@ -3246,7 +3248,7 @@ function addNativeTitle(slide, item, context, options, deckContext) {
   deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: ''});
   deckContext.nativeTitles.add(objectName);
   const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
-  slide.addText(item.value, {
+  slide.addText(bindNoBreak(item.value), {
     ...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75),
     ...nativeFontOptions(style),
     color: pptxColor(context.textColor), align: physicalAlignment(fit.placement?.alignment ?? item.alignment ?? 'left', fit.directions?.[0]),

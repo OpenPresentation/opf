@@ -558,7 +558,7 @@ _No named properties._
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
 | `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
-| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in frame; every other c... |
 | `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
 | `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
 | `overlay` | no | `ref:Overlay` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. |
@@ -805,7 +805,7 @@ _No named properties._
 | `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a... |
 | `image` | no | `ref:Asset` | Source for an image item. |
 | `fit` | no | `enum:cover \| contain \| stretch` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
-| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
 | `shape` | no | `enum:rectangle \| rounded \| circle \| hexagon` | Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'. |
 | `cornerRadius` | no | `number` | Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default. |
