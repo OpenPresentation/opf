@@ -48,20 +48,23 @@ if (process.env.RR54_PRINT_DIGESTS) {
 }
 // LH-60 and LH-56 moved six on purpose: the two-series pie and doughnut draw nested rings, the box-and-whisker (one value per category)
 // one box per series, the world chart over quarters columns, and the treemap and funnel labels contrast with their fills.
+// LH wave 2: LH-03 and LH-81 moved fifteen (the column, bar, line and area types, column-no-options and line-string-numbers): the
+// header row replaces the side legend, and the small column and line charts label their values without the value axis or panel. The
+// world chart over quarters, drawn as columns (LH-60), takes the column chart's header row too, so its digest moved again.
 const REVIEWED_SVG_DIGESTS = {
-  'column': '4ec3de85106a1a440dff2e39',
-  'stacked-column': '028e39ed4c42f237425ca0b4',
-  '100pct-stacked-column': '50a34862743ac74848bb957f',
-  'bar': 'bcc24cb4b3465892848eb2ba',
-  'stacked-bar': 'a01ecf7211fc6c28688247c0',
-  '100pct-stacked-bar': 'f96f4459af84808035c532c6',
-  'line': 'e846689408da1fd0a5a44d8e',
-  'line-with-markers': 'd835e4c3dddf8e9d8c8d245b',
-  'stacked-line': '9d75e56c34acf913ef99b30b',
-  'stacked-line-with-markers': '09843c986170efd7dffa58a8',
-  'area': '4c4ae113c6305f06eca768bc',
-  'stacked-area': '1f6b5010833354342886def2',
-  '100pct-stacked-area': 'c2a70cf36600640289a313d7',
+  'column': 'c027339ea7d6c699b4dfd5f8',
+  'stacked-column': 'bcc1964a00d7827622374f49',
+  '100pct-stacked-column': '3775a859b0eb6a3902b6924a',
+  'bar': '903a3fbab280383f114e726d',
+  'stacked-bar': '9b7fb2b76a52783bc0786afa',
+  '100pct-stacked-bar': 'c3bc2ec3587b183ac63833e2',
+  'line': 'ebedc29d4a70445cdc4d3107',
+  'line-with-markers': '3aab22d3d6b4a3ac8bf3c791',
+  'stacked-line': '1a43ebe46faecb071edd06f7',
+  'stacked-line-with-markers': 'e6def7ff90da0b79a3abc29d',
+  'area': 'b2a4ea43d2afa99b7cc298a8',
+  'stacked-area': 'ea6e3661c32b7bcd4ca0986b',
+  '100pct-stacked-area': '445a6ec13e4459cbb699f3b2',
   'pie': 'b923fe0ee2c2d8a903015c83',
   'doughnut': '151f47d0ebc53d35b4f6e63d',
   'scatter': '44baab35d353e214a225bf68',
@@ -74,10 +77,10 @@ const REVIEWED_SVG_DIGESTS = {
   'box-and-whisker': 'a65be9e95948c1e6a06ea533',
   'waterfall': '70a315ec3bb6754e9e1866e1',
   'funnel': '6208efa6e685004b27a8f3d2',
-  'world': 'e4f710e47dfdea52142160e7',
+  'world': 'fdc75fe9a707636ee2602c4d',
   'sketch': '412f5a537d5291557428c038',
-  'column-no-options': '643844b49b1eb93cae41253f',
-  'line-string-numbers': 'fb2ec0d1f3b78e812aaabc14',
+  'column-no-options': '1b6bd1696b69e0708101550b',
+  'line-string-numbers': 'ddd95c76dd8de9724cdb1be9',
   'histogram-lone-column': '3c2269d823eed5e38ba85da0',
   'table-styled': 'b90e4faf6d93e7d88e6a5aed',
 };
@@ -110,18 +113,19 @@ assert.equal(chartNumber(Number.POSITIVE_INFINITY), null);
 const money = { name: 'Revenue', format: '$#,##0.0' };
 const rows = [['Q1', 12.4, 0.31], ['Q2', 18.1, 0.34], ['Q3', 21.75, 0.4]];
 {
-  const formatted = chartDoc({ type: 'column', dataLabels: { content: ['value'] }, data: { columns: ['Quarter', money, { name: 'Margin', format: '0%' }], rows } });
+  // LH-03: a small chart whose labels show the value drops its value axis; a value axis title keeps it, so the ticks are drawn.
+  const formatted = chartDoc({ type: 'column', dataLabels: { content: ['value'] }, axisTitles: { value: 'Amount' }, data: { columns: ['Quarter', money, { name: 'Margin', format: '0%' }], rows } });
   const svg = render(formatted);
   const shown = words(svg);
   for (const label of ['$12.4', '$18.1', '$21.8', '31%', '34%', '40%']) assert.ok(shown.includes(label), `${label} is a data label (${shown.join(' | ')})`);
   // The value axis takes the first plotted series' format: Revenue, so dollars with one decimal.
   assert.ok(shown.includes('$0.0') && shown.includes('$20.0'), `value ticks are dollars (${shown.join(' | ')})`);
   assert.ok(!shown.includes('12.4') && !shown.includes('20'), 'no General label or tick remains');
-  const general = words(render(chartDoc({ type: 'column', dataLabels: { content: ['value'] }, data: { columns: ['Quarter', 'Revenue', 'Margin'], rows } })));
+  const general = words(render(chartDoc({ type: 'column', dataLabels: { content: ['value'] }, axisTitles: { value: 'Amount' }, data: { columns: ['Quarter', 'Revenue', 'Margin'], rows } })));
   assert.ok(general.includes('12.4') && general.includes('20') && general.includes('0.31'), 'without a format the labels and ticks are General');
   // Lines, scatter, pie (the percent label stays a percent, the value takes the format) and the chartex constructs.
   for (const type of ['line', 'area', 'bar', 'radar']) {
-    const shownType = words(render(chartDoc({ type, dataLabels: { content: ['value'] }, data: { columns: ['Quarter', money], rows: rows.map((row) => row.slice(0, 2)) } })));
+    const shownType = words(render(chartDoc({ type, dataLabels: { content: ['value'] }, axisTitles: { value: 'Amount' }, data: { columns: ['Quarter', money], rows: rows.map((row) => row.slice(0, 2)) } })));
     assert.ok(shownType.includes('$12.4'), `${type}: label formatted`);
     assert.ok(shownType.some((word) => /^\$\d+\.0$/.test(word)), `${type}: tick formatted`);
   }

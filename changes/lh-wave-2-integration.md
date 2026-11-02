@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [opf]
+---
+LH wave 2 integration (output-changing where two wave 2 features meet): the chart layer (LH-03, LH-81) is decided for the construct `chartDrawPlan` draws (LH-60), so a world chart over categories that are not places, drawn as columns, takes a column chart's header row and small-chart labels in the preview and the PPTX export. An automatic composition's majority grid (LH-58) is measured as the balanced grid it draws, not as a stack of its blocks, so the row of other blocks under it keeps its room (three code panels above two texts no longer squeeze the texts to `small-cell`). A region grid of text and lists sized jointly (LH-43) takes LH-47's balanced rows and stretched short last row. A recomposition at the readability floor (LH-83) is also kept when its smallest body size is as large as the layout's and it reports less overflow, since sibling sets now share one size: agenda-split 3 long, process and timeline 5 and 6 long and the five-block code slide of the corpus (b13 s29) recompose without their findings.
