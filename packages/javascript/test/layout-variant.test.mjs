@@ -72,8 +72,6 @@ describe('precedence (README decision: slide, then layout, then deck, then theme
 			[{ variant: 'dark1' }, 'dark2', 'dark2'],
 			[{ background: 'dark2' }, 'dark1', 'dark1'],
 			[{ variant: { background: 'dark1', accents: ACCENTS } }, 'dark2', 'dark2'],
-			[{ background: '#0B1020' }, 'dark2', 'dark2'],
-			[{ background: { type: 'image', src: 'https://example.com/bg.jpg', tone: 'dark' } }, 'dark2', 'dark2'],
 		]) {
 			assert.equal(on('surface', design), surface, `surface on ${JSON.stringify(design)}`);
 			assert.equal(on('brand', design), brand, `brand on ${JSON.stringify(design)}`);
@@ -101,11 +99,13 @@ describe('precedence (README decision: slide, then layout, then deck, then theme
 		assert.deepEqual(roles(deck({ background: 'dark1', accents: own }, { design: { variant: { background: 'light1', accents: ACCENTS } } })).variant, { background: 'dark1', accents: own });
 	});
 
-	test('a layout variant hides the deck picture background; a slide picture stays', () => {
+	test('a deck picture background beats the layout variant (LH-103); a slide picture stays', () => {
 		const picture = { type: 'image', src: 'https://example.com/bg.jpg', tone: 'dark' };
 		const document = deck('light2', { design: { background: picture } });
 		const context = resolveSlideContext(document, 0);
-		assert.equal(composeSlide(context.slide, context.options).backgroundImage, undefined);
+		assert.ok(composeSlide(context.slide, context.options).backgroundImage, 'the layout slide keeps the deck picture');
+		assert.equal(context.resolved.layoutVariant, undefined);
+		assert.deepEqual(context.resolved.roles.variant, { background: 'dark1' }, 'the picture tone decides');
 		const other = resolveSlideContext(document, 1);
 		assert.ok(composeSlide(other.slide, other.options).backgroundImage, 'a slide without the layout keeps the deck picture');
 		const own = resolveSlideContext(deck('light2', { slide: { design: { background: picture } } }), 0);

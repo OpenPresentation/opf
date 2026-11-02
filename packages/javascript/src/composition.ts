@@ -34,7 +34,7 @@ export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logo
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {layoutVariantApplies} from './color.js';
-export {applyLuminance, clrMapAttributes, colorMapFor, isColorVariant, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
+export {applyLuminance, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, CHART_EMPHASIS_TINT_MIX, CHART_EMPHASIS_TINT_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
@@ -810,10 +810,10 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   return result;
 }
 
-/** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. A layout variant hides the deck's and the theme's (LH-01). */
+/** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. A layout variant hides a scheme-based background of the deck and the theme (LH-01), never a picture (LH-103). */
 function resolveBackgroundImage(slide: Record<string, any>, presentation: unknown, themeBackground: unknown, layout: unknown, width: number, height: number, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedBackgroundImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
-  if (layoutVariantApplies(own, layout)) return undefined;
+  if (layoutVariantApplies(own, layout, deck, themeBackground)) return undefined;
   const [value, at] = own.background !== undefined ? [own.background, `${path}.design.background`]
     : deck.background !== undefined ? [deck.background, 'design.background'] : [themeBackground, 'theme'];
   const background = imageBackground(value);
