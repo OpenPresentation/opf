@@ -4634,7 +4634,7 @@ async function normalizePptxZip(raw, context) {
     }
     // Composition already measured and named most families as their safe family; the pass above caught the rest. Each
     // authored family that was replaced is reported once (generic CSS families are engine defaults, not authored).
-    for (const [family, safe] of [...context.safeTypeface.replaced].sort(([a], [b]) => a.localeCompare(b))) context.reportDiagnostic?.({code: 'typeface-replaced', path: '', family, replacement: safe,
+    for (const [family, safe] of [...context.safeTypeface.replaced].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) context.reportDiagnostic?.({code: 'typeface-replaced', path: '', family, replacement: safe,
       message: sameMetrics(family, safe)
         ? `${family} is written as ${safe}, which has the same character widths, so the text wraps as in the preview.`
         : `${family} is written as ${safe}, an Office-safe family on every Windows and macOS machine; the text was laid out with ${safe}'s widths, so its line breaks can differ from the preview drawn in ${family}.`});
