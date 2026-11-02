@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { resolveTextStyle, textWidthMeasurer } from '@openpresentation/opf/composition';
+import { composeSlide, resolveTextStyle, textWidthMeasurer } from '@openpresentation/opf/composition';
 import {resolvePresentation, toSvg} from '../dist/svg.js';
 
 // RR-96: gridlines and axis lines are the deck's scheme-derived neutrals (core roles.neutrals), not a fixed colour with opacity.
@@ -272,8 +272,9 @@ for (const count of [12, 49]) {
   assert.equal(rendered.diagnostics.filter((d) => d.code === 'text-overflow').length, 0, 'radar two-line: no text-overflow diagnostics');
   assert.ok(rendered.labels.some((entry) => entry.lines.length === 2), 'radar spoke labels wrap at spaces onto two lines');
   assert.ok(rendered.labels.every((entry) => entry.lines.join(' ') === names[entry.row]), 'radar two-line labels keep whole words');
-  const frame = /<rect\b([^>]*data-opf-path="slides\.0\.chart"[^>]*)\/>/.exec(rendered.svg);
-  const { x, y, width, height } = attributes(frame[1]);
+  // LH-105: no chart draws a panel; the chart's frame is the box composition gave it.
+  const input = { slides: [{ title: 't', chart: { type: 'radar', dataLabels: false, data: { columns: ['Category', 'Value'], rows: names.map((name, i) => [name, 5 + i]) } } }] };
+  const { x, y, width, height } = composeSlide(input.slides[0], { width: 1280, height: 720, presentation: input, slideIndex: 0 }).items.find((item) => item.field === 'chart').box;
   for (const entry of rendered.labels) for (const [px, py] of polygon(entry)) {
     assert.ok(px >= Number(x) && px <= Number(x) + Number(width) && py >= Number(y) && py <= Number(y) + Number(height), `radar: label ${entry.row} lies inside the chart`);
   }

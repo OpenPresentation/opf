@@ -142,7 +142,8 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const options = resolveChartOptions(chart, chartOptionTarget(authored));
   const keyWidth = spec.key === 'line' ? fontPx * 1.4 : fontPx * 0.6, keyGap = fontPx * 0.4;
   const legendWidth = (within: number) => Math.min(within * 0.45, keyWidth + keyGap + Math.max(0, ...names.map(width)) + fontPx * 0.5);
-  let legendManaged = Boolean(layer?.header?.legend);
+  // LH-105: a line chart whose series are named at their line ends (layer.endLabels) draws no legend, and keeps a gutter for the names.
+  let legendManaged = Boolean(layer?.header?.legend) || layer?.endLabels !== undefined;
   if (options.active && options.legend !== undefined) {
     legendManaged = true;
     if (options.legend === 'left' || options.legend === 'right') cut(options.legend, legendWidth(inner.width) + pad);
@@ -171,8 +172,10 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const ticks: number[] = [];
   for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(clean(axis.min + index * axis.majorUnit));
   const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format)))) + fontPx * 0.5;
-  const x = rtl ? inner.x + pad + fontPx / 2 : inner.x + pad + tickWidth;
-  const plotWidth = Math.max(1, rtl ? right - tickWidth - x : right - x - fontPx / 2);
+  // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
+  const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0);
+  const x = rtl ? inner.x + pad + end : inner.x + pad + tickWidth;
+  const plotWidth = Math.max(1, rtl ? right - tickWidth - x : right - x - end);
   const labels = plan.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));
   if (rtl) labels.reverse();
   const cap = Math.max(lineHeight + fontPx * 1.22, inner.height * 0.4);

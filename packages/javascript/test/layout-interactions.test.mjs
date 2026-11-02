@@ -282,3 +282,25 @@ test('LH-80 with reading order: a picture track keeps the blocks in reading orde
     assert.deepEqual(order, ['slides.0.blocks.0.text', 'slides.0.blocks.1.image'], `${direction}: the text is read before the picture after it`);
   }
 });
+
+test('LH-105 with LH-93, LH-81 and LH-03: sibling line charts named at their line ends share one plot, and their names follow it', () => {
+  // Two line charts of one unit share their value axis and plot (LH-33, LH-93). Each names its series at the line ends instead of a
+  // header legend (LH-105); the shared plot moves the line ends, so the names are placed again against it.
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'];
+  const lines = (shift) => ({ type: 'line', data: { columns: ['Month', 'Plan', 'Actual'], rows: months.map((month, row) => [month, 40 + row * 4 - shift, 38 + row * 6 - shift]) } });
+  const slide = { title: 'Two regions', blocks: [{ chart: { ...lines(0), axisTitles: { value: 'Revenue ($M) for every region' } } }, { chart: lines(12) }] };
+  const charts = composeSlide(slide, {}).items.filter((item) => item.field === 'chart');
+  for (const item of charts) {
+    const { layer, valueAxis } = item.chart;
+    assert.ok(layer.endLabels, 'named at the line ends');
+    assert.equal(layer.header?.legend, undefined, 'no header legend');
+    const plotTop = item.box.y + layer.plot.top, plotHeight = item.box.height - layer.plot.top - layer.plot.bottom;
+    for (const entry of layer.endLabels.entries) {
+      const last = item.value.data.rows.at(-1)[entry.series + 1];
+      const y = plotTop + (valueAxis.max - last) / (valueAxis.max - valueAxis.min) * plotHeight;
+      assert.ok(Math.abs(entry.point.y - y) < 1e-6, 'the name stands at its line end on the shared plot');
+    }
+  }
+  const [a, b] = charts.map((item) => ({ top: item.box.y + item.chart.layer.plot.top, height: item.box.height - item.chart.layer.plot.top - item.chart.layer.plot.bottom }));
+  assert.ok(Math.abs(a.top - b.top) < 1e-6 && Math.abs(a.height - b.height) < 1e-6, 'one plot top and height');
+});

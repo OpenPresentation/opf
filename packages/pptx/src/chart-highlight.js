@@ -84,7 +84,8 @@ export function applyChartHighlight(xml, plan) {
     if (plan.circular) {
       return ser.replace(/<c:dPt>([\s\S]*?)<\/c:dPt>/g, (point, inner) => {
         const row = Number(/<c:idx val="(\d+)"\/>/.exec(inner)?.[1]);
-        return marks.categories[row] === undefined ? point : recolor(point, marks.categories[row] ? accent : muted);
+        // LH-105: a focus plan colours each focused slice in its own colour (plan.sliceColor).
+        return marks.categories[row] === undefined ? point : recolor(point, plan.sliceColor ? plan.sliceColor(row) : marks.categories[row] ? accent : muted);
       });
     }
     if (index >= marks.series.length) return ser;

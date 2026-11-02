@@ -42,9 +42,10 @@ describe('the axis step depends on the axis length', () => {
 	});
 
 	test('the spacing follows the slide scale', () => {
-		assert.equal(chartIntervalsFor(480, 20, 1), 8);
+		// LH-105: at most six intervals.
+		assert.equal(chartIntervalsFor(480, 20, 1), 6);
 		assert.equal(chartIntervalsFor(480, 20, 2), 5);
-		assert.equal(chartIntervalsFor(480, 20, 0), 8, 'a bad scale reads as 1');
+		assert.equal(chartIntervalsFor(480, 20, 0), 6, 'a bad scale reads as 1');
 		assert.equal(chartIntervalsFor(10000, 1, 1), CHART_MAX_INTERVALS);
 		assert.equal(chartIntervalsFor(1, 1, 1), 1);
 		assert.equal(CHART_MIN_TICK_SPACING_PX >= 40, true);

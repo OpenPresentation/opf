@@ -179,7 +179,7 @@ describe("the header row (LH-81)", () => {
     assert.deepEqual(item.chart.layer.header.legend.entries.map((entry) => entry.name), ["Current", "Baseline"]);
     assert.ok(item.chart.layer.small, "two series of four points");
     assert.ok(item.chart.valueAxis);
-    const plain = composeSlide({ title: "Signal", chart: { type: "pie", data: quarters(["Current"]) } }, { dimensions: { width: 1280, height: 720 } }).items.find((entry) => entry.field === "chart");
+    const plain = composeSlide({ title: "Signal", chart: { type: "scatter", data: quarters(["Current"]) } }, { dimensions: { width: 1280, height: 720 } }).items.find((entry) => entry.field === "chart");
     assert.equal(plain.chart, undefined);
   });
 

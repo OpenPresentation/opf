@@ -147,7 +147,7 @@ function titleString(title) {
  * The options of a parsed classic chart (fast-xml-parser, prefixes kept, attributes plain): `{axisTitles?, legend?, dataLabels?}`
  * plus `notes` naming what the three fields cannot express. `defaults` is what an export writes without the field:
  * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind. `layer` says what an
- * export of the LH-81 header row left in the part: `{header, headerLegend}`.
+ * export of the LH-81 header row left in the part: `{header, headerLegend}`, and `direct` when its labels are LH-105's direct labels.
  */
 export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo, layer = {}}) {
   const chart = chartSpace?.['c:chart'];
@@ -185,9 +185,11 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
     if (layer.header) {
       if (!(position === 'right' || (position === 'top' && layer.headerLegend))) out.legend = position;
     } else if (headerKind || !(defaultLegend && position === 'right')) out.legend = position;
-  } else if (defaultLegend) out.legend = 'none';
+  } else if (defaultLegend && !layer.direct) out.legend = 'none';
 
-  const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats, combo);
+  // LH-105: the direct labels an export writes in place of a legend (series names at the line ends, category names on the slices) are
+  // the default, not an option (src/chart-direct-labels.js `directLabelDefaults`).
+  const dataLabels = layer.direct ? undefined : classicDataLabels(chartNode, target, notes, seriesFormats, combo);
   if (dataLabels !== undefined) out.dataLabels = dataLabels;
   return {options: out, notes};
 }

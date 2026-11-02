@@ -52,14 +52,14 @@ const surfaceOf = deck => { const design = resolvePresentation(deck).slides[0].d
 
 // --- Chart frame, intervals and series 1 (P19, P18)
 {
-  // LH-03: `dataLabels: false` keeps the panel and the value axis of a small chart (one series of four points), which this checks.
+  // LH-03: `dataLabels: false` keeps the value axis of a small chart (one series of four points), which this checks. LH-105: no chart
+  // draws a panel; the series stand on the slide background at 4.5:1 (dark), softened as far as that allows.
   const chart = {type: 'column', dataLabels: false, data: {columns: ['Week', 'Task completion'], rows: [['1', 68], ['2', 72], ['3', 76], ['4', 84]]}};
   const deck = {slides: [{title: 'The largest gain came in week four', chart}]};
-  const {surface} = surfaceOf(deck);
+  const {background: surface} = surfaceOf(deck);
   const svg = toSvg(deck, 1, {trace: true});
   const panel = tags(svg, 'rect').find(rect => rect['data-opf-path'] === 'slides.0.chart');
-  assert.ok(panel && panel.fill.toUpperCase() === surface.toUpperCase());
-  assert.equal(panel.stroke, undefined, 'no outer frame');
+  assert.equal(panel, undefined, 'no chart panel');
   const gridlines = tags(svg, 'line').filter(line => line.y1 === line.y2 && line['stroke-width'] !== undefined);
   assert.ok(gridlines.length > 0 && gridlines.length <= 9, `${gridlines.length} horizontal lines`);
   // Value-axis tick labels carry the chart's own path (the category labels carry their row's).

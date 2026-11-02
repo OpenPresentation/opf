@@ -160,11 +160,11 @@ export function drawCenteredLabel(c, text, x, y, path, fill) {
   drawLabel(c, text, { x: x - width / 2, y: y - height / 2, width, height }, path, fill ? labelFill(c, "center", fill) : c.labelColor);
 }
 
-/** A label on a pie or doughnut slice at the angle `mid`; `inner` is the ring's inner radius (0 for a pie). */
-export function drawSliceLabel(c, text, { cx, cy, r, inner, mid }, path, fill) {
+/** A label on a pie or doughnut slice at the angle `mid`; `inner` is the ring's inner radius (0 for a pie). `own` is the slice's own position (LH-105). */
+export function drawSliceLabel(c, text, { cx, cy, r, inner, mid }, path, fill, own) {
   const { width, height } = labelSize(c, text);
   const cos = Math.cos(mid), sin = Math.sin(mid);
-  const position = inner ? "center" : c.dataLabels.position ?? "outside-end";
+  const position = inner ? "center" : own ?? c.dataLabels.position ?? "outside-end";
   const half = (width * Math.abs(cos) + height * Math.abs(sin)) / 2;
   let radius;
   if (inner) radius = (r + inner) / 2;

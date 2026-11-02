@@ -40,8 +40,11 @@ const CHART_FLOOR_MIN_HEIGHT = 12 * CHART_TEXT_FLOOR_PX;
 const CHART_FLOOR_MIN_WIDTH = 16 * CHART_TEXT_FLOOR_PX;
 /** WI-5: value-axis intervals are at least this far apart (reference pixels), so a short axis shows fewer ticks instead of a crowded scale. */
 export const CHART_MIN_TICK_SPACING_PX = 48;
-/** WI-5: a value axis has at most this many intervals (nine labels), however long it is: 0 to 100% in fives is a scale, 0 to 90% in tens is a ruler. */
-export const CHART_MAX_INTERVALS = 8;
+/**
+ * WI-5: a value axis has at most this many intervals, however long it is: 0 to 100% in fives is a scale, 0 to 90% in tens is a ruler.
+ * LH-105: six (seven labels; it was eight): a few well-rounded ticks, as Few asks of a graph, and the 1, 2 or 5 step of niceScale.
+ */
+export const CHART_MAX_INTERVALS = 6;
 
 /**
  * RR-90: the unscaled chart text size for a chart box: {@link CHART_TEXT_PX}, shrunk only when the box is small (the text is at most
@@ -153,11 +156,13 @@ function tighten(scale: ChartScale, top: number, bound: number, limit: number, m
     const kept = scaleFrom(scale.min, end, scale.step);
     if (kept.ticks.length > 1 && end - kept.ticks.at(-1)! <= scale.step / 2 + 1e-9 * scale.step) return kept;
     const whole = (value: number, of: number) => Math.abs(value / of - Math.round(value / of)) < 1e-9;
-    for (let intervals = limit; intervals >= 1; intervals--) {
+    // LH-105: an axis with room for three intervals or more is not cut down to one (0 and 140 where 0, 50, 100 fit); a finer end is tried.
+    const fewest = limit >= 3 ? 2 : 1;
+    for (let intervals = limit; intervals >= fewest; intervals--) {
       const step = clean((end - scale.min) / intervals);
       if (step > 0 && whole(step, unit) && whole(scale.min, step)) return scaleFrom(scale.min, end, step);
     }
-    return kept.ticks.length > 1 ? kept : scale;
+    if (fewest === 1) return kept.ticks.length > 1 ? kept : scale;
   }
   return scale;
 }
@@ -178,9 +183,9 @@ function normalizedScale(dataMin: number, dataMax: number, limit: number): Chart
   return { min, max, step: restore(normalized.step) || Number.MIN_VALUE, ticks };
 }
 
-/** How many intervals a value axis `length` pixels long can carry when each tick label needs `labelExtent` pixels: 1 to 10. */
+/** How many intervals a value axis `length` pixels long can carry when each tick label needs `labelExtent` pixels: 1 to {@link CHART_MAX_INTERVALS} (LH-105: it was 10). */
 export function maxIntervalsFor(length: number, labelExtent: number): number {
-  return Math.max(1, Math.min(10, Math.floor(length / Math.max(1, labelExtent))));
+  return Math.max(1, Math.min(CHART_MAX_INTERVALS, Math.floor(length / Math.max(1, labelExtent))));
 }
 
 /**

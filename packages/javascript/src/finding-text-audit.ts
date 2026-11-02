@@ -180,8 +180,8 @@ const chartColorsAdjusted: RuleText = (finding, _context, helpers) => {
   }
   if (contrast === undefined) return undefined;
   return {
-    message: `${label} (${code(shown)}) has ${num(contrast, 1)}:1 contrast against the chart panel${panel ? ` (${code(panel)})` : ""}, so it is drawn lighter or darker to reach 3:1.`,
-    next: `pick a color with at least 3:1 contrast against ${panel ? code(panel) : "the panel"}, or remove ${code("colors")} to use the palette.`,
+    message: `${label} (${code(shown)}) has ${num(contrast, 1)}:1 contrast against the slide background${panel ? ` (${code(panel)})` : ""}, so it is drawn lighter or darker to reach 3:1.`,
+    next: `pick a color with at least 3:1 contrast against ${panel ? code(panel) : "the background"}, or remove ${code("colors")} to use the palette.`,
   };
 };
 
@@ -426,6 +426,24 @@ const straightQuotes: RuleText = (finding) => {
   };
 };
 
+const chartDualAxis: RuleText = (finding) => {
+  const names = match(finding.message, /^The combo chart plots (.+) on a second value axis/)?.[1];
+  return {
+    message: `${names ? `${names} ${/, /.test(names) ? "are" : "is"}` : "A series is"} on a second value axis, so two scales share one plot and its crossings mean nothing.`,
+    next: `show the secondary series in a chart of its own beside this one, or drop ${code("secondaryAxis")} when the series share a unit.`,
+  };
+};
+
+const chartPieManySlices: RuleText = (finding) => {
+  const slices = measuredNumber(finding, "slices");
+  const limit = measuredNumber(finding, "limit");
+  if (slices === undefined) return undefined;
+  return {
+    message: `This chart has ${slices} slices${limit === undefined ? "" : `, more than ${limit}`}; the small ones are hard to compare and to label.`,
+    next: `compare the parts with bars (${code('type: "bar"')}), or group the smallest into one "Other" slice.`,
+  };
+};
+
 // ------------------------------------------------------------------------------------------------ content
 
 const chartValueNotNumeric: RuleText = (finding) => {
@@ -611,4 +629,6 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/tight-spacing": tightSpacing,
   "opf/layout-monotony": layoutMonotony,
   "opf/straight-quotes": straightQuotes,
+  "opf/chart-dual-axis": chartDualAxis,
+  "opf/chart-pie-many-slices": chartPieManySlices,
 };

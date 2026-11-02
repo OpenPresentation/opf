@@ -26,7 +26,8 @@ const marks=(svg,name,pattern)=>elements(svg,name).filter(a=>pattern.test(a['dat
 const texts=svg=>[...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([,t])=>t.replace(/<[^>]+>/g,''));
 const point=/^slides\.0\.chart\.data\.rows\.\d+\.\d+$/,series=/^slides\.0\.chart\.data\.columns\.\d+$/;
 const bound=resolvePresentation({slides:[{chart:{type:'column',data:categoryData}}]}).slides[0];
-const palette=chartSeriesPalette(bound.design.colors.surface,bound.design.colorScheme);
+// LH-105: the series colours are judged against the slide background (no chart has a panel) and softened towards it.
+const palette=chartSeriesPalette(bound.design.backgroundColor??bound.design.colors.background,bound.design.colorScheme,undefined,undefined,{soften:true});
 let checks=0;
 
 // Every classic id takes the chart-type renderer, never the legacy single-series fallback.
@@ -91,7 +92,8 @@ checks++;
 for(const [id,markers] of [['line',false],['line-with-markers',true],['stacked-line',false],['stacked-line-with-markers',true]]){
   const svg=render(id);
   assert.equal(marks(svg,'circle',point).length,markers?11:0,`${id}: markers`);
-  assert.equal(marks(svg,'polyline',series).length,6,`${id}: three legend keys and one line per series`);
+  // LH-105: three series are named at their line ends instead of a legend: one line per series, no legend keys.
+  assert.equal(marks(svg,'polyline',series).length,3,`${id}: one line per series`);
   checks++;
 }
 {
@@ -126,7 +128,8 @@ for(const id of ['pie','doughnut']){
     }
     const holes=slices.filter(s=>(s.d.match(/A /g)??[]).length===2).length;
     assert.equal(holes,id==='pie'&&rings===1?0:slices.length,`${id}: ring slices`);
-    assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),palette.slice(0,4),`${id}: legend per category`);
+    // LH-105: one series names its categories on the slices (no legend); nested rings keep the legend of their categories.
+    assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),rings===1?[]:palette.slice(0,4),`${id}: legend per category`);
     assert.ok(['North','South','East','West'].every(t=>texts(svg).includes(t)));
     checks++;
   }

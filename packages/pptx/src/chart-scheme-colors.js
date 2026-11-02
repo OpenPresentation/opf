@@ -12,18 +12,33 @@ const hex6 = value => String(value).replace(/^#/, '').toUpperCase();
  * maps a colour reference and its resolved hex to a scheme value when the deck theme holds that colour (theme-colors.js). A colour the
  * panel adjusted, a hex or variable entry and a tint (series 7 to 12) have none.
  */
-export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor, accents) {
+export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor, accents, soft) {
   const authored = Array.isArray(colors) ? colors : [];
   return preferred.map((color, index) => {
     if (hex6(color) !== hex6(adjusted[index])) return undefined;
     const entry = typeof authored[index] === 'string' ? authored[index].trim() : undefined;
-    if (entry !== undefined) return /^[A-Za-z]/.test(entry) ? schemeFor(entry, hex6(color)) : undefined;
     // RR-96: series i is the slot the variant's accent order puts at position i (accent i + 1 by default), and schemeFor names the role that slot has.
-    return index < 6 ? schemeFor(accents?.[index] ?? `accent${index + 1}`, hex6(color)) : undefined;
+    // An entry that does not resolve keeps the scheme colour of its position (core softens it as a scheme series, `soft`).
+    const slot = () => index < 6 ? schemeFor(accents?.[index] ?? `accent${index + 1}`, hex6(color)) : undefined;
+    const value = entry !== undefined ? (/^[A-Za-z]/.test(entry) ? schemeFor(entry, hex6(color)) : undefined) ?? (soft?.[index] ? slot() : undefined) : slot();
+    // LH-105: `adjusted` is the full-strength palette and `soft` core's chartSoftColors; a softened accent is its slot with core's transforms.
+    const transforms = soft?.[index];
+    if (!transforms) return value;
+    return value ? {val: value, satMod: transforms.satMod, ...(transforms.lumMod !== undefined ? {lumMod: transforms.lumMod} : {}), ...(transforms.lumOff !== undefined ? {lumOff: transforms.lumOff} : {})} : undefined;
   });
 }
 
-const srgbIn = (block, hex, scheme) => block.replace(new RegExp(`<a:srgbClr val="${hex}"\\s*/>`, 'gi'), `<a:schemeClr val="${scheme}"/>`);
+/**
+ * The DrawingML of a palette scheme value: a slot name (`accent1`), or LH-105's softened accent `{val, satMod, lumMod, lumOff}`: the slot
+ * with the HSL transforms core's softenChartPalette applied, so re-theming the deck in PowerPoint keeps the series soft.
+ */
+export function schemeColorXml(scheme) {
+  if (typeof scheme === 'string') return `<a:schemeClr val="${scheme}"/>`;
+  const transforms = ['satMod', 'lumMod', 'lumOff'].filter(name => scheme[name] !== undefined).map(name => `<a:${name} val="${scheme[name]}"/>`).join('');
+  return `<a:schemeClr val="${scheme.val}">${transforms}</a:schemeClr>`;
+}
+
+const srgbIn = (block, hex, scheme) => block.replace(new RegExp(`<a:srgbClr val="${hex}"\\s*/>`, 'gi'), () => schemeColorXml(scheme));
 
 /**
  * Rewrite the series fills of a generated classic chart part to scheme colours. Series are matched to the palette by position (the
