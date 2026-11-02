@@ -177,7 +177,8 @@ async function bundledSchemaResolver() {
   return {
     order: 1,
     canRead: (file) => byId.has(file.url.split("#")[0]),
-    read: (file) => byId.get(file.url.split("#")[0]),
+    // A fresh copy per read: the generator marks the schemas it types, so two references into one document must not share objects.
+    read: (file) => structuredClone(byId.get(file.url.split("#")[0])),
   };
 }
 

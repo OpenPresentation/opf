@@ -9,7 +9,8 @@ const chartOf=deck=>deck.slides[0].chart??deck.slides[0].blocks?.find(block=>blo
 try{
  for(const type of ['column','pie'])for(const [background,surface,text]of [['#000000','#F8FAFC','#000000'],['#FFFFFF','#0F172A','#FFFFFF']]){
   const data={columns:[' Quarter & Ω\t\n ','Current'],rows:[['Q1',2],['Q2',3]]};
-  const source={design:{background,colorScheme:{id:'cool-horizon',dark1:'#000000',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data}}]},before=JSON.stringify(source);
+  // LH-03: `dataLabels: false` keeps the panel of a small chart (one series of two points), whose colors this checks.
+  const source={design:{background,colorScheme:{id:'cool-horizon',dark1:'#000000',light1:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type,data,dataLabels:false}}]},before=JSON.stringify(source);
   const bytes=await toPptx(source),imported=await fromPptx(bytes);
   check(validate(imported, {only: ['format']}).valid,'Reimport validates in the browser');
   check(JSON.stringify(chartOf(imported).data)===JSON.stringify(data),'Browser preserves exact heading, labels, series and values');

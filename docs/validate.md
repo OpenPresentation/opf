@@ -296,6 +296,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
+| [`opf/chart-series-dropped`](#opfchart-series-dropped) | Content | warning | structure | A chart series is not drawn by the chart type. |
 | [`opf/code-highlight-out-of-range`](#opfcode-highlight-out-of-range) | Content | warning | structure | A code highlight marks a line the code does not have. |
 | [`opf/code-highlight-range-reversed`](#opfcode-highlight-range-reversed) | Content | warning | structure | A code highlight range ends before it starts. |
 | [`opf/variable-builtin-missing`](#opfvariable-builtin-missing) | Content | warning | structure | A built-in variable has no value in this document. |
@@ -753,7 +754,7 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-colors-adjusted`
 
@@ -948,6 +949,16 @@ Default severity: **warning**. Cost: structure. A chart highlight is adapted by 
 **Why.** A highlight the chart type cannot show as authored (a category highlight on a chart without categories, for example) is adapted by every engine, so the emphasis is not exactly what was written.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/chart-series-dropped`
+
+Default severity: **warning**. Cost: structure. A chart series is not drawn by the chart type.
+
+**Why.** A treemap, histogram, Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places is drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
 
 ### `opf/code-highlight-out-of-range`
 

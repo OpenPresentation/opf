@@ -18,9 +18,11 @@ for (const { keys, deck } of decks) {
   const traced = toSvg(deck, { trace: true }), plain = toSvg(deck);
   for (const bound of resolved.slides) {
     const key = keys[bound.index], svg = traced[bound.index], geometry = bound.geometry;
-    assert.ok(Array.isArray(geometry.regions), `${key}: core composed the template's regions`);
+    // LH-83: a slide whose layout sets a body role at the readability floor is recomposed as the automatic grid: no regions, and
+    // every item is drawn outside a region group.
+    assert.ok(Array.isArray(geometry.regions) !== Boolean(geometry.recomposed), `${key}: core composed the template's regions, or recomposed the slide`);
     const tags = openTags(svg);
-    const regionOf = new Map(geometry.regions.map((region) => [region.name, region]));
+    const regionOf = new Map((geometry.regions ?? []).map((region) => [region.name, region]));
     // Every traced content path (headings and blocks) resolves against the source deck, so an editor can edit through it.
     for (const tag of tags) {
       const path = attr(tag.attrs, 'data-opf-path');
@@ -67,8 +69,13 @@ for (const { keys, deck } of decks) {
         assert.deepEqual(box, { x: item.image.box.x, y: item.image.box.y, width: item.image.box.width, height: item.image.box.height }, `${key}: ${item.path} picture box`);
         assert.ok(item.image.box.x >= item.box.x - 0.01 && item.image.box.y >= item.box.y - 0.01 && item.image.box.x + item.image.box.width <= item.box.x + item.box.width + 0.01, `${key}: ${item.path} frame inside the bled cell`);
         // The bled cell, which holds the whole picture, reaches the slide edge; a contained picture's own frame sits inside it.
-        const cell = item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
+        // LH-46: several pictures in one bled region are a mosaic: together they reach the edges the region reaches, and each
+        // stays inside the region.
+        const pictures = geometry.items.filter((other) => other.region === item.region && other.field === 'image');
+        const union = pictures.map((other) => other.box).reduce((a, b) => ({ x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.max(a.x + a.width, b.x + b.width) - Math.min(a.x, b.x), height: Math.max(a.y + a.height, b.y + b.height) - Math.min(a.y, b.y) }));
+        const cell = pictures.length > 1 ? union : item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
         assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(cell)})`);
+        assert.ok(item.box.x >= region.box.x - 0.01 && item.box.y >= region.box.y - 0.01 && item.box.x + item.box.width <= region.box.x + region.box.width + 0.01 && item.box.y + item.box.height <= region.box.y + region.box.height + 0.01, `${key}: ${item.path} inside its bled region`);
       }
       // A list in columns: every column core broke it into is drawn in its own box, with every item exactly once and the
       // numbering continuing across the columns.
@@ -159,12 +166,14 @@ assert.ok(paginated.length >= 10, `overflowing sample slides paginated: ${pagina
 for (const { keys, deck } of [templateDeck('agenda'), templateDeck('table-beside')]) {
   const svgs = toSvg(deck, { trace: true });
   for (const bound of resolvePresentation(deck).slides) {
-    if (!['agenda 5 long', 'agenda 6 long', 'table-beside 5 long', 'table-beside 6 long'].includes(keys[bound.index])) continue;
+    if (!['agenda 5 long', 'agenda 6 long', 'table-beside 5 long', 'table-beside 6 long'].includes(keys[bound.index]) || bound.geometry.recomposed) continue;
     const boxes = new Map(bound.geometry.regions.map((region) => [region.name, region.box]));
     assert.ok(regionGroups(svgs[bound.index]).some((group) => group.tags.some((tag) => outside(tag, boxes.get(group.region)))), `${keys[bound.index]}: overflow is drawn outside its region before pagination`);
   }
 }
-for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 5 long', 'faq 6 long', 'table-beside 5 long', 'table-beside 6 long', 'timeline 5 long', 'timeline 6 long']) {
+// LH-83: table-beside 5 long fits once recomposed as the automatic grid, so it no longer overflows or paginates.
+// Wave 2: faq 5 long and timeline 5 long fit once recomposed too (a recomposition as large as the layout with less overflow is kept).
+for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 6 long', 'table-beside 6 long', 'timeline 6 long']) {
   assert.ok(overflowing.get(name) > 0, `${name} carries text-overflow before pagination`);
   assert.ok(paginated.some(({ source }) => source === name), `${name} is paginated`);
 }
@@ -179,7 +188,7 @@ for (const { source, keys, deck } of paginated) {
     paginatedPages++;
     assert.equal(deck.slides[bound.index].layout, source.split(' ')[0], `${key}: continues on the same layout`);
     assert.deepEqual(geometry.diagnostics.filter((entry) => entry.code === 'text-overflow'), [], `${key}: no text-overflow`);
-    const boxes = new Map(geometry.regions.map((region) => [region.name, region.box]));
+    const boxes = new Map((geometry.regions ?? []).map((region) => [region.name, region.box]));
     for (const group of regionGroups(svgs[bound.index])) {
       const box = boxes.get(group.region);
       assert.ok(box, `${key}: ${group.region} is a region of the page`);

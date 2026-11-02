@@ -443,6 +443,11 @@ const chartMappingAdapted: RuleText = (finding) => ({
   next: "remove that mapping entry, or name a different column.",
 });
 
+const chartSeriesDropped: RuleText = (finding) => ({
+  message: keep(cap(finding.message)),
+  next: "use a chart type that plots every series, or one chart per series.",
+});
+
 const chartHighlightAdapted: RuleText = (finding) => {
   const name = unquote(match(finding.message, /^highlight names \w+ ("(?:[^"\\]|\\.)*"), which is not plotted as a series/)?.[1]);
   if (!name) return undefined;
@@ -590,6 +595,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/chart-value-not-numeric": chartValueNotNumeric,
   "opf/chart-mapping-adapted": chartMappingAdapted,
   "opf/chart-highlight-adapted": chartHighlightAdapted,
+  "opf/chart-series-dropped": chartSeriesDropped,
   "opf/code-highlight-out-of-range": codeHighlightOutOfRange,
   "opf/code-highlight-range-reversed": codeHighlightRangeReversed,
   "opf/variable-builtin-missing": variableBuiltinMissing,

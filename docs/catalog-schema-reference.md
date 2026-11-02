@@ -344,7 +344,7 @@ _No named properties._
 | `size` | no | `ref:RegionSize` |  |
 | `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A group is also accepted where every one of its leaf kinds is. Omitted: every body content kind and 'group'. |
 | `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
-| `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it; 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in four columns; rows and columns swap in a portrait re... |
+| `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
@@ -367,6 +367,15 @@ _No named properties._
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'su... |
+
+#### LayoutVariantRole
+
+- Type: `enum:surface | brand`
+- Required fields: none
+- Purpose: A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's str...
+
+_No named properties._
 
 #### Composition
 
@@ -502,7 +511,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `id` | yes | `string` | The variant's id within the theme, lowercase kebab-case. |
 | `name` | yes | `string` | Human-readable variant name shown in pickers. |
-| `variant` | yes | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent... |
+| `variant` | yes | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the ColorVariant object of... |
 
 #### ThemeBackgroundSlot
 

@@ -13,8 +13,10 @@ import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineCha
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
+import {applyDoughnutRings,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
+import {applyChartLayerLayout,chartEmphasisPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -54,8 +56,8 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
-  ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -681,8 +683,9 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
 // RR-96: the variant a color map imports as is dropped where the document's own design already gives that map: core picks light1 or dark1 from the
 // slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
 function dropImpliedVariants(imported, options) {
-  const rolesVariant = design => {
-    try { return JSON.stringify(coreContext({...imported, design, slides: [{}]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  // LH-01: a slide's implied variant includes its layout's (a section imports its accent clrMapOvr as a variant its layout already gives).
+  const rolesVariant = (design, slide = {}) => {
+    try { return JSON.stringify(coreContext({...imported, design, slides: [slide]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
   };
   const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
   if (imported.design?.variant !== undefined) {
@@ -695,7 +698,7 @@ function dropImpliedVariants(imported, options) {
   for (const slide of imported.slides) {
     if (slide.design?.variant === undefined) continue;
     const rest = withoutVariant(slide.design);
-    const implied = rolesVariant({...imported.design, ...rest});
+    const implied = rolesVariant(imported.design, {...(slide.layout !== undefined ? {layout: slide.layout} : {}), design: rest});
     if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
       if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
     }
@@ -1436,7 +1439,8 @@ function readParagraphs(txBody) {
       const linear = zones.map(choice => keyedMathText(choice["a14:m"])).join("");
       if (zones.length && !fallbackRuns.some(run => scalarText(run?.["a:t"]))) texts.push(linear);
       return {
-        text: texts.join(""),
+        // LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again.
+        text: unbindNoBreak(texts.join("")),
         bullet: asArray(paragraph?.["a:pPr"]).some(props => props?.["a:buChar"] !== undefined || props?.["a:buBlip"] !== undefined || props?.["a:buAutoNum"] !== undefined),
         level: Number(asArray(paragraph?.["a:pPr"])[0]?.lvl ?? 0),
         maxFontSize: sizes.length > 0 ? Math.max(...sizes) : 0,
@@ -1673,12 +1677,18 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const valueCodes = series.map(entry => cacheFormatCode(entry?.["c:val"] ?? entry?.["c:yVal"]));
   const xCode = chartNode.type === 'scatter' ? cacheFormatCode(series[0]?.["c:xVal"]) : undefined;
   // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
+  // LH-81: what an export of the header row left in the part: a caption title or a top legend at a manual position.
+  const nativeLegend = doc["c:chartSpace"]?.["c:chart"]?.["c:legend"];
+  const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
+  const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
-    return chart && Object.keys(options).length ? {...chart, ...options} : chart;
+    // LH-03: the value labels an export of a small chart writes by default are not an option.
+    const unfilled = doc["c:chartSpace"]?.["c:spPr"]?.["a:noFill"] !== undefined;
+    return chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
   };
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
@@ -2479,8 +2489,11 @@ const geometryFallbackBackground = presentation => presentation.design?.backgrou
 
 function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const slide = presentation.slides[slideIndex];
-  const effective = { ...presentation, design: { ...presentation.design, ...slide.design } };
   const core = coreContext(presentation, slideIndex, options);
+  // LH-01: a layout's variant (core's resolved.layoutVariant, set only where the slide names neither a variant nor a background) replaces
+  // the deck's variant and hides the deck's background, as a slide variant over the theme's does.
+  const layoutVariant = core.resolved.layoutVariant;
+  const effective = { ...presentation, design: { ...presentation.design, ...(layoutVariant ? {variant: layoutVariant, background: undefined} : {}), ...slide.design } };
   const resolved = resolvePresentationContext(effective, options, core);
   // A reference that matched no record is reported once per place it is written.
   for (const diagnostic of core.diagnostics) {
@@ -2966,12 +2979,17 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   for (const entry of chartData.diagnostics ?? []) options.onDiagnostic?.({code: entry.code, path, message: entry.message, pointer: entry.path});
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
   // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
-  const chartOptions = resolveChartOptionsFor(chart);
-  reportChartOptionDiagnostics(chartOptions, path, options.onDiagnostic);
+  // LH-03, LH-81: the chart layer composition decided (src/chart-layer.js); a small chart's default value labels count as data labels.
+  const layer = chartData.chartex ? undefined : chartLayout?.layer;
+  const authoredOptions = resolveChartOptionsFor(chart);
+  reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
+  const chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
 
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
-  const panelFill = context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
+  // LH-03: a small chart has no panel; its colours are judged against the card or the slide background it stands on, as the preview does.
+  const panelFill = layer?.small ? context.cardFill ?? `#${normalizeHex(context.colors.background)}`
+    : context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
   // RR-96: chart text, gridlines and axis lines are core's scheme-derived neutrals (tx1 mixed into bg1 at 65%, 15% and 25%), which the finished
   // part writes as schemeClr with lumMod/lumOff, so a variant or background style change in PowerPoint recolors them.
   const neutrals = context.roles.neutrals;
@@ -2995,7 +3013,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
   // Synthetic row-number categories are a native adaptation, not an authored
   // data column. Full provenance restores the source form only on unchanged caches.
-  recordPayloadData(context, objectName, 'chart', presentation, path, undefined, {rowNumbers: chart.data?.columns?.length === 1 && chartData.adaptations?.some(entry => entry.adaptation === 'row-numbers') === true});
+  recordPayloadData(context, objectName, 'chart', presentation, path, undefined, {rowNumbers: chart.data?.columns?.length === 1 && chartData.adaptations?.some(entry => entry.adaptation === 'row-numbers') === true,
+    fallback: chartData.adaptations?.some(entry => entry.adaptation === 'chart-fallback') === true});
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
@@ -3009,17 +3028,19 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const palette = adjustedPalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
+  // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
+  if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
-    schemeFor: hex => schemeColorValue('primary', hex, context)});
+    schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3030,6 +3051,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // bar chart with one series whenever chartColors is a custom array of more than one colour, so PowerPoint drew each
   // column of a single-series column or bar chart in a different colour. One colour for that series writes no c:dPt.
   const chartColors = chartData.type === 'bar' && chartData.series.length === 1 ? palette.slice(0, 1) : palette;
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  const layerXml = chartLayerOptions(layer, {region, scale, textSize, labelColor: markLabelColor, font: context.fonts.body, chart, rtl: context.direction === 'rtl'});
+  if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,
     x: region.x,
@@ -3080,7 +3104,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
-    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {})
+    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {}),
+    // LH-03, LH-81: no chart area fill, no value axis or gridlines, the caption and the header legend (their positions are written below).
+    ...layerXml.options
   };
   if (chartData.combo?.length && chartData.combo.length === chartData.series.length) {
     slide.addChart(...comboChart(chartData, chartOptionsXml, {palette, chartOptions, labelColor, font: context.fonts.body, textSize}));
@@ -3179,13 +3205,14 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
       // PptxGenJS marks every part of a newline-containing run as a paragraph
       // break, including its final part. Split explicitly so the next styled
       // run stays on that final line, and preserve empty/trailing lines.
-      const parts = run.text.split(/\r*\n/);
+      // LH-11: PowerPoint wraps a table cell itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
+      const parts = bindNoBreak(run.text).split(/\r*\n/);
       return parts.map((text, part) => ({text,options:{...runOptions,breakLine:part < parts.length - 1}}));
     }) : null;
     return {
       // Keep native wrapping and the original cell value: inserting measured
       // soft wraps into the text would change a later import or copy operation.
-      text: rich ? runs : text,
+      text: rich ? runs : bindNoBreak(text),
       options: {
         ...nativeFontOptions(style),
         fontSize: fit.fontSize * 0.75,
@@ -3316,7 +3343,7 @@ function addNativeTitle(slide, item, context, options, deckContext) {
   deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: ''});
   deckContext.nativeTitles.add(objectName);
   const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
-  slide.addText(item.value, {
+  slide.addText(bindNoBreak(item.value), {
     ...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75),
     ...nativeFontOptions(style),
     color: pptxColor(context.textColor), align: physicalAlignment(fit.placement?.alignment ?? item.alignment ?? 'left', fit.directions?.[0]),
@@ -3994,11 +4021,14 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   if (authored.columns.length === 0) return unplottable("no-columns", "The chart has no data columns.", "The chart data has no columns.");
   const resolvedData = resolveChartData(source, presentation);
   if (!resolvedData.ok) return unplottable(resolvedData.reason, "The chart data cannot be drawn here.", resolvedData.message);
-  const data = {columns: resolvedData.columns, rows: resolvedData.rows};
-  const columnCodes = (resolvedData.formats ?? []).map(excelCode);
+  // LH-60: core's draw plan: the construct both engines draw (a map over categories that are not places as columns, a pie of several
+  // series as a doughnut of rings, a box per series, a scatter by position) and the data as drawn.
+  const plan = chartDrawPlan(source, resolvedData, {language: typeof presentation?.language === 'string' ? presentation.language : undefined});
+  const data = {columns: plan.columns, rows: plan.rows};
+  const columnCodes = (plan.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
-  const {id: chartId, spec: resolved} = resolveChartType(chart.type);
+  const {id: chartId, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
   // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
@@ -4021,8 +4051,9 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
     adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
   }
+  if (plan.fallback) adaptations.push(chartFallbackAdaptation(plan, typeName));
   // FA-14: the resolved table (category, X, series columns), which chart.highlight names its series and categories in.
-  const mapped = {resolved: {columns: data.columns, hasX: resolvedData.hasX === true, rows: data.rows}, type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length,
+  const mapped = {resolved: {columns: data.columns, hasX: plan.hasX === true, rows: data.rows}, type: spec.pptx, spec, chartex, barDir: spec.barDir, barGrouping: spec.pptx === 'bar' || spec.pptx === 'area' ? spec.grouping : undefined, diagnostics, heading: data.columns[0], pointCount: data.rows.length,
     // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
     ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
@@ -4074,7 +4105,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
     values: data.rows.map((row) => row?.[seriesIndex + 1] ?? null)
   }));
   let codes = columnCodes.slice(1);
-  const plotted = spec.family === 'circular' ? 1 : chartex ? chartex.series : Infinity;
+  // LH-60: a pie plots one series (core draws a pie of several as a doughnut, whose rings plot every series).
+  const plotted = spec.pptx === 'pie' ? 1 : chartex ? chartex.series : Infinity;
   if (series.length > plotted) {
     // A pie, doughnut or single-series chartex construct plots one series; name the ones left out instead of dropping them silently.
     const dropped = series.slice(plotted).map((entry) => `'${entry.name}'`);
@@ -4089,11 +4121,11 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
     return source.mapping === undefined ? column : data.columns.indexOf(dataColumnName(authored.columns[column]));
   };
   const notNumeric = notNumericDiagnostic(rejected.filter((entry) => !(position(entry) > plotted)));
-  if (spec.family === 'xy' && series.length === 1) {
-    // [Point, X, Y...] carries its own X column; a lone value column is plotted against the row numbers.
+  if (spec.family === 'xy' && !plan.hasX) {
+    // [Point, X, Y...] carries its own X column; a lone value column (or, LH-60, series beside an X column without numbers) is plotted against the row numbers.
     series = [{name: 'X', labels, values: data.rows.map((_, index) => index + 1)}, ...series];
     codes = [undefined, ...codes];
-    adaptations.push({adaptation: "row-numbers", message: `The scatter chart has no X column (a point label column and one value column), so its ${data.rows.length} values are plotted against their row numbers.`});
+    if (plan.fallback !== 'scatter-by-position') adaptations.push({adaptation: "row-numbers", message: `The scatter chart has no X column (a point label column and one value column), so its ${data.rows.length} values are plotted against their row numbers.`});
   }
   // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
   const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
@@ -4468,9 +4500,11 @@ async function normalizePptxZip(raw, context) {
       if(!context.chartHeadings.has(name))continue;
       const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
-      const {heading,labelColor,markLabelColor,spec,textSize}=context.chartHeadings.get(name);
+      const {heading,labelColor,markLabelColor,spec,textSize,layerLayout}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
-      entries[chartPart]=encodeText(omitEmptyNumberPoints(applyChartConstruct(decodeText(entries[chartPart]),spec)));
+      // LH-81: the header caption, legend and plot area at the positions core gave them.
+      if(layerLayout)entries[chartPart]=encodeText(applyChartLayerLayout(decodeText(entries[chartPart]),layerLayout));
+      entries[chartPart]=encodeText(omitEmptyNumberPoints(applyDoughnutRings(applyChartConstruct(decodeText(entries[chartPart]),spec),context.chartHeadings.get(name).rings)));
       const highlight=context.chartHeadings.get(name).highlight;
       if(highlight){
         try{entries[chartPart]=encodeText(applyChartHighlight(decodeText(entries[chartPart]),highlight));}
@@ -4503,6 +4537,13 @@ async function normalizePptxZip(raw, context) {
     if(ordered!==xml)entries[part]=encodeText(ordered);
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
+  // LH-81: PptxGenJS copies a chart title onto its frame's cNvPr as the alt-text title; the header caption is the chart's own text, not
+  // the frame's alt text, so the frame keeps only its name and descr (FA-09).
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const xml = decodeText(bytes), next = xml.replace(/(<p:cNvPr\b[^>]*?\bname="([^"]+)"[^>]*?)\s+title="[^"]*"/g, (match, head, name) => context.chartHeadings.get(name)?.layerLayout?.title ? head : match);
+    if (next !== xml) entries[part] = encodeText(next);
+  }
   if (context.frameAlts.size) for (const [part, bytes] of Object.entries(entries)) if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) { const xml = decodeText(bytes), next = applyFrameAlt(xml, context.frameAlts); if (next !== xml) entries[part] = encodeText(next); }
   // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame (the classic chart above is the fallback).
   try {

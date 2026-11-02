@@ -154,7 +154,7 @@ const roundTripDeck = {
     spare: {columns: ['a', 'b'], rows: [['x', 1]]},
   },
   slides: [
-    {title: 'Dataset chart', chart: {type: 'column', dataLabels: true, data: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}}},
+    {title: 'Dataset chart', chart: {type: 'column', dataLabels: {position: 'inside-end'}, data: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}}},
     {title: 'Mapped chart', chart: {type: 'line', mapping: {category: 'Quarter', series: ['Costs', 'Revenue']}, data: {columns: ['Revenue', 'Quarter', {name: 'Costs', format: '#,##0'}], rows: [[1, 'a', 2], [3, 'b', 4]], source: {src: 'https://example.com/q.csv', description: 'Finance export'}}}},
     {title: 'Scatter', chart: {type: 'scatter', mapping: {x: 'W'}, data: {columns: ['N', 'H', {name: 'W', format: '0.0'}], rows: [['a', 170, 60.5], ['b', 180, 75]]}}},
     {title: 'Dataset table', table: {dataset: 'revenue', fields: ['Quarter', 'Revenue']}},
@@ -168,7 +168,8 @@ const roundTripDeck = {
   assert.deepEqual(deck.datasets, roundTripDeck.datasets, 'the datasets map returns whole, the unused dataset included');
   const [datasetChart, mappedChart, scatter, datasetTable, inlineTable, treemap] = slidePayloads(deck);
   assert.deepEqual(datasetChart.data, {dataset: 'revenue', fields: ['Quarter', 'Revenue']}, 'the dataset reference returns, not the inlined snapshot');
-  assert.equal(datasetChart.dataLabels, true, 'the native chart options stay');
+  // LH-03: plain value labels are a small chart's default and import as no option, so the deck asks for a position.
+  assert.deepEqual(datasetChart.dataLabels, {position: 'inside-end'}, 'the native chart options stay');
   assert.deepEqual({data: mappedChart.data, mapping: mappedChart.mapping}, {data: roundTripDeck.slides[1].chart.data, mapping: roundTripDeck.slides[1].chart.mapping}, 'mapping, DataColumn formats and data.source return as authored');
   assert.deepEqual({data: scatter.data, mapping: scatter.mapping}, {data: roundTripDeck.slides[2].chart.data, mapping: roundTripDeck.slides[2].chart.mapping}, 'the scatter X mapping returns');
   assert.deepEqual(datasetTable, roundTripDeck.slides[3].table, 'a dataset table returns as its reference');

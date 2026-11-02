@@ -201,7 +201,7 @@ _No named properties._
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
-| `variant` | no | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the object form, which is needed only for an accent order:... |
 | `logo` | no | `oneOf:string / const:false` | Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets it... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
@@ -297,6 +297,15 @@ _No named properties._
 | `preset` | no | `ref:DimensionPreset` |  |
 | `widthInches` | no | `number` | Custom slide width in inches; overrides the preset width when provided. |
 | `heightInches` | no | `number` | Custom slide height in inches; overrides the preset height when provided. |
+
+
+### ColorVariantSlot
+
+- Type: `enum:light1 | light2 | dark1 | dark2 | accent1 | accent2 | accent3 | accent4 | accent5 | accent6`
+- Required fields: none
+- Purpose: The scheme slot a color variant puts behind the slide (bg1): a light or dark slot, or an accent. On an accent the text side is the light family (tx1 = light1, tx2 = light2) or the dark family (tx1 = dark1, tx2 = dark2), whichever text slot has the higher contrast on that accent; tx2 falls back to tx1's slot where it is under 4.5:1 on the accent, and bg2 is the accent itself.
+
+_No named properties._
 
 
 ### ThemeBackgroundSlot
@@ -493,7 +502,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `background` | yes | `ref:ThemeBackgroundSlot` | The scheme slot that is the background (bg1) of the variant. |
+| `background` | yes | `ref:ColorVariantSlot` | The scheme slot that is the background (bg1) of the variant. |
 | `accents` | no | `array<enum:accent1 \| accent2 \| accent3 \| accent4 \| accent5 \| accent6>` | Optional accent order: a permutation of accent1 to accent6. Entry i is the scheme slot drawn as accent i + 1, so primary, secondary and accent (the first three) and the chart series colors follow it. Default: the sche... |
 
 
@@ -558,7 +567,7 @@ _No named properties._
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
 | `fit` | no | `enum:cover \| contain \| stretch \| tile` | How the picture fills the canvas: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered over the colour scheme's default background; 'stretch' scales it to the canvas exact... |
-| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `focus` | no | `ref:ImageFocus` | Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in frame; every other c... |
 | `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
 | `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
 | `overlay` | no | `ref:Overlay` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. |
@@ -805,7 +814,7 @@ _No named properties._
 | `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a... |
 | `image` | no | `ref:Asset` | Source for an image item. |
 | `fit` | no | `enum:cover \| contain \| stretch` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
-| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. |
+| `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
 | `shape` | no | `enum:rectangle \| rounded \| circle \| hexagon` | Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'. |
 | `cornerRadius` | no | `number` | Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default. |
@@ -1149,7 +1158,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; pie, doughnut and other single-series constructs still plot one series. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a 'chart-mapping-adapted' warning.
+- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; a chart type that plots one series (treemap, funnel, waterfall and the like) still plots the first and names the others in a 'chart-series-dropped' warning, and a pie or doughnut of several series draws nested rings. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

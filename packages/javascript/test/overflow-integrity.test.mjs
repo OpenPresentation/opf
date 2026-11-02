@@ -6,10 +6,10 @@ import { resolveSlideContext } from '../dist/index.js';
 
 // LH-40 and LH-45 (layout harvest): overflow is measured and visible. A code, metric or quote part that finds no room is drawn at the
 // readability floor with its finding instead of failing the export; strict composition still fails; nothing draws past its cell silently.
-const compose = (slide, strict = false) => {
+const compose = (slide, strict = false, recompose = true) => {
   const deck = { slides: [strict ? { ...slide, composition: { overflow: 'error' } } : slide] };
   const { slide: resolved, options } = resolveSlideContext(deck, 0, { catalogs: [gallery] });
-  return composeSlide(resolved, options);
+  return composeSlide(resolved, recompose ? options : { ...options, recompose: false });
 };
 const lines = (count, name) => Array.from({ length: count }, (_, index) => `${name}(${index});`).join('\n');
 const without = (layout) => JSON.parse(JSON.stringify(layout));
@@ -59,7 +59,12 @@ const fiveBlocks = {
 };
 
 test('the code layout with five blocks composes with its finding, and strict composition still fails', () => {
-  const result = compose(fiveBlocks);
+  // Wave 2: by default the slide is recomposed as the automatic grid (LH-83), three panels in a row above the two texts, with no
+  // finding; the layout's own composition still draws the overfull middle panel with its finding.
+  const recomposed = compose(fiveBlocks);
+  assert.ok(recomposed.recomposed);
+  assert.deepEqual(recomposed.diagnostics.filter((entry) => entry.code === 'text-overflow'), []);
+  const result = compose(fiveBlocks, false, false);
   const finding = result.diagnostics.find((entry) => entry.path === 'slides.0.blocks.2.code.source');
   assert.ok(finding, 'the middle code body carries a finding');
   assert.equal(finding.code, 'text-overflow');

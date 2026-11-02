@@ -8,7 +8,7 @@ import {readFileSync} from 'node:fs';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {catalogDisplay} from '@openpresentation/gallery';
-import {ENGINE_DEFAULT_COLOR_SCHEME} from '@openpresentation/opf/composition';
+import {ENGINE_DEFAULT_COLOR_SCHEME, chartDrawPlan, resolveChartData} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
@@ -24,7 +24,9 @@ const boxData = {columns: ['Team', 'Cycle', 'Review'], rows: [['Alpha', 5, 7], [
 const singleData = {columns: ['Sample'], rows: [[3], [5], [8], [13], [5.5], [9]]};
 const chartexIds = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family === 'chartex');
 assert.deepEqual(chartexIds, ['treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world']);
-const dataFor = (id) => (id === 'box-and-whisker' ? boxData : categoryData);
+// LH-60: a map plots places; over other categories (North, South) it is drawn as clustered columns.
+const mapData = {columns: ['Country', 'Value'], rows: [['Germany', 42], ['France', 31], ['Spain', -8], ['Italy', 19]]};
+const dataFor = (id) => (id === 'box-and-whisker' ? boxData : id === 'world' ? mapData : categoryData);
 
 // Native chartex export is opt-in (`chartex: 'native'`) until the native PowerPoint check passes; the default keeps main's bytes (checked below).
 async function exportDeck(slides, options = {}) {
@@ -53,7 +55,7 @@ let checks = 0;
 // ---------------------------------------------------------------------------
 // Each chartex id: parts, relationships, content types, the alternate-content frame and the cx:chartSpace structure.
 const expectedLayout = {
-  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="1" value="0"\/><\/cx:dataLabels>/},
+  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="1" value="0"\/>(?:<cx:dataLabel idx="\d+"><cx:txPr><a:bodyPr\/><a:lstStyle\/><a:p><a:pPr><a:defRPr [^>]*>(?:(?!<\/a:pPr>)[\s\S])*<\/a:pPr><a:fld [^>]*type="CATEGORYNAME">[\s\S]*?<\/a:fld><a:endParaRPr lang="en-US"\/><\/a:p><\/cx:txPr><\/cx:dataLabel>)+<\/cx:dataLabels>/},
   histogram: {layoutIds: ['clusteredColumn'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 2},
   pareto: {layoutIds: ['clusteredColumn', 'paretoLine'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 3},
   'box-and-whisker': {layoutIds: ['boxWhisker', 'boxWhisker'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"\/><cx:statistics quartileMethod="exclusive"\/><\/cx:layoutPr>/, axes: 2},
@@ -203,9 +205,12 @@ for (const id of chartexIds) {
   const face = classic.match(/<a:latin typeface="([^"]+)"/)[1];
   // Every text element (chart space, each axis, data labels, legend) carries the same explicit label colour, font and size (FF-62, RR-90: the preview's 15 pt on the default slide).
   const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill>${labelColor}</a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
-  const textBlocks = [...cx.matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
+  // LH-56: the labels inside treemap tiles and funnel bars take a colour per fill (test/chart-fallbacks.mjs); every other text element
+  // keeps the deck's label colour.
+  const inside = id === 'treemap' || id === 'funnel';
+  const textBlocks = [...(inside ? cx.replace(/<cx:dataLabels\b[\s\S]*?<\/cx:dataLabels>/g, '') : cx).matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
-  assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
+  assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels && !inside ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
   assert.ok(cx.endsWith(`${textProperties}</cx:chartSpace>`), `${id}: chart space txPr`);
   const chartAreaFill = classic.match(new RegExp(`</c:chart><c:spPr><a:solidFill>${COLOR}`))[1];
   // The chartex chart area is the classic chart area's colour, with the alpha of a translucent fill kept as a child.
@@ -424,14 +429,16 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     assert.equal(fallback.layoutTagParts, fixture.entries[name].layoutTagParts, `${name} (fallback): complete reviewed layout tags`);
     assert.equal(fallback.chartexParts, 0, `${name} (fallback): no chartex parts`);
     assert.ok(fallback.slides.every((slide) => !slide.includes('AlternateContent')), `${name} (fallback): no alternate content`);
-    const maps = deck.slides.filter((slide) => slide.chart.type === 'world').length;
+    // LH-60: a world chart over places is a map; over other categories (North, South) every mode draws it as clustered columns.
+    const maps = deck.slides.filter((slide) => slide.chart.type === 'world' && chartDrawPlan(slide.chart, resolveChartData(slide.chart)).type === 'world').length;
+    const mapColumns = deck.slides.filter((slide) => slide.chart.type === 'world').length - maps;
     const multiPareto = deck.slides.filter(slide => slide.chart.type === 'pareto' && slide.chart.data.columns.length > 2).length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto');
     if (multiPareto) await assert.rejects(run(deck, 'native'), e => e.code === 'unsupported-chart-data');
     const native = multiPareto ? null : await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
-    assert.equal(auto.chartexParts, deck.slides.length - maps - multiPareto, `${name} (auto): chartex parts for every confirmed construct`);
-    if (native) assert.equal(native.chartexParts, deck.slides.length, `${name} (native): chartex parts for every construct`);
+    assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto, `${name} (auto): chartex parts for every confirmed construct`);
+    if (native) assert.equal(native.chartexParts, deck.slides.length - mapColumns, `${name} (native): chartex parts for every construct`);
     if (maps === 0 && native) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
     else if (native) {
       assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);

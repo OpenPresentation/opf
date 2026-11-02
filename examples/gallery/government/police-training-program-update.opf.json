@@ -62,7 +62,6 @@
     "dimensions": "4:3",
     "background": "#F8FAFC",
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",

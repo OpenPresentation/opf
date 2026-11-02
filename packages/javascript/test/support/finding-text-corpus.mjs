@@ -114,6 +114,7 @@ export const CASES = [
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },
 	{ name: 'chart-value-not-numeric', rule: 'opf/chart-value-not-numeric', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 'about 12']] } } }]) },
 	{ name: 'chart-mapping-adapted', rule: 'opf/chart-mapping-adapted', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] }, mapping: { category: 'Quarter', x: 'Costs', series: ['Quarter', 'Revenue'] } } }]) },
+	{ name: 'chart-series-dropped', rule: 'opf/chart-series-dropped', input: deck([{ title: 'T', chart: { type: 'treemap', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] } } }]) },
 	{ name: 'chart-highlight-adapted', rule: 'opf/chart-highlight-adapted', input: deck([{ title: 'T', chart: { type: 'column', data: { columns: ['Quarter', 'Revenue', 'Costs'], rows: [['Q1', 1, 2]] }, highlight: { series: ['Quarter'] }, mapping: { series: ['Revenue'] } } }]) },
 	{ name: 'code-highlight-out-of-range', rule: 'opf/code-highlight-out-of-range', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },
 	{ name: 'code-highlight-range-reversed', rule: 'opf/code-highlight-range-reversed', input: deck([{ title: 'Code', code: { source: 'a\nb\nc', highlight: [2, 7, [3, 1]] } }]) },

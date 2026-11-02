@@ -59,6 +59,7 @@ const GOLDEN = {
   "chart-colors-adjusted-contrast": ["Chart color 2 (`#7B241C`) has 1.7:1 contrast against the chart panel (`#011842`), so it is drawn lighter or darker to reach 3:1.", "pick a color with at least 3:1 contrast against `#011842`, or remove `colors` to use the palette."],
   "chart-text-alternative": ["The chart on slide 1 has no text alternative.", "write the message it carries in `alt`, or add text beside it that states what it shows."],
   "missing-language": ["The deck doesn't declare its language.", "add `\"language\": \"en-US\"` (or the language the text is written in) to the deck."],
+  "chart-series-dropped": ["A 'treemap' chart plots one series, so \"Costs\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series.", "use a chart type that plots every series, or one chart per series."],
   "chart-option-adapted": ["`dataLabels.position` isn't supported by a pie chart and is adapted. The type's default position is used.", "remove `dataLabels.position`, or choose a chart type that can show it."],
   "text-overflow": ["Text on slide 1 doesn't fit at the smallest allowed size.", "shorten it, split the slide, or choose a roomier layout."],
   "min-font-size-run": ["A text run on slide 1 is set to 8 pt, below the 11 pt readable minimum.", "raise `fontSize` to at least 11."],
@@ -79,7 +80,7 @@ const GOLDEN = {
   "layout-failed": ["Slide 1 (layout `broken`) couldn't be laid out: Invalid composition.padding, so the geometry checks were skipped.", "fix the composition setting or content named above."],
   "reading-order-differs": ["`blocks.0` is read at position 1 but appears at position 2 on slide 2, so a screen reader reads the slide out of order.", "reorder the blocks so the reading order follows what people see, or pin them to layout regions."],
   "schema-without-keyword": ["must NOT be valid.", "inspect this schema constraint and preserve unrelated content."],
-  "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 20 px, 63% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
+  "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 18 px, 56% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
   "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"left\"` in the slide's design, or cut it to a line or two."],
   "tight-spacing-gap": ["Two blocks on slide 1 are 0.08 in apart, closer than 0.25 in, so they read as one crowded block.", "raise `composition.gap`, use fewer blocks or nested groups, or split the slide."],
   "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
@@ -94,11 +95,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 82 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 83 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 82);
+	assert.equal(RULE_IDS.length, 83);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

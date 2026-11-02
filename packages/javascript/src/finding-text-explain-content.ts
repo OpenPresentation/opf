@@ -18,6 +18,11 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, mapping: { x: "Costs" } } },
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
   ),
+  "opf/chart-series-dropped": ex(
+    "Use a chart type that plots every series (column, bar, line), or draw one chart per series. A one-series type draws only the first.",
+    { title: "Revenue", chart: { type: "treemap", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
+    { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS } } },
+  ),
   "opf/chart-highlight-adapted": ex(
     "Name a series the chart plots in `highlight`, or remove the entry. A column that is the category or X column, or that the mapping leaves out, highlights nothing.",
     { title: "Revenue", chart: { type: "column", alt: "Revenue", data: { columns: COLUMNS, rows: ROWS }, highlight: { series: ["Quarter"] } } },
