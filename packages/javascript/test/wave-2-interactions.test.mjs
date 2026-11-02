@@ -56,7 +56,7 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
   assert.equal(places.chart?.layer, undefined);
 });
 
-test('LH-71 and LH-52 with LH-44: a table that wraps beside its text goes full width above it, and the pair is centred', () => {
+test('LH-71 and LH-52 with LH-44: a table that wraps beside its text goes full width above it, and the pair is centered', () => {
   const table = { table: { columns: ['Workstream', 'Owner', 'Status', 'Decision'], rows: [['Community college', 'Program lead', 'At risk', 'Continue'], ['Data and reporting', 'Analytics', 'On track', 'Tighten metric definitions'], ['Field adoption', 'Operations', 'Watch', 'Add weekly office hours']] } };
   const text = { text: 'Metro Technical College should focus the next cycle on connecting employer demand to short-cycle training capacity while making the operating tradeoffs clear.' };
   for (const direction of ['ltr', 'rtl']) {

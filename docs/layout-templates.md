@@ -177,6 +177,8 @@ set at the largest size of the type scale at which every row fits, each card as 
 tall. The gap between the cards closes to half a gap when that sets the text larger. The cards share the leftover height in
 proportion to their needs, and each card's text sits in the middle of its card. When the texts would fill under 45% of that
 height (a few short paragraphs), the cards hug their text instead and the stack sits in the middle of the region, as LH-64's rows do.
+The rows are kept only when their smallest body size is at least the one the regions side by side give, or they overflow less;
+otherwise the layout's regions stand.
 
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
 block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's

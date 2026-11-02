@@ -9,7 +9,7 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
     const before=structuredClone(slide),plain=composeSlide(slide,dimensions),boxed=composeSlide(slide,{...dimensions,contentBox:true});
     assert.deepEqual(boxed.flows,plain.flows);assert.deepEqual(boxed.items[0],plain.items[0]);assert.deepEqual(slide,before);
     for(const [index,item]of boxed.items.entries())if(index){
-      // The card is the flow's cell (LH-52 may centre the plain payload in it, so the plain item box can be shorter).
+      // The card is the flow's cell (LH-52 may center the plain payload in it, so the plain item box can be shorter).
       const flow=plain.flows[0],cell={x:flow.box.x+flow.columns[index-1].offset,y:flow.box.y+flow.rows[0].offset,width:flow.columns[index-1].size,height:flow.rows[0].size};
       for(const key of ['x','y','width','height'])assert.ok(Math.abs(item.frameBox[key]-cell[key])<0.01,key);
       // A sixteenth of the card's shorter side, between 12 and CARD_INSET (24) px at 720, at most a quarter of the card; down, at most a
