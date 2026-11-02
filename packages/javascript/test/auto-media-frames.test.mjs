@@ -29,7 +29,8 @@ test('an image pair and a note: both pictures are whole and frame to the picture
   for (const image of images) {
     assert.equal(image.image.fit, 'contain');
     near(image.image.box.width / image.image.box.height, 16 / 9);
-    near(image.image.box.y, image.box.y);
+    // LH-52: the row fills under 55% of the body, so each frame sits in the middle of its cell.
+    near(image.image.box.y + image.image.box.height / 2, image.box.y + image.box.height / 2);
   }
   assert.equal(result.items.find((item) => item.field === 'text' && item.text.fontSize < 54).text.fontSize, 28);
 });
@@ -51,7 +52,8 @@ test('a layout keeps the engine default, and a placed picture still bleeds as a 
 });
 
 test('a portrait picture frames to its width and gives the rest of the row to the text', () => {
-  const equal = composeSlide({ title: 'T', blocks: [{ image: svg(1600, 900) }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
+  // The equal row of a landscape picture and the note (LH-71 would stack these two: the picture fills more above the text).
+  const equal = composeSlide({ title: 'T', composition: { mode: 'row' }, blocks: [{ image: svg(1600, 900) }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   const result = composeSlide({ title: 'T', blocks: [{ image: svg(600, 1200) }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   near(image.box.width, image.image.box.width, 'the cell is as wide as the frame');

@@ -106,7 +106,8 @@ test('chartPrimary does not apply with regions, an explicit mode, no chart, only
   const cases = [
     [{title: 'Regions', left: chart, right: {text: 'R'}}, 'promoted-regions'],
     [{title: 'Explicit', composition: {mode: 'grid', columns: 2}, blocks: [chart, {text: 'a'}]}, 'configured-mode'],
-    [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a'}]}, 'lowest-score'],
+    // LH-71: a chart above a one-letter text fills more of the body than beside it.
+    [{title: 'Explicit', composition: {mode: 'auto'}, blocks: [chart, {text: 'a'}]}, 'split-fill'],
     [{title: 'No chart', blocks}, 'lowest-score'],
     [{title: 'Only charts', blocks: [chart, chart]}, 'lowest-score'],
     [{title: 'One chart', chart: chart.chart}, 'lowest-score'],

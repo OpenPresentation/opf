@@ -165,6 +165,19 @@ of regions side by side (two-column, three-column). The anchor sets how the row 
 - `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
   per row (LH-04); a row with a picture, chart, table or group keeps cells the size of the region's share.
 
+Long texts are drawn as full-width rows (LH-86). Side by side, two or three paragraphs of at least 80 characters read as narrow
+columns of long lines, or as a short one in a wide card beside a long one in a narrow card when an empty region collapsed into it.
+On a slide that draws cards, when the filled regions of a layout lie in one row and hold only such paragraphs (two or three, in
+several regions or in one region's grid), every paragraph moves to the first region of that row in reading order. The other
+regions are left empty and collapse into it, and that region stacks them one card per row across the row. The slide must have no
+`contentDirection` and no composition of its own, and must have nothing beyond a region's room or below the grid.
+
+A stacked column of such cards (these rows, or more long paragraphs one region stacks) shares the region's height. The text is
+set at the largest size of the type scale at which every row fits, each card as tall as its text plus the insets of a card that
+tall. The gap between the cards closes to half a gap when that sets the text larger. The cards share the leftover height in
+proportion to their needs, and each card's text sits in the middle of its card. When the texts would fill under 45% of that
+height (a few short paragraphs), the cards hug their text instead and the stack sits in the middle of the region, as LH-64's rows do.
+
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
 block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
 anchor down the cell, so a landscape picture beside text starts on the text's first line instead of floating in the middle of
