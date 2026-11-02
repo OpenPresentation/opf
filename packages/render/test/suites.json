@@ -13,6 +13,7 @@
     "font-variants.mjs",
     "furniture-review.mjs",
     "golden-store.mjs",
+    "host-font-size.mjs",
     "latin-family-fixture.mjs",
     "layout-template-fixture.mjs",
     "packed-install.mjs",
@@ -30,6 +31,7 @@
     "shared-metric.mjs",
     "source-whitespace-review-sheets.mjs",
     "timeline-review-sheets.mjs",
+    "title-lines.mjs",
     "variable-font-retained-gate.mjs"
   ],
   "contractExclude": {

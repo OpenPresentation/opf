@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {titleLines} from './title-lines.mjs';
 
 const source = readFileSync(new URL('./script-corpora-slides-browser.mjs', import.meta.url), 'utf8');
 const start = source.indexOf('const observed = await page.evaluate(');
@@ -13,7 +14,8 @@ const host = {
   querySelectorAll() {
     return [{
       textContent: current,
-      getAttribute(name) { return {'font-size': '54', 'font-family': 'Test', textLength: '10'}[name] ?? null; },
+      getAttribute(name) { return {'font-size': '54', 'font-family': 'Test', textLength: '10', 'data-opf-path': 'slides.0.title'}[name] ?? null; },
+      matches(selector) { assert.equal(selector, titleLines, 'the callback selects the title lines by their source path'); return true; },
       hasAttribute(name) { return name === 'textLength'; },
       querySelectorAll() { return []; },
       removeAttribute() {},
@@ -35,7 +37,7 @@ const samples = [
   {id: 'ordinary', svg: 'אבג', expected: [{first: 0, last: -2}]},
   {id: 'empty', svg: '\t\r\n\u2067\u2069 ', expected: []},
 ];
-const observed = observe([samples, ['54']]);
+const observed = observe([samples, titleLines]);
 for (const [index, sample] of samples.entries()) {
   assert.deepEqual(JSON.parse(JSON.stringify(observed[index].orders)), sample.expected, sample.id);
   assert.equal(observed[index].runs.length, 1, 'the rest of the real observation callback still runs');
