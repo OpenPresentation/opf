@@ -4150,8 +4150,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const size = atFloor ? snapFontSizeUp((settings.minFontSize ?? 16) * scale) : plan.size;
     return paragraphRowNeeds(units, plan.shape, cells, cards, size, settings).reduce((sum, need) => sum + need, 0) + between * (plan.shape.rows - 1);
   };
-  // LH-67: lead plus stack. Of LEAD_STACK_MIN to LEAD_STACK_MAX sibling texts or quotes, one at least LEAD_MEDIAN_RATIO times the median
-  // length of the others and PAIR_LENGTH_RATIO times the next longest leads: a cell LEAD_SHARE of the width at full height, starting one
+  // LH-67: lead plus stack. Of LEAD_STACK_MIN to LEAD_STACK_MAX sibling texts or quotes, a paragraph (at least PARAGRAPH_MIN_CHARS) at
+  // least LEAD_MEDIAN_RATIO times the median length of the others and PAIR_LENGTH_RATIO times the next longest leads: a cell LEAD_SHARE of the width at full height, starting one
   // role step larger (the lead size for a text, the display size for a quote), and the others stack in the column beside it. A chart or
   // picture with two compact siblings (metrics, or texts and quotes of at most COMPACT_CHARS) leads the same way at FIGURE_LEAD_SHARE.
   // The lead sits at the start unless it is the last block (then at the end), so the reading order holds; right to left mirrors it.
@@ -4166,7 +4166,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const lengths = units.map(leadLength), lead = lengths.indexOf(Math.max(...lengths));
       const others = lengths.filter((_, index) => index !== lead).sort((a, b) => a - b), half = others.length >> 1;
       const median = others.length % 2 ? others[half]! : (others[half - 1]! + others[half]!) / 2;
-      if (lengths[lead]! >= LEAD_MEDIAN_RATIO * median && lengths[lead]! >= PAIR_LENGTH_RATIO * others.at(-1)!) plan = { lead, share: LEAD_SHARE };
+      if (lengths[lead]! >= PARAGRAPH_MIN_CHARS && lengths[lead]! >= LEAD_MEDIAN_RATIO * median && lengths[lead]! >= PAIR_LENGTH_RATIO * others.at(-1)!) plan = { lead, share: LEAD_SHARE };
     } else if (units.length === 3) {
       const figures = units.flatMap((unit, index) => unit.field === 'chart' || unit.field === 'image' ? [index] : []);
       const compact = (unit: Pending) => unit.caption === undefined && (unit.field === 'metric' || ((unit.field === 'text' || unit.field === 'quote') && leadLength(unit) <= COMPACT_CHARS));

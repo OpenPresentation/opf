@@ -129,7 +129,7 @@ and apply in automatic composition and in a layout's regions alike; a right-to-l
 - **Centred layouts centre only short text.** When the content alignment is `center` and comes from the layout record or
   the theme, a paragraph or list over two lines or 120 characters is start-aligned in a column at most 65 characters wide,
   centred in its cell, and its siblings follow it. An alignment the slide or the deck sets is the author's and is kept.
-- **Lead plus stack.** Of three to five sibling texts or quotes, one at least 2.5 times the median length of the others
+- **Lead plus stack.** Of three to five sibling texts or quotes, a paragraph of at least 100 characters at least 2.5 times the median length of the others
   and twice the next longest leads: a cell 55% of the width at full height, a text starting at the lead size (32 px), beside
   a stack of the others at one size. A chart or picture with two compact siblings (metrics, or texts and quotes of at most
   120 characters) leads at 58%. The lead sits at the start unless it is the last block. A `flow: grid` region keeps its
