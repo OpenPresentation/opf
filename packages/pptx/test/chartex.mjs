@@ -55,7 +55,7 @@ let checks = 0;
 // ---------------------------------------------------------------------------
 // Each chartex id: parts, relationships, content types, the alternate-content frame and the cx:chartSpace structure.
 const expectedLayout = {
-  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="1" value="0"\/>(?:<cx:dataLabel idx="\d+"><cx:txPr>[\s\S]*?<\/cx:txPr><\/cx:dataLabel>)+<\/cx:dataLabels>/},
+  treemap: {layoutIds: ['treemap'], dimension: 'size', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:parentLabelLayout val="none"\/><\/cx:layoutPr>/, axes: 0, dataLabels: /<cx:dataLabels pos="ctr"><cx:txPr>[\s\S]*?<\/cx:txPr><cx:visibility seriesName="0" categoryName="1" value="0"\/>(?:<cx:dataLabel idx="\d+"><cx:txPr><a:bodyPr\/><a:lstStyle\/><a:p><a:pPr><a:defRPr [^>]*>(?:(?!<\/a:pPr>)[\s\S])*<\/a:pPr><a:fld [^>]*type="CATEGORYNAME">[\s\S]*?<\/a:fld><a:endParaRPr lang="en-US"\/><\/a:p><\/cx:txPr><\/cx:dataLabel>)+<\/cx:dataLabels>/},
   histogram: {layoutIds: ['clusteredColumn'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 2},
   pareto: {layoutIds: ['clusteredColumn', 'paretoLine'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:aggregation\/><\/cx:layoutPr>/, axes: 3},
   'box-and-whisker': {layoutIds: ['boxWhisker', 'boxWhisker'], dimension: 'val', requires: 'cx1', layoutPr: /<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"\/><cx:statistics quartileMethod="exclusive"\/><\/cx:layoutPr>/, axes: 2},

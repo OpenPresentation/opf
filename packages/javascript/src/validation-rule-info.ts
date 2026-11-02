@@ -466,6 +466,80 @@ export const languageTagRule = rule(
 	},
 );
 
+// rules-layout-findings.ts (LH-19, LH-31): info findings that read the composed geometry and the slide sequence.
+
+/** `opf/text-shrunk`: a fitted size below this fraction of its role's starting size. */
+export const SHRUNK_RATIO = 0.7;
+/** `opf/centered-body`: a centred paragraph or list is reported past this many lines or characters. */
+export const CENTERED_BODY_LINES = 2, CENTERED_BODY_CHARACTERS = 120;
+/** `opf/centered-body`: a text of at most this many characters is a short note, whatever it wraps to in a narrow cell. */
+export const CENTERED_NOTE_CHARACTERS = 80;
+/** `opf/tight-spacing`: sibling blocks closer than this, in inches of the reference slide, where the author set the gap (the slide's default gap is 1/30 of the short side, 0.25 in). */
+export const TIGHT_GAP_INCHES = 0.25;
+/** `opf/tight-spacing`: a block closer than this to the slide edge (the engine's default padding is 0.6 in). */
+export const TIGHT_MARGIN_INCHES = 0.5;
+/** `opf/layout-monotony`: this many content slides in a row with one layout record. */
+export const MONOTONY_RUN = 4;
+
+export const textShrunkRule = rule(
+	'text-shrunk',
+	'layout',
+	'info',
+	`Text is fitted far below its role's starting size (under ${SHRUNK_RATIO * 100}%).`,
+	'Composition starts each type role at a size meant to be read across a room (prose 28 px, a list 32 px, a table 25 px, a quote 40 px, code 22 px on the 720 px reference slide) and shrinks text that does not fit. Text that ends far below that size still fits, but the slide carries more than it can show at a comfortable size; it is usually two slides.',
+	{
+		cost: 'composition',
+		standard: `The type roles of composition (docs/dynamic-composition.md); the fitted size composeSlide computed, compared with ${SHRUNK_RATIO} of the role size.`,
+		approximations: 'Reads the fitted size of text and list blocks, the quote body, the code body and the smallest body cell of a table, on the 720 px reference slide. Headings, metrics and timelines have their own scales and are not checked. A block whose runs set `fontSize` is the author\'s choice and is skipped; text that overflows is opf/text-overflow. One finding per slide, at the block shrunk the most; `measured.blocks` counts the shrunk blocks.',
+	},
+);
+export const centeredBodyRule = rule(
+	'centered-body',
+	'layout',
+	'info',
+	`A paragraph or list of more than ${CENTERED_BODY_LINES} lines or ${CENTERED_BODY_CHARACTERS} characters is centred.`,
+	'Each line of centred text starts at a different place, so the eye has to search for the next line. Centring suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.',
+	{
+		cost: 'composition',
+		standard: `Typographic convention for running text: a straight start edge. The alignment and the line count are those composeSlide computed; more than ${CENTERED_BODY_LINES} lines or ${CENTERED_BODY_CHARACTERS} characters.`,
+		approximations: 'Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centred blocks.',
+	},
+);
+export const tightSpacingRule = rule(
+	'tight-spacing',
+	'layout',
+	'info',
+	`Blocks are closer than ${TIGHT_GAP_INCHES} in to each other or ${TIGHT_MARGIN_INCHES} in to the slide edge.`,
+	'Space between blocks tells the audience which things belong together, and a margin keeps content clear of the edge that projectors, screen-sharing and printing crop. Blocks closer together than the engine\'s own default gap read as one crowded block.',
+	{
+		cost: 'composition',
+		standard: `Measured on the composed boxes (the card frame, the picture frame, else the cell) of sibling blocks and groups, on the 13.33 x 7.5 in reference slide: a gap under ${TIGHT_GAP_INCHES} in (the default gap is 1/30 of the short side, 0.25 in) or a margin under ${TIGHT_MARGIN_INCHES} in (the default padding is 0.6 in).`,
+		approximations: 'Only a gap the author set is checked: `composition.gap` on the slide, its layout record or a group. Without one the default gap of the engine applies (1/30 of the shorter side of the container: 0.25 in on the slide, less in a short nested group) and is not reported. Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.',
+	},
+);
+export const layoutMonotonyRule = rule(
+	'layout-monotony',
+	'layout',
+	'info',
+	`${MONOTONY_RUN} or more content slides in a row use the same layout record.`,
+	'A run of slides with one arrangement looks the same from slide to slide, so the audience stops noticing that the content changed. The structure of the content (a comparison, a sequence, a number, a picture) usually asks for different layouts.',
+	{
+		standard: `Counted on the slide sequence: ${MONOTONY_RUN} or more consecutive visible slides with body content and the same \`layout\`.`,
+		approximations: 'Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.',
+	},
+);
+export const straightQuotesRule = rule(
+	'straight-quotes',
+	'content',
+	'info',
+	'Text uses straight quotation marks (" or \') where the language has typographic ones.',
+	'Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.',
+	{
+		standard: 'The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).',
+		approximations: 'Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `\'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language\'s marks.',
+	},
+);
+
 /**
  * The infos of the implemented rules in the order their implementations report: the order of `ruleImplementations` (accessibility,
  * layout, content), each rule followed by the further rules it can report (`also`).
@@ -499,6 +573,11 @@ const implementedRules: ValidationRuleInfo[] = [
 	unusedBeatRule,
 	emptySlideRule,
 	languageTagRule,
+	textShrunkRule,
+	centeredBodyRule,
+	tightSpacingRule,
+	layoutMonotonyRule,
+	straightQuotesRule,
 ];
 
 const infos: ValidationRuleInfo[] = [...formatRules, ...referenceRules, ...policyRules, ...dataRules, ...implementedRules];
