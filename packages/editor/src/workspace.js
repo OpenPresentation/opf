@@ -164,10 +164,11 @@ function resolveParts(options, layout, slots, asked = []) {
   }
   // The slide is the editor; a source-only layout has none.
   parts.canvas = layout === "source" ? false : panels.canvas !== false;
-  // CE-28 wave 2: an item the toolbar lists brings the part it shows: Export in the viewer, and Review (run without its panel where the layout
-  // has none, so the pill has counts) wherever it is listed.
+  // CE-28 wave 2: an item the toolbar lists brings the part it shows: Export in the viewer, Present (CE-30: also where the host arranges the
+  // parts with `slots`), and Review (run without its panel where the layout has none, so the pill has counts) wherever it is listed.
   const listed = (id) => asked.some((item) => item.id === id) || Boolean(slots[itemSlot(id)]);
   if (panels.export === undefined && listed("export")) parts.export = true;
+  if (panels.present === undefined && listed("present")) parts.present = true;
   if (panels.review === undefined && listed("review") && !parts.review) {
     parts.review = true;
     // A layout without a Review panel gets none: the review runs headless for the pill.
