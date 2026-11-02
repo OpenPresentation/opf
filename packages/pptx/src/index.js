@@ -56,7 +56,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -2377,6 +2377,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
+  const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
+  let emphasisDrawn = false;
   for (const item of geometry.items) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
@@ -2391,7 +2393,16 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // Card text sits on a literal card fill, not the slide background: keep it literal.
     // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
     const cardNeutral = slideContext.roles.neutrals?.card;
-    const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText, ...(cardNeutral ? {cardFill: cardNeutral.hex} : {})} : slideContext;
+    // LH-06: an item on the emphasis surface is coloured with the surface's roles (literal, as card text is), and the surface, a tagged
+    // card frame in core's fill and radius with no line, is drawn under the first of them, as the preview draws it.
+    const itemContext = item.emphasis && emphasisContext ? emphasisContext : item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText, ...(cardNeutral ? {cardFill: cardNeutral.hex} : {})} : slideContext;
+    if (item.emphasis && emphasisContext && !emphasisDrawn) {
+      emphasisDrawn = true;
+      const {box, radius, path: emphasisPath} = geometry.emphasis;
+      context.cardTags.set(`OPF card ${emphasisPath}`, emphasisPath);
+      slide.addShape('roundRect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, rectRadius: radius / 96,
+        fill: {color: emphasisContext.colors.background, transparency: 0}, line: {type: 'none'}, objectName: `OPF card ${emphasisPath}`});
+    }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     if (item.frameBox) {
       const frame=item.frameBox;
@@ -2473,6 +2484,14 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     slide.addNotes(notes);
     if (notes.includes('\r')) context.notesWithCarriageReturns.set(`ppt/notesSlides/notesSlide${slideIndex + 1}.xml`, notes);
   }
+}
+
+// LH-06: the export context of an item on the emphasis surface (core's emphasisSurface): the surface fill is its background and the surface's
+// roles its colours, written literal (a slide-scheme colour they equal becomes a scheme colour again in writeSchemeColors).
+function emphasisExportContext(context, surface) {
+  const roles = surface.roles, fill = normalizeHex(surface.fill);
+  const colors = {...context.colors, background: fill, text: normalizeHex(roles.text), mutedText: normalizeHex(roles.textSecondary), accent: normalizeHex(roles.primary), surface: normalizeHex(roles.surface), border: normalizeHex(roles.border)};
+  return {...context, schemeOverride: true, roles, colors, textColor: colors.text, mutedColor: colors.mutedText, cardFill: `#${fill}`};
 }
 
 // RR-81: the placed-image bands of a slide (its image blocks with a `placement`), which a template layout reserves as the slide does.

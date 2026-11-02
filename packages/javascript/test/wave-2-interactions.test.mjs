@@ -55,3 +55,15 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
   const places = composeSlide({ title: 'Chart', blocks: [{ chart: { type: 'world', data: { columns: ['Country', 'Sales'], rows: [['France', 4], ['Germany', 5], ['Japan', 6]] } } }] }, {}).items.find((item) => item.field === 'chart');
   assert.equal(places.chart?.layer, undefined);
 });
+
+test('LH-06 with LH-43 and LH-58: a foot band is no sibling of the blocks above it, which still share one size', () => {
+  const text = (name, more = '') => ({ text: `${name} should focus the next cycle on secure funding for hands-on robotics and chemistry labs${more}.` });
+  const slide = { title: 'Demo moment', blocks: [text('Prairie Ridge'), text('Canyon Unified', ' while making the operating tradeoffs clear to student services stakeholders and families across the district'), text('Morrow Labs'), { text: 'Next step: name the pilot lead.' }] };
+  for (const direction of ['ltr', 'rtl']) for (const layout of [undefined, layouts.pillars]) {
+    const result = composeSlide(slide, { direction, ...(layout ? { layout } : {}) });
+    assert.equal(result.emphasis?.shape, 'band');
+    const above = result.items.filter((item) => item.field === 'text' && !item.emphasis);
+    assert.equal(new Set(above.map((item) => item.text.fontSize)).size, 1, 'the blocks above share one size');
+    assert.deepEqual(overflow(result), []);
+  }
+});

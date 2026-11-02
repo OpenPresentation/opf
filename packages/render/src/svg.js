@@ -1,7 +1,7 @@
 // The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
-  layoutTable, fitList, fitRichText, composeSlide, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
+  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark,
@@ -910,18 +910,32 @@ function imageRecolorMatrix(recolor, bound) {
 
 function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
+  // LH-06: core's emphasis surface (geometry.emphasis) is drawn under the first item on it, in the fill core's emphasisSurface gives the
+  // slide; every item on it (item.emphasis) is drawn with the surface's roles, whose text reaches 4.5:1 on the fill, as the PPTX export does.
+  const emphasis=bound.geometry.emphasis;
+  const onSurface=emphasis ? emphasisBound(bound, emphasisSurface(bound.design.colorScheme, bound.design.roles)) : undefined;
+  let surfaceDrawn=false;
   return bound.geometry.items.map(item => {
+    const itemBound=item.emphasis&&onSurface ? onSurface : bound;
+    const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})) : '';
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
     // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
     // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
     const frame=item.frameBox;
-    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.roles.neutrals.card.hex,stroke:bound.design.roles.neutrals.cardBorder.hex,...traceAttrs(options,item.path)}) : '';
+    const surface=under+(frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.roles.neutrals.card.hex,stroke:bound.design.roles.neutrals.cardBorder.hex,...traceAttrs(options,item.path)}) : '');
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
-    const drawn=surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
+    const drawn=surface+renderPayload(item, item.box, { ...itemBound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...itemBound, composition: item.composition },options,drawHelpers):'');
     // OPF 0.19 (RR-81): with trace, everything an item of a layout template region draws (card, payload, caption) is
     // grouped under data-opf-region, the region's name (ComposedItem.region). Items outside a template are unchanged.
     return options.trace && item.region !== undefined && drawn ? tag('g',{'data-opf-region':item.region},drawn) : drawn;
   });
+}
+// LH-06: the slide as an item on the emphasis surface sees it: the surface fill is its background and the surface's roles are its colours.
+function emphasisBound(bound, surface) {
+  const roles = surface.roles;
+  return { ...bound, design: { ...bound.design, backgroundColor: surface.fill, darkBackground: roles.dark, roles, colors: { ...bound.design.colors,
+    background: surface.fill, surface: roles.surface, text: roles.text, mutedText: roles.textSecondary, primary: roles.primary, secondary: roles.secondary,
+    accent: roles.accent, hyperlink: roles.hyperlink, followedHyperlink: roles.followedHyperlink, border: roles.border } } };
 }
 // Draw helpers injected into src/annotations.js (captions and footnote areas).
 const drawHelpers = { tag, renderTextBox, renderRichLines };

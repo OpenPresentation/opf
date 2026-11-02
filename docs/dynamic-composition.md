@@ -114,6 +114,19 @@ kind and right-to-left decks; a slide that pins a block to a region, or sets its
 Grouping changes the order of the composed items to the order of the cells (a pair's two blocks together; the majority
 grid before the others), which is the reading order the preview, the PPTX export and accessibility use.
 
+## Emphasis surface (LH-06)
+
+A slide has at most one emphasis surface: a contrasting card or band that carries the slide's takeaway. `emphasis: true` on a block or a group (at any depth) puts it there; the first one in reading order takes the surface, any other is drawn without it and reported as the composition diagnostic `emphasis-ignored`. The surface is the block's or group's cell, drawn as a card; nothing on it takes a card of its own, and a group's children are arranged inside the card's inset.
+
+Without an authored emphasis, two automatic rules read the slide's root `blocks` (with a layout or without):
+
+- a **foot band**: a last block that is plain text of 60 characters or fewer, after blocks that are all longer (any other kind, or text over 60 characters), is drawn as a full-width band at the foot of the body;
+- a **pill**: a last plain text of 30 characters or fewer after one long text (over 60 characters) is drawn as a pill at the foot of the body, hugging its one line at the start of the content alignment (the right in a right-to-left deck).
+
+The body above composes in what remains, the band or pill text is the last item, and `composeSlide` drops the band or pill when the body overflows less without it. A band or pill taller than 30% of the body is not drawn. `emphasis: false` keeps a block out of both rules; a block with a region pin, a caption or any payload besides `text` never takes them.
+
+Composition reports the surface as `result.emphasis` `{ path, box, radius, shape: 'card' | 'band' | 'pill', source: 'authored' | 'foot-band' | 'pill' }` and marks every item on it `emphasis: true`. Its colours come from core `emphasisSurface(colorScheme, roles)`, which resolves a variant of the deck's own scheme through the layout-variant machinery (LH-01): on a light slide dark2, then dark1, then the accents; on a dark slide the accents in the slide's order, then light1; the first whose text reaches 4.5:1 on its fill and whose fill reaches 3:1 against the slide. Every text role on it under 4.5:1 takes the surface's text colour. The preview and the PPTX export draw the surface under the first item on it and colour those items with the surface's roles (PPTX: a tagged `OPF card <path>` frame with no line, recognized on import as decoration); `validate` measures their contrast against the surface.
+
 ## Nested groups
 
 ### Shared content cards
@@ -244,6 +257,8 @@ Pass the allocated reference-pixel `box`, resolved heading/body `fontFamilies`, 
 The allocator tries an adjacent value/unit baseline when both fit one line and the unit uses at most 35% of the cell width; otherwise it stacks the fields. Metadata has an eight-reference-pixel gap, with twelve pixels after the primary row. Related fields stay together rather than being separated by a percentage of the cell height. The value starts at up to 76 reference pixels (28% of cell height); label/unit/delta start at 23, description at 20 and trend at 18. Every requested size is raised to the chosen floor, scaled once. Natural metadata height gets space before reducing type. At most 48 arrangements are evaluated, each with at most 77 value-size trials; identical inputs and a deterministic measurement provider select the fitting candidate with least summed font reduction, preferring the first candidate on ties.
 
 Each part exposes requested/resolved styles and the same source-preserving line/segment representation used by code (`CodeTextFit`), measured with proportional heading/body fonts. CR/LF/CRLF, tabs, whitespace and grapheme boundaries remain exact. Consumers must reuse accepted line and segment positions, font sizes and styles rather than independently re-fit or normalize text. This API reports `provided` measurement when a provider is passed, without claiming that its glyph coverage or shaping is complete. Unsupported glyphs propagate the provider's error with the field path.
+
+LH-68: `tile: true` lays the metric out as a tile of its whole box, as a layout region with `metrics: "tile"` asks: the label first as an eyebrow, the value under it starting at `METRIC_TILE_VALUE_SHARE` (a quarter) of the box's height, between its 76 px role size and twice it, a stacked unit under the value, and the description, delta and trend at the foot of the box. Pass the start alignment with it.
 
 Pass `align: 'left' | 'center' | 'right'` (default left) to the primitive. Its returned `alignment` and per-part `linePositions` give an absolute x origin and baseline for each `fit.sourceLines` entry, including blank lines. An inline value/unit pair moves together, with the gap following the actual value advance. Composition accepts host-resolved `contentAlignment`; an explicit slide `design.contentAlignment` overrides it. Renderer/export/pagination pass the effective design into the same operation. Alignment does not trigger a second font fit.
 

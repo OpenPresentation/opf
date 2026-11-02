@@ -1634,11 +1634,11 @@
  ],
  "timeline 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region timeline 57.6,147.5,1164.8,451.9 column 1",
-  "region notes 57.6,623.4,1164.8,39 grid 1",
+  "region timeline 57.6,147.5,1164.8,423.2 column 1",
+  "region notes 57.6,570.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.timeline timeline 57.6,147.5,1164.8,451.9",
-  "item blocks.1.text notes 57.6,623.4,1164.8,39 32px"
+  "item blocks.0.timeline timeline 57.6,147.5,1164.8,423.2",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "timeline 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1875,11 +1875,11 @@
  ],
  "metrics 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region metrics 57.6,147.5,1164.8,456.8 grid 1",
-  "region note 57.6,628.2,1164.8,34.2 column 1",
+  "region metrics 57.6,147.5,1164.8,423.2 grid 1",
+  "region note 57.6,570.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,308,1164.8,135.8 76px",
-  "item blocks.1.text note 57.6,628.2,1164.8,34.2 28px"
+  "item blocks.0.metric metrics 57.6,291.2,1164.8,135.8 76px",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "metrics 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1990,109 +1990,109 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,332.5,1140.8,145 76px"
+  "item blocks.0.metric cards 81.6,183.5,1116.8,454.9 113.7px"
  ],
  "scorecard 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,332.5,546.4,145 76px",
-  "item blocks.1.metric cards 664,332.5,546.4,145 76px"
+  "item blocks.0.metric cards 81.6,183.5,522.4,454.9 113.7px",
+  "item blocks.1.metric cards 676,183.5,522.4,454.9 113.7px"
  ],
  "scorecard 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,332.5,348.3,145 76px",
-  "item blocks.1.metric cards 465.9,332.5,348.3,145 76px",
-  "item blocks.2.metric cards 862.1,332.5,348.3,145 76px"
+  "item blocks.0.metric cards 80.9,182.7,325.7,456.4 114.1px",
+  "item blocks.1.metric cards 477.1,182.7,325.7,456.4 114.1px",
+  "item blocks.2.metric cards 873.4,182.7,325.7,456.4 114.1px"
  ],
  "scorecard 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 4",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,197.7,546.4,145 76px",
-  "item blocks.1.metric cards 664,197.7,546.4,145 76px",
-  "item blocks.2.metric cards 69.6,467.2,546.4,145 76px",
-  "item blocks.3.metric cards 664,467.2,546.4,145 76px"
+  "item blocks.0.metric cards 72.2,174.1,541.2,204.3 76px",
+  "item blocks.1.metric cards 666.6,174.1,541.2,204.3 76px",
+  "item blocks.2.metric cards 72.2,443.5,541.2,204.3 76px",
+  "item blocks.3.metric cards 666.6,443.5,541.2,204.3 76px"
  ],
  "scorecard 5 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 5",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,197.7,348.3,145 76px",
-  "item blocks.1.metric cards 465.9,197.7,348.3,145 76px",
-  "item blocks.2.metric cards 862.1,197.7,348.3,145 76px",
-  "item blocks.3.metric cards 69.6,467.2,546.4,145 76px",
-  "item blocks.4.metric cards 664,467.2,546.4,145 76px"
+  "item blocks.0.metric cards 72.2,174.1,343.1,204.3 76px",
+  "item blocks.1.metric cards 468.5,174.1,343.1,204.3 76px",
+  "item blocks.2.metric cards 864.7,174.1,343.1,204.3 76px",
+  "item blocks.3.metric cards 72.2,443.5,541.2,204.3 76px",
+  "item blocks.4.metric cards 666.6,443.5,541.2,204.3 76px"
  ],
  "scorecard 6 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 6",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 69.6,197.7,348.3,145 76px",
-  "item blocks.1.metric cards 465.9,197.7,348.3,145 76px",
-  "item blocks.2.metric cards 862.1,197.7,348.3,145 76px",
-  "item blocks.3.metric cards 69.6,467.2,348.3,145 76px",
-  "item blocks.4.metric cards 465.9,467.2,348.3,145 76px",
-  "item blocks.5.metric cards 862.1,467.2,348.3,145 76px"
+  "item blocks.0.metric cards 72.2,174.1,343.1,204.3 76px",
+  "item blocks.1.metric cards 468.5,174.1,343.1,204.3 76px",
+  "item blocks.2.metric cards 864.7,174.1,343.1,204.3 76px",
+  "item blocks.3.metric cards 72.2,443.5,343.1,204.3 76px",
+  "item blocks.4.metric cards 468.5,443.5,343.1,204.3 76px",
+  "item blocks.5.metric cards 864.7,443.5,343.1,204.3 76px"
  ],
  "scorecard 1 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 69.6,355.5,1140.8,145 76px"
+  "item blocks.0.metric cards 81.6,229.6,1116.8,408.8 102.2px"
  ],
  "scorecard 2 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 72.5,323.4,540.5,209.2 76px",
-  "item blocks.1.metric cards 666.9,323.4,540.5,209.2 76px"
+  "item blocks.0.metric cards 81.6,229.6,522.4,408.8 102.2px",
+  "item blocks.1.metric cards 676,229.6,522.4,408.8 102.2px"
  ],
  "scorecard 3 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 74.3,310.8,338.8,234.5 76px",
-  "item blocks.1.metric cards 470.6,310.8,338.8,234.5 76px",
-  "item blocks.2.metric cards 866.9,310.8,338.8,234.5 76px"
+  "item blocks.0.metric cards 80.9,228.9,325.7,410.2 102.5px",
+  "item blocks.1.metric cards 477.1,228.9,325.7,410.2 102.5px",
+  "item blocks.2.metric cards 873.4,228.9,325.7,410.2 102.5px"
  ],
  "scorecard 4 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 4",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 70.1,218.1,545.4,174.7 76px",
-  "item blocks.1.metric cards 664.5,218.1,545.4,174.7 76px",
-  "item blocks.2.metric cards 70.1,464.5,545.4,174.7 76px",
-  "item blocks.3.metric cards 664.5,464.5,545.4,174.7 76px"
+  "item blocks.0.metric cards 70.7,218.8,544.1,184.1 76px",
+  "item blocks.1.metric cards 665.1,218.8,544.1,184.1 76px",
+  "item blocks.2.metric cards 70.7,465.2,544.1,184.1 76px",
+  "item blocks.3.metric cards 665.1,465.2,544.1,184.1 76px"
  ],
  "scorecard 5 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 5",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 70.7,218.7,346.1,183.4 76px",
-  "item blocks.1.metric cards 467,218.7,346.1,183.4 76px",
-  "item blocks.2.metric cards 863.2,218.7,346.1,183.4 76px",
-  "item blocks.3.metric cards 70.1,464.5,545.4,174.7 76px",
-  "item blocks.4.metric cards 664.5,464.5,545.4,174.7 76px"
+  "item blocks.0.metric cards 70.7,218.8,346,184.1 76px",
+  "item blocks.1.metric cards 467,218.8,346,184.1 76px",
+  "item blocks.2.metric cards 863.3,218.8,346,184.1 76px",
+  "item blocks.3.metric cards 70.7,465.2,544.1,184.1 76px",
+  "item blocks.4.metric cards 665.1,465.2,544.1,184.1 76px"
  ],
  "scorecard 6 long": [
   "area title 57.6,57.6,1164.8,112",
   "region cards 57.6,193.6,1164.8,468.8 grid 6",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 70.7,218.7,346.1,183.4 76px",
-  "item blocks.1.metric cards 467,218.7,346.1,183.4 76px",
-  "item blocks.2.metric cards 863.2,218.7,346.1,183.4 76px",
-  "item blocks.3.metric cards 70.7,465.1,346.1,183.4 76px",
-  "item blocks.4.metric cards 467,465.1,346.1,183.4 76px",
-  "item blocks.5.metric cards 863.2,465.1,346.1,183.4 76px"
+  "item blocks.0.metric cards 70.7,218.8,346,184.1 76px",
+  "item blocks.1.metric cards 467,218.8,346,184.1 76px",
+  "item blocks.2.metric cards 863.3,218.8,346,184.1 76px",
+  "item blocks.3.metric cards 70.7,465.2,346,184.1 76px",
+  "item blocks.4.metric cards 467,465.2,346,184.1 76px",
+  "item blocks.5.metric cards 863.3,465.2,346,184.1 76px"
  ],
  "image 1 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2439,11 +2439,11 @@
  ],
  "chart 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region charts 57.6,147.5,1164.8,456.8 grid 1",
-  "region note 57.6,628.2,1164.8,34.2 column 1",
+  "region charts 57.6,147.5,1164.8,423.2 grid 1",
+  "region note 57.6,570.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.chart charts 57.6,147.5,1164.8,456.8",
-  "item blocks.1.text note 57.6,628.2,1164.8,34.2 28px"
+  "item blocks.0.chart charts 57.6,147.5,1164.8,423.2",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "chart 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2559,11 +2559,11 @@
  ],
  "chart-beside 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region chart 57.6,147.5,684.5,514.9 column 1",
-  "region notes 766.1,147.5,456.3,514.9 column 1",
+  "region chart 57.6,147.5,1164.8,423.2 column 1",
+  "region notes 766.1,147.5,456.3,423.2 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.chart chart 57.6,147.5,684.5,514.9",
-  "item blocks.1.text notes 766.1,147.5,456.3,514.9 28px"
+  "item blocks.0.chart chart 57.6,147.5,1164.8,423.2",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "chart-beside 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2676,11 +2676,11 @@
  ],
  "table 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region table 57.6,147.5,1164.8,456.8 column 1",
-  "region note 57.6,628.2,1164.8,34.2 column 1",
+  "region table 57.6,147.5,1164.8,423.2 column 1",
+  "region note 57.6,570.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.table table 57.6,147.5,1164.8,456.8",
-  "item blocks.1.text note 57.6,628.2,1164.8,34.2 28px"
+  "item blocks.0.table table 57.6,147.5,1164.8,423.2",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "table 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2784,11 +2784,11 @@
  ],
  "table-beside 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region table 57.6,147.5,684.5,514.9 column 1",
-  "region notes 766.1,147.5,456.3,514.9 column 1",
+  "region table 57.6,147.5,1164.8,423.2 column 1",
+  "region notes 766.1,147.5,456.3,423.2 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.table table 57.6,147.5,684.5,514.9",
-  "item blocks.1.text notes 766.1,147.5,456.3,514.9 28px"
+  "item blocks.0.table table 57.6,147.5,1164.8,423.2",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "table-beside 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2892,11 +2892,11 @@
  ],
  "code 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region code 57.6,147.5,684.5,514.9 column 1",
-  "region notes 766.1,147.5,456.3,514.9 column 1",
+  "region code 57.6,147.5,1164.8,423.2 column 1",
+  "region notes 766.1,147.5,456.3,423.2 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.code code 57.6,147.5,684.5,148 22px",
-  "item blocks.1.text notes 766.1,147.5,456.3,514.9 28px"
+  "item blocks.0.code code 57.6,147.5,1164.8,148 22px",
+  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "code 3 short": [
   "area title 57.6,57.6,1164.8,65.9",

@@ -2465,6 +2465,11 @@
         "composition": {
           "$ref": "#/$defs/Composition",
           "description": "Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened."
+        },
+        "emphasis": {
+          "type": "boolean",
+          "description": "true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text colour on it at 4.5:1 or more against its fill. A slide has one emphasis surface: the first block or group with emphasis: true in reading order takes it, and any other is drawn without it (composition diagnostic emphasis-ignored). Without any, a slide's short last text block (60 characters or fewer) after longer blocks is drawn as a band at the foot of the body, and one of 30 or fewer after a lone long text as a pill there; false keeps a block out of those automatic rules.",
+          "examples": [true, false]
         }
       },
       "allOf": [
