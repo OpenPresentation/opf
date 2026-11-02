@@ -63,6 +63,30 @@ describe('precedence (README decision: slide, then layout, then deck, then theme
 		assert.deepEqual(roles(deck('dark1', { design: { variant: 'dark1' } }), 1).variant, { background: 'dark1' }, 'the dark deck stays dark elsewhere');
 	});
 
+	test('surface and brand resolve against the deck tone: a dark deck stays dark, and neither repeats the deck background', () => {
+		const on = (value, design) => roles(deck(value, { design })).variant.background;
+		// [deck design, surface, brand]
+		for (const [design, surface, brand] of [
+			[{}, 'light2', 'dark2'],
+			[{ background: 'light2' }, 'light1', 'dark2'],
+			[{ variant: 'dark1' }, 'dark2', 'dark2'],
+			[{ background: 'dark2' }, 'dark1', 'dark1'],
+			[{ variant: { background: 'dark1', accents: ACCENTS } }, 'dark2', 'dark2'],
+			[{ background: '#0B1020' }, 'dark2', 'dark2'],
+			[{ background: { type: 'image', src: 'https://example.com/bg.jpg', tone: 'dark' } }, 'dark2', 'dark2'],
+		]) {
+			assert.equal(on('surface', design), surface, `surface on ${JSON.stringify(design)}`);
+			assert.equal(on('brand', design), brand, `brand on ${JSON.stringify(design)}`);
+			const r = roles(deck('brand', { design }));
+			assert.equal(r.map.tx1, 'light1', 'brand takes light text');
+			assert.ok(colorContrast(r.text, r.background) >= 4.5);
+		}
+		assert.deepEqual(roles(deck('surface', { design: { variant: { background: 'dark1', accents: ACCENTS } } })).variant, { background: 'dark2', accents: ACCENTS });
+		assert.deepEqual(layoutColorVariant(layout('brand')), { background: 'dark2' });
+		assert.deepEqual(layoutColorVariant(layout('surface'), { background: 'dark2', dark: true }), { background: 'dark1' });
+		assert.equal(roles(deck('surface', { slide: { design: { variant: 'light1' } } })).variant.background, 'light1', 'the slide still wins');
+	});
+
 	test('the slide own variant or background wins', () => {
 		const ownVariant = deck('accent1', { slide: { design: { variant: 'light1' } } });
 		assert.deepEqual(roles(ownVariant).variant, { background: 'light1' });

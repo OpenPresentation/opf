@@ -429,15 +429,18 @@ async function checkLayoutDesignHints(opfSchema) {
     return;
   }
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-  // A oneOf of $refs (design.variant) names the same opf.schema.json definitions, written absolute in the layout schema.
+  // A oneOf of $refs (design.variant) names the same opf.schema.json definitions, written absolute in the layout schema. The layout's
+  // variant alone may add its own tone-relative values (LH-01: #/$defs/LayoutVariantRole), so a layout value is a superset there.
   const refs = (schema) => schema.oneOf?.map((entry) => entry.$ref?.replace('https://openpresentation.org/schema/opf/v1', ''));
+  const layoutOnly = new Set(['#/$defs/LayoutVariantRole']);
   for (const [key, hint] of Object.entries(hints)) {
     const counterpart = design[key];
     if (!counterpart) {
       fail(`[i] layout.schema.json DesignHints.${key} has no counterpart in opf.schema.json Design`);
       continue;
     }
-    if (hint.type !== counterpart.type || !same(hint.enum, counterpart.enum) || !same(refs(hint), refs(counterpart))) {
+    const hintRefs = refs(hint)?.filter((ref) => !layoutOnly.has(ref));
+    if (hint.type !== counterpart.type || !same(hint.enum, counterpart.enum) || !same(hintRefs, refs(counterpart))) {
       fail(`[i] DesignHints.${key} type/values differ from Design.${key}`);
     }
   }

@@ -9,7 +9,7 @@
   "design": {
     "titleAlignment": "center",
     "contentAlignment": "center",
-    "variant": "light2"
+    "variant": "surface"
   },
   "direction": "column",
   "anchor": "middle",

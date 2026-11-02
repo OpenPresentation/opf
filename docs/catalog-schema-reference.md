@@ -367,7 +367,15 @@ _No named properties._
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
-| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | The color variant slides on this layout draw on (LH-01): a background slot ('light2', 'dark1', 'accent1', ...) or the ColorVariant object, as design.variant. Unlike the other keys it outranks the deck's design and the... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'su... |
+
+#### LayoutVariantRole
+
+- Type: `enum:surface | brand`
+- Required fields: none
+- Purpose: A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's str...
+
+_No named properties._
 
 #### Composition
 

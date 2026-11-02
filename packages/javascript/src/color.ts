@@ -193,13 +193,41 @@ export function isColorVariant(value: unknown): value is ColorVariantInput {
 }
 
 /**
- * LH-01: the variant a layout record names (`layout.design.variant`), normalized, or undefined. It ranks above the deck's design and the
- * theme and below the slide's own design (docs/programs/layout-harvest/README.md, Decisions), so a section or a closing draws on its
- * variant in any deck while an author can still set a slide's own.
+ * LH-01: the tone-relative values a layout record's `design.variant` can take besides a variant, resolved against the deck's own variant
+ * (its background slot and whether it is dark) by {@link layoutColorVariant}:
+ *
+ * - `surface`: the deck's secondary surface on its own side, light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck
+ *   is already on light2 or dark2), so a statement stands off the deck without flipping its tone;
+ * - `brand`: the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), the strong surface a closing slide takes on a light or
+ *   a dark deck, with light text.
  */
-export function layoutColorVariant(layout: unknown): ColorVariant | undefined {
+export type LayoutVariantRole = 'surface' | 'brand';
+const LAYOUT_VARIANT_ROLES: readonly LayoutVariantRole[] = ['surface', 'brand'];
+
+/** The deck a layout's tone-relative variant is resolved against: its background slot (bg1 of its map) and whether its text is light. */
+export interface LayoutVariantDeck {
+  background: ColorVariantBackground;
+  dark: boolean;
+}
+
+/** The layout record's `design.variant` as authored, when it is well formed: a variant (normalized) or a {@link LayoutVariantRole}. */
+function layoutVariantValue(layout: unknown): ColorVariant | LayoutVariantRole | undefined {
   const design = layout && typeof layout === 'object' ? (layout as { design?: unknown }).design : undefined;
-  return design && typeof design === 'object' ? normalizeColorVariant((design as { variant?: unknown }).variant) : undefined;
+  const value = design && typeof design === 'object' ? (design as { variant?: unknown }).variant : undefined;
+  return (LAYOUT_VARIANT_ROLES as readonly unknown[]).includes(value) ? (value as LayoutVariantRole) : normalizeColorVariant(value);
+}
+
+/**
+ * LH-01: the variant a layout record names (`layout.design.variant`), normalized, or undefined: a variant as written, or a
+ * {@link LayoutVariantRole} resolved against `deck` (default: a light deck on light1). It ranks above the deck's design and the theme and
+ * below the slide's own design (docs/programs/layout-harvest/README.md, Decisions), so a section or a closing draws on its variant in any
+ * deck while an author can still set a slide's own.
+ */
+export function layoutColorVariant(layout: unknown, deck: LayoutVariantDeck = { background: 'light1', dark: false }): ColorVariant | undefined {
+  const value = layoutVariantValue(layout);
+  if (value === 'surface') return { background: deck.dark ? (deck.background === 'dark2' ? 'dark1' : 'dark2') : deck.background === 'light2' ? 'light1' : 'light2' };
+  if (value === 'brand') return { background: deck.background === 'dark2' ? 'dark1' : 'dark2' };
+  return value;
 }
 
 /**
@@ -208,7 +236,7 @@ export function layoutColorVariant(layout: unknown): ColorVariant | undefined {
  */
 export function layoutVariantApplies(slideDesign: unknown, layout: unknown): boolean {
   const own = slideDesign && typeof slideDesign === 'object' ? (slideDesign as { variant?: unknown; background?: unknown }) : {};
-  return layoutColorVariant(layout) !== undefined && own.variant === undefined && (own.background === undefined || own.background === null || own.background === false);
+  return layoutVariantValue(layout) !== undefined && own.variant === undefined && (own.background === undefined || own.background === null || own.background === false);
 }
 
 /** LH-01: the contrast tx2 needs on an accent background to stay the family's secondary text; under it tx2 maps to tx1's slot. */

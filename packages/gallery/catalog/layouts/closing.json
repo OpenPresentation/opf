@@ -10,7 +10,7 @@
     "titleAlignment": "center",
     "contentAlignment": "center",
     "imageFit": "contain",
-    "variant": "dark1"
+    "variant": "brand"
   },
   "direction": "column",
   "anchor": "middle",

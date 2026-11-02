@@ -238,7 +238,15 @@ Which variant a slide has, from the most specific to the least (slide design, th
 3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone only a variant of a less specific level can apply; with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
 
-A layout record's `design.variant` (LH-01) ranks above the deck and the theme and below the slide, unlike the layout's other design keys (docs/programs/layout-harvest/README.md, Decisions): the default `section` draws on `accent1`, `statement` and `quote` on `light2` and `closing` on `dark1` in any deck, light or dark, while a slide's own `variant` or `background` wins. It hides the deck's and the theme's background (a deck picture too: the slide is the variant's bg1), and without an accent order of its own it keeps the deck's. `resolveSlideContext(...).resolved.layoutVariant` is the variant when it decides the slide.
+A layout record's `design.variant` (LH-01) ranks above the deck and the theme and below the slide, unlike the layout's other design keys (docs/programs/layout-harvest/README.md, Decisions); a slide's own `variant` or `background` wins. Besides a variant it takes a value relative to the deck's own variant (the one the deck and the theme give), so a layout keeps the deck's tone:
+
+| Layout `design.variant` | Light deck (on `light1`) | Deck on `light2` | Dark deck (on `dark1`, an accent with light text, a dark picture or color) | Deck on `dark2` |
+| --- | --- | --- | --- | --- |
+| `surface`, the deck's secondary surface | `light2` | `light1` | `dark2` | `dark1` |
+| `brand`, the scheme's brand dark, with light text | `dark2` | `dark2` | `dark2` | `dark1` |
+| a variant (`accent1`, `dark1`, an object) | as written | as written | as written | as written |
+
+The default `section` is `accent1`, `statement` and `quote` are `surface` and `closing` is `brand`, so a dark deck's statement stays dark and its closing still stands off the deck. In every default theme and colour scheme, light or dark, their text and secondary text reach 4.5:1. The layout variant hides the deck's and the theme's background (a deck picture too: the slide is the variant's bg1), and without an accent order of its own it keeps the deck's. `resolveSlideContext(...).resolved.layoutVariant` is the resolved variant when it decides the slide; `layoutColorVariant(layout, deck)` (`/composition`) resolves one record.
 
 A theme record can list the variants it offers (`variants`, from gallery 4): named values of `variant`, such as `light`, `light-alt`, `dark` and `dark-alt` on `minimal`, `classic` and `bold`. They are for pickers: choosing one writes its `variant` into `design.variant` (or a slide's), and the document keeps that value, not the entry id. The engines read only `design.variant`. There is no `dark` theme in the default catalog: a dark deck is a theme with a dark variant, for example `{ "theme": "classic", "variant": "dark1" }`.
 

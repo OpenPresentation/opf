@@ -297,12 +297,15 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
  * The design levels {@link colorChoice} reads for one slide, most specific first (LH-01): the slide's design, then its layout record's
  * variant, then the deck's design, then the theme record. A layout's `design.variant` outranks the deck and the theme and loses to the
  * slide's own variant or background (docs/programs/layout-harvest/README.md, Decisions). Without an accent order of its own it keeps the one
- * the deck and the theme give, so a dark-alt deck's section slide keeps the deck's accents.
+ * the deck and the theme give, so a dark-alt deck's section slide keeps the deck's accents. A tone-relative value (`surface`, `brand`) is
+ * resolved against the variant the deck and the theme give (its bg1 slot and whether it is dark).
  */
 export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}): Rec[] {
-	const variant = layoutColorVariant(layout);
-	if (!variant) return [slideDesign, deckDesign, theme];
-	const accents = variant.accents ?? colorChoice([deckDesign, theme], scheme, variables).variant?.accents;
+	if (!layoutColorVariant(layout)) return [slideDesign, deckDesign, theme];
+	const below = colorChoice([deckDesign, theme], scheme, variables);
+	const deck = resolveColorRoles(scheme, { background: below.background, variant: below.variant });
+	const variant = layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
+	const accents = variant.accents ?? below.variant?.accents;
 	return [slideDesign, { variant: accents ? { ...variant, accents } : variant }, deckDesign, theme];
 }
 

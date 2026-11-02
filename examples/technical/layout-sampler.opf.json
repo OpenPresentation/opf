@@ -1463,7 +1463,7 @@
           "design": {
             "titleAlignment": "center",
             "contentAlignment": "center",
-            "variant": "light2"
+            "variant": "surface"
           },
           "direction": "column",
           "anchor": "middle",
@@ -1498,7 +1498,7 @@
             "titleAlignment": "center",
             "contentAlignment": "center",
             "imageFit": "contain",
-            "variant": "dark1"
+            "variant": "brand"
           },
           "direction": "column",
           "anchor": "middle",
@@ -1587,7 +1587,7 @@
             "Text"
           ],
           "design": {
-            "variant": "light2"
+            "variant": "surface"
           },
           "direction": "column",
           "anchor": "middle",
