@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 
-import { CHART_LEAD_MIN_CONTRAST, METRIC_VALUE_MIN_CONTRAST, chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, colorContrast, metricValueColor } from '../dist/composition.js';
+import { CHART_DARK_SERIES_MIN_CONTRAST, METRIC_VALUE_MIN_CONTRAST, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, colorContrast, metricValueColor } from '../dist/composition.js';
 
 const NAVY = '#011842'; // the default dark background
 const BLUE = '#2874A6'; // accent1 of the default scheme
@@ -47,29 +47,29 @@ describe('chart series 1', () => {
 	});
 
 	test('series 1 reaches 4.5:1 on a dark surface when it comes from the scheme', () => {
-		const adjusted = chartPaletteForFill(NAVY, palette, { legibleLead: true });
-		assert.ok(colorContrast(adjusted[0], NAVY) >= CHART_LEAD_MIN_CONTRAST, `${adjusted[0]} ${colorContrast(adjusted[0], NAVY)}`);
+		const adjusted = chartPaletteForFill(NAVY, palette, { legible: chartSchemeSeries(undefined, scheme) });
+		assert.ok(colorContrast(adjusted[0], NAVY) >= CHART_DARK_SERIES_MIN_CONTRAST, `${adjusted[0]} ${colorContrast(adjusted[0], NAVY)}`);
 		assert.equal(adjusted[0], metricValueColor(BLUE, NAVY), 'the same lift as a metric value');
 		assert.equal(adjusted.length, palette.length);
 	});
 
 	test('the other series keep their separation from series 1', () => {
-		const adjusted = chartPaletteForFill(NAVY, palette, { legibleLead: true });
+		const adjusted = chartPaletteForFill(NAVY, palette, { legible: chartSchemeSeries(undefined, scheme) });
 		assert.equal(new Set(adjusted).size, adjusted.length);
 		for (const color of adjusted) assert.ok(colorContrast(color, NAVY) >= 3, color);
 	});
 
 	test('a light surface keeps series 1', () => {
-		assert.equal(chartPaletteForFill('#FFFFFF', palette, { legibleLead: true })[0], chartPaletteForFill('#FFFFFF', palette)[0]);
+		assert.equal(chartPaletteForFill('#FFFFFF', palette, { legible: chartSchemeSeries(undefined, scheme) })[0], chartPaletteForFill('#FFFFFF', palette)[0]);
 	});
 
 	test('an authored chart.colors[0] is explicit and is not lifted', () => {
-		assert.equal(chartLeadFromScheme(undefined, scheme), true);
-		assert.equal(chartLeadFromScheme([], scheme), true);
-		assert.equal(chartLeadFromScheme(['#2874A6'], scheme), false);
-		assert.equal(chartLeadFromScheme(['accent3'], scheme), false);
-		assert.equal(chartLeadFromScheme([undefined, '#112233'], scheme), true, 'only entry 0 is series 1');
+		assert.equal(chartSchemeSeries(undefined, scheme)[0], true);
+		assert.equal(chartSchemeSeries([], scheme)[0], true);
+		assert.equal(chartSchemeSeries(['#2874A6'], scheme)[0], false);
+		assert.equal(chartSchemeSeries(['accent3'], scheme)[0], false);
+		assert.deepEqual(chartSchemeSeries([undefined, '#112233'], scheme).slice(0, 3), [true, false, true], 'entry i is series i + 1');
 		const explicit = chartSeriesPalette(scheme, ['#2874A6']);
-		assert.equal(chartPaletteForFill(NAVY, explicit, { legibleLead: chartLeadFromScheme(['#2874A6'], scheme) })[0], BLUE);
+		assert.equal(chartPaletteForFill(NAVY, explicit, { legible: chartSchemeSeries(['#2874A6'], scheme) })[0], BLUE);
 	});
 });

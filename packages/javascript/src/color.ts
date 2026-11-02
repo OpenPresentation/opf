@@ -267,6 +267,23 @@ function mixTowardsBackground(slot: string, slotHex: string, backgroundHex: stri
 /** Shares of the text colour (tx1) mixed into the background (bg1) for the neutrals, PowerPoint's chart-style values. */
 export const NEUTRAL_SHARES = { border: .2, gridline: .15, axisLine: .25, chartText: .65, codeComment: .65 } as const;
 
+/** LH-54: the share of the text colour (light1 on a dark slide) a dark card starts from, mixed into the background. */
+export const CARD_SURFACE_MIX = 0.07;
+/** LH-54: the contrast a mixed dark card reaches against the background, stepping the mix up from {@link CARD_SURFACE_MIX} (Claude Design's #0B2A5C on #011842 is 1.25:1). */
+export const CARD_SURFACE_MIN_CONTRAST = 1.25;
+/** LH-54: the share of the text colour mixed into a mixed dark card for its 1 px stroke (about 12% white over the card). */
+export const CARD_BORDER_MIX = 0.12;
+/** LH-79: a light variant's tx1 at or below this relative luminance (about #1A1A1A) is near-black, and the code panel takes tx2 instead. */
+export const CODE_PANEL_NEAR_BLACK = 0.01;
+/** LH-79: the contrast bg1 text keeps on tx2 for tx2 to be the code panel of a light variant. */
+export const CODE_PANEL_MIN_TEXT_CONTRAST = 7;
+/** LH-79: a dark variant's code panel is bg1 at this share of its HSL lightness (`lumMod`; Claude Design's #001030 on #011842). */
+export const CODE_PANEL_DARK_SHADE = 0.7;
+/** LH-79: the contrast the shaded panel needs against the background to count as a step below it. */
+export const CODE_PANEL_MIN_STEP = 1.05;
+/** LH-79: the share of the way from bg1 to tx1 a near-black dark slide's code panel is lifted when neither shade nor bg2 stands off. */
+export const CODE_PANEL_LIFT = 0.06;
+
 /**
  * The colours OPF draws that are neither text nor an accent, all derived from the scheme through the variant's map, so a dark variant
  * gets light lines and a change of variant or background style in PowerPoint recolours them.
@@ -284,12 +301,26 @@ export interface SchemeNeutrals {
   outline: SchemeColor;
   /** The neutral metric trend (no good or bad news): tx2. */
   trendNeutral: SchemeColor;
-  /** The code panel: tx1 (a dark panel) on a light variant, bg2 on a dark one, so a code block is a dark card on either. */
+  /**
+   * The code panel, a dark card on either variant (LH-79). On a light variant it is tx1, or tx2 when tx1 is near-black ({@link CODE_PANEL_NEAR_BLACK})
+   * and tx2 is dark enough to carry bg1 text at {@link CODE_PANEL_MIN_TEXT_CONTRAST}: a navy theme gets a navy panel, not a black one. On a dark
+   * variant it is bg1 shaded to {@link CODE_PANEL_DARK_SHADE} of its lightness, a surface just below the slide; where that cannot stand off a
+   * near-black background ({@link CODE_PANEL_MIN_STEP}), bg2 when it does, else bg1 lifted {@link CODE_PANEL_LIFT} towards tx1.
+   */
   codePanel: SchemeColor;
   /** Plain code text: bg1 or tx1, whichever reads better on the panel. */
   codeText: SchemeColor;
   /** Code comments and line numbers: the code text at 65% over the panel. */
   codeComment: SchemeColor;
+  /**
+   * The fill of a card (a composed item's `frameBox`), LH-54: the `surface` role wherever it stands off the background, and on a dark slide
+   * where it does not (the dark2 variant, whose bg2 is the background itself) the background mixed towards tx1 from {@link CARD_SURFACE_MIX}
+   * until it reaches {@link CARD_SURFACE_MIN_CONTRAST}, so a dark card reads as a filled surface rather than a hairline outline. A mixed card is
+   * a literal colour (no single luminance transform of a slot reproduces it), as `surfaceAlt` is.
+   */
+  card: SchemeColor;
+  /** The 1 px stroke of a card: `border`, or on a mixed dark card that card mixed {@link CARD_BORDER_MIX} towards tx1 (a literal colour). */
+  cardBorder: SchemeColor;
 }
 
 export interface ResolvedColorRoles {
@@ -368,7 +399,7 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
   const text = dark ? tx1 : (keepAlpha(colorScheme.text) ?? tx1);
   const surface = keepAlpha(colorScheme.surface) ?? bg2;
   const accents = map.accents.map(name => slot(name, '#000000'));
-  const neutrals = schemeNeutrals({ bg1: explicitBackground ?? bg1, tx1, bg2, tx2, dark });
+  const neutrals = schemeNeutrals({ bg1: explicitBackground ?? bg1, bg1Slot: bg1, tx1, bg2, tx2, dark, surface, surfaceAuthored: keepAlpha(colorScheme.surface) !== undefined });
   return {
     primary: keepAlpha(colorScheme.primary) ?? accents[0]!,
     secondary: keepAlpha(colorScheme.secondary) ?? accents[1]!,
@@ -390,17 +421,47 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
 }
 
 /** The neutrals of a resolved map: see {@link SchemeNeutrals}. The four colors are opaque #RRGGBB (or with alpha, as the scheme has them). */
-function schemeNeutrals(colors: { bg1: string; tx1: string; bg2: string; tx2: string; dark: boolean }): SchemeNeutrals {
+function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2: string; tx2: string; dark: boolean; surface: string; surfaceAuthored: boolean }): SchemeNeutrals {
   const { bg1, tx1, bg2, tx2, dark } = colors;
   const opaque = (value: string) => normalizeHexColor(value) ?? value;
   const [back, front, second, secondText] = [opaque(bg1), opaque(tx1), opaque(bg2), opaque(tx2)];
   const share = (amount: number) => mixTowardsBackground('tx1', front, back, amount);
-  // The code panel is a dark card: tx1 on a light variant, bg2 on a dark one (a dark card one step off the slide).
-  const panel: SchemeColor = dark ? { slot: 'bg2', hex: second } : { slot: 'tx1', hex: front };
+  const border = share(NEUTRAL_SHARES.border);
+  // A luminance transform of bg1 is bg1's only while the background is the slot's colour; over a literal background it stays literal.
+  const ofBackground = (lumMod: number, lumOff = 0): SchemeColor => {
+    const hex = applyLuminance(back, lumMod, lumOff);
+    return back === opaque(colors.bg1Slot) ? { slot: 'bg1', hex, ...(lumMod !== 100000 ? { lumMod } : {}), ...(lumOff !== 0 ? { lumOff } : {}) } : { slot: 'bg1', hex };
+  };
+  // LH-79: the code panel is a dark card. Light: tx1, or tx2 for a near-black tx1 (a navy theme gets a navy panel, not a black one).
+  // Dark: bg1 shaded a step below the slide; a near-black slide that cannot go darker takes bg2 when it stands off, else bg1 lifted.
+  let panel: SchemeColor;
+  if (!dark) {
+    const navy = (luminance(front) ?? 1) <= CODE_PANEL_NEAR_BLACK && secondText !== front && (colorContrast(back, secondText) ?? 0) >= CODE_PANEL_MIN_TEXT_CONTRAST;
+    panel = navy ? { slot: 'tx2', hex: secondText } : { slot: 'tx1', hex: front };
+  } else {
+    const shaded = ofBackground(Math.round(CODE_PANEL_DARK_SHADE * 100000));
+    const standsOff = (hex: string) => (colorContrast(hex, back) ?? 0) >= CODE_PANEL_MIN_STEP;
+    panel = standsOff(shaded.hex) ? shaded : standsOff(second) ? { slot: 'bg2', hex: second }
+      : (() => { const lift = mixTowardsBackground('bg1', back, front, 1 - CODE_PANEL_LIFT); return ofBackground(lift.lumMod ?? 100000, lift.lumOff ?? 0); })();
+  }
   const textOnPanel: SchemeColor = (colorContrast(back, panel.hex) ?? 0) >= (colorContrast(front, panel.hex) ?? 0) ? { slot: 'bg1', hex: back } : { slot: 'tx1', hex: front };
   const comment = mixTowardsBackground(textOnPanel.slot, textOnPanel.hex, panel.hex, NEUTRAL_SHARES.codeComment);
+  // LH-54: a card is the surface where it stands off the slide. On a dark slide where it does not (dark2: bg2 is the background) and no
+  // `surface` is authored, the background is mixed towards tx1 until the card reaches 1.25:1, with a stroke 12% further towards tx1.
+  const surface = normalizeHexColor(colors.surface);
+  let card: SchemeColor = { slot: 'bg2', hex: colors.surface }, cardBorder = border;
+  const backChannels = opaqueChannels(back), frontChannels = opaqueChannels(front);
+  if (dark && !colors.surfaceAuthored && surface && backChannels && frontChannels && (colorContrast(surface, back) ?? 0) < SURFACE_ALT_MIN_CONTRAST) {
+    let fill = mixChannels(backChannels, frontChannels, CARD_SURFACE_MIX);
+    for (let amount = CARD_SURFACE_MIX; (colorContrast(fill, back) ?? Infinity) < CARD_SURFACE_MIN_CONTRAST && amount < .5; ) {
+      amount = Math.min(.5, amount + .005);
+      fill = mixChannels(backChannels, frontChannels, amount);
+    }
+    card = { slot: 'bg1', hex: fill };
+    cardBorder = { slot: 'tx1', hex: mixChannels(opaqueChannels(fill)!, frontChannels, CARD_BORDER_MIX) };
+  }
   return {
-    border: share(NEUTRAL_SHARES.border),
+    border,
     gridline: share(NEUTRAL_SHARES.gridline),
     axisLine: share(NEUTRAL_SHARES.axisLine),
     chartText: share(NEUTRAL_SHARES.chartText),
@@ -409,6 +470,8 @@ function schemeNeutrals(colors: { bg1: string; tx1: string; bg2: string; tx2: st
     codePanel: panel,
     codeText: textOnPanel,
     codeComment: comment,
+    card,
+    cardBorder,
   };
 }
 
@@ -542,15 +605,18 @@ const tierOf = (index: number): number => Math.floor(index / CHART_SERIES_TIER_S
 /** Cost, in CIE L* points of movement, of each point a placement falls short of the separation from a neighbouring series. */
 const CHART_SERIES_SHORTFALL_WEIGHT = 8;
 
-/** WI-5 (P18, D3): the contrast series 1 reaches on a dark chart surface when it comes from the scheme (see {@link ChartPaletteOptions.legibleLead}). */
-export const CHART_LEAD_MIN_CONTRAST = 4.5;
+/** WI-5 (P18, D3) and LH-55: the contrast every series from the scheme reaches on a dark chart surface (see {@link ChartPaletteOptions.legible}). */
+export const CHART_DARK_SERIES_MIN_CONTRAST = 4.5;
+/** LH-55: the CIE L* step kept between series 1 and 2 on a dark chart surface when both come from the scheme (the default blue pair was 9 apart). */
+export const CHART_LEAD_LIGHTNESS_STEP = 20;
 
 export interface ChartPaletteOptions {
   /**
-   * Lift series 1 to {@link CHART_LEAD_MIN_CONTRAST} (4.5:1) on a dark `fill` (WI-5, P18, decision D3). Pass it only when series 1 comes from the
-   * deck scheme: {@link chartLeadFromScheme}. An authored `chart.colors[0]` and a host palette keep their colour.
+   * The series that come from the deck scheme ({@link chartSchemeSeries}): on a dark `fill` each of them reaches {@link CHART_DARK_SERIES_MIN_CONTRAST}
+   * (4.5:1) rather than 3:1 (WI-5, P18, decision D3; LH-55 for every series), and series 2 keeps {@link CHART_LEAD_LIGHTNESS_STEP} from series 1
+   * when both are listed. An authored `chart.colors` entry and a host palette (omit the option) keep the 3:1 floor.
    */
-  legibleLead?: boolean;
+  legible?: readonly boolean[];
 }
 
 /** Series colours for a chart drawn on `fill`: the palette in order, each colour adjusted for contrast
@@ -578,31 +644,44 @@ export interface ChartPaletteOptions {
  * nearest lightness that clears it. The result is deterministic and in series order. An unresolved or
  * translucent fill or colour is passed through, like `chartColorForFill`.
  *
+ * On a dark `fill` the series `options.legible` lists (the scheme's, {@link chartSchemeSeries}) take {@link CHART_DARK_SERIES_MIN_CONTRAST}
+ * (4.5:1) in place of 3:1 throughout: series 1 is lifted to it first (with {@link legible}, keeping its hue) and kept, the others are adjusted
+ * and placed against that floor, and series 2 keeps {@link CHART_LEAD_LIGHTNESS_STEP} (L*) from series 1 even where it already had the
+ * contrast (LH-55: the second default blue on navy was 3.0:1 and nine L* from the first).
+ *
  * It depends only on the surface and the palette, so every chart on a surface gets the same series colours,
  * and preview and export (which both call this function) draw the same ones.
  */
 export function chartPaletteForFill(fill: string, palette: readonly string[], options: ChartPaletteOptions = {}): string[] {
   const opaqueFill = colorContrast(fill, fill) !== undefined;
-  if (options.legibleLead && opaqueFill && isDarkColor(fill) && palette.length > 0) {
-    // WI-5 (P18, D3): series 1, drawn on a dark surface from the scheme, reaches 4.5:1 (the default blue on navy is 3.42:1). The other series are placed around it.
-    const lead = normalizeHexColor(palette[0]);
-    if (lead) palette = [legible(lead, normalizeHexColor(fill)!, CHART_LEAD_MIN_CONTRAST), ...palette.slice(1)];
-  }
+  // WI-5 and LH-55: on a dark surface a series from the scheme reaches 4.5:1 (the default blues on navy were 3.42:1 and 3.0:1); any other series, and every
+  // series on a light surface, 3:1.
+  const darkFill = opaqueFill && isDarkColor(fill), surface = normalizeHexColor(fill)!;
+  const legibleAt = (index: number) => darkFill && options.legible?.[index] === true && opaqueChannels(palette[index]!) !== undefined;
+  const floorOf = (index: number) => legibleAt(index) ? CHART_DARK_SERIES_MIN_CONTRAST : 3;
+  // Series 1 is lifted first and kept; the other series are placed around it.
+  if (legibleAt(0)) palette = [legible(normalizeHexColor(palette[0])!, surface, CHART_DARK_SERIES_MIN_CONTRAST), ...palette.slice(1)];
+  // LH-55: series 2 keeps a lightness step of 20 from series 1 when both are the scheme's, so the first two series never read as one blue.
+  const leadPair = legibleAt(0) && legibleAt(1);
+  const isLeadPair = (a: number, b: number) => leadPair && Math.min(a, b) === 0 && Math.max(a, b) === 1;
   const preferredLab = palette.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
-  const adjusted = palette.map(color => chartColorForFill(fill, color));
-  // Colours the surface keeps stay put; only the ones it moves are placed again.
-  const kept = palette.map((color, index) => opaqueFill && preferredLab[index] !== undefined && adjusted[index] === color);
+  const adjusted = palette.map((color, index) => legibleAt(index) ? legible(normalizeHexColor(color)!, surface, CHART_DARK_SERIES_MIN_CONTRAST) : chartColorForFill(fill, color));
+  const adjustedLab = adjusted.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
+  // Colours the surface keeps stay put; only the ones it moves are placed again (and series 2 when it sits too close to series 1).
+  const kept = palette.map((color, index) => opaqueFill && preferredLab[index] !== undefined && adjusted[index] === color
+    && !(index === 1 && leadPair && Math.abs(adjustedLab[0]![0] - adjustedLab[1]![0]) < CHART_LEAD_LIGHTNESS_STEP));
   const placed: (string | undefined)[] = palette.map((_, index) => kept[index] || !opaqueFill || !preferredLab[index] ? adjusted[index] : undefined);
   const placedLab: (Lab | undefined)[] = placed.map(color => { const channels = color === undefined ? undefined : opaqueChannels(color); return channels ? labOf(channels) : undefined; });
   palette.forEach((_, index) => {
     const wanted = preferredLab[index], base = adjusted[index]!;
     if (placed[index] !== undefined || !wanted) return;
     const baseLab = labOf(opaqueChannels(base)!);
-    // The separation every placed series must keep from this one: what the palette itself had, capped at the floor.
+    // The separation every placed series must keep from this one: what the palette itself had, capped at the floor (series 1 and 2 of a
+    // dark scheme chart: the full lead step, whatever the palette had).
     const needs = palette.flatMap((_, other) => {
       const before = preferredLab[other], lab = placedLab[other];
       return other !== index && tierOf(other) <= tierOf(index) && before && lab && placed[other] !== undefined
-        ? [{ lab, adjacent: Math.abs(other - index) === 1, wide: Math.min(labDifference(before, wanted), CHART_SERIES_MIN_DIFFERENCE), step: Math.min(Math.abs(before[0] - wanted[0]), CHART_SERIES_MIN_LIGHTNESS_STEP) }]
+        ? [{ lab, adjacent: Math.abs(other - index) === 1, wide: Math.min(labDifference(before, wanted), CHART_SERIES_MIN_DIFFERENCE), step: isLeadPair(index, other) ? CHART_LEAD_LIGHTNESS_STEP : Math.min(Math.abs(before[0] - wanted[0]), CHART_SERIES_MIN_LIGHTNESS_STEP) }]
         : [];
     });
     // How far a candidate is from the required separations (>= 0 when it meets them): the colour difference from every
@@ -621,8 +700,11 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
     let best: { color: string; lab: Lab; cost: number; moved: number } | undefined = { color: base, lab: baseLab, cost: cost({ moved: 0, ...start }), moved: 0 };
     for (let step = 0; step <= 400; step++) {
       const color = labWithLightness(step / 4, wanted[1], wanted[2]), contrast = colorContrast(color, fill);
-      if (contrast === undefined || contrast < 3) continue;
-      const lab = labOf(opaqueChannels(color)!), moved = Math.abs(lab[0] - baseLab[0]), total = cost({ moved, ...shortfall(lab) });
+      if (contrast === undefined || contrast < floorOf(index)) continue;
+      const lab = labOf(opaqueChannels(color)!);
+      // LH-55: the lead step is a requirement, not a cost: no other separation buys series 2 a place closer to series 1.
+      if (index === 1 && leadPair && Math.abs(lab[0] - placedLab[0]![0]) < CHART_LEAD_LIGHTNESS_STEP) continue;
+      const moved = Math.abs(lab[0] - baseLab[0]), total = cost({ moved, ...shortfall(lab) });
       if (total < best.cost - 1e-9 || (Math.abs(total - best.cost) <= 1e-9 && moved < best.moved)) best = { color, lab, cost: total, moved };
     }
     placed[index] = best.color;
@@ -670,11 +752,14 @@ export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, co
 }
 
 /**
- * Whether series 1 of a chart comes from the deck scheme (accent1 of the variant) rather than from an authored `chart.colors[0]`:
- * the series {@link chartPaletteForFill} may lift with `legibleLead`. Pass the chart's own `colors` and the same scheme and context as {@link chartSeriesPalette}.
+ * Which series of a chart come from the deck scheme rather than from an authored `chart.colors` entry, in series order: entry `i` is true
+ * when `colors[i]` is absent or cannot be resolved, so the series keeps the scheme colour of its position. These are the series
+ * {@link chartPaletteForFill} lifts to 4.5:1 on a dark surface (`options.legible`). The list covers the palette {@link chartSeriesPalette}
+ * returns for the same arguments (twelve entries, more when `colors` is longer).
  */
-export function chartLeadFromScheme(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): boolean {
-  return resolveChartColors(colors, colorScheme, context)[0] === undefined;
+export function chartSchemeSeries(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): boolean[] {
+  const resolved = resolveChartColors(colors, colorScheme, context);
+  return Array.from({ length: Math.max(12, resolved.length) }, (_, index) => resolved[index] === undefined);
 }
 
 /** What a `chart.colors` entry resolves against: the deck's role colours and `variables`, as for any ColorRef. */

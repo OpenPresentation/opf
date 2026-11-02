@@ -4,15 +4,16 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartHighlightColors, chartHighlightMarks, chartLeadFromScheme, chartNumber, chartPaletteForFill, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
 // `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
 // two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
-// WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel (an authored `colors[0]` keeps its colour).
+// WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, series 2 a lightness step from series 1 (an authored
+// `colors` entry keeps the 3:1 floor).
 export function chartSeriesPalette(surface, colorScheme, colors, context) {
-  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legibleLead: chartLeadFromScheme(colors, colorScheme, context) });
+  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legible: chartSchemeSeries(colors, colorScheme, context) });
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours

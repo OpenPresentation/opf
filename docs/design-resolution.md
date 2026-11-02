@@ -253,11 +253,13 @@ Lines and quiet colors are not fixed grey. `roles.neutrals` derives each from th
 | `chartText` | tx1 at 65%: chart axis labels and legend text |
 | `outline` | bg1: pie and treemap outlines, the video play icon, anything drawn on a mark |
 | `trendNeutral` | tx2: the neutral metric trend |
-| `codePanel` | tx1 on a light map, bg2 on a dark one: the code block is a dark card on either |
+| `codePanel` | The code block is a dark card on either map (LH-79). Light: tx1, or tx2 when tx1 is near-black (relative luminance 0.01 or less) and bg1 keeps 7:1 on tx2, so a navy theme draws a navy panel. Dark: bg1 at 70% of its lightness (`lumMod` 70000), a step below the slide; a near-black slide takes bg2 when it stands off, else bg1 lifted 6% towards tx1. Over a literal background the bg1 shade is a literal color |
 | `codeText` | bg1 or tx1, whichever reads better on the panel |
 | `codeComment` | the code text at 65% over the panel (comments and line numbers) |
+| `card` | The fill of a card (a composed item's `frameBox`, LH-54): the `surface` role, except on a dark slide where the surface does not stand off the background (under 1.1:1, as on the `dark2` variant, whose bg2 is the background) and no `surface` is authored. There the card is the background mixed towards tx1, from 7% until it reaches 1.25:1 (`#172C52` on the default `#011842`), a literal color |
+| `cardBorder` | The card's 1 px stroke: `border`, or on a mixed dark card that card mixed 12% towards tx1 (a literal color) |
 
-`codeSyntaxPaletteForRoles(roles)` builds the syntax palette from `codePanel`, `codeText`, `codeComment` and the variant's first three accents, and `codeHighlightColors(scheme, palette, codePanel.hex)` takes the panel the highlight band sits on. `readableSchemeColor(fill, roles)` returns bg1 or tx1 (as a scheme color), whichever reads on a fill the scheme does not name, for table header text and text on marks. The validator's contrast rules read the same roles, so a dark variant is checked against its own text and surface.
+`codeSyntaxPaletteForRoles(roles)` builds the syntax palette from `codePanel`, `codeText`, `codeComment` and the variant's first three accents, and `codeHighlightColors(scheme, palette, codePanel.hex)` takes the panel the highlight band sits on. `readableSchemeColor(fill, roles)` returns bg1 or tx1 (as a scheme color), whichever reads on a fill the scheme does not name, for table header text and text on marks. The validator's contrast rules read the same roles, so a dark variant is checked against its own text and surface, and text in a card against `card`. The preview and the PPTX export draw a card with `card` and `cardBorder`, and color a metric in a card (its value and trend) against `card`.
 
 ### Background colors are ColorRefs
 
