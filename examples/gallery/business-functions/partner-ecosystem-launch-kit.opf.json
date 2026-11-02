@@ -14,7 +14,6 @@
     "dimensions": "a4",
     "background": "dark1",
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "left",
@@ -296,7 +295,7 @@
       "colorSchemes": {
         "vibes": {
           "name": "Vibes",
-          "accent1": "#4A1BE4",
+          "accent1": "#5230F2",
           "accent2": "#B8E109",
           "accent3": "#95928C",
           "accent4": "#E48A1B",
