@@ -116,6 +116,12 @@ assert.deepEqual(normalizeToolbarItems(['title', { id: 'export', priority: 3 }, 
   ['title', TOOLBAR_ITEMS.title.priority, false], ['export', 3, true], ['spacer', 0, false], ['spacer', 0, false], ['|', 0, false], ['more', 100, false],
 ], 'names and { id, priority }; spacer and | repeat; more never collapses');
 assert.throws(() => normalizeToolbarItems(['nope']), /"nope" is not a toolbar item/);
+// CE-30: a host's own item is { id, priority } with a name of its own; a bare unknown name, one without a priority or a malformed one still throws.
+assert.deepEqual(normalizeToolbarItems([{ id: 'save', priority: 90 }, { id: 'page-tools', priority: 5, collapsible: false }]).map(({ id, priority, collapsible }) => [id, priority, collapsible]), [['save', 90, true], ['page-tools', 5, false]]);
+assert.throws(() => normalizeToolbarItems([{ id: 'save' }]), /"save" is not a toolbar item/);
+assert.throws(() => normalizeToolbarItems([{ id: 'Save OPF', priority: 1 }]), /is not a toolbar item/);
+assert.throws(() => normalizeToolbarItems([{ id: 'save', priority: 'high' }]), /must be a number/);
+assert.throws(() => normalizeToolbarItems([{ id: 'save', priority: 1 }, { id: 'save', priority: 2 }]), /given twice/);
 assert.throws(() => normalizeToolbarItems(['find', 'find']), /given twice/);
 assert.throws(() => normalizeToolbarItems([{ id: 'find', priority: 'high' }]), /must be a number/);
 assert.throws(() => normalizeToolbarItems('title'), /must be an array/);

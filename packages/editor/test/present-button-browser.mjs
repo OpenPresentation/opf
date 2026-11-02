@@ -212,7 +212,7 @@ try {
   // The button is next to Export, and presents the current slide.
   assert.equal(await present.getAttribute('aria-label'), 'Present');
   assert.equal(await present.getAttribute('title'), 'Present (F5)');
-  const order = await page.evaluate(() => [...document.querySelectorAll('.header-actions > *')].map((node) => node.id).filter((id) => id === 'present-button' || id === 'export-menu'));
+  const order = await page.evaluate(() => [...document.querySelectorAll('.header-actions .opf-tb > *')].map((node) => node.id).filter((id) => id === 'present-button' || id === 'export-menu'));
   assert.deepEqual(order, ['present-button', 'export-menu'], 'Present sits next to Export');
   assert.equal(await presenter.isHidden(), true);
   await page.locator('#thumb-strip .opf-thumbs-item').nth(2).click();

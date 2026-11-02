@@ -1,6 +1,7 @@
 // RR-25: the phone and tablet layout of the playground. At 900px and narrower the page is one screen: the slide strip on top, the slide
 // filling the middle, and a bottom bar (Edit, Design, Find, Undo, Redo). The inspector becomes a bottom sheet that the bar opens, so the
-// slide stays in view above it; the document's header buttons sit behind a "More" button; nothing scrolls sideways down to 320px.
+// slide stays in view above it; the document's header buttons sit behind a "More" button (there the header's toolbar wraps and nothing
+// collapses into ⋯: playground.js); nothing scrolls sideways down to 320px.
 // While text is being typed the page asks the browser not to zoom into the field (iOS zooms into a field whose text is smaller than
 // 16px, and the field mirrors the slide text), and gives the zoom back when typing ends.
 const CSS = `
@@ -25,8 +26,12 @@ html,body{overscroll-behavior:none}
 .document-bar{flex-wrap:wrap;height:auto;min-height:44px;padding:4px 12px;gap:6px}
 .breadcrumb{flex:1 1 0;min-width:0}
 .breadcrumb input{min-width:0;max-width:none;width:100%}
+.document-title{flex:1 1 auto;width:auto;min-width:96px}
+.autosave-status{max-width:44%;font-size:10.5px}
 .breadcrumb-label,.breadcrumb .slash{display:none}
-.header-actions{display:none;width:100%;flex-wrap:wrap;gap:6px;padding-bottom:6px}
+.header-actions{display:none;flex:1 1 100%;width:100%;flex-wrap:wrap;gap:6px;padding-bottom:6px}
+.header-actions .opf-tb,.header-tools{flex-wrap:wrap;gap:6px}
+.header-actions .opf-tb>.opf-tb-item{max-width:100%}
 body[data-menu=open] .header-actions{display:flex}
 .editing-shell{display:flex;flex-direction:column;flex:1 1 0;min-height:0}
 .canvas-column{flex:1 1 0;min-height:0}
@@ -60,6 +65,8 @@ dialog{max-width:100vw;max-height:100dvh}
 button,select,input[type=text],input[type=number],textarea{touch-action:manipulation}
 }
 @media (max-width:480px){
+.breadcrumb{flex-wrap:wrap;row-gap:0}
+.autosave-status{flex:1 1 100%;max-width:none;padding:0 8px 2px;-webkit-line-clamp:1}
 .workspace-brand{gap:6px;padding:0 0 0 10px}
 .slide-toolbar{gap:0;margin:0}
 .slide-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible;padding:0 10px 6px}
@@ -77,7 +84,7 @@ button,select,input[type=text],input[type=number],textarea{touch-action:manipula
 @media (max-width:900px) and (pointer:coarse){
 .canvas-toolbar button,.document-bar button,.sidebar .add-slide,.inspector button,.inspector select,.inspector input{min-height:44px}
 .sheet-close{min-width:44px}
-.header-actions>button{min-width:44px}
+.header-actions .header-button{min-width:44px}
 .canvas-footer{height:auto;min-height:44px}
 }
 `;

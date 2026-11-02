@@ -203,7 +203,9 @@ function resolveToolbar(options, layout, parts, views, given, items) {
     spacer: true,
     "|": true,
   };
-  return items.filter((item) => !RESERVED_ITEMS.has(item.id) && available[item.id] && !(ITEM_SLOT_NAMES.has(item.id) && given[itemSlot(item.id)]));
+  // A host's own item (`{ id, priority }` with a name of its own) is always built: its slot is the host's to fill (`editor.toolbar.slot(id)`).
+  const host = (id) => !Object.hasOwn(TOOLBAR_ITEMS, id);
+  return items.filter((item) => !RESERVED_ITEMS.has(item.id) && (host(item.id) || available[item.id]) && !(ITEM_SLOT_NAMES.has(item.id) && given[itemSlot(item.id)]));
 }
 
 /**

@@ -342,17 +342,18 @@ select {
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  gap: 20px;
+  gap: 16px;
   min-height: 56px;
   padding: 8px 20px;
   background: var(--opf-ui-surface);
   border-bottom: 1px solid var(--opf-ui-border);
 }
 
+/* CE-30: the breadcrumb takes what it shows (the deck title has a width of its own); the header actions take the rest of the row. */
 .breadcrumb {
   display: flex;
   align-items: center;
-  flex: 1 1 220px;
+  flex: 0 1 auto;
   gap: 12px;
   min-width: 0;
   color: var(--opf-ui-muted-fg);
@@ -388,7 +389,8 @@ select {
 /* CE-28: the deck title part (src/deck-title.js) in the breadcrumb; the input keeps the look of the field it replaced (id document-name). */
 .document-title {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  width: clamp(200px, 20vw, 340px);
   min-width: 0;
   max-width: 340px;
 }
@@ -412,24 +414,60 @@ select {
   border-color: var(--opf-ui-ring);
 }
 
-.header-actions {
-  display: flex;
+/* CE-30: the autosave line, beside the title so the saved state shows without scrolling. */
+.autosave-status {
+  display: -webkit-box;
   flex: 0 1 auto;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px 4px;
+  min-width: 0;
+  max-width: 200px;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--opf-ui-muted-fg);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
-.header-actions > button {
+.autosave-status[data-state="unavailable"],
+.autosave-status[data-state="error"] {
+  font-weight: 600;
+  color: var(--opf-ui-warn);
+}
+
+/* CE-30: the header actions are the editor's toolbar (src/toolbar.js): one row; what does not fit moves into ⋯. */
+.header-actions {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+}
+
+.header-actions .opf-tb {
+  gap: 4px;
+}
+
+.header-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-actions .header-button,
+.header-tools > button {
   min-height: 28px;
   padding: 0 8px;
   font-size: 12px;
+  white-space: nowrap;
 }
 
-.header-actions > button .icon {
+.header-actions .header-button .icon {
   width: 14px;
   height: 14px;
+}
+
+/* The ⋯ menu's entries read from the left, like the page's other menus (the page centres the text of its buttons). */
+.header-actions .opf-tb-menu-item {
+  justify-content: flex-start;
 }
 
 .export-menu-slot {
@@ -879,33 +917,6 @@ select {
   padding: 10px 0;
   background: var(--opf-ui-surface);
   border-top: 1px solid var(--opf-ui-border);
-}
-
-.inspector-bottom {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-top: auto;
-  padding: 17px 20px;
-  font: 11.5px/1.6 var(--opf-ui-mono);
-  color: var(--opf-ui-muted-fg);
-  border-top: 1px solid var(--opf-ui-border);
-}
-
-.inspector-bottom .icon {
-  width: 12px;
-  height: 12px;
-  margin-top: 2px;
-}
-
-.inspector-bottom #autosave-status {
-  color: var(--opf-ui-muted-fg);
-}
-
-.inspector-bottom #autosave-status[data-state="unavailable"],
-.inspector-bottom #autosave-status[data-state="error"] {
-  font-weight: 600;
-  color: var(--opf-ui-warn);
 }
 
 .diagnostics-section {
@@ -1643,6 +1654,15 @@ dialog::backdrop {
   }
 }
 
+/* CE-30: below 1600px the "Presentations /" crumb gives its room to the header actions. */
+@media (max-width: 1599px) {
+  .breadcrumb-label,
+  .breadcrumb > .icon,
+  .slash {
+    display: none;
+  }
+}
+
 @media (max-width: 1100px) {
   :root {
     --sidebar: 176px;
@@ -1730,11 +1750,11 @@ dialog::backdrop {
     flex-wrap: wrap;
   }
 
-  .header-actions > button {
+  .header-actions .header-button {
     padding: 0 7px;
   }
 
-  .header-actions > button span {
+  .header-actions .header-button span {
     display: none;
   }
 
@@ -1847,10 +1867,6 @@ dialog::backdrop {
 
   .file-badge {
     display: none;
-  }
-
-  .inspector-bottom {
-    margin-top: 0;
   }
 
   .slide-list {
@@ -1985,7 +2001,13 @@ dialog::backdrop {
     max-width: none;
   }
 
+  .document-title {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
   .header-actions {
+    flex: 1 1 100%;
     flex-wrap: wrap;
     gap: 6px;
     width: 100%;
@@ -2073,7 +2095,8 @@ dialog::backdrop {
     min-height: 44px;
   }
 
-  .header-actions > button {
+  .header-actions .header-button,
+  .header-tools > button {
     min-height: 44px;
   }
 
