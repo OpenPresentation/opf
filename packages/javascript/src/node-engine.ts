@@ -19,4 +19,4 @@ export { assetRoot } from "./node/export.js";
 export { createZip } from "./node/zip.js";
 export { type MeasuringFonts, type MeasuringFontsOptions, type PaginateDeckOptions, type PaginatedDeck, measuringFonts, paginateDeck } from "./node/paginate.js";
 export { RENDER_EXTRAS, locatePackage } from "./node/peers.js";
-export { defaultCatalogs, galleryMismatch } from "./node/catalogs.js";
+export { defaultCatalogs } from "./node/catalogs.js";
