@@ -14,6 +14,7 @@ import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './ch
 import {applyDoughnutRings,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
+import {applyChartLayerLayout,chartEmphasisPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -53,7 +54,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -1616,12 +1617,18 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const valueCodes = series.map(entry => cacheFormatCode(entry?.["c:val"] ?? entry?.["c:yVal"]));
   const xCode = chartNode.type === 'scatter' ? cacheFormatCode(series[0]?.["c:xVal"]) : undefined;
   // RR-35: axis titles, legend position and data labels read back into the chart's option fields.
+  // LH-81: what an export of the header row left in the part: a caption title or a top legend at a manual position.
+  const nativeLegend = doc["c:chartSpace"]?.["c:chart"]?.["c:legend"];
+  const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
+  const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
-    return chart && Object.keys(options).length ? {...chart, ...options} : chart;
+    // LH-03: the value labels an export of a small chart writes by default are not an option.
+    const unfilled = doc["c:chartSpace"]?.["c:spPr"]?.["a:noFill"] !== undefined;
+    return chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
   };
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
@@ -2906,12 +2913,17 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   for (const entry of chartData.diagnostics ?? []) options.onDiagnostic?.({code: entry.code, path, message: entry.message, pointer: entry.path});
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
   // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
-  const chartOptions = resolveChartOptionsFor(chart);
-  reportChartOptionDiagnostics(chartOptions, path, options.onDiagnostic);
+  // LH-03, LH-81: the chart layer composition decided (src/chart-layer.js); a small chart's default value labels count as data labels.
+  const layer = chartData.chartex ? undefined : chartLayout?.layer;
+  const authoredOptions = resolveChartOptionsFor(chart);
+  reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
+  const chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
 
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
-  const panelFill = context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
+  // LH-03: a small chart has no panel; its colours are judged against the card or the slide background it stands on, as the preview does.
+  const panelFill = layer?.small ? context.cardFill ?? `#${normalizeHex(context.colors.background)}`
+    : context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
   // RR-96: chart text, gridlines and axis lines are core's scheme-derived neutrals (tx1 mixed into bg1 at 65%, 15% and 25%), which the finished
   // part writes as schemeClr with lumMod/lumOff, so a variant or background style change in PowerPoint recolors them.
   const neutrals = context.roles.neutrals;
@@ -2955,7 +2967,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
-    schemeFor: hex => schemeColorValue('primary', hex, context)});
+    schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
   if (chartData.chartex) {
@@ -2973,6 +2985,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // bar chart with one series whenever chartColors is a custom array of more than one colour, so PowerPoint drew each
   // column of a single-series column or bar chart in a different colour. One colour for that series writes no c:dPt.
   const chartColors = chartData.type === 'bar' && chartData.series.length === 1 ? palette.slice(0, 1) : palette;
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  const layerXml = chartLayerOptions(layer, {region, scale, textSize, labelColor: markLabelColor, font: context.fonts.body, chart, rtl: context.direction === 'rtl'});
+  if (Object.keys(layerXml.layout).length) context.chartHeadings.get(objectName).layerLayout = layerXml.layout;
   const chartOptionsXml = {
     objectName,
     x: region.x,
@@ -3023,7 +3038,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
     // ScatterWithMarkers: markers only, no connecting line.
-    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {})
+    ...(chartData.type === 'scatter' ? { lineSize: 0, lineDataSymbol: 'circle' } : {}),
+    // LH-03, LH-81: no chart area fill, no value axis or gridlines, the caption and the header legend (their positions are written below).
+    ...layerXml.options
   };
   if (chartData.combo?.length && chartData.combo.length === chartData.series.length) {
     slide.addChart(...comboChart(chartData, chartOptionsXml, {palette, chartOptions, labelColor, font: context.fonts.body, textSize}));
@@ -4412,8 +4429,10 @@ async function normalizePptxZip(raw, context) {
       if(!context.chartHeadings.has(name))continue;
       const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
-      const {heading,labelColor,markLabelColor,spec,textSize}=context.chartHeadings.get(name);
+      const {heading,labelColor,markLabelColor,spec,textSize,layerLayout}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
+      // LH-81: the header caption, legend and plot area at the positions core gave them.
+      if(layerLayout)entries[chartPart]=encodeText(applyChartLayerLayout(decodeText(entries[chartPart]),layerLayout));
       entries[chartPart]=encodeText(omitEmptyNumberPoints(applyDoughnutRings(applyChartConstruct(decodeText(entries[chartPart]),spec),context.chartHeadings.get(name).rings)));
       const highlight=context.chartHeadings.get(name).highlight;
       if(highlight){
@@ -4447,6 +4466,13 @@ async function normalizePptxZip(raw, context) {
     if(ordered!==xml)entries[part]=encodeText(ordered);
   }
   applyChartFonts(entries,context.chartFonts,parseRelationships);
+  // LH-81: PptxGenJS copies a chart title onto its frame's cNvPr as the alt-text title; the header caption is the chart's own text, not
+  // the frame's alt text, so the frame keeps only its name and descr (FA-09).
+  for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const xml = decodeText(bytes), next = xml.replace(/(<p:cNvPr\b[^>]*?\bname="([^"]+)"[^>]*?)\s+title="[^"]*"/g, (match, head, name) => context.chartHeadings.get(name)?.layerLayout?.title ? head : match);
+    if (next !== xml) entries[part] = encodeText(next);
+  }
   if (context.frameAlts.size) for (const [part, bytes] of Object.entries(entries)) if (/^ppt\/slides\/slide\d+\.xml$/.test(part)) { const xml = decodeText(bytes), next = applyFrameAlt(xml, context.frameAlts); if (next !== xml) entries[part] = encodeText(next); }
   // Chartex charts: the native cx:chartSpace part, its style parts and the mc:AlternateContent frame (the classic chart above is the fallback).
   try {

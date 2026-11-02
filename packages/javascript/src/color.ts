@@ -888,6 +888,35 @@ export function chartHighlightColors(surface: string, primary: string, text: str
   return { accent, muted };
 }
 
+/** LH-03: share of the way the quieter marks of a small chart move from the accent towards the surface, at most. */
+export const CHART_EMPHASIS_TINT_MIX = 0.55;
+/** LH-03: smallest contrast the quieter tint keeps against the surface: a bar is a graphical object (WCAG 1.4.11, 3:1). */
+export const CHART_EMPHASIS_TINT_MIN_CONTRAST = 3;
+/** LH-03: smallest CIE L* step between the emphasised colour and the quieter tint, so the emphasis is visible. */
+export const CHART_EMPHASIS_MIN_LIGHTNESS_STEP = 15;
+
+/**
+ * LH-03: the two colours of a small chart's emphasis, or undefined when the surface leaves no room for them. `accent` is the series
+ * colour (`color`, already adjusted for the surface by `chartPaletteForFill`) and marks the emphasised point; `muted` is that colour mixed
+ * towards the surface, a quieter tint of the same hue for every other point. The mix is the largest, up to
+ * {@link CHART_EMPHASIS_TINT_MIX}, that keeps {@link CHART_EMPHASIS_TINT_MIN_CONTRAST} against the surface; when that tint is not
+ * {@link CHART_EMPHASIS_MIN_LIGHTNESS_STEP} L* away from the accent (an accent with little contrast to spare, as a mid blue on a dark
+ * navy), there is no emphasis and every point keeps the series colour. The preview and the PPTX export call it with the same pair.
+ */
+export function chartEmphasisColors(surface: string, color: string): { accent: string; muted: string } | undefined {
+  const fill = (normalizeHexColor(surface) ?? '#FFFFFF').slice(0, 7);
+  const accent = (normalizeHexColor(color) ?? '#000000').slice(0, 7).toUpperCase();
+  const from = opaqueChannels(accent), to = opaqueChannels(fill);
+  if (!from || !to) return undefined;
+  for (let step = Math.round(CHART_EMPHASIS_TINT_MIX * 50); step > 0; step--) {
+    const muted = mixChannels(from, to, step / 50);
+    if ((colorContrast(muted, fill) ?? 0) < CHART_EMPHASIS_TINT_MIN_CONTRAST) continue;
+    const mutedChannels = opaqueChannels(muted);
+    return mutedChannels && Math.abs(labOf(from)[0] - labOf(mutedChannels)[0]) >= CHART_EMPHASIS_MIN_LIGHTNESS_STEP ? { accent, muted } : undefined;
+  }
+  return undefined;
+}
+
 // --------------------------------------------------------------- alternate surface (banded table rows)
 
 /** Share of the text colour mixed into the surface for the `surfaceAlt` role. */

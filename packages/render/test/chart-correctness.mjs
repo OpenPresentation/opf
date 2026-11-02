@@ -75,7 +75,8 @@ const shapes = {
 };
 for (const [type, peak] of Object.entries(peaks)) {
   for (const [shape, slide] of Object.entries(shapes)) {
-    const svg = toSvg({ slides: [slide({ type, data: quarters })] }, 1, { trace: true });
+    // LH-03: `dataLabels: false` keeps the value axis of the small column, bar and line charts, whose end this measures.
+    const svg = toSvg({ slides: [slide({ type, data: quarters, dataLabels: false })] }, 1, { trace: true });
     const { ticks: drawn, end } = axisEnd(svg, shape === 'dashboard' ? 'slides.0.blocks.0.chart' : 'slides.0.chart', type === 'bar');
     assert.ok(end >= peak - 0.5 && end <= peak * 1.25 + 0.5, `${type} (${shape}): the axis ends at ${end.toFixed(2)} for data peaking at ${peak} (ticks ${drawn.join(', ')})`);
     checks++;

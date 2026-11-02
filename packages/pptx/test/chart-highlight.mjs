@@ -17,7 +17,9 @@ const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', 
 const data = {columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]]};
 const pieData = {columns: ['Region', 'Share'], rows: [['EMEA', 40], ['APAC', 35], ['AMER', 25]]};
 const scatterData = {columns: ['Point', 'Spend', 'Revenue', 'Cost'], rows: [['a', 1, 10, 3], ['b', 2, 14, 4], ['c', 4, 19, 9]]};
-const deckOf = (chart, design = {fontScheme: 'roboto'}) => ({design, slides: [{title: 'Chart', chart}]});
+// LH-03: `dataLabels: false` keeps the panel, value axis and colours of a small chart (two series of four points), so the highlight is
+// what is tested; a chart that asks for its own labels keeps them.
+const deckOf = (chart, design = {fontScheme: 'roboto'}) => ({design, slides: [{title: 'Chart', chart: {dataLabels: false, ...chart}}]});
 
 async function exportDeck(chart, {design, ...options} = {}) {
   const diagnostics = [];

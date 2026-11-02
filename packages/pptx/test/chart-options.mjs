@@ -59,22 +59,33 @@ const flags = block => ({
 });
 const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(match => match[1].match(/<c:dLbls>([\s\S]*?)<\/c:dLbls>/)?.[0]);
 
-// 1. A chart without options writes the same chart parts as before: no axis titles, the default legend, labels hidden.
+// 1. A chart without options writes its type's defaults: no axis titles; the LH-81 header legend (top, at core's position) on the
+// column, bar, line and area charts and a right legend on the others; value labels only on the LH-03 small charts (a clustered column,
+// or line chart of two series of four points here; two series of horizontal bars are too thin for a label beside each). Import writes
+// none of these defaults back.
+const SMALL = new Set(['column', 'line']), HEADER = new Set(['column', 'bar', 'line', 'area', 'stacked-column']);
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: dataOf(type)});
-  assert.doesNotMatch(result.classic, /<c:title>/, `${type}: no axis title by default`);
-  assert.deepEqual([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].map(match => match[1]).filter(value => value === '1'), [], `${type}: no label is shown by default`);
-  assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' ? undefined : 'r', `${type}: default legend`);
+  assert.doesNotMatch(result.classic, /<c:(?:catAx|valAx)>(?:(?!<\/c:(?:catAx|valAx)>)[\s\S])*<c:title>/, `${type}: no axis title by default`);
+  // Two series and no value axis title: the header row has the legend and no generated caption, so no chart has a title here.
+  assert.doesNotMatch(result.classic, /<c:chart>\s*<c:title>/, `${type}: no generated caption for two series`);
+  assert.equal([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].some(match => match[1] === '1'), SMALL.has(type), `${type}: labels are shown on small charts only`);
+  assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' ? undefined : HEADER.has(type) ? 't' : 'r', `${type}: default legend`);
   assert.deepEqual(result.imported.axisTitles, undefined);
   assert.equal(result.imported.legend, undefined, `${type}: the default legend imports as no option`);
   assert.equal(result.imported.dataLabels, undefined, `${type}: hidden labels import as no option`);
   assert.deepEqual(result.diagnostics.filter(d => d.code === 'chart-option-adapted').map(({option, path, phase}) => ({option, path, phase})), type === 'line' ? [0, 1].map(index => ({option: `series.${index}.line.color`, path: `slides.0.charts.0.series.${index}.line.color`, phase: 'import'})) : [], 'Only explicit current native line paint is diagnosed; export options remain unchanged');
 }
 {
-  // Inert option values change nothing, byte for byte.
-  const plain = await exportDeck({type: 'column', data}), inert = await exportDeck({type: 'column', data, dataLabels: false, axisTitles: {}});
+  // Inert option values change nothing, byte for byte (`dataLabels: false` on a chart that is not small).
+  const plain = await exportDeck({type: 'area', data}), inert = await exportDeck({type: 'area', data, dataLabels: false, axisTitles: {}});
   assert.equal(inert.classic, plain.classic);
   assert.deepEqual(Object.keys(inert.entries).sort(), Object.keys(plain.entries).sort());
+  // LH-03: on a small chart `dataLabels: false` is explicit: no labels, and the value axis and its gridlines stay.
+  const small = await exportDeck({type: 'column', data}), off = await exportDeck({type: 'column', data, dataLabels: false});
+  assert.match(small.classic, /<c:valAx>(?:(?!<\/c:valAx>)[\s\S])*<c:delete val="1"\/>/);
+  assert.match(off.classic, /<c:valAx>(?:(?!<\/c:valAx>)[\s\S])*<c:delete val="0"\/>[\s\S]*<c:majorGridlines>/);
+  assert.ok(![...off.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].some(match => match[1] === '1'));
 }
 
 // 2. Axis titles: native c:title on the right axes, XML-escaped, read back.
@@ -106,7 +117,8 @@ for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter
 for (const position of ['top', 'bottom', 'left', 'right']) {
   const result = await exportDeck({type: 'column', data, legend: position});
   assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)[1], {top: 't', bottom: 'b', left: 'l', right: 'r'}[position]);
-  assert.equal(result.imported.legend, position === 'right' ? undefined : position, `${position}: round trip (right is the multi-series default)`);
+  // LH-81: a two-series column chart's default legend is in the header row, so every named position, right included, is an option.
+  assert.equal(result.imported.legend, position, `${position}: round trip`);
 }
 {
   const none = await exportDeck({type: 'column', data, legend: 'none'});
@@ -134,7 +146,10 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     assert.deepEqual(flags(block), {value: true, category: false, percent: false, position: 'outEnd', separator: ', '});
     assert.match(block, /<c:numFmt formatCode="General" sourceLinked="0"\/>/, 'General number format');
   }
-  assert.equal(column.imported.dataLabels, true);
+  // LH-03: the value labels of a small chart are its default, so they import as no option.
+  assert.equal(column.imported.dataLabels, undefined);
+  const areaLabels = await exportDeck({type: 'area', data, dataLabels: true});
+  assert.equal(areaLabels.imported.dataLabels, true);
 
   const cases = [
     ['column', {content: ['category', 'value'], position: 'inside-end', separator: ' | '}, {value: true, category: true, percent: false, position: 'inEnd', separator: ' | '}],
@@ -171,7 +186,8 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
       if (out.separator === ', ') delete out.separator;
       return Object.keys(out).length ? out : true;
     })();
-    assert.deepEqual(back, wanted, `${label}: round trip`);
+    // LH-03: plain value labels on a small chart (a clustered column or line chart of two series of four points) are its default.
+    assert.deepEqual(back, wanted === true && ['column', 'line', 'line-with-markers'].includes(type) ? undefined : wanted, `${label}: round trip`);
   }
   // Pie labels hide per point in PptxGenJS output; the options write a visible label for every point.
   const pie = await exportDeck({type: 'pie', data: pieData, dataLabels: {position: 'inside-end', content: ['value']}});

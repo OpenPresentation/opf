@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, markLabelColor, chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -24,6 +24,41 @@ function highlightFor(c, resolved, spec, data) {
   const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.hasX, rows: data.rows });
   if (!marks) return undefined;
   return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
+}
+
+// LH-03: a one-series small column or bar chart draws its emphasised point (core: the last one with a value) in the series colour and
+// every other point in a quieter tint of it (core chartEmphasisColors); it is drawn as a category highlight of that point.
+function emphasisFor(c, layer) {
+  const row = layer?.small?.emphasis;
+  const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0]);
+  // A backdrop that leaves no room for a tint at 3:1 and 15 L* from the series colour draws every point in the series colour.
+  return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
+}
+
+// LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
+// is carved from the top of the chart box, and a header legend replaces the side legend (c.legendManaged).
+function drawHeader(c, spec, header) {
+  const rtl = c.bound.geometry?.direction === "rtl";
+  if (header.caption) {
+    const element = c.svg.renderTextBox(header.caption.text, header.caption.box, c.bound, {
+      path: c.path, fontSize: c.fontPx / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: 700,
+      fill: c.labelColor, options: c.options, align: rtl ? "right" : "left", verticalAlign: "middle"
+    });
+    if (element) c.children.push(element);
+  }
+  if (header.legend) {
+    c.legendManaged = true;
+    const plan = spec.kind === "combo" ? comboPlan(c, c.series()) : undefined;
+    for (const entry of header.legend.entries) {
+      const s = c.series()[entry.series];
+      const key = entry.key === "line" ? "line" : undefined;
+      const marker = key === "line" && (spec.kind === "combo" ? plan?.[entry.series]?.role === "line" : Boolean(spec.markers));
+      const metrics = { swatch: c.fontPx * 0.6, gap: c.fontPx * 0.4, keyWidth: key ? c.fontPx * 1.4 : c.fontPx * 0.6 };
+      drawLegendEntry(c, { name: entry.name, color: seriesColor(c, entry.series), path: `${c.path}.data.columns.${s?.column ?? entry.series + 1}`, key, marker }, entry.box.x, entry.box.y, entry.box.height, metrics, entry.box.width);
+    }
+  }
+  const outer = c.box;
+  c.box = { x: outer.x, y: outer.y + header.height, width: outer.width, height: Math.max(1, outer.height - header.height) };
 }
 
 /** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
@@ -120,14 +155,20 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const spec = data?.type && CHART_TYPES[data.type] ? CHART_TYPES[data.type] : authoredSpec;
   const render = spec && RENDERERS[spec.kind];
   if (!render || !data || !data.rows.length || data.columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
-  const c = chartContext(item, box, bound, options, svg, data);
+  // LH-03, LH-81: the chart layer composition decided (core chart-layer.ts): a small chart's labels, axis, panel and emphasis, and the
+  // header row. A chart without one draws as before. Core decides it for the construct drawn (a map drawn as columns is a column chart).
+  const layer = item.chart?.layer;
+  const c = chartContext(item, box, bound, options, svg, data, layer);
   // WI-5 (P19): the panel is a fill only; the axes and gridlines draw the plot, so there is no outer frame (the PPTX chart area has no line either).
-  c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
+  // LH-03: a small chart has no panel; its marks stand on the backdrop (c.surface is then the card or the slide background).
+  if (!layer?.small) c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
-  // with none of them skips this block entirely, so its output is unchanged.
-  const resolved = resolveOptions(item.value, authoredSpec);
+  // with none of them skips this block entirely, so its output is unchanged. LH-03: a small chart's default value labels count as data labels.
+  const resolved = chartLayerDataLabels(resolveOptions(item.value, authoredSpec), layer, spec.kind);
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
-  c.highlight = highlightFor(c, resolved, spec, data);
+  c.highlight = highlightFor(c, resolved, spec, data) ?? emphasisFor(c, layer);
+  c.valueAxisHidden = layer?.small?.valueAxis === false;
+  if (layer?.header) drawHeader(c, spec, layer.header);
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
     reportOptionDiagnostics(c, resolved);
@@ -192,12 +233,13 @@ function tracePaths(item, bound, resolved) {
   return columnMap.every((column, index) => column === index) ? null : { columnMap };
 }
 
-function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false }) {
+function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false }, layer) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
   const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
-  const surface = bound.design.colors.surface;
+  // LH-03: a small chart has no panel, so its colours are judged against what it stands on: the card, or the slide background.
+  const surface = layer?.small ? (item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background) : bound.design.colors.surface;
   // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colours the PPTX export writes as
 // scheme colours): chart text, gridlines, axis lines and the outline between marks (bg1).
 const neutrals = bound.design.roles.neutrals;
@@ -665,14 +707,18 @@ function renderCategoryChart(c, spec) {
   const extents = stacks.flat().filter(Boolean).flatMap((point) => spec.kind === "line" || !stackedGrouping ? [point.to] : [point.from, point.to]);
   const dataMin = extents.length ? Math.min(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 0, dataMax = extents.length ? Math.max(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 1;
   const legendWidth = seriesLegend(c, series, spec.kind === "line" ? "line" : undefined, spec.markers);
+  // LH-03: a small chart without its value axis draws no tick labels and no gridlines; its labels carry the values. The plot keeps a
+  // line above the tallest column (or point) for its label, and a horizontal bar chart the widest label's room beyond the longest bar.
+  const hidden = c.valueAxisHidden === true;
+  const labelRoom = hidden && horizontal && c.dataLabels ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format })) + fontPx * 0.5))) : 0;
   const right = box.x + box.width - pad - legendWidth;
-  const top = box.y + pad + c.lineHeight / 2;
+  const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
   let plot, scale, valueTickWidth;
   if (horizontal) {
     const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
     let x = box.x + pad + categoryWidth + c.pad / 2;
-    const bottom = box.y + box.height - pad - c.lineHeight;
-    let width = Math.max(1, right - x - fontPx);
+    const bottom = box.y + box.height - pad - (hidden ? 0 : c.lineHeight);
+    let width = Math.max(1, right - x - fontPx - labelRoom);
     const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat)), c.width(formatTick(dataMin, percent, valueFormat)), c.width("100%")) + fontPx;
     const scaleFor = (w) => categoryScale(c, dataMin, dataMax, w, tickWidth, percent);
     scale = scaleFor(width);
@@ -689,7 +735,7 @@ function renderCategoryChart(c, spec) {
     const axis = planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
-      const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
+      const tickWidth = hidden ? fontPx / 2 : Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
       if (rtl) {
         const x = box.x + pad + fontPx / 2;
         return { scale: fitted, plot: { x, y: top, width: Math.max(1, right - tickWidth - x), height }, tickWidth };
@@ -705,7 +751,7 @@ function renderCategoryChart(c, spec) {
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
-  for (const tick of scale.ticks) {
+  for (const tick of hidden ? [] : scale.ticks) {
     const position = at(tick), label = formatTick(tick, percent, valueFormat);
     if (horizontal) {
       gridline(c, position, plot.y, position, plot.y + plot.height);
@@ -721,12 +767,13 @@ function renderCategoryChart(c, spec) {
   if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot });
   else if (spec.kind === "line") drawLines(c, spec, series, stacks, { plot, band, at, categorySlot });
   else drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot });
+  // The value axis line goes with its tick labels (LH-03); the category axis line stays, at zero.
   if (horizontal) {
     axisLine(c, crossing, plot.y, crossing, plot.y + plot.height);
-    axisLine(c, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
+    if (!hidden) axisLine(c, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
   } else {
     const valueAxisX = rtl ? plot.x + plot.width : plot.x;
-    axisLine(c, valueAxisX, plot.y, valueAxisX, plot.y + plot.height);
+    if (!hidden) axisLine(c, valueAxisX, plot.y, valueAxisX, plot.y + plot.height);
     axisLine(c, plot.x, crossing, plot.x + plot.width, crossing);
   }
 }
