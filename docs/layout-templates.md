@@ -299,6 +299,35 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
 | `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
 
+### Recomposition at the readability floor (LH-83)
+
+A layout whose regions leave its content too little room sets that content at the readability floor. When a template's
+composition sets a body role at the floor, `composeSlide` composes the same blocks again as the automatic grid
+([dynamic composition](dynamic-composition.md)) and keeps that result when its smallest body size is larger, it reports no
+more overflow (`text-overflow`, `small-cell`) and no more of its fits break a line inside a word; otherwise the layout's
+result stands. Both compositions are pure, so the choice is deterministic, and both engines read it from core.
+
+- **Body roles.** Text, lists and table cells, and the main part of the other payloads: a quote's and a code panel's body, a
+  metric's value and label, and a timeline event's `what`. The other parts (attribution, filename, language, unit, delta,
+  description, trend, a timeline's name, dates and notes) ask for 14 to 20 px by design, so reaching the floor is no squeeze
+  and never triggers it. Headings are not body. The floor is the composition's `minFontSize` (16 reference pixels at a
+  720-pixel short edge, 12 pt).
+- **What stays.** Every block is drawn, in source order. The header and footer bands, the footnote area, placed images and
+  the background are the slide's own and do not change. The layout record's `design` (alignment, cards, list bullet, image
+  fit, background variant) and `composition` (padding, gap, `minFontSize`) still apply. The slide keeps its `layout`, so
+  the PPTX export still uses that layout's native slide layout, and an edit that gives the content room (fewer blocks,
+  `paginate`) returns the slide to its regions.
+- **What changes.** The tag, title and subtitle are a content slide's heading group above the body, as on an automatic slide
+  (the one-line title steps of LH-51 and LH-76), not the layout's title area. Region semantics do not apply: the result
+  has no `regions` or `headingAreas`, no item names a `region`, and no `opf/layout-unplaced` is reported, since every block
+  is in the grid.
+- **Reported as** `recomposed: { layoutSize, size }` on the composition: the smallest body size the layout fitted and the
+  smallest of the result, in reference pixels. Validate reports the findings of the result it composes.
+- **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with promoted regions, a slide with a block
+  pinned to a region (`region`: the author chose the region), and `composeSlide(slide, { recompose: false })`, for hosts
+  that need the regions and for tests of a layout's own geometry. A strict composition (`overflow: "error"`) that the layout
+  cannot fit still fails, and an automatic grid that fails strictly is not kept.
+
 `composeLayoutAreas(record, options)` gives the areas of the empty layout: where a PowerPoint slide layout puts a placeholder
 per area. It is `composeSlide`'s own geometry for a slide with a one-line title and subtitle and every region kept, so it
 takes `composeSlide`'s options (`width`, `height`, `presentation` for the deck's header and footer, `direction`, ...) plus
