@@ -114,6 +114,38 @@ kind and right-to-left decks; a slide that pins a block to a region, or sets its
 Grouping changes the order of the composed items to the order of the cells (a pair's two blocks together; the majority
 grid before the others), which is the reading order the preview, the PPTX export and accessibility use.
 
+## Reading measure, alignment and leads
+
+These rules (layout harvest LH-70, LH-72, LH-67, LH-78) read block kinds, counts and text lengths, never a layout or slide id,
+and apply in automatic composition and in a layout's regions alike; a right-to-left deck mirrors them. A slide's own
+`composition.mode`, `columns` or `weights`, and `design.contentDirection`, keep their arrangement.
+
+**Readable size wins over the ideal measure.** `composeSlide` composes a slide with these rules and, when one of them changed
+something, without them too. It keeps the result with them only when no block's fitted body size is smaller (each text, list and
+table, and each main part of a quote, code panel, metric or timeline), or when it reports less overflow; it never overflows or
+splits words more. Otherwise it tries each rule on its own and keeps the ones that pass. LH-72's start alignment and sibling quotes
+sharing one size are always applied.
+
+- **Paragraph columns.** Three to six sibling paragraphs of similar length (100 to 240 characters each, the longest less
+  than twice the shortest) are parallel items, so they are set as a grid of columns 45 to 65 average characters wide, when that
+  is as large as their own arrangement. The shapes have 2 to 4 full columns (3 as 2 + 1 or a row; 4 as 2 x 2, 3 + 1 or a row;
+  6 as 2 x 3 or 3 x 2); each takes the largest size of the type scale at which its narrowest column keeps 45 characters and its
+  rows fit, and the largest wins. On a wide slide that is two columns at 21 or 24 px; three columns at a 45-character measure
+  exist only at the floor, so three paragraphs usually keep their own arrangement. `explain` reports `paragraph-columns`.
+- **Centered layouts center only short text.** When the content alignment is `center` and comes from the layout record or
+  the theme, a paragraph or list over two lines or 120 characters is start-aligned in a column at most 65 characters wide,
+  centered in its cell, and its siblings follow it. An alignment the slide or the deck sets is the author's and is kept.
+- **Lead plus stack.** Of three to five sibling texts or quotes, a paragraph of at least 100 characters, at least 2.5 times
+  the median length of the others and twice the next longest, leads: a cell 55% of the width at full height, a text starting
+  at the lead size (32 px), beside a stack of the others at one size. A chart or picture with two compact siblings (metrics, or
+  texts and quotes of at most 120 characters) leads at 58%. The lead sits at the start unless it is the last block. A
+  `flow: grid` region keeps its grid. `explain` reports `lead-stack`.
+- **Quotes beside other blocks.** A quote beside a block of another kind, or one of three or more quotes, starts at the
+  lead size and steps down until it takes at most four lines (never below the 28 px body size), on a card that hugs it, when
+  that makes no quote smaller; otherwise it keeps its size, on a card when the card costs no size. A card the slide does not
+  otherwise draw is left out when it would make the quote overflow. A lone quote, and one or two quotes alone on a slide, keep
+  the 40 px display size. Sibling quotes in one row share one body size; a row of wider cells keeps its own.
+
 ## Nested groups
 
 ### Shared content cards
@@ -281,7 +313,7 @@ The result contains `parts` for the body and any nonempty footer, exact display 
 
 Check `overflow` and `diagnostics` before accepting the parts. Invalid available dimensions remain visible with `fit` absent (a fit at the readability floor with `floorFallback`, LH-40), and `overflow: 'error'` throws `OPFCompositionError`. Diagnostics distinguish invalid part space, parts outside their cell, text that exceeds its reserved space, and overlapping line rectangles. Those rectangles are conservative text-layout bounds, not measured glyph outlines. The readability floor is scaled once and can raise the nominal body (28) or footer (17) size; it is never silently capped below the selected floor.
 
-`quote-flow-v1` asks for a 40-pixel body (it fits down through 28 pixels to the readability floor) wrapped in the quotation marks of the deck language (`options.language`, a BCP-47 tag: “…” for English, „…“ for German, «…» for French and Spanish, 「…」 for Japanese, ASCII only for a language the table `QUOTE_MARKS` does not list; every mark is one UTF-16 code unit, so the body's source range starts at offset 1). It keeps 18-reference-pixel outer insets and an 18-pixel body/footer gap while fonts scale with the canvas. A 40-pixel footer is a whitespace preference. The allocator expands it for long sources or compacts it for dense bodies, trying at most the nominal and minimum footer sizes and selecting the fitting pair with least total font reduction. If neither fits, it returns floor-size failure diagnostics. This is a bounded internal allocation step, not a complete layout-repair engine.
+`quote-flow-v1` asks for a 40-pixel body (it fits down through 28 pixels to the readability floor; LH-78: `bodySize` sets another start, and `bodyLines` steps the start down until the body takes at most that many lines, never below 28 pixels) wrapped in the quotation marks of the deck language (`options.language`, a BCP-47 tag: “…” for English, „…“ for German, «…» for French and Spanish, 「…」 for Japanese, ASCII only for a language the table `QUOTE_MARKS` does not list; every mark is one UTF-16 code unit, so the body's source range starts at offset 1). It keeps 18-reference-pixel outer insets and an 18-pixel body/footer gap while fonts scale with the canvas. A 40-pixel footer is a whitespace preference. The allocator expands it for long sources or compacts it for dense bodies, trying at most the nominal and minimum footer sizes and selecting the fitting pair with least total font reduction. If neither fits, it returns floor-size failure diagnostics. This is a bounded internal allocation step, not a complete layout-repair engine.
 
 `composeSlide` scores both parts and accepts geometry against the final rounded item box. Each quote item carries `quoteLayout`; its compatibility `text` field is the same fit object as the quote body, including generated quotation marks. Consumers needing original offsets must use the explicit `sources` mappings. The coordinated renderer and PPTX consume these parts without another measurement/style-resolution pass. Missing geometry rejects rendering/export rather than omitting content; a part with no usable space reaches them laid out at the readability floor (LH-40), so they draw it, overflowing, beside its diagnostic. This requires core 0.8.0 with renderer/PPTX 0.6.0; older core 0.7.0/renderer 0.5.1/PPTX 0.5.2 lack these changes. The complete published set, immutable verification refs and fresh registry evidence are recorded in [the release plan](plans/shared-quote-release.md).
 

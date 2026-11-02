@@ -82,7 +82,9 @@ test('the recomposition keeps the layout record\'s design and composition', () =
   assert.ok(result.recomposed);
   const body = result.items.filter((item) => !HEADINGS.has(item.field));
   assert.ok(body.every((item) => item.frameBox), 'cards from the record\'s design');
-  assert.ok(body.every((item) => item.alignment === 'center'), 'alignment from the record\'s design');
+  // LH-72: the record centers, and the lists that run over two lines are start-aligned in a centered column.
+  assert.equal(result.design.contentAlignment, 'center', 'alignment from the record\'s design');
+  assert.ok(body.every((item) => item.alignment === 'center' || item.text.lines.length > 2), 'only long text is start-aligned');
   assert.equal(result.items.find((item) => item.field === 'title').box.x, Math.round(0.06 * 720 * 10) / 10, 'padding from the record\'s composition');
 });
 

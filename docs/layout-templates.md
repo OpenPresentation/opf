@@ -313,6 +313,11 @@ keeps its own size). Their prose, and their lists, are refitted at the smallest 
 share it role by role (value, unit, label, description, delta, trend). A sibling the shared size would make overflow keeps
 its own fit, so the shared size never takes a block under the readability floor.
 
+Sibling quotes in one row share one body size too (LH-78), and a region's similar paragraphs, a lead beside a stack and the start
+alignment of long text in a centered layout follow the rules in [Reading measure, alignment and
+leads](dynamic-composition.md#reading-measure-alignment-and-leads) (LH-70, LH-67, LH-72). A paragraph grid and a lead plus
+stack replace a lone fixed region's lead plus cards when they are no smaller; a `flow: grid` region never takes a lead plus stack.
+
 Where sibling text and lists span several rows, the rows are sized jointly with the shared size instead of being fixed first:
 at each size of the type scale, from the largest start down, every row asks for its tallest cell's need at that size (a card's
 insets included), and the largest size at which the rows fit is kept. This applies to a region's grid of paragraphs and lists
