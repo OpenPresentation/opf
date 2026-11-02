@@ -6,7 +6,7 @@ export { readDeckReport } from "./deck-report.js";
 export type { DeckReport, DeckReportOptions } from "./deck-report.js";
 export { type ConversionPlan, deckFileFormat, exportFormatOf, planConversion, readInput, writePlanned } from "./node/conversion.js";
 export { OPFApiError, OPFExportError, OPFImportError, asApiError } from "./api-errors.js";
-export { EXPORT_FORMATS, type ExportContext, type ExportFile, type ExportFontSummary, type ExportFormat, type ExportOptions, type ExportRun, type ExportText, type ResolvedExportOptions, EXPORT_TEXT, VERSIONS, checkDate, checkRenamedOptions, checkScale, resolveExportOptions, runExport } from "./node/export.js";
+export { EXPORT_FORMATS, type ExportContext, type ExportContinuedSlide, type ExportFile, type ExportFontSummary, type ExportFormat, type ExportOptions, type ExportRun, type ExportText, type ResolvedExportOptions, EXPORT_TEXT, VERSIONS, checkDate, checkRenamedOptions, checkScale, resolveExportOptions, runExport } from "./node/export.js";
 export { type PlannedFile, checkDestinations, checkOutputPattern, deckStem, padNumber, pointerOf, publishNew, stemOf, writeFiles } from "./node/files.js";
 export { type SlideSelection, parseSlideSelection } from "./slide-selection.js";
 export { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts } from "./node/fonts.js";

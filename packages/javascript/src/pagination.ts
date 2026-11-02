@@ -1,6 +1,6 @@
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
-import { composeSlide, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
+import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
 import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
 import { resolveDrawnFontFamilies } from './drawn-font-families.js';
@@ -20,8 +20,20 @@ export interface PaginationOptions extends Omit<ComposeSlideOptions, 'textMeasur
   fonts?: Fonts;
   /** Registered catalogs, for resolving the slide's script fonts when `presentation` is given. `paginate` passes its own. */
   catalogs?: readonly Catalog[];
-  /** Readability floor used while choosing page breaks. Default 24 reference pixels. */
+  /**
+   * Readability floor used while choosing page breaks. Default 24 reference pixels; with `wholeBlocks`, the slide's own floor
+   * (its `composition.minFontSize`, its layout's, else 16), and the pages keep the slide's composition as authored.
+   */
   minFontSize?: number;
+  /**
+   * LH-90: break only between the slide's block units (`blockUnits`: a lead block and the blocks that follow it; each root block
+   * alone when the slide has none), never inside one, over the fewest pages that hold them, with the units spread evenly over
+   * those pages when every page still fits (eight timelines that fit five to a page are four and four, not five and three).
+   * The slide is composed first as the engines draw it: a strict (`overflow: "error"`) composition throws its
+   * `OPFCompositionError`, and a slide with no `text-overflow` or `small-cell` is returned unchanged. A unit that overflows on a
+   * page of its own throws `OPFPaginationError`.
+   */
+  wholeBlocks?: boolean;
   /** All-or-nothing resource limit. Defaults to 100 output slides. */
   maxSlides?: number;
   /** Existing slide and content payload IDs to avoid when generating continuation IDs. */
@@ -128,15 +140,15 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   let source = clone(input) as Record<string, any>;
   const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
-  const minFontSize = options.minFontSize ?? 24;
-  if (!Number.isFinite(minFontSize) || minFontSize < 8 || minFontSize > 32) throw new RangeError("Pagination minFontSize must be between 8 and 32.");
+  const minFontSize = options.minFontSize ?? (options.wholeBlocks ? undefined : 24);
+  if (minFontSize !== undefined && (!Number.isFinite(minFontSize) || minFontSize < 8 || minFontSize > 32)) throw new RangeError("Pagination minFontSize must be between 8 and 32.");
   const sourceIndex = options.slideIndex ?? 0, sourceBase = `slides.${sourceIndex}`;
   const withReadability = (slide: Record<string, any>, warn = false): Record<string, any> => {
     const result = clone(slide);
-    const rootMinimum = Math.max(minFontSize,result.composition?.minFontSize ?? (options.layout?.composition as any)?.minFontSize ?? 16);
+    const rootMinimum = Math.max(minFontSize ?? 0,result.composition?.minFontSize ?? (options.layout?.composition as any)?.minFontSize ?? 16);
     result.composition = {...result.composition,minFontSize:rootMinimum};
     const visit = (node: Record<string, any>, inheritedMinimum: number) => {
-      const minimum = Math.max(minFontSize,node.composition?.minFontSize ?? inheritedMinimum);
+      const minimum = Math.max(minFontSize ?? 0,node.composition?.minFontSize ?? inheritedMinimum);
       if (node.composition) node.composition = { ...node.composition, minFontSize:minimum, ...(warn?{overflow:'warn'}:{}) };
       if (Array.isArray(node.blocks)) node.blocks.forEach(child=>{ visit(child,minimum); });
     };
@@ -145,8 +157,9 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     return result;
   };
   // Persist the evaluated readability policy in the ordinary returned slides. Otherwise a
-  // footer measured at 24px during pagination would render at its old 17px nominal size.
-  source = withReadability(source);
+  // footer measured at 24px during pagination would render at its old 17px nominal size. At the slide's own floor
+  // (`wholeBlocks` without `minFontSize`) the pages are drawn as the slide was, so they keep its composition as authored.
+  if (minFontSize !== undefined) source = withReadability(source);
   let evaluations = 0;
   const {fonts,catalogs,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
   // opf#485: measure script runs in the slide's script fonts, as the renderer and the exporter do.
@@ -164,6 +177,12 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const slideNumber = (options.slideNumber??sourceIndex+1)+pageIndex;
     return composeSlide(resolveSlideVariables(withReadability(slide,true),{slideNumber,...(slideCount!==undefined?{slideCount}:{}),...logoContext}), {...composeOptions,slideNumber});
   };
+  // LH-90: a whole-block split acts only on a slide the engines draw overflowing; a strict composition fails here as it does there.
+  if (options.wholeBlocks) {
+    const slideNumber = options.slideNumber ?? sourceIndex+1;
+    const drawn = composeSlide(resolveSlideVariables(source,{slideNumber,...(slideCount!==undefined?{slideCount}:{}),...logoContext}), {...composeOptions,slideNumber});
+    if (!drawn.diagnostics.some(issue => issue.code === 'text-overflow' || issue.code === 'small-cell')) return {slides:[source],pages:[{slideIndex:sourceIndex,mappings:drawn.items.map(item=>({sourcePath:item.path,outputPath:item.path}))}]};
+  }
   const initial = geometry(source);
   // Only fit diagnostics (and anything from the repeated furniture) drive pagination. Design-level
   // notices such as unresolved-content for listBullet: "image" without a logo, or an unsupported
@@ -250,8 +269,9 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
           value.forEach((child,index)=>{
             const projected = visit(child,`${childPath}.${index}`,`${outputPath}.${children.length}`);
             if (!projected) return;
-            // OPF 0.19: a root block moved to a continuation slide keeps the region it was drawn in, as a pin.
-            const region = root && pageIndex > 0 && projected.region === undefined ? regionOfBlock.get(index) : undefined;
+            // OPF 0.19: a root block moved to a continuation slide keeps the region it was drawn in, as a pin. A whole-block page (LH-90)
+            // is bound by the layout as the first page is, so every page composes alike (a pin would also keep it from recomposing).
+            const region = root && pageIndex > 0 && !options.wholeBlocks && projected.region === undefined ? regionOfBlock.get(index) : undefined;
             if (region && regionAccepts(region, projected)) projected.region = region.name;
             children.push(projected);
           });
@@ -280,6 +300,38 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
     selected = new Map();
   };
+  if (options.wholeBlocks) {
+    // LH-90: a page holds a run of whole units, each with all of its leaves: the slide's block units (a lead block and the
+    // blocks that follow it, `blockUnits`), else each root block alone.
+    const unitOf = new Map<number, number>();
+    for (const [unit,indices] of (blockUnits(source)?.units ?? []).entries()) for (const index of indices) unitOf.set(index,unit);
+    const units: Leaf[][] = [];
+    let previous: number | undefined;
+    for (const leaf of leaves) {
+      const index = blockIndex(leaf.path);
+      if (index < 0) throw new OPFPaginationError(`Content at ${leaf.path} is not in a root block; a whole-block split moves root blocks only.`, initial.diagnostics);
+      const unit = unitOf.get(index) ?? -1-index;
+      if (units.length && unit === previous) units.at(-1)!.push(leaf); else units.push([leaf]);
+      previous = unit;
+    }
+    const portions = (from: number, to: number) => new Map(units.slice(from,to).flat().map(leaf=>[leaf.path,{leaf,start:0,end:(leaf.boundaries ?? [0,1]).at(-1)!,value:leaf.value} as Portion]));
+    const issuesOf = (from: number, to: number, pageIndex: number) => fit(geometry(project(portions(from,to),pageIndex).slide,pageIndex).diagnostics);
+    // The fewest pages: each page takes as many of the next blocks as fit.
+    const greedy: [number,number][] = [];
+    for (let start = 0; start < units.length;) {
+      const alone = issuesOf(start,start+1,greedy.length);
+      if (alone.length) throw new OPFPaginationError(`The block at ${units[start]![0]!.path} cannot fit on an otherwise empty slide.`,alone);
+      let end = start+1;
+      while (end < units.length && !issuesOf(start,end+1,greedy.length).length) end++;
+      greedy.push([start,end]); start = end;
+    }
+    // The same number of pages with the blocks spread evenly (the earlier pages take the remainder), when every page fits.
+    const count = greedy.length, base = Math.floor(units.length/count), extra = units.length%count;
+    const balanced = Array.from({length:count},(_,page)=>{ const start = page*base+Math.min(page,extra); return [start,start+base+(page<extra?1:0)] as [number,number]; });
+    const ranges = balanced.every(([from,to],page)=>!issuesOf(from,to,page).length) ? balanced : greedy;
+    for (const [from,to] of ranges) { selected = portions(from,to); finish(); }
+    return {slides,pages};
+  }
   for (const leaf of leaves) {
     const boundaries = leaf.boundaries ?? [0,1];
     const end = boundaries.at(-1)!;
@@ -346,10 +398,105 @@ export interface PresentationPaginationResult {
 
 /** Resolve the slides' references (the document's catalogs groups, then the registered catalogs) and paginate a complete presentation without mutating it. */
 export function paginate(input: unknown, options: PresentationPaginationOptions = {}): PresentationPaginationResult {
-  checkCatalogsOption(options.catalogs, 'paginate');
+  const {presentation,pages} = paginateSlides(input,options,'paginate',options.maxSlides ?? 100,(slide,slideOptions)=>paginateSlide(slide,slideOptions));
+  return {presentation,pages,layout:options.fonts?'measured':'estimated'};
+}
+
+/** LH-90: one slide that `continueOverfull` continues on further slides. */
+export interface ContinuedSlide {
+  /** The slide's index in the input presentation. */
+  sourceSlideIndex: number;
+  /** The index of each of its pages in the output presentation, in order. */
+  slideIndices: number[];
+  /** The lead kind of its block units (`blockUnits`): `timeline`, `table`, `text`, ... */
+  kind: string;
+  /** The input indices of the root blocks each page holds, in order. */
+  blocks: number[][];
+  /** How many block units (lead blocks) each page holds. */
+  units: number[];
+  /** Each page's mapping, as `paginate` returns it, with output paths. */
+  pages: (PaginatedPage & { sourceSlideIndex: number })[];
+}
+export interface ContinuationResult {
+  /** The presentation to draw: the input with each continued slide replaced by its pages. */
+  presentation: Record<string, any>;
+  /** The slides that were continued, in order; empty when the slide count did not change. */
+  continued: ContinuedSlide[];
+  /** How the breaks were chosen, as in `paginate`. */
+  layout: 'measured' | 'estimated';
+}
+
+const promotedKey = /^(top|middle|bottom|left|center|right)([+:]|$)/;
+/**
+ * LH-90: the root blocks of a slide as the units a whole-block split keeps together, or undefined. Every root block must be one
+ * payload (no nested group) and the slide must hold nothing else to move (no root payload, no promoted region). A unit starts at
+ * each block of the first block's kind (`kind`, the lead kind) and takes the blocks after it up to the next one, so eight
+ * timelines are eight units and a timeline keeps the note that follows it. A slide needs two or more units.
+ */
+export function blockUnits(slide: unknown): { kind: string; units: number[][] } | undefined {
+  if (!isRecord(slide) || !Array.isArray(slide.blocks) || slide.blocks.length < 2) return undefined;
+  if (Object.keys(slide).some(key => contentFields.has(key) || promotedKey.test(key))) return undefined;
+  const kinds: string[] = [];
+  for (const block of slide.blocks) {
+    const fields = isRecord(block) && !Array.isArray(block.blocks) ? Object.keys(block).filter(key => contentFields.has(key)) : [];
+    if (fields.length !== 1) return undefined;
+    kinds.push(fields[0]!);
+  }
+  const kind = kinds[0]!, units: number[][] = [];
+  kinds.forEach((blockKind,index)=>{ if (blockKind === kind) units.push([index]); else units.at(-1)!.push(index); });
+  return units.length >= 2 ? {kind,units} : undefined;
+}
+
+/**
+ * LH-90: the deck an export draws. A slide of two or more block units (`blockUnits`: sibling blocks of one kind, each with the
+ * blocks that follow it) that the engines draw overflowing (`text-overflow` or `small-cell` at its own readability floor)
+ * continues on further slides, split between whole units (`paginateSlide` with `wholeBlocks`): the fewest pages that fit, the blocks spread evenly, each page with the slide's
+ * headings, layout and design (pagination's convention), speaker notes on the first. Every other slide is kept as it is, and so
+ * is a slide whose blocks do not fit even one to a page, or whose composition is strict (`overflow: "error"`), which the engines
+ * still refuse. Content is never dropped, and `continued` lists every slide the split changed, so a host can report the new
+ * slide count.
+ */
+export function continueOverfull(input: unknown, options: PresentationPaginationOptions = {}): ContinuationResult {
+  const layout = options.fonts ? 'measured' : 'estimated';
+  const found = new Map<number, { kind: string; units: number[][] }>();
+  let result: ReturnType<typeof paginateSlides>;
+  try {
+    result = paginateSlides(input,options,'continueOverfull',options.maxSlides ?? 10000,(slide,slideOptions,index)=>{
+      const units = blockUnits(slide);
+      if (!units) return undefined;
+      try {
+        const split = paginateSlide(slide,{...slideOptions,wholeBlocks:true,minFontSize:options.minFontSize});
+        if (split.slides.length < 2) return undefined;
+        found.set(index,units);
+        return split;
+      } catch (error) {
+        if (error instanceof OPFPaginationError || error instanceof OPFCompositionError) return undefined;
+        throw error;
+      }
+    });
+  } catch (error) {
+    // A slide count that does not settle ({{deck.slideCount}} moves the breaks it counts) keeps the deck as written.
+    if (error instanceof OPFPaginationError) return {presentation:clone(input) as Record<string, any>,continued:[],layout};
+    throw error;
+  }
+  const continued: ContinuedSlide[] = result.splits.map(({sourceSlideIndex,outputStart,count})=>{
+    const pages = result.pages.filter(page=>page.sourceSlideIndex===sourceSlideIndex);
+    const blocks = pages.map(page=>[...new Set(page.mappings.map(mapping=>/^slides\.\d+\.blocks\.(\d+)/.exec(mapping.sourcePath)?.[1]).filter((value): value is string=>value!==undefined).map(Number))]);
+    const {kind,units} = found.get(sourceSlideIndex)!;
+    return {sourceSlideIndex,slideIndices:Array.from({length:count},(_,page)=>outputStart+page),kind,blocks,units:blocks.map(page=>units.filter(unit=>page.includes(unit[0]!)).length),pages};
+  });
+  return {presentation:result.presentation,continued,layout};
+}
+
+/**
+ * The deck loop `paginate` and `continueOverfull` share: each slide is resolved in its context (references, final slide number,
+ * the deck's slide count) and passed to `split`, whose pages replace it; `undefined` keeps the slide as it is. `paginate` passes
+ * `paginateSlide` itself.
+ */
+function paginateSlides(input: unknown, options: PresentationPaginationOptions, name: 'paginate' | 'continueOverfull', maxSlides: number, split: (slide: Record<string, any>, slideOptions: PaginationOptions, index: number) => PaginationResult | undefined) {
+  checkCatalogsOption(options.catalogs, name);
   assertValid(input, { only: ['format'] });
   const presentation = clone(input) as Record<string, any>;
-  const maxSlides = options.maxSlides ?? 100;
   if (!Number.isInteger(maxSlides) || maxSlides < 1 || maxSlides > 10000) throw new RangeError('maxSlides must be an integer between 1 and 10000.');
   // Reserve every id already in the document — slide and payload alike — so a
   // generated continuation id can never collide with one an author chose.
@@ -358,6 +505,7 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
   const reported = new Set<string>();
   const run = (slideCount: number) => {
     const output: Record<string, any>[] = [], pages: PresentationPaginationResult['pages'] = [], reservedIds = [...authoredIds];
+    const splits: { sourceSlideIndex: number; outputStart: number; count: number }[] = [];
     presentation.slides.forEach((slide: Record<string,any>, index: number) => {
       const context = resolveSlideContext(presentation,index,{slideNumber:output.length+1,slideCount,date:options.date,...(options.catalogs?{catalogs:options.catalogs}:{}),...(options.strictReferences?{strictReferences:true}:{})});
       for (const diagnostic of context.diagnostics) {
@@ -366,8 +514,11 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
         if (!reported.has(key)) { reported.add(key); options.onDiagnostic?.(diagnostic); }
       }
       if (output.length>=maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-      const result = paginateSlide(slide,{...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,...(options.catalogs?{catalogs:options.catalogs}:{}),presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions);
+      const slideOptions = {...context.options,textRasterPadding:options.textRasterPadding,fonts:options.fonts,...(options.catalogs?{catalogs:options.catalogs}:{}),presentation,slideIndex:index,slideNumber:output.length+1,slideCount,date:options.date,maxSlides:maxSlides-output.length,minFontSize:options.minFontSize,reservedIds} as PaginationOptions;
+      const result = split(slide,slideOptions,index);
+      if (!result) { output.push(slide); return; }
       const outputStart = output.length;
+      if (result.slides.length > 1) splits.push({sourceSlideIndex:index,outputStart,count:result.slides.length});
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
         pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
@@ -375,7 +526,7 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
       output.push(...result.slides);
       reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));
     });
-    return {output,pages};
+    return {output,pages,splits};
   };
   // {{deck.slideCount}} anywhere in the deck depends on the final page count, which can in
   // turn depend on the width of that value. Iterate to a bounded fixed point.
@@ -385,8 +536,8 @@ export function paginate(input: unknown, options: PresentationPaginationOptions 
     if (attempt >= 3) throw new OPFPaginationError('The slide count did not converge. Change the text around {{deck.slideCount}} or split the input.');
     slideCount = result.output.length; result = run(slideCount);
   }
-  const {output,pages} = result;
+  const {output,pages,splits} = result;
   presentation.slides=output;
   assertValid(presentation, { only: ['format'] });
-  return {presentation,pages,layout:options.fonts?'measured':'estimated'};
+  return {presentation,pages,splits};
 }

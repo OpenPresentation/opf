@@ -55,9 +55,9 @@ describe("the exports map", () => {
 describe("the two builds", () => {
   test("export the same names, sharing every class and function but the file API and the verbs with the CLI's default catalog", () => {
     assert.deepEqual(Object.keys(browserBuild).sort(), Object.keys(nodeBuild).sort());
-    // RR-75: in Node, validate, stats, paginate, embed and edit register the default catalog when a call names none.
+    // RR-75: in Node, validate, stats, paginate, continueOverfull (LH-90), embed and edit register the default catalog when a call names none.
     for (const name of Object.keys(nodeBuild)) {
-      if (["open", "save", "convert", "validate", "stats", "paginate", "embed", "edit"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
+      if (["open", "save", "convert", "validate", "stats", "paginate", "continueOverfull", "embed", "edit"].includes(name)) assert.notEqual(browserBuild[name], nodeBuild[name], name);
       else assert.equal(browserBuild[name], nodeBuild[name], name);
     }
     for (const name of ["open", "save", "convert", "OPFApiError", "OPFExportError", "OPFImportError", "parseSlideSelection", "parse", "stringify", "validate"]) assert.equal(typeof nodeBuild[name], "function", name);

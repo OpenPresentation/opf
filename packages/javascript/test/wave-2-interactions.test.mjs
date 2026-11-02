@@ -69,3 +69,19 @@ test('LH-81 and LH-33 with LH-93: siblings with headers of one and two rows shar
   assert.ok(Math.abs(plots[0].top - plots[1].top) < 1e-6 && Math.abs(plots[0].height - plots[1].height) < 1e-6);
   assert.notEqual(charts[0].chart.layer.header.height, charts[1].chart.layer.header?.height, 'the headers differ');
 });
+
+test('LH-90 with LH-83: every page of a continued slide composes alike, recomposed at the floor or on the layout', async () => {
+  const { gallery } = await import('@openpresentation/gallery');
+  const { continueOverfull, resolveSlideContext } = await import('../dist/index.js');
+  for (const [id, units] of [['agenda-split', [3, 3]], ['process', [3, 3]]]) {
+    const slide = { ...sampleSlide(layouts[id], 6, 'long'), layout: id };
+    const result = continueOverfull({ slides: [slide] }, { catalogs: [gallery] });
+    assert.deepEqual(result.continued.map((entry) => entry.units), [units], id);
+    // A continued page is bound by the layout as the first page is: no region pin keeps a later page from recomposing (explicit
+    // pagination pins a moved block to its region; a whole-block page does not), so both pages of the agendas recompose and fit.
+    const pages = result.presentation.slides.map((page, index) => { const context = resolveSlideContext(result.presentation, index, { catalogs: [gallery] }); return composeSlide(context.slide, context.options); });
+    assert.ok(result.presentation.slides.every((page) => page.blocks.every((block) => block.region === undefined)), `${id}: no pins`);
+    assert.deepEqual(pages.map((page) => overflow(page).length), [0, 0], `${id}: every page fits`);
+    assert.equal(new Set(pages.map((page) => Boolean(page.recomposed))).size, 1, `${id}: the pages compose alike`);
+  }
+});

@@ -19,11 +19,11 @@
 // unless `date` is passed.
 //
 // RR-75: in Node the functions behind the CLI's verbs have the CLI's defaults, so `opf validate deck` and `validate(deck)` agree:
-// `validate`, `stats`, `paginate`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
+// `validate`, `stats`, `paginate`, `continueOverfull`, `embed` and `edit` resolve references in the pptx.gallery catalog (`gallery` of the
 // @openpresentation/gallery package, RR-78) when no `catalogs` option is given. The browser build registers none (FA-21).
 import type { Presentation } from "./core.js";
 import type { Catalog } from "./catalog-refs.js";
-import { edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck } from "./core.js";
+import { continueOverfull as continueDeck, edit as editDeck, embed as embedRecords, paginate as paginateDeck, stats as deckStats, validate as validateDeck } from "./core.js";
 import { OPFApiError, asApiError } from "./api-errors.js";
 import type { ConvertFormat, ConvertInput, ConvertOptions, ConvertResult, OpenOptions, SaveOptions, SaveResult } from "./node/conversion.js";
 import { defaultCatalogs } from "./node/catalogs.js";
@@ -50,6 +50,8 @@ export const validate: typeof validateDeck = (input, options) => validateDeck(in
 export const stats: typeof deckStats = (presentation, options) => deckStats(presentation, withDefaultCatalog(options));
 /** `paginate` with the gallery registered when `catalogs` is omitted, as `opf paginate` does. Pass `fonts` (opf-render's `loadFonts()`) for measured page breaks. */
 export const paginate: typeof paginateDeck = (input, options) => paginateDeck(input, withDefaultCatalog(options));
+/** `continueOverfull` with the gallery registered when `catalogs` is omitted, as `convert` uses it (LH-90). Pass `fonts` for measured breaks. */
+export const continueOverfull: typeof continueDeck = (input, options) => continueDeck(input, withDefaultCatalog(options));
 /** `embed` with the gallery registered when `catalogs` is omitted, as `opf embed` does. */
 export const embed: typeof embedRecords = (document, options) => embedRecords(document, withDefaultCatalog(options));
 /** `edit` with the gallery registered for the check when `catalogs` is omitted, as `opf edit` does. */

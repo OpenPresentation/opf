@@ -336,6 +336,14 @@ Pagination continues on a new slide with the same layout: blocks beyond a region
 carry a `region` pin to the region they came from. A block that no region of the layout accepts, on a layout with no
 overflow region, stays below the grid on every page and never drives a split.
 
+The export does one split on its own (LH-90). A slide whose body is two or more units of one kind (eight timelines, five
+tables; a unit is a block of the first block's kind with the blocks that follow it, so a timeline keeps its note) and that
+overflows at its readability floor continues on further slides of the same layout, split between whole units: the fewest
+pages that fit, the units spread evenly, every page bound by the layout as the first is (no pins, so each page can
+recompose). `opf convert` and `convert` draw that deck for the preview and the PPTX alike and report each such slide
+(`slide-continued`, report field `continued`); a strict slide still fails, and `paginate: false` (`--keep-slides`) draws
+the slide as written. See [dynamic composition](dynamic-composition.md#pagination).
+
 ## Design keys
 
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,

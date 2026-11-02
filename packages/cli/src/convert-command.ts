@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -35,7 +35,7 @@ export const spec: CommandSpec = {
 	positional: [2, 2],
 	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
 	repeated: ["fonts"],
-	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster"],
+	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "keep-slides", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
 (stdin: --from json|yaml|md|pptx, else text starting with { or [ is JSON). Output: .json, .opf.yaml/.yml, .opf.md, .pdf, .pptx,
 .png and .svg (one file per slide beside the output: slides/deck.png gives slides/deck-1.png, padded to the largest slide
@@ -54,8 +54,11 @@ Flags, each only where its format is involved (otherwise exit 2):
   Markdown output  --drop-unsupported             leave out what the dialect has no syntax for (listed as loss) instead of
                                                   embedding it as YAML in a fence
   pdf, png, svg    --slides <1,3-5>  --include-hidden
-  pdf, png, svg,   --paginate  --date <YYYY-MM-DD>  --fonts <dir>... (.ttf and .otf files)  --asset-dir <dir>
-  and pptx
+  pdf, png, svg,   --date <YYYY-MM-DD>  --fonts <dir>... (.ttf and .otf files)  --asset-dir <dir>
+  and pptx         --paginate                     split every slide that overflows, as opf paginate does. Without it a slide
+                                                  of sibling blocks of one kind (eight timelines) that overflows continues on
+                                                  further slides between whole blocks (slide-continued, report continued)
+                   --keep-slides                  draw every slide as written, also one that overflows
   pptx             --charts <auto|native|picture>  --images <compatible|preserve>  --provenance <full|references-only|none>
                    --body-text <measured|native>  measured (the default): every wrapped line is its own text box, laid out as the
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
@@ -160,6 +163,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 	// Output-side scope, before anything is read.
 	const exportFlags = given(options, repeated, EXPORT_ONLY);
 	if (target.kind === "deck" && exportFlags.length) throw usage(`${flagList(exportFlags)} ${exportFlags.length === 1 ? "applies" : "apply"} to pdf, pptx, png and svg outputs, not to a deck written as ${target.format === "markdown" ? "md" : target.format}.`, "option-not-applicable", { options: exportFlags.map((name) => `--${name}`) });
+	if (options.paginate && options["keep-slides"]) throw usage("--paginate splits overflowing slides and --keep-slides draws every slide as written; choose one.", "invalid-value", { options: ["--paginate", "--keep-slides"] });
 	if (options["schema-comment"] && !(target.kind === "deck" && target.format === "yaml")) throw usage("--schema-comment applies to a YAML output.", "option-not-applicable", { option: "--schema-comment" });
 	if (options["drop-unsupported"] && !(target.kind === "deck" && target.format === "markdown")) throw usage("--drop-unsupported applies to a Markdown (.opf.md) output.", "option-not-applicable", { option: "--drop-unsupported" });
 	const split = oneOf("--split", options.split, ["auto", "rules", "headings"] as const);
@@ -311,7 +315,7 @@ async function exportDeck(
 			typefaces: text("typefaces"),
 			as: text("as"),
 			fonts: repeated.fonts,
-			paginate: options.paginate === true ? true : undefined,
+			paginate: options.paginate === true ? true : options["keep-slides"] === true ? false : undefined,
 			includeHidden: options["include-hidden"] === true ? true : undefined,
 			// Files are named by the deck, else the input file (`deck` for stdin), as the commands always named them.
 			...(toStdout ? { name: inputFile === "-" ? undefined : path.basename(inputFile).replace(/\.(opf\.)?(json|ya?ml|md)$|\.pptx$/i, "") } : {}),
@@ -345,7 +349,7 @@ async function exportDeck(
 		cli: context.cli,
 		...(exported ? { renderer: exported.renderer, ...(exported.pptx ? { pptx: exported.pptx } : {}) } : {}),
 		...(plan.imported && !exported?.pptx ? { pptx: plan.imported.pptx } : {}),
-		...(exported ? { fonts: exported.fonts, ...(exported.pagination ? { pagination: exported.pagination } : {}), ...(exported.pdf ? { pdf: exported.pdf } : {}), ...(target.format !== "pptx" ? { skippedHidden: exported.skippedHidden } : {}) } : {}),
+		...(exported ? { fonts: exported.fonts, ...(exported.pagination ? { pagination: exported.pagination } : {}), ...(exported.continued ? { continued: exported.continued } : {}), ...(exported.pdf ? { pdf: exported.pdf } : {}), ...(target.format !== "pptx" ? { skippedHidden: exported.skippedHidden } : {}) } : {}),
 		checks: { ...plan.check.checks, layout: "measured", fonts: "checked", nativeExport: target.format === "pptx" ? "checked" : "not-checked" },
 	};
 	if (reaches(findings, failOn)) throw documentFailure("convert", `Findings at or above --fail-on ${failOn}; nothing was written.`, findings, { input: context.input, outputs: outputs.map((item) => ({ ...item, planned: true })) });

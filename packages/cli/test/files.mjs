@@ -129,6 +129,18 @@ try {
   assert.equal((await readdir(temp)).includes('over-strict'), false, '--fail-on warning writes nothing when there are warnings');
   const paginated = run(['convert', 'over.opf.json', 'over-pages/over.svg', '--paginate', '--fail-on', 'warning']).report;
   assert.ok(paginated.outputs.length > 1 && paginated.pagination.pages.length > 1, '--paginate splits the slide with the preview fonts');
+  // LH-90: an overfull slide of sibling blocks of one kind continues on further slides by default and is reported; --keep-slides
+  // draws it as written; the two flags together are a usage error.
+  const event = what => ({when: 'Q1', what, description: 'Confirm current state, owners, and constraints before the next review.'});
+  const paths = {name: 'Paths', slides: [{layout: 'process', title: 'Eight execution paths', blocks: Array.from({length: 8}, (_, index) => ({timeline: {name: `Path ${index + 1}`, description: 'Major milestones for the workstream.', events: ['Baseline', 'Pilot', 'Scale', 'Embed'].map(event)}}))}]};
+  await writeFile(path.join(temp, 'paths.opf.json'), JSON.stringify(paths));
+  const continued = run(['convert', 'paths.opf.json', 'paths/paths.svg']).report;
+  assert.deepEqual(continued.continued, [{slide: 1, slides: [1, 2], kind: 'timeline', blocks: [4, 4], units: [4, 4]}]);
+  assert.equal(continued.outputs.length, 2);
+  assert.ok(continued.findings.some(item => item.ruleId === 'render/slide-continued' && item.path === '/slides/0' && item.help));
+  const kept = run(['convert', 'paths.opf.json', 'paths-kept/paths.svg', '--keep-slides']).report;
+  assert.equal(kept.outputs.length, 1); assert.equal(kept.continued, undefined);
+  run(['convert', 'paths.opf.json', 'paths-both/paths.svg', '--keep-slides', '--paginate'], {status: 2});
   // opf paginate measures with the same fonts when the renderer is installed.
   const measured = run(['paginate', 'over.opf.json', 'over-paged.opf.json']);
   assert.equal(measured.stderrJson?.layout ?? measured.report.layout, 'measured');
