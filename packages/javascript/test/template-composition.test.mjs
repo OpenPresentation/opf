@@ -38,7 +38,7 @@ describe('the grid flow by count', () => {
     const result = compose({ title: 'Five', blocks: short(5) }, layouts.pillars);
     const items = cells(result, 'pillars');
     assert.equal(rows(items), 2);
-    assert.ok(items.every(item => item.frameBox === undefined), 'pillars has no decorative cards by default');
+    assert.ok(items.every(item => item.frameBox !== undefined), 'pillars draws its entries on cards (layout harvest)');
     const [a, b, c, d, e] = items.map((item) => item.box);
     assert.ok(near(d.width, a.width) && near(e.width, a.width));
     const box = region(result, 'pillars').box;

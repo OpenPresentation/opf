@@ -24,6 +24,17 @@ PPTX text is editable line by line, not paragraph by paragraph. `opf convert dec
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
 <!-- glossary:end -->
 
+## What every PPTX export guarantees
+
+`test/native-conformance.mjs` in `@openpresentation/opf-pptx` checks these on every example deck, so you can rely on them without inspecting the XML:
+
+- **Theme.** `ppt/theme/theme1.xml` names the deck's heading and body fonts (major and minor latin) and all twelve colour slots. A colour that comes from the scheme is `a:schemeClr`, so changing the theme in PowerPoint recolours the deck. Colours the author wrote as hex stay literal, and so do derived colours with no theme slot (syntax colours, emphasis, contrast and chrome mixes, gradients). That is about 16% of the colour elements in the examples. A slide with its own colour scheme is all literal.
+- **Chart text.** Axes, data labels, legends and titles name the deck's own typeface, never PowerPoint's default Arial.
+- **Accessibility.** Every text shape that is not a layout placeholder is a text box (`txBox="1"`), so screen readers announce text, not a graphic. Every shape has a descriptive name such as `OPF heading slides.0.title line 0` or `OPF card slides.2.chart`. A picture carries its OPF `alt` as its description; an image without `alt` gets none, so write `alt` for every meaningful image.
+- **Insets.** Text boxes have explicit zero insets, because each box is already the composed text box. PowerPoint's default 0.1 in / 0.05 in padding never shifts text. Table cells have explicit margins.
+- **Chart guards.** Stacked bars and columns never place data labels outside the end of a bar, which PowerPoint reports as a corrupt file. A combo with a secondary axis declares its own category and value axes.
+- **Bullets.** List bullets and numbers are paragraph bullets (`a:buChar`, `a:buBlip`, `a:buAutoNum`), never a "•" typed into the text.
+
 ## Files: `convert`, from code or the shell
 
 One call turns a file into another, the formats named by the file names. In a Node application or script use core's `@openpresentation/opf` (in a browser or worker the file functions reject with `node-only`); from a shell, `opf convert` runs the same code:

@@ -7,9 +7,11 @@
     "Mixed"
   ],
   "design": {
-    "listBullet": "none"
+    "listBullet": "none",
+    "contentBox": true
   },
   "direction": "column",
+  "anchor": "bottom",
   "regions": [
     {
       "name": "title"

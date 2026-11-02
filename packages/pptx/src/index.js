@@ -2333,7 +2333,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const plan = nativePlans.find(plan => plan.item === item);
       const body = addNativeBody(slide, plan, itemContext, options, {textBoxOptions, nativeFontOptions, exportColor, nativeColor, linkColor, langOptions, solidColorXml});
       context.nativeBodies.set(body.objectName, body.defaults);
-      if (plan === nativeBody) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
+      if (plan === nativeBody && !plan.carded) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
@@ -3200,7 +3200,8 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
       tag(name, index, count, {boundary: index === count - 1 ? 'end' : newline ? 'hard' : 'soft', separator: newline ? newline[0] : ''});
       cursor = end + (newline ? newline[0].length : 0);
     }
-    if (runs.length) slide.addText(runs, {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, ...(name ? {objectName: name} : {})});
+    // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
+    if (runs.length) slide.addText(runs, {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
   }
 }
 
@@ -3669,9 +3670,12 @@ function addPlaceholderPayload(slide, label, description, region, context) {
     w: region.w,
     h: region.h,
     fill: { color: context.colors.surface, transparency: 10 },
-    line: { color: context.colors.border, width: 0.75 }
+    line: { color: context.colors.border, width: 0.75 },
+    objectName: "OPF placeholder panel"
   });
   slide.addText(`${label}\n${description}`, {
+    isTextBox: true,
+    objectName: "OPF placeholder text",
     x: region.x + 0.12,
     y: region.y + 0.12,
     w: Math.max(0.2, region.w - 0.24),
@@ -3815,8 +3819,12 @@ function nativeFontOptions(style) {
   return {fontFace:style.fontFamily,bold:style.fontWeight>=600,italic:style.italic};
 }
 
+// LH-12: every OPF text shape is a native text box (`txBox="1"`), so a screen reader announces text, not a graphic; a shape
+// later bound to a layout placeholder drops the flag (native-furniture.js, template-layouts.js). The zero margin is the
+// composition's own geometry: each box already is the composed line or text box, so PowerPoint adds no inset of its own.
 function textBoxOptions(region, context, fontSize) {
   return {
+    isTextBox: true,
     x: region.x,
     y: region.y,
     w: region.w,

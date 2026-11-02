@@ -100,9 +100,11 @@ export function attachNativePlaceholders(entries, records, bands = new Map(), fo
       seen.add(name);
       const properties = NATIVE_PLACEHOLDERS[ph];
       if (!/<p:cNvSpPr\b[^>]*\/>/.test(shape)) throw new Error('Generated furniture shape has no plain shape properties.');
-      shape = shape.replace(/<p:cNvSpPr\b([^>]*)\/>/, '<p:cNvSpPr$1><a:spLocks noGrp="1"/></p:cNvSpPr>').replace(/<p:nvPr\s*\/>/, '<p:nvPr></p:nvPr>');
+      // A placeholder is not a text box (LH-12): it drops the text-box flag; footer text kept as an ordinary shape keeps it.
+      const placeholder = ph !== 'ftr' || footerText !== 'shape';
+      shape = shape.replace(/<p:cNvSpPr\b([^>]*)\/>/, (match, attributes) => `<p:cNvSpPr${placeholder ? attributes.replace(/\s+txBox="1"/, '') : attributes}><a:spLocks noGrp="1"/></p:cNvSpPr>`).replace(/<p:nvPr\s*\/>/, '<p:nvPr></p:nvPr>');
       if (!shape.includes('<p:nvPr>')) throw new Error('Generated furniture shape has no native application properties.');
-      if (ph !== 'ftr' || footerText !== 'shape') shape = shape.replace('<p:nvPr>', `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.idx}"/>`);
+      if (placeholder) shape = shape.replace('<p:nvPr>', `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.idx}"/>`);
       used.add(ph);
       if (!first.has(ph)) {
         const geometry = shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/);

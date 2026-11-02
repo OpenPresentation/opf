@@ -392,7 +392,8 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
           next = /<a:picLocks\b[^>]*\/>/.test(next) ? next.replace(/<a:picLocks\b([^>]*?)\s*\/>/, (match, rest) => /noGrp=/.test(rest) ? match : `<a:picLocks noGrp="1"${rest}/>`)
             : next.replace(/<p:cNvPicPr\s*\/>/, '<p:cNvPicPr><a:picLocks noGrp="1"/></p:cNvPicPr>').replace(/<p:cNvPicPr>(?!<a:picLocks)/, '<p:cNvPicPr><a:picLocks noGrp="1"/>');
         } else if (element === 'sp') {
-          next = next.replace(/<p:cNvSpPr\b([^>]*)\/>/, '<p:cNvSpPr$1><a:spLocks noGrp="1"/></p:cNvSpPr>');
+          // A placeholder is not a text box (LH-12): its text-box flag goes with the binding.
+          next = next.replace(/<p:cNvSpPr\b([^>]*)\/>/, (match, attributes) => `<p:cNvSpPr${attributes.replace(/\s+txBox="1"/, '')}><a:spLocks noGrp="1"/></p:cNvSpPr>`);
         } else if (element === 'graphicFrame') {
           next = /<a:graphicFrameLocks\b[^>]*\/>/.test(next) ? next.replace(/<a:graphicFrameLocks\b([^>]*?)\s*\/>/, (match, rest) => /noGrp=/.test(rest) ? match : `<a:graphicFrameLocks noGrp="1"${rest}/>`)
             : next.replace(/<p:cNvGraphicFramePr\s*\/>/, '<p:cNvGraphicFramePr><a:graphicFrameLocks noGrp="1"/></p:cNvGraphicFramePr>');

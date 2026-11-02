@@ -61,7 +61,7 @@ const roundTrip = async (slide, {strip = false, save = false} = {}) => {
   if (strip) bytes = stripTags(bytes);
   return {bytes, record, ...await read(bytes)};
 };
-const shapes = bytes => [...dec.decode(unzipSync(bytes)['ppt/slides/slide1.xml']).matchAll(/<p:cNvPr id="\d+" name="Text \d+"/g)].length;
+const shapes = bytes => [...dec.decode(unzipSync(bytes)['ppt/slides/slide1.xml']).matchAll(/<p:cNvPr id="\d+" name="OPF text [^"]* line \d+"/g)].length;
 const long = 'The quick brown fox jumps over the lazy dog and keeps running across the wide open field until the sun sets behind the distant hills and everyone goes home, and then it sleeps.';
 
 // --- Every authored form returns exactly, with and without a PowerPoint-style re-save -------------------------
@@ -151,7 +151,7 @@ for (const save of [false, true]) {
   assert.deepEqual(normalize(retyped.deck.slides[0].text)[0], {text: 'Opening line', bold: true});
   assert.equal(normalize(retyped.deck.slides[0].text)[1].text.startsWith('\nSecond'), true);
   // A deleted line changes the slide's shapes: the structure is not applied and nothing is rejoined.
-  const deleted = await read(modify(base.bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="Text 2"[\s\S]*?<\/p:sp>/, ''))));
+  const deleted = await read(modify(base.bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => xml.replace(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="OPF text slides.0.text line 1"[\s\S]*?<\/p:sp>/, ''))));
   assert.deepEqual(deleted.provenance.map(issue => [issue.code, issue.path]), [['slide-reference-changed', 'slides.0.content']]);
   assert.equal(deleted.deck.slides[0].text, undefined);
   // A record whose count no longer matches the lines reports and keeps the flat blocks.
