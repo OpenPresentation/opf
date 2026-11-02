@@ -15,7 +15,8 @@ const chartData = { type: 'line-with-markers', data: { columns: ['Quarter', 'Cur
 const metric = { metric: { value: '$4.8M', label: 'Primary signal', description: 'Move anchor tenants from interest to signed letters of intent', trend: 'up' } };
 
 test('LH-80: the first block\'s picture takes a bled, cover-cropped track at the start side; the headings and blocks compose beside it', () => {
-  const result = composeSlide({ title: 'Signal trend', blocks: [{ image: svg(1600, 1000) }, { text: paragraph }, quote] });
+  // LH-104: a picture close to the track's shape (the crop keeps 85% of it); a wider one takes a track only to read better.
+  const result = composeSlide({ title: 'Signal trend', blocks: [{ image: svg(900, 1000) }, { text: paragraph }, quote] });
   const image = picture(result);
   assert.equal(result.track.kind, 'picture');
   assert.equal(result.track.edge, 'left');
@@ -65,7 +66,7 @@ test('LH-80: an authored fit, frame, placement, layout, weights or a second pict
 });
 
 test('LH-80: an authored mode keeps flowing the other blocks beside the track; a track that would read worse is not taken', () => {
-  const column = composeSlide({ title: 'T', composition: { mode: 'column' }, blocks: [{ text: paragraph }, metric, { image: svg(1600, 1000) }] });
+  const column = composeSlide({ title: 'T', composition: { mode: 'column' }, blocks: [{ text: paragraph }, metric, { image: svg(900, 1000) }] });
   assert.equal(column.track.edge, 'right');
   const [text, value] = ['text', 'metric'].map((field) => column.items.find((item) => item.field === field));
   assert.ok(value.box.y > text.box.y && Math.abs(value.box.x - text.box.x) < 1, 'still one column');

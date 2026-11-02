@@ -8,7 +8,7 @@ import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
 import { isAuthoringColorRef } from "./color-authoring.js";
 
-export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch"]);
+export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch", "auto"]);
 export const IMAGE_SHAPES = Object.freeze(["rectangle", "rounded", "circle", "hexagon"]);
 export const IMAGE_EDGES = Object.freeze(["left", "right", "top", "bottom"]);
 /** The fields an image block carries besides its `image`, in schema order. */

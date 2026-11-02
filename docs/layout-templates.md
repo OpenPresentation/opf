@@ -182,7 +182,7 @@ The rows are kept only when their smallest body size is at least the one the reg
 otherwise the layout's regions stand.
 
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
-block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
+block's own, or `auto` that resolves to contain: LH-104, the `image` layout's default) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
 anchor down the cell, so a landscape picture beside text starts on the text's first line instead of floating in the middle of
 a tall cell. A video draws in a 16:9 frame, the largest that fits its cell, placed the same way. A frame the block shapes with
 `aspectRatio` or a circle stays centered, and `cover` and `stretch` fill the cell. `image-beside` and `logos` write

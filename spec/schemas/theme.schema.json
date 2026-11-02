@@ -136,7 +136,8 @@
           "enum": [
             "cover",
             "contain",
-            "stretch"
+            "stretch",
+            "auto"
           ],
           "description": "As design.imageFit of a deck."
         },

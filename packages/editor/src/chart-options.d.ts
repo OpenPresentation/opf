@@ -22,7 +22,7 @@ export interface ChartOptionFields {
     /** Empty when labels have no position choice (area, doughnut, radar, funnel, treemap). */
     positions: ChartLabelPosition[];
     defaultPosition: ChartLabelPosition | null;
-    /** True for the constructs that label their marks by default (funnel, treemap). */
+    /** True when the chart labels its marks by default: funnel and treemap, and a small chart (LH-03) whose value labels core draws (LH-100). */
     defaultOn: boolean;
   };
   /** What `chart.highlight` can name on this chart type: series, categories (one slice of a pie, one point of a line). */
@@ -89,6 +89,8 @@ export interface PreparedChartOptions {
 /** The chart path a selection path points at, or undefined. */
 export declare function parseChartPath(path: string): string | undefined;
 /** `combo` is present on a combo chart: its plotted series in data order. Pass the `document` for a dataset-backed chart. */
-export declare function readChartOptions(chart: unknown, presentation?: unknown): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; colors: ChartColorPositions; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
-export declare function prepareChartOptions(presentation: unknown, chartPath: string, change: ChartOptionChange): PreparedChartOptions;
-export declare function setChartOptions(editor: EditorSession, chartPath: string, change: ChartOptionChange, meta?: Record<string, unknown>): EditorChange & { action: "chart-options"; chartPath: string; changed: boolean };
+/** LH-100: `layer` is the chart layer core composed for the chart (`item.chart.layer`, `undefined` when it has none); without the key, core's small-chart rule is read on the data alone. */
+export interface ChartOptionReadOptions { layer?: unknown }
+export declare function readChartOptions(chart: unknown, presentation?: unknown, options?: ChartOptionReadOptions): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; colors: ChartColorPositions; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
+export declare function prepareChartOptions(presentation: unknown, chartPath: string, change: ChartOptionChange, options?: ChartOptionReadOptions): PreparedChartOptions;
+export declare function setChartOptions(editor: EditorSession, chartPath: string, change: ChartOptionChange, meta?: Record<string, unknown> & ChartOptionReadOptions): EditorChange & { action: "chart-options"; chartPath: string; changed: boolean };

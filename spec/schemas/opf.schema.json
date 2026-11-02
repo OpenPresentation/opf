@@ -767,8 +767,8 @@
         },
         "imageFit": {
           "type": "string",
-          "enum": ["cover", "contain", "stretch"],
-          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportions, centered across and placed down the cell by the region's anchor (top by default), 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the theme's design.imageFit, then the layout record's design.imageFit, then 'cover'; a slide composed with no layout shows its pictures whole ('contain') instead. Backgrounds set their own fit."
+          "enum": ["cover", "contain", "stretch", "auto"],
+          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportions, centered across and placed down the cell by the region's anchor (top by default), 'stretch' scales it to the frame exactly, 'auto' covers when the crop keeps at least 85% of the picture's width or height (its proportions read from the file, EXIF orientation applied) and contains otherwise; an SVG, or a picture whose size cannot be read from the document, is contained. Effective value: the slide's design, then the deck's design, then the theme's design.imageFit, then the layout record's design.imageFit, then 'cover'; a slide composed with no layout shows its pictures whole ('contain') instead. Backgrounds set their own fit."
         },
         "listBullet": {
           "type": "string",
@@ -2321,8 +2321,8 @@
         },
         "fit": {
           "type": "string",
-          "enum": ["cover", "contain", "stretch"],
-          "description": "Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by default); 'stretch' scales it to the frame exactly. Default: the effective design.imageFit, else 'cover' in a layout and 'contain' on a slide with no layout."
+          "enum": ["cover", "contain", "stretch", "auto"],
+          "description": "Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by default); 'stretch' scales it to the frame exactly; 'auto' covers when the crop keeps at least 85% of the picture's width or height and contains otherwise (an SVG, or a picture whose size cannot be read from the document, is contained), so a photo close to its frame's shape fills it and any other is shown whole. Default: the effective design.imageFit, else 'cover' in a layout and 'contain' on a slide with no layout."
         },
         "focus": {
           "$ref": "#/$defs/ImageFocus",
