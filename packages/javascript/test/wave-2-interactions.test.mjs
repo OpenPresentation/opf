@@ -55,3 +55,33 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
   const places = composeSlide({ title: 'Chart', blocks: [{ chart: { type: 'world', data: { columns: ['Country', 'Sales'], rows: [['France', 4], ['Germany', 5], ['Japan', 6]] } } }] }, {}).items.find((item) => item.field === 'chart');
   assert.equal(places.chart?.layer, undefined);
 });
+
+// Wave 3 (LH-70, LH-67, LH-72, LH-78) where they meet wave 2's grouping (LH-46), sibling sizes (LH-43) and recomposition (LH-83).
+const paragraph = (name) => `${name} should focus the next cycle on one measurable change while making the operating tradeoffs clear to its stakeholders.`;
+
+test('LH-70 with LH-46: a statement of similar paragraphs is a grid of columns, not a lead over cards, in both directions', () => {
+  const slide = { title: 'The ask', blocks: ['Harborline Bank', 'Relay Cloud', 'Juniper Legal', 'Easton Library'].map((name) => ({ text: paragraph(name) })) };
+  for (const direction of [undefined, 'rtl']) {
+    const result = composeSlide(slide, { layout: layouts.statement, ...(direction ? { direction } : {}) });
+    assert.deepEqual(overflow(result), []);
+    const texts = result.items.filter((item) => item.field === 'text');
+    assert.equal(new Set(texts.map((item) => Math.round(item.box.width))).size, 1, 'equal columns: no lead');
+    assert.equal(new Set(texts.map((item) => item.text.fontSize)).size, 1, 'one size (LH-43)');
+    assert.ok(texts.every((item) => item.alignment === 'left'), 'long text in a centred layout is start-aligned (LH-72)');
+  }
+});
+
+test('LH-67 with LH-43: the lead keeps its larger size while the stack shares one', () => {
+  const slide = { title: 'Signal trend', blocks: [{ text: paragraph('Ironwood Devices') }, { text: 'The deck-level language can be a catalog id.' }, { text: 'The new checklist reached both teams.' }] };
+  const [lead, ...stack] = composeSlide(slide, {}).items.filter((item) => item.field === 'text');
+  assert.ok(lead.text.fontSize > stack[0].text.fontSize);
+  assert.equal(stack[0].text.fontSize, stack[1].text.fontSize);
+});
+
+test('LH-78 with LH-43: quotes of one grid share one size', () => {
+  const quote = (text) => ({ quote: { text, attribution: 'Working group' } });
+  const result = composeSlide({ title: 'Voices', blocks: [quote('Teams already know where the friction is; the deck makes the sequence of choices explicit to everyone.'), quote('The path is workable if we keep the metric simple.'), quote('The decision owner stays visible to the board.')] }, { layout: layouts.quote });
+  assert.deepEqual(overflow(result), []);
+  assert.ok(result.regions, 'the layout is kept');
+  assert.equal(new Set(result.items.filter((item) => item.quoteLayout).map((item) => item.quoteLayout.parts[0].fit.fontSize)).size, 1);
+});
