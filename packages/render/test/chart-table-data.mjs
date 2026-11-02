@@ -30,6 +30,8 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 //    LH-59: bar, stacked-bar and 100pct-stacked-bar list their categories top to bottom; the waterfall and the lone-column histogram size
 //    their tick-label column from the tightened probe axes (the axis maximum stays within 1.25 x the data), so those five digests changed.
 //    LH-55: on the default dark panel every series from the scheme reaches 4.5:1 and series 2 keeps 20 L* from series 1, so the digest of every chart with more than one series or category changed (24); the single-series histogram, waterfall, funnel, map, sketch and table did not. LH wave 1: with both, bar, stacked-bar and 100pct-stacked-bar carry both changes (new digests); every other digest is the one its own change gave.
+//    LH-48: the styled table is the slide's only block and fills little of the body, so it grows (its type and rows, `tableGrowth`) and sits in
+//    the middle of the body; only its digest changed.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
 const plainRows = [['Q1', 12.4, 3, 8], ['Q2', 18.1, 5, 9], ['Q3', 21.75, 2, 4], ['Q4', 9, 7, 6]];
@@ -82,7 +84,7 @@ const REVIEWED_SVG_DIGESTS = {
   'column-no-options': '1b6bd1696b69e0708101550b',
   'line-string-numbers': 'ddd95c76dd8de9724cdb1be9',
   'histogram-lone-column': '3c2269d823eed5e38ba85da0',
-  'table-styled': 'b90e4faf6d93e7d88e6a5aed',
+  'table-styled': '1fb1ac9862fa48e2107a7043',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 

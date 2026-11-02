@@ -81,7 +81,8 @@ test('a stacked one-line block is not a small cell; a squeezed or equal-share ce
   const short = (count) => Array.from({ length: count }, (_, index) => ({ text: `Note ${index + 1}.` }));
   const nested = { title: 'Give the main idea room', composition: { mode: 'row', weights: [2, 1], overflow: 'error' }, blocks: [{ composition: { mode: 'column' }, blocks: [{ text: 'Recommendation: fund the next milestone.' }, { text: 'The implementation stays shared across browser preview and PowerPoint export.' }] }, { text: 'Context, constraints, and the next decision.' }] };
   for (const slide of [{ title: 'Two notes', composition: { mode: 'column' }, blocks: short(2) }, nested]) {
-    const result = composeSlide(slide);
+    // At their role sizes (`fill: false`; LH-48 would grow the two short notes).
+    const result = composeSlide(slide, { fill: false });
     assert.ok(result.items.some((item) => item.field === 'text' && item.box.height < 60), 'a stacked one-line cell is shorter than the small-cell height');
     assert.deepEqual(result.diagnostics, []);
     assert.equal(paginateSlide(slide).slides.length, 1);

@@ -59,6 +59,8 @@ A block's `region` pin is resolved before the layout binds unpinned content by k
 
 When a template sets a body role at the readability floor, `composeSlide` composes the same blocks as the automatic grid and keeps that result when its smallest body size is larger (or as large with less overflow) and it neither overflows nor splits words more (LH-83, `recomposed` on the composition): the headings then sit above the body as on an automatic slide and the result has no `regions`. `recompose: false` keeps the layout's result. See [Recomposition at the readability floor](layout-templates.md#recomposition-at-the-readability-floor-lh-83).
 
+A body that fills under half of its height at its role sizes grows (LH-48): the only block of a slide steps up the type scale (each role up to its display size, `LONE_DISPLAY_SIZES`) to about 60% of the body and sits in its middle, and a body of several paragraphs and lists steps up together, at one size, and centers. `fill: false` keeps the role sizes. See [A body that fills too little](layout-templates.md#a-body-that-fills-too-little-lh-48).
+
 The slide's own `composition.mode`, `columns` and `weights` arrange the first primary flowing region. `design.contentDirection` asks flowing regions to use a row or column; `design.mirror` reverses template tracks. Effective design keys resolve per key from slide, deck, theme, layout, then engine default. Promoted regions retain their 3×3 vocabulary and visual reading order. The layout template does not replace content groups inside a slide; groups still keep related blocks together.
 
 ## Shared headers and footers
@@ -200,7 +202,7 @@ A block or promoted region can contain its own `blocks` and `composition`. The o
 }
 ```
 
-The parent allocates a box to each group, then the group arranges its children inside that box. Group padding defaults to zero; padding and gap use the group's shorter edge. Only `minFontSize` and `overflow` inherit. A strict ancestor cannot be weakened by a child's `overflow: "warn"`. Font sizes remain relative to the canvas, not the group. Groups can nest up to 32 levels; cycles and deeper nesting fail with an explicit error.
+The parent allocates a box to each group, then the group arranges its children inside that box. Group padding defaults to zero; a group's own `padding` and `gap` use its shorter edge. A group without a `gap` of its own sets its blocks the slide's gap apart (0.25 in at 16:9, LH-89), reduced as any gap is when the group is too small for it; before, it was 1/30 of the group's own shorter edge, so the blocks of a short nested row nearly touched. The slide's gap is kept only when no block of the slide reads smaller than with the former gap (unless it removes overflow). Only `minFontSize` and `overflow` inherit. A strict ancestor cannot be weakened by a child's `overflow: "warn"`. Font sizes remain relative to the canvas, not the group. Groups can nest up to 32 levels; cycles and deeper nesting fail with an explicit error.
 
 Automatic grid scoring inspects descendant text using each descendant's explicit arrangement or geometric automatic seed. After selecting the parent's grid, it optimizes each child's automatic grid. This deterministic, bounded search avoids exponential combinations; it does not claim a globally optimal packing.
 

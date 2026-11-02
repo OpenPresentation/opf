@@ -303,6 +303,8 @@ export interface ComposedItem {
   emphasis?: true;
   /** LH-68: this metric is laid out as a tile of its card (a `metrics: "tile"` region). Absent on every other item. */
   metricTile?: true;
+  /** LH-48: the growth (`TableLayoutOptions.growth`) of a lone table that filled too little of the body; engines lay the table out with it. */
+  tableGrowth?: number;
 }
 /**
  * LH-06: the one contrasting surface of a slide. `path` is the block or group drawn on it (every item under that path carries
@@ -659,6 +661,11 @@ export interface ComposeSlideOptions {
    * the body is then composed again as the automatic grid when that sets it larger; `SlideComposition.recomposed`).
    */
   recompose?: boolean;
+  /**
+   * LH-48: `false` keeps a body that fills too little of its height at its role sizes and in its place (by default a lone block, or a body
+   * of paragraphs and lists, under half full steps up the type scale to about 60% and moves to the middle of the body).
+   */
+  fill?: boolean;
   /** Return candidate scores and coverage without changing the selected geometry. */
   explain?: boolean;
 }
@@ -1424,6 +1431,23 @@ export interface QuoteLayoutOptions {
    * candidates are scored, and a card's inset is given up, by the parts that found no room.
    */
   floorFallback?: boolean;
+  /**
+   * LH-48: a factor of at least 1 on the role sizes of a lone block that fills too little of the body (composeSlide picks it on the type
+   * scale's ratio). Each role grows by it up to its display size (`LONE_DISPLAY_SIZES`) and never shrinks; absent or 1, the role sizes.
+   */
+  growth?: number;
+}
+/**
+ * LH-48: the largest size, in reference pixels, a role of a lone block grows to (`growth`): text one and a half times its role size,
+ * still under the title's 54; a list, a quote, code and a metric's parts by about as much; a metric's value to twice its role size.
+ */
+export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, quoteFooter: 24, code: 32, codeHeader: 18, value: 152, unit: 28, label: 28, delta: 28, description: 22, trend: 20 } as const;
+/** LH-48: a body under LONE_FILL of its height at its role sizes grows, to at most LONE_TARGET of it. */
+export const LONE_FILL = .5, LONE_TARGET = .6;
+/** LH-48: a role size grown by `growth` (at least 1), capped at its display size; a role already larger keeps its size. */
+function grownRoleSize(size: number, growth: number | undefined, display: number): number {
+  const factor = growth !== undefined && Number.isFinite(growth) && growth > 1 ? growth : 1;
+  return Math.max(size, Math.min(size * factor, display));
 }
 /**
  * LH-78: how large a quote's body starts. Composition sets them; the default is the display size (QUOTE_NOMINAL_SIZE) with no line
@@ -1512,12 +1536,13 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const marks = quoteMarksFor(options.language);
   const body = add('body',`${marks.open}${quoteText}${marks.close}`,[source(bodyPath,quoteText,marks.open.length)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    options.bodySize ?? QUOTE_NOMINAL_SIZE,options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
+    options.bodySize ?? grownRoleSize(QUOTE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.quote),options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
+  const footerSize = grownRoleSize(17,options.growth,LONE_DISPLAY_SIZES.quoteFooter);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
-    17,options.fontFamilies?.body??'sans-serif',500,path) : undefined;
+    footerSize,options.fontFamilies?.body??'sans-serif',500,path) : undefined;
   // A photo with no footer text still sizes from the nominal footer size.
-  const footerRequested = attribution?.requestedFontSize ?? gridFontSize(17 * scale, minimum);
+  const footerRequested = attribution?.requestedFontSize ?? gridFontSize(footerSize * scale, minimum);
   const usable = (area:LayoutBox) => [area.x,area.y,area.width,area.height].every(Number.isFinite) && area.width>0 && area.height>0;
   // A rich body fits through the rich-text layouter (the one body text uses); every other part keeps the plain fitter.
   const fit = (part:QuoteTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum):TextFit|RichTextFit|undefined => !usable(area) ? undefined
@@ -1734,10 +1759,10 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (sourceValue===undefined) continue;
     const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
-    // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it.
+    // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
     const least=snapFontSizeUp(Math.max(minimum,options.minimumSizes?.[role]??0));
-    const nominal=Math.max(Math.min((role==='value'?valueSize:role==='description'?20:role==='trend'?18:23)*scale,options.roleSizes?.[role]??Infinity),least);
+    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:23,options.growth,LONE_DISPLAY_SIZES[role])*scale,options.roleSizes?.[role]??Infinity),least);
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:gridFontSize(nominal,least),minFontSize:least,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
@@ -2328,7 +2353,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
     const requestedStyle:TextStyle={fontFamily:options.fontFamilies?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
     const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
-      requestedFontSize:gridFontSize((role==='body'?CODE_NOMINAL_SIZE:14)*scale,minimum),minFontSize:minimum,requestedStyle,
+      requestedFontSize:gridFontSize((role==='body'?grownRoleSize(CODE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.code):grownRoleSize(14,options.growth,LONE_DISPLAY_SIZES.codeHeader))*scale,minimum),minFontSize:minimum,requestedStyle,
       style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     parts.push(part);return part;
   };
@@ -2743,6 +2768,11 @@ export interface TableLayoutOptions {
    * and each cell's text reports its paragraph direction (RR-05).
    */
   direction?: TextDirection;
+  /**
+   * LH-48: a lone table that fills too little of the body grows (`ComposedItem.tableGrowth`): its type by this factor up to
+   * `LONE_DISPLAY_SIZES.table`, and its preferred row height with it. Engines pass the item's value so they lay it out as composition did.
+   */
+  growth?: number;
 }
 export interface TableCellLayout {
   /** Logical alignment, shared by preview and native export. Numeric default resolves to the physical right even in RTL. */
@@ -2787,7 +2817,9 @@ export interface TableLayout {
  * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
  */
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
-  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(contentNominalSize('table') * scale,minimum);
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(grownRoleSize(contentNominalSize('table'), options.growth, LONE_DISPLAY_SIZES.table) * scale,minimum);
+  // LH-48: a grown table's rows grow with its type.
+  const preferredRow = 54 * scale * Math.max(1, requested / gridFontSize(contentNominalSize('table') * scale, minimum));
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
   // RR-54: dataset tables are laid out from their inline copy, and a body cell measures its formatted number text.
   const inline = inlineTableData(value, options.presentation);
@@ -2896,7 +2928,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const extra=Math.max(0,required(cell,preferredSize)-current)/cell.rowSpan;
     for(let r=cell.row;r<cell.row+cell.rowSpan;r++)heights[r]!+=extra;
   }
-  const preferred=natural.map(height=>Math.max(54*scale,height));
+  const preferred=natural.map(height=>Math.max(preferredRow,height));
   for(let r=0;r<needed.length;r++)needed[r]=Math.min(preferred[r]!,needed[r]!);
   const sum=(values:number[])=>values.reduce((a,b)=>a+b,0);
   const preferredTotal=sum(preferred),naturalTotal=sum(natural),neededTotal=sum(needed);
@@ -2935,8 +2967,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     if(last||(!layout.overflow&&!splits))return {...layout,overflow:layout.overflow||splits,splitsWords:splits};
   }
 }
-function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
-  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
+function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string, growth?: number): boolean {
+  return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation,...(growth?{growth}:{})}).overflow;
 }
 function flatten(value: unknown): string {
   if (value == null) return "";
@@ -3057,6 +3089,10 @@ const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
 const TILE_FLOORS = Symbol('opf.tileFloors');
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
+/** LH-48: composeSlide composes an under-filled body again with its paragraphs and lists this many type-scale steps larger (growBody). */
+const GROW = Symbol('opf.grow');
+/** LH-48: composeSlide composes an under-filled body again in the middle of the space under the headings (growBody). */
+const CENTER = Symbol('opf.center');
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -3089,7 +3125,7 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
       }
     } else if (item.field === 'table') {
       let table: TableLayout | undefined;
-      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation }); } catch { table = undefined; }
+      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }); } catch { table = undefined; }
       for (const row of table?.rows ?? []) for (const cell of row.cells) add(cell.fit.fontSize);
     } else { add(item.text?.fontSize); split(item.value, item.text); }
   }
@@ -3102,16 +3138,59 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
 const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
 /**
  * The wave 3 rules that rearrange or resize a slide's blocks, each of which must leave every block at least the size the slide has
- * without them: LH-72's measure column (`centered-column`), LH-78's lead size and card for a quote beside other blocks (`quote-beside`)
+ * without them: LH-89's nested gaps from the slide's gap (`nested-gaps`), LH-65's empty columns giving way (`empty-columns`), LH-72's measure column (`centered-column`), LH-78's lead size and card for a quote beside other blocks (`quote-beside`)
  * and the card alone (`quote-card`), LH-06's automatic foot band or pill (`emphasis-band`), LH-68's scorecard tiles (`metric-tiles`),
  * LH-86's long texts as full-width rows (`long-text-rows`), LH-66's minimum measure in the automatic grid (`reading-measure`), LH-67's
  * lead plus stack (`lead-stack`) and LH-70's paragraph columns (`paragraph-columns`). LH-80 and LH-49's tracks are alternatives
  * composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns';
 /** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
-const GUARDED_RULES: readonly GuardedRule[] = ['centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
+/** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
+function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
+  const before = bodyReadability(base, options).byPath;
+  for (const [path, size] of bodyReadability(next, options).byPath) { const was = before.get(path); if (was !== undefined && size < was - FONT_GRID_EPSILON) return true; }
+  return false;
+}
+// LH-48: how much of the body's height its content takes, for a body of two or more paragraphs and lists (a lone block grows in
+// composeLayout, fillLone): from the top of the first block's text to the bottom of the last, over the body (the content box below the
+// headings). `spare`: the height left under the content. Undefined for any other body.
+function bodyFill(result: SlideComposition): { fill: number; spare: number } | undefined {
+  const body = result.items.filter(item => !headings.has(item.field));
+  // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
+  if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
+  const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+  const top = Math.min(...body.map(item => item.box.y)), bottom = Math.max(...body.map(item => item.box.y + height(item.text!)));
+  const above = result.items.filter(item => headings.has(item.field) && item.box.y + item.box.height <= top + 1e-6);
+  const bodyTop = Math.max(result.contentBox.y, ...above.map(item => item.box.y + item.box.height)), bodyBottom = result.contentBox.y + result.contentBox.height;
+  if (bodyBottom - bodyTop <= 0) return undefined;
+  return { fill: (bottom - top) / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom) };
+}
+// LH-48: a body of two or more paragraphs and lists that fills under LONE_FILL of its height, with nothing overflowing, is composed again
+// with all of them one, two or three steps of the type scale larger (GROW; each up to its display size), and the largest step that adds
+// no finding, sets every block larger and fills at most LONE_TARGET is kept. The body then sits in the middle of the space under the
+// headings where its rows hug their content (CENTER). Siblings keep one size (LH-43). A stacked record (statement, quote, closing)
+// already centers its message.
+function growBody(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
+  if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
+  const start = bodyFill(result);
+  if (!start || start.fill >= LONE_FILL) return undefined;
+  if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
+  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field)).map(item => item.text!.fontSize));
+  const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
+  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
+  let best = result, steps = 0;
+  for (let next = 1; next <= 3; next++) {
+    const grown = attempt({ [GROW]: next }), fill = grown && bodyFill(grown);
+    if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options)) break;
+    best = grown; steps = next;
+  }
+  const centered = attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
+  if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) best = centered;
+  return best === result ? undefined : best;
+}
 /**
  * Compose a validated Slide. Layout resolution remains the caller's responsibility.
  *
@@ -3166,12 +3245,14 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
   return result!;
 }
 /**
- * The slide after its guarded composition (`result`): a template slide is recomposed as the automatic grid when the layout leaves a
+ * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template slide is recomposed as the automatic grid when the layout leaves a
  * chart's plot too short (LH-49, chartRecomposition) or a body role at the readability floor (LH-83, recomposeAtFloor); an automatic
  * slide gives its one picture or chart a track (LH-80, LH-49, automaticTracks).
  */
 function settle(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
+  const grown = growBody(input, options, result);
+  if (grown) return grown;
   if (!result.regions) return automaticTracks(input, options, result);
   if (options.recompose === false) return result;
   const blocks = record(input).blocks;
@@ -3188,6 +3269,20 @@ function composeArranged(input: unknown, options: ComposeSlideOptions): SlideCom
   if (!joined.regions || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(joined) === 0) return joined;
   const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
   return overflowCount(unjoined) < overflowCount(joined) ? unjoined : joined;
+}
+/**
+ * Wave 3: one more arrangement of a slide that composeSlide already composed under the guard (a track, LH-80 and LH-49, or a larger body,
+ * LH-48), composed with the guarded rules (GuardedRule) and, when one of them changed something and that reads less well than `before`
+ * (the slide's own guarded composition), without them. The caller keeps it only when it reads as well as `before`, so neither the
+ * arrangement nor a rule leaves a block smaller than wave 2 did, and each arrangement keeps the rules that read well in it.
+ */
+function composeVariant(input: unknown, options: ComposeSlideOptions, before: TrackQuality, floor: number): SlideComposition | undefined {
+  const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
+    try { return composeLayout(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
+    catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
+  };
+  const ruled = compose(ALL_RULES, fired);
+  return !fired.size || (ruled && readsAsWell(before, trackQuality(ruled, options), floor)) ? ruled : compose(NO_RULES);
 }
 /**
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
@@ -3321,17 +3416,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   const pictures = leaf('image'), charts = leaf('chart'), landscape = base.width >= base.height, scale = Math.min(base.width, base.height) / 720;
   const quality = (result: SlideComposition) => trackQuality(result, options);
   const before = quality(base), floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale);
-  // A track is composed with the guarded rules (GuardedRule) and, when one of them changed something and that does not read as well as
-  // the slide without a track, without them: each arrangement keeps the rules that read well in it, and readsAsWell below compares the
-  // track with the slide's own guarded composition, so neither the track nor a rule leaves a block smaller than wave 2 did.
-  const attempt = (flag: symbol, value: unknown): SlideComposition | undefined => {
-    const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
-      try { return composeLayout(input, { ...options, [flag]: value, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
-      catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
-    };
-    const ruled = compose(ALL_RULES, fired);
-    return !fired.size || (ruled && readsAsWell(before, quality(ruled), floor)) ? ruled : compose(NO_RULES);
-  };
+  const attempt = (flag: symbol, value: unknown) => composeVariant(input, { ...options, [flag]: value } as ComposeSlideOptions, before, floor);
   const physical = (edge: ImageEdge): ImageEdge => base.direction === 'rtl' && (edge === 'left' || edge === 'right') ? (edge === 'left' ? 'right' : 'left') : edge;
   if (pictures.length === 1 && !leaf('video').length) {
     const index = pictures[0]!, host = record(blocks[index]), fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : base.design.imageFit;
@@ -3689,7 +3774,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -3788,19 +3873,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (languageTag === null) languageTag = quoteLanguage(options.presentation, options.slideIndex);
     return languageTag;
   };
+  // LH-48: the growth a lone block was given (placeNode), read by every measure of it so its needs and its layout agree.
+  const growthOf = new WeakMap<Pending, number>(), proseGrowth = new WeakMap<Pending, number>();
+  const grownOptions = (node: Pending): { growth?: number } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth } : {}; };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, bodySize?: number) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,floorFallback,
-    ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),
+    ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),...grownOptions(node),
     ...(bodySize !== undefined ? {bodySize:bodySize / scale} : besideQuote(node) && ruleOn('quote-beside') ? {bodySize:LEAD_NOMINAL_SIZE,bodyLines:QUOTE_BESIDE_LINES} : {}),
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,...grownOptions(node),
   });
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
-    textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),
+    textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
     align:tile?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
   });
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
@@ -3870,6 +3958,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return score;
   };
   const modeFor = (settings: Composition) => settings.mode ?? "auto";
+  // LH-89: a group's own `gap` is a fraction of its own shorter edge; without one it takes the slide's gap (0.25 in at 16:9), not 1/30
+  // of its own side, so siblings in a short nested row no longer nearly touch. gridGeometry and stackedBoxes clamp it to fit a small group.
+  const groupGap = (own: Composition, box: LayoutBox): number => {
+    if (own.gap !== undefined || !ruleOn('nested-gaps')) return (own.gap ?? 1 / 30) * Math.min(box.width, box.height);
+    fire('nested-gaps');
+    return gap;
+  };
   const defaultColumns = (count: number, area: LayoutBox, settings: Composition) => {
     const mode = modeFor(settings);
     return mode === "column" ? 1 : mode === "row" ? Math.max(1, count) : settings.columns ?? Math.max(1, Math.min(count, Math.ceil(Math.sqrt(count * area.width / area.height / 1.6))));
@@ -3901,7 +3996,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!node.children) return leafScore(node, box, settings, penalties);
     const own = inheritedSettings(settings, node.composition), area = inset(box, own), slotCount = Math.max(node.children.length, 0);
     const cols = defaultColumns(slotCount, area, own);
-    const boxes = gridBoxes(slotCount, area, cols, node.gap ?? (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
+    const boxes = gridBoxes(slotCount, area, cols, node.gap ?? groupGap(own, box), own.weights ?? [], modeFor(own) === "column");
     return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own, penalties), 0);
   };
   // WI-1: blocks stacked in one column of `area` at the heights they need, one gap apart, from the top (anchor `top`,
@@ -4158,7 +4253,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
-    const mode = modeFor(settings), localGap = (settings.gap ?? 1 / 30) * Math.min(area.width, area.height);
+    const mode = modeFor(settings), localGap = groupGap(settings, area);
     // Root gap retains the canvas-based contract; group gaps use their container.
     const actualGap = gapOverride ?? (settings === rootSettings ? gap : localGap);
     let cols = defaultColumns(count, area, settings);
@@ -4295,10 +4390,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized ? payloadBox(frame ?? box, true) : box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       insideEmphasis ||= emphasized;
-      try { arrange(node.children, inner, own, 0, node.gap ?? (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic); }
+      try { arrange(node.children, inner, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
       finally { if (emphasized) insideEmphasis = false; }
       return;
     }
+    // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
+    const lone = node.fills ? fillLone(node, frame ?? box, settings, cards) : undefined;
+    // Its cell is as tall as its content, so only its width can make it too small (contentSized).
+    if (lone) { box = lone; frame = undefined; metricReferenceHeight = undefined; contentSized.add(node); }
     const onSurface = emphasized || insideEmphasis;
     if (onSurface) cards = emphasized;
     // LH-78: a quote beside other blocks is drawn on a card, unless the card's inset would make it overflow (below). On the emphasis
@@ -4378,7 +4477,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       ...(frameBox && !emphasized ? {frameBox} : {}),
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
-      ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}) });
+      ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
     if (emphasized && frameBox) {
       const own = surface && surface.path === node.emphasis ? surface.box : undefined;
@@ -4483,21 +4582,37 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // WI-4 (P34): in auto mode a prose block is no wider than about 70 average characters of its size, and a lone block that stays within
   // two lines at the lead size asks for that size. Everything else keeps its role size and the width its cell gives it.
-  const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
-    // LH-70, LH-67: a paragraph of a paragraph grid starts at the size its columns were chosen for, and the lead of a lead plus stack at
-    // the lead size; both keep at most a PARAGRAPH_MEASURE_MAX measure.
-    const set = paragraphStarts.get(node);
-    if (set !== undefined) return { size: set, width: Math.min(cellWidth, PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * set) };
+  const baseProseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
     const role = contentNominalSize(node.field) * scale;
-    if (node.field !== 'text' || node.children || !node.auto) return { size: role, width: cellWidth };
+    if (node.field !== 'text' || node.children || !node.auto) return { size: proseGrowth.get(node) ?? role, width: cellWidth };
     // Core's own estimate, never the host's measurement (as `flow: auto` does): every engine picks the same width and size, and no
     // face is asked for just to decide this.
     const linesAt = (width: number, size: number) => estimatedLines(node.value, width, size);
     const measureAt = (size: number) => Math.min(cellWidth, PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM * size);
     const lead = LEAD_NOMINAL_SIZE * scale;
+    // LH-48: a lone block that grew (fillLone) keeps the reading measure at its grown size.
+    const grown = proseGrowth.get(node);
+    if (grown !== undefined) return { size: grown, width: linesAt(cellWidth, grown) <= 1 ? cellWidth : measureAt(grown) };
     if (node.lone && lead > role && linesAt(measureAt(lead), lead) <= 2) return { size: lead, width: linesAt(cellWidth, lead) <= 1 ? cellWidth : measureAt(lead) };
     // A block that is one line across its whole cell keeps that line; only text that wraps takes the reading measure.
     return { size: role, width: linesAt(cellWidth, role) <= 1 ? cellWidth : measureAt(role) };
+  };
+  // LH-48: a body of paragraphs and lists that fills too little of its height is composed again with every one of them a few steps of the
+  // type scale larger (composeSlide, growBody), up to a list's display size; a paragraph in auto mode keeps the reading measure there.
+  const bodySteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[GROW] ?? 0)) || 0);
+  const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
+    // LH-70, LH-67: a paragraph of a paragraph grid starts at the size its columns were chosen for, and the lead of a lead plus stack at
+    // the lead size; both keep at most a PARAGRAPH_MEASURE_MAX measure, and neither grows with the body (LH-48).
+    const set = paragraphStarts.get(node);
+    if (set !== undefined) return { size: set, width: Math.min(cellWidth, PARAGRAPH_MEASURE_MAX * AVERAGE_CHARACTER_EM * set) };
+    const base = baseProseMeasure(node, cellWidth);
+    if (!bodySteps || node.children || proseGrowth.has(node) || (node.field !== 'text' && node.field !== 'items' && node.field !== 'bullets')) return base;
+    // Siblings stop a step under a lone message's display size, so a body of several blocks never reads louder than one statement.
+    const display = LONE_DISPLAY_SIZES.list * scale;
+    let size = base.size;
+    for (let step = 0; step < bodySteps; step++) { const next = scaleAbove(size, composition.minFontSize ?? 16); if (next > display + 1e-9) break; size = next; }
+    if (size === base.size || node.field !== 'text' || !node.auto) return { size, width: base.width };
+    return { size, width: estimatedLines(node.value, cellWidth, size) <= 1 ? cellWidth : Math.min(cellWidth, PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM * size) };
   };
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
@@ -4510,11 +4625,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // and keeps every row at its floor (its line height plus its insets). Undefined for a table layoutTable rejects; the caller keeps its estimate.
   const tableMeasures = new WeakMap<Pending, Map<string, TableLayout | undefined>>();
   const measureTable = (node: Pending, width: number, settings: Composition, atFloor = false): TableLayout | undefined => {
-    const cache = tableMeasures.get(node) ?? new Map<string, TableLayout | undefined>(), key = `${round(width)}:${settings.minFontSize ?? 16}:${atFloor}`;
+    const cache = tableMeasures.get(node) ?? new Map<string, TableLayout | undefined>(), key = `${round(width)}:${settings.minFontSize ?? 16}:${atFloor}:${growthOf.get(node) ?? 1}`;
     tableMeasures.set(node, cache);
     if (!cache.has(key)) {
       let measured: TableLayout | undefined;
-      try { measured = width > 0 ? layoutTable(node.value, { x: 0, y: 0, width, height: atFloor ? scale : 1e6 }, { scale, minFontSize: settings.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, path: node.path, presentation: options.presentation }) : undefined; }
+      try { measured = width > 0 ? layoutTable(node.value, { x: 0, y: 0, width, height: atFloor ? scale : 1e6 }, { scale, minFontSize: settings.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, path: node.path, presentation: options.presentation, ...grownOptions(node) }) : undefined; }
       catch { measured = undefined; }
       cache.set(key, measured);
     }
@@ -4572,6 +4687,68 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
     const body = content + (node.caption !== undefined ? 32 * scale : 0);
     return body + verticalPad(body);
+  };
+  // LH-48: the one block of a slide body (fills: the only root block, or a template's only block) that fills under LONE_FILL of its cell's
+  // height at its role sizes steps up: a paragraph or a list by the steps of the type scale (scaleStep) above its size, a quote, code panel
+  // or metric by the scale's ratio on every role (each up to its display size, LONE_DISPLAY_SIZES), to the largest step at which it fills
+  // at most LONE_TARGET of the cell and every part keeps the size it asks for. It then sits in the middle of the cell, its card hugging it,
+  // as Claude Design sets a short message. A block that fills half its cell or more keeps its sizes and its place. Returns the cell to
+  // place it in, or undefined.
+  const LONE_FIELDS: ReadonlySet<string> = new Set(['text', 'items', 'bullets', 'quote', 'code', 'metric', 'table']);
+  // The smallest step of the type scale above `size`.
+  const scaleAbove = (size: number, floorPx: number): number => {
+    for (let power = 0; ; power++) { const step = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale); if (step > size + 1e-9) return step; }
+  };
+  const fillLone = (node: Pending, cell: LayoutBox, settings: Composition, cards: boolean): LayoutBox | undefined => {
+    // Decided once: the block is then placed in the cell this returns.
+    if (!node.fills || options.fill === false) return undefined;
+    node.fills = false;
+    if (node.children || node.caption !== undefined || !LONE_FIELDS.has(node.field) || node.payload.columns !== undefined) return undefined;
+    const inner = payloadBox(cell, cards), prose = node.field === 'text' || node.field === 'items' || node.field === 'bullets';
+    if (inner.width <= 0 || inner.height <= 0) return undefined;
+    // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
+    const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
+    let best = need();
+    if (best >= LONE_FILL * inner.height) return undefined;
+    const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+    if (prose) {
+      const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;
+      let chosen: number | undefined;
+      for (let size = start; ; ) {
+        const step = scaleAbove(size, settings.minFontSize ?? 16);
+        if (step > display + 1e-9) break;
+        proseGrowth.set(node, step);
+        const height = need(), measure = proseMeasure(node, inner.width);
+        const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
+        if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9) break;
+        chosen = step; best = height; size = step;
+      }
+      if (chosen === undefined) proseGrowth.delete(node); else proseGrowth.set(node, chosen);
+    } else {
+      let chosen: number | undefined;
+      for (let power = 1; power <= 5; power++) {
+        const growth = TYPE_SCALE_RATIO ** power;
+        growthOf.set(node, growth);
+        const height = need();
+        let fits: boolean;
+        if (node.field === 'table') {
+          // A table keeps its words whole and every cell at the grown size.
+          const table = measureTable(node, inner.width, settings), size = gridFontSize(grownRoleSize(TABLE_NOMINAL_SIZE, growth, LONE_DISPLAY_SIZES.table) * scale, floor);
+          fits = !!table && !table.overflow && !table.splitsWords && table.rows.every(row => row.cells.every(cell => cell.fit.fontSize >= size - 1e-9 || Array.isArray(cell.value)));
+        } else {
+          const layout = node.field === 'quote' ? measureQuote(node, inner, settings) : node.field === 'code' ? measureCode(node, inner, settings) : measureMetric(node, inner, settings);
+          fits = !layout.overflow && (layout.parts as readonly { fit?: { fontSize: number }; requestedFontSize: number; visible?: boolean }[]).every(part => part.visible === false || (part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9));
+        }
+        if (height > LONE_TARGET * inner.height || !fits) break;
+        chosen = growth; best = height;
+      }
+      if (chosen === undefined) growthOf.delete(node); else growthOf.set(node, chosen);
+    }
+    // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
+    let height = best;
+    if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
+    height = Math.min(cell.height, height);
+    return { ...cell, y: cell.y + (cell.height - height) / 2, height };
   };
   // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
   // cell's height wide (a metric beside its note in a wide cell), else the figure above its text. One rule for every pair of a
@@ -4861,6 +5038,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const belowUnits = binding.belowUnits.map(unitOf);
     const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
+    // LH-48: a slide whose body is one block (one region holds it and nothing is below the grid) gives that block the body: its region's
+    // cell reaches the foot of the content box when every other region is empty, and the block grows and moves to its middle (fillLone).
+    // A stacked record (statement, quote, closing) already sets its message in the middle of the slide.
+    const bodyUnits = [...contents.values()].flat().concat(belowUnits);
+    const loneUnit = options.fill !== false && plan.stack === undefined && bodyUnits.length === 1 && !bodyUnits[0]!.children ? bodyUnits[0] : undefined;
+    if (loneUnit) loneUnit.fills = true;
     // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
     // measure of the region (row needs, floors, placement) sees them as drawn. A lone timeline may grow when it fits (placeTimeline).
     const timelineBands = (units: Pending[]) => units.length > 1 && units.every(unit => !unit.children && unit.field === 'timeline' && unit.caption === undefined);
@@ -4938,10 +5121,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // The implicit row below the grid holds what no region took; nothing collapses into it.
     const collapsed = collapseAreas(cells, empty, name => name === 'title' || name === 'subtitle', name => name !== BELOW);
     const rects = areaRects(collapsed.grid), ownRects = areaRects(cells);
-    const widths = columnWidths(plan.columns, frame.width, gap);
+    // LH-65: a column that holds only empty regions (and heading or below-the-grid areas that span other columns too) gives way: it
+    // takes no width and no gap, and the columns left share the width by their own sizes, so 2 blocks in three columns draw 1:1, not
+    // one column beside a neighbor that took the empty one's width too. A column with content, or a kept (`empty: keep`) region, stays;
+    // its region reports a zero-wide cell where the column was.
+    const spansOthers = (name: string, column: number) => cells.some(row => row.some((cell, other) => other !== column && cell === name));
+    const headingOrBelow = (name: string) => name === 'title' || name === 'subtitle' || name === BELOW;
+    const vacated = plan.columns.map((_, column) => cells.every(row => { const name = row[column]!; return name === '.' || (empty.has(name) && !headingOrBelow(name)) || (headingOrBelow(name) && spansOthers(name, column)); }));
+    // With one column of content left, a column gives way only when its empty region found no neighbor to collapse into (a hero's
+    // media column beside a stack of rows); otherwise the column left takes the others' width by collapsing them, as before.
+    const filledColumns = plan.columns.filter((_, column) => !vacated[column] && cells.some(row => plan.regions.some(region => row[column] === region.name && unitsOf(region.name).length > 0))).length;
+    if (!ruleOn('empty-columns') || !filledColumns) vacated.fill(false);
+    else if (filledColumns < 2) vacated.forEach((gone, column) => { if (gone && cells.every(row => row[column] === '.' || !empty.has(row[column]!) || collapsed.joined.has(row[column]!))) vacated[column] = false; });
+    if (vacated.some(Boolean)) fire('empty-columns');
+    // The regions whose every cell lies in a column that gave way report `collapsed`.
+    const gaveWay = new Set(plan.regions.filter(region => cells.some(row => row.includes(region.name)) && cells.every(row => row.every((name, column) => name !== region.name || vacated[column]))).map(region => region.name));
+    const keptWidths = columnWidths(plan.columns.filter((_, column) => !vacated[column]), frame.width, gap);
+    const widths = plan.columns.map((_, column) => vacated[column] ? 0 : keptWidths[vacated.slice(0, column).filter(gone => !gone).length]!);
     const columnX: number[] = [];
-    widths.reduce((x, size) => { columnX.push(x); return x + size + gap; }, 0);
-    const spanWidth = (rect: CellRect) => widths.slice(rect.column, rect.column + rect.columnSpan).reduce((a, b) => a + b, 0) + gap * (rect.columnSpan - 1);
+    widths.reduce((x, size, column) => { const kept = !vacated[column], start = kept && widths.slice(0, column).some((_, before) => !vacated[before]) ? x + gap : x; columnX.push(start); return kept ? start + size : x; }, 0);
+    const spanWidth = (rect: CellRect) => columnX[rect.column + rect.columnSpan - 1]! + widths[rect.column + rect.columnSpan - 1]! - columnX[rect.column]!;
     // LH-51: a content slide's title sits in a title area of auto rows above the body; a cover, a section (a title area in a
     // sized row, centred) and a stacked record (statement, quote, closing) keep the role size. LH-76 splits a title only into
     // the title area's own heading group, not into a layout's separate subtitle area.
@@ -5128,9 +5327,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A column of auto rows with an anchor (`template.stack`): the whole stack, headings included, sits in the leftover height.
     const stackUsed = heights.reduce((sum, size) => sum + size, 0) + gap * Math.max(0, heights.filter(size => size > 0).length - 1);
     const stackShift = plan.stack === undefined ? 0 : Math.max(0, frame.height - stackUsed) * (plan.stack === 'middle' ? .5 : 1);
+    // LH-48 (growBody, CENTER): a body under the headings whose rows all hug their content (auto rows) sits in the middle of the height
+    // the headings leave, instead of at its top with the space below it empty.
+    const firstBodyRow = Math.max(0, ...[...rects].filter(([name]) => name === 'title' || name === 'subtitle').map(([, rect]) => rect.row + rect.rowSpan));
+    const centered = (options as Record<symbol, unknown>)[CENTER] === true && plan.stack === undefined && [...rects].every(([name, rect]) => name === 'title' || name === 'subtitle' || rect.row >= firstBodyRow) && rowSizes.slice(firstBodyRow).every(size => size === 'auto');
+    const bodyShift = centered ? Math.max(0, frame.height - stackUsed) / 2 : 0;
     const logical = (rect: CellRect): LayoutBox => {
-      const last = rect.row + rect.rowSpan - 1, y = frame.y + stackShift + rowY[rect.row]!;
-      return { x: frame.x + columnX[rect.column]!, y, width: spanWidth(rect), height: Math.max(0, frame.y + stackShift + rowY[last]! + heights[last]! - y) };
+      const last = rect.row + rect.rowSpan - 1, shift = stackShift + (rect.row >= firstBodyRow ? bodyShift : 0), y = frame.y + shift + rowY[rect.row]!;
+      return { x: frame.x + columnX[rect.column]!, y, width: spanWidth(rect), height: Math.max(0, frame.y + shift + rowY[last]! + heights[last]! - y) };
     };
     // design.mirror reverses each row's cells and the column sizes; a right-to-left deck mirrors the drawing on top.
     const flip = (hints.mirror === true) !== rtl;
@@ -5184,7 +5388,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // estimates the insets of a tall card (up to CARD_INSET); the height is refined once with the insets payloadBox gives a card
     // that tall (a sixteenth of its shorter side), which are no larger, so every payload still fits and the margin under the
     // text matches the one above it.
-    const HUG_FILL = .45, UNEQUAL_PAYLOADS = 1.5, fillSpace = requestedTemplateGap * CARD_FILL_SPACE;
+    const HUG_FILL = .45, UNEQUAL_PAYLOADS = 1.5, fillSpace = requestedTemplateGap * CARD_FILL_SPACE, underFilled = bodySteps > 0 || (options as Record<symbol, unknown>)[CENTER] === true;
     const hugHeight = (units: Pending[], cells: LayoutBox[], estimate: number): number => Math.min(estimate, Math.max(...units.map((unit, index) => {
       const frame = acceptedBox({ ...cells[index]!, height: estimate }), inner = payloadBox(frame, true);
       return naturalHeight(unit, inner.width, false, undefined, settings) + 2 * rasterPadding + scale + 2 * (inner.y - frame.y);
@@ -5202,7 +5406,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!units.every(bodyOnly)) return undefined;
       const card = cellHeight - fillSpace;
       const text = Math.max(...units.map((unit, index) => naturalHeight(unit, cells[index]!.width - 2 * Math.min(CARD_INSET * scale, cells[index]!.width / 4), false, undefined, settings)));
-      if (text < HUG_FILL * card) return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
+      // LH-48: the cards of a body growBody found under-filled hug their text and center, whatever it fills of a card.
+      if (text < HUG_FILL * card || underFilled) return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
       return tallest > UNEQUAL_PAYLOADS * Math.min(...naturals) ? { mode: 'top', height: Math.min(card, tallest) } : undefined;
     };
     // The rows of cards of one area, each with its rule: every card's box and its frame (the cell, for a card that fills it), or
@@ -5231,6 +5436,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (region.name === overridden) {
           arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
           return 'composition';
+        }
+        // LH-48: the body's one block takes the whole cell and places itself (fillLone), whatever the region's anchor or card row.
+        const filled = units.length === 1 && !region.bleed ? fillLone(units[0]!, cell, settings, cards) : undefined;
+        if (filled) {
+          const first = items.length;
+          placeNode(units[0]!, filled, settings, cards, region.listColumns, undefined, region.anchor);
+          leafItems.push(...range(first, items.length));
+          return arrangementOf(region, units, cell);
         }
         // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow
         // or the design's contentDirection. The stack sits in the middle of the region, as a lone timeline is centred in its cell,
@@ -5313,6 +5526,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // WI-1 (N1): regions of one role side by side (the same rows of the grid) are peers: their text shares one size.
     const bands = new Map<string, number[][]>();
     let leafItems: number[] = [];
+    // LH-48 (growBody, CENTER): the regions of an under-filled body sit in the middle of their cells, the regions side by side (one band
+    // of rows) as tall as the tallest of them needs (regionNeed, with each block's placement slack), so a short grid in a tall region no
+    // longer starts at its top above an empty foot. A bled region keeps its cell.
+    const centerNeeds = new Map<string, number>();
+    if ((options as Record<symbol, unknown>)[CENTER] === true && plan.stack === undefined) for (const region of plan.regions) {
+      const units = unitsOf(region.name), rect = rects.get(region.name);
+      if (!units.length || !rect || region.bleed) continue;
+      const key = `${rect.row}:${rect.rowSpan}`, need = regionNeed(region.name, spanWidth(rect)) + units.length * (2 * rasterPadding + scale + (hasCards ? gap * CARD_FILL_SPACE : 0));
+      centerNeeds.set(key, Math.max(centerNeeds.get(key) ?? 0, need));
+    }
+    const regionCell = (rect: CellRect): LayoutBox => {
+      const cell = physical(logical(rect)), need = centerNeeds.get(`${rect.row}:${rect.rowSpan}`);
+      return need !== undefined && need < cell.height - 1e-6 ? { ...cell, y: cell.y + (cell.height - need) / 2, height: need } : cell;
+    };
     // LH-64, LH-04: the lone blocks of card regions in the same rows of the grid, with the same anchor, are one row of cards.
     const loneCards = new Map<string, CardPlacement>();
     if (hasCards) {
@@ -5320,7 +5547,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       for (const region of plan.regions) {
         const units = unitsOf(region.name), rect = rects.get(region.name);
         if (units.length !== 1 || !rect || region.bleed || region.name === overridden) continue;
-        const key = `${rect.row}:${rect.rowSpan}:${region.anchor}`, area = physical(logical(rect));
+        const key = `${rect.row}:${rect.rowSpan}:${region.anchor}`, area = regionCell(rect);
         loneRows.set(key, [...loneRows.get(key) ?? [], { name: region.name, unit: units[0]!, cell: { ...area, width: Math.max(scale, area.width), height: Math.max(scale, area.height) }, anchor: region.anchor }]);
       }
       for (const row of loneRows.values()) {
@@ -5331,9 +5558,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const region of plan.regions) {
       const units = unitsOf(region.name), bound = binding.regions.find(entry => entry.name === region.name)!;
       const rect = rects.get(region.name);
-      let cell = physical(logical(rect ?? ownRects.get(region.name)!));
+      let cell = rect && !region.bleed ? regionCell(rect) : physical(logical(rect ?? ownRects.get(region.name)!));
       const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
-      if (region.bleed && rect) cell = bleed(cell);
+      if (region.bleed && rect && cell.width > 0) cell = bleed(cell);
+      else if (rect && loneUnit && units[0] === loneUnit && plan.regions.every(other => other === region || empty.has(other.name))) cell = { ...cell, height: Math.max(cell.height, frame.y + frame.height - cell.y) };
       leafItems = [];
       const arrangement = units.length && rect ? placeRegion(region, units, cell, loneCards.get(region.name)) : undefined;
       if (arrangement && rect) {
@@ -5344,7 +5572,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         name: region.name, box: roundBox(cell), accepts: [...region.accepts], role: region.role, flow: region.flow, max: region.max, anchor: region.anchor,
         ...(arrangement ? { arrangement } : {}), content: bound.blocks.map(block => block.path),
         ...(bound.overflow.length ? { overflow: bound.overflow.map(block => block.path) } : {}),
-        ...(collapsed.joined.has(region.name) ? { collapsed: true as const } : {}), ...(region.bleed ? { bleed: true as const } : {}),
+        ...(collapsed.joined.has(region.name) || gaveWay.has(region.name) ? { collapsed: true as const } : {}), ...(region.bleed ? { bleed: true as const } : {}),
         ...(areaBox ? { areaBox } : {}),
       });
     }
@@ -5489,7 +5717,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
   } else {
-    const grouped = groupRoot(pending);
+    const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;
+    // LH-48: the one root block is the whole body (fillLone).
+    if (roots.length === 1 && !roots[0]!.children) roots[0]!.fills = true;
     if (grouped?.settings) arrange(grouped.nodes, contentBox, grouped.settings, 0, gap); else arrange(grouped?.nodes ?? pending, contentBox, rootSettings, 0);
   }
   sharePeerSizes();
@@ -5523,7 +5753,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
     for (const key of ["x", "y", "width", "height"] as const) item.box[key] = round(item.box[key]);
-    if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
+    if (item.field === "table" && tableOverflows(item.value,item.box,scale,item.composition,options,item.path,item.tableGrowth)) diagnostics.push({ code: "text-overflow", path: item.path, message: "Table cells do not fit; use fewer rows, fewer columns, or split the table across slides." });
     if (item.quoteLayout) diagnostics.push(...item.quoteLayout.diagnostics);
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);

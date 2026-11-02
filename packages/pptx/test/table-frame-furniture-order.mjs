@@ -40,7 +40,8 @@ for (const [label, table] of [['short', short], ['tall', tall]]) for (const scal
   const note = `${label} scale ${scale} text ${withText}`;
   for (const [actual, expected, name] of [[frame.x, item.box.x, 'x'], [frame.y, item.box.y, 'y'], [frame.cx, item.box.width, 'width']])
     assert.ok(Math.abs(actual - expected * EMU) <= TOLERANCE_EMU, `${note}: frame ${name} ${actual / EMU} equals composed box ${expected}`);
-  const measured = layoutTable(table, item.box, {scale}), rows = measured.rows.reduce((sum, row) => sum + row.box.height, 0);
+  // As composed: a lone table that fills little of the body is laid out grown (LH-48, `tableGrowth`).
+  const measured = layoutTable(table, item.box, {scale, ...(item.tableGrowth ? {growth: item.tableGrowth} : {})}), rows = measured.rows.reduce((sum, row) => sum + row.box.height, 0);
   const drawn = drawnExtent(toSvg(deck, 1, {trace: true}), item.path);
   // Each row is rounded to whole EMU independently, hence the per-row allowance.
   const allowance = TOLERANCE_EMU + frame.rows;

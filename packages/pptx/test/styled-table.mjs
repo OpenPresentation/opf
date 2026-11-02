@@ -74,7 +74,8 @@ for (const scale of [1,.5]) {
   assert.equal(Number(cells[1][2]['a:tcPr'].marR),Math.round(19*scale*9525));
   assert.ok(find(cells[1][2],'a:pPr').every(p => p.algn === 'ctr'));
   const item = composeSlide(deck.slides[0],{width:1280*scale,height:720*scale}).items.find(item => item.field === 'table');
-  const geometry = layoutTable(table,item.box,{scale});
+  // The composed table: a lone table that fills little of the body is laid out grown (LH-48, `tableGrowth`), as the export does.
+  const geometry = layoutTable(table,item.box,{scale,...(item.tableGrowth?{growth:item.tableGrowth}:{})});
   rows.forEach((row,i) => assert.ok(Math.abs(Number(row.h)/9525-geometry.rows[i].box.height)<.001));
   assert.deepEqual(deck,before);
 }
