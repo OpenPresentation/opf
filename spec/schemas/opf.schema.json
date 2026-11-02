@@ -1607,7 +1607,7 @@
         },
         "focus": {
           "$ref": "#/$defs/ImageFocus",
-          "description": "Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits."
+          "description": "Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in frame; every other crop is centered."
         },
         "opacity": {
           "type": "number",
@@ -2321,7 +2321,7 @@
         },
         "focus": {
           "$ref": "#/$defs/ImageFocus",
-          "description": "Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits."
+          "description": "Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in frame; every other crop is centered."
         },
         "aspectRatio": {
           "type": "number",

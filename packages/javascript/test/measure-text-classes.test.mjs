@@ -6,13 +6,14 @@ import assert from 'node:assert/strict';
 import {measureText} from '../dist/composition.js';
 
 const FACTORS=[[/\p{Script=Tamil}/u,1.53],[/\p{Script=Malayalam}/u,1.76],[/\p{Script=Sinhala}/u,1.44],[/\p{Script=Myanmar}/u,1.18],[/\p{Script=Ethiopic}/u,1.13],[/\p{Script=Georgian}/u,1.28]];
-// The 0.28.0 implementation, unchanged.
+// The 0.28.0 implementation, unchanged but for the no-break space (LH-11).
 function reference(text,fontSize){
   let units=0;
   for(const character of text){
     if(/\p{Mn}|\p{Me}|‍|️/u.test(character))continue;
     if(/\p{Mc}/u.test(character)&&/\p{Script=Latin}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(character))continue;
-    const base=character===' '?0.32:/[A-Z0-9]/.test(character)?0.62:character.codePointAt(0)>0x2e80?1:0.54;
+    // LH-11: a no-break space is as wide as the space it stands for (the exporter writes one where a line may not break).
+    const base=character===' '||character===String.fromCharCode(160)?0.32:/[A-Z0-9]/.test(character)?0.62:character.codePointAt(0)>0x2e80?1:0.54;
     const factor=FACTORS.find(([script])=>script.test(character))?.[1]??1;
     units+=base*factor;
   }

@@ -14,6 +14,9 @@ export {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection,type ScriptMeasurementProfile} from './script-fonts.js';
 import {quoteLanguage,quoteMarksFor,type QuoteMarks} from './quote-marks.js';
+import {allowedBreak,proseTokens,proseWords} from './line-break.js';
+/** LH-11: where a line may not break (a number and its unit, a closing mark), and the same rule written as no-break spaces for a PowerPoint that wraps the text itself. */
+export {bindNoBreak,unbindNoBreak,lineMayStartAt} from './line-break.js';
 import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
@@ -633,11 +636,24 @@ const finite = (value: unknown, min: number, max: number): number | undefined =>
 const pathNumber = (value: number) => String(round(value));
 const IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
 const roundBox = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
-/** A valid focus point, else the center. */
-const imageFocus = (value: unknown): ImageFocus => {
+/** A valid focus point the author gave, else undefined. */
+const authoredFocus = (value: unknown): ImageFocus | undefined => {
   const focus = record(value), x = finite(focus.x, 0, 1), y = finite(focus.y, 0, 1);
-  return x !== undefined && y !== undefined ? { x, y } : { x: 0.5, y: 0.5 };
+  return x !== undefined && y !== undefined ? { x, y } : undefined;
 };
+/** A valid focus point, else the center. */
+const imageFocus = (value: unknown): ImageFocus => authoredFocus(value) ?? { x: 0.5, y: 0.5 };
+/**
+ * LH-84: how far down a portrait picture's crop is kept in view when the author gave no focus. A cover crop of a picture taller than
+ * wide into a wider frame trims the top and bottom; a centered crop trims the head of a portrait as much as the legs, so the focus
+ * defaults to 30% of the picture's height (heads stay in frame). Any other crop is centered; an authored focus always wins.
+ */
+export const PORTRAIT_FOCUS_Y = 0.3;
+/** The focus a picture of `aspect` (width / height) uses in `frame` with `fit` when the author gave none (see PORTRAIT_FOCUS_Y). */
+export function defaultImageFocus(frame: LayoutBox, fit: ImageFit, aspect: number): ImageFocus {
+  const portrait = Number.isFinite(aspect) && aspect > 0 && aspect < 1;
+  return fit === 'cover' && portrait && frame.width > 0 && frame.height > 0 && aspect < frame.width / frame.height ? { x: 0.5, y: PORTRAIT_FOCUS_Y } : { x: 0.5, y: 0.5 };
+}
 
 /**
  * Outline of a DrawingML preset in a box, following the ECMA-376 presetShapeDefinitions formulas:
@@ -667,15 +683,16 @@ export function imageShape(kind: ImageShape['kind'], box: LayoutBox, cornerRadiu
  * The shared fit math every engine uses (FA-22). `aspect` is the picture's width / height. cover scales the picture
  * to cover the frame and centers the focus point in the frame as far as the picture still covers it, so the focus
  * point always stays in view ({0.5, 0.5} is a center crop, {0, 0} keeps the top-left corner). contain scales it to
- * fit and centers it; stretch fills the frame exactly. Focus applies to cover only. `crop` holds the DrawingML
+ * fit and centers it; stretch fills the frame exactly. Focus applies to cover only; without one, a portrait picture cropped
+ * into a wider frame keeps its heads (defaultImageFocus), every other crop is centered. `crop` holds the DrawingML
  * srcRect insets as fractions of the picture: positive insets crop, negative insets pad.
  */
-export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus: ImageFocus = { x: 0.5, y: 0.5 }): ImageFitPlacement {
+export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus?: ImageFocus): ImageFitPlacement {
   if (![frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) || frame.width <= 0 || frame.height <= 0) throw new RangeError('An image frame needs finite coordinates and a positive size.');
   if (fit === 'stretch' || !Number.isFinite(aspect) || aspect <= 0) return { image: roundBox(frame), crop: { left: 0, top: 0, right: 0, bottom: 0 } };
   const wide = aspect > frame.width / frame.height, cover = fit === 'cover';
   const width = wide === cover ? frame.height * aspect : frame.width, height = wide === cover ? frame.height : frame.width / aspect;
-  const point = imageFocus(focus);
+  const point = focus === undefined ? defaultImageFocus(frame, fit, aspect) : imageFocus(focus);
   const place = (start: number, span: number, size: number, at: number) => cover
     ? Math.min(start, Math.max(start + span - size, start + span / 2 - at * size))
     : start + (span - size) / 2;
@@ -759,7 +776,7 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   // with aspectRatio or a circle shape stays centered, as the schema says.
   if (context.anchor && fit === 'contain' && !aspect && box.height < frameArea.height) box.y = frameArea.y + anchoredOffset(frameArea.height - box.height, context.anchor);
   box = roundBox(box);
-  const focus = imageFocus(host.focus);
+  const focus = authoredFocus(host.focus) ?? (pictureAspect ? defaultImageFocus(box, fit, pictureAspect) : imageFocus(undefined));
   const shape = imageShape(kindName, box, finite(host.cornerRadius, 0, 0.5));
   const result: ComposedImage = { region: roundBox(region), box, fit, focus, shape };
   const border = record(host.border), borderWidth = finite(border.width, 0, 64);
@@ -790,7 +807,11 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
   const overlay = composeOverlay(background.overlay, box, imageShape('rectangle', box), `${at}.overlay`, mirrorSide, diagnostics);
   if (overlay) result.overlay = overlay;
   const aspect = background.fit === 'tile' ? undefined : intrinsicImageAspect(background.src, record(presentation).assets);
-  if (aspect) result.picture = fitImage(box, background.fit as ImageFit, aspect, background.focus);
+  if (aspect) {
+    // LH-84: a portrait picture the author gave no focus keeps its heads (defaultImageFocus).
+    if (authoredFocus(record(value).focus) === undefined) result.focus = defaultImageFocus(box, background.fit as ImageFit, aspect);
+    result.picture = fitImage(box, background.fit as ImageFit, aspect, result.focus);
+  }
   return result;
 }
 
@@ -1119,7 +1140,7 @@ function balancedBreaks(text:string,lines:readonly WrappedLine[],widthOf:(start:
     const count=group.length;
     if (count<2) return;
     const from=group[0]!.start,to=group.at(-1)!.end;
-    const words=[...text.slice(from,to).matchAll(/(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu)].map(match=>({start:from+match.index!,end:from+match.index!+match[0].length,text:match[0]}));
+    const words=proseWords(text.slice(from,to)).map(word=>({start:from+word.start,end:from+word.end,text:word.text}));
     const total=words.length;
     if (total<count||total>BALANCE_MAX_WORDS) return;
     const cache=new Map<number,number>(),span=(first:number,last:number)=>{
@@ -1168,7 +1189,8 @@ function characterUnits(character: string): number {
   if (ZERO_WIDTH_MARK.test(character)) return Number.NaN;
   // Preserve the pre-0.19 Latin/CJK estimate, including their spacing tone/reading marks.
   if (SPACING_MARK.test(character) && LATIN_CJK.test(character)) return Number.NaN;
-  const base = character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+  // A no-break space (LH-11: the exporter writes one where a line may not break) is as wide as the space it stands for.
+  const base = character === " " || character === "\u00a0" ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
   const factor = SCRIPT_WIDTH_FACTORS.find(([script]) => script.test(character))?.[1] ?? 1;
   return base * factor;
 }
@@ -2116,7 +2138,7 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       start=nextStart;end=nextStart;
     };
     const tokens=prose?/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu:/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu;
-    for (const token of text.matchAll(tokens)) {
+    for (const token of prose?proseTokens(text):text.matchAll(tokens)) {
       if (token.index===undefined) throw new Error('Missing code token source offset.');
       const a=token.index,b=a+token[0].length;
       if (/^[\r\n]/.test(token[0])) {push(a,b,'hard');continue;}
@@ -2132,9 +2154,11 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       // Nonbreaking spaces and word joiners carry an explicit author constraint.
       // Keep the protected token intact and report overflow at the chosen floor.
       if (prose&&/[\u00a0\u202f\u2060\ufeff]/u.test(token[0])) {end=b;continue;}
-      for (const segment of textSegments.segment(token[0])) {
+      // Inside an over-long word the break moves back off a figure, its unit and a closing mark (LH-11) when the line has room for it.
+      const cuts=prose?[...textSegments.segment(token[0])].map(segment=>a+segment.index):undefined;
+      for (const [k,segment] of [...textSegments.segment(token[0])].entries()) {
         const next=a+segment.index+segment.segment.length;
-        if (end>start && width(start,next)>box.width+.01) push(a+segment.index,a+segment.index,'soft');
+        if (end>start && width(start,next)>box.width+.01) {const at=cuts?allowedBreak(text,cuts,k,start):a+segment.index;push(at,at,'soft');}
         end=next;
       }
     }
@@ -2368,8 +2392,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const ranges:{start:number;end:number}[]=[],hung=new Map<number,number>();
     let lineStart=0,lineEnd=0,hangFrom=-1;
     const push=(end:number)=>{if(hangFrom>=0)hung.set(ranges.length,hangFrom);hangFrom=-1;ranges.push({start:lineStart,end});lineStart=end;lineEnd=end;};
-    for(const match of whole.matchAll(/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu)){
-      const start=match.index!,end=start+match[0].length;
+    for(const match of proseTokens(whole)){
+      const start=match.index,end=start+match[0].length;
       if(/^[\r\n]/.test(match[0])){push(start);lineStart=end;lineEnd=end;continue;}
       // A break the balancer chose (headings): the line ends before this word.
       if(forced?.has(start)&&lineEnd>lineStart&&/\S/u.test(whole.slice(lineStart,lineEnd)))push(start);
@@ -2381,9 +2405,10 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
       if(width(start,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
       // Match plain prose: protected tokens stay whole and report overflow at the readability floor.
       if(/[\u00a0\u202f\u2060\ufeff]/u.test(match[0])){lineEnd=end;continue;}
-      for(const {segment,index}of textSegments.segment(match[0])){
+      const cuts=[...textSegments.segment(match[0])];
+      for(const [k,{segment,index}]of cuts.entries()){
         const next=start+index+segment.length;
-        if(lineEnd>lineStart&&width(lineStart,next)>box.width+WRAP_TOLERANCE)push(start+index);
+        if(lineEnd>lineStart&&width(lineStart,next)>box.width+WRAP_TOLERANCE)push(allowedBreak(whole,cuts.map(cut=>start+cut.index),k,lineStart));
         lineEnd=next;
       }
     }
@@ -2675,13 +2700,12 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   // share of the rest by how much more it asks for. When even the minimums do not fit the table, the trial size shrinks (see the loop below).
   const horizontalPadding=(cell:typeof cells[number])=>(cell.padding.left+cell.padding.right)*scale;
   const measureText=(cell:typeof cells[number])=>textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement);
-  const wordSplit=/[^\S\u00a0\u202f\ufeff]+/u;
   const demand=(cell:typeof cells[number])=>{
     const measure=measureText(cell),size=cellSize(cell);
     let widest=0,longest=0;
     for(const line of flatten(cell.value).split(/\r\n|\r|\n/)){
       longest=Math.max(longest,measure(line.replace(/\t/g,'    '),size));
-      for(const word of line.split(wordSplit)){
+      for(const word of proseWords(line).map(entry=>entry.text)){
         if(!word)continue;
         // Text without word spaces (Han, kana, Thai ...) breaks between characters: its smallest piece is one character.
         widest=Math.max(widest,UNSPACED_SCRIPT.test(word)?Math.max(...[...word].map(character=>measure(character,size))):measure(word,size));
