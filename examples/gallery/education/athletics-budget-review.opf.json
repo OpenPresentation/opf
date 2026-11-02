@@ -62,7 +62,6 @@
     "dimensions": "letter",
     "background": "#F8FAFC",
     "titleAlignment": "center",
-    "contentAlignment": "right",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "top",

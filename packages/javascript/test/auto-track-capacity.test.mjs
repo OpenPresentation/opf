@@ -34,14 +34,15 @@ test('a code payload in an auto row does not overflow', () => {
   assert.equal(code.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, 22);
 });
 
-test('dense comparison options in an auto row keep at least 20 px, and the verdict follows them within one gap', () => {
+// LH-17: the options fit between 20 and 21 px, so they take the type scale's 18 px step (16, 18, 21, 24, 28, 32 at the default floor).
+test('dense comparison options in an auto row keep at least 18 px, and the verdict follows them within one gap', () => {
   const option = (name) => `${name}\n${'Each team must complete training, collect baseline evidence, assign an accountable owner and confirm support capacity before this option can proceed. '.repeat(5)}`;
   // The comparison record with its option row sized auto, as WI-2 proposes.
   const record = structuredClone(layouts.comparison);
   record.regions[1].size = 'auto';
   const result = composeSlide({ ...heading, blocks: [{ region: 'first', text: option('Option A: focused pilot') }, { region: 'second', text: option('Option B: broad rollout') }, { region: 'verdict', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] }, { layout: record });
   const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
-  assert.ok(first.text.fontSize >= 20 && second.text.fontSize >= 20, `${first.text.fontSize} ${second.text.fontSize}`);
+  assert.ok(first.text.fontSize >= 18 && second.text.fontSize >= 18, `${first.text.fontSize} ${second.text.fontSize}`);
   assert.equal(result.diagnostics.length, 0);
   const options = result.regions.find((region) => region.name === 'first').box;
   assert.ok(verdict.box.y - (options.y + options.height) <= 720 / 30 + 1, 'one gap between the options and the verdict');

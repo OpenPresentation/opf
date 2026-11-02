@@ -76,7 +76,8 @@ for (const type of CLASSIC) {
 // 4. The reordered parts import as before: chart type, series and data labels.
 {
   for (const type of ['line', 'line-with-markers', 'radar-with-markers', 'scatter']) {
-    const chart = {type, data: type === 'scatter' ? scatterData : data, dataLabels: true};
+    // Labels that are not the LH-03 small-chart default (plain values), so the import records them on every type.
+    const chart = {type, data: type === 'scatter' ? scatterData : data, dataLabels: {content: ['category', 'value']}};
     const imported = (await fromPptx(await toPptx({slides: [{title: type, chart}]}, {provenance: false}))).slides[0];
     const back = imported.chart ?? imported.blocks?.find(block => block.chart)?.chart;
     assert.equal(back?.type, type, `${type}: the chart type reads back from the native part`);

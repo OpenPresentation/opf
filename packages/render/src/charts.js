@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -21,9 +21,44 @@ export function chartSeriesPalette(surface, colorScheme, colors, context) {
 // highlight has no `c.highlight`, and every colour below is the palette colour it always was.
 function highlightFor(c, resolved, spec, data) {
   if (!resolved.highlight) return undefined;
-  const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.columns.length > 2, rows: data.rows });
+  const marks = chartHighlightMarks(resolved.highlight, { columns: data.columns, hasX: spec.kind === "scatter" && data.hasX, rows: data.rows });
   if (!marks) return undefined;
   return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
+}
+
+// LH-03: a one-series small column or bar chart draws its emphasised point (core: the last one with a value) in the series colour and
+// every other point in a quieter tint of it (core chartEmphasisColors); it is drawn as a category highlight of that point.
+function emphasisFor(c, layer) {
+  const row = layer?.small?.emphasis;
+  const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0]);
+  // A backdrop that leaves no room for a tint at 3:1 and 15 L* from the series colour draws every point in the series colour.
+  return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
+}
+
+// LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
+// is carved from the top of the chart box, and a header legend replaces the side legend (c.legendManaged).
+function drawHeader(c, spec, header) {
+  const rtl = c.bound.geometry?.direction === "rtl";
+  if (header.caption) {
+    const element = c.svg.renderTextBox(header.caption.text, header.caption.box, c.bound, {
+      path: c.path, fontSize: c.fontPx / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: 700,
+      fill: c.labelColor, options: c.options, align: rtl ? "right" : "left", verticalAlign: "middle"
+    });
+    if (element) c.children.push(element);
+  }
+  if (header.legend) {
+    c.legendManaged = true;
+    const plan = spec.kind === "combo" ? comboPlan(c, c.series()) : undefined;
+    for (const entry of header.legend.entries) {
+      const s = c.series()[entry.series];
+      const key = entry.key === "line" ? "line" : undefined;
+      const marker = key === "line" && (spec.kind === "combo" ? plan?.[entry.series]?.role === "line" : Boolean(spec.markers));
+      const metrics = { swatch: c.fontPx * 0.6, gap: c.fontPx * 0.4, keyWidth: key ? c.fontPx * 1.4 : c.fontPx * 0.6 };
+      drawLegendEntry(c, { name: entry.name, color: seriesColor(c, entry.series), path: `${c.path}.data.columns.${s?.column ?? entry.series + 1}`, key, marker }, entry.box.x, entry.box.y, entry.box.height, metrics, entry.box.width);
+    }
+  }
+  const outer = c.box;
+  c.box = { x: outer.x, y: outer.y + header.height, width: outer.width, height: Math.max(1, outer.height - header.height) };
 }
 
 /** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
@@ -113,18 +148,27 @@ const CHARTEX_KINDS = new Set(["treemap", "histogram", "pareto", "box", "waterfa
  */
 export function renderCatalogChart(item, box, bound, options, svg) {
   const id = resolveChartType(item.value?.type);
-  const spec = id && CHART_TYPES[id];
+  const authoredSpec = id && CHART_TYPES[id];
+  const data = authoredSpec && RENDERERS[authoredSpec.kind] ? chartData(item, bound) : null;
+  // LH-60: the construct core's chartDrawPlan draws (a map over categories that are not places as columns, a pie of several series
+  // as nested rings); the options stay resolved against the authored type, as the validator and the PPTX export resolve them.
+  const spec = data?.type && CHART_TYPES[data.type] ? CHART_TYPES[data.type] : authoredSpec;
   const render = spec && RENDERERS[spec.kind];
-  const data = render ? chartData(item, bound) : null;
-  if (!data || !data.rows.length || data.columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
-  const c = chartContext(item, box, bound, options, svg, data);
+  if (!render || !data || !data.rows.length || data.columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
+  // LH-03, LH-81: the chart layer composition decided (core chart-layer.ts): a small chart's labels, axis, panel and emphasis, and the
+  // header row. A chart without one draws as before. Core decides it for the construct drawn (a map drawn as columns is a column chart).
+  const layer = item.chart?.layer;
+  const c = chartContext(item, box, bound, options, svg, data, layer);
   // WI-5 (P19): the panel is a fill only; the axes and gridlines draw the plot, so there is no outer frame (the PPTX chart area has no line either).
-  c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
+  // LH-03: a small chart has no panel; its marks stand on the backdrop (c.surface is then the card or the slide background).
+  if (!layer?.small) c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
-  // with none of them skips this block entirely, so its output is unchanged.
-  const resolved = resolveOptions(item.value, spec);
+  // with none of them skips this block entirely, so its output is unchanged. LH-03: a small chart's default value labels count as data labels.
+  const resolved = chartLayerDataLabels(resolveOptions(item.value, authoredSpec), layer, spec.kind);
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
-  c.highlight = highlightFor(c, resolved, spec, data);
+  c.highlight = highlightFor(c, resolved, spec, data) ?? emphasisFor(c, layer);
+  c.valueAxisHidden = layer?.small?.valueAxis === false;
+  if (layer?.header) drawHeader(c, spec, layer.header);
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
     reportOptionDiagnostics(c, resolved);
@@ -146,8 +190,11 @@ export function chartData(item, bound) {
   const chart = item.value;
   const resolved = resolveChartData(chart, bound?.presentation, { path: item.path });
   if (!resolved.ok) return null;
-  const formats = resolved.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
-  return { columns: resolved.columns, rows: resolved.rows, formats, trace: tracePaths(item, bound, resolved), ...(resolved.combo ? { combo: resolved.combo } : {}) };
+  // LH-60: core's draw plan (the fallback construct and the data as drawn), shared with the PPTX export.
+  const language = bound?.presentation?.language;
+  const plan = chartDrawPlan(chart, resolved, { language: typeof language === "string" ? language : undefined });
+  const formats = plan.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
+  return { type: plan.type, fallback: plan.fallback, columns: plan.columns, hasX: plan.hasX, rows: plan.rows, formats, trace: tracePaths(item, bound, { ...resolved, columns: plan.columns, regrouped: plan.columns.length !== resolved.columns.length }), ...(resolved.combo ? { combo: resolved.combo } : {}) };
 }
 
 // The authored object at a composed path ("slides.0.blocks.1.chart"), or undefined.
@@ -180,18 +227,19 @@ function tracePaths(item, bound, resolved) {
   if (isDatasetChart(item, bound)) return { collapse: true };
   const authored = authoredAt(bound?.presentation, item.path);
   const authoredData = authored && typeof authored === "object" ? authored.data : undefined;
-  if (!authored || typeof authored !== "object" || (!authored.mapping && !resolved.combo) || !Array.isArray(authoredData?.columns)) return null;
+  if (!authored || typeof authored !== "object" || (!authored.mapping && !resolved.combo && !resolved.regrouped) || !Array.isArray(authoredData?.columns)) return null;
   const names = authoredData.columns.map((column) => column !== null && typeof column === "object" ? column.name : column);
   const columnMap = resolved.columns.map((name, index) => { const found = names.indexOf(name); return found < 0 ? index : found; });
   return columnMap.every((column, index) => column === index) ? null : { columnMap };
 }
 
-function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo }) {
+function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo, hasX = false }, layer) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
   const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
-  const surface = bound.design.colors.surface;
+  // LH-03: a small chart has no panel, so its colours are judged against what it stands on: the card, or the slide background.
+  const surface = layer?.small ? (item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background) : bound.design.colors.surface;
   // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colours the PPTX export writes as
 // scheme colours): chart text, gridlines, axis lines and the outline between marks (bg1).
 const neutrals = bound.design.roles.neutrals;
@@ -211,7 +259,7 @@ const neutrals = bound.design.roles.neutrals;
     return path.replace(/^(.*\.data\.(?:columns\.|rows\.\d+\.))(\d+)$/, (whole, head, column) => `${head}${trace.columnMap[Number(column)] ?? column}`);
   };
   const c = {
-    item, box, bound, options, svg, rows, columns, formats, combo, children, u, fontPx, surface, labelColor, chartTextColor,
+    item, box, bound, options, svg, rows, columns, formats, combo, hasX, children, u, fontPx, surface, labelColor, chartTextColor,
     path: item.path,
     pt: u * 4 / 3,
     pad: 10 * u,
@@ -356,7 +404,7 @@ function legendSource(c, spec) {
   switch (spec.kind) {
     case "pie":
     case "doughnut": return c.rows.map((row, i) => ({ name: c.label(row[0]), color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0` }));
-    case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats).series, "marker");
+    case "scatter": return fromSeries(scatterSeries(c.rows, c.columns, c.formats, c.hasX).series, "marker");
     case "line": return fromSeries(c.series(), "line", spec.markers);
     case "radar": return fromSeries(c.series(), spec.style === "filled" ? undefined : "line", spec.markers);
     case "box": return fromSeries(c.columns.length === 1 ? [{ name: c.label(c.columns[0]), column: 0, index: 0 }] : c.series());
@@ -659,14 +707,18 @@ function renderCategoryChart(c, spec) {
   const extents = stacks.flat().filter(Boolean).flatMap((point) => spec.kind === "line" || !stackedGrouping ? [point.to] : [point.from, point.to]);
   const dataMin = extents.length ? Math.min(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 0, dataMax = extents.length ? Math.max(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 1;
   const legendWidth = seriesLegend(c, series, spec.kind === "line" ? "line" : undefined, spec.markers);
+  // LH-03: a small chart without its value axis draws no tick labels and no gridlines; its labels carry the values. The plot keeps a
+  // line above the tallest column (or point) for its label, and a horizontal bar chart the widest label's room beyond the longest bar.
+  const hidden = c.valueAxisHidden === true;
+  const labelRoom = hidden && horizontal && c.dataLabels ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format })) + fontPx * 0.5))) : 0;
   const right = box.x + box.width - pad - legendWidth;
-  const top = box.y + pad + c.lineHeight / 2;
+  const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
   let plot, scale, valueTickWidth;
   if (horizontal) {
     const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
     let x = box.x + pad + categoryWidth + c.pad / 2;
-    const bottom = box.y + box.height - pad - c.lineHeight;
-    let width = Math.max(1, right - x - fontPx);
+    const bottom = box.y + box.height - pad - (hidden ? 0 : c.lineHeight);
+    let width = Math.max(1, right - x - fontPx - labelRoom);
     const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat)), c.width(formatTick(dataMin, percent, valueFormat)), c.width("100%")) + fontPx;
     const scaleFor = (w) => categoryScale(c, dataMin, dataMax, w, tickWidth, percent);
     scale = scaleFor(width);
@@ -683,7 +735,7 @@ function renderCategoryChart(c, spec) {
     const axis = planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
-      const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
+      const tickWidth = hidden ? fontPx / 2 : Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
       if (rtl) {
         const x = box.x + pad + fontPx / 2;
         return { scale: fitted, plot: { x, y: top, width: Math.max(1, right - tickWidth - x), height }, tickWidth };
@@ -699,7 +751,7 @@ function renderCategoryChart(c, spec) {
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
-  for (const tick of scale.ticks) {
+  for (const tick of hidden ? [] : scale.ticks) {
     const position = at(tick), label = formatTick(tick, percent, valueFormat);
     if (horizontal) {
       gridline(c, position, plot.y, position, plot.y + plot.height);
@@ -715,12 +767,13 @@ function renderCategoryChart(c, spec) {
   if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot });
   else if (spec.kind === "line") drawLines(c, spec, series, stacks, { plot, band, at, categorySlot });
   else drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot });
+  // The value axis line goes with its tick labels (LH-03); the category axis line stays, at zero.
   if (horizontal) {
     axisLine(c, crossing, plot.y, crossing, plot.y + plot.height);
-    axisLine(c, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
+    if (!hidden) axisLine(c, plot.x, plot.y + plot.height, plot.x + plot.width, plot.y + plot.height);
   } else {
     const valueAxisX = rtl ? plot.x + plot.width : plot.x;
-    axisLine(c, valueAxisX, plot.y, valueAxisX, plot.y + plot.height);
+    if (!hidden) axisLine(c, valueAxisX, plot.y, valueAxisX, plot.y + plot.height);
     axisLine(c, plot.x, crossing, plot.x + plot.width, crossing);
   }
 }
@@ -922,50 +975,62 @@ function renderComboChart(c, spec) {
 }
 
 // ---------------------------------------------------------------------------
-// Pie and doughnut: first series only, clockwise from 12 o'clock, one colour per category.
+// Pie and doughnut: clockwise from 12 o'clock, one colour per category; a doughnut of several series draws one ring per series (LH-60).
 
 function renderCircularChart(c, spec) {
   const { box, pad } = c;
   const categories = c.rows.map((row) => c.label(row[0]));
-  const values = c.rows.map((row) => Math.abs(chartNumber(row[1]) ?? 0));
+  // LH-60: a doughnut of several series (core's nested-rings fallback, a pie of several series included) draws one ring per series, the
+  // first innermost as PowerPoint orders a doughnut's rings; a pie and a one-series doughnut draw the first series.
+  const columns = spec.kind === "doughnut" && c.columns.length > 2 ? c.columns.slice(1).map((_, j) => j + 1) : [1];
+  const rings = columns.map((column) => {
+    const values = c.rows.map((row) => Math.abs(chartNumber(row[column]) ?? 0));
+    const total = values.reduce((sum, value) => sum + value, 0);
+    if (!Number.isFinite(total)) throw chartAggregateError(c.path, "slice total");
+    return { column, values, total };
+  });
   const legendWidth = legendEntries(c, categories.map((name, i) => ({
     name, color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0`
   })));
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
-  const total = values.reduce((sum, value) => sum + value, 0);
-  if (!Number.isFinite(total)) throw chartAggregateError(c.path, "slice total");
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
-  const sliceTexts = c.dataLabels ? values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][1]) ?? 0, share: total ? value / total : 0, format: c.formats[1] })) : null;
-  const outside = sliceTexts && spec.kind === "pie" && (c.dataLabels.position ?? "outside-end") === "outside-end";
-  const reserve = outside ? outsideLabelReserve(c, sliceTexts) : { x: 0, y: 0 };
+  const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column] }))) : null;
+  const outside = ringTexts && spec.kind === "pie" && (c.dataLabels.position ?? "outside-end") === "outside-end";
+  const reserve = outside ? outsideLabelReserve(c, ringTexts[0]) : { x: 0, y: 0 };
   const r = outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
-  const inner = spec.kind === "doughnut" ? r * 0.5 : 0;
-  if (!total) {
+  const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
+  if (rings.every((ring) => !ring.total)) {
     c.text("No positive chart values", area, c.path);
     return;
   }
   const border = { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
-  let angle = -Math.PI / 2;
-  values.forEach((value, i) => {
-    const delta = value / total * Math.PI * 2, end = angle + delta;
-    const fill = sliceColor(c, i), path = `${c.path}.data.rows.${i}.1`;
-    if (delta >= Math.PI * 2 - 1e-9) {
-      if (inner) c.mark("path", { d: `${circlePath(c, cx, cy, r)} ${circlePath(c, cx, cy, inner)}`, fill, "fill-rule": "evenodd", ...border }, path);
-      else c.mark("circle", { cx, cy, r, fill, ...border }, path);
-    } else if (delta > 0) {
-      c.mark("path", { d: slicePath(c, cx, cy, r, inner, angle, end), fill, ...border }, path);
-    }
-    angle = end;
+  const thickness = (r - hole) / rings.length;
+  rings.forEach((ring, j) => {
+    const inner = hole + j * thickness, outer = inner + thickness;
+    let angle = -Math.PI / 2;
+    ring.values.forEach((value, i) => {
+      if (!ring.total) return;
+      const delta = value / ring.total * Math.PI * 2, end = angle + delta;
+      const fill = sliceColor(c, i), path = `${c.path}.data.rows.${i}.${ring.column}`;
+      if (delta >= Math.PI * 2 - 1e-9) {
+        if (inner) c.mark("path", { d: `${circlePath(c, cx, cy, outer)} ${circlePath(c, cx, cy, inner)}`, fill, "fill-rule": "evenodd", ...border }, path);
+        else c.mark("circle", { cx, cy, r: outer, fill, ...border }, path);
+      } else if (delta > 0) {
+        c.mark("path", { d: slicePath(c, cx, cy, outer, inner, angle, end), fill, ...border }, path);
+      }
+      angle = end;
+    });
   });
-  if (sliceTexts) {
+  if (ringTexts) rings.forEach((ring, j) => {
+    const inner = hole + j * thickness;
     let start = -Math.PI / 2;
-    values.forEach((value, i) => {
-      const delta = value / total * Math.PI * 2;
-      if (delta > 0) drawSliceLabel(c, sliceTexts[i], { cx, cy, r, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.1`, sliceColor(c, i));
+    ring.values.forEach((value, i) => {
+      const delta = ring.total ? value / ring.total * Math.PI * 2 : 0;
+      if (delta > 0) drawSliceLabel(c, ringTexts[j][i], { cx, cy, r: inner + thickness, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.${ring.column}`, sliceColor(c, i));
       start += delta;
     });
-  }
+  });
 }
 
 function polar(cx, cy, r, angle) {
@@ -988,8 +1053,9 @@ function slicePath(c, cx, cy, r, inner, start, end) {
 // ---------------------------------------------------------------------------
 // Scatter: X from columns[1], Y series from columns[2..], markers only.
 
-export function scatterSeries(rows, columns, formats = []) {
-  const numericX = columns.length > 2;
+// LH-60: `hasX` is core's (resolveChartData, then chartDrawPlan): a scatter whose X column holds no number plots every series against the row position.
+export function scatterSeries(rows, columns, formats = [], hasX = columns.length > 2) {
+  const numericX = hasX;
   const xs = rows.map((row, i) => numericX ? chartNumber(row[1]) : i + 1);
   const first = numericX ? 2 : 1;
   const series = columns.slice(first).map((name, offset) => ({
@@ -1002,8 +1068,8 @@ export function scatterSeries(rows, columns, formats = []) {
 
 function renderScatterChart(c) {
   const { box, pad, fontPx } = c;
-  const { series } = scatterSeries(c.rows, c.columns, c.formats);
-  const yFormat = series[0]?.format, xFormat = c.columns.length > 2 ? c.formats[1] : undefined;
+  const { series } = scatterSeries(c.rows, c.columns, c.formats, c.hasX);
+  const yFormat = series[0]?.format, xFormat = c.hasX ? c.formats[1] : undefined;
   const points = series.flatMap((s) => s.points);
   const xs = points.map((p) => p.x), ys = points.map((p) => p.y);
   const legendWidth = seriesLegend(c, series, "marker");
@@ -1333,7 +1399,7 @@ function renderFunnelChart(c) {
     c.mark("rect", { x, y: y + offset, width, height, fill: c.colors[0] }, `${c.path}.data.rows.${i}.${column}`);
     // RR-35: the funnel labels its bars with values by default; dataLabels picks the content, false removes them.
     if (c.dataLabelsOff) return;
-    c.text(c.dataLabels ? labelString(c, { category: name, value, format }) : formatTick(value, false, format), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`);
+    insideText(c, c.dataLabels ? labelString(c, { category: name, value, format }) : formatTick(value, false, format), { x: plot.x, y: y + offset, width: plot.width, height }, `${c.path}.data.rows.${i}.${column}`, c.colors[0]);
   });
 }
 
@@ -1403,7 +1469,7 @@ function renderTreemapChart(c) {
     // RR-35: the treemap labels its tiles with category names by default; dataLabels picks the content, false removes them. PowerPoint
     // draws the label at the bottom left of its tile whatever the position attribute says (native check 2026-10-01), so the preview does.
     if (!c.dataLabelsOff && rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
-      c.text(c.dataLabels ? labelString(c, { category: categories[i], value: values[i], format }) : categories[i], { x: rect.x + fontPx * 0.25, y: rect.y + rect.height - c.lineHeight - fontPx * 0.2, width: rect.width - fontPx * 0.5, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, "left");
+      insideText(c, c.dataLabels ? labelString(c, { category: categories[i], value: values[i], format }) : categories[i], { x: rect.x + fontPx * 0.25, y: rect.y + rect.height - c.lineHeight - fontPx * 0.2, width: rect.width - fontPx * 0.5, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, c.colors[i % c.colors.length], "left");
     }
   });
 }
@@ -1478,6 +1544,13 @@ function renderBoxWhiskerChart(c) {
   });
 }
 
+// LH-56: a label inside a mark (a treemap tile, a funnel bar, a map tile) takes core's markLabelColor for that fill: the full text colour
+// when it reaches 4.5:1 on the fill, else the slide background, else black or white, as the PPTX export writes the same labels.
+function insideText(c, value, rect, path, fill, align = "center") {
+  const element = c.textElement(value, rect, path, align, markLabelColor(fill, c.labelColor, c.bound.design.colors.background));
+  if (element) c.children.push(element);
+}
+
 /** Mix two hex colours (#RRGGBB) by `t` in [0, 1], rounded per channel. */
 export function mixHex(from, to, t) {
   const channel = (hex, i) => parseInt(hex.slice(1 + 2 * i, 3 + 2 * i), 16);
@@ -1505,13 +1578,14 @@ function renderRegionMapChart(c) {
     const value = values[i];
     const t = value === null ? 0 : max > min ? axisFraction(value, {min, max}) : 1;
     const x = area.x + (i % columns) * tileWidth, y = area.y + Math.floor(i / columns) * tileHeight;
-    c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: value === null ? c.surface : mixHex(light, c.colors[0], t), stroke: c.outlineColor, "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
+    const tile = value === null ? c.surface : mixHex(light, c.colors[0], t);
+    c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: tile, stroke: c.outlineColor, "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
     const inset = { x: x + fontPx * 0.25, width: Math.max(1, tileWidth - fontPx * 0.5) };
     if (tileHeight >= c.lineHeight * 2) {
-      c.text(name, { ...inset, y: y + tileHeight / 2 - c.lineHeight, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
-      if (value !== null) c.text(formatTick(value, false, format), { ...inset, y: y + tileHeight / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.${column}`);
+      insideText(c, name, { ...inset, y: y + tileHeight / 2 - c.lineHeight, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, tile);
+      if (value !== null) insideText(c, formatTick(value, false, format), { ...inset, y: y + tileHeight / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.${column}`, tile);
     } else if (tileHeight >= c.lineHeight) {
-      c.text(name, { ...inset, y: y + (tileHeight - c.lineHeight) / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);
+      insideText(c, name, { ...inset, y: y + (tileHeight - c.lineHeight) / 2, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`, tile);
     }
   });
 }

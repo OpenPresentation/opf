@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate';
-import {validate} from '@openpresentation/opf';
+import {chartDrawPlan,resolveChartData,validate} from '@openpresentation/opf';
 import {toPptx,fromPptx} from './helpers/default-catalog.mjs';
 
 const hidden = ['Global header must be suppressed.','Global footer must be suppressed.'];
@@ -66,7 +66,8 @@ const chartOf=slide=>slide.chart??slide.blocks?.find(block=>block.chart)?.chart;
 for(const name of ['world-category','all-seven'])for(const mode of ['auto','fallback']){
   const source=fixture.decks[name], diagnostics=[];
   const exported=await toPptx(source,{seed:1,chartex:mode,onDiagnostic:issue=>diagnostics.push(issue)});
-  assert.ok(diagnostics.some(issue=>issue.code==='chart-data-adapted'&&issue.adaptation==='chartex-fallback'));
+  // LH-60: a world chart over categories that are not places is drawn as columns in every mode and reports chart-fallback instead.
+  assert.ok(diagnostics.some(issue=>issue.code==='chart-data-adapted'&&['chartex-fallback','chart-fallback'].includes(issue.adaptation)));
   for(const stripped of [false,true]){
     const entries=unzipSync(exported);
     if(stripped)for(const path of Object.keys(entries))if(path.startsWith('ppt/tags/'))delete entries[path];
@@ -75,7 +76,11 @@ for(const name of ['world-category','all-seven'])for(const mode of ['auto','fall
       const actual=chartOf(result.slides[index]);assert.ok(actual);
       const expectedType=mode==='fallback'||slide.chart.type==='world'?'column':slide.chart.type;
       assert.equal(actual.type,expectedType,`${name}/${mode}/stripped${stripped}/slide${index+1}`);
-      assert.deepEqual(actual.data,slide.chart.data,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
+      // LH-60: a box-and-whisker chart with one value per category is exported as one group (one box per series); its data record
+      // restores the authored categories, and without the OPF tags the values come back under the group's name.
+      const plan=chartDrawPlan(slide.chart,resolveChartData(slide.chart));
+      const expectedData=stripped&&plan.fallback==='box-per-series'?{...slide.chart.data,rows:plan.rows}:slide.chart.data;
+      assert.deepEqual(actual.data,expectedData,`${name}/${mode}/stripped${stripped}: every authored category/series/value survives`);
     }
   }
 }

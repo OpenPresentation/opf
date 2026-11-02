@@ -10,7 +10,8 @@ const ACCENTS = ['accent2', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6
 const data = {columns: ['Quarter', 'A', 'B'], rows: [['Q1', 3, 5], ['Q2', 5, 2], ['Q3', 2, 7]]};
 const deck = (variant, slides) => ({name: 'Variants', language: 'en-US', design: {fontScheme: 'roboto', ...(variant ? {variant} : {})}, slides});
 const slides = [
-  {title: 'Chart', chart: {type: 'column', data}},
+  // LH-03: `dataLabels: false` keeps the value axis and gridlines of a small chart (two series of three points), whose neutrals this checks.
+  {title: 'Chart', chart: {type: 'column', data, dataLabels: false}},
   {title: 'Table', table: {columns: ['A', 'B'], rows: [['1', '2'], ['3', '4']]}},
   {title: 'Light', design: {variant: 'light1'}, text: 'A light slide in a dark deck.'},
   {title: 'Second light', design: {variant: 'light2'}, text: 'Another.'},

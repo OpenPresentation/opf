@@ -42,6 +42,7 @@ export type DataDiagnosticCode =
   | 'chart-mapping-adapted'
   | 'chart-highlight-unknown-name'
   | 'chart-highlight-adapted'
+  | 'chart-series-dropped'
   | 'number-format-invalid';
 
 export interface DataDiagnostic {

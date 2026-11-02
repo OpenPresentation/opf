@@ -21,12 +21,12 @@ Four optional fields on the `Chart` object (the fourth, `highlight`, has [its ow
 | Field | Values | Absent means |
 | --- | --- | --- |
 | `axisTitles` | `{ category?: string, value?: string, secondary?: string }` (`secondary`: combo charts) | no axis titles (today) |
-| `legend` | `none`, `top`, `bottom`, `left`, `right` | today's behaviour exactly: a legend at the right of multi-series charts and of pie and doughnut charts, none for a single-series chart |
-| `dataLabels` | `true`, `false` or `{ content?, position?, separator? }` | no data labels (today); the funnel and treemap constructs keep the labels they draw by default (values, category names) |
+| `legend` | `none`, `top`, `bottom`, `left`, `right` | a column, bar, line, area or combo chart of two to four series shows its legend in the [header row](#chart-layer-small-charts-and-the-header-row) above the plot; other multi-series charts and pie and doughnut charts a legend at the right; none for a single-series chart |
+| `dataLabels` | `true`, `false` or `{ content?, position?, separator? }` | no data labels, except on a [small chart](#chart-layer-small-charts-and-the-header-row), which labels its values; the funnel and treemap constructs keep the labels they draw by default (values, category names) |
 
 `axisTitles.category` titles the axis that carries the row labels: the horizontal axis of a column, line, area, histogram, pareto, waterfall and box-and-whisker chart, the **vertical** axis of a bar chart and the X axis of a scatter chart. `axisTitles.value` titles the other one. A named `legend` position shows the legend there even for a single-series chart; `none` hides it.
 
-`dataLabels: true` is `{ "content": ["value"], "position": "auto" }`. `dataLabels: false` is the same as leaving the field out, except on the funnel and treemap constructs, which label their marks by default: there `false` removes those labels (`resolveChartOptions` reports `dataLabelsOff`). In the object form:
+`dataLabels: true` is `{ "content": ["value"], "position": "auto" }`. `dataLabels: false` draws no labels: on a small chart it switches the default value labels off and brings the value axis back, and on the funnel and treemap constructs, which label their marks by default, it removes those labels (`resolveChartOptions` reports `dataLabelsOff`). In the object form:
 
 - `content`: any of `category`, `value`, `percent` (default `["value"]`). A label shows the selected parts in the fixed order category, value, percent, joined by `separator` (default `", "`). Values print in the General number format (twelve significant digits), `percent` as the integer share of the total (`0%`), `category` as the category name (the X value on a scatter chart).
 - `position`: `auto` (default), `center`, `inside-end`, `inside-base`, `outside-end`, `above`, `below`, `left`, `right`. `auto` is the type's default in the table below; the engines write that concrete position, so the preview and PowerPoint do not each pick their own.
@@ -130,6 +130,23 @@ A bar chart (`bar`, `stacked-bar`, `100pct-stacked-bar`) lists its categories to
 
 A waterfall's bars float from the running total. OPF has no total marker, so core's `waterfallSteps(values)` infers one: the **last** value is a total when at least two values precede it and it equals their sum (to twelve significant digits), as in Start 100, +24, -8, End 116. A total bar stands on zero, takes the third palette color (increases take the first, decreases the second) and does not add to the running total; the native PPTX waterfall (`chartex: 'native'`) writes it as `cx:subtotals`, which PowerPoint draws the same way. Any other last value is one more step; intermediate subtotals are not inferred.
 
+## Chart layer: small charts and the header row
+
+Status: LH-03 and LH-81 (layout harvest). Two defaults make a plain chart read like a designed one. Composition decides them once per chart item, from the chart, its resolved data and its box, and puts them on the composed item as `chart.layer` (core `chartLayer`, on `@openpresentation/opf/composition`); the preview and the PPTX export both draw that decision.
+
+**Small charts (LH-03).** A clustered column, bar or line chart (`column`, `bar`, `line`, `line-with-markers`) of one or two series, each of eight or fewer points (`SMALL_CHART_MAX_SERIES`, `SMALL_CHART_MAX_POINTS`), whose value labels fit beside each other (a column or line label no wider than the room between neighbouring marks, a bar label no taller than its bar's slot):
+
+- labels every mark with its value, at the type's default position (outside the end of a column or bar, above a line point), in the column's number format;
+- draws no value axis: no tick labels, no gridlines and no value axis line (the category axis line stays at zero). The PPTX value axis is deleted (`c:delete val="1"`) and has no `c:majorGridlines`; the composed axis still sets the scale;
+- draws no chart panel: the chart stands on the card or the slide background, and its colours and labels are judged against that backdrop;
+- on a one-series column or bar chart, draws the last point that has a value in the series colour and every other point in a quieter tint of it (core `chartEmphasisColors`: the colour mixed towards the backdrop, at most 55%, as far as keeps 3:1 against the backdrop, since a bar is a graphical object under WCAG 1.4.11). The tint must also stay 15 L* (CIE) from the series colour (`CHART_EMPHASIS_MIN_LIGHTNESS_STEP`) so the emphasis shows; when the backdrop leaves no room for both (a mid blue on a dark navy), every point keeps the series colour. The PPTX export writes one `c:dPt` per quieter point.
+
+**Header row (LH-81).** A column, bar, line, area or combo chart of any grouping draws a row above the plot. Its caption, bold at the chart text size in the text colour, sits at the start of the row (the right edge right to left). A caption is generated only when it adds to the legend: one series gives `<series> by <category>` ("Count by stage"), the series part being the value axis title or the series name; two or more series give a caption only from a value axis title ("Revenue ($M) by quarter"), since the legend already names them. The category part is the category axis title or the category column's name in sentence case: a plain capitalised word is lower-cased, and an acronym or proper-looking token (all capitals, an internal capital or a digit: "Q1", "ARR", "FY27") stays as written. Outside English decks the caption is the series part alone. Two to four series show their legend in the same row (at its end) or, when caption and legend do not fit together, at the start of a second row; a legend wider than the chart stays at the side. The plot then takes the chart's whole width. In PowerPoint the caption is the chart title, and title, legend (`legendPos t`) and plot area (`layoutTarget outer`) carry the positions core computed as `c:manualLayout`.
+
+**An explicit option wins.** `dataLabels: false` keeps a small chart's value axis and draws no labels; an explicit `dataLabels` is drawn as written (a label without the value, or a value axis title, keeps the value axis); `highlight` and `colors` keep their colours (no emphasis); a `legend` option keeps that legend and draws no header row; a payload `caption` replaces the header caption (the legend still moves into the header).
+
+**Import.** `fromPptx` does not write these defaults back: value labels on a chart the small-chart rule covers (by type and counts) and a header legend (`legendPos t` with a manual layout) import as no option, so an exported deck imports with the options it was authored with.
+
 ## What each chart type supports (axis titles, legend, data labels)
 
 `chartOptionSupport(target)` in `@openpresentation/opf/composition` returns this table; the validator, the preview, the exporter and the importer all follow it. An option a type cannot show is **adapted** (dropped, or reset to the default) and reported as a `chart-option-adapted` diagnostic by the validator (a warning), the renderer and the exporter (`onDiagnostic`). It is never silently lost and never fails the render.
@@ -209,7 +226,7 @@ The preview (opf-render) and the PPTX export (opf-pptx) both read `resolveChartO
 
 ## Defaults and geometry
 
-A chart that sets none of the four fields renders and exports byte-for-byte as before; the preview tests and the PPTX goldens assert it. A chart with options reserves space for its legend and titles, so its geometry differs from a chart without them. The implementations require coordinated Core, renderer, PPTX and editor versions; use the [compatibility matrix](compatibility-matrix.md).
+A chart that sets none of the four fields draws its type's defaults, including the [chart layer](#chart-layer-small-charts-and-the-header-row) of column, bar, line, area and combo charts. A chart with options reserves space for its legend and titles, so its geometry differs from a chart without them. The implementations require coordinated Core, renderer, PPTX and editor versions; use the [compatibility matrix](compatibility-matrix.md).
 
 ## Not in this change
 

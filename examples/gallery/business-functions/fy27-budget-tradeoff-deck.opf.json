@@ -14,7 +14,6 @@
     "dimensions": "widescreen",
     "background": "light1",
     "titleAlignment": "left",
-    "contentAlignment": "center",
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "none",

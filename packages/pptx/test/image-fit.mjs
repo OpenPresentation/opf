@@ -21,22 +21,27 @@ for (const [name,width,height] of fixtures) {
   const deck={design:{...(deckMode?{imageFit:deckMode}:{})},slides:[{design:slideMode?{imageFit:slideMode}:{},image:{src:uri,alt:'Four quadrants and a circle'}}]};
   const svg=toSvg(deck, 1,{trace:true});
   const image=find(parser.parse(svg),'image')[0];
-  assert.equal(image['@_preserveAspectRatio'],mode==='cover'?'xMidYMid slice':'xMidYMid meet');
+  // LH-84: a portrait picture cover-cropped into a wider frame keeps its heads (focus y 0.3): the preview draws core's placement
+  // in a nested viewport and the export writes the same crop, trimming more from the bottom than the top.
+  const portraitCover=mode==='cover'&&width<height;
+  assert.equal(image['@_preserveAspectRatio'],portraitCover?'none':mode==='cover'?'xMidYMid slice':'xMidYMid meet');
   const bounds=Object.fromEntries(['x','y','width','height'].map(k=>[k,Number(image[`@_${k}`])]));
   const output=await toPptx(deck,{imageFormat:"preserve",strictAssets:true});
   const entries=unzipSync(output), xml=parser.parse(new TextDecoder().decode(entries['ppt/slides/slide1.xml']));
   const picture=find(xml,'p:pic')[0], xfrm=picture['p:spPr']['a:xfrm'];
   const x=Number(xfrm['a:off']['@_x'])/9525,y=Number(xfrm['a:off']['@_y'])/9525,w=Number(xfrm['a:ext']['@_cx'])/9525,h=Number(xfrm['a:ext']['@_cy'])/9525;
   const near=(a,b,label)=>assert.ok(Math.abs(a-b)<.002,`${name} ${mode} ${label}: ${a} vs ${b}`);
-  near(x+w/2,bounds.x+bounds.width/2,'horizontal center');near(y+h/2,bounds.y+bounds.height/2,'vertical center');
+  if (!portraitCover) {near(x+w/2,bounds.x+bounds.width/2,'horizontal center');near(y+h/2,bounds.y+bounds.height/2,'vertical center');}
   if (mode==='contain') {
    near(w/h,width/height,'aspect ratio');assert.ok(w<=bounds.width+.002&&h<=bounds.height+.002);assert.ok(Math.abs(w-bounds.width)<.002||Math.abs(h-bounds.height)<.002);
    assert.equal(find(picture,'a:srcRect').length,0);
   } else {
-   near(x,bounds.x,'x');near(y,bounds.y,'y');near(w,bounds.width,'width');near(h,bounds.height,'height');
+   if (!portraitCover) {near(x,bounds.x,'x');near(y,bounds.y,'y');near(w,bounds.width,'width');near(h,bounds.height,'height');}
    const crop=find(picture,'a:srcRect')[0];assert.ok(crop);
    const l=Number(crop['@_l']),r=Number(crop['@_r']),t=Number(crop['@_t']),b=Number(crop['@_b']);
-   assert.equal(l,r);assert.equal(t,b);assert.ok(l===0||t===0);assert.ok([l,r,t,b].every(v=>v>=0&&v<50000));
+   assert.equal(l,r);assert.ok(l===0||t===0||portraitCover);assert.ok([l,r,t,b].every(v=>v>=0&&v<100000));
+   if (portraitCover) {assert.equal(l,0);assert.ok(t>0&&b>t,'the bottom is trimmed more than the top');}
+   else assert.equal(t,b);
    near(width*(1-(l+r)/100000)/(height*(1-(t+b)/100000)),w/h,'visible source aspect ratio');
   }
   assert.equal(picture['p:nvPicPr']['p:cNvPr']['@_descr'],'Four quadrants and a circle');

@@ -5,6 +5,7 @@ import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js
 import { resolveDesignRecords } from "./design-records.js";
 import { chartOptionTarget, resolveChartOptions } from "./chart-options.js";
 import { datasetDiagnostics, resolveChartData, resolveTableData, type DataDiagnostic } from "./chart-data.js";
+import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
@@ -660,7 +661,7 @@ function chartTypeWarnings(
 
 // RR-54: chart and table data. Errors: dataset-unknown, dataset-field-unknown, data-column-duplicate,
 // chart-mapping-unknown-column, chart-highlight-unknown-name (FA-14), number-format-invalid. Warnings: chart-value-not-numeric (not for
-// null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted.
+// null, "" or a 'var:<id>' cell whose variable is a number), chart-mapping-adapted, chart-highlight-adapted, chart-series-dropped (LH-60).
 function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: ValidationIssue[] } {
   const out = { errors: [] as ValidationIssue[], warnings: [] as ValidationIssue[] };
   if (!isRecord(value) || !Array.isArray(value.slides)) return out;
@@ -675,7 +676,12 @@ function dataIssues(value: unknown): { errors: ValidationIssue[]; warnings: Vali
   };
   add(datasetDiagnostics(value));
   const payload = (node: Record<string, unknown>, path: string): void => {
-    if (isRecord(node.chart)) add(resolveChartData(node.chart, value, { path: pathFor(path, "chart") }).diagnostics);
+    if (isRecord(node.chart)) {
+      const resolved = resolveChartData(node.chart, value, { path: pathFor(path, "chart") });
+      add(resolved.diagnostics);
+      // LH-60: a series the drawn chart type cannot plot is named (chart-series-dropped).
+      add(chartDrawDiagnostics(node.chart, resolved, pathFor(path, "chart"), { language: typeof value.language === "string" ? value.language : undefined }));
+    }
     if (isRecord(node.table)) add(resolveTableData(node.table, value, { path: pathFor(path, "table") }).diagnostics);
   };
   value.slides.forEach((slide, index) => {

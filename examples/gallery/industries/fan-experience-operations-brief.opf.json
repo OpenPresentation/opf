@@ -70,7 +70,6 @@
       "opacity": 0.18
     },
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "top",

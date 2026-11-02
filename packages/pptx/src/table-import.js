@@ -1,3 +1,4 @@
+import {unbindNoBreak} from '@openpresentation/opf/composition';
 import {nativeRunStyle as runStyle, mergeNativeRunProperties as mergeProperties} from './native-text-style.js';
 import {drawingObject, readSlideTheme} from './background-import.js';
 import {readBackgroundColor} from './background.js';
@@ -7,7 +8,8 @@ import {nativeCellExtent,inheritNativeBorders,nativeBorderProperties,mergeCellBo
 const nodes = (tree, tag) => (tree ?? []).filter(node => Object.hasOwn(node, tag));
 const child = (tree, tag) => nodes(tree, tag)[0]?.[tag];
 const attrs = (tree, tag) => nodes(tree, tag)[0]?.[':@'] ?? {};
-const text = tree => (tree ?? []).map(node => node['#text'] ?? '').join('');
+// LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again.
+const text = tree => unbindNoBreak((tree ?? []).map(node => node['#text'] ?? '').join(''));
 const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false','off'].includes(value) ? false : undefined;
 
 

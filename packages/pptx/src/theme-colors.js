@@ -339,17 +339,21 @@ export function recoverTheme({themeName, colors, majorFont, minorFont}, {themes,
 
 const MAP_BACKGROUNDS = Object.freeze({'lt1,dk1,lt2,dk2': 'light1', 'lt2,dk1,lt2,dk2': 'light2', 'dk1,lt1,dk2,lt2': 'dark1', 'dk2,lt1,dk2,lt2': 'dark2'});
 const ACCENT_KEYS = Object.freeze(['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6']);
+// LH-01: an accent variant puts one accent at bg1 and bg2 with the light family (lt1, and lt2 or lt1) or the dark one (dk1, and dk2 or dk1) as text.
+const ACCENT_TEXT = Object.freeze({lt1: ['lt2', 'lt1'], dk1: ['dk2', 'dk1']});
+const accentBackground = (bg1, tx1, bg2, tx2) => ACCENT_KEYS.includes(bg1) && bg2 === bg1 && ACCENT_TEXT[tx1]?.includes(tx2) ? bg1 : undefined;
 
 /**
  * The variant a PowerPoint color map stands for (`mapping`: bg1, tx1, bg2, tx2 as lt1, dk1, lt2, dk2, and the six accents; a missing attribute is
  * the default). `design.variant` as authored is the background slot alone (`"dark1"`) unless the accents are re-pointed, which needs the object form
  * `{background, accents}`. Returns `{variant}` (the default map is `light1` with no accent order, written only when `explicit`, a slide
- * override back to the default), `{} ` for the default map, and `{unsupported: true}` for a map that is no variant (bg1 on an accent, text on a light and
+ * override back to the default), `{} ` for the default map, and `{unsupported: true}` for a map that is no variant (bg1 and bg2 on different accents, text on a light and
  * background on a light slot, a repeated accent): the caller reports it and imports nothing.
  */
 export function variantFromColorMap(mapping, {explicit = false} = {}) {
   const at = (key, fallback) => (typeof mapping?.[key] === 'string' ? mapping[key] : fallback);
-  const background = MAP_BACKGROUNDS[[at('bg1', 'lt1'), at('tx1', 'dk1'), at('bg2', 'lt2'), at('tx2', 'dk2')].join(',')];
+  const roles = [at('bg1', 'lt1'), at('tx1', 'dk1'), at('bg2', 'lt2'), at('tx2', 'dk2')];
+  const background = MAP_BACKGROUNDS[roles.join(',')] ?? accentBackground(...roles);
   const accents = ACCENT_KEYS.map(key => at(key, key));
   const permutation = accents.length === 6 && new Set(accents).size === 6 && accents.every(slot => ACCENT_KEYS.includes(slot));
   if (!background || !permutation) return {unsupported: true};
