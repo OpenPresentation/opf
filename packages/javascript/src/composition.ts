@@ -3195,6 +3195,26 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // or list refits from a smaller size than the one it started at (its start, by item index).
   const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes']) => MetricLayout>();
   const bodyStarts = new Map<number, number>();
+  // LH-17: the type scale fitted body text steps down. From the readability floor up by TYPE_SCALE_RATIO, rounded to whole reference
+  // pixels: 16, 18, 21, 24, 28 and 32 px at the default floor, so prose has five sizes from its 28 px start to the floor, and a list or
+  // lead six from 32. A block that shrinks takes the largest size of the scale its fit allows, instead of any size between, so a deck's
+  // fitted body sizes are a few, and siblings of different kinds land on the same ones. A block keeps its starting size when it fits
+  // there, on the scale or not (a raised floor). Per slide and deterministic: the scale depends only on the floor and the canvas.
+  const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
+  const scaleStep = (size: number, floorPx: number): number => {
+    let step = snapFontSizeUp(floorPx * scale);
+    for (let power = 1; ; power++) {
+      const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
+      if (next > size + 1e-9) return step;
+      step = Math.max(step, next);
+    }
+  };
+  // The sizes a joint fit tries, largest first: the start, then every step of the scale under it, down to the floor.
+  const scaleSizes = (start: number, floorPx: number): number[] => {
+    const sizes = [Math.max(start, snapFontSizeUp(floorPx * scale))];
+    for (let step = scaleStep(sizes[0]! - 1e-6, floorPx); step < sizes.at(-1)! - 1e-9; step = scaleStep(step - 1e-6, floorPx)) sizes.push(step);
+    return sizes;
+  };
   const range = (from: number, to: number) => Array.from({ length: to - from }, (_, index) => from + index);
   const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
@@ -3333,12 +3353,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // block taking the size its share of the column happens to allow (23, 21 and 25 px in one column).
     const textual = nodes.every(node => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets'));
     if (textual && nodes.length > 1 && needs.reduce((sum, size) => sum + size, 0) > space + 1e-6) {
-      const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), start = Math.max(...nodes.map(node => proseMeasure(node, area.width).size));
-      for (let size = start; ; size -= scale) {
-        const trial = Math.max(floor, snapFontSizeDown(size));
+      // LH-17: the trial sizes are the type scale's, so the stack is sized for the size its blocks are set at.
+      for (const trial of scaleSizes(Math.max(...nodes.map(node => proseMeasure(node, area.width).size)), settings.minFontSize ?? 16)) {
         const natural = nodes.map(node => naturalHeight(node, area.width, cards, undefined, settings, false, Math.min(trial, proseMeasure(node, area.width).size)));
         if (natural.reduce((sum, height) => sum + height, 0) <= space + 1e-6) { heights = natural; break; }
-        if (trial <= floor) break;
       }
     }
     // A chart or picture never gets less than the equal share it had before WI-1, even when the measured blocks cannot fit at
@@ -3497,6 +3515,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (cols === 1 && stacks) {
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
+    } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
+      // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
+      grid.boxes = jointRowBoxes(nodes, grid.boxes, nodes.map((_, index) => Math.floor(index / cols)), area, grid.gap, settings, hasCards, 'top', true);
+      grid.rows = grid.rows.map((_, row) => { const box = grid.boxes[row * cols]!; return { offset: box.y - area.y, size: box.height }; });
     }
     // Right to left: the first column and the `left` region sit at the right of their container (RR-05). Track sizes,
     // weights and the scoring above are unchanged; only each box moves to its mirrored place within the container.
@@ -3765,6 +3787,37 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const body = content + (node.caption !== undefined ? 32 * scale : 0);
     return body + verticalPad(body);
   };
+  // LH-43: a block whose size its siblings share: a paragraph or a list, with no caption and no children.
+  const proseLeaf = (node: Pending): boolean => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
+  // LH-43 (LH-42 did it for a list grid): the rows of a grid whose cells share one size (sharePeerSizes) are sized jointly, not fixed in
+  // advance. At a trial size every row is as tall as its tallest cell needs, a card's insets included, and the trial is the largest
+  // size of the type scale (scaleSizes) at which the rows fit the area, so a long sibling no longer forces a small size on cells whose
+  // rows keep equal heights. With `spread` (cards, an automatic grid) the height left over goes to the rows in proportion to their
+  // needs, so they fill the area and a row of short texts stays a short row; otherwise the rows keep their needs and the anchor places
+  // them. The cells of one row keep its height, so cards line up, and columns keep their widths. Rows that do not fit at the floor get
+  // heights in proportion to their needs and overflow them, so the overflow is reported.
+  const jointRowBoxes = (units: Pending[], cells: LayoutBox[], rowOf: number[], area: LayoutBox, between: number, settings: Composition, cards: boolean, anchor: RegionAnchor, spread: boolean): LayoutBox[] => {
+    const rows = Math.max(0, ...rowOf) + 1, space = Math.max(0, area.height - between * (rows - 1));
+    // A filled card starts CARD_FILL_SPACE of a gap down (placeNode), and the placed text keeps its raster padding. A card's text is
+    // measured inside payloadBox's inset for a card at least as tall as wide, its largest, so the need is never short.
+    const slack = 2 * rasterPadding + scale + (cards ? gap * CARD_FILL_SPACE : 0);
+    const inset = (width: number) => cards ? Math.min(CARD_INSET * scale, Math.max(12 * scale, width / 16), width / 4) : 0;
+    const starts = units.map((unit, index) => proseMeasure(unit, cells[index]!.width - 2 * inset(cells[index]!.width)).size);
+    let needs: number[] = [];
+    for (const trial of scaleSizes(Math.max(...starts), settings.minFontSize ?? 16)) {
+      needs = Array.from({ length: rows }, () => 0);
+      units.forEach((unit, index) => {
+        const width = cells[index]!.width, pad = inset(width), row = rowOf[index]!;
+        needs[row] = Math.max(needs[row]!, naturalHeight(unit, width - 2 * pad, false, undefined, settings, false, Math.min(trial, starts[index]!)) + 2 * pad + slack);
+      });
+      if (needs.reduce((sum, need) => sum + need, 0) <= space + 1e-6) break;
+    }
+    const total = needs.reduce((sum, need) => sum + need, 0), spare = Math.max(0, space - total);
+    const heights = total > space + 1e-6 ? needs.map(need => need * space / total) : spread ? needs.map(need => need + spare * need / total) : needs;
+    const rowY: number[] = [], shift = spread ? 0 : anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0;
+    heights.reduce((y, height) => { rowY.push(y); return y + height + between; }, area.y + shift);
+    return cells.map((box, index) => ({ ...box, y: rowY[rowOf[index]!]!, height: heights[rowOf[index]!]! }));
+  };
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
@@ -3903,34 +3956,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       while (columns > 1 && (areaWidth - gap * (columns - 1)) / columns < LIST_GRID_COLUMN_EMS * LIST_NOMINAL_SIZE * scale) columns--;
       return listGridShape(units.length, columns);
     };
-    // LH-42: the rows of a list grid are as tall as their tallest list needs, descriptions and nested entries counted, at the largest
-    // one size at which every row fits (the lists then share one size, sharePeerSizes). Cards share what is left evenly, so they fill
-    // the region; lists without cards keep their rows and the region's anchor places them. Lists that do not fit at the minimum size
-    // get rows in proportion to their needs and overflow them, so the overflow is reported.
-    const listGridBoxes = (units: Pending[], shape: FlowShape, cell: LayoutBox, settings: Composition, cards: boolean, anchor: RegionAnchor): LayoutBox[] => {
+    // LH-42, LH-43: the rows of a list grid, or of any grid of text and lists, sized jointly (jointRowBoxes). The rows of cards, and of a
+    // grid of paragraphs, fill the region; lists without cards keep their rows and the region's anchor places them (LH-42).
+    const gridRowBoxes = (units: Pending[], shape: FlowShape, cell: LayoutBox, settings: Composition, cards: boolean, anchor: RegionAnchor, lists: boolean): LayoutBox[] => {
       const { cells, gap: between } = flowCells(shape, cell, gap);
-      const rowOf = shape.perRow.flatMap((count, row) => Array.from({ length: count }, () => row));
-      const space = Math.max(0, cell.height - between * (shape.rows - 1)), width = cells[0]!.width;
-      // A filled card starts CARD_FILL_SPACE of a gap down (placeNode), and the placed text keeps its raster padding. A card's list is
-      // measured inside payloadBox's inset for a card at least as tall as wide, its largest, so the need is never short.
-      const slack = 2 * rasterPadding + scale + (cards ? gap * CARD_FILL_SPACE : 0);
-      const inset = cards ? Math.min(CARD_INSET * scale, Math.max(12 * scale, width / 16), width / 4) : 0;
-      const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
-      let needs: number[] = [];
-      for (let size = LIST_NOMINAL_SIZE * scale; ; size -= scale) {
-        const trial = Math.max(floor, snapFontSizeDown(size));
-        needs = shape.perRow.map(() => 0);
-        units.forEach((unit, index) => { const row = rowOf[index]!; needs[row] = Math.max(needs[row]!, naturalHeight(unit, width - 2 * inset, false, undefined, settings, false, trial) + 2 * inset + slack); });
-        if (needs.reduce((sum, need) => sum + need, 0) <= space + 1e-6 || trial <= floor) break;
-      }
-      const total = needs.reduce((sum, need) => sum + need, 0), spare = Math.max(0, space - total);
-      const heights = total > space + 1e-6 ? needs.map(need => need * space / total) : cards ? needs.map(need => need + spare / shape.rows) : needs;
-      const rowY: number[] = [], shift = cards ? 0 : anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0;
-      heights.reduce((y, height) => { rowY.push(y); return y + height + between; }, cell.y + shift);
-      return cells.map((box, index) => ({ ...box, y: rowY[rowOf[index]!]!, height: heights[rowOf[index]!]! }));
+      return jointRowBoxes(units, cells, shape.perRow.flatMap((count, row) => Array.from({ length: count }, () => row)), cell, between, settings, cards, anchor, cards || !lists);
     };
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
-    const regionNeed = (name: string, areaWidth: number, atFloor = false): number => {
+    const regionNeed = (name: string, areaWidth: number, atFloor = false, size?: number): number => {
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
       // A kept empty region holds its place: two lines of body text (WI-4: at the lead size in a `flow: auto` region, where a lone block uses it) in an auto row, inside a card's insets when the slide
       // draws cards, as a filled region's text would be (naturalHeight). It gives way first (its floor is 0).
@@ -3947,7 +3980,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       let total = 0, index = 0;
       for (const count of shape.perRow) {
         let row = 0;
-        for (let k = 0; k < count; k++) row = Math.max(row, naturalHeight(units[index++]!, cellWidth, cards, undefined, composition, atFloor));
+        for (let k = 0; k < count; k++) { const unit = units[index++]!; row = Math.max(row, naturalHeight(unit, cellWidth, cards, undefined, composition, atFloor, size === undefined ? undefined : Math.min(size, proseMeasure(unit, cellWidth).size))); }
         total += row;
       }
       return total + gap * Math.max(0, shape.rows - 1);
@@ -3956,8 +3989,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // span several rows do not size it, and an auto row whose areas are all empty has no height and no gap.
     // A numeric row needs what its areas need (an area spanning several numeric rows, its share), so that auto rows below
     // or above it never squeeze it to nothing (allocateRows).
-    const areaNeed = (name: string, rect: CellRect) => name === 'title' ? groupHeight(headingItemsAt(titleFields, 0, 0, spanWidth(rect))) : name === 'subtitle' ? groupHeight(headingItemsAt(subtitleFields, 0, 0, spanWidth(rect))) : regionNeed(name, spanWidth(rect));
-    const demands = rowSizes.map((size, row): RowDemand => {
+    const areaNeed = (name: string, rect: CellRect, size?: number) => name === 'title' ? groupHeight(headingItemsAt(titleFields, 0, 0, spanWidth(rect))) : name === 'subtitle' ? groupHeight(headingItemsAt(subtitleFields, 0, 0, spanWidth(rect))) : regionNeed(name, spanWidth(rect), false, size);
+    // `joint` and `size`: the regions sized at a trial size instead of their role sizes (LH-43, below).
+    const demandsAt = (joint?: ReadonlySet<string>, trial?: number) => rowSizes.map((size, row): RowDemand => {
       let need = 0, floor = 0, heading = false, below = false;
       for (const [name, rect] of rects) {
         // An empty neighbour that collapsed into an area can leave it spanning auto rows only (every row of a column of auto
@@ -3965,14 +3999,34 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const autoSpan = size === 'auto' && rect.rowSpan > 1 && rect.row === row && rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(entry => entry === 'auto');
         if (size === 'auto' ? rect.row !== row || (rect.rowSpan !== 1 && !autoSpan) : row < rect.row || row >= rect.row + rect.rowSpan) continue;
         if (size !== 'auto' && rect.rowSpan > 1 && rowSizes.slice(rect.row, rect.row + rect.rowSpan).some(entry => entry === 'auto')) continue;
-        const value = areaNeed(name, rect) / (autoSpan ? 1 : rect.rowSpan);
+        const value = areaNeed(name, rect, joint?.has(name) ? trial : undefined) / (autoSpan ? 1 : rect.rowSpan);
         // WI-1: how far a body auto row can shrink, its content at the minimum font size (allocateRows, shareHeights).
         if (size === 'auto' && name !== 'title' && name !== 'subtitle') floor = Math.max(floor, regionNeed(name, spanWidth(rect), true));
         if (value > need) { need = value; heading = name === 'title' || name === 'subtitle'; below = name === BELOW; }
       }
       return { size, need, ...(size === 'auto' && !heading ? { floor } : {}), kind: heading ? 'heading' : below ? 'below' : 'body' };
     });
-    const heights = allocateRows(demands, frame.height, gap);
+    let heights = allocateRows(demandsAt(), frame.height, gap);
+    // LH-43: blocks below the grid share one size with the parallel primary regions they continue (composeTemplate's peer sets), so
+    // when all of them are text and lists the rows are sized jointly too: at a trial size of the type scale every row of these regions
+    // asks for what they need at that size, and the largest trial at which every one of them gets its need is kept. A short region
+    // below then takes only what its blocks need at the shared size, and the columns above keep the rest, instead of each fitting in
+    // the height its role size asked for. When no trial fits, the rows stay as allocated at the role sizes.
+    const parallelPrimary = new Map<string, string[]>();
+    for (const region of plan.regions) {
+      const rect = rects.get(region.name);
+      if (region.role === 'primary' && rect && unitsOf(region.name).length) parallelPrimary.set(`${rect.row}:${rect.rowSpan}`, [...parallelPrimary.get(`${rect.row}:${rect.rowSpan}`) ?? [], region.name]);
+    }
+    const joint = new Set([...parallelPrimary.values()].filter(names => names.length > 1).flat());
+    if (belowUnits.length && joint.size && [...joint, BELOW].every(name => unitsOf(name).every(proseLeaf))) {
+      joint.add(BELOW);
+      const start = Math.max(...[...joint].flatMap(name => unitsOf(name).map(unit => proseMeasure(unit, spanWidth(rects.get(name)!)).size)));
+      for (const trial of scaleSizes(start, composition.minFontSize ?? 16)) {
+        const tracks = allocateRows(demandsAt(joint, trial), frame.height, gap);
+        const room = (rect: CellRect) => tracks.slice(rect.row, rect.row + rect.rowSpan).reduce((sum, size) => sum + size, 0) + gap * (rect.rowSpan - 1);
+        if ([...joint].every(name => regionNeed(name, spanWidth(rects.get(name)!), false, trial) <= room(rects.get(name)!) + 1e-6)) { heights = tracks; break; }
+      }
+    }
     const rowY: number[] = [];
     // A row with no height sits at the end of the row above it, not after its gap.
     heights.reduce((y, size, row) => { rowY.push(size > 0 || !heights.slice(0, row).some(above => above > 0) ? y : y - gap); return size > 0 ? y + size + gap : y; }, 0);
@@ -4090,7 +4144,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const listGrid = bands ? undefined : listGridOf(region, units, cell.width, cell.width >= cell.height);
         const arrangement = bands ? bandColumnCount === 1 ? 'column' : 'grid' : listGrid ? 'grid' : arrangementOf(region, units, cell);
         const shape = listGrid ?? flowShape(arrangement, units.length, cell.width >= cell.height);
-        let boxes = bands ? bandBoxes(units, cell, bandColumnCount, cards, region.anchor === 'bottom' ? 'bottom' : 'middle') : listGrid ? listGridBoxes(units, listGrid, cell, settings, cards, region.anchor) : flowCells(shape, cell, gap).cells;
+        // LH-43: a grid of text and lists over several rows shares one size, so its rows are sized jointly, as a list grid's are.
+        const jointGrid = !bands && arrangement === 'grid' && shape.rows > 1 && units.every(proseLeaf);
+        let boxes = bands ? bandBoxes(units, cell, bandColumnCount, cards, region.anchor === 'bottom' ? 'bottom' : 'middle') : listGrid || jointGrid ? gridRowBoxes(units, shape, cell, settings, cards, region.anchor, !!listGrid) : flowCells(shape, cell, gap).cells;
         const referenceHeights = boxes.map(box => box.height);
         let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
@@ -4189,20 +4245,6 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     leafItems = [];
     if (belowUnits.length) placeRegion(belowRegion, belowUnits, physical(logical(rects.get(BELOW)!)));
     if (leafItems.length && parallel.length) peerSets.push([...parallel, ...leafItems]);
-  };
-  // LH-17: the type scale fitted body text steps down. From the readability floor up by TYPE_SCALE_RATIO, rounded to whole reference
-  // pixels: 16, 18, 21, 24, 28 and 32 px at the default floor, so prose has five sizes from its 28 px start to the floor, and a list or
-  // lead six from 32. A block that shrinks takes the largest size of the scale its fit allows, instead of any size between, so a deck's
-  // fitted body sizes are a few, and siblings of different kinds land on the same ones. A block keeps its starting size when it fits
-  // there, on the scale or not (a raised floor). Per slide and deterministic: the scale depends only on the floor and the canvas.
-  const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
-  const scaleStep = (size: number, floorPx: number): number => {
-    let step = snapFontSizeUp(floorPx * scale);
-    for (let power = 1; ; power++) {
-      const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
-      if (next > size + 1e-9) return step;
-      step = Math.max(step, next);
-    }
   };
   // WI-1 (N1): peers share one fitted size per kind (prose, lists): every member is refitted at the smallest size a member
   // of its kind fitted at, so columns side by side read as one design. A refit that would overflow keeps its own fit.

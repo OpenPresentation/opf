@@ -20,6 +20,20 @@ test('the cards of a grid share one size across its rows', () => {
   assert.equal(sizes.length, 8);
   assert.equal(new Set(sizes).size, 1, `one size: ${sizes}`);
   assert.deepEqual(overflow(result), []);
+  // The joint fit: the rows are sized at the shared size, so the long row is tall, the row of short texts short, and the shared size
+  // is above what equal rows allowed the long cards (18 px).
+  assert.ok(sizes[0] >= 21, String(sizes[0]));
+  const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.'));
+  assert.ok(texts[0].box.height > 2 * texts[4].box.height, `${texts[0].box.height} over ${texts[4].box.height}`);
+  for (const row of [texts.slice(0, 4), texts.slice(4)]) assert.equal(new Set(row.map((item) => item.box.height)).size, 1, 'a row keeps one height');
+});
+
+test('the rows of a grid without cards fill the region as before when their needs are equal', () => {
+  const result = composeSlide({ title: 'Points', blocks: ['Point 1', 'Point 2', 'Point 3', 'Point 4'].map((text) => ({ text })) }, { layout: layouts.text });
+  const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.'));
+  assert.equal(texts[0].box.height, texts[2].box.height, 'equal needs, equal rows');
+  assert.ok(texts[2].box.y + texts[2].box.height > 650, 'the rows fill the region');
+  assert.deepEqual(sizesOf(result), [28, 28, 28, 28]);
 });
 
 test('blocks below the grid read at the size of the parallel columns they continue', () => {
@@ -28,6 +42,9 @@ test('blocks below the grid read at the size of the parallel columns they contin
   const sizes = sizesOf(result);
   assert.equal(new Set(sizes).size, 1, `one size: ${sizes}`);
   assert.deepEqual(overflow(result), []);
+  // The joint fit: the row below takes what its blocks need at the shared size and the columns keep the rest, so the shared size is
+  // above the 18 px the columns were cut to when the row below was sized at the role size.
+  assert.ok(sizes[0] >= 21, String(sizes[0]));
 });
 
 test("a lone primary region keeps its own size over the blocks below it (a statement's message)", () => {
