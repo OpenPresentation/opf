@@ -48,5 +48,10 @@ assert.equal(new Set(diagnostics.map(item=>`${item.code}:${item.path}:${item.rea
 overflow.slides[0].composition={overflow:'error'};
 assert.throws(()=>toSvg(overflow, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const tiny={design:{fontScheme:'roboto',dimensions:{widthInches:40/96,heightInches:40/96}},slides:[{composition:{padding:0},quote:{text:'Keep body',attribution:'Keep source'}}]};
+// LH-40: a quote with no usable space is drawn whole at the readability floor beside its finding; strict composition rejects it.
+const tinyDiagnostics=[],tinySvg=toSvg(tiny, 1,{ fonts: {textMeasurement:fonts.textMeasurement},onDiagnostic:item=>tinyDiagnostics.push(item)});
+assert.ok(tinyDiagnostics.some(item=>item.code==='text-overflow'&&item.reason==='invalid-part-box'));
+for (const word of ['Keep','body','source']) assert.ok(tinySvg.includes(word),`tiny quote draws ${word}`);
+tiny.slides[0].composition.overflow='error';
 assert.throws(()=>toSvg(tiny, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 console.log(`Shared quote SVG: ${cases} exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.`);

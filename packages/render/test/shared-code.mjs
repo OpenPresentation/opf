@@ -66,6 +66,11 @@ assert.ok(diagnostics.some(item=>item.path==='slides.0.code.source'&&item.reason
 overflow.slides[0].composition={overflow:'error'};
 assert.throws(()=>toSvg(overflow, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const tiny={design:{fontScheme:'roboto',dimensions:{widthInches:40/96,heightInches:40/96}},slides:[{composition:{padding:0},code:'Keep all text'}]};
+// LH-40: code with no usable space is drawn whole at the readability floor beside its finding; strict composition rejects it.
+const tinyDiagnostics=[],tinySvg=toSvg(tiny, 1,{ fonts: {textMeasurement:fonts.textMeasurement},onDiagnostic:item=>tinyDiagnostics.push(item)});
+assert.ok(tinyDiagnostics.some(item=>item.code==='text-overflow'&&item.reason==='invalid-part-box'));
+assert.ok(['Keep','all','text'].every(word=>tinySvg.includes(word)));
+tiny.slides[0].composition.overflow='error';
 assert.throws(()=>toSvg(tiny, 1,{ fonts: {textMeasurement:fonts.textMeasurement}}),{code:'layout-overflow'});
 const forbidden=[...Array.from({length:32},(_,i)=>i).filter(i=>![9,10,13].includes(i)),0xD800,0xDFFF,0xFFFE,0xFFFF];
 let invalidCases=0;
