@@ -18,8 +18,8 @@
       "bytes": 7030
     },
     "gallery/business-functions/data-platform-migration-plan.opf.json#4": {
-      "sha256": "2a675cfd589d30c7073033c688eef62e81b8d837a6ff0e396813be5433b30704",
-      "bytes": 6753
+      "sha256": "39180e45272ede7b56d1a938f99b9a861a237574794d2cee4a14677bf7c0876c",
+      "bytes": 7796
     },
     "gallery/business-functions/data-platform-migration-plan.opf.json#5": {
       "sha256": "bb132190ddabfe28772c5c477d49de4710c49b689efe605df5bf2a961666caad",
@@ -34,12 +34,12 @@
       "bytes": 4074
     },
     "gallery/business-functions/data-platform-migration-plan.opf.json#8": {
-      "sha256": "2d081cc18622fe392c41a5102017fa3814626686fe17c50b18eaa81974f6a247",
-      "bytes": 5664
+      "sha256": "0a5f101b270801f8f29d482711484450499c95ccc788a6ea7938c0c7ed7a35a3",
+      "bytes": 5666
     },
     "gallery/business-functions/data-platform-migration-plan.opf.json#9": {
-      "sha256": "fd0968eafaad2bd2023fd40f9338acf520225e46111e2c3e0ef9a3d199512b69",
-      "bytes": 10453
+      "sha256": "9c2186c124e4ed371d54351dbe57b7ff10a185f2e13433418a056bb1ca48b62f",
+      "bytes": 10382
     }
   }
 }

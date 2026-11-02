@@ -6,8 +6,8 @@
       "bytes": 6567
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
-      "sha256": "5933599c7635cac655bd87aab063baed547061d725966ba2ca9fabbf68a4fd8c",
-      "bytes": 9716
+      "sha256": "5829f7c8cbd018449a024cb801d3716694e04e3a7f909acaa58532edb9d69f93",
+      "bytes": 9705
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
       "sha256": "5b8cca53d75aff66857f86b643ec970d26f0b4726c418e82f9ecb1ba4c6f3434",
@@ -18,8 +18,8 @@
       "bytes": 9446
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
-      "sha256": "a307003f5bf2d588ea2c8581c7d4381843f8eb09874bfb5720fcf76f6be4d56a",
-      "bytes": 9059
+      "sha256": "96217ebb75c298935549c9674f4a728c395b0b4d51bee811ea366339edd017d1",
+      "bytes": 10600
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
       "sha256": "a28e5562c0470bceb55cb5e4e1a8a8ef0bcefa7d03d9b3d63c9b914b85c1fb04",
@@ -34,12 +34,12 @@
       "bytes": 4718
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
-      "sha256": "c51a5874b3b5a1f5fce9b71a2d2ed7141743501c1d69a68dc9dfb2591c0fb6ae",
-      "bytes": 7594
+      "sha256": "65be7df4b94bc99cdcf5b7d54d290d16fdd60988bbafbd18a97be3d44779adf3",
+      "bytes": 7426
     },
     "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
-      "sha256": "484ddf7d21315daa3c8430701def3277a440d6820d15cda42cac0a3a89fbc54e",
-      "bytes": 14409
+      "sha256": "2f5ffccf0738d76b04a154052e4014d6b7f3f6e024217eb295f5dafde61eff5b",
+      "bytes": 14523
     }
   }
 }

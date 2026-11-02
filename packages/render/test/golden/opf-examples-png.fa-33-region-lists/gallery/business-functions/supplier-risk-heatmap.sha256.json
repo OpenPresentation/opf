@@ -6,8 +6,8 @@
       "bytes": 6117
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#1": {
-      "sha256": "3d439e7d2552a9a01969602755b90cdd0e95243f476bdd83d4f520e2c625d63c",
-      "bytes": 9668
+      "sha256": "f87c4f722940b0495a7d734e93f2284b52814604425109d71469645a6067f402",
+      "bytes": 9674
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#2": {
       "sha256": "ab2ac2d41c9fd21150c4d5a773cb682ac1bff17e134d0f591d76c56a4e5bc01b",
@@ -18,8 +18,8 @@
       "bytes": 9307
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#4": {
-      "sha256": "cea730907a5758ed66af9e0170aa0928e3d1b5923bb1486ac35cf18cc58fc2be",
-      "bytes": 9084
+      "sha256": "c4c5355bd5afda0c24d56e738f9cb9d007743118e6cf72df169c664faf131ce8",
+      "bytes": 10574
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#5": {
       "sha256": "b50773e425f1fb40e16fdabbd62fc2f11994c6e0026a89745312c62feff184fb",
@@ -34,12 +34,12 @@
       "bytes": 20168
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#8": {
-      "sha256": "50dd3ae88089d1a71f359d299c58febaf389c82de6454fa092bdd8e243359e52",
-      "bytes": 7206
+      "sha256": "bbb0f00d26772fb146519b6d7446777df2bd2cf84509e2ee3e930f3f8ac24429",
+      "bytes": 7123
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#9": {
-      "sha256": "c47990d9312ead802b1c3b6e8c286ba8483b2d4999655d641d6ea44ed99d31c5",
-      "bytes": 14172
+      "sha256": "b7526d7963b274a794f592e3675ea65f07ff204afda0dbbd67e7533c2f7f08a7",
+      "bytes": 14231
     }
   }
 }

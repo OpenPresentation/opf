@@ -18,8 +18,8 @@
       "bytes": 10214
     },
     "gallery/government/tax-portal-modernization.opf.json#4": {
-      "sha256": "3e57b6495a2157b0e60011cdaef56c6c6979eb6ed367c28275b03798bd850ec5",
-      "bytes": 9774
+      "sha256": "dbf7cb9dd71fd27049a90456d07e2800b8ffa5947f34f6f549d0da63dbdc7dba",
+      "bytes": 11156
     },
     "gallery/government/tax-portal-modernization.opf.json#5": {
       "sha256": "a2c2b52c5c80eebe6d2f0c3cd9ace401cdd9500b86038afe3a894f4989aba403",
@@ -34,12 +34,12 @@
       "bytes": 24328
     },
     "gallery/government/tax-portal-modernization.opf.json#8": {
-      "sha256": "6fcb4f2e8127c04883e05a4b49a79797281e5acf727ae1274a363966c18defe8",
-      "bytes": 8136
+      "sha256": "99928468e352b60f50e419fa65e83cb3da20fc660a5f553f9dc355795033667b",
+      "bytes": 8042
     },
     "gallery/government/tax-portal-modernization.opf.json#9": {
-      "sha256": "eb10e337da20fdf59d472f99a790eb0b7927bb9d58d46dca42136ce077bb4394",
-      "bytes": 13706
+      "sha256": "8c7532ff6310d11e93cf61caeed9c074efc78934d05fa52fff7e4b685593227e",
+      "bytes": 14243
     }
   }
 }
