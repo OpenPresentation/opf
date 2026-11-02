@@ -3612,11 +3612,13 @@ function codePanelColor(context) {
 function addMetricPayload(slide,value,layout,context,path,options) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
-  // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
+  // RR-07, LH-53: a trend adds one native arrow shape where core placed it (before the delta; the trend word is not drawn) and colors
+  // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
+  // dark one, a value whose accent falls under 4.5:1 takes the text color.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
   const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color, as the preview does.
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,`#${normalizeHex(context.textColor)}`).slice(1).toUpperCase():context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});

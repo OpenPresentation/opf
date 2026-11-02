@@ -71,7 +71,8 @@ test('sibling metrics share their value, label and description sizes', () => {
   const result = composeSlide({ title: 'Operating model', blocks }, { layout: layouts.metrics });
   const metrics = result.items.filter((item) => item.metricLayout);
   assert.equal(metrics.length, 4);
-  for (const role of ['value', 'label', 'description', 'trend']) {
+  // LH-53: the trend is drawn as an arrow (no text part to size); its host line shares the label's size.
+  for (const role of ['value', 'label', 'description']) {
     const sizes = metrics.flatMap((item) => item.metricLayout.parts.filter((part) => part.role === role && part.visible).map((part) => part.fit.fontSize));
     assert.equal(new Set(sizes).size, 1, `${role}: ${sizes}`);
   }

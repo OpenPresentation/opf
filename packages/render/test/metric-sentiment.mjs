@@ -34,8 +34,9 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
     assert.equal(found[0].fill, COLORS[sentiment][background], `${trend}/${sentiment} on ${background}`);
     assert.equal(found[0].fill, metricTrendColor(trend, {background, sentiment, neutral}));
     assert.ok(colorContrast(found[0].fill, background) >= 4.5, `${trend}/${sentiment} ${found[0].fill} on ${background}`);
-    for (const role of ['trend', 'delta']) assert.equal(textFill(svg, role), found[0].fill, `${trend}/${sentiment} ${role} text colour`);
-    assert.ok(svg.includes(`>${trend}</tspan>`), 'the trend word is still drawn');
+    assert.equal(textFill(svg, 'delta'), found[0].fill, `${trend}/${sentiment} delta text color`);
+    // LH-53: the trend word is not drawn; the arrow, whose text alternative it is, carries the direction.
+    assert.ok(!svg.includes(`>${trend}</tspan>`) && !svg.includes('data-opf-metric-role="trend"'), 'the trend word is not drawn');
     // The other fields keep their colours.
     for (const role of ['value', 'label']) assert.equal(textFill(svg, role), textFill(absent, role), `${trend}/${sentiment} ${role} colour`);
     checked++;

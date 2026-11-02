@@ -1871,14 +1871,14 @@
   "region metrics 57.6,147.5,1164.8,514.9 grid 1",
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,287.6,1164.8,234.6 152px"
+  "item blocks.0.metric metrics 57.6,238.8,1164.8,332.2 232px"
  ],
  "metrics 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region metrics 57.6,147.5,1164.8,423.2 grid 1",
   "region note 57.6,570.6,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,241.8,1164.8,234.6 152px",
+  "item blocks.0.metric metrics 57.6,193,1164.8,332.2 232px",
   "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
  ],
  "metrics 3 short": [
@@ -1886,8 +1886,8 @@
   "region metrics 57.6,147.5,1164.8,456.8 grid 2",
   "region note 57.6,628.2,1164.8,34.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,308,570.4,135.8 76px",
-  "item blocks.2.metric metrics 652,308,570.4,135.8 76px",
+  "item blocks.0.metric metrics 57.6,301.2,570.4,149.4 120px",
+  "item blocks.2.metric metrics 652,301.2,570.4,149.4 120px",
   "item blocks.1.text note 57.6,628.2,1164.8,34.2 28px"
  ],
  "metrics 4 short": [
@@ -1895,10 +1895,10 @@
   "region metrics 57.6,147.5,1164.8,514.9 grid 4",
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,147.5,570.4,132.8 76px",
-  "item blocks.1.text metrics 57.6,292.3,570.4,34.2 28px",
-  "item blocks.2.metric metrics 652,147.5,570.4,132.8 76px",
-  "item blocks.3.text metrics 652,292.3,570.4,34.2 28px"
+  "item blocks.0.metric metrics 57.6,147.5,570.4,146.4 120px",
+  "item blocks.1.text metrics 57.6,305.9,570.4,34.2 28px",
+  "item blocks.2.metric metrics 652,147.5,570.4,146.4 120px",
+  "item blocks.3.text metrics 652,305.9,570.4,34.2 28px"
  ],
  "metrics 5 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1929,7 +1929,7 @@
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric metrics 57.6,293.6,1164.8,268.8 152px"
+  "item blocks.0.metric metrics 57.6,244.8,1164.8,366.4 232px"
  ],
  "metrics 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -1937,7 +1937,7 @@
   "region note 57.6,525.8,1164.8,136.6 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric metrics 57.6,279.8,1164.8,135.8 76px",
+  "item blocks.0.metric metrics 57.6,248.6,1164.8,198.2 160px",
   "item blocks.1.text note 185,525.8,910,136.6 28px"
  ],
  "metrics 3 long": [
@@ -1946,8 +1946,8 @@
   "region note 57.6,525.8,1164.8,136.6 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric metrics 57.6,265.8,570.4,163.8 76px",
-  "item blocks.2.metric metrics 652,265.8,570.4,163.8 76px",
+  "item blocks.0.metric metrics 57.6,238.9,570.4,217.5 120px",
+  "item blocks.2.metric metrics 652,238.9,570.4,217.5 120px",
   "item blocks.1.text note 185,525.8,910,136.6 28px"
  ],
  "metrics 4 long": [
@@ -1956,10 +1956,10 @@
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric metrics 57.6,193.6,570.4,160.8 76px",
-  "item blocks.1.text metrics 57.6,366.5,570.4,205 28px",
-  "item blocks.2.metric metrics 652,193.6,570.4,160.8 76px",
-  "item blocks.3.text metrics 652,366.5,570.4,205 28px"
+  "item blocks.0.metric metrics 57.6,193.6,570.4,214.5 120px",
+  "item blocks.1.text metrics 57.6,420.2,570.4,205 28px",
+  "item blocks.2.metric metrics 652,193.6,570.4,214.5 120px",
+  "item blocks.3.text metrics 652,420.2,570.4,205 28px"
  ],
  "metrics 5 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -1990,7 +1990,7 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region cards 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric cards 74.4,287.7,1131.3,234.5 152px"
+  "item blocks.0.metric cards 81.3,238.9,1117.4,332.1 232px"
  ],
  "scorecard 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2042,7 +2042,7 @@
   "region cards 57.6,193.6,1164.8,468.8 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric cards 75.1,305.3,1129.7,245.5 133px"
+  "item blocks.0.metric cards 81.2,263,1117.6,330.1 207.7px"
  ],
  "scorecard 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3139,19 +3139,16 @@
   "item blocks.0.chart charts 57.6,147.5,1164.8,514.9"
  ],
  "dashboard 2 short": [
-  "area title 57.6,57.6,1164.8,65.9",
-  "region kpis 57.6,147.5,1164.8,196.4 grid 1",
-  "region charts 57.6,367.8,1164.8,294.6 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.1.metric kpis 57.6,147.5,1164.8,196.4 76px",
-  "item blocks.0.chart charts 57.6,367.8,1164.8,294.6"
+  "item blocks.0.chart - 57.6,147.5,764.3,514.9",
+  "item blocks.1.metric - 845.9,147.5,376.5,514.9 160px"
  ],
  "dashboard 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region kpis 57.6,147.5,1164.8,196.4 grid 1",
   "region charts 57.6,367.8,1164.8,294.6 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.1.metric kpis 57.6,147.5,1164.8,196.4 76px",
+  "item blocks.1.metric kpis 57.6,147.5,1164.8,196.4 160px",
   "item blocks.0.chart charts 57.6,367.8,570.4,294.6",
   "item blocks.2.chart charts 652,367.8,570.4,294.6"
  ],
@@ -3160,8 +3157,8 @@
   "region kpis 57.6,147.5,1164.8,196.4 grid 2",
   "region charts 57.6,367.8,1164.8,294.6 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.1.metric kpis 57.6,147.5,570.4,196.4 76px",
-  "item blocks.3.metric kpis 652,147.5,570.4,196.4 76px",
+  "item blocks.1.metric kpis 57.6,147.5,570.4,196.4 120px",
+  "item blocks.3.metric kpis 652,147.5,570.4,196.4 120px",
   "item blocks.0.chart charts 57.6,367.8,570.4,294.6",
   "item blocks.2.chart charts 652,367.8,570.4,294.6"
  ],
@@ -3197,13 +3194,10 @@
   "item blocks.0.chart charts 57.6,193.6,1164.8,468.8"
  ],
  "dashboard 2 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region kpis 57.6,193.6,1164.8,177.9 grid 1",
-  "region charts 57.6,395.5,1164.8,266.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.1.metric kpis 57.6,193.6,1164.8,177.9 76px",
-  "item blocks.0.chart charts 57.6,395.5,1164.8,266.9"
+  "item blocks.0.chart - 57.6,193.6,764.3,468.8",
+  "item blocks.1.metric - 845.9,193.6,376.5,468.8 152px"
  ],
  "dashboard 3 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3221,8 +3215,8 @@
   "region charts 57.6,395.5,1164.8,266.9 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.1.metric kpis 57.6,193.6,570.4,177.9 76px",
-  "item blocks.3.metric kpis 652,193.6,570.4,177.9 76px",
+  "item blocks.1.metric kpis 57.6,193.6,570.4,177.9 120px",
+  "item blocks.3.metric kpis 652,193.6,570.4,177.9 120px",
   "item blocks.0.chart charts 57.6,395.5,570.4,266.9",
   "item blocks.2.chart charts 652,395.5,570.4,266.9"
  ],

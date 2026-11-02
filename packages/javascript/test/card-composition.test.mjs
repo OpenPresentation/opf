@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {composeSlide,layoutMetric,OPFCompositionError} from '../dist/composition.js';
+import {composeSlide,layoutMetric,METRIC_DISPLAY_SIZES,OPFCompositionError} from '../dist/composition.js';
 import {paginate} from '../dist/pagination.js';
 
 test('cards preserve outer tracks, regions and headings while measuring a rounded inner box',()=>{
@@ -21,7 +21,9 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
       assert.ok(Math.abs(item.box.width+2*pad-frame.width)<1e-3);
     }
     const metric=boxed.items[1];
-    assert.deepEqual(metric.metricLayout,layoutMetric(metric.value,metric.box,{scale:Math.min(dimensions.width,dimensions.height)/720,path:metric.path}));
+    // LH-112: a metric beside a list is start-aligned at display size (a band in a wide, short card, LH-15), grown against the body height.
+    const band=metric.metricLayout.arrangement==='band'?{band:true}:{};
+    assert.deepEqual(metric.metricLayout,layoutMetric(metric.value,metric.box,{scale:Math.min(dimensions.width,dimensions.height)/720,path:metric.path,align:'left',display:{...METRIC_DISPLAY_SIZES.one,height:boxed.contentBox.height},...band}));
     assert.ok(boxed.items[2].text.listEntries.every(entry=>entry.marker.x>=boxed.items[2].box.x&&entry.textBox.x>entry.marker.x));
     const regions={'top:left':{text:'A'},'bottom:right':{text:'B'}};
     assert.deepEqual(composeSlide(regions,{...dimensions,contentBox:true}).items.map(i=>i.frameBox),composeSlide(regions,dimensions).items.map(i=>i.box));

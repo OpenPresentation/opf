@@ -28,7 +28,13 @@ test('the gallery layouts at their sample content: a slide the layout fits above
       continue;
     }
     recomposed.push(key);
-    if (result.recomposed.chart) {
+    if (result.recomposed.kpis) {
+      // LH-61: one or two metrics the layout stacked over a chart sit in a column beside it, the plot at least as tall, no block smaller.
+      const chart = result.items.find((item) => item.field === 'chart');
+      assert.ok(result.items.filter((item) => item.metricLayout).every((item) => item.box.x + item.box.width <= chart.box.x + 0.5 || item.box.x >= chart.box.x + chart.box.width - 0.5), `${key}: the metrics beside the chart`);
+      assert.ok(result.recomposed.chart.plot >= result.recomposed.chart.layoutPlot, `${key}: the plot is no shorter`);
+      assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6, `${key}: no smaller body`);
+    } else if (result.recomposed.chart) {
       // LH-49: a chart the layout left a plot shorter than its minimum (120 px here) is drawn taller, no block smaller.
       assert.ok(result.recomposed.chart.layoutPlot < 120 && result.recomposed.chart.plot > result.recomposed.chart.layoutPlot, `${key}: a short plot grows (${JSON.stringify(result.recomposed.chart)})`);
       assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6 || overflows(result) < overflows(kept), `${key}: no smaller body unless it overflows less`);

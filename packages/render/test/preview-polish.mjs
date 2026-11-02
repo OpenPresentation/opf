@@ -81,12 +81,10 @@ for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['fla
     // RR-96: a flat trend takes the deck's scheme-derived neutral (core roles.neutrals.trendNeutral) like the export.
     const neutral = resolvePresentation(metricDeck({value: 1, label: 'x', trend}, design)).slides[0].design.roles.neutrals.trendNeutral.hex;
     assert.equal(found[0].fill, metricTrendColor(trend, {background, neutral}));
-    // The trend word stays the visible source text; the trend and delta text take the arrow's colour.
-    for (const role of ['trend', 'delta']) {
-      const text = svg.match(new RegExp(`<text\\b[^>]*data-opf-metric-role="${role}"[^>]*>`))[0];
-      assert.equal(/\bfill="([^"]*)"/.exec(text)[1], found[0].fill, `${trend} ${role} colour`);
-    }
-    assert.ok(svg.includes(`>${trend}</tspan>`), 'the trend word is still drawn');
+    // LH-53: the trend word is not drawn (it is the arrow's text alternative); the delta text takes the arrow's color.
+    const delta = svg.match(/<text\b[^>]*data-opf-metric-role="delta"[^>]*>/)[0];
+    assert.equal(/\bfill="([^"]*)"/.exec(delta)[1], found[0].fill, `${trend} delta color`);
+    assert.ok(!svg.includes(`>${trend}</tspan>`) && !svg.includes('data-opf-metric-role="trend"'), 'the trend word is not drawn');
   }
 }
 assert.notEqual(arrows(toSvg(metricDeck({value: 1, trend: 'up'}), 1))[0].fill, arrows(toSvg(metricDeck({value: 1, trend: 'down'}), 1))[0].fill);

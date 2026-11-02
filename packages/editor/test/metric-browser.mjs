@@ -65,7 +65,9 @@ try {
     const geometry=await page.evaluate(()=>editor.composeSlide(0,{fonts}).items[0].metricLayout);
     assert.equal(await page.evaluate(()=>Boolean(editor.composeSlide(0,{fonts}).items[0].frameBox)),cards);
     assert.equal(geometry.alignment,alignment);
-    for(const part of geometry.parts){
+    // LH-53: the trend is drawn as an arrow, not as text, so it has no inline text target; every drawn part does.
+    assert.equal(await target('slides.0.metric.trend').count(),0);assert.ok(geometry.trendBox);
+    for(const part of geometry.parts.filter(part=>part.visible)){
       assert.equal(await target(part.path).count(),1);
       const origins=await target(part.path).locator('text').evaluateAll(nodes=>nodes.map(node=>({x:Number(node.getAttribute('x')),baseline:Number(node.getAttribute('y')),anchor:node.getAttribute('text-anchor')})));
       assert.equal(origins.length,part.linePositions.length);
@@ -101,7 +103,6 @@ try {
     await page.getByRole('button',{name:'Redo',exact:true}).click();assert.equal((await presentation()).slides[0].metric.description,changed);
     await edit('slides.0.metric.value','43');assert.equal((await presentation()).slides[0].metric.value,43);
     await edit('slides.0.metric.delta','1');assert.equal((await presentation()).slides[0].metric.delta,1);
-    await edit('slides.0.metric.trend','down');assert.equal((await presentation()).slides[0].metric.trend,'down');
     await edit('slides.0.metric.unit','seconds');await edit('slides.0.metric.label','New\tLabel  ');
     const beforePagination=await presentation();
     await page.getByRole('button',{name:'Paginate',exact:true}).click();assert.equal((await presentation()).slides[0].composition.minFontSize,24);
@@ -130,7 +131,7 @@ try {
     await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
     scalarResults.push({dimensions,source:metric,type:typeof metric,noOpPreserved:true,editUndoPreserved:true});
   }
-  for(const [field,value,invalid] of [['value',42,'not a number'],['trend','flat','sideways']]){
+  for(const [field,value,invalid] of [['value',42,'not a number']]){
     const deck={design:{fontScheme:'roboto'},slides:[{metric:{value:42,trend:'flat'}}]};
     await page.evaluate(args=>mountMetric(args),{deck,faces});
     await enter(target(`slides.0.metric.${field}`));const input=page.getByRole('textbox',{name:`Edit ${field} inline`,exact:true});
@@ -142,7 +143,7 @@ try {
   assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
   assert.deepEqual(await fingerprint(),runtime,'Resolved package sources changed during browser verification');
   const report={mode:'resolved-package-browser',cards,node:process.version,browser:browser.version(),platform:process.platform,runtime,bundleSha256:hash(bundle),verifierSha256:hash(await readFile(new URL(import.meta.url))),fontHashes:faces.map(face=>({family:face.family,weight:face.weight,italic:face.italic,sha256:hash(Buffer.from(face.dataUrl.split(',')[1],'base64'))})),results,scalarResults,invalidResults,errors,externalRequests:requests,
-    scope:'Offline canvas with resolved dependencies: six wide/portrait/alignment metric workflows; exact accepted SVG origins and inline style, every metadata field, source/type/CRLF/tab/no-op preservation, readable selection, numeric/trend validation, atomic pagination undo, export and undoable metric reimport. Eight scalar/blank workflows and two rejected edits. Dependency mode must be bound by the caller; this report alone is not registry evidence. Native formatting, position/font recovery and native PowerPoint raster equivalence are not established.'};
+    scope:'Offline canvas with resolved dependencies: six wide/portrait/alignment metric workflows; exact accepted SVG origins and inline style, every drawn metadata field (the trend is an arrow, LH-53), source/type/CRLF/tab/no-op preservation, readable selection, numeric validation, atomic pagination undo, export and undoable metric reimport. Eight scalar/blank workflows and one rejected edit. Dependency mode must be bound by the caller; this report alone is not registry evidence. Native formatting, position/font recovery and native PowerPoint raster equivalence are not established.'};
   if(process.argv[2])await writeFile(process.argv[2],JSON.stringify(report,null,2)+'\n');
   console.log(`Metric canvas: ${results.length} aligned workflows, ${scalarResults.length} scalar/blank edits and ${invalidResults.length} guarded rejections pass offline.`);
 }finally{await browser.close();}

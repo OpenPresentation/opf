@@ -1418,11 +1418,13 @@ function renderMetric(item, box, bound, options) {
   const layout=item.metricLayout;
   if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
   const children=[];
-  // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
+  // RR-07, LH-53: a trend draws core's arrow (before the delta; the trend word is not drawn) and colors the delta text.
+  // LH-54: a metric in a card is colored against the card fill, not the slide behind it. LH-57: on a dark one, a value whose accent
+  // falls under 4.5:1 takes the text color.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
   const trendMark=metricTrendMark(layout,bound,backdrop);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color.
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});

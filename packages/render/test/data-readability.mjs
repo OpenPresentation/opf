@@ -19,7 +19,8 @@ const surfaceOf = deck => { const design = resolvePresentation(deck).slides[0].d
   assert.ok(value.length > 0);
   for (const text of value) assert.ok(colorContrast(text.fill, background) >= 4.5, `metric value ${text.fill} on ${background}: ${colorContrast(text.fill, background)}`);
   const label = [...svg.matchAll(/<text\b([^>]*data-opf-metric-role="label"[^>]*)>/g)].map(match => attrsOf(match[1]))[0];
-  assert.notEqual(label.fill.toUpperCase(), value[0].fill.toUpperCase(), 'only the value is lifted');
+  // LH-57: on a dark slide a value whose accent is under 4.5:1 takes the light text color, as its label does, not a lightened accent.
+  assert.equal(value[0].fill.toUpperCase(), label.fill.toUpperCase(), 'the value takes the text color');
 }
 // A light surface keeps the palette colour.
 {
