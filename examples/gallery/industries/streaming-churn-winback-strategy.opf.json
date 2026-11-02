@@ -78,7 +78,6 @@
       "opacity": 0.94
     },
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
@@ -587,7 +586,7 @@
           "accent2": "#0100A6",
           "accent3": "#02ACFF",
           "accent4": "#94A1B2",
-          "accent5": "#E3ECF3",
+          "accent5": "#C0D0DD",
           "accent6": "#5A82FC",
           "dark1": "#000000",
           "dark2": "#011842",
