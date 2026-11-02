@@ -70,7 +70,8 @@ const hostDeck = {name: 'Catalogs', catalogs: {acme: {source: ACME}}, slides};
     const result = await collect(hostDeck, catalogs === undefined ? {} : {catalogs});
     assert.deepEqual(result.unresolved.map(brief), [{kind: 'layouts', reference: 'acme:hero', path: 'slides.0.layout', group: 'acme', source: ACME, fallback: 'automatic'}]);
     assert.match(result.unresolved[0].message, /acme:hero/);
-    const withoutTitleBinding = xml => xml.replace(/<a:spLocks noGrp="1"\/>/g, '').replace(/<p:cNvSpPr><\/p:cNvSpPr>/g, '<p:cNvSpPr/>').replace(/<p:ph type="title"\/>/g, '');
+    // A bound title is a placeholder; the unbound one is a text box (LH-12).
+    const withoutTitleBinding = xml => xml.replace(/<a:spLocks noGrp="1"\/>/g, '').replace(/ txBox="1"/g, '').replace(/<p:cNvSpPr><\/p:cNvSpPr>/g, '<p:cNvSpPr/>').replace(/<p:ph type="title"\/>/g, '');
     assert.equal(withoutTitleBinding(result.xml).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), withoutTitleBinding(automatic.xml).replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/, ''), 'the slide composes automatically');
   }
   const strict = error => {
