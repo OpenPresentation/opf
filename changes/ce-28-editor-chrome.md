@@ -1,5 +1,0 @@
----
-type: added
-packages: [editor]
----
-CE-28: the embeddable editor's title bar is a toolbar of named items. `createOpfEditor(el, { toolbar })` takes `false` or a list of `title`, `history`, `counter`, `views`, `find`, `autosave`, `export`, `present`, `expand`, `more`, `spacer` and `|`; any item mounts in a host element through `slots[<item>]`; items that do not fit collapse into a `⋯` menu by priority, measured on the editor's own width. New `layout: "embed"` (the slide with a compact bar: name, undo and redo, slide counter, expand, present) for small embeds; `"full"` and `"canvas"` gain the name and expand items. The deck name is edited in place (`title` item, `createDeckTitle` from `/deck-title`), as one undoable edit that the source pane follows; handle `getDeckName()`, `setDeckName(name)`, event `deckName`, React `useOpfDeckName(editor)` and the Svelte equivalent. The `expand` item (`createExpandController` and `createExpandButton` from `/editor-expand`) makes the editor fill the screen to edit, with Escape to leave and the page behind made inert; handle `expand(on?)`, `expanded`, event `expand`.
