@@ -38,7 +38,7 @@ export interface OpfEditorElementDefaults {
 /**
  * `<opf-editor>`: the editor in one tag. The editor mounts in a `div` inside the element (light DOM), once the element is connected and the
  * page has parsed its content, and is destroyed one microtask after the element leaves the document (unless it came back: a move in the DOM
- * keeps the editor). Attributes `layout`, `toolbar`, `readonly`, `theme`, `density`, `slide` and `src` are observed; see docs/web-component.md.
+ * keeps the editor). Attributes `layout`, `toolbar`, `readonly`, `theme`, `density`, `slide`, `src` and `fonts` are observed; see docs/web-component.md.
  */
 export interface OpfEditorElement extends HTMLElement {
   /** The editor handle once it is created, else `null` (before mount, after removal, or when it could not be created). */
@@ -53,7 +53,10 @@ export interface OpfEditorElement extends HTMLElement {
   document: unknown;
   /** More `createOpfEditor` options. Read when the editor mounts; setting a different object on a mounted element remounts it, keeping the document. */
   options: Partial<OpfEditorOptions>;
-  /** A fonts handle (or what `OpfEditorFontsOption` allows), or the URL of a font root; the `fonts` attribute is a font root. Default: `defineOpfEditorElement`'s. */
+  /**
+   * A fonts handle (or what `OpfEditorFontsOption` allows), or the URL of a font root. Default: `defineOpfEditorElement`'s, then `options.fonts`, then
+   * the `fonts` attribute (a font root; observed: changing it remounts the editor). Setting a different value on a mounted element remounts it.
+   */
   fonts: OpfEditorFontsOption | string | undefined;
   catalogs: readonly Catalog[] | undefined;
   /** The attributes as properties. `readOnly` is the `readonly` attribute. */
