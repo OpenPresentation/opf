@@ -5786,7 +5786,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
   if (autoSurface && autoEmphasis?.follows !== undefined && (options as Record<symbol, unknown>)[PILL_AT_FOOT] !== true) {
     const prefix = `${path}.blocks.${autoEmphasis.follows}.`, owner = items.filter(item => item.path.startsWith(prefix) && item.text);
-    const textBottom = Math.max(...owner.map(item => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight)));
+    // A text drawn on a card (LH-64, LH-48) ends at its card: the pill follows the card, not the text inside it.
+    const textBottom = Math.max(...owner.map(item => Math.max(item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight), item.frameBox ? item.frameBox.y + item.frameBox.height : -Infinity)));
     const column = owner[0]?.box, surfaceBox = autoSurface.emphasis.box, top = round(textBottom + gap);
     if (!column || !Number.isFinite(textBottom) || top + surfaceBox.height > bodyBottom + .01) return composeLayout(input, { ...options, [PILL_AT_FOOT]: true } as ComposeSlideOptions);
     const side = alignmentFor('text'), atEnd = rtl ? side === 'left' : side === 'right', width = surfaceBox.width;

@@ -149,7 +149,8 @@ test('LH-06, LH-68: no rule costs a block its size; the pill follows its text', 
     const options = { direction, ...(layout ? { layout } : {}) }, result = composeSlide(pillSlide, options), plain = composeSlide(without(pillSlide), { ...options, fill: false });
     assert.equal(result.emphasis?.shape, 'pill');
     const body = result.items.find((item) => item.path === 'slides.0.blocks.0.text'), pill = result.emphasis.box;
-    const bottom = body.box.y + (body.text.placement?.height ?? body.text.lines.length * body.text.lineHeight);
+    // One gap under the text's last line, or under its card when the text is drawn on one (wave 3: LH-06 with LH-64 and LH-48).
+    const bottom = Math.max(body.box.y + (body.text.placement?.height ?? body.text.lines.length * body.text.lineHeight), body.frameBox ? body.frameBox.y + body.frameBox.height : -Infinity);
     assert.ok(pill.y > bottom && pill.y - bottom <= 720 / 30 + 1, `${direction}: one gap under the text (${pill.y - bottom})`);
     assert.ok(pill.x >= body.box.x - 0.5 && pill.x + pill.width <= body.box.x + body.box.width + 0.5, `${direction}: in the text's column`);
     for (const [path, size] of sizes(plain)) assert.ok((sizes(result).get(path) ?? Infinity) >= size - 1e-6, `${direction}: ${path} keeps ${size}`);
