@@ -217,6 +217,40 @@ kind `group`.
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.
 
+### Grouping before placement (layout harvest)
+
+`composeSlide` then groups the bound blocks before it places a cell (`groupBinding`, on `/composition`). The rules read
+block kinds, counts and text lengths, never a layout or slide id, and work for any count and in right-to-left decks. A
+slide that pins any block with `region` keeps the binding above as written.
+
+1. **Repeated pairs (LH-58).** A block sequence that repeats one pair of kinds is one cell per pair: a figure (`metric`,
+   `chart`, `table`, `image`, `video`, `code`) and a paragraph, in either order, or a long and a short paragraph (one at
+   least twice the other's length, the long one on the same side of every pair), two pairs or more. The pairs go to the
+   region the figure binds to, which may hold up to 6 of them (or its `max`, when larger); the other regions are empty
+   and collapse. Inside its cell a pair is one row (each half at least 0.8 of the cell's height wide) or one column
+   (the figure above its text), half a gap apart; every pair of a grid has one cell size, so the pairs match. On a slide
+   that draws cards each block keeps its own card.
+2. **Group by kind (LH-82, LH-73).** A flowing region whose blocks are mostly (more than half, at least 2) of a kind it
+   accepts keeps only those. The blocks it took only as the overflow region (within its room) go to another region that
+   accepts them, beyond that region's `max`, or else to the implicit row below the grid; they are not
+   `opf/layout-unplaced`. Up to 4 such blocks sit side by side in one row under the grid (or stacked, when that is
+   shorter), and the row asks for at most 30% of the content box, down to its height at the minimum font size, so the
+   grid keeps about 60 to 65% of the body. On `metrics`, 3 metrics and 2 notes are a row of metrics over a row of two
+   notes; on `chart`, 3 charts and 2 notes the same.
+3. **Extra blocks join a region (LH-46).** A block no region had room for, on a layout with no overflow region, joins
+   the region that accepts it instead of the row below the grid: a `flow: none` region takes up to 6 blocks (accepted,
+   no finding: the region then flows as `auto`); a flowing region takes up to 12, drawn beyond its `max` with
+   `opf/layout-unplaced` as an overflow region draws them (so `paginate` can still move them).
+   - `flow: none` regions of one role side by side (the `first` and `second` columns of `comparison` or `two-column`)
+     become one region of N cells: the first takes their blocks and any block bound between them in source order (the
+     `verdict`), and the others collapse into it. Four texts on `comparison` are a 2 x 2 grid in reading order.
+   - A lone fixed region arranges pictures as a **mosaic** and text, quotes and metrics as a **lead plus cards**. A
+     mosaic is 2 or 3 pictures in a row, and 4 to 6 a lead picture at full height beside the others in two rows (the
+     lead as wide as two of their columns); a region taller than wide stacks 2 and sets a lead picture across the top of
+     3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
+     layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
+     size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
 above; a body region before a heading region). Headings are centred vertically in their region unless every row it spans is
 `auto`, so a `cover` or a title-only slide centres its title. A slide with promoted regions (`left`, `top:left`, ...)
@@ -229,7 +263,7 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | `flow` | Blocks are arranged |
 | --- | --- |
 | `none` | One block fills the region. |
-| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns. Rows and columns swap in a portrait region. A short last row keeps the column width and is centred. |
+| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centred. |
 | `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures and videos take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
 
