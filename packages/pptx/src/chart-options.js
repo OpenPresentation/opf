@@ -200,7 +200,10 @@ function classicDataLabels(chartNode, target, notes, seriesFormats = [], combo) 
   const block = serLabels ?? chartNode?.['c:dLbls'];
   if (!block) return undefined;
   const points = asArray(block['c:dLbl']);
-  const source = points.length ? points.find(point => String(point?.['c:idx']?.val) === '0') ?? points[0] : block;
+  // LH-92: a point that names its doughnut ring (the series name on one slice) is not the labels' pattern; read another point.
+  const pattern = points.filter(point => !flag(point?.['c:showSerName']));
+  const pool = pattern.length ? pattern : points;
+  const source = points.length ? pool.find(point => String(point?.['c:idx']?.val) === '0') ?? pool[0] : block;
   const content = [];
   if (flag(source['c:showCatName'])) content.push('category');
   if (flag(source['c:showVal'])) content.push('value');

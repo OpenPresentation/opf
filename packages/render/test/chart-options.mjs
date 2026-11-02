@@ -159,7 +159,8 @@ for (const type of ['funnel', 'treemap']) {
   assert.deepEqual(diagnostics.filter((d) => d.code === 'chart-option-adapted').map((d) => d.option), ['dataLabels.position']);
   // Pie: percent and category.
   const pie = texts(render({ type: 'pie', dataLabels: { content: ['category', 'percent'] } })).filter((entry) => /\.data\.rows\.\d\.1$/.test(entry.path));
-  assert.deepEqual(pie.map((entry) => entry.text), ['Q1, 15%', 'Q2, 30%', 'Q3, 22%', 'Q4, 33%']);
+  // LH-92: this pie has two series, so it draws nested rings (LH-60), and each ring names its series before its largest slice's label.
+  assert.deepEqual(pie.map((entry) => entry.text), ['Q1, 15%', 'Q2, 30%', 'Q3, 22%', 'North, Q4, 33%']);
   // Line, scatter, area, radar, doughnut: one label per point, number format General.
   for (const type of ['line', 'line-with-markers', 'stacked-area', 'radar', 'doughnut', 'scatter', 'waterfall', 'histogram']) {
     const count = labelPaths(render({ type, dataLabels: true })).length + texts(render({ type, dataLabels: true })).filter((entry) => /\.data\.rows\.\d\.1$/.test(entry.path) && type === 'doughnut').length;

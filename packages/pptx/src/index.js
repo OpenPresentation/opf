@@ -13,7 +13,7 @@ import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineCha
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
-import {applyDoughnutRings,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
+import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
@@ -3027,7 +3027,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: chartSchemeSeries(chart.colors, context.colorScheme, colorContext)});
   const palette = adjustedPalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
-  Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
+  Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
@@ -4520,7 +4520,13 @@ async function normalizePptxZip(raw, context) {
       entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
       // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
       const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
-      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
+      // LH-92: a pie drawn as nested rings (LH-60) labels inside its rings, as a doughnut does: no c:dLblPos (a doughnut has none) and the
+      // colour that contrasts with each slice, as the preview draws them.
+      const ringed=optionKind==='pie'&&/<c:doughnutChart>/.test(decodeText(entries[chartPart]));
+      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:ringed?{...chartOptions,dataLabels:{...chartOptions.dataLabels,position:null}}:chartOptions,kind:ringed?'doughnut':optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
+      // LH-92: each ring of a nested-ring doughnut names its series on the slice core chose, after the data labels it may join.
+      const {ringNames,palette:slicePalette}=context.chartHeadings.get(name);
+      if(ringNames)entries[chartPart]=encodeText(applyRingLabels(decodeText(entries[chartPart]),ringNames,{labels:chartOptions?.dataLabels,fills:series=>highlight?.pointFills(series)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));
       // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
       const numberFormats=context.chartHeadings.get(name).numberFormats;
       if(numberFormats){
