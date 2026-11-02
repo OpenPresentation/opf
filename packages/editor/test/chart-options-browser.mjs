@@ -24,12 +24,16 @@ const server = createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12]] };
+// LH-03: a small chart (one or two series of at most eight points) labels its values by default, so turning data labels on would not
+// change its preview. Nine months make the column chart one that draws no labels until the control turns them on.
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+const columnData = { columns: ['Month', 'North', 'South'], rows: months.map((month, index) => [month, 10 + (index * 7) % 13, 5 + (index * 5) % 11]) };
 const source = {
   name: 'Chart options',
   language: 'en-US',
   design: { theme: 'classic', fontScheme: 'roboto' },
   slides: [
-    { id: 'column', title: 'Column', blocks: [{ chart: { type: 'column', data } }, { text: 'Notes' }] },
+    { id: 'column', title: 'Column', blocks: [{ chart: { type: 'column', data: columnData } }, { text: 'Notes' }] },
     { id: 'pie', title: 'Pie', blocks: [{ chart: { type: 'pie', data } }] },
     { id: 'combo', title: 'Combo', blocks: [{ chart: { type: 'combo', data: { columns: ['Quarter', 'Revenue', { name: 'Margin', format: '0%' }], rows: [['Q1', 10, 0.3], ['Q2', 20, 0.34], ['Q3', 15, 0.29]] } } }] },
   ],
@@ -118,15 +122,15 @@ try {
 
   // FA-14: the highlight lists one checkbox per series and per category; each commits one undoable change and the preview redraws.
   assert.deepEqual(await panel.locator('[data-choices="series"] input').evaluateAll(inputs => inputs.map(input => input.value)), ['North', 'South']);
-  assert.deepEqual(await panel.locator('[data-choices="categories"] input').evaluateAll(inputs => inputs.map(input => input.value)), ['Q1', 'Q2', 'Q3']);
+  assert.deepEqual(await panel.locator('[data-choices="categories"] input').evaluateAll(inputs => inputs.map(input => input.value)), months);
   await step('highlight a series', () => field('Highlight series North').check(), current => JSON.stringify(chartOf(current).highlight) === '{"series":["North"]}');
-  await step('highlight a category', () => field('Highlight category Q2').check(), current => JSON.stringify(chartOf(current).highlight) === '{"categories":["Q2"]}');
+  await step('highlight a category', () => field('Highlight category Feb').check(), current => JSON.stringify(chartOf(current).highlight) === '{"categories":["Feb"]}');
   await field('Highlight series South').check();
   await waitDoc(current => JSON.stringify(chartOf(current).highlight) === '{"series":["South"]}', 'highlight for the follow-up step');
-  await field('Highlight category Q3').check();
-  await waitDoc(current => JSON.stringify(chartOf(current).highlight) === '{"series":["South"],"categories":["Q3"]}', 'both parts together');
+  await field('Highlight category Mar').check();
+  await waitDoc(current => JSON.stringify(chartOf(current).highlight) === '{"series":["South"],"categories":["Mar"]}', 'both parts together');
   await field('Highlight series South').uncheck();
-  await field('Highlight category Q3').uncheck();
+  await field('Highlight category Mar').uncheck();
   await waitDoc(current => chartOf(current).highlight === undefined, 'clearing both lists removes the field');
   await settle();
   mark('the highlight lists series and categories');
