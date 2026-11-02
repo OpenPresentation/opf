@@ -1,0 +1,20 @@
+{
+  "description": "LH-36: colour-scheme records that fail a palette rule today and are not changed in the pull request that added the check. A record fix redraws every deck that uses the scheme (a declared drawing change in the gallery package), so each is its own change. Each entry names the scheme id, the rule and the reason; scripts/check-palette.mjs fails when an entry no longer fails (remove it then) and when a new record fails.",
+  "failures": [
+    {
+      "id": "deep-purple",
+      "rule": "accent-lightness",
+      "reason": "accent1 #6A1B9A and accent2 #7B1FA2 are two purples 0.03 apart in OKLCH lightness; the second accent needs a different hue family or a lighter tone, which redraws every deep-purple deck."
+    },
+    {
+      "id": "luxury",
+      "rule": "accent-lightness",
+      "reason": "accent1 #997929 (gold) and accent2 #C15937 (terracotta) differ in hue only (lightness 0.00 apart); they read the same in greyscale and to colour-blind viewers. Fixing it redraws every luxury deck."
+    },
+    {
+      "id": "pastel-red",
+      "rule": "accent-lightness",
+      "reason": "accent1 #FE938C and accent2 #E6B89C are two pastels 0.04 apart in OKLCH lightness; separating them means darkening one, which changes the scheme's pastel character and every deck that uses it."
+    }
+  ]
+}
