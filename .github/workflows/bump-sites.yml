@@ -208,7 +208,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "$DRY_RUN" = true ]; then
             echo "Dry run: nothing is pushed." | tee -a "$GITHUB_STEP_SUMMARY"
-            git diff -- . ':!pnpm-lock.yaml' ':!package-lock.json' | head -200
+            git diff -- . ':!pnpm-lock.yaml' ':!package-lock.json' | head -200 || true  # head closes the pipe early on a long diff (SIGPIPE, exit 141 under pipefail)
             exit 0
           fi
           git config user.name "opf-release[bot]"
