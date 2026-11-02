@@ -318,3 +318,16 @@ test('LH-48 with LH-86: long texts drawn as full-width rows grow together when t
     assert.ok(Math.abs(rows[0].frameBox.width - rows[1].frameBox.width) < 1e-6 && rows[0].frameBox.width > result.contentBox.width * 0.9, `${direction}: across the region`);
   }
 });
+
+test('LH-114 with LH-80 and LH-48: a pull line is never a license to shrink the quote in another arrangement', () => {
+  // A picture, a text and a short quote: the pull line (quote at the lead size) is one arrangement, a picture track another (LH-80).
+  // An arrangement that draws the quote on a card again keeps the card's size (40 px here), not the pull line's lead size.
+  const picture = { image: { src: `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><rect width="1600" height="1000" fill="#3f8a55"/></svg>').toString('base64')}`, alt: 'A green field' } };
+  const slide = { title: 'What participants noticed', blocks: [picture, { text: 'Participants said the checklist made the next step obvious.' }, { quote: { text: 'We can now see where participants need help.', attribution: 'Pilot lead' } }] };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide(slide, direction === 'rtl' ? { presentation: { language: 'ar', slides: [slide] }, slideIndex: 0 } : {});
+    assert.deepEqual(overflow(result), []);
+    const quote = result.items.find((item) => item.quoteLayout), body = quote.quoteLayout.parts.find((part) => part.role === 'body');
+    assert.ok(quote.quoteLayout.rule || body.fit.fontSize >= 40 - 1e-9, `${direction}: ${quote.quoteLayout.rule ? 'pull line' : 'card'} at ${body.fit.fontSize}`);
+  }
+});

@@ -327,7 +327,7 @@ The footer under the quote is the attribution, then the role on its own line, th
 
 ## Timeline
 
-Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
+Timeline-specific fields are grouped under `timeline`. An array value is shorthand for `timeline.events`; use object form when the timeline needs a name or description. Timeline events use `when`, `what`, `description` and `status`. `status` is `done`, `current` or `planned` and marks progress: `done` is a filled marker with normal text, `current` ("we are here") is a ringed marker with a bold label, and `planned` is a hollow outlined marker with muted text. An event without a status draws as a plain filled marker. The connector is drawn in the primary color up to the current event (to the last done one when none is current), and an English deck adds a status word (Done, Current, Planned) under each label when the timeline keeps its size with them. Schedule health (at risk, blocked) is not a status; say it in the event text. See [Dynamic composition](dynamic-composition.md#timeline-internals) for the exact drawing.
 
 ```json
 {

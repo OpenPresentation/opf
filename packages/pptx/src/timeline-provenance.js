@@ -50,12 +50,17 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
   for(const group of groups.values())try{
     const anchors=group.filter(item=>item.data.anchor!==undefined);if(anchors.length!==1)throw Error('Missing or duplicated timeline anchor.');
     const anchor=anchors[0],manifest=anchor.data.anchor,count=validateManifest(manifest);
-    // A current event's ring is a second native ellipse with its own tag, so the group has one more shape per ring.
-    const total=count+manifest.eventCount+1+group.filter(item=>item.data.role==='ring').length;
+    // A current event's ring is a second native ellipse with its own tag, so the group has one more shape per ring. LH-121: the
+    // progress line and the generated status words are shapes of the group too.
+    const extra=group.filter(item=>item.data.role==='ring'||item.data.role==='progress'||item.data.role==='status').length;
+    const total=count+manifest.eventCount+1+extra;
     if(anchor.data.role!=='text'||anchor.data.part!==0||anchor.data.line!==0||group.length!==total||new Set(group.map(item=>item.shape)).size!==total)throw Error('Incomplete or duplicated timeline elements.');
-    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set(),rings=new Set(),statuses=new Map();let connectors=0;
+    const ordered=manifest.parts.map(part=>Array(part.lines)),markers=new Set(),rings=new Set(),statuses=new Map();let connectors=0,progress=0;
     for(const item of group){
       if(item.ambiguous)throw Error('Multiple source identities on one timeline shape.');
+      // LH-121: a status word is generated text, not a source field: import reads the status from its marker and skips the word.
+      if(item.data.role==='status'){if(!Number.isSafeInteger(item.data.eventIndex)||item.data.eventIndex<0||item.data.eventIndex>=manifest.eventCount)throw Error('Ambiguous timeline status word.');continue;}
+      if(item.data.role==='progress'){if(++progress>1||item.shape['p:spPr']?.['a:prstGeom']?.prst!=='line'||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet))throw Error('Invalid timeline progress line.');continue;}
       if(item.data.role==='connector'||item.data.role==='marker'||item.data.role==='ring'){
         const expected=item.data.role==='connector'?'line':'ellipse';
         if(item.shape['p:spPr']?.['a:prstGeom']?.prst!==expected||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet))throw Error('Timeline graphic now contains different geometry or native text.');

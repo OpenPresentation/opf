@@ -1484,6 +1484,8 @@ function renderQuote(item, box, bound, options) {
   });
   // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
   if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
+  // LH-114: a pull line's accent rule, in the primary color (core places it; the PPTX export draws the same rectangle).
+  if (layout.rule) children.unshift(tag('rect', {...HIDDEN, x: stableNumber(layout.rule.x), y: stableNumber(layout.rule.y), width: stableNumber(layout.rule.width), height: stableNumber(layout.rule.height), fill: bound.design.colors.primary, ...(options.trace ? {'data-opf-quote-rule': 'true'} : {})}));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
 
@@ -1500,6 +1502,8 @@ function renderTimeline(item, box, bound, options) {
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
+  if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
   const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
@@ -1515,6 +1519,14 @@ function renderTimeline(item, box, bound, options) {
     children.push(tag('g',options.trace?{'data-opf-timeline-role':part.role}:{},renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,align:part.alignment,
       fill:part.status?timelineTextColor(part,statusColors):bound.design.colors.text,diagnosticsHandled:true,options,
+    })));
+  }
+  // LH-121: the generated status word under each label; it traces to its event, not to a source field.
+  for(const label of layout.statusLabels??[]){
+    if(!label.fit)continue;
+    children.push(tag('g',options.trace?{'data-opf-timeline-role':'status'}:{},renderTextBox(label.text,label.box,bound,{
+      path:label.path.replace(/\.status$/,''),fit:label.fit,textStyle:label.style,fontFamily:label.requestedStyle.fontFamily,align:label.alignment,
+      fill:timelineTextColor(label,statusColors),diagnosticsHandled:true,options,
     })));
   }
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));

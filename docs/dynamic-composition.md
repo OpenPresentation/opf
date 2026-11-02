@@ -102,8 +102,11 @@ a block's fitted body size below what the slide gets without the wave's rules (e
 quote, code panel, metric or timeline), unless that leaves fewer findings (`text-overflow`, `small-cell`, `layout-unplaced`), and
 then never below the readability floor. A rule never adds a finding, splits a word or sets a paragraph under the minimum measure.
 The guarded rules are LH-89's nested gaps, LH-65's empty columns, LH-72's measure column, LH-78's quote lead size and card, LH-06's
-automatic band or pill, LH-68's scorecard tiles, LH-86's long-text rows, LH-66's minimum measure, LH-67's lead plus stack and LH-70's
-paragraph columns.
+automatic band or pill, LH-114's pull line, LH-121's timeline status words, LH-68's scorecard tiles, LH-86's long-text rows, LH-66's
+minimum measure, LH-67's lead plus stack and LH-70's paragraph columns. A pull line sets its quote at the lead size on purpose, so the
+guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
+keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the
+card's size.
 
 - The slide is composed once with every rule. When none changed anything (most slides), that is the result.
 - When only rules that move blocks without changing the size any block asks for changed something (nested gaps, the measure, long-text
@@ -125,7 +128,7 @@ row sharing a size are always applied. The rules meet as follows:
   its cell. On the emphasis surface (LH-06) the surface is its card.
 - Long texts that LH-86 moved into one region keep their rows; paragraph columns and a lead plus stack do not rearrange them. A short
   last text after them is LH-06's foot band, bound to no region.
-- LH-06's band or pill keeps its own size; LH-48 grows the blocks above it.
+- LH-06's band or pill keeps its own size; LH-48 grows the blocks above it. LH-114's pull line does the same.
 - LH-48 grows LH-86's long-text rows and LH-52's splits of paragraphs like any body of paragraphs: its fill is the height the text covers,
   not the cards around it. A lead plus stack (LH-67) does not grow, so its lead stays larger; a body at the floor is left to LH-83.
 - When LH-71 stacks a chart above a short takeaway and its plot becomes wider than 3:1, LH-49 gives the chart the filling track beside
@@ -199,6 +202,16 @@ pass are kept. LH-72's start alignment and sibling quotes sharing one size are a
   that makes no quote smaller; otherwise it keeps its size, on a card when the card costs no size. A card the slide does not
   otherwise draw is left out when it would make the quote overflow. A lone quote, and one or two quotes alone on a slide, keep
   the 40 px display size. Sibling quotes in one row share one body size; a row of wider cells keeps its own.
+- **Quotes under data: the pull line (LH-114).** A quote of 140 characters or fewer that shares the slide's root `blocks` with
+  a table, a list of three or more entries, or two or more other blocks is drawn across the body as its own row: an 80 x 6 px
+  accent rule in the primary color at the start edge, the quote at the lead size (32 px, stepping down to 28 px to take at most two
+  lines) in the regular weight, and one caption line "— Name, Role" (the source after an en dash) under it. It is the last row when
+  the quote is the last block, and the first row under the headings when it is the first block of an automatic slide; the data takes
+  the full width beside it, and in a layout the quote is bound to no region. A quote beside one compact block (a metric, a chart, a
+  short text, a list of one or two entries) keeps its card, as does a quote in the middle, one of several quotes, a quote with a
+  photo, a region pin, a caption or `emphasis: true`, a quote that needs more than two lines, and a slide with an arrangement of its
+  own. The quote layout reports the rule as `quoteLayout.rule`; the preview draws it as a rectangle and the PPTX export as a tagged
+  native rectangle (`OPF quote rule <group>`) that import consumes with the quote.
 
 ## Emphasis surface (LH-06)
 
@@ -206,7 +219,7 @@ A slide has at most one emphasis surface: a contrasting card or band that carrie
 
 Without an authored emphasis, two automatic rules read the slide's root `blocks` (with a layout or without):
 
-- a **foot band**: a last block that is plain text of 60 characters or fewer, after blocks that are all longer (any other kind, or text over 60 characters), is drawn as a full-width band at the foot of the body;
+- a **foot band**: a last block that is plain text of 60 characters or fewer, after blocks that are all longer (any other kind, or text over 60 characters), is drawn as a full-width band at the foot of the body. A takeaway of up to 120 characters is a foot band too when the blocks right before it are two or more charts or tables (LH-06, widened); a note between two charts reads as the first chart's note and keeps the 60-character rule;
 - a **pill**: a last plain text of 30 characters or fewer after one long text (over 60 characters) is drawn as a pill one gap under that text's last line, hugging its one line at the start of the text's column (the right in a right-to-left deck); where that leaves no room it is drawn at the foot of the body.
 
 The body above composes in what remains and the band or pill text is the last item. Neither costs a block its size: `composeSlide` also composes the slide without it, starts the band or pill text at least at the size the block fitted at there, and keeps the band or pill only when it leaves fewer findings (`text-overflow`, `small-cell`, `layout-unplaced`), or as many and no body block smaller (a text or list, any visible part of a quote, code panel, metric or timeline, a table's smallest cell). A band or pill taller than 30% of the body is not drawn. `emphasis: false` keeps a block out of both rules, and a slide with an arrangement of its own (a `composition` mode other than `auto`, `weights` or `columns`) takes neither; a block with a region pin, a caption or any payload besides `text` never takes them.
@@ -420,7 +433,14 @@ A horizontal timeline centers its whole block (name, description and labels) in 
 - **Hollow means background-filled.** The outline of a hollow marker and the ring are drawn over the slide background color (in the SVG as the fill, in PPTX as a solid fill of the same color) so the connector does not cross them.
 - **Colors.** `timelineTextColor` returns `mutedText` for a planned event, lightened or darkened until it reaches 4.5:1 against the slide background (`TIMELINE_TEXT_MIN_CONTRAST`), and the normal text color otherwise. Outlines and rings are kept at 3:1 (`TIMELINE_OUTLINE_MIN_CONTRAST`); the filled marker keeps the primary color exactly.
 - **Bold label.** The weight is part of the layout, not a drawing detail: the `what` part of a `current` event is requested at weight 700, so line breaks and heights were measured bold.
-- **PPTX.** The marker is a native `ellipse` (solid primary fill for `done`, `current` and no status; background fill plus a primary line for `planned`), the ring is a second native `ellipse` (background fill plus a primary line), the bold label is a bold run, and planned text takes the muted color. The exporter records each event's status in the marker's `OPF_TIMELINE_V1` tag and the ring in a tag of its own, and the importer restores `status` from them; a deck whose marker or ring was edited away imports as ordinary text without status, like the rest of the timeline provenance. Status is also written in Markdown as a task-list prefix on the event line: `[x]` done, `[>]` current, `[ ]` planned.
+- **Progress and status words (LH-121).** `TimelineLayout.progress` is the part of the connector from the first event to the
+  `current` one (to the last `done` one when none is current; absent when no event is done or current); both engines draw it in the
+  primary color over the border-colored connector. With `statusWords` (composition sets it under the size guard, for an English deck)
+  each event with a status gets a word under its label, `Done`, `Current` or `Planned` (`TIMELINE_STATUS_WORDS`) at 16 reference
+  pixels, in `TimelineLayout.statusLabels`: generated text with no `sources`, never in `parts`. `timelineTextColor` sets the current
+  event's word in the primary color and the others muted, at 4.5:1. A timeline that would set its labels smaller to make room keeps
+  them and draws no words; a deck in another language keeps the status in its markers and progress.
+- **PPTX.** The marker is a native `ellipse` (solid primary fill for `done`, `current` and no status; background fill plus a primary line for `planned`), the ring is a second native `ellipse` (background fill plus a primary line), the bold label is a bold run, and planned text takes the muted color. The exporter records each event's status in the marker's `OPF_TIMELINE_V1` tag and the ring in a tag of its own, and the importer restores `status` from them; a deck whose marker or ring was edited away imports as ordinary text without status, like the rest of the timeline provenance. The progress line is a second native `line` (`OPF timeline <group> progress`) and each status word a text shape tagged `status`; import consumes both and reads the status from the markers. Status is also written in Markdown as a task-list prefix on the event line: `[x]` done, `[>]` current, `[ ]` planned.
 
 ## Resizing in the preview
 
