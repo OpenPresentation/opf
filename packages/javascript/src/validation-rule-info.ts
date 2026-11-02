@@ -473,7 +473,7 @@ export const SHRUNK_RATIO = 0.7;
 export const CENTERED_BODY_LINES = 2, CENTERED_BODY_CHARACTERS = 120;
 /** `opf/centered-body`: a text of at most this many characters is a short note, whatever it wraps to in a narrow cell. */
 export const CENTERED_NOTE_CHARACTERS = 80;
-/** `opf/tight-spacing`: sibling blocks closer than this, in inches of the reference slide (the engine's own default gap, 1/30 of the short side). */
+/** `opf/tight-spacing`: sibling blocks closer than this, in inches of the reference slide, where the author set the gap (the slide's default gap is 1/30 of the short side, 0.25 in). */
 export const TIGHT_GAP_INCHES = 0.25;
 /** `opf/tight-spacing`: a block closer than this to the slide edge (the engine's default padding is 0.6 in). */
 export const TIGHT_MARGIN_INCHES = 0.5;
@@ -513,7 +513,7 @@ export const tightSpacingRule = rule(
 	{
 		cost: 'composition',
 		standard: `Measured on the composed boxes (the card frame, the picture frame, else the cell) of sibling blocks and groups, on the 13.33 x 7.5 in reference slide: a gap under ${TIGHT_GAP_INCHES} in (the default gap is 1/30 of the short side, 0.25 in) or a margin under ${TIGHT_MARGIN_INCHES} in (the default padding is 0.6 in).`,
-		approximations: 'Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.',
+		approximations: 'Only a gap the author set is checked: `composition.gap` on the slide, its layout record or a group. Without one the default gap of the engine applies (1/30 of the shorter side of the container: 0.25 in on the slide, less in a short nested group) and is not reported. Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.',
 	},
 );
 export const layoutMonotonyRule = rule(

@@ -212,13 +212,20 @@ const tightSpacing: ValidationRule = {
 			let gap: { a: Spaced; b: Spaced; distance: number } | undefined;
 			const siblings = new Map<string, Spaced[]>();
 			for (const entry of spaced) siblings.set(parentPath(entry.path), [...(siblings.get(parentPath(entry.path)) ?? []), entry]);
-			for (const list of siblings.values())
+			// Only a gap the author set is reported: the slide's (or its layout record's) composition.gap, or a group's own. Without one the
+			// engine's default applies, 1/30 of the container's shorter side, which in a short nested group is a few pixels (a default of the
+			// engine, not of the deck).
+			const groupGap = new Map(composition.groups.map((group) => [group.path, group.composition.gap]));
+			const authoredGap = (parent: string) => (groupGap.has(parent) ? groupGap.get(parent) : composition.composition.gap) !== undefined;
+			for (const [parent, list] of siblings) {
+				if (!authoredGap(parent)) continue;
 				for (let i = 0; i < list.length; i++)
 					for (let j = i + 1; j < list.length; j++) {
 						if (list[i]!.exempt || list[j]!.exempt) continue;
 						const distance = facingGap(list[i]!.box, list[j]!.box);
 						if (distance !== undefined && distance < gapLimit - 0.01 && (!gap || distance < gap.distance)) gap = { a: list[i]!, b: list[j]!, distance };
 					}
+			}
 			const inches = (px: number) => round(px / scale / PX_PER_INCH, 2);
 			if (gap)
 				context.report(tightSpacingRule, {

@@ -62,13 +62,20 @@ test('opf/tight-spacing: gaps under 0.25 in and margins under 0.5 in; the defaul
 	assert.ok(gap.measured.gapInches < 0.25);
 	const [margin] = findings(deck([{ title: 'Options', composition: { padding: 0.02 }, blocks: two }]), 'opf/tight-spacing');
 	assert.equal(margin.measured.minimumMarginInches, 0.5);
+	// A nested group with no gap of its own uses the engine's default (1/30 of its shorter side: about 0.03 in in a one-line row), which
+	// is the engine's spacing, not the author's, so it is not reported; the same group with an explicit small gap is.
+	for (const mode of ['row', 'column']) {
+		const nested = (composition) => deck([{ title: 'A group', blocks: [{ text: 'Lead text before the group' }, { composition, blocks: [{ text: 'Left in the group' }, { text: 'Right in the group' }] }] }]);
+		assert.deepEqual(findings(nested({ mode }), 'opf/tight-spacing'), [], `default ${mode} group`);
+		const [tight] = findings(nested({ mode, gap: 0.01 }), 'opf/tight-spacing');
+		assert.equal(tight?.path, '/slides/0/blocks/1/blocks/1', `${mode} group with gap 0.01`);
+	}
 	// A picture placed on an edge bleeds on purpose.
 	const placed = deck([{ title: 'Site', blocks: [{ image: { src: 'https://example.com/site.png', alt: 'The site' }, placement: { edge: 'left' } }, { text: 'The new site opens in May.' }] }]);
 	assert.deepEqual(findings(placed, 'opf/tight-spacing'), []);
 	// The default layouts at their intended counts.
 	const sampler = JSON.parse(readFileSync(new URL('../../../examples/technical/layout-sampler.opf.json', import.meta.url), 'utf8'));
-	const reported = findings(sampler, 'opf/tight-spacing').map((finding) => sampler.slides[finding.slide].layout).filter(Boolean);
-	assert.deepEqual(reported, [], 'a layout record of the sampler reports tight spacing');
+	assert.deepEqual(findings(sampler, 'opf/tight-spacing'), [], 'the sampler (every layout record and its dynamic compositions) reports tight spacing');
 });
 
 test('opf/layout-monotony: four content slides in a row with one layout; framing slides, automatic slides and other layouts break a run', () => {

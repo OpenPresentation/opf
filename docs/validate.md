@@ -908,7 +908,7 @@ Default severity: **info**. Cost: composition. Blocks are closer than 0.25 in to
 
 **Basis.** Measured on the composed boxes (the card frame, the picture frame, else the cell) of sibling blocks and groups, on the 13.33 x 7.5 in reference slide: a gap under 0.25 in (the default gap is 1/30 of the short side, 0.25 in) or a margin under 0.5 in (the default padding is 0.6 in).
 
-**Approximations.** Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.
+**Approximations.** Only a gap the author set is checked: `composition.gap` on the slide, its layout record or a group. Without one the default gap of the engine applies (1/30 of the shorter side of the container: 0.25 in on the slide, less in a short nested group) and is not reported. Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.
 
 ### `opf/layout-monotony`
 
