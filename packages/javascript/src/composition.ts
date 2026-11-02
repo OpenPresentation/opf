@@ -3225,14 +3225,28 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       if (box.y < top) box = { ...box, y: top, height: Math.max(scale, box.y + box.height - top) };
     }
     const frameBox = cards ? acceptedBox(frame ?? box) : undefined;
-    const metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
+    let metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
+    const cell = box;
     box = payloadBox(box, cards);
-    const caption = captionOf(node, box);
-    if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
+    let caption = captionOf(node, box);
+    if (caption) box = caption.mediaBox;
     const textValue = contentText(node.field, node.value);
-    const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
-    const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-    const metricLayout = node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined;
+    const measureInternal = () => [
+      node.field === 'quote' ? measureQuote(node,box,settings) : undefined,
+      node.field === 'code' ? measureCode(node,box,settings) : undefined,
+      node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined,
+    ] as const;
+    let [quoteLayout, codeLayout, metricLayout] = measureInternal();
+    // A quote, code or metric that has no room inside its card's inset takes the whole card: content before padding.
+    const unfit = (layout?: {parts: readonly {fit?: unknown}[]}) => layout?.parts.some(part => !part.fit) === true;
+    if (cards && (unfit(quoteLayout) || unfit(codeLayout) || unfit(metricLayout))) {
+      box = cell;
+      metricHeight = metricReferenceHeight;
+      caption = captionOf(node, box);
+      if (caption) box = caption.mediaBox;
+      [quoteLayout, codeLayout, metricLayout] = measureInternal();
+    }
+    if (caption) diagnostics.push(...caption.diagnostics);
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;

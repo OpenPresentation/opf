@@ -54,3 +54,13 @@ test('hero sets the picture full height beside the title, lead and support', () 
   assert.ok(title.box.x + title.box.width <= media.box.x, 'the title stays in the text column');
   assert.ok(lead.box.y > title.box.y, 'the lead follows the title');
 });
+
+test('a scorecard of nine long measures fits every metric: a metric with no room inside its card inset takes the whole card', () => {
+  const long = 'Shift the library from stacks-first to research-services-first before the next budget cycle';
+  const blocks = Array.from({ length: 9 }, (_, index) => ({ metric: { value: `$${index + 1}.8M`, label: `Signal ${index + 1}`, description: long, trend: 'up' } }));
+  const result = compose('scorecard', { title: 'Nine measures', blocks });
+  for (const item of result.items.filter((entry) => entry.field === 'metric')) {
+    assert.ok(item.frameBox, `${item.path} is on a card`);
+    assert.ok(item.metricLayout.parts.every((part) => part.fit), `${item.path} lays out every part`);
+  }
+});
