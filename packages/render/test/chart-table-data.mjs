@@ -46,6 +46,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
   console.log(JSON.stringify(digests, null, 2));
   process.exit(0);
 }
+// LH-60 and LH-56 moved six on purpose: the two-series pie and doughnut draw nested rings, the box-and-whisker (one value per category)
+// one box per series, the world chart over quarters columns, and the treemap and funnel labels contrast with their fills.
 const REVIEWED_SVG_DIGESTS = {
   'column': '4ec3de85106a1a440dff2e39',
   'stacked-column': '028e39ed4c42f237425ca0b4',
@@ -60,19 +62,19 @@ const REVIEWED_SVG_DIGESTS = {
   'area': '4c4ae113c6305f06eca768bc',
   'stacked-area': '1f6b5010833354342886def2',
   '100pct-stacked-area': 'c2a70cf36600640289a313d7',
-  'pie': '239de764b01203cb9c631c17',
-  'doughnut': 'e83aaf3968a9e6bcc4b01889',
+  'pie': 'b923fe0ee2c2d8a903015c83',
+  'doughnut': '151f47d0ebc53d35b4f6e63d',
   'scatter': '44baab35d353e214a225bf68',
   'radar': '9f0bf90fdffcebfa65edd7ee',
   'radar-with-markers': '79796466e2ad84d3b1b62506',
   'filled-radar': 'b044881d170ae269eb127c96',
-  'treemap': 'baaad2b1dd5f5141044d0765',
+  'treemap': 'cb63c8922c227f3ae6f8c234',
   'histogram': 'e4a1342012db24e6c5585283',
   'pareto': '20f13a2185543acb45794d90',
-  'box-and-whisker': 'af606f9703cdd4b34f4cf33e',
+  'box-and-whisker': 'a65be9e95948c1e6a06ea533',
   'waterfall': '70a315ec3bb6754e9e1866e1',
-  'funnel': '914c2a6f14ecf2935cb70a9c',
-  'world': 'c963880f5b9404c2977115a3',
+  'funnel': '6208efa6e685004b27a8f3d2',
+  'world': 'e4f710e47dfdea52142160e7',
   'sketch': '412f5a537d5291557428c038',
   'column-no-options': '643844b49b1eb93cae41253f',
   'line-string-numbers': 'fb2ec0d1f3b78e812aaabc14',

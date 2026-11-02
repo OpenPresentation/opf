@@ -1158,7 +1158,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; pie, doughnut and other single-series constructs still plot one series. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a 'chart-mapping-adapted' warning.
+- Purpose: Series mapping by column name (after any 'fields' selection). Mapping only selects and orders columns; a chart type that plots one series (treemap, funnel, waterfall and the like) still plots the first and names the others in a 'chart-series-dropped' warning, and a pie or doughnut of several series draws nested rings. An unknown name is a 'chart-mapping-unknown-column' error; a series that repeats the category or X column, and an X column on a chart type without an X axis, are dropped with a...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
