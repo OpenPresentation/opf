@@ -3520,7 +3520,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const measurers = new Map<number, MeasureTextWidth>();
     const measure = (text: string, size: number, weight: 400 | 700): number => {
       let measurer = measurers.get(weight);
-      if (!measurer) measurers.set(weight, measurer = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: weight, italic: false, path: node.path}, options.textMeasurement), options.textMeasurement));
+      if (!measurer) {
+        measurer = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: weight, italic: false, path: node.path}, options.textMeasurement), options.textMeasurement);
+        measurers.set(weight, measurer);
+      }
       return measurer(text, size);
     };
     const layer = resolved.ok ? chartLayer(node.value, resolved, {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' : 'ltr', ...(deckLanguage() !== undefined ? {language: deckLanguage()!} : {}), captioned: node.caption !== undefined}) : undefined;
