@@ -2006,6 +2006,12 @@ dialog::backdrop {
     width: auto;
   }
 
+  /* On a phone the autosave line would take a row of its own and push the slide off the first screen (a 320×568 Android); it stays off
+     the bar there, as before 0.30. */
+  .document-bar .autosave-status {
+    display: none;
+  }
+
   .header-actions {
     flex: 1 1 100%;
     flex-wrap: wrap;
