@@ -92,18 +92,20 @@ export function waterfallSignedFormat(format: string | undefined): string {
 }
 
 /**
- * LH-107: the waterfall treatment of a chart (`chart` the drawn chart, `data` its resolved data, one value column), with the caption
+ * LH-107: the waterfall treatment of a chart (`chart` the drawn chart, `data` its resolved data: categories and one value column, or a lone value column), with the caption
  * header the dropped value axis leaves: the column's name (or the value axis title) above the plot. The labels are the default unless
  * `dataLabels` is set, and are kept only when the widest fits its category band (the bars stand 1.5 bands apart); the value axis goes
  * with default labels unless it has a title.
  */
 export function chartWaterfall(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry): {waterfall: ChartLayerWaterfall; header?: ChartLayerHeader} | undefined {
-  if (!record(chart) || !data.ok || typeOf(chart) !== 'waterfall' || data.columns.length !== 2 || !data.rows.length) return undefined;
-  const values = data.rows.map(row => chartNumber(row[1]));
+  if (!record(chart) || !data.ok || typeOf(chart) !== 'waterfall' || data.columns.length > 2 || !data.rows.length) return undefined;
+  // A lone value column has no categories (the rows are numbered); otherwise the categories come first.
+  const column = data.columns.length === 1 ? 0 : 1;
+  const values = data.rows.map(row => chartNumber(row[column]));
   const roles = waterfallRoles(values);
   if (!roles.some(Boolean)) return undefined;
   const {box, scale} = geometry;
-  const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' ? data.formats[1] : undefined;
+  const format = typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
   let labels = chart.dataLabels === undefined;
   if (labels && usable(box, scale)) {
     const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
@@ -114,7 +116,7 @@ export function chartWaterfall(chart: unknown, data: ResolvedChartData, geometry
   const titled = record(chart.axisTitles) && nonBlank(chart.axisTitles.value) !== undefined;
   const valueAxis = !labels || titled;
   const waterfall: ChartLayerWaterfall = {roles, labels, valueAxis, colors: chart.colors === undefined};
-  const caption = valueAxis || geometry.captioned || !usable(box, scale) ? undefined : (record(chart.axisTitles) ? nonBlank(chart.axisTitles.value) : undefined) ?? (label(data.columns[1]) || undefined);
+  const caption = valueAxis || geometry.captioned || !usable(box, scale) ? undefined : (record(chart.axisTitles) ? nonBlank(chart.axisTitles.value) : undefined) ?? (label(data.columns[column]) || undefined);
   return {waterfall, ...(caption ? {header: captionHeader(caption, geometry)} : {})};
 }
 
