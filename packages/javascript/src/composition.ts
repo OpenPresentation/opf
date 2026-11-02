@@ -3049,41 +3049,14 @@ export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions 
 const RECOMPOSE = Symbol('opf.recompose');
 /** composeSlide composes a template slide again with this flag: grouping leaves the blocks below the grid in place (no LH-46 join). */
 const UNJOINED = Symbol('opf.unjoined');
-/** composeSlide composes a slide again with this flag: no automatic foot band or pill (LH-06), to compare the slide without it. */
-const PLAIN_EMPHASIS = Symbol('opf.plainEmphasis');
 /** LH-06: the size (canvas px) the automatic band or pill text starts at, when larger than its own: what the block fitted at without it. */
 const EMPHASIS_SIZE = Symbol('opf.emphasisSize');
 /** LH-06: compose the pill at the foot of the body, where it has room, rather than right after the text it follows. */
 const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
-/** LH-68: compose the metrics of `metrics: "tile"` regions as stacks (what wave 2 drew), to compare. */
-const NO_TILES = Symbol('opf.noTiles');
 /** LH-68: each tile metric's fitted sizes as a stack, by item path and role: the floor of its tile's sizes. */
 const TILE_FLOORS = Symbol('opf.tileFloors');
-/**
- * LH-06, LH-68: the fitted size of every body block of a composition, by path: a text or list, each visible part of a quote, code panel,
- * metric or timeline (`<item path>#<role>`), a table's smallest cell. Headings are not body.
- */
-function bodySizes(result: SlideComposition, options: ComposeSlideOptions): Map<string, number> {
-  const scale = Math.min(result.width, result.height) / 720, sizes = new Map<string, number>();
-  const add = (key: string, size: number | undefined) => { if (size !== undefined && Number.isFinite(size)) sizes.set(key, Math.min(size, sizes.get(key) ?? Infinity)); };
-  for (const item of result.items) {
-    if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag') continue;
-    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
-    if (internal) { for (const part of internal.parts as readonly { role: string; fit?: { fontSize: number }; visible?: boolean }[]) if (part.visible !== false) add(`${item.path}#${part.role}`, part.fit?.fontSize); }
-    else if (item.field === 'table') {
-      let table: TableLayout | undefined;
-      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation }); } catch { table = undefined; }
-      for (const row of table?.rows ?? []) for (const cell of row.cells) add(item.path, cell.fit.fontSize);
-    } else add(item.path, item.text?.fontSize);
-  }
-  return sizes;
-}
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
-/** composeSlide composes a template slide again with this flag: long texts keep the layout's regions side by side (no LH-86 rows). */
-const SIDE_BY_SIDE = Symbol('opf.sideBySide');
-/** The compositions in which LH-86 drew long texts as rows (composeSlide compares them with the side-by-side layout). */
-const longTextResults = new WeakSet<SlideComposition>();
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -3123,117 +3096,113 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
   return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords, byPath };
 }
 /**
- * Wave 3 (LH-70, LH-67, LH-78, LH-72's measure column): composeLayout applies a rule only when it is in RULES (all of them when RULES is
- * absent), and records in FIRED the rules that changed something.
+ * Wave 3: composeLayout applies a guarded rule only when it is in RULES (every one when RULES is absent), and records in FIRED the
+ * rules that changed something on the slide.
  */
 const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
-type GuardedRule = 'paragraph-columns' | 'lead-stack' | 'quote-beside' | 'quote-card' | 'centered-column';
 /**
- * The guarded rules, tried in this order when the full set does not pass the guard: the cheapest change first. `quote-beside` is LH-78's
- * lead size, line target and card; `quote-card` the card alone, at the size the quote had, for a slide where the lead size costs size.
+ * The wave 3 rules that rearrange or resize a slide's blocks, each of which must leave every block at least the size the slide has
+ * without them: LH-72's measure column (`centered-column`), LH-78's lead size and card for a quote beside other blocks (`quote-beside`)
+ * and the card alone (`quote-card`), LH-06's automatic foot band or pill (`emphasis-band`), LH-68's scorecard tiles (`metric-tiles`),
+ * LH-86's long texts as full-width rows (`long-text-rows`), LH-66's minimum measure in the automatic grid (`reading-measure`), LH-67's
+ * lead plus stack (`lead-stack`) and LH-70's paragraph columns (`paragraph-columns`). LH-80 and LH-49's tracks are alternatives
+ * composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['centered-column', 'quote-beside', 'quote-card', 'lead-stack', 'paragraph-columns'];
-/**
- * Wave 3 guard: a composition with the guarded rules is kept over the one without them (the wave 2 arrangement) only when no block's
- * fitted body size (each text, list and table, and each main part of a quote, code panel, metric or timeline) is smaller, unless it
- * reports less overflow, which may trade size for fitting (never below the floor, where every fit stops). It never overflows or
- * splits words more. Readable size wins over the ideal measure.
- */
-function keepsSizes(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
-  const after = bodyReadability(next, options), before = bodyReadability(base, options);
-  if (after.overflows > before.overflows || after.splitWords > before.splitWords) return false;
-  if (after.overflows < before.overflows) return true;
-  for (const [path, size] of before.byPath) { const own = after.byPath.get(path); if (own !== undefined && own < size - FONT_GRID_EPSILON) return false; }
-  return true;
-}
+type GuardedRule = 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns';
+/** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
+const GUARDED_RULES: readonly GuardedRule[] = ['centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns'];
+const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * Compose a validated Slide. Layout resolution remains the caller's responsibility.
  *
- * Wave 3: the slide is composed with the reading-measure, lead and quote rules (LH-70, LH-67, LH-78, LH-72's measure column); when one
- * of them changed something, it is composed without them too, and the result with them is kept only when no block reads smaller
- * (keepsSizes). Otherwise each rule that fired is tried on its own, in GUARDED_RULES order, and kept when the slide still passes the
- * guard with it. LH-72's start alignment and sibling quotes sharing one size are not guarded: neither makes the smallest block smaller.
+ * The wave 3 size guard, one for every rule (GuardedRule): the slide is composed with all of them, recording which changed something.
+ * When none did, that is the result: one composition, as before wave 3. Otherwise the slide is also composed without them (wave 2's
+ * composition, `base`), which seeds the two rules that start from a size there (LH-68's tiles start each metric role at its stacked
+ * size, LH-06's band or pill starts its text at the size the block had), and the result with the rules is kept when it reads as well
+ * as `base` (readsAsWell: no block's body size smaller, and no more findings, split words or prose under the minimum measure; fewer
+ * findings may trade size, never below the floor, where every fit stops). When it does not, each rule that fired is added on its own,
+ * in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the ideal measure, card or
+ * arrangement. Then, on the settled composition, a template slide may be recomposed as the automatic grid (LH-49 for a short plot,
+ * LH-83 at the floor) and an automatic slide may give its picture or chart a track (LH-80, LH-49), each kept only when it reads as well.
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const fired = new Set<GuardedRule>(), own = options as Record<symbol, unknown>;
-  if (own[RULES] !== undefined) return composeArranged(input, options);
-  const withRules = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => composeArranged(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions);
-  let full: SlideComposition | undefined, failure: unknown;
-  try { full = withRules(new Set(GUARDED_RULES), fired); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
-  if (full && !fired.size) return full;
-  const base = withRules(new Set());
-  if (full && keepsSizes(full, base, options)) return full;
-  if (!full && !fired.size) throw failure;
-  let kept = new Set<GuardedRule>(), best = base;
-  for (const rule of GUARDED_RULES) {
-    if (full && !fired.has(rule)) continue;
-    const rules = new Set([...kept, rule]);
-    let trial: SlideComposition;
-    try { trial = withRules(rules); } catch (error) { if (error instanceof OPFCompositionError) continue; throw error; }
-    if (keepsSizes(trial, base, options)) { kept = rules; best = trial; }
-  }
-  return best;
+  if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
+  return settle(input, options, guardedCompose(input, options));
+}
+/**
+ * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition or a track): the composition with the
+ * guarded rules that read as well as the same arrangement without them. Throws the strict composition's error when nothing composes.
+ */
+function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const fired = new Set<GuardedRule>(), ruled = (rules: ReadonlySet<GuardedRule>, extra: Record<symbol, unknown> = {}) => ({ ...options, [RULES]: rules, ...extra } as ComposeSlideOptions);
+  const attempt = (settings: ComposeSlideOptions): SlideComposition | undefined => {
+    try { return composeArranged(input, settings); } catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
+  };
+  let failure: unknown, result: SlideComposition | undefined;
+  try { result = composeArranged(input, ruled(ALL_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
+  if ((globalThis as any).__firedCounts) { const key = [...fired].sort().join("+") || "none"; (globalThis as any).__firedCounts[key] = ((globalThis as any).__firedCounts[key] ?? 0) + 1; }
+  if (fired.size) {
+    let base: SlideComposition;
+    try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; return result; }
+    const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), before = trackQuality(base, options);
+    const readsWell = (next: SlideComposition | undefined): next is SlideComposition => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
+    // LH-68, LH-06: a tile metric starts every role at its stacked size in `base`, and a band or pill text at its block's size there.
+    const seeds: Record<symbol, unknown> = {};
+    if (fired.has('metric-tiles')) seeds[TILE_FLOORS] = new Map(base.items.filter(item => item.metricLayout).map(item => [item.path, Object.fromEntries(item.metricLayout!.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]))]));
+    const surface = result?.emphasis && result.emphasis.source !== 'authored' ? result.emphasis.path : undefined;
+    const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
+    if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
+    if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(ALL_RULES, seeds));
+    if (!readsWell(result)) {
+      let kept: ReadonlySet<GuardedRule> = NO_RULES;
+      result = base;
+      for (const rule of GUARDED_RULES) {
+        if (!fired.has(rule)) continue;
+        const rules = new Set([...kept, rule]), trial = attempt(ruled(rules, seeds));
+        if (readsWell(trial)) { kept = rules; result = trial; }
+      }
+    }
+  } else if (!result) throw failure;
+  return result!;
+}
+/**
+ * The slide after its guarded composition (`result`): a template slide is recomposed as the automatic grid when the layout leaves a
+ * chart's plot too short (LH-49, chartRecomposition) or a body role at the readability floor (LH-83, recomposeAtFloor); an automatic
+ * slide gives its one picture or chart a track (LH-80, LH-49, automaticTracks).
+ */
+function settle(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
+  if (!result.regions) return automaticTracks(input, options, result);
+  if (options.recompose === false) return result;
+  const blocks = record(input).blocks;
+  if (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) return result;
+  return chartRecomposition(input, options, result) ?? recomposeAtFloor(input, options, result);
+}
+/**
+ * Wave 2 (LH-46 with LH-44 and LH-41): extra blocks that join a fixed region share its cells. Measured blocks (tables, timelines, code)
+ * that need more room than those cells give overflow there, where below the grid they read whole (three tables in table-beside's narrow
+ * region broke their words). The joined composition is kept unless leaving the extra blocks below the grid overflows less.
+ */
+function composeArranged(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const joined = composeLayout(input, options);
+  if (!joined.regions || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(joined) === 0) return joined;
+  const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
+  return overflowCount(unjoined) < overflowCount(joined) ? unjoined : joined;
 }
 /**
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
  * then composed as the automatic grid (dynamic composition) with the layout record's design and composition, and that result is
- * kept when its smallest body size is larger (or as large with less overflow) and it neither overflows nor splits words more (`recomposed`); otherwise the
- * layout's result stands. A slide the layout fits above the floor, a cover, a slide with promoted regions or a block pinned to
- * a region (`region`), a layout master and `recompose: false` keep the layout's composition unchanged. Both passes are pure,
- * so the choice is deterministic.
+ * kept when its smallest body size is larger (or as large with less overflow) and it neither overflows nor splits words more
+ * (`recomposed`); otherwise the layout's result stands. A slide the layout fits above the floor, a cover, a slide with promoted
+ * regions or a block pinned to a region (`region`), a layout master and `recompose: false` keep the layout's composition unchanged.
+ * Both passes are pure, so the choice is deterministic.
  */
-function composeArranged(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  // Wave 2 (LH-46 with LH-44 and LH-41): extra blocks that join a fixed region share its cells. Measured blocks (tables, timelines,
-  // code) that need more room than those cells give overflow there, where below the grid they read whole (three tables in
-  // table-beside's narrow region broke their words). The joined composition is kept unless leaving the extra blocks below the grid
-  // overflows less.
-  const compose = (settings: ComposeSlideOptions): SlideComposition => {
-    const joined = composeLayout(input, settings);
-    if (!joined.regions || (settings as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(joined) === 0) return joined;
-    const unjoined = composeLayout(input, { ...settings, [UNJOINED]: true } as ComposeSlideOptions);
-    return overflowCount(unjoined) < overflowCount(joined) ? unjoined : joined;
-  };
-  let chosen = options, result = compose(chosen);
-  // LH-06, LH-68: a rule of this composition (scorecard tiles, an automatic foot band or pill) never costs a block its fitted size. Each is
-  // compared with the slide composed without it (what wave 2 drew) and kept only when it leaves fewer findings (it trades size to fit,
-  // never below the floor), or as many and no body size smaller (bodySizes). The tile and the band or pill start at the sizes there.
-  const findings = (entry: SlideComposition) => overflowCount(entry) + entry.diagnostics.filter(diagnostic => diagnostic.code === 'layout-unplaced').length;
-  const keeps = (ruled: SlideComposition, without: SlideComposition): boolean => {
-    if (findings(ruled) !== findings(without)) return findings(ruled) < findings(without);
-    const sizes = bodySizes(without, options);
-    for (const [path, size] of bodySizes(ruled, options)) if (size < (sizes.get(path) ?? 0) - FONT_GRID_EPSILON) return false;
-    return true;
-  };
-  if (result.items.some(item => item.metricTile)) {
-    const stacked = compose({ ...chosen, [NO_TILES]: true } as ComposeSlideOptions), floors = new Map<string, Partial<Record<string, number>>>();
-    for (const item of stacked.items) if (item.metricLayout) floors.set(item.path, Object.fromEntries(item.metricLayout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize])));
-    const floored = { ...chosen, [TILE_FLOORS]: floors } as ComposeSlideOptions, tiled = compose(floored);
-    if (keeps(tiled, stacked)) { chosen = floored; result = tiled; } else { chosen = { ...chosen, [NO_TILES]: true } as ComposeSlideOptions; result = stacked; }
-  }
-  if (result.emphasis && result.emphasis.source !== 'authored') {
-    const plainOptions = { ...chosen, [PLAIN_EMPHASIS]: true } as ComposeSlideOptions, plain = compose(plainOptions), textPath = `${result.emphasis.path}.text`;
-    const own = (entry: SlideComposition) => entry.items.find(item => item.path === textPath)?.text?.fontSize ?? 0;
-    if (own(result) < own(plain) - FONT_GRID_EPSILON) { chosen = { ...chosen, [EMPHASIS_SIZE]: own(plain) } as ComposeSlideOptions; result = compose(chosen); }
-    if (!result.emphasis || result.emphasis.source === 'authored' || !keeps(result, plain)) { chosen = plainOptions; result = plain; }
-  }
-  // Wave 3 (LH-86): long texts drawn as rows are kept only when their smallest body size is at least the one the layout's regions side
-  // by side give, or they overflow less; a row never trades type size for the arrangement.
-  if (longTextResults.has(result)) {
-    const sideBySide = composeLayout(input, { ...options, [SIDE_BY_SIDE]: true } as ComposeSlideOptions);
-    const smallest = (entry: SlideComposition) => Math.min(...bodyReadability(entry, options).sizes.map(size => size.size));
-    if (overflowCount(result) >= overflowCount(sideBySide) && smallest(result) < smallest(sideBySide) - FONT_GRID_EPSILON) result = sideBySide;
-  }
-  if (!result.regions && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true) return automaticTracks(input, options, result);
-  if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
-  const blocks = record(input).blocks;
-  if (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) return result;
-  const charted = chartRecomposition(input, options, result);
-  if (charted) return charted;
+function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   const before = bodyReadability(result, options);
   if (!before.sizes.some(entry => entry.atFloor)) return result;
   let automatic: SlideComposition;
   // A strict automatic grid that does not fit is no better than the layout: the layout's result stands.
-  try { automatic = composeLayout(input, { ...chosen, [RECOMPOSE]: true } as ComposeSlideOptions); }
+  try { automatic = guardedCompose(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
   catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
   const after = bodyReadability(automatic, options);
   const scale = Math.min(result.width, result.height) / 720, layoutSize = Math.min(...before.sizes.map(entry => entry.size)), size = Math.min(...after.sizes.map(entry => entry.size));
@@ -3252,10 +3221,6 @@ const MEDIA_TRACK_SHARES: readonly number[] = [.5, .45, .4, .35];
 const MEDIA_TRACK_MIN_KEPT = .5;
 /** LH-49: the shares of the slide's width (height on a portrait canvas) a chart's track tries, widest first (3:2 is design.chartPrimary's). */
 const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
-/** composeLayout composes an automatic grid again without the LH-66 measure with this flag, to check the measure costs no size. */
-const UNMEASURED = Symbol('opf.unmeasured');
-/** The compositions whose automatic grid the LH-66 measure weighed (a paragraph under the measure in some candidate). */
-const MEASURED = new WeakSet<SlideComposition>();
 /**
  * LH-49: the smallest plot a chart draws in automatic composition: at least CHART_MIN_PLOT_PX reference pixels and CHART_MIN_PLOT_SHARE
  * of the body's height tall, and at most CHART_MAX_PLOT_ASPECT times as wide as tall.
@@ -3286,17 +3251,10 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
 /** LH-80, LH-49: how well a composition reads, for comparing it with the same slide composed another way. */
 interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number> }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
-  const read = bodyReadability(result, options), blocks = new Map<string, number>();
-  // Each body item's own size: its text, or the smallest main part of a quote, code panel, metric or timeline (bodyReadability's).
-  for (const item of result.items) {
-    if (headings.has(item.field)) continue;
-    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
-    const sizes = internal ? (internal.parts as readonly { role: string; requestedFontSize: number; minFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]).filter(part => part.visible !== false && MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON && part.fit).map(part => part.fit!.fontSize) : item.text?.fontSize !== undefined ? [item.text.fontSize] : [];
-    if (sizes.length) blocks.set(item.path, Math.min(...sizes));
-  }
+  const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
   const measure = Math.min(Infinity, ...narrow.map(item => item.box.width / (AVERAGE_CHARACTER_EM * item.text!.fontSize)));
-  return { overflows: read.overflows, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks };
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks: read.byPath };
 }
 /**
  * LH-80, LH-49, LH-66: `after` reads as well as `before`: no more overflow or small cells, no more words split, no more prose under the
@@ -3307,7 +3265,7 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
   if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01) return false;
   const kept = after.size >= before.size - FONT_GRID_EPSILON && [...before.blocks].every(([path, size]) => (after.blocks.get(path) ?? Infinity) >= size - FONT_GRID_EPSILON);
-  return kept || (after.overflows < before.overflows && after.size > floor + FONT_GRID_EPSILON);
+  return kept || (after.overflows < before.overflows && after.size >= floor - FONT_GRID_EPSILON);
 }
 /**
  * LH-49: whether a composed chart's plot (chartPlotBox) is under the minimum of a body `bodyHeight` tall: too short or, with `aspect`,
@@ -3331,7 +3289,7 @@ function chartRecomposition(input: unknown, options: ComposeSlideOptions, result
   const scale = Math.min(result.width, result.height) / 720, charts = result.items.filter(item => item.field === 'chart');
   if (!charts.some(item => shortPlot(item, bodyHeight(result), scale, false))) return undefined;
   let automatic: SlideComposition;
-  try { automatic = composeLayout(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
+  try { automatic = guardedCompose(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
   catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   const shortest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => item.field === 'chart').map(item => chartPlotBox(item, scale).height));
   const before = trackQuality(result, options), after = trackQuality(automatic, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
@@ -3363,9 +3321,16 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   const pictures = leaf('image'), charts = leaf('chart'), landscape = base.width >= base.height, scale = Math.min(base.width, base.height) / 720;
   const quality = (result: SlideComposition) => trackQuality(result, options);
   const before = quality(base), floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale);
+  // A track is composed with the guarded rules (GuardedRule) and, when one of them changed something and that does not read as well as
+  // the slide without a track, without them: each arrangement keeps the rules that read well in it, and readsAsWell below compares the
+  // track with the slide's own guarded composition, so neither the track nor a rule leaves a block smaller than wave 2 did.
   const attempt = (flag: symbol, value: unknown): SlideComposition | undefined => {
-    try { return composeLayout(input, { ...options, [flag]: value } as ComposeSlideOptions); }
-    catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
+    const fired = new Set<GuardedRule>(), compose = (rules: ReadonlySet<GuardedRule>, collect?: Set<GuardedRule>) => {
+      try { return composeLayout(input, { ...options, [flag]: value, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
+      catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
+    };
+    const ruled = compose(ALL_RULES, fired);
+    return !fired.size || (ruled && readsAsWell(before, quality(ruled), floor)) ? ruled : compose(NO_RULES);
   };
   const physical = (edge: ImageEdge): ImageEdge => base.direction === 'rtl' && (edge === 'left' || edge === 'right') ? (edge === 'left' ? 'right' : 'left') : edge;
   if (pictures.length === 1 && !leaf('video').length) {
@@ -3377,6 +3342,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     let best: { result: SlideComposition; size: number; read: TrackQuality } | undefined;
     for (const size of MEDIA_TRACK_SHARES.filter(share => kept(share) >= MEDIA_TRACK_MIN_KEPT - 1e-9)) {
       const result = attempt(MEDIA_TRACK, { block: index, edge, size }), read = result && quality(result);
+      if ((globalThis as any).__guardDebug) console.error('track', size, JSON.stringify({ before: { ...before, blocks: Object.fromEntries(before.blocks) }, read: read && { ...read, blocks: Object.fromEntries(read.blocks) } }));
       if (!result || !read || !readsAsWell(before, read, floor)) continue;
       const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
       if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
@@ -3396,21 +3362,8 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   }
   return base;
 }
-/**
- * LH-66 never costs the text its size: a composition whose automatic grid weighed the minimum measure (MEASURED) is composed again
- * without it, and the measured one is kept only when it reads as well as that one (readsAsWell), so a paragraph moved to a wider cell
- * never leaves a block smaller than the grid without the rule set it.
- */
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = composeLayoutOnce(input, options);
-  if (!MEASURED.has(result)) return result;
-  let plain: SlideComposition;
-  try { plain = composeLayoutOnce(input, { ...options, [UNMEASURED]: true } as ComposeSlideOptions); }
-  catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
-  const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
-  return readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain;
-}
-function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  const debugCounts = (globalThis as any).__composeCounts; if (debugCounts) { const key = Object.getOwnPropertySymbols(options).map(symbol => symbol.description).filter(name => name !== "opf.rules" && name !== "opf.fired").join("+") || "plain"; debugCounts[key] = (debugCounts[key] ?? 0) + 1; }
   const slide = record(input), layout = record(options.layout);
   // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
   // record's contentDirection asks its regions to flow one way, so the automatic grid does not take it.
@@ -3697,7 +3650,7 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   };
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
-    if ((options as Record<symbol, unknown>)[PLAIN_EMPHASIS] === true || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
+    if (!ruleOn('emphasis-band') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ block, index }]);
@@ -3712,6 +3665,7 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   // surface that would take more than EMPHASIS_BAND_MAX_SHARE of the body is not drawn.
   let autoSurface: { emphasis: ComposedEmphasis; item: ComposedItem } | undefined;
   if (autoEmphasis) {
+    fire('emphasis-band');
     const blockPath = `${path}.blocks.${autoEmphasis.block}`, textPath = `${blockPath}.text`, value = record(slide.blocks[autoEmphasis.block]).text;
     const text = contentText('text', value)!, pill = autoEmphasis.shape === 'pill';
     const left = area.left + padding, width = area.right - area.left - padding * 2, size = Math.max((pill ? EMPHASIS_PILL_SIZE : PROSE_NOMINAL_SIZE) * scale, Number((options as Record<symbol, unknown>)[EMPHASIS_SIZE] ?? 0));
@@ -3922,10 +3876,9 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   };
   // LH-66, automatic composition only: a paragraph of four lines or more in a cell narrower than MIN_MEASURE_CHARS average characters of
   // `size` has too short a measure (underMeasure). Lines are core's own estimate, as `flow: auto` counts them, so every engine decides alike.
-  let measureWeighed = false;
   const narrowMeasure = (node: Pending, width: number, size: number): boolean => {
-    if ((options as Record<symbol, unknown>)[UNMEASURED] === true || !autoComposition() || !proseLeaf(node) || !underMeasure(node.field, node.value, width, size)) return false;
-    measureWeighed = true;
+    if (!ruleOn('reading-measure') || !autoComposition() || !proseLeaf(node) || !underMeasure(node.field, node.value, width, size)) return false;
+    fire('reading-measure');
     return true;
   };
   // LH-66: a `grid` with no column count of its own takes fewer columns while one of its paragraphs is under the minimum measure at the
@@ -4702,7 +4655,7 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   // of a short row stretch (LH-47) and their text keeps the measure. Each shape takes the largest size of the type scale at which its
   // narrowest column is at least PARAGRAPH_MEASURE_MIN characters and its rows, sized jointly at the measure, fit the area; the shape
   // with the largest size wins, one with no row of a single cell on a tie, then the fewer columns. Undefined (the region's own flow) when
-  // no shape fits. composeSlide keeps the columns only when they are no smaller than the region's own arrangement (keepsSizes).
+  // no shape fits. composeSlide keeps the columns only when they are no smaller than the region's own arrangement (readsAsWell).
   const PARAGRAPH_GRID_MIN = 3, PARAGRAPH_GRID_MAX = 6, PARAGRAPH_MIN_CHARS = 100, PARAGRAPH_MAX_CHARS = 240, PARAGRAPH_GRID_COLUMNS = 4;
   const paragraphStarts = new WeakMap<Pending, number>();
   const cardInsetOf = (width: number, cards: boolean) => cards ? Math.min(CARD_INSET * scale, Math.max(12 * scale, width / 16), width / 4) : 0;
@@ -4816,7 +4769,6 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   // collapse into it, and that region stacks them (arrangementOf). Only a slide that draws cards, with no contentDirection and no
   // composition of its own, whose row holds nothing else, nothing beyond a region's room and nothing below the grid.
   const LONG_TEXT_CHARS = 80, LONG_TEXT_ROWS = 3, LONG_TEXT_HUG = .45;
-  let longTextRowsDrawn = false;
   const longTextUnit = (unit: Pending): boolean => !unit.children && unit.caption === undefined && unit.field === 'text' && textLength(unit.value) >= LONG_TEXT_CHARS;
   const longTextRows = (grouped: GroupedBinding, plan: LayoutTemplate): { binding: GroupedBinding; region?: string } => {
     const own = record(slide.composition);
@@ -4835,7 +4787,7 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
     if (!side || units.length < 2 || units.length > LONG_TEXT_ROWS || !units.every(longBlock)) return { binding: grouped };
     if (row.some(region => region.bleed || (region !== row[0] && region.empty === 'keep') || grouped.regions.find(entry => entry.name === region.name)?.overflow.length)) return { binding: grouped };
     const target = row[0]!.name, names = new Set(row.map(region => region.name));
-    longTextRowsDrawn = true;
+    fire('long-text-rows');
     const moved = new Map(grouped.units);
     for (const region of row) moved.set(region.name, region.name === target ? units : []);
     return { binding: { ...grouped, units: moved, regions: grouped.regions.map(entry => entry.name === target ? { ...entry, blocks: units.flat() } : names.has(entry.name) ? { ...entry, blocks: [] } : entry) }, region: target };
@@ -4882,8 +4834,8 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
     // LH-06: the block drawn as the automatic foot band or pill is bound to no region (an empty block in its place keeps every index).
     const bound = autoSurface ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => index === autoEmphasis?.block ? {} : block) } : slide;
-    // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide compares them.
-    const { binding, region: longTextRegion } = ((options as Record<symbol, unknown>)[SIDE_BY_SIDE] === true ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true }), plan);
+    // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide leaves the rule out (its guard).
+    const { binding, region: longTextRegion } = (!ruleOn('long-text-rows') ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true }), plan);
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
     const blockUnit = (bound: BoundBlock): Pending => {
@@ -4902,7 +4854,7 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
       const units = contents.get(region.name) ?? [];
       if (region.flow === 'auto') for (const unit of units) { unit.auto = true; unit.lone = units.length === 1; }
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
-      if (region.metrics === 'tile' && (options as Record<symbol, unknown>)[NO_TILES] !== true) for (const unit of units) if (!unit.children && unit.field === 'metric') metricTiles.add(unit);
+      if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
@@ -5612,8 +5564,6 @@ function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): S
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
-  if (longTextRowsDrawn) longTextResults.add(composed);
-  if (measureWeighed) MEASURED.add(composed);
   return composed;
 }
 
