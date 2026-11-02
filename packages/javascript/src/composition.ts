@@ -277,6 +277,13 @@ export interface ComposedItem {
    * that ignores `listColumns` still draws every item; `box` is the whole list's cell.
    */
   listColumns?: ComposedListColumn[];
+  /**
+   * LH-76: this heading draws one part of a "Topic: qualifier" title that would wrap, split at its first colon followed by a
+   * space: the topic as the title (`part` topic, `field` title) and the qualifier below it as a subtitle (`part` qualifier,
+   * `field` subtitle). Both items carry the title's path; `value` is the drawn part, `start` and `end` its UTF-16 range in the
+   * authored title, which the document keeps whole. Absent on every other item.
+   */
+  titleSplit?: { part: 'topic' | 'qualifier'; start: number; end: number };
 }
 /** One column of a list laid out in columns (`ComposedItem.listColumns`). */
 export interface ComposedListColumn {
@@ -2969,8 +2976,59 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     throw new Error('Text placement did not evaluate its bounded floor trial.');
   };
+  // LH-51: the title of a content slide steps down from its role size, in three equal steps to at most a quarter smaller, to
+  // the largest step that sets it on one line: a second title line costs about 60 px of body, and Claude Design's titles are
+  // about 35-43 px at 1280 and do not wrap. Discrete steps keep a deck to at most four title sizes. A title that needs two
+  // lines even at the smallest step wraps at its role size and balances (WI-4), as before. Per slide: a deck-wide size would
+  // need every slide's layout resolved first, which is the caller's work, not composition's.
+  const TITLE_STEPS = [1, 11 / 12, 10 / 12, 9 / 12];
+  const oneLine = (fit: TextFit | RichTextFit, text: string) => !fit.overflow && ('richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length) <= text.split(/\r\n|[\r\n\u2028\u2029]/).length;
+  const fitTitle = (value: unknown, text: string, box: LayoutBox, requested: number, fitPath: string): { fit: TextFit | RichTextFit; single: boolean } => {
+    const whole = fitPlacedText('title', value, text, box, requested, minSize, fitPath);
+    if (oneLine(whole, text)) return { fit: whole, single: true };
+    for (const step of TITLE_STEPS.slice(1)) {
+      const fit = fitPlacedText('title', value, text, box, requested * step, minSize, fitPath);
+      if (oneLine(fit, text)) return { fit, single: true };
+    }
+    return { fit: whole, single: false };
+  };
+  // LH-76: "Topic: qualifier", the first colon followed by a space (a space before it, as in French, stays with the colon).
+  const titleColon = (value: string): { topicEnd: number; start: number } | undefined => {
+    const match = /[ \u00a0\u202f]*:[ \u00a0\u202f]+/.exec(value);
+    if (!match || /[\r\n\u2028\u2029]/.test(value)) return undefined;
+    const start = match.index + match[0].length;
+    return match.index > 0 && value.slice(start).trim() ? { topicEnd: match.index, start } : undefined;
+  };
+  // The heading group (tag, title, subtitle) stacked from `y` at an area's width, half a gap apart. `title`: how a content
+  // slide's title fits ('step', LH-51; 'split', LH-51 and LH-76); covers, sections and stacked records keep the role size.
+  const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split'): ComposedItem[] => {
+    const list: ComposedItem[] = [];
+    let top = y;
+    const boxFor = (field: string) => ({ x, y: top, width: areaWidth, height: Math.max(height * (field === 'title' ? 0.26 : field === 'subtitle' ? 0.12 : 0.045), minSize * 1.22 + 2 * rasterPadding) });
+    const push = (field: string, value: unknown, itemPath: string, box: LayoutBox, text: TextFit | RichTextFit, titleSplit?: ComposedItem['titleSplit']) => {
+      box.height = Math.min(box.height, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0));
+      list.push({ path: itemPath, field, type: 'text', value, payload: { text: value }, box, text, textStyle: styleFor(field, itemPath), composition, alignment: alignmentFor(field), ...(titleSplit ? { titleSplit } : {}) });
+      top += box.height + gap * 0.5;
+    };
+    for (const field of fields) {
+      const value = slide[field], text = annotationText(value), fieldPath = `${path}.${field}`, box = boxFor(field);
+      const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : PROSE_NOMINAL_SIZE) * scale;
+      if (field !== 'title' || !title) { push(field, value, fieldPath, box, fitPlacedText(field, value, text, box, requested, minSize, fieldPath)); continue; }
+      const fitted = fitTitle(value, text, box, requested, fieldPath);
+      // LH-76: a "Topic: qualifier" title that still wraps sets the topic as the title on one line and the qualifier below it at
+      // the subtitle size, when the slide has no subtitle and the topic fits one line. The document is unchanged: both items
+      // carry the title's path and their range of it (`titleSplit`); the PPTX export tags them as the one title.
+      const colon = !fitted.single && title === 'split' && typeof value === 'string' && !annotationText(slide.subtitle) ? titleColon(value) : undefined;
+      const topic = colon ? fitTitle(value.slice(0, colon.topicEnd), value.slice(0, colon.topicEnd), box, requested, fieldPath) : undefined;
+      if (!colon || !topic?.single) { push(field, value, fieldPath, box, fitted.fit); continue; }
+      push('title', value.slice(0, colon.topicEnd), fieldPath, box, topic.fit, { part: 'topic', start: 0, end: colon.topicEnd });
+      const qualifier = value.slice(colon.start), below = boxFor('subtitle');
+      push('subtitle', qualifier, fieldPath, below, fitPlacedText('subtitle', qualifier, qualifier, below, PROSE_NOMINAL_SIZE * scale, minSize, fieldPath), { part: 'qualifier', start: colon.start, end: value.length });
+    }
+    return list;
+  };
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
-  const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
+  const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
@@ -3061,21 +3119,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
   }
   let y = logo ? logo.box.y + logo.box.height + gap : headingTop;
-  const headingItems: ComposedItem[] = [];
-  // A template places its headings in its title (and subtitle) area: composeTemplate below.
-  for (const field of useTemplate ? [] : ["tag", "title", "subtitle"]) {
-    if (!slide[field] || (Array.isArray(slide[field]) && !annotationText(slide[field]))) continue;
-    const requested = (field === "title" ? 54 : field === "tag" ? 16 : PROSE_NOMINAL_SIZE) * scale;
-    const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
-    const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
-    // A TextRun[] heading wraps and fits like rich body text (richTextLayouter); a string keeps the plain fitter.
-    const text = fitPlacedText(field,slide[field],annotationText(slide[field]),box,requested,minSize,`${path}.${field}`);
-    box.height = Math.min(maxHeight, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight,text.placement?.height??0));
-    if(furniture&&box.y+box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:`${path}.${field}`,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
-    const item: ComposedItem = { path: `${path}.${field}`, field, type: "text", value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field,`${path}.${field}`), composition, alignment: alignmentFor(field) };
-    headingItems.push(item);
+  // A template places its headings in its title (and subtitle) area: composeTemplate below. A TextRun[] heading wraps and fits
+  // like rich body text (richTextLayouter); a string keeps the plain fitter. A slide with body content has a content title (LH-51).
+  const headingItems: ComposedItem[] = useTemplate ? [] : headingGroup(["tag", "title", "subtitle"].filter(field => slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field]))),
+    area.left + padding, y, area.right - area.left - padding * 2, hasBodyPayload ? 'split' : undefined);
+  for (const item of headingItems) {
+    if(furniture&&item.box.y+item.box.height>bodyBottom+.01)diagnostics.push({code:'text-overflow',path:item.path,message:'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.'});
     items.push(item);
-    y += box.height + gap * 0.5;
+    y = item.box.y + item.box.height + gap * 0.5;
   }
   if (headingItems.length) {
     if (isCover) {
@@ -3810,21 +3861,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const columnX: number[] = [];
     widths.reduce((x, size) => { columnX.push(x); return x + size + gap; }, 0);
     const spanWidth = (rect: CellRect) => widths.slice(rect.column, rect.column + rect.columnSpan).reduce((a, b) => a + b, 0) + gap * (rect.columnSpan - 1);
+    // LH-51: a content slide's title sits in a title area of auto rows above the body; a cover, a section (a title area in a
+    // sized row, centred) and a stacked record (statement, quote, closing) keep the role size. LH-76 splits a title only into
+    // the title area's own heading group, not into a layout's separate subtitle area.
+    const titleRect = rects.get('title');
+    const titleMode = hasBodyPayload && plan.stack === undefined && titleRect && rowSizes.slice(titleRect.row, titleRect.row + titleRect.rowSpan).every(size => size === 'auto') ? plan.subtitle ? 'step' as const : 'split' as const : undefined;
     // The heading group (tag, title, subtitle stacked as in 0.18), measured at an area's width.
-    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => {
-      const list: ComposedItem[] = [];
-      let top = y;
-      for (const field of fields) {
-        const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : PROSE_NOMINAL_SIZE) * scale;
-        const maxHeight = Math.max(height * (field === 'title' ? 0.26 : field === 'subtitle' ? 0.12 : 0.045), minSize * 1.22 + 2 * rasterPadding);
-        const box = { x, y: top, width: areaWidth, height: maxHeight };
-        const text = fitPlacedText(field, slide[field], annotationText(slide[field]), box, requested, minSize, `${path}.${field}`);
-        box.height = Math.min(maxHeight, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0));
-        list.push({ path: `${path}.${field}`, field, type: 'text', value: slide[field], payload: { text: slide[field] }, box, text, textStyle: styleFor(field, `${path}.${field}`), composition, alignment: alignmentFor(field) });
-        top += box.height + gap * 0.5;
-      }
-      return list;
-    };
+    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined);
     const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - list[0]!.box.y : 0;
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).

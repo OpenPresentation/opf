@@ -981,6 +981,7 @@ function renderTextPayload(item, box, bound, options) {
     fit: item.text,
     textStyle: item.textStyle,
     diagnosticsHandled: Boolean(item.text),
+    ...(item.titleSplit ? { sourceOffset: item.titleSplit.start } : {}),
     options
   });
 }
@@ -2137,6 +2138,8 @@ function renderTextBox(text, box, bound, config) {
   const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
+  // LH-76: one part of a split "Topic: qualifier" title traces its source ranges in the authored title, the value at its path.
+  const sourceOffset = config.sourceOffset ?? 0;
   let cursor = 0;
   const lines = fit.lines.map((line, index) => {
     // Logical alignment (RR-05): a right-to-left line starts at the right edge.
@@ -2152,7 +2155,7 @@ function renderTextBox(text, box, bound, config) {
     let content,family,positioned=false,trimWidth=0,sizeAdjust,shift=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
       const segmentText=line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start),fixed=segment.kind==='tab'||placed;
-      const traced=(start,end)=>config.options.trace?{'data-opf-source-start':start,'data-opf-source-end':end,'data-opf-segment':segment.kind}:{};
+      const traced=(start,end)=>config.options.trace?{'data-opf-source-start':sourceOffset+start,'data-opf-source-end':sourceOffset+end,'data-opf-segment':segment.kind}:{};
       const scripted=segment.kind==='tab'?{content:escapeText(segmentText)}:scriptLine(segmentText,style,bound,type,{rtl,
         placement:placed?{x:origin+segment.x,width:segment.width,fontSize:size}:undefined,fontSize:size,
         trace:config.options.trace?(start,end)=>traced(segment.start+start,segment.start+end):undefined});
@@ -2179,7 +2182,7 @@ function renderTextBox(text, box, bound, config) {
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
     textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
-    ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceLine.start,'data-opf-source-end':sourceLine.end,'data-opf-source-next-start':sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
+    ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),
