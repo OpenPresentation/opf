@@ -47,13 +47,17 @@ test('blocks below the grid read at the size of the parallel columns they contin
   assert.ok(sizes[0] >= 21, String(sizes[0]));
 });
 
-test("a lone primary region keeps its own size over the blocks below it (a statement's message)", () => {
+test("a lone primary region keeps its own size over the other blocks (a statement's message)", () => {
   const blocks = [{ text: long('Civic Arts Commission') }, ...['Measure the result.', 'Gradient backgrounds carry angle and color stops.', 'Support it with evidence.', long('Test with two teams')].map((text) => ({ text }))];
   const result = composeSlide({ title: 'Grant equity review', blocks }, { layout: layouts.statement });
   const message = result.items.find((item) => item.path === 'slides.0.blocks.0.text');
-  const below = result.items.filter((item) => item.field === 'text' && item.path !== 'slides.0.blocks.0.text' && item.path.includes('.blocks.'));
-  assert.ok(below.length > 0);
-  assert.ok(below.every((item) => item.text.fontSize < message.text.fontSize), `${message.text.fontSize} over ${below.map((item) => item.text.fontSize)}`);
+  const others = result.items.filter((item) => item.field === 'text' && item.path !== 'slides.0.blocks.0.text' && item.path.includes('.blocks.'));
+  assert.ok(others.length > 0);
+  // Wave 2: with LH-46 the other blocks join the statement's region as cards under the message (a lead over cards) instead of a row
+  // below the grid. The message keeps the size it has alone and never takes a smaller size from the cards.
+  const alone = composeSlide({ title: 'Grant equity review', blocks: blocks.slice(0, 1) }, { layout: layouts.statement }).items.find((item) => item.path === 'slides.0.blocks.0.text');
+  assert.equal(message.text.fontSize, alone.text.fontSize);
+  assert.ok(others.every((item) => item.text.fontSize <= message.text.fontSize), `${message.text.fontSize} over ${others.map((item) => item.text.fontSize)}`);
 });
 
 test('sibling metrics share their value, label and description sizes', () => {

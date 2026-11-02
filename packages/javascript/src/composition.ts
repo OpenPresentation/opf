@@ -2976,7 +2976,7 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
  *
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
  * then composed as the automatic grid (dynamic composition) with the layout record's design and composition, and that result is
- * kept when its smallest body size is larger and it neither overflows nor splits words more (`recomposed`); otherwise the
+ * kept when its smallest body size is larger (or as large with less overflow) and it neither overflows nor splits words more (`recomposed`); otherwise the
  * layout's result stands. A slide the layout fits above the floor, a cover, a slide with promoted regions or a block pinned to
  * a region (`region`), a layout master and `recompose: false` keep the layout's composition unchanged. Both passes are pure,
  * so the choice is deterministic.
@@ -2994,7 +2994,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
   const after = bodyReadability(automatic, options);
   const scale = Math.min(result.width, result.height) / 720, layoutSize = Math.min(...before.sizes.map(entry => entry.size)), size = Math.min(...after.sizes.map(entry => entry.size));
-  if (!after.sizes.length || size <= layoutSize + FONT_GRID_EPSILON || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
+  // Wave 2 (LH-83 with LH-43): sibling sets share one size, so an automatic grid that fits everything at the floor no longer shows a
+  // larger smallest size than the overfull layout; it is kept too, since it draws what the layout overflows.
+  const larger = size > layoutSize + FONT_GRID_EPSILON, fitsMore = size >= layoutSize - FONT_GRID_EPSILON && after.overflows < before.overflows;
+  if (!after.sizes.length || !(larger || fitsMore) || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
   return { ...automatic, recomposed: { layoutSize: layoutSize / scale, size: size / scale } };
 }
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
@@ -3882,6 +3885,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (node.children && node.synthetic && node.composition?.mode === 'row') {
       const between = node.gap ?? gap, share = Math.max(scale, (cellWidth - between * (node.children.length - 1)) / node.children.length);
       return Math.max(0, ...node.children.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
+    }
+    // LH-58 with LH-47: a synthetic automatic band (groupRoot's majority grid) is measured as the balanced grid it is drawn as, each row
+    // as tall as its tallest block in its cell, not as a stack of its blocks, which asked for every block's height and left the row of
+    // the other blocks under it at its floor.
+    if (node.children && node.synthetic && !node.orient && node.children.length > 1 && (node.composition?.mode ?? 'auto') === 'auto') {
+      const between = node.gap ?? gap, perRow = gridFlowShape(node.children.length, true).perRow;
+      let from = 0;
+      return perRow.reduce((sum, count, row) => {
+        const share = Math.max(scale, (cellWidth - between * (count - 1)) / count), members = node.children!.slice(from, from += count);
+        return sum + (row ? between : 0) + Math.max(0, ...members.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
+      }, 0);
     }
     if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);

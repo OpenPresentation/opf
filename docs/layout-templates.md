@@ -354,7 +354,7 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 
 A layout whose regions leave its content too little room sets that content at the readability floor. When a template's
 composition sets a body role at the floor, `composeSlide` composes the same blocks again as the automatic grid
-([dynamic composition](dynamic-composition.md)) and keeps that result when its smallest body size is larger, it reports no
+([dynamic composition](dynamic-composition.md)) and keeps that result when its smallest body size is larger (or as large and it reports less overflow), it reports no
 more overflow (`text-overflow`, `small-cell`) and no more of its fits break a line inside a word; otherwise the layout's
 result stands. Both compositions are pure, so the choice is deterministic, and both engines read it from core.
 

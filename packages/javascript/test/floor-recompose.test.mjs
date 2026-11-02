@@ -30,7 +30,8 @@ test('the gallery layouts at their sample content: a slide the layout fits above
     recomposed.push(key);
     // Recomposed only from the floor, to a larger smallest size, with no more overflow and every block still drawn.
     assert.ok(result.recomposed.layoutSize <= FLOOR + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
-    assert.ok(result.recomposed.size > result.recomposed.layoutSize, `${key}: the recomposition is larger`);
+    // Larger, or (wave 2, sibling sets share one size) as large with less overflow.
+    assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
     assert.ok(overflows(result) <= overflows(kept), `${key}: no more overflow`);
     assert.deepEqual(blocksDrawn(result), blocksDrawn(kept), `${key}: no block is lost`);
     assert.equal(result.regions, undefined, `${key}: no regions`);
