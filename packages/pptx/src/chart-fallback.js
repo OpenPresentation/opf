@@ -4,7 +4,7 @@
 // show the same chart. Only the nested rings need a rewrite here: PptxGenJS writes the first series of a doughnut alone (it plots one
 // series per pie), so the other rings are added to the generated c:doughnutChart as further c:ser elements, each a copy of the first with
 // its own index, name, workbook column and values. The embedded workbook already holds every series (PptxGenJS writes one column each).
-import {chartDrawPlan, textColorForFill} from '@openpresentation/opf/composition';
+import {chartDrawPlan, markLabelColor} from '@openpresentation/opf/composition';
 
 export {chartDrawPlan};
 
@@ -53,9 +53,10 @@ export function applyDoughnutRings(xml, series) {
 }
 
 /**
- * LH-56: the text colour of a label inside a chartex mark of colour `fill` (hex without #): core's `textColorForFill` from the full text
- * colour `labelColor` (black or white when that colour falls under 4.5:1 on the fill), as the preview draws treemap tiles and funnel bars.
+ * LH-56: the text colour of a label inside a chartex mark of colour `fill` (hex without #): core's `markLabelColor` of the full text colour
+ * `labelColor` and the slide `background` (the text colour at 4.5:1, else the background, else black or white), as the preview draws
+ * treemap tiles and funnel bars. The text and background are role colours, which the finished part writes as theme colours.
  */
-export function insideLabelColor(fill, labelColor) {
-  return String(textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase();
+export function insideLabelColor(fill, labelColor, background) {
+  return String(markLabelColor(`#${fill}`, `#${labelColor}`, background ? `#${background}` : undefined)).replace(/^#/, '').toUpperCase();
 }

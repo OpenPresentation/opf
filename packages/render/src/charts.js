@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, markLabelColor, chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -1497,10 +1497,10 @@ function renderBoxWhiskerChart(c) {
   });
 }
 
-// LH-56: a label inside a mark (a treemap tile, a funnel bar, a map tile) takes core's text colour for that fill: the full text colour
-// when it reaches 4.5:1 on the fill, else black or white (textColorForFill), as the PPTX export writes the same labels.
+// LH-56: a label inside a mark (a treemap tile, a funnel bar, a map tile) takes core's markLabelColor for that fill: the full text colour
+// when it reaches 4.5:1 on the fill, else the slide background, else black or white, as the PPTX export writes the same labels.
 function insideText(c, value, rect, path, fill, align = "center") {
-  const element = c.textElement(value, rect, path, align, textColorForFill(fill, c.labelColor));
+  const element = c.textElement(value, rect, path, align, markLabelColor(fill, c.labelColor, c.bound.design.colors.background));
   if (element) c.children.push(element);
 }
 

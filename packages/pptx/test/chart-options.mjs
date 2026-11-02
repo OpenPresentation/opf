@@ -15,6 +15,9 @@ const decoder = new TextDecoder();
 const data = {columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]]};
 const scatterData = {columns: ['Point', 'Spend', 'Revenue'], rows: [['a', 1, 10], ['b', 2, 14], ['c', 4, 19]]};
 const single = {columns: ['Quarter', 'Revenue'], rows: [['Q1', 10], ['Q2', 20], ['Q3', 15]]};
+// LH-60: a pie or doughnut of several series is drawn as nested rings (test/chart-fallbacks.mjs); these options are checked on one series.
+const pieData = {columns: data.columns.slice(0, 2), rows: data.rows.map(row => row.slice(0, 2))};
+const dataOf = type => type === 'scatter' ? scatterData : type === 'pie' || type === 'doughnut' ? pieData : data;
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: false});
 
 async function exportDeck(chart, options = {}) {
@@ -58,7 +61,7 @@ const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map
 
 // 1. A chart without options writes the same chart parts as before: no axis titles, the default legend, labels hidden.
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
-  const result = await exportDeck({type, data: type === 'scatter' ? scatterData : data});
+  const result = await exportDeck({type, data: dataOf(type)});
   assert.doesNotMatch(result.classic, /<c:title>/, `${type}: no axis title by default`);
   assert.deepEqual([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].map(match => match[1]).filter(value => value === '1'), [], `${type}: no label is shown by default`);
   assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' ? undefined : 'r', `${type}: default legend`);
@@ -94,7 +97,7 @@ for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter
   assert.match(axes[1], /<a:t>Revenue<\/a:t>/);
   assert.deepEqual(scatter.imported.axisTitles, {category: 'Spend', value: 'Revenue'});
   // A type with no axes adapts and says so.
-  const pie = await exportDeck({type: 'pie', data, axisTitles: {category: 'x'}});
+  const pie = await exportDeck({type: 'pie', data: pieData, axisTitles: {category: 'x'}});
   assert.doesNotMatch(pie.classic, /<c:title>/);
   assert.deepEqual(pie.diagnostics.filter(d => d.code === 'chart-option-adapted').map(d => [d.option, d.path]), [['axisTitles.category', 'slides.0.chart.axisTitles.category']]);
 }
@@ -115,10 +118,10 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   const plainOne = await exportDeck({type: 'column', data: single});
   assert.doesNotMatch(plainOne.classic, /<c:legend>/);
   assert.equal(plainOne.imported.legend, undefined);
-  const pieNone = await exportDeck({type: 'pie', data, legend: 'none'});
+  const pieNone = await exportDeck({type: 'pie', data: pieData, legend: 'none'});
   assert.doesNotMatch(pieNone.classic, /<c:legend>/);
   assert.equal(pieNone.imported.legend, 'none', 'a pie legend is the default, so none is recorded');
-  const pieRight = await exportDeck({type: 'pie', data, legend: 'right'});
+  const pieRight = await exportDeck({type: 'pie', data: pieData, legend: 'right'});
   assert.equal(pieRight.imported.legend, undefined);
 }
 
@@ -149,7 +152,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     ['doughnut', {content: ['percent']}, {value: false, category: false, percent: true, position: undefined, separator: ', '}],
   ];
   for (const [type, dataLabels, expected] of cases) {
-    const result = await exportDeck({type, data: type === 'scatter' ? scatterData : data, dataLabels});
+    const result = await exportDeck({type, data: dataOf(type), dataLabels});
     const label = `${type} ${JSON.stringify(dataLabels)}`;
     await assertWellFormed(result.parts, label);
     assertDLblsOrder(result.classic, label);
@@ -171,7 +174,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     assert.deepEqual(back, wanted, `${label}: round trip`);
   }
   // Pie labels hide per point in PptxGenJS output; the options write a visible label for every point.
-  const pie = await exportDeck({type: 'pie', data, dataLabels: {position: 'inside-end', content: ['value']}});
+  const pie = await exportDeck({type: 'pie', data: pieData, dataLabels: {position: 'inside-end', content: ['value']}});
   const points = [...pie.classic.matchAll(/<c:dLbl>([\s\S]*?)<\/c:dLbl>/g)].map(match => match[1]);
   assert.equal(points.length, data.rows.length, 'one c:dLbl per slice');
   assert.ok(points.every(point => /<c:showVal val="1"\/>/.test(point) && /<c:dLblPos val="inEnd"\/>/.test(point)));
@@ -288,7 +291,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     }
   }
   // Pie percent labels: the preview's integer percent is the number PowerPoint's 0% shows.
-  const pie = {type: 'pie', data, dataLabels: {content: ['category', 'percent']}};
+  const pie = {type: 'pie', data: pieData, dataLabels: {content: ['category', 'percent']}};
   const svg = toSvg({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart: pie}]}, 1, {trace: true});
   const previewLabels = textGroups(svg).filter(group => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(group.path)).map(group => group.text);
   const total = data.rows.reduce((sum, row) => sum + row[1], 0);

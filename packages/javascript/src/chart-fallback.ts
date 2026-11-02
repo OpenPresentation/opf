@@ -7,6 +7,7 @@
 // Browser-safe and synchronous. The place names come from the runtime's CLDR region names (Intl.DisplayNames), in English and in the deck
 // language, so a right-to-left or CJK deck's country names count as places too.
 import { chartOptionTarget, type ChartOptionKind } from './chart-options.js';
+import { colorContrast, textColorForFill } from './color.js';
 import type { DataCellValue, DataDiagnostic, ResolvedChartData } from './chart-data.js';
 
 /** Why a chart is drawn as another construct (or with its data regrouped). */
@@ -51,22 +52,37 @@ const AREAS = ['001', '002', '005', '009', '011', '013', '014', '015', '017', '0
 /** A label folded for comparison: trimmed, lower case, without diacritics, one kind of apostrophe and single spaces. */
 const fold = (label: string): string => label.normalize('NFKD').replace(/\p{M}+/gu, '').replace(/[’ʼ`]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
 
+/**
+ * The languages whose region names always count, besides the deck language: a deck that declares no language (or another one) may still
+ * name its places in its own script (日本, ألمانيا, Deutschland).
+ */
+const PLACE_LOCALES = ['en', 'es', 'fr', 'de', 'pt', 'it', 'nl', 'pl', 'tr', 'ru', 'uk', 'ar', 'he', 'fa', 'hi', 'zh', 'ja', 'ko', 'vi', 'th', 'id'];
+
+/** The folded region and area names of one locale (none when the runtime has no Intl.DisplayNames or does not know the locale). */
+function regionNames(locale: string, codes: ReadonlySet<string>): string[] {
+  let display: Intl.DisplayNames;
+  try { display = new Intl.DisplayNames([locale], { type: 'region', fallback: 'none' }); } catch { return []; }
+  const names: string[] = [];
+  for (const code of [...codes, ...AREAS]) {
+    try { const name = display.of(code); if (name) names.push(fold(name)); } catch { /* an area this runtime does not name */ }
+  }
+  return names;
+}
+
 const placeNames = new Map<string, ReadonlySet<string>>();
-/** The region and area names of `language` (and English), folded, plus the subdivisions and aliases; cached per language. */
+/** The region and area names of {@link PLACE_LOCALES} and `language`, folded, plus the subdivisions and aliases; cached per language. */
 function placesFor(language: string | undefined): { names: ReadonlySet<string>; codes: ReadonlySet<string> } {
-  const key = language ?? '';
   const codes = regionCodes();
-  let names = placeNames.get(key);
+  let base = placeNames.get('');
+  if (!base) {
+    base = new Set([...SUBDIVISIONS.split('|'), ...PLACE_LOCALES.flatMap(locale => regionNames(locale, codes))]);
+    placeNames.set('', base);
+  }
+  if (!language || PLACE_LOCALES.includes(language)) return { names: base, codes };
+  let names = placeNames.get(language);
   if (!names) {
-    const set = new Set<string>(SUBDIVISIONS.split('|'));
-    for (const locale of new Set(['en', ...(language ? [language] : [])])) {
-      let display: Intl.DisplayNames | undefined;
-      try { display = new Intl.DisplayNames([locale], { type: 'region', fallback: 'none' }); } catch { continue; }
-      for (const code of [...codes, ...AREAS]) {
-        try { const name = display.of(code); if (name) set.add(fold(name)); } catch { /* an area this runtime does not name */ }
-      }
-    }
-    placeNames.set(key, names = set);
+    names = new Set([...base, ...regionNames(language, codes)]);
+    placeNames.set(language, names);
   }
   return { names, codes };
 }
@@ -83,7 +99,8 @@ function regionCodes(): ReadonlySet<string> {
       try { if (display.of(code)) set.add(code); } catch { /* not a region subtag */ }
     }
   } catch { /* no Intl.DisplayNames: only the listed names count as places */ }
-  return assignedCodes = set;
+  assignedCodes = set;
+  return set;
 }
 
 /**
@@ -112,8 +129,8 @@ const label = (cell: unknown): string => cell === null || cell === undefined ? '
  *   ({@link isPlaceLabel}) is drawn as clustered columns, every series kept. A map needs places to plot; Q1 to Q4 would be empty tiles.
  * - **One value per box-and-whisker category** (`box-per-series`): when no category label repeats (two rows or more), each box would be a
  *   single value. The rows are one group named after the category column, so each series is one box of its values across the categories.
- * - **Several series on a pie or doughnut** (`nested-rings`): drawn as a doughnut of one ring per series, the first series innermost (as
- *   PowerPoint orders the rings of a doughnut), every ring coloured by category.
+ * - **Several series on a pie or doughnut** (`nested-rings`): two or more series that hold numbers are drawn as a doughnut of one ring per
+ *   series, the first series innermost (as PowerPoint orders the rings of a doughnut), every ring coloured by category.
  * - **Scatter whose X column holds no number** (`scatter-by-position`): the text column cannot be an X axis, so it is left out and every
  *   series is plotted against the category position (1, 2, 3, ...), like a scatter of one value column.
  *
@@ -129,7 +146,9 @@ export function chartDrawPlan(chart: unknown, resolved: Extract<ResolvedChartDat
   let fallback: ChartFallback | undefined;
   const dropped: string[] = [];
   const categorized = columns.length > 1;
-  const seriesCount = categorized ? columns.length - (hasX ? 2 : 1) : 0;
+  // The series that hold a number: a column of notes or labels beside a pie's values is not a ring.
+  const first = hasX ? 2 : 1;
+  const seriesCount = categorized ? columns.slice(first).filter((_, offset) => rows.some(row => typeof row[first + offset] === 'number')).length : 0;
   if (kind === 'map' && categorized) {
     const labels = rows.map(row => label(row[0]).trim()).filter(Boolean);
     const places = labels.filter(entry => isPlaceLabel(entry, options.language)).length;
@@ -168,4 +187,15 @@ export function chartDrawDiagnostics(chart: unknown, resolved: ResolvedChartData
     ? `the X column ${quoted(plan.dropped)} of this scatter chart holds no numbers, so its series are plotted against the category position (1, 2, 3, ...) and that column is not drawn; give the X column numbers, or use a line or column chart`
     : `a '${type}' chart plots one series, so ${quoted(plan.dropped)} ${plan.dropped.length === 1 ? 'is' : 'are'} not drawn; use a chart type that plots several series (column, bar, line) or one chart per series`;
   return [{ code: 'chart-series-dropped', severity: 'warning', path: `${path}/type`, message }];
+}
+
+/**
+ * LH-56: the colour of a label drawn inside a mark (a treemap tile, a funnel bar, a map tile) of colour `fill`: the deck's full text colour
+ * `text` when it reaches 4.5:1 on the fill, else the slide background `background` (the other role colour, so the PPTX export still writes a
+ * theme colour) when that does, else black or white ({@link textColorForFill}). The preview and the PPTX export both call it.
+ */
+export function markLabelColor(fill: string, text: string, background?: string): string {
+  if ((colorContrast(text, fill) ?? 0) >= 4.5) return text;
+  if (background !== undefined && (colorContrast(background, fill) ?? 0) >= 4.5) return background;
+  return textColorForFill(fill, text);
 }

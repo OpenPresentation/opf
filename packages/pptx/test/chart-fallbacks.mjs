@@ -11,9 +11,11 @@ const decoder = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false});
 const quarters = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 21, 18], ['Q2', 25, 20], ['Q3', 28, 22], ['Q4', 32, 24]]};
 
-async function exportChart(chart, options = {}) {
+// `slideDesign`: a slide's own design; a slide with its own colour scheme keeps its colours literal (no theme colour rewrite), so the label
+// colours can be read as hex.
+async function exportChart(chart, options = {}, slideDesign) {
   const diagnostics = [];
-  const bytes = await toPptx({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart: {alt: 'A chart', ...chart}}]}, {onDiagnostic: d => diagnostics.push(d), ...options});
+  const bytes = await toPptx({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', ...(slideDesign ? {design: slideDesign} : {}), chart: {alt: 'A chart', ...chart}}]}, {onDiagnostic: d => diagnostics.push(d), ...options});
   const entries = unzipSync(bytes);
   const part = (pattern) => Object.entries(entries).find(([name]) => pattern.test(name))?.[1];
   const classic = part(/^ppt\/charts\/chart\d+\.xml$/);
@@ -78,7 +80,7 @@ for (const type of ['pie', 'doughnut']) {
 // LH-56: treemap tiles carry their own label colour at 4.5:1 (or black or white), a funnel's labels one colour against the series fill.
 {
   const one = {columns: ['Quarter', 'Current'], rows: quarters.rows.map(row => row.slice(0, 2))};
-  const {chartex: treemap} = await exportChart({type: 'treemap', data: one});
+  const {chartex: treemap} = await exportChart({type: 'treemap', data: one}, {}, {colorScheme: 'cool-horizon'});
   const fills = [...treemap.matchAll(/<cx:dataPt idx="(\d+)"><cx:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/g)].map(([, idx, hex]) => [Number(idx), hex]);
   const labels = new Map([...treemap.matchAll(/<cx:dataLabel idx="(\d+)">[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/g)].map(([, idx, hex]) => [Number(idx), hex]));
   // Tiles that keep a theme accent are written as schemeClr (RR-89); the others are checked by their hex fill.
@@ -90,7 +92,7 @@ for (const type of ['pie', 'doughnut']) {
     assert.ok(colorContrast(`#${label}`, `#${fill}`) >= 4.5 || ['000000', 'FFFFFF'].includes(label), `tile ${idx}: ${label} on ${fill}`);
   }
   assert.doesNotThrow(() => parser.parse(treemap));
-  const {chartex: funnel} = await exportChart({type: 'funnel', data: one});
+  const {chartex: funnel} = await exportChart({type: 'funnel', data: one}, {}, {colorScheme: 'cool-horizon'});
   const seriesFill = funnel.match(/<cx:series [^>]*>[\s\S]*?<cx:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
   const labelFill = funnel.match(/<cx:dataLabels [^>]*><cx:numFmt[^>]*\/>?<cx:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)?.[1] ?? funnel.match(/<cx:dataLabels [^>]*>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)[1];
   assert.ok(colorContrast(`#${labelFill}`, `#${seriesFill}`) >= 4.5 || ['000000', 'FFFFFF'].includes(labelFill), `funnel: ${labelFill} on ${seriesFill}`);

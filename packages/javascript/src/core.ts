@@ -175,7 +175,7 @@ export type { DataCell, TabularData, ImportedChartData, ImportedChartType, Impor
 // RR-54: chart and table data: strict numbers, number formats and Excel codes, datasets, series mapping.
 export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, fromExcelNumberFormat, inlineDatasets, inlineTableData, inlineChartData, isDatasetRef, isXYChartType, resolveChartData, resolveTableData, tableCellDisplayValue, datasetDiagnostics, unusedDatasets, suggestChartNumberFix } from './chart-data.js';
 // LH-60: how a chart is drawn when its data does not fit its type (map, box, pie and scatter fallbacks; series a type cannot plot).
-export { chartDrawPlan, chartDrawDiagnostics, isPlaceLabel } from './chart-fallback.js';
+export { chartDrawPlan, chartDrawDiagnostics, isPlaceLabel, markLabelColor } from './chart-fallback.js';
 export type { ChartDrawPlan, ChartFallback } from './chart-fallback.js';
 export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
