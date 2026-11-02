@@ -70,7 +70,6 @@
       "opacity": 0.18
     },
     "titleAlignment": "center",
-    "contentAlignment": "right",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",
@@ -603,7 +602,7 @@
       "colorSchemes": {
         "vibes": {
           "name": "Vibes",
-          "accent1": "#4A1BE4",
+          "accent1": "#5230F2",
           "accent2": "#B8E109",
           "accent3": "#95928C",
           "accent4": "#E48A1B",

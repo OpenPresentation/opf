@@ -62,7 +62,6 @@
     "dimensions": "a4",
     "background": "dark1",
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "none",

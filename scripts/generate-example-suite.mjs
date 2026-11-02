@@ -409,7 +409,7 @@ function designFor(spec, index, catalogs, density) {
       : pick(["widescreen", "16:9", "4:3", "16:10", "letter", "a4"], index),
     background,
     titleAlignment: pick(["left", "center", "right"], index),
-    contentAlignment: pick(["left", "center", "right"], index, 1),
+    // LH-88: no deck-level contentAlignment. A deck value overrides every layout record, so a cycled "center" (a third of the decks) centred list and paragraph bodies (opf/centered-body); unset, the layout records decide: start-aligned bodies, centred cover, section, closing, statement and metrics.
     contentBox: index % 3 === 0,
     contentDirection: pick(["horizontal", "vertical"], index),
     chartPrimary: pick(["none", "left", "right", "top", "bottom"], index),
