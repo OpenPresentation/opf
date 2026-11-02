@@ -122,7 +122,7 @@ const deck = () => ({
 
 // --- removed design keys are refused; image destinations are the background and the watermark ----------------------
 {
-  assert.deepEqual(DESIGN_OPTIONS.find((option) => option.id === "imageFit").values, ["cover", "contain", "stretch"]);
+  assert.deepEqual(DESIGN_OPTIONS.find((option) => option.id === "imageFit").values, ["cover", "contain", "stretch", "auto"]);
   const editor = createEditorSession(deck(), { rejectInvalid: true });
   setDesignOption(editor, "imageFit", "contain", { slideIndex: 0 });
   assert.equal(editor.get("slides.0.design.imageFit"), "contain");
