@@ -302,9 +302,26 @@ Columns share the content width in proportion. Rows are allocated so that no row
 
 Paragraphs and lists of one stacked column that do not fit at their role sizes shrink together to the largest one size that fits, and read at that one size.
 
-Blocks drawn side by side as peers (regions of one role in the same rows, such as the columns of `two-column` or
-`comparison`, and the blocks of one row of a `grid` or `row` flow) share one size per kind: their prose, and their lists,
-are refitted at the smallest size any of them fitted at.
+Sibling blocks share one size per kind (LH-43): the blocks of one region whatever its arrangement (every row of a `grid`,
+a `row`, a stacked column), regions of one role in the same rows (the columns of `two-column` or `comparison`), and blocks
+drawn below the grid with the parallel primary regions they continue (a lone primary region, such as a statement's message,
+keeps its own size). Their prose, and their lists, are refitted at the smallest size any of them fitted at; sibling metrics
+share it role by role (value, unit, label, description, delta, trend). A sibling the shared size would make overflow keeps
+its own fit, so the shared size never takes a block under the readability floor.
+
+Where sibling text and lists span several rows, the rows are sized jointly with the shared size instead of being fixed first:
+at each size of the type scale, from the largest start down, every row asks for its tallest cell's need at that size (a card's
+insets included), and the largest size at which the rows fit is kept. This applies to a region's grid of paragraphs and lists
+(as LH-42 did for a list grid), to a stacked column, to an automatic grid, and to the parallel primary regions with the blocks
+drawn below them (their template rows are allocated at that size). Leftover height goes to the rows in proportion to their
+needs (cards, a grid of paragraphs, an automatic grid) or stays at the region's anchor (lists without cards), so a row of short
+texts is a short row and a row of long ones a tall one. The cells of one row keep its height and columns keep their widths.
+Sets that mix in other blocks (a metric, a picture, a chart) keep their rows and share sizes as above.
+
+A block that shrinks takes a size of the type scale (LH-17): from `minFontSize` up by a ratio of (28/16)^¼, rounded to whole
+reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor. Prose has five sizes from its 28 px start to the
+floor, and a list or lead six from 32 px; a block that fits at its starting size keeps it, on the scale or not. The scale
+depends only on the floor and the canvas, so every slide composes independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
 uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
