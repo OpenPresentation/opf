@@ -1557,6 +1557,11 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
   align?: 'left' | 'center' | 'right';
   /** Unscaled clearance around available vector outlines; defaults to one reference pixel. */
   textRasterPadding?: number;
+  /**
+   * LH-43: starting sizes in canvas pixels by role, used where smaller than the role size, so sibling metrics can share the smallest
+   * sizes any of them fitted at. Each role still fits down from its start to the readability floor.
+   */
+  roleSizes?: Partial<Record<MetricTextRole, number>>;
 }
 
 /**
@@ -1592,7 +1597,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (sourceValue===undefined) continue;
     const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
-    const nominal=(role==='value'?76:role==='description'?20:role==='trend'?18:23)*scale;
+    const nominal=Math.min((role==='value'?76:role==='description'?20:role==='trend'?18:23)*scale,options.roleSizes?.[role]??Infinity);
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:gridFontSize(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
@@ -3183,9 +3188,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
-  // WI-1 (N1): indexes into `items` of blocks drawn side by side as peers (one row of a flow, or regions of one role side
+  // WI-1 (N1), LH-43: indexes into `items` of sibling blocks (the cells of a flow or a region, or regions of one role side
   // by side); after composition the text and lists of each set share the smallest size any of them fitted at.
   const peerSets: number[][] = [];
+  // LH-43, LH-17: what refitting a placed item needs: a metric is laid out again in its own box from given role sizes, and a text
+  // or list refits from a smaller size than the one it started at (its start, by item index).
+  const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes']) => MetricLayout>();
+  const bodyStarts = new Map<number, number>();
   const range = (from: number, to: number) => Array.from({ length: to - from }, (_, index) => from + index);
   const decisions: CompositionDecision[] | undefined = options.explain ? [] : undefined;
   const inheritedSettings = (parent: Composition, own: Composition = {}): Composition => ({
@@ -3221,9 +3230,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
   });
-  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes']) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
-    textRasterPadding:options.textRasterPadding,
+    textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),
     align:alignmentFor('metric'),direction:textDirection,
   });
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
@@ -3494,15 +3503,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const mirrored = (box: LayoutBox): LayoutBox => rtl ? { ...box, x: area.x + area.width - (box.x - area.x) - box.width } : box;
     const boxes = grid.boxes.map(mirrored);
     if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: rtl ? grid.columns.map(track => ({offset: area.width - track.offset - track.size, size: track.size})) : grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
-    const rowItems = new Map<number, number[]>(), stack: number[] = [];
+    // LH-43: the cells of a grid are one set across its rows, as the blocks of a stacked column are.
+    const stack: number[] = [];
     nodes.forEach((node, index) => {
       const box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
       const first = items.length;
       placeNode(node, box, settings);
-      if (!hasRegions && cols > 1 && !node.children) rowItems.set(Math.floor(index / cols), [...rowItems.get(Math.floor(index / cols)) ?? [], ...range(first, items.length)]);
-      else if (!hasRegions && cols === 1 && stacks && !node.children) stack.push(...range(first, items.length));
+      if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
     });
-    for (const set of rowItems.values()) peerSets.push(set);
     if (stack.length > 1) peerSets.push(stack);
   };
   // OPF 0.19: the template region the next items are drawn in (ComposedItem.region), set while a region is composed.
@@ -3593,6 +3601,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}) });
+    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, roleSizes => measureMetric(node, metricBox, settings, false, roleSizes)); }
+    else if (text && !internal && !columns) bodyStarts.set(items.length - 1, prose?.size ?? contentNominalSize(node.field)*scale);
     // A template's auto row, and a block a stacked column gave its whole need, is as tall as its content, so only its width can make the cell too small.
     if (box.width < 100 * scale || (!templateCell && !contentSized.has(node) && box.height < 60 * scale)) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
   };
@@ -4104,7 +4114,6 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
             return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height:cards?rowHeight:height};
           });
         }
-        const rowItems: number[][] = shape.perRow.map(() => []);
         // LH-64, LH-04: the rows of cards of a grid (a lone block's card was planned with its neighbours' regions, `lone`).
         const planned: (CardPlacement | undefined)[] = lone ? [lone] : [];
         if (!lone && cards && !bands && (arrangement === 'grid' || arrangement === 'row')) {
@@ -4122,18 +4131,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); frames = frames.map(frame => frame && mirrored([frame])[0]); }
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
-        const rowOf = (index: number) => { let row = 0; for (let seen = shape.perRow[0] ?? 0; index >= seen; seen += shape.perRow[++row] ?? Infinity); return row; };
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
           placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
-          if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
+          if (!unit.children) { leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
-        // LH-42: the lists of a list grid read at one size, across rows too.
-        if (listGrid) peerSets.push(stack);
-        else if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
-        // WI-4: the paragraphs and lists of one stacked column read at one size (stackedBoxes sizes the stack for it).
-        else if (stacked && stack.length > 1) peerSets.push(stack);
+        // LH-43: the blocks of one kind in a region read at one size whatever their arrangement: across the rows of a grid (LH-42 did
+        // it for a list grid), along a row and down a stacked column (WI-4; stackedBoxes sizes the stack for it). Uneven content no
+        // longer draws a short card at its role size beside a long one at the floor.
+        if (stack.length > 1) peerSets.push(stack);
         return arrangement;
       } finally { regionTag = undefined; templateCell = false; }
     };
@@ -4176,23 +4183,63 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       });
     }
     for (const members of bands.values()) if (members.length > 1) peerSets.push(members.flat());
+    // LH-43: blocks no region took, drawn below the grid, continue the parallel primary regions (columns side by side) and read at
+    // their size. A lone primary region (a statement's message) keeps its own size over them.
+    const parallel = [...bands].flatMap(([band, members]) => band.endsWith(':primary') && members.length > 1 ? members.flat() : []);
+    leafItems = [];
     if (belowUnits.length) placeRegion(belowRegion, belowUnits, physical(logical(rects.get(BELOW)!)));
+    if (leafItems.length && parallel.length) peerSets.push([...parallel, ...leafItems]);
+  };
+  // LH-17: the type scale fitted body text steps down. From the readability floor up by TYPE_SCALE_RATIO, rounded to whole reference
+  // pixels: 16, 18, 21, 24, 28 and 32 px at the default floor, so prose has five sizes from its 28 px start to the floor, and a list or
+  // lead six from 32. A block that shrinks takes the largest size of the scale its fit allows, instead of any size between, so a deck's
+  // fitted body sizes are a few, and siblings of different kinds land on the same ones. A block keeps its starting size when it fits
+  // there, on the scale or not (a raised floor). Per slide and deterministic: the scale depends only on the floor and the canvas.
+  const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
+  const scaleStep = (size: number, floorPx: number): number => {
+    let step = snapFontSizeUp(floorPx * scale);
+    for (let power = 1; ; power++) {
+      const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
+      if (next > size + 1e-9) return step;
+      step = Math.max(step, next);
+    }
   };
   // WI-1 (N1): peers share one fitted size per kind (prose, lists): every member is refitted at the smallest size a member
   // of its kind fitted at, so columns side by side read as one design. A refit that would overflow keeps its own fit.
+  // LH-43: metrics share too, role by role (value, label, description and the rest), each at the smallest size a sibling fitted it.
   const sharePeerSizes = (): void => {
+    for (const [index, start] of bodyStarts) {
+      const item = items[index]!, size = item.text!.fontSize, floorPx = item.composition.minFontSize ?? 16, step = scaleStep(size, floorPx);
+      if (size >= start - 1e-9 || step >= size - 1e-9) continue;
+      const refit = fitContent(item.field, item.value, contentText(item.field, item.value) ?? '', item.box, step, snapFontSizeUp(floorPx * scale), item.path, item.payload.numbering);
+      if (!refit.overflow && Math.abs(refit.fontSize - step) < 1e-9) item.text = refit;
+    }
     const parent = new Map<number, number>();
     const find = (index: number): number => { let root = index; while (parent.has(root) && parent.get(root) !== root) root = parent.get(root)!; parent.set(index, root); return root; };
     for (const set of peerSets) for (const index of set) parent.set(find(index), find(set[0]!));
-    const kindOf = (item: ComposedItem) => !item.text || item.quoteLayout || item.codeLayout || item.metricLayout || item.timelineLayout || item.listColumns ? undefined
+    const kindOf = (item: ComposedItem, index: number) => item.metricLayout ? (metricRefits.has(index) ? 'metric' : undefined)
+      : !item.text || item.quoteLayout || item.codeLayout || item.timelineLayout || item.listColumns ? undefined
       : item.field === 'text' ? 'text' : item.field === 'items' || item.field === 'bullets' ? 'list' : undefined;
     const sets = new Map<string, number[]>();
     for (const index of parent.keys()) {
-      const item = items[index], kind = item && kindOf(item);
+      const item = items[index], kind = item && kindOf(item, index);
       if (kind) sets.set(`${find(index)}:${kind}`, [...sets.get(`${find(index)}:${kind}`) ?? [], index]);
     }
-    for (const members of sets.values()) {
+    for (const [key, members] of sets) {
       if (members.length < 2) continue;
+      if (key.endsWith(':metric')) {
+        const sizes: Partial<Record<MetricTextRole, number>> = {};
+        for (const index of members) for (const part of items[index]!.metricLayout!.parts) if (part.visible && part.fit) sizes[part.role] = Math.min(sizes[part.role] ?? Infinity, part.fit.fontSize);
+        for (const index of members) {
+          const item = items[index]!;
+          if (item.metricLayout!.parts.every(part => !part.visible || !part.fit || part.fit.fontSize <= sizes[part.role]! + 1e-9)) continue;
+          const refit = metricRefits.get(index)!(sizes);
+          if (refit.overflow || refit.parts.some(part => part.visible && (!part.fit || Math.abs(part.fit.fontSize - sizes[part.role]!) > 1e-9))) continue;
+          item.metricLayout = refit;
+          item.text = refit.parts.find(part => part.role === 'value')?.fit;
+        }
+        continue;
+      }
       const size = Math.min(...members.map(index => items[index]!.text!.fontSize));
       for (const index of members) {
         const item = items[index]!;
