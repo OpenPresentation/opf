@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { spawnSpec } from './package-manager.mjs';
 
 export const REPOSITORY = 'https://github.com/OpenPresentation/opf';
 export const PUBLISH_WORKFLOW = '.github/workflows/npm-publish.yml';
@@ -161,10 +162,10 @@ export function publishedRange(range, version) {
 // The registry
 
 export function run(command, args, options = {}) {
-  // npm is npm.cmd on Windows, which only a shell starts; the arguments here are fixed words and checked versions.
-  const shell = process.platform === 'win32' && command === 'npm';
-  const settings = { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, ...options };
-  const result = shell ? spawnSync([command, ...args].join(' '), { ...settings, shell: true }) : spawnSync(command, args, settings);
+  // npm and pnpm are .cmd files on Windows, which node will not start without a shell; spawnSpec runs their JavaScript entrypoint
+  // with this Node instead (pnpm.cmd failed with EINVAL in `release.mjs prepare`).
+  const spec = spawnSpec([command, ...args], { env: options.env ?? process.env });
+  const result = spawnSync(spec.command, spec.args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, ...options, ...spec.options });
   if (result.error) throw result.error;
   return result;
 }

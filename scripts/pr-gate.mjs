@@ -130,13 +130,19 @@ export function latestPerName(checks) {
 }
 
 /**
+ * A required name also covers the legs of a matrix job of that name: `verify` is `verify` or `verify (ubuntu-latest)` (the site
+ * repositories' `verify` is a one-leg matrix). Every leg that reports counts, so one red leg is red.
+ */
+export const isRequiredCheck = (checkName, name) => checkName === name || (checkName.startsWith(`${name} (`) && checkName.endsWith(')'));
+
+/**
  * { state: 'green' | 'red' | 'pending', failing, pending, missing } for the reported `checks`. `required` is 'all' or a list of
  * check names. A required check that has not registered (or a skipped one) is pending / not green, never green.
  */
 export function evaluateChecks({ checks, required }) {
   const latest = latestPerName(checks);
-  const considered = required === 'all' ? latest.filter((check) => !NEUTRAL_BOTS.has(check.name)) : latest.filter((check) => required.includes(check.name));
-  const missing = required === 'all' ? (latest.length ? [] : ['(no checks yet)']) : required.filter((name) => !latest.some((check) => check.name === name));
+  const considered = required === 'all' ? latest.filter((check) => !NEUTRAL_BOTS.has(check.name)) : latest.filter((check) => required.some((name) => isRequiredCheck(check.name, name)));
+  const missing = required === 'all' ? (latest.length ? [] : ['(no checks yet)']) : required.filter((name) => !latest.some((check) => isRequiredCheck(check.name, name)));
   const failing = considered.filter((check) => RED_CONCLUSIONS.has(check.state));
   const pending = considered.filter((check) => check.state === 'PENDING');
   const notGreen = required === 'all' ? [] : considered.filter((check) => !['SUCCESS', 'PENDING', ...RED_CONCLUSIONS].includes(check.state));
