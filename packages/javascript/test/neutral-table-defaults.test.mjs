@@ -15,7 +15,9 @@ test('typed numeric alignment survives formatting, headers, explicit controls an
  assert.deepEqual(rows.map(r=>r.cells.map(c=>c.alignment)),[['left','right'],['left','right'],['left','center']]);
  assert.equal(rows[1].cells[1].value,'5.80');assert.deepEqual(table,before);
  assert.deepEqual(layoutTable(table,box,{alignment:'left'}).rows.map(r=>r.cells.map(c=>c.alignment)),[['left','left'],['left','left'],['left','center']]);
- assert.equal(layoutTable({rows:[['52',52]]},box).rows[0].cells[0].alignment,'left','numeric-looking strings are text');
+ // LH-117: a column aligns by how its cells read, so a number written as a string aligns as a number.
+ assert.equal(layoutTable({rows:[['52',52]]},box).rows[0].cells[0].alignment,'right','a number written as text reads as a number');
  assert.equal(layoutTable({rows:[['52',52]]},box,{direction:'rtl'}).rows[0].cells[1].alignment,'left','logical left becomes physical right in RTL');
- const mixed=layoutTable({columns:['Mixed'],rows:[[1],['note']]},box);assert.equal(mixed.rows[0].cells[0].alignment,'left');assert.equal(mixed.rows[1].cells[0].alignment,'right');
+ // LH-117: one number in two cells is a column of text: the JSON number starts at the start edge too.
+ const mixed=layoutTable({columns:['Mixed'],rows:[[1],['note']]},box);assert.equal(mixed.rows[0].cells[0].alignment,'left');assert.equal(mixed.rows[1].cells[0].alignment,'left');
 });

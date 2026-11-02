@@ -17,7 +17,8 @@ import {fromPptx, toPptx} from '../dist/index.js';
 const deck = (language, extra = {}, text = 'Heading') => ({name: 'Script fonts', ...(language === undefined ? {} : {language}), ...extra, slides: [
   {title: text, subtitle: 'Subtitle', text},
   {title: 'List', items: [text, {text: 'Two', level: 1}], notes: text},
-  {title: 'Table', table: {columns: ['Name', text], rows: [['A', '1']]}},
+  // LH-117: one number in two cells is a column of text, so its alignment mirrors with the deck (a column of numbers stays at the physical right).
+  {title: 'Table', table: {columns: ['Name', text], rows: [['A', '1'], ['B', 'x']]}},
   {title: 'Chart', chart: {type: 'column', data: {columns: ['Label', 'A', 'B'], rows: [['One', 1, 2], ['Two', 3, 4]]}}},
   {id: 'code', layout: 'code', title: 'Code', code: {source: 'const x = 1;', language: 'ts'}},
 ]});

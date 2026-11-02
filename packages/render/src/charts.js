@@ -680,11 +680,14 @@ function drawBottomLabels(c, plan, plot, entries) {
 // A vertical category axis (labels to the left of horizontal bars and funnels).
 // Labels stay on one line inside the gutter, wrap at spaces onto two lines when
 // their rows are tall enough, else are ellipsized; every n-th row is labelled
-// when the rows are shorter than a line of text.
+// when the rows are shorter than a line of text. LH-120: a row is tall enough for
+// two lines when it holds one line and the glyphs of a second (a line plus one
+// text size): the label then reaches into the gap between bars, and only a label
+// whose words do not fit two lines is ellipsized.
 function planRowLabels(c, entries, band, gutter) {
   const labels = labelCandidates(c, entries);
   const n = Math.max(1, Math.ceil(c.textHeight / band - 1e-9));
-  const canWrap = n * band >= 2 * c.textHeight - 0.01;
+  const canWrap = n * band >= c.textHeight + c.fontPx - 0.01;
   const placed = [];
   for (let i = 0; i < labels.length; i += n) {
     const label = labels[i];
@@ -699,12 +702,13 @@ function planRowLabels(c, entries, band, gutter) {
   return { n, labels: placed };
 }
 
-// `rowTop(i)` is the top of category i's row; rows are `band` tall.
+// `rowTop(i)` is the top of category i's row; rows are `band` tall. A two-line label is given its two lines' height around its row's
+// middle, so it is drawn at the chart text size even where it reaches past its row (LH-120).
 function drawRowLabels(c, plan, entries, band, gutter, x, rowTop) {
   const span = plan.n * band;
   for (const label of plan.labels) {
-    const middle = rowTop(label.i) + band / 2;
-    c.text(label.text, { x, y: middle - span / 2, width: gutter, height: span }, entries[label.i].path, "right");
+    const middle = rowTop(label.i) + band / 2, height = Math.max(span, label.text.split(/\n/).length * c.textHeight);
+    c.text(label.text, { x, y: middle - height / 2, width: gutter, height }, entries[label.i].path, "right");
   }
   reportTruncatedLabels(c, plan.labels.filter((label) => label.truncated).map((label) => entries[label.i].path));
 }
@@ -756,7 +760,10 @@ function renderCategoryChart(c, spec) {
   const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
   let plot, scale, valueTickWidth;
   if (horizontal) {
-    const categoryWidth = Math.min(box.width * 0.3, Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
+    // LH-120: the label gutter is at most 30% of the chart, or up to 40% for a word that does not break (a label's longest word fits
+    // before a label is ellipsized; longer labels wrap onto two lines, planRowLabels).
+    const longestWord = Math.max(0, ...categories.flatMap((name) => flatLabel(name).split(BREAKABLE).map((word) => c.width(word)))) + fontPx * 0.5;
+    const categoryWidth = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...categories.map((name) => c.width(flatLabel(name)))) + fontPx * 0.5);
     let x = box.x + pad + categoryWidth + c.pad / 2;
     const bottom = box.y + box.height - pad - (hidden ? 0 : c.lineHeight);
     let width = Math.max(1, right - x - fontPx - labelRoom);

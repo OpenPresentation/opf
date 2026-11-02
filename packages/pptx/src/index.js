@@ -58,7 +58,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricTrendWordShown, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -1108,7 +1108,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily});
+  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -2582,7 +2582,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addCodePayload(slide, payload.code, codeLayout, region, context, path, options);
       break;
     case "metric":
-      addMetricPayload(slide, payload.metric,metricLayout,context,path,options);
+      addMetricPayload(slide, payload.metric,metricLayout,context,path,options,presentation);
       break;
     case "quote":
       await addQuotePayload(slide, presentation, payload.quote, quoteLayout, context, options, path);
@@ -3609,13 +3609,16 @@ function codePanelColor(context) {
   return context.roles.neutrals?.codePanel?.hex ?? '#111827';
 }
 
-function addMetricPayload(slide,value,layout,context,path,options) {
+function addMetricPayload(slide,value,layout,context,path,options,presentation) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
   // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
-  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  // LH-118: the trend word is English; outside an English deck the arrow alone shows the trend, in the word's place, as in the preview.
+  // The word's line is still written, as a hidden shape, so the metric's provenance (and its trend) survives import.
+  const trendWord=metricTrendWordShown(presentation?.language);
+  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {}),...(trendWord ? {} : {word:false})});
   const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
@@ -3635,7 +3638,7 @@ function addMetricPayload(slide,value,layout,context,path,options) {
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         ...nativeFontOptions(part.style),
         color:partColor(part),align:layout.alignment,...(part.fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),fit:'none',wrap:false,lineSpacingMultiple:1,
-        tabStops:tabStops.length?tabStops:undefined,objectName,
+        tabStops:tabStops.length?tabStops:undefined,objectName,...(part.role==='trend'&&!trendWord?{hidden:true}:{}),
       });
     }
   }
