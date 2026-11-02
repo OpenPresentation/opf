@@ -1,11 +1,12 @@
 // RR-78: core's Node defaults register `gallery` of @openpresentation/gallery (core's dependency) when a call names no
-// catalogs, and refuse a gallery that targets another catalog record schema than this core reads.
+// catalogs. MR-62: there is no runtime schema refusal; core and the gallery release in lockstep and `pnpm check:catalog-schema`
+// holds the two CATALOG_SCHEMA constants equal, which the test below also asserts on the built packages.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { CATALOG_SCHEMA as GALLERY_CATALOG_SCHEMA, gallery } from "@openpresentation/gallery";
 import { CATALOG_SCHEMA, validate } from "../dist/index.js";
-import { defaultCatalogs, galleryMismatch } from "../dist/node-engine.js";
+import { defaultCatalogs } from "../dist/node-engine.js";
 
 const galleryManifest = JSON.parse(readFileSync(new URL(import.meta.resolve("@openpresentation/gallery/package.json")), "utf8"));
 
@@ -23,14 +24,8 @@ test("core reads the catalog schema the gallery targets", () => {
   assert.equal(CATALOG_SCHEMA, 4);
   assert.equal(GALLERY_CATALOG_SCHEMA, CATALOG_SCHEMA);
   assert.equal(galleryManifest.opf.catalogSchema, CATALOG_SCHEMA, "published gallery package opf.catalogSchema");
-  assert.equal(galleryMismatch(4), undefined);
 });
 
-test("a gallery of another catalog schema is refused with a clear message", () => {
-  const message = galleryMismatch(1);
-  assert.match(message, /@openpresentation\/gallery targets catalog schema 1, and this @openpresentation\/opf reads catalog schema 4/);
-  assert.match(message, /pass catalogs explicitly/);
-  assert.match(galleryMismatch(2), /targets catalog schema 2, and this @openpresentation\/opf reads catalog schema 4/);
-  assert.match(galleryMismatch(undefined), /targets catalog schema undefined/);
-  assert.equal(galleryMismatch(4, 4), undefined);
+test("the removed gallery-schema-mismatch refusal stays removed", async () => {
+  assert.equal("galleryMismatch" in (await import("../dist/node-engine.js")), false);
 });

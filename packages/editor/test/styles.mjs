@@ -4,7 +4,7 @@ import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSy
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { buildStyles, layerStyles } from "../scripts/build-styles.mjs";
+import { buildStyles, layerStyles, splitUnlayered, UNLAYERED_NOTE, UNLAYERED_SELECTOR } from "../scripts/build-styles.mjs";
 
 // RR-98: dist/styles.css is generated from src/styles/*.css (tokens first, then the other files alphabetically), defines the whole
 // --opf-ui-* contract for light and dark, uses only those tokens, and is exported as `@openpresentation/opf-editor/styles.css`.
@@ -174,10 +174,26 @@ assert.match(declared(paneEditor.body, "border-radius") ?? "", /^0\b/, "the pane
 const layeredPath = path.join(root, "dist", "styles.layered.css");
 assert.ok(existsSync(layeredPath), "npm run build writes dist/styles.layered.css");
 const layered = readFileSync(layeredPath, "utf8");
-assert.equal(layered, `@layer opf {\n${css.trimEnd()}\n}\n`, "the layered file is the plain file inside one @layer opf block");
+// CE-30: except the rules for CodeMirror's elements (a `.cm-` class in the selector), which follow the layer unlayered: CodeMirror's own theme is
+// unlayered, so inside the layer they would lose to it (the source pane's code would be cut off on the left).
+const split = splitUnlayered(css);
+assert.equal(layered, `@layer opf {\n${split.layered.trimEnd()}\n}\n\n${UNLAYERED_NOTE}\n${split.unlayered}\n`, "the layered file is the plain file inside one @layer opf block, then its CodeMirror rules");
 assert.equal(layered.split("{").length, layered.split("}").length, "the layered file has balanced braces");
 assert.ok(!/@import\b/.test(layered), "no @import, which may not sit inside a layer");
+const ruleKey = (block) => `${block.selectors.join(",")}{${squash(block.body)}}`;
+const insideLayer = blocks(split.layered);
+const outsideLayer = blocks(split.unlayered);
+assert.deepEqual([...insideLayer, ...outsideLayer].map(ruleKey).sort(), all.map(ruleKey).sort(), "every rule of styles.css is in the layered file once, inside or after the layer");
+assert.deepEqual(insideLayer.filter((block) => block.selectors.some((selector) => UNLAYERED_SELECTOR.test(selector))).map(ruleKey), [], "no rule for a CodeMirror element is inside the layer");
+assert.deepEqual(outsideLayer.filter((block) => !block.selectors.some((selector) => UNLAYERED_SELECTOR.test(selector))).map(ruleKey), [], "only rules for CodeMirror's elements are outside the layer");
+assert.ok(outsideLayer.length > 50 && /:is\(\.opf-ui, \.opf-json, \.opf-code\) \.cm-line\b/.test(split.unlayered) && /\.opf-source-code \.cm-content\b/.test(split.unlayered), "the source pane's and the JSON editor's CodeMirror rules are among them");
 assert.equal(layerStyles('@charset "utf-8";\n.a{color:red}\n'), '@charset "utf-8";\n@layer opf {\n.a{color:red}\n}\n', "an @charset rule stays first, above the layer");
+assert.equal(
+  layerStyles('.a{color:red}\n/* x */\n.b .cm-line{padding:0}\n@media (max-width: 9px) {\n  .c{top:0}\n  .cm-gutters{left:0}\n}\n@media print {\n  .cm-content{margin:0}\n}\n@keyframes k { from { top: 0 } }\n'),
+  '@layer opf {\n.a{color:red}\n/* x */\n\n@media (max-width: 9px) {\n  .c{top:0}\n\n}\n\n@keyframes k { from { top: 0 } }\n}\n\n'
+    + `${UNLAYERED_NOTE}\n.b .cm-line{padding:0}\n@media (max-width: 9px) {\n  .cm-gutters{left:0}\n}\n@media print {\n  .cm-content{margin:0}\n}\n`,
+  "a CodeMirror rule leaves the layer in its order, under a copy of its @media; comments and @keyframes stay",
+);
 
 // 6. The package exports resolve.
 assert.deepEqual(pkg.exports["./styles.css"], { style: "./dist/styles.css", default: "./dist/styles.css" });

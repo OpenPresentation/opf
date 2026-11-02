@@ -119,9 +119,11 @@ This package compatibility generation is separate from the layout schema URI: la
 generation-3 Gallery records because `areas`, `columns`, `rows` and the `regions` map no longer validate; like generation 3
 (nested area arrays) it does not introduce a `/v3` schema URI.
 
-Core reads catalog schema `CATALOG_SCHEMA` (exported from its root). When the installed gallery declares another one,
-core never registers it: the Node defaults throw `OPFApiError` `gallery-schema-mismatch` and the CLI stops with the same
-code, naming both versions. No browser entry of core imports catalog data; `pnpm check:catalog-free` holds that with an
+Core reads catalog schema `CATALOG_SCHEMA` (exported from its root) and the gallery declares the one its records target
+(`CATALOG_SCHEMA`, `opf.catalogSchema`). The seven packages release in lockstep at one version, so there is no runtime
+check (the former `gallery-schema-mismatch` refusal of the Node defaults and the CLI was removed in MR-62, with no alias):
+`pnpm check:catalog-schema` fails the build when the two constants differ. A third-party catalog still declares its own
+generation the same way. No browser entry of core imports catalog data; `pnpm check:catalog-free` holds that with an
 esbuild metafile budget.
 
 OPF 0.19 removed `@openpresentation/opf/catalog` (`defaultCatalog`, `DEFAULT_CATALOG_SOURCE`, `catalogDisplay`,

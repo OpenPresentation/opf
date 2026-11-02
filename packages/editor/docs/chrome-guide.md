@@ -102,6 +102,7 @@ An item may be listed once (a name given twice throws); `spacer` and `|` may rep
 | `help` | The keyboard shortcut sheet. |
 | `more` | The `⋯` menu, shown only while something is in it. |
 | `spacer`, `\|` | The free space; a divider between two visible items. |
+| `{ id, priority }`, a name of your own | An empty slot for your own element, with its own priority. Put the element in `editor.toolbar.slot(id)` and register what it offers in `⋯` with `editor.toolbar.mount(id, { menuItems })`. The playground's Source, Save OPF and Import buttons are items like this. |
 
 `zoom` is the Studio's own and is left out of the workspace's bars. Items and priorities in full: [embedding.md, Toolbar and presets](embedding.md#toolbar-and-presets). `toolbar: false` builds no bar at all, which is the starting point for the next two sections.
 

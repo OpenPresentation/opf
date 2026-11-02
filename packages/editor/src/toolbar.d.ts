@@ -26,11 +26,21 @@ export type ToolbarItemName =
   | "spacer"
   | "|";
 
-/** An item by name, or with its own priority (higher stays visible longer) and whether it may move into the more menu. */
-export type ToolbarItemSpec = ToolbarItemName | { id: ToolbarItemName; priority?: number; collapsible?: boolean };
+/** An item name, or the name of a host's own item. */
+export type ToolbarItemId = ToolbarItemName | (string & {});
+
+/**
+ * An item by name, or with its own priority (higher stays visible longer) and whether it may move into the more menu. A host's own item is
+ * `{ id, priority }` with a name that is not one of the above (lowercase letters, digits and dashes): its slot starts empty, the host fills it
+ * (`slot(id)`) and registers what it offers in the more menu with `mount(id, part)`. A bare unknown name throws, so a misspelt item is caught.
+ */
+export type ToolbarItemSpec =
+  | ToolbarItemName
+  | { id: ToolbarItemName; priority?: number; collapsible?: boolean }
+  | { id: string; priority: number; collapsible?: boolean };
 
 export interface ToolbarItem {
-  id: ToolbarItemName;
+  id: ToolbarItemId;
   priority: number;
   collapsible: boolean;
 }
@@ -38,7 +48,7 @@ export interface ToolbarItem {
 /** The defaults of every item: `more` and `title` stay (the title shrinks instead), `spacer` and `|` are layout. */
 export declare const TOOLBAR_ITEMS: Readonly<Record<ToolbarItemName, Readonly<{ priority: number; collapsible: boolean }>>>;
 
-/** The items with their priorities. Throws on a name that is not an item, and on a named item given twice (`spacer` and `|` may repeat). */
+/** The items with their priorities. Throws on a name that is not an item (or a host item), and on a named item given twice (`spacer` and `|` may repeat). */
 export declare function normalizeToolbarItems(items: readonly ToolbarItemSpec[]): ToolbarItem[];
 
 /** One entry of the more menu. `pressed` makes it a checkbox item (`aria-checked`); a `disabled` item is listed but does not run. */
@@ -65,7 +75,7 @@ export interface ToolbarOptions {
   /** Replace the ⋯ glyph: `more` (`.opf-tb-more-icon`). See `OpfIcon`. */
   icons?: OpfIcons<"more">;
   /** The set of collapsed items changed. */
-  onCollapse?(detail: { collapsed: ToolbarItemName[] }): void;
+  onCollapse?(detail: { collapsed: ToolbarItemId[] }): void;
   /** A part's `menuItems()` or an item's `run()` threw. */
   onError?(error: unknown): void;
 }
@@ -74,20 +84,20 @@ export interface Toolbar {
   /** The row (`.opf-tb`), appended to the container. */
   readonly element: HTMLElement;
   readonly items: ToolbarItem[];
-  /** One element per named item (`data-opf-toolbar-item`), in bar order. Mount a part in it, then `mount(name, part)`. */
-  readonly slots: Partial<Record<ToolbarItemName, HTMLElement>>;
-  slot(name: ToolbarItemName): HTMLElement | undefined;
+  /** One element per named item (`data-opf-toolbar-item`), in bar order, host items included. Mount a part in it, then `mount(name, part)`. */
+  readonly slots: Partial<Record<ToolbarItemId, HTMLElement>>;
+  slot(name: ToolbarItemId): HTMLElement | undefined;
   /** The items in the more menu now, in bar order. */
-  readonly collapsed: ToolbarItemName[];
+  readonly collapsed: ToolbarItemId[];
   readonly menuOpen: boolean;
   /** Change an item's priority or whether it collapses; false for an item that is not in the bar (or `more`, `spacer`, `|`). */
-  setItem(name: ToolbarItemName, change: { priority?: number; collapsible?: boolean }): boolean;
+  setItem(name: ToolbarItemId, change: { priority?: number; collapsible?: boolean }): boolean;
   /** Register the part mounted in a slot, for its menu items. Returns the function that unregisters it. */
-  mount(name: ToolbarItemName, part: ToolbarPart): () => void;
+  mount(name: ToolbarItemId, part: ToolbarPart): () => void;
   /** What the more menu would list now, one group per collapsed part. */
-  menuItems(): { id: ToolbarItemName; items: ToolbarMenuItem[] }[];
+  menuItems(): { id: ToolbarItemId; items: ToolbarMenuItem[] }[];
   /** Fit the row now (it also fits itself on the next frame after a resize). Returns the collapsed items. */
-  update(): ToolbarItemName[];
+  update(): ToolbarItemId[];
   /** Open the more menu and focus its first (or last) item. False when there is nothing to list. */
   openMenu(which?: "first" | "last"): boolean;
   closeMenu(options?: { restoreFocus?: boolean }): void;

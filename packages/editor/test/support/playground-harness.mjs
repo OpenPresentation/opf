@@ -10,6 +10,15 @@ import { chromium } from 'playwright';
 const root = fileURLToPath(new URL('../../artifacts/playground/', import.meta.url));
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.ttf': 'font/ttf' };
 
+// CE-30: press one of the header's actions by name: its button when it shows, else its entry in the header's ⋯ menu (on a desktop width the
+// low-priority actions, such as List numbering and Fill template, sit there).
+export async function pressHeader(page, name) {
+  const button = page.getByRole('button', { name, exact: true });
+  if (await button.isVisible()) return button.click();
+  await page.locator('.header-actions .opf-tb-more-button').click();
+  return page.getByRole('menuitem', { name, exact: true }).click();
+}
+
 export async function startPlayground({ source, contextOptions = { viewport: { width: 1440, height: 1000 } } } = {}) {
   const server = createServer(async (req, res) => {
     try {

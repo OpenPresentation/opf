@@ -302,7 +302,7 @@ const roundTrip = async slide => {
   assert.equal(root.slide.blocks, undefined);
   assert.deepEqual(styled(root.slide.text), runs);
   // The count is the number of native line shapes.
-  const shapes = [...dec.decode(unzipSync(root.bytes)['ppt/slides/slide1.xml']).matchAll(/<p:cNvPr id="\d+" name="Text \d+"/g)];
+  const shapes = [...dec.decode(unzipSync(root.bytes)['ppt/slides/slide1.xml']).matchAll(/<p:cNvPr id="\d+" name="OPF text [^"]* line \d+"/g)];
   assert.equal(shapes.length, root.record.content.lines);
   // A plain string root already returns whole through its tagged lines.
   const plain = await roundTrip({text: long});
@@ -343,7 +343,7 @@ const roundTrip = async slide => {
   assert.deepEqual(styled(hard.slide.text), [{text: 'First paragraph', bold: true}, {text: `\nSecond ${long}`}]);
   // An edited deck: a deleted line changes the slide's shapes, so the stored structure is not applied
   // (and nothing is rejoined from the lines that remain).
-  const lineName = /<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="Text 2"[\s\S]*?<\/p:sp>/;
+  const lineName = /<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="OPF text slides.0.text line 1"[\s\S]*?<\/p:sp>/;
   const deleted = modify(root.bytes, entries => text(entries, 'ppt/slides/slide1.xml', xml => { assert.match(xml, lineName); return xml.replace(lineName, ''); }));
   const edited = await read(deleted);
   assert.deepEqual(edited.provenance.map(issue => [issue.code, issue.path]), [['slide-reference-changed', 'slides.0.content']]);

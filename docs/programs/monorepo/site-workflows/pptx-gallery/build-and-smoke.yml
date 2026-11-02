@@ -1,14 +1,15 @@
 name: Build and smoke
 
-# MR-52 (OpenPresentation/opf, docs/programs/monorepo/README.md, section 6, decision D19). Install as .github/workflows/build-and-smoke.yml in
-# Data-Advantage/pptx-gallery. pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes
-# to main), so the bump pull requests that bump-sites.yml opens get their own check, named `build-and-smoke`, which opf-bump-merge.yml
-# waits for before it merges a patch bump. It runs for bump branches only (bot/opf-v*): the other pull requests are unaffected. Widen
-# the `if` below to run it for every pull request if the owner wants that.
+# MR-52 (OpenPresentation/opf, docs/programs/monorepo/README.md, section 6, decision D19). The check `build-and-smoke` that
+# opf-bump-merge.yml waits for before it merges a patch bump of the OpenPresentation/opf packages ("bump to vX.Y.Z", branch bot/opf-v*,
+# opened by the OPF release bot). It runs for those bump branches only; every other pull request is unaffected (Validate gallery registry
+# still runs for all of them). Widen the `if` below to run it for every pull request if wanted.
 #
-# The steps are the part of validate-gallery-registry.yml that needs no secret and no production URL: the install from the refreshed
-# lockfile, the checks on the package catalog and the vendored editor (a bump whose public/opf-editor bundle was not refreshed for the
-# new versions fails verify:published-editor here and stays open), the unit tests and the production build.
+# The steps are the part of validate-gallery-registry.yml that needs no secret and no production URL, plus the checks of everything a bump
+# regenerates (the package catalog, layout and chart previews, preview fonts, font replacements, the vendored editor bundle: a bump whose
+# generated files were not refreshed for the new versions fails here and stays open), the unit tests, the production build and a smoke of
+# the built site (the editor entry URLs). Keep the workflow name and the job name in step with `workflows:` and REQUIRED_CHECKS of
+# opf-bump-merge.yml.
 on:
   pull_request:
     branches: [main]
@@ -24,6 +25,7 @@ jobs:
   build-and-smoke:
     name: build-and-smoke
     if: ${{ startsWith(github.head_ref, 'bot/opf-v') && github.event.pull_request.head.repo.full_name == github.repository }}
+    # RR-40: a fixed image, as in the other workflows of this repository.
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -46,8 +48,14 @@ jobs:
       - name: Typecheck
         run: pnpm lint
 
-      - name: Package catalog and exact layout preview invariants
-        run: pnpm check:core-catalog && pnpm verify:layout-previews && pnpm test:package-catalog
+      - name: Package catalog, preview and font invariants
+        run: |
+          pnpm check:core-catalog
+          pnpm verify:layout-previews
+          pnpm verify:chart-previews
+          pnpm verify:font-replacements
+          pnpm verify:preview-fonts
+          pnpm test:package-catalog
 
       - name: Vendored editor against the pinned packages
         run: |
@@ -61,3 +69,14 @@ jobs:
 
       - name: Production build
         run: pnpm build
+
+      - name: Built editor entry URLs and assets
+        run: |
+          pnpm start --hostname 127.0.0.1 --port 3135 > /tmp/gallery-editor-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:3135/editor > /dev/null; then break; fi
+            sleep 1
+          done
+          GALLERY_BASE=http://127.0.0.1:3135 pnpm verify:editor-entry

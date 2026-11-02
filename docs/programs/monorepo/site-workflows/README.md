@@ -1,6 +1,6 @@
 # Site-side workflows for the OPF bump pull requests (MR-52, D19)
 
-Drafts, not installed. `bump-sites.yml` in this repository opens a "bump to vX.Y.Z" pull request in each of the three site repositories
+Copies of the files installed in the sites (2026-11-02, by [openpresentation-site#186](https://github.com/Data-Advantage/openpresentation-site/pull/186), [pptx-gallery#166](https://github.com/Data-Advantage/pptx-gallery/pull/166) and [pptx-dev#191](https://github.com/Data-Advantage/pptx-dev/pull/191); a site's own copy is authoritative once merged). `bump-sites.yml` in this repository opens a "bump to vX.Y.Z" pull request in each of the three site repositories
 after a stable release and labels it `auto-merge` (a patch bump) or `needs-review` (a minor or major bump). It never merges one. The sites
 are private repositories in a Free-plan organization, so they have no ruleset, no required check and no auto-merge: **each site's own CI
 merges an `auto-merge` bump after its build and smoke checks passed, with the GitHub App's token** (decision D19). These files are that
@@ -9,7 +9,7 @@ merge, one per site. MR-52 installs them (a pull request per site, no deploy) af
 | Site (repository, default branch) | Files to copy to `.github/workflows/` | Required checks |
 | --- | --- | --- |
 | `Data-Advantage/openpresentation-site` (`main`) | `openpresentation-site/opf-bump-merge.yml` | `site` (the job of `site-ci.yml`) |
-| `Data-Advantage/pptx-gallery` (`main`) | `pptx-gallery/opf-bump-merge.yml` and `pptx-gallery/build-and-smoke.yml` | `build-and-smoke` (new; pptx-gallery has no pull request CI for an arbitrary change) |
+| `Data-Advantage/pptx-gallery` (`main`) | `pptx-gallery/opf-bump-merge.yml` and `pptx-gallery/build-and-smoke.yml` | `build-and-smoke` (new, bump branches only), `verify` (validate-gallery-registry.yml, every pull request) and `worker-build` (cloudflare-worker.yml, the deployed OpenNext build); none is required by GitHub, so the merge waits for all three |
 | `Data-Advantage/pptx-dev` (`master`) | `pptx-dev/opf-bump-merge.yml` | `verify (ubuntu-latest)` (application-ci.yml) and `build` (cloudflare-build.yml) |
 
 ## What `opf-bump-merge.yml` does

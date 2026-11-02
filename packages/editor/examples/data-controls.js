@@ -5,7 +5,7 @@ import {whenFontsReady} from '../src/font-gate.js';
 
 export function installDataControls({editor,getCanvas,getSlideIndex,getSelectedPath,setSlideIndex,status,fonts}) {
  const button=document.createElement('button');button.id='import-data';button.textContent='Import data';button.className='quiet';
- document.querySelector('.header-actions').prepend(button);
+ (document.getElementById('header-tools') ?? document.querySelector('.header-actions')).prepend(button);
  const dialog=document.createElement('dialog');dialog.id='data-dialog';dialog.setAttribute('aria-labelledby','data-title');
  dialog.innerHTML=`<div class="dialog-header"><div><h2 id="data-title">Import data</h2><p>Paste CSV or JSON, or choose a file. Create an editable table or chart.</p></div><button id="data-close" aria-label="Close data import">×</button></div>
  <div class="data-split"><div class="data-inputs">

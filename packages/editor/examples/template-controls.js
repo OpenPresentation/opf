@@ -12,7 +12,7 @@ export function installTemplateControls({ editor, getCanvas, getSlideIndex, getS
   button.textContent = 'Fill template';
   button.className = 'quiet';
   button.title = 'Fill the presentation\'s variables with your own content';
-  document.querySelector('.header-actions').prepend(button);
+  (document.getElementById('header-tools') ?? document.querySelector('.header-actions')).prepend(button);
   const dialog = document.createElement('dialog');
   dialog.id = 'template-dialog';
   dialog.setAttribute('aria-labelledby', 'template-title');

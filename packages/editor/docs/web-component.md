@@ -77,7 +77,7 @@ All are observed. A change after the editor is mounted is applied live where the
 | `density` | `comfortable`, `touch` or `auto` | Control size. Live. |
 | `slide` | whole number from 0 | The slide on show. Live. |
 | `src` | URL of a deck | Fetched **only** when the page sets it. JSON, YAML or Markdown, read with `readDeckFile` (`@openpresentation/opf-editor/read-deck-file`): the file extension decides first, then the `Content-Type`, then the content. A change on a mounted element opens the new deck in the same editor, as one undoable change. A failed request or a file that is not a deck is an [`opf-error`](#errors) with `source: "src"`; nothing throws. |
-| `fonts` | URL of a font root | The self-hosted font folder (the layout of `npx opf-preview-fonts public/opf-fonts`), loaded on demand with the renderer's `loadPreviewFonts`, as `<opf-deck fonts="/opf-fonts">` does. See [Fonts](#fonts). |
+| `fonts` | URL of a font root | The self-hosted font folder (the layout of `npx opf-preview-fonts public/opf-fonts`), loaded on demand with the renderer's `loadPreviewFonts`, as `<opf-deck fonts="/opf-fonts">` does. The `fonts` property, the default of `defineOpfEditorElement` and `options.fonts` win over it. Changing it remounts. See [Fonts](#fonts). |
 
 The attributes are also properties: `el.layout`, `el.toolbar`, `el.theme`, `el.density`, `el.src` (strings), `el.readOnly` (boolean, the `readonly` attribute) and `el.slide` (a number: the editor's current slide once mounted; setting it navigates).
 

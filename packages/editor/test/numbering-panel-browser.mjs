@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { pressHeader } from './support/playground-harness.mjs';
 
 // RR-33 in a real browser, on the built playground (npm run build:playground): the List numbering dialog numbers a list,
 // changes its style, start and suffix, sets them per level, restarts the count at an entry and turns numbering off; every
@@ -76,7 +77,7 @@ try {
   mark('bulleted list before numbering');
 
   // Open the dialog: the slide's list, not numbered yet.
-  await button('List numbering').click();
+  await pressHeader(page, 'List numbering');
   const dialog = page.locator('#numbering-dialog');
   await dialog.waitFor();
   const enabled = dialog.getByLabel('Number this list');
@@ -131,7 +132,7 @@ try {
   // Restart at the selected entry: select an entry, then the dialog offers its own start.
   await dialog.locator('#numbering-close').click();
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.items.3"]').click();
-  await button('List numbering').click();
+  await pressHeader(page, 'List numbering');
   const entry = dialog.getByLabel(/^Entry 4 starts at/);
   await entry.waitFor();
   await entry.fill('9');
@@ -147,7 +148,7 @@ try {
   await dialog.locator('#numbering-close').click();
   await page.locator('#slide-list > *').nth(1).click();
   await settle();
-  await button('List numbering').click();
+  await pressHeader(page, 'List numbering');
   const choices = dialog.getByLabel('List', { exact: true });
   assert.equal(await choices.locator('option').count(), 2);
   await choices.selectOption({ index: 1 });
@@ -161,7 +162,7 @@ try {
   await dialog.locator('#numbering-close').click();
   await page.locator('#slide-list > *').first().click();
   await settle();
-  await button('List numbering').click();
+  await pressHeader(page, 'List numbering');
   await dialog.getByLabel('Number this list').uncheck();
   await waitDoc(current => current.slides[0].numbering === undefined, 'numbering off');
   await settle();
