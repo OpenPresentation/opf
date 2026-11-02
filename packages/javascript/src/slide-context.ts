@@ -105,7 +105,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables));
   const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
   // LH-01: the layout's variant when it decides the background (the slide sets neither a variant nor a background of its own).
-  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout) ? (levels[1]!.variant as ColorVariant) : undefined;
+  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout, deck.design, theme.background) ? (levels[1]!.variant as ColorVariant) : undefined;
   const composeOptions: ComposeSlideOptions = {
     ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
     ...(layout ? { layout } : {}),

@@ -230,13 +230,46 @@ export function layoutColorVariant(layout: unknown, deck: LayoutVariantDeck = { 
   return value;
 }
 
+const isSetBackground = (value: unknown): boolean => value !== undefined && value !== null && value !== false;
+/** The image sources a background string shorthand can be (composition's IMAGE_SOURCE). */
+const IMAGE_SOURCE_SHORTHAND = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
+
+/**
+ * LH-103: whether a background definition is fixed, so a gallery layout's variant never replaces it: a hex color (shorthand or a solid's
+ * color), a solid whose color is a `var:` variable, a gradient, a pattern or a picture (an image source string or `{ type: "image" }`).
+ * Scheme-based, and so open to a layout variant: no background, a theme slot (`"dark1"`, `{ type: "theme" }`) and a solid whose color
+ * is a scheme slot or role name (`accent1`, `primary`, `background`), which follow the scheme as the variant does. A `var:` reference
+ * counts as fixed whatever it holds, because the author named a color of the deck's own rather than a place in the scheme.
+ */
+export function isFixedBackground(definition: unknown): boolean {
+  if (!isSetBackground(definition)) return false;
+  if (typeof definition === 'string') return normalizeHexColor(definition) !== undefined || IMAGE_SOURCE_SHORTHAND.test(definition);
+  if (typeof definition !== 'object') return false;
+  const background = definition as { type?: unknown; color?: unknown };
+  if (background.type === 'solid') return normalizeHexColor(background.color) !== undefined || (typeof background.color === 'string' && background.color.trim().startsWith('var:'));
+  return background.type === 'gradient' || background.type === 'pattern' || background.type === 'image';
+}
+
+/**
+ * LH-103: whether the deck and the theme draw a fixed background ({@link isFixedBackground}), which a layout's variant does not replace:
+ * the slide keeps that background and its text follows that background's tone or luminance, as on a slide with no layout variant. The
+ * drawn background is the deck's own, else the theme's unless a deck variant hides it (as colorChoice does). A deck `variant` beside its
+ * own fixed background only maps the text and the surfaces, so that background still wins over the layout.
+ */
+export function deckBackgroundIsFixed(deckDesign: unknown, themeBackground: unknown): boolean {
+  const deck = deckDesign && typeof deckDesign === 'object' ? (deckDesign as { variant?: unknown; background?: unknown }) : {};
+  if (isSetBackground(deck.background)) return isFixedBackground(deck.background);
+  return !normalizeColorVariant(deck.variant) && isFixedBackground(themeBackground);
+}
+
 /**
  * LH-01: whether a layout's variant decides the slide's background: the layout names one and the slide's own design sets neither a
- * variant nor a background, so the layout hides the deck's and the theme's background (the slide is the variant's bg1).
+ * variant nor a background, so the layout hides a scheme-based background of the deck and the theme (the slide is the variant's bg1).
+ * LH-103: never over a fixed background of the deck or the theme ({@link deckBackgroundIsFixed}), which the slide keeps.
  */
-export function layoutVariantApplies(slideDesign: unknown, layout: unknown): boolean {
+export function layoutVariantApplies(slideDesign: unknown, layout: unknown, deckDesign: unknown = {}, themeBackground: unknown = undefined): boolean {
   const own = slideDesign && typeof slideDesign === 'object' ? (slideDesign as { variant?: unknown; background?: unknown }) : {};
-  return layoutVariantValue(layout) !== undefined && own.variant === undefined && (own.background === undefined || own.background === null || own.background === false);
+  return layoutVariantValue(layout) !== undefined && own.variant === undefined && !isSetBackground(own.background) && !deckBackgroundIsFixed(deckDesign, themeBackground);
 }
 
 /** LH-01: the contrast tx2 needs on an accent background to stay the family's secondary text; under it tx2 maps to tx1's slot. */
