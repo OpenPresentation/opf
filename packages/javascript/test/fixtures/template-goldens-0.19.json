@@ -1062,24 +1062,24 @@
   "region first 57.6,147.5,1164.8,514.9 column 1",
   "region second 652,147.5,570.4,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,624,1143.5,34.2 28px"
+  "item blocks.0.text first 69,386.7,1142,36.6 28px"
  ],
  "two-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region first 57.6,147.5,570.4,514.9 column 1",
   "region second 652,147.5,570.4,514.9 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,624,549.1,34.2 28px",
-  "item blocks.1.text second 662.7,624,549.1,34.2 28px"
+  "item blocks.0.text first 69,386.7,547.6,36.6 28px",
+  "item blocks.1.text second 663.4,386.7,547.6,36.6 28px"
  ],
  "two-column 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region first 57.6,147.5,570.4,448.2 column 1",
   "region second 652,147.5,570.4,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,549.1,34.2 28px",
-  "item blocks.1.text second 662.7,557.3,549.1,34.2 28px",
-  "item blocks.2.text - 65.3,634.8,1149.5,24.6 20px",
+  "item blocks.0.text first 69,353.3,547.6,36.6 28px",
+  "item blocks.1.text second 663.4,353.3,547.6,36.6 28px",
+  "item blocks.2.text - 68.3,624,1143.5,34.2 28px",
   "diagnostic layout-unplaced blocks.2"
  ],
  "two-column 4 short": [
@@ -1087,10 +1087,10 @@
   "region first 57.6,147.5,570.4,448.2 column 1",
   "region second 652,147.5,570.4,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,549.1,34.2 28px",
-  "item blocks.1.text second 662.7,557.3,549.1,34.2 28px",
-  "item blocks.2.text - 65.3,634.8,556.4,24.6 20px",
-  "item blocks.3.text - 658.4,634.8,556.4,24.6 20px",
+  "item blocks.0.text first 69,353.3,547.6,36.6 28px",
+  "item blocks.1.text second 663.4,353.3,547.6,36.6 28px",
+  "item blocks.2.text - 68.3,624,550.4,34.2 28px",
+  "item blocks.3.text - 661.4,624,550.4,34.2 28px",
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3"
  ],
@@ -1099,11 +1099,11 @@
   "region first 57.6,147.5,570.4,448.2 column 1",
   "region second 652,147.5,570.4,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,549.1,34.2 28px",
-  "item blocks.1.text second 662.7,557.3,549.1,34.2 28px",
-  "item blocks.2.text - 65.3,634.8,358.7,24.6 20px",
-  "item blocks.3.text - 460.7,634.8,358.7,24.6 20px",
-  "item blocks.4.text - 856,634.8,358.7,24.6 20px",
+  "item blocks.0.text first 69,353.3,547.6,36.6 28px",
+  "item blocks.1.text second 663.4,353.3,547.6,36.6 28px",
+  "item blocks.2.text - 68.3,624,352.7,34.2 28px",
+  "item blocks.3.text - 463.7,624,352.7,34.2 28px",
+  "item blocks.4.text - 859,624,352.7,34.2 28px",
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4"
@@ -1113,12 +1113,12 @@
   "region first 57.6,147.5,570.4,381.5 column 1",
   "region second 652,147.5,570.4,381.5 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,490.6,549.1,34.2 28px",
-  "item blocks.1.text second 662.7,490.6,549.1,34.2 28px",
-  "item blocks.2.text - 65.3,568.1,555.1,24.6 20px",
-  "item blocks.3.text - 659.7,568.1,555.1,24.6 20px",
-  "item blocks.4.text - 65.3,634.8,555.1,24.6 20px",
-  "item blocks.5.text - 659.7,634.8,555.1,24.6 20px",
+  "item blocks.0.text first 69,320,547.6,36.6 28px",
+  "item blocks.1.text second 663.4,320,547.6,36.6 28px",
+  "item blocks.2.text - 68.3,557.3,549.1,34.2 28px",
+  "item blocks.3.text - 662.7,557.3,549.1,34.2 28px",
+  "item blocks.4.text - 68.3,624,549.1,34.2 28px",
+  "item blocks.5.text - 662.7,624,549.1,34.2 28px",
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4",
@@ -1129,7 +1129,7 @@
   "region first 57.6,213.4,1164.8,449 column 1",
   "region second 652,213.4,570.4,449 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.text first 69.6,546.3,1140.8,104.1 28px"
+  "item blocks.0.text first 69.6,385.1,1140.8,105.5 28px"
  ],
  "two-column 2 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -1146,7 +1146,7 @@
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.text first 73.4,273.2,538.8,221.3 28px",
   "item blocks.1.text second 667.8,273.2,538.8,221.3 28px",
-  "item blocks.2.text - 69.6,557.9,1140.8,92.9 25px",
+  "item blocks.2.text - 69.6,546.3,1140.8,104.1 28px",
   "diagnostic layout-unplaced blocks.2"
  ],
  "two-column 4 long": [
@@ -1156,8 +1156,8 @@
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.text first 70.1,237.9,545.3,175.5 25px",
   "item blocks.1.text second 664.5,237.9,545.3,175.5 25px",
-  "item blocks.2.text - 70.1,474.4,545.3,175.5 25px",
-  "item blocks.3.text - 664.5,474.4,545.3,175.5 25px",
+  "item blocks.2.text - 70.9,463.2,543.8,186 25px",
+  "item blocks.3.text - 665.3,463.2,543.8,186 25px",
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3"
  ],
@@ -1182,10 +1182,10 @@
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.text first 70.1,237.9,545.3,175.5 25px",
   "item blocks.1.text second 664.5,237.9,545.3,175.5 25px",
-  "item blocks.2.text - 69.6,470.1,546.4,65.8 16px",
-  "item blocks.3.text - 664,470.1,546.4,65.8 16px",
-  "item blocks.4.text - 69.6,588.4,546.4,65.8 16px",
-  "item blocks.5.text - 664,588.4,546.4,65.8 16px",
+  "item blocks.2.text - 69.6,459.3,546.4,75.4 16px",
+  "item blocks.3.text - 664,459.3,546.4,75.4 16px",
+  "item blocks.4.text - 69.6,577.6,546.4,75.4 16px",
+  "item blocks.5.text - 664,577.6,546.4,75.4 16px",
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4",
@@ -1201,7 +1201,7 @@
   "region second 453.9,147.5,372.3,514.9 - 0 collapsed",
   "region third 850.1,147.5,372.3,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,624,1143.5,34.2 28px"
+  "item blocks.0.text first 69,386.7,1142,36.6 28px"
  ],
  "three-column 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1209,8 +1209,8 @@
   "region second 453.9,147.5,768.5,514.9 column 1",
   "region third 850.1,147.5,372.3,514.9 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,624,350.9,34.2 28px",
-  "item blocks.1.text second 464.5,624,747.2,34.2 28px"
+  "item blocks.0.text first 69,386.7,349.4,36.6 28px",
+  "item blocks.1.text second 465.3,386.7,745.7,36.6 28px"
  ],
  "three-column 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1218,9 +1218,9 @@
   "region second 453.9,147.5,372.3,514.9 column 1",
   "region third 850.1,147.5,372.3,514.9 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,624,350.9,34.2 28px",
-  "item blocks.1.text second 464.5,624,350.9,34.2 28px",
-  "item blocks.2.text third 860.8,624,350.9,34.2 28px"
+  "item blocks.0.text first 69,386.7,349.4,36.6 28px",
+  "item blocks.1.text second 465.3,386.7,349.4,36.6 28px",
+  "item blocks.2.text third 861.6,386.7,349.4,36.6 28px"
  ],
  "three-column 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1228,10 +1228,10 @@
   "region second 453.9,147.5,372.3,448.2 column 1",
   "region third 850.1,147.5,372.3,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,350.9,34.2 28px",
-  "item blocks.1.text second 464.5,557.3,350.9,34.2 28px",
-  "item blocks.2.text third 860.8,557.3,350.9,34.2 28px",
-  "item blocks.3.text - 65.3,634.8,1149.5,24.6 20px",
+  "item blocks.0.text first 69,353.3,349.4,36.6 28px",
+  "item blocks.1.text second 465.3,353.3,349.4,36.6 28px",
+  "item blocks.2.text third 861.6,353.3,349.4,36.6 28px",
+  "item blocks.3.text - 68.3,624,1143.5,34.2 28px",
   "diagnostic layout-unplaced blocks.3"
  ],
  "three-column 5 short": [
@@ -1240,11 +1240,11 @@
   "region second 453.9,147.5,372.3,448.2 column 1",
   "region third 850.1,147.5,372.3,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,350.9,34.2 28px",
-  "item blocks.1.text second 464.5,557.3,350.9,34.2 28px",
-  "item blocks.2.text third 860.8,557.3,350.9,34.2 28px",
-  "item blocks.3.text - 65.3,634.8,556.4,24.6 20px",
-  "item blocks.4.text - 658.4,634.8,556.4,24.6 20px",
+  "item blocks.0.text first 69,353.3,349.4,36.6 28px",
+  "item blocks.1.text second 465.3,353.3,349.4,36.6 28px",
+  "item blocks.2.text third 861.6,353.3,349.4,36.6 28px",
+  "item blocks.3.text - 68.3,624,550.4,34.2 28px",
+  "item blocks.4.text - 661.4,624,550.4,34.2 28px",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4"
  ],
@@ -1254,12 +1254,12 @@
   "region second 453.9,147.5,372.3,448.2 column 1",
   "region third 850.1,147.5,372.3,448.2 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text first 68.3,557.3,350.9,34.2 28px",
-  "item blocks.1.text second 464.5,557.3,350.9,34.2 28px",
-  "item blocks.2.text third 860.8,557.3,350.9,34.2 28px",
-  "item blocks.3.text - 65.3,634.8,358.7,24.6 20px",
-  "item blocks.4.text - 460.7,634.8,358.7,24.6 20px",
-  "item blocks.5.text - 856,634.8,358.7,24.6 20px",
+  "item blocks.0.text first 69,353.3,349.4,36.6 28px",
+  "item blocks.1.text second 465.3,353.3,349.4,36.6 28px",
+  "item blocks.2.text third 861.6,353.3,349.4,36.6 28px",
+  "item blocks.3.text - 68.3,624,352.7,34.2 28px",
+  "item blocks.4.text - 463.7,624,352.7,34.2 28px",
+  "item blocks.5.text - 859,624,352.7,34.2 28px",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4",
   "diagnostic layout-unplaced blocks.5"
@@ -1270,7 +1270,7 @@
   "region second 453.9,213.4,372.3,449 - 0 collapsed",
   "region third 850.1,213.4,372.3,449 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.text first 69.6,546.3,1140.8,104.1 28px"
+  "item blocks.0.text first 69.6,385.1,1140.8,105.5 28px"
  ],
  "three-column 2 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -1278,8 +1278,8 @@
   "region second 453.9,213.4,768.5,449 column 1",
   "region third 850.1,213.4,372.3,449 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.text first 80.9,296.1,325.7,343.1 28px",
-  "item blocks.1.text second 465.9,503.6,744.5,146.8 28px"
+  "item blocks.0.text first 80.9,248.6,325.7,346.1 28px",
+  "item blocks.1.text second 477.9,249.4,720.5,344.6 28px"
  ],
  "three-column 3 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -1300,7 +1300,7 @@
   "item blocks.0.text first 75.4,243.2,336.6,249.3 24px",
   "item blocks.1.text second 471.7,243.2,336.6,249.3 24px",
   "item blocks.2.text third 867.9,243.2,336.6,249.3 24px",
-  "item blocks.3.text - 69.6,557.9,1140.8,92.9 25px",
+  "item blocks.3.text - 69.6,546.3,1140.8,104.1 28px",
   "diagnostic layout-unplaced blocks.3"
  ],
  "three-column 5 long": [
@@ -1312,8 +1312,8 @@
   "item blocks.0.text first 70.1,237.9,347.2,175.5 20px",
   "item blocks.1.text second 466.4,237.9,347.2,175.5 20px",
   "item blocks.2.text third 862.7,237.9,347.2,175.5 20px",
-  "item blocks.3.text - 70.1,474.4,545.3,175.5 25px",
-  "item blocks.4.text - 664.5,474.4,545.3,175.5 25px",
+  "item blocks.3.text - 70.9,463.2,543.8,186 25px",
+  "item blocks.4.text - 665.3,463.2,543.8,186 25px",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4"
  ],
@@ -1337,22 +1337,22 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region pillars 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text pillars 69,621.3,1142,36.6 28px"
+  "item blocks.0.text pillars 69,386.7,1142,36.6 28px"
  ],
  "pillars 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region pillars 57.6,147.5,1164.8,514.9 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text pillars 69,621.3,547.6,36.6 28px",
-  "item blocks.1.text pillars 663.4,621.3,547.6,36.6 28px"
+  "item blocks.0.text pillars 69,386.7,547.6,36.6 28px",
+  "item blocks.1.text pillars 663.4,386.7,547.6,36.6 28px"
  ],
  "pillars 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region pillars 57.6,147.5,1164.8,514.9 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.text pillars 69,621.3,349.4,36.6 28px",
-  "item blocks.1.text pillars 465.3,621.3,349.4,36.6 28px",
-  "item blocks.2.text pillars 861.6,621.3,349.4,36.6 28px"
+  "item blocks.0.text pillars 69,386.7,349.4,36.6 28px",
+  "item blocks.1.text pillars 465.3,386.7,349.4,36.6 28px",
+  "item blocks.2.text pillars 861.6,386.7,349.4,36.6 28px"
  ],
  "pillars 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1360,8 +1360,8 @@
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item blocks.0.text pillars 69,351.8,547.6,36.6 28px",
   "item blocks.1.text pillars 663.4,351.8,547.6,36.6 28px",
-  "item blocks.2.text pillars 69,621.3,547.6,36.6 28px",
-  "item blocks.3.text pillars 663.4,621.3,547.6,36.6 28px"
+  "item blocks.2.text pillars 69,421.5,547.6,36.6 28px",
+  "item blocks.3.text pillars 663.4,421.5,547.6,36.6 28px"
  ],
  "pillars 5 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1370,8 +1370,8 @@
   "item blocks.0.text pillars 69,351.8,349.4,36.6 28px",
   "item blocks.1.text pillars 465.3,351.8,349.4,36.6 28px",
   "item blocks.2.text pillars 861.6,351.8,349.4,36.6 28px",
-  "item blocks.3.text pillars 267.2,621.3,349.4,36.6 28px",
-  "item blocks.4.text pillars 663.4,621.3,349.4,36.6 28px"
+  "item blocks.3.text pillars 267.2,421.5,349.4,36.6 28px",
+  "item blocks.4.text pillars 663.4,421.5,349.4,36.6 28px"
  ],
  "pillars 6 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -1380,15 +1380,15 @@
   "item blocks.0.text pillars 69,351.8,349.4,36.6 28px",
   "item blocks.1.text pillars 465.3,351.8,349.4,36.6 28px",
   "item blocks.2.text pillars 861.6,351.8,349.4,36.6 28px",
-  "item blocks.3.text pillars 69,621.3,349.4,36.6 28px",
-  "item blocks.4.text pillars 465.3,621.3,349.4,36.6 28px",
-  "item blocks.5.text pillars 861.6,621.3,349.4,36.6 28px"
+  "item blocks.3.text pillars 69,421.5,349.4,36.6 28px",
+  "item blocks.4.text pillars 465.3,421.5,349.4,36.6 28px",
+  "item blocks.5.text pillars 861.6,421.5,349.4,36.6 28px"
  ],
  "pillars 1 long": [
   "area title 57.6,57.6,1164.8,131.8",
   "region pillars 57.6,213.4,1164.8,449 grid 1",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.text pillars 69.6,543.3,1140.8,107.1 28px"
+  "item blocks.0.text pillars 69.6,385.1,1140.8,105.5 28px"
  ],
  "pillars 2 long": [
   "area title 57.6,57.6,1164.8,131.8",

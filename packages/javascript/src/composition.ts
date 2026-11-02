@@ -3579,7 +3579,55 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const slideComposition = record(slide.composition);
     const overridden = ['mode', 'columns', 'weights'].some(key => slideComposition[key] !== undefined) ? plan.regions.find(region => region.role === 'primary' && region.flow !== 'none')?.name : undefined;
     const settings: Composition = { ...composition };
-    const placeRegion = (region: LayoutRegion, units: Pending[], area: LayoutBox): NonNullable<ComposedRegion['arrangement']> => {
+    // LH-64, LH-04: a row of cards (one row of a region's grid, or the lone blocks of card regions side by side) and how its cards
+    // stand in their cells; undefined keeps the region's rule (LH-22: filled cards, the payload at the anchor).
+    //  - LH-04, top anchor: cards of measured blocks hug the tallest one, so a short row leaves no empty card below its text.
+    //  - LH-64, middle or bottom anchor, every card body text only (a paragraph, or a list without labelled items; a picture, a
+    //    metric or a heading line keeps the anchor): when the tallest text fills under 45% of a filled card, the cards hug it and
+    //    the row centres, since text set at the foot of a tall card reads as an empty card; otherwise, when the payloads are more
+    //    than 1.5x apart, they start at the card's top, so a short text does not sit alone at the foot beside long ones.
+    // A hugging card is as tall as the tallest payload of its row, insets included, so the cards keep one height. naturalHeight
+    // estimates the insets of a tall card (up to CARD_INSET); the height is refined once with the insets payloadBox gives a card
+    // that tall (a sixteenth of its shorter side), which are no larger, so every payload still fits and the margin under the
+    // text matches the one above it.
+    const HUG_FILL = .45, UNEQUAL_PAYLOADS = 1.5, fillSpace = requestedTemplateGap * CARD_FILL_SPACE;
+    const hugHeight = (units: Pending[], cells: LayoutBox[], estimate: number): number => Math.min(estimate, Math.max(...units.map((unit, index) => {
+      const frame = acceptedBox({ ...cells[index]!, height: estimate }), inner = payloadBox(frame, true);
+      return naturalHeight(unit, inner.width, false, undefined, settings) + 2 * rasterPadding + scale + 2 * (inner.y - frame.y);
+    })));
+    const hugsContent = (unit: Pending) => !unit.children && unit.caption === undefined && ['text', 'items', 'bullets', 'quote', 'metric'].includes(unit.field);
+    const bodyOnly = (unit: Pending) => !unit.children && unit.caption === undefined && (unit.field === 'text'
+      || ((unit.field === 'items' || unit.field === 'bullets') && Array.isArray(unit.value) && !(unit.value as ListValue[]).some(entry => !!entry && typeof entry === 'object' && !Array.isArray(entry) && (entry as {description?: unknown}).description !== undefined)));
+    type CardRowRule = {mode: 'hug' | 'top'; height: number};
+    const cardRowRule = (units: Pending[], cells: LayoutBox[], anchor: RegionAnchor, references?: number[]): CardRowRule | undefined => {
+      if (!units.length || !units.every(hugsContent)) return undefined;
+      const cellHeight = Math.min(...cells.map(cell => cell.height));
+      const naturals = units.map((unit, index) => naturalHeight(unit, cells[index]!.width, true, anchor === 'top' ? undefined : references?.[index], settings) + 2 * rasterPadding + scale);
+      const tallest = Math.max(...naturals);
+      if (anchor === 'top') return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
+      if (!units.every(bodyOnly)) return undefined;
+      const card = cellHeight - fillSpace;
+      const text = Math.max(...units.map((unit, index) => naturalHeight(unit, cells[index]!.width - 2 * Math.min(CARD_INSET * scale, cells[index]!.width / 4), false, undefined, settings)));
+      if (text < HUG_FILL * card) return { mode: 'hug', height: hugHeight(units, cells, Math.min(cellHeight, tallest)) };
+      return tallest > UNEQUAL_PAYLOADS * Math.min(...naturals) ? { mode: 'top', height: Math.min(card, tallest) } : undefined;
+    };
+    // The rows of cards of one area, each with its rule: every card's box and its frame (the cell, for a card that fills it), or
+    // undefined for a row that keeps the region's rule. Rows that all hug stack one gap apart, from the top under a top anchor and
+    // centred otherwise; another hugging row sits in its own cell the same way.
+    type CardPlacement = {box: LayoutBox; frame?: LayoutBox};
+    const placeCardRows = (rows: {cells: LayoutBox[]; rule?: CardRowRule}[], area: LayoutBox, anchor: RegionAnchor): (CardPlacement[] | undefined)[] => {
+      const stack = rows.length > 1 && rows.every(row => row.rule?.mode === 'hug');
+      const total = rows.reduce((sum, row) => sum + (row.rule?.height ?? 0), 0) + gap * (rows.length - 1);
+      let y = area.y + (anchor === 'top' ? Math.max(0, Math.min(fillSpace, area.height - total)) : Math.max(0, (area.height - total) / 2));
+      return rows.map(({cells, rule}) => {
+        if (!rule) return undefined;
+        const cell = cells[0]!, height = rule.height;
+        const top = stack ? y : rule.mode === 'top' ? cell.y + fillSpace : cell.y + (anchor === 'top' ? Math.max(0, Math.min(fillSpace, cell.height - height)) : Math.max(0, (cell.height - height) / 2));
+        y += height + gap;
+        return cells.map(entry => ({ box: { x: entry.x, y: top, width: entry.width, height }, ...(rule.mode === 'top' ? { frame: entry } : {}) }));
+      });
+    };
+    const placeRegion = (region: LayoutRegion, units: Pending[], area: LayoutBox, lone?: CardPlacement): NonNullable<ComposedRegion['arrangement']> => {
       regionTag = region.name === BELOW ? undefined : region.name;
       // A region squeezed to nothing (auto rows took the content box) still gets a drawable cell; its content overflows.
       const cell = { ...area, width: Math.max(scale, area.width), height: Math.max(scale, area.height) };
@@ -3615,17 +3663,29 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
             return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height:cards?rowHeight:height};
           });
         }
+        const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
+        // LH-64, LH-04: the rows of cards of a grid (a lone block's card was planned with its neighbours' regions, `lone`).
+        const planned: (CardPlacement | undefined)[] = lone ? [lone] : [];
+        if (!lone && cards && (arrangement === 'grid' || arrangement === 'row')) {
+          const rows = shape.perRow.map((count, row) => range(0, count).map(offset => shape.perRow.slice(0, row).reduce((sum, size) => sum + size, 0) + offset));
+          const placed = placeCardRows(rows.map(indexes => {
+            const cells = indexes.map(index => cellBoxes[index]!);
+            return { cells, rule: cardRowRule(indexes.map(index => units[index]!), cells, region.anchor, indexes.map(index => referenceHeights[index]!)) };
+          }), cell, region.anchor);
+          rows.forEach((indexes, row) => { placed[row]?.forEach((placement, offset) => { planned[indexes[offset]!] = placement; }); });
+        }
+        boxes = boxes.map((box, index) => planned[index]?.box ?? box);
+        let frames = planned.map(placement => placement?.frame);
         // Right to left: the flow inside a region runs from the right (RR-05).
         const mirrored = (list: LayoutBox[]) => list.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
-        if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); }
+        if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); frames = frames.map(frame => frame && mirrored([frame])[0]); }
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
-        const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
         const rowOf = (index: number) => { let row = 0; for (let seen = shape.perRow[0] ?? 0; index >= seen; seen += shape.perRow[++row] ?? Infinity); return row; };
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
@@ -3637,6 +3697,21 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // WI-1 (N1): regions of one role side by side (the same rows of the grid) are peers: their text shares one size.
     const bands = new Map<string, number[][]>();
     let leafItems: number[] = [];
+    // LH-64, LH-04: the lone blocks of card regions in the same rows of the grid, with the same anchor, are one row of cards.
+    const loneCards = new Map<string, CardPlacement>();
+    if (hasCards) {
+      const loneRows = new Map<string, {name: string; unit: Pending; cell: LayoutBox; anchor: RegionAnchor}[]>();
+      for (const region of plan.regions) {
+        const units = unitsOf(region.name), rect = rects.get(region.name);
+        if (units.length !== 1 || !rect || region.bleed || region.name === overridden) continue;
+        const key = `${rect.row}:${rect.rowSpan}:${region.anchor}`, area = physical(logical(rect));
+        loneRows.set(key, [...loneRows.get(key) ?? [], { name: region.name, unit: units[0]!, cell: { ...area, width: Math.max(scale, area.width), height: Math.max(scale, area.height) }, anchor: region.anchor }]);
+      }
+      for (const row of loneRows.values()) {
+        const cells = row.map(entry => entry.cell), anchor = row[0]!.anchor;
+        placeCardRows([{ cells, rule: cardRowRule(row.map(entry => entry.unit), cells, anchor) }], cells[0]!, anchor)[0]?.forEach((placement, index) => { loneCards.set(row[index]!.name, placement); });
+      }
+    }
     for (const region of plan.regions) {
       const units = unitsOf(region.name), bound = binding.regions.find(entry => entry.name === region.name)!;
       const rect = rects.get(region.name);
@@ -3644,7 +3719,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
       if (region.bleed && rect) cell = bleed(cell);
       leafItems = [];
-      const arrangement = units.length && rect ? placeRegion(region, units, cell) : undefined;
+      const arrangement = units.length && rect ? placeRegion(region, units, cell, loneCards.get(region.name)) : undefined;
       if (arrangement && rect) {
         const band = `${rect.row}:${rect.rowSpan}:${region.role}`;
         bands.set(band, [...bands.get(band) ?? [], leafItems]);
