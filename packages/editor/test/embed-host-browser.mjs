@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { startWorkspacePage, deck } from './support/workspace-page.mjs';
 
 // CE-30 in a real browser: what openpresentation.org met adopting the editor. A `present` item in the `toolbar` list of a host that arranges
-// the parts with `slots` brings Present, as `export` brings Export.
+// the parts with `slots` brings Present, as `export` brings Export. `embed`, `viewer` and `canvas` fit their slide in a short box on a phone.
+// `variables: { focusSource }` hands the "press on text without a field of its own" fallback to the host's own code editor.
 const checks = [];
 const mark = (name) => checks.push(name);
 
@@ -96,6 +97,57 @@ const mark = (name) => checks.push(name);
     }, deck());
     assert.deepEqual(stacked, { direction: 'column', below: true, stage: `${Math.round(812 * 0.4 * 100) / 100}px` }, 'the full layout still stacks on a phone');
     mark('the full layout still stacks the source above the slide on a phone');
+    assert.deepEqual(app.errors, []);
+  } finally {
+    await app.close();
+  }
+}
+
+// ---- `variables: { focusSource }`: the host's code editor gets the press on text without a field ------------------------------------------
+{
+  const app = await startWorkspacePage();
+  try {
+    const fixture = deck(2, { variables: { who: { type: 'text', value: 'Ada' } } });
+    fixture.slides[0].title = 'Hello {{who}}';
+    const result = await app.page.evaluate(async (d) => {
+      const host = document.querySelector('#host');
+      const calls = [];
+      const errors = [];
+      const mountWith = async (variables) => {
+        window.ed?.destroy();
+        window.ed = window.opfWs.createOpfEditor(host, { document: d, layout: 'embed', variables, fonts: window.fonts, catalogs: [window.opfWs.gallery], onError: (event) => errors.push(event.message) });
+        await window.ed.ready;
+        await window.ed.whenIdle();
+      };
+      const target = (path) => host.querySelector(`svg [data-opf-path="${path}"][role="button"]`);
+      // A press on a text the document has no field for: the drawing names a path the document does not have (a generated value).
+      const pressGenerated = () => {
+        const text = target('slides.0.text');
+        text.setAttribute('data-opf-path', 'slides.0.generated');
+        const event = new PointerEvent('pointerdown', { bubbles: true, cancelable: true, composed: true, button: 0, pointerType: 'mouse' });
+        text.querySelector('text').dispatchEvent(event);
+        return event.defaultPrevented;
+      };
+      await mountWith({ focusSource: () => calls.push('focus') });
+      const title = target('slides.0.title')?.textContent;
+      const prevented = pressGenerated();
+      const editing = window.ed.canvas.editingPath ?? null;
+      await mountWith({ focusSource: () => { throw new Error('host editor is gone'); } });
+      pressGenerated();
+      await mountWith('resolved');
+      const builtIn = pressGenerated();
+      let badOption;
+      try { window.opfWs.createOpfEditor(document.createElement('div'), { document: d, variables: { focusSource: 'no' } }).destroy(); } catch (error) { badOption = error.message; }
+      return { title, prevented, editing, calls: calls.length, errors, builtIn, badOption };
+    }, fixture);
+    assert.equal(result.title, 'Hello Ada', 'an object `variables` draws the variables resolved');
+    assert.equal(result.prevented, true, 'the press is taken (no inline edit starts)');
+    assert.equal(result.editing, null, 'no properties form opens for it');
+    assert.equal(result.calls, 1, "the host's focusSource is called once");
+    assert.deepEqual(result.errors, ['host editor is gone'], 'a throw in focusSource is an error event');
+    assert.equal(result.builtIn, true, '`"resolved"` in an embed (no source pane) still takes the press, as before');
+    assert.match(result.badOption, /variables\.focusSource must be a function/);
+    mark('`variables: { focusSource }` draws resolved and calls the host for a press on text without a field; a throw is an error event');
     assert.deepEqual(app.errors, []);
   } finally {
     await app.close();

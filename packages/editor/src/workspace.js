@@ -423,7 +423,10 @@ export function createOpfEditor(element, options = {}) {
   }
   let frameSize = { width: 0, height: 0 };
   const draftMemory = createSourceMemory();
-  const variablesMode = options.variables === "resolved" ? "resolved" : "authored";
+  // CE-30: `variables: { focusSource }` is "resolved" with the host's own code editor: a press on text without a field of its own focuses that.
+  const variablesObject = options.variables !== null && typeof options.variables === "object" ? options.variables : undefined;
+  const variablesMode = options.variables === "resolved" || variablesObject ? "resolved" : "authored";
+  if (variablesObject && variablesObject.focusSource !== undefined && typeof variablesObject.focusSource !== "function") throw new TypeError("variables.focusSource must be a function.");
   const fitMode = studioLayout ? false : options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
 
   const say = (message) => {
@@ -945,7 +948,14 @@ export function createOpfEditor(element, options = {}) {
       cleanups.push(
         installCanvasVariableEditing(slots.canvas, ui, canvas, {
           resolved: () => !authoredTemplate,
-          focusSource: () => pane?.editor?.api?.focus?.(),
+          focusSource: () => {
+            if (!variablesObject?.focusSource) return pane?.editor?.api?.focus?.();
+            try {
+              variablesObject.focusSource();
+            } catch (error) {
+              report(error);
+            }
+          },
         }),
       );
     }

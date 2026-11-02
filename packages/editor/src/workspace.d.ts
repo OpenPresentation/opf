@@ -274,6 +274,15 @@ export interface OpfEditorSourceOptions {
   onDownload?(file: SourceFile): void | Promise<void>;
 }
 
+/** CE-30: `variables` as an object: the canvas draws `{{variables}}` resolved, as with `"resolved"`. */
+export interface OpfEditorVariablesOptions {
+  /**
+   * Called when a press on the slide lands on text that has no field of its own (a value the deck generates), in place of focusing the editor's
+   * source pane: focus your own code editor. A throw is reported as an `error` event.
+   */
+  focusSource?(): void;
+}
+
 export interface OpfEditorOptions {
   /** The document to edit: an OPF object, or its JSON text (then the pane keeps its spelling). Creates the session. */
   document?: unknown;
@@ -289,8 +298,12 @@ export interface OpfEditorOptions {
   imageResolver?: ToSvgOptions["imageResolver"];
   /** Stores an uploaded image yourself and returns its reference (see `@openpresentation/opf-editor/assets`). Used by the design controls. */
   onAddAsset?: DesignControlsOptions["onAddAsset"];
-  /** `"authored"` (default): the canvas shows `{{variables}}` as written. `"resolved"`: filled in, except in a template deck; a press on filled-in text opens its properties form. */
-  variables?: "authored" | "resolved";
+  /**
+   * `"authored"` (default): the canvas shows `{{variables}}` as written. `"resolved"`: filled in, except in a template deck; a press on filled-in text
+   * opens its properties form, and a press on text without a field of its own (a generated value) focuses the source pane. CE-30: an object is
+   * `"resolved"` too, and its `focusSource` is called instead of focusing the source pane: for a host with its own code editor beside the slide.
+   */
+  variables?: "authored" | "resolved" | OpfEditorVariablesOptions;
 
   /**
    * `"full"` (default), `"canvas"`, `"embed"` (CE-28) or `"source"`: the editor builds the arrangement (ignored when `slots` names a part; slots for the
