@@ -42,7 +42,7 @@ for (const bound of resolved.slides) {
       assert.equal(marker.weight === undefined ? 400 : +marker.weight, entry.marker.style.fontWeight, `${where}: weight core measured`);
       assert.equal(marker.style === 'italic', !!entry.marker.style.italic, `${where}: slant core measured`);
     } else {
-      assert.equal(marker.text, ['•', '◦', '▪'][entry.level % 3], `${where}: bullet glyph`);
+      assert.equal(marker.text, ['•', '–'][entry.level % 2], `${where}: bullet glyph (LH-85: glyphs every bundled face has)`);
       assert.equal(marker.weight, undefined, `${where}: bullets carry no weight`);
       assert.equal(marker.style, undefined, `${where}: bullets carry no slant`);
     }
@@ -75,6 +75,6 @@ assert.equal(toSvg(deck)[1], toSvg(deck, 2));
 const plain = {design: {fontScheme: 'roboto'}, slides: [{title: 'Plain', items: ['One', {text: 'Two', level: 1}, 'Three']}]};
 const withUndefined = {design: {fontScheme: 'roboto'}, slides: [{title: 'Plain', items: ['One', {text: 'Two', level: 1}, 'Three'], numbering: undefined}]};
 assert.equal(toSvg(plain, 1), toSvg(withUndefined, 1));
-assert.deepEqual(markers(toSvg(plain, 1)).map(marker => marker.text), ['•', '◦', '•']);
+assert.deepEqual(markers(toSvg(plain, 1)).map(marker => marker.text), ['•', '–', '•']);
 
 console.log(`Numbered lists passed: ${numbered} numbers drawn at core's marker geometry (text, position, size, weight, slant), bullets unchanged.`);

@@ -51,5 +51,10 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
 const strict={design:{fontScheme:'roboto'},slides:[{composition:{overflow:'error'},blocks:[{quote:{text:'Keep body',attribution:'Unabridged attribution. '.repeat(1000)}}]}]};
 await assert.rejects(()=>toPptx(strict,{fonts}),{code:'layout-overflow'});
 const tiny={design:{fontScheme:'roboto',dimensions:{widthInches:40/96,heightInches:40/96}},slides:[{composition:{padding:0},quote:{text:'Keep body',attribution:'Keep source'}}]};
+// LH-40: a quote with no usable space exports whole at the readability floor beside its finding; strict composition rejects it.
+const tinyDiagnostics=[],tinyXml=new TextDecoder().decode(unzipSync(await toPptx(tiny,{fonts,onDiagnostic:item=>tinyDiagnostics.push(item)}))['ppt/slides/slide1.xml']);
+assert.ok(tinyDiagnostics.some(item=>item.code==='text-overflow'&&item.reason==='invalid-part-box'));
+for (const word of ['Keep','body','source']) assert.ok(tinyXml.includes(word),`tiny quote exports ${word}`);
+tiny.slides[0].composition.overflow='error';
 await assert.rejects(()=>toPptx(tiny,{fonts}),{code:'layout-overflow'});
 console.log(`Shared quote PPTX: ${cases} wide/portrait decks and ${lines} native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.`);

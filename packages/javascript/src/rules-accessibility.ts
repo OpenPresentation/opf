@@ -1,4 +1,4 @@
-import { chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
+import { chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
@@ -89,7 +89,8 @@ function collectSamples(context: RuleSlide): TextSample[] {
 	const { design, composition } = context;
 	if (!composition) return [];
 	const samples: TextSample[] = [];
-	const surface: BackdropSample = { colors: [design.colors.surface], unknown: false };
+	// LH-54: text in a card (`frameBox`) sits on the card fill, which on a dark slide is the mixed card surface, not the scheme surface.
+	const surface: BackdropSample = { colors: [design.neutrals.card.hex], unknown: false };
 	const scale = Math.min(design.dimensions.width, design.dimensions.height) / 720;
 	for (const item of composition.items) {
 		if (['chart', 'image', 'video', 'code'].includes(item.field) || item.type === 'chart' || item.type === 'image' || item.type === 'video' || item.type === 'code') continue;
@@ -489,7 +490,7 @@ const chartRules: ValidationRule[] = [
 					if (count < 2) continue;
 					const surface = slide.design.colors.surface;
 					const paletteContext = chartColorContext(slide.design);
-					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legibleLead: context.chartPalette === undefined && chartLeadFromScheme(chart.colors, slide.design.colorScheme, paletteContext) });
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined });
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];

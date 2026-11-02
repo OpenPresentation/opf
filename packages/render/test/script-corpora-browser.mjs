@@ -14,6 +14,7 @@ import {chromium} from 'playwright';
 import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora, loadFaces, qualify} from '../scripts/script-corpora.mjs';
+import {titleLines, traced} from './title-lines.mjs';
 
 const corpora = await loadCorpora();
 const {faces, registry} = await loadFaces();
@@ -97,11 +98,15 @@ try {
   // The renderer's own SVG: a slide whose title is fullwidth punctuation carries text-spacing-trim: space-all, so the browser's natural
   // advance of the title equals the accepted (pinned) textLength instead of being up to 10 percent narrower.
   const punctuation = [['ja', 'jpan-punctuation'], ['zh-Hans', 'hans-punctuation'], ['zh-Hant', 'hant-punctuation']].map(([language, id]) => ({language, id, text: corpora.groups.flatMap(group => group.samples).find(sample => sample.id === id).text}));
-  const slides = punctuation.map(({language, text}) => toSvg({$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]}, 1, {fonts: prepared}));
-  const trimmed = await page.evaluate(markup => markup.map(svg => {
+  // The title is found by its source path (test/title-lines.mjs): LH-51 draws a content title that fits one line below 54 px at the stepped size.
+  const slides = punctuation.map(({id, language, text}) => {
+    const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'FF-44', language, design: {fontScheme: language === 'ja' ? 'meiryo' : language === 'zh-Hans' ? 'microsoft-yahei' : 'microsoft-jhenghei'}, slides: [{title: text, text: 'Body'}]};
+    return traced(toSvg(deck, 1, {fonts: prepared, trace: true}), toSvg(deck, 1, {fonts: prepared}), id);
+  });
+  const trimmed = await page.evaluate(([markup, selector]) => markup.map(svg => {
     const host = document.querySelector('main');
     host.innerHTML = svg;
-    const title = [...host.querySelectorAll('text')].find(text => text.getAttribute('font-size') === '54');
+    const title = host.querySelector(selector);
     const style = getComputedStyle(title), family = style.fontFamily.split(',')[0].trim().replace(/^['"]|['"]$/g, '');
     const matchingFace = () => [...document.fonts].find(face => face.family.replace(/^['"]|['"]$/g, '') === family && face.weight === style.fontWeight && face.style === style.fontStyle && face.status === 'loaded');
     const requireFace = () => { const face = matchingFace(); if (!face) throw new Error(`Missing pinned SVG face: ${family} ${style.fontWeight} ${style.fontStyle}`); return face; };
@@ -118,7 +123,7 @@ try {
     // Diagnostics for a failure: the characters whose painted advance is not one em (fullwidth punctuation and ideographs are exactly one em).
     const odd = [...title.textContent].map((character, index) => [character, title.getSubStringLength(index, 1)]).filter(([character, width]) => !/[　-ヿ一-鿿＀-￯…]/.test(character) ? false : Math.abs(width - size) > 0.01);
     return {style: host.querySelector('svg').getAttribute('style'), accepted, natural, size, family: getComputedStyle(title).fontFamily, pinnedFamily: family, pinnedWeight: pinned.weight, pinnedStyle: pinned.style, rejectedMissing, odd};
-  }), slides);
+  }), [slides, titleLines]);
   const observedPunctuation = [];
   for (const [index, value] of trimmed.entries()) {
     assert.equal(value.style, 'text-spacing-trim:space-all', `${punctuation[index].id}: the slide carries text-spacing-trim`);

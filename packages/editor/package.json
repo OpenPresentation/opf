@@ -352,6 +352,7 @@
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
+    "test:title-split-editing-browser": "node test/title-split-editing-browser.mjs",
     "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
     "test:metric-browser": "node test/metric-browser.mjs",
     "test:rich-input-browser": "node test/rich-input-browser.mjs",

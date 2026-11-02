@@ -4,15 +4,16 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartHighlightColors, chartHighlightMarks, chartLeadFromScheme, chartNumber, chartPaletteForFill, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
 // `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
 // two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
-// WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel (an authored `colors[0]` keeps its colour).
+// WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, series 2 a lightness step from series 1 (an authored
+// `colors` entry keeps the 3:1 floor).
 export function chartSeriesPalette(surface, colorScheme, colors, context) {
-  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legibleLead: chartLeadFromScheme(colors, colorScheme, context) });
+  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legible: chartSchemeSeries(colors, colorScheme, context) });
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
@@ -280,9 +281,10 @@ function axisFraction(value, scale, reverse = false) {
   return (reverse ? max - position : position - min) / (max - min);
 }
 
+// LH-59: ticks run from min in steps of step up to max, which a tightened axis (core's niceScale) need not land on.
 function scaleFrom(min, max, step) {
   const ticks = [];
-  const count = Math.round((max - min) / step);
+  const count = Math.floor((max - min) / step + 1e-9);
   for (let index = 0; index <= count; index++) ticks.push(clean(min + index * step));
   return { min, max, step, ticks };
 }
@@ -671,10 +673,10 @@ function renderCategoryChart(c, spec) {
     // RR-54: a formatted value axis keeps its end labels inside the chart.
     if (valueFormat !== undefined && !percent) ({ x, width, scale } = insetForEndLabels(c, x, width, valueFormat, scaleFor));
     plot = { x, y: top, width, height: Math.max(1, bottom - top) };
-    // Office bar charts draw the first category nearest the origin (bottom).
+    // LH-59: the categories read top to bottom in data order (PowerPoint's reversed category axis, which the export writes).
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     const rowBand = plot.height / count;
-    drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, box.x + pad, (i) => plot.y + plot.height - (i + 1) * rowBand);
+    drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, box.x + pad, (i) => plot.y + i * rowBand);
   } else {
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     if (rtl) entries.reverse();
@@ -747,8 +749,8 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
       const path = `${c.path}.data.rows.${i}.${s.column}`;
       let rect;
       if (horizontal) {
-        // Office bar charts draw the first category and first series nearest the origin (bottom).
-        const y = plot.y + plot.height - i * band - geometry.offset - slot - geometry.width;
+        // LH-59: the first category and its first series at the top (PowerPoint's reversed category axis, c:orientation maxMin).
+        const y = plot.y + i * band + geometry.offset + slot;
         rect = { x: Math.min(a, b), y, width: Math.abs(b - a), height: geometry.width };
         c.mark("rect", { ...rect, fill: color }, path);
       } else {
@@ -863,8 +865,9 @@ function renderComboChart(c, spec) {
   const axis = planCategoryAxis(c, entries, (reserve) => {
     const height = Math.max(1, box.y + box.height - pad - reserve - top);
     const intervals = chartIntervalsFor(height, c.lineHeight * 1.2, c.u);
-    const scale = niceScale(primaryMin, primaryMax, intervals);
-    const secondary = secondaryLines.length ? niceScale(secondaryMin, secondaryMax, intervals) : null;
+    // The two axes share the gridlines, so each ends on a tick (LH-59 endOnTick).
+    const scale = niceScale(primaryMin, primaryMax, intervals, { endOnTick: true });
+    const secondary = secondaryLines.length ? niceScale(secondaryMin, secondaryMax, intervals, { endOnTick: true }) : null;
     const primaryWidth = tickWidthOf(scale, primaryFormat), secondaryWidth = secondary ? tickWidthOf(secondary, secondaryFormat) : 0;
     const leftWidth = rtl ? secondaryWidth : primaryWidth, rightWidth = rtl ? primaryWidth : secondaryWidth;
     const x = box.x + pad + (leftWidth || fontPx / 2);
@@ -1060,7 +1063,7 @@ function renderRadarChart(c, spec) {
   const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   const radius = Math.max(1, Math.min(area.width / 2 - labelWidth, area.height / 2 - c.lineHeight - (wraps ? c.textHeight : 0)));
-  const scale = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight));
+  const scale = niceScale(values.length ? Math.min(...values) : 0, values.length ? Math.max(...values) : 1, maxIntervalsFor(radius, c.lineHeight), { endOnTick: true });
   const angle = (i) => -Math.PI / 2 + i / count * Math.PI * 2;
   const rAt = (v) => axisFraction(Math.min(scale.max, Math.max(scale.min, v)), scale) * radius;
   const point = (i, v) => polar(cx, cy, rAt(v), angle(i));
@@ -1280,17 +1283,13 @@ function renderHistogramChart(c, spec) {
 }
 
 // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
+// LH-59: a last value equal to the running sum of the steps before it is a total (core's waterfallSteps): it stands on zero in the third
+// palette colour, as PowerPoint draws the cx:subtotals point the export writes.
+const waterfallColor = (bar, palette) => palette[(bar.total ? 2 : bar.value < 0 ? 1 : 0) % palette.length];
 function renderWaterfallChart(c) {
   const { column, values, categories } = chartexValues(c.rows, c.columns);
   const format = c.formats[column];
-  let running = 0;
-  const bars = values.map((value, i) => {
-    if (value === null) return null;
-    const from = running;
-    running += value;
-    if (!Number.isFinite(running)) throw chartAggregateError(c.path, "running total");
-    return { i, value, from, to: running };
-  }).filter(Boolean);
+  const bars = waterfallSteps(values, c.path).map((step) => ({ ...step, i: step.index }));
   const extents = bars.flatMap((bar) => [bar.from, bar.to]);
   const dataMin = extents.length ? Math.min(0, ...extents) : 0, dataMax = extents.length ? Math.max(0, ...extents) : 1;
   const probe = { ticks: probeTicks(dataMin, dataMax) };
@@ -1301,14 +1300,14 @@ function renderWaterfallChart(c) {
   bars.forEach((bar, k) => {
     const a = at(bar.from), b = at(bar.to);
     const x = plot.x + bar.i * band + offset;
-    c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: c.colors[bar.value < 0 ? 1 : 0] }, `${c.path}.data.rows.${bar.i}.${column}`);
+    c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: waterfallColor(bar, c.colors) }, `${c.path}.data.rows.${bar.i}.${column}`);
     const next = bars[k + 1];
     if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt });
   });
   // RR-35: data labels show each step's value (not the running total) on the floating bars.
   if (c.dataLabels) bars.forEach((bar) => {
     const a = at(bar.from), b = at(bar.to);
-    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value, format }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, c.colors[bar.value < 0 ? 1 : 0]);
+    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value, format }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, waterfallColor(bar, c.colors));
   });
 }
 

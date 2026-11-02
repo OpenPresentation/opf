@@ -112,7 +112,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `flow` | `none`, `grid`, `column`, `auto` | `auto` |
 | `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
-| `listColumns` | `"auto"` (a list that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
+| `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -152,6 +152,18 @@ based on their tallest measured content, so differing description lengths do not
 Content that does not fit retains its allocation and overflow diagnostics. Nested groups, captioned quotes/metrics,
 charts, tables and explicit slide composition overrides keep their existing allocation behavior; an anchor is not
 a promise to measure arbitrary content.
+
+On a slide that draws content cards (`design.contentBox`), a row of cards is one row of a region's grid, or the lone blocks
+of regions side by side (two-column, three-column). The anchor sets how the row stands:
+
+- `middle` or `bottom`: a card fills its cell (starting half a gap down, clear of the heading) and the anchor places its
+  content inside it, while a card carries a picture, a metric or a heading line (a labelled list item). A row of body text
+  only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
+  it with one height and the row centres in the region, since short text at the foot of a tall card reads as an empty card;
+  rows that all hug stack one gap apart. When the texts are longer and their heights more than 1.5x apart, the cards still
+  fill but every text starts at the card's top, so a short text does not sit alone at a foot beside long ones.
+- `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
+  per row (LH-04); a row with a picture, chart, table or group keeps cells the size of the region's share.
 
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
 block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
@@ -218,14 +230,26 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | --- | --- |
 | `none` | One block fills the region. |
 | `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns. Rows and columns swap in a portrait region. A short last row keeps the column width and is centred. |
-| `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, tables, timelines and videos take what the measured blocks (text, lists, quotes, metrics, code) leave. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
+| `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures and videos take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
+
+Several timelines in one region are a stack of horizontal bands whatever the region's `flow` and `contentDirection`: one column, or two when one column does not fit at the readability floor (see [Dynamic composition](dynamic-composition.md#timeline-internals)).
 
 `design.contentDirection` makes every flowing region one row or one column. A slide's own `composition.mode`, `columns` and
 `weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A list in a region
 with `listColumns: "auto"` (the lone list of the design, and, since the RR-81 review, any list of the region that does not
 fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size (a column at
-least a quarter of the slide wide); `columns: 2` or `3` fixes the count.
+least a quarter of the slide wide); `columns: 2` or `3` fixes the count. `auto` never deals a list of 6 or fewer entries
+across columns (LH-42): such a list shrinks in its one column instead.
+
+**Several lists in a region (LH-42).** A region (on a slide without `design.contentDirection`) that
+receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
+lists never read as one table: 2 to 4 lists in that many columns, a multiple of 3 in 3 columns, any other count in 4
+(7 as 4 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
+and a region taller than wide stacks up to 3 lists and takes at most 2 columns. Each row is as tall as its tallest list needs,
+descriptions and nested entries counted, at the largest one size at which every row fits, and the region's lists share that
+size. Cards share the height left over, so they fill the region; lists without cards keep their rows and the region's
+`anchor` places them. No list of the grid is dealt across columns.
 
 ### Tracks
 

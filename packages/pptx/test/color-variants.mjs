@@ -42,8 +42,10 @@ const open = async (document) => {
   assert.equal(override(3).accent1, 'accent1', 'a slide variant without accents uses the default accent order');
   assert.equal(override(5).accent1, 'accent3', 'a slide variant with accents carries its own order');
   assert.equal(override(5).accent3, 'accent1');
-  // The second series keeps the deck's second accent (the first is lightened for the dark panel, which is a literal): the role, through the map.
-  assert.match(text('ppt/charts/chart1.xml'), /<c:ser>[\s\S]*?<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:schemeClr val="accent2"\/>/, 'the second series is the accent2 role');
+  // LH-55: on the dark panel both scheme series are lifted to 4.5:1 and written as literals. An authored role keeps the 3:1 floor, so a chart
+  // that draws its second series in slot accent1 keeps it, written as the role that holds it through the map (accent2) as a schemeClr.
+  const authored = await open(deck({background: 'dark1', accents: ACCENTS}, [{title: 'Chart', chart: {type: 'column', data, colors: ['accent2', 'accent1']}}]));
+  assert.match(authored.text('ppt/charts/chart1.xml'),/<c:ser>[\s\S]*?<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:schemeClr val="accent2"\/>/, 'the second series is the accent2 role');
   assert.ok(theme.accent1 && theme.accent2, 'the theme still holds the accent slots');
 }
 

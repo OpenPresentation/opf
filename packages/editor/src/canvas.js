@@ -275,6 +275,19 @@ export function createCanvasEditor(container, options = {}) {
       .replace(/\s+/g, " ")
       .trim();
   }
+  // LH-76: the other drawn parts of a split "Topic: qualifier" title: the top-level groups with the target's path outside it.
+  function splitParts(target, path) {
+    const svg = preview.querySelector("svg");
+    if (!target || !svg) return [];
+    return [...svg.querySelectorAll(`g[data-opf-path="${path}"]`)].filter((node) => node !== target && !target.contains(node) && !node.contains(target) && !node.parentElement?.closest(`[data-opf-path="${path}"]`));
+  }
+  // The box both parts of a split title cover, or undefined when the path's title is not split.
+  function splitBox(geometry, path) {
+    const parts = geometry.items.filter((item) => item.path === path && item.titleSplit);
+    if (parts.length < 2) return undefined;
+    const x = Math.min(...parts.map((part) => part.box.x)), y = Math.min(...parts.map((part) => part.box.y));
+    return { x, y, width: Math.max(...parts.map((part) => part.box.x + part.box.width)) - x, height: Math.max(...parts.map((part) => part.box.y + part.box.height)) - y };
+  }
   function render(presentation = current()) {
     if (disposed) return;
     requireFonts(presentation);
@@ -301,6 +314,10 @@ export function createCanvasEditor(container, options = {}) {
       const path = node.getAttribute("data-opf-path");
       const item = geometry.items.find((item) => item.path === path);
       const value = getValueAtPath(presentation, path);
+      // LH-76: the qualifier of a split "Topic: qualifier" title is drawn as a second group with the title's path. It is not a
+      // target of its own: presses fall through to the title target's selection box, which covers both parts (splitBox).
+      if (seen.has(path) && item?.titleSplit && node.matches("g") && !node.parentElement?.closest(`[data-opf-path="${path}"]`))
+        node.setAttribute("pointer-events", "none");
       if (
         seen.has(path) ||
         node.getAttribute('data-opf-generated') === 'true' ||
@@ -332,13 +349,13 @@ export function createCanvasEditor(container, options = {}) {
       node.setAttribute("tabindex", "0");
       // WCAG 2.5.3 (label in name): the name carries every word the target draws, in drawing order, after "Edit <field>:", so the visible
       // text is always part of the name. Content with no drawn text (a picture) falls back to the source text or "content properties".
-      const drawn = targetText(node);
+      const drawn = [node, ...splitParts(node, path)].map(targetText).filter(Boolean).join(" ");
       node.setAttribute(
         "aria-label",
         `Edit ${path.split(".").at(-1)}: ${drawn || (["string", "number"].includes(typeof value) ? String(value) : "content properties")}`,
       );
       if (node.matches("g")) {
-        const bounds = allocatedSelectionBox(node, item);
+        const bounds = splitBox(geometry, path) ?? allocatedSelectionBox(node, item);
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
         // RR-25: on a touch screen a text block of a few slide units is a few pixels tall, so the target grows (up to 24 slide units
         // each way) until it is about 44 CSS pixels in each direction.
@@ -508,6 +525,8 @@ export function createCanvasEditor(container, options = {}) {
         { slides: [slideIndex] },
       ).slides[slideIndex].geometry;
     const item = geometry.items.find((item) => item.path === active.path);
+    // LH-76: a split title is edited as the whole authored title. The textarea shows it, at the title's size, over both parts.
+    const split = splitBox(geometry, active.path), parts = split ? splitParts(target, active.path) : [];
     const metricLayout=geometry.items.find(item=>item.metricLayout?.parts.some(part=>part.path===active.path))?.metricLayout;
     const metricPart=metricLayout?.parts.find(part=>part.path===active.path);
     const timelinePart=geometry.items.find(item=>item.timelineLayout?.parts.some(part=>part.path===active.path))?.timelineLayout?.parts.find(part=>part.path===active.path);
@@ -530,9 +549,9 @@ export function createCanvasEditor(container, options = {}) {
     const bounds = target.getBBox(),
       anchor = text.getAttribute("text-anchor");
     const tracedWidth = Number(target.getAttribute("data-opf-box-width"));
-    const width = internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
+    const width = split?.width ?? internalPart?.box.width ?? item?.box.width ?? (tracedWidth > 0 ? tracedWidth : Math.max(80, bounds.width + 20));
     const left = internalPart?.box.x ?? (anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x);
-    const visibleText=active.composing||active.isCode||active.isMetric;
+    const visibleText=active.composing||active.isCode||active.isMetric||!!split;
     Object.assign(active.input.style, {
       fontFamily: font.fontFamily,
       fontSize: `${fontSize * scale}px`,
@@ -553,6 +572,18 @@ export function createCanvasEditor(container, options = {}) {
     active.input.style.setProperty('--opf-inline-selection-color',visibleText ? font.fill : 'transparent');
     // Other text keeps the canonical SVG visible beneath the transparent input.
     target.style.opacity = visibleText ? "0" : "1";
+    for (const part of parts) part.style.opacity = "0";
+    if (split) {
+      // The whole title is longer than the topic: the input steps its size down (to half the title's) until it fits the box both
+      // parts take, so it does not run over the body while it is edited; a longer draft grows the input instead.
+      const room = split.height * scale, input = active.input, floor = fontSize * scale / 2;
+      input.style.height = `${room}px`;
+      for (let size = fontSize * scale; input.scrollHeight > room + 1 && size - 1 >= floor;) {
+        size -= 1;
+        Object.assign(input.style, { fontSize: `${size}px`, lineHeight: `${size * lineHeight / fontSize}px` });
+      }
+      input.style.height = `${Math.max(room, input.scrollHeight)}px`;
+    }
   }
   // What editing a target opens: inline text ("text"), the rich-text input ("rich-text"), or the properties form.
   function editKind(path) {
@@ -570,7 +601,7 @@ export function createCanvasEditor(container, options = {}) {
       if (edit.type === "string") source = parseCanvasValue(edit.input.value, "string", edit.originalValue);
     } catch { /* fall back to the raw input text */ }
     return textInputOffsetAtPoint({
-      doc, win, target: getTarget(edit.path), path: edit.path, source, input: edit.input, clientX, clientY,
+      doc, win, target: [getTarget(edit.path), ...splitParts(getTarget(edit.path), edit.path)], path: edit.path, source, input: edit.input, clientX, clientY,
     });
   }
   function setRange(input, anchor, focus) {

@@ -10,8 +10,9 @@ import path from 'node:path';
 import {chromium} from 'playwright';
 import {toSvg} from '../dist/index.js';
 import {loadFonts} from '../dist/fonts-node.js';
-import {FONT_POLICY, adjustedFontSize} from '../dist/fonts.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
+import {hostAdvance} from './host-font-size.mjs';
+import {titleLines, traced} from './title-lines.mjs';
 
 const corpora = await loadCorpora();
 // The pinned faces are served to the page by route below, so the SVGs carry no embedded font data (embeddedFonts: []).
@@ -19,14 +20,12 @@ const prepared = await loadFonts({pack: 'office', scripts: 'all'}), {registry} =
 const faces = registry.describeFaces(), files = prepared.fontFiles;
 // Loaded Node handles use HarfBuzz: no fallback-only width tolerance applies to these slides.
 const limits = new Map(); // Loaded HarfBuzz handles have no fontkit width exceptions.
-// Read every adjusted title size from the installed font policy.
-const titleSizes = ['54', ...FONT_POLICY.families.filter(row => typeof row.replacement?.sizeAdjust === 'number').map(row => String(adjustedFontSize(54, row.replacement.sizeAdjust)))];
 const cases = [];
 for (const group of corpora.groups) {
   for (const sample of group.samples) {
     const language = group.languages.find(tag => tag.split('-')[0] === sample.lang.split('-')[0]) ?? group.languages[0] ?? sample.lang;
     const deck = {$schema: 'https://openpresentation.org/schema/opf/v1', name: `FF-44 ${sample.id}`, language, slides: [{title: sample.text, text: 'Body'}]};
-    cases.push({id: sample.id, group: group.script, rtl: group.direction === 'rtl', language, svg: toSvg(deck, 1, { fonts: {...prepared, embeddedFonts: []}})});
+    cases.push({id: sample.id, group: group.script, rtl: group.direction === 'rtl', language, svg: traced(toSvg(deck, 1, {fonts: {...prepared, embeddedFonts: []}, trace: true}), toSvg(deck, 1, {fonts: {...prepared, embeddedFonts: []}}), sample.id)});
   }
 }
 const served = new Map(faces.map((face, index) => [`https://fonts.test/${index}.ttf`, {...face, file: files[index]}]));
@@ -44,13 +43,13 @@ try {
     for (const [url, face] of list) document.fonts.add(await new FontFace(face.family, `url(${url})`, {weight: String(face.weight), style: face.italic ? 'italic' : 'normal'}).load());
     await document.fonts.ready;
   }, [...served].map(([url, face]) => [url, {family: face.family, weight: face.weight, italic: face.italic}]));
-  const observed = await page.evaluate(([list, titleSizes]) => list.map(item => {
+  const observed = await page.evaluate(([list, selector]) => list.map(item => {
     const host = document.querySelector('main');
     host.innerHTML = item.svg;
     const runs = [];
     for (const text of host.querySelectorAll('text')) {
-      // the title lines (RR-38, opf#361: a size-adjusted title is drawn at its adjusted size, titleSizes)
-      if (!titleSizes.includes(text.getAttribute('font-size'))) continue;
+      // the title lines, at whatever size the title is drawn (LH-51 steps a content title down; RR-38, opf#361: a size-adjusted title is drawn at its adjusted size)
+      if (!text.matches(selector)) continue;
       const spans = [...text.querySelectorAll('tspan[textLength]')];
       const pinned = text.hasAttribute('textLength') ? [text] : spans;
       for (const element of pinned) {
@@ -64,7 +63,7 @@ try {
     // Painted order of each title line: the first letter against the last (the isolate marks of right-to-left lines are skipped).
     const orders = [];
     for (const text of host.querySelectorAll('text')) {
-      if (!titleSizes.includes(text.getAttribute('font-size'))) continue;
+      if (!text.matches(selector)) continue;
       const content = text.textContent, letters = [];
       let offset = 0;
       for (const character of content) {
@@ -76,7 +75,7 @@ try {
       orders.push({first: text.getStartPositionOfChar(first).x, last: text.getStartPositionOfChar(last).x});
     }
     return {id: item.id, runs, orders};
-  }), [cases.map(({id, svg}) => ({id, svg})), titleSizes]);
+  }), [cases.map(({id, svg}) => ({id, svg})), titleLines]);
   let worst = 0, runCount = 0, limited = 0, rtlLines = 0, punctuationLinux = 0;
   const rows = [];
   for (const [index, value] of observed.entries()) {
@@ -85,7 +84,7 @@ try {
     for (const run of value.runs) {
       runCount++;
       assert.ok(run.loaded, `${value.id}: ${run.family} is a loaded pinned face for ${JSON.stringify(run.text)}`);
-      const delta = Math.abs(run.natural - run.accepted);
+      const delta = Math.abs(run.natural - hostAdvance(run.accepted, run.size));
       rows.push({id: value.id, family: run.family, accepted: run.accepted, natural: run.natural});
       // Linux Chromium (the pinned Playwright image) paints fullwidth punctuation lines differently from Edge (see script-corpora-browser.mjs): recorded, not gated there.
       if (process.platform === 'linux' && /[　-〿＀-￯‘-”]/.test(run.text)) { punctuationLinux++; continue; }

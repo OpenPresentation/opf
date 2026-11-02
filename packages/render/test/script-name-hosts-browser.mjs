@@ -21,6 +21,7 @@ import sharp from 'sharp';
 import * as coreSymbols from '@openpresentation/opf/symbol-font-encodings';
 import {BUNDLED_FONT_MANIFEST, loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
+import {hostAdvance, hostFontSize} from './host-font-size.mjs';
 import {FULLWIDTH, expectedWeight, root, scriptFamilies, shortName} from './script-family-fixture.mjs';
 
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/script-name-hosts');
@@ -55,7 +56,7 @@ assert.equal(eager.length, 33, 'the eager list is the 33 office and base faces')
 const corpora = await loadCorpora();
 const limits = new Map(corpora.fontkitFallbackLimits.flatMap(limit => Object.entries(limit.samples).map(([id, bound]) => [`${limit.family}|${id}`, bound])));
 const ORIGIN = 'https://app.test', PACK = `${ORIGIN}/pack/`;
-const packRequests = [], unexpected = [], errors = [], notGatedOnLinux = [];
+const packRequests = [], unexpected = [], errors = [], notGatedOnLinux = [], sizeQuantized = [];
 
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const report = [];
@@ -153,10 +154,12 @@ try {
           assert.ok(run.faceLoaded, `${label}: a loaded FontFace backs ${run.family}`);
           if (!codeTable) {
             assert.ok(run.accepted !== null, `${label}: pinned to an accepted advance`);
-            const delta = Math.abs(run.natural - run.accepted);
+            // A fractional size draws at the size the host sets (test/host-font-size.mjs); recorded where that differs.
+            const drawnAt = hostAdvance(run.accepted, run.size), delta = Math.abs(run.natural - drawnAt);
+            if (hostFontSize(run.size) !== run.size) sizeQuantized.push({family: name, sample: sample.id, size: run.size, drawnSize: hostFontSize(run.size), accepted: run.accepted, drawnAt: Number(drawnAt.toFixed(3)), natural: run.natural});
             // Linux Chromium (the pinned Playwright image) paints fullwidth punctuation lines differently from Edge and macOS Chromium: recorded, not gated there.
             if (process.platform === 'linux' && FULLWIDTH.test(run.text)) notGatedOnLinux.push({family: name, sample: sample.id, delta: Number(delta.toFixed(3))});
-            else if (bound === undefined) assert.ok(delta < 0.1, `${label}: advance ${run.natural} differs from accepted ${run.accepted}`);
+            else if (bound === undefined) assert.ok(delta < 0.1, `${label}: advance ${run.natural} differs from accepted ${run.accepted}${drawnAt === run.accepted ? '' : ` (${drawnAt.toFixed(3)} at the ${hostFontSize(run.size)} px the host draws)`}`);
             else assert.ok(delta <= bound * run.size / 100 + 0.1, `${label}: the recorded limit ${bound} (at 100 px) no longer bounds ${delta.toFixed(3)} px at ${run.size} px`);
             if (sample.rtl && run.order) assert.ok(run.order[0] > run.order[1], `${label}: a right-to-left run displays right to left`);
           }
@@ -196,6 +199,6 @@ try {
   const total = new Set(packRequests);
   assert.equal(total.size, packRequests.length, 'no file is fetched twice');
   const bytes = (await Promise.all([...total].map(async file => (await stat(path.join(root, 'node_modules/@expo-google-fonts', file))).size))).reduce((a, b) => a + b, 0);
-  await writeFile(path.join(outputDirectory, 'browser.json'), `${JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, families: report.length, platform: process.platform, runsNotGatedOnLinux: notGatedOnLinux, findings: [], filesFetchedInTotal: total.size, bytesFetchedInTotal: bytes, runChecks, report}, null, 1)}\n`);
+  await writeFile(path.join(outputDirectory, 'browser.json'), `${JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, families: report.length, platform: process.platform, runsNotGatedOnLinux: notGatedOnLinux, runsSizeQuantized: sizeQuantized, findings: [], filesFetchedInTotal: total.size, bytesFetchedInTotal: bytes, runChecks, report}, null, 1)}\n`);
   console.log(`Script name hosts (browser): ${report.length} proprietary names drawn in their route faces; the registry fetched ${total.size} pinned files (${(bytes / 1048576).toFixed(1)} MiB) on demand; ${runChecks} runs checked.`);
 } finally { await browser.close(); }

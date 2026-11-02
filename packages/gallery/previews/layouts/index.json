@@ -51,17 +51,17 @@
     {
       "id": "two-column",
       "file": "two-column.svg",
-      "bytes": 2228
+      "bytes": 2226
     },
     {
       "id": "three-column",
       "file": "three-column.svg",
-      "bytes": 3973
+      "bytes": 3812
     },
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 4501
+      "bytes": 5293
     },
     {
       "id": "comparison",
@@ -76,12 +76,12 @@
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 2819
+      "bytes": 2814
     },
     {
       "id": "faq",
       "file": "faq.svg",
-      "bytes": 2662
+      "bytes": 4600
     },
     {
       "id": "metrics",
@@ -146,7 +146,7 @@
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 5073
+      "bytes": 5578
     },
     {
       "id": "logos",

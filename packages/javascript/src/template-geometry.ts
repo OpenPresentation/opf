@@ -28,6 +28,22 @@ export function gridFlowShape(count: number, landscape: boolean): FlowShape {
   return { columns, rows, perRow };
 }
 
+/** LH-42: `listColumns: "auto"` never deals a list of this many entries or fewer across columns. */
+export const LIST_WHOLE_ENTRIES = 6;
+
+/**
+ * LH-42: the grid of a region that holds 2 or more lists, one list per cell: `count` columns for up to 4 lists, 3 columns when
+ * the count is a multiple of 3, otherwise 4. When the region is too narrow for that many (`maxColumns`), the rows the widest
+ * allowed count needs are filled evenly instead (4 lists in 3 columns are 2 x 2, not 3 + 1).
+ */
+export function listGridShape(count: number, maxColumns = 4): FlowShape {
+  if (!Number.isInteger(count) || count < 1) return { columns: 1, rows: 0, perRow: [] };
+  const wanted = count <= 4 ? count : count % 3 === 0 ? 3 : 4, limit = Math.max(1, Math.floor(maxColumns));
+  const columns = wanted <= limit ? wanted : Math.ceil(count / Math.ceil(count / limit));
+  const rows = Math.ceil(count / columns);
+  return { columns, rows, perRow: Array.from({ length: rows }, (_, row) => Math.min(columns, count - row * columns)) };
+}
+
 /** One row (`row`), one column (`column`) or the grid sequence (`grid`) for `count` blocks. */
 export function flowShape(arrangement: 'grid' | 'row' | 'column', count: number, landscape: boolean): FlowShape {
   if (count < 1) return { columns: 1, rows: 0, perRow: [] };

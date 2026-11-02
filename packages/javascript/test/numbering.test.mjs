@@ -159,7 +159,7 @@ test('composeSlide: a deck without numbering composes exactly as before', () => 
   const item = composeSlide(slide).items.find(i => i.field === 'items');
   assert.deepEqual(Object.keys(item.payload), ['type', 'items']);
   assert.ok(item.text.listEntries.every(e => e.marker.number === undefined && e.marker.width === undefined));
-  assert.deepEqual(item.text.listEntries.map(e => e.marker.text), ['•', '◦']);
+  assert.deepEqual(item.text.listEntries.map(e => e.marker.text), ['•', '–']);
 });
 
 test('composeSlide reports Roman numerals past 3999 without failing a strict slide', () => {

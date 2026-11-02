@@ -28,7 +28,8 @@ describe('niceScale', () => {
 		assert.equal(niceScale(0, 0, 10).max, 1.2);
 		assert.deepEqual(niceScale(Number.NaN, 3, 10), niceScale(0, 1, 10));
 		assert.deepEqual(niceScale(0, 100, Number.NaN), niceScale(0, 100, 10));
-		assert.deepEqual(niceScale(0, 100, 0).ticks, [0, 200]);
+		// LH-59: one interval ends near the data (0 to 120), not at the next 1/2/5 tick (200).
+		assert.deepEqual(niceScale(0, 100, 0).ticks, [0, 120]);
 	});
 
 	test('percent scales run from 0 (or -1) to 1', () => {
@@ -121,8 +122,9 @@ describe('chartValueAxis', () => {
 		const short = axisOf(chart, { width: 800, height: 200, scale: 1 });
 		assert.equal(tall.majorUnit, 100);
 		assert.equal(axisOf(chart, { width: 800, height: 300, scale: 1 }).majorUnit, 200);
-		assert.equal(short.majorUnit, 500);
-		assert.equal(axisOf(chart, { width: 800, height: 150, scale: 1 }).majorUnit, 1000);
+		// LH-59: a short axis ends near the data: 0 to 800 in two or one intervals, not 0 to 1000 in steps of 500 or 1000.
+		assert.deepEqual(short, { min: 0, max: 800, majorUnit: 400 });
+		assert.deepEqual(axisOf(chart, { width: 800, height: 150, scale: 1 }), { min: 0, max: 800, majorUnit: 800 });
 		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSize: 40 }).majorUnit, 200);
 		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 100);
 		assert.equal(CHART_TEXT_PX, 20);
@@ -174,7 +176,8 @@ describe('composition exposes the axis on the chart item', () => {
 	test('the slide scale follows the canvas, and a dataset chart is resolved too', () => {
 		const document = { datasets: { sales: { columns: ['Quarter', 'Sales'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 790]] } }, slides: [slide({ type: 'column', data: { dataset: 'sales' } })] };
 		const item = chartItem(composeSlide(document.slides[0], { width: 1920, height: 1080, presentation: document, slideIndex: 0 }));
-		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 1000, majorUnit: 200 });
+		// LH-59: the axis ends at 900 (ticks 0 to 800 in steps of 200), within 1.25 x the data maximum, not at 1000.
+		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 900, majorUnit: 200 });
 	});
 
 	test('other chart types and non-chart items carry no chart', () => {

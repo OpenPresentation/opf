@@ -40,7 +40,7 @@ for (const [label, table] of [['short', short], ['tall', tall]]) for (const scal
   const note = `${label} scale ${scale} text ${withText}`;
   for (const [actual, expected, name] of [[frame.x, item.box.x, 'x'], [frame.y, item.box.y, 'y'], [frame.cx, item.box.width, 'width']])
     assert.ok(Math.abs(actual - expected * EMU) <= TOLERANCE_EMU, `${note}: frame ${name} ${actual / EMU} equals composed box ${expected}`);
-  const rows = layoutTable(table, item.box, {scale}).rows.reduce((sum, row) => sum + row.box.height, 0);
+  const measured = layoutTable(table, item.box, {scale}), rows = measured.rows.reduce((sum, row) => sum + row.box.height, 0);
   const drawn = drawnExtent(toSvg(deck, 1, {trace: true}), item.path);
   // Each row is rounded to whole EMU independently, hence the per-row allowance.
   const allowance = TOLERANCE_EMU + frame.rows;
@@ -48,7 +48,9 @@ for (const [label, table] of [['short', short], ['tall', tall]]) for (const scal
   assert.ok(Math.abs(frame.cy - rows * EMU) <= allowance, `${note}: frame cy equals the measured row total ${rows}`);
   assert.ok(Math.abs(frame.cy - drawn.height * EMU) <= allowance, `${note}: frame cy ${frame.cy / EMU} equals the preview's drawn table height ${drawn.height}`);
   assert.ok(Math.abs(frame.y - drawn.y * EMU) <= TOLERANCE_EMU, `${note}: frame top equals the drawn table top`);
-  assert.ok(frame.cy <= item.box.height * EMU + allowance, `${note}: the table never exceeds its composed box`);
+  // LH-44: a table whose rows do not fit at the floor keeps them at the floor and runs past its box; it reports overflow.
+  assert.ok(measured.overflow || frame.cy <= item.box.height * EMU + allowance, `${note}: the table exceeds its composed box only when it reports overflow`);
+  if (label === 'tall' && scale === 1) assert.ok(measured.overflow && frame.cy > item.box.height * EMU, `${note}: forty rows at the floor run past the box`);
   if (item.box.height * EMU - frame.cy > 100 * EMU) slack++; else packed++;
   checked++;
 }

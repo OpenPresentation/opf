@@ -54,7 +54,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -2379,16 +2379,18 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
-    const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText} : slideContext;
+    // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
+    const cardNeutral = slideContext.roles.neutrals?.card;
+    const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText, ...(cardNeutral ? {cardFill: cardNeutral.hex} : {})} : slideContext;
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     if (item.frameBox) {
       const frame=item.frameBox;
       context.cardTags.set(`OPF card ${item.path}`,item.path);
       const paint=value=>({color:normalizeHex(value),transparency:/^#[0-9a-f]{8}$/i.test(value)?(1-parseInt(value.slice(7),16)/255)*100:0});
-      const surface=itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
+      const surface=cardNeutral?.hex??itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
       slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
         rectRadius:8*Math.min(widthInches,heightInches)/720,
-        fill:paint(surface),line:{...paint(`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
+        fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
     if (nativeTitle) {
       addNativeTitle(slide, item, itemContext, options, context);
@@ -2399,12 +2401,12 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.nativeBodies.set(body.objectName, body.defaults);
       if (plan === nativeBody && !plan.carded) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
+      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?(item.titleSplit?'title':item.field):undefined,headingLines:titleSplitLines(item,geometry.items,opfSlide.title),color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
-      const objectName = `OPF heading ${item.path} line 0`;
-      context.headingTags.set(objectName,{v:1,group:item.path,field:item.field,line:0,count:1});
+      const split = titleSplitLines(item, geometry.items, opfSlide.title), objectName = `OPF heading ${item.path} line ${split?.offset ?? 0}`;
+      context.headingTags.set(objectName,{v:1,group:item.path,field:split?'title':item.field,line:split?.offset??0,count:split?.count??1});
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
@@ -2576,8 +2578,10 @@ function addTextPayload(slide, value, region, context, path) {
 
 // opf-pptx#212: the look (richBase) the runs of a measured list are written with where the source states none: {text,
 // description?}, or undefined when its entries do not share one (import then reads every run value as observed).
+// LH-77: the entry of a heading list is written bold, so its look is the style core gave a run that states no weight of its own.
 function listRunLook(fit,style,context){
-  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],style,kind==='text'?context.colors.text:context.colors.mutedText))));
+  const entryStyle=(entry,kind)=>kind==='text'&&entry.heading?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
+  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?context.colors.text:context.colors.mutedText))));
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
@@ -3000,8 +3004,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
   const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
-  // WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
-  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legibleLead: chartLeadFromScheme(chart.colors, context.colorScheme, colorContext)});
+  // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
+  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: chartSchemeSeries(chart.colors, context.colorScheme, colorContext)});
   const palette = adjustedPalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
@@ -3068,6 +3072,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
     // value axis to the right, as the preview draws them. Bar charts keep their vertical category axis.
     ...(context.direction === 'rtl' && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
+    // LH-59: a horizontal bar chart lists its categories top to bottom in data order, as the preview draws it: the category axis runs
+    // from the top (c:catAx orientation maxMin) and the value axis crosses it at the last category (c:valAx crosses max), so the value
+    // labels stay at the bottom.
+    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max' } : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
@@ -3276,6 +3284,18 @@ function assertXmlText(text, path) {
   if(invalid)throw new OPFPptxError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`,{path});
 }
 
+// LH-76: core draws a "Topic: qualifier" title that would wrap as two items with the title's path (`titleSplit`): the topic as the
+// title and the qualifier as a subtitle. Their lines are tagged as one title group, the topic's first, its last line joined to the
+// qualifier by the authored colon (boundary `split`), so import restores the whole authored title. The Title placeholder holds the topic.
+function titleSplitLines(item, items, title) {
+  if (!item.titleSplit || typeof title !== 'string') return undefined;
+  const part = name => items.find(other => other.path === item.path && other.titleSplit?.part === name);
+  const topic = part('topic'), qualifier = part('qualifier');
+  if (!topic?.text?.lines || !qualifier?.text?.lines) return undefined;
+  const count = topic.text.lines.length + qualifier.text.lines.length;
+  return item === topic ? {offset: 0, count, join: {boundary: 'split', separator: title.slice(topic.titleSplit.end, qualifier.titleSplit.start)}} : {offset: topic.text.lines.length, count};
+}
+
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
 // RR-88: a plain-string title that wraps over several lines, with no hard break, overflow, rich runs or right-to-left line.
@@ -3323,8 +3343,9 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     // Logical alignment (RR-05): a right-to-left line starts at the right edge; furniture and metrics pass physical alignments and report no line directions.
     const placed=fit.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(fit.placement?.alignment??config.align??context.contentAlignment??'left',fit.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
-    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
+    const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
+    const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
+    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
@@ -3518,8 +3539,10 @@ function addMetricPayload(slide,value,layout,context,path,options) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,`#${normalizeHex(context.colors.background)}`).slice(1).toUpperCase():context.textColor;
+  // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
+  const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
+  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
