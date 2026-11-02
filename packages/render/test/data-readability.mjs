@@ -65,7 +65,7 @@ const surfaceOf = deck => { const design = resolvePresentation(deck).slides[0].d
   // Value-axis tick labels carry the chart's own path (the category labels carry their row's).
   const labels = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(match => attrsOf(match[1])['data-opf-path'] === 'slides.0.chart').map(match => match[2].replace(/<[^>]*>/g, ''))
     // The LH-81 header caption carries the chart's path too; it is not a tick label.
-    .filter(text => text !== 'Task completion by Week');
+    .filter(text => text !== 'Task completion by week');
   assert.deepEqual(labels, ['0', '20', '40', '60', '80', '100'], 'a 0 to 100 axis in steps of 20, not 0 to 90 in tens');
   const bars = tags(svg, 'rect').filter(rect => /^slides\.0\.chart\.data\.rows\.\d+\.1$/.test(rect['data-opf-path'] ?? ''));
   assert.equal(bars.length, 4);

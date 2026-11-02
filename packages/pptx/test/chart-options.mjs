@@ -64,7 +64,8 @@ const SMALL = new Set(['column', 'line']), HEADER = new Set(['column', 'bar', 'l
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: type === 'scatter' ? scatterData : data});
   assert.doesNotMatch(result.classic, /<c:(?:catAx|valAx)>(?:(?!<\/c:(?:catAx|valAx)>)[\s\S])*<c:title>/, `${type}: no axis title by default`);
-  assert.equal(/<c:chart>\s*<c:title>/.test(result.classic), HEADER.has(type), `${type}: the header caption is the chart title`);
+  // Two series and no value axis title: the header row has the legend and no generated caption, so no chart has a title here.
+  assert.doesNotMatch(result.classic, /<c:chart>\s*<c:title>/, `${type}: no generated caption for two series`);
   assert.equal([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].some(match => match[1] === '1'), SMALL.has(type), `${type}: labels are shown on small charts only`);
   assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' ? undefined : HEADER.has(type) ? 't' : 'r', `${type}: default legend`);
   assert.deepEqual(result.imported.axisTitles, undefined);

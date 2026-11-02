@@ -50,7 +50,7 @@ for (const [name, values] of ordinary) {
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
       .map(([, , body]) => [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join(""))
       // LH-81: the header caption is chart text too; it is not a tick label.
-      .filter((text) => text !== "Value by Category");
+      .filter((text) => text !== "Value by category");
     assert.ok(labels.length >= 2, `${label}: value axis has ticks`);
     const ticks = labels.map(Number);
     assert.ok(ticks.every(Number.isFinite), `${label}: numeric tick labels`);
@@ -112,7 +112,7 @@ for (const [name, values, dropsZero, edge] of autoZero) {
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
       .map(([, , body]) => [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join(""))
-      .filter((text) => text !== "Value by Category").map(Number);
+      .filter((text) => text !== "Value by category").map(Number);
     const grid = lines.filter((l) => l.stroke === GRID && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
     assert.equal(grid.length, labels.length, `${label}: one gridline per tick label`);
     const at = grid.map((g) => Number(g[horizontal ? "x1" : "y1"]));

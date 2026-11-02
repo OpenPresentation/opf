@@ -12,12 +12,14 @@ const decoder = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ''});
 const two = {columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 28, 25], ['Q2', 32, 27], ['Q3', 35, 29], ['Q4', 39, 31]]};
 const one = {columns: ['Stage', 'Count'], rows: [['Lead', 120], ['Qualified', 64], ['Proposal', 31], ['Won', 12]]};
-const deckOf = chart => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Chart', chart}]});
+const deckOf = (chart, design = {}) => ({design: {fontScheme: 'roboto', ...design}, slides: [{title: 'Chart', chart}]});
+// A light deck whose series colour leaves room for the quieter tint (3:1 and 15 L*).
+const LIGHT = {colorScheme: 'cool-horizon', variant: 'light1'};
 const attrs = text => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 let checks = 0;
 
-async function exported(chart) {
-  const bytes = await toPptx(deckOf(chart));
+async function exported(chart, design) {
+  const bytes = await toPptx(deckOf(chart, design));
   const entries = unzipSync(bytes);
   const xml = decoder.decode(entries['ppt/charts/chart1.xml']), slide = decoder.decode(entries['ppt/slides/slide1.xml']);
   assert.doesNotThrow(() => parser.parse(xml), 'the chart part is well-formed');
@@ -55,38 +57,45 @@ const shownValues = xml => [...xml.matchAll(/<c:showVal val="1"\/>/g)].length;
 // 3. The emphasis of a one-series bar chart: the series keeps its colour (the last point), every other point is the quieter tint, and
 // the preview draws the same two colours.
 {
-  const {xml} = await exported({type: 'bar', data: one});
+  const {xml} = await exported({type: 'bar', data: one}, LIGHT);
   const ser = xml.match(/<c:ser>[\s\S]*?<\/c:ser>/)[0];
   const points = [...ser.matchAll(/<c:dPt><c:idx val="(\d+)"\/>[\s\S]*?<a:srgbClr val="(\w{6})"\/>[\s\S]*?<\/c:dPt>/g)].map(([, idx, hex]) => [Number(idx), hex]);
   assert.deepEqual(points.map(([idx]) => idx), [0, 1, 2], 'one c:dPt per quieter point');
   assert.equal(new Set(points.map(([, hex]) => hex)).size, 1, 'one tint');
-  const svg = toSvg(deckOf({type: 'bar', data: one}), 1, {trace: true});
+  const svg = toSvg(deckOf({type: 'bar', data: one}, LIGHT), 1, {trace: true});
   const fills = [...svg.matchAll(/<rect\b([^>]*)\/>/g)].map(([, a]) => attrs(a)).filter(a => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(a['data-opf-path'] ?? '')).map(a => a.fill.toUpperCase());
   assert.equal(fills.length, 4);
   assert.equal(fills[0], `#${points[0][1]}`, 'the preview tints the same points with the same colour');
   assert.equal(new Set(fills.slice(0, 3)).size, 1);
-  // The tint is core's for the last point's colour on the slide background (the default deck's navy).
+  // The tint is core's for the last point's colour on the slide background.
   const background = svg.match(/<rect\b[^>]*data-opf-path="slides\.0"[^>]*fill="(#[0-9A-Fa-f]{6})"/)?.[1] ?? svg.match(/<rect\b[^>]*fill="(#[0-9A-Fa-f]{6})"/)[1];
   const {accent, muted} = chartEmphasisColors(background, fills[3]);
   assert.equal(muted.toUpperCase(), fills[0]);
   assert.notEqual(accent, muted);
-  checks += 6;
+  // On the default navy a mid blue leaves no room for a tint at 3:1 and 15 L*: every bar keeps the series colour, in both engines.
+  const navy = await exported({type: 'bar', data: one});
+  assert.doesNotMatch(navy.xml, /<c:dPt>/, 'no emphasis on the default navy');
+  const navySvg = toSvg(deckOf({type: 'bar', data: one}), 1, {trace: true});
+  const navyFills = [...navySvg.matchAll(/<rect\b([^>]*)\/>/g)].map(([, a]) => attrs(a)).filter(a => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(a['data-opf-path'] ?? '')).map(a => a.fill);
+  assert.equal(new Set(navyFills).size, 1);
+  checks += 8;
 }
 
 // 4. The header row: the caption is the chart title at core's position, the legend sits at the top at core's position, and the plot
 // area takes the chart below them; the chart frame carries no alt title.
 {
-  const {xml, slide} = await exported({type: 'line', data: two});
+  // Two series: the caption comes from the value axis title (the legend names the series); its category is in sentence case.
+  const {xml, slide} = await exported({type: 'line', data: two, axisTitles: {value: 'Signal'}});
   const title = xml.match(/<c:chart>\s*<c:title>[\s\S]*?<\/c:title>/)?.[0];
   assert.ok(title, 'a chart title');
-  assert.match(title, /<a:t>Current, Baseline by Quarter<\/a:t>/);
+  assert.match(title, /<a:t>Signal by quarter<\/a:t>/);
   assert.match(title, /b="1"/, 'bold');
   assert.match(title, /<c:manualLayout><c:xMode val="edge"\/><c:yMode val="edge"\/><c:x val="[\d.]+"\/><c:y val="[\d.]+"\/><\/c:manualLayout>/);
   assert.match(xml, /<c:legend><c:legendPos val="t"\/><c:layout><c:manualLayout><c:xMode val="edge"\/><c:yMode val="edge"\/><c:x val="[\d.]+"\/><c:y val="[\d.]+"\/><c:w val="[\d.]+"\/><c:h val="[\d.]+"\/><\/c:manualLayout><\/c:layout><c:overlay val="0"\/>/);
   assert.match(xml, /<c:plotArea><c:layout><c:manualLayout><c:layoutTarget val="outer"\/>/);
   assert.doesNotMatch(slide.match(/<p:cNvPr\b[^>]*name="OPF chart 1"[^>]*>/)[0], /\btitle=/, 'no alt title on the frame');
   // The caption's position is core's: the composed caption box over the composed chart box.
-  const item = composeSlide(deckOf({type: 'line', data: two}).slides[0], {dimensions: {width: 1280, height: 720}, fontFamilies: {body: 'Roboto', heading: 'Roboto'}}).items.find(entry => entry.field === 'chart');
+  const item = composeSlide(deckOf({type: 'line', data: two, axisTitles: {value: 'Signal'}}).slides[0], {dimensions: {width: 1280, height: 720}, fontFamilies: {body: 'Roboto', heading: 'Roboto'}}).items.find(entry => entry.field === 'chart');
   const x = Number(title.match(/<c:x val="([\d.]+)"\/>/)[1]);
   assert.ok(Math.abs(x - (item.chart.layer.header.caption.box.x - item.box.x) / item.box.width) < 0.01, 'the caption sits where core put it');
   checks += 8;
@@ -100,9 +109,10 @@ const shownValues = xml => [...xml.matchAll(/<c:showVal val="1"\/>/g)].length;
   assert.doesNotMatch(right.xml, /<c:legend>[\s\S]*?<c:manualLayout>[\s\S]*?<\/c:legend>/);
   assert.equal(right.imported.legend, 'right', 'a right legend is not the default of a two-series column chart: it imports as an option');
   const stacked = await exported({type: 'stacked-column', data: two});
-  assert.match(stacked.xml, /<c:chart>\s*<c:title>/);
+  assert.doesNotMatch(stacked.xml, /<c:chart>\s*<c:title>/, 'two series and no value axis title: no generated caption');
+  assert.match(stacked.xml, /<c:legend><c:legendPos val="t"\/><c:layout><c:manualLayout>/, 'the header legend');
   assert.ok(!valueAxisDeleted(stacked.xml) && shownValues(stacked.xml) === 0, 'a stacked chart keeps its value axis and draws no labels');
-  checks += 6;
+  checks += 7;
 }
 
 console.log(`Chart layer export passed: ${checks} checks (small charts, explicit options, emphasis parity, header row, legend option).`);

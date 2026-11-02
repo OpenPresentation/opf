@@ -89,6 +89,8 @@ export function chartEmphasisPlan({layer, data, panelFill, palette, schemes}) {
   const row = layer?.small?.emphasis;
   if (row === undefined || !data?.rows) return undefined;
   const colors = chartEmphasisColors(panelFill, `#${palette[0]}`);
+  // No room for a tint at 3:1 and 15 L* from the series colour: every point keeps the series colour, as in the preview.
+  if (!colors) return undefined;
   const accentHex = colors.accent.replace(/^#/, '').toUpperCase(), mutedHex = colors.muted.replace(/^#/, '').toUpperCase();
   const accent = {hex: accentHex, xml: schemes?.[0] ? `<a:schemeClr val="${schemes[0]}"/>` : `<a:srgbClr val="${accentHex}"/>`};
   const muted = {hex: mutedHex, xml: `<a:srgbClr val="${mutedHex}"/>`};

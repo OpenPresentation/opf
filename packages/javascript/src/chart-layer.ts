@@ -6,7 +6,8 @@
 //   small chart (LH-03)   a clustered column, bar or line chart of one or two series with eight or fewer points labels every mark with
 //                         its value and drops the value axis, its gridlines and the grey chart panel; a one-series column or bar chart
 //                         draws its last point in the accent and the others in a quieter tint of it.
-//   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption ("<series> by <category>")
+//   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption when it adds to the
+//                         legend ("Revenue by quarter")
 //                         at the start of a row above the plot and its series legend (two to four swatches) in that row or the next,
 //                         instead of a legend at the side, so the plot keeps the chart's whole width.
 //
@@ -106,20 +107,30 @@ function categorySpec(chart: Record<string, unknown>): CategorySpec | undefined 
 }
 
 /**
- * The header caption: "<series> by <category>". The series part is the value axis title, else the series names when there are one or
- * two (more names make a caption the legend already says); the category part is the category axis title, else the category column's
- * name. Outside English the parts are not joined with a word: the caption is the series part alone.
+ * The category part of a caption in sentence case: a plain word (a capital followed only by lower-case letters, "Quarter", "Stage") is
+ * lower-cased; an acronym or a proper-looking token (all capitals, an internal capital or a digit: "Q1", "ARR", "FY27", "iPhone") is
+ * kept as written. Only letters with case change, so a script without case is untouched.
+ */
+export function sentenceCaseCategory(text: string): string {
+  return text.split(/(\s+)/).map(token => /^\p{Lu}\p{Ll}+$/u.test(token) ? token.toLocaleLowerCase() : token).join('');
+}
+
+/**
+ * The header caption, generated only when it says something the legend does not. One series: "<series> by <category>", the series
+ * part being the value axis title or the series name. Two or more series: the legend already names them, so a caption is generated only
+ * from a value axis title, "<value axis title> by <category>". The category part is the category axis title, else the category
+ * column's name, in sentence case ({@link sentenceCaseCategory}). Outside English the parts are not joined with a word: the caption is
+ * the series part alone.
  */
 export function chartHeaderCaption(chart: unknown, columns: readonly string[], language?: string): string | undefined {
   if (!record(chart)) return undefined;
   const titles = record(chart.axisTitles) ? chart.axisTitles : {};
   const names = columns.slice(1).map(label).filter(Boolean);
-  const series = nonBlank(titles.value) ?? (names.length && names.length <= SMALL_CHART_MAX_SERIES ? names.join(', ') : undefined);
-  const category = nonBlank(titles.category) ?? (label(columns[0]) || undefined);
+  const series = nonBlank(titles.value) ?? (names.length === 1 ? names[0] : undefined);
+  if (!series) return undefined;
   const english = language === undefined || /^en(?:-|$)/i.test(language);
-  if (!english) return series;
-  if (series && category) return `${series} by ${category}`;
-  return series ?? (category ? `By ${category}` : undefined);
+  const category = nonBlank(titles.category) ?? (label(columns[0]) || undefined);
+  return english && category ? `${series} by ${sentenceCaseCategory(category)}` : series;
 }
 
 /** The label text of a value as the engines draw a default value label: the column's number format, else the General form. */

@@ -2,7 +2,16 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { chartEmphasisColors, chartHeader, chartHeaderCaption, chartLayer, chartLayerDataLabels, colorContrast, composeSlide, resolveChartData, smallChart } from "../dist/composition.js";
+import { chartEmphasisColors, chartHeader, chartHeaderCaption, chartLayer, chartLayerDataLabels, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, composeSlide, resolveChartData, smallChart } from "../dist/composition.js";
+import { colorSchemes } from "./support/catalog.mjs";
+
+// CIE L* of an sRGB hex colour.
+const lightness = (hex) => {
+  const linear = (channel) => { const n = channel / 255; return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4; };
+  const [r, g, b] = [1, 3, 5].map((offset) => linear(Number.parseInt(hex.slice(offset, offset + 2), 16)));
+  const y = 0.2126729 * r + 0.7151522 * g + 0.072175 * b;
+  return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : 24389 / 27 * y;
+};
 
 const measure = (text, size, weight) => text.length * size * (weight === 700 ? 0.6 : 0.55);
 const box = { x: 100, y: 100, width: 640, height: 400 };
@@ -72,24 +81,42 @@ describe("small charts (LH-03)", () => {
     assert.equal(chartLayerDataLabels({ active: false }, undefined, "bar").dataLabels, undefined);
   });
 
-  test("the quieter tint keeps the hue and stays visible against the backdrop", () => {
-    for (const surface of ["#FFFFFF", "#011842", "#F2F2F2"]) {
-      const { accent, muted } = chartEmphasisColors(surface, "#2E75B6");
-      assert.equal(accent, "#2E75B6");
-      assert.notEqual(muted, accent);
-      assert.ok(colorContrast(muted, surface) >= 1.6 - 1e-9, surface);
+  test("the quieter tint reaches 3:1 and stays 15 L* from the accent, or there is no emphasis", () => {
+    // Every gallery colour scheme, on its light and dark backdrops (light1, light2, dark1, dark2), for the series colour the engines draw.
+    let emphasised = 0, plain = 0;
+    for (const scheme of colorSchemes) {
+      for (const backdrop of [scheme.light1, scheme.light2, scheme.dark1, scheme.dark2].filter(Boolean)) {
+        const series = chartPaletteForFill(backdrop, chartSeriesPalette(scheme), { legible: chartSchemeSeries(undefined, scheme) })[0];
+        const colors = chartEmphasisColors(backdrop, series);
+        if (!colors) { plain++; continue; }
+        emphasised++;
+        assert.equal(colors.accent, series.slice(0, 7).toUpperCase());
+        assert.ok(colorContrast(colors.muted, backdrop) >= 3 - 1e-9, `${scheme.id} on ${backdrop}: tint ${colors.muted} at 3:1`);
+        assert.ok(Math.abs(lightness(colors.accent) - lightness(colors.muted)) >= 15 - 1e-9, `${scheme.id} on ${backdrop}: 15 L* apart`);
+      }
     }
+    assert.ok(emphasised > 0 && emphasised + plain >= colorSchemes.length * 2, `${emphasised} emphasised, ${plain} plain`);
+    // The case the review found: a mid blue on the default navy leaves no room for a visible tint, so there is no emphasis.
+    assert.equal(chartEmphasisColors("#011842", "#308BC7"), undefined);
+    assert.ok(chartEmphasisColors("#FFFFFF", "#1F4E79"));
   });
 });
 
 describe("the header row (LH-81)", () => {
-  test("the caption reads <series> by <category> from the data or the axis titles", () => {
-    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current", "Baseline"]), "Current, Baseline by Quarter");
-    assert.equal(chartHeaderCaption({ type: "bar" }, ["Stage", "Count"]), "Count by Stage");
-    assert.equal(chartHeaderCaption({ type: "column", axisTitles: { value: "Task completion", category: "Week" } }, ["W", "Rate"]), "Task completion by Week");
-    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "A", "B", "C"]), "By Quarter", "three names are the legend's job");
-    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current", "Baseline"], "ar"), "Current, Baseline", "no English connective outside English");
-    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current"], "en-GB"), "Current by Quarter");
+  test("a caption is generated only when it adds to the legend, with the category in sentence case", () => {
+    assert.equal(chartHeaderCaption({ type: "bar" }, ["Stage", "Count"]), "Count by stage", "one series: <series> by <category>");
+    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current", "Baseline"]), undefined, "two series: the legend names them");
+    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "A", "B", "C"]), undefined);
+    assert.equal(chartHeaderCaption({ type: "column", axisTitles: { value: "Revenue ($M)" } }, ["Quarter", "North", "South"]), "Revenue ($M) by quarter", "a value axis title captions several series");
+    assert.equal(chartHeaderCaption({ type: "column", axisTitles: { value: "Task completion", category: "Week" } }, ["W", "Rate"]), "Task completion by week");
+    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current"], "en-GB"), "Current by quarter");
+    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current"], "ar"), "Current", "no English connective outside English");
+    assert.equal(chartHeaderCaption({ type: "column" }, ["Quarter", "Current"]), "Current by quarter");
+    // Acronyms and proper-looking tokens stay as written.
+    for (const [category, expected] of [["FY27", "FY27"], ["Q1 Region", "Q1 region"], ["ARR Tier", "ARR tier"], ["iPhone Model", "iPhone model"], ["Sales Region", "sales region"], ["月", "月"]]) {
+      assert.equal(chartHeaderCaption({ type: "column" }, [category, "Revenue"]), `Revenue by ${expected}`, category);
+    }
+    assert.equal(chartHeaderCaption({ type: "column" }, ["", "Revenue"]), "Revenue", "no category name");
   });
 
   test("two to four series put their legend in the header row, one series none, five keep the side legend", () => {
@@ -102,8 +129,15 @@ describe("the header row (LH-81)", () => {
     assert.equal(legendOf(5), undefined);
   });
 
-  test("the legend shares the caption's row when both fit, and takes the next row otherwise", () => {
+  test("without a caption the legend starts the row", () => {
     const chart = { type: "column", data: quarters(["Current", "Baseline"]) };
+    const header = chartHeader(chart, resolveChartData(chart), geometry);
+    assert.equal(header.caption, undefined);
+    assert.equal(header.legend.box.x, box.x + 10);
+  });
+
+  test("the legend shares the caption's row when both fit, and takes the next row otherwise", () => {
+    const chart = { type: "column", axisTitles: { value: "Signal" }, data: quarters(["Current", "Baseline"]) };
     const wide = chartHeader(chart, resolveChartData(chart), geometry);
     assert.equal(wide.legend.box.y, wide.caption.box.y);
     assert.ok(wide.legend.box.x + wide.legend.box.width <= box.x + box.width - 10 + 1e-6, "the legend ends the row");
@@ -114,7 +148,7 @@ describe("the header row (LH-81)", () => {
   });
 
   test("right to left, the caption starts at the right edge", () => {
-    const chart = { type: "column", data: quarters(["Current", "Baseline"]) };
+    const chart = { type: "column", axisTitles: { value: "Signal" }, data: quarters(["Current", "Baseline"]) };
     const header = chartHeader(chart, resolveChartData(chart), { ...geometry, direction: "rtl" });
     assert.ok(Math.abs(header.caption.box.x + header.caption.box.width - (box.x + box.width - 10)) < 1e-6);
     assert.ok(header.legend.box.x < header.caption.box.x);
@@ -132,7 +166,8 @@ describe("the header row (LH-81)", () => {
   test("composition puts the layer on the composed chart and sizes the value axis below the header", () => {
     const slide = { title: "Signal", chart: { type: "column", data: quarters(["Current", "Baseline"]) } };
     const item = composeSlide(slide, { dimensions: { width: 1280, height: 720 } }).items.find((entry) => entry.field === "chart");
-    assert.ok(item.chart.layer.header.caption.text.startsWith("Current, Baseline"));
+    assert.equal(item.chart.layer.header.caption, undefined, "two series: no generated caption");
+    assert.deepEqual(item.chart.layer.header.legend.entries.map((entry) => entry.name), ["Current", "Baseline"]);
     assert.ok(item.chart.layer.small, "two series of four points");
     assert.ok(item.chart.valueAxis);
     const plain = composeSlide({ title: "Signal", chart: { type: "pie", data: quarters(["Current"]) } }, { dimensions: { width: 1280, height: 720 } }).items.find((entry) => entry.field === "chart");

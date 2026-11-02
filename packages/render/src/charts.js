@@ -30,8 +30,9 @@ function highlightFor(c, resolved, spec, data) {
 // every other point in a quieter tint of it (core chartEmphasisColors); it is drawn as a category highlight of that point.
 function emphasisFor(c, layer) {
   const row = layer?.small?.emphasis;
-  if (row === undefined) return undefined;
-  return { series: [false], categories: c.rows.map((_, i) => i === row), ...chartEmphasisColors(c.surface, c.colors[0]) };
+  const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0]);
+  // A backdrop that leaves no room for a tint at 3:1 and 15 L* from the series colour draws every point in the series colour.
+  return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
 }
 
 // LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
