@@ -8,7 +8,8 @@
   ],
   "design": {
     "titleAlignment": "center",
-    "contentAlignment": "center"
+    "contentAlignment": "center",
+    "variant": "accent1"
   },
   "direction": "column",
   "regions": [

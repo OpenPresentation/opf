@@ -696,10 +696,10 @@
         },
         "variant": {
           "oneOf": [
-            { "$ref": "#/$defs/ThemeBackgroundSlot" },
+            { "$ref": "#/$defs/ColorVariantSlot" },
             { "$ref": "#/$defs/ColorVariant" }
           ],
-          "description": "Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the slide background (and so which are the text and the alternate surface), and optionally the order of the accents. A variant is a mapping over the same twelve-slot scheme, as PowerPoint's color map is, never a second scheme. Without it the background decides: a theme-slot background ('dark1', { type: 'theme', slot }) is the variant of that slot, a picture or gradient takes its 'tone', and any other background picks light or dark by its luminance. A slide's variant replaces the deck's whole, including its accent order.",
+          "description": "Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the slide background (and so which are the text and the alternate surface), and optionally the order of the accents. A variant is a mapping over the same twelve-slot scheme, as PowerPoint's color map is, never a second scheme. Without it the background decides: a theme-slot background ('dark1', { type: 'theme', slot }) is the variant of that slot, a picture or gradient takes its 'tone', and any other background picks light or dark by its luminance. A slide's variant replaces the deck's whole, including its accent order. A slide's layout record can name a variant too (layout design.variant): it outranks the deck's and the theme's, and the slide's own variant or background still wins.",
           "examples": ["dark1", { "background": "light1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }]
         },
         "logo": {
@@ -1005,6 +1005,11 @@
           "description": "Custom slide height in inches; overrides the preset height when provided."
         }
       }
+    },
+    "ColorVariantSlot": {
+      "type": "string",
+      "description": "The scheme slot a color variant puts behind the slide (bg1): a light or dark slot, or an accent. On an accent the text side is the light family (tx1 = light1, tx2 = light2) or the dark family (tx1 = dark1, tx2 = dark2), whichever text slot has the higher contrast on that accent; tx2 falls back to tx1's slot where it is under 4.5:1 on the accent, and bg2 is the accent itself.",
+      "enum": ["light1", "light2", "dark1", "dark2", "accent1", "accent2", "accent3", "accent4", "accent5", "accent6"]
     },
     "ThemeBackgroundSlot": {
       "type": "string",
@@ -1448,10 +1453,10 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["background"],
-      "description": "A variant of the deck's single color scheme, as a mapping over its twelve slots (PowerPoint's clrMap): 'background' is the slot the slide background and the role bg1 take, and with it the other roles: light1 maps bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2; dark1 maps bg1 = dark1, tx1 = light1, bg2 = dark2, tx2 = light2; light2 and dark2 make that slot both the background and the alternate surface (light2: bg1 = bg2 = light2, tx1 = dark1, tx2 = dark2; dark2: bg1 = bg2 = dark2, tx1 = light1, tx2 = light2), which is how a slide with that theme background has always been drawn. Text, secondary text, the card surface and every neutral (borders, gridlines, chart axis, code panel) follow the map. The PowerPoint export writes it as the master's clrMap, or a slide's clrMapOvr.",
+      "description": "A variant of the deck's single color scheme, as a mapping over its twelve slots (PowerPoint's clrMap): 'background' is the slot the slide background and the role bg1 take, and with it the other roles: light1 maps bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2; dark1 maps bg1 = dark1, tx1 = light1, bg2 = dark2, tx2 = light2; light2 and dark2 make that slot both the background and the alternate surface (light2: bg1 = bg2 = light2, tx1 = dark1, tx2 = dark2; dark2: bg1 = bg2 = dark2, tx1 = light1, tx2 = light2), which is how a slide with that theme background has always been drawn. An accent background (accent1 to accent6) is both bg1 and bg2, with the text family (light1 and light2, or dark1 and dark2) that reads better on it; see ColorVariantSlot. Text, secondary text, the card surface and every neutral (borders, gridlines, chart axis, code panel) follow the map. The PowerPoint export writes it as the master's clrMap, or a slide's clrMapOvr.",
       "properties": {
         "background": {
-          "$ref": "#/$defs/ThemeBackgroundSlot",
+          "$ref": "#/$defs/ColorVariantSlot",
           "description": "The scheme slot that is the background (bg1) of the variant."
         },
         "accents": {

@@ -30,9 +30,10 @@ export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-export {applyLuminance, clrMapAttributes, colorMapFor, isColorVariant, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
+import {layoutVariantApplies} from './color.js';
+export {applyLuminance, clrMapAttributes, colorMapFor, isColorVariant, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
-export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorMap, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
+export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
 export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuoteMarks, isWrappedInQuoteMarks, type QuoteMarks} from './quote-marks.js';
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
@@ -792,9 +793,10 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   return result;
 }
 
-/** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. */
-function resolveBackgroundImage(slide: Record<string, any>, presentation: unknown, themeBackground: unknown, width: number, height: number, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedBackgroundImage | undefined {
+/** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. A layout variant hides the deck's and the theme's (LH-01). */
+function resolveBackgroundImage(slide: Record<string, any>, presentation: unknown, themeBackground: unknown, layout: unknown, width: number, height: number, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedBackgroundImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
+  if (layoutVariantApplies(own, layout)) return undefined;
   const [value, at] = own.background !== undefined ? [own.background, `${path}.design.background`]
     : deck.background !== undefined ? [deck.background, 'design.background'] : [themeBackground, 'theme'];
   const background = imageBackground(value);
@@ -3064,7 +3066,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const imageDiagnostics: LayoutDiagnostic[] = [];
   // A right-to-left deck mirrors placements and edge overlays: `left` is the start side, drawn at the right.
   const mirrorSide = (side: string): string => !rtl ? side : side === 'left' ? 'right' : side === 'right' ? 'left' : side;
-  const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, width, height, path, mirrorSide, imageDiagnostics);
+  const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default

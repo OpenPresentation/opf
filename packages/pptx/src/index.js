@@ -621,8 +621,9 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
 // RR-96: the variant a color map imports as is dropped where the document's own design already gives that map: core picks light1 or dark1 from the
 // slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
 function dropImpliedVariants(imported, options) {
-  const rolesVariant = design => {
-    try { return JSON.stringify(coreContext({...imported, design, slides: [{}]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  // LH-01: a slide's implied variant includes its layout's (a section imports its accent clrMapOvr as a variant its layout already gives).
+  const rolesVariant = (design, slide = {}) => {
+    try { return JSON.stringify(coreContext({...imported, design, slides: [slide]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
   };
   const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
   if (imported.design?.variant !== undefined) {
@@ -635,7 +636,7 @@ function dropImpliedVariants(imported, options) {
   for (const slide of imported.slides) {
     if (slide.design?.variant === undefined) continue;
     const rest = withoutVariant(slide.design);
-    const implied = rolesVariant({...imported.design, ...rest});
+    const implied = rolesVariant(imported.design, {...(slide.layout !== undefined ? {layout: slide.layout} : {}), design: rest});
     if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
       if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
     }
@@ -2416,8 +2417,11 @@ const geometryFallbackBackground = presentation => presentation.design?.backgrou
 
 function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const slide = presentation.slides[slideIndex];
-  const effective = { ...presentation, design: { ...presentation.design, ...slide.design } };
   const core = coreContext(presentation, slideIndex, options);
+  // LH-01: a layout's variant (core's resolved.layoutVariant, set only where the slide names neither a variant nor a background) replaces
+  // the deck's variant and hides the deck's background, as a slide variant over the theme's does.
+  const layoutVariant = core.resolved.layoutVariant;
+  const effective = { ...presentation, design: { ...presentation.design, ...(layoutVariant ? {variant: layoutVariant, background: undefined} : {}), ...slide.design } };
   const resolved = resolvePresentationContext(effective, options, core);
   // A reference that matched no record is reported once per place it is written.
   for (const diagnostic of core.diagnostics) {

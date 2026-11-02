@@ -23,7 +23,7 @@ describe('maps', () => {
 		assert.deepEqual(colorMapFor({ background: 'dark1', accents }).accents, accents);
 		assert.ok(isColorVariant({ background: 'dark1', accents }));
 		assert.ok(isColorVariant({ background: 'light1' }));
-		for (const bad of [undefined, null, 'purple', 'accent1', 7, {}, { background: 'accent1' }, { background: 'dark1', accents: ['accent1'] }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'dark1'] }])
+		for (const bad of [undefined, null, 'purple', 'hyperlink', 7, {}, { background: 'hyperlink' }, { background: 'dark1', accents: ['accent1'] }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'dark1'] }])
 			assert.equal(isColorVariant(bad), false, JSON.stringify(bad));
 		assert.deepEqual(colorMapFor({ background: 'dark1', accents: ['accent1'] }).accents, colorMapFor().accents, 'a malformed accent list is ignored');
 	});
@@ -249,7 +249,7 @@ describe('schema', () => {
 	});
 
 	test('a malformed variant is a schema error', () => {
-		for (const variant of [{}, { background: 'accent1' }, { background: 'dark1', extra: 1 }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1'] }, 'purple', 7])
+		for (const variant of [{}, { background: 'hyperlink' }, { background: 'dark1', extra: 1 }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1'] }, 'purple', 7])
 			assert.ok(errors(doc({ variant })).length > 0, JSON.stringify(variant));
 	});
 

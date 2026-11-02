@@ -135,10 +135,13 @@ function readableLink(link: string, background: string, text: string): string {
 
 // --------------------------------------------------------------- variants: PowerPoint's colour map over one scheme (RR-96)
 
-/** The four slots a variant can use as the slide background. */
-export type ColorVariantBackground = 'light1' | 'light2' | 'dark1' | 'dark2';
+/** The four light and dark slots: the text roles (tx1, tx2) always map to one of them. */
+export type ColorBaseSlot = 'light1' | 'light2' | 'dark1' | 'dark2';
 export type ColorAccentSlot = 'accent1' | 'accent2' | 'accent3' | 'accent4' | 'accent5' | 'accent6';
+/** The slots a variant can use as the slide background: the four light and dark slots, or an accent (LH-01). */
+export type ColorVariantBackground = ColorBaseSlot | ColorAccentSlot;
 const ACCENT_SLOTS: readonly ColorAccentSlot[] = ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6'];
+const isAccentSlot = (value: unknown): value is ColorAccentSlot => (ACCENT_SLOTS as readonly unknown[]).includes(value);
 
 /**
  * A variant of the deck's single colour scheme: which slot is the background (and so which are the text and the alternate surface),
@@ -154,13 +157,13 @@ export interface ColorVariant {
 /** The slots the roles bg1, tx1, bg2 and tx2 and the six accents point at (OOXML `clrMap`, with `lt1` named `light1` and so on). */
 export interface ColorMap {
   bg1: ColorVariantBackground;
-  tx1: ColorVariantBackground;
+  tx1: ColorBaseSlot;
   bg2: ColorVariantBackground;
-  tx2: ColorVariantBackground;
+  tx2: ColorBaseSlot;
   accents: readonly ColorAccentSlot[];
 }
 
-const MAPS: Record<ColorVariantBackground, Omit<ColorMap, 'accents'>> = {
+const MAPS: Record<ColorBaseSlot, Omit<ColorMap, 'accents'>> = {
   light1: { bg1: 'light1', tx1: 'dark1', bg2: 'light2', tx2: 'dark2' },
   light2: { bg1: 'light2', tx1: 'dark1', bg2: 'light2', tx2: 'dark2' },
   dark1: { bg1: 'dark1', tx1: 'light1', bg2: 'dark2', tx2: 'light2' },
@@ -170,12 +173,14 @@ const MAPS: Record<ColorVariantBackground, Omit<ColorMap, 'accents'>> = {
 /** A variant as authored: the background slot alone (`"dark1"`, the same as `{ "background": "dark1" }`), or the object form, which is needed only for an accent order. */
 export type ColorVariantInput = ColorVariantBackground | ColorVariant;
 
+const isVariantBackground = (value: unknown): value is ColorVariantBackground => (typeof value === 'string' && Object.hasOwn(MAPS, value)) || isAccentSlot(value);
+
 /** The variant an authored value stands for, always the normalized object form, or undefined for a value that is not a variant: a background slot string, or an object with a background slot and, when given, a permutation of the six accent slots. */
 export function normalizeColorVariant(value: unknown): ColorVariant | undefined {
-  if (typeof value === 'string') return Object.hasOwn(MAPS, value) ? { background: value as ColorVariantBackground } : undefined;
+  if (typeof value === 'string') return isVariantBackground(value) ? { background: value } : undefined;
   if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
   const { background, accents } = value as { background?: unknown; accents?: unknown };
-  if (typeof background !== 'string' || !Object.hasOwn(MAPS, background)) return undefined;
+  if (!isVariantBackground(background)) return undefined;
   if (accents === undefined) return { background: background as ColorVariantBackground };
   return Array.isArray(accents) && accents.length === 6 && ACCENT_SLOTS.every(slot => accents.includes(slot))
     ? { background: background as ColorVariantBackground, accents: [...accents] as ColorAccentSlot[] }
@@ -188,17 +193,80 @@ export function isColorVariant(value: unknown): value is ColorVariantInput {
 }
 
 /**
+ * LH-01: the tone-relative values a layout record's `design.variant` can take besides a variant, resolved against the deck's own variant
+ * (its background slot and whether it is dark) by {@link layoutColorVariant}:
+ *
+ * - `surface`: the deck's secondary surface on its own side, light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck
+ *   is already on light2 or dark2), so a statement stands off the deck without flipping its tone;
+ * - `brand`: the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), the strong surface a closing slide takes on a light or
+ *   a dark deck, with light text.
+ */
+export type LayoutVariantRole = 'surface' | 'brand';
+const LAYOUT_VARIANT_ROLES: readonly LayoutVariantRole[] = ['surface', 'brand'];
+
+/** The deck a layout's tone-relative variant is resolved against: its background slot (bg1 of its map) and whether its text is light. */
+export interface LayoutVariantDeck {
+  background: ColorVariantBackground;
+  dark: boolean;
+}
+
+/** The layout record's `design.variant` as authored, when it is well formed: a variant (normalized) or a {@link LayoutVariantRole}. */
+function layoutVariantValue(layout: unknown): ColorVariant | LayoutVariantRole | undefined {
+  const design = layout && typeof layout === 'object' ? (layout as { design?: unknown }).design : undefined;
+  const value = design && typeof design === 'object' ? (design as { variant?: unknown }).variant : undefined;
+  return (LAYOUT_VARIANT_ROLES as readonly unknown[]).includes(value) ? (value as LayoutVariantRole) : normalizeColorVariant(value);
+}
+
+/**
+ * LH-01: the variant a layout record names (`layout.design.variant`), normalized, or undefined: a variant as written, or a
+ * {@link LayoutVariantRole} resolved against `deck` (default: a light deck on light1). It ranks above the deck's design and the theme and
+ * below the slide's own design (docs/programs/layout-harvest/README.md, Decisions), so a section or a closing draws on its variant in any
+ * deck while an author can still set a slide's own.
+ */
+export function layoutColorVariant(layout: unknown, deck: LayoutVariantDeck = { background: 'light1', dark: false }): ColorVariant | undefined {
+  const value = layoutVariantValue(layout);
+  if (value === 'surface') return { background: deck.dark ? (deck.background === 'dark2' ? 'dark1' : 'dark2') : deck.background === 'light2' ? 'light1' : 'light2' };
+  if (value === 'brand') return { background: deck.background === 'dark2' ? 'dark1' : 'dark2' };
+  return value;
+}
+
+/**
+ * LH-01: whether a layout's variant decides the slide's background: the layout names one and the slide's own design sets neither a
+ * variant nor a background, so the layout hides the deck's and the theme's background (the slide is the variant's bg1).
+ */
+export function layoutVariantApplies(slideDesign: unknown, layout: unknown): boolean {
+  const own = slideDesign && typeof slideDesign === 'object' ? (slideDesign as { variant?: unknown; background?: unknown }) : {};
+  return layoutVariantValue(layout) !== undefined && own.variant === undefined && (own.background === undefined || own.background === null || own.background === false);
+}
+
+/** LH-01: the contrast tx2 needs on an accent background to stay the family's secondary text; under it tx2 maps to tx1's slot. */
+export const ACCENT_SECONDARY_MIN_CONTRAST = 4.5;
+
+/**
  * The map a variant stands for: `light1` is the default map (bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2); `dark1` swaps
  * light and dark; `light2` and `dark2` make that slot both the background and the alternate surface (bg2, as a slide with that theme
  * background has always had it, which keeps the default theme's dark2 background unchanged), with the text of the family's side. No variant is `light1`.
+ *
+ * LH-01: an accent background is both bg1 and bg2, as light2 and dark2 are, with the text of the family whose tx1 reads better on that
+ * accent in `colorScheme` (light1 and light2 when light1 has the higher contrast, else dark1 and dark2), so the scheme's own slots carry
+ * the text and no colour is invented; tx2 maps to tx1's slot where the family's tx2 is under {@link ACCENT_SECONDARY_MIN_CONTRAST} on the
+ * accent. Without a scheme the accent counts as dark.
  */
-export function colorMapFor(variant?: ColorVariantInput): ColorMap {
+export function colorMapFor(variant?: ColorVariantInput, colorScheme: Record<string, unknown> = {}): ColorMap {
   const normalized = normalizeColorVariant(variant);
-  const base = MAPS[normalized?.background ?? 'light1'];
-  return { ...base, accents: normalized?.accents ? [...normalized.accents] : ACCENT_SLOTS };
+  const accents = normalized?.accents ? [...normalized.accents] : ACCENT_SLOTS;
+  const background = normalized?.background ?? 'light1';
+  if (!isAccentSlot(background)) return { ...MAPS[background], accents };
+  const hex = (slot: string, fallback: string) => normalizeHexColor(colorScheme[slot]) ?? fallback;
+  const fill = hex(background, '#000000');
+  const contrast = (slot: ColorBaseSlot, fallback: string) => colorContrast(hex(slot, fallback), fill) ?? 0;
+  const lightText = contrast('light1', '#FFFFFF') >= contrast('dark1', '#000000');
+  const tx1: ColorBaseSlot = lightText ? 'light1' : 'dark1', family: ColorBaseSlot = lightText ? 'light2' : 'dark2';
+  const tx2 = contrast(family, lightText ? '#F8FAFC' : '#1E293B') >= ACCENT_SECONDARY_MIN_CONTRAST ? family : tx1;
+  return { bg1: background, tx1, bg2: background, tx2, accents };
 }
 
-const OOXML_SLOT: Record<string, string> = { light1: 'lt1', light2: 'lt2', dark1: 'dk1', dark2: 'dk2' };
+const OOXML_SLOT: Record<string, string> = { light1: 'lt1', light2: 'lt2', dark1: 'dk1', dark2: 'dk2', accent1: 'accent1', accent2: 'accent2', accent3: 'accent3', accent4: 'accent4', accent5: 'accent5', accent6: 'accent6' };
 
 /**
  * The attributes of PowerPoint's `<p:clrMap>` for a map (`bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" ...` and the two
@@ -386,12 +454,11 @@ export function resolveColorRoles(colorScheme: Record<string, unknown>, options:
   const explicit = normalizeColorVariant(options.variant);
   // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved colour.
   const explicitBackground = keepAlpha(options.background);
-  const dark = explicit ? explicit.background.startsWith('dark')
-    : options.tone ? options.tone === 'dark'
-    : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme));
-  const variant: ColorVariant = explicit ?? { background: dark ? 'dark1' : 'light1' };
-  const map = colorMapFor(variant);
-  const slotColor = (name: ColorVariantBackground) => slot(name, FALLBACK[name]!);
+  const variant: ColorVariant = explicit ?? { background: (options.tone ? options.tone === 'dark' : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme))) ? 'dark1' : 'light1' };
+  const map = colorMapFor(variant, colorScheme);
+  // The slide is dark where its text is the light family: dark1, dark2, and an accent that takes light text (LH-01).
+  const dark = map.tx1 === 'light1';
+  const slotColor = (name: ColorVariantBackground) => slot(name, FALLBACK[name] ?? '#000000');
   // The default map keeps the scheme's `background` override as its bg1; any other map reads its slot.
   const bg1 = map.bg1 === 'light1' ? defaultSlideBackground(colorScheme) : slotColor(map.bg1);
   const background = explicitBackground ?? bg1;

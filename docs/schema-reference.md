@@ -201,7 +201,7 @@ _No named properties._
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
-| `variant` | no | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the... |
+| `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant` | Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the object form, which is needed only for an accent order:... |
 | `logo` | no | `oneOf:string / const:false` | Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets it... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
@@ -297,6 +297,15 @@ _No named properties._
 | `preset` | no | `ref:DimensionPreset` |  |
 | `widthInches` | no | `number` | Custom slide width in inches; overrides the preset width when provided. |
 | `heightInches` | no | `number` | Custom slide height in inches; overrides the preset height when provided. |
+
+
+### ColorVariantSlot
+
+- Type: `enum:light1 | light2 | dark1 | dark2 | accent1 | accent2 | accent3 | accent4 | accent5 | accent6`
+- Required fields: none
+- Purpose: The scheme slot a color variant puts behind the slide (bg1): a light or dark slot, or an accent. On an accent the text side is the light family (tx1 = light1, tx2 = light2) or the dark family (tx1 = dark1, tx2 = dark2), whichever text slot has the higher contrast on that accent; tx2 falls back to tx1's slot where it is under 4.5:1 on the accent, and bg2 is the accent itself.
+
+_No named properties._
 
 
 ### ThemeBackgroundSlot
@@ -493,7 +502,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `background` | yes | `ref:ThemeBackgroundSlot` | The scheme slot that is the background (bg1) of the variant. |
+| `background` | yes | `ref:ColorVariantSlot` | The scheme slot that is the background (bg1) of the variant. |
 | `accents` | no | `array<enum:accent1 \| accent2 \| accent3 \| accent4 \| accent5 \| accent6>` | Optional accent order: a permutation of accent1 to accent6. Entry i is the scheme slot drawn as accent i + 1, so primary, secondary and accent (the first three) and the chart series colors follow it. Default: the sche... |
 
 

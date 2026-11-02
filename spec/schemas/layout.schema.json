@@ -57,7 +57,7 @@
     },
     "design": {
       "$ref": "#/$defs/DesignHints",
-      "description": "The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Per key the slide's design wins, then the deck's design, then the resolved theme's design, then this record's design, then the engine default. Composition, the renderer and the PPTX exporter all read the one result."
+      "description": "The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion. Per key the slide's design wins, then the deck's design, then the resolved theme's design, then this record's design, then the engine default; 'variant' alone ranks this record above the deck and the theme (see DesignHints.variant). Composition, the renderer and the PPTX exporter all read the one result."
     },
     "direction": {
       "type": "string",
@@ -475,8 +475,22 @@
         "mirror": {
           "type": "boolean",
           "description": "Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change."
+        },
+        "variant": {
+          "oneOf": [
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariantSlot" },
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant" },
+            { "$ref": "#/$defs/LayoutVariantRole" }
+          ],
+          "description": "The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'surface', 'brand'), so the layout keeps the deck's tone. Unlike the other keys it outranks the deck's design and the theme: the slide's own design.variant or design.background wins, then this, then the deck's variant or background, then the theme's. It hides a background of the deck or theme (the slide is the variant's bg1), and without an accent order of its own it keeps the deck's.",
+          "examples": ["accent1", "surface", "brand"]
         }
       }
+    },
+    "LayoutVariantRole": {
+      "type": "string",
+      "enum": ["surface", "brand"],
+      "description": "A layout variant relative to the deck's own variant (LH-01). 'surface' is the deck's secondary surface on its own side: light2 on a light deck and dark2 on a dark one (light1 or dark1 where the deck is already on light2 or dark2), so a statement stands off the deck without changing its tone. 'brand' is the scheme's brand dark, dark2 (dark1 where the deck is already on dark2), with light text: a closing slide's strong surface on a light or a dark deck."
     },
     "Composition": {
       "type": "object",

@@ -345,9 +345,13 @@ const LINK_URL = /^(https?:|mailto:|tel:)/i;
 // sorted keys, so the output does not depend on the order a catalog lists a field in. A reference that resolves nowhere never
 // throws (unless `strictReferences`): the context falls back to core's engine defaults (ENGINE_DEFAULT_THEME, _COLOR_SCHEME,
 // _FONT_SCHEME; a layout to automatic composition) and reports `unresolved-reference`, which is forwarded as a render diagnostic.
+// A theme-slot background beside a variant at the same level is not drawn (core colorChoice): the slide is the variant's bg1,
+// so `{ background: "light1", variant: "dark1" }` paints dark1 under its light text, as the PPTX export does.
+const THEME_BACKGROUND_SLOTS = new Set(["light1", "light2", "dark1", "dark2"]);
+const isThemeSlotBackground = (value) => THEME_BACKGROUND_SLOTS.has(value) || (value?.type === "theme" && THEME_BACKGROUND_SLOTS.has(value.slot));
 function drawnBackground(levels) {
   for (const level of levels) {
-    if (level.variant !== undefined) return level.background;
+    if (level.variant !== undefined) return isThemeSlotBackground(level.background) ? undefined : level.background;
     if (level.background !== undefined && level.background !== null && level.background !== false) return level.background;
   }
   return undefined;
@@ -363,7 +367,8 @@ function resolveDesign(presentation, slide, slideContext) {
   // RR-96: core resolves the slide's roles (its variant's map over the scheme, the accents in order, the scheme-derived neutrals) once, in
   // the slide context every engine shares. A variant hides the background of a less specific level (the slide is then the variant's bg1).
   const roles = resolved.roles;
-  const backgroundDefinition = drawnBackground([slideDesign, deckDesign, theme]);
+  // LH-01: a layout's variant ranks between the slide's design and the deck's (core's resolved.layoutVariant, when it decides).
+  const backgroundDefinition = drawnBackground([slideDesign, resolved.layoutVariant ? { variant: resolved.layoutVariant } : {}, deckDesign, theme]);
   const variables = presentation.variables ?? {};
   // A background reference sees only the scheme and the three accent roles; a picture or no background is the variant's bg1.
   const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary: roles.primary, secondary: roles.secondary, accent: roles.accent }, variables }, roles.background);
