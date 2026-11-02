@@ -110,18 +110,26 @@ for(const id of ['area','stacked-area','100pct-stacked-area']){
   checks++;
 }
 
-// Pie and doughnut: first series only, one slice per category, category colours, per-category legend.
+// Pie and doughnut: one slice per category, category colours, per-category legend. One series draws a pie or a doughnut; LH-60:
+// several series draw nested rings (a pie of several series is a doughnut), one ring per series, each in the category colours.
 for(const id of ['pie','doughnut']){
-  const svg=render(id,{columns:['Region','Share','Ignored'],rows:[['North',42,1],['South',31,2],['East',18,3],['West',9,4]]});
-  const slices=marks(svg,'path',point);
-  assert.equal(slices.length,4,`${id}: four slices`);
-  assert.ok(slices.every(s=>s['data-opf-path'].endsWith('.1')),`${id}: first series only`);
-  slices.forEach((s,i)=>assert.equal(s.fill,palette[i],`${id}: slice ${i} colour`));
-  const holes=slices.filter(s=>(s.d.match(/A /g)??[]).length===2).length;
-  assert.equal(holes,id==='pie'?0:4,`${id}: ring slices`);
-  assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),palette.slice(0,4),`${id}: legend per category`);
-  assert.ok(['North','South','East','West'].every(t=>texts(svg).includes(t)));
-  checks++;
+  const one={columns:['Region','Share'],rows:[['North',42],['South',31],['East',18],['West',9]]};
+  for(const data of [one,{columns:['Region','Share','Second'],rows:one.rows.map((row,i)=>[...row,i+1])}]){
+    const rings=data.columns.length-1;
+    const svg=render(id,data);
+    const slices=marks(svg,'path',point);
+    assert.equal(slices.length,4*rings,`${id}: four slices per ring`);
+    for(let ring=1;ring<=rings;ring++){
+      const own=slices.filter(s=>s['data-opf-path'].endsWith(`.${ring}`));
+      assert.equal(own.length,4,`${id}: ring ${ring}`);
+      own.forEach((s,i)=>assert.equal(s.fill,palette[i],`${id}: ring ${ring} slice ${i} colour`));
+    }
+    const holes=slices.filter(s=>(s.d.match(/A /g)??[]).length===2).length;
+    assert.equal(holes,id==='pie'&&rings===1?0:slices.length,`${id}: ring slices`);
+    assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),palette.slice(0,4),`${id}: legend per category`);
+    assert.ok(['North','South','East','West'].every(t=>texts(svg).includes(t)));
+    checks++;
+  }
 }
 assert.throws(()=>render('donut',{columns:['a','b'],rows:[['x',1]]}),error=>error.code==='invalid-opf'&&JSON.stringify(error.details).includes('/slides/0/chart/type'),'donut is not a chart type: the validator rejects it at chart.type');
 

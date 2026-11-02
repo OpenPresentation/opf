@@ -6,6 +6,9 @@
   "tags": [
     "Text"
   ],
+  "design": {
+    "variant": "surface"
+  },
   "direction": "column",
   "anchor": "middle",
   "regions": [

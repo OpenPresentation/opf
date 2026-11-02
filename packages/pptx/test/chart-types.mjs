@@ -15,7 +15,9 @@ const chartTypeRecords = Array.isArray(catalogDisplay.chartTypes) ? catalogDispl
 const decoder = new TextDecoder();
 const categoryData = {columns: ['Quarter', 'North', 'South', 'West'], rows: [['Q1', 4, 3, 2], ['Q2', 5, 2, 3], ['Q3', 6, 4, 1]]};
 const scatterData = {columns: ['Point', 'Spend', 'Revenue', 'Margin'], rows: [['a', 1, 10, 3], ['b', 2, 14, 4], ['c', 4, 19, 6]]};
-const dataFor = (id) => (CHART_TYPES[id].family === 'xy' ? scatterData : categoryData);
+// LH-60: a pie or doughnut of several series is drawn as nested rings (test/chart-fallbacks.mjs); the construct table checks one series.
+const singleSeries = {columns: categoryData.columns.slice(0, 2), rows: categoryData.rows.map((row) => row.slice(0, 2))};
+const dataFor = (id) => (CHART_TYPES[id].family === 'xy' ? scatterData : CHART_TYPES[id].family === 'circular' ? singleSeries : categoryData);
 
 async function exportChart(type, data) {
   const bytes = await toPptx({slides: [{title: type, chart: {type, data}}]});
@@ -153,7 +155,8 @@ for (const record of keptRecords) {
   checked++;
 }
 
-// No silent loss: a pie or doughnut plots one series and a chartex type is written as a clustered column chart; both say so.
+// No silent loss: a pie or doughnut of several series is a doughnut of nested rings (LH-60) and a chartex type is written as a
+// clustered column chart; both say so.
 async function diagnosticsFor(type, data) {
   const diagnostics = [];
   const bytes = await toPptx({slides: [{title: type, chart: {type, data}}]}, {onDiagnostic: (diagnostic) => diagnostics.push(diagnostic)});
@@ -162,9 +165,10 @@ async function diagnosticsFor(type, data) {
 }
 for (const type of ['pie', 'doughnut']) {
   const {diagnostics, xml} = await diagnosticsFor(type, categoryData);
-  assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['series-dropped', 'slides.0.chart']], type);
-  assert.match(diagnostics[0].message, /first series 'North'.*other 2 \('South', 'West'\) are not/, type);
-  assert.equal(construct(xml).series.length, 1, `${type}: only the first series is written`);
+  assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['chart-fallback', 'slides.0.chart']], type);
+  assert.match(diagnostics[0].message, /nested-rings fallback/, type);
+  assert.equal(construct(xml).element, 'doughnutChart', `${type}: a doughnut`);
+  assert.equal(construct(xml).series.length, 3, `${type}: one ring per series`);
   const single = await diagnosticsFor(type, {columns: ['Quarter', 'North'], rows: [['Q1', 4], ['Q2', 5]]});
   assert.deepEqual(single.diagnostics, [], `${type}: one series is unchanged and silent`);
   checked++;
@@ -173,8 +177,9 @@ for (const type of ['pie', 'doughnut']) {
 // column mc:Fallback and no fallback is reported. The unconfirmed map keeps the clustered column chart and reports it.
 const chartexTypes = Object.keys(CHART_TYPES).filter((id) => CHART_TYPES[id].family === 'chartex');
 for (const type of chartexTypes) {
-  const single = {columns: categoryData.columns.slice(0, 2), rows: categoryData.rows.map((row) => row.slice(0, 2))};
-  const {diagnostics, xml, chartex} = await diagnosticsFor(type, type === 'box-and-whisker' ? categoryData : single);
+  // LH-60: the map plots places (over quarters it is drawn as columns), and a box-and-whisker category holds several values.
+  const single = {columns: categoryData.columns.slice(0, 2), rows: categoryData.rows.map((row, index) => [type === 'world' ? ['DE', 'FR', 'ES'][index] : row[0], row[1]])};
+  const {diagnostics, xml, chartex} = await diagnosticsFor(type, type === 'box-and-whisker' ? {...categoryData, rows: [...categoryData.rows, ...categoryData.rows]} : single);
   const unconfirmed = Boolean(resolveChartType(type).spec.unconfirmed);
   assert.deepEqual(diagnostics.map((diagnostic) => diagnostic.adaptation), unconfirmed ? ['chartex-fallback'] : [], `${type}: ${unconfirmed ? 'fallback reported' : 'no adaptation for its own data shape'}`);
   if (unconfirmed) assert.match(diagnostics[0].message, /not yet accepted natively.*chartex: 'native'/, type);
