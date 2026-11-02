@@ -53,6 +53,7 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // LH wave 2: LH-03 and LH-81 moved fifteen (the column, bar, line and area types, column-no-options and line-string-numbers): the
 // header row replaces the side legend, and the small column and line charts label their values without the value axis or panel. The
 // world chart over quarters, drawn as columns (LH-60), takes the column chart's header row too, so its digest moved again.
+// LH wave 3: pie and doughnut moved: LH-92 names each ring of the two-series pie and doughnut along the ring.
 const REVIEWED_SVG_DIGESTS = {
   'column': 'c027339ea7d6c699b4dfd5f8',
   'stacked-column': 'bcc1964a00d7827622374f49',
@@ -67,8 +68,8 @@ const REVIEWED_SVG_DIGESTS = {
   'area': 'b2a4ea43d2afa99b7cc298a8',
   'stacked-area': 'ea6e3661c32b7bcd4ca0986b',
   '100pct-stacked-area': '445a6ec13e4459cbb699f3b2',
-  'pie': 'b923fe0ee2c2d8a903015c83',
-  'doughnut': '151f47d0ebc53d35b4f6e63d',
+  'pie': '93fed876966cf892931784b3',
+  'doughnut': 'cdb00e0b80875322a92eb24d',
   'scatter': '44baab35d353e214a225bf68',
   'radar': '9f0bf90fdffcebfa65edd7ee',
   'radar-with-markers': '79796466e2ad84d3b1b62506',

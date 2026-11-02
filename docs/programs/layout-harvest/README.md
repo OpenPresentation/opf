@@ -50,7 +50,7 @@ These are vetoable defaults, taken 2026-11-02 so the work need not wait. Each re
 | Decision | Default taken | Alternative |
 | --- | --- | --- |
 | Precedence of a layout's background variant (LH-01) | A layout's `design.variant` outranks the deck's and the theme's; the slide's own design still wins | The layout loses to the deck, as other design keys do |
-| `image` layout fit | Keep `contain` (pictures whole) | `cover`, as Claude Design crops to fill |
+| `image` layout fit | Keep `contain` (pictures whole). Superseded by LH-104 (owner-approved 2026-11-02): the default becomes `auto`, cover when the crop keeps at least 85% of the picture, else contain | `cover`, as Claude Design crops to fill |
 | Hero capacity | Keep the full-height picture; three long supporting paragraphs overflow and are reported | Full-width support row as before |
 | Small-chart defaults (LH-03) | Direct value labels for a single-series chart of eight or fewer points; import does not write the default back | Leave labels to authors |
 | Corpus size (LH-27) | About 1000 varied slides in about 20 Claude Design batches | 1000 whole decks (mostly repeats; about 100× the cost) |

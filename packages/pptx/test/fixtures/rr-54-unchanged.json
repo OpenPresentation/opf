@@ -446,10 +446,10 @@
      }
     ]
    },
-   "sha256": "a8e55011be36b79d847e1d03f47a0d25c9dd371fa4072324a5dcc8a7b2c1512c",
+   "sha256": "7ac11066fe83875973213ad5896566e436d4e55dcbed7ca5c5d279a183cc3b30",
    "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
    "rr20PartCount": 31,
-   "rr20Bytes": 26351,
+   "rr20Bytes": 26384,
    "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
    "rr90PreviousBytes": 25631,
    "wi5PreviousSha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
@@ -457,7 +457,8 @@
    "lhWave1PreviousSha256": "85516a4efbf9d4e6dcdca88a1aa4a3b09d267f10c314b8b9b4c2790a4ee1ae52",
    "lhWave1PreviousBytes": 25687,
    "lhWave2PreviousSha256": "959eaaa29d5868260cbe48f8ed2990203359d73054296e9b210f73c034aadf88",
-   "lhWave2PreviousBytes": 25689
+   "lhWave2PreviousBytes": 25689,
+   "lhWave3PreviousSha256": "a8e55011be36b79d847e1d03f47a0d25c9dd371fa4072324a5dcc8a7b2c1512c"
   },
   "doughnut": {
    "deck": {
@@ -499,10 +500,10 @@
      }
     ]
    },
-   "sha256": "cbb0f10ca7e59a6f301aaf175752d4ef1ba9ec2b63797599b3419954a1d97550",
+   "sha256": "41d7e3a1ffa3673160f3180285463669a9906e6b319f7c6368f063916e815180",
    "rr81PreviousSha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df",
    "rr20PartCount": 31,
-   "rr20Bytes": 26253,
+   "rr20Bytes": 26261,
    "rr90PreviousSha256": "1c46e14b031ae6168c6a39d86a22cff958ffb62984c8ee18ebb3c5854195bd23",
    "rr90PreviousBytes": 25573,
    "wi5PreviousSha256": "d4052fc62082484d6907a6c65906b946fda81f087c47eb1ffba198f3b671a8b5",
@@ -510,7 +511,8 @@
    "lhWave1PreviousSha256": "637eafb717553707c694645e56bb70f5c586516a723a6a0f98c223cddc36c9cb",
    "lhWave1PreviousBytes": 25629,
    "lhWave2PreviousSha256": "fdfd0abbf2426fe2605917a8ea57cb713d57c5ae8b48f9b5fa4fc63b0ddeddb4",
-   "lhWave2PreviousBytes": 25629
+   "lhWave2PreviousBytes": 25629,
+   "lhWave3PreviousSha256": "cbb0f10ca7e59a6f301aaf175752d4ef1ba9ec2b63797599b3419954a1d97550"
   },
   "radar": {
    "deck": {
@@ -958,22 +960,24 @@
      }
     ]
    },
-   "sha256": "19849ed9297462518f22a6f99f2d24ec56ad55b4bc01d2d9a2effc1851614d20",
+   "sha256": "ac6cc5c3f2a7261573d45836b991647b116bdca295bbb64520ea3f29a93c0697",
    "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
-   "nativeSlideSha256": "f908f268ae4dd46a780557507e28458e82b7ce4f87026af6804d4c7c4a7e64e3",
+   "nativeSlideSha256": "f06c2df49e64e92cba9fa4418f21f8ce4c2889fab260d7b2fb0c3389f4b0e1e7",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
    "rr81PreviousSha256": "66ee74dbd87484edceaa5ae690e9ace20218e4b4bf5642801dada33c8299d917",
    "rr81PreviousNativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
    "rr20PreviousSha256": "f7204fb6867b288b557dd9fc4265727237aac74bd61f1a52f9f1d7498f852e27",
    "rr20PartCount": 28,
-   "rr20Bytes": 20234,
+   "rr20Bytes": 20247,
    "rr20PreviousNativeSlideSha256": "1ba4ee539780e772cabf82b46659cffb46c9528c86b2f5e3ed2d36745341ba45",
    "rr90PreviousSha256": "863685d0e72b6e7ad466226cb6ddb3c68af0fad81fc37fe7bdcc759243c0fc29",
    "rr90PreviousBytes": 20228,
    "rr90PreviousNativeSlideSha256": "75191fd6a3bf2aa74ce2b59d6d038918cb334465af0ce0f03470f86dcdc3e316",
    "wi5PreviousSha256": "c9f29d663f9135bcd14221b5d1a0ebb27775b183586a8b76a594c4d4498f91e9",
    "wi5PreviousBytes": 20274,
-   "wi5PreviousNativeSlideSha256": "1685ff79f76dd66d0ad7f3de5ca9e0631eb25e525a04ddebc02acdf96fc8b6be"
+   "wi5PreviousNativeSlideSha256": "1685ff79f76dd66d0ad7f3de5ca9e0631eb25e525a04ddebc02acdf96fc8b6be",
+   "lhWave3PreviousSha256": "19849ed9297462518f22a6f99f2d24ec56ad55b4bc01d2d9a2effc1851614d20",
+   "lhWave3PreviousNativeSlideSha256": "f908f268ae4dd46a780557507e28458e82b7ce4f87026af6804d4c7c4a7e64e3"
   },
   "styled-table": {
    "deck": {
@@ -1015,22 +1019,24 @@
      }
     ]
    },
-   "sha256": "6d03809b33c3508f26e95c8abfafe80624e087abade7babdb37485b399be3e60",
+   "sha256": "bbad327522f1e99cff6a127e16738e9699058130332b8aabcd7061a002aeb374",
    "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
-   "nativeSlideSha256": "910cc0e5e6554e7fb020f35c3989db21cca19071efa768ad94e903d5e23d5dba",
+   "nativeSlideSha256": "b54b0462b821061198378e13d6b795e5ce7f276967dcfe6902ffe5165133bb0d",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
    "rr81PreviousSha256": "0c15e8bfbfa17618a23e1bf404ffb487b55fff0d00f7c95236fd758453aec8d5",
    "rr81PreviousNativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
    "rr20PreviousSha256": "c2203b92dc12e66d2f7c882ea003035b4cdc42a2abbf85a5e1b013745941d4da",
    "rr20PartCount": 28,
-   "rr20Bytes": 20081,
+   "rr20Bytes": 20087,
    "rr20PreviousNativeSlideSha256": "8a5db04709c55f68a3e9459bddde772141769830e6daa053c4cf7df951073823",
    "rr90PreviousSha256": "882a5cf6ded2883b19dd59b535bb6be7f2269adef77e2adef7ddb90558e51f05",
    "rr90PreviousBytes": 20055,
    "rr90PreviousNativeSlideSha256": "b74f7d78955d8da43fca63ac9ee1203d4e1b3b7929e445dca3a725e038863de9",
    "wi5PreviousSha256": "7e63dc309d2009089a90a1e4a38c16d5009db40644add7091d7eb7102157d58d",
    "wi5PreviousBytes": 20107,
-   "wi5PreviousNativeSlideSha256": "85850b391b88e4e1af30fee6274a584112621d0b2e18a65fc10bb360650df2b5"
+   "wi5PreviousNativeSlideSha256": "85850b391b88e4e1af30fee6274a584112621d0b2e18a65fc10bb360650df2b5",
+   "lhWave3PreviousSha256": "6d03809b33c3508f26e95c8abfafe80624e087abade7babdb37485b399be3e60",
+   "lhWave3PreviousNativeSlideSha256": "910cc0e5e6554e7fb020f35c3989db21cca19071efa768ad94e903d5e23d5dba"
   },
   "mixed-blocks": {
    "deck": {
@@ -1077,15 +1083,15 @@
      }
     ]
    },
-   "sha256": "d82be7890cd88c3dae87769dfa469d6d8180ab04a709535be1b6f9b97ca9a3da",
+   "sha256": "8f175e54bdc8a7ff2381f3b7407fb3e577a68f9391f51ef31186f9d112a0af72",
    "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
-   "nativeSlideSha256": "b2fe845801fc8da580dbf982cc82d4e0a6ec7b48cc870af9dee1703b897eb007",
+   "nativeSlideSha256": "5fdb9836aff0ec44a3ed137e7fd97e252c74bea13c1b484108a7c5e115d486f9",
    "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
    "rr81PreviousSha256": "884f2202724f38110ee08308371622d013f34604ea0af6584a66cfeabff1234a",
    "rr81PreviousNativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
    "rr20PreviousSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
    "rr20PartCount": 31,
-   "rr20Bytes": 27101,
+   "rr20Bytes": 27110,
    "rr20PreviousNativeSlideSha256": "72b7cbc76ec12a294480c933f66a247dd90449798a0008d3adf3d723fa0591ad",
    "rr90PreviousSha256": "d66b20b9afc9c15964238285d36eaf9cc783e51009bb29cdf8a00dc6e2b0f9ff",
    "rr90PreviousBytes": 26900,
@@ -1097,7 +1103,9 @@
    "wi3PreviousBytes": 26989,
    "wi3PreviousNativeSlideSha256": "7e720fc71922eebc2091da3502a07a5199e61a181f7d8d34f82e819798a582fe",
    "lhWave2PreviousSha256": "47e9f0245f7ce890037ce8ef7d49c9194963cd4418d99a785f7f181344181353",
-   "lhWave2PreviousBytes": 26992
+   "lhWave2PreviousBytes": 26992,
+   "lhWave3PreviousSha256": "d82be7890cd88c3dae87769dfa469d6d8180ab04a709535be1b6f9b97ca9a3da",
+   "lhWave3PreviousNativeSlideSha256": "b2fe845801fc8da580dbf982cc82d4e0a6ec7b48cc870af9dee1703b897eb007"
   }
  },
  "rr90FirstUseLayoutReview": {

@@ -95,13 +95,49 @@ Core 0.15 composes pictures in two ways (FA-22); [images](image-treatments.md) h
 
 A top-level image block with `placement: { edge, size, inset }` takes a band along that slide edge: `size` of the slide width (left, right) or height (top, bottom), default 0.5, edge to edge, or inside the slide padding with `inset`. Headings, footnotes and the body compose in the free area that remains, with the usual padding; header and footer bands keep their full-width placement. Bands are taken in block order and each spans the free area the earlier ones left; a second block on a used edge flows as content (the validator reports it). Placed items are listed after the headings and before the flowed body, and their placeholder slot is not reserved in the flow. A slide whose only body is placed images is composed like a cover. A right-to-left deck mirrors `left` and `right`.
 
+## One size guard for the layout-harvest rules
+
+Every rule of the third layout-harvest wave that rearranges or resizes blocks is held to one guard in `composeSlide`: no rule sets
+a block's fitted body size below what the slide gets without the wave's rules (each text, list and table, and each main part of a
+quote, code panel, metric or timeline), unless that leaves fewer findings (`text-overflow`, `small-cell`, `layout-unplaced`), and
+then never below the readability floor. A rule never adds a finding, splits a word or sets a paragraph under the minimum measure.
+The guarded rules are LH-89's nested gaps, LH-65's empty columns, LH-72's measure column, LH-78's quote lead size and card, LH-06's
+automatic band or pill, LH-68's scorecard tiles, LH-86's long-text rows, LH-66's minimum measure, LH-67's lead plus stack and LH-70's
+paragraph columns.
+
+- The slide is composed once with every rule. When none changed anything (most slides), that is the result.
+- When only rules that move blocks without changing the size any block asks for changed something (nested gaps, the measure, long-text
+  rows, the measure column), and every block got the size it asked for with no finding, the result is kept as it is.
+- Otherwise the slide is also composed without the rules. That composition seeds LH-68's tiles (each metric role starts at its stacked
+  size) and LH-06's band or pill (its text starts at the size the block had), and the result with the rules is kept when it reads as
+  well. When it does not, each rule that changed something is added on its own, smallest change first, and kept while the slide still
+  reads as well.
+- The slide then settles: an under-filled body grows (LH-48), a layout may be recomposed as the automatic grid (LH-49, LH-83), and an
+  automatic slide may give its picture or chart a track (LH-80, LH-49). Each of those arrangements is composed with the rules that read
+  well in it and kept only when it reads as well as the guarded composition.
+
+LH-52 and LH-71 only place blocks at the sizes they already have and are not guarded; LH-72's start alignment and sibling quotes of one
+row sharing a size are always applied. The rules meet as follows:
+
+- Paragraph columns (LH-70) and a lead plus stack (LH-67) keep their own cells; LH-52 centers only the scored grid or LH-71's row, and
+  LH-48 does not grow them.
+- A quote beside another block in a centered split (LH-52) takes its own card (LH-78), measured with the card's insets, in the middle of
+  its cell. On the emphasis surface (LH-06) the surface is its card.
+- Long texts that LH-86 moved into one region keep their rows; paragraph columns and a lead plus stack do not rearrange them. A short
+  last text after them is LH-06's foot band, bound to no region.
+- LH-06's band or pill takes precedence over LH-48's growth of the same blocks; a slide without a band grows.
+- When LH-71 stacks a chart above a short takeaway and its plot becomes wider than 3:1, LH-49 gives the chart the filling track beside
+  the text. A picture track (LH-80) keeps only the rules that read well beside it (a quote's lead size that would make it smaller is
+  left out).
+- Charts that LH-49 recomposes share their value axis and plot height (LH-33, LH-93) in the recomposed grid.
+
 ## Media tracks and the reading measure
 
 Automatic composition (no layout, no promoted regions, no `columns` or `weights` of the slide's own) gives a picture or a chart a track of its own and keeps paragraphs on a readable measure (layout harvest LH-80, LH-49, LH-66). The rules read block kinds, counts and measured sizes, never a slide id, and mirror in a right-to-left deck.
 
 - **Picture track (LH-80).** A slide's one picture block among other blocks takes a full-height track at the slide edge, as an automatic `placement` (`item.image.placement.automatic`): cover-cropped with the LH-84 portrait focus and bled to the edges. It sits at the start side when it is the first block, else at the end side (the top or bottom of a portrait canvas). The headings and the other blocks compose beside it in the slide's own `mode`. The track is 50, 45, 40 or 35% of the slide; a track whose crop would keep less than half of the picture's width or height is not tried, so a panorama stays whole in the flow. Of the tracks that read as well as the slide without one (below), the one with the largest smallest body size is taken, then the one with the larger body sizes in all, then the one that crops least (a portrait picture takes a narrow track), then the widest. A block's own `fit: "contain"` or `"stretch"`, a `design.imageFit` of either, a frame shape or `aspectRatio`, an authored `placement`, a second picture or a video keep the composition as before: set `fit: "contain"` to show a screenshot or a diagram whole.
 - **Chart track (LH-49).** A slide's one chart block among other blocks (no picture, no `design.chartPrimary`, which stays the author's) whose plot is too short takes the filling track: the root's first column when it is the first block, else the last, 60, 55 or 50% of the content width (the first that reads as well) against a column of the other blocks in the slide's own `mode`, as `chartPrimary` splits it. A plot is too short under the larger of 120 reference pixels and 22% of the body's height, or when it is more than three times as wide as tall. `chartPlotBox(item, scale)` is the plot as the engines lay it out: the chart box less the chart layer's header row, the padding, the label rows and the value axis labels.
-- **Reads as well.** A track is kept only when the slide has no more overflow or small cells, no more words split, no more paragraphs under the minimum measure and none on a shorter measure than before, and no block's body size smaller: a new arrangement never costs the text its size. Only a slide that overflows without it may trade size, to overflow less and never at the readability floor. Otherwise the slide is composed as before (an authored `row` of four narrow blocks keeps its row). `geometry.track` (`kind`, physical `edge`, `size`, the block's `path`) says which track was taken.
+- **Reads as well.** A track is kept only when the slide has no more overflow or small cells, no more words split, no more paragraphs under the minimum measure and none on a shorter measure than before, and no block's body size smaller: a new arrangement never costs the text its size. Only a slide that overflows without it may trade size, to leave fewer findings, and never below the readability floor. Otherwise the slide is composed as before (an authored `row` of four narrow blocks keeps its row). `geometry.track` (`kind`, physical `edge`, `size`, the block's `path`) says which track was taken.
 - **Reading measure (LH-66).** A paragraph of four lines or more in a cell narrower than 28 average characters of its fitted size (`MIN_MEASURE_CHARS`) has too short a measure. The `auto` grid adds 20 to a candidate's score for each such paragraph (`narrowMeasure` in the explanation's penalties), and a `grid` with no `columns` of its own takes fewer columns until its paragraphs keep the measure. The grid chosen with the measure is kept only when it reads as well as the grid without it (no block smaller, as above). Labels of a line or two and lists keep their grid.
 
 A layout that leaves a chart's plot shorter than its minimum (a wide chart region drawn on purpose keeps its proportions) is composed as the automatic grid when that draws the plot taller and reads as well; `recomposed.chart` holds the shortest plot of both, in reference pixels (see [Layout templates](layout-templates.md#recomposition-at-the-readability-floor-lh-83)).
@@ -138,11 +174,9 @@ These rules (layout harvest LH-70, LH-72, LH-67, LH-78) read block kinds, counts
 and apply in automatic composition and in a layout's regions alike; a right-to-left deck mirrors them. A slide's own
 `composition.mode`, `columns` or `weights`, and `design.contentDirection`, keep their arrangement.
 
-**Readable size wins over the ideal measure.** `composeSlide` composes a slide with these rules and, when one of them changed
-something, without them too. It keeps the result with them only when no block's fitted body size is smaller (each text, list and
-table, and each main part of a quote, code panel, metric or timeline), or when it reports less overflow; it never overflows or
-splits words more. Otherwise it tries each rule on its own and keeps the ones that pass. LH-72's start alignment and sibling quotes
-sharing one size are always applied.
+**Readable size wins over the ideal measure.** These rules are held to the size guard above: a result with them is kept only when
+no block's fitted body size is smaller, or when it reports fewer findings; otherwise each rule is tried on its own and the ones that
+pass are kept. LH-72's start alignment and sibling quotes sharing one size are always applied.
 
 - **Paragraph columns.** Three to six sibling paragraphs of similar length (100 to 240 characters each, the longest less
   than twice the shortest) are parallel items, so they are set as a grid of columns 45 to 65 average characters wide, when that
