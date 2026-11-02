@@ -144,7 +144,7 @@ describe("a timeline under its column chart (LH-115)", () => {
     const inset = chartPlotInset(chart.value, resolveChartData(chart.value), chart.chart, { box: chart.box, scale: 1, minFontSize: chart.composition.minFontSize, measure: (text, size) => text.length * size * 0.5, direction: language === "ar" ? "rtl" : "ltr", language });
     const left = chart.box.x + inset.left, width = chart.box.width - inset.left - inset.right, band = width / 4;
     const columns = [0, 1, 2, 3].map((index) => left + ((language === "ar" ? 3 - index : index) + 0.5) * band);
-    timeline.timelineLayout.markers.forEach((marker, index) => assert.ok(Math.abs(marker.x - columns[index]) < 1.5, `event ${index}: ${marker.x} vs ${columns[index]}`));
+    for (const [index, marker] of timeline.timelineLayout.markers.entries()) assert.ok(Math.abs(marker.x - columns[index]) < 1.5, `event ${index}: ${marker.x} vs ${columns[index]}`);
     const before = compose({ title: "Hiring ramp", blocks: [{ timeline: events.map((event) => ({ ...event, when: `${event.when} 2026` })) }, { chart: ramp }] }, { presentation });
     const what = (composed) => Math.min(...composed.items.find((item) => item.timelineLayout).timelineLayout.parts.filter((part) => part.role === "what").map((part) => part.fit.fontSize));
     assert.ok(what(result) >= what(before) - 0.01, "no smaller than the arrangement without the rule");
