@@ -2260,10 +2260,31 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
   return fitSourceText(text,box,size,minimum,step,measure,false,true,direction);
 }
 
+/**
+ * The line breaks of a text depend only on the text, the width measure, the size, the box width and the prose and direction flags, and
+ * composition asks for the same ones many times (every arrangement a slide is compared in, every trial size of a grid). They are kept per
+ * measure (the estimates are two module functions; a host measurement is one closure per style, dropped with it), up to
+ * LINE_BREAK_CACHE_LIMIT per measure. A hit returns copies, so a caller may change what it gets.
+ */
+const lineBreakCache = new WeakMap<MeasureTextWidth, Map<string, CodeTextFit>>();
+const LINE_BREAK_CACHE_LIMIT = 10000;
+const copyTextFit = (fit: CodeTextFit, width: number, height: number): CodeTextFit => ({ ...fit, lines: [...fit.lines], sourceLines: fit.sourceLines.map(line => ({ ...line, segments: line.segments.map(segment => ({ ...segment })) })), ...(fit.directions ? { directions: [...fit.directions] } : {}),
+  overflow: fit.sourceLines.length * fit.lineHeight > height + .01 || fit.sourceLines.some(line => line.width > width + .01) });
 /** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
 function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection,balance=false):SourceTextFit {
   const directionAt=direction==='rtl'?paragraphDirectionAt(text,'rtl'):undefined;
+  let cache = lineBreakCache.get(measure);
+  if (!cache) { cache = new Map(); lineBreakCache.set(measure, cache); }
   const layout=(fontSize:number,forced?:ReadonlySet<number>):CodeTextFit=>{
+    if (forced) return breakLines(fontSize,forced);
+    const key=`${prose?1:0}${direction==='rtl'?'r':'l'}${fontSize}|${box.width}|${text}`, known=cache!.get(key);
+    if (known) return copyTextFit(known,box.width,box.height);
+    const fit=breakLines(fontSize);
+    if (cache!.size>=LINE_BREAK_CACHE_LIMIT) cache!.clear();
+    cache!.set(key,copyTextFit(fit,box.width,Infinity));
+    return fit;
+  };
+  const breakLines=(fontSize:number,forced?:ReadonlySet<number>):CodeTextFit=>{
     const tabWidth=measure(' ',fontSize)*4;
     if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Text tabs require a positive finite measured space advance.');
     const measureLine=(start:number,end:number,record=false)=>{
@@ -3148,6 +3169,13 @@ type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-
 /** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
 const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
+/**
+ * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
+ * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
+ * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
+ */
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column']);
+const AT_REQUEST = new WeakSet<SlideComposition>();
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
 function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
   const before = bodyReadability(base, options).byPath;
@@ -3194,23 +3222,25 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
 /**
  * Compose a validated Slide. Layout resolution remains the caller's responsibility.
  *
- * The wave 3 size guard, one for every rule (GuardedRule): the slide is composed with all of them, recording which changed something.
- * When none did, that is the result: one composition, as before wave 3. Otherwise the slide is also composed without them (wave 2's
- * composition, `base`), which seeds the two rules that start from a size there (LH-68's tiles start each metric role at its stacked
- * size, LH-06's band or pill starts its text at the size the block had), and the result with the rules is kept when it reads as well
- * as `base` (readsAsWell: no block's body size smaller, and no more findings, split words or prose under the minimum measure; fewer
- * findings may trade size, never below the floor, where every fit stops). When it does not, each rule that fired is added on its own,
- * in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the ideal measure, card or
- * arrangement. Then, on the settled composition, a template slide may be recomposed as the automatic grid (LH-49 for a short plot,
- * LH-83 at the floor) and an automatic slide may give its picture or chart a track (LH-80, LH-49), each kept only when it reads as well.
+ * The wave 3 size guard, one for every rule (guardedCompose): no rule of wave 3 sets a block smaller than wave 2 does, unless that
+ * removes a finding. Then the slide settles (settle): an under-filled body grows (LH-48), a template slide may be recomposed as the
+ * automatic grid (LH-49 for a short plot, LH-83 at the floor), and an automatic slide may give its picture or chart a track (LH-80,
+ * LH-49); each of those arrangements is guarded the same way and kept only when it reads as well as the guarded composition.
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
   return settle(input, options, guardedCompose(input, options));
 }
 /**
- * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition or a track): the composition with the
- * guarded rules that read as well as the same arrangement without them. Throws the strict composition's error when nothing composes.
+ * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition): the slide is composed with every guarded
+ * rule (GuardedRule), recording which changed something. When none did, that is the result: one composition, as before wave 3. When
+ * only placement rules did (PLACEMENT_RULES) and every block got the size it asked for with no finding, it is kept as well. Otherwise
+ * the slide is also composed without the rules (wave 2's composition, `base`), which seeds the two rules that start from a size there
+ * (LH-68's tiles start each metric role at its stacked size, LH-06's band or pill starts its text at the size the block had), and the
+ * result with the rules is kept when it reads as well as `base` (readsAsWell: no block's body size smaller, and no more findings, split
+ * words or prose under the minimum measure; fewer findings may trade size, never below the floor). When it does not, each rule that
+ * fired is added on its own, in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the
+ * ideal measure, card or arrangement. Throws the strict composition's error when nothing composes.
  */
 function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const fired = new Set<GuardedRule>(), ruled = (rules: ReadonlySet<GuardedRule>, extra: Record<symbol, unknown> = {}) => ({ ...options, [RULES]: rules, ...extra } as ComposeSlideOptions);
@@ -3219,7 +3249,10 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
   };
   let failure: unknown, result: SlideComposition | undefined;
   try { result = composeArranged(input, ruled(ALL_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
-  if ((globalThis as any).__firedCounts) { const key = [...fired].sort().join("+") || "none"; (globalThis as any).__firedCounts[key] = ((globalThis as any).__firedCounts[key] ?? 0) + 1; }
+  if (fired.size && result && AT_REQUEST.has(result) && [...fired].every(rule => PLACEMENT_RULES.has(rule))) {
+    const read = trackQuality(result, options);
+    if (read.overflows === 0 && read.splitWords === 0 && read.narrow === 0) return result;
+  }
   if (fired.size) {
     let base: SlideComposition;
     try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; return result; }
@@ -3245,9 +3278,10 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
   return result!;
 }
 /**
- * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template slide is recomposed as the automatic grid when the layout leaves a
- * chart's plot too short (LH-49, chartRecomposition) or a body role at the readability floor (LH-83, recomposeAtFloor); an automatic
- * slide gives its one picture or chart a track (LH-80, LH-49, automaticTracks).
+ * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template
+ * slide is recomposed as the automatic grid when the layout leaves a chart's plot too short (LH-49, chartRecomposition) or a body role
+ * at the readability floor (LH-83, recomposeAtFloor); an automatic slide gives its one picture or chart a track (LH-80, LH-49,
+ * automaticTracks). Each arrangement is composed under the guard (guardedCompose, composeVariant).
  */
 function settle(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
@@ -3343,7 +3377,12 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
   const top = box.y + header + pad + labels, height = Math.max(0, box.height - header - 2 * pad - labels - row);
   return { x: box.x + pad + axis, y: top, width: Math.max(0, box.width - 2 * pad - axis), height };
 }
-/** LH-80, LH-49: how well a composition reads, for comparing it with the same slide composed another way. */
+/**
+ * Wave 3: how well a composition reads, for comparing it with the same slide composed another way (the one measure of the wave 3 guard).
+ * `overflows`: its findings (text-overflow, small-cell, layout-unplaced); `blocks`: the body size of every text, list and table and of
+ * each main part of a quote, code panel, metric or timeline (bodyReadability's `byPath`); `narrow` and `measure`: the paragraphs under
+ * the minimum measure (LH-66) and the shortest of their measures.
+ */
 interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number> }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
@@ -3352,10 +3391,9 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks: read.byPath };
 }
 /**
- * LH-80, LH-49, LH-66: `after` reads as well as `before`: no more overflow or small cells, no more words split, no more prose under the
- * minimum measure and none on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A new
- * arrangement never costs the text its size: only where `before` overflows may `after` be smaller, to overflow less, and never at the
- * readability floor.
+ * Wave 3: `after` reads as well as `before`: no more findings, no more words split, no more prose under the minimum measure and none
+ * on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A rule or arrangement never costs
+ * the text its size: only to leave fewer findings may `after` be smaller, and never below the readability floor.
  */
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
   if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01) return false;
@@ -3427,7 +3465,6 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     let best: { result: SlideComposition; size: number; read: TrackQuality } | undefined;
     for (const size of MEDIA_TRACK_SHARES.filter(share => kept(share) >= MEDIA_TRACK_MIN_KEPT - 1e-9)) {
       const result = attempt(MEDIA_TRACK, { block: index, edge, size }), read = result && quality(result);
-      if ((globalThis as any).__guardDebug) console.error('track', size, JSON.stringify({ before: { ...before, blocks: Object.fromEntries(before.blocks) }, read: read && { ...read, blocks: Object.fromEntries(read.blocks) } }));
       if (!result || !read || !readsAsWell(before, read, floor)) continue;
       const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
       if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
@@ -3448,7 +3485,6 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   return base;
 }
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const debugCounts = (globalThis as any).__composeCounts; if (debugCounts) { const key = Object.getOwnPropertySymbols(options).map(symbol => symbol.description).filter(name => name !== "opf.rules" && name !== "opf.fired").join("+") || "plain"; debugCounts[key] = (debugCounts[key] ?? 0) + 1; }
   const slide = record(input), layout = record(options.layout);
   // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
   // record's contentDirection asks its regions to flow one way, so the automatic grid does not take it.
@@ -3875,6 +3911,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // LH-48: the growth a lone block was given (placeNode), read by every measure of it so its needs and its layout agree.
   const growthOf = new WeakMap<Pending, number>(), proseGrowth = new WeakMap<Pending, number>();
+  let loneGrowth = false;
   const grownOptions = (node: Pending): { growth?: number } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth } : {}; };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
@@ -4723,7 +4760,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9) break;
         chosen = step; best = height; size = step;
       }
-      if (chosen === undefined) proseGrowth.delete(node); else proseGrowth.set(node, chosen);
+      if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
     } else {
       let chosen: number | undefined;
       for (let power = 1; power <= 5; power++) {
@@ -4742,7 +4779,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (height > LONE_TARGET * inner.height || !fits) break;
         chosen = growth; best = height;
       }
-      if (chosen === undefined) growthOf.delete(node); else growthOf.set(node, chosen);
+      if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
     }
     // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
     let height = best;
@@ -5793,7 +5830,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
+  // Wave 3: every body block fitted at the size it asked for (a paragraph or list at its starting size, each visible part of a quote, code
+  // panel, metric or timeline at its role size), so no arrangement of the same requests could set one larger (composeSlide's guard).
+  const atRequest = !loneGrowth && items.every((item, index) => {
+    if (headings.has(item.field) || item.emphasis) return true;
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal && (internal.parts as readonly { requestedFontSize: number; fit?: { fontSize: number } }[]).some(part => part.fit && part.fit.fontSize > part.requestedFontSize + FONT_GRID_EPSILON)) return false;
+    if (internal) return (internal.parts as readonly { requestedFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]).every(part => part.visible === false || !part.fit || part.fit.fontSize >= part.requestedFontSize - FONT_GRID_EPSILON);
+    if (item.field === 'table') return false;
+    if (!item.text) return true;
+    const start = bodyStarts.get(index);
+    return start !== undefined && item.text.fontSize >= snapFontSizeDown(start) - FONT_GRID_EPSILON;
+  });
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
+  if (atRequest) AT_REQUEST.add(composed);
   return composed;
 }
 
