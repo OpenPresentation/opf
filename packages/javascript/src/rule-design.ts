@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -304,9 +304,13 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
  * slide's own variant or background (docs/programs/layout-harvest/README.md, Decisions). Without an accent order of its own it keeps the one
  * the deck and the theme give, so a dark-alt deck's section slide keeps the deck's accents. A tone-relative value (`surface`, `brand`) is
  * resolved against the variant the deck and the theme give (its bg1 slot and whether it is dark).
+ *
+ * LH-103: only over a scheme-based background. A fixed background the deck or the theme draws (a hex or `var:` color, a gradient, a
+ * pattern, a picture; deckBackgroundIsFixed) beats the layout's variant: the levels are the slide's, the deck's and the theme's, so the
+ * slide keeps that background and its tone or luminance decides the text, as on a slide with no layout variant.
  */
 export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}): Rec[] {
-	if (!layoutColorVariant(layout)) return [slideDesign, deckDesign, theme];
+	if (!layoutColorVariant(layout) || deckBackgroundIsFixed(deckDesign, theme.background)) return [slideDesign, deckDesign, theme];
 	const below = colorChoice([deckDesign, theme], scheme, variables);
 	const deck = resolveColorRoles(scheme, { background: below.background, variant: below.variant });
 	const variant = layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;

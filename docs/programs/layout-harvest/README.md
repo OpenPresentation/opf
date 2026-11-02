@@ -50,6 +50,7 @@ These are vetoable defaults, taken 2026-11-02 so the work need not wait. Each re
 | Decision | Default taken | Alternative |
 | --- | --- | --- |
 | Precedence of a layout's background variant (LH-01) | A layout's `design.variant` outranks the deck's and the theme's; the slide's own design still wins | The layout loses to the deck, as other design keys do |
+| A fixed deck background against a layout's variant (LH-103; owner decision 2026-11-02) | A fixed background the deck or the theme draws (a hex or `var:` color, a gradient, a pattern, a picture) beats a layout's `design.variant`: the slide keeps it and its text follows its tone or luminance. A scheme-based one (none, a theme slot, a slot or role name such as `primary`, a deck `variant`) takes the layout's variant on top. A deck with a fixed background and a `variant` keeps the background; a theme's fixed background counts as the deck's | The layout variant hides every deck and theme background, a picture too (LH-01 as first built) |
 | `image` layout fit | Keep `contain` (pictures whole) | `cover`, as Claude Design crops to fill |
 | Hero capacity | Keep the full-height picture; three long supporting paragraphs overflow and are reported | Full-width support row as before |
 | Small-chart defaults (LH-03) | Direct value labels for a single-series chart of eight or fewer points; import does not write the default back | Leave labels to authors |
