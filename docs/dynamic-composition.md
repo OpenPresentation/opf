@@ -144,7 +144,7 @@ sharing one size are always applied.
   lead size and steps down until it takes at most four lines (never below the 28 px body size), on a card that hugs it, when
   that makes no quote smaller; otherwise it keeps its size, on a card when the card costs no size. A card the slide does not
   otherwise draw is left out when it would make the quote overflow. A lone quote, and one or two quotes alone on a slide, keep
-  the 40 px display size. Sibling quotes share one body size, as sibling paragraphs do.
+  the 40 px display size. Sibling quotes in one row share one body size; a row of wider cells keeps its own.
 
 ## Nested groups
 

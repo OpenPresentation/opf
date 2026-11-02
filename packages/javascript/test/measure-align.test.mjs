@@ -139,3 +139,14 @@ test('LH-78: the quote body steps down to fit its lines, never below the body te
   const display = layoutQuote({ text }, box).parts.find((part) => part.role === 'body');
   assert.equal(display.requestedFontSize, 40, 'the display size by default');
 });
+
+test('LH-78: quotes share one size within a row; a row of wider cells keeps its own', () => {
+  const result = composeSlide(sampleSlide(layouts.quote, 5, 'long'), { layout: layouts.quote });
+  assert.deepEqual(overflow(result), []);
+  const rows = new Map();
+  for (const item of quotes(result)) rows.set(Math.round((item.frameBox ?? item.box).y), [...(rows.get(Math.round((item.frameBox ?? item.box).y)) ?? []), bodySize(item)]);
+  const [narrow, wide] = [...rows.values()];
+  assert.equal(new Set(narrow).size, 1, 'one size in the row of three');
+  assert.equal(new Set(wide).size, 1, 'one size in the row of two');
+  assert.ok(wide[0] > narrow[0], 'the wider row keeps its larger size');
+});

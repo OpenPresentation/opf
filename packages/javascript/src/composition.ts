@@ -4846,17 +4846,28 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         }
         continue;
       }
-      // LH-78: sibling quotes share one body size: each larger one is laid out again in its own box at the smallest body size.
+      // LH-78: sibling quotes of one row share one body size: each larger one is laid out again in its own box at the row's smallest
+      // body size. A row is the quotes whose cells overlap vertically, so a row of wider cells under a row of narrow ones keeps its own,
+      // larger size.
       if (key.endsWith(':quote')) {
         const bodyOf = (layout: QuoteLayout) => layout.parts.find(part => part.role === 'body')?.fit;
-        const size = Math.min(...members.map(index => bodyOf(items[index]!.quoteLayout!)?.fontSize ?? Infinity));
+        const cellOf = (index: number) => items[index]!.frameBox ?? items[index]!.box;
+        const rows: number[][] = [];
         for (const index of members) {
-          const item = items[index]!;
-          if ((bodyOf(item.quoteLayout!)?.fontSize ?? 0) <= size + 1e-9) continue;
-          const refit = quoteRefits.get(index)!(size), body = bodyOf(refit);
-          if (refit.overflow || !body || Math.abs(body.fontSize - size) > 1e-9) continue;
-          item.quoteLayout = refit;
-          item.text = body;
+          const cell = cellOf(index), row = rows.find(list => list.some(other => { const peer = cellOf(other); return Math.max(cell.y, peer.y) < Math.min(cell.y + cell.height, peer.y + peer.height) - 1e-6; }));
+          if (row) row.push(index); else rows.push([index]);
+        }
+        for (const row of rows) {
+          if (row.length < 2) continue;
+          const size = Math.min(...row.map(index => bodyOf(items[index]!.quoteLayout!)?.fontSize ?? Infinity));
+          for (const index of row) {
+            const item = items[index]!;
+            if ((bodyOf(item.quoteLayout!)?.fontSize ?? 0) <= size + 1e-9) continue;
+            const refit = quoteRefits.get(index)!(size), body = bodyOf(refit);
+            if (refit.overflow || !body || Math.abs(body.fontSize - size) > 1e-9) continue;
+            item.quoteLayout = refit;
+            item.text = body;
+          }
         }
         continue;
       }
