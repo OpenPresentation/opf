@@ -28,13 +28,13 @@ Sources:
 | LH-03 | Small charts of one or two series: direct value labels, the last point (or the named one) in the accent, no value axis or gridlines, no grey plot panel | CD, SG | core chart options, render, pptx | Charts of 8 or fewer points in one series draw labels in both engines; PPTX import does not write the default back | P1 | todo |
 | LH-04 | Top-anchored cards hug their content, then comparison draws on cards without dense options falling under 20 px | CD | core, gallery | `auto-track-capacity.test.mjs` still passes with comparison on cards | P1 | todo |
 | LH-05 | Compact grids: short text cells hug instead of spreading over the body | CD | core | A 3 × 2 grid of one-line texts keeps its rows one gap apart | P2 | todo |
-| LH-06 | Emphasis surface: one block or group on a dark or accent card or band (on dark, accent fill with dark text); a closing's short last text (30 characters or fewer) as an accent band | CD | schema, core, render, pptx | `emphasis: true` draws a contrasting surface in both engines, with text colours that pass contrast | P2 | todo |
+| LH-06 | Emphasis surface: one block or group on a dark or accent card or band (on dark, accent fill with dark text); a short last text (60 characters or fewer) after longer blocks as a foot band, and one of 30 or fewer beside a lone long text as a pill | CD | schema, core, render, pptx | `emphasis: true` draws a contrasting surface in both engines, with text colours that pass contrast | P2 | todo |
 | LH-07 | Numbered step badges and a connector for process and agenda; one-word item lists as an arrowed flow | CD | core, render, pptx | Process draws numbered circles joined by a line; PPTX writes shapes, not a picture | P2 | todo |
 | LH-08 | Ruled rows: label and description side by side, and list entries as ruled rows | CD | design key, core, engines | A `listStyle: rows` (or equivalent) design key draws hairlines between entries in both engines | P2 | todo |
 | LH-09 | Statement message at display size, lead paragraph in text, decorative quote mark | CD | core, render | The sampler's statement, text and quote match the review page's targets | P2 | todo |
 | LH-10 | Prose measure cap of 55 to 65 characters, with overflow into columns | SG | core | No body paragraph in the sampler runs past 75 characters a line | P2 | todo |
 | LH-11 | No line break between a number and its unit or %, or before a closing quotation mark or `. , ; : )` | PX, SG | core | "26 %" and "$4.8 M" style pairs never split across lines | P2 | todo |
-| LH-12 | PPTX audit: theme slots and scheme colours, chart text in theme fonts, `txBox` and shape names, zero insets where aligned, stacked `outEnd` guard, secondary-axis combos | PX | pptx | A conformance test over the exported XML of every example deck | P1 | todo |
+| LH-12 | PPTX audit: theme slots and scheme colours, chart text in theme fonts, `txBox` and shape names, zero insets where aligned, stacked `outEnd` guard, secondary-axis combos | PX | pptx | A conformance test over the exported XML of every example deck | P1 | done ([opf#949](https://github.com/OpenPresentation/opf/pull/949)) |
 | LH-13 | Skill updates: outline titles first, a content-to-structure table, vertical budget, placeholders for missing facts, notes as a script | SG, PX | skills | `opf-author` and `opf-layout` teach each rule with an OPF example | P2 | todo |
 | LH-14 | Optional named icons on items, metrics and group headings | SG, CD | schema, render, pptx, assets | About 30 bundled icons drawn on a chip in both engines | P3 | todo |
 | LH-15 | Horizontal metric for wide, short tiles; hairline rule style for metrics | CD | core, render | A 2 × 2 metric grid draws number left, label right | P3 | todo |
@@ -43,7 +43,7 @@ Sources:
 | LH-18 | Matrix alignment: sibling groups share row tracks | SG | core | Pillars of unequal heading lengths keep descriptions on one line | P3 | todo |
 | LH-19 | Info findings: text shrunk far below its role size, four or more identical layouts in a row, straight quotes, centred body text | SG, PX | validator | Each rule has a fixture and a `describeFinding` entry | P3 | todo |
 | LH-20 | Pictures-only PPTX export for fidelity | SG | cli, pptx | `opf convert --as images` writes one picture per slide with notes and alt text | P3 | todo |
-| LH-27 | Compare about 1000 varied slides with Claude Design and catalog what generalizes | CD | tooling | Every batch reviewed; ideas added here | P1 | in-progress |
+| LH-27 | Compare about 1000 varied slides with Claude Design and catalog what generalizes | CD | tooling | Every batch reviewed; ideas added here | P1 | done |
 | LH-28 | Safe-fonts PPTX export mode | PX | pptx, cli | `fonts: "safe"` maps each family to Office's metric-safe set | P3 | todo |
 | LH-29 | Lossy export findings for borders, shadows, SVG and images | SG | pptx | One `opf/export-lossy` family documented in `opf-export` | P3 | todo |
 | LH-30 | An optional template group whose variables are all unfilled collapses whole | PX | core | Picture and card go with the text; a validator note says so | P3 | todo |
@@ -63,14 +63,14 @@ Sources:
 | LH-44 | Tables: a row floor (line height plus insets), a column at least its longest word, natural width in automatic composition; never a break inside a word | CD b02, b03, b04, b14 | core, render | b02 s01, b03 s31, b04 s09/s46, b14 s49 draw whole words and readable rows, or report `opf/layout-overflow` | P1 | todo |
 | LH-45 | Nothing draws outside its box silently: code, tables and timelines fit at the floor or report `opf/layout-overflow` | CD b01, b04 | core, render, pptx | b01 s24 and b04 s14/s42 either fit or carry the finding | P1 | todo |
 | LH-46 | Extra blocks in fixed regions join the grid at the sibling size: image 2–6 (a row, then lead plus mosaic, cover), comparison N columns, statement and closing lead plus cards | CD b01–04 | core, gallery | The image, comparison and statement slides with 3–6 blocks lay out as one grid with no slim full-width strips | P2 | todo |
-| LH-47 | Balanced grid counts with no lone last cell (7 → 4 + 3, 9 → 3 × 3); media grids share one aspect and cover | CD b02, b03 | core | Gallery, team and logos with 7, 8 and 9 entries fill their last row to within one cell | P2 | todo |
+| LH-47 | Balanced grid counts with no lone last cell (7 → 4 + 3, 9 → 3 × 3), the cells of a short last row stretched to the full width; media grids share one aspect and cover | CD b02, b03 | core | Gallery, team and logos with 7, 8 and 9 entries fill their last row to within one cell | P2 | todo |
 | LH-48 | Short content scales up: a lone metric, quote, code or text, or any body under half full, steps up its role scale to about 60% fill and centres | CD b01–04, b14 | core | The lone-block slides (b01 s21/s49, b02 s27/s50, b04 s38, b14 s16/s17) fill 50–70% of the body | P2 | todo |
 | LH-49 | Charts get the filling track and a minimum plot size (the larger of 120 px and 22% of the body; aspect at most 3:1) | CD b01, b02, b14 | core | Charts beside metrics, quotes and lists (b02 s40, b14 s28/s46) draw a readable plot | P2 | todo |
-| LH-50 | A short label (3 words or fewer, no full stop) before a longer text becomes that text's eyebrow | CD b01, b02 | core | "Signal", "Inputs" and "Operations" in b01 s27, b02 s11 draw as eyebrows | P3 | todo |
+| LH-50 | A short label (3 words or fewer, no full stop) next to a longer text becomes that text's eyebrow or tag | CD b01, b02 | core | "Signal", "Inputs" and "Operations" in b01 s27, b02 s11 draw as eyebrows | P3 | todo |
 | LH-51 | One-line titles first: a title steps down up to 25% before it wraps | CD b03, b04 | core | Titles of 45–60 characters in the corpus stay on one line | P2 | todo |
 | LH-52 | Panels stretch and text centres when a two-part split fills under 55% of the body | CD b03, b04 | core | b03 s12/s16, b04 s01/s29 draw full-height panels with centred text | P2 | todo |
 | LH-53 | Metric unit at 60% of the value on its baseline; delta and trend on one line | CD b03, b04 | render, pptx | "18 %" and "▲ +6 pts" render as one figure and one line | P3 | todo |
-| LH-54 | Cards on dark backgrounds are filled: a surface about 7% toward light1, no stroke | CD b14 | core colour roles, render, pptx | Dark-deck cards in b14 read as surfaces at about 1.25:1 | P1 | todo |
+| LH-54 | Cards on dark backgrounds are filled: a surface about 7% toward light1, with a 1 px stroke at about 12% white | CD b14 | core colour roles, render, pptx | Dark-deck cards in b14 read as surfaces at about 1.25:1 | P1 | todo |
 | LH-55 | Dark chart palette: every series at 4.5:1 or more against the plot, with a lightness step of at least 20 between series 1 and 2 | CD b14 | core colour | The b14 charts pass both checks | P1 | todo |
 | LH-56 | Labels inside marks (treemap, funnel, pie, tiles) take a colour per fill at 4.5:1 | CD b14 | render, pptx | b14 s10/s24/s46 labels pass contrast | P2 | todo |
 | LH-57 | On dark, a metric value takes the text colour and the accent moves to its label | CD b14 | core roles, render | b14 metric slides keep the value as the strongest element | P3 | todo |
@@ -81,9 +81,9 @@ Sources:
 | LH-62 | A middle-anchored layout keeps its title at the top margin (quote layout) | CD b14 | gallery, core | Decision: today the whole group centres on purpose (WI-2); Claude Design keeps the title fixed | P3 | todo |
 | LH-63 | A text whose first line is 40 characters or fewer draws that line as a run-in heading | CD b02 | core | "Option A: focused pilot" draws as a heading over its body | P3 | todo |
 | LH-64 | Text-only cards do not foot-anchor: when every card in a row holds only body text filling under 45% of it, the cards hug their text and the row centres; three or fewer long texts draw as full-width rows | CD b07, b08, b15, b16 | core, gallery | b15 s27/s36/s39/s45, b16 s13/s22/s31 draw no card with its top half empty | P1 | todo |
-| LH-65 | Under-filled layouts: an empty region gives way and the rest split evenly (2 blocks in three-column draw 1:1); a layout with fewer blocks than its minimum, or filling under 35%, composes as a statement | CD b05–08, b16 | core, gallery | b05 s20/s23, b06 s01, b08 s38/s41, b16 s13/s31 lay out evenly or as a statement | P2 | todo |
+| LH-65 | Under-filled layouts: an empty region gives way and the rest split evenly (2 blocks in three-column draw 1:1); a layout with fewer blocks than its minimum, or filling under 35%, composes as a statement; a faq of plain lists composes as the list layout | CD b05–08, b16 | core, gallery | b05 s20/s23, b06 s01, b08 s38/s41, b16 s13/s31 lay out evenly or as a statement | P2 | todo |
 | LH-66 | Minimum prose measure: a text track is at least 28 average characters wide; beside media, text gets at least 40% of the width, otherwise a full-width row | CD b07, b08 | core | No text column in b07 s19/s32/s47, b08 s14/s27/s42 runs under 28 characters a line | P2 | todo |
-| LH-67 | Lead plus stack: of 3–5 sibling texts or quotes, one at least 2.5× the others takes a lead cell about 55% wide, one role step larger | CD b07, b08 | core | b07 s02/s21/s35, b08 s26 draw a lead and a stack | P3 | todo |
+| LH-67 | Lead plus stack: of 3–5 sibling texts or quotes, one at least 2.5× the others takes a lead cell about 55% wide, one role step larger; a chart or picture with 2 compact siblings takes 55–60% at full height | CD b07, b08 | core | b07 s02/s21/s35, b08 s26 draw a lead and a stack | P3 | todo |
 | LH-68 | Scorecard metric sized from its tile: value about 25% of the tile height (1× to 2× the role size), top-left with its label as eyebrow, description and trend at the foot | CD b07, b08 | gallery, core | b07 s33, b08 s11/s39 fill their tiles | P2 | todo |
 | LH-69 | A lone short text (4 words or fewer) in a placed region draws as a tile heading or at display size | CD b07, b08 | core | b07 s29, b08 s07/s18/s46 | P3 | todo |
 | LH-70 | Sibling paragraphs of similar length (3–6 texts of 100–240 characters) become a column grid at a 45–65 character measure | CD b05, b06 | core | b05 s08/s13/s36/s41, b06 s13/s14/s19/s47 draw as columns | P2 | todo |
@@ -92,6 +92,33 @@ Sources:
 | LH-73 | A grid of mostly metrics keeps only metrics; an extra text goes to the note region or becomes a caption | CD b06 | core | b06 s22/s50 | P3 | todo |
 | LH-74 | A picture or logo alone on a card fills the card to its edges, clipped to the radius, with no inset or stroke | CD b15, b16 | core, render, pptx | b15 s06/s15/s24/s33/s42, b16 s44 | P2 | todo |
 | LH-75 | Table layout: a short table (under half the body) and a note of 2 or more lines go side by side, 70:30 | CD b15 | gallery, core | b15 s23/s41 | P3 | todo |
+| LH-76 | Colon title split: a "Topic: qualifier" title that still wraps after LH-51 splits at the colon, the qualifier becoming the subtitle when the slide has none | CD b09–13 | core, skill | About 18 of 100 slides keep a one-line title | P2 | todo |
+| LH-77 | A one-entry described list draws as a heading (bold, one step up) over its description at text size, with no bullet, in its own cell | CD b09–13 | core | No 8 px descriptions in b09 s07, b10 s13, b12 s08, b13 s23 | P1 | todo |
+| LH-78 | A quote beside other blocks takes lead size on a card with a quote mark, fitting in 4 lines; display size only when alone or 2 or fewer in the quote layout | CD b09, b10, b12 | core | b09 s05/s10/s14/s38, b12 s02/s19/s29 | P2 | todo |
+| LH-79 | Code panel surface from the theme: dark2 on a light deck when dark1 is near-black; on a dark deck a surface about 6% darker than the background; tokens at 4.5:1 | CD b09–13, b17, b18 | core colour roles, render, pptx | Code panels on navy decks draw in the brand dark | P2 | todo |
+| LH-80 | Pictures in automatic composition take a full-height side track of 35–50% of the width, cover-cropped and bled at edges, never below 25% of the body area | CD b11, b17 | core | b11 s06/s08/s20/s33/s35/s47, b17 s08/s10 draw no thumbnails | P2 | todo |
+| LH-81 | Chart header row: an untitled chart draws its caption ("<series> by <category>") and up to four legend swatches in a row above the plot, which keeps the full width | CD b11–13, b17 | core chart options, render, pptx | Every corpus chart has its caption and legend above the plot | P2 | todo |
+| LH-82 | Group by kind when pairs do not match: interleaved blocks of unequal counts form a grid of the majority kind (about 60–65%) with the others stacked as ruled rows | CD b12, b13 | core | b12 s15/s25/s47, b13 s03 | P2 | todo |
+| LH-83 | Recomposition triggered by the floor: when a layout's best fit puts a role under 12 px, compose the blocks as the automatic grid and keep that when its smallest size is larger | CD b12, b13 | core | agenda-split, process and agenda slides of b12/b13 stay readable | P1 | todo |
+| LH-84 | Portrait crop focus: a picture of aspect under 1 cover-cropped into a wider frame defaults to focus y 0.3 | CD b12, b13 | core, render, pptx | Heads stay in frame in b12 s36, b13 s13 | P2 | todo |
+| LH-85 | Nested-list markers never draw as missing glyphs: level 1 and 2 markers (◦ ▪) draw as shapes or fall back to • when the face lacks them; a validator check for glyph coverage | CD b13 | render, pptx, validator | b13 s27 draws its level-1 marker | P1 | todo |
+
+## Implementation order
+
+This is the cross-batch synthesis of LH-27: the order that most raises the average slide, with correctness and overlaps first and dependencies respected.
+
+1. **Overflow is visible** (LH-45, LH-40): every block measures what it fits at the floor, reports `opf/layout-overflow`, and never fails a non-strict export.
+2. **Lists stay whole** (LH-42, LH-77, LH-85).
+3. **Timelines as compact bands** (LH-41, LH-83).
+4. **Tables and charts correct** (LH-44, LH-59, LH-60, LH-55).
+5. **One fitted size per sibling set** (LH-43, then LH-17).
+6. **Group blocks before placing them** (LH-58, LH-82, LH-73, LH-46, LH-47).
+7. **Fill the body** (LH-65, LH-64, LH-48, LH-52, LH-71, LH-80).
+8. **Measure and alignment** (LH-66, LH-70, LH-72, LH-67, LH-49, LH-78).
+9. **One-line titles** (LH-51, LH-76).
+10. **One emphasis surface per slide** (LH-06, LH-01, LH-54, LH-68, LH-79), with the chart layer (LH-03, LH-81) alongside.
+
+Independent items (PPTX, validator, skills, gallery tooling) can land at any time.
 
 ## Progress log
 
@@ -99,3 +126,4 @@ Sources:
 - 2026-11-02: LH-27 corpus generated (844 slides, 18 batches; scripts/layout-harvest-corpus.mjs). Our side renders 841; the code layout at five blocks fails the export on main too (LH-40); a scorecard of nine long measures regressed with cards and was fixed in opf#942 (a block with no room inside its card inset takes the whole card).
 - 2026-11-02: LH-27 batches 01–04 and 14 (250 slides, one dark) compared and reviewed by three reviewers; 23 items added (LH-41 to LH-63), LH-03 and LH-11 widened. The defects most often found: lists split across columns and overlapping (LH-42), siblings at different sizes (LH-43), timelines over their notes (LH-41), squeezed tables (LH-44), and dark cards and chart series without contrast (LH-54, LH-55).
 - 2026-11-02: LH-27 batches 05–08, 15 and 16 (300 more slides, two dark) reviewed by three reviewers; LH-64 to LH-75 added and nine items widened. The most consistent findings were extra blocks in fixed regions (LH-46, about 20 slides per 100), several timelines (LH-41), empty bodies (LH-48, LH-65) and wrapping titles (LH-51, 19 of 100 dark slides). LH-64 corrects LH-22: text-only cards set at their foot read as empty.
+- 2026-11-02: LH-27 complete: all 18 batches (844 slides, 5 dark) built in Claude Design and reviewed; batches 09–13, 17 and 18 add LH-76 to LH-85 and widen six items. The implementation order above is the reviewers' cross-batch synthesis. LH-12 merged (opf#949).
