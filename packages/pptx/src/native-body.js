@@ -1,6 +1,6 @@
 // RR-86 opt-in prototype. Native paragraphs trade measured line positions for a
 // single editable body. No source words or per-line recovery tags are stored.
-import {paragraphDirection, resolveTextStyle} from '@openpresentation/opf/composition';
+import {bindNoBreak, paragraphDirection, resolveTextStyle} from '@openpresentation/opf/composition';
 import {autoNumScheme} from './numbered-list.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
@@ -102,7 +102,8 @@ export function addNativeBody(slide, plan, context, options, helpers) {
         color, transparency: hex.length === 8 ? (1 - parseInt(hex.slice(6), 16) / 255) * 100 : 0,
         underline: run.underline ? {style: 'sng', color} : {style: 'none'}, strike: run.strikethrough ? 'sngStrike' : undefined,
         hyperlink: run.link && /^(https?:|mailto:|tel:)/i.test(run.link) ? {url: run.link} : undefined, ...helpers.langOptions(context, run.lang)};
-      const pieces = run.text.split(/\r\n|\r|\n/);
+      // LH-11: PowerPoint wraps the body itself, so the spaces core's line breaker never breaks at are no-break spaces (import writes them back).
+      const pieces = bindNoBreak(run.text).split(/\r\n|\r|\n/);
       pieces.forEach((text, index) => {
         if (index) { paragraph = []; paragraphs.push(paragraph); }
         paragraph.push({text, options: {...runOptions}});

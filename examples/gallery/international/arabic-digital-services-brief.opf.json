@@ -77,7 +77,6 @@
       "opacity": 0.2
     },
     "titleAlignment": "center",
-    "contentAlignment": "right",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "bottom",
@@ -667,9 +666,9 @@
       "colorSchemes": {
         "pastel-red": {
           "name": "Pastel Red",
-          "accent1": "#FE938C",
+          "accent1": "#DD756F",
           "accent2": "#E6B89C",
-          "accent3": "#EAD2AC",
+          "accent3": "#E4CCA7",
           "accent4": "#9CAFB7",
           "accent5": "#4281A4",
           "accent6": "#BFBFBF",

@@ -67,7 +67,6 @@
       "opacity": 0.2
     },
     "titleAlignment": "right",
-    "contentAlignment": "left",
     "contentBox": false,
     "contentDirection": "horizontal",
     "chartPrimary": "right",
@@ -634,7 +633,7 @@
       "colorSchemes": {
         "deep-purple": {
           "name": "Deep Purple",
-          "accent1": "#6A1B9A",
+          "accent1": "#7F35B2",
           "accent2": "#7B1FA2",
           "accent3": "#8E24AA",
           "accent4": "#9C27B0",

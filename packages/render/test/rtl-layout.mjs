@@ -13,7 +13,8 @@ const slides = [
   {title: 'عنوان العرض', items: [arabic, 'English item', 'العنصر الثاني: PowerPoint 365']},
   {title: 'مناطق', left: {text: 'النص الأيسر'}, right: {items: ['عنصر ١', 'عنصر ٢']}},
   {title: 'جدول', table: {columns: ['المؤشر', 'القيمة', 'الحالة'], rows: [['الإيرادات', '12', 'جيد']]}},
-  {title: 'مخطط', chart: {type: 'column', data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
+  // LH-03: `dataLabels: false` keeps the value axis of a small chart, whose side this checks.
+  {title: 'مخطط', chart: {type: 'column', dataLabels: false, data: {columns: ['شهر', 'قيمة'], rows: [['يناير', 12], ['فبراير', 15], ['مارس', 18]]}}},
   {title: 'نص طويل', text: `${arabic} ${arabic} ${arabic} ${'abc '.repeat(40)}`.trim()},
 ];
 const rtlDeck = {language: 'ar', slides}, ltrDeck = {language: 'en', slides};

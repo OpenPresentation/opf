@@ -4,7 +4,8 @@
 // `c:min 0`, so PowerPoint and Keynote chose their own major unit (the preview showed 0 to 800 in steps of 100, Keynote steps of 200).
 // Composition now derives the axis from the chart box and the chart text size, and the exporter writes it as c:max and c:majorUnit.
 import { chartOptionTarget, resolveChartOptions } from './chart-options.js';
-import { chartNumber, type ResolvedChartData } from './chart-data.js';
+import { chartNumber, resolveChartData, type ResolvedChartData } from './chart-data.js';
+import { chartDrawPlan } from './chart-fallback.js';
 
 /** The ticks of an automatic value axis: `ticks` runs from `min` to `max` in steps of `step`. */
 export interface ChartScale {
@@ -304,6 +305,8 @@ export interface ChartAxisGeometry {
   scale: number;
   /** The composition's `minFontSize` (default 16), which the chart text never goes below. */
   minFontSize?: number;
+  /** LH-60: the deck language, which names the places a map chart plots (a map over other categories is drawn as columns). */
+  language?: string;
 }
 
 /**
@@ -324,7 +327,9 @@ export interface ChartAxisGeometry {
  */
 export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geometry: ChartAxisGeometry): ChartValueAxis | undefined {
   const type = typeof chart === 'object' && chart !== null ? (chart as { type?: unknown }).type : undefined;
-  const id = typeof type === 'string' ? type.trim().toLowerCase() : '';
+  const authored = typeof type === 'string' ? type.trim().toLowerCase() : '';
+  // LH-60: the drawn construct (a map over categories that are not places is drawn as columns, and takes their axis).
+  const id = resolved.ok ? chartDrawPlan(chart, resolved, { language: geometry.language }).type : authored;
   const spec = Object.hasOwn(CATEGORY_CHARTS, id) ? CATEGORY_CHARTS[id] : undefined;
   if (!spec || !resolved.ok || resolved.combo) return undefined;
   const { scale, width, height } = geometry;
@@ -346,10 +351,50 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const pad = 10 * scale;
   const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;
-  const options = resolveChartOptions(chart, chartOptionTarget(id));
+  const options = resolveChartOptions(chart, chartOptionTarget(authored));
   const legendBand = options.legend === 'top' || options.legend === 'bottom' ? lineHeight + pad : 0;
   const titleBand = options.axisTitles.category ? lineHeight : 0;
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
   const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent });
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
+}
+
+/** LH-33: a chart whose value axis {@link shareSiblingChartAxes} may share: the chart object and the axis composition gave it. */
+export interface SiblingChart {
+  value: unknown;
+  chart?: { valueAxis?: ChartValueAxis };
+}
+
+/**
+ * LH-33: sibling charts of one unit on one slide share their value axis, so equal values stand equally tall and the charts can be read
+ * against each other. Two column, bar, line or area charts of a slide are of one unit when they run the same way (vertical or horizontal),
+ * are both 100% stacked or both not, and their first series has the same number format; without a format, when they plot the same series
+ * names (Current and Baseline in both). Each set of two or more is given one axis, `niceScale` from the lowest minimum to the highest
+ * maximum with the fewest intervals any member had (its plot is the shortest), and both engines draw it (the preview draws `valueAxis`, the
+ * PPTX export writes it). `document` resolves dataset references. The axes are changed in place.
+ */
+export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?: unknown): void {
+  const sets = new Map<string, SiblingChart[]>();
+  for (const item of charts) {
+    const axis = item.chart?.valueAxis;
+    if (!axis) continue;
+    const type = typeof item.value === 'object' && item.value !== null ? (item.value as { type?: unknown }).type : undefined;
+    const id = typeof type === 'string' ? type.trim().toLowerCase() : '';
+    const resolved = resolveChartData(item.value, document);
+    if (!resolved.ok) continue;
+    const spec = Object.hasOwn(CATEGORY_CHARTS, id) ? CATEGORY_CHARTS[id]! : CATEGORY_CHARTS.column!;
+    const format = resolved.formats[1];
+    const key = JSON.stringify([spec.horizontal, axis.percent === true, format ?? null, format === undefined ? resolved.columns.slice(1) : null]);
+    sets.set(key, [...sets.get(key) ?? [], item]);
+  }
+  for (const members of sets.values()) {
+    if (members.length < 2) continue;
+    const axes = members.map(item => item.chart!.valueAxis!);
+    const min = Math.min(...axes.map(axis => axis.min)), max = Math.max(...axes.map(axis => axis.max));
+    if (axes.every(axis => axis.min === min && axis.max === max)) continue;
+    const intervals = Math.max(1, Math.min(...axes.map(axis => Math.round((axis.max - axis.min) / axis.majorUnit))));
+    const percent = axes[0]!.percent === true;
+    const shared = niceScale(min, max, intervals, { percent });
+    for (const item of members) item.chart!.valueAxis = { min: shared.min, max: shared.max, majorUnit: shared.step, ...(percent ? { percent: true as const } : {}) };
+  }
 }

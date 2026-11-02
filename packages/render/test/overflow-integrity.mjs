@@ -3,12 +3,13 @@ import {toSvg} from './catalog-harness.mjs';
 
 // LH-40 (layout harvest): the code layout with five blocks (LH-27 corpus, batch-13 s29) left its middle panel's body no room after the
 // filename and language, and the preview threw `layout-overflow`. Non-strict, the body is drawn at the readability floor and the finding
-// is reported; a strict composition still fails.
+// is reported; a strict composition still fails. Wave 2: unpinned, the slide is recomposed as the automatic grid (LH-83: three panels in
+// a row, no finding), so the middle panel is pinned to the layout's code region, which keeps the layout's composition.
 const lines = (count, name) => Array.from({length: count}, (_, index) => `${name}(${index});`).join('\n');
 const slide = {layout: 'code', title: 'Signal Trend', blocks: [
   {code: {source: lines(6, 'routeToSponsor'), language: 'ts', filename: 'video-demo-sales-narrative-rule.ts'}},
   {text: 'Prairie Ridge High School should focus the next cycle on secure funding for hands-on robotics and chemistry labs while making the operating tradeoffs clear to k-12 education stakeholders.'},
-  {code: {source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts'}},
+  {code: {source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts'}, region: 'code'},
   {text: 'Keep the recommendation and its evidence together.'},
   {code: {source: lines(6, 'keepInWeeklyReview'), language: 'ts', filename: 'revenue-forecast-inspection-rule.ts'}},
 ]};

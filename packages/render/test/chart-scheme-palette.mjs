@@ -70,7 +70,8 @@ for (const type of ['column', 'bar', 'line', 'area']) {
 // The value axis is core's: the gridline labels are min, min + majorUnit, ... max of chartValueAxis for the chart's box, in a tall
 // box and in a short one (fewer, larger intervals).
 {
-  const chart = {type: 'column', data: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 760], ['Q4', 310]]}};
+  // LH-03: `dataLabels: false` keeps the value axis of a small chart (one series of four points).
+  const chart = {type: 'column', dataLabels: false, data: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 760], ['Q4', 310]]}};
   const ticksOf = (input, path) => {
     const svg = toSvg(input, 1, {trace: true});
     const frame = attrs(svg, 'rect', new RegExp(`^${path.replaceAll('.', '\\.')}$`))[0];

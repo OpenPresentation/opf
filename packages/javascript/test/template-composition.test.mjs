@@ -24,25 +24,25 @@ const cells = (result, name) => result.items.filter((item) => item.region === na
 const rows = (items) => [...new Set(items.map((item) => Math.round(item.box.y)))].length;
 
 describe('the grid flow by count', () => {
-  test('landscape: 1, 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns', () => {
+  test('landscape: 1, 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (LH-47)', () => {
     const shapes = Array.from({ length: 12 }, (_, index) => gridFlowShape(index + 1, true)).map((shape) => shape.perRow.join('+'));
-    assert.deepEqual(shapes, ['1', '2', '3', '2+2', '3+2', '3+3', '4+3', '4+4', '4+4+1', '4+4+2', '4+4+3', '4+4+4']);
+    assert.deepEqual(shapes, ['1', '2', '3', '2+2', '3+2', '3+3', '4+3', '4+4', '3+3+3', '4+3+3', '4+4+3', '4+4+4']);
   });
 
-  test('portrait: rows and columns swap (2 and 3 stacked, 5 as 2 + 2 + 1, 6 as 2 x 3, 7 to 12 in three rows)', () => {
+  test('portrait: rows and columns swap (2 and 3 stacked, 5 as 2 + 2 + 1, 6 as 2 x 3, 7 to 12 in three balanced rows)', () => {
     const shapes = Array.from({ length: 12 }, (_, index) => gridFlowShape(index + 1, false)).map((shape) => shape.perRow.join('+'));
-    assert.deepEqual(shapes, ['1', '1+1', '1+1+1', '2+2', '2+2+1', '2+2+2', '3+3+1', '3+3+2', '3+3+3', '4+4+2', '4+4+3', '4+4+4']);
+    assert.deepEqual(shapes, ['1', '1+1', '1+1+1', '2+2', '2+2+1', '2+2+2', '3+2+2', '3+3+2', '3+3+3', '4+3+3', '4+4+3', '4+4+4']);
   });
 
-  test('pillars draws 5 blocks as 3 + 2, the short row centred with the full rows\' column width', () => {
+  test('pillars draws 5 blocks as 3 + 2, the short row stretched to the full width (LH-47)', () => {
     const result = compose({ title: 'Five', blocks: short(5) }, layouts.pillars);
     const items = cells(result, 'pillars');
     assert.equal(rows(items), 2);
     assert.ok(items.every(item => item.frameBox !== undefined), 'pillars draws its entries on cards (layout harvest)');
-    const [a, b, c, d, e] = items.map((item) => item.box);
-    assert.ok(near(d.width, a.width) && near(e.width, a.width));
+    const [a, b, c, d, e] = items.map((item) => item.frameBox);
+    assert.ok(near(d.width, e.width) && d.width > a.width * 1.4);
     const box = region(result, 'pillars').box;
-    assert.ok(near((d.x - box.x), (box.x + box.width) - (e.x + e.width)), 'centred');
+    assert.ok(near(d.x, box.x) && near(e.x + e.width, box.x + box.width), 'full width');
     assert.ok(near(b.y, a.y) && near(c.y, a.y) && d.y > a.y);
   });
 

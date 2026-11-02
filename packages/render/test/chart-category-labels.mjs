@@ -20,7 +20,8 @@ let measurer;
 const widthOf = (text, size) => (measurer ??= textWidthMeasurer(resolveTextStyle({ fontFamily: 'Aptos', fontWeight: 400, italic: false }, undefined), undefined))(text, size);
 
 function render(type, rows, { columns = ['Category', 'Value'], onlyPath = true } = {}) {
-  const input = { slides: [{ title: 't', chart: { type, data: { columns, rows } } }] };
+  // LH-03: `dataLabels: false` keeps a small chart's value gridlines, which locate the plot here.
+  const input = { slides: [{ title: 't', chart: { type, dataLabels: false, data: { columns, rows } } }] };
   const before = JSON.stringify(input);
   const diagnostics = [];
   const svg = toSvg(input, 1, { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });
@@ -249,9 +250,11 @@ for (const count of [12, 49]) {
     const rows = names.map((name, i) => [name, 10 + (i * 5) % 17]);
     for (const type of ['stacked-column', '100pct-stacked-column', 'area', 'stacked-area', 'line-with-markers', 'stacked-bar', 'waterfall', 'funnel', 'box-and-whisker']) {
       const label = `${type}/${count}/${kind}`;
-      const data = type.includes('stacked') ? rows.map((row) => [...row, row[1] + 3]) : rows;
+      // LH-60: a box-and-whisker category needs two values or more to be a box per category (one value each is one box per series).
+      const box = type === 'box-and-whisker';
+      const data = type.includes('stacked') ? rows.map((row) => [...row, row[1] + 3]) : box ? rows.flatMap((row) => [row, [row[0], row[1] + 2]]) : rows;
       const rendered = render(type, data, { columns: type.includes('stacked') ? ['Category', 'A', 'B'] : ['Category', 'Value'] });
-      check(label, rendered, names, { valueLabels: type === 'funnel' });
+      check(label, rendered, box ? names.flatMap((name) => [name, name]) : names, { valueLabels: type === 'funnel' });
       cases++;
     }
     const radar = render('radar-with-markers', rows);

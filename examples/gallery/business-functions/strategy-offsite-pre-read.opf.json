@@ -78,7 +78,6 @@
       "opacity": 0.94
     },
     "titleAlignment": "center",
-    "contentAlignment": "right",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "right",
