@@ -1705,12 +1705,24 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
 export type TimelineStatus = 'done' | 'current' | 'planned';
 const TIMELINE_STATUS_VALUES: readonly string[] = ['done', 'current', 'planned'];
-/** WI-5 (P22): an alternating event narrower than this many ems of the label size is composed vertically instead. */
+/** WI-5 (P22): an event narrower than this many ems of the label size is composed vertically instead. */
 const TIMELINE_NARROW_EM = 8;
 /** WI-5 (P22): the vertical arrangement of a narrow timeline may reduce its text by up to this many reference pixels before the usual search. */
 const TIMELINE_NARROW_REDUCTIONS = 4;
 /** The 'current' ring is this multiple of the marker radius. */
 const TIMELINE_RING_RATIO = 1.6;
+/**
+ * Role sizes in reference pixels. LH-41: a compact band (one of several timelines stacked in a region) uses the smaller set,
+ * as Claude Design's compact bands do, so four to nine bands read at one modest size.
+ */
+const TIMELINE_ROLE_SIZES = {name:24,description:18,when:18,what:22,'event-description':18} as const;
+const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-description':16} as const;
+/** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
+const TIMELINE_GROWTH = 4;
+/** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
+const TIMELINE_FLOOR_OFFSET = 1000;
+/** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
+const TIMELINE_BAND_MIN_HEIGHT = 56;
 export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
 export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
 export interface TimelineTextPart {
@@ -1735,7 +1747,12 @@ export interface TimelineLayoutDiagnostic extends LayoutDiagnostic {
 }
 export interface TimelineLayout {
   algorithm: 'timeline-flow-v1';
-  arrangement: 'alternating' | 'vertical';
+  /**
+   * `band` (LH-41): one horizontal connector with each event's `when` above its marker and its `what` and description below,
+   * every label within its event spacing. `alternating`: labels alternate above and below the connector, each up to two event
+   * spacings wide, for labels wider than one spacing. `vertical`: a marker rail down the start edge with the labels beside it.
+   */
+  arrangement: 'band' | 'alternating' | 'vertical';
   attempts: number;
   textMeasurement: 'provided' | 'estimated';
   textOutlines: 'provided' | 'unavailable';
@@ -1748,12 +1765,28 @@ export interface TimelineLayout {
    */
   markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
+  /** LH-41: what the drawn timeline covers (its parts, markers and rings). Its height is the height the timeline needs. */
+  bounds: LayoutBox;
   diagnostics: TimelineLayoutDiagnostic[];
   overflow: boolean;
 }
-export interface TimelineLayoutOptions extends QuoteLayoutOptions { textRasterPadding?: number }
+export interface TimelineLayoutOptions extends QuoteLayoutOptions {
+  textRasterPadding?: number;
+  /** LH-41: one band of several timelines in a region: only the horizontal arrangements are tried (never the vertical rail), and the band sits at the top of its box. */
+  horizontal?: boolean;
+  /** LH-41: the compact role sizes: name and what 18, the rest 16 reference pixels; a band then sets each `when` and `what` on one row when every pair fits. */
+  compact?: boolean;
+  /** LH-41: in a band, the description beside the name when both fit on one row (the bands of one stack decide this together). */
+  inlineHeader?: boolean;
+  /**
+   * LH-41: reference pixels added to every role size before the search. Negative starts smaller (the bands of one region at one
+   * size; a large negative value measures at the readability floor); positive lets a lone timeline grow when it still fits.
+   * No part goes below `minFontSize`.
+   */
+  sizeOffset?: number;
+}
 
-/** Preserve event order and field boundaries while trying at most 50 readable arrangements. */
+/** Preserve event order and field boundaries while trying at most 100 readable arrangements. */
 export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent, box: LayoutBox, options: TimelineLayoutOptions = {}): TimelineLayout {
   const shorthand=Array.isArray(value),timeline=(shorthand?{events:value}:value) as TimelineContent;
   if(!timeline||!Array.isArray(timeline.events)||!timeline.events.length||
@@ -1762,22 +1795,22 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
   }
   if(timeline.events.some(event=>event.status!==undefined&&!TIMELINE_STATUS_VALUES.includes(event.status)))throw new TypeError("Timeline event status must be 'done', 'current' or 'planned'.");
-  const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale;
-  if(![box.x,box.y,box.width,box.height,scale,minimum,padding].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding.');
+  const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale,offset=options.sizeOffset??0;
+  if(![box.x,box.y,box.width,box.height,scale,minimum,padding,offset].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding and a finite size offset.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
   const outlines=options.textMeasurement?.outlineBounds!==undefined,rtl=options.direction==='rtl';
   if(outlines&&typeof options.textMeasurement?.outlineBounds!=='function')throw new TypeError('Text outline provider must be a function.');
   const path=options.path??'timeline',eventPath=(index:number)=>shorthand?`${path}.${index}`:`${path}.events.${index}`;
-  const fonts=resolveFontFamilies(options.fontFamilies),source:TimelineTextPart[]=[];
-  const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,size:number,weight:number,eventIndex?:number)=>{
+  const fonts=resolveFontFamilies(options.fontFamilies),source:TimelineTextPart[]=[],roles=options.compact?TIMELINE_COMPACT_SIZES:TIMELINE_ROLE_SIZES;
+  const add=(role:TimelineTextPart['role'],text:string|undefined,partPath:string,weight:number,eventIndex?:number)=>{
     if(text===undefined)return;
     // A current event's label is bold ("we are here"); every other part keeps its weight.
     const status=eventIndex===undefined?undefined:timeline.events[eventIndex]!.status;
     const requestedStyle:TextStyle={fontFamily:fonts.body,fontWeight:status==='current'&&role==='what'?700:weight,italic:false,path:partPath};
-    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
+    source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(roles[role]*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
-  add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
-  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,18,500,index);add('what',event.what,`${eventPath(index)}.what`,22,600,index);add('event-description',event.description,`${eventPath(index)}.description`,18,400,index);});
+  add('name',timeline.name,`${path}.name`,700);add('description',timeline.description,`${path}.description`,400);
+  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,500,index);add('what',event.what,`${eventPath(index)}.what`,600,index);add('event-description',event.description,`${eventPath(index)}.description`,400,index);});
   const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
   for(const part of source)if(part.eventIndex===undefined)metadata.push(part);else events[part.eventIndex]!.push(part);
   const cache=new Map<string,{fit:SourceTextFit;ink:TextLineInk[];height:number}>();
@@ -1800,21 +1833,30 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   };
   type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];connector:TimelineLayout['connector'];diagnostics:TimelineLayoutDiagnostic[];score:number};
   let selected:Candidate|undefined,attempts=0;
+  // The search starts `sizeOffset` from the role sizes and steps down one reference pixel at a time to the floor.
+  const sizeAt=(part:TimelineTextPart,reduction:number)=>gridFontSize(part.requestedFontSize+(offset-reduction)*scale,minimum);
   let reductionLimit=0;
-  for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize-minimum)/scale);
-  const reductions=Math.min(24,Math.ceil(reductionLimit));
-  // WI-5 (P22): an alternating timeline gives each event `box.width / events` of width. Below 8 ems of the label size the labels wrap one word per
+  for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize+offset*scale-minimum)/scale);
+  const reductions=Math.min(24+Math.max(0,Math.ceil(offset)),Math.ceil(reductionLimit));
+  // WI-5 (P22): a horizontal timeline gives each event `box.width / events` of width. Below 8 ems of the label size the labels wrap one word per
   // line, so the timeline is composed vertically (events stacked down the cell, the same markers, statuses and order). The full-width
-  // timeline keeps its alternating arrangement.
-  const labelSize=source.find(part=>part.role==='what')?.requestedFontSize??gridFontSize(22*scale,minimum);
-  const narrow=timeline.events.length>1&&box.width/Math.max(2,timeline.events.length)<TIMELINE_NARROW_EM*labelSize;
-  const tryArrangement=(arrangement:TimelineLayout['arrangement'],reduction:number):boolean=>{
+  // timeline keeps a horizontal arrangement. A band of a stack (`horizontal`) never turns vertical. The test is at the role sizes, whatever
+  // the size offset, so a timeline measured at the floor has the arrangement it is placed in.
+  const count=events.length,labelSize=source.find(part=>part.role==='what')?.requestedFontSize??gridFontSize(roles.what*scale,minimum);
+  const narrow=!options.horizontal&&count>1&&box.width/Math.max(2,count)<TIMELINE_NARROW_EM*labelSize;
+  // LH-41: a band gives each event one spacing (`box.width / events`) less a gutter, so neighbouring labels never touch.
+  const bandStep=box.width/count,bandWidth=count>1?Math.max(scale,bandStep-Math.min(16*scale,bandStep/4)):box.width;
+  const lineWidth=(part:TimelineTextPart,reduction:number)=>{const measured=measure(part,sizeAt(part,reduction),1e6,'left');return measured.fit.sourceLines.length===1?measured.fit.sourceLines[0]!.width+(outlines?2*padding:0):Infinity;};
+  // LH-41: labels alternate above and below only when a `when` or `what` label is wider than its event spacing; otherwise they all
+  // sit in one band.
+  const wideAt=(reduction:number)=>count>1&&events.some(fields=>fields.some(part=>(part.role==='when'||part.role==='what')&&lineWidth(part,reduction)>bandWidth+.01));
+  const tryArrangement=(arrangement:TimelineLayout['arrangement'],reduction:number):TimelineLayoutDiagnostic[]=>{
       attempts++;
       const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],diagnostics:TimelineLayoutDiagnostic[]=[];
       let score=0;
       const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
       const place=(part:TimelineTextPart,x:number,y:number,width:number,alignment:TimelineTextPart['alignment'])=>{
-        const measured=measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),Math.max(scale,width),alignment);
+        const measured=measure(part,sizeAt(part,reduction),Math.max(scale,width),alignment);
         const area={x,y,width:Math.max(scale,width),height:Math.max(scale,measured.height)},placement=outlines?placeTextLines(measured.ink,area,alignment,padding,measured.fit.directions):undefined;
         const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
         const accepted={...part,box:area,alignment,fit};parts.push(accepted);
@@ -1823,26 +1865,75 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         if(area.x<box.x-.01||area.y<box.y-.01||area.x+area.width>box.x+box.width+.01||area.y+area.height>box.y+box.height+.01)report(accepted,'part-outside-cell','Timeline field extends outside its cell; increase the cell or paginate events.',Math.max(area.x+area.width-box.x-box.width,area.y+area.height-box.y-box.height));
         return accepted;
       };
-      let y=box.y;
-      for(const part of metadata){const placed=place(part,box.x,y,box.width,'center');y+=placed.box.height+8*scale;}
-      const available=box.y+box.height-y,count=events.length,radius=Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,available)*.04);
+      const heightOf=(part:TimelineTextPart,width:number,alignment:TimelineTextPart['alignment'])=>measure(part,sizeAt(part,reduction),Math.max(scale,width),alignment).height;
+      // The name and description, planned first so that a horizontal timeline can centre the whole block in its box. A band of a stack
+      // sets them at its start edge, as a heading over the band; a lone timeline centres them.
+      const metaAlignment:TimelineTextPart['alignment']=arrangement==='band'&&options.horizontal?'left':'center',metaGap=(options.compact?6:8)*scale,inlineGap=12*scale;
+      const header:{part:TimelineTextPart;x:number;dy:number;width:number}[]=[];let headerHeight=0;
+      const [name,description]=metadata.length===2?metadata:[];
+      const nameWidth=name&&options.inlineHeader&&arrangement==='band'?lineWidth(name,reduction)+scale:Infinity,descriptionWidth=Number.isFinite(nameWidth)?lineWidth(description!,reduction)+scale:Infinity;
+      if(nameWidth+inlineGap+descriptionWidth<=box.width+.01){
+        // LH-41: the description beside the name, bottom-aligned so the two single lines share a baseline (a compact band).
+        const nameHeight=heightOf(name!,nameWidth,'left'),descriptionHeight=heightOf(description!,descriptionWidth,'left'),row=Math.max(nameHeight,descriptionHeight);
+        header.push({part:name!,x:rtl?box.x+box.width-nameWidth:box.x,dy:row-nameHeight,width:nameWidth},{part:description!,x:rtl?box.x+box.width-nameWidth-inlineGap-descriptionWidth:box.x+nameWidth+inlineGap,dy:row-descriptionHeight,width:descriptionWidth});
+        headerHeight=row+metaGap;
+      }else for(const part of metadata){header.push({part,x:box.x,dy:headerHeight,width:box.width});headerHeight+=heightOf(part,box.width,metaAlignment)+metaGap;}
+      const placeHeader=(top:number)=>{for(const entry of header)place(entry.part,entry.x,top+entry.dy,entry.width,metaAlignment);return top+headerHeight;};
       // Status geometry (FA-11): only a 'current' event gets a ring, and only a 'current' or 'planned' marker has an outline.
-      const statusOf=(index:number)=>timeline.events[index]!.status,ringRadius=radius*TIMELINE_RING_RATIO,strokeWidth=Math.min(2*scale,radius/2);
-      const hasRing=timeline.events.some(event=>event.status==='current');
+      const statusOf=(index:number)=>timeline.events[index]!.status,hasRing=timeline.events.some(event=>event.status==='current');
+      const outlined=timeline.events.some(event=>event.status==='planned');
+      let radius=0,ringRadius=0,strokeWidth=0;
+      const setRadius=(value:number)=>{radius=value;ringRadius=radius*TIMELINE_RING_RATIO;strokeWidth=Math.min(2*scale,radius/2);};
       const marker=(index:number,x:number,y:number):TimelineLayout['markers'][number]=>{
         const status=statusOf(index);
         return {path:eventPath(index),eventIndex:index,x,y,radius,...(status?{status}:{}),...(status==='current'?{ring:{radius:ringRadius}}:{}),...(status==='current'||status==='planned'?{strokeWidth}:{})};
       };
-      if(arrangement==='alternating'){
-        const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
-        // Center the measured event envelope, not the empty halves of the cell.
-        // Upper labels end beside their marker; lower labels begin beside theirs.
+      if(arrangement==='band'){
+        // LH-41: a band, every label one event spacing wide. Each `when` is an eyebrow above its marker (bottom-aligned, so the eyebrows
+        // end on one line) and each `what` and description sit below it. A compact band (four or more timelines in a region) sets
+        // each event's `when` and `what` on one row below the marker when every pair fits, as Claude Design's compact bands do. A
+        // lone band centres the block (header and band) in its box; a band of a stack sits at the top of its box, so the bands of one
+        // row share their lines.
+        // A compact band draws smaller markers and tighter gaps (Claude Design's compact bands).
+        setRadius(Math.min((options.compact?7:9)*scale,bandStep/5));
+        const lift=(options.compact?5:6)*scale,fieldGap=(options.compact?2:4)*scale,pairGap=6*scale,extent=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0);
+        const whenOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='when'),whatOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='what')!;
+        const pair=(fields:TimelineTextPart[])=>{const when=whenOf(fields);return when?{when:lineWidth(when,reduction)+scale,what:lineWidth(whatOf(fields),reduction)+scale}:undefined;};
+        const inline=!!options.compact&&events.every(fields=>{const widths=pair(fields);return !widths||widths.when+pairGap+widths.what<=bandWidth+.01;});
+        const below=(fields:TimelineTextPart[])=>fields.filter(part=>inline?part.role==='event-description':part.role!=='when');
+        const rowHeight=(fields:TimelineTextPart[])=>{const widths=pair(fields);return widths?Math.max(heightOf(whenOf(fields)!,widths.when,'left'),heightOf(whatOf(fields),widths.what,'left')):heightOf(whatOf(fields),bandWidth,'center');};
+        const whenHeights=events.map(fields=>{const when=whenOf(fields);return when&&!inline?heightOf(when,bandWidth,'center'):0;});
+        const belowHeights=events.map(fields=>(inline?rowHeight(fields)+(below(fields).length?fieldGap:0):0)+below(fields).reduce((height,part)=>height+heightOf(part,bandWidth,'center'),0)+Math.max(0,below(fields).length-1)*fieldGap);
+        const eyebrow=Math.max(0,...whenHeights),envelope=(eyebrow?eyebrow+lift:0)+2*extent+lift+Math.max(0,...belowHeights);
+        const top=placeHeader(box.y+(options.horizontal?0:Math.max(0,(box.height-headerHeight-envelope)/2))),lineY=top+(eyebrow?eyebrow+lift:0)+extent;
+        events.forEach((fields,index)=>{
+          const x=box.x+bandStep/2+(rtl?count-1-index:index)*bandStep;
+          markers.push(marker(index,x,lineY));
+          let cursor=lineY+extent+lift;
+          const when=whenOf(fields),widths=inline?pair(fields):undefined;
+          if(widths&&when){
+            // `when` then `what`, centred under the marker as one row (in reading order: a right-to-left row starts at the right) and
+            // bottom-aligned so the two single lines share a baseline.
+            const row=rowHeight(fields),start=x-(widths.when+pairGap+widths.what)/2,whenX=rtl?start+widths.what+pairGap:start,whatX=rtl?start:start+widths.when+pairGap;
+            place(when,whenX,cursor+row-heightOf(when,widths.when,'left'),widths.when,'left');
+            place(whatOf(fields),whatX,cursor+row-heightOf(whatOf(fields),widths.what,'left'),widths.what,'left');
+            cursor+=row+fieldGap;
+          }else if(when)place(when,x-bandWidth/2,lineY-extent-lift-whenHeights[index]!,bandWidth,'center');
+          for(const [fieldIndex,part] of below(fields).entries()){const placed=place(part,x-bandWidth/2,cursor,bandWidth,'center');cursor+=placed.box.height;if(fieldIndex<below(fields).length-1)cursor+=fieldGap;}
+        });
+      }else if(arrangement==='alternating'){
+        // Labels wider than one spacing: each is two spacings wide less a gutter, and alternates above and below, so labels on one
+        // side are two spacings apart. Upper labels end beside their marker; lower labels begin beside theirs. The measured block
+        // (header and both label bands) is centred in the box.
+        const gutter=count>1?Math.min(16*scale,box.width/(count+1)/4):0,step=count>1?(box.width+gutter)/(count+1):0,width=count>1?2*step-gutter:box.width;
+        const start=count===1?box.x+box.width/2:box.x+width/2;
+        setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.height-headerHeight)*.04));
         const fieldGap=4*scale,clearance=24*scale;
-        const heights=events.map(fields=>fields.reduce((height,part)=>height+measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),width,'center').height,0)+Math.max(0,fields.length-1)*fieldGap);
+        const heights=events.map(fields=>fields.reduce((height,part)=>height+heightOf(part,width,'center'),0)+Math.max(0,fields.length-1)*fieldGap);
         const markerExtent=hasRing?ringRadius+strokeWidth/2:radius;
         const upper=Math.max(markerExtent,...heights.filter((_,index)=>index%2===0).map(height=>height+clearance));
         const lower=Math.max(markerExtent,...heights.filter((_,index)=>index%2===1).map(height=>height+clearance));
-        const lineY=y+Math.max(0,(available-upper-lower)/2)+upper;
+        const top=placeHeader(box.y+Math.max(0,(box.height-headerHeight-upper-lower)/2)),lineY=top+upper;
         events.forEach((fields,index)=>{
           const x=start+(rtl?count-1-index:index)*step,top=index%2===0?lineY-clearance-heights[index]!:lineY+clearance,bottom=index%2===0?lineY-clearance:box.y+box.height;
           markers.push(marker(index,x,lineY));let cursor=top;
@@ -1851,7 +1942,8 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
         // Reserve the entire marker/ring diameter plus twelve pixels of clear space before text.
-        const outlined=timeline.events.some(event=>event.status==='planned');
+        let y=placeHeader(box.y);
+        setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.y+box.height-y)*.04));
         const lead=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0),gap=2*lead+12*scale;
         const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
@@ -1862,22 +1954,29 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         });
       }
       for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
-      const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
+      const firstMarker=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(firstMarker.x,last.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,last.x),y2:last.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
-      return !diagnostics.length;
+      return diagnostics;
   };
   let settled=false;
   // A narrow cell tries the vertical arrangement first, with up to a few pixels of size reduction, before the usual search.
-  if(narrow)for(let reduction=0;reduction<=Math.min(reductions,TIMELINE_NARROW_REDUCTIONS)&&!settled;reduction++)settled=tryArrangement('vertical',reduction);
-  for(let reduction=0;reduction<=reductions&&!settled;reduction++){
-    for(const arrangement of ['alternating','vertical'] as const){
-      if(tryArrangement(arrangement,reduction)){settled=true;break;}
-    }
+  if(narrow)for(let reduction=0;reduction<=Math.min(reductions,TIMELINE_NARROW_REDUCTIONS)&&!settled;reduction++)settled=!tryArrangement('vertical',reduction).length;
+  // Then, per size: the horizontal arrangement the labels call for, the other one when a band's labels do not fit its spacing, and
+  // the vertical rail (except in a band of a stack).
+  for(let reduction=0;reduction<=Math.max(0,reductions)&&!settled;reduction++){
+    const primary=wideAt(reduction)?'alternating':'band',found=tryArrangement(primary,reduction);
+    if(!found.length){settled=true;break;}
+    if(primary==='band'&&found.some(entry=>entry.reason==='text-fit')&&!tryArrangement('alternating',reduction).length){settled=true;break;}
+    if(!options.horizontal&&!tryArrangement('vertical',reduction).length)settled=true;
   }
   const {score,...result}=selected!;
   if(result.diagnostics.length&&options.overflow==='error')throw new OPFCompositionError(result.diagnostics);
-  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,overflow:result.diagnostics.length>0};
+  let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+  const cover=(x:number,y:number,width:number,height:number)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+width);bottom=Math.max(bottom,y+height);};
+  for(const part of result.parts)cover(part.box.x,part.box.y,part.box.width,part.box.height);
+  for(const marker of result.markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;cover(marker.x-extent,marker.y-extent,2*extent,2*extent);}
+  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:result.diagnostics.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -3006,9 +3105,29 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     textRasterPadding:options.textRasterPadding,
     align:alignmentFor('metric'),direction:textDirection,
   });
-  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition) => layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
-  });
+  // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
+  // region (horizontal only, compact at four or more, all at one size) or a lone timeline that may grow. `sizes` is `role` for
+  // the role sizes, `floor` for the readability floor and `placed` for the size the region chose.
+  const timelineHints = new WeakMap<Pending, { horizontal?: true; compact?: true; inlineHeader?: boolean; sizeOffset?: number; grow?: true }>();
+  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number) => {
+    const hint = timelineHints.get(node);
+    return layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
+      fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
+      ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),
+      sizeOffset: sizeOffset ?? (sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
+    });
+  };
+  // LH-41: a lone timeline grows its type by up to TIMELINE_GROWTH reference pixels when it still fits its box in the arrangement
+  // it has at its role sizes (modest: LH-48 owns filling the body).
+  const placeTimeline = (node: Pending, box: LayoutBox, settings: Composition): TimelineLayout => {
+    const placed = measureTimeline(node, box, settings, 'placed');
+    if (!timelineHints.get(node)?.grow && !node.lone || placed.overflow) return placed;
+    for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
+      const grown = measureTimeline(node, box, settings, 'placed', growth);
+      if (!grown.overflow && grown.arrangement === placed.arrangement) return grown;
+    }
+    return placed;
+  };
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
   const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
   // The proportions of a picture an automatic composition shows whole (fit contain, no frame shape of its own) when core can read them.
@@ -3247,7 +3366,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       [quoteLayout, codeLayout, metricLayout] = measureInternal();
     }
     if (caption) diagnostics.push(...caption.diagnostics);
-    const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
+    const timelineLayout = node.field === 'timeline' ? placeTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
     // WI-4 (P34): a prose block in auto mode keeps a reading measure, placed by the content alignment. The measure never costs
@@ -3376,7 +3495,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
   // Blocks whose height is measured from their content (a group when all its blocks are); the others take any height.
-  const MEASURED_FIELDS = new Set(['text', 'items', 'bullets', 'quote', 'metric', 'code']);
+  // LH-41: a timeline is measured too (its label bands included), so a stack never squeezes it under its labels.
+  const MEASURED_FIELDS = new Set(['text', 'items', 'bullets', 'quote', 'metric', 'code', 'timeline']);
   const measuredNode = (node: Pending): boolean => node.children ? node.children.length > 0 && node.children.every(measuredNode) : MEASURED_FIELDS.has(node.field);
   // `atFloor` (WI-1): the height at the minimum font size instead, which says how far the block can shrink; text and lists
   // are measured there, other payloads scale their need by the minimum over the starting size.
@@ -3400,10 +3520,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       content = source?.fit ? source.box.y + source.fit.lines.length * source.fit.lineHeight + 18 : 1e6;
     }
     else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings).bounds.height;
-    else if (node.field === 'timeline') content = 170 * scale;
+    // LH-41: laid out as the region will (a band, compact, at its role sizes or the floor): its name, label bands and markers.
+    else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role').bounds.height + scale;
     else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
     else content = inner / 1.6;
-    if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets')) content *= Math.min(1, floorSize / startSize);
+    if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
     const body = content + (node.caption !== undefined ? 32 * scale : 0);
     return body + verticalPad(body);
   };
@@ -3432,6 +3553,61 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const belowUnits = binding.below.map(unitOf);
     const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
+    // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
+    // measure of the region (row needs, floors, placement) sees them as drawn. A lone timeline may grow when it fits (placeTimeline).
+    const timelineBands = (units: Pending[]) => units.length > 1 && units.every(unit => !unit.children && unit.field === 'timeline' && unit.caption === undefined);
+    for (const units of [...contents.values(), belowUnits]) {
+      if (timelineBands(units)) for (const unit of units) timelineHints.set(unit, { horizontal: true, ...(units.length >= 4 ? { compact: true as const, inlineHeader: true } : {}) });
+      else if (units.length === 1 && !units[0]!.children && units[0]!.field === 'timeline') timelineHints.set(units[0]!, { grow: true });
+    }
+    // LH-41: the bands of a stack, row by row in `columns` columns (reading order), each row as tall as its taller band, at the role
+    // sizes or the floor.
+    // In two columns an odd last band spans both, as Claude Design sets it: wider, it needs less height.
+    const bandSpans = (index: number, count: number, columns: number) => columns === 2 && count % 2 === 1 && index === count - 1;
+    const bandWidthOf = (index: number, count: number, columns: number, width: number) => bandSpans(index, count, columns) ? width : (width - gap * (columns - 1)) / columns;
+    const bandRows = (units: Pending[], width: number, columns: number, cards: boolean, atFloor: boolean): number[] => {
+      const rows: number[] = [];
+      units.forEach((unit, index) => { const row = Math.floor(index / columns); rows[row] = Math.max(rows[row] ?? 0, naturalHeight(unit, bandWidthOf(index, units.length, columns, width), cards, undefined, composition, atFloor)); });
+      return rows;
+    };
+    const stackHeight = (rows: number[]) => rows.reduce((sum, size) => sum + size, 0) + gap * Math.max(0, rows.length - 1);
+    // One column while it fits at the floor with every band at least TIMELINE_BAND_MIN_HEIGHT tall; otherwise two columns when they
+    // overflow less (Claude Design's compact bands, two up).
+    const bandColumns = (units: Pending[], cell: LayoutBox, cards: boolean): 1 | 2 => {
+      const one = stackHeight(bandRows(units, cell.width, 1, cards, true)) - cell.height;
+      if (one <= 1e-6 && (cell.height - gap * (units.length - 1)) / units.length >= TIMELINE_BAND_MIN_HEIGHT * scale) return 1;
+      return stackHeight(bandRows(units, cell.width, 2, cards, true)) - cell.height < one ? 2 : 1;
+    };
+    // The band boxes: each row its need while the rows fit, else the gaps close to half a gap (content before padding) and then the
+    // rows share the cell (shareHeights); placed by the region's anchor. Every band is then set at the size the most squeezed one
+    // fits at, so the stack reads at one size.
+    const bandBoxes = (units: Pending[], cell: LayoutBox, columns: number, cards: boolean, anchor: RegionAnchor): LayoutBox[] => {
+      // A compact stack sets each description beside its name only when every band's pair fits on one row, so the bands match.
+      const inline = units.every((unit, index) => {
+        const width = bandWidthOf(index, units.length, columns, cell.width), inner = width - (cards ? 2 * Math.min(CARD_INSET * scale, width / 4) : 0);
+        const parts = measureTimeline(unit, { x: 0, y: 0, width: Math.max(scale, inner), height: 1e6 }, composition).parts, name = parts.find(part => part.role === 'name'), description = parts.find(part => part.role === 'description');
+        return !name || !description || description.box.y < name.box.y + name.box.height;
+      });
+      if (!inline) for (const unit of units) if (timelineHints.get(unit)?.inlineHeader) timelineHints.set(unit, { ...timelineHints.get(unit), inlineHeader: false });
+      const needs = bandRows(units, cell.width, columns, cards, false), floors = bandRows(units, cell.width, columns, cards, true);
+      const total = needs.reduce((sum, size) => sum + size, 0), full = Math.max(0, Math.min(gap, cell.height / (needs.length * 2)));
+      const between = needs.length > 1 && total + full * (needs.length - 1) > cell.height ? Math.max(full / 2, Math.min(full, (cell.height - total) / (needs.length - 1))) : full;
+      const heights = shareHeights(needs, floors, cell.height - between * (needs.length - 1));
+      const used = heights.reduce((sum, size) => sum + size, 0) + between * (heights.length - 1);
+      let y = cell.y + Math.max(0, anchor === 'middle' ? (cell.height - used) / 2 : anchor === 'bottom' ? cell.height - used : 0);
+      const tops = heights.map(size => { const top = y; y += size + between; return top; });
+      const boxes = units.map((_, index) => {
+        const row = Math.floor(index / columns), width = bandWidthOf(index, units.length, columns, cell.width);
+        return { x: bandSpans(index, units.length, columns) ? cell.x : cell.x + (index % columns) * (width + gap), y: tops[row]!, width, height: heights[row]! };
+      });
+      const reduction = Math.max(0, ...units.map((unit, index) => {
+        const layout = measureTimeline(unit, payloadBox(boxes[index]!, cards), composition);
+        return Math.max(0, ...layout.parts.map(part => (part.requestedFontSize - part.fit!.fontSize) / scale));
+      }));
+      for (const unit of units) timelineHints.set(unit, { ...timelineHints.get(unit), sizeOffset: -reduction });
+      units.forEach((unit, index) => { if (boxes[index]!.height >= naturalHeight(unit, boxes[index]!.width, cards, undefined, composition) - 1e-6) contentSized.add(unit); });
+      return boxes;
+    };
     const shown = (field: string) => !!slide[field] && !(Array.isArray(slide[field]) && !annotationText(slide[field]));
     const titleFields = ['tag', 'title', ...(plan.subtitle ? [] : ['subtitle'])].filter(shown);
     const subtitleFields = plan.subtitle && shown('subtitle') ? ['subtitle'] : [];
@@ -3497,6 +3673,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const lines = 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22;
         return lines + (hasCards && !region.bleed ? 2 * Math.min(CARD_INSET * scale, areaWidth / 4, lines / 8) : 0);
       }
+      // LH-41: a stack of timeline bands needs its one-column height.
+      if (timelineBands(units)) return stackHeight(bandRows(units, areaWidth, 1, hasCards && !region.bleed, atFloor));
       const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
@@ -3590,15 +3768,19 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
           arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
           return 'composition';
         }
-        const arrangement = arrangementOf(region, units, cell);
-        let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
+        // LH-41: several timelines are one stack of horizontal bands (bandBoxes), in one column or two, whatever the region's flow
+        // or the design's contentDirection. The stack sits in the middle of the region, as a lone timeline is centred in its cell,
+        // unless the region is anchored at the bottom.
+        const bands = timelineBands(units), bandColumnCount = bands ? bandColumns(units, cell, cards) : 1;
+        const arrangement = bands ? bandColumnCount === 1 ? 'column' : 'grid' : arrangementOf(region, units, cell);
+        let boxes = bands ? bandBoxes(units, cell, bandColumnCount, cards, region.anchor === 'bottom' ? 'bottom' : 'middle') : flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
         const referenceHeights = boxes.map(box => box.height);
         let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
         // instead of giving every block an equal share. A lone block at the top keeps the whole cell, as before.
-        const stacked = arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
+        const stacked = !bands && arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
         if (stacked) boxes = stackedBoxes(units, cell, gap, settings, cards, region.anchor);
-        if ((arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
+        if (!bands && (arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
           const naturals = boxes.map((box,index) => {
             const unit = units[index]!;
             return unit.children || unit.caption || !['text','items','bullets','quote','metric'].includes(unit.field) ? undefined
@@ -3625,7 +3807,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
