@@ -30,7 +30,9 @@ try {
     design: { theme: 'classic', fontScheme: 'roboto', imageFit: 'cover' },
     assets: { photo: { src: png, alt: 'A red and blue picture', title: 'photo.png', mediaType: 'image/png' } },
     slides: [
-      { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' } }, { text: 'Beside the picture' }] },
+      // `fit: 'contain'` keeps the picture whole in the flow, as the crop tool is tested on it (a cover picture would take a track, LH-80),
+      // and `emphasis: false` keeps the short text beside it (not LH-06's foot band).
+      { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' }, fit: 'contain' }, { text: 'Beside the picture', emphasis: false }] },
       { id: 'root', title: 'Root picture', image: 'asset:photo', text: 'Text beside it' },
       // OPF 0.15: an image block placed along the right edge (FA-22 placement), in place of the 0.14 slide image.
       { id: 'placed', title: 'Placed picture', blocks: [{ image: 'asset:photo', placement: { edge: 'right', size: 0.45 } }, { text: 'Text' }] },
@@ -185,7 +187,9 @@ try {
   await page.mouse.click(focal.x, focal.y);
   const window1 = await size();
   assert.ok(Math.abs(window1.width / window1.height - frameAspect) < 0.03, `the window has the frame's shape (${frameAspect}): ${JSON.stringify(window1)}`);
-  await layer.getByLabel('Zoom').fill('200');
+  // A picture shown whole has the picture's own 2:1 frame (LH-52 places it in the middle of its cell), so the window zooms in far enough
+  // that its centre stays on the green square after it is kept inside the picture.
+  await layer.getByLabel('Zoom').fill('400');
   await layer.getByLabel('Zoom').dispatchEvent('input');
   const zoomed = await size();
   assert.ok(zoomed.width < window1.width * 0.55, `zoom narrows the window: ${JSON.stringify(zoomed)}`);

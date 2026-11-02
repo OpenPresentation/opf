@@ -357,8 +357,8 @@ export function createCanvasEditor(container, options = {}) {
       if (node.matches("g")) {
         const bounds = splitBox(geometry, path) ?? allocatedSelectionBox(node, item);
         const rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
-        // RR-25: on a touch screen a text block of a few slide units is a few pixels tall, so the target grows (up to 24 slide units
-        // each way) until it is about 44 CSS pixels in each direction.
+        // RR-25: on a touch screen a text block of a few slide units is a few pixels tall, so the target grows (up to 64 slide units
+        // each way) until it is about 44 CSS pixels in each direction. A block LH-48 grew and centered hugs its text, so its box is short.
         const padX = touchPad(svg, bounds.width), padY = touchPad(svg, bounds.height);
         for (const [key, value] of Object.entries({
           x: bounds.x - padX,
@@ -449,7 +449,7 @@ export function createCanvasEditor(container, options = {}) {
     if (!coarse?.matches) return 4;
     const box = svg.getBoundingClientRect(), view = svg.viewBox?.baseVal;
     const scale = box.width && view?.width ? box.width / view.width : 0;
-    return scale ? Math.max(4, Math.min(24, (44 / scale - size) / 2)) : 4;
+    return scale ? Math.max(4, Math.min(64, (44 / scale - size) / 2)) : 4;
   }
   // An in-progress edit whose text needs faces that are not loaded yet waits for them, then draws again.
   function deferDraft(draft) {

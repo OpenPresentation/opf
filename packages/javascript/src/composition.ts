@@ -2262,9 +2262,9 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
 
 /**
  * The line breaks of a text depend only on the text, the width measure, the size, the box width and the prose and direction flags, and
- * composition asks for the same ones many times (every arrangement a slide is compared in, every trial size of a grid). They are kept per
- * measure (the estimates are two module functions; a host measurement is one closure per style, dropped with it), up to
- * LINE_BREAK_CACHE_LIMIT per measure. A hit returns copies, so a caller may change what it gets.
+ * composition asks for the same ones many times (every arrangement a slide is compared in, every trial size of a grid). Those of core's own
+ * estimates (measureText, measureMonospaceText, pure functions of the text) are kept, up to LINE_BREAK_CACHE_LIMIT per measure; a host
+ * measurement is never cached, since its widths change as its fonts load. A hit returns copies, so a caller may change what it gets.
  */
 const lineBreakCache = new WeakMap<MeasureTextWidth, Map<string, CodeTextFit>>();
 const LINE_BREAK_CACHE_LIMIT = 10000;
@@ -2274,9 +2274,9 @@ const copyTextFit = (fit: CodeTextFit, width: number, height: number): CodeTextF
 function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection,balance=false):SourceTextFit {
   const directionAt=direction==='rtl'?paragraphDirectionAt(text,'rtl'):undefined;
   let cache = lineBreakCache.get(measure);
-  if (!cache) { cache = new Map(); lineBreakCache.set(measure, cache); }
+  if (!cache && (measure === measureText || measure === measureMonospaceText)) { cache = new Map(); lineBreakCache.set(measure, cache); }
   const layout=(fontSize:number,forced?:ReadonlySet<number>):CodeTextFit=>{
-    if (forced) return breakLines(fontSize,forced);
+    if (forced || !cache) return breakLines(fontSize,forced);
     const key=`${prose?1:0}${direction==='rtl'?'r':'l'}${fontSize}|${box.width}|${text}`, known=cache!.get(key);
     if (known) return copyTextFit(known,box.width,box.height);
     const fit=breakLines(fontSize);
