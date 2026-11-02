@@ -3014,21 +3014,21 @@
   "diagnostic text-overflow blocks.4.code.source"
  ],
  "hero 1 short": [
-  "area title 57.6,57.6,684.5,65.9",
-  "region lead 57.6,123.5,684.5,538.9 column 1",
-  "region support 57.6,147.5,684.5,514.9 - 0 collapsed",
-  "region media 766.1,0,513.9,720 - 0",
-  "item title - 57.6,57.6,684.5,65.9 54px",
-  "item blocks.0.text lead 57.6,365.2,684.5,55.5 43px"
+  "area title 57.6,57.6,1164.8,65.9",
+  "region lead 57.6,123.5,1164.8,538.9 column 1",
+  "region support 57.6,147.5,1164.8,514.9 - 0 collapsed",
+  "region media 1222.4,57.6,0,604.8 - 0 collapsed",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,365.2,1164.8,55.5 43px"
  ],
  "hero 2 short": [
-  "area title 57.6,57.6,684.5,65.9",
-  "region lead 57.6,147.5,684.5,45.1 column 1",
-  "region support 57.6,415.4,684.5,48.1 grid 1",
-  "region media 766.1,0,513.9,720 - 0",
-  "item title - 57.6,57.6,684.5,65.9 54px",
-  "item blocks.0.text lead 57.6,147.5,684.5,45.1 37px",
-  "item blocks.1.text support 57.6,415.4,684.5,48.1 37px"
+  "area title 57.6,57.6,1164.8,65.9",
+  "region lead 57.6,147.5,1164.8,45.1 column 1",
+  "region support 57.6,415.4,1164.8,48.1 grid 1",
+  "region media 1222.4,57.6,0,604.8 - 0 collapsed",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item blocks.0.text lead 57.6,147.5,1164.8,45.1 37px",
+  "item blocks.1.text support 57.6,415.4,1164.8,48.1 37px"
  ],
  "hero 3 short": [
   "area title 57.6,57.6,684.5,65.9",
@@ -3077,23 +3077,23 @@
   "item blocks.5.image media 766.1,372,513.9,348"
  ],
  "hero 1 long": [
-  "area title 57.6,57.6,684.5,146.2",
-  "region lead 57.6,203.8,684.5,458.6 column 1",
-  "region support 57.6,227.8,684.5,434.6 - 0 collapsed",
-  "region media 766.1,0,513.9,720 - 0",
-  "item title - 57.6,57.6,684.5,65.9 54px",
-  "item title - 57.6,135.5,684.5,68.3 28px",
-  "item blocks.0.text lead 57.6,296.2,684.5,273.8 37px"
+  "area title 57.6,57.6,1164.8,112",
+  "region lead 57.6,169.6,1164.8,492.8 column 1",
+  "region support 57.6,193.6,1164.8,468.8 - 0 collapsed",
+  "region media 1222.4,57.6,0,604.8 - 0 collapsed",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.text lead 57.6,309.6,1164.8,212.8 43px"
  ],
  "hero 2 long": [
-  "area title 57.6,57.6,684.5,146.2",
-  "region lead 57.6,227.8,684.5,170.8 column 1",
-  "region support 57.6,422.6,684.5,239.8 grid 1",
-  "region media 766.1,0,513.9,720 - 0",
-  "item title - 57.6,57.6,684.5,65.9 54px",
-  "item title - 57.6,135.5,684.5,68.3 28px",
-  "item blocks.0.text lead 57.6,227.8,684.5,170.8 28px",
-  "item blocks.1.text support 57.6,422.6,684.5,239.8 28px"
+  "area title 57.6,57.6,1164.8,112",
+  "region lead 57.6,193.6,1164.8,102.5 column 1",
+  "region support 57.6,320.1,1164.8,342.3 grid 1",
+  "region media 1222.4,57.6,0,604.8 - 0 collapsed",
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.text lead 57.6,193.6,1164.8,102.5 28px",
+  "item blocks.1.text support 57.6,320.1,980,342.3 28px"
  ],
  "hero 3 long": [
   "area title 57.6,57.6,684.5,146.2",

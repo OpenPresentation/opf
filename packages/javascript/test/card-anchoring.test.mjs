@@ -1,7 +1,7 @@
 // LH-64 and LH-04: how a row of cards stands in a template region. Body-text cards in a bottom- or middle-anchored region hug a
 // short text and the row centres; very unequal texts start at the card's top; a heading line, a picture or a metric keeps the
 // anchor (LH-22). Top-anchored cards hug their content with one height per row. Short bodies are checked with `fill: false`: LH-48
-// grows an under-filled body and centres it (lone-fill.test.mjs).
+// grows an under-filled body and centers it (lone-fill.test.mjs).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';

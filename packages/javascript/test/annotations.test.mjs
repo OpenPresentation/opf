@@ -253,7 +253,7 @@ describe('captions', () => {
   const block = (payload, caption) => ({ title: 'Caption', blocks: [{ ...payload, caption }] });
   const payloads = { image: { image: png }, chart: { chart: { type: 'bar', data: { columns: ['a', 's'], rows: [['x', 1], ['y', 2]] } } }, table: { table: { columns: ['A', 'B'], rows: [[1, 2]] } }, video: { video: 'https://example.com/v.mp4' } };
   test('a caption band is reserved below the media inside the block region, in every captionable payload', () => {
-    // The cells at the role sizes (`fill: false`): LH-48 grows a lone uncaptioned block and centres it.
+    // The cells at the role sizes (`fill: false`): LH-48 grows a lone uncaptioned block and centers it.
     const cell = composeSlide(block({ text: 'cell' }), { fill: false }).items[1].box;
     for (const [field, payload] of Object.entries(payloads)) {
       const plain = composeSlide(block(payload), { fill: false }), captioned = composeSlide(block(payload, 'Figure 1. Something'), { fill: false });

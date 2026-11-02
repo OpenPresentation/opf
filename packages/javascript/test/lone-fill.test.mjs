@@ -20,7 +20,7 @@ test('a lone short paragraph steps up the type scale, at most to its display siz
   assert.ok(item.text.fontSize > role.text.fontSize && item.text.fontSize <= LONE_DISPLAY_SIZES.text, `${item.text.fontSize}`);
   assert.ok([32, 37, 43].includes(item.text.fontSize), 'a step of the type scale');
   assert.ok(!item.text.overflow);
-  assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 1, 'centred in the body');
+  assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 1, 'centered in the body');
   assert.ok(item.box.height <= LONE_TARGET * result.contentBox.height + 4, 'about 60% of the body at most');
   assert.ok(role.box.y < item.box.y, 'it left the top of the body');
 });
@@ -31,7 +31,7 @@ test('a lone paragraph that already fills half the body keeps its size and place
   assert.deepEqual(composeSlide(slide).items.map((item) => [item.box, item.text.fontSize]), composeSlide(slide, { fill: false }).items.map((item) => [item.box, item.text.fontSize]));
 });
 
-test('a lone metric, quote and code panel grow every role with one factor and centre, without overflow', () => {
+test('a lone metric, quote and code panel grow every role with one factor and center, without overflow', () => {
   const cases = [
     [{ metric: { value: '99.9%', label: 'Validation pass rate', description: 'Example value.', delta: '+2.1 pts', trend: 'up' } }, 'metricLayout', 'value', 76],
     [{ quote: { text: 'The payload model stays predictable even as slide content varies.', attribution: 'OPF fixture' } }, 'quoteLayout', 'body', 40],
@@ -44,7 +44,7 @@ test('a lone metric, quote and code panel grow every role with one factor and ce
     assert.equal(kept.items.at(-1)[key].parts.find((entry) => entry.role === role).fit.fontSize, size, `${key}: the role size without fill`);
     assert.ok(part.fit.fontSize > size, `${key}: ${part.fit.fontSize}`);
     for (const entry of layout.parts) if (entry.fit) assert.ok(entry.fit.fontSize >= entry.requestedFontSize - 1e-9, `${key} ${entry.role} keeps the size it asked for`);
-    assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 2, `${key}: centred`);
+    assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 2, `${key}: centered`);
     assert.ok(layout.bounds.y >= item.box.y - 0.01 && layout.bounds.y + layout.bounds.height <= item.box.y + item.box.height + 0.01, `${key}: inside its box`);
   }
 });
@@ -67,7 +67,7 @@ test('a layout\'s lone block takes the body: its region reaches the foot when th
   assert.ok(Math.abs(region.width - result.contentBox.width) < 1, 'the full width');
   assert.ok(item.text.fontSize > 28);
   assert.ok(Math.abs(middle(item.frameBox ?? item.box) - middle(region)) < 1, 'the card hugs it in the middle');
-  // A stacked record (the statement) already centres its message and keeps its sizes.
+  // A stacked record (the statement) already centers its message and keeps its sizes.
   const stacked = composeSlide({ title: 'Statement', blocks: [{ text: statement }] }, { layout: layouts.statement });
   assert.deepEqual(stacked.items.map((entry) => entry.box), composeSlide({ title: 'Statement', blocks: [{ text: statement }] }, { layout: layouts.statement, fill: false }).items.map((entry) => entry.box));
 });
@@ -83,7 +83,7 @@ test('LH-65: two blocks in three columns draw 1:1; the empty column gives way', 
     assert.equal(third.collapsed, true);
     if (direction === 'rtl') assert.ok(first.box.x > second.box.x, 'mirrored');
   }
-  // A lone block keeps the collapse into its neighbours, as before.
+  // A lone block keeps the collapse into its neighbors, as before.
   const lone = composeSlide({ title: 'One', blocks: [{ text: 'Only one.' }] }, { layout: layouts['three-column'], fill: false });
   assert.ok(lone.regions.find((entry) => entry.name === 'second').box.width > 0);
 });
@@ -117,4 +117,19 @@ test('LH-89: a nested group without a gap of its own is the slide\'s gap apart, 
   const own = composeSlide({ ...slide, blocks: [{ ...slide.blocks[0], composition: { mode: 'row', gap: 0.01 } }, slide.blocks[1]] }, { fill: false });
   const [a, b] = own.items.filter((item) => item.field === 'text' && item.path.includes('blocks.0.blocks'));
   assert.ok(b.box.x - (a.box.x + a.box.width) < 720 / 30, 'a group\'s own gap is a fraction of its own side');
+});
+
+test('LH-65 with the wave 3 rule: a column gives way only when no block reads smaller', () => {
+  // A dense second block reads larger across the two columns it took in wave 2 than in half the row: the columns stay.
+  const long = 'Give one owner responsibility from intake through decision. A shared queue makes exceptions visible and keeps routine work moving. '.repeat(7);
+  const dense = composeSlide({ title: 'Dense', blocks: [{ text: 'Short.' }, { text: long }] }, { layout: layouts['three-column'], fill: false });
+  const [first, second] = ['first', 'second'].map((name) => dense.regions.find((entry) => entry.name === name).box);
+  assert.ok(second.width > first.width * 1.8, 'the wave 2 columns stand');
+  assert.deepEqual(findings(dense), []);
+  // A hero's empty media column, which no neighbor can absorb, gives way to its lone text.
+  const hero = composeSlide({ title: 'Signal trend', blocks: [{ text: statement }] }, { layout: layouts.hero });
+  const media = hero.regions.find((entry) => entry.name === 'media');
+  assert.equal(media.box.width, 0);
+  assert.equal(media.collapsed, true);
+  assert.ok(Math.abs(hero.regions.find((entry) => entry.name === 'lead').box.width - hero.contentBox.width) < 1, 'the text takes the width');
 });

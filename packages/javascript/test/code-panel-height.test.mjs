@@ -27,7 +27,7 @@ test('a short snippet gets a panel that hugs its content, anchored at the top of
   assert.ok(Math.abs(layout.bounds.height - content) < 0.01, `${layout.bounds.height} against ${content}`);
   assert.ok(layout.bounds.height < cell.height / 2, `${layout.bounds.height}`);
   assert.equal(layout.bounds.y, cell.y);
-  // On a slide the code item's box is that panel (`fill: false`: LH-48 grows a lone short panel and centres it, lone-fill.test.mjs).
+  // On a slide the code item's box is that panel (`fill: false`: LH-48 grows a lone short panel and centers it, lone-fill.test.mjs).
   const result = composeSlide({ title: 'Code', code: snippet }, { layout: layouts.code, fill: false });
   const item = result.items.find((entry) => entry.field === 'code');
   assert.ok(Math.abs(item.box.height - item.codeLayout.bounds.height) < 0.02);

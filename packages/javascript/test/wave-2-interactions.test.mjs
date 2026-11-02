@@ -69,6 +69,6 @@ test('LH-48 with LH-43 and LH-64: an under-filled row of cards grows at one size
     assert.equal(new Set(cards.map((item) => item.frameBox.height)).size, 1, `${direction}: one card height (LH-64)`);
     const title = result.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
     const card = cards[0].frameBox, above = card.y - (title.y + title.height), below = end - (card.y + card.height);
-    assert.ok(Math.abs(above - below) < 30, `${direction}: centred (${above} above, ${below} below)`);
+    assert.ok(Math.abs(above - below) < 30, `${direction}: centered (${above} above, ${below} below)`);
   }
 });

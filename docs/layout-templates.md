@@ -257,11 +257,13 @@ slide that pins any block with `region` keeps the binding above as written.
 
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
 above; a body region before a heading region). A column of the grid that holds nothing but empty regions (and heading or
-below-the-grid areas that span other columns too) gives way first when at least two columns with content remain (LH-65): it
-takes no width and no gap, and the columns left share the width by their own sizes, so two blocks in `three-column` draw 1:1
-instead of one column beside a neighbour that took the third column's width too. The empty region reports a zero-wide cell
-where its column was. Headings are centred vertically in their region unless every row it spans is
-`auto`, so a `cover` or a title-only slide centres its title. A slide with promoted regions (`left`, `top:left`, ...)
+below-the-grid areas that span other columns too) gives way first (LH-65) when at least two columns with content remain, or
+when its empty region has no neighbor to collapse into (a `hero`'s media column beside its stack of rows): it takes no width
+and no gap, and the columns left share the width by their own sizes, so two blocks in `three-column` draw 1:1 instead of one
+column beside a neighbor that took the third column's width too. The empty region reports `collapsed` and a zero-wide cell where
+its column was. The column, and a nested group's new default gap (LH-89), are kept only when no block reads smaller than with
+the columns and gaps of before (unless that removes overflow). Headings are centered vertically in their region unless every
+row it spans is `auto`, so a `cover` or a title-only slide centers its title. A slide with promoted regions (`left`, `top:left`, ...)
 composes them as in 0.18.
 
 In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promoted-region key keeps its 0.18 meaning.
@@ -377,7 +379,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   is kept; siblings keep one size (LH-43). The body then sits in the middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown.** A stacked record (`statement`, `quote`, `closing`, which already centre their message), blocks below
+- **Never grown.** A stacked record (`statement`, `quote`, `closing`, which already center their message), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.

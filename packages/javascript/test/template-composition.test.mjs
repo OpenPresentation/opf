@@ -47,7 +47,7 @@ describe('the grid flow by count', () => {
   });
 
   test('adding a block reflows the region and nothing else moves', () => {
-    // At the role sizes (`fill: false`): LH-48 centres an under-filled body, whose height depends on its blocks.
+    // At the role sizes (`fill: false`): LH-48 centers an under-filled body, whose height depends on its blocks.
     const three = compose({ title: 'x', blocks: short(3) }, layouts.pillars, { fill: false }), four = compose({ title: 'x', blocks: short(4) }, layouts.pillars, { fill: false });
     assert.deepEqual(region(three, 'pillars').box, region(four, 'pillars').box);
     assert.equal(rows(cells(three, 'pillars')), 1);
