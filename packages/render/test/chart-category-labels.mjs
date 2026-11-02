@@ -20,7 +20,8 @@ let measurer;
 const widthOf = (text, size) => (measurer ??= textWidthMeasurer(resolveTextStyle({ fontFamily: 'Aptos', fontWeight: 400, italic: false }, undefined), undefined))(text, size);
 
 function render(type, rows, { columns = ['Category', 'Value'], onlyPath = true } = {}) {
-  const input = { slides: [{ title: 't', chart: { type, data: { columns, rows } } }] };
+  // LH-03: `dataLabels: false` keeps a small chart's value gridlines, which locate the plot here.
+  const input = { slides: [{ title: 't', chart: { type, dataLabels: false, data: { columns, rows } } }] };
   const before = JSON.stringify(input);
   const diagnostics = [];
   const svg = toSvg(input, 1, { trace: true, onDiagnostic: (diagnostic) => diagnostics.push(diagnostic) });

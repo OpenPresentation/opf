@@ -821,6 +821,29 @@ export function chartHighlightColors(surface: string, primary: string, text: str
   return { accent, muted };
 }
 
+/** LH-03: share of the way the quieter marks of a small chart move from the accent towards the surface. */
+export const CHART_EMPHASIS_TINT_MIX = 0.55;
+/** LH-03: smallest contrast the quieter tint keeps against the surface (as the highlight's muted colour). */
+export const CHART_EMPHASIS_TINT_MIN_CONTRAST = CHART_HIGHLIGHT_MUTED_MIN_CONTRAST;
+
+/**
+ * LH-03: the two colours of a small chart's emphasis. `accent` is the series colour (`color`, already adjusted for the surface by
+ * `chartPaletteForFill`) and marks the emphasised point; `muted` is that colour mixed {@link CHART_EMPHASIS_TINT_MIX} of the way towards
+ * the surface, a quieter tint of the same hue for every other point, moved back towards the accent until it keeps
+ * {@link CHART_EMPHASIS_TINT_MIN_CONTRAST} against the surface. The preview and the PPTX export call it with the same pair.
+ */
+export function chartEmphasisColors(surface: string, color: string): { accent: string; muted: string } {
+  const fill = normalizeHexColor(surface) ?? '#FFFFFF';
+  const accent = (normalizeHexColor(color) ?? '#000000').slice(0, 7).toUpperCase();
+  const from = opaqueChannels(accent)!, to = opaqueChannels(fill.slice(0, 7))!;
+  let amount = CHART_EMPHASIS_TINT_MIX, muted = mixChannels(from, to, amount);
+  while ((colorContrast(muted, fill) ?? Infinity) < CHART_EMPHASIS_TINT_MIN_CONTRAST && amount > 0) {
+    amount = Math.max(0, amount - 0.02);
+    muted = mixChannels(from, to, amount);
+  }
+  return { accent, muted };
+}
+
 // --------------------------------------------------------------- alternate surface (banded table rows)
 
 /** Share of the text colour mixed into the surface for the `surfaceAlt` role. */

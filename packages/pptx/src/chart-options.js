@@ -8,7 +8,7 @@
 //   chartex charts   cx:axis/cx:title, cx:legend pos and cx:dataLabels pos (see chartex.js, which calls the helpers here).
 //
 // A chart that carries none of the three fields resolves to `active: false`; nothing below runs and its parts are unchanged.
-import {chartOptionSupport, chartOptionTarget, resolveChartOptions, textColorForFill} from '@openpresentation/opf/composition';
+import {CHART_HEADER_MAX_LEGEND, chartOptionSupport, chartOptionTarget, resolveChartOptions, textColorForFill} from '@openpresentation/opf/composition';
 
 const INACTIVE = Object.freeze({active: false, axisTitles: {}, diagnostics: []});
 
@@ -146,9 +146,10 @@ function titleString(title) {
 /**
  * The options of a parsed classic chart (fast-xml-parser, prefixes kept, attributes plain): `{axisTitles?, legend?, dataLabels?}`
  * plus `notes` naming what the three fields cannot express. `defaults` is what an export writes without the field:
- * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind.
+ * `{legend: 'right' | undefined}` (a legend at the right of multi-series, pie and doughnut charts) and the chart kind. `layer` says what an
+ * export of the LH-81 header row left in the part: `{header, headerLegend}`.
  */
-export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo}) {
+export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCount, circular, scatter, seriesFormats = [], combo, layer = {}}) {
   const chart = chartSpace?.['c:chart'];
   const plotArea = chart?.['c:plotArea'];
   const out = {};
@@ -171,13 +172,19 @@ export function chartOptionsFromClassic(chartSpace, {chartNode, target, seriesCo
   if (Object.keys(axisTitles).length) out.axisTitles = axisTitles;
 
   const defaultLegend = circular || seriesCount > 1;
+  // LH-81: a column, bar, line, area or combo chart of two to four series shows its legend in the header row by default. A chart an export
+  // laid the header row out for (`layer.header`: a caption title or a top legend at a manual position) imports its legend, the header one
+  // or the side one it fell back to, as no option; any other such chart records the legend it has, which is then not the default.
+  const headerKind = target !== undefined && ['bar', 'line', 'area', 'combo'].includes(target.kind) && seriesCount >= 2 && seriesCount <= CHART_HEADER_MAX_LEGEND;
   const legend = chart?.['c:legend'];
   if (legend) {
     const pos = legend['c:legendPos']?.val ?? 'r';
     const mapped = LEGEND_POS_BACK[pos];
     if (!mapped) notes.push({option: 'legend', message: `The legend position '${pos}' (top right) has no OPF equivalent; it imports as 'right'.`});
     const position = mapped ?? 'right';
-    if (!(defaultLegend && position === 'right')) out.legend = position;
+    if (layer.header) {
+      if (!(position === 'right' || (position === 'top' && layer.headerLegend))) out.legend = position;
+    } else if (headerKind || !(defaultLegend && position === 'right')) out.legend = position;
   } else if (defaultLegend) out.legend = 'none';
 
   const dataLabels = classicDataLabels(chartNode, target, notes, seriesFormats, combo);

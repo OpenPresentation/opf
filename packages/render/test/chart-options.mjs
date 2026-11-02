@@ -12,7 +12,10 @@ const GRID = NEUTRALS.gridline.hex, AXIS = NEUTRALS.axisLine.hex;
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]] };
-const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [{ title: 'Chart', chart: { type: 'column', data, ...chart }, ...extra }] });
+// LH-03: `dataLabels: false` keeps the value axis and gridlines (which locate the plot here) of a small chart (two series of four points);
+// a chart that asks for its own labels keeps them.
+const SMALL_TYPES = ['column', 'bar', 'line', 'line-with-markers'];
+const deck = (chart, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: [{ title: 'Chart', chart: { type: 'column', data, ...(SMALL_TYPES.includes(chart.type ?? 'column') ? { dataLabels: false } : {}), ...chart }, ...extra }] });
 const render = (chart, options = {}) => toSvg(deck(chart), 1, { trace: true, ...options });
 
 // The text groups of the chart: path, text and the first <text> element's position.
@@ -37,8 +40,10 @@ const plotExtent = (svg) => {
 for (const id of Object.keys(CHART_TYPES)) {
   const plain = toSvg(deck({ type: id }), 1, { trace: true });
   assert.equal(toSvg(deck({ type: id, axisTitles: {} }), 1, { trace: true }), plain, `${id}: empty axisTitles change nothing`);
-  // dataLabels false is inert except where a construct labels its marks by default (funnel, treemap), asserted below.
-  if (id !== 'funnel' && id !== 'treemap') assert.equal(toSvg(deck({ type: id, dataLabels: false }), 1, { trace: true }), plain, `${id}: dataLabels false changes nothing`);
+  // dataLabels false is inert except where a construct labels its marks by default (funnel, treemap), asserted below, and on the LH-03
+  // small charts, which label their values by default (the deck sets it on those types here: a chart without it is compared).
+  const unset = toSvg({ ...deck({ type: id }), slides: [{ title: 'Chart', chart: { type: id, data } }] }, 1, { trace: true });
+  if (!['funnel', 'treemap', ...SMALL_TYPES].includes(id)) assert.equal(unset, plain, `${id}: dataLabels false changes nothing`);
   assert.doesNotMatch(plain, /axisTitles|dataLabels/, `${id}: no option paths in a plain chart`);
 }
 // ... and a funnel or treemap keeps its default labels unless dataLabels says otherwise.
@@ -51,16 +56,17 @@ for (const type of ['funnel', 'treemap']) {
   assert.ok(texts(withValues).some((entry) => /^\d+$/.test(entry.text)), `${type}: value labels`);
 }
 
-// 2. Legend positions. A two-series column chart draws a right legend by default.
+// 2. Legend positions. A two-series column chart draws its legend in the LH-81 header row by default, above the plot.
 {
   const names = (svg) => texts(svg).filter((entry) => /^slides\.0\.chart\.data\.columns\.\d$/.test(entry.path));
   const base = render({});
   const baseExtent = plotExtent(base);
   assert.equal(names(base).length, 2, 'default: two legend entries');
-  assert.ok(names(base).every((entry) => entry.x > baseExtent.right - 20), 'default legend sits right of the plot');
+  assert.ok(names(base).every((entry) => entry.y < baseExtent.top), 'the default legend sits above the plot, in the header row');
 
-  const right = render({ legend: 'right' });
-  assert.equal(right, base, 'legend right is the default position, byte for byte');
+  const right = render({ legend: 'right' }), rightExtent = plotExtent(right);
+  assert.ok(names(right).every((entry) => entry.x > rightExtent.right - 20), 'legend right sits right of the plot');
+  assert.ok(rightExtent.right < baseExtent.right, 'a side legend takes plot width the header legend leaves');
   const left = render({ legend: 'left' }), leftExtent = plotExtent(left);
   assert.ok(names(left).every((entry) => entry.x < leftExtent.left), 'legend left sits left of the plot');
   const top = render({ legend: 'top' }), topExtent = plotExtent(top);
@@ -71,10 +77,10 @@ for (const type of ['funnel', 'treemap']) {
   assert.ok(names(top)[0].x < names(top)[1].x, 'top legend entries run left to right');
   const none = render({ legend: 'none' });
   assert.equal(names(none).length, 0, 'legend none draws no legend');
-  assert.ok(plotExtent(none).right > baseExtent.right, 'legend none gives the plot the legend space back');
+  assert.ok(plotExtent(none).right > rightExtent.right, 'legend none gives the plot the legend space back');
   for (const [position, extent] of [['top', topExtent], ['bottom', bottomExtent]]) {
-    assert.ok(extent.bottom - extent.top < baseExtent.bottom - baseExtent.top + 1, `${position}: the plot shrinks vertically`);
-    assert.ok(extent.right > baseExtent.right, `${position}: the plot gains the right legend width`);
+    assert.ok(extent.bottom - extent.top < rightExtent.bottom - rightExtent.top + 1, `${position}: the plot shrinks vertically`);
+    assert.ok(extent.right > rightExtent.right, `${position}: the plot gains the right legend width`);
   }
   // A single-series chart has no legend by default; a named position shows it.
   const single = { type: 'column', data: { columns: ['Quarter', 'Revenue'], rows: [['Q1', 1], ['Q2', 2]] } };

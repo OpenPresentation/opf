@@ -35,7 +35,7 @@ for (const [name, values] of ordinary) {
   for (const type of ["column", "bar", "line-with-markers"]) {
     const label = `${name}/${type}`;
     const horizontal = type === "bar";
-    const input = { slides: [{ title: name, chart: { type, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
+    const input = { slides: [{ title: name, chart: { type, dataLabels: false, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
     const before = JSON.stringify(input);
     assert.equal(validate(input, { only: ['format'] }).valid, true, `${label}: valid source`);
     const svg = toSvg(input, 1, { trace: true });
@@ -48,7 +48,9 @@ for (const [name, values] of ordinary) {
     // Value-axis tick labels are the chart-path text groups, one per gridline, in gridline order.
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
-      .map(([, , body]) => [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join(""));
+      .map(([, , body]) => [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join(""))
+      // LH-81: the header caption is chart text too; it is not a tick label.
+      .filter((text) => text !== "Value by Category");
     assert.ok(labels.length >= 2, `${label}: value axis has ticks`);
     const ticks = labels.map(Number);
     assert.ok(ticks.every(Number.isFinite), `${label}: numeric tick labels`);
@@ -103,13 +105,14 @@ for (const [name, values, dropsZero, edge] of autoZero) {
   for (const type of ["column", "bar", "line", "line-with-markers", "area"]) {
     const label = `${name}/${type}`;
     const horizontal = type === "bar";
-    const input = { slides: [{ title: name, chart: { type, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
+    const input = { slides: [{ title: name, chart: { type, dataLabels: false, data: { columns: ["Category", "Value"], rows: values.map((v, i) => [`Item ${i + 1}`, v]) } } }] };
     const svg = toSvg(input, 1, { trace: true });
     assert.equal(toSvg(input, 1, { trace: true }), svg, `${label}: deterministic bytes`);
     const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a));
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
-      .map(([, , body]) => Number([...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join("")));
+      .map(([, , body]) => [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join(""))
+      .filter((text) => text !== "Value by Category").map(Number);
     const grid = lines.filter((l) => l.stroke === GRID && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
     assert.equal(grid.length, labels.length, `${label}: one gridline per tick label`);
     const at = grid.map((g) => Number(g[horizontal ? "x1" : "y1"]));
@@ -169,7 +172,8 @@ for (const type of ["stacked-column", "stacked-area"]) {
   const first = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
     .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
     .map(([, , body]) => Number([...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join("")));
-  assert.equal(Math.min(...first), 0, `${type}: stacked totals keep zero on the axis`);
+  // LH-81: the header caption is chart text too; only the numeric tick labels count.
+  assert.equal(Math.min(...first.filter(Number.isFinite)), 0, `${type}: stacked totals keep zero on the axis`);
   autoZeroChecked++;
 }
 console.log(`Chart axis passed: ${ordinaryChecked} public ordinary-range cases and ${autoZeroChecked} automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, zero magnitude baseline for column/bar/area and top-sixth zoom retained for line, source preservation and deterministic bytes.`);
