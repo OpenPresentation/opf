@@ -258,7 +258,15 @@ Browser glyph bounds can extend slightly beyond advance-based part boxes into th
 
 ## Timeline internals
 
-`layoutTimeline(value, box, options)` (`timeline-flow-v1`) places an optional name and description, then the events as a marker on a connector with each event's `when`, `what` and `description` as separate text parts. It tries an alternating arrangement (labels above and below a horizontal connector) and a vertical one (a marker rail down the start edge, labels beside it), at most 50 candidates in all, and keeps the first that fits or the one with the fewest diagnostics. Right-to-left decks put the vertical rail on the right edge.
+`layoutTimeline(value, box, options)` (`timeline-flow-v1`) places an optional name and description, then the events as a marker on a connector with each event's `when`, `what` and `description` as separate text parts. It has three arrangements, tried from the role sizes down to the readability floor (at most 100 candidates in all), and keeps the first that fits or the one with the fewest diagnostics:
+
+- `band` (LH-41): one horizontal connector, each event one spacing (`box.width / events`, less a gutter) wide, its `when` as an eyebrow above the marker and its `what` and description below. This is the horizontal arrangement whenever every `when` and `what` fits its spacing on one line.
+- `alternating`: labels alternate above and below the connector, each up to two spacings wide, for a `when` or `what` wider than one spacing (or a band whose labels would break inside a word).
+- `vertical`: a marker rail down the start edge with the labels beside it, tried first when an event's spacing is under 8 ems of the label size. Right-to-left decks put the rail on the right edge.
+
+A horizontal timeline centres its whole block (name, description and labels) in the box. `TimelineLayout.bounds` is what the drawn timeline covers (parts, markers and rings), so its height is the height the timeline needs; composition measures a timeline with it, label bands included, and stacks it like text (`MEASURED_FIELDS`).
+
+**Several timelines in one region (LH-41).** A template region whose blocks are all timelines draws them as a stack of bands, whatever its `flow` or the design's `contentDirection`: one column while the stack fits at the readability floor with every band at least 56 reference pixels tall, otherwise two columns (in reading order, each row as tall as its taller band, an odd last band spanning both) when that overflows less. The stack sits in the middle of the region (at the bottom in a region anchored there), the bands share the region as stacked text does (`shareHeights`) and every band is set at the size the most squeezed one fits at. A band of a stack never turns vertical (`horizontal`), sits at the top of its box and sets its name and description at its start edge. With four or more timelines the bands are compact (`compact`: name 20, `what` 18 and the rest 16 reference pixels; each `when` and `what` on one row below the marker when every pair fits; the description beside the name when every band's pair fits). A stack that does not fit at the floor reports `text-overflow` for the parts outside their band. A lone timeline in its region grows its type by up to 4 reference pixels when it still fits in the same arrangement (`sizeOffset`).
 
 ### Event status (FA-11)
 

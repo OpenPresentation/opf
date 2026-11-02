@@ -148,13 +148,13 @@ describe('step 3: content no region takes', () => {
   });
 
   test('a layout with no flowing primary region and no overflowRegion draws it below the grid', () => {
-    const result = bindRegions({ blocks: [text('a')] }, layouts.timeline);
-    // timeline has a supporting notes region that takes text: no overflow needed.
-    assert.deepEqual(bound(result).notes, ['blocks.0']);
-    const below = bindRegions({ blocks: [{ code: 'x' }] }, layouts.timeline);
+    // statement's one primary region has flow none and takes text: no overflow needed (LH-41: timeline's region flows now).
+    const result = bindRegions({ blocks: [text('a')] }, layouts.statement);
+    assert.deepEqual(bound(result).message, ['blocks.0']);
+    const below = bindRegions({ blocks: [{ code: 'x' }] }, layouts.statement);
     assert.equal(below.below.length, 1);
     assert.deepEqual(below.diagnostics.map((entry) => entry.code), ['layout-unplaced']);
-    const composed = composeSlide({ title: 't', blocks: [{ code: 'x = 1' }] }, { layout: layouts.timeline });
+    const composed = composeSlide({ title: 't', blocks: [{ code: 'x = 1' }] }, { layout: layouts.statement });
     const code = composed.items.find((item) => item.field === 'code');
     assert.ok(code && code.region === undefined, 'drawn, in the implicit row');
   });
