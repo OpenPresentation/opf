@@ -2,16 +2,16 @@
   "deck": "technical/catalog-overrides.opf.json",
   "entries": {
     "technical/catalog-overrides.opf.json#0": {
-      "sha256": "9c888c83bff39053fa8b566666188748e20712fe5165a63b8ddbc417982b0173",
-      "bytes": 4886
+      "sha256": "3021cac5ef3a5ae3ad47eca7c10d5aa9cb120a09a3e5c117ccdc6a993dc94512",
+      "bytes": 6577
     },
     "technical/catalog-overrides.opf.json#1": {
-      "sha256": "2384d70739d03763ac9362f0591179023ae35d76eb70691ab8a703f3b7881a55",
-      "bytes": 3033
+      "sha256": "c017ea47ebb42bd1e6215c32635bcc7a2f99b1a872b00103849c40bf236a814d",
+      "bytes": 3036
     },
     "technical/catalog-overrides.opf.json#2": {
-      "sha256": "308cb7e35169be2f09b33d98fa97267d1b92148c6dccade1509cc47ddfd4a360",
-      "bytes": 7390
+      "sha256": "0ae8db0231ffbdab21c4a2845830bd8bfc7047ecd0c9c6e6728f31e9e1cddade",
+      "bytes": 9404
     }
   }
 }

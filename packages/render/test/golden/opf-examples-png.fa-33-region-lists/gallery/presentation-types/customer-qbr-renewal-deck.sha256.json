@@ -6,12 +6,12 @@
       "bytes": 6557
     },
     "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#1": {
-      "sha256": "74448c8691af3a13bf16be497290ad213c97fa6198b56f58a85580481292a644",
-      "bytes": 9479
+      "sha256": "03524ffa7f7f8b37228213d82d3e7f3ad7eceb41e428b6ecb89ce9cc802c5451",
+      "bytes": 14543
     },
     "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#2": {
-      "sha256": "e2d08e54c4172035d294d98afea3ad56e24f781f4673ac196f2e579ec8ccefc4",
-      "bytes": 5670
+      "sha256": "89c843e3170261b375d399cae1aadb0aa4dedcac1420f6adf6d1358515d80b73",
+      "bytes": 5910
     },
     "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#3": {
       "sha256": "3864c135c6248c60c3b433f5aa8e4066c30d41104474231705de981ee8c1a69f",
@@ -22,8 +22,8 @@
       "bytes": 11534
     },
     "gallery/presentation-types/customer-qbr-renewal-deck.opf.json#5": {
-      "sha256": "2fb23c2c7e29ba5a0531b2013e6cc4a0a7b84bd5faf962aeb3fe4ff7458fcb22",
-      "bytes": 10261
+      "sha256": "9bbe618b65c3377947cb23e890d6ef534cceecc553244e8075a53f64477a0543",
+      "bytes": 10636
     }
   }
 }

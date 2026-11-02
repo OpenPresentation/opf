@@ -2,16 +2,16 @@
   "deck": "technical/table-cell-types.opf.json",
   "entries": {
     "technical/table-cell-types.opf.json#0": {
-      "sha256": "4219708d35e0ffed501442eceea2b8cd3e35eb6e37fe42c750e8b622ed7239e3",
-      "bytes": 3878
+      "sha256": "5e21e5f56158bba59f59b32b151963629bfddf6bedc425b590b42505ca851f51",
+      "bytes": 4761
     },
     "technical/table-cell-types.opf.json#1": {
-      "sha256": "5c60533d82b9c46313db9eef3e9c24a734cd4d18c0d12910b92b095ce09e451c",
-      "bytes": 3397
+      "sha256": "adaad7db68bf1a7e9c805ff592589b1d3493853ee2c904dac6409fe712ec7c58",
+      "bytes": 3791
     },
     "technical/table-cell-types.opf.json#2": {
-      "sha256": "c847304507a5ad3e60fa38e6c4c62fcbed5a29ad9390afb211e88bb98197a5bd",
-      "bytes": 6529
+      "sha256": "d695cef75779425d55e491d336b751b7c6c3f8d5e751827cfa10ffb056cf9563",
+      "bytes": 7549
     }
   }
 }
