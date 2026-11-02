@@ -153,6 +153,18 @@ Content that does not fit retains its allocation and overflow diagnostics. Neste
 charts, tables and explicit slide composition overrides keep their existing allocation behavior; an anchor is not
 a promise to measure arbitrary content.
 
+On a slide that draws content cards (`design.contentBox`), a row of cards is one row of a region's grid, or the lone blocks
+of regions side by side (two-column, three-column). The anchor sets how the row stands:
+
+- `middle` or `bottom`: a card fills its cell (starting half a gap down, clear of the heading) and the anchor places its
+  content inside it, while a card carries a picture, a metric or a heading line (a labelled list item). A row of body text
+  only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
+  it with one height and the row centres in the region, since short text at the foot of a tall card reads as an empty card;
+  rows that all hug stack one gap apart. When the texts are longer and their heights more than 1.5x apart, the cards still
+  fill but every text starts at the card's top, so a short text does not sit alone at a foot beside long ones.
+- `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
+  per row (LH-04); a row with a picture, chart, table or group keeps cells the size of the region's share.
+
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
 block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
 anchor down the cell, so a landscape picture beside text starts on the text's first line instead of floating in the middle of
