@@ -116,7 +116,8 @@ for (const preset of ['pct5', 'ltHorz', 'openDmnd', 'wave', 'smGrid', 'zigZag'])
   // The preview's engine id diagStripe is written as the closest preset; import reports the native name.
   const {bytes, exported, background} = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'diagStripe', foregroundColor: '#000000', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
   assert.equal(attrs(bg(bytes), 'pattFill').prst, 'wdUpDiag');
-  assert.deepEqual(exported, []);
+  // LH-29: the approximation is reported.
+  assert.deepEqual(exported.map(d => [d.code, d.feature, d.path]), [['export-lossy', 'pattern-preset', 'design.background.pattern.preset']]);
   assert.equal(background.pattern.preset, 'wdUpDiag');
   // Other engine-defined ids keep only the background color, as in the preview, and are reported.
   const unknown = await roundTrip({slides: [{design: {background: {type: 'pattern', pattern: {preset: 'engineDots', backgroundColor: '#123456'}}}}]});

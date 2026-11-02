@@ -70,6 +70,19 @@ export interface ExportOptions {
 	 * draws as the digit alone. A text that is only `{{slide.number}}` stays a live field in both.
 	 */
 	slideNumbers?: "static" | "live";
+	/**
+	 * `pptx`: the font names the file writes. `selected` (the default) writes the families the deck chose; a viewer without one
+	 * substitutes another font, and the export reports such families (`typeface-not-office-safe`). `safe` writes each Latin text
+	 * family as an Office-safe family that every Windows and macOS machine has and OPF measures exactly (Arial, Georgia, Courier
+	 * New, Times New Roman) and lays the text out with it, so every viewer breaks lines where the export did (`typeface-replaced`).
+	 */
+	typefaces?: "selected" | "safe";
+	/**
+	 * `pptx`: `native` (the default) writes editable shapes, text and charts. `images` writes each slide as one full-bleed PNG
+	 * picture drawn like the preview (at `scale`, default 2: 2560 x 1440 for the 1280 x 720 reference slide), with the speaker
+	 * notes and the slide's text as the picture's alternative text: a fidelity fallback that needs no fonts and has no editable text.
+	 */
+	as?: "native" | "images";
 	/** `YYYY-MM-DD`, for date fields that show today's date. Nothing reads a clock: without it such a field reports `date-needs-value`. */
 	date?: string;
 	/** The directory a presentation's relative image paths resolve against. Omitted: no local file is read (data URIs and remote references work as the engines handle them). */
@@ -177,6 +190,8 @@ export interface ResolvedExportOptions extends Omit<ExportOptions, "fonts" | "te
 	fonts?: FontsHandle;
 	/** `fonts`, when it names folders. */
 	fontFolders: string[];
+	/** `pptx` with `as: "images"`: the pixel scale of the slide pictures (`scale`, default 2). */
+	pictureScale?: number;
 }
 
 const isHandle = (value: unknown): value is FontsHandle => !!value && typeof value === "object" && !Array.isArray(value);
@@ -194,9 +209,13 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const bodyText = oneOf("bodyText", options.bodyText, ["measured", "native"] as const);
 	const slideNumbers = oneOf("slideNumbers", options.slideNumbers, ["static", "live"] as const);
 	const text = oneOf("text", options.text, EXPORT_TEXT);
+	const typefaces = oneOf("typefaces", options.typefaces, ["selected", "safe"] as const);
+	const as = oneOf("as", options.as, ["native", "images"] as const);
 	if (options.raster && format !== "pdf") throw invalid("raster applies to format pdf.");
-	if ((charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined) && format !== "pptx") throw invalid("charts, provenance, images, bodyText and slideNumbers apply to format pptx.");
-	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw invalid("scale applies to format png (and raster pdf).");
+	if ((charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, provenance, images, bodyText, slideNumbers, typefaces and as apply to format pptx.");
+	// A pictures-only PPTX has no text, fonts, charts or source records: the options that shape them do not apply.
+	if (as === "images" && (charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, provenance, images, bodyText, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
+	if (options.scale !== undefined && format !== "png" && format !== "pdf" && !(format === "pptx" && as === "images")) throw invalid("scale applies to format png (and raster pdf, and pptx with as: \"images\").");
 	if (options.includeHidden && format === "pptx") throw invalid("includeHidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
 	if (text !== undefined && format !== "svg") throw invalid("text applies to format svg.");
@@ -207,7 +226,7 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const { fonts, ...rest } = options;
 	if (fonts !== undefined && typeof fonts !== "string" && !isHandle(fonts) && !(Array.isArray(fonts) && fonts.every((folder) => typeof folder === "string"))) throw invalid("fonts must be a fonts handle (loadFonts() of @openpresentation/opf-render/fonts-node), a folder of font files or a list of folders.");
 	const folders = typeof fonts === "string" ? [fonts] : Array.isArray(fonts) ? [...(fonts as readonly string[])] : [];
-	return { ...rest, format, text: text ?? "fonts", scale, ...(isHandle(fonts) ? { fonts } : {}), fontFolders: folders };
+	return { ...rest, format, text: text ?? "fonts", scale, ...(as === "images" ? { pictureScale: options.scale === undefined ? 2 : scale } : {}), ...(isHandle(fonts) ? { fonts } : {}), fontFolders: folders };
 }
 
 export function assetRoot(directory: string | undefined, flags = false): string | undefined {
@@ -311,6 +330,12 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		if (format === "pptx") {
 			requirePptxOptions(pptx as NonNullable<typeof pptx>, options, ctx.flags);
 			const module = (pptx as NonNullable<typeof pptx>).module;
+			const pictures = options.as === "images";
+			// LH-20: a pictures-only PPTX draws each slide as the PNG preview draws it: the same renderer, fonts, image resolver and date.
+			const slideRasterizer = async (picture: unknown, slide: number, size: { scale: number }) => {
+				const svg = renderer.render.module.toSvg(picture, slide, { fonts: { textMeasurement: handle.textMeasurement, embeddedFonts: [] }, imageResolver: resolver.forSvg, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("render", diagnostic), catalogs, ...(date ? { date } : {}) });
+				return new Uint8Array(await renderer.render.module.toPng(svg, { fonts: handle, scale: size.scale }));
+			};
 			const bytes = await module.toPptx(deck, {
 				fonts: handle,
 				imageResolver: resolver.forPptx,
@@ -325,8 +350,24 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(options.images ? { imageFormat: options.images } : {}),
 				...(options.bodyText ? { bodyText: options.bodyText } : {}),
 				...(options.slideNumbers ? { slideNumberFields: options.slideNumbers } : {}),
+				...(options.typefaces ? { typefaces: options.typefaces } : {}),
+				...(pictures ? { as: "images", scale: options.pictureScale, slideRasterizer } : {}),
 				...(date ? { date } : {}),
 			});
+			// LH-28: a family that is not on every Windows and macOS machine, or that OPF measures with a look-alike, can wrap
+			// differently in a viewer that substitutes it. One note per export names them and the option that avoids it.
+			const unsafe = pictures || options.typefaces === "safe" || typeof module.typefacesNotOfficeSafe !== "function" ? [] : module.typefacesNotOfficeSafe(bytes);
+			if (unsafe.length)
+				reporter.add(
+					"pptx",
+					{
+						code: "typeface-not-office-safe",
+						path: "",
+						families: unsafe,
+						message: `The PPTX names ${unsafe.join(", ")}, which ${unsafe.length === 1 ? "is" : "are"} not on every Windows and macOS machine or not measured exactly by OPF. A viewer without ${unsafe.length === 1 ? "it" : "them"} substitutes another font, and lines can break differently from the preview.`,
+					},
+					"info",
+				);
 			return run({ files: [{ name: `${stem}.pptx`, type: MEDIA.pptx, bytes }], skippedHidden: [] });
 		}
 
