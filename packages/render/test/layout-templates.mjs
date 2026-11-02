@@ -67,8 +67,13 @@ for (const { keys, deck } of decks) {
         assert.deepEqual(box, { x: item.image.box.x, y: item.image.box.y, width: item.image.box.width, height: item.image.box.height }, `${key}: ${item.path} picture box`);
         assert.ok(item.image.box.x >= item.box.x - 0.01 && item.image.box.y >= item.box.y - 0.01 && item.image.box.x + item.image.box.width <= item.box.x + item.box.width + 0.01, `${key}: ${item.path} frame inside the bled cell`);
         // The bled cell, which holds the whole picture, reaches the slide edge; a contained picture's own frame sits inside it.
-        const cell = item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
+        // LH-46: several pictures in one bled region are a mosaic: together they reach the edges the region reaches, and each
+        // stays inside the region.
+        const pictures = geometry.items.filter((other) => other.region === item.region && other.field === 'image');
+        const union = pictures.map((other) => other.box).reduce((a, b) => ({ x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), width: Math.max(a.x + a.width, b.x + b.width) - Math.min(a.x, b.x), height: Math.max(a.y + a.height, b.y + b.height) - Math.min(a.y, b.y) }));
+        const cell = pictures.length > 1 ? union : item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
         assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(cell)})`);
+        assert.ok(item.box.x >= region.box.x - 0.01 && item.box.y >= region.box.y - 0.01 && item.box.x + item.box.width <= region.box.x + region.box.width + 0.01 && item.box.y + item.box.height <= region.box.y + region.box.height + 0.01, `${key}: ${item.path} inside its bled region`);
       }
       // A list in columns: every column core broke it into is drawn in its own box, with every item exactly once and the
       // numbering continuing across the columns.

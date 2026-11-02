@@ -85,6 +85,33 @@ Core 0.15 composes pictures in two ways (FA-22); [images](image-treatments.md) h
 - Every image item carries `item.image`: the frame inside its region, `fit` (the block's own, else the effective `design.imageFit`, else `cover` in a layout and `contain` on a slide composed with no layout), `focus`, the mask with its DrawingML preset and SVG outline, line, opacity, recolor and overlay. `fitImage(frame, fit, aspect, focus)` is the shared fit math (LH-84: with no authored `focus`, a portrait picture, taller than wide, cover-cropped into a wider frame defaults to focus y 0.3 so heads stay in frame, `defaultImageFocus`; any other crop is centered, an authored focus always wins, and `item.image.focus` is the focus drawn); core fills `item.image.picture` itself when it can read the picture's proportions (a data URI, or an `asset:` reference to one). A picture shown whole (`contain`) gets a frame of its own proportions at the region's anchor (top by default) when core can read them, so `item.image.box` is the picture and not the whole cell; a video's `item.box` is its 16:9 frame; in automatic composition a chart is at most 4:3 and a single row of a portrait picture beside other blocks, or of two prose blocks whose demand differs by 2.5 times, gets weighted widths.
 
 A top-level image block with `placement: { edge, size, inset }` takes a band along that slide edge: `size` of the slide width (left, right) or height (top, bottom), default 0.5, edge to edge, or inside the slide padding with `inset`. Headings, footnotes and the body compose in the free area that remains, with the usual padding; header and footer bands keep their full-width placement. Bands are taken in block order and each spans the free area the earlier ones left; a second block on a used edge flows as content (the validator reports it). Placed items are listed after the headings and before the flowed body, and their placeholder slot is not reserved in the flow. A slide whose only body is placed images is composed like a cover. A right-to-left deck mirrors `left` and `right`.
+
+## Grouping blocks before placing them
+
+Composition groups a slide's blocks before it places any cell (layout harvest LH-58, LH-82, LH-73, LH-46, LH-47). The
+rules read the blocks' kinds, counts and text lengths, never a layout or slide id, so they hold for any count, any content
+kind and right-to-left decks; a slide that pins a block to a region, or sets its own `composition.mode`, `columns` or
+`weights`, is composed as written. `repeatedPairs`, `majorityKind` and `groupBinding` (on `/composition`) expose them.
+
+- **Repeated pairs.** A sequence that repeats one pair of kinds, a figure (metric, chart, table, picture, video or code)
+  and a paragraph in either order, or a long and a short paragraph (one at least twice the other's length, the long one
+  on the same side of every pair), two pairs or more, composes as one cell per pair. A pair is one row of its two blocks
+  when each half of its cell is at least 0.8 of the cell's height wide (a metric beside its note), else one column (the
+  figure above its text), half a gap apart. Metric, text, metric, text is two cells, not four.
+- **Group by kind.** With no layout, interleaved blocks of two kinds with unequal counts (chart, text, chart, text,
+  chart) are one column of a grid of the majority kind above a row of the others (up to three side by side), each at
+  the height it needs. On a layout, a region's grid keeps the kinds it accepts and the other blocks join the region that
+  accepts them, in one row under the grid that asks for at most 30% of the content box (see [Layout
+  templates](layout-templates.md#grouping-before-placement-layout-harvest)).
+- **Extra blocks in fixed regions** join the grid at the sibling size instead of a slim full-width strip below it:
+  pictures as a row, then a lead picture beside a mosaic, cover-cropped; the columns of `comparison` as N columns;
+  `statement` as a lead over a row of cards (see [Layout templates](layout-templates.md#grouping-before-placement-layout-harvest)).
+- **Balanced grids.** A region's grid of 7 to 12 blocks has balanced rows (7 as 4 + 3, 9 as 3 x 3), and the cells of a
+  short row stretch to the full width, except in a grid of pictures, whose cells keep one size and centre.
+
+Grouping changes the order of the composed items to the order of the cells (a pair's two blocks together; the majority
+grid before the others), which is the reading order the preview, the PPTX export and accessibility use.
+
 ## Nested groups
 
 ### Shared content cards

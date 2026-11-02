@@ -7,7 +7,8 @@ import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
-import {bindRegions,type BoundBlock} from './bind-regions.js';
+import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
+import {groupBinding,majorityKind,repeatedPairs,textLength} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -3185,7 +3186,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean; gap?: number };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean; gap?: number; orient?: boolean };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -3574,7 +3575,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     if (node.children) {
-      const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
+      const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       arrange(node.children, inner, own, 0, node.gap ?? (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
       return;
@@ -3632,7 +3633,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > box.width * CHART_MAX_ASPECT_RATIO) box = roundBox({ ...box, height: box.width * CHART_MAX_ASPECT_RATIO });
-    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext(undefined, anchor)) : undefined;
+    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
@@ -3802,21 +3803,50 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const body = content + (node.caption !== undefined ? 32 * scale : 0);
     return body + verticalPad(body);
   };
+  // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
+  // cell's height wide (a metric beside its note in a wide cell), else the figure above its text. One rule for every pair of a
+  // grid, whose cells share one size, so the pairs match.
+  const PAIR_ROW_RATIO = .8;
+  const pairMode = (box: LayoutBox): 'row' | 'column' => (box.width - gap / 2) / 2 >= PAIR_ROW_RATIO * box.height ? 'row' : 'column';
+  const pairUnit = (members: Pending[]): Pending => ({ field: 'blocks', type: 'group', value: members.map(member => member.payload), path: members[0]!.path, payload: {}, children: members, composition: { mode: 'column' }, synthetic: true, gap: gap / 2, orient: true });
+  // LH-46: the pictures of a mosaic, drawn cover-cropped.
+  const coverPictures = new WeakSet<Pending>();
+  // LH-58, LH-82, automatic composition only (a template groups its binding, groupBinding): the root blocks, one node each, of a
+  // slide with no composition of its own, as repeated pairs (one cell per pair) or, for interleaved blocks of two kinds with
+  // unequal counts, a grid of the majority kind above a row of the others (one column of the two). Undefined: as authored.
+  const groupRoot = (nodes: Pending[]): { nodes: Pending[]; settings?: Composition } | undefined => {
+    if (useTemplate || regions.length || !Array.isArray(slide.blocks) || chartPrimary || modeFor(rootSettings) !== 'auto' || rootSettings.columns !== undefined || rootSettings.weights?.length) return undefined;
+    const blockOf = (node: Pending) => node.children ? node.path : node.path.slice(0, node.path.lastIndexOf('.'));
+    if (new Set(nodes.map(blockOf)).size !== nodes.length || slide.blocks.some((block: unknown) => record(block).region !== undefined)) return undefined;
+    const grouping = nodes.map(node => node.children ? { kind: 'group', group: true } : { kind: kind(node.field), ...(node.field === 'text' ? { length: textLength(node.value) } : {}) });
+    const pairs = repeatedPairs(grouping);
+    if (pairs) return { nodes: Array.from({ length: pairs.count }, (_, pair) => pairUnit([nodes[2 * pair]!, nodes[2 * pair + 1]!])) };
+    const split = majorityKind(grouping);
+    if (!split) return undefined;
+    const band = (members: Pending[], composition: Composition): Pending => members.length === 1 ? members[0]! : { field: 'blocks', type: 'group', value: members.map(member => member.payload), path, payload: {}, children: members, composition, synthetic: true, gap };
+    const others = split.others.map(index => nodes[index]!);
+    return { nodes: [band(split.majority.map(index => nodes[index]!), {}), band(others, others.length <= 3 ? { mode: 'row' } : {})], settings: { ...rootSettings, mode: 'column' } };
+  };
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
-    const binding = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 });
+    // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
+    const binding = groupBinding(bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(slide, options.slideIndex ?? 0));
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
-    const unitOf = (bound: BoundBlock): Pending => {
+    const blockUnit = (bound: BoundBlock): Pending => {
       const host = bound.block !== undefined ? record(slide.blocks[bound.block])
         : { ...Object.fromEntries((bound.fields ?? []).map(field => [field, slide[field]])), ...Object.fromEntries(['type', 'caption', 'numbering'].filter(key => slide[key] !== undefined).map(key => [key, slide[key]])) };
       const parts = collect(host, bound.block !== undefined ? `${path}.blocks.${bound.block}` : path);
       return parts.length === 1 ? parts[0]! : { field: 'blocks', type: 'group', value: parts.map(part => part.payload), path: bound.path, payload: {}, children: parts, composition: { mode: 'column' }, synthetic: true };
     };
-    const contents = new Map<string, Pending[]>(binding.regions.map(entry => [entry.name, [...entry.blocks, ...entry.overflow].map(unitOf)]));
+    // A pair (LH-58) is one cell of its two blocks, half a gap apart, side by side or stacked as its cell's shape allows (pairMode).
+    const unitOf = (bound: BoundBlock[]): Pending => bound.length === 1 ? blockUnit(bound[0]!) : pairUnit(bound.map(blockUnit));
+    const contents = new Map<string, Pending[]>(binding.regions.map(entry => [entry.name, (binding.units.get(entry.name) ?? []).map(unitOf)]));
+    // LH-46: the first block of a lead arrangement is a lone block (the lead size when it is short).
+    for (const [name, arrangement] of binding.arrangements) if (arrangement === 'lead') { const lead = contents.get(name)?.[0]; if (lead) { lead.auto = true; lead.lone = true; } }
     // WI-4 (P34): the blocks of a `flow: auto` region are in auto mode; a region with one block makes it the lone block.
     for (const region of plan.regions) {
       const units = contents.get(region.name) ?? [];
@@ -3824,7 +3854,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
-    const belowUnits = binding.below.map(unitOf);
+    const belowUnits = binding.belowUnits.map(unitOf);
     const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
     // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
@@ -3966,6 +3996,71 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       heights.reduce((y, height) => { rowY.push(y); return y + height + between; }, cell.y + shift);
       return cells.map((box, index) => ({ ...box, y: rowY[rowOf[index]!]!, height: heights[rowOf[index]!]! }));
     };
+    // LH-47: the cells of a short last row stretch to the full width, except in a grid of pictures and videos, whose cells keep
+    // one size (one aspect) and centre.
+    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video'));
+    // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
+    // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
+    const MOVED_SHARE = .3;
+    const movedHeights = (units: Pending[], width: number, cards: boolean, atFloor = false) => {
+      const share = (width - gap * (units.length - 1)) / units.length;
+      return { across: Math.max(...units.map(unit => naturalHeight(unit, share, cards, undefined, composition, atFloor))), stacked: units.reduce((sum, unit) => sum + naturalHeight(unit, width, cards, undefined, composition, atFloor), 0) + gap * (units.length - 1) };
+    };
+    const movedAcross = (units: Pending[], width: number, cards: boolean) => { const heights = movedHeights(units, width, cards); return heights.across <= heights.stacked; };
+    const movedNeed = (units: Pending[], width: number, cards: boolean, atFloor = false) => { const heights = movedHeights(units, width, cards, atFloor), across = movedAcross(units, width, cards); return across ? heights.across : heights.stacked; };
+    // LH-46: a lead plus cards is the first block across the region, then the others in the balanced grid below it.
+    const leadRows = (count: number, landscape: boolean) => [1, ...gridFlowShape(count - 1, landscape).perRow];
+    const leadNeeds = (units: Pending[], width: number, cards: boolean, atFloor = false): number[] => {
+      const rows = leadRows(units.length, true);
+      return rows.map((count, row) => {
+        const cellWidth = (width - gap * (count - 1)) / count, from = rows.slice(0, row).reduce((sum, size) => sum + size, 0);
+        return Math.max(...units.slice(from, from + count).map(unit => naturalHeight(unit, cellWidth, cards, undefined, composition, atFloor)));
+      });
+    };
+    // LH-46, LH-82: the cells of a region grouping gave blocks (groupBinding), or undefined for the region's own flow.
+    //  - row: the blocks of another kind taken out of a grid, side by side in one row under it.
+    //  - mosaic: 2 or 3 pictures in a row; 4 to 6 a lead picture at full height beside a mosaic of the others in two rows (the
+    //    lead as wide as two mosaic columns), cover-cropped unless the block, slide, deck or theme sets a fit. A region taller
+    //    than wide stacks 2 and sets a lead picture across the top of 3 to 6.
+    //  - lead: the lead's row and the card rows at the heights they need, sharing the region when they do not fit (shareHeights),
+    //    placed by the region's anchor.
+    const joinedLayout = (region: LayoutRegion, units: Pending[], cell: LayoutBox, cards: boolean): { shape: FlowShape; boxes: LayoutBox[] } | undefined => {
+      const hint = binding.arrangements.get(region.name), landscape = cell.width >= cell.height;
+      if (!hint || units.length < 2 || direction !== undefined) return undefined;
+      if (hint === 'row') {
+        const across = movedAcross(units, cell.width, cards), shape = flowShape(across ? 'row' : 'column', units.length, true);
+        return { shape, boxes: across ? flowCells(shape, cell, gap).cells : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
+      }
+      if (hint === 'mosaic') {
+        if (hints.sources.imageFit === undefined || hints.sources.imageFit === 'layout') for (const unit of units) coverPictures.add(unit);
+        if (landscape && units.length <= 3) { const shape = flowShape('row', units.length, true); return { shape, boxes: flowCells(shape, cell, gap).cells }; }
+        if (!landscape) {
+          // Taller than wide: two pictures stacked; more, a lead picture across the top over the others in balanced rows of two or three.
+          if (units.length === 2) { const shape = flowShape('column', 2, true); return { shape, boxes: flowCells(shape, cell, gap).cells }; }
+          const below = gridFlowShape(units.length - 1, true).perRow, between = Math.max(0, Math.min(gap, cell.height / ((below.length + 1) * 2)));
+          const leadHeight = (cell.height - between) * 2 / (below.length + 2);
+          const mosaic = flowCells({ columns: below[0]!, rows: below.length, perRow: below }, { x: cell.x, y: cell.y + leadHeight + between, width: cell.width, height: cell.height - leadHeight - between }, between, true).cells;
+          return { shape: { columns: below[0]!, rows: below.length + 1, perRow: [1, ...below] }, boxes: [{ x: cell.x, y: cell.y, width: cell.width, height: leadHeight }, ...mosaic] };
+        }
+        const rest = units.length - 1, perRow = [Math.ceil(rest / 2), Math.floor(rest / 2)], columns = perRow[0]!;
+        const between = Math.max(0, Math.min(gap, cell.width / ((columns + 1) * 2), cell.height / 4));
+        const leadWidth = (cell.width - between) * 2 / (columns + 2);
+        const mosaic = flowCells({ columns, rows: 2, perRow }, { x: cell.x + leadWidth + between, y: cell.y, width: cell.width - leadWidth - between, height: cell.height }, between, true).cells;
+        return { shape: { columns: columns + 1, rows: 2, perRow: [perRow[0]! + 1, perRow[1]!] }, boxes: [{ x: cell.x, y: cell.y, width: leadWidth, height: cell.height }, ...mosaic] };
+      }
+      const rows = leadRows(units.length, landscape);
+      const between = Math.max(0, Math.min(gap, cell.height / (rows.length * 2)));
+      const needs = leadNeeds(units, cell.width, cards), floors = leadNeeds(units, cell.width, cards, true);
+      const heights = shareHeights(needs, floors, cell.height - between * (rows.length - 1));
+      const spare = Math.max(0, cell.height - heights.reduce((sum, size) => sum + size, 0) - between * (rows.length - 1));
+      let y = cell.y + (region.anchor === 'middle' ? spare / 2 : region.anchor === 'bottom' ? spare : 0);
+      const boxes = rows.flatMap((count, row) => {
+        const line = flowCells({ columns: count, rows: 1, perRow: [count] }, { x: cell.x, y, width: cell.width, height: heights[row]! }, gap).cells;
+        y += heights[row]! + between;
+        return line;
+      });
+      return { shape: { columns: Math.max(...rows), rows: rows.length, perRow: rows }, boxes };
+    };
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
     const regionNeed = (name: string, areaWidth: number, atFloor = false): number => {
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
@@ -3979,6 +4074,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       }
       // LH-41: a stack of timeline bands needs its one-column height.
       if (timelineBands(units)) return stackHeight(bandRows(units, areaWidth, 1, hasCards && !region.bleed, atFloor));
+      if (binding.arrangements.get(name) === 'row') {
+        const cards = hasCards && !region.bleed, floor = movedNeed(units, areaWidth, cards, true);
+        return atFloor ? floor : Math.max(floor, Math.min(movedNeed(units, areaWidth, cards), MOVED_SHARE * frame.height));
+      }
+      if (binding.arrangements.get(name) === 'lead') return leadNeeds(units, areaWidth, hasCards && !region.bleed, atFloor).reduce((sum, need) => sum + need, 0) + gap * Math.max(0, leadRows(units.length, true).length - 1);
       const shape = listGridOf(region, units, areaWidth) ?? flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
@@ -4125,9 +4225,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         // unless the region is anchored at the bottom.
         const bands = timelineBands(units), bandColumnCount = bands ? bandColumns(units, cell, cards) : 1;
         const listGrid = bands ? undefined : listGridOf(region, units, cell.width, cell.width >= cell.height);
-        const arrangement = bands ? bandColumnCount === 1 ? 'column' : 'grid' : listGrid ? 'grid' : arrangementOf(region, units, cell);
-        const shape = listGrid ?? flowShape(arrangement, units.length, cell.width >= cell.height);
-        let boxes = bands ? bandBoxes(units, cell, bandColumnCount, cards, region.anchor === 'bottom' ? 'bottom' : 'middle') : listGrid ? listGridBoxes(units, listGrid, cell, settings, cards, region.anchor) : flowCells(shape, cell, gap).cells;
+        const joined = bands || listGrid ? undefined : joinedLayout(region, units, cell, cards);
+        const arrangement = bands ? bandColumnCount === 1 ? 'column' : 'grid' : listGrid ? 'grid' : joined ? joined.shape.rows === 1 ? 'row' : 'grid' : arrangementOf(region, units, cell);
+        const shape = listGrid ?? joined?.shape ?? flowShape(arrangement, units.length, cell.width >= cell.height);
+        let boxes = bands ? bandBoxes(units, cell, bandColumnCount, cards, region.anchor === 'bottom' ? 'bottom' : 'middle') : listGrid ? listGridBoxes(units, listGrid, cell, settings, cards, region.anchor) : joined ? joined.boxes : flowCells(shape, cell, gap, stretchesLastRow(units)).cells;
         const referenceHeights = boxes.map(box => box.height);
         let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
@@ -4270,7 +4371,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: {}, synthetic: true };
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
-  } else arrange(pending, contentBox, rootSettings, 0);
+  } else {
+    const grouped = groupRoot(pending);
+    if (grouped?.settings) arrange(grouped.nodes, contentBox, grouped.settings, 0, gap); else arrange(grouped?.nodes ?? pending, contentBox, rootSettings, 0);
+  }
   sharePeerSizes();
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts).
   shareSiblingChartAxes(items, options.presentation);
@@ -4355,6 +4459,7 @@ export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHint
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';
