@@ -304,3 +304,17 @@ test('LH-105 with LH-93, LH-81 and LH-03: sibling line charts named at their lin
   const [a, b] = charts.map((item) => ({ top: item.box.y + item.chart.layer.plot.top, height: item.box.height - item.chart.layer.plot.top - item.chart.layer.plot.bottom }));
   assert.ok(Math.abs(a.top - b.top) < 1e-6 && Math.abs(a.height - b.height) < 1e-6, 'one plot top and height');
 });
+
+test('LH-48 with LH-86: long texts drawn as full-width rows grow together when the body is under half full, and keep their rows', () => {
+  const text = (name) => ({ text: `${name} should focus the next cycle on move repetitive questions into self-service without hurting satisfaction.` });
+  const slide = { title: 'Decision options', blocks: [text('Waypoint Apps'), text('Northwind Health')] };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide(slide, { layout: layouts['three-column'], direction }), plain = composeSlide(slide, { layout: layouts['three-column'], direction, fill: false });
+    const rows = result.items.filter((item) => item.field === 'text'), before = plain.items.filter((item) => item.field === 'text');
+    assert.deepEqual(overflow(result), []);
+    assert.equal(new Set(rows.map((item) => item.text.fontSize)).size, 1, `${direction}: one size (LH-43)`);
+    assert.ok(rows[0].text.fontSize > before[0].text.fontSize, `${direction}: grown (${before[0].text.fontSize} -> ${rows[0].text.fontSize})`);
+    assert.ok(rows[1].frameBox.y > rows[0].frameBox.y + rows[0].frameBox.height - 1e-6, `${direction}: still one card per row`);
+    assert.ok(Math.abs(rows[0].frameBox.width - rows[1].frameBox.width) < 1e-6 && rows[0].frameBox.width > result.contentBox.width * 0.9, `${direction}: across the region`);
+  }
+});

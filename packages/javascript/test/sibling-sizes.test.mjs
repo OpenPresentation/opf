@@ -29,7 +29,8 @@ test('the cards of a grid share one size across its rows', () => {
 });
 
 test('the rows of a grid without cards fill the region as before when their needs are equal', () => {
-  const result = composeSlide({ title: 'Points', blocks: ['Point 1', 'Point 2', 'Point 3', 'Point 4'].map((text) => ({ text })) }, { layout: layouts.text });
+  // At the role size (`fill: false`): LH-48 grows four short points and centers them, so their rows hug their text.
+  const result = composeSlide({ title: 'Points', blocks: ['Point 1', 'Point 2', 'Point 3', 'Point 4'].map((text) => ({ text })) }, { layout: layouts.text, fill: false });
   const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.'));
   assert.equal(texts[0].box.height, texts[2].box.height, 'equal needs, equal rows');
   assert.ok(texts[2].box.y + texts[2].box.height > 650, 'the rows fill the region');

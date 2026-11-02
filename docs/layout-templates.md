@@ -403,7 +403,8 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   the body, its card hugging it; a grown table's rows grow with its type (`items[].tableGrowth`, which both engines pass to
   `layoutTable`). A block that fills half the body or more keeps its sizes and its place.
 - **A body of paragraphs and lists.** Two or more text and list blocks (in a layout's regions, or on a slide without a layout)
-  that fill under half of the body below the headings, with nothing overflowing, are composed again one, two or three type-scale steps larger (each up to a
+  that fill under half of the body below the headings (the height their text covers, so the empty space inside cards that share
+  the body, as LH-86's rows, does not count), with nothing overflowing and no text at the floor, are composed again one, two or three type-scale steps larger (each up to a
   list's display size, 37 px), and the largest step that adds no finding, sets every block larger and fills at most 60%
   is kept; siblings keep one size (LH-43) and no block reads smaller than before. On a layout the body then sits in the
   middle of the space under the headings: rows that hug

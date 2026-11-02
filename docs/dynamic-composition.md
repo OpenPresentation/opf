@@ -125,7 +125,9 @@ row sharing a size are always applied. The rules meet as follows:
   its cell. On the emphasis surface (LH-06) the surface is its card.
 - Long texts that LH-86 moved into one region keep their rows; paragraph columns and a lead plus stack do not rearrange them. A short
   last text after them is LH-06's foot band, bound to no region.
-- LH-06's band or pill takes precedence over LH-48's growth of the same blocks; a slide without a band grows.
+- LH-06's band or pill keeps its own size; LH-48 grows the blocks above it.
+- LH-48 grows LH-86's long-text rows and LH-52's splits of paragraphs like any body of paragraphs: its fill is the height the text covers,
+  not the cards around it. A lead plus stack (LH-67) does not grow, so its lead stays larger; a body at the floor is left to LH-83.
 - When LH-71 stacks a chart above a short takeaway and its plot becomes wider than 3:1, LH-49 gives the chart the filling track beside
   the text. A picture track (LH-80) keeps only the rules that read well beside it (a quote's lead size that would make it smaller is
   left out).

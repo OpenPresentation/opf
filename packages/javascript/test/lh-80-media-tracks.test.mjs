@@ -122,9 +122,10 @@ test('LH-66: automatic composition keeps a paragraph on 28 average characters or
   const grid = composeSlide({ title: 'T', composition: { mode: 'grid' }, blocks: [long(1), long(2), long(3)] });
   const columns = composeSlide({ title: 'T', composition: { mode: 'grid', columns: 3 }, blocks: [long(1), long(2), long(3)] });
   for (const [index, item] of texts3(grid).entries()) assert.ok(item.text.fontSize >= texts3(columns)[index].text.fontSize - 1e-6, `paragraph ${index} keeps its size`);
-  // Two paragraphs and a label: two columns hold the paragraphs at the same size on a measure of 40 characters.
+  // Two paragraphs and a label: two columns hold the paragraphs at the same size on a measure of 40 characters at the role size.
   const two = composeSlide({ title: 'T', composition: { mode: 'grid' }, blocks: [{ text: paragraph }, { text: paragraph }, { text: 'A short label.' }] });
-  for (const item of texts3(two)) assert.ok(item.text.fontSize === 28 && item.box.width >= 28 * 0.5 * 28, `${item.box.width} at ${item.text.fontSize}`);
+  // LH-48 may grow the under-filled body; the paragraphs keep at least their role size and the measure at the size they have.
+  for (const item of texts3(two)) assert.ok(item.text.fontSize >= 28 && item.box.width >= 28 * 0.5 * item.text.fontSize, `${item.box.width} at ${item.text.fontSize}`);
   // Short labels and lists are not paragraphs: three of them keep three columns.
   const labels = composeSlide({ title: 'T', blocks: [{ text: 'Start with a baseline.' }, { text: 'Keep the scope to one workflow.' }, { text: 'Review feedback every week.' }] });
   assert.equal(new Set(labels.items.filter((item) => item.field === 'text' && item.path.includes('blocks')).map((item) => Math.round(item.box.y))).size, 1);

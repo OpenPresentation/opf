@@ -3178,6 +3178,8 @@ const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: Re
  */
 const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
+/** LH-67 with LH-48: compositions with a lead plus stack, whose hierarchy (a larger lead) LH-48's body growth would flatten. */
+const LEAD_STACKS = new WeakSet<SlideComposition>();
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
 function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
   const before = bodyReadability(base, options).byPath;
@@ -3185,10 +3187,12 @@ function shrinks(next: SlideComposition, base: SlideComposition, options: Compos
   return false;
 }
 // LH-48: how much of the body's height its content takes, for a body of two or more paragraphs and lists (a lone block grows in
-// composeLayout, fillLone): from the top of the first block's text to the bottom of the last, over the body (the content box below the
-// headings). `spare`: the height left under the content. Undefined for any other body.
+// composeLayout, fillLone): the height the blocks' text covers (their extents joined where they overlap, as side by side), over the body
+// (the content box below the headings). `spare`: the height left under the content. Undefined for any other body.
 function bodyFill(result: SlideComposition): { fill: number; spare: number } | undefined {
-  const body = result.items.filter(item => !headings.has(item.field));
+  // LH-06's band or pill keeps its own size and place; the blocks above it are the body that grows.
+  if (LEAD_STACKS.has(result)) return undefined;
+  const body = result.items.filter(item => !headings.has(item.field) && !(item.emphasis && result.emphasis?.source !== 'authored'));
   // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
   if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3196,7 +3200,12 @@ function bodyFill(result: SlideComposition): { fill: number; spare: number } | u
   const above = result.items.filter(item => headings.has(item.field) && item.box.y + item.box.height <= top + 1e-6);
   const bodyTop = Math.max(result.contentBox.y, ...above.map(item => item.box.y + item.box.height)), bodyBottom = result.contentBox.y + result.contentBox.height;
   if (bodyBottom - bodyTop <= 0) return undefined;
-  return { fill: (bottom - top) / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom) };
+  // Wave 3 (LH-48 with LH-86 and LH-64): the height the text covers, the union of the blocks' text extents, not the span from the first to
+  // the last: cards that share the body (LH-86's rows) or blocks a gap apart leave that space empty, so it does not count as filled.
+  const extents = body.map(item => [item.box.y, item.box.y + height(item.text!)] as const).sort((a, b) => a[0] - b[0]);
+  let covered = 0, reach = -Infinity;
+  for (const [from, to] of extents) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
+  return { fill: covered / (bodyBottom - bodyTop), spare: Math.max(0, bodyBottom - bottom) };
 }
 // LH-48: a body of two or more paragraphs and lists that fills under LONE_FILL of its height, with nothing overflowing, is composed again
 // with all of them one, two or three steps of the type scale larger (GROW; each up to its display size), and the largest step that adds
@@ -3207,8 +3216,10 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
   const start = bodyFill(result);
   if (!start || start.fill >= LONE_FILL) return undefined;
+  // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
+  if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
   if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
-  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field)).map(item => item.text!.fontSize));
+  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored')).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
   let best = result, steps = 0;
@@ -5902,6 +5913,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   });
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
   if (atRequest) AT_REQUEST.add(composed);
+  if (leadItems.size) LEAD_STACKS.add(composed);
   return composed;
 }
 

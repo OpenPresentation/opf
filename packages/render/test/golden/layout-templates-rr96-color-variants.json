@@ -196,9 +196,9 @@
    "bytes": 3149
   },
   "agenda-split 2 short": {
-   "svg": "d15d56e1b318fc8b417766bea4f7f694c8cfbcb3387c5992627b49bb28e599bd",
-   "png": "c81afc76721c0f49d273f7aa6fa2a417bd13a5f309e1cef04a2a1d44aaf67925",
-   "bytes": 3984
+   "svg": "65bd25ab51336ae367cf58c1a5c08566d33a0fae393c73c1d79347c97a2100be",
+   "png": "a859ddfc25b711b3cff2722e1be08db841d555560c1ea097dd21d26658e5b230",
+   "bytes": 4679
   },
   "agenda-split 3 short": {
    "svg": "a9b93246faf70c9ebb81e9a47e5843a2aa12baa4a35f1ddd19d4f13e66ca5cee",
@@ -206,9 +206,9 @@
    "bytes": 3811
   },
   "agenda-split 4 short": {
-   "svg": "68d271e42742f66c9eb029fa83b8f1551f563fef42469ef11c7a9ec18b57a723",
-   "png": "4f3b97a7208c1f55d58ef38661c14d1bc377907bacf9814f6a525009a83d1ac0",
-   "bytes": 5766
+   "svg": "470434e325d1b692643683a4a6958aaa9119a3675078f2ece961dac789d5b38e",
+   "png": "ed4007e76c525b5b977bf6fe02a5ba358dac18c84c4aae1222548fc3e0c7987f",
+   "bytes": 6903
   },
   "agenda-split 5 short": {
    "svg": "6617dc9947b07be455b9e56a65b781a82fb03ae36238f92e87820256b240e10b",
@@ -391,9 +391,9 @@
    "bytes": 3473
   },
   "text 5 short": {
-   "svg": "15d9665339abef0c8997a25d7183532a45f96abc36bcba6f91107933124b9645",
-   "png": "a5cdb16b477bb834594cbdfd6d5230608ee386e912fef0038754a4e3bb5250f7",
-   "bytes": 2458
+   "svg": "5b54a78cfa1a2f3f4f490cd175ddf9728dafecc40ee5a9b706143d0a19e8e7cc",
+   "png": "777144f8193832f853e4e9a44bc3559fe9408299df34afab334b85d953b00e3a",
+   "bytes": 3029
   },
   "text 6 short": {
    "svg": "a502f7613f5fe584c3d024acbf37d5f7e92f1256619e7cc77e8f0cd7ca1b0796",
@@ -586,9 +586,9 @@
    "bytes": 11813
   },
   "two-column 2 long": {
-   "svg": "27bee08a5ac7e6d8e006b22374fd1093ddc5eaa946545d01a23f9c18462e78f4",
-   "png": "51298000ff53b1e59321cfcafe95a8651604885c66ebb5a2cb9beaa5ff6ecf3c",
-   "bytes": 12056
+   "svg": "778e8a4b0ce735955d40ea6d1943d09972da4f2ab01094962333e9739685e18f",
+   "png": "7234df37c528a6f3cea8db765c02f4b1cab17648359f474b53f9f656e36b32ed",
+   "bytes": 13885
   },
   "two-column 3 long": {
    "svg": "29272f2bdeb6cb5552df3102a3219abda9be77def479b010aba33141c203ec3a",
@@ -646,9 +646,9 @@
    "bytes": 11898
   },
   "three-column 2 long": {
-   "svg": "07093da2f885672255c524c52be0b01eff741c062c7b1ddcd0649ad2f04b8961",
-   "png": "dc7cf9554c9230b4f6e58c3cde0f9d904ab7e09e59ac3a2f53fa812e98227c5d",
-   "bytes": 12144
+   "svg": "dfca0b2e5c1400afc3c152797dd26289a6bf93bc5ecda99ee1ea3bd359442f5d",
+   "png": "54bf1c22c351d1473756239ef0d7f59541bf2b7ab884e015f246db7a28b555cf",
+   "bytes": 13971
   },
   "three-column 3 long": {
    "svg": "27b88bb398a285896673b5e1476f86ccdf972c907875231e6c01dc1d55bc45e2",
@@ -706,9 +706,9 @@
    "bytes": 11533
   },
   "pillars 2 long": {
-   "svg": "0d024736db2b5b9522e331ff896f4073b0bd9b7708c9abff12c1125f1155805f",
-   "png": "5c673920055229d5ddac62a99c18a5c9d991ee11594d21b398437bf0920d6f89",
-   "bytes": 11772
+   "svg": "b06c6db9569b837233cf2411db153f2d0325fc0817a2c594383b1d4c951da2a9",
+   "png": "b39aa1113be3e8cbd3a5eab7cf2b5d399bee4dd13e895de57fa93eb04f7a565a",
+   "bytes": 13604
   },
   "pillars 3 long": {
    "svg": "4d4e71a3610c33143f5876cf532258398538e39159412c0d0296a2cb26cb8544",
@@ -766,9 +766,9 @@
    "bytes": 11741
   },
   "comparison 2 long": {
-   "svg": "408b4d0a8231d0323d1090ebda105fb39ce908d2c09a7df217946478de1ddbbf",
-   "png": "7fcad30d5fbaef40ed4a54a0a43da10d9241b6a2c386b38a37b4c5a1a54f6942",
-   "bytes": 12166
+   "svg": "4e78b0e3649f8a3f7103ca1a3d9b5ec2135250d02b005f02fd5d9cf7b1095013",
+   "png": "71f0df2a62a1d2d6617a0d36b5f964101751ebf39f923d7291c09f969d31bf18",
+   "bytes": 13760
   },
   "comparison 3 long": {
    "svg": "13409273803edfe67386ce44b7fee70e4a6d0810e84ceecbb0a259de1c8a80c1",
@@ -1606,9 +1606,9 @@
    "bytes": 11220
   },
   "hero 2 long": {
-   "svg": "9042a2d27749c4c3da23b8e0816b2e0dfaeac380c050c25cd79cf2598f38e66a",
-   "png": "256e98ac76dc40e478f3b81171968b5fa3f4ae7331626b096f920ea7ed440676",
-   "bytes": 11717
+   "svg": "f7bf6d2ac08ade15920f715a8d56dff757dd3af924f4f57bf0b2dc1d152fd74b",
+   "png": "0738cf27a48002f7bd19da1ebf4f2ef6102ea044141622991ab40688d4dc8af3",
+   "bytes": 13545
   },
   "hero 3 long": {
    "svg": "88b44fe6be34b2649680afb9ba1bc77968ef25b90af7025d5f1433b22b99c07a",

@@ -4,9 +4,9 @@ Wave 3 of the layout harvest merges eight reviewed branches into one, on top of 
 
 ## Template baseline (`layout-templates-rr96-color-variants.json`)
 
-`node test/layout-template-goldens.mjs --update`, reviewed sheet by sheet (7 sheets, and 2 more after opf#990 merged), then `--promote`d.
+`node test/layout-template-goldens.mjs --update`, reviewed sheet by sheet (7 sheets, 2 more after opf#990 merged and 1 after LH-48's fill measure covered LH-86's rows), then `--promote`d.
 
-- **162 of wave 2's 469 slides moved**; no page is new or gone (469 slides).
+- **165 of wave 2's 469 slides moved**; no page is new or gone (469 slides).
 - By template: section 6, agenda 4, agenda-split 1, statement 6, closing 6, text 9, list 4, two-column 11, three-column 11, pillars 9, comparison 10, timeline 3, faq 4, metrics 8, scorecard 12, image-beside 3, chart 12, chart-beside 12, table 6, table-beside 4, code 3, hero 6, dashboard 12 (8 of them paginated pages).
 - Attribution (most slides carry more than one change):
 
@@ -14,6 +14,7 @@ Wave 3 of the layout harvest merges eight reviewed branches into one, on top of 
 | --- | --- |
 | LH-48, LH-65, LH-89 (fill, empty columns, nested gaps) | The short samples of agenda, text, list, two-column, three-column, pillars, comparison, faq, metrics, scorecard, image-beside, table, table-beside, code and hero: a lone block or an under-filled body grows in type-scale steps and centers, cards hug it; an empty column gives way (two blocks in three-column draw 1:1, hero's empty media column); lone paginated pages (table, timeline, code) grow and center. |
 | LH-70, LH-72 (paragraph columns, centered layouts) | Section, statement and closing with long text: start-aligned in a measure-capped column; statement 5 and 6 long as two equal columns. |
+| LH-86 (long texts as rows), with LH-48 | Two long texts as rows in two-column, three-column, pillars, comparison and hero grow a step and center, their cards hugging them (LH-48's fill is the height the text covers). |
 | LH-86 (long texts as rows) | Two-column, three-column and pillars with 2, 3, 5 and 6 long texts: one card per row across the region, sharing its height. |
 | LH-06, LH-68 (emphasis, tiles) | Every scorecard sample: metrics as tiles (value under its label from the top of the card). A short last text after longer blocks as a foot band (metrics, timeline, chart, chart-beside, table, table-beside and code with 2 short blocks). |
 | LH-95, LH-93, LH-105 (emphasis by shade, plot height, Few defaults) | Chart, chart-beside and dashboard (36 slides): the last bar of a small column chart over quarters (categories in time) is a lighter shade on the navy default; the series are softened, no chart draws a panel, and the value axis has at most six intervals. |
