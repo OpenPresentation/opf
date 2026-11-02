@@ -224,9 +224,9 @@
           "examples": ["Light", "Light alt", "Dark", "Dark alt"]
         },
         "variant": {
-          "description": "The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent order.",
+          "description": "The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2', or an accent 'accent1' to 'accent6'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent order.",
           "oneOf": [
-            { "$ref": "#/$defs/ThemeBackgroundSlot" },
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariantSlot" },
             { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant" }
           ],
           "examples": ["dark1", { "background": "light1", "accents": ["accent6", "accent5", "accent4", "accent1", "accent3", "accent2"] }]

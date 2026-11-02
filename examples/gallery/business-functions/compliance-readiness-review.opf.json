@@ -62,7 +62,6 @@
     "dimensions": "widescreen",
     "background": "light1",
     "titleAlignment": "left",
-    "contentAlignment": "center",
     "contentBox": true,
     "contentDirection": "horizontal",
     "chartPrimary": "top",
@@ -740,7 +739,7 @@
       "colorSchemes": {
         "deep-purple": {
           "name": "Deep Purple",
-          "accent1": "#6A1B9A",
+          "accent1": "#7F35B2",
           "accent2": "#7B1FA2",
           "accent3": "#8E24AA",
           "accent4": "#9C27B0",
@@ -764,18 +763,18 @@
         },
         "burnt-orange": {
           "name": "Burnt Orange",
-          "accent1": "#F77F00",
+          "accent1": "#E97200",
           "accent2": "#D62828",
           "accent3": "#003049",
           "accent4": "#FCBF49",
-          "accent5": "#EAE2B7",
+          "accent5": "#DBCF92",
           "accent6": "#BFBFBF",
           "dark1": "#000000",
           "dark2": "#341B00",
           "followedHyperlink": "#D62828",
           "hyperlink": "#003049",
           "light1": "#FFFFFF",
-          "light2": "#FFFBF7",
+          "light2": "#FFF3E6",
           "summary": "Warm orange and red accents for energetic commercial decks.",
           "description": "A warm, high-contrast palette built around burnt orange, red, navy, and gold. It feels active without losing structure.",
           "tags": [

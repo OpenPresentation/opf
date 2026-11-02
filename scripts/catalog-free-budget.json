@@ -1,114 +1,114 @@
 {
   "description": "FA-21: gzip budget (bytes) of each catalog-free core entry, bundled by scripts/check-catalog-free.mjs (esbuild, browser ESM, minified, gzip level 9). The budget is the measured size plus 3% headroom; the content entries (examples, docs, repo-readme) have none. No entry carries catalog data: the pptx.gallery catalog is @openpresentation/gallery (RR-78). `measured` is the size when it was last updated.",
   "entries": {
-    "browser": 391115,
-    "composition": 95549,
-    "convert": 290345,
+    "browser": 403503,
+    "composition": 107242,
+    "convert": 302557,
     "data": 8752,
-    "deck": 331732,
+    "deck": 344112,
     "diff": 6272,
     "font-policy": 16019,
-    "format": 49824,
-    "ids": 278034,
-    "markdown": 327356,
-    "pagination": 276439,
-    "patch": 276182,
-    "precompiled": 194800,
-    "schema": 74654,
-    "schema-engine-ajv": 115069,
-    "schema-engine-precompiled": 194825,
-    "schemas": 69696,
-    "source": 183558,
+    "format": 50288,
+    "ids": 290543,
+    "markdown": 339619,
+    "pagination": 288951,
+    "patch": 288467,
+    "precompiled": 196703,
+    "schema": 75619,
+    "schema-engine-ajv": 116025,
+    "schema-engine-precompiled": 196729,
+    "schemas": 70654,
+    "source": 184929,
     "spec-files": 582,
     "symbol-font-encodings": 36084,
     "types": 21,
-    "validator": 271853,
-    "yaml": 311396
+    "validator": 284144,
+    "yaml": 323579
   },
   "measured": {
     "browser": {
-      "minified": 1276237,
-      "gzip": 379723
+      "minified": 1308953,
+      "gzip": 391750
     },
     "composition": {
-      "minified": 265049,
-      "gzip": 92766
+      "minified": 294198,
+      "gzip": 104118
     },
     "convert": {
-      "minified": 903525,
-      "gzip": 281888
+      "minified": 935710,
+      "gzip": 293744
     },
     "data": {
       "minified": 22918,
       "gzip": 8497
     },
     "deck": {
-      "minified": 1029374,
-      "gzip": 322069
+      "minified": 1061581,
+      "gzip": 334089
     },
     "diff": {
       "minified": 15832,
       "gzip": 6089
     },
     "docs": {
-      "minified": 1402023,
-      "gzip": 467381
+      "minified": 1430261,
+      "gzip": 477098
     },
     "examples": {
-      "minified": 7120194,
-      "gzip": 4399075
+      "minified": 7117932,
+      "gzip": 4399131
     },
     "font-policy": {
       "minified": 119522,
       "gzip": 15552
     },
     "format": {
-      "minified": 174552,
-      "gzip": 48372
+      "minified": 175885,
+      "gzip": 48823
     },
     "ids": {
-      "minified": 867990,
-      "gzip": 269935
+      "minified": 900197,
+      "gzip": 282080
     },
     "markdown": {
-      "minified": 1017875,
-      "gzip": 317821
+      "minified": 1050082,
+      "gzip": 329727
     },
     "pagination": {
-      "minified": 863431,
-      "gzip": 268387
+      "minified": 895611,
+      "gzip": 280534
     },
     "patch": {
-      "minified": 864095,
-      "gzip": 268137
+      "minified": 896300,
+      "gzip": 280065
     },
     "precompiled": {
-      "minified": 1777625,
-      "gzip": 189126
+      "minified": 1793439,
+      "gzip": 190973
     },
     "repo-readme": {
       "minified": 18217,
       "gzip": 6596
     },
     "schema": {
-      "minified": 270435,
-      "gzip": 72479
+      "minified": 273500,
+      "gzip": 73416
     },
     "schema-engine-ajv": {
-      "minified": 406989,
-      "gzip": 111717
+      "minified": 410054,
+      "gzip": 112645
     },
     "schema-engine-precompiled": {
-      "minified": 1777672,
-      "gzip": 189150
+      "minified": 1793486,
+      "gzip": 190999
     },
     "schemas": {
-      "minified": 258212,
-      "gzip": 67666
+      "minified": 261277,
+      "gzip": 68596
     },
     "source": {
-      "minified": 601085,
-      "gzip": 178211
+      "minified": 605566,
+      "gzip": 179542
     },
     "spec-files": {
       "minified": 4579,
@@ -123,12 +123,12 @@
       "gzip": 20
     },
     "validator": {
-      "minified": 853048,
-      "gzip": 263934
+      "minified": 885250,
+      "gzip": 275867
     },
     "yaml": {
-      "minified": 973164,
-      "gzip": 302326
+      "minified": 1005371,
+      "gzip": 314154
     }
   }
 }

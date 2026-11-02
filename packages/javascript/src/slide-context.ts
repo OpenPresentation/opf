@@ -1,8 +1,8 @@
 import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
 import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
-import { resolveColorRoles, type ResolvedColorRoles } from './color.js';
+import { layoutVariantApplies, resolveColorRoles, type ColorVariant, type ResolvedColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
-import { colorChoice } from './rule-design.js';
+import { colorChoice, colorLevels } from './rule-design.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
 /**
@@ -56,6 +56,12 @@ export interface SlideContext {
     /** The layout record, when the slide names one that resolves. */
     layout?: Rec;
     /**
+     * LH-01: the layout record's `design.variant` (normalized, with the deck's accent order when it names none) when it decides the slide's
+     * background: the slide's own design sets neither a variant nor a background. It outranks the deck's and the theme's, so it hides their
+     * background (the slide is the variant's bg1); `roles` already follows it.
+     */
+    layoutVariant?: ColorVariant;
+    /**
      * Where each resolved record came from: `{ kind, reference, id, group, source?, origin }` (origin `document` for an
      * embedded record, `host` for a registered catalog's). A kind is absent when nothing resolved for it (the engine
      * default, or automatic composition for a layout), so engines record provenance without resolving again.
@@ -95,8 +101,11 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   }
   if (options.strictReferences && diagnostics.length) throw new OPFUnresolvedReferenceError(diagnostics);
 
-  // RR-96: the roles of this slide, from its variant or background (slide, deck, then theme); the same record the engines draw with.
-  const roles = resolveColorRoles(colorScheme, colorChoice([rec(slide.design), rec(deck.design), theme], colorScheme, rec(deck.variables)));
+  // RR-96: the roles of this slide, from its variant or background (slide, layout variant, deck, then theme; LH-01); the same record the engines draw with.
+  const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables));
+  const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
+  // LH-01: the layout's variant when it decides the background (the slide sets neither a variant nor a background of its own).
+  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout) ? (levels[1]!.variant as ColorVariant) : undefined;
   const composeOptions: ComposeSlideOptions = {
     ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
     ...(layout ? { layout } : {}),
@@ -113,5 +122,5 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
   const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number, presentation, darkBackground: composeOptions.darkBackground === true });
-  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
+  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), ...(layoutVariant ? { layoutVariant } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

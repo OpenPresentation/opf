@@ -9,7 +9,9 @@ import { CHART_TYPES } from '../src/charts.js';
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12], ['Q4', 22, 9]] };
 const scheme = { id: 'cool-horizon', primary: '#C0392B' };
-const deck = (chart, design = { colorScheme: scheme }) => ({ design: { fontScheme: 'roboto', ...design }, slides: [{ title: 'Chart', chart: { type: 'column', data, ...chart } }] });
+// LH-03: `dataLabels: false` keeps the panel, value axis and colours of a small chart (two series of four points), so the highlight is what
+// is tested; a chart that asks for its own labels keeps them.
+const deck = (chart, design = { colorScheme: scheme }) => ({ design: { fontScheme: 'roboto', ...design }, slides: [{ title: 'Chart', chart: { type: 'column', data, dataLabels: false, ...chart } }] });
 const render = (chart, options = {}, design) => toSvg(deck(chart, design), 1, { trace: true, ...options });
 
 // Every drawn mark of the chart, by trace path: its element name and fill (or stroke for an unfilled line).

@@ -1,5 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 import { withDisplayedNumbers } from './numbered-list.js';
+import { unbindNoBreak } from '@openpresentation/opf/composition';
 
 // Native shape tags are standard PresentationML customer data. Uppercase hex
 // protects case-sensitive source from PowerPoint's case-insensitive Tags API.
@@ -141,7 +142,8 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
         autoNum = numbering?.['a:buAutoNum'] !== undefined ? {type: numbering[':@']?.type, startAt: numbering[':@']?.startAt} : undefined;
       }
     }
-    return {text,maxFontSize,bullet,level,fields,...(math ? {math} : {}),...(autoNum ? {autoNum} : {})};
+    // LH-11: a no-break space the exporter wrote where core's line breaker never breaks is the space again (same length, so field offsets hold).
+    return {text: unbindNoBreak(text),maxFontSize,bullet,level,fields,...(math ? {math} : {}),...(autoNum ? {autoNum} : {})};
   })).map(withDisplayedNumbers);
 }
 /** The m:t text of an OMML tree in document order (its linear reading, without the equation's layout). */

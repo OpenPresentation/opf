@@ -89,7 +89,20 @@ Validation:
 - `x`: the X column of an XY (scatter) chart. Default, today's rule: the second column (the first when `category` names the second), and only when the chart has three or more columns. With two columns there is no X column: the second column is the one series, plotted against row numbers. An `x` that leaves no series (two columns, or every series dropped) is a `chart-mapping-adapted` warning and that column is plotted as the series. A chart is XY when its type resolves (deprecated ids through their replacement) to the scatter construct of `chartOptionTarget`. An `x` equal to the category is a `chart-mapping-adapted` warning and the default is used. On a chart type without an X axis it is dropped with a `chart-mapping-adapted` warning.
 - `series`: the plotted columns, in order. Default: every column that is not `category` or `x`.
 
-An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; pie, doughnut and single-series constructs still plot one series (`series-dropped`, as today).
+An unknown name is a `chart-mapping-unknown-column` error. A series that repeats the category or X column is a `chart-mapping-adapted` warning and is dropped. Mapping only reorders and selects columns; single-series constructs still plot one series (see [Chart fallbacks](#chart-fallbacks-lh-60)).
+
+### Chart fallbacks (LH-60)
+
+Some data does not fit the chart type it is written for. Core's `chartDrawPlan(chart, resolved, { language })` (on `@openpresentation/opf` and `/composition`) decides from the data alone how the preview and the PPTX export draw such a chart, so both draw the same:
+
+| Data | Drawn as | PPTX |
+| --- | --- | --- |
+| `world` over category labels of which fewer than half are places (`isPlaceLabel`: CLDR region names in English and the deck language, upper-case region codes, US states, Canadian provinces, Australian states, common aliases) | clustered columns of every series (`map-as-columns`) | a `c:barChart`, in every `chartex` mode |
+| `box-and-whisker` with one value per category (no label repeats, two rows or more) | one box per series: the rows form one group named after the category column (`box-per-series`) | the chartex box-and-whisker with that one category |
+| `pie` or `doughnut` of several series | a doughnut of nested rings, the first series innermost, each ring coloured by category (`nested-rings`) | one `c:doughnutChart` with a `c:ser` per series |
+| `scatter` whose X column holds no number | every series against the category position 1, 2, 3, ...; the X column is not drawn (`scatter-by-position`) | X values 1 to n |
+
+The PPTX export reports a fallback as `chart-data-adapted` with `adaptation: 'chart-fallback'` and records the authored data, so `fromPptx` restores it (a pie of several series imports as a doughnut). A construct that plots one series (treemap, histogram and Pareto with categories, waterfall, funnel, a map of places, a one-series pie) still draws the first; `validate` names the others, and a scatter X column without numbers, in the warning `opf/chart-series-dropped` (`chartDrawDiagnostics`).
 
 ## Core runtime API
 

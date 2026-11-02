@@ -157,8 +157,11 @@ const wide = png(480, 270), square = png(100, 100), tall = png(90, 160);
   // Portrait source on a 16:9 slide crops top and bottom; a wide source on a portrait slide crops the sides.
   const portrait = await roundTrip({slides: [{design: {background: {type: 'image', src: tall}}}]});
   const crop = attrs(bg(portrait.bytes), 'srcRect');
-  assert.equal(Number(crop.t), Number(crop.b)); assert.ok(Number(crop.t) > 0 && !crop.l);
+  // LH-84: without an authored focus a portrait picture keeps its heads (focus y 0.3): more is trimmed from the bottom than the top.
+  assert.ok(Number(crop.t) > 0 && Number(crop.b) > Number(crop.t) && !crop.l);
   assert.equal(portrait.background.fit, undefined);
+  const centered = attrs(bg((await roundTrip({slides: [{design: {background: {type: 'image', src: tall, focus: {x: 0.5, y: 0.5}}}}]})).bytes), 'srcRect');
+  assert.equal(Number(centered.t), Number(centered.b), 'an authored center focus wins');
   const onPortrait = await roundTrip({design: {dimensions: {widthInches: 7.5, heightInches: 13.333}}, slides: [{design: {background: {type: 'image', src: wide, fit: 'cover'}}}]});
   const sides = attrs(bg(onPortrait.bytes), 'srcRect');
   assert.equal(sides.l, sides.r); assert.ok(Number(sides.l) > 0 && !sides.t);

@@ -18,6 +18,7 @@
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
+import {insideLabelColor} from './chart-fallback.js';
 import {waterfallSteps} from '@openpresentation/opf/composition';
 
 const NS = Object.freeze({
@@ -139,17 +140,17 @@ const CX_POSITION = Object.freeze({center: 'ctr', 'inside-end': 'inEnd', 'inside
 // RR-54: a value label of a series with a number format (not a binned construct, whose labels are counts) shows it.
 const labelFormat = (spec, code) => code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
 
-function dataLabels(spec, text, options, code) {
+function dataLabels(spec, text, options, code, points = '') {
   if (options?.dataLabelsOff) return '';
   const labels = options?.dataLabels;
   if (labels) {
     const has = part => labels.content.includes(part) ? 1 : 0;
     const position = labels.position === null ? (spec.layoutId === 'treemap' || spec.layoutId === 'funnel' ? 'ctr' : undefined) : CX_POSITION[labels.position];
     // CT_DataLabels: numFmt precedes spPr and txPr.
-    return `<cx:dataLabels${position ? ` pos="${position}"` : ''}>${has('value') ? labelFormat(spec, code) : ''}${text}<cx:visibility seriesName="0" categoryName="${has('category')}" value="${has('value')}"/><cx:separator>${escapeXml(labels.separator)}</cx:separator></cx:dataLabels>`;
+    return `<cx:dataLabels${position ? ` pos="${position}"` : ''}>${has('value') ? labelFormat(spec, code) : ''}${text}<cx:visibility seriesName="0" categoryName="${has('category')}" value="${has('value')}"/><cx:separator>${escapeXml(labels.separator)}</cx:separator>${points}</cx:dataLabels>`;
   }
-  if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/></cx:dataLabels>`;
-  if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${labelFormat(spec, code)}${text}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabels>`;
+  if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/>${points}</cx:dataLabels>`;
+  if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${labelFormat(spec, code)}${text}<cx:visibility seriesName="0" categoryName="0" value="1"/>${points}</cx:dataLabels>`;
   return '';
 }
 
@@ -206,7 +207,18 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code) {
  * layout is PptxGenJS's: Sheet1, headings in row 1, categories in column A and
  * one series per following column.
  */
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, gridColor, font, palette, textSize, options, formats = []}) {
+// LH-56: the labels of a treemap and a funnel sit inside their marks, so they take core's text colour for each mark's fill (4.5:1, black or
+// white when the text colour falls short), as the preview draws them: a funnel's series text, and a treemap tile's own cx:dataLabel (the
+// tiles differ in colour). `markLabelColor` is the full text colour; without it the labels keep the chart text colour.
+function insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize}) {
+  if (!markLabelColor || (spec.layoutId !== 'treemap' && spec.layoutId !== 'funnel')) return undefined;
+  if (spec.layoutId === 'funnel') return {text: textProperties(insideLabelColor(color, markLabelColor, markLabelBackground), font, textSize), points: ''};
+  const points = chartexPointColors(spec.layoutId, entry.values, palette)
+    .map((fill, row) => fill ? `<cx:dataLabel idx="${row}">${textProperties(insideLabelColor(fill, markLabelColor, markLabelBackground), font, textSize)}</cx:dataLabel>` : '').join('');
+  return {text: undefined, points};
+}
+
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = []}) {
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -224,9 +236,10 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
       .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}</cx:spPr></cx:dataPt>` : '').join('');
     // Box whiskers, median lines and mean markers are drawn with the series line; without one PowerPoint used black (native check 2026-09-30).
     const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
+    const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, text, options, formats[index])}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {

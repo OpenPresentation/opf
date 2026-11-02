@@ -139,7 +139,8 @@ const deck = {datasets, slides: [
   assert.match(strict[0].message, /"6%"/);
   const mapped = await exported({slides: [{title: 'Pie', chart: {type: 'doughnut', mapping: {category: 'Region', series: ['Notes', 'Sales']}, data: {columns: ['Sales', 'Region', 'Notes'], rows: [[4, 'North', 7], ['x', 'South', 'y']]}}}]});
   const counted = mapped.diagnostics.filter(entry => entry.code === 'chart-value-not-numeric');
-  assert.deepEqual(counted.map(entry => entry.count), [1], 'with a mapping, only the first mapped series (Notes) is exported and counted');
+  // LH-60: a doughnut of two series that hold numbers draws both as nested rings, so both gaps are exported and counted.
+  assert.deepEqual(counted.map(entry => entry.count), [2], 'with a mapping, both mapped series (Notes, Sales) are exported as rings and counted');
   assert.match(counted[0].message, /"y"/);
   checks += 2;
 }

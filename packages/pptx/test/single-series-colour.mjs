@@ -21,10 +21,11 @@ const pointFills = (body) => [...body.matchAll(/<c:dPt>[\s\S]*?<a:(?:srgbClr|sch
 let checked = 0;
 for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'classic', variant: 'dark1'}]) {
   // The colour of series 0 in a two-series chart is the colour the single series must have (preview: palette colour 0).
-  const reference = seriesFill(series(await chartXml({type: 'column', data: two}, design))[0]);
+  const reference = seriesFill(series(await chartXml({type: 'column', data: two, dataLabels: false}, design))[0]);
   assert.match(reference ?? '', /^(?:[0-9A-F]{6}|accent\d)$/);
   for (const [type, data] of [['column', one], ['bar', one], ['stacked-column', one], ['column', signed], ['waterfall', signed]]) {
-    const xml = await chartXml({type, data}, design);
+    // LH-03: `dataLabels: false` keeps one colour on a small chart; its default emphasis (one c:dPt per quieter point) is chart-layer.mjs's.
+    const xml = await chartXml({type, data, dataLabels: false}, design);
     assert.match(xml, /<c:barChart>/, `${type}: a classic bar chart part`);
     assert.match(xml, /<c:varyColors val="0"\/>/, `${type}: colours do not vary by point`);
     const [only, ...rest] = series(xml);

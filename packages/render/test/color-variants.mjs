@@ -11,7 +11,8 @@ const tags = (svg, name) => [...svg.matchAll(new RegExp(`<${name}\\b([^>]*?)/?>`
 const backgroundOf = (svg) => tags(svg, 'rect').find((rect) => (rect['data-opf-path'] ?? '').endsWith('.design.background') || rect.width === '1280' && rect.height === '720').fill.toUpperCase();
 const titleFill = (svg) => attrs(/<text\b([^>]*data-opf-path="slides\.0\.title"[^>]*)>/.exec(svg)[1]).fill.toUpperCase();
 const colors = {id: 'forest', dark1: '#10231A', light1: '#F5F7F2', dark2: '#2B3A33', light2: '#E6ECE3', accent1: '#B45309', accent2: '#7C2D12', accent3: '#0F766E', accent4: '#6D28D9', accent5: '#BE185D', accent6: '#4D7C0F', hyperlink: '#B45309', followedHyperlink: '#6D28D9'};
-const chart = {type: 'column', data: {columns: ['Quarter', 'A', 'B'], rows: [['Q1', 3, 5], ['Q2', 4, 6], ['Q3', 6, 8]]}};
+// LH-03: `dataLabels: false` keeps the panel, value axis and gridlines of a small chart (two series of three points), whose neutrals this checks.
+const chart = {type: 'column', dataLabels: false, data: {columns: ['Quarter', 'A', 'B'], rows: [['Q1', 3, 5], ['Q2', 4, 6], ['Q3', 6, 8]]}};
 const deck = (design, slideDesign) => ({design: {colorScheme: colors, ...design}, slides: [{title: 'T', chart, ...(slideDesign ? {design: slideDesign} : {})}]});
 const rolesOf = (input) => resolvePresentation(input).slides[0].design.roles;
 

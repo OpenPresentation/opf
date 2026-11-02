@@ -15,7 +15,8 @@ let checked = 0;
 // --- Chart axis step follows the axis length, in the chart part as in core.
 {
   const data = {columns: ['Quarter', 'Revenue'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 760], ['Q4', 310]]};
-  const chart = {type: 'column', data};
+  // LH-03: `dataLabels: false` keeps the value axis of a small chart (one series of four points), whose step this checks.
+  const chart = {type: 'column', data, dataLabels: false};
   const slides = [
     {title: 'Revenue', chart},
     {title: 'Revenue', bullets: ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven'], chart, composition: {mode: 'column'}},
@@ -41,7 +42,8 @@ let checked = 0;
 
 // --- Series 1 on the default navy.
 {
-  const deck = {slides: [{title: 'Completion', chart: {type: 'column', data: {columns: ['Week', 'Task completion'], rows: [['1', 68], ['2', 72]]}}}]};
+  // LH-03: `dataLabels: false` keeps the panel and the one series colour of a small chart (no emphasis), which this checks.
+  const deck = {slides: [{title: 'Completion', chart: {type: 'column', dataLabels: false, data: {columns: ['Week', 'Task completion'], rows: [['1', 68], ['2', 72]]}}}]};
   const entries = await parts(deck);
   const xml = text(entries, 'ppt/charts/chart1.xml');
   const fill = xml.match(/<c:ser>[\s\S]*?<c:spPr>\s*<a:solidFill>\s*<a:srgbClr val="([0-9A-F]{6})"/)?.[1];

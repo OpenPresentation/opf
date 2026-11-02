@@ -65,7 +65,6 @@
       "slot": "light2"
     },
     "titleAlignment": "center",
-    "contentAlignment": "right",
     "contentBox": false,
     "contentDirection": "vertical",
     "chartPrimary": "top",
@@ -596,12 +595,12 @@
       "colorSchemes": {
         "bold-red": {
           "name": "Bold Red",
-          "accent1": "#A41410",
+          "accent1": "#AF231B",
           "accent2": "#2693A1",
           "accent3": "#EFA517",
           "accent4": "#E86D1F",
           "accent5": "#324472",
-          "accent6": "#EFECCA",
+          "accent6": "#D5D0A1",
           "dark1": "#000000",
           "dark2": "#232323",
           "followedHyperlink": "#2693A1",
