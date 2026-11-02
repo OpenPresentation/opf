@@ -267,7 +267,7 @@ test('LH-93 with LH-49: charts a template slide is recomposed for share one plot
   {
     const heights = charts.map((item) => item.box.height - item.chart.layer.plot.top - item.chart.layer.plot.bottom);
     const rows = new Map();
-    charts.forEach((item, index) => rows.set(Math.round(item.box.y), [...(rows.get(Math.round(item.box.y)) ?? []), heights[index]]));
+    charts.forEach((item, index) => { rows.set(Math.round(item.box.y), [...(rows.get(Math.round(item.box.y)) ?? []), heights[index]]); });
     for (const row of rows.values()) assert.ok(Math.max(...row) - Math.min(...row) < 1e-6, 'one plot height per row');
   }
   assert.deepEqual(overflow(result), []);
