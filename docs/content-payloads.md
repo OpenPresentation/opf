@@ -80,6 +80,8 @@ Prefer names and variables over literal hex: re-theming the deck updates every n
 
 Use slide-level `blocks` when a slide contains multiple content payloads, but exact placement should be inferred by the renderer. Blocks may contain a concrete content payload or a nested group with its own `blocks` and optional `composition`. Groups cannot mix child blocks with leaf payload fields. See [dynamic composition](dynamic-composition.md) for nesting and inheritance rules.
 
+Mark the one block or group that carries the slide's takeaway with `"emphasis": true`: it is drawn on a contrasting card (a dark card on a light slide, an accent card on a dark one) whose text reads at 4.5:1 or more. A slide has one emphasis; without one, a short last text after longer blocks is drawn as a band at the foot of the body, and a very short one after a lone long text as a pill (`"emphasis": false` opts a block out). See [Emphasis surface](dynamic-composition.md#emphasis-surface-lh-06).
+
 ```json
 {
   "title": "Customer Feedback Summary",

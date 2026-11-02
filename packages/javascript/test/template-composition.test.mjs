@@ -15,7 +15,8 @@ const statementBefore = { id: 'statement', design: { titleAlignment: 'center', c
 // Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
 const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
-const text = (value) => ({ text: value });
+// LH-06: these blocks test region geometry, so they opt out of the automatic foot band and pill (`emphasis: false`).
+const text = (value) => ({ text: value, emphasis: false });
 const short = (count) => Array.from({ length: count }, (_, index) => text(`Point ${index + 1}`));
 const long = 'Our customers told us the onboarding flow took too long, so we rebuilt it around three steps, measured every one of them and removed the two that nobody needed. The result is a flow that takes four minutes instead of twenty.';
 const compose = (slide, layout, options = {}) => composeSlide(slide, { layout, ...options });

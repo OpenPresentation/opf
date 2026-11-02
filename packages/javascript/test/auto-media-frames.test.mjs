@@ -62,11 +62,11 @@ test('a portrait picture frames to its width and gives the rest of the row to th
 });
 
 test('a chart beside a takeaway is at most 4:3; one chart alone is unchanged', () => {
-  const beside = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.' }] }).items.find((item) => item.field === 'chart');
+  const beside = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell 57% between April and September.', emphasis: false }] }).items.find((item) => item.field === 'chart');
   assert.ok(beside.box.height <= beside.box.width * 0.75 + 0.01, `${beside.box.width} x ${beside.box.height}`);
   const alone = composeSlide({ title: 'T', blocks: [chart] }).items.find((item) => item.field === 'chart');
   assert.ok(alone.box.height <= alone.box.width * 0.75 + 0.01 || alone.box.width > alone.box.height * 1.3);
-  const layout = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell.' }] }, { layout: gallery.layouts['chart-beside'] }).items.find((item) => item.field === 'chart');
+  const layout = composeSlide({ title: 'T', blocks: [chart, { text: 'Median review time fell.', emphasis: false }] }, { layout: gallery.layouts['chart-beside'] }).items.find((item) => item.field === 'chart');
   assert.ok(layout.box.height > layout.box.width * 0.75, 'a layout region keeps its own cell');
 });
 

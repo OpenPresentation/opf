@@ -542,6 +542,64 @@ function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2
   };
 }
 
+/** LH-06: the contrast every text role drawn on the emphasis surface keeps against its fill (WCAG AA for body text). */
+export const EMPHASIS_TEXT_MIN_CONTRAST = 4.5;
+/** LH-06: the contrast the emphasis surface keeps against the slide background, so it reads as a surface of its own (WCAG non-text contrast). */
+export const EMPHASIS_SURFACE_MIN_CONTRAST = 3;
+
+/** LH-06: the one contrasting surface a slide may draw a block, a group, a foot band or a pill on, and the roles of what is drawn on it. */
+export interface EmphasisSurface {
+  /** The variant the surface is drawn in: its bg1 is the fill, its map gives the text (the slide's accent order is kept). */
+  variant: ColorVariant;
+  /** The surface fill, uppercase #RRGGBB: `roles.background`. */
+  fill: string;
+  /**
+   * The roles of the content on the surface: {@link resolveColorRoles} for `variant`, with every text role (text, textSecondary, primary,
+   * secondary, accent) under {@link EMPHASIS_TEXT_MIN_CONTRAST} on the fill replaced by `text`, so a metric value in the primary color on an
+   * accent card does not vanish into it. `dark` is whether the surface takes light text.
+   */
+  roles: ResolvedColorRoles;
+}
+
+/**
+ * LH-06: the emphasis surface of a slide whose roles are `slide`, from the slide's own scheme slots through the LH-01 variant machinery
+ * (no color is invented). A light slide takes the brand dark (dark2, as the `brand` layout variant), then dark1, then the accents in the
+ * slide's order; a dark slide takes its accents in order (Claude Design's accent card on a dark deck, with the text the accent's map
+ * gives: dark1 where it reads better), then light1. The first candidate whose text reaches {@link EMPHASIS_TEXT_MIN_CONTRAST} on its fill and
+ * whose fill reaches {@link EMPHASIS_SURFACE_MIN_CONTRAST} against the slide background is the surface; with none, the candidate with the most
+ * text contrast is (the last candidates are the opposite text family, so a scheme with readable text always has one).
+ */
+export function emphasisSurface(colorScheme: Record<string, unknown>, slide: Pick<ResolvedColorRoles, 'dark' | 'map' | 'background'>): EmphasisSurface {
+  const accents = slide.map.accents;
+  const candidates: ColorVariantBackground[] = slide.dark ? [...accents, 'light1'] : ['dark2', 'dark1', ...accents];
+  const backdrop = normalizeHexColor(slide.background) ?? '#FFFFFF';
+  const hex = (color: string) => normalizeHexColor(color) ?? color;
+  let best: { surface: EmphasisSurface; contrast: number } | undefined;
+  for (const background of candidates) {
+    if (background === slide.map.bg1) continue;
+    const variant: ColorVariant = { background, accents: [...accents] };
+    const roles = resolveColorRoles(colorScheme, { variant });
+    const fill = hex(roles.background);
+    const readable = (color: string) => (colorContrast(hex(color), fill) ?? 0) >= EMPHASIS_TEXT_MIN_CONTRAST;
+    const text = colorContrast(hex(roles.text), fill) ?? 0;
+    const surface: EmphasisSurface = {
+      variant,
+      fill,
+      roles: {
+        ...roles,
+        background: fill,
+        textSecondary: readable(roles.textSecondary) ? roles.textSecondary : roles.text,
+        primary: readable(roles.primary) ? roles.primary : roles.text,
+        secondary: readable(roles.secondary) ? roles.secondary : roles.text,
+        accent: readable(roles.accent) ? roles.accent : roles.text,
+      },
+    };
+    if (text >= EMPHASIS_TEXT_MIN_CONTRAST && (colorContrast(fill, backdrop) ?? 0) >= EMPHASIS_SURFACE_MIN_CONTRAST) return surface;
+    if (!best || text > best.contrast) best = { surface, contrast: text };
+  }
+  return best!.surface;
+}
+
 /**
  * The scheme color, bg1 or tx1 of the roles, that reads best on `fill`: for table header text, text on a mark and anything else that
  * sits on a color the scheme does not name. Returned as a {@link SchemeColor} (slot `bg1` or `tx1`) so the export can write a theme color.

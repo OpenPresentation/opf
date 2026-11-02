@@ -369,7 +369,7 @@ test('opf/missing-language: only the presentation-level language is checked', ()
 
 test('opf/text-overflow and strict composition', () => {
 	const long = 'word '.repeat(600);
-	const tight = (extra = {}) => deck([{ title: 'T', composition: { minFontSize: 16, ...extra }, blocks: [{ text: long }, { text: 'b' }] }]);
+	const tight = (extra = {}) => deck([{ title: 'T', composition: { minFontSize: 16, ...extra }, blocks: [{ text: long }, { text: 'b', emphasis: false }] }]);
 	const found = only(tight(), 'text-overflow');
 	assert.ok(found.length >= 1);
 	assert.equal(found[0].severity, 'warning');

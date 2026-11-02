@@ -24,7 +24,8 @@
         "group"
       ],
       "role": "primary",
-      "flow": "grid"
+      "flow": "grid",
+      "metrics": "tile"
     }
   ],
   "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",

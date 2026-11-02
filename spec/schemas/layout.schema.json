@@ -386,6 +386,14 @@
           ],
           "description": "'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 or fewer entries is never split. 2 or more lists alone in a region are one list per cell in a grid instead. Default 1."
         },
+        "metrics": {
+          "type": "string",
+          "enum": [
+            "stack",
+            "tile"
+          ],
+          "description": "How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout draws cards) from the start: the label first as an eyebrow, the value under it asking for a quarter of the cell's height (between its 76 px role size and twice it, fitted down as usual), and the description, delta and trend at the foot of the cell."
+        },
         "anchor": {
           "type": "string",
           "enum": [
