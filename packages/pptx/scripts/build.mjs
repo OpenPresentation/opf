@@ -70,5 +70,7 @@ await copyFile(new URL('src/format-check.js', root), new URL('format-check.js', 
 await copyFile(new URL('src/theme-colors.js', root), new URL('theme-colors.js', dist));
 await copyFile(new URL('src/typeface-inventory.js', root), new URL('typeface-inventory.js', dist));
 await copyFile(new URL('src/package-fonts.js', root), new URL('package-fonts.js', dist));
+await copyFile(new URL('src/safe-typefaces.js', root), new URL('safe-typefaces.js', dist));
+await copyFile(new URL('src/picture-slides.js', root), new URL('picture-slides.js', dist));
 await copyFile(new URL('src/script-fonts.js', root), new URL('script-fonts.js', dist));
 await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js', dist));

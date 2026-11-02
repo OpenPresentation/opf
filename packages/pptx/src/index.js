@@ -4,6 +4,8 @@ import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './number
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
 import {applyChartFonts, applyPitchFamilies, finalizeFontsUsed, fontPitchFamilies} from './package-fonts.js';
+import {officeSafeTypeface, safeMeasurement, sameMetrics, typefaceClasses, unsafeTypefacesIn, writeSafeTypefaces} from './safe-typefaces.js';
+import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slides.js';
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
@@ -77,6 +79,32 @@ import {readInputZip} from './input-safety.js';
 export {OPFPptxError} from './errors.js';
 
 export {checkTypefaces, inventoryTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
+export {OFFICE_SAFE_TYPEFACES, officeSafeTypeface} from './safe-typefaces.js';
+
+/**
+ * LH-28: the Latin text typefaces a finished PPTX names that are not Office-safe (on every Windows and macOS machine and
+ * measured exactly by OPF): a viewer without one substitutes another font and can break lines differently. Export with
+ * `typefaces: 'safe'` to write their Office-safe equivalents instead.
+ */
+export function typefacesNotOfficeSafe(input) {
+  return unsafeTypefacesIn(readInputZip(input));
+}
+
+// LH-20: draw each slide with `options.slideRasterizer` (default: opf-render's toPng, an optional peer) and export the picture
+// deck: no layout, fonts or provenance of the source deck reach the file, only the pictures, their alt text and the notes.
+async function pictureSlidesPptx(presentation, options) {
+  const scale = options.scale ?? PICTURE_SCALE, rasterizer = options.slideRasterizer ?? defaultSlideRasterizer;
+  let deck;
+  try {
+    deck = await pictureDeck(presentation, slide => rasterizer(presentation, slide, {scale, fonts: options.fonts, catalogs: options.catalogs, date: options.date, onDiagnostic: options.onDiagnostic}));
+  } catch (error) {
+    if (error instanceof OPFPptxError) throw error;
+    const code = error?.code === 'slide-rasterizer-unavailable' ? 'slide-rasterizer-unavailable' : 'slide-render-failed';
+    throw new OPFPptxError(code, code === 'slide-rasterizer-unavailable' ? errorMessage(error) : `A slide could not be drawn for the pictures-only PPTX: ${errorMessage(error)}`, {cause: errorMessage(error), ...(error?.path ? {path: error.path} : {})});
+  }
+  const {as, scale: _scale, slideRasterizer, typefaces, variables, svgRasters, ...rest} = options;
+  return toPptx(deck, {...rest, provenance: false, bodyText: undefined});
+}
 export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './import-signals.js';
 
 export const packageName = "@openpresentation/opf-pptx";
@@ -226,6 +254,15 @@ export async function toPptx(input, options = {}) {
   if (options.footerText !== undefined && !['native', 'shape'].includes(options.footerText)) {
     throw new OPFPptxError('invalid-footer-text-option', "footerText must be 'native' or 'shape'.", {path: 'options.footerText'});
   }
+  if (options.typefaces !== undefined && !['selected', 'safe'].includes(options.typefaces)) {
+    throw new OPFPptxError('invalid-typefaces-option', "typefaces must be 'selected' or 'safe'.", {path: 'options.typefaces'});
+  }
+  if (options.as !== undefined && !['native', 'images'].includes(options.as)) {
+    throw new OPFPptxError('invalid-as-option', "as must be 'native' or 'images'.", {path: 'options.as'});
+  }
+  if (options.scale !== undefined && (options.as !== 'images' || typeof options.scale !== 'number' || !(options.scale >= 0.1 && options.scale <= 8))) {
+    throw new OPFPptxError('invalid-scale-option', "scale applies to as: 'images' and is a number from 0.1 to 8.", {path: 'options.scale'});
+  }
   // OPF 0.15 (FA-23): the host's registered catalogs (core `Catalog[]`, matched by `source`, never fetched) reach every core
   // call that resolves a reference. Strict export (`strictReferences`, default `strictAssets`) fails on a reference that
   // resolves nowhere instead of composing automatically or drawing with the engine default.
@@ -235,9 +272,31 @@ export async function toPptx(input, options = {}) {
   const authored = parseInput(input);
   const presentation = resolveTemplateInput(authored, options);
   assertValidBoundary(presentation);
+  // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
+  if (options.as === 'images') return pictureSlidesPptx(presentation, options);
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
   // chosen family (FF-31). Internally `options.textMeasurement` is that wrapped measurement; it is not a public option.
   options = {...options, textMeasurement: chosenFamilyMeasurement(options.fonts?.textMeasurement), svgRasters: new Map()};
+  // LH-28: safe mode measures each Latin text family as the Office-safe family it is written as, so composition lays out the
+  // text PowerPoint draws on any machine. The design class of a family (sans-serif, serif, monospace) comes from the font
+  // scheme records the slides resolve.
+  const safeTypeface = options.typefaces === 'safe' ? (() => {
+    const classes = typefaceClasses(presentation.slides.flatMap((slide, index) => {
+      const core = coreContext(presentation, index, {...options, textMeasurement: undefined});
+      return [core.resolved.fontScheme, {code: core.options.fontFamilies?.code}];
+    }));
+    const cache = new Map(), replaced = new Map();
+    const safe = family => {
+      if (!cache.has(family)) {
+        const target = officeSafeTypeface(family, classes);
+        cache.set(family, target);
+        if (target !== family && !/^(?:sans-serif|serif|monospace)$/i.test(family)) replaced.set(family, target);
+      }
+      return cache.get(family);
+    };
+    return Object.assign(safe, {replaced});
+  })() : undefined;
+  if (safeTypeface) options = {...options, safeTypeface, textMeasurement: safeMeasurement(options.textMeasurement, safeTypeface)};
   // The renderer remains optional for custom measurement providers. Its public script planner supplies the same
   // shaping/measurement segmentation as preview when installed; the selected native family wrapper stays outside it.
   if (options.textMeasurement) {
@@ -307,6 +366,7 @@ export async function toPptx(input, options = {}) {
   context.dataRecordPaths = new Map();
   context.datasets = presentation.datasets;
   context.reportDiagnostic = options.onDiagnostic;
+  context.safeTypeface = safeTypeface;
   context.imageFormat = options.imageFormat ?? "compatible";
   // Chartex export mode (FF-22b): 'auto' (default) writes native chartex parts for the constructs the native PowerPoint
   // check confirmed (treemap, histogram, pareto, box-and-whisker, waterfall, funnel) and the clustered column fallback
@@ -2294,6 +2354,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   if (backgroundFill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, backgroundFill);
   if (backgroundDefinition?.type === 'pattern' && !nativePatternPreset(backgroundDefinition.pattern?.preset)) {
     options.onDiagnostic?.({code: 'unsupported-pattern', path: `${backgroundPath}.pattern.preset`, message: `Pattern ${backgroundDefinition.pattern?.preset} has no DrawingML preset; only its background color was exported.`});
+  } else if (backgroundDefinition?.type === 'pattern' && nativePatternPreset(backgroundDefinition.pattern?.preset) !== backgroundDefinition.pattern?.preset) {
+    // LH-29: an engine-defined preset the preview draws itself exports as its closest DrawingML preset.
+    const preset = backgroundDefinition.pattern.preset, native = nativePatternPreset(preset);
+    options.onDiagnostic?.({code: 'export-lossy', feature: 'pattern-preset', path: `${backgroundPath}.pattern.preset`, message: `Pattern ${preset} has no DrawingML preset and exports as the closest one, ${native}, whose marks can differ in size and spacing from the preview.`});
   }
   slide.color = slideContext.textColor;
   if (opfSlide.hidden === true) slide.hidden = true;
@@ -2567,6 +2631,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
       if(resolved){
         slide.addImage({...resolved,objectName:bulletImageName(),x:0,y:0,w:.1,h:.1,altText:''});
         picture=true;
+        // LH-29: the preview draws the SVG icon as vectors; PowerPoint's picture bullet is that PNG.
+        if(outcome.svg)options.onDiagnostic?.({code:'export-lossy',feature:'svg-rasterized',path:bulletImage.path,message:'A picture bullet can only be a raster in PowerPoint (a:buBlip), so the SVG icon exports as its PNG; it can look soft when the slide is enlarged.'});
       }else if(!outcome.reported)options.onDiagnostic?.({code:'unresolved-asset',path:bulletImage.path,message:'A picture bullet needs an embedded raster, a declared asset or a host imageResolver; the character bullets were exported instead.'});
       context.bulletImages.set(part,picture);
     }
@@ -2665,7 +2731,7 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
   // cannot carry an SVG: with any of them the SVG stays its PNG raster, so the effect applies as in the preview.
   if (outcome.svg) {
     const treated = [effects?.recolor?.type === 'duotone' && 'duotone recolor', effects?.shape && effects.shape.preset !== 'rect' && 'shape', fit === 'tile' && 'tile fit'].filter(Boolean);
-    if (treated.length) options.onDiagnostic?.({ code: 'svg-image-rasterized', path, message: `An SVG image with ${treated.join(', ')} exports as its PNG raster, so the effect applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.` });
+    if (treated.length) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path, message: `An SVG image with ${treated.join(', ')} exports as its PNG raster, so the effect applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.` });
     else context.svgPictures.set(name, outcome.svg);
   }
   const text = alt !== undefined ? alt : assetAlt(asset, presentation);
@@ -3174,6 +3240,10 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   // FA-27: the table's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker).
   if (typeof authoredTable?.alt === 'string') context.frameAlts.set(objectName, authoredTable.alt);
   if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}, hiddenBorder:{color:'#000000',width:0}});
+  // LH-29: the preview draws a dotted cell border as dots one line width long and two apart; PowerPoint has no such preset and
+  // its square dot (sysDot) is one on, one off. A dashed border (four on, three off) is PowerPoint's dash exactly.
+  if (layout.rows.some(row => row.cells.some(cell => Object.values(cell.style?.borders ?? {}).some(border => border?.dash === 'dot' && border.width > 0))))
+    options.onDiagnostic?.({code: 'export-lossy', feature: 'border-dot', path, message: 'A dotted table border exports as PowerPoint\'s square dot, one line width on and one off; the preview leaves two widths between dots, so the dots sit closer together in PowerPoint.'});
   slide.addTable(rows, {
     objectName,
     x: region.x,
@@ -3568,7 +3638,7 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   }
   const objectName = quotePhotoName(group);
   // PowerPoint is not confirmed to apply a non-rectangular mask to an SVG picture, so an SVG photo exports as its PNG raster (as a masked slide image does).
-  if (outcome.svg) options.onDiagnostic?.({ code: 'svg-image-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
+  if (outcome.svg) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
   context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape });
   context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
   const alt = assetAlt(photo.value, presentation);
@@ -3760,7 +3830,8 @@ function slideTextMeasurement(presentation, index, options) {
     if (!languages.has(key)) {
       const resolved = resolveScriptFonts(presentation, {slideIndex: index, ...(options.catalogs !== undefined ? {catalogs: options.catalogs} : {}), ...(language ? {language} : {})});
       const slots = role => {
-        const latin = core.options.fontFamilies[role];
+        // LH-28: in safe mode the Latin slot is the safe family the text is measured and written in.
+        const latin = options.safeTypeface ? options.safeTypeface(core.options.fontFamilies[role]) : core.options.fontFamilies[role];
         const slot = name => ['latin', 'schemeFamily'].includes(resolved.sources?.[name]) ? latin : resolved[role]?.[name] ?? latin;
         return {latin, eastAsian: slot('eastAsian'), complexScript: slot('complexScript')};
       };
@@ -3774,7 +3845,7 @@ function slideTextMeasurement(presentation, index, options) {
   if (typeof measurement.resolveStyle === 'function') adapted.resolveStyle = style => measurement.resolveStyle(style);
   if (typeof measurement.resolveFont === 'function') adapted.resolveFont = style => measurement.resolveFont(style);
   if (typeof base.outlineBounds === 'function') adapted.outlineBounds = (text, size, style) => pick(style).outlineBounds(text, size, style);
-  return chosenFamilyMeasurement(adapted);
+  return options.safeTypeface ? safeMeasurement(chosenFamilyMeasurement(adapted), options.safeTypeface) : chosenFamilyMeasurement(adapted);
 }
 
 // DrawingML has only a bold flag: a run written for the chosen family (no provider face such as Roboto SemiBold) draws that
@@ -4509,6 +4580,9 @@ async function normalizePptxZip(raw, context) {
     let metadata = rasterMetadata(bytes);
     if (metadata && svgSizes.has(part)) metadata = {...metadata, ...svgSizes.get(part)};
     if (metadata?.mediaType === 'image/webp' && context.imageFormat === 'compatible') {
+      // LH-29: the compatible PNG of an animated WebP (VP8X chunk with the animation flag) is its first frame.
+      if (bytes.length > 20 && decodeText(bytes.subarray(12, 16)) === 'VP8X' && (bytes[20] & 0x02))
+        context.reportDiagnostic?.({code: 'export-lossy', feature: 'image-animation', path: imageSources.get(part) ?? part, message: 'An animated WebP image exports as a still PNG of its first frame (images: compatible); export with images: preserve (--images preserve) to keep the animation for viewers that play WebP.'});
       try {
         if (metadata.width * metadata.height > 40_000_000) throw new Error('Image dimensions exceed the 40 megapixel conversion limit.');
         const png = await webpToPng(bytes);
@@ -4612,6 +4686,22 @@ async function normalizePptxZip(raw, context) {
     liftMasterFurniture(output, context.furnitureParts, diagnostic => context.reportDiagnostic?.(diagnostic));
   } catch (error) {
     throw new OPFPptxError('packaging-failed', 'Header and footer furniture could not be written to the slide master and layouts.', {cause: errorMessage(error)});
+  }
+  // LH-28: safe mode names the Office-safe family wherever a Latin text family is written (runs, bullets, the themes, charts),
+  // after every other part rewrite and before the "Fonts Used" list is read from the parts.
+  if (context.safeTypeface) {
+    const latinFallback = {ea: context.scriptFonts?.deck?.sources?.eastAsian === 'latin', cs: context.scriptFonts?.deck?.sources?.complexScript === 'latin'};
+    for (const path of Object.keys(output)) {
+      if (!/^ppt\/.*\.xml$/.test(path)) continue;
+      const xml = decodeText(output[path][0]), next = writeSafeTypefaces(xml, context.safeTypeface, {latinFallback});
+      if (next !== xml) output[path] = [encodeText(next), output[path][1]];
+    }
+    // Composition already measured and named most families as their safe family; the pass above caught the rest. Each
+    // authored family that was replaced is reported once (generic CSS families are engine defaults, not authored).
+    for (const [family, safe] of [...context.safeTypeface.replaced].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) context.reportDiagnostic?.({code: 'typeface-replaced', path: '', family, replacement: safe,
+      message: sameMetrics(family, safe)
+        ? `${family} is written as ${safe}, which has the same character widths, so the text wraps as in the preview.`
+        : `${family} is written as ${safe}, an Office-safe family on every Windows and macOS machine; the text was laid out with ${safe}'s widths, so its line breaks can differ from the preview drawn in ${family}.`});
   }
   finalizeFontsUsed(output);
   // Document references record evidence from the final normalized parts.

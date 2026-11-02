@@ -36,9 +36,15 @@ const PPTX = [
   'export const inventoryTypefaces = () => [];',
 ];
 
-/** Write the stubs into `modules` (a node_modules directory) as `@openpresentation/opf-render` (with `/fonts-node`) and `@openpresentation/opf-pptx`, version 0.18.0 unless `versions` names others (`{ 'opf-pptx': '0.21.0' }`). */
-export async function installStubPeers(modules, versions = {}) {
-  const packages = { 'opf-render': { 'index.js': RENDER, 'fonts-node.js': FONTS }, 'opf-pptx': { 'index.js': PPTX } };
+// LH-28: the opf-pptx that reads `typefaces` and `as` also exports typefacesNotOfficeSafe; this stub names one family that is not.
+const PPTX_TYPEFACES = ['export const typefacesNotOfficeSafe = (bytes) => (log("typefacesNotOfficeSafe", bytes.length), ["Stub Sans"]);'];
+
+/**
+ * Write the stubs into `modules` (a node_modules directory) as `@openpresentation/opf-render` (with `/fonts-node`) and `@openpresentation/opf-pptx`,
+ * version 0.18.0 unless `versions` names others (`{ 'opf-pptx': '0.21.0' }`). `features.typefaces` adds opf-pptx's typefacesNotOfficeSafe (LH-28).
+ */
+export async function installStubPeers(modules, versions = {}, features = {}) {
+  const packages = { 'opf-render': { 'index.js': RENDER, 'fonts-node.js': FONTS }, 'opf-pptx': { 'index.js': features.typefaces ? [...PPTX, ...PPTX_TYPEFACES] : PPTX } };
   for (const [name, files] of Object.entries(packages)) {
     const directory = path.join(modules, '@openpresentation', name);
     await mkdir(directory, { recursive: true });

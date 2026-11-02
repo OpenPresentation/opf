@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -33,7 +33,7 @@ export const spec: CommandSpec = {
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
 	positional: [2, 2],
-	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "date", "asset-dir"],
+	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
 	repeated: ["fonts"],
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
@@ -65,7 +65,17 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   writes the number as fixed text, so Keynote shows the words too; live keeps the
                                                   slide-number field, which Keynote shows as the digit alone. A bare
                                                   {{slide.number}} stays a live field either way
-  png, raster pdf  --scale <0.1-8>                1 draws the 1280 x 720 reference slide at 1280 x 720 pixels
+                   --typefaces <selected|safe>    selected (the default): the families the deck chose; a viewer without one
+                                                  substitutes another font (typeface-not-office-safe names them). safe: write
+                                                  each Latin text family as Arial, Georgia, Courier New or Times New Roman,
+                                                  on every Windows and macOS machine, and lay the text out with it, so every
+                                                  viewer breaks lines where the file does (typeface-replaced)
+                   --as <native|images>           native (the default): editable shapes, text and charts. images: a
+                                                  fidelity fallback, each slide one full-bleed PNG picture drawn like the
+                                                  preview (--scale, default 2), with its speaker notes and its text as the
+                                                  picture's alt text; it needs no fonts and has no editable text
+  png, raster pdf, --scale <0.1-8>                1 draws the 1280 x 720 reference slide at 1280 x 720 pixels
+  pptx --as images
   pdf              --raster                       each page a picture instead of selectable vector text
   svg              --text <fonts|system|paths>    embed the faces the slide uses (fonts), none (system), or draw outlines (paths)
 
@@ -81,6 +91,8 @@ Examples:
   opf convert deck.pptx deck.opf.md --signals signals.json
   opf convert outline.md deck.opf.yaml
   opf convert deck.opf.json deck.opf.yaml --schema-comment
+  opf convert deck.opf.json deck.pptx --typefaces safe
+  opf convert deck.opf.json deck.pptx --as images
   opf convert deck.opf.md - --to pdf > deck.pdf`,
 };
 
@@ -141,6 +153,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 	oneOf("--images", options.images, ["compatible", "preserve"] as const);
 	oneOf("--body-text", options["body-text"], ["measured", "native"] as const);
 	oneOf("--slide-numbers", options["slide-numbers"], ["static", "live"] as const);
+	oneOf("--typefaces", options.typefaces, ["selected", "safe"] as const);
+	oneOf("--as", options.as, ["native", "images"] as const);
 	oneOf("--text", options.text, ["fonts", "system", "paths"] as const);
 
 	// Output-side scope, before anything is read.
@@ -294,6 +308,8 @@ async function exportDeck(
 			images: text("images"),
 			bodyText: text("body-text"),
 			slideNumbers: text("slide-numbers"),
+			typefaces: text("typefaces"),
+			as: text("as"),
 			fonts: repeated.fonts,
 			paginate: options.paginate === true ? true : undefined,
 			includeHidden: options["include-hidden"] === true ? true : undefined,
