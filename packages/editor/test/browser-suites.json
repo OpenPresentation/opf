@@ -302,6 +302,10 @@
           "command": "node test/styling-hooks-browser.mjs"
         },
         {
+          "id": "browser:layered-source",
+          "command": "node test/layered-source-browser.mjs"
+        },
+        {
           "id": "browser:chrome-examples",
           "command": "node test/chrome-examples-browser.mjs"
         },
