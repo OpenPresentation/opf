@@ -2512,8 +2512,10 @@ function addTextPayload(slide, value, region, context, path) {
 
 // opf-pptx#212: the look (richBase) the runs of a measured list are written with where the source states none: {text,
 // description?}, or undefined when its entries do not share one (import then reads every run value as observed).
+// LH-77: the entry of a heading list is written bold, so its look is the style core gave a run that states no weight of its own.
 function listRunLook(fit,style,context){
-  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],style,kind==='text'?context.colors.text:context.colors.mutedText))));
+  const entryStyle=(entry,kind)=>kind==='text'&&entry.heading?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
+  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?context.colors.text:context.colors.mutedText))));
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};

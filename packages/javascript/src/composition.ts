@@ -6,7 +6,7 @@ import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,type BoundBlock} from './bind-regions.js';
-import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,listColumnBreaks,shareHeights,type CellRect,type RowDemand} from './template-geometry.js';
+import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 /** The pixel size and aspect (width / height) of an embedded picture (a data URI, or an `asset:<id>` that names one), the reading composeSlide uses, for engines that place host-resolved pictures. */
@@ -2323,10 +2323,12 @@ export interface ListEntryLayout {
    * The entry marker: the bullet glyph, or for a numbered list (`numbering`) the formatted number such as `iv.`.
    * A numbered marker also carries `number` and its measured `width`; its `style` is the list style with the weight and
    * slant of the entry's first run, as PowerPoint draws an auto-number in the first run's character formatting.
-   * With `design.listBullet: "none"` (and no numbering) the marker draws nothing: `none` is true, `text` is empty and `indent` is 0;
+   * With `design.listBullet: "none"` (and no numbering), and for the entry of a heading list (`ListFitOptions.heading`), the marker draws nothing: `none` is true, `text` is empty and `indent` is 0;
    * `x`, `y` and `style` still say where the entry's first baseline and font are.
    */
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end';none?:true};
+  /** LH-77: the entry of a heading list (`ListFitOptions.heading`): bold at LIST_HEADING_SCALE times the list size, with no marker. */
+  heading?:true;
   /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
   direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
@@ -2361,7 +2363,22 @@ export interface ListFitOptions extends RichTextOptions {
    * A numbered list ignores it and keeps its numbers.
    */
   bullet?:'none';
+  /**
+   * LH-77: a list of one entry with a description draws as a heading over its text: the entry bold at LIST_HEADING_SCALE times the
+   * list size, the description at the list size, no marker and no indent. Ignored unless the list has exactly that one entry and
+   * no numbering. composeSlide sets it for a list block whose only entry has a description.
+   */
+  heading?:boolean;
 }
+/** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
+export const LIST_HEADING_SCALE=1.25;
+/**
+ * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
+ * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
+ * (Roboto, Open Sans, Montserrat, Lora, Poppins and others) and drew a missing-glyph box in the preview. The levels alternate
+ * bullet and dash, as PowerPoint's own default levels do. A smaller bullet would fall below the readability floor at the floor size.
+ */
+export const LIST_MARKERS:readonly string[]=['•','–'];
 
 /** Reference-pixel starting size; explicit rich runs retain their authored sizes. */
 function contentNominalSize(field:string):number { return field==='items'||field==='bullets'?LIST_NOMINAL_SIZE:field==='table'?TABLE_NOMINAL_SIZE:PROSE_NOMINAL_SIZE; }
@@ -2382,6 +2399,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     return {index,level,direction,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
+  const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined;
   // A native auto-number takes the weight and slant of the paragraph's first run.
   const markerStyleFor=(item:typeof source[number]):TextStyle=>{
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
@@ -2392,27 +2410,30 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
-    const none=options.bullet==='none'&&!numbers;
+    // LH-77: the one described entry of a heading list draws without a marker or an indent, bold and a step up over its description.
+    const none=(options.bullet==='none'||heading)&&!numbers;
     const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
       const rtl=item.direction==='rtl';
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none?0:hanging,offset=Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=none?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
-      const text=richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
+      const text=heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
+        :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
-        y+=fontSize*.12;descriptionBox={x,y,width,height:box.height};
-        description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*.82,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*.82);
+        const ratio=heading?1:.82;
+        y+=fontSize*(heading?.25:.12);descriptionBox={x,y,width,height:box.height};
+        description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
         descriptionBox.height=description.height;lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));y+=description.height;
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:none?'':['•','◦','▪'][item.level%3]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
+      const marker={text:number?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
@@ -2423,7 +2444,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   let minimum=minFontSize;
   for(const item of source) {
     minimum=Math.max(minimum,richMinimum(item.runs,requestedSize,minFontSize));
-    if(item.descriptionRuns!==undefined)minimum=Math.max(minimum,richMinimum(item.descriptionRuns,requestedSize*.82,minFontSize)/.82);
+    if(item.descriptionRuns!==undefined)minimum=Math.max(minimum,heading?richMinimum(item.descriptionRuns,requestedSize,minFontSize):richMinimum(item.descriptionRuns,requestedSize*.82,minFontSize)/.82);
   }
   return fitAtSizes(layout,requestedSize,minimum);
 }
@@ -2836,7 +2857,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
@@ -3326,6 +3347,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const own = node.payload.columns;
     const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
     if (mode === undefined || mode === 1) return undefined;
+    // LH-42: `auto` never deals a short list across columns: entries of 6 or fewer split into columns read as rows of a table
+    // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
+    if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     const numbering = node.payload.numbering as NumberingInput | undefined;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
@@ -3379,11 +3403,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.field === 'items' || node.field === 'bullets') {
       const listSize=contentNominalSize(node.field)*scale;
       let lines = 0;
-      for (const entry of Array.isArray(node.value) ? node.value : []) {
+      const entries = Array.isArray(node.value) ? node.value : [];
+      for (const entry of entries) {
         const object = entry !== null && typeof entry === 'object' && !Array.isArray(entry) ? entry as Record<string, unknown> : undefined;
-        const indent = listSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
-        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, listSize);
-        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, listSize * .82);
+        // LH-77: a one-entry described list is a heading over its description (fitList `heading`), with no indent.
+        const heading = entries.length === 1 && object?.description !== undefined && node.payload.numbering === undefined;
+        const indent = heading ? 0 : listSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
+        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, heading ? listSize * LIST_HEADING_SCALE : listSize);
+        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, heading ? listSize : listSize * .82);
       }
       return lines > LONG_LINES;
     }
@@ -3425,7 +3452,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
       const prose = proseMeasure(node, inner), size=sizeOverride ?? (atFloor ? floorSize : prose.size);
-      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: atFloor || sizeOverride !== undefined ? inner : prose.width, height: 1e6 }, size, size, node.path, node.payload.numbering);
+      // LH-42: the floor is the one the placed fit uses, not the trial size: a list's descriptions (0.82 of its size) may reach the
+      // floor, so a floor of `size` measured a described list one size step above `size` (24.4 px for a trial of 20).
+      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: atFloor || sizeOverride !== undefined ? inner : prose.width, height: 1e6 }, size, Math.min(size, floorSize), node.path, node.payload.numbering);
       // WI-1: the height the placed text takes (its outlines and raster padding included), the same measure the fit that
       // places it checks, so a box of this height holds the text at the starting size instead of one grid step smaller.
       content = Math.max('height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3522,6 +3551,44 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const cellWidth = (cell.width - gap * (shape.columns - 1)) / shape.columns - (cards ? 2 * Math.min(CARD_INSET * scale, cell.width / 4) : 0);
       return units.some(unit => isLong(unit, cellWidth)) ? 'column' : 'grid';
     };
+    // LH-42: a region that receives 2 or more lists, and nothing else, lays them out one list per cell (a card when the slide draws
+    // cards) in listGridShape's grid, so that sibling lists never read as one table and none is dealt across columns. A column stays
+    // at least LIST_GRID_COLUMN_EMS list ems wide, and a region taller than wide stacks up to 3 lists and takes at most 2 columns, as
+    // the portrait grid flow does. design.contentDirection keeps its one row or column.
+    const LIST_GRID_COLUMN_EMS = 7.5;
+    const listGridOf = (region: LayoutRegion, units: Pending[], areaWidth: number, landscape = true): FlowShape | undefined => {
+      if (units.length < 2 || direction !== undefined) return undefined;
+      if (!units.every(unit => !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets'))) return undefined;
+      let columns = landscape ? 4 : units.length <= 3 ? 1 : 2;
+      while (columns > 1 && (areaWidth - gap * (columns - 1)) / columns < LIST_GRID_COLUMN_EMS * LIST_NOMINAL_SIZE * scale) columns--;
+      return listGridShape(units.length, columns);
+    };
+    // LH-42: the rows of a list grid are as tall as their tallest list needs, descriptions and nested entries counted, at the largest
+    // one size at which every row fits (the lists then share one size, sharePeerSizes). Cards share what is left evenly, so they fill
+    // the region; lists without cards keep their rows and the region's anchor places them. Lists that do not fit at the minimum size
+    // get rows in proportion to their needs and overflow them, so the overflow is reported.
+    const listGridBoxes = (units: Pending[], shape: FlowShape, cell: LayoutBox, settings: Composition, cards: boolean, anchor: RegionAnchor): LayoutBox[] => {
+      const { cells, gap: between } = flowCells(shape, cell, gap);
+      const rowOf = shape.perRow.flatMap((count, row) => Array.from({ length: count }, () => row));
+      const space = Math.max(0, cell.height - between * (shape.rows - 1)), width = cells[0]!.width;
+      // A filled card starts CARD_FILL_SPACE of a gap down (placeNode), and the placed text keeps its raster padding. A card's list is
+      // measured inside payloadBox's inset for a card at least as tall as wide, its largest, so the need is never short.
+      const slack = 2 * rasterPadding + scale + (cards ? gap * CARD_FILL_SPACE : 0);
+      const inset = cards ? Math.min(CARD_INSET * scale, Math.max(12 * scale, width / 16), width / 4) : 0;
+      const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+      let needs: number[] = [];
+      for (let size = LIST_NOMINAL_SIZE * scale; ; size -= scale) {
+        const trial = Math.max(floor, snapFontSizeDown(size));
+        needs = shape.perRow.map(() => 0);
+        units.forEach((unit, index) => { const row = rowOf[index]!; needs[row] = Math.max(needs[row]!, naturalHeight(unit, width - 2 * inset, false, undefined, settings, false, trial) + 2 * inset + slack); });
+        if (needs.reduce((sum, need) => sum + need, 0) <= space + 1e-6 || trial <= floor) break;
+      }
+      const total = needs.reduce((sum, need) => sum + need, 0), spare = Math.max(0, space - total);
+      const heights = total > space + 1e-6 ? needs.map(need => need * space / total) : cards ? needs.map(need => need + spare / shape.rows) : needs;
+      const rowY: number[] = [], shift = cards ? 0 : anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0;
+      heights.reduce((y, height) => { rowY.push(y); return y + height + between; }, cell.y + shift);
+      return cells.map((box, index) => ({ ...box, y: rowY[rowOf[index]!]!, height: heights[rowOf[index]!]! }));
+    };
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
     const regionNeed = (name: string, areaWidth: number, atFloor = false): number => {
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
@@ -3533,7 +3600,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const lines = 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22;
         return lines + (hasCards && !region.bleed ? 2 * Math.min(CARD_INSET * scale, areaWidth / 4, lines / 8) : 0);
       }
-      const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
+      const shape = listGridOf(region, units, areaWidth) ?? flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
       for (const count of shape.perRow) {
@@ -3674,8 +3741,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
           arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
           return 'composition';
         }
-        const arrangement = arrangementOf(region, units, cell);
-        let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
+        const listGrid = listGridOf(region, units, cell.width, cell.width >= cell.height);
+        const arrangement = listGrid ? 'grid' : arrangementOf(region, units, cell);
+        const shape = listGrid ?? flowShape(arrangement, units.length, cell.width >= cell.height);
+        let boxes = listGrid ? listGridBoxes(units, listGrid, cell, settings, cards, region.anchor) : flowCells(shape, cell, gap).cells;
         const referenceHeights = boxes.map(box => box.height);
         let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
@@ -3699,7 +3768,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
             return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height:cards?rowHeight:height};
           });
         }
-        const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
+        const rowItems: number[][] = shape.perRow.map(() => []);
         // LH-64, LH-04: the rows of cards of a grid (a lone block's card was planned with its neighbours' regions, `lone`).
         const planned: (CardPlacement | undefined)[] = lone ? [lone] : [];
         if (!lone && cards && (arrangement === 'grid' || arrangement === 'row')) {
@@ -3721,10 +3790,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
+          placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
-        if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
+        // LH-42: the lists of a list grid read at one size, across rows too.
+        if (listGrid) peerSets.push(stack);
+        else if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
         // WI-4: the paragraphs and lists of one stacked column read at one size (stackedBoxes sizes the stack for it).
         else if (stacked && stack.length > 1) peerSets.push(stack);
         return arrangement;
@@ -3896,5 +3967,5 @@ export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, 
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
-export { allocateRows, gridFlowShape, listColumnBreaks, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
+export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';

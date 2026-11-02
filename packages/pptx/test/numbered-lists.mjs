@@ -146,7 +146,7 @@ for (const [label, options] of [['estimated', {}], ['measured', {fonts}]]) {
   const plain = {design: {fontScheme: 'roboto'}, slides: [{title: 'Plain', items: ['One', {text: 'Two', level: 1}, 'Three']}]};
   const xml = slideXml(unzipSync(await toPptx(plain, {seed: 1})), 0);
   assert.ok(!/buAutoNum/.test(xml));
-  assert.deepEqual([...xml.matchAll(/<a:buChar char="(&#x[0-9a-f]+;)"\/>/g)].map(match => match[1]), ['&#x2022;', '&#x25e6;', '&#x2022;']);
+  assert.deepEqual([...xml.matchAll(/<a:buChar char="(&#x[0-9a-f]+;)"\/>/g)].map(match => match[1]), ['&#x2022;', '&#x2013;', '&#x2022;']);
   const back = await fromPptx(await toPptx(plain, {seed: 1}), {});
   assert.ok(!JSON.stringify(back).includes('numbering'));
 }
