@@ -18,9 +18,11 @@ for (const { keys, deck } of decks) {
   const traced = toSvg(deck, { trace: true }), plain = toSvg(deck);
   for (const bound of resolved.slides) {
     const key = keys[bound.index], svg = traced[bound.index], geometry = bound.geometry;
-    assert.ok(Array.isArray(geometry.regions), `${key}: core composed the template's regions`);
+    // LH-83: a slide whose layout sets a body role at the readability floor is recomposed as the automatic grid: no regions, and
+    // every item is drawn outside a region group.
+    assert.ok(Array.isArray(geometry.regions) !== Boolean(geometry.recomposed), `${key}: core composed the template's regions, or recomposed the slide`);
     const tags = openTags(svg);
-    const regionOf = new Map(geometry.regions.map((region) => [region.name, region]));
+    const regionOf = new Map((geometry.regions ?? []).map((region) => [region.name, region]));
     // Every traced content path (headings and blocks) resolves against the source deck, so an editor can edit through it.
     for (const tag of tags) {
       const path = attr(tag.attrs, 'data-opf-path');
@@ -164,12 +166,13 @@ assert.ok(paginated.length >= 10, `overflowing sample slides paginated: ${pagina
 for (const { keys, deck } of [templateDeck('agenda'), templateDeck('table-beside')]) {
   const svgs = toSvg(deck, { trace: true });
   for (const bound of resolvePresentation(deck).slides) {
-    if (!['agenda 5 long', 'agenda 6 long', 'table-beside 5 long', 'table-beside 6 long'].includes(keys[bound.index])) continue;
+    if (!['agenda 5 long', 'agenda 6 long', 'table-beside 5 long', 'table-beside 6 long'].includes(keys[bound.index]) || bound.geometry.recomposed) continue;
     const boxes = new Map(bound.geometry.regions.map((region) => [region.name, region.box]));
     assert.ok(regionGroups(svgs[bound.index]).some((group) => group.tags.some((tag) => outside(tag, boxes.get(group.region)))), `${keys[bound.index]}: overflow is drawn outside its region before pagination`);
   }
 }
-for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 5 long', 'faq 6 long', 'table-beside 5 long', 'table-beside 6 long', 'timeline 5 long', 'timeline 6 long']) {
+// LH-83: table-beside 5 long fits once recomposed as the automatic grid, so it no longer overflows or paginates.
+for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 5 long', 'faq 6 long', 'table-beside 6 long', 'timeline 5 long', 'timeline 6 long']) {
   assert.ok(overflowing.get(name) > 0, `${name} carries text-overflow before pagination`);
   assert.ok(paginated.some(({ source }) => source === name), `${name} is paginated`);
 }
@@ -184,7 +187,7 @@ for (const { source, keys, deck } of paginated) {
     paginatedPages++;
     assert.equal(deck.slides[bound.index].layout, source.split(' ')[0], `${key}: continues on the same layout`);
     assert.deepEqual(geometry.diagnostics.filter((entry) => entry.code === 'text-overflow'), [], `${key}: no text-overflow`);
-    const boxes = new Map(geometry.regions.map((region) => [region.name, region.box]));
+    const boxes = new Map((geometry.regions ?? []).map((region) => [region.name, region.box]));
     for (const group of regionGroups(svgs[bound.index])) {
       const box = boxes.get(group.region);
       assert.ok(box, `${key}: ${group.region} is a region of the page`);

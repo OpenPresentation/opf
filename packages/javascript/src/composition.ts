@@ -554,6 +554,13 @@ export interface SlideComposition {
   footnotes?: ComposedFootnotes;
   /** `rtl` when the slide was composed for a right-to-left deck (mirrored arrangement); absent for left-to-right decks. */
   direction?: 'rtl';
+  /**
+   * LH-83: the layout's composition set a body role at the readability floor, so the body was composed again as the automatic grid,
+   * which set every body role larger and overflows no more; this composition is that one. `layoutSize` is the smallest body size
+   * the layout fitted and `size` the smallest of this composition, in reference pixels (canvas pixels over the canvas scale).
+   * The headings sit above the body as on an automatic slide; `regions` and `headingAreas` are absent. Absent on every other slide.
+   */
+  recomposed?: { layoutSize: number; size: number };
   explanation?: CompositionExplanation;
 }
 export interface ComposeSlideOptions {
@@ -604,6 +611,11 @@ export interface ComposeSlideOptions {
   height?: number;
   slideIndex?: number;
   layout?: Record<string, unknown>;
+  /**
+   * LH-83: `false` keeps a layout template's composition even when it sets a body role at the readability floor (by default
+   * the body is then composed again as the automatic grid when that sets it larger; `SlideComposition.recomposed`).
+   */
+  recompose?: boolean;
   /** Return candidate scores and coverage without changing the selected geometry. */
   explain?: boolean;
 }
@@ -2925,9 +2937,71 @@ export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions 
   });
   return { contentBox: { ...result.contentBox }, areas };
 }
-/** Compose a validated Slide. Layout resolution remains the caller's responsibility. */
+/** composeSlide composes a template slide's body again with this flag: the automatic grid, keeping the record's design and composition. */
+const RECOMPOSE = Symbol('opf.recompose');
+// LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
+// language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
+// so reaching it is no squeeze.
+const MAIN_PARTS: ReadonlySet<string> = new Set(['body', 'value', 'label', 'what']);
+// LH-83: how readable a composition's body is. `sizes`: the body sizes it settled on, in canvas pixels, each with whether it is at
+// its readability floor: every text and list fit, every table's cell size, and each main part (MAIN_PARTS) of a quote, code panel,
+// metric or timeline whose role asks for more than the floor. `overflows`: its text-overflow and small-cell diagnostics.
+// `splitWords`: the plain fits (text, and the parts of a quote, code panel, metric or timeline) with a line break inside a word, as a
+// grid too narrow for its content draws them. Headings are not body.
+function bodyReadability(result: SlideComposition, options: ComposeSlideOptions): { sizes: { size: number; atFloor: boolean }[]; overflows: number; splitWords: number } {
+  const scale = Math.min(result.width, result.height) / 720, sizes: { size: number; atFloor: boolean }[] = [];
+  let splitWords = 0;
+  const split = (text: unknown, fit: unknown) => { if (typeof text === 'string' && Array.isArray(record(fit).sourceLines) && breaksInsideWord(text, fit as SourceTextFit)) splitWords++; };
+  for (const item of result.items) {
+    if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag') continue;
+    const floor = snapFontSizeUp((item.composition.minFontSize ?? 16) * scale);
+    const add = (size: number | undefined) => { if (size !== undefined && Number.isFinite(size)) sizes.push({ size, atFloor: size <= floor + FONT_GRID_EPSILON }); };
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal) {
+      for (const part of internal.parts as readonly { role: string; text: string; requestedFontSize: number; minFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]) {
+        if (part.visible === false) continue;
+        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit?.fontSize);
+        split(part.text, part.fit);
+      }
+    } else if (item.field === 'table') {
+      let table: TableLayout | undefined;
+      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation }); } catch { table = undefined; }
+      for (const row of table?.rows ?? []) for (const cell of row.cells) add(cell.fit.fontSize);
+    } else { add(item.text?.fontSize); split(item.value, item.text); }
+  }
+  return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords };
+}
+/**
+ * Compose a validated Slide. Layout resolution remains the caller's responsibility.
+ *
+ * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
+ * then composed as the automatic grid (dynamic composition) with the layout record's design and composition, and that result is
+ * kept when its smallest body size is larger and it neither overflows nor splits words more (`recomposed`); otherwise the
+ * layout's result stands. A slide the layout fits above the floor, a cover, a slide with promoted regions or a block pinned to
+ * a region (`region`), a layout master and `recompose: false` keep the layout's composition unchanged. Both passes are pure,
+ * so the choice is deterministic.
+ */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  const result = composeLayout(input, options);
+  if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
+  const blocks = record(input).blocks;
+  if (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) return result;
+  const before = bodyReadability(result, options);
+  if (!before.sizes.some(entry => entry.atFloor)) return result;
+  let automatic: SlideComposition;
+  // A strict automatic grid that does not fit is no better than the layout: the layout's result stands.
+  try { automatic = composeLayout(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
+  catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
+  const after = bodyReadability(automatic, options);
+  const scale = Math.min(result.width, result.height) / 720, layoutSize = Math.min(...before.sizes.map(entry => entry.size)), size = Math.min(...after.sizes.map(entry => entry.size));
+  if (!after.sizes.length || size <= layoutSize + FONT_GRID_EPSILON || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
+  return { ...automatic, recomposed: { layoutSize: layoutSize / scale, size: size / scale } };
+}
+function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
+  // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
+  // record's contentDirection asks its regions to flow one way, so the automatic grid does not take it.
+  const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
@@ -2935,7 +3009,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
   // OPF 0.19: a template record (areas and regions) composes through its regions; it is checked first, so an invalid
   // template is refused (OPFLayoutTemplateError) as validate reports it (opf/layout-template, opf/layout-region).
-  const template: LayoutTemplate | undefined = isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
+  const template: LayoutTemplate | undefined = !recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
   // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
   const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
@@ -3127,7 +3201,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     diagnostics.push(...footnotes.diagnostics);
     bodyBottom = footnotes.box.y - gap * .5;
   }
-  const hasLayoutRecord = options.layout !== undefined && options.layout !== null && typeof options.layout === "object";
+  const hasLayoutRecord = !recomposing && options.layout !== undefined && options.layout !== null && typeof options.layout === "object";
   // Empty payloads (`blocks: []`, `text: ""`, empty lists, regions with nothing in them) draw nothing, so they are not body.
   // Whitespace-only text stays body: callers that infer a layout from it (the renderer picks a text layout) must agree with callers that do not (the editor).
   const emptyPayload = (value: unknown) => value === undefined || value === null || value === "" || (Array.isArray(value) && value.length === 0);
@@ -4443,7 +4517,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
   };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
-  const direction = hints.contentDirection;
+  const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
   // The effective design.chartPrimary (slide, deck, then the layout's own) splits the root into a
   // primary chart track and one synthetic container of the other nodes when the slide has no regions

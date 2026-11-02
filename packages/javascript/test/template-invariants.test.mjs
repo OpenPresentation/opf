@@ -18,7 +18,8 @@ describe('geometry invariants over the 30 templates x 1 to 6 short and long bloc
   test('no item crosses a heading or another region, and every item lies inside its region', () => {
     const problems = [];
     for (const { key, record, slide } of cases) {
-      const result = composeSlide(slide, { layout: record });
+      // The layout's own geometry: a recomposition (LH-83) has no regions; test/floor-recompose.test.mjs checks it.
+      const result = composeSlide(slide, { layout: record, recompose: false });
       const headings = result.items.filter((item) => HEADINGS.has(item.field));
       const title = result.headingAreas.find((area) => !area.collapsed);
       for (const heading of headings) if (title && !inside(heading.box, title.box) && !inside(heading.box, result.headingAreas.find((area) => area.name === 'subtitle')?.box ?? title.box)) problems.push(`${key}: ${heading.field} leaves its area`);
