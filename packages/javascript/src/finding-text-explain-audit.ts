@@ -8,6 +8,14 @@ const ROADMAP = { name: "Roadmap", regions: [{ name: "title" }, { direction: "ro
 const TIMELINE = { timeline: { events: [{ when: "Q1", what: "Pilot" }, { when: "Q2", what: "Launch" }] } };
 const PERSON = (n: number) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: "column" } });
 const SERIES = (count: number) => ({ columns: ["Quarter", ...Array.from({ length: count }, (_, i) => `S${i + 1}`)], rows: [["Q1", ...Array.from({ length: count }, (_, i) => i + 1)]] });
+const LONG_ITEMS = [
+  "Enterprise renewals slipped by three weeks in the northern region after the pricing change",
+  "Two of the five largest accounts asked for a phased rollout before they commit to the upgrade",
+  "Support tickets about the migration tool doubled once the self-serve flow went live in May",
+  "The partner channel closed fewer deals than planned because enablement started a quarter late",
+  "Hiring for the platform team is behind plan, and two senior roles have been open since March",
+  "Cloud spend rose faster than usage, mostly from idle staging environments left running overnight",
+];
 
 export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   "opf/text-contrast": ex(
@@ -129,5 +137,25 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Use an image with more pixels for the size it is shown at (about 96 per inch), or show it smaller.",
     { title: "Team", image: { src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAAAAAAAAAAAA", alt: "Team" } },
     { title: "Team", image: { src: "https://example.com/team-2400x1350.png", alt: "Team" } },
+  ),
+  "opf/text-shrunk": ex(
+    "Split the slide (`opf paginate`), move detail to the speaker notes, or shorten the text, so it is drawn near its role size.",
+    { slides: [{ title: "Findings", blocks: [{ items: LONG_ITEMS }, { items: LONG_ITEMS }, { items: LONG_ITEMS }] }] },
+    { slides: [{ title: "Findings", items: LONG_ITEMS.slice(0, 3) }, { title: "Findings (continued)", items: LONG_ITEMS.slice(3) }] },
+  ),
+  "opf/centered-body": ex(
+    "Align paragraphs and lists to the start edge (`contentAlignment: \"left\"`), and keep centering for titles, numbers and one- or two-line statements.",
+    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "center" } },
+    { title: "Why now", items: LONG_ITEMS.slice(0, 3), design: { contentAlignment: "left" } },
+  ),
+  "opf/tight-spacing": ex(
+    "Keep the default spacing, or raise `composition.gap` and `composition.padding`, so blocks stand at least 0.25 in apart and 0.5 in from the slide edge.",
+    { title: "Two options", composition: { gap: 0.01 }, blocks: [{ text: "Build the platform in house." }, { text: "Buy a hosted service." }] },
+    { title: "Two options", blocks: [{ text: "Build the platform in house." }, { text: "Buy a hosted service." }] },
+  ),
+  "opf/layout-monotony": ex(
+    "Give the slides the layouts their content asks for (a comparison, a chart, a statement, a picture), or merge or split them so one arrangement does not repeat four times in a row.",
+    { slides: ["Hiring", "Budget", "Roadmap", "Risks"].map((title) => ({ title, layout: "list", items: ["One point", "Another point"] })) },
+    { slides: [...["Hiring", "Budget", "Roadmap"].map((title) => ({ title, layout: "list", items: ["One point", "Another point"] })), { title: "Risks", layout: "statement", text: "One risk matters." }] },
   ),
 };
