@@ -16,7 +16,8 @@ import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './ch
 import {applyDoughnutRings,applyRingLabels,chartDrawPlan,chartFallbackAdaptation} from './chart-fallback.js';
 import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
-import {applyChartLayerLayout,chartEmphasisPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
+import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
+import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -56,7 +57,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -1682,12 +1683,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const headerLegend = nativeLegend?.["c:legendPos"]?.val === 't' && nativeLegend?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
-    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
+    // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
+    const direct = !nativeLegend && directLabelDefaults(chartNode.node, String(chartNode.type).includes('line') ? 'line' : chartNode.type);
+    const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
     if (budget.rejected?.length) report?.({code: 'chart-value-not-numeric', option: 'data', message: `${budget.rejected.length} cached chart ${budget.rejected.length === 1 ? 'value is' : 'values are'} not a number (first at ${budget.rejected[0]}) and ${budget.rejected.length === 1 ? 'imports as a gap' : 'import as gaps'}, never as a guessed value.`});
-    // LH-03: the value labels an export of a small chart writes by default are not an option.
-    const unfilled = doc["c:chartSpace"]?.["c:spPr"]?.["a:noFill"] !== undefined;
+    // LH-03: the value labels an export of a small chart writes by default are not an option. LH-105: every chart area is unfilled now, so
+    // the small chart is told by its deleted value axis (a small chart whose value axis has a title keeps its labels as an option).
+    const unfilled = asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === '1' || asArray(plotArea?.["c:valAx"])[0]?.["c:delete"]?.val === 1;
     return chart && Object.keys(options).length ? withoutLayerDefaults({...chart, ...options}, {unfilled}) : chart;
   };
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
@@ -2985,11 +2989,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
   const chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
 
-  // Keep the resolved palette surface (including alpha) explicit in native
-  // chart/plot areas, so inherited labels are assessed against their own panel.
-  // LH-03: a small chart has no panel; its colours are judged against the card or the slide background it stands on, as the preview does.
-  const panelFill = layer?.small ? context.cardFill ?? `#${normalizeHex(context.colors.background)}`
-    : context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
+  // LH-03, LH-105: no chart has a panel (the chart and plot areas are unfilled); its colours are judged against the card or the slide
+  // background it stands on, as the preview does.
+  const panelFill = context.cardFill ?? `#${normalizeHex(context.colors.background)}`;
   // RR-96: chart text, gridlines and axis lines are core's scheme-derived neutrals (tx1 mixed into bg1 at 65%, 15% and 25%), which the finished
   // part writes as schemeClr with lumMod/lumOff, so a variant or background style change in PowerPoint recolors them.
   const neutrals = context.roles.neutrals;
@@ -2998,7 +3000,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const markLabelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
   const gridColor = normalizeHex(neutrals?.gridline?.hex ?? `#${context.colors.border}`), axisLineColor = normalizeHex(neutrals?.axisLine?.hex ?? `#${context.colors.border}`);
   const transparency = /^#[0-9a-f]{8}$/i.test(panelFill) ? (1 - parseInt(panelFill.slice(7), 16) / 255) * 100 : 0;
-  const fill = {color:normalizeHex(panelFill),transparency};
+  // LH-105: no chart has a panel; the chart area (and a chartex chart's) is unfilled.
+  const fill = {color:null,transparency};
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
   const textSize = chartTextHundredths(context, region);
@@ -3024,18 +3027,31 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
   // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
-  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: chartSchemeSeries(chart.colors, context.colorScheme, colorContext)});
+  // LH-105: ordinary series are softened towards the backdrop (core softenChartPalette), written as srgbClr; the full-strength palette is
+  // kept for the emphasis and the names at the line ends.
+  const legibleSeries = chartSchemeSeries(chart.colors, context.colorScheme, colorContext);
+  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries, soften: true});
+  const strongPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries}).map(color=>normalizeHex(color));
   const palette = adjustedPalette.map(color=>normalizeHex(color));
-  const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
-  Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {})});
+  const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, strongPalette.map(hex => `#${hex}`), (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents,
+    chartSoftColors(panelFill, preferredPalette, {legible: legibleSeries}));
+  Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {}),
+    // LH-105: the series names at the line ends and the category names on the slices (src/chart-direct-labels.js).
+    ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
-    schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, schemes: paletteSchemes});
+    schemeFor: hex => schemeColorValue('primary', hex, context)}) ?? chartFocusPlan({layer, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, strong: strongPalette}) ?? chartEmphasisPlan({layer, data: chartData.resolved, panelFill, palette, strong: strongPalette, schemes: paletteSchemes});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
+  // LH-105: each series named at its line end in its colour (the highlight's, else full strength) made legible as text, as the preview does.
+  if (layer?.endLabels) {
+    const fills = highlight ? highlight.seriesFills : strongPalette;
+    context.chartHeadings.get(objectName).endLabels = {...layer.endLabels, region, rtl: context.direction === 'rtl',
+      colors: layer.endLabels.entries.map(entry => normalizeHex(chartSeriesLabelColor(panelFill, `#${fills[entry.series % fills.length]}`)))};
+  }
   if (chartData.chartex) {
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
@@ -3060,11 +3076,12 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     y: region.y,
     w: region.w,
     h: region.h,
-    showLegend: circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1),
+    // LH-105: a line chart that names its series at the line ends and a pie that names its slices draw no legend.
+    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
     ...classicChartOptions(chartOptions, {labelColor, font: context.fonts.body, textSize}),
     showTitle: false,
     chartColors,
-    chartArea: {fill:{...fill},roundedCorners:false},
+    chartArea: {fill:{color:null},roundedCorners:false},
     // Paint alpha once in the chart area, rather than stacking two alpha fills.
     plotArea: {fill:{color:null}},
     catAxisLabelFontFace: context.fonts.body,
@@ -3081,6 +3098,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     showValue: false,
     ...(circular ? {dataBorder: {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
     valGridLine: { color: gridColor, size: 1 },
+    // LH-105: no tick marks: the gridlines carry the value scale and the category labels name their bands (Few: few gridlines and ticks).
+    catAxisMajorTickMark: 'none',
+    valAxisMajorTickMark: 'none',
     catAxisLineColor: axisLineColor,
     valAxisLineColor: axisLineColor,
     // Magnitude bars/columns/areas must not let Office auto-truncate a near-equal range.
@@ -4527,6 +4547,10 @@ async function normalizePptxZip(raw, context) {
       // LH-92: each ring of a nested-ring doughnut names its series on the slice core chose, after the data labels it may join.
       const {ringNames,palette:slicePalette}=context.chartHeadings.get(name);
       if(ringNames)entries[chartPart]=encodeText(applyRingLabels(decodeText(entries[chartPart]),ringNames,{labels:chartOptions?.dataLabels,fills:series=>highlight?.pointFills(series)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));
+      // LH-105: the series names at the line ends and the category names on the slices, in place of a legend (src/chart-direct-labels.js).
+      const {endLabels,sliceLabels}=context.chartHeadings.get(name);
+      if(endLabels)entries[chartPart]=encodeText(applyEndLabels(decodeText(entries[chartPart]),{...endLabels,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));
+      if(sliceLabels)entries[chartPart]=encodeText(applySliceLabels(decodeText(entries[chartPart]),{labels:sliceLabels.labels,fills:highlight?.pointFills(0)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));
       // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
       const numberFormats=context.chartHeadings.get(name).numberFormats;
       if(numberFormats){

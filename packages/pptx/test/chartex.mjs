@@ -212,10 +212,9 @@ for (const id of chartexIds) {
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
   assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels && !inside ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
   assert.ok(cx.endsWith(`${textProperties}</cx:chartSpace>`), `${id}: chart space txPr`);
-  const chartAreaFill = classic.match(new RegExp(`</c:chart><c:spPr><a:solidFill>${COLOR}`))[1];
-  // The chartex chart area is the classic chart area's colour, with the alpha of a translucent fill kept as a child.
-  const chartAreaOpen = chartAreaFill.endsWith('/>') ? chartAreaFill.slice(0, -2) : chartAreaFill.replace(/>[\s\S]*$/, '');
-  assert.match(cx, new RegExp(`</cx:chart><cx:spPr><a:solidFill>${escapeRegExp(chartAreaOpen)}(?:/>|>(?:<a:alpha val="\\d+"/>)</a:(?:srgbClr|schemeClr)>)</a:solidFill><a:ln><a:noFill/></a:ln></cx:spPr>`), `${id}: chart area fill`);
+  // LH-105: no chart has a panel: the classic chart area and the chartex chart area are both unfilled.
+  assert.match(classic, /<\/c:chart><c:spPr><a:noFill\/>/, `${id}: the classic chart area is unfilled`);
+  assert.match(cx, /<\/cx:chart><cx:spPr><a:noFill\/><a:ln><a:noFill\/><\/a:ln><\/cx:spPr>/, `${id}: the chartex chart area is unfilled`);
   assert.equal(cx.includes('<cx:legend'), id === 'box-and-whisker', `${id}: legend only for the multi-series box chart`);
 
   // Style parts are well formed and complete.

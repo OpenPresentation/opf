@@ -25,10 +25,10 @@ let checks = 0;
   checks += 4;
 }
 
-// 2. Explicit options win: dataLabels false brings the panel, the gridlines and the ticks back.
+// 2. Explicit options win: dataLabels false brings the gridlines and the ticks back (LH-105: no chart draws a panel).
 {
   const svg = toSvg(deck({ type: 'column', data: two, dataLabels: false }), 1, { trace: true });
-  assert.ok(panel(svg), 'the panel');
+  assert.equal(panel(svg), undefined, 'no panel');
   assert.ok(gridlines(svg).length > 1, 'the gridlines');
   assert.ok(!texts(svg).some((entry) => entry.body === '28'), 'no labels');
   checks += 3;
@@ -37,16 +37,17 @@ let checks = 0;
 // 3. The header row: the bold caption at the start, the legend entries above the plot, the plot as wide as the chart allows.
 {
   // Two series: the legend names them, so the caption is generated from the value axis title only (LH-81 review).
-  const plain = toSvg(deck({ type: 'line', data: two, dataLabels: false }), 1, { trace: true });
+  // LH-105: a line chart names its series at the line ends instead, so the header legend is shown on a column chart.
+  const plain = toSvg(deck({ type: 'column', data: two, dataLabels: false }), 1, { trace: true });
   assert.ok(!texts(plain).some((entry) => / by /.test(entry.body)), 'no caption that repeats the legend');
-  const svg = toSvg(deck({ type: 'line', data: two, dataLabels: false, axisTitles: { value: 'Signal' } }), 1, { trace: true });
+  const svg = toSvg(deck({ type: 'column', data: two, dataLabels: false, axisTitles: { value: 'Signal' } }), 1, { trace: true });
   const caption = texts(svg).find((entry) => entry.body === 'Signal by quarter');
   assert.ok(caption, 'the caption, its category in sentence case');
   const legend = texts(svg).filter((entry) => /^slides\.0\.chart\.data\.columns\.\d$/.test(entry['data-opf-path'] ?? ''));
   assert.deepEqual(legend.map((entry) => entry.body), ['Current', 'Baseline']);
   const top = Math.min(...gridlines(svg).map((line) => Number(line.y1)));
   assert.ok(legend.every((entry) => Number(entry.y) < top), 'the legend sits above the plot');
-  const side = toSvg(deck({ type: 'line', data: two, dataLabels: false, legend: 'right' }), 1, { trace: true });
+  const side = toSvg(deck({ type: 'column', data: two, dataLabels: false, legend: 'right' }), 1, { trace: true });
   const right = (lines) => Math.max(...lines.map((line) => Number(line.x2)));
   assert.ok(right(gridlines(svg)) > right(gridlines(side)), 'without a side legend the plot keeps the width');
   assert.ok(!texts(side).some((entry) => entry.body === 'Signal by quarter'), 'a legend option draws no header row');
@@ -72,7 +73,8 @@ let checks = 0;
     const y = 0.2126729 * r + 0.7151522 * g + 0.072175 * b;
     return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : 24389 / 27 * y;
   };
-  const one = { columns: ['Stage', 'Count'], rows: [['Lead', 120], ['Qualified', 64], ['Proposal', 31], ['Won', 12]] };
+  // LH-105: the last point is emphasised only over time, so the categories are quarters.
+  const one = { columns: ['Quarter', 'Count'], rows: [['Q1', 120], ['Q2', 64], ['Q3', 31], ['Q4', 12]] };
   let emphasised = 0, shadedBack = 0;
   const plainCharts = [];
   for (const theme of Object.keys(defaultCatalog.themes)) for (const scheme of Object.keys(defaultCatalog.colorSchemes)) for (const variant of ['light1', 'dark1']) {
@@ -85,7 +87,8 @@ let checks = 0;
     if (new Set(fills).size === 1) { plainCharts.push(label); continue; }
     emphasised++;
     const [series, shade] = [fills[0], fills[3]];
-    const palette = chartSeriesPalette(backdrop, design.colorScheme, undefined, { accents: design.roles.map.accents, roles: design.colors, variables: design.variables });
+    // LH-105: the other bars keep the soft series colour; the emphasised one takes the full-strength colour or a shade of it.
+    const palette = chartSeriesPalette(backdrop, design.colorScheme, undefined, { accents: design.roles.map.accents, roles: design.colors, variables: design.variables }, { soften: true });
     assert.equal(series, palette[0].slice(0, 7).toUpperCase(), `${label}: the other bars keep the series colour`);
     assert.ok(fills.slice(0, 3).every((fill) => fill === series), `${label}: one series colour`);
     for (const fill of [series, shade]) assert.ok(colorContrast(fill, backdrop) >= 3 - 1e-9, `${label}: ${fill} on ${backdrop} at 3:1`);

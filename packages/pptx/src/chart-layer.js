@@ -16,7 +16,8 @@
 // Import does not write these defaults back as options: a value label that is the small-chart default (`withoutLayerDefaults`) and the
 // header legend (chart-options.js `chartOptionsFromClassic`) import as no option, so a deck exported and imported again keeps its
 // authored options only.
-import {chartEmphasisColors, chartOptionSupport, chartOptionTarget, resolveChartData, smallChart} from '@openpresentation/opf/composition';
+import {schemeColorXml} from './chart-scheme-colors.js';
+import {chartContextColor, chartEmphasisColors, chartOptionSupport, chartOptionTarget, resolveChartData, smallChart} from '@openpresentation/opf/composition';
 
 const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
@@ -30,8 +31,7 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
   const options = {}, layout = {};
   if (!layer) return {options, layout};
   if (layer.small) {
-    // The chart stands on what is under it; PowerPoint draws no chart area fill.
-    options.chartArea = {fill: {color: null}, roundedCorners: false};
+    // The chart stands on what is under it (LH-105: every chart does; the caller writes no chart area fill).
     if (layer.small.valueAxis === false) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
   }
   const header = layer.header;
@@ -92,14 +92,15 @@ export function applyChartLayerLayout(xml, layout) {
  * LH-03, LH-95: the emphasis of a one-series small column or bar chart as a highlight plan (chart-highlight.js shape): the series keeps its
  * colour (its scheme colour when the palette writes one), and the emphasised point takes core's stronger shade of it, an sRGB literal.
  */
-export function chartEmphasisPlan({layer, data, panelFill, palette, schemes}) {
+export function chartEmphasisPlan({layer, data, panelFill, palette, strong, schemes}) {
   const row = layer?.small?.emphasis;
   if (row === undefined || !data?.rows) return undefined;
-  const colors = chartEmphasisColors(panelFill, `#${palette[0]}`);
+  // LH-105: the emphasised point takes the series colour at full strength (`strong`), or a shade of it; the others keep the soft colour.
+  const colors = chartEmphasisColors(panelFill, `#${palette[0]}`, strong?.[0] ? `#${strong[0]}` : undefined);
   if (!colors) return undefined;
   const shadeHex = colors.accent.replace(/^#/, '').toUpperCase(), seriesHex = colors.muted.replace(/^#/, '').toUpperCase();
   const accent = {hex: shadeHex, xml: `<a:srgbClr val="${shadeHex}"/>`};
-  const muted = {hex: seriesHex, xml: schemes?.[0] ? `<a:schemeClr val="${schemes[0]}"/>` : `<a:srgbClr val="${seriesHex}"/>`};
+  const muted = {hex: seriesHex, xml: schemes?.[0] ? schemeColorXml(schemes[0]) : `<a:srgbClr val="${seriesHex}"/>`};
   const marks = {series: [false], categories: data.rows.map((_, index) => index === row)};
   const markColor = (_, index) => marks.categories[index] ? accent : muted;
   // The series colour stays the series' own fill (and the legend's); the emphasised point is the one c:dPt.
@@ -107,6 +108,31 @@ export function chartEmphasisPlan({layer, data, panelFill, palette, schemes}) {
     kind: 'bar', marks, accent, muted, circular: false, seriesColor: () => muted, markColor,
     seriesFills: [seriesHex],
     pointFills: () => marks.categories.map(highlighted => (highlighted ? accent : muted).hex),
+  };
+}
+
+/**
+ * LH-105: the focus the slide title gives a chart (`layer.focus`, core chart-focus.ts) as a highlight plan (chart-highlight.js shape): a
+ * focused series (or category, or pie slice) keeps its full-strength colour (`strong`, by series; by slice on a pie), every other mark
+ * takes core's context neutral, as the preview draws it. Colours are sRGB literals.
+ */
+export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong}) {
+  const focus = layer?.focus;
+  if (!focus || !data?.rows || !strong?.length) return undefined;
+  const srgb = hex => ({hex, xml: `<a:srgbClr val="${hex}"/>`});
+  const mutedHex = chartContextColor(panelFill, `#${labelColor}`).replace(/^#/, '').toUpperCase();
+  const muted = srgb(mutedHex), strongOf = index => srgb(String(strong[index % strong.length]).toUpperCase());
+  const circular = kind === 'pie' || kind === 'doughnut';
+  const seriesCount = Math.max(1, data.columns.length - 1 - (data.hasX ? 1 : 0));
+  const marks = {series: circular ? [false] : Array.from({length: seriesCount}, (_, index) => focus.series?.includes(index) === true), categories: data.rows.map((_, row) => focus.categories?.includes(row) === true)};
+  const seriesColor = index => marks.series[index] ? strongOf(index) : muted;
+  const markColor = (series, row) => marks.series[series] || marks.categories[row] ? strongOf(series) : muted;
+  const sliceColor = row => marks.categories[row] ? strongOf(row) : muted;
+  return {
+    kind, marks, accent: strongOf(0), muted, seriesColor, markColor, sliceColor, circular,
+    seriesFills: marks.series.map((_, index) => seriesColor(index).hex),
+    pointFills: series => circular ? marks.categories.map((_, row) => sliceColor(row).hex)
+      : kind === 'bar' && marks.categories.some(Boolean) ? marks.categories.map((_, row) => markColor(series, row).hex) : undefined,
   };
 }
 

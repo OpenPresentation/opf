@@ -489,9 +489,10 @@ const chartRules: ValidationRule[] = [
 					const slices = perCategory.test(type);
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
-					const surface = slide.design.colors.surface;
+					// LH-105: a chart has no panel; its series stand on the slide background, softened as the engines draw them.
+					const surface = slide.design.colors.background;
 					const paletteContext = chartColorContext(slide.design);
-					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined });
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined, soften: context.chartPalette === undefined });
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
@@ -532,7 +533,8 @@ const chartRules: ValidationRule[] = [
 				for (const payload of slidePayloads(slide.slide, slide.path)) {
 					const chart = rec(payload.node.chart);
 					if (!Array.isArray(chart.colors)) continue;
-					const surface = normalizeHexColor(slide.design.colors.surface);
+					// LH-105: judged against the slide background the chart stands on (no chart has a panel).
+					const surface = normalizeHexColor(slide.design.colors.background);
 					const resolved = resolveChartColors(chart.colors, slide.design.colorScheme, chartColorContext(slide.design));
 					resolved.forEach((color, index) => {
 						const path = `${payload.path === slide.path ? slide.path : payload.path}/chart/colors/${index}`;
@@ -551,8 +553,8 @@ const chartRules: ValidationRule[] = [
 						context.report(chartColorsRule, {
 							path,
 							slide,
-							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the chart panel (${surface}); it is drawn lighter or darker to reach 3:1.`,
-							help: 'Choose a colour that already has at least 3:1 contrast against the slide surface, so the chart shows the colour you wrote.',
+							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the slide background (${surface}); it is drawn lighter or darker to reach 3:1.`,
+							help: 'Choose a colour that already has at least 3:1 contrast against the slide background, so the chart shows the colour you wrote.',
 							measured: { contrast: round(contrast), panel: surface! },
 						});
 					});

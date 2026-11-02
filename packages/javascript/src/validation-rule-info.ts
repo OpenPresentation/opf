@@ -277,7 +277,7 @@ export const chartColorRule = rule(
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 export const chartAltRule = rule(
@@ -293,10 +293,10 @@ export const chartColorsRule = rule(
 	'accessibility',
 	'warning',
 	'A chart colour cannot be used as authored.',
-	'`chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the chart panel is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.',
+	'`chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the slide background the chart stands on is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA',
-		approximations: 'Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the chart panel (the slide surface colour) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved panels are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.',
+		approximations: 'Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the slide background (no chart has a panel, LH-105; a chart in a card stands on the card, which is not measured) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved backgrounds are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.',
 	},
 );
 export const languageRule = rule(
@@ -540,6 +540,34 @@ export const straightQuotesRule = rule(
 	},
 );
 
+// rules-chart-findings.ts (LH-105): info findings for charts that Few's principles advise against; nothing drawn changes.
+
+/** `opf/chart-pie-many-slices`: a pie or doughnut of more than this many categories. */
+export const PIE_MAX_SLICES = 5;
+
+export const chartDualAxisRule = rule(
+	'chart-dual-axis',
+	'content',
+	'info',
+	'A combo chart plots a series on a secondary value axis.',
+	'Two value scales in one plot invite the reader to compare heights that are not comparable: where the lines cross, and which is higher, depends only on how each axis was scaled. Two charts side by side, each with its own axis, read more truly than one chart with two scales (Few, Show Me the Numbers).',
+	{
+		standard: 'Stephen Few, Show Me the Numbers (2012), on dual-scaled graphs.',
+		approximations: 'Reports a `combo` chart whose `secondaryAxis` names at least one plotted line series (the axis core resolves). A combo chart on one axis is not reported.',
+	},
+);
+export const chartPieManySlicesRule = rule(
+	'chart-pie-many-slices',
+	'content',
+	'info',
+	`A pie or doughnut chart has more than ${PIE_MAX_SLICES} slices.`,
+	'People compare angles and areas poorly, and past a few slices the small ones cannot be told apart or labelled. Bars along one axis show the same parts of a whole and let them be compared and ranked (Few, Show Me the Numbers).',
+	{
+		standard: `Stephen Few, Show Me the Numbers (2012), on pie charts; more than ${PIE_MAX_SLICES} categories.`,
+		approximations: 'Counts the rows (categories) of a `pie` or `doughnut` chart as its data resolves; a doughnut of several series (nested rings) counts the categories of a ring. Treemaps and funnels are not checked.',
+	},
+);
+
 /**
  * The infos of the implemented rules in the order their implementations report: the order of `ruleImplementations` (accessibility,
  * layout, content), each rule followed by the further rules it can report (`also`).
@@ -578,6 +606,8 @@ const implementedRules: ValidationRuleInfo[] = [
 	tightSpacingRule,
 	layoutMonotonyRule,
 	straightQuotesRule,
+	chartDualAxisRule,
+	chartPieManySlicesRule,
 ];
 
 const infos: ValidationRuleInfo[] = [...formatRules, ...referenceRules, ...policyRules, ...dataRules, ...implementedRules];

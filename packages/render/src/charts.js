@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColor, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -12,8 +12,10 @@ import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSl
 // two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
 // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, series 2 a lightness step from series 1 (an authored
 // `colors` entry keeps the 3:1 floor).
-export function chartSeriesPalette(surface, colorScheme, colors, context) {
-  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legible: chartSchemeSeries(colors, colorScheme, context) });
+// LH-105: `soften` mixes each scheme series a quarter of the way towards the backdrop (core softenChartPalette), keeping its contrast and its
+// lightness step from its neighbours: ordinary data in soft colours, the full-strength colour left for emphasis.
+export function chartSeriesPalette(surface, colorScheme, colors, context, { soften = false } = {}) {
+  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legible: chartSchemeSeries(colors, colorScheme, context), soften });
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
@@ -30,8 +32,23 @@ function highlightFor(c, resolved, spec, data) {
 // the series colour and every other point in the series colour (core chartEmphasisColors); it is drawn as a category highlight of that point.
 function emphasisFor(c, layer) {
   const row = layer?.small?.emphasis;
-  const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0]);
+  // LH-105: the emphasised point takes the series colour at full strength (or a shade of it); the others keep the soft colour.
+  const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0], c.strongColors[0]);
   return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
+}
+
+// LH-105: the series or categories the slide title names (core chart-focus.ts) take their full-strength colour, every other mark the
+// context neutral (core chartContextColor: the backdrop mixed towards the text colour, 3:1). It is drawn as a highlight whose accent is
+// each series' own colour (and each slice's, on a pie).
+function focusFor(c, layer, spec) {
+  const focus = layer?.focus;
+  if (!focus) return undefined;
+  const muted = chartContextColor(c.surface, c.labelColor);
+  const strong = (index) => c.strongColors[index % c.strongColors.length];
+  const categories = c.rows.map((_, i) => focus.categories?.includes(i) === true);
+  if (spec.kind === "pie" || spec.kind === "doughnut") return { series: [false], categories, accent: strong(0), muted, sliceAccents: c.rows.map((_, i) => strong(i)) };
+  const series = c.columns.slice(1).map((_, j) => focus.series?.includes(j) === true);
+  return { series, categories, accent: strong(0), muted, accents: series.map((_, j) => strong(j)) };
 }
 
 // LH-81: the header row. The caption (bold, the full text colour) and the legend entries sit where core placed them; the band they take
@@ -62,17 +79,17 @@ function drawHeader(c, spec, header) {
 
 /** The colour of series `j` as a whole (a line, an area, a legend key): the accent when highlighted, else muted. */
 function seriesColor(c, j) {
-  return c.highlight ? (c.highlight.series[j] ? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+  return c.highlight ? (c.highlight.series[j] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
 /** The colour of the mark of series `j` at row `i`: highlighted when its series or its category is named. */
 function markColor(c, j, i) {
-  return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
+  return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
 /** The colour of the pie or doughnut slice of row `i`. */
 function sliceColor(c, i) {
-  return c.highlight ? (c.highlight.categories[i] ? c.highlight.accent : c.highlight.muted) : c.colors[i % c.colors.length];
+  return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.muted) : c.colors[i % c.colors.length];
 }
 
 const bar = (dir, grouping) => ({ kind: "bar", dir, grouping });
@@ -158,16 +175,18 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // header row. A chart without one draws as before. Core decides it for the construct drawn (a map drawn as columns is a column chart).
   const layer = item.chart?.layer;
   const c = chartContext(item, box, bound, options, svg, data, layer);
-  // WI-5 (P19): the panel is a fill only; the axes and gridlines draw the plot, so there is no outer frame (the PPTX chart area has no line either).
-  // LH-03: a small chart has no panel; its marks stand on the backdrop (c.surface is then the card or the slide background).
-  if (!layer?.small) c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
+  // LH-105: no chart draws a panel (Few: every pixel of ink shows data); its marks stand on the card or the slide background (c.surface),
+  // and the PPTX chart and plot areas have no fill either.
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
   // with none of them skips this block entirely, so its output is unchanged. LH-03: a small chart's default value labels count as data labels.
   const resolved = chartLayerDataLabels(resolveOptions(item.value, authoredSpec), layer, spec.kind);
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
-  c.highlight = highlightFor(c, resolved, spec, data) ?? emphasisFor(c, layer);
+  c.highlight = highlightFor(c, resolved, spec, data) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
   c.valueAxisHidden = layer?.small?.valueAxis === false;
   c.ringNames = layer?.rings;
+  // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices.
+  c.endLabels = layer?.endLabels;
+  if (layer?.endLabels) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
   const inset = layer?.plot;
   c.plotBox = inset && { x: box.x + inset.left, y: box.y + inset.top, width: Math.max(1, box.width - inset.left - inset.right), height: Math.max(1, box.height - inset.top - inset.bottom) };
@@ -179,6 +198,12 @@ export function renderCatalogChart(item, box, bound, options, svg) {
     c.dataLabelsOff = resolved.dataLabelsOff === true;
     if (resolved.legend !== undefined) placeLegend(c, spec, resolved.legend);
     reserveAxisTitles(c, spec, resolved.axisTitles);
+  }
+  // LH-105: a pie or one-series doughnut names its categories on its slices, inside or (a pie) outside each as core decided, and draws no legend.
+  if (layer?.slices && !c.dataLabels) {
+    c.legendManaged = true;
+    c.dataLabels = { content: ["category"], position: "inside-end", separator: ", " };
+    c.sliceLabels = new Map(layer.slices.labels.map((entry) => [entry.row, entry.position]));
   }
   render(c, spec);
   if (resolved.active) drawAxisTitles(c);
@@ -241,8 +266,8 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
   const composition = bound.composition ?? bound.geometry.composition ?? {};
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
   const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
-  // LH-03: a small chart has no panel, so its colours are judged against what it stands on: the card, or the slide background.
-  const surface = layer?.small ? (item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background) : bound.design.colors.surface;
+  // LH-03, LH-105: a chart has no panel, so its colours are judged against what it stands on: the card, or the slide background.
+  const surface = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background;
   // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colours the PPTX export writes as
 // scheme colours): chart text, gridlines, axis lines and the outline between marks (bg1).
 const neutrals = bound.design.roles.neutrals;
@@ -264,6 +289,7 @@ const neutrals = bound.design.roles.neutrals;
   const c = {
     item, box, bound, options, svg, rows, columns, formats, combo, hasX, children, u, fontPx, surface, labelColor, chartTextColor,
     path: item.path,
+    tracePath,
     pt: u * 4 / 3,
     pad: 10 * u,
     lineHeight: fontPx * 1.5,
@@ -271,7 +297,9 @@ const neutrals = bound.design.roles.neutrals;
     // clear space kept between neighbouring category labels.
     textHeight: fontPx * 1.22,
     labelGap: fontPx * 0.1,
-    colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
+    colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }, { soften: true }),
+    // LH-105: the same series at full strength, for emphasis and for the names at the line ends.
+    strongColors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
     gridColor: neutrals.gridline.hex,
@@ -853,7 +881,21 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (categorySlot(i) + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
   }));
+  // LH-105: each series' last value and name at the end of its line ("61 Enterprise NPS"), in the box core placed it
+  // (chart-direct-labels.ts), in its colour made legible as text; bold for a series the title names.
+  for (const entry of c.endLabels?.entries ?? []) {
+    const s = series[entry.series];
+    if (!s) continue;
+    const fill = chartSeriesLabelColor(c.surface, c.highlight ? seriesColor(c, entry.series) : c.strongColors[entry.series % c.strongColors.length]);
+    const element = c.svg.renderTextBox(entry.text ?? entry.name, entry.box, c.bound, {
+      path: c.tracePath(`${c.path}.data.columns.${s.column}`), fontSize: c.fontPx / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: entry.bold ? 700 : 400,
+      fill, options: c.options, align: rtl(c) ? "right" : "left", verticalAlign: "middle"
+    });
+    if (element) c.children.push(element);
+  }
 }
+
+const rtl = (c) => c.bound.geometry?.direction === "rtl";
 
 function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot = (i) => i }) {
   for (let j = 0; j < series.length; j++) {
@@ -1006,8 +1048,11 @@ function renderCircularChart(c, spec) {
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
   const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column] }))) : null;
-  const outside = ringTexts && spec.kind === "pie" && (c.dataLabels.position ?? "outside-end") === "outside-end";
-  const reserve = outside ? outsideLabelReserve(c, ringTexts[0]) : { x: 0, y: 0 };
+  // LH-105: core's slice labels say per slice whether the name sits inside or outside; only the outside names take room around the pie.
+  const slicePosition = (i) => c.sliceLabels ? (c.sliceLabels.get(i) === "outside" ? "outside-end" : "inside-end") : undefined;
+  const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
+  const outside = outsideTexts.length > 0;
+  const reserve = outside ? outsideLabelReserve(c, outsideTexts) : { x: 0, y: 0 };
   const r = outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (rings.every((ring) => !ring.total)) {
@@ -1047,7 +1092,7 @@ function renderCircularChart(c, spec) {
       const text = name?.row === i ? (own ? `${name.name}${separator}${own}` : name.name) : own;
       const slice = { cx, cy, r: inner + thickness, inner, mid: start + delta / 2 }, path = `${c.path}.data.rows.${i}.${ring.column}`;
       if (delta > 0 && text && name?.row === i) drawRingName(c, text, slice, path, sliceColor(c, i), name.rotation);
-      else if (delta > 0 && text) drawSliceLabel(c, text, slice, path, sliceColor(c, i));
+      else if (delta > 0 && text) drawSliceLabel(c, text, slice, path, sliceColor(c, i), slicePosition(i));
       start += delta;
     });
   });

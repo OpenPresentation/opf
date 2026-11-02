@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {chartPaletteForFill, chartSeriesPalette, chartTextSize, chartValueAxis, resolveChartData} from '@openpresentation/opf/composition';
+import {chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, chartTextSize, chartValueAxis, composeSlide, resolveChartData} from '@openpresentation/opf/composition';
 import {resolvePresentation, toSvg} from './catalog-harness.mjs';
 
 // RR-89, RR-90 and RR-92: the preview draws what core composes. Series colours are core's chartSeriesPalette of the deck's
@@ -13,8 +13,9 @@ const attrs = (svg, tag, path) => [...svg.matchAll(new RegExp(`<${tag}\\b([^>]*)
 // Series follow the colour scheme: a deck with its own accents draws them, and the cool-horizon default is no longer fixed.
 for (const type of ['column', 'bar', 'line', 'area']) {
   const input = deck({type, data}, scheme), bound = resolvePresentation(input).slides[0];
-  // WI-5 and LH-55: every series from the scheme reaches 4.5:1 on a dark panel (legible), as the preview draws it.
-  const expected = chartPaletteForFill(bound.design.colors.surface, chartSeriesPalette(bound.design.colorScheme), {legible: Array(12).fill(true)}).slice(0, 3);
+  // WI-5 and LH-55: every series from the scheme reaches 4.5:1 on a dark backdrop (legible), as the preview draws it. LH-105: the backdrop is
+  // the slide background (no chart has a panel) and the scheme series are softened towards it.
+  const expected = chartPaletteForFill(bound.design.backgroundColor ?? bound.design.colors.background, chartSeriesPalette(bound.design.colorScheme), {legible: Array(12).fill(true), soften: true}).slice(0, 3);
   const svg = toSvg(input, 1, {trace: true});
   const marks = attrs(svg, type === 'line' ? 'polyline' : type === 'area' ? 'path' : 'rect', /\.chart\.data\./);
   const colors = new Set(marks.map((a) => (a.fill !== 'none' && a.fill !== undefined ? a.fill : a.stroke).toUpperCase()));
@@ -22,15 +23,16 @@ for (const type of ['column', 'bar', 'line', 'area']) {
   assert.ok(!colors.has('#2874A6'), `${type}: the cool-horizon series 1 colour is not drawn on a forest deck`);
 }
 
-// On a card that already contrasts with them the accents are drawn as the scheme names them, in order.
+// On a background that already contrasts with them the accents are drawn in the scheme's order; LH-105: softened a quarter of the way to the
+// background, the full-strength accent being kept for emphasis.
 {
   const light = {...scheme, dark1: '#0F172A', light1: '#0F172A', dark2: '#F8FAFC', light2: '#F8FAFC'};
   const input = {design: {background: '#FFFFFF', colorScheme: light}, slides: [{title: 'Chart', chart: {type: 'column', data}}]};
   const svg = toSvg(input, 1, {trace: true});
   const fills = new Map(attrs(svg, 'rect', /\.chart\.data\.rows\.\d+\.(\d)$/).map((a) => [Number(a['data-opf-path'].split('.').at(-1)), a.fill.toUpperCase()]));
-  assert.deepEqual([...fills.entries()].sort((x, y) => x[0] - y[0]).map(([, fill]) => fill), chartPaletteForFill('#F8FAFC', chartSeriesPalette(light)).slice(0, 3).map((color) => color.toUpperCase()));
-  assert.equal(fills.get(1), '#B45309', 'series 1 is accent1');
-  assert.equal(fills.get(3), '#0F766E', 'series 3 is accent3');
+  assert.deepEqual([...fills.entries()].sort((x, y) => x[0] - y[0]).map(([, fill]) => fill), chartPaletteForFill('#FFFFFF', chartSeriesPalette(light), {legible: Array(12).fill(true), soften: true}).slice(0, 3).map((color) => color.toUpperCase()));
+  assert.deepEqual(chartPaletteForFill('#FFFFFF', chartSeriesPalette(light)).slice(0, 3), ['#B45309', '#7C2D12', '#0F766E'], 'at full strength, accent1 to accent3');
+  assert.equal(fills.get(1), '#D87C35', 'series 1 is accent1 softened a quarter of the way to white');
 }
 
 // chart.colors (core RR-89 follow-up): entry i replaces palette colour i before the contrast adjustment; a scheme slot follows the
@@ -42,13 +44,14 @@ for (const type of ['column', 'bar', 'line', 'area']) {
     const byColumn = new Map(attrs(svg, 'rect', /\.chart\.data\.rows\.\d+\.(\d)$/).map((a) => [Number(a['data-opf-path'].split('.').at(-1)), a.fill.toUpperCase()]));
     return [...byColumn.entries()].sort((x, y) => x[0] - y[0]).map(([, fill]) => fill);
   };
-  const expected = (colors, colorScheme = light) => chartPaletteForFill('#F8FAFC', chartSeriesPalette(colorScheme, colors, {})).slice(0, 3).map((color) => color.toUpperCase());
+  // LH-105: the scheme series are softened towards the background; an authored entry is drawn as written.
+  const expected = (colors, colorScheme = light) => chartPaletteForFill('#FFFFFF', chartSeriesPalette(colorScheme, colors, {}), {legible: chartSchemeSeries(colors, colorScheme), soften: true}).slice(0, 3).map((color) => color.toUpperCase());
   const colors = ['accent3', '#7B241C'];
   const fills = fillsOf(render({type: 'column', data, colors}));
   assert.deepEqual(fills, expected(colors), 'colors replace series 1 and 2, series 3 keeps the scheme colour');
   assert.equal(fills[0], '#0F766E', 'accent3 of the scheme');
   assert.equal(fills[1], '#7B241C');
-  assert.equal(fills[2], expected(undefined)[2]);
+
   const recolored = {...light, accent3: '#1D4ED8'};
   assert.equal(fillsOf(render({type: 'column', data, colors}, recolored))[0], '#1D4ED8', 'a scheme slot follows a changed colour scheme');
   const highlighted = fillsOf(render({type: 'column', data, colors, highlight: {series: ['North']}}));
@@ -74,7 +77,8 @@ for (const type of ['column', 'bar', 'line', 'area']) {
   const chart = {type: 'column', dataLabels: false, data: {columns: ['Quarter', 'Revenue'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 760], ['Q4', 310]]}};
   const ticksOf = (input, path) => {
     const svg = toSvg(input, 1, {trace: true});
-    const frame = attrs(svg, 'rect', new RegExp(`^${path.replaceAll('.', '\\.')}$`))[0];
+    // LH-105: no chart draws a panel; its frame is the box composition gave it.
+    const frame = composeSlide(input.slides[0], {width: 1280, height: 720, presentation: input, slideIndex: 0}).items.find((item) => item.path === path)?.box;
     const labels = attrs(svg, 'text', new RegExp(`^${path.replaceAll('.', '\\.')}$`));
     const texts = [...svg.matchAll(new RegExp(`<text\\b[^>]*data-opf-path="${path}"[^>]*>([\\s\\S]*?)</text>`, 'g'))].map(([, body]) => body.replace(/<[^>]+>/g, '').trim());
     assert.ok(frame && labels.length, path);

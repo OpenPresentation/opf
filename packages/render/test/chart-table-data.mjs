@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import * as core from '@openpresentation/opf/composition';
 // FA-23: the documents name the gallery's `roboto` font scheme, so the host catalog is registered.
-import {toSvg} from './catalog-harness.mjs';
+import {resolvePresentation, toSvg} from './catalog-harness.mjs';
 import { chartNumber, formatTick } from '../dist/charts.js';
 
 // RR-54: chart and table data in the preview. Strict chart numbers, number formats on data labels, value-axis ticks and table
@@ -51,37 +51,39 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // LH wave 2: LH-03 and LH-81 moved fifteen (the column, bar, line and area types, column-no-options and line-string-numbers): the
 // header row replaces the side legend, and the small column and line charts label their values without the value axis or panel. The
 // world chart over quarters, drawn as columns (LH-60), takes the column chart's header row too, so its digest moved again.
+// LH-105 moved 29 (column, stacked-column, 100pct-stacked-column, bar, stacked-bar, 100pct-stacked-bar, line, line-with-markers, stacked-line, stacked-line-with-markers, area, stacked-area, 100pct-stacked-area, pie, doughnut, scatter, radar, radar-with-markers, filled-radar, treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world, column-no-options, line-string-numbers, histogram-lone-column): no chart draws a panel, the scheme series are softened, line charts name their series at
+// the line ends, a pie names its slices, the value axis has at most six intervals and nominal categories have no last-point emphasis.
 const REVIEWED_SVG_DIGESTS = {
-  'column': 'c027339ea7d6c699b4dfd5f8',
-  'stacked-column': 'bcc1964a00d7827622374f49',
-  '100pct-stacked-column': '3775a859b0eb6a3902b6924a',
-  'bar': '903a3fbab280383f114e726d',
-  'stacked-bar': '9b7fb2b76a52783bc0786afa',
-  '100pct-stacked-bar': 'c3bc2ec3587b183ac63833e2',
-  'line': 'ebedc29d4a70445cdc4d3107',
-  'line-with-markers': '3aab22d3d6b4a3ac8bf3c791',
-  'stacked-line': '1a43ebe46faecb071edd06f7',
-  'stacked-line-with-markers': 'e6def7ff90da0b79a3abc29d',
-  'area': 'b2a4ea43d2afa99b7cc298a8',
-  'stacked-area': 'ea6e3661c32b7bcd4ca0986b',
-  '100pct-stacked-area': '445a6ec13e4459cbb699f3b2',
-  'pie': 'b923fe0ee2c2d8a903015c83',
-  'doughnut': '151f47d0ebc53d35b4f6e63d',
-  'scatter': '44baab35d353e214a225bf68',
-  'radar': '9f0bf90fdffcebfa65edd7ee',
-  'radar-with-markers': '79796466e2ad84d3b1b62506',
-  'filled-radar': 'b044881d170ae269eb127c96',
-  'treemap': 'cb63c8922c227f3ae6f8c234',
-  'histogram': 'e4a1342012db24e6c5585283',
-  'pareto': '20f13a2185543acb45794d90',
-  'box-and-whisker': 'a65be9e95948c1e6a06ea533',
-  'waterfall': '70a315ec3bb6754e9e1866e1',
-  'funnel': '6208efa6e685004b27a8f3d2',
-  'world': 'fdc75fe9a707636ee2602c4d',
+  'column': '9e0ac4ac35219f397723d0a0',
+  'stacked-column': '22c1bb68ee1f45037f081ace',
+  '100pct-stacked-column': 'c5e8ca6415e870028d442c77',
+  'bar': '092e12deb87ba85b108ddd19',
+  'stacked-bar': '0b7adf7f2cd425d491e5e091',
+  '100pct-stacked-bar': '358d352b2c3b612865011a67',
+  'line': '6cabc1b834046cb5a5f16eb6',
+  'line-with-markers': '1f050e93e0a69fb6a6abe219',
+  'stacked-line': '71155a83f1a403d5689b7ca3',
+  'stacked-line-with-markers': '73562248ec6d015789863aac',
+  'area': '391947ba99026266aba0363f',
+  'stacked-area': 'ee70e43245edd39049546328',
+  '100pct-stacked-area': '390a1812bfeac2b5c53de0e1',
+  'pie': '6e06a71f6638738bd7f6027a',
+  'doughnut': '379c218a8fdb06dec452c64e',
+  'scatter': '34cec85e0c78ae9fa4d1459e',
+  'radar': '876dbceb52d191c557e36b3c',
+  'radar-with-markers': '75e47461799584b0ba652d69',
+  'filled-radar': '3f929717f9aaa20fc2a10060',
+  'treemap': '729597f6c737855962a8ef3a',
+  'histogram': 'd53e45060a24e75965e468ea',
+  'pareto': '4882241d769e6ea7fd8b7606',
+  'box-and-whisker': '8a6324792766fc047f85cd59',
+  'waterfall': '1634735baf70cec035c76edb',
+  'funnel': '3f6d700694a038d2172c254a',
+  'world': '0112794832461b1dc39da0fb',
   'sketch': '412f5a537d5291557428c038',
-  'column-no-options': '1b6bd1696b69e0708101550b',
-  'line-string-numbers': 'ddd95c76dd8de9724cdb1be9',
-  'histogram-lone-column': '3c2269d823eed5e38ba85da0',
+  'column-no-options': 'c74a507b8909ef64e0e44353',
+  'line-string-numbers': '892f93f3d8fc81ad13662b4a',
+  'histogram-lone-column': '7c2a1efedb26d08e1fce33d1',
   'table-styled': 'b90e4faf6d93e7d88e6a5aed',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
@@ -285,10 +287,12 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
 {
   const long = '$#,##0.00 "million"';
   const textBoxes = (svg) => [...svg.matchAll(/<g data-opf-box-height="[\d.-]+" data-opf-box-width="([\d.-]+)" data-opf-box-x="([\d.-]+)" data-opf-box-y="[\d.-]+"[^>]*path="slides\.0\.blocks\.0\.chart[^"]*"[^>]*><text[^>]*>([^<]*)<\/text>/g)].map(([, width, x, text]) => ({ text, left: Number(x), right: Number(x) + Number(width) }));
-  const chartRect = (svg) => { const [, width, x] = svg.match(/<rect data-opf-path="slides\.0\.blocks\.0\.chart" [^>]*?width="([\d.]+)" x="([\d.-]+)"/); return { left: Number(x), right: Number(x) + Number(width) }; };
+  // LH-105: no chart draws a panel; the chart's frame is the box composition gave it.
+  const chartRect = (document) => { const { x, width } = resolvePresentation(document).slides[0].geometry.items.find((item) => item.path === 'slides.0.blocks.0.chart').box; return { left: x, right: x + width }; };
   const outside = (type, columns, data) => {
-    const svg = render(doc({ title: 'T', blocks: [{ chart: { type, data: { columns, rows: data } } }, { text: 'side' }] }), { trace: true });
-    const rect = chartRect(svg);
+    const document = doc({ title: 'T', blocks: [{ chart: { type, data: { columns, rows: data } } }, { text: 'side' }] });
+    const svg = render(document, { trace: true });
+    const rect = chartRect(document);
     // A text box carries one font size of padding (8 px each side); the text itself must be inside the chart.
     return textBoxes(svg).filter((box) => box.left + 8 < rect.left || box.right - 8 > rect.right).map((box) => box.text);
   };

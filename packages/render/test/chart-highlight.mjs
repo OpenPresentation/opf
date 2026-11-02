@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { chartHighlightColors, textColorForFill } from '@openpresentation/opf/composition';
-import { toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import { resolvePresentation, toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { CHART_TYPES } from '../src/charts.js';
 
 // FA-14: chart.highlight in the preview. Core resolves the marks (chartHighlightMarks) and the two colours
@@ -24,9 +24,12 @@ function marks(svg) {
 const colorsOf = (svg, pattern) => marks(svg).filter((mark) => pattern.test(mark.path)).map((mark) => mark.color);
 const plainFor = (chart) => toSvg(deck(chart), 1, { trace: true });
 
-// The chart panel and text colours the preview computes, so the expected colours come from the same core function.
-const surface = toSvg(deck({}), 1, { trace: true }).match(/<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/)?.[0].match(/fill="([^"]+)"/)?.[1];
-assert.match(surface, /^#[0-9A-Fa-f]{6}$/, 'the chart panel fill');
+// The backdrop and text colours the preview computes, so the expected colours come from the same core function. LH-105: no chart draws a
+// panel; it stands on the slide background.
+const backdropOf = (document) => { const design = resolvePresentation(document).slides[0].design; return design.backgroundColor ?? design.colors.background; };
+const surface = backdropOf(deck({}));
+assert.match(surface, /^#[0-9A-Fa-f]{6}$/, 'the slide background');
+assert.doesNotMatch(toSvg(deck({}), 1, { trace: true }), /<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/, 'no chart panel');
 const expected = chartHighlightColors(surface, '#C0392B', textColorForFill(surface, '#0F172A'));
 
 const HIGHLIGHTABLE = new Set(['bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar']);
@@ -88,15 +91,15 @@ for (const id of Object.keys(CHART_TYPES)) {
 // 6. Line: series highlight (lines keep series order, as PowerPoint draws them); a category highlight marks its points even without markers.
 {
   const svg = render({ type: 'line', highlight: { series: ['North'] } });
-  // The legend keys are drawn first (North, South); the plotted lines follow.
+  // LH-105: the series are named at their line ends instead of a legend, so only the plotted lines are drawn, in series order.
   const lines = marks(svg).filter((mark) => mark.name === 'polyline');
-  assert.deepEqual(lines.map((mark) => mark.color), [expected.accent, expected.muted, expected.accent, expected.muted], 'legend keys, then the lines in series order');
+  assert.deepEqual(lines.map((mark) => mark.color), [expected.accent, expected.muted], 'the lines in series order');
   assert.equal(marks(svg).filter((mark) => mark.name === 'circle').length, 0, 'no markers on a plain line');
   const points = render({ type: 'line', highlight: { categories: ['Q3'] } });
   const circles = marks(points).filter((mark) => mark.name === 'circle');
   assert.ok(circles.every((mark) => mark.path.includes('.data.rows.')), 'plain lines have no legend marker');
   assert.deepEqual(circles.map((mark) => [mark.path, mark.color]), [['slides.0.chart.data.rows.2.1', expected.accent], ['slides.0.chart.data.rows.2.2', expected.accent]], 'Q3 points carry accent markers');
-  assert.deepEqual(marks(points).filter((mark) => mark.name === 'polyline').map((mark) => mark.color), Array(4).fill(expected.muted), 'a category-only highlight mutes the lines');
+  assert.deepEqual(marks(points).filter((mark) => mark.name === 'polyline').map((mark) => mark.color), Array(2).fill(expected.muted), 'a category-only highlight mutes the lines (LH-105: named at their ends, no legend keys)');
   const withMarkers = render({ type: 'line-with-markers', highlight: { series: ['North'], categories: ['Q1'] } });
   const north = marks(withMarkers).filter((mark) => mark.name === 'circle' && /\.data\.rows\.\d\.1$/.test(mark.path)).map((mark) => mark.color);
   const south = marks(withMarkers).filter((mark) => mark.name === 'circle' && /\.data\.rows\.\d\.2$/.test(mark.path)).map((mark) => mark.color);
@@ -133,7 +136,7 @@ for (const type of ['pie', 'doughnut']) {
 {
   const dark = { background: '#0B1220', colorScheme: { id: 'cool-horizon', primary: '#1B4F72', dark2: '#1E293B', light2: '#1E293B', dark1: '#F8FAFC', light1: '#F8FAFC' } };
   const svg = render({ highlight: { series: ['North'] } }, {}, dark);
-  const panel = svg.match(/<rect[^>]*data-opf-path="slides\.0\.chart"[^>]*>/)?.[0].match(/fill="([^"]+)"/)?.[1];
+  const panel = backdropOf(deck({}, dark));
   const colors = chartHighlightColors(panel, '#1B4F72', textColorForFill(panel, '#F8FAFC'));
   assert.deepEqual([...new Set(colorsOf(svg, /\.data\.rows\.\d\.1$/))], [colors.accent]);
   assert.deepEqual([...new Set(colorsOf(svg, /\.data\.rows\.\d\.2$/))], [colors.muted]);

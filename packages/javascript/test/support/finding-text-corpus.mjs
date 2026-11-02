@@ -131,6 +131,8 @@ export const CASES = [
 	{ name: 'tight-spacing-gap', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { gap: 0.01 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
 	{ name: 'tight-spacing-margin', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { padding: 0.02 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
 	{ name: 'layout-monotony', rule: 'opf/layout-monotony', input: deck(['Hiring', 'Budget', 'Roadmap', 'Risks', 'Asks'].map((title) => ({ title, layout: 'list', items: ['One point', 'Another point'] }))), options: withGallery },
+	{ name: 'chart-dual-axis', rule: 'opf/chart-dual-axis', input: deck([{ title: 'Revenue and margin', chart: { type: 'combo', alt: 'Revenue and margin', data: { columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12, 0.31], ['Q2', 15, 0.34]] }, line: ['Margin'], secondaryAxis: ['Margin'] } }]) },
+	{ name: 'chart-pie-many-slices', rule: 'opf/chart-pie-many-slices', input: deck([{ title: 'Traffic sources', chart: { type: 'pie', alt: 'Traffic sources', data: { columns: ['Source', 'Visits'], rows: [['Search', 48], ['Direct', 22], ['Social', 12], ['Email', 8], ['Referral', 5], ['Ads', 3]] } } }]) },
 	{ name: 'straight-quotes', rule: 'opf/straight-quotes', input: deck([{ title: 'What customers said', text: 'They called it "the easiest setup we’ve done".' }]) },
 ];
 

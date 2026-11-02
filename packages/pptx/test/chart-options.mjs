@@ -63,14 +63,16 @@ const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map
 // column, bar, line and area charts and a right legend on the others; value labels only on the LH-03 small charts (a clustered column,
 // or line chart of two series of four points here; two series of horizontal bars are too thin for a label beside each). Import writes
 // none of these defaults back.
-const SMALL = new Set(['column', 'line']), HEADER = new Set(['column', 'bar', 'line', 'area', 'stacked-column']);
+// LH-105: a line chart of two to four series names its series at the line ends (no legend, and its small-chart value labels give way),
+// and a pie or doughnut names its slices (no legend).
+const SMALL = new Set(['column']), HEADER = new Set(['column', 'bar', 'area', 'stacked-column']), DIRECT = new Set(['line', 'pie', 'doughnut']);
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: dataOf(type)});
   assert.doesNotMatch(result.classic, /<c:(?:catAx|valAx)>(?:(?!<\/c:(?:catAx|valAx)>)[\s\S])*<c:title>/, `${type}: no axis title by default`);
   // Two series and no value axis title: the header row has the legend and no generated caption, so no chart has a title here.
   assert.doesNotMatch(result.classic, /<c:chart>\s*<c:title>/, `${type}: no generated caption for two series`);
   assert.equal([...result.classic.matchAll(/<c:showVal val="(\d)"\/>/g)].some(match => match[1] === '1'), SMALL.has(type), `${type}: labels are shown on small charts only`);
-  assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' ? undefined : HEADER.has(type) ? 't' : 'r', `${type}: default legend`);
+  assert.equal(result.classic.match(/<c:legendPos val="(\w)"\/>/)?.[1], type === 'scatter' || DIRECT.has(type) ? undefined : HEADER.has(type) ? 't' : 'r', `${type}: default legend`);
   assert.deepEqual(result.imported.axisTitles, undefined);
   assert.equal(result.imported.legend, undefined, `${type}: the default legend imports as no option`);
   assert.equal(result.imported.dataLabels, undefined, `${type}: hidden labels import as no option`);
