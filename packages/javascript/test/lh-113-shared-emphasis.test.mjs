@@ -45,6 +45,9 @@ describe("focus sources (LH-113)", () => {
     const weeks = { type: "line", data: { columns: ["Week", "Conversion"], rows: [["Week 1", 3.1], ["Week 2", 3.2], ["Week 3", 3.5]] }, alt: "Conversion climbed to 3.1% and then 3.5%." };
     assert.equal(focusOf(weeks, { title: "Checkout", blocks: [{ chart: weeks }] }), undefined, "the digits of a decimal are not a key");
     assert.deepEqual(rowsFocus(hiring, { title: "Plan", blocks: [{ text: "Engineering leads." }, { text: "Sales leads." }, { table: hiring }] }), undefined, "sources that disagree");
+    const plans = { columns: ["Plan", "Seats"], rows: [["Plan 1", 10], ["Plan 2", 20], ["Plan 3", 30]] };
+    assert.equal(rowsFocus(plans, { title: "Table", blocks: [{ table: plans }, { text: "Point 2" }] }), undefined, "a number is not a key's own word");
+    assert.deepEqual(rowsFocus(plans, { title: "Table", blocks: [{ table: plans }, { text: "Plan 2 sells best" }] }), [1], "the whole key still names it");
   });
 
   test("a chart takes its alt's or a sibling's focus, the key named first as the subject, unless its title names one", () => {

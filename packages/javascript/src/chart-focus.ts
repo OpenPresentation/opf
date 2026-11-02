@@ -90,7 +90,9 @@ function focusMatcher(language: string) {
       const whole = find(text, list);
       if (whole >= 0) return whole;
       const own = list.filter(token => !common.some(shared => same(shared, token)) && content(token));
-      const partial = own.length && own.length < list.length ? find(text, own) : -1;
+      // LH-113: own words that are only numbers ("Plan 2" beside "Plan 1") name nothing on their own: "Point 2" is not "Plan 2".
+      const lettered = !options.stop || own.some(token => /\p{L}/u.test(token));
+      const partial = own.length && own.length < list.length && lettered ? find(text, own) : -1;
       if (partial >= 0 || !options.cased) return partial;
       const written = casedWords(names[index]!), first = list[0]!;
       if (written.length < 2 || !written.every(capital) || !content(first) || tokens.some((other, at) => at !== index && other.some(word => same(word, first)))) return -1;
