@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {colorContrast, codeHighlightColors} from '@openpresentation/opf/composition';
+import {colorContrast, codeHighlightColors, ENGINE_DEFAULT_COLOR_SCHEME, resolveColorRoles} from '@openpresentation/opf/composition';
 // The decks name the gallery's roboto font scheme, so the host catalog is registered (./catalog-harness.mjs).
 import { toSvg } from './catalog-harness.mjs';
 
@@ -7,6 +7,8 @@ import { toSvg } from './catalog-harness.mjs';
 
 const svg = (document, options = {}, index = 0) => toSvg(document, index + 1, { trace: true, ...options});
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
+// LH-79: the default deck is the dark2 variant, whose code panel is a step below the slide (core's codePanel neutral).
+const PANEL = resolveColorRoles(ENGINE_DEFAULT_COLOR_SCHEME, {variant: 'dark2'}).neutrals.codePanel.hex;
 const codeDeck = highlight => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Highlight', code: {source, language: 'ts', ...(highlight ? {highlight} : {})}}]});
 
 // --- presets -------------------------------------------------------------------------------------------------------------
@@ -29,7 +31,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   for (const band of bands) assert.match(band, /fill="#[0-9A-F]{6}"/);
   const bandFill = bands[0].match(/fill="(#[0-9A-F]{6})"/)[1];
   // The bands sit between the panel and the text.
-  const panel = marked.indexOf('fill="#111827"'), firstBand = marked.indexOf('data-opf-code-highlight'), firstText = marked.indexOf('data-opf-code-role="body"');
+  const panel = marked.indexOf(`fill="${PANEL}"`), firstBand = marked.indexOf('data-opf-code-highlight'), firstText = marked.indexOf('data-opf-code-role="body"');
   assert.ok(panel < firstBand && firstBand < firstText, 'panel, then bands, then text');
   // Every painted colour of a marked line is >= 4.5:1 on the band, every other line >= 4.5:1 on the panel.
   const bodyLines = marked.split('<text ').slice(1).filter(chunk => chunk.slice(0, chunk.indexOf('>')).includes('data-opf-code-role="body"')).map(chunk => {
@@ -41,7 +43,7 @@ for (const [preset, width, height] of [['1:1', 720, 720], ['4:5', 720, 900], ['9
   for (const [, start, inner] of bodyLines) {
     const isMarked = [2, 3, 5].includes(lineNumber(start));
     const paints = [...inner.matchAll(/fill="(#[0-9A-F]{6})"/g)].map(match => match[1]);
-    for (const paint of paints) assert.ok(colorContrast(paint, isMarked ? bandFill : '#111827') >= 4.5, `line ${lineNumber(start)} ${paint}`);
+    for (const paint of paints) assert.ok(colorContrast(paint, isMarked ? bandFill : PANEL) >= 4.5, `line ${lineNumber(start)} ${paint}`);
   }
   const paintsOf = number => [...bodyLines.filter(([, start]) => lineNumber(start) === number)[0][0].matchAll(/fill="(#[0-9A-F]{6})"/g)].map(match => match[1]);
   assert.notDeepEqual(paintsOf(2), paintsOf(1), 'a marked line is not painted like an unmarked one');
