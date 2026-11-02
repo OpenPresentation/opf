@@ -289,6 +289,10 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
+| [`opf/text-shrunk`](#opftext-shrunk) | Layout | info | composition | Text is fitted far below its role's starting size (under 70%). |
+| [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centred. |
+| [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
+| [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
 | [`opf/chart-mapping-adapted`](#opfchart-mapping-adapted) | Content | warning | structure | A chart mapping entry is ignored. |
 | [`opf/chart-highlight-adapted`](#opfchart-highlight-adapted) | Content | warning | structure | A chart highlight is adapted by the chart type. |
@@ -303,6 +307,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/unused-beat`](#opfunused-beat) | Content | info | structure | A beat of the narrative has no slide that references it. |
 | [`opf/empty-slide`](#opfempty-slide) | Content | warning | structure | A slide has no content at all. |
 | [`opf/language-tag`](#opflanguage-tag) | Content | warning | structure | A language tag is malformed, uses an unassigned region or is not in canonical case. |
+| [`opf/straight-quotes`](#opfstraight-quotes) | Content | info | structure | Text uses straight quotation marks (" or ') where the language has typographic ones. |
 
 ## Format rules
 
@@ -876,6 +881,46 @@ Default severity: **warning**. Cost: composition. An image has too few pixels fo
 
 **Approximations.** Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed frame (cover and stretch are measured as the cover scale, contain as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.
 
+### `opf/text-shrunk`
+
+Default severity: **info**. Cost: composition. Text is fitted far below its role's starting size (under 70%).
+
+**Why.** Composition starts each type role at a size meant to be read across a room (prose 28 px, a list 32 px, a table 25 px, a quote 40 px, code 22 px on the 720 px reference slide) and shrinks text that does not fit. Text that ends far below that size still fits, but the slide carries more than it can show at a comfortable size; it is usually two slides.
+
+**Basis.** The type roles of composition (docs/dynamic-composition.md); the fitted size composeSlide computed, compared with 0.7 of the role size.
+
+**Approximations.** Reads the fitted size of text and list blocks, the quote body, the code body and the smallest body cell of a table, on the 720 px reference slide. Headings, metrics and timelines have their own scales and are not checked. A block whose runs set `fontSize` is the author's choice and is skipped; text that overflows is opf/text-overflow. One finding per slide, at the block shrunk the most; `measured.blocks` counts the shrunk blocks.
+
+### `opf/centered-body`
+
+Default severity: **info**. Cost: composition. A paragraph or list of more than 2 lines or 120 characters is centred.
+
+**Why.** Each line of centred text starts at a different place, so the eye has to search for the next line. Centring suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.
+
+**Basis.** Typographic convention for running text: a straight start edge. The alignment and the line count are those composeSlide computed; more than 2 lines or 120 characters.
+
+**Approximations.** Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centred blocks.
+
+### `opf/tight-spacing`
+
+Default severity: **info**. Cost: composition. Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge.
+
+**Why.** Space between blocks tells the audience which things belong together, and a margin keeps content clear of the edge that projectors, screen-sharing and printing crop. Blocks closer together than the engine's own default gap read as one crowded block.
+
+**Basis.** Measured on the composed boxes (the card frame, the picture frame, else the cell) of sibling blocks and groups, on the 13.33 x 7.5 in reference slide: a gap under 0.25 in (the default gap is 1/30 of the short side, 0.25 in) or a margin under 0.5 in (the default padding is 0.6 in).
+
+**Approximations.** Only a gap the author set is checked: `composition.gap` on the slide, its layout record or a group. Without one the default gap of the engine applies (1/30 of the shorter side of the container: 0.25 in on the slide, less in a short nested group) and is not reported. Only blocks of one parent are compared, and only when they face each other across one axis. Headings, header and footer furniture, pictures placed on a slide edge and blocks in a bleed region are exempt. A cell is measured, not the ink inside it, so text that does not fill its cell looks further apart than reported. At most one gap and one margin finding per slide, the tightest of each.
+
+### `opf/layout-monotony`
+
+Default severity: **info**. Cost: structure. 4 or more content slides in a row use the same layout record.
+
+**Why.** A run of slides with one arrangement looks the same from slide to slide, so the audience stops noticing that the content changed. The structure of the content (a comparison, a sequence, a number, a picture) usually asks for different layouts.
+
+**Basis.** Counted on the slide sequence: 4 or more consecutive visible slides with body content and the same `layout`.
+
+**Approximations.** Compares the layout reference of each slide (a catalog prefix is ignored). Cover, section and closing slides, slides with no body content and slides without a layout record (automatic composition) break a run and are not counted; hidden slides are skipped. One finding per run, at its first slide.
+
 
 ## Content rules
 
@@ -992,5 +1037,15 @@ Default severity: **warning**. Cost: structure. A language tag is malformed, use
 **Basis.** BCP 47 (RFC 5646, section 2.1) and the platform locale data (Intl.getCanonicalLocales, Intl.DisplayNames)
 
 **Approximations.** Checks the root `language` (a tag string, or the `bcp47` of an inline Language object) and `lang` on the TextRun objects of titles, subtitles, tags, text, lists, tables, quotes, metrics and timelines. A region is assigned when the runtime's CLDR data names it (ISO 3166-1 codes and UN M.49 areas such as 419); private-use regions (`AA`, `QM`-`QZ`, `XA`-`XZ`) and `ZZ` are accepted, as are private-use (`x-...`) tags. Only the spelling of a tag is checked, not whether the language subtag is assigned or whether the language suits the text. The schema rejects tags with characters other than letters, digits and hyphens (`en_US` is a schema error, with no suggestion), and `en-UK` as the deck language is already an error of the schema rule, so those are not reported twice.
+
+### `opf/straight-quotes`
+
+Default severity: **info**. Cost: structure. Text uses straight quotation marks (" or ') where the language has typographic ones.
+
+**Why.** Straight marks are a typewriter substitute. Typeset text uses the quotation marks of its language (“…” in English, «…» in French, „…“ in German), and a deck that mixes them with the marks the engine draws around quotes looks unfinished.
+
+**Basis.** The quotation marks of the deck language, as the engines draw them around a quote (QUOTE_MARKS in core).
+
+**Approximations.** Checks titles, subtitles, tags, body text, list items and descriptions, and quotes; not table cells, metrics, timelines, code or runs with `code: true`. A `"` after a digit is an inch mark and a `'` between letters or after a digit is an apostrophe or a foot mark; single quotes count only as a pair around words. A language with no typographic marks of its own (one OPF draws ASCII quotes for) is not checked. When only double quotes are found, the finding carries a patch to the language's marks.
 
 <!-- validate-rules:end -->

@@ -210,12 +210,35 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code) {
 // LH-56: the labels of a treemap and a funnel sit inside their marks, so they take core's text colour for each mark's fill (4.5:1, black or
 // white when the text colour falls short), as the preview draws them: a funnel's series text, and a treemap tile's own cx:dataLabel (the
 // tiles differ in colour). `markLabelColor` is the full text colour; without it the labels keep the chart text colour.
-function insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize}) {
+// Native check 2026-11-02 (PR #976): PowerPoint draws funnel labels in its own contrast colour (white on the default blue) whatever the
+// series or point cx:txPr says, so only the treemap's colours reach PowerPoint; other readers take the funnel's series text.
+function insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options}) {
   if (!markLabelColor || (spec.layoutId !== 'treemap' && spec.layoutId !== 'funnel')) return undefined;
   if (spec.layoutId === 'funnel') return {text: textProperties(insideLabelColor(color, markLabelColor, markLabelBackground), font, textSize), points: ''};
+  const field = pointLabelField(options?.dataLabels?.content ?? ['category']);
   const points = chartexPointColors(spec.layoutId, entry.values, palette)
-    .map((fill, row) => fill ? `<cx:dataLabel idx="${row}">${textProperties(insideLabelColor(fill, markLabelColor, markLabelBackground), font, textSize)}</cx:dataLabel>` : '').join('');
+    .map((fill, row) => fill ? `<cx:dataLabel idx="${row}">${pointTextProperties(insideLabelColor(fill, markLabelColor, markLabelBackground), font, textSize, field)}</cx:dataLabel>` : '').join('');
   return {text: undefined, points};
+}
+
+// The text field a point label's cx:txPr names: the first part the label shows, in PowerPoint's order (series name, category name,
+// value). The GUIDs are fixed, so the export stays byte-exact.
+function pointLabelField(content) {
+  if (content.includes('series')) return {type: 'SERIESNAME', id: '{6D3B0F1E-5C1A-4E2B-9A61-1C0B2A3D4E03}', text: '[SERIES NAME]'};
+  if (content.includes('category')) return {type: 'CATEGORYNAME', id: '{6D3B0F1E-5C1A-4E2B-9A61-1C0B2A3D4E01}', text: '[CATEGORY NAME]'};
+  return {type: 'VALUE', id: '{6D3B0F1E-5C1A-4E2B-9A61-1C0B2A3D4E02}', text: '[VALUE]'};
+}
+
+// The cx:txPr of one point's cx:dataLabel. PowerPoint draws a point label whose cx:txPr paragraph holds no text as an empty label
+// (native check 2026-11-02, PR #976: every treemap label vanished with the series-style `a:endParaRPr`-only paragraph, and with an
+// empty run), while any text in the paragraph keeps the label's own content (the visibility's category, value or series name) drawn
+// with the paragraph's defRPr. So the paragraph holds one text field of the label's content (the classic chart's label field, which
+// PowerPoint keeps when it saves the file again), and the colour, size and face sit in its defRPr and the field's rPr alike.
+function pointTextProperties(labelColor, font, size, field) {
+  const face = escapeXml(font);
+  const run = `${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/>`;
+  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}">${run}</a:defRPr></a:pPr>` +
+    `<a:fld id="${field.id}" type="${field.type}"><a:rPr lang="en-US" sz="${size}">${run}</a:rPr><a:t>${field.text}</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
 }
 
 export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = []}) {
@@ -236,7 +259,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
       .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}</cx:spPr></cx:dataPt>` : '').join('');
     // Box whiskers, median lines and mean markers are drawn with the series line; without one PowerPoint used black (native check 2026-09-30).
     const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
-    const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize});
+    const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
       `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
