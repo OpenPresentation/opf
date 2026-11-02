@@ -3479,7 +3479,18 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
       const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
       if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
     }
-    return best ? { ...best.result, track: { kind: 'picture', edge: physical(edge), size: best.size, path: `slides.${options.slideIndex ?? 0}.blocks.${index}` } } : base;
+    if (!best) return base;
+    // A placed picture is listed before the flowed body; a track keeps the blocks' reading order, so the picture of a later block is
+    // listed after the blocks before it (the order the preview, the PPTX export and `opf/reading-order` read).
+    const blockPath = `slides.${options.slideIndex ?? 0}.blocks.${index}`, blockOf = (item: ComposedItem) => { const parts = item.path.split('.'); return parts[2] === 'blocks' ? Number(parts[3]) : -1; };
+    const items = [...best.result.items], at = items.findIndex(item => item.path === blockPath || item.path.startsWith(`${blockPath}.`));
+    if (at >= 0 && index > 0) {
+      const [picture] = items.splice(at, 1);
+      let to = 0;
+      items.forEach((item, position) => { if (headings.has(item.field) || (blockOf(item) >= 0 && blockOf(item) < index)) to = position + 1; });
+      items.splice(to, 0, picture!);
+    }
+    return { ...best.result, items, track: { kind: 'picture', edge: physical(edge), size: best.size, path: blockPath } };
   }
   if (pictures.length || leaf('video').length || charts.length !== 1 || base.design.chartPrimary !== undefined) return base;
   const chartOf = (result: SlideComposition) => result.items.find(item => item.field === 'chart');

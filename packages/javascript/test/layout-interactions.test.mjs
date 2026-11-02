@@ -272,3 +272,13 @@ test('LH-93 with LH-49: charts a template slide is recomposed for share one plot
   }
   assert.deepEqual(overflow(result), []);
 });
+
+test('LH-80 with reading order: a picture track keeps the blocks in reading order, in both directions', () => {
+  const picture = { image: `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000"><rect width="1600" height="1000" fill="#3f8a55"/></svg>').toString('base64')}` };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Signal', blocks: [longText('Northwind'), picture] }, { direction });
+    assert.equal(result.track?.kind, 'picture', direction);
+    const order = result.items.filter((item) => !['title', 'subtitle', 'tag'].includes(item.field)).map((item) => item.path);
+    assert.deepEqual(order, ['slides.0.blocks.0.text', 'slides.0.blocks.1.image'], `${direction}: the text is read before the picture after it`);
+  }
+});

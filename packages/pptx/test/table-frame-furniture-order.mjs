@@ -29,8 +29,12 @@ const drawnExtent = (svg, path) => {
   return {y: top, height: bottom - top};
 };
 let checked = 0, slack = 0, packed = 0;
-for (const [label, table] of [['short', short], ['tall', tall]]) for (const scale of [1, 0.5]) for (const withText of [false, true]) {
-  const slide = withText
+// Wave 3: a lone table grows (LH-48) and a two-block row places it at its need (LH-52), so a weighted column keeps a table cell
+// taller than its rows.
+for (const [label, table] of [['short', short], ['tall', tall]]) for (const scale of [1, 0.5]) for (const withText of [false, true, 'column']) {
+  const slide = withText === 'column'
+    ? {title: 'Frame', composition: {mode: 'column', weights: [1, 3]}, blocks: [{text: 'Context'}, {table}]}
+    : withText
     ? {title: 'Frame', composition: {mode: 'row', weights: [1, 3]}, blocks: [{text: 'Context'}, {table}]}
     : {title: 'Frame', table};
   const deck = {design: {dimensions: {widthInches: 1280 * scale / 96, heightInches: 720 * scale / 96}}, slides: [slide]};
