@@ -313,6 +313,21 @@ request that deletes it and its index entry, and the stability check requires th
 
 Edit records by pull request in `packages/gallery`: change the record and its index entry, run `pnpm --filter @openpresentation/gallery rehash` and `previews`, and add a `changes/<slug>.md` fragment (`packages: [gallery]`; a drawing change is declared with `drawing:`, see `changes/README.md`). The package is released with the other five under the repository's one shared version. `pnpm check:spec` and `pnpm check:catalog` verify the indexes, manifest and records, and `pnpm check:stability` holds a drawing change or a removed id to the declaration rule. Core's browser entries remain catalog-free (`pnpm check:catalog-free`).
 
+### Palette discipline (`pnpm check:palette`)
+
+LH-36: `scripts/check-palette.mjs` reads every colour-scheme record in `packages/gallery/catalog/color-schemes/` and holds it to the palette rules of the Slides and pptx guidance. It changes no record. A new or edited scheme is checked by `pnpm check:changed`.
+
+| Rule | Level | What it checks |
+| --- | --- | --- |
+| `contrast-base` | fails | `dark1` on `light1` reaches 7:1 (the body text pair) |
+| `contrast-surface` | fails | `dark2` as a background reaches 4.5:1 with `light1` text, `light2` with `dark1` text |
+| `accent-lightness` | fails | `accent1` and `accent2`, the pair that must be told apart, differ in OKLCH lightness by at least 0.08, not only in hue |
+| `accent-close` | report | any accent 1 to 6 pair (other than a repeated colour) within 0.05 in OKLCH lightness |
+| `pure-neutral` | report | `light1` is exactly `#FFFFFF` or `dark1` exactly `#000000`; guidance prefers toned neutrals, but many schemes use the pure values on purpose |
+| `red-green` | report | `accent1` and `accent2` are a red and a green (hue, chroma at least 0.08) within 0.1 in lightness: a colour-blind risk |
+
+The failing rules guard readability, so they stop a merge; the report rules are guidance and print to stdout only (`--quiet` hides them; `--summary <file.md>` writes them as a markdown table for a PR). A scheme that already fails a rule and is not fixed in the pull request that adds the check is listed, with its reason, in `scripts/palette-known-failures.json`; the check fails when a new record fails and when a listed record no longer does (remove the entry then). Today three schemes are listed, all for `accent-lightness`: `deep-purple`, `luxury` and `pastel-red`. Fixing one is a gallery drawing change and is declared in its fragment.
+
 ## Reconciliation status
 
 The per-kind divergence between the gallery and this snapshot is in
