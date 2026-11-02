@@ -1,5 +1,0 @@
----
-type: added
-packages: [editor]
----
-CE-30: the editor for any page. `layout: "viewer"`: read-only, the slide with its name, the slide counter, Present and Expand (and Export or host buttons when the toolbar lists them). The Studio shows the editable deck name and the Expand button, and its shortcut sheet lists the same keys as `help`. `<opf-editor>`, the editor as a custom element with no framework: `import "@openpresentation/opf-editor/element/define"` defines the tag (or call `defineOpfEditorElement(name, { fonts, catalogs })` from `/element`; importing it defines nothing). Attributes `layout`, `toolbar`, `readonly`, `theme`, `density`, `slide`, `src` and `fonts`; the deck comes from the `document` property, `src` (fetched only when the page sets it) or an inline `<script type="application/json">` (YAML and Markdown too); every editor event is dispatched as a bubbling `opf-<name>` DOM event. The package playground shows the new toolbar items and exposes its editor as `window.opfEditor` for same-origin hosts. Guides: `docs/chrome-guide.md` (tasks, with runnable examples in `examples/chrome/`) and `docs/web-component.md`.
