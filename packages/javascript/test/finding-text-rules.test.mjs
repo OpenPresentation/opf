@@ -79,6 +79,12 @@ const GOLDEN = {
   "layout-failed": ["Slide 1 (layout `broken`) couldn't be laid out: Invalid composition.padding, so the geometry checks were skipped.", "fix the composition setting or content named above."],
   "reading-order-differs": ["`blocks.0` is read at position 1 but appears at position 2 on slide 2, so a screen reader reads the slide out of order.", "reorder the blocks so the reading order follows what people see, or pin them to layout regions."],
   "schema-without-keyword": ["must NOT be valid.", "inspect this schema constraint and preserve unrelated content."],
+  "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 20 px, 63% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
+  "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"left\"` in the slide's design, or cut it to a line or two."],
+  "tight-spacing-gap": ["Two blocks on slide 1 are 0.08 in apart, closer than 0.25 in, so they read as one crowded block.", "raise `composition.gap`, use fewer blocks or nested groups, or split the slide."],
+  "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
+  "layout-monotony": ["Slides 1 to 5 (5 in a row) all use layout `list`, so they look alike.", "give some of them the layout their content asks for (a comparison, a chart, a statement, a picture), or merge or split slides."],
+  "straight-quotes": ["`They called it \"the easiest setup we’ve done\".` uses straight quotation marks; this deck's language uses “…”.", "apply the quick fix, or type “ and ” instead."],
 };
 
 const firstOf = (name) => {
@@ -88,11 +94,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 77 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 82 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 77);
+	assert.equal(RULE_IDS.length, 82);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

@@ -24,6 +24,14 @@ const png = (width, height) => {
 };
 const person = (n) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: 'column' } });
 const withGallery = { catalogs: [gallery] };
+const longItems = [
+	'Enterprise renewals slipped by three weeks in the northern region after the pricing change',
+	'Two of the five largest accounts asked for a phased rollout before they commit to the upgrade',
+	'Support tickets about the migration tool doubled once the self-serve flow went live in May',
+	'The partner channel closed fewer deals than planned because enablement started a quarter late',
+	'Hiring for the platform team is behind plan, and two senior roles have been open since March',
+	'Cloud spend rose faster than usage, mostly from idle staging environments left running overnight',
+];
 const footer = { left: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, right: { text: '{{slide.number}}' } };
 
 /** Real `validate` calls. `name` is unique; `rule` is the rule the case must trigger; `pick` chooses among several findings of that rule. */
@@ -117,6 +125,12 @@ export const CASES = [
 	{ name: 'unused-beat', rule: 'opf/unused-beat', input: narrativeDeck({ slides: [{ title: 'One', beat: 'hook' }, { title: 'Two', beat: 'proof' }] }) },
 	{ name: 'empty-slide', rule: 'opf/empty-slide', input: deck([{ title: 'T', text: 'x' }, { id: 'blank-one' }]) },
 	{ name: 'language-tag', rule: 'opf/language-tag', input: deck([{ title: 'T', text: 'x' }], { language: { bcp47: 'fr-UK' } }) },
+	{ name: 'text-shrunk', rule: 'opf/text-shrunk', input: deck([{ title: 'Findings', blocks: [{ items: longItems }, { items: longItems }, { items: longItems }] }]) },
+	{ name: 'centered-body', rule: 'opf/centered-body', input: deck([{ title: 'Why now', items: longItems.slice(0, 3), design: { contentAlignment: 'center' } }]) },
+	{ name: 'tight-spacing-gap', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { gap: 0.01 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
+	{ name: 'tight-spacing-margin', rule: 'opf/tight-spacing', input: deck([{ title: 'Two options', composition: { padding: 0.02 }, blocks: [{ text: 'Build it in house.' }, { text: 'Buy a hosted service.' }] }]) },
+	{ name: 'layout-monotony', rule: 'opf/layout-monotony', input: deck(['Hiring', 'Budget', 'Roadmap', 'Risks', 'Asks'].map((title) => ({ title, layout: 'list', items: ['One point', 'Another point'] }))), options: withGallery },
+	{ name: 'straight-quotes', rule: 'opf/straight-quotes', input: deck([{ title: 'What customers said', text: 'They called it "the easiest setup we’ve done".' }]) },
 ];
 
 const finding = (ruleId, severity, category, path, message, extra = {}) => ({ ruleId, severity, category, scope: 'document', path, message, ...extra });
