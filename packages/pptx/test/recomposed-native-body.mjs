@@ -36,6 +36,16 @@ const layoutOf = (entries, slide) => {
   assert.equal(bodies.length, 3, 'one native body per list');
   const bound = bodies.filter(shape => /<p:ph type="body" idx="\d+"\/>/.test(shape));
   assert.equal(bound.length, 1, 'the first binds to the Body placeholder');
+  // The bound body draws where core measured it, as the text boxes beside it do: the same insets, anchor and paragraph spacing,
+  // with no space before or after a paragraph written explicitly, so the master's body style (spcBef 20%) never applies.
+  const format = shape => ({bodyPr: /<a:bodyPr\b[^>]*>/.exec(shape)[0], lstStyle: /<a:lstStyle>[\s\S]*?<\/a:lstStyle>/.exec(shape)[0], paragraphs: [...shape.matchAll(/<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g)].map(([pPr]) => pPr)});
+  for (const shape of bodies) {
+    const {paragraphs, lstStyle, bodyPr} = format(shape);
+    assert.equal(paragraphs.length, 6);
+    for (const pPr of [...paragraphs, lstStyle]) assert.match(pPr, /<a:spcBef><a:spcPts val="0"\/><\/a:spcBef><a:spcAft><a:spcPts val="0"\/><\/a:spcAft>/);
+    assert.match(bodyPr, /lIns="0" tIns="0" rIns="0" bIns="0"[^>]*anchor="t"/);
+  }
+  for (const other of bodies.filter(shape => shape !== bound[0])) assert.deepEqual(format(bound[0]), format(other), 'the placeholder is formatted as the text boxes are');
   const idx = /<p:ph type="body" idx="(\d+)"\/>/.exec(bound[0])[1];
   const layout = layoutOf(entries, 1);
   assert.equal(layout.name, 'Agenda beside (automatic grid)');

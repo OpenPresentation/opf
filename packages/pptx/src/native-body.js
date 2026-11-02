@@ -134,6 +134,8 @@ export function nativeTitleAutofit(xml, names) {
     ? shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>') : shape);
 }
 
+const NO_PARAGRAPH_SPACE = '<a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft>';
+
 /** Only prototype objects receive explicit no-autofit and paragraph typing defaults. */
 export function nativeBodyDefaults(xml, records) {
   if (!records?.size) return xml;
@@ -142,6 +144,10 @@ export function nativeBodyDefaults(xml, records) {
     const defaults = records.get(name);
     if (!defaults) return shape;
     shape = shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>');
+    // LH-91: no space before or after a paragraph, as core measured the lines. A body bound to a placeholder would otherwise take the
+    // master's body style (spcBef 20%), and each paragraph would sit lower than in a text box beside it.
+    shape = shape.replace(/<a:pPr\b([^>]*?)\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g, (pPr, empty) => empty !== undefined ? `<a:pPr${empty}>${NO_PARAGRAPH_SPACE}</a:pPr>`
+      : pPr.includes('<a:spcBef>') ? pPr : pPr.includes('</a:lnSpc>') ? pPr.replace('</a:lnSpc>', `</a:lnSpc>${NO_PARAGRAPH_SPACE}`) : pPr.replace(/^(<a:pPr\b[^>]*>)/, `$1${NO_PARAGRAPH_SPACE}`));
     const pPr = shape.match(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/)?.[0] ?? '<a:pPr/>';
     const paragraphDefault = pPr.replace(/<a:pPr\b/, '<a:defPPr').replace(/<\/a:pPr>/, '</a:defPPr>').replace(/<a:defRPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:defRPr>)/g, '');
     const withDefaults = paragraphDefault.endsWith('/>') ? paragraphDefault.slice(0, -2) + `>${defaults}</a:defPPr>` : paragraphDefault.replace('</a:defPPr>', `${defaults}</a:defPPr>`);
