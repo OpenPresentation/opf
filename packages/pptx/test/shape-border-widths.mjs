@@ -54,7 +54,7 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
     ['code panel', named(1, 'OPF code 1 panel'), emu(previewPx(previews[1], 'slides.1.code', 'rect'))],
     ['media frame', named(2, 'OPF media slides.2.video frame'), emu(previewPx(previews[2], 'slides.2.video', 'rect'))],
     ['timeline connector', named(3, 'OPF timeline 0 connector'), emu(previewPx(previews[3], 'slides.3.timeline', 'line'))],
-    ['unsupported payload rect', slides[4].find(shape => /^Shape \d+$/.test(shape.name) && shape.geometry === 'rect'), emu(previewPx(previews[4], 'slides.4.chart', 'rect'))],
+    ['unsupported payload rect', named(4, 'OPF placeholder panel'), emu(previewPx(previews[4], 'slides.4.chart', 'rect'))],
     ['image placeholder', named(5, 'OPF image placeholder 1'), emu(1)],
   ];
   for (const [label, shape, expected] of expectations) {

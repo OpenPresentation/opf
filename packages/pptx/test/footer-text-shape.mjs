@@ -84,7 +84,8 @@ for (const mode of modes) for (const [id, deck, expected] of cases) {
       assert.match(shape, /<a:spLocks noGrp="1"\/>/);
       assert.doesNotMatch(shape, /<a:fld\b/, 'Literal footer target is not a live-field shape');
       assert.equal(shape.split(literalToken).length - 1, 1);
-      removed++; return shape.replace(literalToken, '');
+      // Without the placeholder the footer is an ordinary text shape, so it is a text box (LH-12).
+      removed++; return shape.replace(literalToken, '').replace('<p:cNvSpPr>', '<p:cNvSpPr txBox="1">');
     });
     assert.deepEqual(after[part], strToU8(desired), `${file}: ${part} differs only by literal ftr token`);
   }
