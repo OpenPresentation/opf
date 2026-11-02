@@ -86,14 +86,14 @@ const rtl = await read(deck('ar')), ltr = await read(deck('en'));
   assert.ok(alignments.length > 0 && alignments.every(align => align === 'left'), 're-import reads right alignment of rtl cells as the logical start');
 }
 
-// Column charts reverse their categories; bar charts keep theirs.
+// Column charts reverse their categories; bar charts read top to bottom in either direction (LH-59: reversed category axis).
 {
   const orientations = slide => {
     const rel = rtl.xml[`ppt/slides/_rels/slide${slide}.xml.rels`].match(/charts\/(chart\d+\.xml)/)[1];
     return [...rtl.xml[`ppt/charts/${rel}`].matchAll(/<c:orientation val="(\w+)"\/>/g)].map(match => match[1]);
   };
   assert.deepEqual(orientations(4), ['maxMin', 'minMax'], 'column: reversed categories, value axis unchanged');
-  assert.deepEqual(orientations(6), ['minMax', 'minMax'], 'bar charts keep their vertical category axis');
+  assert.deepEqual(orientations(6), ['maxMin', 'minMax'], 'bar charts list their categories top to bottom, as in a left-to-right deck');
   const rel = ltr.xml['ppt/slides/_rels/slide4.xml.rels'].match(/charts\/(chart\d+\.xml)/)[1];
   assert.deepEqual([...ltr.xml[`ppt/charts/${rel}`].matchAll(/<c:orientation val="(\w+)"\/>/g)].map(match => match[1]), ['minMax', 'minMax']);
 }
