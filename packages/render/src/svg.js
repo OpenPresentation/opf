@@ -907,9 +907,10 @@ function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
-    // region's flow cell; core never gives an item of a bled region a card).
+    // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
+    // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
     const frame=item.frameBox;
-    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
+    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.roles.neutrals.card.hex,stroke:bound.design.roles.neutrals.cardBorder.hex,...traceAttrs(options,item.path)}) : '';
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
     const drawn=surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
     // OPF 0.19 (RR-81): with trace, everything an item of a layout template region draws (card, payload, caption) is
@@ -1398,8 +1399,10 @@ function renderMetric(item, box, bound, options) {
   if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
   const children=[];
   // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
-  const trendMark=metricTrendMark(layout,bound,options);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,bound.design.backgroundColor??bound.design.colors.background):bound.design.colors.text;
+  // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
+  const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
+  const trendMark=metricTrendMark(layout,bound,backdrop);
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1441,8 +1444,8 @@ function renderMetric(item, box, bound, options) {
 }
 
 // The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
-function metricTrendMark(layout,bound,options) {
-  return coreMetricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
+function metricTrendMark(layout,bound,background) {
+  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
 }
 
 function renderQuote(item, box, bound, options) {

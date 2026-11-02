@@ -52,7 +52,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -2315,16 +2315,18 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
-    const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText} : slideContext;
+    // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
+    const cardNeutral = slideContext.roles.neutrals?.card;
+    const itemContext = item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText, ...(cardNeutral ? {cardFill: cardNeutral.hex} : {})} : slideContext;
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     if (item.frameBox) {
       const frame=item.frameBox;
       context.cardTags.set(`OPF card ${item.path}`,item.path);
       const paint=value=>({color:normalizeHex(value),transparency:/^#[0-9a-f]{8}$/i.test(value)?(1-parseInt(value.slice(7),16)/255)*100:0});
-      const surface=itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
+      const surface=cardNeutral?.hex??itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
       slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
         rectRadius:8*Math.min(widthInches,heightInches)/720,
-        fill:paint(surface),line:{...paint(`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
+        fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
     if (nativeTitle) {
       addNativeTitle(slide, item, itemContext, options, context);
@@ -2934,8 +2936,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
   const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
-  // WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
-  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legibleLead: chartLeadFromScheme(chart.colors, context.colorScheme, colorContext)});
+  // WI-5 (P18, D3) and LH-55: every series from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
+  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: chartSchemeSeries(chart.colors, context.colorScheme, colorContext)});
   const palette = adjustedPalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
@@ -3448,8 +3450,10 @@ function addMetricPayload(slide,value,layout,context,path,options) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,`#${normalizeHex(context.colors.background)}`).slice(1).toUpperCase():context.textColor;
+  // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
+  const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
+  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
