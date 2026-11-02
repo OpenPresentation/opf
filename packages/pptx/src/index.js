@@ -2335,12 +2335,12 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.nativeBodies.set(body.objectName, body.defaults);
       if (plan === nativeBody && !plan.carded) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
+      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?(item.titleSplit?'title':item.field):undefined,headingLines:titleSplitLines(item,geometry.items,opfSlide.title),color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
-      const objectName = `OPF heading ${item.path} line 0`;
-      context.headingTags.set(objectName,{v:1,group:item.path,field:item.field,line:0,count:1});
+      const split = titleSplitLines(item, geometry.items, opfSlide.title), objectName = `OPF heading ${item.path} line ${split?.offset ?? 0}`;
+      context.headingTags.set(objectName,{v:1,group:item.path,field:split?'title':item.field,line:split?.offset??0,count:split?.count??1});
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
         ...nativeFontOptions(item.textStyle),
@@ -3206,6 +3206,18 @@ function assertXmlText(text, path) {
   if(invalid)throw new OPFPptxError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`,{path});
 }
 
+// LH-76: core draws a "Topic: qualifier" title that would wrap as two items with the title's path (`titleSplit`): the topic as the
+// title and the qualifier as a subtitle. Their lines are tagged as one title group, the topic's first, its last line joined to the
+// qualifier by the authored colon (boundary `split`), so import restores the whole authored title. The Title placeholder holds the topic.
+function titleSplitLines(item, items, title) {
+  if (!item.titleSplit || typeof title !== 'string') return undefined;
+  const part = name => items.find(other => other.path === item.path && other.titleSplit?.part === name);
+  const topic = part('topic'), qualifier = part('qualifier');
+  if (!topic?.text?.lines || !qualifier?.text?.lines) return undefined;
+  const count = topic.text.lines.length + qualifier.text.lines.length;
+  return item === topic ? {offset: 0, count, join: {boundary: 'split', separator: title.slice(topic.titleSplit.end, qualifier.titleSplit.start)}} : {offset: topic.text.lines.length, count};
+}
+
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
 // RR-88: a plain-string title that wraps over several lines, with no hard break, overflow, rich runs or right-to-left line.
@@ -3253,8 +3265,9 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     // Logical alignment (RR-05): a right-to-left line starts at the right edge; furniture and metrics pass physical alignments and report no line directions.
     const placed=fit.placement?.lines[index],alignment=placed?.alignment??physicalAlignment(fit.placement?.alignment??config.align??context.contentAlignment??'left',fit.directions?.[index]),factor=alignment==='right'?1:alignment==='center'?.5:0;
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
-    const objectName=config.heading?`OPF heading ${config.path} line ${index}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
-    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:index,count:fit.lines.length,...boundary});
+    const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
+    const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
+    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
