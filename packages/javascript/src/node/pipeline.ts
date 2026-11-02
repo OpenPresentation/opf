@@ -4,7 +4,7 @@ import { type Catalog, type Finding, type Presentation, type ValidateOptions, ty
 import { defaultCatalogs } from "./catalogs.js";
 import { runImport } from "./pptx-import.js";
 import { OPFApiError } from "../api-errors.js";
-import { type ExportFile, type ExportFontSummary, type ExportOptions, type ResolvedExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
+import { type ExportContinuedSlide, type ExportFile, type ExportFontSummary, type ExportOptions, type ResolvedExportOptions, VERSIONS, resolveExportOptions, runExport } from "./export.js";
 import { listFontDirectories } from "./fonts.js";
 import { PPTX_PACKAGE, type Peer, type PptxModule, type Renderer, loadPptx, loadRenderer } from "./peers.js";
 import { Reporter } from "./reporter.js";
@@ -28,6 +28,8 @@ export interface ExportResult {
 	skippedHidden: number[];
 	/** With `paginate`: the pages the slides were split into. */
 	pagination?: { pages: unknown };
+	/** With `paginate: "blocks"` (the default): each slide that was continued on further slides (LH-90), with one-based slide numbers. */
+	continued?: ExportContinuedSlide[];
 	/** `pdf`: the mode used. */
 	pdf?: { mode: "vector" | "raster" };
 	/** The engines that drew the files. */
@@ -93,6 +95,7 @@ export async function runPreparedExport(prepared: PreparedExport, presentation: 
 		fonts: run.fonts as ExportFontSummary,
 		skippedHidden: run.skippedHidden,
 		...(run.pagination ? { pagination: run.pagination } : {}),
+		...(run.continued ? { continued: run.continued } : {}),
 		...(run.pdf ? { pdf: run.pdf } : {}),
 		...VERSIONS(renderer, pptx),
 	};

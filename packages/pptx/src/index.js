@@ -2335,9 +2335,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // RR-81: a slide on a 0.19 template uses that template's native slide layout (src/template-layouts.js), whose placeholders
   // core composes with this slide's options (canvas, the deck's header and footer, direction) and its placed-image bands.
   let template = slideTemplate(slideContext.core);
-  const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto';
+  // LH-91: a slide recomposed at the readability floor (LH-83, geometry.recomposed) is drawn as the automatic grid and has no
+  // regions, so its native body is planned as an automatic slide's is. It keeps its template's slide layout (the layout tag is
+  // what import reads the slide's layout from), in a variant whose Body placeholder sits at the recomposed body's box.
+  const recomposed = template !== undefined && geometry.recomposed !== undefined;
+  const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto' || recomposed;
   const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic}) : undefined;
-  if (template && nativeBody) template = {...template, key: `${template.key}\u0000native-body:${nativeBody.region}`, nativeBodyRegion: nativeBody.region};
+  if (template && nativeBody) template = recomposed
+    ? {...template, key: `${template.key}\u0000recomposed-native-body`, recomposedBody: {box: nativeBody.box, anchor: nativeBody.anchor, style: {...nativeBody.item.textStyle, fontSize: nativeBody.item.text.fontSize, alignment: nativeBody.item.alignment}}}
+    : {...template, key: `${template.key}\u0000native-body:${nativeBody.region}`, nativeBodyRegion: nativeBody.region};
   if (template) context.templateSlides[slideIndex] = {template, areaOptions: {...composeOptions, placements: placedImageBands(opfSlide)}};
   else if (automatic) context.automaticSlides[slideIndex] = {areaOptions: composeOptions, title: geometry.items.find(item => item.field === 'title'), ...(nativeBody ? {nativeBody} : {})};
   // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).

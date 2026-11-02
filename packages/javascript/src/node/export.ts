@@ -7,7 +7,7 @@
 // caller names, so the same presentation gives the same bytes on every machine.
 import { statSync } from "node:fs";
 import path from "node:path";
-import { type Catalog, type Fonts, paginate } from "../core.js";
+import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
 import { createImageResolver } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
 import { OPFApiError } from "../api-errors.js";
@@ -41,8 +41,13 @@ export interface ExportOptions {
 	slides?: SlideSelection;
 	/** Write hidden slides too (`svg`, `png`, `pdf`). */
 	includeHidden?: boolean;
-	/** Split overflowing slides with the same fonts before drawing, as `opf paginate` does. */
-	paginate?: boolean;
+	/**
+	 * How slides that do not fit are split before drawing, with the same fonts. `"blocks"` (the default, LH-90): a slide of two or more
+	 * sibling blocks of one kind (eight timelines, five tables) that overflows at its readability floor continues on further slides,
+	 * split between whole blocks, and `continued` lists it; every other slide is drawn as written. `true`: every overflowing slide is
+	 * split, as `opf paginate` does. `false`: every slide is drawn as written, overflowing or not.
+	 */
+	paginate?: boolean | "blocks";
 	/** Pixel scale of `png` and of a raster `pdf` (0.1 to 8; 1 draws the 1280 x 720 reference slide at 1280 x 720 pixels). */
 	scale?: number;
 	/** `pdf`: draw each slide as a picture (`true`) instead of selectable vector text (the default). */
@@ -121,10 +126,26 @@ export interface ExportFontSummary {
 	scripts?: unknown;
 }
 
+/** LH-90: a slide the export continued on further slides (`paginate: "blocks"`), with one-based slide numbers. */
+export interface ExportContinuedSlide {
+	/** The slide in the presentation. */
+	slide: number;
+	/** The slides it was drawn as, in the output. */
+	slides: number[];
+	/** The lead kind of its blocks: each page holds whole units of a block of this kind and the blocks that follow it. */
+	kind: string;
+	/** How many of its blocks each of those slides holds. */
+	blocks: number[];
+	/** How many units (blocks of `kind`) each of those slides holds. */
+	units: number[];
+}
+
 export interface ExportRun {
 	files: ExportFile[];
 	fonts?: ExportFontSummary;
 	pagination?: { pages: unknown };
+	/** The slides continued on further slides (`paginate: "blocks"`, the default); absent when none was. */
+	continued?: ExportContinuedSlide[];
 	pdf?: { mode: "vector" | "raster" };
 	skippedHidden: number[];
 	/** Set when drawing or paginating threw: the reporter holds the error finding and `files` is empty. */
@@ -203,6 +224,7 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const format = oneOf("format", options.format, EXPORT_FORMATS);
 	if (!format) throw invalid("An export needs options.format: svg, png, pdf or pptx.");
 	if (options.raster !== undefined && typeof options.raster !== "boolean") throw invalid("raster must be true or false.");
+	if (options.paginate !== undefined && typeof options.paginate !== "boolean" && options.paginate !== "blocks") throw invalid('paginate must be true, false or "blocks".');
 	const charts = oneOf("charts", options.charts, ["auto", "native", "picture"] as const);
 	const provenance = oneOf("provenance", options.provenance, ["full", "references-only", "none"] as const);
 	const images = oneOf("images", options.images, ["compatible", "preserve"] as const);
@@ -302,13 +324,42 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	});
 
 	let pagination: { pages: unknown } | undefined;
-	if (options.paginate) {
+	let continued: ExportContinuedSlide[] | undefined;
+	if (options.paginate === true) {
 		try {
 			const result = paginate(deck, { fonts: handle as Fonts, catalogs });
 			deck = result.presentation;
 			pagination = { pages: result.pages };
 		} catch (error) {
 			reportThrown(reporter, "render", error);
+			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
+		}
+	} else if (options.paginate !== false) {
+		// LH-90: an overfull slide of block units (sibling blocks of one kind, each with the blocks after it) continues on further slides, so the preview and the PPTX draw
+		// readable pages instead of overlapping bands. Each continued slide is reported, since the slide count changes.
+		const source = format === "pptx" ? "pptx" : "render";
+		try {
+			const result = continueOverfull(deck, { fonts: handle as Fonts, catalogs, ...(date ? { date } : {}) });
+			if (result.continued.length) {
+				deck = result.presentation;
+				continued = result.continued.map((entry) => ({ slide: entry.sourceSlideIndex + 1, slides: entry.slideIndices.map((index) => index + 1), kind: entry.kind, blocks: entry.blocks.map((page) => page.length), units: entry.units }));
+				for (const entry of continued) {
+					const units = entry.units.reduce((sum, count) => sum + count, 0);
+					const blocks = entry.blocks.reduce((sum, count) => sum + count, 0);
+					const held = blocks === units ? `${units} ${entry.kind} blocks` : `${units} ${entry.kind} blocks with the ${blocks - units} blocks that follow them`;
+					reporter.add(source, {
+						code: "slide-continued",
+						path: `slides.${entry.slide - 1}`,
+						slides: entry.slides,
+						kind: entry.kind,
+						blocks: entry.blocks,
+						units: entry.units,
+						message: `Slide ${entry.slide} does not fit at the readability floor, so its ${held} are drawn on ${entry.slides.length} slides (${entry.slides.join(", ")}) with ${entry.units.join(", ")} ${entry.kind} blocks per slide, never splitting one; the deck has ${entry.slides.length - 1} more slide${entry.slides.length === 2 ? "" : "s"}.`,
+					});
+				}
+			}
+		} catch (error) {
+			reportThrown(reporter, source, error);
 			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
 		}
 	}
@@ -325,7 +376,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		throw new OPFApiError(skippedHidden.length ? (ctx.flags ? "Every slide is hidden. Use --include-hidden to write them, or --slides to name slides." : "Every slide is hidden. Use includeHidden to write them, or slides to name slides.") : "The presentation has no slides.", skippedHidden.length ? "all-slides-hidden" : "no-slides");
 
 	const stem = deckStem(options.name === undefined ? deck : { filename: options.name }, "-");
-	const run = (extra: Partial<ExportRun> & { files: ExportFile[] }): ExportRun => ({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden, ...extra });
+	const run = (extra: Partial<ExportRun> & { files: ExportFile[] }): ExportRun => ({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), ...(continued ? { continued } : {}), skippedHidden, ...extra });
 	try {
 		if (format === "pptx") {
 			requirePptxOptions(pptx as NonNullable<typeof pptx>, options, ctx.flags);
