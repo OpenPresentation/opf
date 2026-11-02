@@ -479,8 +479,12 @@ export interface CompositionCandidate {
 export interface CompositionDecision {
   path: string;
   mode: NonNullable<Composition['mode']> | 'regions';
-  /** `chart-primary`: the root split a primary chart from a synthetic container of the other nodes (design.chartPrimary). */
-  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions' | 'chart-primary';
+  /**
+   * `chart-primary`: the root split a primary chart from a synthetic container of the other nodes (design.chartPrimary).
+   * `table-width` (LH-44): the grid of `selectedColumns` gave a table less than its words need, so the table took its natural width
+   * beside a column of the other blocks, or the whole width between rows of them.
+   */
+  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions' | 'chart-primary' | 'table-width';
   selectedColumns?: number;
   /** Only candidates actually evaluated by automatic selection, in tie-break order. */
   candidates: CompositionCandidate[];
@@ -2450,8 +2454,14 @@ export interface TableLayout {
    * word at the table's type size, and the preview and the PPTX export draw the same widths.
    */
   columnWidths: number[];
-  /** WI-5: true when a word is wider than its cell at the type size the table settled on (the last resort of a table that cannot fit), so a line breaks inside the word. */
+  /** WI-5: true when a word is wider than its cell at the type size the table settled on (the last resort of a table that cannot fit), so a line breaks inside the word. LH-44: the table then reports `overflow`. */
   splitsWords: boolean;
+  /** LH-44: the sum of the columns' unwrapped widths (every cell on one line) at the settled type size: the width the table asks for. */
+  naturalWidth: number;
+  /** LH-44: the sum of the columns' minimum widths (each its longest word plus its padding) at the settled type size: below it a word breaks. */
+  minimumWidth: number;
+  /** LH-44: the height the rows' text and insets take at the settled type size, before the preferred 54 px row: the height the table needs. */
+  naturalHeight: number;
 }
 
 /** Shared cell geometry and font fitting for SVG, native PPTX and pagination.
@@ -2520,6 +2530,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const padding=horizontalPadding(cell),slack=.5*scale;
     return {min:widest>0?widest+padding+slack:padding,max:Math.max(longest+padding+slack,padding)};
   };
+  let naturalWidth=0,minimumWidth=0;
   const sizeColumns=()=>{
     const min=Array<number>(columnCount).fill(0),max=Array<number>(columnCount).fill(0),demands=cells.map(demand);
     cells.forEach((cell,index)=>{if(cell.colSpan===1){min[cell.column]=Math.max(min[cell.column]!,demands[index]!.min);max[cell.column]=Math.max(max[cell.column]!,demands[index]!.max);}});
@@ -2545,6 +2556,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     else widths=min.map(value=>value*total/Math.max(minTotal,Number.EPSILON));
     columnWidths.splice(0,columnCount,...widths);
     for(const cell of cells)cell.width=sum(columnWidths.slice(cell.column,cell.column+cell.colSpan))-horizontalPadding(cell);
+    naturalWidth=maxTotal;minimumWidth=minTotal;
     return min;
   };
   // Whether some word is wider than its cell at the current trial size: the text would break inside the word.
@@ -2572,11 +2584,13 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   for(let r=0;r<needed.length;r++)needed[r]=Math.min(preferred[r]!,needed[r]!);
   const sum=(values:number[])=>values.reduce((a,b)=>a+b,0);
   const preferredTotal=sum(preferred),naturalTotal=sum(natural),neededTotal=sum(needed);
+  // LH-44: a row is never shorter than its text at the floor plus its insets (`needed`). Rows that do not fit at that height are
+  // not squeezed over their text: the table keeps them, runs past its box and reports overflow.
   const heights=preferred.map((height,r)=>preferredTotal<=box.height?height:naturalTotal<=box.height
     ? natural[r]!+(height-natural[r]!)*(box.height-naturalTotal)/Math.max(Number.EPSILON,preferredTotal-naturalTotal)
     : neededTotal<=box.height
     ? needed[r]!+(natural[r]!-needed[r]!)*(box.height-neededTotal)/Math.max(Number.EPSILON,naturalTotal-neededTotal)
-    : needed[r]!*box.height/neededTotal);
+    : needed[r]!);
   const ys=[box.y];for(const height of heights)ys.push(ys.at(-1)!+height);
   let overflow=false;
   const rows:TableRowLayout[]=heights.map((height,r)=>({box:{x:box.x,y:ys[r]!,width:box.width,height},cells:[]}));
@@ -2591,7 +2605,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     overflow ||= cell.width<=0||available<=0||fit.overflow;
     rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
-  return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false};
+  overflow ||= sum(heights)>box.height+.01;
+  return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false,naturalWidth,minimumWidth,naturalHeight:naturalTotal};
   };
   // Largest size first, one reference pixel at a time: the first size at which the text and rows fit the box is the table's size.
   for(let step=0;;step++){
@@ -2599,8 +2614,9 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     trial=last?snapFontSizeUp(minimum):gridFontSize(raw,minimum);
     sizeColumns();
     const layout=place(),splits=splitsWords();
-    // A word that does not fit its column shrinks the table, within the fit rules, before any line breaks inside it.
-    if(last||(!layout.overflow&&!splits))return {...layout,splitsWords:splits};
+    // A word that does not fit its column shrinks the table, within the fit rules, before any line breaks inside it. LH-44: a word
+    // still too wide at the floor is overflow, so automatic composition gives the table another cell and a fixed cell reports it.
+    if(last||(!layout.overflow&&!splits))return {...layout,overflow:layout.overflow||splits,splitsWords:splits};
   }
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
@@ -2935,7 +2951,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean; gap?: number };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -3061,12 +3077,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (!node.children) return leafScore(node, box, settings, penalties);
     const own = inheritedSettings(settings, node.composition), area = inset(box, own), slotCount = Math.max(node.children.length, 0);
     const cols = defaultColumns(slotCount, area, own);
-    const boxes = gridBoxes(slotCount, area, cols, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
+    const boxes = gridBoxes(slotCount, area, cols, node.gap ?? (own.gap ?? 1 / 30) * Math.min(box.width, box.height), own.weights ?? [], modeFor(own) === "column");
     return node.children.reduce((score, child, index) => score + scoreNode(child, boxes[index]!, own, penalties), 0);
   };
   // WI-1: blocks stacked in one column of `area` at the heights they need, one gap apart, from the top (anchor `top`,
-  // `middle` or `bottom` places a stack that fits). Text, lists, quotes, metrics and code are measured; charts, pictures,
-  // tables, timelines and videos keep at least an equal share and take whatever the measured blocks leave. When the needs do not
+  // `middle` or `bottom` places a stack that fits). Text, lists, quotes, metrics, code and (LH-44) tables are measured; charts, pictures,
+  // timelines and videos keep at least an equal share and take whatever the measured blocks leave. When the needs do not
   // fit, every block gives up the same fraction of what it can give up above its height at the minimum font size
   // (shareHeights), so a short block keeps nearly its need and none overflows while the floors fit.
   // The leaves stackedBoxes gave the whole height they need at their role size. Like a template's auto row, such a cell is as tall
@@ -3100,7 +3116,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       heights = nodes.map((_, index) => elastic[index] ? share : rest[measured.indexOf(index)]!);
     }
     const spare = space - heights.reduce((sum, size) => sum + size, 0);
-    if (stretch && spare > 0) heights = heights.map((size, index) => elastic[index] ? size + spare / stretch : size);
+    // LH-44: a table is measured (it gets at least its rows at the floor) and still takes its share of the spare height, as before.
+    const grows = nodes.map((node, index) => elastic[index] || (!node.children && node.field === 'table')), growing = grows.filter(Boolean).length;
+    if (growing && spare > 0) heights = heights.map((size, index) => grows[index] ? size + spare / growing : size);
     const used = heights.reduce((sum, size) => sum + size, 0) + between * (nodes.length - 1);
     nodes.forEach((node, index) => { if (!node.children && !elastic[index] && heights[index]! >= needs[index]! - 1e-6) contentSized.add(node); });
     let y = area.y + Math.max(0, anchor === 'middle' ? (area.height - used) / 2 : anchor === 'bottom' ? area.height - used : 0);
@@ -3113,6 +3131,31 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   //    when that shortens the longer block and adds the shorter at most one line; peers keep equal widths.
   // Explicit weights, a layout and every other row keep the equal tracks.
   const WEIGHTED_DEMAND_RATIO = 2.5, WEIGHTED_SHARES = [.55, .6, .65, .7];
+  // LH-44: the widest share of a row or area a table asks for, and the type its neighbours may give up for it (reference px, summed).
+  const TABLE_MAX_SHARE = .65, TABLE_NEIGHBOUR_REDUCTION = 4;
+  const tableCardInset = () => hasCards ? 2 * CARD_INSET * scale : 0;
+  // LH-44: in one row of blocks a table asks for its natural width (every cell on one line, plus a card's insets), up to
+  // TABLE_MAX_SHARE of the row; the blocks beside it share the rest. A table its equal cell holds keeps that cell. The table widens
+  // as far as the blocks beside it keep their fit (no new overflow, at most TABLE_NEIGHBOUR_REDUCTION px of type given up in all), and
+  // to the width its words need (its minimum) as long as they do not overflow.
+  const tableRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
+    if (!autoComposition() || settings.weights?.length || count < 2 || cols !== count || nodes.length !== count) return undefined;
+    const tables = nodes.flatMap((node, index) => !node.children && node.field === 'table' ? [index] : []);
+    if (tables.length !== 1) return undefined;
+    const equal = gridGeometry(count, area, cols, rowGap, [], false).boxes;
+    const index = tables[0]!, total = equal.reduce((sum, box) => sum + box.width, 0), cardInset = tableCardInset();
+    const measured = measureTable(nodes[index]!, total, settings);
+    if (!measured) return undefined;
+    const want = Math.min(TABLE_MAX_SHARE * total, measured.naturalWidth + cardInset), least = Math.min(want, measured.minimumWidth + cardInset);
+    if (want <= equal[index]!.width + scale) return undefined;
+    const others = nodes.flatMap((_, other) => other === index ? [] : [other]);
+    const weightsAt = (width: number) => nodes.map((_, other) => other === index ? width : (total - width) / others.length);
+    const neighbours = (width: number) => others.reduce((sum, other) => sum + scoreNode(nodes[other]!, gridGeometry(count, area, cols, rowGap, weightsAt(width), false).boxes[other]!, settings), 0);
+    const baseline = neighbours(equal[index]!.width), from = Math.max(least, equal[index]!.width), step = (want - from) / 4;
+    for (let width = want; width > from + scale; width -= step) if (neighbours(width) <= baseline + TABLE_NEIGHBOUR_REDUCTION) return weightsAt(width);
+    // Words before type: the minimum width when the neighbours keep their fit, if at a smaller size.
+    return least > equal[index]!.width + scale && neighbours(least) < baseline + 1000 ? weightsAt(least) : undefined;
+  };
   const autoRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
     if (!autoComposition() || settings.weights?.length || count < 2 || count > 3 || cols !== count || nodes.length !== count) return undefined;
     const equal = gridGeometry(count, area, cols, rowGap, [], false).boxes;
@@ -3126,6 +3169,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const freed = media.reduce((sum, index) => sum + equal[index]!.width - wholeWidths[index]!, 0);
       return nodes.map((_, index) => media.includes(index) ? wholeWidths[index]! : equal[index]!.width + freed / others.length);
     }
+    const table = tableRowWeights(nodes, count, cols, area, rowGap, settings);
+    if (table) return table;
     const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
     if (count !== 2 || !nodes.every(prose)) return undefined;
     const need = (node: Pending, width: number) => naturalHeight(node, width, hasCards, undefined, settings);
@@ -3141,6 +3186,40 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
   };
+  // LH-44: when the grid the scores chose gives a table a cell narrower than its words (the sum of its columns' minimum widths at the
+  // starting size, plus a card's insets), the arrangement changes. Two candidates are scored against that grid and the lowest wins:
+  //  - beside: the table at its natural width (at least its minimum, at most TABLE_MAX_SHARE of the area) and the other blocks
+  //    stacked in one column beside it, on the side the table's place in the reading order gives it;
+  //  - across: the table across the whole width, the blocks before it in a row above and the blocks after it in a row below.
+  // Only a slide with no layout and one table changes (an `auto` container, or a `grid` one with no column count), and the blocks
+  // keep their reading order.
+  let spannedContainer = false;
+  const tableArrangement = (nodes: Pending[], area: LayoutBox, settings: Composition, between: number, cols: number, gridScore: number): { nodes: Pending[]; settings: Composition } | undefined => {
+    if (!autoComposition() || settings.weights?.length) return undefined;
+    const tables = nodes.flatMap((node, index) => !node.children && node.field === 'table' ? [index] : []);
+    if (tables.length !== 1) return undefined;
+    const index = tables[0]!, table = nodes[index]!, cardInset = tableCardInset();
+    const measured = measureTable(table, Math.max(scale, area.width - cardInset), settings);
+    if (!measured) return undefined;
+    const offered = gridGeometry(nodes.length, area, cols, between, (modeFor(settings) === 'auto' ? autoRowWeights(nodes, nodes.length, cols, area, between, settings) : undefined) ?? [], false).boxes[index]!;
+    if (offered.width - cardInset >= measured.minimumWidth - .5) return undefined;
+    const band = (members: Pending[], mode: Composition['mode']): Pending => members.length === 1 ? members[0]! : { field: 'blocks', type: 'group', value: members.map(member => member.payload), path, payload: {}, children: members, composition: mode ? { mode } : {}, synthetic: true, gap: between };
+    const scored = (members: Pending[], own: Composition, boxes: LayoutBox[]) => members.reduce((sum, member, i) => sum + scoreNode(member, boxes[i]!, own), 0);
+    const options: { nodes: Pending[]; settings: Composition; score: number }[] = [];
+    const others = nodes.filter((_, other) => other !== index), track = Math.max(scale, area.width - between);
+    if (measured.minimumWidth + cardInset <= TABLE_MAX_SHARE * track) {
+      const share = Math.min(TABLE_MAX_SHARE, (measured.naturalWidth + cardInset) / track), first = index < nodes.length / 2;
+      const members = first ? [table, band(others, 'column')] : [band(others, 'column'), table];
+      const own: Composition = { ...settings, mode: 'row', weights: first ? [share, 1 - share] : [1 - share, share] };
+      options.push({ nodes: members, settings: own, score: scored(members, own, gridBoxes(2, area, 2, between, own.weights!, false)) });
+    }
+    const before = nodes.slice(0, index), after = nodes.slice(index + 1);
+    const rows = [...before.length ? [band(before, before.length <= 3 ? 'row' : undefined)] : [], table, ...after.length ? [band(after, after.length <= 3 ? 'row' : undefined)] : []];
+    const column: Composition = { ...settings, mode: 'column' };
+    options.push({ nodes: rows, settings: column, score: scored(rows, column, stackedBoxes(rows, area, between, column)) });
+    const chosen = options.reduce((a, b) => b.score < a.score ? b : a);
+    return chosen.score < gridScore ? chosen : undefined;
+  };
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
@@ -3155,8 +3234,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // WI-1: one column of blocks is placed stacked at the heights they need (stackedBoxes), never smaller per block than the
     // equal rows the candidates are scored on; weights on a column win.
     const stacks = !hasRegions && count === nodes.length && count > 1 && !(mode === 'column' && settings.weights?.length);
+    let best = Infinity;
     if (mode === "auto" && !hasRegions) {
-      let best = Infinity;
       for (let candidate = 1; candidate <= Math.min(count, settings.columns ?? 6); candidate++) {
         const boxes = gridBoxes(count, area, candidate, actualGap, settings.weights ?? [], false);
         const emptySlots = (Math.ceil(count / candidate) * candidate - count) * 2;
@@ -3166,10 +3245,22 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         if (score < best) { best = score; cols = candidate; }
       }
     }
-    if (recorded) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
+    // LH-44: an automatic or a `grid` arrangement whose column count is not set gives way when it leaves a table too narrow for its
+    // words (a grid's own columns are not scored, so either table candidate is better than its split words).
+    const spanning = (mode === 'auto' || mode === 'grid') && !hasRegions && count === nodes.length && count > 1 && settings.columns === undefined ? tableArrangement(nodes, area, settings, actualGap, cols, best) : undefined;
+    if (spanning) {
+      if (recorded) decisions?.push({path:containerPath,mode,reason:'table-width',selectedColumns:cols,candidates:candidates ?? []});
+      spannedContainer = recorded;
+      arrange(spanning.nodes, area, spanning.settings, 0, actualGap, containerPath, recorded);
+      return;
+    }
+    // LH-44: the arrangement tableArrangement chose records its decision above, and its flow here.
+    const decided = spannedContainer;
+    spannedContainer = false;
+    if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
       reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
-    const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
+    const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     if (cols === 1 && stacks) {
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
@@ -3214,7 +3305,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
-      arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
+      arrange(node.children, inner, own, 0, node.gap ?? (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
       return;
     }
     // A card fills its whole cell (`frame`) even when the region's anchor places a shorter payload inside it. Every filled card starts
@@ -3376,14 +3467,34 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
   // Blocks whose height is measured from their content (a group when all its blocks are); the others take any height.
-  const MEASURED_FIELDS = new Set(['text', 'items', 'bullets', 'quote', 'metric', 'code']);
+  const MEASURED_FIELDS = new Set(['text', 'items', 'bullets', 'quote', 'metric', 'code', 'table']);
   const measuredNode = (node: Pending): boolean => node.children ? node.children.length > 0 && node.children.every(measuredNode) : MEASURED_FIELDS.has(node.field);
+  // LH-44: a table measured as layoutTable lays it out at `width`: in a box taller than it asks for (its rows at the starting size,
+  // `naturalHeight`, are its need; the widths it asks for), or, `atFloor`, in a box too short for it, which steps its type to the floor
+  // and keeps every row at its floor (its line height plus its insets). Undefined for a table layoutTable rejects; the caller keeps its estimate.
+  const tableMeasures = new WeakMap<Pending, Map<string, TableLayout | undefined>>();
+  const measureTable = (node: Pending, width: number, settings: Composition, atFloor = false): TableLayout | undefined => {
+    const cache = tableMeasures.get(node) ?? new Map<string, TableLayout | undefined>(), key = `${round(width)}:${settings.minFontSize ?? 16}:${atFloor}`;
+    tableMeasures.set(node, cache);
+    if (!cache.has(key)) {
+      let measured: TableLayout | undefined;
+      try { measured = width > 0 ? layoutTable(node.value, { x: 0, y: 0, width, height: atFloor ? scale : 1e6 }, { scale, minFontSize: settings.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, path: node.path, presentation: options.presentation }) : undefined; }
+      catch { measured = undefined; }
+      cache.set(key, measured);
+    }
+    return cache.get(key);
+  };
   // `atFloor` (WI-1): the height at the minimum font size instead, which says how far the block can shrink; text and lists
   // are measured there, other payloads scale their need by the minimum over the starting size.
   const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition, atFloor = false, sizeOverride?: number): number => {
     const pad = cards ? 2 * Math.min(CARD_INSET * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
     // payloadBox's vertical inset, min(inset, height / 10), for a card of `content` plus that inset: content / 8 on each side.
     const verticalPad = (content: number) => cards ? 2 * Math.min(pad / 2, content / 8) : 0;
+    // LH-44: a synthetic row of blocks (tableArrangement's band) is as tall as its tallest block in its share of the width.
+    if (node.children && node.synthetic && node.composition?.mode === 'row') {
+      const between = node.gap ?? gap, share = Math.max(scale, (cellWidth - between * (node.children.length - 1)) / node.children.length);
+      return Math.max(0, ...node.children.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
+    }
     if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number;
@@ -3401,9 +3512,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     }
     else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings).bounds.height;
     else if (node.field === 'timeline') content = 170 * scale;
-    else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
+    else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
-    if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets')) content *= Math.min(1, floorSize / startSize);
+    if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table')) content *= Math.min(1, floorSize / startSize);
     const body = content + (node.caption !== undefined ? 32 * scale : 0);
     return body + verticalPad(body);
   };
