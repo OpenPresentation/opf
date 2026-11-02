@@ -3904,7 +3904,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const between = node.gap ?? gap, perRow = gridFlowShape(node.children.length, true).perRow;
       let from = 0;
       return perRow.reduce((sum, count, row) => {
-        const share = Math.max(scale, (cellWidth - between * (count - 1)) / count), members = node.children!.slice(from, from += count);
+        const share = Math.max(scale, (cellWidth - between * (count - 1)) / count), members = node.children!.slice(from, from + count);
+        from += count;
         return sum + (row ? between : 0) + Math.max(0, ...members.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
       }, 0);
     }
