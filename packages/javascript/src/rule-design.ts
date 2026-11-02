@@ -71,6 +71,11 @@ export function colorDifference(a: string, b: string): number {
 	return Math.hypot(l1 - l2, a1 - a2, b1 - b2);
 }
 
+/** LH-35: the CIE L* step between two colours, what tells them apart in greyscale or to a reader who sees no hue. */
+export function lightnessDifference(a: string, b: string): number {
+	return Math.abs(lab(a)[0] - lab(b)[0]);
+}
+
 const CVD_MATRICES = {
 	// Machado, Oliveira and Fernandes (2009), severity 1.0, applied to linear sRGB.
 	protanopia: [
