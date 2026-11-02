@@ -227,6 +227,24 @@ theme: `design.theme: "dark"` is an unresolved reference (`opf/unresolved-refere
 example `{ "theme": "classic", "variant": "dark1" }`, and `colorScheme: "boost"` with `fontScheme: "seaford"` for the old
 dark look.
 
+## Review checklist for records (design clichés)
+
+LH-37. A reviewer applies this list to every new or changed theme, color scheme, font scheme and layout record (and to its previews) before approving the pull request. Each line is a default that makes a deck look generated; a record that has one needs a stated reason in the pull request, or a change. The list is about what a record sets: a record cannot opt out of what the engine draws, which the [layout-harvest program](programs/layout-harvest/README.md) tracks as engine items.
+
+1. **No accent line under titles.** No short rule, bar or underline under a title or tag, whether a layout region, a theme decoration or a preview. Hierarchy comes from size, weight and space.
+2. **No decorative side stripes on cards.** A card or `contentBox` surface is a fill or an outline, not a fill with a colored bar down one edge.
+3. **No default gradient backgrounds.** A theme background is a color-scheme slot (`light1`, `dark1`, ...) or a picture the user chose. A gradient is a deliberate, named variant of one theme and never the default; check the record and its previews.
+4. **No centred body text.** Centre only a cover, a section, a closing, a statement or a number (`titleAlignment` / `contentAlignment: "center"` on those layouts). A layout whose body is a list, a table, a paragraph or code stays start-aligned, in a right-to-left deck too.
+5. **No emoji.** None in a record's names, descriptions, tags, sample content or previews, and none standing in for an icon or a bullet.
+6. **Not "cream, serif and terracotta" by default.** A scheme with a warm off-white `light1`/`light2` (hue 30-55, saturation 20% or more, lightness 88-97%) together with a terracotta accent (hue 8-28, saturation 35-75%, lightness 35-60%) and a theme that pairs it with a serif font scheme is the assistant-generated look. Offer it only with a reason, and never as a theme default.
+7. **No low-contrast tints.** Compute the WCAG contrast ratio of each pair:
+   - `dark1` on `light1` and `light1` on `dark1` at least 7:1, and `dark2` against `light1` at least 4.5:1 (it is a text and a background color);
+   - `accent1`, the lead and highlight color, at least 3:1 against both `light1` and `dark1`, because a variant draws on either and white text on it needs 4.5:1 to be body text;
+   - no accent under 1.5:1 against either `light1` or `dark1` (such a slot is invisible as a line, a marker or a bar; chart fills are adjusted to 3:1 by the engine, shapes and text are not);
+   - `light2` visibly different from `light1` (at least 1.05:1), since it is the surface of cards and bands; an identical or near-identical `light2` makes a card disappear.
+
+A record that fails a line is listed in the pull request with the line number and the measured value. The review does not edit other records: it opens a follow-up item for each.
+
 ## Endpoints
 
 | Request | Response |
@@ -312,6 +330,21 @@ request that deletes it and its index entry, and the stability check requires th
 ### Updating it
 
 Edit records by pull request in `packages/gallery`: change the record and its index entry, run `pnpm --filter @openpresentation/gallery rehash` and `previews`, and add a `changes/<slug>.md` fragment (`packages: [gallery]`; a drawing change is declared with `drawing:`, see `changes/README.md`). The package is released with the other five under the repository's one shared version. `pnpm check:spec` and `pnpm check:catalog` verify the indexes, manifest and records, and `pnpm check:stability` holds a drawing change or a removed id to the declaration rule. Core's browser entries remain catalog-free (`pnpm check:catalog-free`).
+
+### Palette discipline (`pnpm check:palette`)
+
+LH-36: `scripts/check-palette.mjs` reads every colour-scheme record in `packages/gallery/catalog/color-schemes/` and holds it to the palette rules of the Slides and pptx guidance. It changes no record. A new or edited scheme is checked by `pnpm check:changed`.
+
+| Rule | Level | What it checks |
+| --- | --- | --- |
+| `contrast-base` | fails | `dark1` on `light1` reaches 7:1 (the body text pair) |
+| `contrast-surface` | fails | `dark2` as a background reaches 4.5:1 with `light1` text, `light2` with `dark1` text |
+| `accent-lightness` | fails | `accent1` and `accent2`, the pair that must be told apart, differ in OKLCH lightness by at least 0.08, not only in hue |
+| `accent-close` | report | any accent 1 to 6 pair (other than a repeated colour) within 0.05 in OKLCH lightness |
+| `pure-neutral` | report | `light1` is exactly `#FFFFFF` or `dark1` exactly `#000000`; guidance prefers toned neutrals, but many schemes use the pure values on purpose |
+| `red-green` | report | `accent1` and `accent2` are a red and a green (hue, chroma at least 0.08) within 0.1 in lightness: a colour-blind risk |
+
+The failing rules guard readability, so they stop a merge; the report rules are guidance and print to stdout only (`--quiet` hides them; `--summary <file.md>` writes them as a markdown table for a PR). A scheme that already fails a rule and is not fixed in the pull request that adds the check is listed, with its reason, in `scripts/palette-known-failures.json`; the check fails when a new record fails and when a listed record no longer does (remove the entry then). Today three schemes are listed, all for `accent-lightness`: `deep-purple`, `luxury` and `pastel-red`. Fixing one is a gallery drawing change and is declared in its fragment.
 
 ## Reconciliation status
 
