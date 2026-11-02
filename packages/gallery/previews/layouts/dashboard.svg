@@ -31,8 +31,8 @@
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="377.9" xml:space="preserve" y="653.2">Week</text></g>
 <g transform="rotate(-90 71.1 492.97)"><g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="71.1" xml:space="preserve" y="499.99">Task completion</text></g></g></g>
 <g><rect fill="#F0F0F0" height="292.92" width="570.4" x="652" y="366.76"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="682.16" xml:space="preserve" y="551.345">A</text></g>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="682.16" xml:space="preserve" y="448.635">B</text></g>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="682.16" xml:space="preserve" y="448.635">A</text></g>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="end" x="682.16" xml:space="preserve" y="551.345">B</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="687.16" x2="687.16" y1="390.26" y2="595.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="687.16" xml:space="preserve" y="616.2">0.0</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="813.97" x2="813.97" y1="390.26" y2="595.68"/>
@@ -43,8 +43,8 @@
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1067.59" xml:space="preserve" y="616.2">6.0</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="1194.4" x2="1194.4" y1="390.26" y2="595.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="1194.4" xml:space="preserve" y="616.2">8.0</text></g>
-<rect fill="#2874A6" height="41.084" width="367.749" x="687.16" y="523.783"/>
-<rect fill="#2874A6" height="41.084" width="424.814" x="687.16" y="421.073"/>
+<rect fill="#2874A6" height="41.084" width="367.749" x="687.16" y="421.073"/>
+<rect fill="#2874A6" height="41.084" width="424.814" x="687.16" y="523.783"/>
 <line stroke="#BFBFBF" stroke-width="1.333" x1="687.16" x2="687.16" y1="390.26" y2="595.68"/>
 <line stroke="#BFBFBF" stroke-width="1.333" x1="687.16" x2="1194.4" y1="595.68" y2="595.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="18" font-weight="400" style="white-space:pre" text-anchor="middle" x="940.78" xml:space="preserve" y="653.2">Median task time (min)</text></g></g>

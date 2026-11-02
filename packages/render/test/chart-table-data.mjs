@@ -29,7 +29,7 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 //    Full old/new SVG comparisons are recorded in the RR-20 source qualification. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
 //    LH-59: bar, stacked-bar and 100pct-stacked-bar list their categories top to bottom; the waterfall and the lone-column histogram size
 //    their tick-label column from the tightened probe axes (the axis maximum stays within 1.25 x the data), so those five digests changed.
-//    LH-55: on the default dark panel every series from the scheme reaches 4.5:1 and series 2 keeps 20 L* from series 1, so the digest of every chart with more than one series or category changed (24); the single-series histogram, waterfall, funnel, map, sketch and table did not.
+//    LH-55: on the default dark panel every series from the scheme reaches 4.5:1 and series 2 keeps 20 L* from series 1, so the digest of every chart with more than one series or category changed (24); the single-series histogram, waterfall, funnel, map, sketch and table did not. LH wave 1: with both, bar, stacked-bar and 100pct-stacked-bar carry both changes (new digests); every other digest is the one its own change gave.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
 const plainRows = [['Q1', 12.4, 3, 8], ['Q2', 18.1, 5, 9], ['Q3', 21.75, 2, 4], ['Q4', 9, 7, 6]];
@@ -50,9 +50,9 @@ const REVIEWED_SVG_DIGESTS = {
   'column': '4ec3de85106a1a440dff2e39',
   'stacked-column': '028e39ed4c42f237425ca0b4',
   '100pct-stacked-column': '50a34862743ac74848bb957f',
-  'bar': '26f681042581c37316952904',
-  'stacked-bar': 'a0f1b141fd89b539c12b9693',
-  '100pct-stacked-bar': '0d74d0aca857ceb8bdedd098',
+  'bar': 'bcc24cb4b3465892848eb2ba',
+  'stacked-bar': 'a01ecf7211fc6c28688247c0',
+  '100pct-stacked-bar': 'f96f4459af84808035c532c6',
   'line': 'e846689408da1fd0a5a44d8e',
   'line-with-markers': 'd835e4c3dddf8e9d8c8d245b',
   'stacked-line': '9d75e56c34acf913ef99b30b',
@@ -70,13 +70,13 @@ const REVIEWED_SVG_DIGESTS = {
   'histogram': 'e4a1342012db24e6c5585283',
   'pareto': '20f13a2185543acb45794d90',
   'box-and-whisker': 'af606f9703cdd4b34f4cf33e',
-  'waterfall': 'ab9c183844839f83248d407c',
+  'waterfall': '70a315ec3bb6754e9e1866e1',
   'funnel': '914c2a6f14ecf2935cb70a9c',
   'world': 'c963880f5b9404c2977115a3',
   'sketch': '412f5a537d5291557428c038',
   'column-no-options': '643844b49b1eb93cae41253f',
   'line-string-numbers': 'fb2ec0d1f3b78e812aaabc14',
-  'histogram-lone-column': 'cb6da441b29d1de04c896913',
+  'histogram-lone-column': '3c2269d823eed5e38ba85da0',
   'table-styled': 'b90e4faf6d93e7d88e6a5aed',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');

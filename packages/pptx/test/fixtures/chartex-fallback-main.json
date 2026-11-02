@@ -623,8 +623,8 @@
       "lh41PreviousSha256": "eb0006ec87c3fea719bb244d532bda503150a6bf43283540558ea9166bfbf391"
     },
     "pareto-multi": {
-      "sha256": "cbadccc5eb38b6e501f1b39ebdbf2636c5424492ddd1ce221309008cbd09c298",
-      "bytes": 86685,
+      "sha256": "aa9bbc083ae91fb276ddc1f8e8e2b7aed077b652ce7f002bb6836dccf171e159",
+      "bytes": 86684,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -646,8 +646,8 @@
       "lh41PreviousSha256": "9fddad58062304053051ec56b14cab42fffd20e4419d3edf0f75ce4af6ed3c5c"
     },
     "box-multi": {
-      "sha256": "02bdfd21a7c9bbf7e786968b726a728e6d1834d4e21d38e10ae7d5816c6bfefc",
-      "bytes": 86685,
+      "sha256": "06be438d875e37c11858a253a9409c517affaeb2e471e19c4da1fbf78f6692ed",
+      "bytes": 86684,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
