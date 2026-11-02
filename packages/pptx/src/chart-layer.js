@@ -35,12 +35,18 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
     if (layer.small.valueAxis === false) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
   }
   const header = layer.header;
-  if (!header && !layer.plot) return {options, layout};
+  if (!header && !layer.plot && !layer.rows) return {options, layout};
   const left = region.x * 96, top = region.y * 96, width = region.w * 96, height = region.h * 96;
   // LH-93: a chart that shares its value axis with siblings has core's plot box, the plot itself without its tick and category labels
   // (layoutTarget inner), so its plot is as tall as theirs in PowerPoint too.
   const plot = layer.plot;
   if (plot) layout.plot = {x: fraction(plot.left / width), y: fraction(plot.top / height), w: fraction((width - plot.left - plot.right) / width), h: fraction((height - plot.top - plot.bottom) / height), target: 'inner'};
+  // LH-115: a horizontal bar chart beside a table of the same keys has its plot over the table's body rows (core chart-rows.ts): the plot
+  // itself (layoutTarget inner) from the first row's top to the last row's bottom, between the preview's category gutter and value labels.
+  // PowerPoint spaces the categories evenly over that span, so on rows of unequal height a bar sits off its row's center by at most half
+  // the difference (the preview centers each on its row).
+  const rows = layer.rows;
+  if (rows && !plot) layout.plot = {x: fraction(rows.left / width), y: fraction(rows.top / height), w: fraction((width - rows.left - rows.right) / width), h: fraction((rows.bottom - rows.top) / height), target: 'inner'};
   if (!header) return {options, layout};
   // The chart text size in slide pixels (hundredths of a point x 96 / 72 / 100) and the preview's padding.
   const fontPx = textSize / 75, inset = 10 * scale;

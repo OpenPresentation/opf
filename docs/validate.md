@@ -242,6 +242,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/number-format-invalid`](#opfnumber-format-invalid) | Format | error | structure | A number format cannot be read. |
 | [`opf/variable-invalid-value`](#opfvariable-invalid-value) | Format | error | structure | A variable value does not match its declared type. |
 | [`opf/variable-unknown-builtin`](#opfvariable-unknown-builtin) | Format | error | structure | A token names a built-in variable that does not exist. |
+| [`opf/table-highlight-unknown-name`](#opftable-highlight-unknown-name) | Format | error | structure | A table highlight names a row the table does not have. |
 | [`opf/chart-highlight-unknown-name`](#opfchart-highlight-unknown-name) | Format | error | structure | A chart highlight names a series or category the chart does not have. |
 | [`opf/variable-format`](#opfvariable-format) | Format | error | structure | A variable cannot be formatted. |
 | [`opf/variable-unfilled`](#opfvariable-unfilled) | Format | error | structure | A required template variable has no value. |
@@ -452,6 +453,14 @@ Default severity: **error**. Cost: structure. A variable value does not match it
 Default severity: **error**. Cost: structure. A token names a built-in variable that does not exist.
 
 **Why.** The `deck.`, `speaker.`, `organization.` and `slide.` names (and `speakers`) are reserved for built-in variables; a name under them that is not a built-in can never be filled, so the token would show literally. The slide-scoped `slide.number`, `slide.section` and `deck.slideCount` are inline tokens only, so `var:slide.*` and `var:deck.slideCount` are reported too; organization logos are whole-field references only (`var:organization.logo.icon`), so a `{{organization.logo}}` token, an unknown logo shape or an unknown organization id is reported.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/table-highlight-unknown-name`
+
+Default severity: **error**. Cost: structure. A table highlight names a row the table does not have.
+
+**Why.** `table.highlight` emphasizes body rows by their first-column text; a name that matches no row highlights nothing, so the table is not drawn as authored.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

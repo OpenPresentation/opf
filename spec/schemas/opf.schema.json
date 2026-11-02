@@ -3396,6 +3396,20 @@
           "type": "string",
           "description": "Text alternative for the table: what it shows (the point and the key numbers), not 'a table'. The preview exposes it as the table's accessible name (role group with aria-label; the cells stay readable) and the PowerPoint export writes it as the table frame's alternative text (descr); import reads it back. An empty string hides a purely decorative table, with the same meaning as an empty Asset alt. The alt is a summary read before the cells, which stay readable, so it is most useful for a large or dense table; validate does not require one and does not report a missing one.",
           "examples": ["North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."]
+        },
+        "highlight": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional emphasis: the body rows that carry the message, named by their first-column (key) text exactly as 'chart.highlight' names categories, as text; a key shared by several rows highlights each of them. The engines draw a highlighted row on an accent tint of the table surface (15% of the deck's primary color, mixed less where the cell text would fall under 4.5:1); a cell with its own 'style.fill' keeps it. Absent, the engines highlight the rows the slide's other texts name (its title, a sentence, a list entry, a quote or a chart's alt) when they agree on some rows but not all; an empty 'rows' list turns that off. PPTX export writes the tint as each cell's fill and import restores the list. A name no row has is a 'table-highlight-unknown-name' error.",
+          "required": ["rows"],
+          "properties": {
+            "rows": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Key texts (the first cell of each body row, as text) of the rows to highlight."
+            }
+          },
+          "examples": [{ "rows": ["Southeast", "Southwest"] }]
         }
       }
     },

@@ -19,11 +19,13 @@ for (const type of Object.keys(CHART_TYPES)) {
   assert.doesNotMatch(decorative, /aria-label="[^"]*North/, `${type}: no label on a decorative chart`);
 }
 
-// The wrapper adds nothing else: taking its two tags out of a labelled chart reproduces the plain SVG byte for byte.
+// The wrapper adds nothing else: taking its two tags out of a labelled chart reproduces the plain SVG byte for byte. (LH-113: an alt that
+// names a series or category is a focus source and emphasizes it, so this alt names none.)
+const neutral = 'Both regions grow through the year.';
 for (const type of ['column', 'pie', 'waterfall', 'line']) {
   const plain = toSvg(deck({ type }), 1);
-  const open = /<g aria-label="[^"]*" role="img">/.exec(toSvg(deck({ type, alt }), 1))[0];
-  const rest = toSvg(deck({ type, alt }), 1).replace(open, '');
+  const open = /<g aria-label="[^"]*" role="img">/.exec(toSvg(deck({ type, alt: neutral }), 1))[0];
+  const rest = toSvg(deck({ type, alt: neutral }), 1).replace(open, '');
   const ends = [...rest.matchAll(/<\/g>/g)].map((match) => match.index);
   assert.ok(ends.some((at) => rest.slice(0, at) + rest.slice(at + 4) === plain), `${type}: only the wrapper tags are added`);
 }

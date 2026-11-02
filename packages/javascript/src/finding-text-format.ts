@@ -229,6 +229,17 @@ const chartHighlightUnknownName: RuleText = (finding) => {
   return undefined;
 };
 
+const tableHighlightUnknownName: RuleText = (finding) => {
+  const row = match(finding.message, /^highlight names row ("(?:[^"\\]|\\.)*"), which no body row has as its first cell(?:; the rows are (.+))?$/);
+  if (!row) return undefined;
+  const name = unquote(row[1]);
+  const keys = unquoteList(row[2]);
+  return {
+    message: `${code(`highlight: "${name}"`)} matches no row.${keys.length ? ` Available: ${plainList(keys)}${/\.\.\.$/.test(row[2] ?? "") ? ", …" : ""}.` : ""}`,
+    next: keys.length ? chooseNext(name, keys) : "name a row by the text of its first cell, or remove the entry.",
+  };
+};
+
 // ------------------------------------------------------------------------------------------------ variables
 
 /** `{{id}}` for an inline token, `var:id` where the finding's own sentence says the whole-field form. */
@@ -617,6 +628,7 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/variable-invalid-value": variableInvalidValue,
   "opf/variable-unknown-builtin": variableUnknownBuiltin,
   "opf/chart-highlight-unknown-name": chartHighlightUnknownName,
+  "opf/table-highlight-unknown-name": tableHighlightUnknownName,
   "opf/variable-format": variableFormat,
   "opf/variable-unfilled": variableUnfilled,
   "opf/run-color-unrecognized": runColorUnrecognized,

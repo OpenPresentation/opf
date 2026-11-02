@@ -144,6 +144,14 @@ Automatic composition (no layout, no promoted regions, no `columns` or `weights`
 
 A layout that leaves a chart's plot shorter than its minimum (a wide chart region drawn on purpose keeps its proportions) is composed as the automatic grid when that draws the plot taller and reads as well; `recomposed.chart` holds the shortest plot of both, in reference pixels (see [Layout templates](layout-templates.md#recomposition-at-the-readability-floor-lh-83)).
 
+## Rows shared across kinds (LH-115)
+
+Two blocks that list the same keys in the same order share their rows (layout harvest LH-115, extending LH-18's shared row tracks across kinds). Each rule only moves marks within boxes composition already gave, or composes the slide once more under the size guard, so it never costs a block its size.
+
+- **Bars on a table's rows.** A horizontal bar chart beside a table whose first-column keys are the chart's categories in the same order draws each bar beside its key: the plot spans the table's body rows (from the first row's top to the last row's bottom) and each category is centered on the middle of its key cell's text (`item.chart.layer.rows`, core `alignBarRows`). Only when those rows fit in the chart's box below its header row and above its value labels; otherwise the chart keeps its own plot. The PPTX export writes the plot area over the same rows (an inner manual layout); PowerPoint spaces categories evenly over it, so on rows of unequal height a bar sits off its key by at most half the difference.
+- **A timeline under its column chart.** An automatic slide of a timeline and a column chart (no layout, no `mode`, `columns` or `weights` of the slide's own) whose events' `when` values are the chart's categories in the same order is composed again with the chart above and the timeline as one band under the plot: each event's marker and labels sit under its column, mirrored right to left with the columns. It is kept only when it reads as well as the slide without it; the timeline stays listed first when it was written first.
+- A list with one entry per bar category is not merged into the bar labels: as sublabels at the chart text size its entries would be smaller than the list (32 px against 16 to 20 px on the mixed corpus's m28), which the size guard forbids.
+
 ## Grouping blocks before placing them
 
 Composition groups a slide's blocks before it places any cell (layout harvest LH-58, LH-82, LH-73, LH-46, LH-47). The

@@ -207,6 +207,12 @@ Table-specific fields are grouped under `table`. Do not put loose `columns` or `
 
 A table may instead show a dataset: `"table": { "dataset": "revenue", "fields": ["Quarter", "Revenue"] }` (no `rows` or `columns`); it takes its headers, rows and column formats from the dataset, and per-cell styles need an inline table. A column header may be a `DataColumn` (`{ "name": "Revenue", "format": "$#,##0.0" }`) and a styled header or body cell takes a `format`; a number cell displays formatted (the body cell's own format wins over the column's), and `layoutTable` measures the formatted text. See [Chart and table data](chart-table-data.md).
 
+### Highlighted rows
+
+`table.highlight` names the body rows that carry the message by the text of their first cell, as `chart.highlight` names categories: `"highlight": { "rows": ["Southeast", "Southwest"] }`. The preview and the PPTX export draw those rows on an accent tint of the table surface (15% of the deck's primary color, mixed less where the cell text would fall under 4.5:1, core `tableHighlightColor`); a cell with its own `style.fill` keeps it. The export writes the tint as each cell's fill, and import restores the list. A name no row has is the validation error `table-highlight-unknown-name`.
+
+Without `highlight`, a table highlights the rows its slide names (layout harvest LH-113, core `tableSlideFocus`): the title and subtitle first, else what the slide's other texts, list entries, quotes and chart alts name together ("Engineering and support carry 70% of the new roles" names the Engineering and Support rows; "Prices rise 3%" names the rows whose cells show 3%). The rules are conservative: a range ("from Q1 to Q4"), a list that names a row in two or more entries, a paragraph over 140 characters that names more than one row, and sources that disagree name nothing, and the focus is never every row. An empty `rows` list turns it off, and so does a body cell with its own fill. [Chart options](chart-options.md) describes the same focus for charts.
+
 Table body cells accept strings, numbers, booleans, or `null`. Since core 0.5.0, a cell or column header also accepts the same `TextRun[]` used by rich text:
 
 ```json

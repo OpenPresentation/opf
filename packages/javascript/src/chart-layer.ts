@@ -19,6 +19,7 @@ import {chartTextSize} from './chart-axis.js';
 import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-data.js';
 import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
+import type {ChartLayerRows} from './chart-rows.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -96,6 +97,11 @@ export interface ChartLayer {
    * context neutral. A focus replaces the small chart's last-point emphasis.
    */
   focus?: ChartLayerFocus;
+  /**
+   * LH-115: a horizontal bar chart beside a table of the same keys in the same order draws each category on its table row (chart-rows.ts
+   * `alignBarRows`).
+   */
+  rows?: ChartLayerRows;
 }
 
 /** LH-105: one series name at the end of its line. Lengths are slide pixels. */

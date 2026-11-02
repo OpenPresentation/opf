@@ -59,7 +59,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
+  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, tableHighlightColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -2469,7 +2469,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction, tableGrowth: item.tableGrowth }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -3217,17 +3217,24 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {}),
     // LH-48: a lone table that composition grew is laid out at the same growth as the preview.
-    ...(context.tableGrowth ? {growth: context.tableGrowth} : {})
+    ...(context.tableGrowth ? {growth: context.tableGrowth} : {}),
+    // LH-113: the highlighted body rows composition gave the table (table.highlight, or the rows the slide's texts name).
+    ...(context.tableHighlight ? {highlight: context.tableHighlight} : {})
   });
   const columnCount = layout.columnCount;
+  // LH-113: a highlighted row's cells take the accent tint of the surface the preview draws (core tableHighlightColor), an sRGB literal;
+  // their text keeps the body text's theme color where it is the same color as on the surface.
+  const highlightHex = layout.rows.some(row => row.cells.some(cell => cell.highlighted)) ? tableHighlightColor(`#${context.colors.surface}`, `#${context.colors.accent}`, `#${context.colors.text}`).replace(/^#/, '').toUpperCase() : undefined;
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
     const cellStyle = cell.style ?? {};
-    const defaultFillHex = header ? context.colors.accent : context.colors.surface;
+    const tinted = cell.highlighted && cellStyle.fill === undefined && highlightHex !== undefined;
+    const defaultFillHex = header ? context.colors.accent : tinted ? highlightHex : context.colors.surface;
     const baseFill = exportColor(cellStyle.fill ?? defaultFillHex, context, defaultFillHex);
     // FF-24c: engine chrome resolves from scheme roles (header accent1, body surface), so it follows the deck theme like a named fill.
-    const fillReference = cellStyle.fill ?? (header ? 'accent1' : 'surface');
-    const fillValue = schemeColorValue(fillReference, baseFill, context);
+    const fillReference = cellStyle.fill ?? (header ? 'accent1' : tinted ? `#${highlightHex}` : 'surface');
+    const keepsText = tinted && textColorForFill(`#${highlightHex}`, `#${context.colors.text}`) === textColorForFill(`#${context.colors.surface}`, `#${context.colors.text}`);
+    const fillValue = schemeColorValue(keepsText ? 'surface' : fillReference, keepsText ? context.colors.surface : baseFill, context);
     // RR-96: header text is the role (bg1 or tx1) that reads better on the fill, as the preview chooses it (core readableSchemeColor).
     const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
     const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
@@ -3277,7 +3284,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         // Rich runs carry resolved alpha. A translucent cell default would
         // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
         ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
-        fill: { color: nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
+        fill: { color: tinted ? highlightHex : nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
       },
     };
   }));

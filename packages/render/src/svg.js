@@ -4,7 +4,7 @@ import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
-  timelineMarkerShapes, timelineTextColor, layoutWatermark,
+  timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
@@ -1522,8 +1522,10 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
+  // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
+  const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
   // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
   const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
   // WI-5 (P20): a table draws horizontal rules only by default (the header rule and a rule under every row, as the PPTX export writes them).
@@ -1531,7 +1533,7 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
-    const defaultFill = cell.header ? bound.design.colors.primary : bound.design.colors.surface;
+    const defaultFill = cell.header ? bound.design.colors.primary : cell.highlighted ? highlightFill : bound.design.colors.surface;
     const fill = style.fill == null
       ? defaultFill
       : resolveColorRef(style.fill, bound, defaultFill);

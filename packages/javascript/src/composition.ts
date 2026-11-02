@@ -1,10 +1,11 @@
 import {tableGrid,type TableCellStyle} from './table.js';
-import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
+import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {chartTextSize,chartValueAxis,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartLayer,type ChartLayer} from './chart-layer.js';
-import {shareSiblingPlots} from './chart-plot.js';
+import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
+import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
-import {chartTitleFocus} from './chart-focus.js';
+import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
@@ -40,7 +41,7 @@ import {layoutVariantApplies} from './color.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
 export {applyLuminance, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
-export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, softenChartPalette, chartSoftColors, applyHslTransforms, type ChartSoftColor, chartSeriesLabelColor, CHART_SERIES_SOFT_MIX, CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, resolveChartColors, chartHighlightColors, chartEmphasisColors, softenChartPalette, chartSoftColors, applyHslTransforms, type ChartSoftColor, chartSeriesLabelColor, CHART_SERIES_SOFT_MIX, CHART_EMPHASIS_MIN_CONTRAST, CHART_EMPHASIS_MIN_LIGHTNESS_STEP, CHART_SERIES_TINT_MIX, CHART_DARK_SERIES_MIN_CONTRAST, CHART_LEAD_LIGHTNESS_STEP, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, tableHighlightColor, TABLE_HIGHLIGHT_MIX, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST, CARD_SURFACE_MIX, CARD_SURFACE_MIN_CONTRAST, CARD_BORDER_MIX, CODE_PANEL_DARK_SHADE} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorBaseSlot, ColorMap, LayoutVariantDeck, LayoutVariantRole, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
 export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuoteMarks, isWrappedInQuoteMarks, type QuoteMarks} from './quote-marks.js';
@@ -307,6 +308,11 @@ export interface ComposedItem {
   metricTile?: true;
   /** LH-48: the growth (`TableLayoutOptions.growth`) of a lone table that filled too little of the body; engines lay the table out with it. */
   tableGrowth?: number;
+  /**
+   * LH-113: the body rows (0-based, after the header) a table draws on its highlight tint: the rows `table.highlight` names, else the
+   * rows the slide's texts name (chart-focus.ts `tableSlideFocus`). Engines pass it to `layoutTable` (`TableLayoutOptions.highlight`).
+   */
+  tableHighlight?: number[];
 }
 /**
  * LH-06: the one contrasting surface of a slide. `path` is the block or group drawn on it (every item under that path carries
@@ -2796,6 +2802,8 @@ export interface TableLayoutOptions {
    * `LONE_DISPLAY_SIZES.table`, and its preferred row height with it. Engines pass the item's value so they lay it out as composition did.
    */
   growth?: number;
+  /** LH-113: the body rows (0-based, after the header) drawn on the highlight tint (`ComposedItem.tableHighlight`); their cells are `highlighted`. */
+  highlight?: readonly number[];
 }
 export interface TableCellLayout {
   /** Logical alignment, shared by preview and native export. Numeric default resolves to the physical right even in RTL. */
@@ -2814,6 +2822,8 @@ export interface TableCellLayout {
   fit: TextFit | RichTextFit;
   /** Paragraph direction of the cell text; present only in a right-to-left deck. */
   direction?: TextDirection;
+  /** LH-113: a body cell of a highlighted row: without a fill of its own it takes the highlight tint (core `tableHighlightColor`). */
+  highlighted?: true;
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
 export interface TableLayout {
@@ -2862,6 +2872,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     if (shown !== cell.input) cell.value = typeof shown === 'object' && shown !== null && !Array.isArray(shown) ? shown.value : shown;
   }
   const columnCount=grid.columnCount;
+  // LH-113: the highlighted body rows, counted after the header rows.
+  const headerRows=Number(grid.hasHeaders),highlighted=new Set(options.highlight??[]);
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;
@@ -2974,7 +2986,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{}),...(!cell.header&&highlighted.has(cell.row-headerRows)?{highlighted:true as const}:{})});
   }
   overflow ||= sum(heights)>box.height+.01;
   return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false,naturalWidth,minimumWidth,naturalHeight:naturalTotal};
@@ -3300,7 +3312,7 @@ function settle(input: unknown, options: ComposeSlideOptions, result: SlideCompo
   if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
   const grown = growBody(input, options, result);
   if (grown) return grown;
-  if (!result.regions) return automaticTracks(input, options, result);
+  if (!result.regions) return timelineUnderChart(input, options, result) ?? automaticTracks(input, options, result);
   if (options.recompose === false) return result;
   const blocks = record(input).blocks;
   if (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) return result;
@@ -3364,9 +3376,41 @@ function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: 
   if (!after.sizes.length || !(larger || fitsMore) || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
   return { ...automatic, recomposed: { layoutSize: layoutSize / scale, size: size / scale } };
 }
+/**
+ * LH-115, automatic composition (no layout record, no composition mode, columns or weights of the slide's own): a slide of two blocks, a
+ * timeline and a column chart, whose events' `when` values are the chart's categories in the same order, is composed again with the
+ * chart above and the timeline below it, laid out as one band under the plot so that each event's marker and label sit under its
+ * column (Claude Design's "ramp with milestones"). Kept only when it reads as well as the slide without it (readsAsWell) and the
+ * timeline did take the band under the plot; otherwise undefined and the slide stands.
+ */
+function timelineUnderChart(input: unknown, options: ComposeSlideOptions, base: SlideComposition): SlideComposition | undefined {
+  const slide = record(input), blocks = slide.blocks, own = record(slide.composition);
+  if (!Array.isArray(blocks) || blocks.length !== 2 || (options.layout !== null && typeof options.layout === 'object') || Object.keys(slide).some(key => regionParts(key))) return undefined;
+  if (own.mode !== undefined || own.columns !== undefined || (Array.isArray(own.weights) && own.weights.length)) return undefined;
+  const hosts = blocks.map(record);
+  if (hosts.some(host => host.placement !== undefined || host.region !== undefined || Array.isArray(host.blocks))) return undefined;
+  const chart = hosts.find(host => record(host.chart).type !== undefined)?.chart, timeline = hosts.find(host => host.timeline !== undefined)?.timeline;
+  const type = typeof record(chart).type === 'string' ? String(record(chart).type).trim().toLowerCase() : '';
+  if (!chart || timeline === undefined || !['column', 'stacked-column', '100pct-stacked-column'].includes(type)) return undefined;
+  const events: unknown[] = Array.isArray(timeline) ? timeline : Array.isArray(record(timeline).events) ? record(timeline).events as unknown[] : [];
+  const whens = events.map(event => record(event).when);
+  const data = resolveChartData(chart, options.presentation);
+  if (!data.ok || data.combo || data.hasX || !whens.every((when): when is string => typeof when === 'string')) return undefined;
+  const categories = data.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]));
+  if (!sameKeys(whens, categories, quoteLanguage(options.presentation, options.slideIndex) ?? 'en')) return undefined;
+  const scale = Math.min(base.width, base.height) / 720, before = trackQuality(base, options), floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale);
+  const result = composeVariant(input, { ...options, [TIMELINE_UNDER_CHART]: true } as ComposeSlideOptions, before, floor);
+  if (!result || !readsAsWell(before, trackQuality(result, options), floor)) return undefined;
+  const chartItem = result.items.find(item => item.field === 'chart'), timelineItem = result.items.find(item => item.timelineLayout);
+  if (!chartItem || !timelineItem || timelineItem.timelineLayout!.arrangement !== 'band' || timelineItem.box.y < chartItem.box.y + chartItem.box.height - .5) return undefined;
+  if (shortPlot(chartItem, bodyHeight(result), scale, false)) return undefined;
+  return result;
+}
 /** composeSlide composes an automatic slide again with one of these: its one picture as a side band (LH-80), its one chart as the root's first or last track (LH-49). */
 const MEDIA_TRACK = Symbol('opf.mediaTrack');
 const CHART_TRACK = Symbol('opf.chartTrack');
+/** LH-115: composeSlide composes a slide of a timeline and a column chart of the same keys again with the timeline under the plot. */
+const TIMELINE_UNDER_CHART = Symbol('opf.timelineUnderChart');
 /** LH-80: the shares of the slide's width (height on a portrait canvas) a picture's track tries, widest first. */
 const MEDIA_TRACK_SHARES: readonly number[] = [.5, .45, .4, .35];
 /** LH-80: a picture's track keeps at least this share of the picture's width (or height) in its cover crop; a narrower track is not tried. */
@@ -3943,6 +3987,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (languageTag === null) languageTag = quoteLanguage(options.presentation, options.slideIndex);
     return languageTag;
   };
+  // LH-113: the slide's texts that may name the focus of its charts and tables (chart-focus.ts), collected on first use.
+  let focusTexts: FocusSource[] | undefined;
+  const focusSources = (): FocusSource[] => focusTexts ??= slideFocusSources(slide);
   // LH-48: the growth a lone block was given (placeNode), read by every measure of it so its needs and its layout agree.
   const growthOf = new WeakMap<Pending, number>(), proseGrowth = new WeakMap<Pending, number>();
   let loneGrowth = false;
@@ -4452,9 +4499,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
     const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language});
     let valueAxis = axisFor(layer?.header?.height ?? 0);
-    // LH-105: the series or categories the slide title names are the chart's focus (chart-focus.ts); a focus replaces the small chart's
-    // last-point emphasis.
-    const focus = drawn.data.ok ? chartTitleFocus(drawn.chart, drawn.data, {text: [annotationText(slide.title), annotationText(slide.subtitle)].filter(Boolean).join('. '), ...(language !== undefined ? {language} : {})}) : undefined;
+    // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
+    // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
+    const focus = drawn.data.ok ? chartSlideFocus(drawn.chart, drawn.data, {sources: focusSources(), ...(language !== undefined ? {language} : {})}) : undefined;
     if (focus) {
       const small = layer?.small ? (({emphasis: _emphasis, ...rest}) => rest)(layer.small) : undefined;
       layer = {...layer, ...(small ? {small} : {}), focus};
@@ -5813,7 +5860,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const rootSettings: Composition = chartPrimary
     ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: chartTrack ? (firstChart ? [chartTrack.share, 1 - chartTrack.share] : [1 - chartTrack.share, chartTrack.share]) : firstChart ? [3, 2] : [2, 3], columns: undefined }
     : { ...composition, mode: composition.mode ?? directionMode };
+  // LH-115: a timeline whose `when` values are a column chart's categories draws under the plot (settle, timelineUnderChart): the chart
+  // above, the timeline in a band of its own height below, laid out again under the plot after the chart is composed (below).
+  const underChart = (options as Record<symbol, unknown>)[TIMELINE_UNDER_CHART] === true && !useTemplate && !regions.length && pending.length === 2 && pending.every(node => !node.children)
+    ? { chart: pending.find(node => node.field === 'chart'), timeline: pending.find(node => node.field === 'timeline') } : undefined;
   if (useTemplate) composeTemplate();
+  else if (underChart?.chart && underChart.timeline) {
+    timelineHints.set(underChart.timeline, { horizontal: true });
+    const band = measureTimeline(underChart.timeline, { x: 0, y: 0, width: contentBox.width, height: 1e6 }, composition).bounds.height + scale;
+    arrange([underChart.chart, underChart.timeline], contentBox, { ...composition, mode: 'column', weights: [Math.max(scale, contentBox.height - gap - band), band], columns: undefined }, 0);
+  }
   else if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
     const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
@@ -5851,6 +5907,54 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   shareSiblingPlots(shareSiblingChartAxes(items, options.presentation), plotGeometry, options.presentation);
   // LH-105: a shared plot moves the line ends, so their names are placed again.
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
+  // LH-113: a table draws the rows its `highlight` names, else the rows the slide's texts name (chart-focus.ts), on the highlight tint.
+  for (const item of items) {
+    if (item.field !== 'table') continue;
+    const resolved = resolveTableData(item.value, options.presentation), table = record(item.value), language = deckLanguage();
+    const highlight = table.highlight !== undefined ? tableHighlightRows(table.highlight, resolved.rows) : tableSlideFocus(item.value, resolved.rows,
+      resolved.rows.map(row => row.map((cell, column) => tableKeyText(tableCellDisplayValue(cell, resolved.formats[column])))), {sources: focusSources(), ...(language !== undefined ? {language} : {})});
+    if (highlight?.length) item.tableHighlight = highlight;
+  }
+  // LH-115: a horizontal bar chart beside a table of the same keys in the same order draws each bar on its table row (chart-rows.ts).
+  const rounded = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
+  for (const chart of items) {
+    if (chart.field !== 'chart' || !chart.chart?.layer || chart.chart.layer.rows) continue;
+    const data = resolveChartData(chart.value, options.presentation);
+    if (!data.ok || data.combo || data.hasX) continue;
+    const plan = chartDrawPlan(chart.value, data, { language: deckLanguage() });
+    if (plan.fallback || !horizontalBarType(plan.type)) continue;
+    const categories = data.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]));
+    for (const table of items) {
+      if (table.field !== 'table' || !besideEachOther(chart.box, table.box)) continue;
+      const resolved = resolveTableData(table.value, options.presentation);
+      if (!sameKeys(categories, tableRowKeys(resolved.rows), deckLanguage())) continue;
+      let layout: TableLayout;
+      try { layout = layoutTable(table.value, rounded(table.box), { scale, minFontSize: table.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(rtl ? { direction: 'rtl' as const } : {}), ...(table.tableGrowth ? { growth: table.tableGrowth } : {}) }); } catch { continue; }
+      const body = layout.rows.filter(row => !row.cells.some(cell => cell.header));
+      if (body.some(row => row.cells.some(cell => cell.rowSpan > 1))) continue;
+      const layer = chart.chart.layer, authored = record(chart.value);
+      // Each bar beside its key: the middle of the key cell's text (cells set their text at the top of the row).
+      const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
+      const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: layer.header?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
+      if (rows) { chart.chart.layer = { ...layer, rows }; break; }
+    }
+  }
+  // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
+  // it was written first (reading order).
+  if (underChart?.chart && underChart.timeline) {
+    const chartItem = items.find(item => item.path === underChart.chart!.path), timelineItem = items.find(item => item.path === underChart.timeline!.path && item.timelineLayout);
+    const resolved = chartItem?.chart ? resolveChartData(chartItem.value, options.presentation) : undefined;
+    const inset = chartItem?.chart && resolved?.ok ? chartPlotInset(chartItem.value, resolved, chartItem.chart, { ...plotGeometry(chartItem), box: chartItem.box }) : undefined;
+    if (chartItem && timelineItem && inset && !timelineItem.frameBox) {
+      const box = { x: chartItem.box.x + inset.left, y: timelineItem.box.y, width: Math.max(scale, chartItem.box.width - inset.left - inset.right), height: timelineItem.box.height };
+      const layout = placeTimeline(underChart.timeline, box, timelineItem.composition);
+      if (!layout.overflow && layout.arrangement === 'band') { timelineItem.box = box; timelineItem.timelineLayout = layout; }
+    }
+    if (chartItem && timelineItem && pending.indexOf(underChart.timeline) < pending.indexOf(underChart.chart)) {
+      const from = items.indexOf(timelineItem), to = items.indexOf(chartItem);
+      if (from > to) { items.splice(from, 1); items.splice(to, 0, timelineItem); }
+    }
+  }
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
@@ -5940,11 +6044,12 @@ export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,cha
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
 export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
-export {chartTitleFocus,type ChartLayerFocus} from './chart-focus.js';
+export {chartTitleFocus,chartSlideFocus,slideFocusSources,tableSlideFocus,tableHighlightRows,focusHits,type ChartLayerFocus,type FocusSource} from './chart-focus.js';
+export {alignBarRows,type ChartLayerRows} from './chart-rows.js';
 export {chartContextColor,chartContextColors,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
-export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue} from './chart-data.js';
+export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';
 export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapping,ChartComboSeries,DataTableCell,DataTableHeader,DataDiagnostic,ResolvedChartData,ResolvedTableData} from './chart-data.js';
 export {chartDrawPlan,chartDrawDiagnostics,isPlaceLabel,markLabelColor} from './chart-fallback.js';
 export type {ChartDrawPlan,ChartFallback} from './chart-fallback.js';
