@@ -27,6 +27,7 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 //    RR-20 changes only the neutral structural stroke in 30 SVGs; the styled table also right-aligns two numeric cells.
 //    Old and new full SVG strings were compared before these reviewed digests changed. RR-90 (core): table cells ask for the 25 px body size, so only the styled table's digest changed (b0bbca64..., was d5d091b9...); the SVG differs in the cell text sizes and row heights. WI-5: the chart panel has no outer frame, the axis has fewer intervals and series 1 is lifted on a dark panel, so every chart digest changed except the legacy sketch; the styled table draws horizontal rules only and sizes its columns from content. Further drift needs a reason.
 //    Full old/new SVG comparisons are recorded in the RR-20 source qualification. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
+//    LH-55: on the default dark panel every series from the scheme reaches 4.5:1 and series 2 keeps 20 L* from series 1, so the digest of every chart with more than one series or category changed (24); the single-series histogram, waterfall, funnel, map, sketch and table did not.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
 const plainRows = [['Q1', 12.4, 3, 8], ['Q2', 18.1, 5, 9], ['Q3', 21.75, 2, 4], ['Q4', 9, 7, 6]];
@@ -44,35 +45,35 @@ if (process.env.RR54_PRINT_DIGESTS) {
   process.exit(0);
 }
 const REVIEWED_SVG_DIGESTS = {
-  'column': 'fb128f6d9c0952ea5f7c2b8b',
-  'stacked-column': '13f469a0a5539210a9be086b',
-  '100pct-stacked-column': 'f2a4c0aa6901d418349cdf1d',
-  'bar': 'f081a531ba14dd92af1f0dea',
-  'stacked-bar': '3898c05ae250099d1b88092e',
-  '100pct-stacked-bar': '77d7af0e74386a5008f531b0',
-  'line': '4e049010a014c589293c8201',
-  'line-with-markers': '94c13dee2f00162e5e1def91',
-  'stacked-line': '5db483fecd9ebbbc553cee08',
-  'stacked-line-with-markers': 'b93068b1189a59e26c30fa49',
-  'area': '953dbb486c9a5fa60b06664e',
-  'stacked-area': '3729d23047156aa29d9e0510',
-  '100pct-stacked-area': 'a469181ef0ea6030e4e3f2a4',
-  'pie': '55c5efd61f537c7661832bda',
-  'doughnut': '56b34d406247bcfb2a3a63bb',
-  'scatter': '02e3984b895538c32e5b9999',
-  'radar': 'bb7f58b7bbbd201bd1e472e8',
-  'radar-with-markers': '52183c8f9a287b894de0693e',
-  'filled-radar': 'caedf67c1fe2690cc6010378',
-  'treemap': '2c895cdeda9683eb3bfb132a',
+  'column': '4ec3de85106a1a440dff2e39',
+  'stacked-column': '028e39ed4c42f237425ca0b4',
+  '100pct-stacked-column': '50a34862743ac74848bb957f',
+  'bar': '26f681042581c37316952904',
+  'stacked-bar': 'a0f1b141fd89b539c12b9693',
+  '100pct-stacked-bar': '0d74d0aca857ceb8bdedd098',
+  'line': 'e846689408da1fd0a5a44d8e',
+  'line-with-markers': 'd835e4c3dddf8e9d8c8d245b',
+  'stacked-line': '9d75e56c34acf913ef99b30b',
+  'stacked-line-with-markers': '09843c986170efd7dffa58a8',
+  'area': '4c4ae113c6305f06eca768bc',
+  'stacked-area': '1f6b5010833354342886def2',
+  '100pct-stacked-area': 'c2a70cf36600640289a313d7',
+  'pie': '239de764b01203cb9c631c17',
+  'doughnut': 'e83aaf3968a9e6bcc4b01889',
+  'scatter': '44baab35d353e214a225bf68',
+  'radar': '9f0bf90fdffcebfa65edd7ee',
+  'radar-with-markers': '79796466e2ad84d3b1b62506',
+  'filled-radar': 'b044881d170ae269eb127c96',
+  'treemap': 'baaad2b1dd5f5141044d0765',
   'histogram': 'e4a1342012db24e6c5585283',
-  'pareto': '95edbf1194c4cf628820387a',
-  'box-and-whisker': 'ceed23fbab6ad690535d9eba',
+  'pareto': '20f13a2185543acb45794d90',
+  'box-and-whisker': 'af606f9703cdd4b34f4cf33e',
   'waterfall': 'ab9c183844839f83248d407c',
   'funnel': '914c2a6f14ecf2935cb70a9c',
   'world': 'c963880f5b9404c2977115a3',
   'sketch': '412f5a537d5291557428c038',
-  'column-no-options': 'e87e4160bc93d0357543b5ca',
-  'line-string-numbers': '5b9f209587da4eeb4dd68403',
+  'column-no-options': '643844b49b1eb93cae41253f',
+  'line-string-numbers': 'fb2ec0d1f3b78e812aaabc14',
   'histogram-lone-column': 'cb6da441b29d1de04c896913',
   'table-styled': 'b90e4faf6d93e7d88e6a5aed',
 };
