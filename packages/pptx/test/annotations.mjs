@@ -15,7 +15,8 @@ const deck = () => ({
   references: [{id: 'a', text: 'Source A, 2026', url: 'https://a.example'}, {id: 'b', text: ['Rich ', {text: 'B', bold: true}]}, {id: 'unused', text: 'Never cited'}],
   slides: [
     {title: 'Cites', text: [{text: 'Growth was strong', cite: 'a'}, ' and margins held', {text: '.', cite: ['a', 'b']}, {text: ' Note', footnote: 'An inline note.'}], design: {footer: {center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}},
-    {title: 'Caption', blocks: [{image: png, caption: 'Figure 1. A pixel'}, {table: {columns: ['A', 'B'], rows: [[1, 2]]}, caption: {text: ['Table ', {text: '1', bold: true}], position: 'above', align: 'center'}}]},
+    // LH-80: the picture keeps its place in the flow (fit: contain), as the captions are checked against a blank-layout composition.
+    {title: 'Caption', blocks: [{image: png, fit: 'contain', caption: 'Figure 1. A pixel'}, {table: {columns: ['A', 'B'], rows: [[1, 2]]}, caption: {text: ['Table ', {text: '1', bold: true}], position: 'above', align: 'center'}}]},
     {title: 'Bullets', bullets: [[{text: 'again', cite: 'b'}], 'plain'], notes: 'n'},
     {title: 'Root caption', chart: {type: 'bar', data: {columns: ['x', 'y'], rows: [['p', 1], ['q', 2]]}}, caption: 'Figure 2. Chart'},
   ],

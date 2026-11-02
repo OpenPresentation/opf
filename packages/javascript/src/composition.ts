@@ -564,8 +564,8 @@ export interface SlideComposition {
    * the layout fitted and `size` the smallest of this composition, in reference pixels (canvas pixels over the canvas scale).
    * The headings sit above the body as on an automatic slide; `regions` and `headingAreas` are absent. Absent on every other slide.
    * LH-49: the same when the layout left a chart's plot shorter than its minimum and the automatic grid draws it taller and reads as
-   * well: `chart` holds the shortest plot height (chartPlotBox) of the layout's composition and of this one, in reference pixels, and
-   * `size` may be smaller than `layoutSize`, by at most a fifth and above the readability floor.
+   * well (no block smaller unless the layout overflows): `chart` holds the shortest plot height (chartPlotBox) of the layout's
+   * composition and of this one, in reference pixels.
    */
   recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number } };
   /**
@@ -3043,8 +3043,12 @@ const CHART_TRACK = Symbol('opf.chartTrack');
 const MEDIA_TRACK_SHARES: readonly number[] = [.5, .45, .4, .35];
 /** LH-80: a picture's track keeps at least this share of the picture's width (or height) in its cover crop; a narrower track is not tried. */
 const MEDIA_TRACK_MIN_KEPT = .5;
-/** LH-80, LH-49: how much of its smallest body size a slide may give up for a track (above the readability floor). */
-const TRACK_SIZE_GIVE = .2;
+/** LH-49: the shares of the slide's width (height on a portrait canvas) a chart's track tries, widest first (3:2 is design.chartPrimary's). */
+const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
+/** composeLayout composes an automatic grid again without the LH-66 measure with this flag, to check the measure costs no size. */
+const UNMEASURED = Symbol('opf.unmeasured');
+/** The compositions whose automatic grid the LH-66 measure weighed (a paragraph under the measure in some candidate). */
+const MEASURED = new WeakSet<SlideComposition>();
 /**
  * LH-49: the smallest plot a chart draws in automatic composition: at least CHART_MIN_PLOT_PX reference pixels and CHART_MIN_PLOT_SHARE
  * of the body's height tall, and at most CHART_MAX_PLOT_ASPECT times as wide as tall.
@@ -3073,21 +3077,30 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
   return { x: box.x + pad + axis, y: top, width: Math.max(0, box.width - 2 * pad - axis), height };
 }
 /** LH-80, LH-49: how well a composition reads, for comparing it with the same slide composed another way. */
-interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number }
+interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number> }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
-  const read = bodyReadability(result, options);
+  const read = bodyReadability(result, options), blocks = new Map<string, number>();
+  // Each body item's own size: its text, or the smallest main part of a quote, code panel, metric or timeline (bodyReadability's).
+  for (const item of result.items) {
+    if (headings.has(item.field)) continue;
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    const sizes = internal ? (internal.parts as readonly { role: string; requestedFontSize: number; minFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]).filter(part => part.visible !== false && MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON && part.fit).map(part => part.fit!.fontSize) : item.text?.fontSize !== undefined ? [item.text.fontSize] : [];
+    if (sizes.length) blocks.set(item.path, Math.min(...sizes));
+  }
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
   const measure = Math.min(Infinity, ...narrow.map(item => item.box.width / (AVERAGE_CHARACTER_EM * item.text!.fontSize)));
-  return { overflows: read.overflows, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure };
+  return { overflows: read.overflows, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks };
 }
 /**
- * LH-80, LH-49: `after` reads as well as `before`: no more overflow or small cells, no more words split, no more prose under the
- * minimum measure (LH-66) and none on a shorter measure than before, and a smallest body size at most a fifth smaller
- * (TRACK_SIZE_GIVE) and above the readability floor when it is smaller at all.
+ * LH-80, LH-49, LH-66: `after` reads as well as `before`: no more overflow or small cells, no more words split, no more prose under the
+ * minimum measure and none on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A new
+ * arrangement never costs the text its size: only where `before` overflows may `after` be smaller, to overflow less, and never at the
+ * readability floor.
  */
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
-  return after.overflows <= before.overflows && after.splitWords <= before.splitWords && after.narrow <= before.narrow && after.measure >= before.measure - .01
-    && (after.size >= before.size - FONT_GRID_EPSILON || (after.size >= before.size * (1 - TRACK_SIZE_GIVE) && after.size > floor + FONT_GRID_EPSILON));
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01) return false;
+  const kept = after.size >= before.size - FONT_GRID_EPSILON && [...before.blocks].every(([path, size]) => (after.blocks.get(path) ?? Infinity) >= size - FONT_GRID_EPSILON);
+  return kept || (after.overflows < before.overflows && after.size > floor + FONT_GRID_EPSILON);
 }
 /**
  * LH-49: whether a composed chart's plot (chartPlotBox) is under the minimum of a body `bodyHeight` tall: too short or, with `aspect`,
@@ -3128,8 +3141,8 @@ function chartRecomposition(input: unknown, options: ComposeSlideOptions, result
  *    width or height (MEDIA_TRACK_MIN_KEPT): a wide picture takes a wide track or none.
  *  - LH-49: the slide's one chart block among other blocks (no picture, no design.chartPrimary) whose plot is under its minimum
  *    (CHART_MIN_PLOT_PX, CHART_MIN_PLOT_SHARE of the body, CHART_MAX_PLOT_ASPECT) takes the filling track: the root's first column
- *    (it is the first block) or last, 3:2 against a column of the others in the slide's own mode, as design.chartPrimary splits it,
- *    when that plot is taller.
+ *    (it is the first block) or last, 60, 55 or 50% of the content width (the first that reads as well) against a column of the others
+ *    in the slide's own mode, as design.chartPrimary splits it, when that plot is taller.
  * Each is kept only when it reads as well as the slide without it (readsAsWell); otherwise the slide is composed as before. Of the
  * picture tracks that read as well, the one with the largest smallest body size is taken; on a tie, the one with the larger body sizes
  * in all (by more than a pixel), then the one that crops the picture least (a portrait picture takes a narrower track than a landscape
@@ -3169,11 +3182,28 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   if (!chart || !shortPlot(chart, bodyHeight(base), scale)) return base;
   const plot = chartPlotBox(chart, scale);
   const edge: ImageEdge = landscape ? (charts[0] === 0 ? 'left' : 'right') : (charts[0] === 0 ? 'top' : 'bottom');
-  const result = attempt(CHART_TRACK, edge), placed = result && chartOf(result);
-  if (!result || !placed || chartPlotBox(placed, scale).height <= plot.height + .5 || !readsAsWell(before, quality(result), floor)) return base;
-  return { ...result, track: { kind: 'chart', edge: physical(edge), size: round((landscape ? placed.box.width : placed.box.height) / (landscape ? base.width : base.height)), path: `slides.${options.slideIndex ?? 0}.blocks.${charts[0]}` } };
+  for (const share of CHART_TRACK_SHARES) {
+    const result = attempt(CHART_TRACK, { edge, share }), placed = result && chartOf(result);
+    if (!result || !placed || chartPlotBox(placed, scale).height <= plot.height + .5 || !readsAsWell(before, quality(result), floor)) continue;
+    return { ...result, track: { kind: 'chart', edge: physical(edge), size: round((landscape ? placed.box.width : placed.box.height) / (landscape ? base.width : base.height)), path: `slides.${options.slideIndex ?? 0}.blocks.${charts[0]}` } };
+  }
+  return base;
 }
+/**
+ * LH-66 never costs the text its size: a composition whose automatic grid weighed the minimum measure (MEASURED) is composed again
+ * without it, and the measured one is kept only when it reads as well as that one (readsAsWell), so a paragraph moved to a wider cell
+ * never leaves a block smaller than the grid without the rule set it.
+ */
 function composeLayout(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  const result = composeLayoutOnce(input, options);
+  if (!MEASURED.has(result)) return result;
+  let plain: SlideComposition;
+  try { plain = composeLayoutOnce(input, { ...options, [UNMEASURED]: true } as ComposeSlideOptions); }
+  catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
+  const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
+  return readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain;
+}
+function composeLayoutOnce(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   const slide = record(input), layout = record(options.layout);
   // LH-83: the recomposition reads the record's design and composition and composes the body as if no layout were given; the
   // record's contentDirection asks its regions to flow one way, so the automatic grid does not take it.
@@ -3610,7 +3640,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // LH-66, automatic composition only: a paragraph of four lines or more in a cell narrower than MIN_MEASURE_CHARS average characters of
   // `size` has too short a measure (underMeasure). Lines are core's own estimate, as `flow: auto` counts them, so every engine decides alike.
-  const narrowMeasure = (node: Pending, width: number, size: number): boolean => autoComposition() && proseLeaf(node) && underMeasure(node.field, node.value, width, size);
+  let measureWeighed = false;
+  const narrowMeasure = (node: Pending, width: number, size: number): boolean => {
+    if ((options as Record<symbol, unknown>)[UNMEASURED] === true || !autoComposition() || !proseLeaf(node) || !underMeasure(node.field, node.value, width, size)) return false;
+    measureWeighed = true;
+    return true;
+  };
   // LH-66: a `grid` with no column count of its own takes fewer columns while one of its paragraphs is under the minimum measure at the
   // size it would be set at there (at least one column). The scored `auto` grid weighs the same rule as a penalty (leafScore).
   const measuredGridColumns = (nodes: Pending[], area: LayoutBox, cols: number, between: number, settings: Composition): number => {
@@ -4734,14 +4769,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // This automatic hint preserves its 3:2 track geometry; a template remains authoritative.
   // LH-49: the chart track automaticTracks chose splits the root the same way, whatever the slide's own mode; the other blocks keep that
   // mode in their column.
-  const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as ImageEdge | undefined;
-  const chartHint = chartTrack ?? hints.chartPrimary;
+  const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as { edge: ImageEdge; share: number } | undefined;
+  const chartHint = chartTrack?.edge ?? hints.chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
   const chartPrimary = chartSide !== undefined && !useTemplate && (chartTrack !== undefined || !ownMode) && !regions.length && chartIndex >= 0 && pending.some(node => node.children || node.field !== 'chart') ? chartSide : undefined;
   const firstChart = chartPrimary === 'left' || chartPrimary === 'top';
   const rootSettings: Composition = chartPrimary
-    ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: firstChart ? [3, 2] : [2, 3], columns: undefined }
+    ? { ...composition, mode: chartPrimary === 'left' || chartPrimary === 'right' ? 'row' : 'column', weights: chartTrack ? (firstChart ? [chartTrack.share, 1 - chartTrack.share] : [1 - chartTrack.share, chartTrack.share]) : firstChart ? [3, 2] : [2, 3], columns: undefined }
     : { ...composition, mode: composition.mode ?? directionMode };
   if (useTemplate) composeTemplate();
   else if (chartPrimary) {
@@ -4803,7 +4838,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(explanation?{explanation}:{}) };
+  if (measureWeighed) MEASURED.add(composed);
+  return composed;
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */
