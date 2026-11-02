@@ -11,8 +11,10 @@ const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ??
 const note = 'The pilot team reviews the site context alongside the proposed work. A shared visual reference helps explain access constraints, seasonal conditions, and the sequence of activities.';
 const chart = { chart: { type: 'line', data: { columns: ['Month', 'Minutes'], rows: [['Apr', 44], ['May', 39], ['Jun', 33], ['Jul', 29], ['Aug', 24], ['Sep', 19]] } } };
 
+// LH-80: one picture among other blocks now takes a cover-cropped side track (lh-80-media-tracks.test.mjs); `fit: 'contain'` on the
+// block keeps it whole in the flow, as below.
 test('an image and an explanation: the picture is whole, 16:9, at the cell top; the text keeps its 28 px', () => {
-  const result = composeSlide({ title: 'Keep field context visible during planning', blocks: [{ image: svg(1600, 900) }, { text: note }] });
+  const result = composeSlide({ title: 'Keep field context visible during planning', blocks: [{ image: svg(1600, 900), fit: 'contain' }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   assert.equal(image.image.fit, 'contain');
   near(image.image.box.width / image.image.box.height, 16 / 9);
@@ -52,9 +54,10 @@ test('a layout keeps the engine default, and a placed picture still bleeds as a 
 });
 
 test('a portrait picture frames to its width and gives the rest of the row to the text', () => {
-  // The equal row of a landscape picture and the note (LH-71 would stack these two: the picture fills more above the text).
-  const equal = composeSlide({ title: 'T', composition: { mode: 'row' }, blocks: [{ image: svg(1600, 900) }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
-  const result = composeSlide({ title: 'T', blocks: [{ image: svg(600, 1200) }, { text: note }] });
+  // The equal row of a landscape picture and the note (LH-71 would stack these two: the picture fills more above the text). The pictures
+  // are shown whole (`contain`), which keeps them in the flow (LH-80 gives a cover picture a track).
+  const equal = composeSlide({ title: 'T', composition: { mode: 'row' }, blocks: [{ image: svg(1600, 900), fit: 'contain' }, { text: note }] }).items.find((item) => item.field === 'text' && item.text.fontSize < 54);
+  const result = composeSlide({ title: 'T', blocks: [{ image: svg(600, 1200), fit: 'contain' }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   near(image.box.width, image.image.box.width, 'the cell is as wide as the frame');
   near(image.image.box.height, image.box.height, 'the frame fills the cell height');

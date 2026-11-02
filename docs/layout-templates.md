@@ -407,6 +407,13 @@ result stands. Both compositions are pure, so the choice is deterministic, and b
   is in the grid.
 - **Reported as** `recomposed: { layoutSize, size }` on the composition: the smallest body size the layout fitted and the
   smallest of the result, in reference pixels. Validate reports the findings of the result it composes.
+- **A chart too short (LH-49).** A layout that leaves a chart's plot shorter than its minimum (the larger of 120 reference
+  pixels and 22% of the body's height, `chartPlotBox`) is recomposed the same way, at any body size, when the automatic grid
+  draws the shortest plot taller and reads as well: no more overflow or split words, no more paragraphs under the reading
+  measure, and no block's body size smaller (only a layout that overflows may trade size, to overflow less, never at the floor). `recomposed.chart` then holds the shortest
+  plot of the layout and of the result, `{ layoutPlot, plot }`. A wide chart region the layout draws on purpose (`chart`,
+  `dashboard`) keeps its proportions: only the plot's height triggers it. chart-beside with its notes holding further charts
+  (a few pixels of plot each) becomes the automatic grid of charts above their notes.
 - **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with promoted regions, a slide with a block
   pinned to a region (`region`: the author chose the region), and `composeSlide(slide, { recompose: false })`, for hosts
   that need the regions and for tests of a layout's own geometry. A strict composition (`overflow: "error"`) that the layout

@@ -159,3 +159,19 @@ test('LH-86 with LH-43 and LH-46: long rows joined into one region share its hei
     assert.ok(Math.abs(texts[0].frameBox.y - region.y) < 1 && Math.abs(texts[4].frameBox.y + texts[4].frameBox.height - region.y - region.height) < 1);
   }
 });
+
+test('LH-49 with LH-58: a layout that squeezes chart and text pairs is composed as the automatic pairs, each chart above its text', () => {
+  // chart-beside with three long chart and text pairs stacks them in rows of 140 px: plots of a few pixels.
+  const slide = sampleSlide(layouts['chart-beside'], 6, 'long');
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide(slide, { layout: layouts['chart-beside'], direction });
+    assert.ok(result.recomposed?.chart, `${direction}: recomposed for the short plots`);
+    assert.ok(result.recomposed.chart.plot > result.recomposed.chart.layoutPlot);
+    const charts = result.items.filter((item) => item.field === 'chart'), texts = result.items.filter((item) => item.field === 'text' && item.path.includes('blocks'));
+    assert.equal(new Set(charts.map((item) => Math.round(item.box.y))).size, 1, `${direction}: the charts share one row`);
+    for (const [index, item] of charts.entries()) assert.ok(Math.abs(texts[index].box.x - item.box.x) < 1 && texts[index].box.y > item.box.y, `${direction}: pair ${index} is one column`);
+    const first = charts[0].box.x, last = charts.at(-1).box.x;
+    assert.ok(direction === 'rtl' ? first > last : first < last, `${direction}: reading order`);
+    assert.deepEqual(overflow(result), []);
+  }
+});

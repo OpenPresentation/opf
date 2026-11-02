@@ -303,7 +303,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   let compared = 0;
   for (const [index, slide] of deck.slides.entries()) {
     const context = resolveSlideContext(deck, index, {});
-    const geometry = composeSlide(context.slide, context.options);
+    // The layout's own regions (recompose: false): a slide LH-49 recomposes for a short chart plot still uses its layout's placeholders.
+    const geometry = composeSlide(context.slide, {...context.options, recompose: false});
     const shapes = placeholders(text(parts, layoutOf(parts, index + 1)));
     for (const region of geometry.regions) {
       assert.equal(region.collapsed, undefined, `${slide.layout}.${region.name} is filled`);
