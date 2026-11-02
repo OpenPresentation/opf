@@ -78,4 +78,9 @@ export const CONTENT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { language: { bcp47: "fr-UK" }, slides: [{ title: "Bienvenue" }] },
     { language: { bcp47: "fr-GB" }, slides: [{ title: "Bienvenue" }] },
   ),
+  "opf/straight-quotes": ex(
+    "Type the quotation marks of the deck's language (“…” and ‘…’ in English, «…» in French, „…“ in German) instead of the straight \" and '. Apostrophes inside words and inch and foot marks after numbers are fine.",
+    { title: "What customers said", text: "They called it \"the easiest setup we've done\"." },
+    { title: "What customers said", text: "They called it “the easiest setup we've done”." },
+  ),
 };

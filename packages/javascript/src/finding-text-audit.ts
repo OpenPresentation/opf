@@ -356,6 +356,76 @@ const imageResolution: RuleText = (finding) => {
   };
 };
 
+const textShrunk: RuleText = (finding) => {
+  const size = measuredNumber(finding, "sizePx");
+  const role = measuredNumber(finding, "rolePx");
+  const ratio = measuredNumber(finding, "ratio");
+  if (size === undefined || role === undefined || ratio === undefined) return undefined;
+  const blocks = measuredNumber(finding, "blocks") ?? 1;
+  const what = match(finding.message, /^The (.+?) is fitted at/)?.[1] ?? "text";
+  const more = blocks > 1 ? ` (and ${blocks - 1} more block${blocks === 2 ? "" : "s"})` : "";
+  return {
+    message: `The ${what}${onSlide(finding)}${more} is shrunk to ${num(size, 1)} px, ${Math.round(ratio * 100)}% of its ${num(role)} px starting size, so the slide is likely too dense.`,
+    next: `split it with ${code("opf paginate")}, move detail to the speaker notes, or shorten the text.`,
+  };
+};
+
+const centeredBody: RuleText = (finding) => {
+  const lines = measuredNumber(finding, "lines");
+  const characters = measuredNumber(finding, "characters");
+  if (lines === undefined || characters === undefined) return undefined;
+  const what = match(finding.message, /^A centred (\w+) of/)?.[1] ?? "block";
+  const blocks = measuredNumber(finding, "blocks") ?? 1;
+  return {
+    message: `A centered ${what}${onSlide(finding)} runs ${lines} line${lines === 1 ? "" : "s"} (${characters} characters)${blocks > 1 ? `, with ${blocks - 1} more like it` : ""}; each line starts at a different place, which is harder to read.`,
+    next: `set ${code('contentAlignment: "left"')} in the slide's design, or cut it to a line or two.`,
+  };
+};
+
+const tightSpacing: RuleText = (finding) => {
+  const gap = measuredNumber(finding, "gapInches");
+  const margin = measuredNumber(finding, "marginInches");
+  if (gap !== undefined) {
+    const minimum = measuredNumber(finding, "minimumGapInches");
+    return {
+      message: `Two blocks${onSlide(finding)} are ${num(gap)} in apart${minimum !== undefined ? `, closer than ${num(minimum)} in` : ""}, so they read as one crowded block.`,
+      next: `raise ${code("composition.gap")}, use fewer blocks or nested groups, or split the slide.`,
+    };
+  }
+  if (margin !== undefined) {
+    const minimum = measuredNumber(finding, "minimumMarginInches");
+    return {
+      message: `A block${onSlide(finding)} is ${num(margin)} in from the slide edge${minimum !== undefined ? `, closer than ${num(minimum)} in` : ""}.`,
+      next: `raise ${code("composition.padding")}, or place a picture meant to reach the edge with ${code("placement")}.`,
+    };
+  }
+  return undefined;
+};
+
+const layoutMonotony: RuleText = (finding) => {
+  const layout = measuredText(finding, "layout");
+  const slides = measuredNumber(finding, "slides");
+  const first = measuredNumber(finding, "first");
+  const last = measuredNumber(finding, "last");
+  if (!layout || slides === undefined || first === undefined || last === undefined) return undefined;
+  return {
+    message: `Slides ${first} to ${last} (${slides} in a row) all use layout ${code(layout)}, so they look alike.`,
+    next: "give some of them the layout their content asks for (a comparison, a chart, a statement, a picture), or merge or split slides.",
+  };
+};
+
+const straightQuotes: RuleText = (finding) => {
+  const open = measuredText(finding, "open");
+  const close = measuredText(finding, "close");
+  const text = unquote(match(finding.message, /: ("(?:[^"\\]|\\.)*")\.$/)?.[1]);
+  if (!open || !close) return undefined;
+  const fix = finding.fixes?.find((entry) => entry.id === "use-typographic-quotes");
+  return {
+    message: `${text ? `${code(brief(text, 50))} uses` : "This text uses"} straight quotation marks; this deck's language uses ${open}…${close}.`,
+    next: fix ? `apply the quick fix, or type ${open} and ${close} instead.` : `type ${open} and ${close} instead, and the matching single marks.`,
+  };
+};
+
 // ------------------------------------------------------------------------------------------------ content
 
 const chartValueNotNumeric: RuleText = (finding) => {
@@ -536,4 +606,9 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/unused-beat": unusedBeat,
   "opf/empty-slide": emptySlide,
   "opf/language-tag": languageTag,
+  "opf/text-shrunk": textShrunk,
+  "opf/centered-body": centeredBody,
+  "opf/tight-spacing": tightSpacing,
+  "opf/layout-monotony": layoutMonotony,
+  "opf/straight-quotes": straightQuotes,
 };
