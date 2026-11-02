@@ -7,10 +7,11 @@
     "Groups of items"
   ],
   "design": {
-    "contentBox": false,
+    "contentBox": true,
     "listBullet": "none"
   },
   "direction": "column",
+  "anchor": "middle",
   "regions": [
     {
       "name": "title"

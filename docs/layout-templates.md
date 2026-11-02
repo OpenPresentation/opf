@@ -56,19 +56,20 @@ The record's `direction` is omitted, so it is `column`: the title on top, then o
 `row`. A split has no name; it is a place to put regions the other way. Splits nest up to three levels, so a record can
 describe any layout made of full-width and full-height cuts (a guillotine partition), which is every built-in layout.
 
-`hero` nests the same way, with sizes: a title, a row of a lead and a picture twice as tall as the supporting row, then
-the supporting content.
+`hero` nests the other way, with sizes: a row of a text column (the title, the lead and the supporting content) and a
+picture two thirds as wide, bled to the slide's edges. A heading region may sit inside a split.
 
 ```json
 {
   "name": "Hero",
+  "direction": "row",
   "regions": [
-    { "name": "title" },
-    { "direction": "row", "size": 2, "regions": [
-      { "name": "lead",  "accepts": ["text", "quote", "metric"], "flow": "none" },
-      { "name": "media", "accepts": ["image", "video"], "role": "media", "flow": "none" }
+    { "direction": "column", "size": 3, "regions": [
+      { "name": "title" },
+      { "name": "lead", "size": "auto", "accepts": ["text", "quote", "metric"], "flow": "none" },
+      { "name": "support", "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "column" }
     ] },
-    { "name": "support", "size": 1, "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
+    { "name": "media", "size": 2, "accepts": ["image", "video"], "role": "media", "flow": "none", "bleed": true }
   ]
 }
 ```

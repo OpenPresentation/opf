@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "The built-in slide layouts of OPF 0.19: 30 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "969be8a67e9022d6417e04f698456949d427cd777d593260b04ddc1c4811e341",
+  "contentSha256": "c5de82a1a479b1c99a41a1f9a73f7c959f966de093567069bb9bbc5dde3102db",
   "records": [
     {
       "id": "cover",
@@ -190,7 +190,7 @@
     {
       "id": "hero",
       "name": "Hero",
-      "summary": "A lead message with a picture and supporting points.",
+      "summary": "A lead message and its supporting points beside a full-height picture.",
       "group": "Mixed",
       "file": "hero.json"
     },

@@ -8,6 +8,8 @@ Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a singl
 
 The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cover.png`) exist in [`assets/`](./assets/): original abstract artwork, MIT licensed with this repository, written by `scripts/generate-technical-example-assets.mjs`, so `opf convert` of every fixture finds its images. The fixtures' `./media/demo.mp4` and `./data/pipeline.csv` references stay authoring examples: no conversion reads a video or a data file.
 
+[`layout-sampler.opf.json`](./layout-sampler.opf.json) has one slide for each of the 30 default layouts and 13 dynamic compositions, on one fictional pilot story. Use it to review a layout change: `node scripts/render-layout-sampler.mjs <dir>` renders it against this checkout's gallery (ignoring the records it embeds), one PNG per slide, and `node scripts/layout-sampler-sheet.mjs <dir> <sheet.png>` tiles the PNGs into a labelled contact sheet.
+
 ## Coverage Areas
 
 - Root slide payloads and explicit content `type` values.

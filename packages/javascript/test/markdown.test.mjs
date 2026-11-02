@@ -543,7 +543,7 @@ describe("round trips", () => {
   }
 
   test("property: every example deck survives OPF to Markdown to OPF with all text and block kinds", () => {
-    assert.equal(examples.length, 129);
+    assert.equal(examples.length, 130);
     let nativeSlides = 0;
     let total = 0;
     const reasons = new Map();
@@ -565,7 +565,8 @@ describe("round trips", () => {
     }
     // Lossy parts are reported, not hidden: these are the only reasons the examples need YAML. A chart block carries type,
     // alt and data only, so a chart with options (FA-14 `highlight`; the FA-15 combo example: line, secondaryAxis, axis titles) is embedded.
-    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|chart content|"key" has no Markdown form|a block with several fields)/, reason);
+    // An items entry whose description holds a line break (the layout sampler's team: role, then responsibility) is embedded too.
+    for (const reason of reasons.keys()) assert.match(reason, /^(?:video content|table content|text content|chart content|items content|"key" has no Markdown form|a block with several fields)/, reason);
     assert.ok(nativeSlides / total > 0.9, `${nativeSlides} of ${total} slides are plain Markdown`);
   });
 

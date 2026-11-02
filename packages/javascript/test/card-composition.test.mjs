@@ -10,10 +10,11 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
     assert.deepEqual(boxed.flows,plain.flows);assert.deepEqual(boxed.items[0],plain.items[0]);assert.deepEqual(slide,before);
     for(const [index,item]of boxed.items.entries())if(index){
       assert.deepEqual(item.frameBox,plain.items[index].box);
-      const pad=12*Math.min(dimensions.width,dimensions.height)/720;
-      assert.ok(Math.abs(item.box.x-item.frameBox.x-pad)<1e-6);
-      assert.ok(Math.abs(item.box.y-item.frameBox.y-pad)<1e-6);
-      assert.ok(Math.abs(item.box.width+2*pad-item.frameBox.width)<1e-6);
+      // CARD_INSET (24 px at 720) across, at most a quarter of the card; down, at most a tenth of its height.
+      const frame=item.frameBox,pad=Math.min(24*Math.min(dimensions.width,dimensions.height)/720,frame.width/4,frame.height/4),down=Math.min(pad,frame.height/10);
+      assert.ok(Math.abs(item.box.x-frame.x-pad)<1e-3);
+      assert.ok(Math.abs(item.box.y-frame.y-down)<1e-3);
+      assert.ok(Math.abs(item.box.width+2*pad-frame.width)<1e-3);
     }
     const metric=boxed.items[1];
     assert.deepEqual(metric.metricLayout,layoutMetric(metric.value,metric.box,{scale:Math.min(dimensions.width,dimensions.height)/720,path:metric.path}));

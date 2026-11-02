@@ -192,7 +192,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 
   test('reading order is the order of the list, depth first', () => {
     const template = layoutTemplate(layouts.hero);
-    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'media', 'support']);
+    assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'support', 'media']);
     const custom = layoutTemplate({
       name: 'x',
       regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', size: 2, accepts: ['timeline'], flow: 'none' }, { direction: 'column', regions: [{ name: 'notes', accepts: ['text'] }, { name: 'metrics', accepts: ['metric', 'text'], flow: 'grid' }] }] }],

@@ -61,7 +61,7 @@
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 3530
+      "bytes": 5067
     },
     {
       "id": "comparison",
@@ -91,7 +91,7 @@
     {
       "id": "scorecard",
       "file": "scorecard.svg",
-      "bytes": 3300
+      "bytes": 3681
     },
     {
       "id": "image",
@@ -131,12 +131,12 @@
     {
       "id": "code",
       "file": "code.svg",
-      "bytes": 2720
+      "bytes": 2961
     },
     {
       "id": "hero",
       "file": "hero.svg",
-      "bytes": 4601
+      "bytes": 3661
     },
     {
       "id": "dashboard",
@@ -146,7 +146,7 @@
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 4391
+      "bytes": 5362
     },
     {
       "id": "logos",

@@ -1,0 +1,2509 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout sampler",
+  "language": "en",
+  "description": "One slide for each of the 30 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "layout-cover",
+      "layout": "cover",
+      "title": "A smaller pilot. A clearer decision.",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "media",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Illustrative landscape with two green ridges"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-section",
+      "layout": "section",
+      "title": "Test before scaling",
+      "subtitle": "Illustrative example • fictional data"
+    },
+    {
+      "id": "layout-agenda",
+      "layout": "agenda",
+      "title": "From the problem to the next decision",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "items",
+          "items": [
+            "Define the problem",
+            "Review the pilot evidence",
+            "Agree the next decision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-agenda-split",
+      "layout": "agenda-split",
+      "title": "Three parts, one decision",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "items",
+          "items": [
+            "Define the problem",
+            "Review the pilot evidence",
+            "Agree the next decision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-statement",
+      "layout": "statement",
+      "title": "Start small enough to learn quickly",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "message",
+          "text": "Learn with two teams before expanding the rollout."
+        }
+      ]
+    },
+    {
+      "id": "layout-closing",
+      "layout": "closing",
+      "title": "Agree the pilot team and start date",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "details",
+          "text": "Next step: name the pilot lead and agree the start date."
+        }
+      ]
+    },
+    {
+      "id": "layout-text",
+      "layout": "text",
+      "title": "Learn before scaling",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "body",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        },
+        {
+          "region": "body",
+          "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
+        },
+        {
+          "region": "body",
+          "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
+        }
+      ]
+    },
+    {
+      "id": "layout-list",
+      "layout": "list",
+      "title": "Make the next step explicit",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "body",
+          "items": [
+            "Close the audit gaps",
+            "Pilot with two teams",
+            "Report every week"
+          ]
+        },
+        {
+          "region": "body",
+          "items": [
+            "Hire two engineers",
+            "Ship the mobile beta",
+            "Retire the old portal"
+          ]
+        },
+        {
+          "region": "body",
+          "items": [
+            "Agree the budget",
+            "Name the owners",
+            "Review in March"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-quote",
+      "layout": "quote",
+      "title": "A shared view makes decisions easier",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "quotes",
+          "quote": {
+            "text": "We can now see where participants need help.",
+            "attribution": "Pilot lead",
+            "source": "Illustrative quotation"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-two-column",
+      "layout": "two-column",
+      "title": "Opportunity and constraints",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "first",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        },
+        {
+          "region": "second",
+          "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
+        }
+      ]
+    },
+    {
+      "id": "layout-three-column",
+      "layout": "three-column",
+      "title": "Scope, evidence and the next decision",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "first",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        },
+        {
+          "region": "second",
+          "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
+        },
+        {
+          "region": "third",
+          "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
+        }
+      ]
+    },
+    {
+      "id": "layout-pillars",
+      "layout": "pillars",
+      "title": "Three conditions for a useful pilot",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "pillars",
+          "items": [
+            {
+              "text": "Clear scope",
+              "description": "Two teams and one workflow keep the pilot focused."
+            }
+          ]
+        },
+        {
+          "region": "pillars",
+          "items": [
+            {
+              "text": "Consistent measures",
+              "description": "Track completion and task time against a baseline."
+            }
+          ]
+        },
+        {
+          "region": "pillars",
+          "items": [
+            {
+              "text": "An explicit decision",
+              "description": "Agree the evidence needed before expanding."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-comparison",
+      "layout": "comparison",
+      "title": "Choose the smallest useful test",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "first",
+          "text": "Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline."
+        },
+        {
+          "region": "second",
+          "text": "Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs."
+        },
+        {
+          "region": "verdict",
+          "text": "Recommendation: establish the evidence with Option A before committing to Option B."
+        }
+      ]
+    },
+    {
+      "id": "layout-process",
+      "layout": "process",
+      "title": "Three steps from evidence to decision",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "steps",
+          "items": [
+            {
+              "text": "Establish a baseline",
+              "description": "Measure the current completion rate and task time.",
+              "start": 1
+            }
+          ],
+          "numbering": "arabic"
+        },
+        {
+          "region": "steps",
+          "items": [
+            {
+              "text": "Run the pilot",
+              "description": "Test with two teams and review feedback each week.",
+              "start": 2
+            }
+          ],
+          "numbering": "arabic"
+        },
+        {
+          "region": "steps",
+          "items": [
+            {
+              "text": "Decide what to scale",
+              "description": "Compare outcomes with the baseline and agree the next step.",
+              "start": 3
+            }
+          ],
+          "numbering": "arabic"
+        }
+      ]
+    },
+    {
+      "id": "layout-timeline",
+      "layout": "timeline",
+      "title": "Six weeks to an informed decision",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "timeline",
+          "timeline": {
+            "events": [
+              {
+                "when": "Week 1",
+                "what": "Baseline"
+              },
+              {
+                "when": "Weeks 2–5",
+                "what": "Pilot"
+              },
+              {
+                "when": "Week 6",
+                "what": "Review and decide"
+              }
+            ]
+          }
+        },
+        {
+          "region": "notes",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-faq",
+      "layout": "faq",
+      "title": "What the pilot involves",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "questions",
+          "items": [
+            {
+              "text": "Who takes part?",
+              "description": "Two field teams, with 52 participants in total."
+            }
+          ]
+        },
+        {
+          "region": "questions",
+          "items": [
+            {
+              "text": "How long does it run?",
+              "description": "Six weeks, including a baseline measurement."
+            }
+          ]
+        },
+        {
+          "region": "questions",
+          "items": [
+            {
+              "text": "What happens next?",
+              "description": "Review completion and task time before expanding."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-metrics",
+      "layout": "metrics",
+      "title": "Pilot outcomes in three measures",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "metrics",
+          "metric": {
+            "value": 52,
+            "label": "Trial participants",
+            "description": "Illustrative six-week pilot"
+          }
+        },
+        {
+          "region": "metrics",
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "description": "Up from 68% at baseline"
+          }
+        },
+        {
+          "region": "metrics",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Down from 9.4 min"
+          }
+        },
+        {
+          "region": "note",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ],
+      "design": {
+        "titleAlignment": "center"
+      }
+    },
+    {
+      "id": "layout-scorecard",
+      "layout": "scorecard",
+      "title": "Track performance against a target",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "cards",
+          "metric": {
+            "value": 52,
+            "label": "Trial participants",
+            "description": "Target: 50 participants"
+          }
+        },
+        {
+          "region": "cards",
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "description": "Target: at least 80%"
+          }
+        },
+        {
+          "region": "cards",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Target: under 7 min"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-image",
+      "layout": "image",
+      "title": "Give the visual room to speak",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "media",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Illustrative landscape with two green ridges"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-image-beside",
+      "layout": "image-beside",
+      "title": "Explain what the audience should notice",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "media",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Illustrative landscape with two green ridges"
+          }
+        },
+        {
+          "region": "body",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-gallery",
+      "layout": "gallery",
+      "title": "Compare three visual directions",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "pictures",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Blue and green landscape palette"
+          }
+        },
+        {
+          "region": "pictures",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNkNDliNzQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmYWU1Y2IiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iI2I5NmI1MCIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiM4NTRiNDgiLz48L3N2Zz4=",
+            "alt": "Warm earth landscape palette"
+          }
+        },
+        {
+          "region": "pictures",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM5YThmYmUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNlZWU4ZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzc1NmI5NiIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiM1MTQ3NjciLz48L3N2Zz4=",
+            "alt": "Purple landscape palette"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-chart",
+      "layout": "chart",
+      "title": "Completion rose through the pilot",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "charts",
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "region": "note",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-chart-beside",
+      "layout": "chart-beside",
+      "title": "The largest gain came in week four",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "chart",
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "region": "notes",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-table",
+      "layout": "table",
+      "title": "Compare outcomes on consistent measures",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "table",
+          "table": {
+            "columns": [
+              "Team",
+              {
+                "name": "Participants",
+                "format": "0"
+              },
+              {
+                "name": "Completion",
+                "format": "0%"
+              },
+              {
+                "name": "Median time (min)",
+                "format": "0.0"
+              }
+            ],
+            "rows": [
+              [
+                "A",
+                28,
+                0.89,
+                5.8
+              ],
+              [
+                "B",
+                24,
+                0.79,
+                6.7
+              ]
+            ]
+          }
+        },
+        {
+          "region": "note",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-table-beside",
+      "layout": "table-beside",
+      "title": "Team B needs targeted support",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "table",
+          "table": {
+            "columns": [
+              "Team",
+              {
+                "name": "Participants",
+                "format": "0"
+              },
+              {
+                "name": "Completion",
+                "format": "0%"
+              },
+              {
+                "name": "Median time (min)",
+                "format": "0.0"
+              }
+            ],
+            "rows": [
+              [
+                "A",
+                28,
+                0.89,
+                5.8
+              ],
+              [
+                "B",
+                24,
+                0.79,
+                6.7
+              ]
+            ]
+          }
+        },
+        {
+          "region": "notes",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ]
+    },
+    {
+      "id": "layout-code",
+      "layout": "code",
+      "title": "Keep the implementation easy to inspect",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "code",
+          "code": {
+            "language": "javascript",
+            "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+          }
+        },
+        {
+          "region": "notes",
+          "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+        }
+      ]
+    },
+    {
+      "id": "layout-hero",
+      "layout": "hero",
+      "title": "One team. One outcome.",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "lead",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        },
+        {
+          "region": "support",
+          "text": "Keep the scope narrow, collect feedback weekly and give each decision a named owner."
+        },
+        {
+          "region": "support",
+          "text": "Compare the results with the baseline. Expand only when the evidence supports the next step."
+        },
+        {
+          "region": "support",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        },
+        {
+          "region": "media",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Illustrative landscape with two green ridges"
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-dashboard",
+      "layout": "dashboard",
+      "title": "Pilot performance at a glance",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "kpis",
+          "metric": {
+            "value": 52,
+            "label": "Trial participants",
+            "description": "Illustrative six-week pilot"
+          }
+        },
+        {
+          "region": "kpis",
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "description": "Up from 68% at baseline"
+          }
+        },
+        {
+          "region": "kpis",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Down from 9.4 min"
+          }
+        },
+        {
+          "region": "charts",
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "region": "charts",
+          "chart": {
+            "type": "bar",
+            "axisTitles": {
+              "value": "Median task time (min)"
+            },
+            "data": {
+              "columns": [
+                "Team",
+                {
+                  "name": "Median task time (min)",
+                  "format": "0.0"
+                }
+              ],
+              "rows": [
+                [
+                  "A",
+                  5.8
+                ],
+                [
+                  "B",
+                  6.7
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-team",
+      "layout": "team",
+      "title": "Give each workstream a clear owner",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Ana Ruiz",
+              "description": "Pilot lead\nCoordinates the two teams and weekly reviews."
+            }
+          ]
+        },
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Sam Lee",
+              "description": "Product lead\nTurns participant feedback into product changes."
+            }
+          ]
+        },
+        {
+          "region": "people",
+          "items": [
+            {
+              "text": "Kai Moreau",
+              "description": "Analytics lead\nMeasures completion and task time consistently."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "layout-logos",
+      "layout": "logos",
+      "title": "Recognize the partners",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "logos",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48cGF0aCBkPSJNMjIwIDE3MFY3MGwxNjAgMTAwVjcwIiBmaWxsPSJub25lIiBzdHJva2U9IiMyNjM0NDUiIHN0cm9rZS13aWR0aD0iMjQiLz48L3N2Zz4=",
+            "alt": "NORTH, fictional geometric mark"
+          }
+        },
+        {
+          "region": "logos",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48cGF0aCBkPSJNMjMwIDYwaDE0MHYyNEgyNTR2MzRoOTZ2MjRoLTk2djM4aC0yNHoiIGZpbGw9IiMyNjM0NDUiLz48L3N2Zz4=",
+            "alt": "FIELD, fictional geometric mark"
+          }
+        },
+        {
+          "region": "logos",
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgNjAwIDI0MCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSIyNDAiIGZpbGw9IiNmMGYwZjAiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSIxMjAiIHI9IjcyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyNjM0NDUiIHN0cm9rZS13aWR0aD0iMjAiLz48cGF0aCBkPSJNMjYwIDEyMGg4ME0zMDAgODB2ODAiIHN0cm9rZT0iIzI2MzQ0NSIgc3Ryb2tlLXdpZHRoPSIxOCIvPjwvc3ZnPg==",
+            "alt": "STUDIO, fictional geometric mark"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dynamic-row-weighted",
+      "title": "Lead with the recommendation",
+      "subtitle": "Illustrative example • fictional data",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "text": "Run a six-week pilot with two teams before expanding. The pilot gives us a baseline, weekly feedback and one clear decision at the end."
+        },
+        {
+          "text": "Cost: two team leads at 20% for six weeks."
+        }
+      ]
+    },
+    {
+      "id": "dynamic-auto-three",
+      "title": "What makes a pilot worth running",
+      "subtitle": "Illustrative example • fictional data",
+      "composition": {
+        "mode": "auto",
+        "columns": 3
+      },
+      "blocks": [
+        {
+          "items": [
+            {
+              "text": "Clear scope",
+              "description": "Two teams and one workflow keep the pilot focused."
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "text": "Consistent measures",
+              "description": "Track completion and task time against a baseline."
+            }
+          ]
+        },
+        {
+          "items": [
+            {
+              "text": "An explicit decision",
+              "description": "Agree the evidence needed before expanding."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dynamic-metric-grid",
+      "title": "Pilot outcomes in four measures",
+      "subtitle": "Illustrative example • fictional data",
+      "composition": {
+        "mode": "grid",
+        "columns": 2
+      },
+      "blocks": [
+        {
+          "metric": {
+            "value": 52,
+            "label": "Trial participants",
+            "description": "Across two field teams"
+          }
+        },
+        {
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "description": "Up from 68% at baseline"
+          }
+        },
+        {
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Down from 9.4 min"
+          }
+        },
+        {
+          "metric": {
+            "value": 2,
+            "label": "Teams",
+            "description": "One workflow each"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dynamic-column",
+      "title": "Completion rose every week",
+      "subtitle": "Illustrative example • fictional data",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          1,
+          3
+        ]
+      },
+      "blocks": [
+        {
+          "text": "Task completion climbed from 68% to 84% over the first four weeks of the pilot."
+        },
+        {
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dynamic-chart-list",
+      "title": "What the first four weeks show",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "bullets": [
+            "Completion rose 16 points",
+            "The largest gain came in week four",
+            "Team B needs targeted support"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dynamic-nested-group",
+      "title": "Week four brought the biggest gain",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "chart": {
+            "type": "column",
+            "axisTitles": {
+              "category": "Week",
+              "value": "Task completion"
+            },
+            "data": {
+              "columns": [
+                "Week",
+                {
+                  "name": "Task completion",
+                  "format": "0%"
+                }
+              ],
+              "rows": [
+                [
+                  "1",
+                  0.68
+                ],
+                [
+                  "2",
+                  0.72
+                ],
+                [
+                  "3",
+                  0.76
+                ],
+                [
+                  "4",
+                  0.84
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "composition": {
+            "mode": "column"
+          },
+          "blocks": [
+            {
+              "metric": {
+                "value": "+8 pts",
+                "label": "Week four gain",
+                "description": "From 76% to 84%"
+              }
+            },
+            {
+              "text": "The new checklist reached both teams at the start of week four."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dynamic-promoted-columns",
+      "title": "What the pilot asks of us",
+      "subtitle": "Illustrative example • fictional data",
+      "left": {
+        "text": "The pilot shows a clear gain in completion with modest effort."
+      },
+      "center+right": {
+        "items": [
+          "Two teams must release a lead at 20%",
+          "Weekly reviews need a fixed slot",
+          "Analytics needs read access to both workflows"
+        ]
+      }
+    },
+    {
+      "id": "dynamic-promoted-grid",
+      "title": "From baseline to decision in six weeks",
+      "subtitle": "Illustrative example • fictional data",
+      "top:left": {
+        "metric": {
+          "value": 52,
+          "label": "Participants"
+        }
+      },
+      "top:center": {
+        "metric": {
+          "value": "84%",
+          "label": "Completion"
+        }
+      },
+      "top:right": {
+        "metric": {
+          "value": "6.2",
+          "unit": "min",
+          "label": "Median time"
+        }
+      },
+      "middle+bottom:left+center+right": {
+        "timeline": {
+          "events": [
+            {
+              "when": "Week 1",
+              "what": "Baseline"
+            },
+            {
+              "when": "Weeks 2–5",
+              "what": "Pilot"
+            },
+            {
+              "when": "Week 6",
+              "what": "Review and decide"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dynamic-image-text-quote",
+      "title": "What participants noticed",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "image": {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNjAgMTAwIiB3aWR0aD0iMTYwMCIgaGVpZ2h0PSIxMDAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InMiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM3YWE3ZTYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZmUwZjUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEwMCIgZmlsbD0idXJsKCNzKSIvPjxwYXRoIGQ9Ik0wIDYyIFE0MCA0MCA4MCA1OCBUMTYwIDUwIFYxMDAgSDAgWiIgZmlsbD0iIzNmOGE1NSIvPjxwYXRoIGQ9Ik0wIDc4IFE1MCA2NCAxMDAgNzYgVDE2MCA3MiBWMTAwIEgwIFoiIGZpbGw9IiMyZjZiNDIiLz48L3N2Zz4=",
+            "alt": "Illustrative landscape with two green ridges"
+          }
+        },
+        {
+          "text": "Participants said the checklist made the next step obvious."
+        },
+        {
+          "quote": {
+            "text": "We can now see where participants need help.",
+            "attribution": "Pilot lead",
+            "source": "Illustrative quotation"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dynamic-table-text",
+      "title": "Where Team B falls behind",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Team",
+              {
+                "name": "Participants",
+                "format": "0"
+              },
+              {
+                "name": "Completion",
+                "format": "0%"
+              },
+              {
+                "name": "Median time (min)",
+                "format": "0.0"
+              }
+            ],
+            "rows": [
+              [
+                "A",
+                28,
+                0.89,
+                5.8
+              ],
+              [
+                "B",
+                24,
+                0.79,
+                6.7
+              ]
+            ]
+          }
+        },
+        {
+          "text": "Team B trails on both measures. Pair its lead with Team A for weeks five and six."
+        }
+      ]
+    },
+    {
+      "id": "dynamic-six-points",
+      "title": "Six lessons from the pilot",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "text": "Start with a baseline."
+        },
+        {
+          "text": "Keep the scope to one workflow."
+        },
+        {
+          "text": "Review feedback every week."
+        },
+        {
+          "text": "Name one owner per decision."
+        },
+        {
+          "text": "Share results with both teams."
+        },
+        {
+          "text": "Decide with the evidence, not the calendar."
+        }
+      ]
+    },
+    {
+      "id": "dynamic-code-text",
+      "title": "How the running total works",
+      "subtitle": "Illustrative example • fictional data",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      },
+      "blocks": [
+        {
+          "code": {
+            "language": "javascript",
+            "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+          }
+        },
+        {
+          "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+        }
+      ]
+    },
+    {
+      "id": "dynamic-chart-quote",
+      "title": "The numbers and the voice agree",
+      "subtitle": "Illustrative example • fictional data",
+      "left+center": {
+        "chart": {
+          "type": "column",
+          "axisTitles": {
+            "category": "Week",
+            "value": "Task completion"
+          },
+          "data": {
+            "columns": [
+              "Week",
+              {
+                "name": "Task completion",
+                "format": "0%"
+              }
+            ],
+            "rows": [
+              [
+                "1",
+                0.68
+              ],
+              [
+                "2",
+                0.72
+              ],
+              [
+                "3",
+                0.76
+              ],
+              [
+                "4",
+                0.84
+              ]
+            ]
+          }
+        }
+      },
+      "right": {
+        "quote": {
+          "text": "The weekly review keeps the next step clear.",
+          "attribution": "Product lead",
+          "source": "Illustrative quotation"
+        }
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "cover": {
+          "name": "Cover",
+          "summary": "The opening slide: title, subtitle and an optional picture.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "design": {
+            "titleAlignment": "center",
+            "contentAlignment": "center"
+          },
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "media",
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
+            }
+          ],
+          "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
+          }
+        },
+        "section": {
+          "name": "Section",
+          "summary": "A divider between parts: the section title and an optional subtitle.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "design": {
+            "titleAlignment": "center",
+            "contentAlignment": "center"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title",
+              "size": 1
+            }
+          ],
+          "description": "Introduce the next part of a presentation. Use the subtitle to connect the new section to the overall argument.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/section.svg"
+          }
+        },
+        "agenda": {
+          "name": "Agenda",
+          "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "items",
+              "accepts": [
+                "list",
+                "text"
+              ],
+              "role": "primary",
+              "flow": "column",
+              "listColumns": "auto"
+            }
+          ],
+          "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
+          }
+        },
+        "agenda-split": {
+          "name": "Agenda beside",
+          "summary": "A concise agenda beside its title and introduction.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "items",
+              "accepts": [
+                "list",
+                "text"
+              ],
+              "role": "primary",
+              "flow": "column",
+              "listColumns": "auto",
+              "anchor": "middle"
+            }
+          ],
+          "description": "Introduce a concise agenda with the title and introduction on one side and the parts of the talk beside them. Use Agenda for detailed entries that need the full slide width.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda-split.svg"
+          }
+        },
+        "statement": {
+          "name": "Statement",
+          "summary": "One message, large and alone.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "design": {
+            "titleAlignment": "center",
+            "contentAlignment": "center"
+          },
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "message",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "quote",
+                "metric"
+              ],
+              "role": "primary",
+              "flow": "none"
+            }
+          ],
+          "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/statement.svg"
+          }
+        },
+        "closing": {
+          "name": "Closing",
+          "summary": "The last slide: thanks, the call to action and contact details.",
+          "tags": [
+            "Openers and closers"
+          ],
+          "design": {
+            "titleAlignment": "center",
+            "contentAlignment": "center",
+            "imageFit": "contain"
+          },
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "details",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "list",
+                "image"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          ],
+          "description": "End with the action the audience should take. Include contact details or a brief thank-you when useful.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/closing.svg"
+          }
+        },
+        "text": {
+          "name": "Text",
+          "summary": "Prose. Several blocks sit side by side when short and stack when long.",
+          "tags": [
+            "Text"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          ],
+          "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+          }
+        },
+        "list": {
+          "name": "List",
+          "summary": "Bulleted or numbered points; one long list flows into columns.",
+          "tags": [
+            "Text"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto",
+              "listColumns": "auto"
+            }
+          ],
+          "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
+          }
+        },
+        "quote": {
+          "name": "Quote",
+          "summary": "One or more quotations with attribution and photo.",
+          "tags": [
+            "Text"
+          ],
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "quotes",
+              "size": "auto",
+              "accepts": [
+                "quote",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Highlight a quotation and its source. Use the attribution to explain who said it and why their perspective matters.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/quote.svg"
+          }
+        },
+        "two-column": {
+          "name": "Two columns",
+          "summary": "Two independent columns of any content.",
+          "tags": [
+            "Text"
+          ],
+          "design": {
+            "imageFit": "contain"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "first",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "quote",
+                    "code",
+                    "image",
+                    "video",
+                    "chart",
+                    "table",
+                    "metric",
+                    "timeline",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "second",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "quote",
+                    "code",
+                    "image",
+                    "video",
+                    "chart",
+                    "table",
+                    "metric",
+                    "timeline",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                }
+              ]
+            }
+          ],
+          "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence. Pictures remain visible in full unless an explicit fit overrides the layout default.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+          }
+        },
+        "three-column": {
+          "name": "Three columns",
+          "summary": "Three independent columns of any content.",
+          "tags": [
+            "Text"
+          ],
+          "design": {
+            "imageFit": "contain"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "first",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "quote",
+                    "code",
+                    "image",
+                    "video",
+                    "chart",
+                    "table",
+                    "metric",
+                    "timeline",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "second",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "quote",
+                    "code",
+                    "image",
+                    "video",
+                    "chart",
+                    "table",
+                    "metric",
+                    "timeline",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "third",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "quote",
+                    "code",
+                    "image",
+                    "video",
+                    "chart",
+                    "table",
+                    "metric",
+                    "timeline",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                }
+              ]
+            }
+          ],
+          "description": "Place three independent bodies of content beside each other. Keep equivalent comparisons parallel and use fewer columns when content needs more width. Pictures remain visible in full unless an explicit fit overrides the layout default.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/three-column.svg"
+          }
+        },
+        "pillars": {
+          "name": "Pillars",
+          "summary": "Related ideas arranged in equal columns.",
+          "tags": [
+            "Groups of items"
+          ],
+          "design": {
+            "contentBox": true,
+            "listBullet": "none"
+          },
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "pillars",
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "image",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Show the main themes or principles behind an idea. Give each item a short heading and a comparable amount of detail.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/pillars.svg"
+          }
+        },
+        "comparison": {
+          "name": "Comparison",
+          "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
+          "tags": [
+            "Groups of items"
+          ],
+          "design": {
+            "contentBox": false
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "size": "auto",
+              "regions": [
+                {
+                  "name": "first",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "image",
+                    "chart",
+                    "table",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "second",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "image",
+                    "chart",
+                    "table",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                }
+              ]
+            },
+            {
+              "name": "verdict",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/comparison.svg"
+          }
+        },
+        "process": {
+          "name": "Process",
+          "summary": "Steps in order, in one row.",
+          "tags": [
+            "Groups of items"
+          ],
+          "design": {
+            "contentBox": false,
+            "contentDirection": "horizontal"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "steps",
+              "accepts": [
+                "timeline",
+                "list",
+                "text",
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
+          }
+        },
+        "timeline": {
+          "name": "Timeline",
+          "summary": "Dated events or a roadmap along one axis, with optional notes.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "timeline",
+              "accepts": [
+                "timeline"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "notes",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "list",
+                "metric"
+              ],
+              "role": "supporting",
+              "flow": "auto"
+            }
+          ],
+          "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+          }
+        },
+        "faq": {
+          "name": "FAQ",
+          "summary": "Questions with their answers.",
+          "tags": [
+            "Groups of items"
+          ],
+          "design": {
+            "contentBox": false,
+            "listBullet": "none"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "questions",
+              "accepts": [
+                "list",
+                "text",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "column",
+              "listColumns": "auto"
+            }
+          ],
+          "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/faq.svg"
+          }
+        },
+        "metrics": {
+          "name": "Metrics",
+          "summary": "One to six headline numbers, with an optional note.",
+          "tags": [
+            "Numbers"
+          ],
+          "design": {
+            "contentAlignment": "center"
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "metrics",
+              "accepts": [
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid",
+              "anchor": "middle"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+          }
+        },
+        "scorecard": {
+          "name": "Scorecard",
+          "summary": "Headline measures with their targets and status.",
+          "tags": [
+            "Numbers"
+          ],
+          "design": {
+            "contentBox": true
+          },
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "cards",
+              "accepts": [
+                "metric",
+                "text",
+                "list",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/scorecard.svg"
+          }
+        },
+        "image": {
+          "name": "Image",
+          "summary": "One picture, shown whole, under an optional title.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "media",
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
+            }
+          ],
+          "description": "Let one picture carry the message, shown whole at its own proportions rather than cropped. Add a short title or caption to explain what the audience should notice. For a full-bleed crop, set the image block's fit to cover.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        },
+        "image-beside": {
+          "name": "Image beside",
+          "summary": "A picture or video beside text.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "media",
+                  "accepts": [
+                    "image",
+                    "video"
+                  ],
+                  "role": "media",
+                  "flow": "none",
+                  "anchor": "middle"
+                },
+                {
+                  "name": "body",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "quote",
+                    "group"
+                  ],
+                  "role": "primary",
+                  "flow": "auto",
+                  "anchor": "middle"
+                }
+              ]
+            }
+          ],
+          "description": "Explain a visual alongside its supporting text. Use the text to direct attention to the meaningful parts of the image.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/image-beside.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        },
+        "gallery": {
+          "name": "Gallery",
+          "summary": "One to six framed pictures: a screenshot, a diagram, a photo set.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "pictures",
+              "accepts": [
+                "image",
+                "video",
+                "group"
+              ],
+              "role": "media",
+              "flow": "grid"
+            }
+          ],
+          "description": "Show several related visuals together. Use consistent captions and ordering to make the relationship between them clear.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/gallery.svg"
+          }
+        },
+        "chart": {
+          "name": "Chart",
+          "summary": "One to six charts, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "charts",
+              "accepts": [
+                "chart",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+          }
+        },
+        "chart-beside": {
+          "name": "Chart beside",
+          "summary": "A chart with the takeaway beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "chart",
+                  "size": 3,
+                  "accepts": [
+                    "chart"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "notes",
+                  "size": 2,
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "quote",
+                    "chart"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            }
+          ],
+          "description": "Pair a chart with an explanation of its result. Keep the text focused on the pattern or decision supported by the data.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-beside.svg"
+          }
+        },
+        "table": {
+          "name": "Table",
+          "summary": "A table across the slide, with an optional note.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "table",
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "column"
+            },
+            {
+              "name": "note",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          ],
+          "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table.svg"
+          }
+        },
+        "table-beside": {
+          "name": "Table beside",
+          "summary": "A table with commentary beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "table",
+                  "size": 3,
+                  "accepts": [
+                    "table"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "notes",
+                  "size": 2,
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "quote"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            }
+          ],
+          "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
+          }
+        },
+        "code": {
+          "name": "Code",
+          "summary": "Source code with the explanation beside it.",
+          "tags": [
+            "Visuals"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "direction": "row",
+              "regions": [
+                {
+                  "name": "code",
+                  "size": 3,
+                  "accepts": [
+                    "code"
+                  ],
+                  "role": "primary",
+                  "flow": "column"
+                },
+                {
+                  "name": "notes",
+                  "size": 2,
+                  "accepts": [
+                    "text",
+                    "list"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            }
+          ],
+          "description": "Show a code example or technical excerpt. Keep the excerpt focused and use the title or caption to explain its purpose.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/code.svg"
+          }
+        },
+        "hero": {
+          "name": "Hero",
+          "summary": "A lead message and its supporting points beside a full-height picture.",
+          "tags": [
+            "Mixed"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "direction": "column",
+              "size": 3,
+              "regions": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "lead",
+                  "size": "auto",
+                  "accepts": [
+                    "text",
+                    "quote",
+                    "metric"
+                  ],
+                  "role": "primary",
+                  "flow": "none"
+                },
+                {
+                  "name": "support",
+                  "accepts": [
+                    "text",
+                    "list",
+                    "metric",
+                    "group"
+                  ],
+                  "role": "supporting",
+                  "flow": "column"
+                }
+              ]
+            },
+            {
+              "name": "media",
+              "size": 2,
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none",
+              "bleed": true
+            }
+          ],
+          "description": "Combine a prominent visual or message with supporting content. Use it when one element should lead the audience into the details.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/hero.svg"
+          }
+        },
+        "dashboard": {
+          "name": "Dashboard",
+          "summary": "Headline numbers over charts.",
+          "tags": [
+            "Mixed"
+          ],
+          "design": {
+            "contentBox": false
+          },
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "kpis",
+              "size": 2,
+              "accepts": [
+                "metric"
+              ],
+              "role": "secondary",
+              "flow": "grid"
+            },
+            {
+              "name": "charts",
+              "size": 3,
+              "accepts": [
+                "chart",
+                "table"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
+          }
+        },
+        "team": {
+          "name": "Team",
+          "summary": "People: photo, name and role cards.",
+          "tags": [
+            "Mixed"
+          ],
+          "design": {
+            "listBullet": "none",
+            "contentBox": true
+          },
+          "direction": "column",
+          "anchor": "middle",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "people",
+              "accepts": [
+                "group",
+                "image",
+                "text",
+                "quote",
+                "list"
+              ],
+              "role": "primary",
+              "flow": "grid"
+            }
+          ],
+          "description": "Introduce people and their roles. Use consistent names, descriptions and portraits when available.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/team.svg"
+          }
+        },
+        "logos": {
+          "name": "Logos",
+          "summary": "Customer, partner or sponsor logos in a grid of up to 12.",
+          "tags": [
+            "Mixed"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "logos",
+              "accepts": [
+                "image",
+                "text",
+                "group"
+              ],
+              "role": "media",
+              "flow": "grid",
+              "anchor": "middle",
+              "max": 12
+            }
+          ],
+          "description": "Present organizations, partners or customers as a group. Use a consistent visual scale and add context when the relationship is not obvious.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/logos.svg"
+          },
+          "design": {
+            "imageFit": "contain"
+          }
+        }
+      }
+    }
+  }
+}
