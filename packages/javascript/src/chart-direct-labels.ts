@@ -103,7 +103,7 @@ export function endLabelText(data: ResolvedChartData, series: number): string {
  * widest name, and the names are placed against it (placeEndLabels).
  */
 export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, geometry: ChartLayerGeometry, axisFor: (headerHeight: number) => ChartValueAxis | undefined): {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined {
-  if (!endLabelCandidate(chart, data, layer)) return undefined;
+  if (!endLabelCandidate(chart, data, layer) || !data.ok) return undefined;
   const {box, scale} = geometry;
   if (![box.width, box.height, scale].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0) return undefined;
   const header = chartHeader(chart, data, geometry, {legend: false});
