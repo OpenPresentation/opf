@@ -2333,7 +2333,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const plan = nativePlans.find(plan => plan.item === item);
       const body = addNativeBody(slide, plan, itemContext, options, {textBoxOptions, nativeFontOptions, exportColor, nativeColor, linkColor, langOptions, solidColorXml});
       context.nativeBodies.set(body.objectName, body.defaults);
-      if (plan === nativeBody) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
+      if (plan === nativeBody && !plan.carded) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
