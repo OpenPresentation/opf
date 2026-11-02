@@ -3748,8 +3748,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     if (cols === 1 && stacks) {
-      // LH-48 (growBody, CENTER): an under-filled body stacked in one column sits in the middle of the content box.
-      grid.boxes = stackedBoxes(nodes, area, actualGap, settings, hasCards, area === contentBox && (options as Record<symbol, unknown>)[CENTER] === true ? 'middle' : 'top');
+      grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
