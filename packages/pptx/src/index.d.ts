@@ -62,8 +62,19 @@ export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; pat
 export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unresolved-source" | "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" | "file-unreadable" | "resolver-failed" }
 /** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */
 export interface SvgSanitizedDiagnostic { code: "svg-sanitized"; path: string; message: string }
-/** An SVG image block with a duotone recolor or a non-rectangular shape (or an SVG image background with the tile fit) exports as its PNG raster, not as a native SVG picture, so the effect applies as in the preview (PowerPoint applies opacity, grayscale and a border to an SVG picture, and those stay native). */
-export interface SvgImageRasterizedDiagnostic { code: "svg-image-rasterized"; path: string; message: string }
+/**
+ * LH-29: a mapping the PowerPoint file cannot represent exactly; the export draws the nearest native form. `feature` names the mapping:
+ * - `svg-rasterized`: an SVG image block with a duotone recolor or a non-rectangular shape, an SVG image background with the tile fit, an
+ *   SVG quote photo or an SVG picture bullet exports as its PNG raster, not as a native SVG picture (PowerPoint applies opacity, grayscale
+ *   and a border to an SVG picture, and those stay native);
+ * - `border-dot`: a dotted table cell border is PowerPoint's square dot (one width on, one off); the preview leaves two widths between dots;
+ * - `pattern-preset`: an engine-defined pattern preset (`diagStripe`) is its closest DrawingML preset (`wdUpDiag`);
+ * - `image-animation`: an animated WebP becomes a still PNG of its first frame under `imageFormat: "compatible"`.
+ * The skill `opf-export` lists every mapping, including the ones that report another code or none.
+ */
+export interface ExportLossyDiagnostic { code: "export-lossy"; feature: "svg-rasterized" | "border-dot" | "pattern-preset" | "image-animation"; path: string; message: string }
+/** LH-28, `typefaces: "safe"`: an authored family written as its Office-safe family (`replacement`), once per family; `path` is `""`. */
+export interface TypefaceReplacedDiagnostic { code: "typeface-replaced"; path: string; family: string; replacement: string; message: string }
 /**
  * The chart data was reshaped to export a native chart: a single value column was plotted against row numbers; a one-series construct
  * (pie, doughnut, and with `chartex: "native"` treemap, histogram, pareto, waterfall, funnel, map) kept only its first series; by default
@@ -147,6 +158,32 @@ export interface ToPptxOptions {
    */
   footerText?: "native" | "shape";
   /**
+   * LH-28: the font names the file writes. "selected" (default) writes the families the deck chose (the font policy: the selected
+   * name, never a preview replacement); a viewer without one substitutes another font and may break lines differently
+   * (`typefacesNotOfficeSafe` lists them). "safe" writes each Latin text family as an Office-safe family, one that ships with every
+   * Windows and macOS machine and that OPF measures exactly (`OFFICE_SAFE_TYPEFACES`: Arial, Courier New, Georgia, Times New Roman):
+   * the metric twin when there is one (Arimo or Liberation Sans as Arial, Tinos as Times New Roman, Cousine as Courier New, Gelasio as
+   * Georgia), else by the font scheme's type (sans-serif as Arial, serif as Georgia, monospace as Courier New). Composition measures
+   * the safe family, so the file's line breaks are the ones every viewer draws (they can differ from the preview drawn in the selected
+   * family). East Asian and complex-script slots, symbol, emoji and math families keep their names. Reports `typeface-replaced`.
+   */
+  typefaces?: "selected" | "safe";
+  /**
+   * LH-20: "native" (default) writes editable shapes, text and charts. "images" writes each slide as one full-bleed PNG picture
+   * drawn like the preview, with its speaker notes, hidden flag and section, and the slide's text as the picture's alternative text:
+   * a fidelity fallback that needs no fonts and has no editable text. The pictures are drawn by `slideRasterizer`.
+   */
+  as?: "native" | "images";
+  /** With `as: "images"`: pixels per reference pixel, 0.1 to 8. Default 2 (2560 x 1440 for the 1280 x 720 reference slide). */
+  scale?: number;
+  /**
+   * With `as: "images"`: draws slide `slide` (counted from 1) of the deck as PNG bytes at `size.scale`. Default in Node:
+   * opf-render's `toPng` (optional peer `@openpresentation/opf-render`) with `fonts`, `catalogs` and `date`, which draws embedded
+   * images only; core's `convert` passes one that resolves local images too. Without it and without opf-render the export throws
+   * `slide-rasterizer-unavailable`; a rasterizer that throws or returns no PNG gives `slide-render-failed`.
+   */
+  slideRasterizer?: (presentation: unknown, slide: number, size: { scale: number; fonts?: Fonts; catalogs?: readonly Catalog[]; date?: string; onDiagnostic?: (diagnostic: unknown) => void }) => Uint8Array | Promise<Uint8Array>;
+  /**
    * Values for the deck's template variables, keyed by variable id (core `resolveVariables`). A deck that uses content
    * variables, or is marked `template: true`, is resolved to a concrete deck first; the PPTX holds the resolved text.
    * A template exports with each unfilled variable's example (diagnostic `variable-example-used`); a normal deck with an
@@ -164,7 +201,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -572,6 +609,13 @@ export interface TypefaceViolation {
 export declare const THEME_SCRIPT_SUPPLEMENTS: Readonly<Record<"major" | "minor", Readonly<Record<string, string>>>>;
 
 export declare function inventoryTypefaces(input: Uint8Array | ArrayBuffer | Record<string, Uint8Array>, options?: {nested?: boolean}): TypefaceInventory;
+
+/** LH-28: the Office-safe families: on every Windows and macOS machine, with a metric-compatible open face OPF measures them with (from the font policy table). */
+export declare const OFFICE_SAFE_TYPEFACES: readonly string[];
+/** LH-28: the Office-safe family `typefaces: "safe"` writes for `family` (unchanged for a family that is not Latin text). `classes` maps lower-case family names to `sans-serif`, `serif` or `monospace`. */
+export declare function officeSafeTypeface(family: string, classes?: ReadonlyMap<string, "sans-serif" | "serif" | "monospace">): string;
+/** LH-28: the Latin text typefaces a finished PPTX names that are not Office-safe, sorted. */
+export declare function typefacesNotOfficeSafe(input: Uint8Array | ArrayBuffer): string[];
 
 export declare function packageFontsUsed(inventory: TypefaceInventory): string[];
 

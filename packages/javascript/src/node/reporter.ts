@@ -21,7 +21,9 @@ const INFO = new Set([
 	"font-substituted",
 	"pdf-font-embedded",
 	"pdf-font-fallback",
-	"svg-image-rasterized",
+	"export-lossy",
+	"typeface-not-office-safe",
+	"typeface-replaced",
 	"svg-sanitized",
 	"script-font-unavailable",
 	"media-provenance-omitted",
@@ -43,6 +45,9 @@ const HELP: Record<string, string> = {
 	"date-needs-value": "Pass --date YYYY-MM-DD. The CLI never reads a clock, so output stays reproducible.",
 	"font-unavailable": "Pass --fonts with the font files, or choose a font the bundled pack covers (opf catalog fontSchemes).",
 	"missing-glyph": "Install the script font package named by script-font-not-installed, or supply a covering font with --fonts.",
+	"export-lossy": "The PowerPoint file draws this with its nearest native form (see feature and the message). Change the content if the difference matters, or export with --as images for an exact picture.",
+	"typeface-not-office-safe": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+	"typeface-replaced": "Drop --typefaces safe to keep the selected families in the file.",
 	"duplicate-font-face": "A --fonts face repeats a bundled family, weight and style; remove it or rename the family.",
 };
 
