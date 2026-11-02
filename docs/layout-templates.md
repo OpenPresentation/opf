@@ -217,6 +217,44 @@ kind `group`.
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.
 
+### Grouping before placement (layout harvest)
+
+`composeSlide` then groups the bound blocks before it places a cell (`groupBinding`, on `/composition`). The rules read
+block kinds, counts and text lengths, never a layout or slide id, and work for any count and in right-to-left decks. A
+slide that pins any block with `region` keeps the binding above as written.
+
+1. **Repeated pairs (LH-58).** A block sequence that repeats one pair of kinds is one cell per pair: a figure (`metric`,
+   `chart`, `table`, `image`, `video`, `code`) and a paragraph, in either order, or a long and a short paragraph (one at
+   least twice the other's length, the long one on the same side of every pair), two pairs or more. The pairs go to the
+   region the figure binds to, which may hold up to 6 of them (or its `max`, when larger); the other regions are empty
+   and collapse. Inside its cell a pair is one row (each half at least 0.8 of the cell's height wide) or one column
+   (the figure above its text), half a gap apart; every pair of a grid has one cell size, so the pairs match. On a slide
+   that draws cards each block keeps its own card.
+2. **Group by kind (LH-82, LH-73).** A flowing region whose blocks are mostly (more than half, at least 2) of a kind it
+   accepts keeps only those. The blocks it took only as the overflow region (within its room) go to another region that
+   accepts them, beyond that region's `max`, or else to the implicit row below the grid; they are not
+   `opf/layout-unplaced`. Up to 4 such blocks sit side by side in one row under the grid (or stacked, when that is
+   shorter), and the row asks for at most 30% of the content box, down to its height at the minimum font size, so the
+   grid keeps about 60 to 65% of the body. On `metrics`, 3 metrics and 2 notes are a row of metrics over a row of two
+   notes; on `chart`, 3 charts and 2 notes the same.
+3. **Extra blocks join a region (LH-46).** A block no region had room for, on a layout with no overflow region, joins
+   the region that accepts it instead of the row below the grid: a `flow: none` region takes up to 6 blocks (accepted,
+   no finding: the region then flows as `auto`); a flowing region takes up to 12, drawn beyond its `max` with
+   `opf/layout-unplaced` as an overflow region draws them (so `paginate` can still move them).
+   - `flow: none` regions of one role side by side (the `first` and `second` columns of `comparison` or `two-column`)
+     become one region of N cells: the first takes their blocks and any block bound between them in source order (the
+     `verdict`), and the others collapse into it. Four texts on `comparison` are a 2 x 2 grid in reading order.
+   - A lone fixed region arranges pictures as a **mosaic** and text, quotes and metrics as a **lead plus cards**. A
+     mosaic is 2 or 3 pictures in a row, and 4 to 6 a lead picture at full height beside the others in two rows (the
+     lead as wide as two of their columns); a region taller than wide stacks 2 and sets a lead picture across the top of
+     3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
+     layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
+     size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
+     `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
+     the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
+     words).
+
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
 above; a body region before a heading region). Headings are centred vertically in their region unless every row it spans is
 `auto`, so a `cover` or a title-only slide centres its title. A slide with promoted regions (`left`, `top:left`, ...)
@@ -229,7 +267,7 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | `flow` | Blocks are arranged |
 | --- | --- |
 | `none` | One block fills the region. |
-| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns. Rows and columns swap in a portrait region. A short last row keeps the column width and is centred. |
+| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centred. |
 | `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures and videos take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
 
@@ -268,9 +306,26 @@ Columns share the content width in proportion. Rows are allocated so that no row
 
 Paragraphs and lists of one stacked column that do not fit at their role sizes shrink together to the largest one size that fits, and read at that one size.
 
-Blocks drawn side by side as peers (regions of one role in the same rows, such as the columns of `two-column` or
-`comparison`, and the blocks of one row of a `grid` or `row` flow) share one size per kind: their prose, and their lists,
-are refitted at the smallest size any of them fitted at.
+Sibling blocks share one size per kind (LH-43): the blocks of one region whatever its arrangement (every row of a `grid`,
+a `row`, a stacked column), regions of one role in the same rows (the columns of `two-column` or `comparison`), and blocks
+drawn below the grid with the parallel primary regions they continue (a lone primary region, such as a statement's message,
+keeps its own size). Their prose, and their lists, are refitted at the smallest size any of them fitted at; sibling metrics
+share it role by role (value, unit, label, description, delta, trend). A sibling the shared size would make overflow keeps
+its own fit, so the shared size never takes a block under the readability floor.
+
+Where sibling text and lists span several rows, the rows are sized jointly with the shared size instead of being fixed first:
+at each size of the type scale, from the largest start down, every row asks for its tallest cell's need at that size (a card's
+insets included), and the largest size at which the rows fit is kept. This applies to a region's grid of paragraphs and lists
+(as LH-42 did for a list grid), to a stacked column, to an automatic grid, and to the parallel primary regions with the blocks
+drawn below them (their template rows are allocated at that size). Leftover height goes to the rows in proportion to their
+needs (cards, a grid of paragraphs, an automatic grid) or stays at the region's anchor (lists without cards), so a row of short
+texts is a short row and a row of long ones a tall one. The cells of one row keep its height and columns keep their widths.
+Sets that mix in other blocks (a metric, a picture, a chart) keep their rows and share sizes as above.
+
+A block that shrinks takes a size of the type scale (LH-17): from `minFontSize` up by a ratio of (28/16)^¼, rounded to whole
+reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor. Prose has five sizes from its 28 px start to the
+floor, and a list or lead six from 32 px; a block that fits at its starting size keeps it, on the scale or not. The scale
+depends only on the floor and the canvas, so every slide composes independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
 uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
@@ -298,6 +353,35 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 | `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. On a template without a `subtitle` area the title area carries `parts: { title, subtitle }`: it is split where the stacked heading group puts the subtitle, so `title` runs from the area's top to the bottom of the title (the tag above it included) and `subtitle` from the subtitle's top (half a gap under the title when the slide has none) to the area's bottom. PowerPoint's `ctrTitle` and `subTitle` placeholders use these boxes. |
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
 | `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
+
+### Recomposition at the readability floor (LH-83)
+
+A layout whose regions leave its content too little room sets that content at the readability floor. When a template's
+composition sets a body role at the floor, `composeSlide` composes the same blocks again as the automatic grid
+([dynamic composition](dynamic-composition.md)) and keeps that result when its smallest body size is larger (or as large and it reports less overflow), it reports no
+more overflow (`text-overflow`, `small-cell`) and no more of its fits break a line inside a word; otherwise the layout's
+result stands. Both compositions are pure, so the choice is deterministic, and both engines read it from core.
+
+- **Body roles.** Text, lists and table cells, and the main part of the other payloads: a quote's and a code panel's body, a
+  metric's value and label, and a timeline event's `what`. The other parts (attribution, filename, language, unit, delta,
+  description, trend, a timeline's name, dates and notes) ask for 14 to 20 px by design, so reaching the floor is no squeeze
+  and never triggers it. Headings are not body. The floor is the composition's `minFontSize` (16 reference pixels at a
+  720-pixel short edge, 12 pt).
+- **What stays.** Every block is drawn, in source order. The header and footer bands, the footnote area, placed images and
+  the background are the slide's own and do not change. The layout record's `design` (alignment, cards, list bullet, image
+  fit, background variant) and `composition` (padding, gap, `minFontSize`) still apply. The slide keeps its `layout`, so
+  the PPTX export still uses that layout's native slide layout, and an edit that gives the content room (fewer blocks,
+  `paginate`) returns the slide to its regions.
+- **What changes.** The tag, title and subtitle are a content slide's heading group above the body, as on an automatic slide
+  (the one-line title steps of LH-51 and LH-76), not the layout's title area. Region semantics do not apply: the result
+  has no `regions` or `headingAreas`, no item names a `region`, and no `opf/layout-unplaced` is reported, since every block
+  is in the grid.
+- **Reported as** `recomposed: { layoutSize, size }` on the composition: the smallest body size the layout fitted and the
+  smallest of the result, in reference pixels. Validate reports the findings of the result it composes.
+- **Never recomposed.** A slide the layout fits above the floor, a cover, a slide with promoted regions, a slide with a block
+  pinned to a region (`region`: the author chose the region), and `composeSlide(slide, { recompose: false })`, for hosts
+  that need the regions and for tests of a layout's own geometry. A strict composition (`overflow: "error"`) that the layout
+  cannot fit still fails, and an automatic grid that fails strictly is not kept.
 
 `composeLayoutAreas(record, options)` gives the areas of the empty layout: where a PowerPoint slide layout puts a placeholder
 per area. It is `composeSlide`'s own geometry for a slide with a one-line title and subtitle and every region kept, so it

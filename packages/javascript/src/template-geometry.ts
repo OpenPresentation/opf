@@ -15,17 +15,19 @@ export interface FlowShape {
 
 /**
  * The `grid` flow by block count. In a landscape region: 1 fills it; 2 side by side; 3 in a row; 4 as 2 x 2; 5 as 3 + 2;
- * 6 as 3 x 2; 7 to 12 in four columns. In a portrait region (taller than wide) rows and columns swap: 2 and 3 stacked,
- * 4 as 2 x 2, 5 as 2 + 2 + 1, 6 as 2 x 3, 7 to 12 in three rows.
+ * 6 as 3 x 2; 7 to 12 in rows of at most four. In a portrait region (taller than wide) rows and columns swap: 2 and 3
+ * stacked, 4 as 2 x 2, 5 as 2 + 2 + 1, 6 as 2 x 3, 7 to 12 in three rows.
+ * LH-47: the rows are balanced: as many rows as the widest row needs, filled evenly with the fuller rows first, so no row is
+ * more than one cell short of another (9 as 3 x 3 instead of 4 + 4 + 1, 10 as 4 + 3 + 3; portrait 7 as 3 + 2 + 2).
  */
 export function gridFlowShape(count: number, landscape: boolean): FlowShape {
   if (!Number.isInteger(count) || count < 1) return { columns: 1, rows: 0, perRow: [] };
   let columns: number;
   if (landscape) columns = count <= 3 ? count : count === 4 ? 2 : count <= 6 ? 3 : 4;
   else columns = count <= 3 ? 1 : count <= 6 ? 2 : Math.ceil(count / 3);
-  const rows = Math.ceil(count / columns);
-  const perRow = Array.from({ length: rows }, (_, row) => Math.min(columns, count - row * columns));
-  return { columns, rows, perRow };
+  const rows = Math.ceil(count / columns), base = Math.floor(count / rows), extra = count % rows;
+  const perRow = Array.from({ length: rows }, (_, row) => base + (row < extra ? 1 : 0));
+  return { columns: perRow[0]!, rows, perRow };
 }
 
 /** LH-42: `listColumns: "auto"` never deals a list of this many entries or fewer across columns. */
@@ -54,18 +56,19 @@ export function flowShape(arrangement: 'grid' | 'row' | 'column', count: number,
 
 /**
  * The cells of a flow shape inside `box`, in block order (row by row). Rows have equal heights and full rows equal
- * widths; a short last row keeps the column width of the full rows and is centred. `gap` is clamped so no cell is
- * thinner than the gaps around it.
+ * widths; a short row keeps the column width of the full rows and is centred, or, with `stretch` (LH-47), its cells share
+ * the full width. `gap` is clamped so no cell is thinner than the gaps around it.
  */
-export function flowCells(shape: FlowShape, box: LayoutBox, requestedGap: number): { cells: LayoutBox[]; gap: number } {
+export function flowCells(shape: FlowShape, box: LayoutBox, requestedGap: number, stretch = false): { cells: LayoutBox[]; gap: number } {
   if (!shape.rows) return { cells: [], gap: requestedGap };
   const gap = Math.max(0, Math.min(requestedGap, box.width / (shape.columns * 2), box.height / (shape.rows * 2)));
   const width = (box.width - gap * (shape.columns - 1)) / shape.columns;
   const height = (box.height - gap * (shape.rows - 1)) / shape.rows;
   const cells: LayoutBox[] = [];
   shape.perRow.forEach((count, row) => {
-    const used = count * width + (count - 1) * gap, start = box.x + (box.width - used) / 2;
-    for (let column = 0; column < count; column++) cells.push({ x: count === shape.columns ? box.x + column * (width + gap) : start + column * (width + gap), y: box.y + row * (height + gap), width, height });
+    const own = stretch ? (box.width - gap * (count - 1)) / count : width;
+    const used = count * own + (count - 1) * gap, start = box.x + (box.width - used) / 2;
+    for (let column = 0; column < count; column++) cells.push({ x: count === shape.columns ? box.x + column * (width + gap) : start + column * (own + gap), y: box.y + row * (height + gap), width: own, height });
   });
   return { cells, gap };
 }

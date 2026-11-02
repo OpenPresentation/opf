@@ -1,31 +1,35 @@
 <svg aria-label="The largest gain came in week four" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
 <rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
 <g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">The largest gain came in week four</text></g>
-<g><rect fill="#F0F0F0" height="512.2" width="684.48" x="57.6" y="147.48"/>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="700" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="180.28">Task completion by week</text></g>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="226.41" xml:space="preserve" y="612.48">1</text></g>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="368.03" xml:space="preserve" y="612.48">2</text></g>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="509.65" xml:space="preserve" y="612.48">3</text></g>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="651.27" xml:space="preserve" y="612.48">4</text></g>
 <line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="589.68" y2="589.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="597.48">0%</text></g>
-<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="506.24" y2="506.24"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="514.04">20%</text></g>
-<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="422.8" y2="422.8"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="430.6">40%</text></g>
-<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="339.36" y2="339.36"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="347.16">60%</text></g>
-<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="255.92" y2="255.92"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="263.72">80%</text></g>
-<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="172.48" y2="172.48"/>
-<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="180.28">100%</text></g>
-<rect fill="#2874A6" height="283.696" width="56.648" x="198.086" y="305.984"/>
-<rect fill="#2874A6" height="300.384" width="56.648" x="339.706" y="289.296"/>
-<rect fill="#2874A6" height="317.072" width="56.648" x="481.326" y="272.608"/>
-<rect fill="#2874A6" height="350.448" width="56.648" x="622.946" y="239.232"/>
-<line stroke="#BFBFBF" stroke-width="1.333" x1="155.6" x2="155.6" y1="172.48" y2="589.68"/>
+<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="514.24" y2="514.24"/>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="522.04">20%</text></g>
+<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="438.8" y2="438.8"/>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="446.6">40%</text></g>
+<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="363.36" y2="363.36"/>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="371.16">60%</text></g>
+<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="287.92" y2="287.92"/>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="295.72">80%</text></g>
+<line stroke="#D9D9D9" stroke-width="1.333" x1="155.6" x2="722.08" y1="212.48" y2="212.48"/>
+<g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="end" x="148.6" xml:space="preserve" y="220.28">100%</text></g>
+<rect fill="#649BBF" height="256.496" width="56.648" x="198.086" y="333.184"/>
+<rect fill="#649BBF" height="271.584" width="56.648" x="339.706" y="318.096"/>
+<rect fill="#649BBF" height="286.672" width="56.648" x="481.326" y="303.008"/>
+<rect fill="#2874A6" height="316.848" width="56.648" x="622.946" y="272.832"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="226.41" xml:space="preserve" y="325.984">68%</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="368.03" xml:space="preserve" y="310.896">72%</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="509.65" xml:space="preserve" y="295.808">76%</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="651.27" xml:space="preserve" y="265.632">84%</text></g>
+<line stroke="#BFBFBF" stroke-width="1.333" x1="155.6" x2="155.6" y1="212.48" y2="589.68"/>
 <line stroke="#BFBFBF" stroke-width="1.333" x1="155.6" x2="722.08" y1="589.68" y2="589.68"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="438.84" xml:space="preserve" y="652.48">Week</text></g>
-<g transform="rotate(-90 72.6 381.08)"><g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="72.6" xml:space="preserve" y="388.88">Task completion</text></g></g></g>
+<g transform="rotate(-90 72.6 401.08)"><g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="72.6" xml:space="preserve" y="408.88">Task completion</text></g></g></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="175.48">Test with two teams for six </text>
 <text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="209.64">weeks. Measure task completion </text>
 <text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="243.8">and time before deciding what to </text>

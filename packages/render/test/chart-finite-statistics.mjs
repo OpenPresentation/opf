@@ -10,7 +10,8 @@ for(const values of [[Number.MAX_VALUE,Number.MAX_VALUE],[-Number.MAX_VALUE,Numb
     error=>error instanceof RangeError&&/Cannot render slides\.0\.chart: box statistics exceeds the finite numeric range/.test(error.message));
 }
 for(const values of [[-Number.MAX_VALUE,0,Number.MAX_VALUE],[Number.MAX_VALUE,Number.MAX_VALUE],[-Number.MAX_VALUE,-Number.MAX_VALUE]]) {
-  const document=deck('world',values.map((value,index)=>[String(index),value]));
+  // LH-60: a map plots places (region codes here); over other categories it is drawn as columns.
+  const document=deck('world',values.map((value,index)=>[['DE','FR','ES'][index],value]));
   const before=JSON.stringify(document);
   finiteSvg(toSvg(document,1));
   assert.equal(JSON.stringify(document),before,'rendering preserves the authored values');
@@ -19,9 +20,12 @@ assert.deepEqual(boxStatistics([2,4,8,12]),{q1:2.5,median:6,q3:11,mean:6.5,low:2
 assert.equal(boxStatistics([null]),null);
 // These ordinary SVG hashes were captured before this arithmetic-only fix and re-captured for RR-89 and RR-90 (series colours from the
 // colour scheme, 20 px chart text), RR-96 (scheme-derived neutrals) and WI-5 (the chart panel has no outer frame), which change every chart's bytes on purpose.
-const ordinary={'box-and-whisker':'c8e5eda684548294ccb223b87e1871d80300173d467f570932ef5d0778890727',world:'cf6134c0a384ef82ccbca0d8a587f5683a6bb8bb069240f1131dc1ad99036a1a'};
+// LH-60: the map is captured over region codes (DE, FR), since a map over A and B is drawn as columns; LH-56 gave its tile labels a colour per tile.
+const ordinary={'box-and-whisker':'c8e5eda684548294ccb223b87e1871d80300173d467f570932ef5d0778890727',world:'1c73cddd4f061dff4bfee0cc0ec01d0d2b0ec4b807a9275b1e7bccce9d2d90f2'};
+const labels={'box-and-whisker':['A','B'],world:['DE','FR']};
 for(const [type,expected] of Object.entries(ordinary)) {
-  const svg=toSvg(deck(type,[['A',2],['A',4],['B',8],['B',12]]),1);
+  const [a,b]=labels[type];
+  const svg=toSvg(deck(type,[[a,2],[a,4],[b,8],[b,12]]),1);
   finiteSvg(svg);
   assert.equal(createHash('sha256').update(svg).digest('hex'),expected,`${type}: ordinary SVG bytes remain unchanged`);
 }

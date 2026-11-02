@@ -161,9 +161,10 @@ for (const container of ['c:numRef', 'c:strRef', 'c:multiLvlStrRef', 'c:val', 'c
       : container === 'c:yVal' ? {element: 'scatterChart'} : {};
     const entries = unzipSync(fixture(options));
     const pattern = new RegExp(`<${container}>[\\s\\S]*?</${container}>`);
-    const xml = strFromU8(entries[chartPart]);
-    assert.ok(pattern.test(xml), 'fixture contains the intended native container');
-    entries[chartPart] = strToU8(xml.replace(pattern, match => match + match));
+    // The series' own container: the chart title (LH-81 header caption) carries a c:tx of its own before the first series.
+    const xml = strFromU8(entries[chartPart]), at = xml.indexOf('<c:ser>');
+    assert.ok(at >= 0 && pattern.test(xml.slice(at)), 'fixture contains the intended native container');
+    entries[chartPart] = strToU8(xml.slice(0, at) + xml.slice(at).replace(pattern, match => match + match));
     await assert.rejects(fromPptx(zipSync(entries)), error =>
       error.code === 'invalid-chart-cache'
       && error.path.startsWith(`${chartPart}#`)
