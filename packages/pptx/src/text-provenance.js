@@ -13,7 +13,8 @@ export function sourceLineParagraphs(ordered,paragraphs,{legacy=false}={}) {
  let text='',maxFontSize=0;
  for(const [index,item]of ordered.entries()) {
   const {boundary,separator}=item.data,last=index===ordered.length-1;
-  if(typeof separator!=='string'||(boundary==='hard'?!/^(\r\n|\r|\n)$/.test(separator)||last:separator!==''||boundary!==(last?'end':'soft')))throw Error('Invalid source line boundary.');
+  // LH-76: `split` joins the topic of a split "Topic: qualifier" title to its qualifier with the authored colon.
+  if(typeof separator!=='string'||(boundary==='hard'?!/^(\r\n|\r|\n)$/.test(separator)||last:boundary==='split'?!/^[^\S\r\n]*:[^\S\r\n]+$/.test(separator)||last:separator!==''||boundary!==(last?'end':'soft')))throw Error('Invalid source line boundary.');
   const current=paragraphs[item.index]??[];
   if(current.some(p=>p.bullet))throw Error('Tagged plain text now has native bullets.');
   text+=current.map(p=>p.text).join('\n')+separator;

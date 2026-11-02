@@ -6,8 +6,8 @@
       "bytes": 5150
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#1": {
-      "sha256": "018a598e0afec8494ea4cfcc00a564bac0e87e02c326cce7e3abc1dc7a5d4445",
-      "bytes": 7897
+      "sha256": "185c7268e5489842ac288223411ef245b839cacf9d9039417c09c8616c02ac64",
+      "bytes": 7879
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#2": {
       "sha256": "0e2519a0957a96dae94aa80565f0133cddacf542f2de4b3b51154e804ec4bc91",
@@ -18,28 +18,28 @@
       "bytes": 8146
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#4": {
-      "sha256": "a371dd374392360130906fd2a21a564d2e27a7bb66c6560319cf9c3fb98fbdc0",
-      "bytes": 7732
+      "sha256": "11a8e931f32adb86309f0189d3368f9926d2e39eb199663264ab97197f9589c8",
+      "bytes": 9002
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#5": {
       "sha256": "29bcc7892be9ce250f8b67016687fc990a5f716b159920d63b0ce84f4c2f7b5d",
       "bytes": 17008
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#6": {
-      "sha256": "67c8df28cf5bb6ce402210c04f5f85f297bbc26906319fd87d166e454d1e9b0e",
-      "bytes": 9962
+      "sha256": "fda9d0632bddb2be81ab1a1c58d67664283e252c648bcd19726a1bcdb6b5028e",
+      "bytes": 9915
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#7": {
       "sha256": "ccb6893ecf8e38298ace109dfa11f5c2621265eb676803ca31593bfbd9d5dd91",
       "bytes": 19983
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#8": {
-      "sha256": "0df033f4c464555ef0be09dbf8c9a74db35319cd7c6cf82bd9c50c406d82fb17",
-      "bytes": 6297
+      "sha256": "57d6ee36120f349f811ad71df1d60830e43bd26f96e560920827f4288431bcc9",
+      "bytes": 6276
     },
     "gallery/business-functions/compliance-readiness-review.opf.json#9": {
-      "sha256": "59bab94b4279b1c569677819c2f65fe0cdb068d6a1fa4b2112c87df99754270e",
-      "bytes": 11847
+      "sha256": "7bef58a8f16eccb3032f59b6e10866b4b5726752295d776994e413776b33309c",
+      "bytes": 11697
     }
   }
 }

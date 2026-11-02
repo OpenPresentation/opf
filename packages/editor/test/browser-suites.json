@@ -178,6 +178,10 @@
           "command": "pnpm run test:click-entry-browser"
         },
         {
+          "id": "browser:title-split-editing",
+          "command": "pnpm run test:title-split-editing-browser"
+        },
+        {
           "id": "browser:canvas-a11y",
           "command": "pnpm run test:canvas-a11y-browser"
         },

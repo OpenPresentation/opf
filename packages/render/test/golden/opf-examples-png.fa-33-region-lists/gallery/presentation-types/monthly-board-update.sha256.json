@@ -6,16 +6,16 @@
       "bytes": 4259
     },
     "gallery/presentation-types/monthly-board-update.opf.json#1": {
-      "sha256": "d26ac5da0472a4606e5e23dc12eab9d7ab91cdf58790045d95226bcc07522db7",
-      "bytes": 8370
+      "sha256": "1e315e527f2f6e54bef403555a88315c9691956bd03dbaeffea0e8a60f63ad6c",
+      "bytes": 8146
     },
     "gallery/presentation-types/monthly-board-update.opf.json#2": {
       "sha256": "7cfc8fe23155d04058a2571182df132afa75362c4802268c230cdca62cdfcd39",
       "bytes": 5032
     },
     "gallery/presentation-types/monthly-board-update.opf.json#3": {
-      "sha256": "b1789bef20ccc811273587a17e1f490aa29347470837511f2c30b6ff7a61bcb3",
-      "bytes": 5801
+      "sha256": "a10e37bd585c97f6494e3d03d004123c0bbbd46a31b12d089de827c039c62416",
+      "bytes": 5683
     }
   }
 }

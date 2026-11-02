@@ -166,10 +166,10 @@ for (const count of [3, 12, 49, 120]) {
     const top = rows.reduce((best, row, i) => row[1] > rows[best][1] ? i : best, 0);
     assert.equal(leftmost.row, top, `pareto/${count}/${kind}: first (tallest) label drawn`);
     cases++;
-    // Horizontal bars: rows skip when shorter than a text line; the first category is nearest the origin.
+    // Horizontal bars: rows skip when shorter than a text line; the first category is at the top (LH-59: data order, top to bottom).
     const bar = render('bar', rows);
     check(`bar/${count}/${kind}`, bar, names);
-    const { band: rowBand, positions: rowAt } = positions(bar, count, { vertical: true, reversed: true });
+    const { band: rowBand, positions: rowAt } = positions(bar, count, { vertical: true });
     const drawnRows = rowAt.slice().sort((a, b) => a - b);
     assert.equal(drawnRows[0], 0, `bar/${count}/${kind}: first category drawn`);
     const rowStep = Math.max(1, Math.ceil(bar.labels[0].size * 1.22 / rowBand - 1e-9));

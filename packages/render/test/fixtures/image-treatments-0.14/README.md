@@ -17,3 +17,5 @@ colour scheme's default slide background, so the 0.14 deck set that colour (ligh
 0.15 renderer cannot draw a slideImage, which is the point of keeping them.
 
 WI-4 (the subtitle draws at 28 px, up from 25 px): the PNGs of the treatments with a subtitle were redrawn by the current renderer, because the text pixels moved. The frames, the pictures and `reference.json` (the 0.14 boxes of the picture frames and outlines) are unchanged; the paint order and the heading frames follow `packages/javascript/test/fixtures/image-treatments-0.14.json`.
+
+LH-51 (a content title steps down by up to a quarter before it wraps): `device-frame.png` and the heading and body boxes of `device-frame` in `reference.json` were redrawn by the current renderer, because its title, which wrapped at 54 px beside the picture, now sits on one line at a smaller step. Its frame, shape and overlay outlines are unchanged.

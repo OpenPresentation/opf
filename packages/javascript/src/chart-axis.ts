@@ -64,9 +64,11 @@ function clean(value: number): number {
   return Object.is(rounded, -0) ? 0 : rounded;
 }
 
+// LH-59: the ticks run from `min` in steps of `step` up to `max`, which a tightened axis need not land on (PowerPoint draws the same
+// gridlines for c:min, c:max and c:majorUnit).
 function scaleFrom(min: number, max: number, step: number): ChartScale {
   const ticks: number[] = [];
-  const count = Math.round((max - min) / step);
+  const count = Math.floor((max - min) / step + 1e-9);
   for (let index = 0; index <= count; index++) ticks.push(clean(min + index * step));
   return { min, max, step, ticks };
 }
@@ -75,12 +77,24 @@ function pickStep(min: number, max: number, limit: number, steps: readonly numbe
   return steps.find((step) => Math.round((max - min) / step) <= limit) ?? max - min;
 }
 
+/** LH-59: an axis ends at most this fraction of the plotted range above the data maximum (1.25 x the maximum on a zero-based axis). */
+export const CHART_AXIS_MAX_OVERSHOOT = 0.25;
+
 /**
  * Office-like automatic value axis: include zero unless every value sits in the top sixth of the range, add 5% headroom, then choose
  * the smallest 1/2/5 x 10^k major unit that fits `maxIntervals` (default 10, at least 1). `percent` is the 100% stacked axis: 0 to 1 in
  * steps of 0.1, 0.2, 0.25, 0.5 or 1 (from -1 when a value is negative). Non-finite data bounds fall back to 0 to 1.
+ *
+ * LH-59: the maximum stays near the data. When the first tick at or above the headroom lies more than
+ * {@link CHART_AXIS_MAX_OVERSHOOT} of the plotted range above the data maximum (1.25 x the maximum on a zero-based axis; data peaking
+ * at 124 on an axis of 0 to 200), the axis ends at the first multiple of the largest finer 1/2/5 unit within that bound (150). The ticks
+ * then keep the major unit when the last one is at most half a unit below the end (0 to 40 in tens, ending at 45: the end is not a tick,
+ * as in PowerPoint with a c:max off the major unit). Otherwise the major unit becomes the end divided into as many equal intervals as
+ * fit, each a multiple of that unit (0, 400, 800; one interval, 0 and 150, on the shortest axes), keeping zero on a tick. `endOnTick`
+ * keeps the untightened axis, for a chart whose outermost gridline is the axis end (the radar's outer ring, the combo chart's gridlines
+ * shared by its two axes).
  */
-export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, { percent = false }: { percent?: boolean } = {}): ChartScale {
+export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, { percent = false, endOnTick = false }: { percent?: boolean; endOnTick?: boolean } = {}): ChartScale {
   const limit = Number.isFinite(maxIntervals) ? Math.max(1, Math.floor(maxIntervals)) : 10;
   if (percent) {
     const min = dataMin < -1e-9 ? -1 : 0;
@@ -112,10 +126,39 @@ export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, {
       if (!(step > 0) || !Number.isFinite(step)) continue;
       const min = Math.floor(bottom / step + 1e-9) * step;
       const max = Math.ceil(top / step - 1e-9) * step;
-      if (Number.isFinite(min) && Number.isFinite(max) && Math.round((max - min) / step) <= limit) return scaleFrom(clean(min), clean(max), step);
+      if (Number.isFinite(min) && Number.isFinite(max) && Math.round((max - min) / step) <= limit) {
+        const scale = scaleFrom(clean(min), clean(max), step);
+        return endOnTick ? scale : tighten(scale, top, hi + span * CHART_AXIS_MAX_OVERSHOOT, limit, mantissa, exponent);
+      }
     }
   }
   return normalizedScale(dataMin, dataMax, limit);
+}
+
+// LH-59: end an axis whose top tick lies above `bound` at the first multiple of a finer 1/2/5 unit at or above `top` (the data maximum
+// plus its headroom), as {@link niceScale} describes. The units below the major unit (`mantissa` x 10^`exponent`) are tried from the
+// largest, so the end is as round as the bound allows; any unit up to the window `bound - top` fits. The ticks start at the minimum, so
+// PowerPoint's c:min, c:max and c:majorUnit draw the same gridlines.
+function tighten(scale: ChartScale, top: number, bound: number, limit: number, mantissa: number, exponent: number): ChartScale {
+  if (!(scale.max > bound) || !(bound > top) || !(top > scale.min)) return scale;
+  const units = [5, 2, 1];
+  let index = units.indexOf(mantissa);
+  for (let guard = 0; guard < 60; guard++) {
+    if (++index >= units.length) { index = 0; exponent--; }
+    const unit = units[index]! * 10 ** exponent;
+    if (!(unit > 0) || !Number.isFinite(unit)) break;
+    const end = clean(Math.ceil(top / unit - 1e-9) * unit);
+    if (!(end <= bound)) continue;
+    const kept = scaleFrom(scale.min, end, scale.step);
+    if (kept.ticks.length > 1 && end - kept.ticks.at(-1)! <= scale.step / 2 + 1e-9 * scale.step) return kept;
+    const whole = (value: number, of: number) => Math.abs(value / of - Math.round(value / of)) < 1e-9;
+    for (let intervals = limit; intervals >= 1; intervals--) {
+      const step = clean((end - scale.min) / intervals);
+      if (step > 0 && whole(step, unit) && whole(scale.min, step)) return scaleFrom(scale.min, end, step);
+    }
+    return kept.ticks.length > 1 ? kept : scale;
+  }
+  return scale;
 }
 
 // Work in representable units when headroom or a tick step exceeds Number's range. Only axis bounds and ticks saturate at the
@@ -218,6 +261,38 @@ export function stackCategoryValues(
       return { value, from, to: running[i]! };
     }),
   );
+}
+
+/** LH-59: one bar of a waterfall: the step's value and the running totals it spans; a total bar spans zero to its value. */
+export interface WaterfallStep {
+  /** The row the bar plots. */
+  index: number;
+  value: number;
+  from: number;
+  to: number;
+  total: boolean;
+}
+
+/**
+ * LH-59: the bars of a waterfall (`values` is the plotted column, null for a row without a value). Each step floats from the running
+ * total before it. OPF has no total marker, so a total is inferred: the last value is a total when at least two values precede it and
+ * it equals their sum (to twelve significant digits), as in Start 100, +24, -8, End 116. A total bar stands on zero and does not add to
+ * the running total, and the PPTX export writes it as a cx:subtotals index, so PowerPoint draws the same bar. Throws a RangeError when
+ * the running total leaves the finite range.
+ */
+export function waterfallSteps(values: readonly (number | null)[], path = 'chart'): WaterfallStep[] {
+  const steps: WaterfallStep[] = [];
+  let running = 0;
+  for (const [index, value] of values.entries()) {
+    if (value === null || !Number.isFinite(value)) continue;
+    const from = running;
+    running += value;
+    if (!Number.isFinite(running)) throw new RangeError(`Cannot render ${path}: running total exceeds the finite numeric range. Rescale the chart values before rendering.`);
+    steps.push({ index, value, from, to: running, total: false });
+  }
+  const last = steps.at(-1);
+  if (last && steps.length > 2 && clean(last.value) === clean(last.from)) Object.assign(last, { from: 0, to: last.value, total: true });
+  return steps;
 }
 
 /** The slide geometry the axis density follows. All lengths are slide pixels. */

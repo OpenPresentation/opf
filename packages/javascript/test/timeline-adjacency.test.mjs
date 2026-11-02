@@ -5,21 +5,33 @@ import {layoutTimeline,OPFCompositionError} from '../dist/composition.js';
 const events=[{when:'Q1',what:'Discover',description:'Listen to customers.'},{when:'Q2',what:'Design',description:'Test the proposed direction.'},{when:'Q3',what:'Deliver',description:'Share what we learned.'}];
 const bottom=part=>part.box.y+part.box.height;
 
-test('tall alternating timelines keep measured labels adjacent to markers with readable hierarchy',()=>{
+test('tall band timelines keep each when above its marker and the what and description below, centred in the box',()=>{
   for(const height of [360,960]){
     const result=layoutTimeline(events,{x:30,y:20,width:960,height});
-    assert.equal(result.overflow,false);assert.equal(result.arrangement,'alternating');assert.equal(result.attempts,1);
+    assert.equal(result.overflow,false);assert.equal(result.arrangement,'band');assert.equal(result.attempts,1);
     for(const [index,marker] of result.markers.entries()){
-      const fields=result.parts.filter(part=>part.eventIndex===index);
-      if(index%2===0)assert.ok(Math.abs(marker.y-bottom(fields.at(-1))-24)<.001);
-      else assert.equal(fields[0].box.y-marker.y,24);
-      assert.deepEqual(fields.map(part=>part.fit.fontSize),[18,22,18]);
-      assert.deepEqual(fields.map(part=>part.style.fontWeight),[500,600,400]);
-      for(let i=1;i<fields.length;i++)assert.equal(fields[i].box.y-bottom(fields[i-1]),4);
+      const [when,what,description]=result.parts.filter(part=>part.eventIndex===index);
+      assert.ok(Math.abs(marker.y-marker.radius-6-bottom(when))<.001,'the when ends one lift above the marker');
+      assert.ok(Math.abs(what.box.y-(marker.y+marker.radius+6))<.001,'the what starts one lift below it');
+      assert.ok(Math.abs(description.box.y-bottom(what)-4)<.001);
+      assert.deepEqual([when,what,description].map(part=>part.fit.fontSize),[18,22,18]);
+      assert.deepEqual([when,what,description].map(part=>part.style.fontWeight),[500,600,400]);
     }
-    const first=Math.min(...result.parts.map(part=>part.box.y));
-    const last=Math.max(...result.parts.map(bottom));
-    assert.ok(Math.abs((first+last)/2-(20+height/2))<.001);
+    assert.equal(new Set(result.markers.map(marker=>marker.y)).size,1);
+    assert.ok(Math.abs((result.bounds.y+result.bounds.y+result.bounds.height)/2-(20+height/2))<.001,'the block is centred');
+  }
+});
+
+test('labels wider than the event spacing alternate above and below, two spacings wide',()=>{
+  const wide=events.map(event=>({...event,what:`${event.what} the next customer journey`}));
+  const result=layoutTimeline(wide,{x:30,y:20,width:960,height:600});
+  assert.equal(result.overflow,false);assert.equal(result.arrangement,'alternating');
+  const step=(960+16)/4;
+  for(const [index,marker] of result.markers.entries()){
+    const fields=result.parts.filter(part=>part.eventIndex===index);
+    if(index%2===0)assert.ok(Math.abs(marker.y-bottom(fields.at(-1))-24)<.001);
+    else assert.equal(fields[0].box.y-marker.y,24);
+    for(const part of fields)assert.ok(Math.abs(part.box.width-(2*step-16))<.001);
   }
 });
 

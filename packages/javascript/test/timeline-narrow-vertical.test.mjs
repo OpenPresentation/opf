@@ -54,7 +54,7 @@ describe('a narrow cell composes vertically', () => {
 describe('the threshold is 8 ems of the label size per event', () => {
 	test('three events switch between 527 and 529 px', () => {
 		assert.equal(compose(527).arrangement, 'vertical');
-		assert.equal(compose(529, 600).arrangement, 'alternating');
+		assert.notEqual(compose(529, 600).arrangement, 'vertical', 'a horizontal arrangement');
 	});
 
 	test('the threshold follows the slide scale', () => {
@@ -64,13 +64,13 @@ describe('the threshold is 8 ems of the label size per event', () => {
 	});
 });
 
-describe('the full-width timeline is unchanged', () => {
+describe('the full-width timeline is one band (LH-41)', () => {
 	const wide = { x: 0, y: 0, width: 1100, height: 400 };
 	const five = Array.from({ length: 5 }, (_, index) => ({ when: `Week ${index + 1}`, what: `Milestone ${index + 1}` }));
 
-	test('it alternates its labels above and below one horizontal connector', () => {
+	test('its labels fit their spacing, so they all sit in one band along one horizontal connector', () => {
 		const layout = layoutTimeline(five, wide, { textMeasurement: measurement });
-		assert.equal(layout.arrangement, 'alternating');
+		assert.equal(layout.arrangement, 'band');
 		assert.equal(layout.connector.y1, layout.connector.y2);
 		const ys = new Set(layout.markers.map((marker) => marker.y));
 		assert.equal(ys.size, 1);
@@ -78,7 +78,7 @@ describe('the full-width timeline is unchanged', () => {
 	});
 
 	test('a single event and a single column never go vertical for width', () => {
-		assert.equal(layoutTimeline([{ what: 'Only' }], { x: 0, y: 0, width: 200, height: 300 }, { textMeasurement: measurement }).arrangement, 'alternating');
+		assert.equal(layoutTimeline([{ what: 'Only' }], { x: 0, y: 0, width: 200, height: 300 }, { textMeasurement: measurement }).arrangement, 'band');
 	});
 
 	test('a narrow cell that cannot stack falls back to the usual search', () => {

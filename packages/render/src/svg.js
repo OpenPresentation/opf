@@ -907,9 +907,10 @@ function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   return bound.geometry.items.map(item => {
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
-    // region's flow cell; core never gives an item of a bled region a card).
+    // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
+    // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
     const frame=item.frameBox;
-    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.colors.surface,stroke:bound.design.colors.border,...traceAttrs(options,item.path)}) : '';
+    const surface=frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.roles.neutrals.card.hex,stroke:bound.design.roles.neutrals.cardBorder.hex,...traceAttrs(options,item.path)}) : '';
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
     const drawn=surface+renderPayload(item, item.box, { ...bound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...bound, composition: item.composition },options,drawHelpers):'');
     // OPF 0.19 (RR-81): with trace, everything an item of a layout template region draws (card, payload, caption) is
@@ -980,6 +981,7 @@ function renderTextPayload(item, box, bound, options) {
     fit: item.text,
     textStyle: item.textStyle,
     diagnosticsHandled: Boolean(item.text),
+    ...(item.titleSplit ? { sourceOffset: item.titleSplit.start } : {}),
     options
   });
 }
@@ -1398,8 +1400,10 @@ function renderMetric(item, box, bound, options) {
   if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
   const children=[];
   // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
-  const trendMark=metricTrendMark(layout,bound,options);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,bound.design.backgroundColor??bound.design.colors.background):bound.design.colors.text;
+  // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
+  const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
+  const trendMark=metricTrendMark(layout,bound,backdrop);
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1441,8 +1445,8 @@ function renderMetric(item, box, bound, options) {
 }
 
 // The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
-function metricTrendMark(layout,bound,options) {
-  return coreMetricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
+function metricTrendMark(layout,bound,background) {
+  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
 }
 
 function renderQuote(item, box, bound, options) {
@@ -2134,6 +2138,8 @@ function renderTextBox(text, box, bound, config) {
   const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
   const type = config.fontFamily === bound.design.fonts.code ? "monospace" : bound.design.fontScheme.type;
   const source = String(text ?? ""), boxRtl = paragraphRtl(bound, source);
+  // LH-76: one part of a split "Topic: qualifier" title traces its source ranges in the authored title, the value at its path.
+  const sourceOffset = config.sourceOffset ?? 0;
   let cursor = 0;
   const lines = fit.lines.map((line, index) => {
     // Logical alignment (RR-05): a right-to-left line starts at the right edge.
@@ -2149,7 +2155,7 @@ function renderTextBox(text, box, bound, config) {
     let content,family,positioned=false,trimWidth=0,sizeAdjust,shift=0;
     if(tabs) content=sourceLine.segments.map(segment=>{
       const segmentText=line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start),fixed=segment.kind==='tab'||placed;
-      const traced=(start,end)=>config.options.trace?{'data-opf-source-start':start,'data-opf-source-end':end,'data-opf-segment':segment.kind}:{};
+      const traced=(start,end)=>config.options.trace?{'data-opf-source-start':sourceOffset+start,'data-opf-source-end':sourceOffset+end,'data-opf-segment':segment.kind}:{};
       const scripted=segment.kind==='tab'?{content:escapeText(segmentText)}:scriptLine(segmentText,style,bound,type,{rtl,
         placement:placed?{x:origin+segment.x,width:segment.width,fontSize:size}:undefined,fontSize:size,
         trace:config.options.trace?(start,end)=>traced(segment.start+start,segment.start+end):undefined});
@@ -2176,7 +2182,7 @@ function renderTextBox(text, box, bound, config) {
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
     textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
-    ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceLine.start,'data-opf-source-end':sourceLine.end,'data-opf-source-next-start':sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
+    ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
   }, content);
   });
   return tag("g", { ...traceAttrs(config.options, config.path),

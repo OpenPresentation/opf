@@ -968,7 +968,7 @@
                 "timeline"
               ],
               "role": "primary",
-              "flow": "none"
+              "flow": "column"
             },
             {
               "name": "notes",

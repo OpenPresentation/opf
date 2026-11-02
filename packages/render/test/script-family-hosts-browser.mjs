@@ -9,7 +9,8 @@
 //   - every style resolves to the family itself, as `exact`, never to a substitute or the generic fallback,
 //   - the document holds the faces the registry holds, and a loaded FontFace backs every drawn run,
 //   - every run of the deck is drawn in the family, and its natural advance in the browser (the pin removed) equals the registry's
-//     accepted advance within 0.1 px (these browser handles omit shapeWasm, so the fontkit fallback limits of Myanmar, one Syriac word and Nastaliq vowel marks stay bounded),
+//     accepted advance within 0.1 px at the size the host draws (test/host-font-size.mjs: Linux Chromium truncates a fractional
+//     size to 1/64 px) (these browser handles omit shapeWasm, so the fontkit fallback limits of Myanmar, one Syriac word and Nastaliq vowel marks stay bounded),
 //   - right-to-left samples display right to left, and the glyphs paint: the family's runs have ink, and the colour emoji face paints
 //     saturated pixels (its COLRv1 glyphs), which a fallback face could not.
 // It writes artifacts/script-family-hosts/browser.json (per family: files fetched, bytes, runs). Offline: every other request is aborted.
@@ -21,6 +22,7 @@ import {chromium} from 'playwright';
 import sharp from 'sharp';
 import {loadFonts} from '../dist/fonts-node.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
+import {hostAdvance, hostFontSize} from './host-font-size.mjs';
 import {FULLWIDTH, assertFindings, expectedWeight, root, scriptDeck, scriptFamilies, shortName} from './script-family-fixture.mjs';
 
 const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/script-family-hosts');
@@ -37,7 +39,7 @@ const limits = new Map(corpora.fontkitFallbackLimits.flatMap(limit => Object.ent
 const families = await scriptFamilies();
 assert.equal(families.length, 35, `the fixture covers ${families.length} script families`);
 const ORIGIN = 'https://app.test', PACK = `${ORIGIN}/pack/`;
-const packRequests = [], unexpected = [], errors = [], notGatedOnLinux = [];
+const packRequests = [], unexpected = [], errors = [], notGatedOnLinux = [], sizeQuantized = [];
 
 const browser = await chromium.launch({channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined});
 const report = [];
@@ -130,10 +132,12 @@ try {
       for (const run of observed.runs) {
         assert.equal(run.family, entry.family, `${where} ${sample.id}: "${[...run.text].slice(0, 12).join('')}" is drawn in ${entry.family}, not ${run.family}`);
         assert.ok(run.faceLoaded, `${where} ${sample.id}: a loaded FontFace backs "${[...run.text].slice(0, 12).join('')}" (${run.family} ${run.weight})`);
-        const delta = Math.abs(run.natural - run.accepted);
+        // A fractional size draws at the size the host sets (test/host-font-size.mjs); recorded where that differs.
+        const drawnAt = hostAdvance(run.accepted, run.size), delta = Math.abs(run.natural - drawnAt);
+        if (hostFontSize(run.size) !== run.size) sizeQuantized.push({family: entry.family, sample: sample.id, size: run.size, drawnSize: hostFontSize(run.size), accepted: run.accepted, drawnAt: Number(drawnAt.toFixed(3)), natural: run.natural});
         // Linux Chromium (the pinned Playwright image) paints fullwidth punctuation lines differently from Edge and macOS Chromium: recorded, not gated there.
         if (process.platform === 'linux' && FULLWIDTH.test(run.text)) notGatedOnLinux.push({family: entry.family, sample: sample.id, delta: Number(delta.toFixed(3))});
-        else if (bound === undefined) assert.ok(delta < 0.1, `${where} ${sample.id}: "${[...run.text].slice(0, 12).join('')}" advance ${run.natural} differs from accepted ${run.accepted}`);
+        else if (bound === undefined) assert.ok(delta < 0.1, `${where} ${sample.id}: "${[...run.text].slice(0, 12).join('')}" advance ${run.natural} differs from accepted ${run.accepted}${drawnAt === run.accepted ? '' : ` (${drawnAt.toFixed(3)} at the ${hostFontSize(run.size)} px the host draws)`}`);
         else assert.ok(delta <= bound * run.size / 100 + 0.1, `${where} ${sample.id}: the recorded limit ${bound} (at 100 px) no longer bounds ${delta.toFixed(3)} px at ${run.size} px`);
         if (sample.rtl && run.order) assert.ok(run.order[0] > run.order[1], `${where} ${sample.id}: a right-to-left run displays right to left`);
         runChecks += 1;
@@ -173,6 +177,6 @@ try {
   const total = new Set(packRequests);
   assert.equal(total.size, packRequests.length, 'no file is fetched twice');
   const bytes = (await Promise.all([...total].map(async file => (await stat(path.join(root, 'node_modules/@expo-google-fonts', file))).size))).reduce((a, b) => a + b, 0);
-  await writeFile(path.join(outputDirectory, 'browser.json'), `${JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, families: report.length, platform: process.platform, runsNotGatedOnLinux: notGatedOnLinux, findings, filesFetchedInTotal: total.size, bytesFetchedInTotal: bytes, runChecks, report}, null, 1)}\n`);
+  await writeFile(path.join(outputDirectory, 'browser.json'), `${JSON.stringify({node: process.version, browser: browser.version(), bundleBytes: script.length, families: report.length, platform: process.platform, runsNotGatedOnLinux: notGatedOnLinux, runsSizeQuantized: sizeQuantized,findings, filesFetchedInTotal: total.size, bytesFetchedInTotal: bytes, runChecks, report}, null, 1)}\n`);
   console.log(`Script family hosts (browser): ${report.length} families; the registry fetched ${total.size} pinned files (${(bytes / 1048576).toFixed(1)} MiB) on demand; ${runChecks} runs drawn in their family within 0.1 px of the accepted advance.`);
 } finally { await browser.close(); }

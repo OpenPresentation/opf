@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
-import {colorContrast, resolveCanvasDimensions} from '@openpresentation/opf/composition';
+import {colorContrast, ENGINE_DEFAULT_COLOR_SCHEME, resolveCanvasDimensions, resolveColorRoles} from '@openpresentation/opf/composition';
 import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
@@ -57,6 +57,8 @@ for (const [preset, cx, cy] of [['1:1', 6858000, 6858000], ['4:5', 6858000, 8572
 // --- code.highlight ----------------------------------------------------------------------------------------------------
 const source = ['const a = 1;', 'const b = 2;', 'const c = a + b;', '', 'console.log(c);', 'return c;'].join('\n');
 const codeDeck = highlight => ({design: {fontScheme: 'roboto'}, slides: [{title: 'Highlight', code: {source, language: 'ts', ...(highlight ? {highlight} : {})}}]});
+// LH-79: the default deck is the dark2 variant, whose code panel is a step below the slide (core's codePanel neutral).
+const PANEL = resolveColorRoles(ENGINE_DEFAULT_COLOR_SCHEME, {variant: 'dark2'}).neutrals.codePanel.hex;
 const lineShapes = xml => named(xml, /^OPF code \d+ body line \d+$/);
 {
   const {bytes, slide, diagnostics} = await exportDeck(codeDeck([2, [3, 3], 5]));
@@ -85,7 +87,7 @@ const lineShapes = xml => named(xml, /^OPF code \d+ body line \d+$/);
   for (const [index, line] of lines.entries()) {
     const marked = [1, 2, 4].includes(index);
     const colorsOfLine = [...line.matchAll(/<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/g)].map(match => match[1]);
-    for (const color of colorsOfLine) assert.ok(colorContrast(`#${color}`, marked ? `#${bandFill}` : '#111827') >= 4.5, `line ${index + 1} ${color}`);
+    for (const color of colorsOfLine) assert.ok(colorContrast(`#${color}`, marked ? `#${bandFill}` : PANEL) >= 4.5, `line ${index + 1} ${color}`);
   }
   assert.notEqual(colors[0], colors[1], 'a marked line is not coloured like an unmarked one');
   // The band is not content and the highlight comes back with the source.

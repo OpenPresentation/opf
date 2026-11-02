@@ -121,6 +121,8 @@ describe('neutrals', () => {
 			const slotHex = { tx1: roles.text, bg1: roles.background, tx2: roles.textSecondary, bg2: roles.surface };
 			for (const [name, neutral] of Object.entries(roles.neutrals)) {
 				if (!['tx1', 'bg1', 'tx2', 'bg2'].includes(neutral.slot)) assert.fail(`${name}: ${neutral.slot}`);
+				// LH-54: a mixed dark card and its stroke are literal colours (no transform), which the PPTX table leaves literal.
+				if ((name === 'card' || name === 'cardBorder') && neutral.lumMod === undefined && neutral.lumOff === undefined && background === 'dark2') continue;
 				const base = { tx1: roles.neutrals.codeText.slot === 'tx1' && name.startsWith('code') ? slotHex.tx1 : slotHex.tx1, bg1: slotHex.bg1, tx2: slotHex.tx2, bg2: slotHex.bg2 }[neutral.slot];
 				assert.equal(applyLuminance(base, neutral.lumMod ?? 100000, neutral.lumOff ?? 0), neutral.hex, `${background} ${name}`);
 			}
