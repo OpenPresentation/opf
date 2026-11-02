@@ -32,7 +32,8 @@ const rangeOf = (node) => {
  */
 function traceLines(target, path) {
   const lines = [];
-  for (const node of target.querySelectorAll('text')) {
+  // A target, or the list of groups a path draws (both parts of a split "Topic: qualifier" title, LH-76).
+  for (const node of [target].flat().filter(Boolean).flatMap((root) => [...root.querySelectorAll('text')])) {
     const own = node.getAttribute('data-opf-path');
     if (own !== null && own !== path) continue;
     const line = rangeOf(node);
