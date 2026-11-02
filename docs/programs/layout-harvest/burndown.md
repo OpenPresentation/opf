@@ -56,7 +56,9 @@ Sources:
 | LH-37 | Gallery review checklist against slide-design clichés (title underline bars, side stripes, default gradients) | SG, PX | gallery docs | Checklist in `docs/default-catalog.md`; records reviewed | P3 | todo |
 | LH-38 | Header and footer sit about half a content margin from the slide edge | SG | core | Furniture rows read as chrome in the sampler | P3 | todo |
 | LH-39 | Metric proportions: value about 4× its label, line-height 1, never wraps | SG | core | A wide value such as "$1.24M" stays on one line in a narrow tile | P3 | todo |
+| LH-40 | Dense code, quote and metric blocks degrade with a finding instead of failing the export | CD (LH-27 corpus) | render, pptx | The code layout with five blocks of the corpus (batch-13 s29, batch-17 s04) renders and exports in non-strict mode with `opf/layout-overflow`; strict mode still fails | P1 | todo |
 
 ## Progress log
 
 - 2026-11-02: program opened from the layout sampler comparison (opf#942, LH-21 to LH-26 built); catalog seeded from the Claude Design comparison, the Slides type guidance and the pptx skill. LH-27 started.
+- 2026-11-02: LH-27 corpus generated (844 slides, 18 batches; scripts/layout-harvest-corpus.mjs). Our side renders 841; the code layout at five blocks fails the export on main too (LH-40); a scorecard of nine long measures regressed with cards and was fixed in opf#942 (a block with no room inside its card inset takes the whole card).
