@@ -1,9 +1,8 @@
 ---
 type: changed
-packages: [opf, gallery]
-drawing: ["layouts:text", "layouts:statement", "layouts:closing", "layouts:section", "layouts:quote", "layouts:metrics", "layouts:comparison", "layouts:two-column", "layouts:three-column", "layouts:pillars", "layouts:timeline", "layouts:hero"]
+packages: [opf]
 ---
-Layout harvest LH-70, LH-72, LH-67 and LH-78 (output-changing; the gallery's layouts draw these slides differently, with no record changed):
+Layout harvest LH-70, LH-72, LH-67 and LH-78 (output-changing: the slides of the text, statement, closing, section, quote, metrics, comparison, two-column, three-column, pillars, timeline and hero layouts that meet these rules draw differently; no gallery record changes):
 
 - **Paragraph columns (LH-70).** Three to six sibling paragraphs of similar length (100 to 240 characters each, the longest less than twice the shortest) are set as a grid of columns, each 45 to 65 average characters wide: the balanced shape (3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 2 x 3 or 3 x 2) at the largest size of the type scale at which the narrowest column keeps 45 characters and the rows fit. A statement's similar paragraphs are columns too, not a lead over cards. Composition explains it as `paragraph-columns`.
 - **Centred layouts centre only short text (LH-72).** When the content alignment comes from the layout record or the theme, a paragraph or list over two lines or 120 characters is start-aligned (at the right in a right-to-left deck) in a column at most 65 characters wide, centred in its cell; its siblings follow it, so a grid reads with one alignment. An alignment the slide or deck sets is kept. `opf/centered-body` (opf#965) fires on 0 of the 844 corpus slides (44 before) and on 1 of 862 example slides (1 before: a slide that sets `contentAlignment: center` itself).
