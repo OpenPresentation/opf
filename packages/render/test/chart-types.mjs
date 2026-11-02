@@ -57,10 +57,10 @@ for(const id of ['column','stacked-column','100pct-stacked-column','bar','stacke
   const [north,south,east]=stacked.map(r=>({y:Number(r.y),bottom:Number(r.y)+Number(r.height)}));
   assert.ok(Math.abs(south.bottom-north.y)<0.01,'positive values stack upward');
   assert.ok(Math.abs(east.y-north.bottom)<0.01,'negative values stack downward from zero');
-  // Horizontal bars: first category at the bottom, first series nearest the axis.
+  // LH-59: horizontal bars read top to bottom in data order: first category at the top, first series at the top of its cluster.
   const bars=marks(render('bar'),'rect',point),y=path=>Number(bars.find(r=>r['data-opf-path']===`${PATH}.data.rows.${path}`).y);
-  assert.ok(y('0.1')>y('3.1'),'first category at the bottom');
-  assert.ok(y('0.1')>y('0.2'),'first series lowest in its cluster');
+  assert.ok(y('0.1')<y('3.1'),'first category at the top');
+  assert.ok(y('0.1')<y('0.2'),'first series highest in its cluster');
   const band=100;assert.deepEqual(barGeometry(band,2,'clustered'),{group:40,width:20,offset:30,clustered:true});
   assert.deepEqual(barGeometry(band,2,'stacked').width,band/1.5);
   checks++;

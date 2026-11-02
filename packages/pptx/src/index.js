@@ -3002,6 +3002,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
     // value axis to the right, as the preview draws them. Bar charts keep their vertical category axis.
     ...(context.direction === 'rtl' && ((chartData.type === 'bar' && chartData.barDir === 'col') || chartData.type === 'line' || chartData.type === 'area') ? { catAxisOrientation: 'maxMin' } : {}),
+    // LH-59: a horizontal bar chart lists its categories top to bottom in data order, as the preview draws it: the category axis runs
+    // from the top (c:catAx orientation maxMin) and the value axis crosses it at the last category (c:valAx crosses max), so the value
+    // labels stay at the bottom.
+    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max' } : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),

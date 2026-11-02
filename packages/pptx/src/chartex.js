@@ -18,6 +18,7 @@
 import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
+import {waterfallSteps} from '@openpresentation/opf/composition';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -107,8 +108,11 @@ function layoutProperties(spec, series, hasCategories) {
       return `<cx:layoutPr><cx:binning intervalClosed="r" underflow="auto" overflow="auto"><cx:binCount val="${scottBinCount(series.values.filter(value => value !== null && Number.isFinite(value)))}"/></cx:binning></cx:layoutPr>`;
     case 'boxWhisker':
       return '<cx:layoutPr><cx:visibility meanLine="0" meanMarker="1" nonoutliers="0" outliers="1"/><cx:statistics quartileMethod="exclusive"/></cx:layoutPr>';
-    case 'waterfall':
-      return '<cx:layoutPr><cx:visibility connectorLines="1"/></cx:layoutPr>';
+    case 'waterfall': {
+      // LH-59: the total core infers (a last value equal to the running sum before it) is a subtotal point, which PowerPoint draws from zero.
+      const totals = [...waterfallTotals(series.values)].map(index => `<cx:idx val="${index}"/>`).join('');
+      return `<cx:layoutPr><cx:visibility connectorLines="1"/>${totals ? `<cx:subtotals>${totals}</cx:subtotals>` : ''}</cx:layoutPr>`;
+    }
     case 'regionMap':
       // No cx:geoCache: PowerPoint fetches the region shapes from Bing Maps when the deck is opened online (see chart-map-geodata).
       return '<cx:layoutPr><cx:geography cultureLanguage="en-US" cultureRegion="US" attribution="Powered by Bing"/></cx:layoutPr>';
@@ -149,11 +153,23 @@ function dataLabels(spec, text, options, code) {
   return '';
 }
 
+// LH-59: the rows of a waterfall's plotted column that are totals (none when the running total leaves the finite range).
+function waterfallTotals(values) {
+  try {
+    return new Set(waterfallSteps(values.map(value => value === null || value === undefined || !Number.isFinite(value) ? null : value)).filter(step => step.total).map(step => step.index));
+  } catch {
+    return new Set();
+  }
+}
+
 // Per-point fills where the construct colours points, not series: a treemap
-// tile per category, a waterfall bar by sign. The preview paints the same.
+// tile per category, a waterfall bar by sign (LH-59: a total in the third colour). The preview paints the same.
 export function chartexPointColors(layoutId, values, palette) {
   if (layoutId === 'treemap') return values.map((value, index) => value === null ? null : palette[index % palette.length]);
-  if (layoutId === 'waterfall') return values.map(value => value === null ? null : palette[value < 0 ? 1 : 0]);
+  if (layoutId === 'waterfall') {
+    const totals = waterfallTotals(values);
+    return values.map((value, index) => value === null ? null : palette[(totals.has(index) ? 2 : value < 0 ? 1 : 0) % palette.length]);
+  }
   return values.map(() => null);
 }
 
