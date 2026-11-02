@@ -234,7 +234,7 @@ LH-37. A reviewer applies this list to every new or changed theme, color scheme,
 1. **No accent line under titles.** No short rule, bar or underline under a title or tag, whether a layout region, a theme decoration or a preview. Hierarchy comes from size, weight and space.
 2. **No decorative side stripes on cards.** A card or `contentBox` surface is a fill or an outline, not a fill with a colored bar down one edge.
 3. **No default gradient backgrounds.** A theme background is a color-scheme slot (`light1`, `dark1`, ...) or a picture the user chose. A gradient is a deliberate, named variant of one theme and never the default; check the record and its previews.
-4. **No centred body text.** Centre only a cover, a section, a closing, a statement or a number (`titleAlignment` / `contentAlignment: "center"` on those layouts). A layout whose body is a list, a table, a paragraph or code stays start-aligned, in a right-to-left deck too.
+4. **No centered body text.** Center only a cover, a section, a closing, a statement or a number (`titleAlignment` / `contentAlignment: "center"` on those layouts). A layout whose body is a list, a table, a paragraph or code stays start-aligned, in a right-to-left deck too.
 5. **No emoji.** None in a record's names, descriptions, tags, sample content or previews, and none standing in for an icon or a bullet.
 6. **Not "cream, serif and terracotta" by default.** A scheme with a warm off-white `light1`/`light2` (hue 30-55, saturation 20% or more, lightness 88-97%) together with a terracotta accent (hue 8-28, saturation 35-75%, lightness 35-60%) and a theme that pairs it with a serif font scheme is the assistant-generated look. Offer it only with a reason, and never as a theme default.
 7. **No low-contrast tints.** Compute the WCAG contrast ratio of each pair:
@@ -333,16 +333,16 @@ Edit records by pull request in `packages/gallery`: change the record and its in
 
 ### Palette discipline (`pnpm check:palette`)
 
-LH-36: `scripts/check-palette.mjs` reads every colour-scheme record in `packages/gallery/catalog/color-schemes/` and holds it to the palette rules of the Slides and pptx guidance. It changes no record. A new or edited scheme is checked by `pnpm check:changed`.
+LH-36: `scripts/check-palette.mjs` reads every color-scheme record in `packages/gallery/catalog/color-schemes/` and holds it to the palette rules of the Slides and pptx guidance. It changes no record. A new or edited scheme is checked by `pnpm check:changed`.
 
 | Rule | Level | What it checks |
 | --- | --- | --- |
 | `contrast-base` | fails | `dark1` on `light1` reaches 7:1 (the body text pair) |
 | `contrast-surface` | fails | `dark2` as a background reaches 4.5:1 with `light1` text, `light2` with `dark1` text |
 | `accent-lightness` | fails | `accent1` and `accent2`, the pair that must be told apart, differ in OKLCH lightness by at least 0.08, not only in hue |
-| `accent-close` | report | any accent 1 to 6 pair (other than a repeated colour) within 0.05 in OKLCH lightness |
+| `accent-close` | report | any accent 1 to 6 pair (other than a repeated color) within 0.05 in OKLCH lightness |
 | `pure-neutral` | report | `light1` is exactly `#FFFFFF` or `dark1` exactly `#000000`; guidance prefers toned neutrals, but many schemes use the pure values on purpose |
-| `red-green` | report | `accent1` and `accent2` are a red and a green (hue, chroma at least 0.08) within 0.1 in lightness: a colour-blind risk |
+| `red-green` | report | `accent1` and `accent2` are a red and a green (hue, chroma at least 0.08) within 0.1 in lightness: a color-blind risk |
 
 The failing rules guard readability, so they stop a merge; the report rules are guidance and print to stdout only (`--quiet` hides them; `--summary <file.md>` writes them as a markdown table for a PR). A scheme that already fails a rule and is not fixed in the pull request that adds the check is listed, with its reason, in `scripts/palette-known-failures.json`; the check fails when a new record fails and when a listed record no longer does (remove the entry then). Today three schemes are listed, all for `accent-lightness`: `deep-purple`, `luxury` and `pastel-red`. Fixing one is a gallery drawing change and is declared in its fragment.
 

@@ -34,7 +34,7 @@ A slide carries one message. Pick the structure from the content, not from habit
 
 | The content is | Use |
 | --- | --- |
-| Parallel entries with details (principles, workstreams, risks) | layout `pillars`, or labelled `items` (`text` plus `description`) |
+| Parallel entries with details (principles, workstreams, risks) | layout `pillars`, or labeled `items` (`text` plus `description`) |
 | Figures that sit in a sentence | layout `metrics`, one `metric` block per figure |
 | Options compared on the same criteria | layout `comparison` (two options) or a `table` (more, or more criteria) |
 | A sequence of steps or dates | layout `process` or `timeline`, with a `timeline` payload |

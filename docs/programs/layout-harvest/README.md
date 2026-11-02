@@ -8,7 +8,7 @@ Default OPF slides look as good as Claude Design's version of the same content. 
 
 ## How the comparison works
 
-1. **Content only.** A slide's words, numbers and pictures go to Claude Design, with the deck's colours and fonts. No layout name, region, grid or arrangement rule goes with them.
+1. **Content only.** A slide's words, numbers and pictures go to Claude Design, with the deck's colors and fonts. No layout name, region, grid or arrangement rule goes with them.
 2. **Same content in OPF.** The same slide is rendered by OPF with its default layouts.
 3. **Side-by-side review.** Each pair is compared at the slide-HTML level (sizes, margins, structure) and visually.
 4. **Generalize before building.** An idea is built only when it holds for every count, content kind, canvas and language the layout accepts. It is tested on the varied cases of `packages/gallery/test/layout-harvest.test.mjs` and on the composition goldens (30 layouts × 1 to 6 blocks × short and long content).

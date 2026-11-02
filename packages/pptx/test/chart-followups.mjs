@@ -33,11 +33,11 @@ async function exported(deck) {
   // The name runs along its ring: North's middle is 72 degrees past 12 o'clock (core's rotation, 60000ths of a degree).
   assert.match(plain.charts[0].match(/<c:ser>[\s\S]*?<\/c:ser>/)[0], /<c:dLbl><c:idx val="0"\/>[\s\S]*?<a:bodyPr rot="4320000" vert="horz"\/>/);
   // With data labels the named slice shows the name before its own parts; a pie drawn as rings writes no c:dLblPos (a doughnut has none).
-  const labelled = await exported(deck({type: 'pie', data, dataLabels: {content: ['percent']}}));
-  assert.deepEqual(named(labelled.charts[0]), [[0], [1]]);
-  assert.doesNotMatch(labelled.charts[0], /<c:dLblPos\b/, 'no label position on the rings');
-  assert.deepEqual(labelled.imported.chart.dataLabels, {content: ['percent']}, 'the labels import as authored');
-  // The name contrasts with its slice, the colour the preview draws.
+  const labeled = await exported(deck({type: 'pie', data, dataLabels: {content: ['percent']}}));
+  assert.deepEqual(named(labeled.charts[0]), [[0], [1]]);
+  assert.doesNotMatch(labeled.charts[0], /<c:dLblPos\b/, 'no label position on the rings');
+  assert.deepEqual(labeled.imported.chart.dataLabels, {content: ['percent']}, 'the labels import as authored');
+  // The name contrasts with its slice, the color the preview draws.
   const svg = toSvg(deck({type: 'pie', data}), 1, {trace: true});
   const text = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(([, , body]) => body.replace(/<[^>]*>/g, '') === 'FY24');
   const ser = plain.charts[0].match(/<c:ser>[\s\S]*?<\/c:ser>/)[0];

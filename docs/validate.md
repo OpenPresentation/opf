@@ -290,7 +290,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
 | [`opf/text-shrunk`](#opftext-shrunk) | Layout | info | composition | Text is fitted far below its role's starting size (under 70%). |
-| [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centred. |
+| [`opf/centered-body`](#opfcentered-body) | Layout | info | composition | A paragraph or list of more than 2 lines or 120 characters is centered. |
 | [`opf/tight-spacing`](#opftight-spacing) | Layout | info | composition | Blocks are closer than 0.25 in to each other or 0.5 in to the slide edge. |
 | [`opf/layout-monotony`](#opflayout-monotony) | Layout | info | structure | 4 or more content slides in a row use the same layout record. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
@@ -754,7 +754,7 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colors per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighboring series (and neighboring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-colors-adjusted`
 
@@ -893,13 +893,13 @@ Default severity: **info**. Cost: composition. Text is fitted far below its role
 
 ### `opf/centered-body`
 
-Default severity: **info**. Cost: composition. A paragraph or list of more than 2 lines or 120 characters is centred.
+Default severity: **info**. Cost: composition. A paragraph or list of more than 2 lines or 120 characters is centered.
 
-**Why.** Each line of centred text starts at a different place, so the eye has to search for the next line. Centring suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.
+**Why.** Each line of centered text starts at a different place, so the eye has to search for the next line. Centering suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.
 
 **Basis.** Typographic convention for running text: a straight start edge. The alignment and the line count are those composeSlide computed; more than 2 lines or 120 characters.
 
-**Approximations.** Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centred blocks.
+**Approximations.** Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centered blocks.
 
 ### `opf/tight-spacing`
 

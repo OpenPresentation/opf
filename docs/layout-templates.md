@@ -158,9 +158,9 @@ On a slide that draws content cards (`design.contentBox`), a row of cards is one
 of regions side by side (two-column, three-column). The anchor sets how the row stands:
 
 - `middle` or `bottom`: a card fills its cell (starting half a gap down, clear of the heading) and the anchor places its
-  content inside it, while a card carries a picture, a metric or a heading line (a labelled list item). A row of body text
+  content inside it, while a card carries a picture, a metric or a heading line (a labeled list item). A row of body text
   only (paragraphs and plain lists) does not (LH-64): when the tallest text fills under 45% of a filled card, the cards hug
-  it with one height and the row centres in the region, since short text at the foot of a tall card reads as an empty card;
+  it with one height and the row centers in the region, since short text at the foot of a tall card reads as an empty card;
   rows that all hug stack one gap apart. When the texts are longer and their heights more than 1.5x apart, the cards still
   fill but every text starts at the card's top, so a short text does not sit alone at a foot beside long ones.
 - `top`: cards of measured blocks (text, lists, quotes, metrics) hug the tallest of their row, from the top, with one height
@@ -289,7 +289,7 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | `flow` | Blocks are arranged |
 | --- | --- |
 | `none` | One block fills the region. |
-| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centred. |
+| `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in balanced rows of at most four (7 as 4 + 3, 8 as 4 + 4, 9 as 3 x 3, 10 as 4 + 3 + 3; LH-47: no row is more than one cell short of another). Rows and columns swap in a portrait region (7 as 3 + 2 + 2). The cells of a short row stretch to the full width; in a grid of only pictures and videos they keep the full rows' size, one aspect, and are centered. |
 | `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures and videos take what the measured blocks (text, lists, quotes, metrics, code, timelines, tables) leave; a table (LH-44) needs its rows at the starting size, gives up height down to its rows at the floor and takes a share of any spare height. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
 

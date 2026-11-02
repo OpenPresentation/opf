@@ -18,8 +18,8 @@ describe("LH-92: ring names", () => {
 
   test("each ring of a doughnut of several series is named on its largest slice", () => {
     const chart = { type: "doughnut", data };
-    // The text runs along the ring at the slice's middle: North, the first 40% of FY24, is centred 72 degrees past 12 o'clock; South,
-    // 35 to 80 of 115 in FY25, is centred at 6 o'clock, where the ring runs level.
+    // The text runs along the ring at the slice's middle: North, the first 40% of FY24, is centered 72 degrees past 12 o'clock; South,
+    // 35 to 80 of 115 in FY25, is centered at 6 o'clock, where the ring runs level.
     const rings = chartRingLabels(chart, resolveChartData(chart));
     assert.deepEqual(rings.map(({ series, name, row }) => ({ series, name, row })), [{ series: 0, name: "FY24", row: 0 }, { series: 1, name: "FY25", row: 1 }]);
     assert.deepEqual(rings.map((ring) => ring.rotation), [72, 0]);

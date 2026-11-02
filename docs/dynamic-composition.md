@@ -127,7 +127,7 @@ kind and right-to-left decks; a slide that pins a block to a region, or sets its
   pictures as a row, then a lead picture beside a mosaic, cover-cropped; the columns of `comparison` as N columns;
   `statement` as a lead over a row of cards (see [Layout templates](layout-templates.md#grouping-before-placement-layout-harvest)).
 - **Balanced grids.** A region's grid of 7 to 12 blocks has balanced rows (7 as 4 + 3, 9 as 3 x 3), and the cells of a
-  short row stretch to the full width, except in a grid of pictures, whose cells keep one size and centre.
+  short row stretch to the full width, except in a grid of pictures, whose cells keep one size and center.
 
 Grouping changes the order of the composed items to the order of the cells (a pair's two blocks together; the majority
 grid before the others), which is the reading order the preview, the PPTX export and accessibility use.
@@ -365,7 +365,7 @@ Browser glyph bounds can extend slightly beyond advance-based part boxes into th
 - `alternating`: labels alternate above and below the connector, each up to two spacings wide, for a `when` or `what` wider than one spacing (or a band whose labels would break inside a word).
 - `vertical`: a marker rail down the start edge with the labels beside it, tried first when an event's spacing is under 8 ems of the label size. Right-to-left decks put the rail on the right edge.
 
-A horizontal timeline centres its whole block (name, description and labels) in the box. `TimelineLayout.bounds` is what the drawn timeline covers (parts, markers and rings), so its height is the height the timeline needs; composition measures a timeline with it, label bands included, and stacks it like text (`MEASURED_FIELDS`).
+A horizontal timeline centers its whole block (name, description and labels) in the box. `TimelineLayout.bounds` is what the drawn timeline covers (parts, markers and rings), so its height is the height the timeline needs; composition measures a timeline with it, label bands included, and stacks it like text (`MEASURED_FIELDS`).
 
 **Several timelines in one region (LH-41).** A template region whose blocks are all timelines draws them as a stack of bands, whatever its `flow` or the design's `contentDirection`: one column while the stack fits at the readability floor with every band at least 56 reference pixels tall, otherwise two columns (in reading order, each row as tall as its taller band, an odd last band spanning both) when that overflows less. The stack sits in the middle of the region (at the bottom in a region anchored there), the bands share the region as stacked text does (`shareHeights`) and every band is set at the size the most squeezed one fits at. A band of a stack never turns vertical (`horizontal`), sits at the top of its box and sets its name and description at its start edge. With four or more timelines the bands are compact (`compact`: name 20, `what` 18 and the rest 16 reference pixels; each `when` and `what` on one row below the marker when every pair fits; the description beside the name when every band's pair fits). A stack that does not fit at the floor reports `text-overflow` for the parts outside their band. A lone timeline in its region grows its type by up to 4 reference pixels when it still fits in the same arrangement (`sizeOffset`).
 

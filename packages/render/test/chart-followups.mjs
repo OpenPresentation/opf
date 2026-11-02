@@ -15,10 +15,10 @@ let checks = 0;
   const deck = (chart) => ({ design: { fontScheme: 'roboto' }, slides: [{ title: 'Mix', chart }] });
   const plain = texts(toSvg(deck({ type: 'pie', data }), 1, { trace: true }));
   for (const name of ['FY24', 'FY25']) assert.equal(plain.filter((entry) => entry.body === name).length, 1, `${name} names its ring`);
-  const labelled = texts(toSvg(deck({ type: 'doughnut', data, dataLabels: { content: ['percent'] } }), 1, { trace: true })).map((entry) => entry.body);
-  assert.ok(labelled.includes('FY24, 40%'), 'the inner ring: its name before its largest slice\'s label');
-  assert.ok(labelled.includes('FY25, 39%'), 'the outer ring');
-  assert.ok(labelled.includes('25%') && !labelled.includes('FY24, 25%'), 'the other slices keep their own label');
+  const labeled = texts(toSvg(deck({ type: 'doughnut', data, dataLabels: { content: ['percent'] } }), 1, { trace: true })).map((entry) => entry.body);
+  assert.ok(labeled.includes('FY24, 40%'), 'the inner ring: its name before its largest slice\'s label');
+  assert.ok(labeled.includes('FY25, 39%'), 'the outer ring');
+  assert.ok(labeled.includes('25%') && !labeled.includes('FY24, 25%'), 'the other slices keep their own label');
   // The name contrasts with its slice.
   const svg = toSvg(deck({ type: 'pie', data }), 1, { trace: true });
   const name = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].map(([, a, body]) => ({ ...attributesOf(a), body: body.replace(/<[^>]*>/g, '') })).find((entry) => entry.body === 'FY24');

@@ -152,11 +152,11 @@ const centeredBody: ValidationRule = {
 			}
 			if (!worst) continue;
 			const { item, lines, characters } = worst;
-			const others = count > 1 ? ` ${count - 1} more long centred block${count === 2 ? ' is' : 's are'} on this slide.` : '';
+			const others = count > 1 ? ` ${count - 1} more long centered block${count === 2 ? ' is' : 's are'} on this slide.` : '';
 			context.report(centeredBodyRule, {
 				path: pointerOfDotted(item.path),
 				slide,
-				message: `A centred ${item.field === 'text' ? 'paragraph' : 'list'} of ${lines} line${lines === 1 ? '' : 's'} (${characters} characters); every line starts at a different place, which is harder to read.${others}`,
+				message: `A centered ${item.field === 'text' ? 'paragraph' : 'list'} of ${lines} line${lines === 1 ? '' : 's'} (${characters} characters); every line starts at a different place, which is harder to read.${others}`,
 				help: 'Align body text to the start (contentAlignment "left" on the slide or block design), or shorten it to a statement of one or two lines.',
 				measured: { lines, characters, maximumLines: CENTERED_BODY_LINES, maximumCharacters: CENTERED_BODY_CHARACTERS, blocks: count },
 			});

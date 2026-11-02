@@ -277,7 +277,7 @@ export const chartColorRule = rule(
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colors per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighboring series (and neighboring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 export const chartAltRule = rule(
@@ -470,7 +470,7 @@ export const languageTagRule = rule(
 
 /** `opf/text-shrunk`: a fitted size below this fraction of its role's starting size. */
 export const SHRUNK_RATIO = 0.7;
-/** `opf/centered-body`: a centred paragraph or list is reported past this many lines or characters. */
+/** `opf/centered-body`: a centered paragraph or list is reported past this many lines or characters. */
 export const CENTERED_BODY_LINES = 2, CENTERED_BODY_CHARACTERS = 120;
 /** `opf/centered-body`: a text of at most this many characters is a short note, whatever it wraps to in a narrow cell. */
 export const CENTERED_NOTE_CHARACTERS = 80;
@@ -497,12 +497,12 @@ export const centeredBodyRule = rule(
 	'centered-body',
 	'layout',
 	'info',
-	`A paragraph or list of more than ${CENTERED_BODY_LINES} lines or ${CENTERED_BODY_CHARACTERS} characters is centred.`,
-	'Each line of centred text starts at a different place, so the eye has to search for the next line. Centring suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.',
+	`A paragraph or list of more than ${CENTERED_BODY_LINES} lines or ${CENTERED_BODY_CHARACTERS} characters is centered.`,
+	'Each line of centered text starts at a different place, so the eye has to search for the next line. Centering suits a title, a metric or a statement of a line or two; a paragraph or a list reads faster from a straight start edge.',
 	{
 		cost: 'composition',
 		standard: `Typographic convention for running text: a straight start edge. The alignment and the line count are those composeSlide computed; more than ${CENTERED_BODY_LINES} lines or ${CENTERED_BODY_CHARACTERS} characters.`,
-		approximations: 'Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centred blocks.',
+		approximations: 'Checks text and list blocks whose composed alignment is center. Titles, subtitles, tags, metrics, quotes and timelines are not checked, nor a short note of at most 80 characters, whatever it wraps to in a narrow cell. A text block alone on the slide or alone in its layout region (a statement, or the note of the metrics layout) is reported only past 3 lines, and on a cover, section or closing layout not at all. One finding per slide, at the longest block; `measured.blocks` counts the long centered blocks.',
 	},
 );
 export const tightSpacingRule = rule(

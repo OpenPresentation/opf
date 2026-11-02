@@ -28,7 +28,7 @@ PPTX text is editable line by line, not paragraph by paragraph. `opf convert dec
 
 `test/native-conformance.mjs` in `@openpresentation/opf-pptx` checks these on every example deck, so you can rely on them without inspecting the XML:
 
-- **Theme.** `ppt/theme/theme1.xml` names the deck's heading and body fonts (major and minor latin) and all twelve colour slots. A colour that comes from the scheme is `a:schemeClr`, so changing the theme in PowerPoint recolours the deck. Colours the author wrote as hex stay literal, and so do derived colours with no theme slot (syntax colours, emphasis, contrast and chrome mixes, gradients). That is about 16% of the colour elements in the examples. A slide with its own colour scheme is all literal.
+- **Theme.** `ppt/theme/theme1.xml` names the deck's heading and body fonts (major and minor latin) and all twelve color slots. A color that comes from the scheme is `a:schemeClr`, so changing the theme in PowerPoint recolours the deck. Colors the author wrote as hex stay literal, and so do derived colors with no theme slot (syntax colors, emphasis, contrast and chrome mixes, gradients). That is about 16% of the color elements in the examples. A slide with its own color scheme is all literal.
 - **Chart text.** Axes, data labels, legends and titles name the deck's own typeface, never PowerPoint's default Arial.
 - **Accessibility.** Every text shape that is not a layout placeholder is a text box (`txBox="1"`), so screen readers announce text, not a graphic. Every shape has a descriptive name such as `OPF heading slides.0.title line 0` or `OPF card slides.2.chart`. A picture carries its OPF `alt` as its description; an image without `alt` gets none, so write `alt` for every meaningful image.
 - **Insets.** Text boxes have explicit zero insets, because each box is already the composed text box. PowerPoint's default 0.1 in / 0.05 in padding never shifts text. Table cells have explicit margins.
@@ -90,9 +90,9 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | Still WebP | A PNG with the same pixels | none |
 | Image that is not PNG, JPEG, GIF, WebP or SVG (BMP, TIFF, AVIF) | The unavailable-image placeholder, as in the preview | `unresolved-asset`, reason `unsupported-format` |
 | Engine-defined pattern preset (`diagStripe`) | Its closest DrawingML preset (`wdUpDiag`) | `export-lossy`, `pattern-preset` |
-| Unknown pattern preset | The pattern's background colour only, as in the preview | `unsupported-pattern` (both engines) |
-| Named CSS colour (`"red"`) on a run | Not an OPF colour: every engine draws the theme text colour | `opf/run-color-unrecognized` (validation) |
-| Chart colour that cannot be resolved or has too little contrast | The adjusted colour, in every engine | `opf/chart-colors-adjusted` (validation) |
+| Unknown pattern preset | The pattern's background color only, as in the preview | `unsupported-pattern` (both engines) |
+| Named CSS color (`"red"`) on a run | Not an OPF color: every engine draws the theme text color | `opf/run-color-unrecognized` (validation) |
+| Chart color that cannot be resolved or has too little contrast | The adjusted color, in every engine | `opf/chart-colors-adjusted` (validation) |
 | Chart option the chart type cannot show | The adapted chart, in every engine | `opf/chart-option-adapted` (validation) |
 | Chartex chart type (treemap, waterfall, ...) PowerPoint has not confirmed | A clustered column chart (`--charts native` writes the chartex part) | `chart-data-adapted`, `chartex-fallback` |
 | Content with no PowerPoint form | A plain-language placeholder frame | `content-placeholder` |

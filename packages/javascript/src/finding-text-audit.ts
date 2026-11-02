@@ -374,7 +374,7 @@ const centeredBody: RuleText = (finding) => {
   const lines = measuredNumber(finding, "lines");
   const characters = measuredNumber(finding, "characters");
   if (lines === undefined || characters === undefined) return undefined;
-  const what = match(finding.message, /^A centred (\w+) of/)?.[1] ?? "block";
+  const what = match(finding.message, /^A centered (\w+) of/)?.[1] ?? "block";
   const blocks = measuredNumber(finding, "blocks") ?? 1;
   return {
     message: `A centered ${what}${onSlide(finding)} runs ${lines} line${lines === 1 ? "" : "s"} (${characters} characters)${blocks > 1 ? `, with ${blocks - 1} more like it` : ""}; each line starts at a different place, which is harder to read.`,

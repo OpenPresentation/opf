@@ -5,7 +5,7 @@ import { describe, test } from "node:test";
 import { chartEmphasisColors, chartHeader, chartHeaderCaption, chartLayer, chartLayerDataLabels, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, composeSlide, resolveChartData, smallChart } from "../dist/composition.js";
 import { colorSchemes } from "./support/catalog.mjs";
 
-// CIE L* of an sRGB hex colour.
+// CIE L* of an sRGB hex color.
 const lightness = (hex) => {
   const linear = (channel) => { const n = channel / 255; return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4; };
   const [r, g, b] = [1, 3, 5].map((offset) => linear(Number.parseInt(hex.slice(offset, offset + 2), 16)));
@@ -52,11 +52,11 @@ describe("small charts (LH-03)", () => {
     assert.deepEqual([explicit.labels, explicit.valueAxis], [false, false], "explicit labels draw as written");
     assert.equal(smallChart({ type: "column", data, dataLabels: { content: ["category"] } }, resolveChartData({ type: "column", data })).valueAxis, true, "labels without the value keep the axis");
     assert.equal(smallChart({ type: "column", data, axisTitles: { value: "Revenue ($M)" } }, resolveChartData({ type: "column", data })).valueAxis, true, "a value axis title keeps the axis");
-    assert.equal(smallChart({ type: "column", data, highlight: { categories: ["Q2"] } }, resolveChartData({ type: "column", data })).emphasis, undefined, "highlight keeps its colours");
-    assert.equal(smallChart({ type: "column", data, colors: ["accent2"] }, resolveChartData({ type: "column", data })).emphasis, undefined, "colors keep their colours");
+    assert.equal(smallChart({ type: "column", data, highlight: { categories: ["Q2"] } }, resolveChartData({ type: "column", data })).emphasis, undefined, "highlight keeps its colors");
+    assert.equal(smallChart({ type: "column", data, colors: ["accent2"] }, resolveChartData({ type: "column", data })).emphasis, undefined, "colors keep their colors");
   });
 
-  test("a one-series column or bar chart emphasises its last point with a value", () => {
+  test("a one-series column or bar chart emphasizes its last point with a value", () => {
     const chart = { type: "column", data: { columns: ["Q", "Revenue"], rows: [["Q1", 4], ["Q2", 6], ["Q3", null]] } };
     assert.equal(smallChart(chart, resolveChartData(chart)).emphasis, 1);
     const two = { type: "column", data: quarters(["Revenue", "Costs"]) };
@@ -81,31 +81,31 @@ describe("small charts (LH-03)", () => {
     assert.equal(chartLayerDataLabels({ active: false }, undefined, "bar").dataLabels, undefined);
   });
 
-  test("LH-95: the emphasised point is a stronger shade of the series colour on every backdrop", () => {
-    // Every gallery colour scheme, on its light and dark backdrops (light1, light2, dark1, dark2), for the series colour the engines draw:
-    // the other points keep the series colour, the emphasised one stands 15 L* from it, and both reach 3:1 against the backdrop.
-    let emphasised = 0;
+  test("LH-95: the emphasized point is a stronger shade of the series color on every backdrop", () => {
+    // Every gallery color scheme, on its light and dark backdrops (light1, light2, dark1, dark2), for the series color the engines draw:
+    // the other points keep the series color, the emphasized one stands 15 L* from it, and both reach 3:1 against the backdrop.
+    let emphasized = 0;
     for (const scheme of colorSchemes) {
       for (const backdrop of [scheme.light1, scheme.light2, scheme.dark1, scheme.dark2].filter(Boolean)) {
         const series = chartPaletteForFill(backdrop, chartSeriesPalette(scheme), { legible: chartSchemeSeries(undefined, scheme) })[0];
         const colors = chartEmphasisColors(backdrop, series);
         assert.ok(colors, `${scheme.id} on ${backdrop}: an emphasis`);
-        emphasised++;
-        assert.equal(colors.muted, series.slice(0, 7).toUpperCase(), "the other points keep the series colour");
+        emphasized++;
+        assert.equal(colors.muted, series.slice(0, 7).toUpperCase(), "the other points keep the series color");
         for (const color of [colors.accent, colors.muted]) assert.ok(colorContrast(color, backdrop) >= 3 - 1e-9, `${scheme.id} on ${backdrop}: ${color} at 3:1`);
         assert.ok(Math.abs(lightness(colors.accent) - lightness(colors.muted)) >= 15 - 1e-9, `${scheme.id} on ${backdrop}: 15 L* apart`);
         // Away from the backdrop: darker on a light one, lighter on a dark one.
         assert.equal(lightness(colors.accent) < lightness(colors.muted), lightness(backdrop) > lightness(colors.muted), `${scheme.id} on ${backdrop}: away from the backdrop`);
       }
     }
-    assert.ok(emphasised >= colorSchemes.length * 2);
-    // The case LH-03's tint could not emphasise: a mid blue on the default navy now takes a lighter blue.
+    assert.ok(emphasized >= colorSchemes.length * 2);
+    // The case LH-03's tint could not emphasize: a mid blue on the default navy now takes a lighter blue.
     const navy = chartEmphasisColors("#011842", "#308BC7");
     assert.equal(navy.muted, "#308BC7");
     assert.ok(lightness(navy.accent) - lightness("#308BC7") >= 15 - 1e-9 && colorContrast(navy.accent, "#011842") >= 3);
     const light = chartEmphasisColors("#FFFFFF", "#1F4E79");
     assert.ok(lightness("#1F4E79") - lightness(light.accent) >= 15 - 1e-9, "darker on white");
-    // A series colour too dark to go 15 L* darker is shaded the other way, still at 3:1.
+    // A series color too dark to go 15 L* darker is shaded the other way, still at 3:1.
     const black = chartEmphasisColors("#FFFFFF", "#101010");
     assert.ok(lightness(black.accent) - lightness("#101010") >= 15 - 1e-9 && colorContrast(black.accent, "#FFFFFF") >= 3);
   });
