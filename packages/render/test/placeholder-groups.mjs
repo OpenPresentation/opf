@@ -42,6 +42,9 @@ for (const [index, slide] of deck.slides.entries()) {
       assert.ok(first, `${slide.id} ${item.path}: traced entries`);
       const [line] = JSON.parse(first[1].replaceAll('&quot;', '"'));
       assert.ok(near(line.y, item.box.y) && line.x >= item.box.x && line.x < item.box.x + item.box.width, `${slide.id} ${item.path}: first line inside the box`);
+    } else if (item.chart?.layer?.small) {
+      // LH-03: a small chart draws no frame rectangle (no panel); its group carries the chart's path.
+      assert.match(svg, new RegExp(`<g\\b(?=[^>]*data-opf-path="${item.path.replaceAll('.', '\\.')}")(?=[^>]*data-opf-chart=)`), `${slide.id} ${item.path}: traced chart`);
     } else {
       const box = tracedBox(svg, item.path);
       assert.ok(box, `${slide.id} ${item.path}: traced box`);

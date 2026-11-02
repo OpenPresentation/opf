@@ -12,13 +12,15 @@ const cases=[
 let checked=0;
 for(const fixture of cases)for(const type of ['column','bar','line','area','pie','doughnut','stacked-column']){
  const circular=['pie','doughnut'].includes(type);
- const chart={type,data:{columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]}};
+ // LH-03: `dataLabels: false` keeps the panel of a small chart (two series of two points), whose colours this checks.
+ const chart={type,dataLabels:false,data:{columns:circular?['Quarter','Current']:['Quarter','Current','Baseline'],rows:circular?[['Q1',2],['Q2',3]]:[['Q1',2,1],['Q2',3,2]]}};
  const input={design:{background:fixture.background,colorScheme:{id:'cool-horizon',dark1:fixture.text,light1:fixture.text,dark2:fixture.surface,light2:fixture.surface}},slides:[{chart}]},original=structuredClone(input);
  const svg=toSvg(input, 1,{trace:true}),bound=resolvePresentation(input).slides[0];
  assert.equal(bound.design.colors.surface,fixture.surface);
  const chartPath='slides.0.chart';
  const panel=[...svg.matchAll(/<rect\b([^>]*)>/g)].find(([,a])=>a.includes(`data-opf-path="${chartPath}"`));assert.ok(panel);assert.ok(panel[1].includes(`fill="${fixture.surface}"`));
- const labels=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)];assert.ok(labels.length>0);
+ // LH-81: the header caption is drawn in the full text colour (as the PPTX chart title); every other chart text is the chart-text neutral.
+ const labels=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(([,,text])=>text!=='Current, Baseline by Quarter');assert.ok(labels.length>0);
  // RR-96: chart text is the scheme-derived chart-text neutral (tx1 mixed into bg1), kept legible on the panel by core's textColorForFill.
  const labelFill=textColorForFill(bound.design.colors.surface,bound.design.roles.neutrals.chartText.hex);
  for(const [,a]of labels)assert.ok(a.toLowerCase().includes(`fill="${labelFill.toLowerCase()}"`),`${type} ${fixture.surface}: ${a}`);

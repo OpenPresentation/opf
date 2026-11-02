@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -69,6 +69,11 @@ export function colorDifference(a: string, b: string): number {
 	const [l1, a1, b1] = lab(a),
 		[l2, a2, b2] = lab(b);
 	return Math.hypot(l1 - l2, a1 - a2, b1 - b2);
+}
+
+/** LH-35: the CIE L* step between two colours, what tells them apart in greyscale or to a reader who sees no hue. */
+export function lightnessDifference(a: string, b: string): number {
+	return Math.abs(lab(a)[0] - lab(b)[0]);
 }
 
 const CVD_MATRICES = {
@@ -294,6 +299,22 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
 }
 
 /**
+ * The design levels {@link colorChoice} reads for one slide, most specific first (LH-01): the slide's design, then its layout record's
+ * variant, then the deck's design, then the theme record. A layout's `design.variant` outranks the deck and the theme and loses to the
+ * slide's own variant or background (docs/programs/layout-harvest/README.md, Decisions). Without an accent order of its own it keeps the one
+ * the deck and the theme give, so a dark-alt deck's section slide keeps the deck's accents. A tone-relative value (`surface`, `brand`) is
+ * resolved against the variant the deck and the theme give (its bg1 slot and whether it is dark).
+ */
+export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}): Rec[] {
+	if (!layoutColorVariant(layout)) return [slideDesign, deckDesign, theme];
+	const below = colorChoice([deckDesign, theme], scheme, variables);
+	const deck = resolveColorRoles(scheme, { background: below.background, variant: below.variant });
+	const variant = layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
+	const accents = variant.accents ?? below.variant?.accents;
+	return [slideDesign, { variant: accents ? { ...variant, accents } : variant }, deckDesign, theme];
+}
+
+/**
  * Effective design of one slide: the same fields and the same defaults as the opf-render preview, including
  * its choice of text colour from the luminance of the background (a gradient background counts as light, as
  * the preview treats it).
@@ -309,7 +330,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
-	const choice = colorChoice([own, deck, theme], colorScheme, variables);
+	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables), colorScheme, variables);
 	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
 	const text = roles.text;

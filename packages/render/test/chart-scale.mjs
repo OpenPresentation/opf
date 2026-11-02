@@ -68,7 +68,8 @@ for (const [name, values] of ranges) {
     const data = type === "scatter"
       ? { columns: ["Category", "X", "Y"], rows: values.map((v, i) => [`point ${i}`, v, v]) }
       : { columns: ["Category", "Value"], rows: values.map((v, i) => [`point ${i}`, v]) };
-    const { svg, error } = await render({ slides: [{ chart: { type, data } }] });
+    // LH-03: `dataLabels: false` keeps the panel and value axis of a small chart (one series of three points).
+    const { svg, error } = await render({ slides: [{ chart: { type, data, dataLabels: false } }] });
     assert.equal(error, undefined, `${type}/${name}: finite input renders`);
     const { shapes, frame } = finiteGeometry(svg);
     assert.match(svg, new RegExp(`data-opf-chart="${type}"`));

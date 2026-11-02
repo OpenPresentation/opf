@@ -1,4 +1,4 @@
-import { chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
+import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
@@ -24,6 +24,7 @@ import {
 	type Rec,
 	backdropColors,
 	colorDifference,
+	lightnessDifference,
 	readableColor,
 	rec,
 	resolveTextColor,
@@ -502,6 +503,12 @@ const chartRules: ValidationRule[] = [
 								if (difference < worst.difference) worst = { model, difference };
 							}
 							if (worst.difference < context.thresholds.minSeriesColorDifference) pairs.push({ a, b, ...worst });
+							// LH-35: neighbouring series (and neighbouring slices, the last beside the first) also differ in lightness, the cue that
+							// survives without hue: under the engines' own step (CHART_SERIES_MIN_LIGHTNESS_STEP, 11 L*) they read as one tone.
+							else if (b === a + 1 || (slices && a === 0 && b === used.length - 1 && used.length > 2)) {
+								const lightness = lightnessDifference(used[a]!, used[b]!);
+								if (lightness < CHART_SERIES_MIN_LIGHTNESS_STEP) pairs.push({ a, b, model: 'lightness', difference: lightness });
+							}
 						}
 					const cycles = count > palette.length;
 					if (!pairs.length && !cycles) continue;
