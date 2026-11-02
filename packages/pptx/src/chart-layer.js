@@ -131,7 +131,7 @@ export function chartFocusPlan({layer, data, kind, panelFill, labelColor, strong
   const seriesGrays = circular ? [] : context(restSeries.length, indexes(seriesCount).filter(index => focus.categories ? true : marks.series[index]));
   const sliceGrays = circular ? context(restRows.length, indexes(data.rows.length).filter(row => marks.categories[row])) : [];
   const muted = (circular ? sliceGrays : seriesGrays)[0];
-  const mutedOf = index => seriesGrays[Math.max(0, restSeries.indexOf(index))];
+  const mutedOf = index => circular ? muted : seriesGrays[Math.max(0, restSeries.indexOf(index))];
   const seriesColor = index => marks.series[index] ? strongOf(index) : mutedOf(index);
   const markColor = (series, row) => marks.series[series] || marks.categories[row] ? strongOf(series) : mutedOf(series);
   const sliceColor = row => marks.categories[row] ? strongOf(row) : sliceGrays[Math.max(0, restRows.indexOf(row))];

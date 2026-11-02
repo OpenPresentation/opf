@@ -94,7 +94,19 @@ let checks = 0;
   checks += 3;
 }
 
-// 5. Every part parses.
+// 5. The title names a slice: it keeps its colour, the other slices take two distinct context grays, as the preview draws them.
+{
+  const document = deckOf({title: 'Enterprise accounts bring 62% of revenue', chart: {type: 'pie', data: {columns: ['Segment', 'Revenue'], rows: [['Enterprise', 62.4], ['Mid-market', 25.1], ['Small business', 12.5]]}}});
+  const {xml, theme, map} = await exported(document);
+  const fills = [...xml.matchAll(/<c:dPt>\s*<c:idx val="(\d+)"\/>([\s\S]*?)<\/c:dPt>/g)].map(([, , body]) => colorsInXml(body.match(/<c:spPr>([\s\S]*?)<\/c:spPr>/)[1], theme, map)[0].hex);
+  const svg = toSvg(document, 1, {trace: true});
+  const preview = [0, 1, 2].map(row => attrs(svg.match(new RegExp(`<path\\b([^>]*data-opf-path="slides\\.0\\.chart\\.data\\.rows\\.${row}\\.1"[^>]*)>`))[1]).fill.toUpperCase());
+  assert.deepEqual(fills.map(hex => `#${hex}`), preview);
+  assert.equal(new Set(preview).size, 3, 'the focused slice and two distinct context grays');
+  checks += 2;
+}
+
+// 6. Every part parses.
 {
   const {xml} = await exported(deckOf({title: 'T', chart: {type: 'line', data: {columns: ['Year', 'A', 'B'], rows: [['2022', 1, 2], ['2023', 3, 4], ['2024', 5, 7]]}}}));
   assert.doesNotThrow(() => parser.parse(xml));
