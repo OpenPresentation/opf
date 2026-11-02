@@ -58,7 +58,8 @@ const indexesOf = record => {
   return Object.fromEntries([...regions.keys()].map(name => { const kind = kindOf(regions.get(name)); counts[kind] = (counts[kind] ?? -1) + 1; return [name, IDX_BASE[kind] + counts[kind]]; }));
 };
 const sample = {
-  text: () => ({text: 'A short paragraph of body text.'}),
+  // LH-06: the sample text opts out of the automatic foot band, so every region of a template is filled as its layout placeholder is.
+  text: () => ({text: 'A short paragraph of body text.', emphasis: false}),
   list: () => ({items: ['Alpha', 'Beta', 'Gamma']}),
   image: () => ({image: {src: wide}}),
   video: () => ({video: 'https://example.com/clip.mp4'}),
@@ -293,7 +294,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   // An `auto` row is as tall as its content; on the empty layout it holds two body lines, so the text blocks here are two lines.
   // Cards on: each template's own design (comparison draws cards), then cards on every template; a carded auto row holds the card's
   // insets on the slide and on the empty layout alike.
-  const band = {edge: 'left', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.'} : block;
+  const band = {edge: 'left', size: 0.2}, twoLines = block => block.text !== undefined ? {text: 'First line.\nSecond line.', emphasis: false} : block;
   for (const contentBox of [undefined, true]) {
   const deck = {name: 'Bands', catalogs: {custom: {layouts: templates}}, design: {...(contentBox !== undefined ? {contentBox} : {}), footer: {left: {text: 'Board review'}, right: {text: '{{slide.number}}'}}},
     slides: contentSlides().map(slide => ({...slide, subtitle: 'Subtitle', blocks: [{image: {src: square}, placement: band}, ...(slide.blocks ?? []).map(twoLines)]}))};

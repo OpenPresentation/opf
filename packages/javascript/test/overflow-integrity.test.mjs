@@ -78,7 +78,10 @@ test('the code layout with five blocks composes with its finding, and strict com
 // its own card, and its trend reached past the card with no finding.
 test('a metric that reaches past its card is reported', () => {
   const metric = (value, description, trend) => ({ metric: { value, label: 'Primary signal', description, trend } });
-  const result = compose({
+  // LH-68: the gallery scorecard now lays its metrics out as tiles of their cards, which fit these nine; the stacked metrics of the
+  // record before it (a shared row height taller than a metric's own cell) are what this finding is about.
+  const stacked = { ...gallery.layouts.scorecard, regions: gallery.layouts.scorecard.regions.map(({ metrics, ...region }) => region) };
+  const result = ((slide) => { const { slide: resolved, options } = resolveSlideContext({ slides: [slide] }, 0, { catalogs: [gallery] }); return composeSlide(resolved, { ...options, layout: stacked }); })({
     layout: 'scorecard',
     title: 'Digital Services Modernization: next steps',
     blocks: [

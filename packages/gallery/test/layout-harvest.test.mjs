@@ -18,9 +18,10 @@ const long = 'Shift the library from stacks-first to research-services-first bef
 for (const [id, anchor, blocks] of [
   ['pillars', 'bottom', [labelled('Clear scope', 'Two teams and one workflow keep the pilot focused.'), labelled('Consistent measures', 'Track completion and task time against a baseline.'), labelled('An explicit decision', 'Agree the evidence needed before expanding the rollout to every team.')]],
   ['team', 'bottom', [labelled('Ana Ruiz', 'Pilot lead'), labelled('Sam Lee', 'Product lead. Turns participant feedback into product changes.'), labelled('Kai Moreau', 'Analytics lead')]],
-  ['scorecard', 'middle', [{ metric: { value: 52, label: 'Participants', description: 'Target: 50' } }, { metric: { value: '84%', label: 'Completion', description: 'Target: at least 80%' } }, { metric: { value: '6.2', unit: 'min', label: 'Median time' } }]],
+  // LH-68: scorecard metrics are tiles: label at the card's top, value under it, description at its foot.
+  ['scorecard', 'tile', [{ metric: { value: 52, label: 'Participants', description: 'Target: 50' } }, { metric: { value: '84%', label: 'Completion', description: 'Target: at least 80%' } }, { metric: { value: '6.2', unit: 'min', label: 'Median time' } }]],
 ]) {
-  test(`${id}: cards with a heading line or a metric fill the body and set their content at the ${anchor}`, () => {
+  test(`${id}: cards with a heading line or a metric fill the body and set their content at the ${anchor === 'tile' ? 'tile positions' : anchor}`, () => {
     const result = compose(id, { title: 'Side by side', blocks });
     assert.equal(result.diagnostics.length, 0);
     const items = carded(result);
@@ -34,6 +35,12 @@ for (const [id, anchor, blocks] of [
     for (const item of items) {
       const above = item.box.y - item.frameBox.y, below = bottomOf(item.frameBox) - bottomOf(item.box);
       if (anchor === 'bottom') assert.ok(above > below, `${item.path}: the content sits low in its card (${above} above, ${below} below)`);
+      else if (anchor === 'tile') {
+        const part = (role) => item.metricLayout.parts.find((entry) => entry.role === role);
+        assert.ok(above > 0 && above <= 24 && below > 0 && below <= 24, `${item.path}: the tile fills its card inside the inset`);
+        assert.ok(part('label').box.y < part('value').box.y, `${item.path}: the label is the eyebrow`);
+        if (part('description')) assert.ok(Math.abs(bottomOf(part('description').box) - bottomOf(item.box)) < 1, `${item.path}: the description sits at the foot`);
+      }
       else assert.ok(above > 24 && below > 24, `${item.path}: the content sits inside its card, clear of both edges`);
     }
   });

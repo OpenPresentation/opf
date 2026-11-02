@@ -7,7 +7,7 @@ import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs'
 
 // LH-06: the PPTX draws the emphasis surface as the preview does: a tagged card frame (`OPF card <path>`, no line) at core's box and radius
 // in core's emphasisSurface fill, under the items on it, whose text is written in the surface's roles. The frame is recognized on import
-// as decoration (content-card-reflow) and the text comes back as ordinary text.
+// as decoration (content-card-reflow), the text comes back as ordinary text and an authored emphasis comes back on its block.
 const decoder = new TextDecoder();
 const long = 'Easton University Library should focus the next cycle on shifting the library from stacks-first to research services first.';
 const slides = [
@@ -51,6 +51,9 @@ for (const design of [{theme: 'classic'}, {theme: 'classic', variant: 'dark1'}])
   assert.equal(imported.slides.length, slides.length);
   assert.ok(diagnostics.includes('content-card-reflow'));
   assert.ok(!diagnostics.includes('invalid-card-provenance'));
+  // The authored emphasis comes back through the content topology; the automatic ones are not written back.
+  assert.equal(imported.slides[2].blocks[1].emphasis, true);
+  assert.ok(imported.slides.slice(0, 2).every(slide => slide.blocks.every(block => block.emphasis === undefined)));
 }
 assert.equal(checked, 6);
 console.log(`emphasis surface export: ${checked} slides`);

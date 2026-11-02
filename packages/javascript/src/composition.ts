@@ -3045,10 +3045,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
     if (overflowCount(unjoined) < overflowCount(result)) result = unjoined;
   }
-  // LH-06: an automatic foot band or pill takes its height from the body; it is kept unless the body without it overflows less.
-  if (result.emphasis && result.emphasis.source !== 'authored' && overflowCount(result) > 0) {
+  // LH-06: an automatic foot band or pill takes its height from the body; it is kept unless the body without it overflows less or leaves
+  // fewer blocks below the layout's grid.
+  const findings = (entry: SlideComposition) => overflowCount(entry) + entry.diagnostics.filter(diagnostic => diagnostic.code === 'layout-unplaced').length;
+  if (result.emphasis && result.emphasis.source !== 'authored' && findings(result) > 0) {
     const plain = composeLayout(input, { ...options, [PLAIN_EMPHASIS]: true } as ComposeSlideOptions);
-    if (overflowCount(plain) < overflowCount(result)) result = plain;
+    if (findings(plain) < findings(result)) result = plain;
   }
   if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
   const blocks = record(input).blocks;
@@ -3337,8 +3339,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // (EMPHASIS_BAND_MAX_CHARACTERS or fewer) after blocks that are all longer (any other kind, or a longer text) becomes a full-width band
   // at the foot of the body; one of EMPHASIS_PILL_MAX_CHARACTERS or fewer after a lone long text becomes a pill there, at the start of the
   // content alignment. The body above composes in what is left, with a layout or without. Never on a slide with an authored
-  // `emphasis: true` (one surface per slide), nor for a last block that sets `emphasis: false`, pins a region, has a caption or holds
-  // anything but text; composeSlide drops it when the body overflows less without it.
+  // `emphasis: true` (one surface per slide) or an arrangement of its own (a `composition` mode other than auto, weights or columns), nor
+  // for a last block that sets `emphasis: false`, pins a region, has a caption or holds anything but text; composeSlide drops it when the
+  // body overflows less without it.
   const plainText = (block: unknown): string | undefined => {
     const host = record(block);
     if (host.emphasis === false || host.region !== undefined || host.caption !== undefined || Array.isArray(host.blocks) || fields.some(field => field !== 'text' && host[field] !== undefined)) return undefined;
@@ -3348,6 +3351,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill' } | undefined => {
     if ((options as Record<symbol, unknown>)[PLAIN_EMPHASIS] === true || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
+    const own = record(slide.composition);
+    if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ block, index }]);
     const last = flowed[flowed.length - 1], text = flowed.length >= 2 && last ? plainText(last.block) : undefined;
     if (text === undefined || !last) return undefined;
@@ -4154,7 +4159,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
     const belowUnits = binding.belowUnits.map(unitOf);
-    const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, metrics: 'stack', anchor: 'top', empty: 'collapse' };
+    const belowRegion: LayoutRegion = { name: BELOW, accepts: [], role: 'supporting', flow: 'auto', max: belowUnits.length, bleed: false, listColumns: 1, anchor: 'top', empty: 'collapse' };
     const unitsOf = (name: string): Pending[] => name === BELOW ? belowUnits : contents.get(name) ?? [];
     // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
     // measure of the region (row needs, floors, placement) sees them as drawn. A lone timeline may grow when it fits (placeTimeline).

@@ -19,9 +19,10 @@ import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from '
 //            | {form: 'root', fields: [{field, box?}]}     // root shorthand with several payloads
 //            | {form: 'blocks', blocks: Node[]}
 //            | {form: 'regions', regions: {[key]: Node}}   // key = promoted region key
-//   Node     = {t: 'group', id?, ext?, comp?, typed?, pin?, in?, blocks: Node[]}
-//            | {t: 'leaf', k, id?, ext?, typed?, pin?, in?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
+//   Node     = {t: 'group', id?, ext?, comp?, typed?, pin?, in?, emph?, blocks: Node[]}
+//            | {t: 'leaf', k, id?, ext?, typed?, pin?, in?, emph?, bullets?, box?, lines?, wrap?}   // box = [x, y, w, h] reference px, 1 decimal
 //   pin = the block's authored `region` pin (OPF 0.19 layout templates, RR-81), restored onto the block
+//   emph = the block's or group's authored `emphasis` (true or false, LH-06), restored onto it
 //   in  = the template region a root block was drawn in (RR-81): where its shapes are, for editors and diagnostics; never restored
 //   typed = true when the authored block spelled out its `type`
 //   bullets = true when the authored list block used the `bullets` key (import names every list `items`), also under `type: 'text'`
@@ -268,6 +269,7 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
     if (object(block.extensions)) node.ext = clone(block.extensions);
     if (typeof block.type === 'string') node.typed = true;
     if (typeof block.region === 'string' && REGION_NAME.test(block.region)) node.pin = block.region;
+    if (typeof block.emphasis === 'boolean') node.emph = block.emphasis;
     if (regionOf.has(path)) node.in = regionOf.get(path);
     return node;
   };
@@ -486,6 +488,7 @@ export function validateTopology(value) {
     if (item.ext !== undefined && !object(item.ext)) throw Error('Invalid content node extensions.');
     if (item.typed !== undefined && item.typed !== true) throw Error('Invalid content node type flag.');
     if ((item.pin !== undefined && !REGION_NAME.test(item.pin ?? '')) || (item.in !== undefined && !REGION_NAME.test(item.in ?? ''))) throw Error('Invalid content node region.');
+    if (item.emph !== undefined && typeof item.emph !== 'boolean') throw Error('Invalid content node emphasis.');
     if (item.t === 'group') {
       if (depth >= MAX_GROUP_DEPTH) throw Error(`Content groups nest deeper than ${MAX_GROUP_DEPTH} levels.`);
       if (item.comp !== undefined && !object(item.comp)) throw Error('Invalid group composition.');
@@ -622,6 +625,7 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
     if (leaf.node.id !== undefined) { payload.id = leaf.node.id; ids.push(leaf.node.id); }
     if (leaf.node.ext !== undefined) payload.extensions = clone(leaf.node.ext);
     if (leaf.node.pin !== undefined) payload.region = leaf.node.pin;
+    if (leaf.node.emph !== undefined) payload.emphasis = leaf.node.emph;
     return payload;
   };
   const build = item => {
@@ -636,6 +640,7 @@ export function rebuildContent(topology, blocks, bounds, placed, intactStyles = 
     if (item.ext !== undefined) group.extensions = clone(item.ext);
     if (item.comp !== undefined) group.composition = clone(item.comp);
     if (item.pin !== undefined) group.region = item.pin;
+    if (item.emph !== undefined) group.emphasis = item.emph;
     group.blocks = children;
     return group;
   };

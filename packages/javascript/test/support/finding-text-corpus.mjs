@@ -91,7 +91,7 @@ export const CASES = [
 	{ name: 'chart-text-alternative-decorative', rule: 'opf/chart-text-alternative', input: deck([{ title: 'Revenue', text: 'x', chart: { type: 'column', alt: '', data: chartData } }]) },
 	{ name: 'missing-language', rule: 'opf/missing-language', input: { name: 'x', slides: [{ title: 'T', text: 'x' }] } },
 	{ name: 'chart-option-adapted', rule: 'opf/chart-option-adapted', input: deck([{ title: 'Pie', chart: { type: 'pie', data: chartData, axisTitles: { value: 'Revenue' }, dataLabels: { position: 'above' } } }]), pick: (f) => f.path.endsWith('dataLabels/position') },
-	{ name: 'text-overflow', rule: 'opf/text-overflow', input: deck([{ title: 'T', composition: { minFontSize: 16 }, blocks: [{ text: 'word '.repeat(600) }, { text: 'b' }] }]) },
+	{ name: 'text-overflow', rule: 'opf/text-overflow', input: deck([{ title: 'T', composition: { minFontSize: 16 }, blocks: [{ text: 'word '.repeat(600) }, { text: 'b', emphasis: false }] }]) },
 	{ name: 'unresolved-content', rule: 'opf/unresolved-content', input: deck([{ title: 'T', items: ['a', 'b'] }], { design: { listBullet: 'image' } }) },
 	{ name: 'layout-failed', rule: 'opf/layout-failed', input: deck([{ title: 'T', layout: 'broken', text: 'x' }]), options: { catalogs: [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', regions: [{ name: 'title', size: 1 }], composition: { padding: 5 } } } }] } },
 	{ name: 'min-font-size-run', rule: 'opf/min-font-size', input: deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 8 }, ' ok'] }]) },

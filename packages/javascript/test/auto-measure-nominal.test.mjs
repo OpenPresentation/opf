@@ -14,10 +14,11 @@ const textMeasurement = {
   outlineBounds: (text, size) => (text ? { x: 0, y: -0.8 * size, width: text.length * size * 0.5, height: size } : null),
 };
 const note = 'Next step: agree the pilot owner by Friday.';
+// LH-06: the notes opt out of the automatic foot band (`emphasis: false`), which would otherwise draw this short last text.
 
 for (const [id, regionName, slide, size] of [
-  ['metrics', 'note', { title: 'Metrics', blocks: [{ metric: { value: '42%', label: 'Growth' } }, { text: note }] }, 28],
-  ['chart', 'note', { title: 'Chart', blocks: [{ chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } }, { text: note }] }, 28],
+  ['metrics', 'note', { title: 'Metrics', blocks: [{ metric: { value: '42%', label: 'Growth' } }, { text: note, emphasis: false }] }, 28],
+  ['chart', 'note', { title: 'Chart', blocks: [{ chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } }, { text: note, emphasis: false }] }, 28],
   ['closing', 'details', { title: 'Thank you', text: note }, 32],
 ]) {
   test(`${id}: a single-line auto note composes at exactly ${size} px`, () => {
