@@ -9,7 +9,7 @@ import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
-import {groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength} from './block-grouping.js';
+import {groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import type {MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -525,8 +525,10 @@ export interface CompositionDecision {
    * `paragraph-columns` (LH-70): similar paragraphs set as a grid of columns at a reading measure.
    * `lead-stack` (LH-67): one block much longer than its siblings (or a chart or picture beside two compact blocks) leads beside a
    * stack of the others.
+   * `split-fill` (LH-71): two or three blocks of an automatic body took one row or one column instead of the scored grid, because it
+   * fills more of the body; `candidates` are the scored ones.
    */
-  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions' | 'chart-primary' | 'table-width' | 'paragraph-columns' | 'lead-stack';
+  reason: 'lowest-score' | 'configured-mode' | 'promoted-regions' | 'chart-primary' | 'table-width' | 'paragraph-columns' | 'lead-stack' | 'split-fill';
   selectedColumns?: number;
   /** Only candidates actually evaluated by automatic selection, in tie-break order. */
   candidates: CompositionCandidate[];
@@ -3056,6 +3058,10 @@ function bodySizes(result: SlideComposition, options: ComposeSlideOptions): Map<
 }
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
+/** composeSlide composes a template slide again with this flag: long texts keep the layout's regions side by side (no LH-86 rows). */
+const SIDE_BY_SIDE = Symbol('opf.sideBySide');
+/** The compositions in which LH-86 drew long texts as rows (composeSlide compares them with the side-by-side layout). */
+const longTextResults = new WeakSet<SlideComposition>();
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -3187,6 +3193,13 @@ function composeArranged(input: unknown, options: ComposeSlideOptions = {}): Sli
     const own = (entry: SlideComposition) => entry.items.find(item => item.path === textPath)?.text?.fontSize ?? 0;
     if (own(result) < own(plain) - FONT_GRID_EPSILON) { chosen = { ...chosen, [EMPHASIS_SIZE]: own(plain) } as ComposeSlideOptions; result = compose(chosen); }
     if (!result.emphasis || result.emphasis.source === 'authored' || !keeps(result, plain)) { chosen = plainOptions; result = plain; }
+  }
+  // Wave 3 (LH-86): long texts drawn as rows are kept only when their smallest body size is at least the one the layout's regions side
+  // by side give, or they overflow less; a row never trades type size for the arrangement.
+  if (longTextResults.has(result)) {
+    const sideBySide = composeLayout(input, { ...options, [SIDE_BY_SIDE]: true } as ComposeSlideOptions);
+    const smallest = (entry: SlideComposition) => Math.min(...bodyReadability(entry, options).sizes.map(size => size.size));
+    if (overflowCount(result) >= overflowCount(sideBySide) && smallest(result) < smallest(sideBySide) - FONT_GRID_EPSILON) result = sideBySide;
   }
   if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
   const blocks = record(input).blocks;
@@ -3859,6 +3872,119 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const chosen = options.reduce((a, b) => b.score < a.score ? b : a);
     return chosen.score < gridScore ? chosen : undefined;
   };
+  // LH-52, LH-71: a split is two or three blocks (no group, no caption) side by side or stacked at the root of the body. Its fill is
+  // the share of the body its blocks draw: text, lists, quotes, metrics and code their ink (each line's width by its height, measured
+  // at their starting size, so rewrapping them changes nothing), a table at most its natural width by the height of its rows at that
+  // width (wrapped cells add height, not content), a timeline its cell's width by the height it needs, a picture shown whole and a
+  // video their frame, a chart the largest 4:3 box of its cell (drawn wider, its marks spread but fill no more), anything else its
+  // cell. `stretch`: the code panels of a row that fills under SPLIT_FILL take their whole cell, as LH-52 draws them.
+  const SPLIT_FILL = .55, SPLIT_MIN_BLOCK = 120, SPLIT_MARGIN = .02, SPLIT_CHART_SHAPE = 4 / 3;
+  const splitBlocks = (nodes: Pending[]) => nodes.length >= 2 && nodes.length <= 3 && nodes.every(node => !node.children && node.caption === undefined);
+  const inkArea = (fit: unknown): number => {
+    const value = record(fit);
+    if (Array.isArray(value.listEntries)) return (value.listEntries as ListEntryLayout[]).reduce((sum, entry) => sum + inkArea(entry.text) + inkArea(entry.description), 0);
+    if (Array.isArray(value.richLines)) return (value.richLines as RichTextLine[]).reduce((sum, line) => sum + line.width * line.height, 0);
+    if (Array.isArray(value.sourceLines)) return (value.sourceLines as { width: number }[]).reduce((sum, line) => sum + line.width * (value.lineHeight as number), 0);
+    return 0;
+  };
+  const drawnArea = (node: Pending, cell: LayoutBox, settings: Composition, stretch: boolean): number => {
+    const frame = (aspect: number) => { const box = containedBox(cell, aspect, 'top'); return box.width * box.height; };
+    if (node.field === 'image') { const aspect = wholePictureAspect(node); return aspect ? frame(aspect) : cell.width * cell.height; }
+    if (node.field === 'video') return frame(VIDEO_ASPECT);
+    if (node.field === 'chart') return frame(SPLIT_CHART_SHAPE);
+    if (!MEASURED_FIELDS.has(node.field)) return cell.width * cell.height;
+    if (stretch && node.field === 'code') return cell.width * cell.height;
+    const open = { x: 0, y: 0, width: Math.max(scale, cell.width), height: 1e6 }, floorSize = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+    if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
+      const prose = proseMeasure(node, open.width);
+      return inkArea(fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...open, width: prose.width }, prose.size, floorSize, node.path, node.payload.numbering));
+    }
+    if (node.field === 'quote' || node.field === 'metric' || node.field === 'code') return (node.field === 'quote' ? measureQuote(node, open, settings) : node.field === 'code' ? measureCode(node, open, settings) : measureMetric(node, open, settings)).parts.reduce((sum, part) => sum + ((part as { visible?: boolean }).visible === false ? 0 : inkArea(part.fit)), 0);
+    if (node.field === 'table') {
+      // A table fills what it shows with one line per cell: at most its natural width by the height of its rows at that width.
+      const natural = measureTable(node, Math.max(scale, cell.width), settings), whole = natural && measureTable(node, Math.max(cell.width, natural.naturalWidth), settings);
+      if (natural && whole) return Math.min(cell.width, natural.naturalWidth) * Math.min(cell.height, whole.naturalHeight);
+    }
+    return cell.width * Math.min(cell.height, naturalHeight(node, cell.width, hasCards, undefined, settings));
+  };
+  const splitFill = (nodes: Pending[], boxes: LayoutBox[], area: LayoutBox, settings: Composition, stretch = false): number =>
+    nodes.reduce((sum, node, index) => sum + drawnArea(node, boxes[index]!, settings, stretch), 0) / Math.max(1, area.width * area.height);
+  // LH-71: two or three blocks of an automatic body try one row and one column (stacked at the heights they need, as arrange draws
+  // it) besides the grid the scores chose, and keep the one that fills the body most (a row that fills under SPLIT_FILL counted
+  // with its panels stretched, as LH-52 draws it). A row gives every block at least SPLIT_MIN_BLOCK px of width, and a column every
+  // picture, chart and video at least that height; neither may overflow more than the scored grid. A fill within SPLIT_MARGIN of the
+  // body keeps the scored grid, so a row of texts stays a row: their ink is the same either way but for the spaces at line breaks,
+  // and only panels, tables, timelines and frames tip the choice.
+  const rowOrColumn = (nodes: Pending[], area: LayoutBox, settings: Composition, between: number, scored: number): number => {
+    const count = nodes.length;
+    const option = (cols: number) => {
+      let boxes: LayoutBox[];
+      if (cols === 1) {
+        // stackedBoxes marks the blocks it gives their whole need; this is a trial, so the marks are undone.
+        const sized = nodes.map(node => contentSized.has(node));
+        boxes = stackedBoxes(nodes, area, between, settings);
+        nodes.forEach((node, index) => { if (!sized[index]) contentSized.delete(node); });
+      } else boxes = gridGeometry(count, area, cols, between, (cols === count ? autoRowWeights(nodes, count, cols, area, between, settings) : undefined) ?? [], false).boxes;
+      const plain = splitFill(nodes, boxes, area, settings), fill = cols === count && plain < SPLIT_FILL ? splitFill(nodes, boxes, area, settings, true) : plain;
+      const penalties: CompositionPenalties = { cellProportions: 0, fontReduction: 0, textOverflow: 0, tableOverflow: 0, smallCells: 0, emptySlots: 0 };
+      nodes.forEach((node, index) => { scoreNode(node, boxes[index]!, settings, penalties); });
+      const small = cols === count ? boxes.some(box => box.width < SPLIT_MIN_BLOCK * scale) : cols === 1 && boxes.some((box, index) => !measuredNode(nodes[index]!) && box.height < SPLIT_MIN_BLOCK * scale);
+      return { cols, fill, overflow: penalties.textOverflow + penalties.tableOverflow, reduction: penalties.fontReduction, small };
+    };
+    const current = option(scored);
+    let best = current;
+    for (const cols of [count, 1]) {
+      if (cols === scored) continue;
+      const other = option(cols);
+      // Wave 3: a new arrangement never sets its blocks smaller than the scored grid does, unless it removes an overflow.
+      const smaller = other.reduction > current.reduction + 1e-6 && other.overflow >= current.overflow;
+      if (!other.small && !smaller && other.overflow <= current.overflow && other.fill > best.fill + SPLIT_MARGIN) best = other;
+    }
+    return best.cols;
+  };
+  // LH-52: a row of two or three blocks at the root of the body that fills under SPLIT_FILL of it reads as a strip along the top with
+  // the rest empty. Its panels stretch instead and its text centers: a code panel takes its whole cell with its code in the middle,
+  // text, lists, quotes, metrics, tables and timelines sit at the height they need in the middle of their cell (a card still fills
+  // the cell), a picture shown whole and a video sit in the middle of their cell, and a chart's box is centered. Every block keeps
+  // the size it had at the top, so nothing shrinks; the row's arrangement and widths are unchanged.
+  // LH-52, a column: the stack of a split that fills under SPLIT_FILL keeps every measured block at the height it needs (a table no
+  // longer takes the spare height, which left the next block at the foot of the body) and sits in the middle of the body. Pictures,
+  // charts and videos keep the height the stack gave them.
+  const centeredSplitStack = (nodes: Pending[], boxes: LayoutBox[], area: LayoutBox, settings: Composition): LayoutBox[] => {
+    const between = boxes.length > 1 ? Math.max(0, boxes[1]!.y - boxes[0]!.y - boxes[0]!.height) : 0;
+    const heights = boxes.map((box, index) => {
+      const node = nodes[index]!;
+      if (!measuredNode(node)) return box.height;
+      const need = naturalHeight(node, box.width, hasCards, undefined, settings) + 2 * rasterPadding + scale;
+      if (need > box.height) return box.height;
+      contentSized.add(node);
+      return need;
+    });
+    let y = area.y + Math.max(0, (area.height - heights.reduce((sum, size) => sum + size, 0) - between * (boxes.length - 1)) / 2);
+    return boxes.map((box, index) => { const next = { ...box, y, height: heights[index]! }; y += heights[index]! + between; return next; });
+  };
+  const fillsSplit = (nodes: Pending[], boxes: LayoutBox[], area: LayoutBox, settings: Composition, cols: number): boolean =>
+    area === contentBox && cols === nodes.length && splitBlocks(nodes) && splitFill(nodes, boxes, area, settings) < SPLIT_FILL;
+  const placeSplitBlock = (node: Pending, cell: LayoutBox, settings: Composition): void => {
+    const first = items.length;
+    // A card fills its cell; what it holds is centered inside the card's own insets (those of the whole card, not of a card as short
+    // as the payload), so it is placed without a card of its own and given the cell as its frame.
+    const inner = hasCards ? payloadBox(cell) : cell;
+    if (node.field === 'image' || node.field === 'video') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
+    else if (node.field === 'chart') {
+      const height = modeFor(settings) === 'auto' && inner.height > inner.width * CHART_MAX_ASPECT_RATIO ? inner.width * CHART_MAX_ASPECT_RATIO : inner.height;
+      placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
+    } else if (MEASURED_FIELDS.has(node.field)) {
+      const need = naturalHeight(node, inner.width, false, undefined, settings) + 2 * rasterPadding + scale;
+      if (need >= inner.height) { placeNode(node, cell, settings); return; }
+      contentSized.add(node);
+      placeNode(node, { ...inner, y: inner.y + (inner.height - need) / 2, height: need }, settings, false);
+      const item = items[first];
+      if (item && node.field === 'code' && item.codeLayout && !item.codeLayout.overflow) item.box = acceptedBox(inner);
+    } else { placeNode(node, cell, settings); return; }
+    const item = items[first];
+    if (item && hasCards) item.frameBox = acceptedBox(cell);
+  };
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
@@ -3888,6 +4014,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (score < best) { best = score; cols = candidate; }
       }
     }
+    // LH-71: two or three blocks of an automatic body keep a row or a column when it fills more than the scored grid.
+    let splitChoice = false;
+    if (mode === 'auto' && !hasRegions && area === contentBox && settings.columns === undefined && !settings.weights?.length && count === nodes.length && splitBlocks(nodes)) {
+      const chosen = rowOrColumn(nodes, area, settings, actualGap, cols);
+      splitChoice = chosen !== cols;
+      cols = chosen;
+    }
     // LH-44: an automatic or a `grid` arrangement whose column count is not set gives way when it leaves a table too narrow for its
     // words (a grid's own columns are not scored, so either table candidate is better than its split words).
     const spanning = (mode === 'auto' || mode === 'grid') && !hasRegions && count === nodes.length && count > 1 && settings.columns === undefined ? tableArrangement(nodes, area, settings, actualGap, cols, best) : undefined;
@@ -3902,7 +4035,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
-      reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : paragraphs ? 'paragraph-columns' : lead ? 'lead-stack' : mode==='auto'?'lowest-score':'configured-mode',
+      reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : paragraphs ? 'paragraph-columns' : lead ? 'lead-stack' : splitChoice ? 'split-fill' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
     const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : mode === 'row' && !hasRegions ? tableRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     if (paragraphs) {
@@ -3921,6 +4054,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.gap = actualGap;
     } else if (cols === 1 && stacks) {
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
+      if (area === contentBox && splitBlocks(nodes) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
@@ -3934,10 +4068,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: rtl ? grid.columns.map(track => ({offset: area.width - track.offset - track.size, size: track.size})) : grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
     // LH-43: the cells of a grid are one set across its rows, as the blocks of a stacked column are.
     const stack: number[] = [];
+    // LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep their own cells; LH-52 centers the scored grid or LH-71's row.
+    const filled = !hasRegions && !paragraphs && !lead && count === nodes.length && fillsSplit(nodes, grid.boxes, area, settings, cols);
     nodes.forEach((node, index) => {
       const box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
       const first = items.length;
-      placeNode(node, box, settings);
+      if (filled) placeSplitBlock(node, box, settings); else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
     });
     if (stack.length > 1) peerSets.push(stack);
@@ -4455,6 +4591,71 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return new Set(quotes.map(quote => quote.path));
   })();
   const besideQuote = (node: Pending) => node.field === 'quote' && !node.children && quotesBeside.has(node.path) && !stackLeads.has(node);
+  // LH-86: long texts as full-width rows. Two or three paragraphs of at least LONG_TEXT_CHARS characters each, drawn as cards side by
+  // side (in regions of one row of the grid, or in one region's grid), read as narrow columns of long lines beside one another, and a
+  // short one in a wide card beside a long one in a narrow card (an empty region collapsed into it). They are drawn one card per row
+  // instead, across the whole row: every block moves to the first region of the row in reading order, the others are left empty and
+  // collapse into it, and that region stacks them (arrangementOf). Only a slide that draws cards, with no contentDirection and no
+  // composition of its own, whose row holds nothing else, nothing beyond a region's room and nothing below the grid.
+  const LONG_TEXT_CHARS = 80, LONG_TEXT_ROWS = 3, LONG_TEXT_HUG = .45;
+  let longTextRowsDrawn = false;
+  const longTextUnit = (unit: Pending): boolean => !unit.children && unit.caption === undefined && unit.field === 'text' && textLength(unit.value) >= LONG_TEXT_CHARS;
+  const longTextRows = (grouped: GroupedBinding, plan: LayoutTemplate): { binding: GroupedBinding; region?: string } => {
+    const own = record(slide.composition);
+    if (!hasCards || direction !== undefined || grouped.belowUnits.length || ['mode', 'columns', 'weights'].some(key => own[key] !== undefined)) return { binding: grouped };
+    const longBlock = (unit: BoundBlock[]): boolean => {
+      const host = unit.length === 1 && unit[0]!.block !== undefined ? record(slide.blocks?.[unit[0]!.block]) : undefined;
+      return !!host && host.caption === undefined && typeof host.text !== 'undefined' && fields.every(field => field === 'text' || host[field] === undefined) && textLength(host.text) >= LONG_TEXT_CHARS;
+    };
+    const rects = areaRects(plan.grid), band = (name: string) => { const rect = rects.get(name); return rect ? `${rect.row}:${rect.rowSpan}` : undefined; };
+    const filled = plan.regions.filter(region => grouped.units.get(region.name)?.length);
+    const key = filled.length ? band(filled[0]!.name) : undefined;
+    if (key === undefined || filled.some(region => band(region.name) !== key)) return { binding: grouped };
+    const row = plan.regions.filter(region => band(region.name) === key).sort((a, b) => rects.get(a.name)!.column - rects.get(b.name)!.column);
+    const units = row.flatMap(region => grouped.units.get(region.name) ?? []);
+    const side = filled.length > 1 || filled[0]!.flow !== 'column';
+    if (!side || units.length < 2 || units.length > LONG_TEXT_ROWS || !units.every(longBlock)) return { binding: grouped };
+    if (row.some(region => region.bleed || (region !== row[0] && region.empty === 'keep') || grouped.regions.find(entry => entry.name === region.name)?.overflow.length)) return { binding: grouped };
+    const target = row[0]!.name, names = new Set(row.map(region => region.name));
+    longTextRowsDrawn = true;
+    const moved = new Map(grouped.units);
+    for (const region of row) moved.set(region.name, region.name === target ? units : []);
+    return { binding: { ...grouped, units: moved, regions: grouped.regions.map(entry => entry.name === target ? { ...entry, blocks: units.flat() } : names.has(entry.name) ? { ...entry, blocks: [] } : entry) }, region: target };
+  };
+  // LH-86 (and wave 2's b04 s17): a stacked column of long-text cards shares the region's height row by row, so the cards fill the
+  // region instead of leaving a band of it empty, and their text is set at the largest size of the type scale (scaleSizes) at which
+  // every row fits: each card as tall as its text at that size plus the insets payloadBox gives a card of that height (a wide, short
+  // card keeps a tenth of its height above and below its text, not the inset of a tall one), and the height left over shared in
+  // proportion to the needs. The gap between the cards closes to half a gap when that sets the text larger (content before padding,
+  // as LH-41's bands do). Rows that do not fit at the floor share the region in proportion to their needs and overflow, with their
+  // finding. Each card's text is centered in it afterwards (centerCardText).
+  const centeredCardText: number[] = [];
+  const longTextRowBoxes = (units: Pending[], cell: LayoutBox, settings: Composition, gapSize: number): LayoutBox[] => {
+    const cardNeed = (unit: Pending, size: number): number => {
+      let height = 0, inner = cell.width;
+      for (let pass = 0; pass < 3; pass++) {
+        const text = naturalHeight(unit, inner, false, undefined, settings, false, size) + 2 * rasterPadding + scale;
+        const frame = acceptedBox({ x: 0, y: 0, width: cell.width, height: Math.max(height, text) }), box = payloadBox(frame, true);
+        height = text + frame.height - box.height;
+        inner = box.width;
+      }
+      return height;
+    };
+    const starts = units.map(unit => proseMeasure(unit, cell.width).size);
+    let needs: number[] = [], between = gapSize / 2;
+    for (const trial of scaleSizes(Math.max(...starts), settings.minFontSize ?? 16)) {
+      needs = units.map((unit, index) => cardNeed(unit, Math.min(trial, starts[index]!)));
+      const total = needs.reduce((sum, need) => sum + need, 0);
+      const fitting = [gapSize, gapSize / 2].find(size => total + size * (units.length - 1) <= cell.height + 1e-6);
+      if (fitting !== undefined) { between = fitting; break; }
+    }
+    const total = needs.reduce((sum, need) => sum + need, 0), space = Math.max(0, cell.height - between * (units.length - 1));
+    // As LH-64's cards: rows whose text would fill under LONG_TEXT_HUG of their shared height (a few short paragraphs) hug their
+    // text instead, and the stack sits in the middle of the region, since a large card around two lines reads as an empty card.
+    const hug = total > 0 && total < LONG_TEXT_HUG * space;
+    let y = cell.y + (hug ? (space - total) / 2 : 0);
+    return needs.map(need => { const height = hug ? need : total > 0 ? need * space / total : space / units.length, box = { ...cell, y, height }; y += height + between; return box; });
+  };
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
@@ -4463,7 +4664,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
     // LH-06: the block drawn as the automatic foot band or pill is bound to no region (an empty block in its place keeps every index).
     const bound = autoSurface ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => index === autoEmphasis?.block ? {} : block) } : slide;
-    const binding = groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true });
+    // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide compares them.
+    const { binding, region: longTextRegion } = ((options as Record<symbol, unknown>)[SIDE_BY_SIDE] === true ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true }), plan);
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
     const blockUnit = (bound: BoundBlock): Pending => {
@@ -4581,6 +4783,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
     const arrangementOf = (region: LayoutRegion, units: Pending[], cell: LayoutBox): 'grid' | 'row' | 'column' => {
+      if (region.name === longTextRegion) return 'column';
       if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
@@ -4687,7 +4890,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-41: a stack of timeline bands needs its one-column height.
       if (timelineBands(units)) return stackHeight(bandRows(units, areaWidth, 1, hasCards && !region.bleed, atFloor));
       // LH-70, LH-67: as placeRegion arranges them (a body-tall area decides the paragraph grid).
-      const fixed = direction !== undefined || listGridOf(region, units, areaWidth) !== undefined || binding.arrangements.get(name) === 'mosaic' || binding.arrangements.get(name) === 'row';
+      const fixed = direction !== undefined || name === longTextRegion || listGridOf(region, units, areaWidth) !== undefined || binding.arrangements.get(name) === 'mosaic' || binding.arrangements.get(name) === 'row';
       const paragraphs = fixed ? undefined : paragraphColumns(units, { x: 0, y: 0, width: areaWidth, height: frame.height }, hasCards && !region.bleed, composition);
       if (paragraphs) return paragraphNeed(units, paragraphs, areaWidth, hasCards && !region.bleed, composition, atFloor);
       const leading = fixed || region.flow === 'grid' ? undefined : leadStack(units);
@@ -4866,8 +5069,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const listGrid = bands ? undefined : listGridOf(region, units, cell.width, cell.width >= cell.height);
         // LH-70, LH-67: similar paragraphs as columns, or a lead beside a stack, in a region whose arrangement the design does not fix
         // (contentDirection) and that grouping gave no picture mosaic or moved row; a statement's lead plus cards gives way to either. A
-        // lead plus stack is not a grid, so a `flow: grid` region keeps its grid.
-        const own = bands || listGrid || direction !== undefined || binding.arrangements.get(region.name) === 'mosaic' || binding.arrangements.get(region.name) === 'row' ? undefined : region;
+        // lead plus stack is not a grid, so a `flow: grid` region keeps its grid. Long texts LH-86 moved into one region keep their rows.
+        const own = bands || listGrid || direction !== undefined || region.name === longTextRegion || binding.arrangements.get(region.name) === 'mosaic' || binding.arrangements.get(region.name) === 'row' ? undefined : region;
         const paragraphs = own ? paragraphColumns(units, cell, cards, settings) : undefined;
         const lead = own && !paragraphs && region.flow !== 'grid' ? leadStack(units) : undefined;
         const joined = bands || listGrid || paragraphs || lead ? undefined : joinedLayout(region, units, cell, cards);
@@ -4886,7 +5089,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
         // instead of giving every block an equal share. A lone block at the top keeps the whole cell, as before.
         const stacked = !bands && arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
-        if (stacked) boxes = stackedBoxes(units, cell, gap, settings, cards, region.anchor);
+        // LH-86: a stack of long-text cards shares the region's height (longTextRowBoxes).
+        const longRows = stacked && cards && units.length > 1 && units.every(longTextUnit);
+        if (stacked) boxes = longRows ? longTextRowBoxes(units, cell, settings, gap) : stackedBoxes(units, cell, gap, settings, cards, region.anchor);
         if (!bands && !lead && (arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
           const naturals = boxes.map((box,index) => {
             const unit = units[index]!;
@@ -4926,6 +5131,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const first = items.length;
           placeNode(unit, boxes[index]!, settings, cards, listGrid ? 1 : region.listColumns, region.anchor === 'top' || stacked || planned[index] ? undefined : referenceHeights[index], region.anchor, !cards || bands ? undefined : planned[index] ? frames[index] : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
+          if (longRows) centeredCardText.push(...range(first, items.length));
         });
         // LH-43: the blocks of one kind in a region read at one size whatever their arrangement: across the rows of a grid (LH-42 did
         // it for a list grid), along a row and down a stacked column (WI-4; stackedBoxes sizes the stack for it). Uneven content no
@@ -5076,6 +5282,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
     }
   };
+  // LH-86: the text of a card in a stack of long-text rows sits in the middle of its card, at the size the rows share (after
+  // sharePeerSizes), so a row taller than its text keeps its spare height above and below the text, not under it.
+  const centerCardText = (): void => {
+    for (const index of centeredCardText) {
+      const item = items[index]!, fit = item.text;
+      if (!fit || fit.overflow) continue;
+      const used = Math.max('height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+      const dy = (item.box.height - used) / 2;
+      if (dy < scale) continue;
+      item.box = { ...item.box, y: item.box.y + dy, height: item.box.height - dy };
+      item.text = translateTextFit(fit, dy);
+    }
+  };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
@@ -5103,6 +5322,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   sharePeerSizes();
   shareStartAlignment();
   hugQuoteCards();
+  centerCardText();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
   // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
@@ -5170,7 +5390,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
-  return { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
+  if (longTextRowsDrawn) longTextResults.add(composed);
+  return composed;
 }
 
 /** Canonical physical slide size, converted to reference pixels at 96 pixels/inch. */

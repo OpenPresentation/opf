@@ -46,7 +46,8 @@ test('right to left: hugging cards keep their cells, mirrored', () => {
 });
 
 test('long body text keeps the filled card at its anchor; very unequal texts start at the card top', () => {
-  const even = composeSlide({ title: 'Cards', blocks: [{ text: `${sentence} ${sentence}` }, { text: `${sentence} ${sentence}` }, { text: `${sentence} ${sentence}` }] }, { layout: columns('bottom') });
+  // Plain lists of long entries: three long paragraphs side by side are drawn one card per row instead (LH-86, split-fill.test.mjs).
+  const even = composeSlide({ title: 'Cards', blocks: [{ bullets: [sentence, sentence] }, { bullets: [sentence, sentence] }, { bullets: [sentence, sentence] }] }, { layout: columns('bottom') });
   for (const item of cards(even)) {
     assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(even))) < 1, `${item.path}: the card fills its region`);
     assert.ok(item.box.y - item.frameBox.y > bottomOf(item.frameBox) - bottomOf(item.box), `${item.path}: at the foot`);

@@ -131,3 +131,31 @@ test('LH-06 with LH-43 and LH-58: a foot band is no sibling of the blocks above 
     for (const item of above) assert.ok(item.text.fontSize >= plain.items.find((entry) => entry.path === item.path).text.fontSize - 1e-6, item.path);
   }
 });
+
+test('LH-71 and LH-52 with LH-44: a table that wraps beside its text goes full width above it, and the pair is centered', () => {
+  const table = { table: { columns: ['Workstream', 'Owner', 'Status', 'Decision'], rows: [['Community college', 'Program lead', 'At risk', 'Continue'], ['Data and reporting', 'Analytics', 'On track', 'Tighten metric definitions'], ['Field adoption', 'Operations', 'Watch', 'Add weekly office hours']] } };
+  const text = { text: 'Metro Technical College should focus the next cycle on connecting employer demand to short-cycle training capacity while making the operating tradeoffs clear.' };
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Execution timeline', blocks: [table, text] }, { direction, explain: true });
+    assert.deepEqual(overflow(result), []);
+    const grid = result.items.find((item) => item.field === 'table'), note = result.items.find((item) => item.field === 'text');
+    // LH-44's row would give the table 65% of the width and wrap its cells; the column shows every cell on one line.
+    assert.equal(result.explanation.decisions[0].reason, 'split-fill');
+    assert.ok(Math.abs(grid.box.width - result.contentBox.width) < 1);
+    // The table keeps its rows' height (no spare height), so the text follows it.
+    assert.ok(note.box.y - (grid.box.y + grid.box.height) < 40);
+  }
+});
+
+test('LH-86 with LH-43 and LH-46: long rows joined into one region share its height at one size', () => {
+  const paragraph = (name) => ({ text: `${name} should focus the next cycle on preparing supplier data collection for annual reporting while making the operating tradeoffs clear to its stakeholders.` });
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Scope 3 reporting readiness', blocks: ['Lumina Foods', 'Cedarwell Properties', 'Brightpath Analytics', 'North Pier Advisory', 'RheinWorks Mobility'].map(paragraph) }, { layout: layouts['two-column'], direction });
+    assert.deepEqual(overflow(result), []);
+    const texts = result.items.filter((item) => item.field === 'text');
+    assert.equal(texts.length, 5);
+    assert.equal(new Set(texts.map((item) => item.text.fontSize)).size, 1);
+    const region = result.regions.find((entry) => entry.arrangement === 'column').box;
+    assert.ok(Math.abs(texts[0].frameBox.y - region.y) < 1 && Math.abs(texts[4].frameBox.y + texts[4].frameBox.height - region.y - region.height) < 1);
+  }
+});
