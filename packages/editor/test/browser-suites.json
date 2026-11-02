@@ -344,6 +344,10 @@
         {
           "id": "browser:thumbnail-strip-actions",
           "command": "node test/thumbnail-strip-actions-browser.mjs"
+        },
+        {
+          "id": "browser:playground-header",
+          "command": "node test/playground-header-browser.mjs"
         }
       ]
     }

@@ -31,10 +31,16 @@ export const TOOLBAR_ITEMS = Object.freeze({
 });
 const REPEATABLE = new Set(["spacer", "|"]);
 const LABELS = Object.freeze({ more: "More", menu: "More actions" });
+// A host's own item: `{ id, priority }` with a name of its own (lowercase letters, digits and dashes). Its slot starts empty; the host fills it and
+// registers what it offers in ⋯ with `mount(id, part)`, like any item. A bare unknown name still throws, so a misspelt item is caught.
+const HOST_ITEM = /^[a-z][a-z0-9-]*$/;
+
+const isHostItem = (id) => typeof id === "string" && !Object.hasOwn(TOOLBAR_ITEMS, id) && HOST_ITEM.test(id);
 
 /**
  * Turn the `items` option (names, or `{ id, priority, collapsible }`) into the list the toolbar builds, with each item's priority and whether
- * it collapses. Throws on a name that is not an item and on a named item given twice (`spacer` and `|` may repeat).
+ * it collapses. Throws on a name that is not an item (a host's own item is `{ id, priority }` with a name of its own) and on a named item given
+ * twice (`spacer` and `|` may repeat).
  */
 export function normalizeToolbarItems(items) {
   if (!Array.isArray(items)) throw new TypeError("toolbar items must be an array of item names or { id, priority } objects.");
@@ -42,8 +48,9 @@ export function normalizeToolbarItems(items) {
   return items.map((item, index) => {
     const spec = typeof item === "string" ? { id: item } : item;
     if (!spec || typeof spec !== "object" || typeof spec.id !== "string") throw new TypeError(`toolbar item ${index} must be an item name or { id, priority }.`);
-    const known = TOOLBAR_ITEMS[spec.id];
-    if (!known) throw new RangeError(`"${spec.id}" is not a toolbar item (${Object.keys(TOOLBAR_ITEMS).join(", ")}).`);
+    const host = typeof item === "object" && spec.priority !== undefined && isHostItem(spec.id);
+    const known = host ? { priority: spec.priority, collapsible: true } : Object.hasOwn(TOOLBAR_ITEMS, spec.id) ? TOOLBAR_ITEMS[spec.id] : undefined;
+    if (!known) throw new RangeError(`"${spec.id}" is not a toolbar item (${Object.keys(TOOLBAR_ITEMS).join(", ")}; an item of your own is { id, priority }).`);
     if (!REPEATABLE.has(spec.id)) {
       if (seen.has(spec.id)) throw new RangeError(`the toolbar item "${spec.id}" is given twice.`);
       seen.add(spec.id);
@@ -274,7 +281,8 @@ export function createToolbar(container, options = {}) {
     }
     const before = collapsed.join(",");
     bar.setAttribute("data-measuring", "");
-    for (const entry of entries) if (entry.collapsible) setCollapsed(entry, false);
+    // Every item shows again first, one made non-collapsible (`setItem`) while it was in ⋯ included.
+    for (const entry of entries) setCollapsed(entry, false);
     if (moreEntry) moreEntry.element.hidden = true;
     syncDividers();
     const next = [];

@@ -88,6 +88,48 @@ const hostPersistence = (() => {
 let editor, ed;
 let selectedPath = 'slides.0.title', selectedValue, renderError, review, pendingContentFocus = false, keepInspectorPanel = false, pictureTools;
 function status(message) { ed.status(message); }
+// CE-30: the header's items, in bar order, with their priorities (higher stays in the bar longer; the rest move into ⋯, lowest first). Saving
+// and the two ways out (Present, Export) stay longest, then expand, Source and Import (hosts and their tests press Source and Import as buttons
+// at 1280px and wider: pptx.gallery's e2e); the review pill, the Design menu and Copy OPF next; All properties, the contextual tools (List
+// numbering, Fill template, Import data) and help go first. The deck title is not an item: it sits before the bar with a width of its own.
+const HEADER_ITEMS = [
+  { id: 'tools', priority: 24, from: 'header-tools' },
+  { id: 'review-pill', priority: 50, from: 'toolbar-review' },
+  { id: 'design', priority: 45, slotId: 'toolbar-design' },
+  { id: 'import', priority: 68, from: 'add-opf' },
+  { id: 'copy', priority: 40, from: 'copy-opf' },
+  { id: 'properties', priority: 30, from: 'open-properties' },
+  { id: 'source', priority: 70, from: 'open-json' },
+  { id: 'save', priority: 90, from: 'download' },
+  { id: 'present', priority: 85, slotId: 'present-button' },
+  { id: 'export', priority: 88, slotId: 'export-menu' },
+  { id: 'help', priority: 10, slotId: 'toolbar-help' },
+  { id: 'expand', priority: 80, slotId: 'toolbar-expand' },
+];
+const HEADER_TOOLBAR = ['spacer', ...HEADER_ITEMS.map(({ id, priority }) => ({ id, priority })), 'more'];
+// What a page item offers in ⋯ while it is collapsed: each of its buttons that shows, pressed as if it were clicked.
+const buttonItems = slot => ({
+  menuItems: () => [...slot.querySelectorAll('button')].filter(button => !button.hidden && !button.closest('[hidden]')).map(button => ({
+    id: button.id, label: button.getAttribute('aria-label') || button.textContent.trim(), disabled: button.disabled, run: () => button.click(),
+  })),
+});
+function placeHeaderItems(toolbar) {
+  if (!toolbar) return;
+  for (const item of HEADER_ITEMS) {
+    const slot = toolbar.slot(item.id);
+    if (!slot) continue;
+    // The editor's own items keep the ids the page's slots had (hosts and tests find Present as #present-button, say).
+    if (item.slotId) { slot.id = item.slotId; continue; }
+    slot.append(element(item.from));
+    if (item.id !== 'review-pill') toolbar.mount(item.id, buttonItems(slot));
+  }
+  // At phone width the header actions are the "More" panel (mobile-controls.js), where every item shows and the row wraps: nothing collapses.
+  const compact = window.matchMedia('(max-width: 900px)');
+  const collapsible = toolbar.items.filter(item => item.collapsible).map(item => item.id);
+  const fit = () => { for (const id of collapsible) toolbar.setItem(id, { collapsible: !compact.matches }); };
+  fit();
+  compact.addEventListener('change', fit);
+}
 // RR-06: every dimension switch, design option, content conversion, chart type and table style/merge is a control here. Each commits one
 // undoable session change, so the editor's update loop (which redraws every part, and loads fonts first) runs after an edit exactly as for any change.
 // The editor library mounts these parts in the page's own elements.
@@ -101,19 +143,23 @@ ed = createOpfEditor(document.body, {
     navigator: element('slide-nav'), thumbnails: element('thumb-strip'),
     slides: element('slide-list'), slideToolbar: element('slide-toolbar'),
     sorter: element('sorter-list'), sorterView: element('sorter-view'), outline: element('outline-view'), layouts: element('layouts-view'),
-    export: element('export-menu'), present: element('present-button'),
-    // CE-28: the editor's toolbar items in the page's own top bar: the deck title, the review pill, the Design quick menu, help and expand.
-    title: element('document-title'), reviewPill: element('toolbar-review'), designMenu: element('toolbar-design'), help: element('toolbar-help'), expand: element('toolbar-expand'),
+    // CE-28: the deck title in the page's own breadcrumb, and the autosave line beside it (CE-30: in the bar, so the saved state shows without scrolling).
+    title: element('document-title'), reviewPill: element('toolbar-review'),
+    // CE-30: the header actions are the editor's toolbar, built in the page's own element: Export, Present, the Design quick menu, help and
+    // expand are its items, the page's buttons are items of the page's own (HEADER_ITEMS below), and what does not fit moves into ⋯.
+    toolbar: document.querySelector('.header-actions'),
     status: element('status'), banner: element('restore-banner'), autosave: element('autosave-status'),
     overlay: document.body,
   },
   persistence: hostPersistence,
   // The page runs its own Review tab (review-controls.js) and feeds the pill its counts; the editor runs no second review.
-  panels: { review: false },
+  // Present is the toolbar's item, not a slot of the page's, so it is named here.
+  panels: { review: false, present: true },
+  toolbar: HEADER_TOOLBAR,
   // The Design menu's "More design options…" opens the page's Design tab.
   designMenu: { onOpenPanel: () => showPanel('design', true) },
-  // The title's field keeps the id the page and its tests have always used.
-  on: { mounted: ({ editor: handle }) => handle.deckTitle?.input.setAttribute('id', 'document-name') },
+  // The title's field keeps the id the page and its tests have always used; the review pill's menu entry is registered once it exists.
+  on: { mounted: ({ editor: handle }) => { handle.deckTitle?.input.setAttribute('id', 'document-name'); if (handle.reviewPill) handle.toolbar?.mount('review-pill', handle.reviewPill); } },
   export: { exportPptx: (deck, request) => pptxExporter({ editor, fonts, measurementFor: value => layoutFor(value, 0).fonts.textMeasurement })(deck, request) },
   // The page has its own Ctrl/Cmd+Z handler below (it reports through the status line).
   shortcuts: false,
@@ -122,6 +168,7 @@ ed = createOpfEditor(document.body, {
   labels: { thumbnails: 'Slide thumbnails' },
 });
 editor = ed.session;
+placeHeaderItems(ed.toolbar);
 // The handle, for a same-origin host that embeds the playground in an iframe (pptx.gallery): `iframe.contentWindow.opfEditor` (docs/embedding.md).
 globalThis.opfEditor = ed;
 // The review pill opens the page's own Review tab.

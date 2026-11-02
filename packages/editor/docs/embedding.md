@@ -129,6 +129,7 @@ createOpfEditor(el, { document, fonts, catalogs, toolbar: false, slots: { title:
 | `more` | the ⋯ menu, shown only while something is in it | fixed | – |
 | `spacer`, `\|` | the free space; a divider, shown only between two visible items | – | – |
 | `zoom` | the Studio's own; left out by the workspace | – | – |
+| `{ id, priority }`, a name of your own (lowercase letters, digits, dashes) | an empty slot for your own element (`editor.toolbar.slot(id)`); a bare unknown name still throws | the one you give | what you register with `editor.toolbar.mount(id, { menuItems })` |
 
 | Layout | Default `toolbar` |
 | --- | --- |

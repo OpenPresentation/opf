@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { pressHeader } from './support/playground-harness.mjs';
 
 // RR-32 in a real browser, on the built playground (npm run build:playground): the Fill template panel lists a
 // template's variables with typed inputs, shows what is unfilled, previews the typed values live, fills the deck as
@@ -77,7 +78,7 @@ try {
   mark('canvas shows the template tokens');
 
   // Open the panel.
-  await button('Fill template').click();
+  await pressHeader(page, 'Fill template');
   const dialog = page.locator('#template-dialog');
   await dialog.waitFor();
   const fields = dialog.locator('.opf-template-field');
@@ -165,7 +166,7 @@ try {
 
   // Insert a token into the selected text: an existing variable, then a new one declared in the same edit.
   await settle();
-  await button('Fill template').click();
+  await pressHeader(page, 'Fill template');
   await dialog.locator('summary', { hasText: 'Insert a variable into text' }).click();
   await dialog.getByLabel('Variable', { exact: true }).selectOption('client');
   await page.locator('#value').fill('Hello ');

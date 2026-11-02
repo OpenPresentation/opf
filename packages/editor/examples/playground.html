@@ -27,8 +27,9 @@
 </aside>
 <main class="main-shell">
   <header class="document-bar">
-    <div class="breadcrumb"><svg class="icon"><use href="#i-slides"/></svg><span class="breadcrumb-label">Presentations</span><span class="slash">/</span><span id="document-title" class="document-title"></span></div>
-    <div class="header-actions"><div id="toolbar-review" class="export-menu-slot"></div><div id="toolbar-design" class="export-menu-slot"></div><button id="add-opf" class="secondary" aria-label="Import"><svg class="icon"><use href="#i-import"/></svg><span>Import</span></button><button id="copy-opf" class="quiet" aria-label="Copy OPF"><svg class="icon"><use href="#i-copy"/></svg><span>Copy OPF</span></button><button id="open-properties" class="secondary">All properties</button><button id="open-json" class="quiet" aria-label="Source"><svg class="icon"><use href="#i-code"/></svg><span>Source</span></button><button id="download" class="primary" aria-label="Save OPF"><svg class="icon"><use href="#i-download"/></svg><span>Save OPF</span></button><div id="present-button" class="export-menu-slot"></div><div id="export-menu" class="export-menu-slot"></div><div id="toolbar-help" class="export-menu-slot"></div><div id="toolbar-expand" class="export-menu-slot"></div></div>
+    <div class="breadcrumb"><svg class="icon"><use href="#i-slides"/></svg><span class="breadcrumb-label">Presentations</span><span class="slash">/</span><span id="document-title" class="document-title"></span><span id="autosave-status" class="autosave-status">Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>
+    <!-- CE-30: the header actions are the editor's toolbar (slots.toolbar): one row, the items that do not fit move into ⋯ by priority (playground.js). -->
+    <div class="header-actions"><div id="toolbar-review" class="export-menu-slot"></div><div id="header-tools" class="header-tools"></div><button id="add-opf" class="secondary header-button" aria-label="Import"><svg class="icon"><use href="#i-import"/></svg><span>Import</span></button><button id="copy-opf" class="quiet header-button" aria-label="Copy OPF"><svg class="icon"><use href="#i-copy"/></svg><span>Copy OPF</span></button><button id="open-properties" class="secondary header-button">All properties</button><button id="open-json" class="quiet header-button" aria-label="Source"><svg class="icon"><use href="#i-code"/></svg><span>Source</span></button><button id="download" class="primary header-button" aria-label="Save OPF"><svg class="icon"><use href="#i-download"/></svg><span>Save OPF</span></button></div>
   </header>
   <div id="restore-banner" class="restore-banner" hidden></div>
   <div class="editing-shell">
@@ -67,7 +68,6 @@
       </div>
       <div id="panel-review" class="inspector-panel" role="tabpanel" aria-labelledby="tab-review" hidden><div id="review-controls"></div></div>
       <div id="diagnostics-section" class="diagnostics-section" hidden><div class="section-heading"><h2>Layout notes</h2><span id="diagnostic-count" class="review-count"></span></div><ul id="diagnostics" aria-label="Layout diagnostics"></ul></div>
-      <div class="inspector-bottom"><svg class="icon"><use href="#i-check"/></svg><span id="autosave-status">Changes stay in this session.<br>Save an OPF file to keep your work.</span></div>
     </aside>
   </div>
 </main>

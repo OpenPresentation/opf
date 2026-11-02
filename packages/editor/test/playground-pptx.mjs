@@ -69,10 +69,13 @@ try {
     await page.setViewportSize(viewport);
     // RR-25: on a phone the document's header buttons sit behind the More button.
     if (await page.locator('#more-actions').isVisible() && await page.locator('#more-actions').getAttribute('aria-expanded') !== 'true') await page.locator('#more-actions').click();
-    for (const name of ['Import', 'Copy OPF', 'Source', 'Save OPF', 'Export']) {
+    for (const name of ['Import', 'Source', 'Save OPF', 'Export']) {
       assert.equal(await button(name).count(), 1, `${name} keeps its accessible name at ${viewport.width}px`);
       assert.equal(await button(name).isVisible(), true);
     }
+    // CE-30: Copy OPF is a button, or, on a desktop width without room for it, the header's ⋯ menu lists it under the same name.
+    const copyInMore = await page.evaluate(() => window.opfEditor.toolbar.menuItems().some((group) => group.items.some((item) => item.label === 'Copy OPF')));
+    assert.ok(await button('Copy OPF').isVisible() || copyInMore, `Copy OPF is reachable at ${viewport.width}px`);
     await button('Source').click();
     assert.equal(await page.locator('#json').isVisible(), true);
     await button('Close source editor').click();

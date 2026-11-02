@@ -9,7 +9,7 @@ export function installNumberingControls({ editor, getCanvas, getSlideIndex, get
   button.textContent = 'List numbering';
   button.className = 'quiet';
   button.title = 'Number the selected list, or any list on the slide';
-  document.querySelector('.header-actions').prepend(button);
+  (document.getElementById('header-tools') ?? document.querySelector('.header-actions')).prepend(button);
   const dialog = document.createElement('dialog');
   dialog.id = 'numbering-dialog';
   dialog.setAttribute('aria-labelledby', 'numbering-title');
