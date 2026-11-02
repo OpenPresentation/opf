@@ -19,6 +19,10 @@ const TITLES = {
   code: 'Keep the implementation easy to inspect', scorecard: 'Track performance against a target',
   logos: 'Recognize the partners',
 };
+const SUBTITLES = {
+  cover: 'A six-week pilot with two teams', section: 'Part 2: the evidence',
+  chart: 'Share of tasks completed, by week of the pilot',
+};
 const METRICS = [
   { value: 52, label: 'Trial participants', description: 'Illustrative six-week pilot' },
   { value: '84%', label: 'Task completion', description: 'Up from 68% at baseline' },
@@ -62,9 +66,12 @@ export function editorialDeck(id, record) {
   const deck = templateDeck(id, record);
   const slide = deck.slides[0];
   slide.title = TITLES[id] ?? record.name;
-  slide.subtitle = 'Illustrative example • fictional data';
+  // Most slides have no subtitle, so most examples show none; the slides that usually carry one show a real one.
+  if (SUBTITLES[id]) slide.subtitle = SUBTITLES[id];
+  else delete slide.subtitle;
   if (id === 'metrics') slide.design = { titleAlignment: 'center' };
-  deck.design = { background: 'light1' };
+  // The examples' figures are fictional: every preview says so in its footer.
+  deck.design = { background: 'light1', footer: { left: { text: 'Illustrative example • fictional data' } } };
   const counts = {};
   slide.blocks = (slide.blocks ?? []).map((block) => {
     const kind = Object.keys(block).find(key => key !== 'region');

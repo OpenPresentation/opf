@@ -7,9 +7,11 @@
     "Text"
   ],
   "design": {
-    "imageFit": "contain"
+    "imageFit": "contain",
+    "contentBox": true
   },
   "direction": "column",
+  "anchor": "bottom",
   "regions": [
     {
       "name": "title"

@@ -7,9 +7,10 @@
     "Numbers"
   ],
   "design": {
-    "contentBox": false
+    "contentBox": true
   },
   "direction": "column",
+  "anchor": "middle",
   "regions": [
     {
       "name": "title"

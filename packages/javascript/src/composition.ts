@@ -130,7 +130,9 @@ export function resolveTextStyle(style: TextStyle, measurement?: TextMeasurement
   return measurement?.resolveStyle ? measurement.resolveStyle(style) : style;
 }
 export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasurement): MeasureTextWidth {
-  if (!measurement) return measureText;
+  // Without a host measurement a monospace family is measured on its 0.6 em cells: the proportional estimate is about
+  // 15% short for code, so a code line it accepted ran past its panel once drawn in the bundled Roboto Mono.
+  if (!measurement) return isMonospaceFamily(style.fontFamily) ? measureMonospaceText : measureText;
   return (text, size) => {
     const width = measurement.measure(text, size, style);
     if (!Number.isFinite(width) || width < 0) throw new RangeError('Text measurement must return a finite, nonnegative width.');
@@ -1070,6 +1072,16 @@ const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });
 export const PROSE_NOMINAL_SIZE = 28, LIST_NOMINAL_SIZE = 32, LEAD_NOMINAL_SIZE = 32, TABLE_NOMINAL_SIZE = 25;
 /** WI-4: a quote body asks for 40 px and fits down (to 28 px and below); a code body asks for 22 px and fits down to the floor. */
 export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
+/**
+ * The largest inset between a content card's edge and its payload, in reference pixels: a card insets a sixteenth of its shorter side,
+ * at least the former 12 px and at most this. 24 px (36 px at 1080) follows the ~40 px card padding of Claude's Slides type.
+ */
+export const CARD_INSET = 24;
+/**
+ * A card that fills its cell starts this fraction of a gap below the cell's top (12 px at 720), so a row of full-height cards stands
+ * clear of the heading above it (1.5 gaps in all, near the 56 px at 1080 of Claude's Slides type).
+ */
+export const CARD_FILL_SPACE = 0.5;
 /** The code body size before WI-4: the size taken when the 22 px request would wrap lines it keeps whole. */
 const LEGACY_CODE_NOMINAL_SIZE = 18;
 /** Joins a quote's attribution and source (an en dash with a space on each side); import reads the older ' - ' too. */
@@ -1168,6 +1180,18 @@ export function measureText(text: string, fontSize: number): number {
     if (!Number.isNaN(advance)) units += advance;
   }
   return units * fontSize;
+}
+const MONOSPACE_FAMILY = /\bmono\b|monospace|\bcourier\b|\bconsolas\b|\bmenlo\b/i;
+/** Whether the first family of a font stack is a monospace face (the generic `monospace`, or a family named as one). */
+function isMonospaceFamily(family: string | undefined): boolean {
+  const first = family?.split(',')[0]?.trim().replace(/^['"]|['"]$/g, '');
+  return first !== undefined && MONOSPACE_FAMILY.test(first);
+}
+/** The default estimate for a monospace face: 0.6 em per ASCII character, the proportional estimate for the rest. */
+export function measureMonospaceText(text: string, fontSize: number): number {
+  let width = 0;
+  for (const character of text) width += character.charCodeAt(0) < 128 ? 0.6 * fontSize : measureText(character, fontSize);
+  return width;
 }
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
   return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true,false).lines;
@@ -2958,8 +2982,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // use the same rounded interior, including strict overflow and pagination.
   const payloadBox = (box: LayoutBox, cards = hasCards): LayoutBox => {
     if (!cards) return box;
-    const frame = acceptedBox(box), padding = Math.min(12 * scale, frame.width / 4, frame.height / 4);
-    return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
+    // The inset is a sixteenth of the card's shorter side, between the former 12 px and CARD_INSET, so a small card (a KPI tile) keeps
+    // the room its payload needs; down, it is at most a tenth of the card's height.
+    const frame = acceptedBox(box), side = Math.max(12 * scale, Math.min(frame.width, frame.height) / 16);
+    const padding = Math.min(CARD_INSET * scale, side, frame.width / 4, frame.height / 4), vertical = Math.min(padding, frame.height / 10);
+    return acceptedBox({x:frame.x+padding,y:frame.y+vertical,width:frame.width-2*padding,height:frame.height-2*vertical});
   };
   // The deck language tag the quote marks follow, resolved on first use.
   let languageTag: string | undefined | null = null;
@@ -3183,22 +3210,43 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     caption.box = { ...caption.box, y: target };
     caption.fit = translateTextFit(caption.fit, dy);
   };
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top'): void => {
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       arrange(node.children, inner, own, 0, (own.gap ?? 1 / 30) * Math.min(box.width, box.height), node.path, !node.synthetic);
       return;
     }
-    const frameBox = cards ? acceptedBox(box) : undefined;
-    const metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
+    // A card fills its whole cell (`frame`) even when the region's anchor places a shorter payload inside it. Every filled card starts
+    // CARD_FILL_SPACE of a gap down, so cards side by side keep one top edge; a payload that reached higher is trimmed to the card.
+    if (frame) {
+      const top = frame.y + gap * CARD_FILL_SPACE;
+      frame = { ...frame, y: top, height: Math.max(scale, frame.y + frame.height - top) };
+      if (box.y < top) box = { ...box, y: top, height: Math.max(scale, box.y + box.height - top) };
+    }
+    const frameBox = cards ? acceptedBox(frame ?? box) : undefined;
+    let metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
+    const cell = box;
     box = payloadBox(box, cards);
-    const caption = captionOf(node, box);
-    if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
+    let caption = captionOf(node, box);
+    if (caption) box = caption.mediaBox;
     const textValue = contentText(node.field, node.value);
-    const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
-    const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-    const metricLayout = node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined;
+    const measureInternal = () => [
+      node.field === 'quote' ? measureQuote(node,box,settings) : undefined,
+      node.field === 'code' ? measureCode(node,box,settings) : undefined,
+      node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined,
+    ] as const;
+    let [quoteLayout, codeLayout, metricLayout] = measureInternal();
+    // A quote, code or metric that has no room inside its card's inset takes the whole card: content before padding.
+    const unfit = (layout?: {parts: readonly {fit?: unknown}[]}) => layout?.parts.some(part => !part.fit) === true;
+    if (cards && (unfit(quoteLayout) || unfit(codeLayout) || unfit(metricLayout))) {
+      box = cell;
+      metricHeight = metricReferenceHeight;
+      caption = captionOf(node, box);
+      if (caption) box = caption.mediaBox;
+      [quoteLayout, codeLayout, metricLayout] = measureInternal();
+    }
+    if (caption) diagnostics.push(...caption.diagnostics);
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
@@ -3333,8 +3381,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // `atFloor` (WI-1): the height at the minimum font size instead, which says how far the block can shrink; text and lists
   // are measured there, other payloads scale their need by the minimum over the starting size.
   const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition, atFloor = false, sizeOverride?: number): number => {
-    const pad = cards ? 2 * Math.min(12 * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
-    if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + pad;
+    const pad = cards ? 2 * Math.min(CARD_INSET * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
+    // payloadBox's vertical inset, min(inset, height / 10), for a card of `content` plus that inset: content / 8 on each side.
+    const verticalPad = (content: number) => cards ? 2 * Math.min(pad / 2, content / 8) : 0;
+    if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
@@ -3354,7 +3404,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
     else content = inner / 1.6;
     if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets')) content *= Math.min(1, floorSize / startSize);
-    return content + (node.caption !== undefined ? 32 * scale : 0) + pad;
+    const body = content + (node.caption !== undefined ? 32 * scale : 0);
+    return body + verticalPad(body);
   };
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
@@ -3432,7 +3483,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       if (flow === 'grid') return 'grid';
       const shape = gridFlowShape(units.length, cell.width >= cell.height);
       const cards = hasCards && !region.bleed;
-      const cellWidth = (cell.width - gap * (shape.columns - 1)) / shape.columns - (cards ? 2 * Math.min(12 * scale, cell.width / 4) : 0);
+      const cellWidth = (cell.width - gap * (shape.columns - 1)) / shape.columns - (cards ? 2 * Math.min(CARD_INSET * scale, cell.width / 4) : 0);
       return units.some(unit => isLong(unit, cellWidth)) ? 'column' : 'grid';
     };
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
@@ -3440,7 +3491,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
       // A kept empty region holds its place: two lines of body text (WI-4: at the lead size in a `flow: auto` region, where a lone block uses it) in an auto row, inside a card's insets when the slide
       // draws cards, as a filled region's text would be (naturalHeight). It gives way first (its floor is 0).
-      if (!units.length) return region.empty === 'keep' && !atFloor ? 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22 + (hasCards && !region.bleed ? 2 * Math.min(12 * scale, areaWidth / 4) : 0) : 0;
+      if (!units.length) {
+        if (region.empty !== 'keep' || atFloor) return 0;
+        // Two body lines, plus the card's vertical inset as a filled card of that height takes it (payloadBox, naturalHeight).
+        const lines = 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22;
+        return lines + (hasCards && !region.bleed ? 2 * Math.min(CARD_INSET * scale, areaWidth / 4, lines / 8) : 0);
+      }
       const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
@@ -3537,6 +3593,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const arrangement = arrangementOf(region, units, cell);
         let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
         const referenceHeights = boxes.map(box => box.height);
+        let cellBoxes = boxes;
         // WI-1: a column stacks its blocks at the heights they need and the region's anchor places the stack (stackedBoxes),
         // instead of giving every block an equal share. A lone block at the top keeps the whole cell, as before.
         const stacked = arrangement === 'column' && !(units.length === 1 && region.anchor === 'top');
@@ -3548,17 +3605,19 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
               : naturalHeight(unit,box.width,cards,referenceHeights[index],settings)+2*rasterPadding+scale;
           });
           // One vertical origin per grid row keeps related metric value/label baselines aligned,
-          // even when descriptions have different line counts. Individual bounds remain compact.
+          // even when descriptions have different line counts. Individual bounds remain compact, except that cards in a row
+          // share the row's height, so their bottom edges line up too.
           boxes = boxes.map((box,index) => {
             const height = naturals[index];
             if (height === undefined || height >= box.height) return box;
-            const rowHeight = Math.max(...boxes.flatMap((peer,peerIndex) => peer.y === box.y && naturals[peerIndex] !== undefined ? [naturals[peerIndex]!] : []));
+            const rowHeight = Math.min(box.height,Math.max(...boxes.flatMap((peer,peerIndex) => peer.y === box.y && naturals[peerIndex] !== undefined ? [naturals[peerIndex]!] : [])));
             const spare = Math.max(0,box.height-rowHeight);
-            return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height};
+            return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height:cards?rowHeight:height};
           });
         }
         // Right to left: the flow inside a region runs from the right (RR-05).
-        if (rtl) boxes = boxes.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
+        const mirrored = (list: LayoutBox[]) => list.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
+        if (rtl) { boxes = mirrored(boxes); cellBoxes = mirrored(cellBoxes); }
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
@@ -3566,7 +3625,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor);
+          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor, !cards ? undefined : !stacked ? cellBoxes[index] : units.length === 1 ? cell : undefined);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));

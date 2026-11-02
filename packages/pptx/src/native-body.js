@@ -37,7 +37,7 @@ export function planNativeBody(slide, geometry, {automatic = false, report = () 
 
 function planOne(item, geometry, automatic, reject) {
   const region = geometry.regions?.find(region => region.name === item.region);
-  if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length) || item.frameBox) {
+  if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length)) {
     reject('complex-composition'); return undefined;
   }
   if (item.listColumns?.length > 1) { reject('multi-column'); return undefined; }
@@ -66,6 +66,9 @@ function planOne(item, geometry, automatic, reject) {
   if (values.some(value => hasRtl(ownText(value)) || /\t|[\u0000-\u0008\u000B\u000C\u000E-\u001F\u061C\u200E\u200F\u202A-\u202E\u2066-\u2069]/.test(ownText(value))) || !values.some(value => ownText(value).length)) {
     reject('unsupported-text'); return undefined;
   }
+  // A block on a card (LH-22) is a native text box at its place inside the card, never bound to the Body placeholder: Change Layout
+  // would move it away from its card, as it would a carded picture.
+  if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true};
   return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: region?.anchor ?? 'top'};
 }
 
