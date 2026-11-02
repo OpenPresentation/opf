@@ -52,7 +52,7 @@ Sources:
 | LH-33 | Sibling charts of one unit share axis maximum and plot height | SG | core, render, pptx | The dashboard's two charts of one unit use one scale | P3 | todo |
 | LH-34 | Image callouts: labels as real text over a picture | SG | schema, core, engines | `image.callouts` draw as text boxes in both engines | P3 | todo |
 | LH-35 | Colour never alone: sentiment and trend carry a sign and text; series colours differ in lightness | SG | render, pptx, validator | `opf/chart-color-only` checks lightness; trend draws a glyph | P3 | todo |
-| LH-36 | Gallery palette discipline check | SG, PX | gallery tooling | A `check:` script on colour schemes (dark, light, 1 to 2 accents, lightness spread) | P3 | done (PR pending) |
+| LH-36 | Gallery palette discipline check | SG, PX | gallery tooling | A `check:` script on colour schemes (dark, light, 1 to 2 accents, lightness spread) | P3 | done ([opf#963](https://github.com/OpenPresentation/opf/pull/963)) |
 | LH-37 | Gallery review checklist against slide-design clichés (title underline bars, side stripes, default gradients) | SG, PX | gallery docs | Checklist in `docs/default-catalog.md`; records reviewed | P3 | todo |
 | LH-38 | Header and footer sit about half a content margin from the slide edge | SG | core | Furniture rows read as chrome in the sampler | P3 | todo |
 | LH-39 | Metric proportions: value about 4× its label, line-height 1, never wraps | SG | core | A wide value such as "$1.24M" stays on one line in a narrow tile | P3 | todo |
