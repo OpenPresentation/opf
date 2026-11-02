@@ -2625,14 +2625,11 @@
   "item blocks.1.text notes 766.1,193.6,456.3,468.8 28px"
  ],
  "chart-beside 3 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region chart 57.6,193.6,684.5,468.8 column 1",
-  "region notes 766.1,193.6,456.3,468.8 column 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.chart chart 57.6,193.6,684.5,468.8",
-  "item blocks.1.text notes 766.1,193.6,456.3,222.4 24px",
-  "item blocks.2.chart notes 766.1,440,456.3,222.4"
+  "item blocks.0.chart - 57.6,193.6,570.4,342.3",
+  "item blocks.2.chart - 652,193.6,570.4,342.3",
+  "item blocks.1.text - 57.6,559.9,1164.8,102.5 28px"
  ],
  "chart-beside 4 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -2655,17 +2652,14 @@
   "item blocks.3.text - 652,457.4,570.4,205 28px"
  ],
  "chart-beside 6 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region chart 57.6,193.6,1164.8,468.8 column 6",
-  "region notes 766.1,193.6,456.3,468.8 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.chart chart 57.6,193.6,576.4,140.3",
-  "item blocks.1.text chart 646,193.6,576.4,140.3 21px",
-  "item blocks.2.chart chart 57.6,357.9,576.4,140.3",
-  "item blocks.3.text chart 646,357.9,576.4,140.3 21px",
-  "item blocks.4.chart chart 57.6,522.1,576.4,140.3",
-  "item blocks.5.text chart 646,522.1,576.4,140.3 21px"
+  "item blocks.0.chart - 57.6,193.6,372.3,228.4",
+  "item blocks.1.text - 57.6,434,372.3,228.4 21px",
+  "item blocks.2.chart - 453.9,193.6,372.3,228.4",
+  "item blocks.3.text - 453.9,434,372.3,228.4 21px",
+  "item blocks.4.chart - 850.1,193.6,372.3,228.4",
+  "item blocks.5.text - 850.1,434,372.3,228.4 21px"
  ],
  "table 1 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -3121,19 +3115,19 @@
  "hero 5 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.text - 57.6,193.6,273.2,222.4 18px",
-  "item blocks.1.text - 354.8,193.6,273.2,222.4 18px",
-  "item blocks.3.text - 652,193.6,273.2,222.4 18px",
-  "item blocks.4.text - 949.2,193.6,273.2,222.4 18px",
+  "item blocks.0.text - 57.6,193.6,570.4,99.2 18px",
+  "item blocks.1.text - 652,193.6,570.4,99.2 18px",
+  "item blocks.3.text - 57.6,316.8,570.4,99.2 18px",
+  "item blocks.4.text - 652,316.8,570.4,99.2 18px",
   "item blocks.2.image - 57.6,440,1164.8,222.4"
  ],
  "hero 6 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.text - 57.6,193.6,273.2,222.4 18px",
-  "item blocks.1.text - 354.8,193.6,273.2,222.4 18px",
-  "item blocks.3.text - 652,193.6,273.2,222.4 18px",
-  "item blocks.4.text - 949.2,193.6,273.2,222.4 18px",
+  "item blocks.0.text - 57.6,193.6,570.4,99.2 18px",
+  "item blocks.1.text - 652,193.6,570.4,99.2 18px",
+  "item blocks.3.text - 57.6,316.8,570.4,99.2 18px",
+  "item blocks.4.text - 652,316.8,570.4,99.2 18px",
   "item blocks.2.image - 57.6,440,570.4,222.4",
   "item blocks.5.image - 652,440,570.4,222.4"
  ],
