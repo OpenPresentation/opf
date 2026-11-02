@@ -66,6 +66,45 @@ Core 0.9.0 adds `layoutCode(value, box, options)` and accepted `item.codeLayout.
 Code pagination preserves exact body fragments and repeats filename/language, retaining the evaluated floor. Irreducible metadata rejects the whole operation even with an empty body. Coordinated renderer/PPTX 0.7.0 and editor 0.6.0 reuse these measurements; inspect the installed versions and rollout plan before relying on them. SVG/PPTX reject XML-forbidden code characters with `invalid-code-text`, source path and UTF-16 offset; schema-valid JSON and font coverage are separate checks. Complete native code tags can recover source/metadata after edits, but native formatting, positions, font theme and readability policy are not reconstructed. Inspect native output and preserve the original PPTX; this is not pixel or arbitrary Office round-trip equivalence.
 
 
+## Vertical budget
+
+How much one slide holds is measured, not guessed. The numbers below come from `composeSlide` on a default 16:9 slide (1280×720 reference pixels, the default theme and layout, a one-line title, no `fontSize` set), with the portable text estimate: they are estimates, and a real font changes them a little. Sizes are reference pixels (points are 0.75 of that). "Full" is the size the engine starts at; the engine shrinks the whole block together when it does not fit, down to the readability floor, and reports `overflow` below it.
+
+| Content in one block | Starts at | Still full size | Shrunk to a readable size | At the floor or over |
+| --- | --- | --- | --- | --- |
+| List entries, one line each (about 40 characters) | 32 | up to 10 | 12 entries at 29, 14 at 24, 16 at 21 | not reached at 16 |
+| List entries, two lines each (about 115 characters) | 32 | up to 6 | 7 entries at 27, 8 at 23, 10 at 19 | 19 from 10 entries on |
+| `items` with a one-line `description` | 26 | up to 6 | 7 entries at 23, 8 at 20 | 10 at 16 (the floor); 12 overflow |
+| Table data rows (plus the header row) | 25 | up to 10 | 12 rows at 22, 14 at 18 | 16 at 14, 20 at 10 |
+| Paragraphs of about 230 characters | 28 | up to 4 | 5 at 22, 6 at 19 | |
+
+Reading it as an author:
+
+- A talk to a room wants the **full** column, which is a ceiling and not a target: about 6 list entries, 4 `items` with descriptions, 8 table rows and 3 paragraphs. Past the full column the slide still fits, but its text is smaller than the slide beside it and the audience reads less of it.
+- A list or table that sits in the shrunk column is a signal to split the slide (two ideas make two slides), move the detail to a handout or the speaker notes, or turn it into a structure that shows it (a table into a chart, entries into `pillars`).
+- A two-line title costs body space: 10 one-line entries stay at 32, but 12 fall from 29 to 25 and 14 from 24 to 21. Keep the title to one line (about 40 characters) before you count.
+- Nothing is dropped or cropped: the floor is `composition.minFontSize` (16 by default), and under it the engine reports `opf/text-overflow` (`opf validate` shows it as a warning) instead of cutting text. Lowering `minFontSize` to make a slide pass is not a repair.
+
+To measure your own content, compose it and read the fitted size, or let the engine split what does not fit:
+
+```js
+import { resolveSlideContext } from '@openpresentation/opf';
+import { gallery } from '@openpresentation/gallery';
+import { composeSlide, layoutTable } from '@openpresentation/opf/composition';
+
+const { slide, options } = resolveSlideContext(document, slideIndex, { catalogs: [gallery] });
+const geometry = composeSlide(slide, options);
+for (const item of geometry.items) {
+  if (item.type === 'list' || item.type === 'text') console.log(item.path, item.text.fontSize, item.text.overflow);
+  if (item.type === 'table') {
+    const table = layoutTable(item.value, item.box, { fontFamily: options.fontFamilies?.body, textMeasurement: options.textMeasurement, path: item.path });
+    console.log(item.path, table.rows[0].cells[0].fit.fontSize, table.overflow);
+  }
+}
+```
+
+A fitted size well under the "Starts at" column is the budget talking. When it is exceeded, split the slide yourself where the story breaks, or run `opf paginate deck.opf.json --check` to list the slides the engine would split and `opf paginate deck.opf.json -i` to split them into continuation slides. Pagination cuts at the point where the content stops fitting, not where the story breaks, so prefer your own split and use pagination as the backstop.
+
 ## Resizing tracks
 
 For a v2 region, `anchor: "middle"` or `"bottom"` positions a compact measured content envelope inside the region;

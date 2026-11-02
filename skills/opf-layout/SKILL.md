@@ -30,6 +30,14 @@ Work on the supplied OPF document without silently rewriting or dropping content
 
 Read [geometry and repair](references/geometry.md) before measuring or paginating. The format schema is the source of numeric bounds; do not invent arbitrary `x`, `y`, `width`, or `fontSize` fields on leaf payloads.
 
+## Match the structure to the content, and budget the slide
+
+One idea per slide. Pick the layout from what the content is, then check it fits before you repair anything:
+
+- Parallel entries with details: layout `pillars`, or labelled `items`. Figures that sit in prose: layout `metrics`. Options compared: layout `comparison` (two) or a `table`. A sequence: layout `process` or `timeline`. One message: layout `statement`. A quote: layout `quote`. The opf-author skill's storyline guide has an example of each.
+- A slide has a vertical budget. At the default sizes on a 16:9 slide, about 10 one-line list entries, 6 two-line entries, 6 entries with a description, 10 table rows or 4 paragraphs keep the engine's full text size; past that the whole block shrinks toward the 16 px floor and then overflows. For a talk, aim well under it (about 6 entries, 8 table rows, 3 paragraphs). The [vertical budget](references/geometry.md#vertical-budget) lists the measured figures and the `composeSlide` call that measures your own content; label them as estimates without a font measurement.
+- When the budget is exceeded, split the slide where the story breaks (two ideas, two slides), or run `opf paginate deck.opf.json --check` and then `opf paginate deck.opf.json -i` to let the engine split what does not fit. Do not lower `minFontSize` or shorten the content to make it pass.
+
 ## Headers and footers
 
 Header and footer zones (`left`, `center`, `right`) sit on the content inset, so a footer's left edge meets the body's. They are three columns with a small gutter, and a zone beside empty zones takes their width: a lone `left` footer spans the content width, and a `left` and a `right` zone share the free center. A `center` zone stays centered. A zone that still wraps onto more than two lines gets the `opf/furniture-wraps` warning: shorten it, or move a source to a `caption` on the chart, table or image it describes, or to the speaker notes. See `docs/dynamic-composition.md` for the geometry (`furniture-flow-v2`).
