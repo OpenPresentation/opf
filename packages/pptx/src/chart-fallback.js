@@ -4,7 +4,7 @@
 // show the same chart. Only the nested rings need a rewrite here: PptxGenJS writes the first series of a doughnut alone (it plots one
 // series per pie), so the other rings are added to the generated c:doughnutChart as further c:ser elements, each a copy of the first with
 // its own index, name, workbook column and values. The embedded workbook already holds every series (PptxGenJS writes one column each).
-import {chartDrawPlan, markLabelColor} from '@openpresentation/opf/composition';
+import {chartDrawPlan, markLabelColor, textColorForFill} from '@openpresentation/opf/composition';
 
 export {chartDrawPlan};
 
@@ -50,6 +50,38 @@ export function applyDoughnutRings(xml, series) {
       .replace(/<c:val>[\s\S]*?<\/c:val>/, () => `<c:val><c:numRef><c:f>Sheet1!$${letter}$2:$${letter}$${rows + 1}</c:f><c:numCache><c:ptCount val="${rows}"/>${points}</c:numCache></c:numRef></c:val>`);
   });
   return xml.replace(first, () => `${first}${added.join('')}`);
+}
+
+/**
+ * LH-92: name each ring of a doughnut of nested rings on the slice core chose (`layer.rings`: series, name, row, rotation), after the data labels
+ * are written. With data labels, that slice's c:dLbl also shows the series name (PowerPoint puts it first, before the label's own parts,
+ * with the labels' separator), as the preview draws it. Without, the series' c:dLbls is one c:dLbl that shows the series name alone and
+ * shows nothing else. The name takes the colour that contrasts with the slice (core `textColorForFill` of the full text colour), as the
+ * preview draws a label inside a ring, and runs along the ring (core's rotation, the label's custom text angle). `fills(series)` gives
+ * the slice fills of a series (hex, by row), `size` the text size in hundredths of a point.
+ */
+export function applyRingLabels(xml, rings, {labels, fills, labelColor, size, font}) {
+  if (!Array.isArray(rings) || rings.length < 2) return xml;
+  const named = new Map(rings.map(ring => [ring.series, ring]));
+  const face = escapeXml(font);
+  return xml.replace(/<c:doughnutChart>[\s\S]*?<\/c:doughnutChart>/, group => group.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => {
+    const ring = named.get(Number(/<c:idx val="(\d+)"\/>/.exec(ser)?.[1]));
+    if (!ring) return ser;
+    // The label runs along the ring: a custom text angle (a:bodyPr rot, 60000ths of a degree) about the label's centre.
+    const body = ring.rotation ? `<a:bodyPr rot="${Math.round(ring.rotation * 60000)}" vert="horz"/>` : '<a:bodyPr/>';
+    if (labels) {
+      return ser.replace(new RegExp(`<c:dLbl><c:idx val="${ring.row}"/>[\\s\\S]*?</c:dLbl>`), point => point.replace('<c:showSerName val="0"/>', '<c:showSerName val="1"/>').replace(/<a:bodyPr\/>/, () => body));
+    }
+    const fill = fills(ring.series)?.[ring.row] ?? '000000';
+    const color = String(textColorForFill(`#${fill}`, `#${labelColor}`)).replace(/^#/, '').toUpperCase();
+    const text = `<c:txPr>${body}<a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}" b="0" i="0" u="none" strike="noStrike"><a:solidFill><a:srgbClr val="${color}"/></a:solidFill>` +
+      `<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></c:txPr>`;
+    const hidden = '<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="0"/><c:showBubbleSize val="0"/>';
+    const block = `<c:dLbls><c:dLbl><c:idx val="${ring.row}"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>${text}` +
+      `<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="1"/><c:showPercent val="0"/><c:showBubbleSize val="0"/></c:dLbl>${hidden}<c:showLeaderLines val="0"/></c:dLbls>`;
+    // In CT_PieSer order the labels come after the point fills and before the categories.
+    return /<c:dLbls>[\s\S]*?<\/c:dLbls>/.test(ser) ? ser.replace(/<c:dLbls>[\s\S]*?<\/c:dLbls>/, () => block) : ser.replace(/(<c:cat>|<c:val>)/, (head) => `${block}${head}`);
+  }));
 }
 
 /**

@@ -55,3 +55,17 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
   const places = composeSlide({ title: 'Chart', blocks: [{ chart: { type: 'world', data: { columns: ['Country', 'Sales'], rows: [['France', 4], ['Germany', 5], ['Japan', 6]] } } }] }, {}).items.find((item) => item.field === 'chart');
   assert.equal(places.chart?.layer, undefined);
 });
+
+test('LH-81 and LH-33 with LH-93: siblings with headers of one and two rows share one plot height', () => {
+  // A one-series chart's header is its caption; a two-series chart with a value axis title has a caption and, when they do not fit
+  // together, its legend on a second row. Sharing their value axis (LH-33), they also share one plot top, baseline and height.
+  const quarters = (names, shift = 0) => ({ columns: ['Quarter', ...names], rows: [['Q1', 40 - shift, 31], ['Q2', 52 - shift, 38], ['Q3', 61 - shift, 44], ['Q4', 73 - shift, 52]].map((row) => row.slice(0, names.length + 1)) });
+  const slide = { title: 'Revenue', blocks: [
+    { chart: { type: 'line', data: quarters(['Revenue', 'Plan for the fiscal year']), axisTitles: { value: 'Revenue ($M) for every region' } } },
+    { chart: { type: 'line', data: quarters(['Revenue', 'Plan for the fiscal year'], 12) } }] };
+  const charts = composeSlide(slide, {}).items.filter((item) => item.field === 'chart');
+  const plots = charts.map((item) => item.chart.layer.plot && { top: item.box.y + item.chart.layer.plot.top, height: item.box.height - item.chart.layer.plot.top - item.chart.layer.plot.bottom });
+  assert.ok(plots.every(Boolean), 'both charts get a plot');
+  assert.ok(Math.abs(plots[0].top - plots[1].top) < 1e-6 && Math.abs(plots[0].height - plots[1].height) < 1e-6);
+  assert.notEqual(charts[0].chart.layer.header.height, charts[1].chart.layer.header?.height, 'the headers differ');
+});

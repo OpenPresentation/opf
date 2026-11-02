@@ -5,7 +5,7 @@
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
 import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
-import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
+import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
 // `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
@@ -26,12 +26,11 @@ function highlightFor(c, resolved, spec, data) {
   return { ...marks, ...chartHighlightColors(c.surface, c.bound.design.colors.primary, c.labelColor) };
 }
 
-// LH-03: a one-series small column or bar chart draws its emphasised point (core: the last one with a value) in the series colour and
-// every other point in a quieter tint of it (core chartEmphasisColors); it is drawn as a category highlight of that point.
+// LH-03, LH-95: a one-series small column or bar chart draws its emphasised point (core: the last one with a value) in a stronger shade of
+// the series colour and every other point in the series colour (core chartEmphasisColors); it is drawn as a category highlight of that point.
 function emphasisFor(c, layer) {
   const row = layer?.small?.emphasis;
   const colors = row === undefined ? undefined : chartEmphasisColors(c.surface, c.colors[0]);
-  // A backdrop that leaves no room for a tint at 3:1 and 15 L* from the series colour draws every point in the series colour.
   return colors ? { series: [false], categories: c.rows.map((_, i) => i === row), ...colors } : undefined;
 }
 
@@ -168,6 +167,10 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
   c.highlight = highlightFor(c, resolved, spec, data) ?? emphasisFor(c, layer);
   c.valueAxisHidden = layer?.small?.valueAxis === false;
+  c.ringNames = layer?.rings;
+  // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
+  const inset = layer?.plot;
+  c.plotBox = inset && { x: box.x + inset.left, y: box.y + inset.top, width: Math.max(1, box.width - inset.left - inset.right), height: Math.max(1, box.height - inset.top - inset.bottom) };
   if (layer?.header) drawHeader(c, spec, layer.header);
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
@@ -732,7 +735,14 @@ function renderCategoryChart(c, spec) {
   } else {
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     if (rtl) entries.reverse();
-    const axis = planCategoryAxis(c, entries, (reserve) => {
+    // LH-93: a chart that shares its value axis with siblings draws its plot in the box core gave the set (one plot height); its tick
+    // labels sit beside it and its category labels under it, laid out as they would be for a plot of its own.
+    const shared = c.plotBox;
+    const axis = shared ? {
+      scale: categoryScale(c, dataMin, dataMax, shared.height, c.lineHeight * 1.2, percent), plot: shared,
+      tickWidth: rtl ? Math.max(1, right - shared.x - shared.width) : undefined,
+      plan: planBottomLabels(c, entries, shared, Math.max(c.lineHeight + c.textHeight, c.box.height * 0.4), { minX: shared.x - fontPx * 0.5, maxX: shared.x + shared.width + fontPx * 0.5, rotatedMinX: c.box.x + c.pad })
+    } : planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
       const tickWidth = hidden ? fontPx / 2 : Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
@@ -1022,15 +1032,34 @@ function renderCircularChart(c, spec) {
       angle = end;
     });
   });
-  if (ringTexts) rings.forEach((ring, j) => {
+  // LH-92: core names each ring on its largest slice (layer.rings): the series name, before that slice's own label text when it has one,
+  // as PowerPoint writes a label that shows the series name.
+  const named = new Map(rings.length > 1 ? (c.ringNames ?? []).map((entry) => [entry.series, entry]) : []);
+  const separator = c.dataLabels?.separator ?? ", ";
+  rings.forEach((ring, j) => {
+    const name = named.get(ring.column - 1);
+    if (!ringTexts && !name) return;
     const inner = hole + j * thickness;
     let start = -Math.PI / 2;
     ring.values.forEach((value, i) => {
       const delta = ring.total ? value / ring.total * Math.PI * 2 : 0;
-      if (delta > 0) drawSliceLabel(c, ringTexts[j][i], { cx, cy, r: inner + thickness, inner, mid: start + delta / 2 }, `${c.path}.data.rows.${i}.${ring.column}`, sliceColor(c, i));
+      const own = ringTexts?.[j][i] ?? "";
+      const text = name?.row === i ? (own ? `${name.name}${separator}${own}` : name.name) : own;
+      const slice = { cx, cy, r: inner + thickness, inner, mid: start + delta / 2 }, path = `${c.path}.data.rows.${i}.${ring.column}`;
+      if (delta > 0 && text && name?.row === i) drawRingName(c, text, slice, path, sliceColor(c, i), name.rotation);
+      else if (delta > 0 && text) drawSliceLabel(c, text, slice, path, sliceColor(c, i));
       start += delta;
     });
   });
+}
+
+// LH-92: a ring's name, centred in its band at the slice's middle and turned along the ring by core's rotation (the PPTX label's
+// custom angle), in the colour that contrasts with the slice.
+function drawRingName(c, text, { cx, cy, r, inner, mid }, path, fill, rotation = 0) {
+  const radius = (r + inner) / 2, x = cx + radius * Math.cos(mid), y = cy + radius * Math.sin(mid);
+  const width = c.width(text) + c.fontPx * 0.5, height = c.lineHeight;
+  const element = c.textElement(text, { x: x - width / 2, y: y - height / 2, width, height }, path, "center", labelFill(c, "center", fill));
+  if (element) c.children.push(rotation ? c.svg.tag("g", { transform: `rotate(${c.num(rotation)} ${c.num(x)} ${c.num(y)})` }, element) : element);
 }
 
 function polar(cx, cy, r, angle) {
