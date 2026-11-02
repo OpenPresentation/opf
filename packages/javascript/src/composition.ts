@@ -4386,7 +4386,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.gap = actualGap;
     } else if (cols === 1 && stacks) {
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
-      if (area === contentBox && splitBlocks(nodes) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      // LH-52 with LH-48: a stack of paragraphs and lists keeps its top, as LH-48's grown stack does (the editor resizes its tracks from
+      // the top); a stack with a panel, table, timeline or media block sits in the middle of the body.
+      if (area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
