@@ -53,7 +53,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // LH wave 2: LH-03 and LH-81 moved fifteen (the column, bar, line and area types, column-no-options and line-string-numbers): the
 // header row replaces the side legend, and the small column and line charts label their values without the value axis or panel. The
 // world chart over quarters, drawn as columns (LH-60), takes the column chart's header row too, so its digest moved again.
-// LH wave 3: pie and doughnut moved: LH-92 names each ring of the two-series pie and doughnut along the ring.
+// LH wave 3: the digests below are LH-105's, drawn on LH-92 (ring names on the two-series pie and doughnut); table-styled moved again with
+// LH-48 (a lone table grows) when the wave was integrated.
 // LH-105 moved 29 (column, stacked-column, 100pct-stacked-column, bar, stacked-bar, 100pct-stacked-bar, line, line-with-markers, stacked-line, stacked-line-with-markers, area, stacked-area, 100pct-stacked-area, pie, doughnut, scatter, radar, radar-with-markers, filled-radar, treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world, column-no-options, line-string-numbers, histogram-lone-column): no chart draws a panel, the scheme series are softened, line charts name their series at
 // the line ends, a pie names its slices, the value axis has at most six intervals and nominal categories have no last-point emphasis.
 const REVIEWED_SVG_DIGESTS = {
@@ -87,7 +88,7 @@ const REVIEWED_SVG_DIGESTS = {
   'column-no-options': 'c74a507b8909ef64e0e44353',
   'line-string-numbers': '892f93f3d8fc81ad13662b4a',
   'histogram-lone-column': '7c2a1efedb26d08e1fce33d1',
-  'table-styled': 'b90e4faf6d93e7d88e6a5aed',
+  'table-styled': '1fb1ac9862fa48e2107a7043',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 
