@@ -106,8 +106,8 @@ test('a shrunk text or list takes a size of the type scale, and unshrunk blocks 
 });
 
 test('the scale follows a raised floor and the canvas scale, and keeps a start that is off it', () => {
-  // A 20 px floor: 20, 23, 26, 30 and 35 px; a 28 px paragraph that fits keeps 28.
-  const fits = composeSlide({ title: 'Short', composition: { minFontSize: 20 }, blocks: [{ text: 'A short point.' }, { text: 'Another one.' }] }, { layout: layouts['two-column'] });
+  // A 20 px floor: 20, 23, 26, 30 and 35 px; a 28 px paragraph that fits keeps 28 (`fill: false`: LH-48 would grow the short body).
+  const fits = composeSlide({ title: 'Short', composition: { minFontSize: 20 }, blocks: [{ text: 'A short point.' }, { text: 'Another one.' }] }, { layout: layouts['two-column'], fill: false });
   assert.deepEqual(sizesOf(fits), [28, 28]);
   const dense = composeSlide({ title: 'Dense', composition: { minFontSize: 20 }, blocks: Array.from({ length: 4 }, (_, index) => ({ text: long(`Team ${index}`).repeat(2) })) }, { layout: layouts['two-column'] });
   for (const size of sizesOf(dense)) assert.ok([20, 23, 26, 28].includes(size), String(size));

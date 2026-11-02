@@ -32,10 +32,13 @@ const geometry = index => composeSlide(document.slides[index], { presentation: d
   const slide = svg(0), core = geometry(0);
   const markers = elements(slide, /<tspan[^>]*data-opf-segment="marker"[^>]*>[^<]*<\/tspan>/g);
   assert.deepEqual(markers.map(marker => marker['data-opf-marker']), ['1', '1,2', '3']);
+  // The lone paragraph's size: its 32 px lead (WI-4), grown on the type scale when it fills too little of the body (LH-48).
+  const bodySize = core.items.find(item => item.field === 'text').text.fontSize;
+  assert.ok(bodySize >= 32, String(bodySize));
   for (const marker of markers) {
     ok(marker.raw.endsWith(`>${marker['data-opf-marker']}</tspan>`), 'marker text');
-    assert.equal(marker['font-size'], '21.333'); // 2/3 of the 32 px lead body of this lone paragraph (WI-4): PowerPoint draws a superscript at 2/3 of its size (native probe 2026-10-01)
-    assert.equal(marker['baseline-shift'], '9.6'); // raised 0.3 of the nominal (marked run) size
+    assert.equal(Number(marker['font-size']), Number((bodySize * 2 / 3).toFixed(3))); // 2/3 of the body size: PowerPoint draws a superscript at 2/3 of its size (native probe 2026-10-01)
+    assert.ok(Math.abs(Number(marker['baseline-shift']) - bodySize * 0.3) < 0.01, marker['baseline-shift']); // raised 0.3 of the nominal (marked run) size
     ok(!('data-opf-text-start' in marker) && !('data-opf-text-end' in marker), 'a marker has no source offsets');
     ok(!('text-decoration' in marker), 'a marker is not decorated');
   }

@@ -9,7 +9,8 @@ test('unspecified short lists start at32, with numbering and nested entries inta
     assert.equal(fit.fontSize,32);assert.equal(fit.overflow,false);assert.deepEqual(fit.listEntries.map(entry=>entry.text.lines.join('')),values);
   }
   for(const field of ['items','bullets']){
-    const result=composeSlide({[field]:values});const item=result.items.find(item=>item.field===field);
+    // The role size (`fill: false`); a lone short list grows from it (LH-48, lone-fill.test.mjs).
+    const result=composeSlide({[field]:values},{fill:false});const item=result.items.find(item=>item.field===field);
     assert.equal(item.text.fontSize,32);
   }
 });

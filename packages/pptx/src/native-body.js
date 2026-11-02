@@ -69,7 +69,9 @@ function planOne(item, geometry, automatic, reject) {
   // A block on a card (LH-22) is a native text box at its place inside the card, never bound to the Body placeholder: Change Layout
   // would move it away from its card, as it would a carded picture.
   if (item.frameBox) return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...item.box}, anchor: 'top', carded: true};
-  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: region?.anchor ?? 'top'};
+  // LH-48: core sets a lone block that fills too little of the body in the middle of its region; the placeholder anchors it there too.
+  const centred = region && item.box.height < region.box.height - 1 && Math.abs(item.box.y + item.box.height / 2 - (region.box.y + region.box.height / 2)) < 1;
+  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: centred ? 'middle' : region?.anchor ?? 'top'};
 }
 
 // RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.

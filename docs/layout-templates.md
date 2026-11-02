@@ -256,7 +256,11 @@ slide that pins any block with `region` keeps the binding above as written.
      words).
 
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
-above; a body region before a heading region). Headings are centred vertically in their region unless every row it spans is
+above; a body region before a heading region). A column of the grid that holds nothing but empty regions (and heading or
+below-the-grid areas that span other columns too) gives way first when at least two columns with content remain (LH-65): it
+takes no width and no gap, and the columns left share the width by their own sizes, so two blocks in `three-column` draw 1:1
+instead of one column beside a neighbour that took the third column's width too. The empty region reports a zero-wide cell
+where its column was. Headings are centred vertically in their region unless every row it spans is
 `auto`, so a `cover` or a title-only slide centres its title. A slide with promoted regions (`left`, `top:left`, ...)
 composes them as in 0.18.
 
@@ -353,6 +357,30 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 | `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. On a template without a `subtitle` area the title area carries `parts: { title, subtitle }`: it is split where the stacked heading group puts the subtitle, so `title` runs from the area's top to the bottom of the title (the tag above it included) and `subtitle` from the subtitle's top (half a gap under the title when the slide has none) to the area's bottom. PowerPoint's `ctrTitle` and `subTitle` placeholders use these boxes. |
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
 | `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
+
+### A body that fills too little (LH-48)
+
+Short content steps up instead of sitting small at the top of an empty body, as Claude Design sets a short message.
+
+- **A lone block.** When a slide's whole body is one paragraph, list, quote, code panel, metric or table (the only block of
+  an automatic slide, or a template slide's only block, with nothing below the grid), its region's cell reaches the foot of
+  the content box when every other region is empty, and the block takes the body. When it fills under half of that height
+  at its role sizes it steps up: a paragraph or a list by the steps of the type scale above its size, a quote, code panel,
+  metric or table by the scale's ratio on every role, to the largest step at which it fills at most 60% of the body and
+  every part keeps the size it asks for. No role grows past its display size (`LONE_DISPLAY_SIZES`: text 43 px, a list 37,
+  a quote 56, code 32, a metric's value 152, a table 32, at a 720-pixel short edge). The block then sits in the middle of
+  the body, its card hugging it; a grown table's rows grow with its type (`items[].tableGrowth`, which both engines pass to
+  `layoutTable`). A block that fills half the body or more keeps its sizes and its place.
+- **A body of paragraphs and lists.** Two or more text and list blocks in regions that fill under half of the body below
+  the headings, with nothing overflowing, are composed again one, two or three type-scale steps larger (each up to a
+  list's display size, 37 px), and the largest step that adds no finding, sets every block larger and fills at most 60%
+  is kept; siblings keep one size (LH-43). The body then sits in the middle of the space under the headings: rows that hug
+  their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
+  text (LH-64's hug, whatever it fills of a card).
+- **Never grown.** A stacked record (`statement`, `quote`, `closing`, which already centre their message), blocks below
+  the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
+  list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
+  role sizes. Both engines read the result from core.
 
 ### Recomposition at the readability floor (LH-83)
 

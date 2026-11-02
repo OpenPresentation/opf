@@ -5,13 +5,14 @@ import { composeSlide, LEAD_NOMINAL_SIZE } from '../dist/composition.js';
 
 // WI-4 (P34): in auto mode a prose block that wraps is no wider than about 70 average characters of its size, placed by the
 // content alignment; a lone block of up to two lines uses the 32 px lead size. The measure never costs size, and a line
-// that fits across its cell stays one line.
+// that fits across its cell stays one line. These are the starting sizes and widths: `fill: false` keeps LH-48's growth of an
+// under-filled body out (lone-fill.test.mjs).
 const { layouts } = gallery;
 const sentence = 'Give one owner responsibility from intake through decision. A shared queue makes exceptions visible and keeps routine work moving. ';
 const textOf = (result) => result.items.filter((item) => item.field === 'text');
 
 test('a lone paragraph that wraps keeps a reading measure of about 70 characters', () => {
-  const result = composeSlide({ title: 'Remove the handoff', blocks: [{ text: sentence + sentence }] }, { layout: layouts.text });
+  const result = composeSlide({ title: 'Remove the handoff', blocks: [{ text: sentence + sentence }] }, { layout: layouts.text, fill: false });
   const [item] = textOf(result);
   const body = result.regions.find((region) => region.name === 'body').box;
   assert.equal(item.text.fontSize, 28);
@@ -22,7 +23,7 @@ test('a lone paragraph that wraps keeps a reading measure of about 70 characters
 
 test('the measure follows the content alignment', () => {
   const body = (alignment) => {
-    const result = composeSlide({ title: 'Aligned', design: { contentAlignment: alignment }, blocks: [{ text: sentence + sentence }] }, { layout: layouts.text });
+    const result = composeSlide({ title: 'Aligned', design: { contentAlignment: alignment }, blocks: [{ text: sentence + sentence }] }, { layout: layouts.text, fill: false });
     return [textOf(result)[0], result.regions.find((region) => region.name === 'body').box];
   };
   const [centered, area] = body('center');
@@ -33,19 +34,19 @@ test('the measure follows the content alignment', () => {
 
 test('a lone block of up to two lines uses the 32 px lead size', () => {
   assert.equal(LEAD_NOMINAL_SIZE, 32);
-  const lone = composeSlide({ title: 'One idea', blocks: [{ text: 'Give one owner responsibility from intake through decision.' }] }, { layout: layouts.text });
+  const lone = composeSlide({ title: 'One idea', blocks: [{ text: 'Give one owner responsibility from intake through decision.' }] }, { layout: layouts.text, fill: false });
   assert.equal(textOf(lone)[0].text.fontSize, 32);
-  const twoLines = composeSlide({ title: 'One idea', blocks: [{ text: 'Give one owner responsibility from intake through decision. A shared queue makes exceptions visible and keeps routine work moving.' }] }, { layout: layouts.text });
+  const twoLines = composeSlide({ title: 'One idea', blocks: [{ text: 'Give one owner responsibility from intake through decision. A shared queue makes exceptions visible and keeps routine work moving.' }] }, { layout: layouts.text, fill: false });
   assert.equal(textOf(twoLines)[0].text.fontSize, 32);
   assert.ok(textOf(twoLines)[0].text.lines.length <= 2);
   // Longer text, and a block that has a neighbour, keep the 28 px body size.
-  assert.equal(textOf(composeSlide({ title: 'Long', blocks: [{ text: sentence.repeat(4) }] }, { layout: layouts.text }))[0].text.fontSize, 28);
-  const pair = composeSlide({ title: 'Two', blocks: [{ text: 'Give one owner responsibility.' }, { text: 'Make exceptions visible.' }] }, { layout: layouts.text });
+  assert.equal(textOf(composeSlide({ title: 'Long', blocks: [{ text: sentence.repeat(4) }] }, { layout: layouts.text, fill: false }))[0].text.fontSize, 28);
+  const pair = composeSlide({ title: 'Two', blocks: [{ text: 'Give one owner responsibility.' }, { text: 'Make exceptions visible.' }] }, { layout: layouts.text, fill: false });
   assert.deepEqual(textOf(pair).map((item) => item.text.fontSize), [28, 28]);
 });
 
 test('a block that is one line across its cell keeps the whole cell', () => {
-  const result = composeSlide({ title: 'Line', blocks: [{ text: 'A short sentence of about sixty characters, set on one line only.' }] }, { layout: layouts.text });
+  const result = composeSlide({ title: 'Line', blocks: [{ text: 'A short sentence of about sixty characters, set on one line only.' }] }, { layout: layouts.text, fill: false });
   const [item] = textOf(result);
   const body = result.regions.find((region) => region.name === 'body').box;
   assert.equal(item.text.lines.length, 1);
@@ -53,7 +54,7 @@ test('a block that is one line across its cell keeps the whole cell', () => {
 });
 
 test('the measure never costs size: dense prose uses its whole cell', () => {
-  const dense = composeSlide({ title: 'Dense', blocks: [{ text: sentence.repeat(14) }] }, { layout: layouts.text });
+  const dense = composeSlide({ title: 'Dense', blocks: [{ text: sentence.repeat(14) }] }, { layout: layouts.text, fill: false });
   const [item] = textOf(dense);
   const body = dense.regions.find((region) => region.name === 'body').box;
   assert.equal(item.box.width, body.width, 'the cell, because the measure would shrink the type');

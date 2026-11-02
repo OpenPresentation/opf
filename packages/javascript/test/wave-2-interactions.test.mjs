@@ -55,3 +55,20 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
   const places = composeSlide({ title: 'Chart', blocks: [{ chart: { type: 'world', data: { columns: ['Country', 'Sales'], rows: [['France', 4], ['Germany', 5], ['Japan', 6]] } } }] }, {}).items.find((item) => item.field === 'chart');
   assert.equal(places.chart?.layer, undefined);
 });
+
+test('LH-48 with LH-43 and LH-64: an under-filled row of cards grows at one size, the cards hug it and the row sits in the middle', () => {
+  const blocks = [{ text: 'Waypoint Apps should move repetitive questions into self-service without hurting satisfaction.' }, { text: 'This fixture keeps identity metadata separate from slide content.' }];
+  for (const direction of ['ltr', 'rtl']) {
+    const result = composeSlide({ title: 'Decision options', blocks }, { layout: layouts['three-column'], direction });
+    const kept = composeSlide({ title: 'Decision options', blocks }, { layout: layouts['three-column'], direction, fill: false });
+    const cards = result.items.filter((item) => item.frameBox), sizes = cards.map((item) => item.text.fontSize);
+    assert.deepEqual(overflow(result), []);
+    assert.equal(cards.length, 2);
+    assert.equal(new Set(sizes).size, 1, `${direction}: one size (LH-43)`);
+    assert.ok(sizes[0] > kept.items.find((item) => item.frameBox).text.fontSize, `${direction}: grown`);
+    assert.equal(new Set(cards.map((item) => item.frameBox.height)).size, 1, `${direction}: one card height (LH-64)`);
+    const title = result.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
+    const card = cards[0].frameBox, above = card.y - (title.y + title.height), below = end - (card.y + card.height);
+    assert.ok(Math.abs(above - below) < 30, `${direction}: centred (${above} above, ${below} below)`);
+  }
+});

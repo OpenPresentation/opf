@@ -7,7 +7,8 @@ import {composeSlide, layoutTemplate} from '../dist/composition.js';
 const record = (anchor, regions) => ({id: 'stack', direction: 'column', ...(anchor ? {anchor} : {}), regions});
 const allAuto = [{name: 'title'}, {name: 'details', size: 'auto', accepts: ['text'], flow: 'none'}];
 const slide = {title: 'Thank you', blocks: [{text: 'Next step: book a call'}]};
-const compose = (layout, value = slide, options = {}) => composeSlide(value, {width: 1280, height: 720, layout, ...options});
+// The stack at the role sizes (`fill: false`: LH-48 gives a lone block on a record that is not a stack the whole body).
+const compose = (layout, value = slide, options = {}) => composeSlide(value, {width: 1280, height: 720, layout, fill: false, ...options});
 const top = result => Math.min(...result.items.map(item => item.box.y));
 const bottom = result => Math.max(...result.items.map(item => item.box.y + item.box.height));
 const free = result => ({top: result.contentBox.y, bottom: result.contentBox.y + result.contentBox.height});
