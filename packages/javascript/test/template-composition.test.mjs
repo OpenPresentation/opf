@@ -63,7 +63,9 @@ describe('the grid flow by count', () => {
 
   test('auto: a grid when every block is short, a column when any block is long (more than 6 estimated lines)', () => {
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text), 'body').arrangement, 'grid');
-    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'column');
+    assert.equal(region(compose({ title: 'x', blocks: [text(long), text(`${long} Again.`), text('c')] }, layouts.text), 'body').arrangement, 'column');
+    // LH-67: one long block beside short ones leads beside a stack of them (a row of two cells).
+    assert.equal(region(compose({ title: 'x', blocks: [text('a'), text(long), text('c')] }, layouts.text), 'body').arrangement, 'row');
     // The estimate, never the host's measurement: a wide measurement does not change the decision.
     const wide = { measure: (value, size) => value.length * size * 2 };
     assert.equal(region(compose({ title: 'x', blocks: short(3) }, layouts.text, { textMeasurement: wide }), 'body').arrangement, 'grid');

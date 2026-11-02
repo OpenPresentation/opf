@@ -78,7 +78,7 @@ describe('automatic composition', () => {
 				{ metric: { value: '91%', label: 'Primary signal' } },
 				{ chart: { type: 'column', data: { columns: ['Quarter', 'Value'], rows: [['Q1', 1], ['Q2', 2]] } } },
 				{ table: decisions },
-				{ quote: { text: 'The bottom row remains available for interpretation.' } },
+				{ quote: { text: 'The bottom row remains available for interpretation.', attribution: 'Program lead' } },
 			],
 		};
 		const result = composeSlide(slide, { ...options, explain: true });

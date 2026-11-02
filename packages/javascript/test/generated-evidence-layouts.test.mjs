@@ -27,12 +27,17 @@ test('generated Evidence Packs keep vertical charts readable beside intact notes
     const quote = geometry.items.find(item => item.type === 'quote');
     const metric = geometry.items.find(item => item.type === 'metric');
     assert.ok(chart && quote && metric, 'all authored content is composed');
-    assert.equal(chart.region, 'chart');
-    assert.equal(quote.region, 'notes');
-    assert.equal(metric.region, 'notes');
+    // LH-83 with LH-78: the quote beside the chart starts at the lead size, so a slide whose layout sets a part at the floor may
+    // recompose as the automatic grid: the chart beside a stack of the quote and the metric, on the side the record's chartPrimary
+    // gives it. The geometry below holds either way.
+    if (!geometry.recomposed) {
+      assert.equal(chart.region, 'chart');
+      assert.equal(quote.region, 'notes');
+      assert.equal(metric.region, 'notes');
+    }
     assert.ok(chart.box.height >= geometry.height * 0.5, 'chart occupies at least half the slide height');
     assert.ok(chart.box.width / chart.box.height < 2, 'chart is not a shallow strip');
-    assert.ok(quote.box.x >= chart.box.x + chart.box.width, 'quote sits beside the chart');
+    assert.ok(quote.box.x >= chart.box.x + chart.box.width || quote.box.x + quote.box.width <= chart.box.x, 'quote sits beside the chart');
     assert.ok(metric.box.y >= quote.box.y + quote.box.height, 'metric follows quote in the notes column');
     for (const item of [chart, quote, metric]) {
       assert.ok(item.box.x >= 0 && item.box.y >= 0 && item.box.x + item.box.width <= geometry.width + .01 && item.box.y + item.box.height <= geometry.height + .01, 'content stays in slide bounds');

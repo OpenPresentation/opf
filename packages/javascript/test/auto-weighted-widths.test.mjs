@@ -37,6 +37,8 @@ test('peers of similar demand keep equal widths', () => {
 test('explicit weights and a three-block row are never reweighted', () => {
   const [a, b] = prose(composeSlide({ title: 'T', composition: { mode: 'row', weights: [1, 1] }, blocks: [{ text: short }, { text: long }] }));
   near(a.box.width, b.box.width);
-  const widths = prose(composeSlide({ title: 'T', blocks: [{ text: short }, { text: short }, { text: long }] })).map((item) => item.box.width);
+  // LH-67: in automatic composition a much longer third block leads beside a stack of the others (lead-stack.test.mjs); a row of
+  // three keeps equal widths.
+  const widths = prose(composeSlide({ title: 'T', composition: { mode: 'row' }, blocks: [{ text: short }, { text: short }, { text: long }] })).map((item) => item.box.width);
   near(widths[0], widths[2]);
 });
