@@ -52,6 +52,10 @@ const guide = read('docs/web-component.md');
 const observed = [...new Set([...read('src/element.js').matchAll(/const OBSERVED = \[([^\]]*)\]/g)].flatMap((match) => [...match[1].matchAll(/"([^"]+)"/g)].map((item) => item[1])))];
 assert.deepEqual(observed, ['layout', 'toolbar', 'readonly', 'theme', 'density', 'slide', 'src', 'fonts']);
 for (const attribute of observed) assert.ok(guide.includes(`\`${attribute}\``), `docs/web-component.md documents the "${attribute}" attribute`);
+// CE-30: the typings list the same observed attributes as the code.
+const typedObserved = /Attributes ((?:`[a-z]+`(?:, | and )?)+) are observed/.exec(declarations.replace(/\s*\*\s*/g, ' '));
+assert.ok(typedObserved, 'src/element.d.ts says which attributes are observed');
+assert.deepEqual([...typedObserved[1].matchAll(/`([a-z]+)`/g)].map((match) => match[1]), observed, 'src/element.d.ts lists exactly the observed attributes of src/element.js');
 for (const name of element.OPF_EDITOR_EVENTS) assert.ok(guide.includes(`\`${element.opfEventType(name)}\``), `docs/web-component.md lists ${element.opfEventType(name)}`);
 for (const entry of ['@openpresentation/opf-editor/element', '@openpresentation/opf-editor/element/define', '@openpresentation/opf-editor/styles.css']) assert.ok(guide.includes(entry), `docs/web-component.md names ${entry}`);
 

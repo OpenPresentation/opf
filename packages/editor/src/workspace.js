@@ -164,10 +164,11 @@ function resolveParts(options, layout, slots, asked = []) {
   }
   // The slide is the editor; a source-only layout has none.
   parts.canvas = layout === "source" ? false : panels.canvas !== false;
-  // CE-28 wave 2: an item the toolbar lists brings the part it shows: Export in the viewer, and Review (run without its panel where the layout
-  // has none, so the pill has counts) wherever it is listed.
+  // CE-28 wave 2: an item the toolbar lists brings the part it shows: Export in the viewer, Present (CE-30: also where the host arranges the
+  // parts with `slots`), and Review (run without its panel where the layout has none, so the pill has counts) wherever it is listed.
   const listed = (id) => asked.some((item) => item.id === id) || Boolean(slots[itemSlot(id)]);
   if (panels.export === undefined && listed("export")) parts.export = true;
+  if (panels.present === undefined && listed("present")) parts.present = true;
   if (panels.review === undefined && listed("review") && !parts.review) {
     parts.review = true;
     // A layout without a Review panel gets none: the review runs headless for the pill.
@@ -422,7 +423,10 @@ export function createOpfEditor(element, options = {}) {
   }
   let frameSize = { width: 0, height: 0 };
   const draftMemory = createSourceMemory();
-  const variablesMode = options.variables === "resolved" ? "resolved" : "authored";
+  // CE-30: `variables: { focusSource }` is "resolved" with the host's own code editor: a press on text without a field of its own focuses that.
+  const variablesObject = options.variables !== null && typeof options.variables === "object" ? options.variables : undefined;
+  const variablesMode = options.variables === "resolved" || variablesObject ? "resolved" : "authored";
+  if (variablesObject && variablesObject.focusSource !== undefined && typeof variablesObject.focusSource !== "function") throw new TypeError("variables.focusSource must be a function.");
   const fitMode = studioLayout ? false : options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
 
   const say = (message) => {
@@ -944,7 +948,14 @@ export function createOpfEditor(element, options = {}) {
       cleanups.push(
         installCanvasVariableEditing(slots.canvas, ui, canvas, {
           resolved: () => !authoredTemplate,
-          focusSource: () => pane?.editor?.api?.focus?.(),
+          focusSource: () => {
+            if (!variablesObject?.focusSource) return pane?.editor?.api?.focus?.();
+            try {
+              variablesObject.focusSource();
+            } catch (error) {
+              report(error);
+            }
+          },
         }),
       );
     }

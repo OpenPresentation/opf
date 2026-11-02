@@ -183,6 +183,11 @@
   gap: 4px;
   padding: 0 12px 8px;
 }
+/* CE-30: the slide row is no wider than the editor; the thumbnail strip scrolls inside it (a narrow box, a phone). */
+.opf-ws-dock > .opf-ws-navigator,
+.opf-ws-dock > .opf-ws-thumbnails {
+  max-width: 100%;
+}
 .opf-ws-status {
   flex: none;
   margin: 0;
@@ -270,27 +275,29 @@
   flex: 1 1 0;
   min-height: 0;
 }
-/* A phone: the parts stack, the source above the slide, the side panel below. */
+/* A phone: the parts stack, the source above the slide, the side panel below. CE-30: only in the layouts that have several parts to stack;
+   `embed`, `viewer` and `canvas` are the slide alone and fit it to their box at any width (a stage of 40vh made a short embed overflow).
+   `:where()` keeps the specificity of the plain class. */
 @media (max-width: 760px) {
-  .opf-ws-body {
+  :where(.opf-workspace:not([data-opf-layout="embed"], [data-opf-layout="viewer"], [data-opf-layout="canvas"])) .opf-ws-body {
     flex-direction: column;
     overflow: auto;
   }
-  .opf-ws-source {
+  :where(.opf-workspace:not([data-opf-layout="embed"], [data-opf-layout="viewer"], [data-opf-layout="canvas"])) .opf-ws-source {
     flex: none;
     min-width: 0;
     height: 40vh;
     border-right: 0;
     border-bottom: 1px solid var(--opf-ui-border);
   }
-  .opf-ws-main {
+  :where(.opf-workspace:not([data-opf-layout="embed"], [data-opf-layout="viewer"], [data-opf-layout="canvas"])) .opf-ws-main {
     flex: none;
   }
-  .opf-ws-stage {
+  :where(.opf-workspace:not([data-opf-layout="embed"], [data-opf-layout="viewer"], [data-opf-layout="canvas"])) .opf-ws-stage {
     flex: none;
     min-height: 40vh;
   }
-  .opf-ws-side {
+  :where(.opf-workspace:not([data-opf-layout="embed"], [data-opf-layout="viewer"], [data-opf-layout="canvas"])) .opf-ws-side {
     flex: none;
     border-left: 0;
     border-top: 1px solid var(--opf-ui-border);
