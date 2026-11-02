@@ -2,6 +2,7 @@
 // chart-layer.ts, ComposedChart.layer); this asserts what the preview draws from it.
 import assert from 'node:assert/strict';
 import { colorContrast } from '@openpresentation/opf/composition';
+import { chartSeriesPalette } from '../src/charts.js';
 import { defaultCatalog, resolvePresentation, toSvg } from './catalog-harness.mjs';
 
 const attributesOf = (text) => Object.fromEntries([...text.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, value]));
@@ -61,8 +62,9 @@ let checks = 0;
   checks += 2;
 }
 
-// 5. The emphasis on every theme x colour scheme x light and dark variant: the quieter bars reach 3:1 against the backdrop and stay
-// 15 L* from the emphasised bar, or every bar keeps the series colour.
+// 5. LH-95: the emphasis on every theme x colour scheme x light and dark variant. The last bar takes a stronger shade of the series
+// colour (darker on a light backdrop, lighter on a dark one) and the other bars keep the series colour; every bar reaches 3:1 against the
+// backdrop and the emphasised bar stands 15 L* from the rest, in all 84 combinations.
 {
   const lightness = (hex) => {
     const linear = (channel) => { const n = channel / 255; return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4; };
@@ -71,7 +73,8 @@ let checks = 0;
     return y > 216 / 24389 ? 116 * Math.cbrt(y) - 16 : 24389 / 27 * y;
   };
   const one = { columns: ['Stage', 'Count'], rows: [['Lead', 120], ['Qualified', 64], ['Proposal', 31], ['Won', 12]] };
-  let emphasised = 0, plainCharts = 0;
+  let emphasised = 0, shadedBack = 0;
+  const plainCharts = [];
   for (const theme of Object.keys(defaultCatalog.themes)) for (const scheme of Object.keys(defaultCatalog.colorSchemes)) for (const variant of ['light1', 'dark1']) {
     const input = deck({ type: 'column', data: one }, { theme, colorScheme: scheme, variant });
     const design = resolvePresentation(input).slides[0].design;
@@ -79,16 +82,21 @@ let checks = 0;
     const fills = [...toSvg(input, 1, { trace: true }).matchAll(/<rect\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a)).filter((a) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(a['data-opf-path'] ?? '')).map((a) => a.fill.toUpperCase());
     const label = `${theme} ${scheme} ${variant}`;
     assert.equal(fills.length, 4, label);
-    if (new Set(fills).size === 1) { plainCharts++; continue; }
+    if (new Set(fills).size === 1) { plainCharts.push(label); continue; }
     emphasised++;
-    const [muted, accent] = [fills[0], fills[3]];
-    assert.ok(fills.slice(0, 3).every((fill) => fill === muted), `${label}: one tint`);
-    assert.ok(colorContrast(muted, backdrop) >= 3 - 1e-9, `${label}: tint ${muted} on ${backdrop} at 3:1`);
-    assert.ok(Math.abs(lightness(accent) - lightness(muted)) >= 15 - 1e-9, `${label}: 15 L* between ${accent} and ${muted}`);
+    const [series, shade] = [fills[0], fills[3]];
+    const palette = chartSeriesPalette(backdrop, design.colorScheme, undefined, { accents: design.roles.map.accents, roles: design.colors, variables: design.variables });
+    assert.equal(series, palette[0].slice(0, 7).toUpperCase(), `${label}: the other bars keep the series colour`);
+    assert.ok(fills.slice(0, 3).every((fill) => fill === series), `${label}: one series colour`);
+    for (const fill of [series, shade]) assert.ok(colorContrast(fill, backdrop) >= 3 - 1e-9, `${label}: ${fill} on ${backdrop} at 3:1`);
+    assert.ok(Math.abs(lightness(shade) - lightness(series)) >= 15 - 1e-9, `${label}: 15 L* between ${shade} and ${series}`);
+    const dark = lightness(backdrop) < lightness(series);
+    if (dark !== lightness(shade) > lightness(series)) shadedBack++;
   }
-  assert.ok(emphasised > 0, `${emphasised} emphasised, ${plainCharts} without emphasis`);
-  console.log(`Chart layer emphasis: ${emphasised} of ${emphasised + plainCharts} theme x scheme x variant charts emphasise the last bar.`);
-  checks += 1;
+  assert.deepEqual(plainCharts, [], 'every combination emphasises the last bar');
+  assert.equal(emphasised, Object.keys(defaultCatalog.themes).length * Object.keys(defaultCatalog.colorSchemes).length * 2);
+  console.log(`Chart layer emphasis: ${emphasised} of ${emphasised + plainCharts.length} theme x scheme x variant charts emphasise the last bar (${shadedBack} shaded towards the backdrop, the series colour being too close to black or white).`);
+  checks += 2;
 }
 
 console.log(`Chart layer passed: ${checks} checks (small charts, explicit options, header row, right to left).`);

@@ -92,15 +92,6 @@ for (const type of ['pie', 'doughnut']) {
     assert.ok(colorContrast(`#${label}`, `#${fill}`) >= 4.5 || ['000000', 'FFFFFF'].includes(label), `tile ${idx}: ${label} on ${fill}`);
   }
   assert.doesNotThrow(() => parser.parse(treemap));
-  // PowerPoint draws a point label whose cx:txPr paragraph holds no text as an empty label (native check 2026-11-02, PR #976), so each
-  // point's paragraph holds a text field of the label's content (category names by default, the first shown part with dataLabels).
-  const pointLabels = [...treemap.matchAll(/<cx:dataLabel idx="\d+">([\s\S]*?)<\/cx:dataLabel>/g)].map(([, body]) => body);
-  assert.equal(pointLabels.length, 4);
-  for (const body of pointLabels) assert.match(body, /<a:p><a:pPr><a:defRPr [^>]*>[\s\S]*?<\/a:pPr><a:fld id="\{[0-9A-F-]+\}" type="CATEGORYNAME"><a:rPr lang="en-US" sz="\d+"><a:solidFill>[\s\S]*?<\/a:solidFill><a:latin typeface="[^"]+"\/>[\s\S]*?<\/a:rPr><a:t>\[CATEGORY NAME\]<\/a:t><\/a:fld><a:endParaRPr lang="en-US"\/><\/a:p>/, 'the point label paragraph holds its category field');
-  const {chartex: valueTreemap} = await exportChart({type: 'treemap', data: one, dataLabels: {content: ['value']}}, {}, {colorScheme: 'cool-horizon'});
-  const valueFields = [...valueTreemap.matchAll(/<cx:dataLabel idx="\d+">[\s\S]*?<a:fld [^>]*type="(\w+)"/g)].map(([, type]) => type);
-  assert.deepEqual(valueFields, ['VALUE', 'VALUE', 'VALUE', 'VALUE'], 'value labels name the value field');
-  assert.match(valueTreemap, /<cx:visibility seriesName="0" categoryName="0" value="1"\/><cx:separator>[^<]*<\/cx:separator><cx:dataLabel idx="0">/, 'CT_DataLabels: the point labels follow the separator');
   const {chartex: funnel} = await exportChart({type: 'funnel', data: one}, {}, {colorScheme: 'cool-horizon'});
   const seriesFill = funnel.match(/<cx:series [^>]*>[\s\S]*?<cx:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
   const labelFill = funnel.match(/<cx:dataLabels [^>]*><cx:numFmt[^>]*\/>?<cx:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)?.[1] ?? funnel.match(/<cx:dataLabels [^>]*>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)[1];

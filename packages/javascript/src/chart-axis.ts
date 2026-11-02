@@ -371,10 +371,11 @@ export interface SiblingChart {
  * are both 100% stacked or both not, and their first series has the same number format; without a format, when they plot the same series
  * names (Current and Baseline in both). Each set of two or more is given one axis, `niceScale` from the lowest minimum to the highest
  * maximum with the fewest intervals any member had (its plot is the shortest), and both engines draw it (the preview draws `valueAxis`, the
- * PPTX export writes it). `document` resolves dataset references. The axes are changed in place.
+ * PPTX export writes it). `document` resolves dataset references. The axes are changed in place; the sets of two or more are returned
+ * (LH-93 gives each one plot height, chart-plot.ts).
  */
-export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?: unknown): void {
-  const sets = new Map<string, SiblingChart[]>();
+export function shareSiblingChartAxes<T extends SiblingChart>(charts: readonly T[], document?: unknown): T[][] {
+  const sets = new Map<string, T[]>();
   for (const item of charts) {
     const axis = item.chart?.valueAxis;
     if (!axis) continue;
@@ -387,8 +388,10 @@ export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?
     const key = JSON.stringify([spec.horizontal, axis.percent === true, format ?? null, format === undefined ? resolved.columns.slice(1) : null]);
     sets.set(key, [...sets.get(key) ?? [], item]);
   }
+  const out: T[][] = [];
   for (const members of sets.values()) {
     if (members.length < 2) continue;
+    out.push(members);
     const axes = members.map(item => item.chart!.valueAxis!);
     const min = Math.min(...axes.map(axis => axis.min)), max = Math.max(...axes.map(axis => axis.max));
     if (axes.every(axis => axis.min === min && axis.max === max)) continue;
@@ -397,4 +400,5 @@ export function shareSiblingChartAxes(charts: readonly SiblingChart[], document?
     const shared = niceScale(min, max, intervals, { percent });
     for (const item of members) item.chart!.valueAxis = { min: shared.min, max: shared.max, majorUnit: shared.step, ...(percent ? { percent: true as const } : {}) };
   }
+  return out;
 }

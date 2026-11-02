@@ -81,24 +81,33 @@ describe("small charts (LH-03)", () => {
     assert.equal(chartLayerDataLabels({ active: false }, undefined, "bar").dataLabels, undefined);
   });
 
-  test("the quieter tint reaches 3:1 and stays 15 L* from the accent, or there is no emphasis", () => {
-    // Every gallery colour scheme, on its light and dark backdrops (light1, light2, dark1, dark2), for the series colour the engines draw.
-    let emphasised = 0, plain = 0;
+  test("LH-95: the emphasised point is a stronger shade of the series colour on every backdrop", () => {
+    // Every gallery colour scheme, on its light and dark backdrops (light1, light2, dark1, dark2), for the series colour the engines draw:
+    // the other points keep the series colour, the emphasised one stands 15 L* from it, and both reach 3:1 against the backdrop.
+    let emphasised = 0;
     for (const scheme of colorSchemes) {
       for (const backdrop of [scheme.light1, scheme.light2, scheme.dark1, scheme.dark2].filter(Boolean)) {
         const series = chartPaletteForFill(backdrop, chartSeriesPalette(scheme), { legible: chartSchemeSeries(undefined, scheme) })[0];
         const colors = chartEmphasisColors(backdrop, series);
-        if (!colors) { plain++; continue; }
+        assert.ok(colors, `${scheme.id} on ${backdrop}: an emphasis`);
         emphasised++;
-        assert.equal(colors.accent, series.slice(0, 7).toUpperCase());
-        assert.ok(colorContrast(colors.muted, backdrop) >= 3 - 1e-9, `${scheme.id} on ${backdrop}: tint ${colors.muted} at 3:1`);
+        assert.equal(colors.muted, series.slice(0, 7).toUpperCase(), "the other points keep the series colour");
+        for (const color of [colors.accent, colors.muted]) assert.ok(colorContrast(color, backdrop) >= 3 - 1e-9, `${scheme.id} on ${backdrop}: ${color} at 3:1`);
         assert.ok(Math.abs(lightness(colors.accent) - lightness(colors.muted)) >= 15 - 1e-9, `${scheme.id} on ${backdrop}: 15 L* apart`);
+        // Away from the backdrop: darker on a light one, lighter on a dark one.
+        assert.equal(lightness(colors.accent) < lightness(colors.muted), lightness(backdrop) > lightness(colors.muted), `${scheme.id} on ${backdrop}: away from the backdrop`);
       }
     }
-    assert.ok(emphasised > 0 && emphasised + plain >= colorSchemes.length * 2, `${emphasised} emphasised, ${plain} plain`);
-    // The case the review found: a mid blue on the default navy leaves no room for a visible tint, so there is no emphasis.
-    assert.equal(chartEmphasisColors("#011842", "#308BC7"), undefined);
-    assert.ok(chartEmphasisColors("#FFFFFF", "#1F4E79"));
+    assert.ok(emphasised >= colorSchemes.length * 2);
+    // The case LH-03's tint could not emphasise: a mid blue on the default navy now takes a lighter blue.
+    const navy = chartEmphasisColors("#011842", "#308BC7");
+    assert.equal(navy.muted, "#308BC7");
+    assert.ok(lightness(navy.accent) - lightness("#308BC7") >= 15 - 1e-9 && colorContrast(navy.accent, "#011842") >= 3);
+    const light = chartEmphasisColors("#FFFFFF", "#1F4E79");
+    assert.ok(lightness("#1F4E79") - lightness(light.accent) >= 15 - 1e-9, "darker on white");
+    // A series colour too dark to go 15 L* darker is shaded the other way, still at 3:1.
+    const black = chartEmphasisColors("#FFFFFF", "#101010");
+    assert.ok(lightness(black.accent) - lightness("#101010") >= 15 - 1e-9 && colorContrast(black.accent, "#FFFFFF") >= 3);
   });
 });
 
