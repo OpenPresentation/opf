@@ -92,7 +92,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 	const samples: TextSample[] = [];
 	// LH-54: text in a card (`frameBox`) sits on the card fill, which on a dark slide is the mixed card surface, not the scheme surface.
 	const surface: BackdropSample = { colors: [design.neutrals.card.hex], unknown: false };
-	// LH-06: the slide's emphasis surface (core emphasisSurface), the backdrop and the colours of every item drawn on it.
+	// LH-06: the slide's emphasis surface (core emphasisSurface), the backdrop and the colors of every item drawn on it.
 	const emphasis = composition.emphasis ? emphasisSurface(design.colorScheme, { dark: design.dark, map: design.map, background: design.colors.background }) : undefined;
 	const surfaceDesign: ResolvedDesign | undefined = emphasis ? { ...design, colors: { ...design.colors, background: emphasis.fill, surface: emphasis.roles.surface, text: emphasis.roles.text, mutedText: emphasis.roles.textSecondary, primary: emphasis.roles.primary, secondary: emphasis.roles.secondary, accent: emphasis.roles.accent } } : undefined;
 	const emphasisBackdrop: BackdropSample | undefined = emphasis ? { colors: [emphasis.fill], unknown: false } : undefined;

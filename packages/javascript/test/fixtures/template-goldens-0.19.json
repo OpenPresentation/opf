@@ -1634,11 +1634,11 @@
  ],
  "timeline 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region timeline 57.6,147.5,1164.8,423.2 column 1",
-  "region notes 57.6,570.6,1164.8,0 - 0 collapsed",
+  "region timeline 57.6,147.5,1164.8,413.5 column 1",
+  "region notes 57.6,561,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.timeline timeline 57.6,147.5,1164.8,423.2",
-  "item blocks.1.text - 81.6,611.4,1116.8,34.2 28px"
+  "item blocks.0.timeline timeline 57.6,147.5,1164.8,413.5",
+  "item blocks.1.text - 81.6,604.2,1116.8,39 32px"
  ],
  "timeline 3 short": [
   "area title 57.6,57.6,1164.8,65.9",

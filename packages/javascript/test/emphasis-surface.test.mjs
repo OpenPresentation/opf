@@ -5,7 +5,7 @@ import { colorContrast, composeSlide, emphasisSurface, EMPHASIS_SURFACE_MIN_CONT
 import { resolveSlideContext } from '../dist/index.js';
 
 // LH-06: one emphasis surface per slide, authored (`emphasis: true` on a block or group) or automatic (a short last text after longer
-// blocks as a foot band, one of 30 characters or fewer after a lone long text as a pill), coloured from the scheme's own slots.
+// blocks as a foot band, one of 30 characters or fewer after a lone long text as a pill), colored from the scheme's own slots.
 // LH-68: a metric in a `metrics: "tile"` region (the gallery scorecard) is laid out from its whole card.
 const { layouts } = gallery;
 const long = (name) => `${name} should focus the next cycle on improving evaluation timelines and family communication while making the operating tradeoffs clear.`;
@@ -95,7 +95,7 @@ test('LH-06: the surface keeps every text role at 4.5:1 and stands off the slide
     checked++;
   }
   assert.ok(checked > 100);
-  // No colour is invented: the fill is one of the scheme's slots.
+  // No color is invented: the fill is one of the scheme's slots.
   const scheme = gallery.colorSchemes['cool-horizon'];
   const fill = emphasisSurface(scheme, resolveColorRoles(scheme)).fill;
   assert.ok(Object.values(scheme).some((value) => typeof value === 'string' && value.toUpperCase().startsWith(fill)));
@@ -137,4 +137,31 @@ test('LH-68: the scorecard draws its metrics as tiles that fill their cards, one
     }
     assert.deepEqual(result.diagnostics.filter((entry) => entry.code === 'text-overflow'), []);
   }
+});
+
+test('LH-06, LH-68: no rule costs a block its size; the pill follows its text', () => {
+  const sizes = (result) => new Map(result.items.filter((item) => item.text && !['title', 'subtitle', 'tag'].includes(item.field)).map((item) => [item.path, item.text.fontSize]));
+  const without = (slide) => ({ ...slide, blocks: slide.blocks.map((block, index) => (index === slide.blocks.length - 1 ? { ...block, emphasis: false } : block)) });
+  // The pill sits one gap under the long text's last line, in the text's column, at the size the short text has without it.
+  const pillSlide = { title: 'Decision options', blocks: [{ text: long('North Metro') }, { text: 'Signal' }] };
+  for (const layout of [undefined, layouts.hero, layouts['two-column'], layouts.closing]) for (const direction of ['ltr', 'rtl']) {
+    const options = { direction, ...(layout ? { layout } : {}) }, result = composeSlide(pillSlide, options), plain = composeSlide(without(pillSlide), options);
+    assert.equal(result.emphasis?.shape, 'pill');
+    const body = result.items.find((item) => item.path === 'slides.0.blocks.0.text'), pill = result.emphasis.box;
+    const bottom = body.box.y + (body.text.placement?.height ?? body.text.lines.length * body.text.lineHeight);
+    assert.ok(pill.y > bottom && pill.y - bottom <= 720 / 30 + 1, `${direction}: one gap under the text (${pill.y - bottom})`);
+    assert.ok(pill.x >= body.box.x - 0.5 && pill.x + pill.width <= body.box.x + body.box.width + 0.5, `${direction}: in the text's column`);
+    for (const [path, size] of sizes(plain)) assert.ok((sizes(result).get(path) ?? Infinity) >= size - 1e-6, `${direction}: ${path} keeps ${size}`);
+  }
+  // A band that would shrink the blocks above it is not drawn.
+  const tight = { title: 'Tight', blocks: [{ text: `${long('A')} ${long('B')} ${long('C')}` }, { text: `${long('D')} ${long('E')}` }, { text: 'Next step: name the pilot lead.' }] };
+  const banded = composeSlide(tight), plainTight = composeSlide(without(tight));
+  for (const [path, size] of sizes(plainTight)) assert.ok((sizes(banded).get(path) ?? Infinity) >= size - 1e-6, `${path} keeps ${size}`);
+  // A scorecard tile never fits a role smaller than the stacked metric did.
+  const metric = (value, description) => ({ metric: { value, label: 'Primary signal', description, trend: 'down' } });
+  const four = { title: 'STEM Lab Funding Proposal: signal trend', blocks: [metric('$4.8M', 'Reset field safety practices before tower crane installation'), metric('91%', 'Increase household recycling participation with clearer guidance'), metric('$820K', 'Approve controls for customer-facing predictive models'), metric('11 days', 'Show regional patterns with maps, charts, and concise interpretation')] };
+  const stacked = { ...layouts.scorecard, regions: layouts.scorecard.regions.map(({ metrics, ...region }) => region) };
+  const roles = (result) => new Map(result.items.filter((item) => item.metricLayout).flatMap((item) => item.metricLayout.parts.filter((part) => part.visible && part.fit).map((part) => [`${item.path}#${part.role}`, part.fit.fontSize])));
+  const tiles = roles(composeSlide(four, { layout: layouts.scorecard })), stacks = roles(composeSlide(four, { layout: stacked }));
+  for (const [key, size] of stacks) assert.ok(tiles.get(key) >= size - 1e-6, `${key}: ${tiles.get(key)} against ${size}`);
 });

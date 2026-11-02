@@ -555,7 +555,7 @@ export interface EmphasisSurface {
   fill: string;
   /**
    * The roles of the content on the surface: {@link resolveColorRoles} for `variant`, with every text role (text, textSecondary, primary,
-   * secondary, accent) under {@link EMPHASIS_TEXT_MIN_CONTRAST} on the fill replaced by `text`, so a metric value in the primary colour on an
+   * secondary, accent) under {@link EMPHASIS_TEXT_MIN_CONTRAST} on the fill replaced by `text`, so a metric value in the primary color on an
    * accent card does not vanish into it. `dark` is whether the surface takes light text.
    */
   roles: ResolvedColorRoles;
@@ -563,7 +563,7 @@ export interface EmphasisSurface {
 
 /**
  * LH-06: the emphasis surface of a slide whose roles are `slide`, from the slide's own scheme slots through the LH-01 variant machinery
- * (no colour is invented). A light slide takes the brand dark (dark2, as the `brand` layout variant), then dark1, then the accents in the
+ * (no color is invented). A light slide takes the brand dark (dark2, as the `brand` layout variant), then dark1, then the accents in the
  * slide's order; a dark slide takes its accents in order (Claude Design's accent card on a dark deck, with the text the accent's map
  * gives: dark1 where it reads better), then light1. The first candidate whose text reaches {@link EMPHASIS_TEXT_MIN_CONTRAST} on its fill and
  * whose fill reaches {@link EMPHASIS_SURFACE_MIN_CONTRAST} against the slide background is the surface; with none, the candidate with the most

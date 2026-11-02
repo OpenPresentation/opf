@@ -930,7 +930,7 @@ function renderSlideContent(bound, width, height, options) {
     return options.trace && item.region !== undefined && drawn ? tag('g',{'data-opf-region':item.region},drawn) : drawn;
   });
 }
-// LH-06: the slide as an item on the emphasis surface sees it: the surface fill is its background and the surface's roles are its colours.
+// LH-06: the slide as an item on the emphasis surface sees it: the surface fill is its background and the surface's roles are its colors.
 function emphasisBound(bound, surface) {
   const roles = surface.roles;
   return { ...bound, design: { ...bound.design, backgroundColor: surface.fill, darkBackground: roles.dark, roles, colors: { ...bound.design.colors,

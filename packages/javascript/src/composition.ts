@@ -296,7 +296,7 @@ export interface ComposedItem {
    */
   titleSplit?: { part: 'topic' | 'qualifier'; start: number; end: number };
   /**
-   * LH-06: this item is drawn on the slide's emphasis surface (`SlideComposition.emphasis`): engines colour it with the surface's roles
+   * LH-06: this item is drawn on the slide's emphasis surface (`SlideComposition.emphasis`): engines color it with the surface's roles
    * (core `emphasisSurface`), not the slide's. Absent on every other item.
    */
   emphasis?: true;

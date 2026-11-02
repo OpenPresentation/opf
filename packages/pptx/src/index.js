@@ -2393,7 +2393,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // Card text sits on a literal card fill, not the slide background: keep it literal.
     // LH-54: the card fill is core's card neutral (a filled surface on a dark slide whose scheme surface is the background), which a metric is coloured against.
     const cardNeutral = slideContext.roles.neutrals?.card;
-    // LH-06: an item on the emphasis surface is coloured with the surface's roles (literal, as card text is), and the surface, a tagged
+    // LH-06: an item on the emphasis surface is colored with the surface's roles (literal, as card text is), and the surface, a tagged
     // card frame in core's fill and radius with no line, is drawn under the first of them, as the preview draws it.
     const itemContext = item.emphasis && emphasisContext ? emphasisContext : item.frameBox ? {...slideContext, textColor: slideContext.colors.text, mutedColor: slideContext.colors.mutedText, ...(cardNeutral ? {cardFill: cardNeutral.hex} : {})} : slideContext;
     if (item.emphasis && emphasisContext && !emphasisDrawn) {
@@ -2487,7 +2487,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
 }
 
 // LH-06: the export context of an item on the emphasis surface (core's emphasisSurface): the surface fill is its background and the surface's
-// roles its colours, written literal (a slide-scheme colour they equal becomes a scheme colour again in writeSchemeColors).
+// roles its colors, written literal (a slide-scheme color they equal becomes a scheme color again in writeSchemeColors).
 function emphasisExportContext(context, surface) {
   const roles = surface.roles, fill = normalizeHex(surface.fill);
   const colors = {...context.colors, background: fill, text: normalizeHex(roles.text), mutedText: normalizeHex(roles.textSecondary), accent: normalizeHex(roles.primary), surface: normalizeHex(roles.surface), border: normalizeHex(roles.border)};

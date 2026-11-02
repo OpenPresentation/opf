@@ -58,12 +58,15 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
 
 test('LH-06 with LH-43 and LH-58: a foot band is no sibling of the blocks above it, which still share one size', () => {
   const text = (name, more = '') => ({ text: `${name} should focus the next cycle on secure funding for hands-on robotics and chemistry labs${more}.` });
-  const slide = { title: 'Demo moment', blocks: [text('Prairie Ridge'), text('Canyon Unified', ' while making the operating tradeoffs clear to student services stakeholders and families across the district'), text('Morrow Labs'), { text: 'Next step: name the pilot lead.' }] };
+  const slide = { title: 'Demo moment', blocks: [text('Prairie Ridge'), text('Canyon Unified'), text('Morrow Labs'), { text: 'Next step: name the pilot lead.' }] };
   for (const direction of ['ltr', 'rtl']) for (const layout of [undefined, layouts.pillars]) {
     const result = composeSlide(slide, { direction, ...(layout ? { layout } : {}) });
     assert.equal(result.emphasis?.shape, 'band');
     const above = result.items.filter((item) => item.field === 'text' && !item.emphasis);
     assert.equal(new Set(above.map((item) => item.text.fontSize)).size, 1, 'the blocks above share one size');
     assert.deepEqual(overflow(result), []);
+    // The band costs no block its size (LH-06's guard): the blocks above keep the size they have without it.
+    const plain = composeSlide({ ...slide, blocks: slide.blocks.map((block, index) => (index === 3 ? { ...block, emphasis: false } : block)) }, { direction, ...(layout ? { layout } : {}) });
+    for (const item of above) assert.ok(item.text.fontSize >= plain.items.find((entry) => entry.path === item.path).text.fontSize - 1e-6, item.path);
   }
 });
