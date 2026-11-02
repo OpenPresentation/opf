@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf, render, pptx]
+---
+LH-40 and LH-45 (layout harvest): overflow is measured and visible, and never fails a non-strict export. A quote, code or metric part that finds no usable space (its `invalid-part-box` diagnostic) is now laid out at the readability floor in the room its cell leaves, so the preview and the PPTX export draw it, overflowing, beside its diagnostic; before, both threw `layout-overflow` and the whole export failed (the code layout with five blocks). The layout functions take the new `floorFallback` option for this; `composeSlide` sets it on the layout it accepts, so candidate scores, card insets, findings and bounds are those of the layout without it. A quote, code, metric or timeline part that reaches past its cell (its card, when it has one) is a `text-overflow` diagnostic at the part's path, also when its own layout accepted it in a taller box: a metric laid out at its row's shared height could end past its card with no finding. Strict composition (`overflow: "error"`) still fails on these findings.

@@ -1305,6 +1305,22 @@ export interface QuoteLayoutOptions {
   citationMarker?: (runPath: string) => string | undefined;
   /** BCP-47 tag of the deck language: it picks the quotation marks (`quoteMarksFor`). Without one the marks are English (“…”). */
   language?: string;
+  /**
+   * LH-40: lay out a part that has no usable space at the readability floor in the room its cell leaves (`floorRoom`), so engines draw
+   * it, overflowing, instead of failing the export. Its `invalid-part-box` finding, the other diagnostics and `bounds` stay those of the
+   * layout without it, and a strict (`overflow: 'error'`) layout still throws first. composeSlide sets it on the layout it accepts only:
+   * candidates are scored, and a card's inset is given up, by the parts that found no room.
+   */
+  floorFallback?: boolean;
+}
+/**
+ * LH-40: the room a part that found no usable space is drawn in at the readability floor: its own box moved into the cell, down to the
+ * cell's foot, with the cell's width when it has none of its own. Its text overflows this room; the finding says so.
+ */
+function floorRoom(area: LayoutBox, cell: LayoutBox): LayoutBox {
+  const wide = Number.isFinite(area.x) && Number.isFinite(area.width) && area.width > 0;
+  const y = Number.isFinite(area.y) ? Math.min(Math.max(area.y, cell.y), cell.y + cell.height) : cell.y;
+  return { x: wide ? area.x : cell.x, y, width: wide ? area.width : cell.width, height: cell.y + cell.height - y };
 }
 /** The displayed runs of a rich quote body: the quotation marks join the first and last run. */
 function quoteBodyRuns(runs: readonly (string | RichTextRun)[], marks: QuoteMarks): (string | RichTextRun)[] {
@@ -1467,6 +1483,11 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   if (photo) occupiedParts.push(photo.box);
   const bottom = Math.max(box.y, ...occupiedParts.map(area => area.y + area.height));
   const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  // LH-40: a part with no room is set at the floor in what its cell leaves; it overflows, and its finding above stands.
+  if (options.floorFallback) for (const part of parts) if (!part.fit) {
+    const room = floorRoom(part.box, box), floorFit = fit(part, {...room, height:Math.max(room.height, minimum*1.22)}, minimum, minimum);
+    if (floorFit) { part.box = room; part.fit = {...floorFit, overflow:true}; }
+  }
   return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
@@ -1672,14 +1693,16 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
     primary.box.x+=offset;unit.box.x+=offset;
   }
-  for (const part of parts) if (part.fit) {
+  const position=(part:MetricTextPart)=>{
+    if(!part.fit)return;
     if(part.fit.placement) {
       part.fit={...part.fit,placement:{...part.fit.placement,lines:part.fit.placement.lines.map(line=>({...line,x:line.x+part.box.x,y:line.y+part.box.y,baseline:line.baseline+part.box.y,outline:line.outline?{...line.outline,x:line.outline.x+part.box.x,y:line.outline.y+part.box.y}:null}))}};
       part.linePositions=part.fit.placement!.lines.map(({x,baseline})=>({x,baseline}));
     } else part.linePositions=part.fit.sourceLines.map((line,index)=>({
       x:part.box.x+(part.box.width-line.width)*alignmentFactor,baseline:part.box.y+part.fit!.fontSize+index*part.fit!.lineHeight,
     }));
-  }
+  };
+  for (const part of parts) position(part);
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
   for (const part of parts.filter(part=>part.visible)) {
@@ -1699,6 +1722,11 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
   const bottom = Math.max(box.y, ...visible.map(part => part.box.y + occupied(part.fit!)));
   const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  // LH-40: a field with no room is set at the floor in what its cell leaves; it overflows, and its finding above stands.
+  if (options.floorFallback) for (const part of parts) if (part.visible&&!part.fit) {
+    const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
+    part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
+  }
   return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
@@ -2100,6 +2128,11 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   // The panel a code body needs: the insets around the metadata and the source lines (the whole cell when the layout failed).
   const bottom=body.fit&&!body.fit.overflow?body.box.y+body.box.height+18:box.y+box.height;
   const bounds={x:box.x,y:box.y,width:box.width,height:Math.min(box.height,Math.max(bottom-box.y,0))};
+  // LH-40: a part with no room is set at the floor in what the panel leaves; it overflows, and its finding above stands.
+  if (options.floorFallback) for (const part of parts) if (!part.fit) {
+    const room=floorRoom(part.box,usable(inner)?inner:box);
+    part.box=room;part.fit={...fitCodeText(part.text,room,minimum,minimum,scale,textWidthMeasurer(part.style,options.textMeasurement)),overflow:true};
+  }
   return {bounds,algorithm:'code-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
 }
 
@@ -2994,15 +3027,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (languageTag === null) languageTag = quoteLanguage(options.presentation, options.slideIndex);
     return languageTag;
   };
-  const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
+  const measureQuote = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,floorFallback,
     ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),
   });
-  const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+  const measureCode = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
   });
-  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
+    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
     textRasterPadding:options.textRasterPadding,
     align:alignmentFor('metric'),direction:textDirection,
   });
@@ -3231,10 +3264,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
     const textValue = contentText(node.field, node.value);
-    const measureInternal = () => [
-      node.field === 'quote' ? measureQuote(node,box,settings) : undefined,
-      node.field === 'code' ? measureCode(node,box,settings) : undefined,
-      node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined,
+    const measureInternal = (floorFallback = false) => [
+      node.field === 'quote' ? measureQuote(node,box,settings,floorFallback) : undefined,
+      node.field === 'code' ? measureCode(node,box,settings,floorFallback) : undefined,
+      node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings, floorFallback) : undefined,
     ] as const;
     let [quoteLayout, codeLayout, metricLayout] = measureInternal();
     // A quote, code or metric that has no room inside its card's inset takes the whole card: content before padding.
@@ -3246,6 +3279,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       if (caption) box = caption.mediaBox;
       [quoteLayout, codeLayout, metricLayout] = measureInternal();
     }
+    // LH-40: a part that still has no room is drawn at the readability floor, overflowing, with its finding: the export never fails on it
+    // (a strict composition still does, on the finding).
+    if (unfit(quoteLayout) || unfit(codeLayout) || unfit(metricLayout)) [quoteLayout, codeLayout, metricLayout] = measureInternal(true);
     if (caption) diagnostics.push(...caption.diagnostics);
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
@@ -3796,6 +3832,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
     else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
+    // LH-45: nothing draws past its cell (its card, when it has one) without a finding. A layout checks its parts against the box it was
+    // given, and a metric is given its row's shared height, which can be taller than its own cell: the accepted parts are checked here.
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal && !internal.diagnostics.length) {
+      const cell = item.frameBox ?? item.box;
+      for (const part of internal.parts as readonly { path: string; role: string; box: LayoutBox; visible?: boolean }[]) {
+        const area = part.box;
+        if (part.visible === false || area.x >= cell.x - .01 && area.y >= cell.y - .01 && area.x + area.width <= cell.x + cell.width + .01 && area.y + area.height <= cell.y + cell.height + .01) continue;
+        diagnostics.push({ code: "text-overflow", path: part.path, message: `The ${item.field} ${part.role} extends outside its cell; give the block more space, shorten it, or split the slide.` });
+      }
+    }
     for (const entry of (item.text as ListFit | undefined)?.listEntries ?? []) {
       if (entry.marker.number?.adapted) numberingDiagnostics.push({ code: "numbering-adapted", path: entry.textPath ?? item.path, message: `Roman numerals stop at 3999; this entry is numbered ${entry.marker.number.value} in arabic, as PowerPoint draws it.` });
     }
