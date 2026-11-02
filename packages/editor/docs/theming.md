@@ -4,6 +4,8 @@ The editor's chrome (the source pane, the slide row, the export menu, the presen
 
 `src/styles/tokens.css` defines the values below (and `test/styles.mjs` keeps it equal to this page). `@openpresentation/opf-editor/styles.css` ships them; import it once.
 
+The classes, state attributes and icon names of each part are the styling contract in [Styling the chrome](styling.md); this page covers the tokens.
+
 ## The contract
 
 | Role | Short name | Token | Light | Dark |
@@ -37,6 +39,17 @@ The editor's chrome (the source pane, the slide row, the export menu, the presen
 | Size | `controlHeight` | `--opf-ui-control-h` | `32px` (40px with `data-density="touch"`, 44px on a coarse pointer) | same |
 | Depth | `shadow` | `--opf-ui-shadow-pop` | `0 8px 24px rgba(0, 0, 0, 0.1)` | `0 8px 24px rgba(0, 0, 0, 0.4)` |
 | Motion | `motion` | `--opf-ui-ease` | `120ms ease` (off under `prefers-reduced-motion`) | same |
+| Bar | `barBackground` | `--opf-ui-bar-bg` | `var(--opf-ui-surface)` | same |
+| Bar | `barText` | `--opf-ui-bar-fg` | `var(--opf-ui-fg)` | same |
+| Bar | `barBorder` | `--opf-ui-bar-border` | `var(--opf-ui-border)` | same |
+| Bar | `barGap` | `--opf-ui-bar-gap` | `8px` | same |
+| Bar | `barPadding` | `--opf-ui-bar-padding` | `6px 12px` (`4px 8px` in the `embed` layout) | same |
+| Bar | `barHeight` | `--opf-ui-bar-height` | `0px` | same |
+| Title | `titleFont` | `--opf-ui-title-font` | `var(--opf-ui-font)` | same |
+| Title | `titleSize` | `--opf-ui-title-size` | `15px` | same |
+| Title | `titleWeight` | `--opf-ui-title-weight` | `600` | same |
+| Title | `titleText` | `--opf-ui-title-fg` | `var(--opf-ui-fg)` | same |
+| Layer | `overlayZ` | `--opf-ui-z-overlay` | `1000` | same |
 
 Rules every component follows, and a host can rely on:
 
@@ -83,6 +96,10 @@ html.dark .opf-ui {
 ```
 
 A page that forces light inside a dark page marks `data-theme="light"` on the editor (or an ancestor); the stylesheet then restores the light values for everything inside.
+
+## Component tokens (CE-29)
+
+The `Bar`, `Title` and `Layer` rows restyle one part each and derive from the core tokens, so they follow the scheme and a host's theme until you set them: `barBackground`, `barText`, `barBorder`, `barGap`, `barPadding` and `barHeight` (the minimum height) style the toolbar's bar; `titleFont`, `titleSize`, `titleWeight` and `titleText` the deck title; `overlayZ` the layer of the expanded editor (the older `--opf-expand-z` still wins when set). They are set like any other token (`theme.tokens`, or on the `.opf-ui` elements). [Styling the chrome](styling.md) says where each is read.
 
 ## Fonts
 

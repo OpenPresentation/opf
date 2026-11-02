@@ -1,0 +1,30 @@
+/* The help item (src/shortcuts-sheet.js). The sheet itself reuses the source pane's shortcuts dialog styles (shortcuts.css: .opf-shortcuts*).
+   Uses only --opf-ui-* tokens. */
+.opf-help-button {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease);
+}
+.opf-help-button[data-density="touch"] { width: 40px; height: 40px; }
+.opf-help-button:hover:not(:disabled),
+.opf-help-button[aria-expanded="true"] { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-help-button:disabled { opacity: 0.4; cursor: default; }
+.opf-help-button:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 2px; }
+.opf-help-icon { width: 18px; height: 18px; }
+.opf-help-button[data-density="touch"] .opf-help-icon { width: 20px; height: 20px; }
+.opf-help-sheet { z-index: 80; }
+.opf-help-close-icon { width: 16px; height: 16px; flex: none; }
+@media (prefers-reduced-motion: reduce) {
+  .opf-help-button { transition: none; }
+}

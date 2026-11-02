@@ -1,6 +1,6 @@
 # Browser preview and live editing
 
-Editor 0.26.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+The editor (`@openpresentation/opf-editor`) provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
@@ -9,15 +9,21 @@ The published canvas covers the interactions below; complete PowerPoint feature 
 
 `@openpresentation/opf-editor/workspace` mounts everything the sections below build by hand (the canvas, the source pane, the slide navigator and thumbnails, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave) over one session and one fonts handle: `createOpfEditor(element, { document, catalogs, fonts })`. `@openpresentation/opf-editor/react` has `<OpfEditor>` and the hooks `useOpfEditor`, `useOpfDocument`, `useOpfSelection` and `useOpfCursor` for React 18 and 19. The chrome reads `--opf-ui-*` tokens that a `theme` option sets. The source pane tells the host where the caret is (`cursor` event: pointer, id path, selection), reveals a field without taking focus (`sourcePane.revealPath`) and draws the host's own marks (`sourcePane.setDecorations`). See [Embedding the editor](../packages/editor/docs/embedding.md) and [Theming the editor chrome](../packages/editor/docs/theming.md).
 
+## Toolbar, presets and the web component
+
+The editor's title bar is a toolbar of named items. `layout` picks the preset: `"embed"` is the slide alone under a compact bar (the deck's name, Undo and Redo, the slide counter, Design, Expand and Present) for a page that shows a deck, `"viewer"` is the same read-only, `"canvas"` adds the slide row, and `"full"` is the whole editor with the source pane. `toolbar: ["title", "history", "spacer", "expand"]` replaces a preset's items and order, `actions` adds the host's own buttons (Save, Share, Download), and `guardUnload`, `editor.dirty`, the `save` event (Ctrl/Cmd+S) and `editor.markSaved()` connect the editor to the host's storage. Each item can instead sit in the page's own header (`toolbar: false`, `slots: { title, history, counter, expand }`), or the host builds its own controls from the handle (`getDeckName`, `setDeckName`, `undo`, `setSlide`, `expand`) and its events (`deckName`, `slide`, `dirty`, `expand`). The bar and its parts are plain DOM with stable classes, state attributes and `--opf-ui-*` tokens for plain CSS, and an `icons` option.
+
+The same editor is one HTML tag, `<opf-editor layout="embed" toolbar="title,history,counter,expand">` with an inline or fetched deck and `opf-deck-name`, `opf-dirty` and `opf-save` events, and a React component with `useOpfDeckName` and `useOpfDirty`. The [chrome guide](../packages/editor/docs/chrome-guide.md) walks through each task with code from runnable pages (embed, viewer, full, your own header, headless, React, the web component and styling), [Embedding the editor](../packages/editor/docs/embedding.md#toolbar-and-presets) lists every item and priority, [Styling the chrome](../packages/editor/docs/styling.md) is the contract of its classes and icons, and [The web component](../packages/editor/docs/web-component.md) covers the tag.
+
 ## Install the published packages
 
-Use Node 24 with Core, editor, PPTX, renderer and Gallery 0.26.1. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
+Use Node 24. Core, editor, PPTX, renderer and Gallery are released together at one shared version, so install them in one command and keep them on the same version (pin it with `--save-exact` once you have one). The toolbar, the presets, the save contract and the web component above are in the releases after 0.29.1. The [quickstart](quickstart.md) is the shared command-line first run:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.26.1 @openpresentation/opf-render@0.26.1 @openpresentation/opf-editor@0.26.1 @openpresentation/opf-pptx@0.26.1 @openpresentation/gallery@0.26.1
+npm install @openpresentation/opf @openpresentation/opf-render @openpresentation/opf-editor @openpresentation/opf-pptx @openpresentation/gallery
 ```
 
-No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.20.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
+No paid service or provider account is required. The agent skills install with `npx @openpresentation/cli skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, call `convert("deck.opf.json", "deck.pdf")` (or `convert(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` for the bytes) from `@openpresentation/opf` in Node, which draws with the same engines and the bundled fonts; `open("deck.pptx")` reads a PowerPoint file back into a presentation for the editor ([OPF files in Node](node.md)).
 

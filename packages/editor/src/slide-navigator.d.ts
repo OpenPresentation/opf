@@ -1,3 +1,4 @@
+import type { OpfIcons } from "./icons.js";
 import type { EditorSession } from "./index.js";
 
 export interface SlideNavigatorLabels {
@@ -22,6 +23,8 @@ export interface SlideNavigatorOptions {
   /** `"comfortable"` (32px controls, default) or `"touch"` (40px). */
   density?: "comfortable" | "touch";
   labels?: SlideNavigatorLabels;
+  /** Replace the arrows: `previous` and `next` (`.opf-nav-icon`). See `OpfIcon`. */
+  icons?: OpfIcons<"previous" | "next">;
   /** False to stop following the editor on its own; call `refresh()` yourself. Default true. */
   autoRefresh?: boolean;
 }

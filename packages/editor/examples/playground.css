@@ -385,6 +385,24 @@ select {
   transition: border-color var(--opf-ui-ease);
 }
 
+/* CE-28: the deck title part (src/deck-title.js) in the breadcrumb; the input keeps the look of the field it replaced (id document-name). */
+.document-title {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 340px;
+}
+
+.document-title .opf-title {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.document-title .opf-title-input {
+  width: 100%;
+}
+
 .breadcrumb input:hover {
   border-color: var(--opf-ui-border);
 }
@@ -1962,7 +1980,8 @@ dialog::backdrop {
     flex: 1 1 100%;
   }
 
-  .breadcrumb input {
+  .breadcrumb input,
+  .document-title {
     max-width: none;
   }
 

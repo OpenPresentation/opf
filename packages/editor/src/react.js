@@ -257,3 +257,21 @@ export function useOpfCursor(editor) {
   const subscribe = useCallback(subscribeTo(editor, "cursor"), [editor]);
   return useSyncExternalStore(subscribe, () => (editor ? editor.sourceCursor : null), () => null);
 }
+
+/** CE-28 wave 2: whether the editor has unsaved changes, following its `dirty` event. */
+export function useOpfDirty(editor) {
+  const subscribe = useCallback(subscribeTo(editor, "dirty"), [editor]);
+  return useSyncExternalStore(subscribe, () => Boolean(editor?.dirty), () => false);
+}
+
+/**
+ * CE-28: the deck's name and a setter, `[name, setName]`. `name` is the document's `name` (`""` without one), read again on every `deckName`
+ * event (a rename from the title, the source pane, undo or the host); `setName(next)` is `editor.setDeckName(next)`: one undoable edit through
+ * the session (an empty name removes it), queued while the editor is not mounted yet. Returns `["", () => false]` while there is no editor.
+ */
+export function useOpfDeckName(editor) {
+  const subscribe = useCallback(subscribeTo(editor, "deckName"), [editor]);
+  const name = useSyncExternalStore(subscribe, () => (editor ? editor.getDeckName() : ""), () => "");
+  const setName = useCallback((next) => (editor ? editor.setDeckName(next) : false), [editor]);
+  return [name, setName];
+}

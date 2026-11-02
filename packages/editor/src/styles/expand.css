@@ -1,0 +1,69 @@
+/* CE-28: the expand-editor part (src/editor-expand.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+
+/* ---- the expanded editor -------------------------------------------------------------------------------------------------------------- */
+/* The editor's host element becomes a fixed overlay over the viewport; it stays where it is in the DOM. !important beats the sizes a host sets
+   inline or by class on the element. A host can raise or lower the overlay with --opf-ui-z-overlay (default 1000: above page chrome, below the
+   presenter at 2000); --opf-expand-z is the older name and still wins when set. An ancestor with a transform, filter or containment would make "fixed" relative to itself; the host owns that. */
+[data-opf-expanded] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: var(--opf-expand-z, var(--opf-ui-z-overlay)) !important;
+  box-sizing: border-box !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: var(--opf-ui-bg);
+  color: var(--opf-ui-fg);
+  overscroll-behavior: contain;
+}
+/* The target takes the focus when it expands; the whole viewport must not wear a ring. */
+[data-opf-expanded]:focus,
+[data-opf-expanded]:focus-visible { outline: none; }
+
+/* ---- the button ----------------------------------------------------------------------------------------------------------------------- */
+.opf-expand-button,
+.opf-expand-button *,
+.opf-expand-button *::before,
+.opf-expand-button *::after { box-sizing: border-box; }
+.opf-expand-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease);
+}
+.opf-expand-button[data-density="touch"] {
+  width: 40px;
+  height: 40px;
+}
+.opf-expand-button:hover { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-expand-button[aria-pressed="true"] { color: var(--opf-ui-fg); }
+.opf-expand-button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+.opf-expand-button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.opf-expand-button[aria-disabled="true"]:hover { background: transparent; color: var(--opf-ui-muted-fg); }
+.opf-expand-button .opf-expand-icon { flex: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .opf-expand-button { transition: none; }
+}

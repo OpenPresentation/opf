@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Editor chrome examples</title>
+<link rel="stylesheet" href="./page.css">
+</head>
+<body>
+<h1>Editor chrome examples</h1>
+<p class="lead">Eight small pages, one idea each. They run the built package from this folder; the guide that explains them is <code>packages/editor/docs/chrome-guide.md</code>.</p>
+<nav class="index" aria-label="Examples">
+  <ul>
+    <li><a href="./embed.html">embed</a><span><code>layout: "embed"</code> in a 720 by 420 card, with the deck name shown outside it.</span></li>
+    <li><a href="./viewer.html">viewer</a><span><code>layout: "viewer"</code>: read-only, Present and Expand, and a host "Download PPTX" action.</span></li>
+    <li><a href="./full.html">full</a><span><code>layout: "full"</code> with Save and Share actions, <code>guardUnload</code>, Ctrl/Cmd+S and a dirty indicator.</span></li>
+    <li><a href="./own-header.html">own header</a><span>No toolbar: the title, history, counter, design menu and expand button in the page's own header (<code>slots</code>).</span></li>
+    <li><a href="./headless.html">headless</a><span>The page's own title field and buttons, driven by the handle and its events.</span></li>
+    <li><a href="./react.html">react</a><span><code>&lt;OpfEditor&gt;</code> with <code>useOpfDeckName</code> and <code>useOpfDirty</code>.</span></li>
+    <li><a href="./element.html">element</a><span><code>&lt;opf-editor&gt;</code> with an inline deck and an <code>opf-deck-name</code> listener.</span></li>
+    <li><a href="./styled.html">styled</a><span>Styling hooks: a dark bar, a serif title, custom icons and a pill-shaped review status.</span></li>
+  </ul>
+</nav>
+</body>
+</html>

@@ -102,10 +102,18 @@ ed = createOpfEditor(document.body, {
     slides: element('slide-list'), slideToolbar: element('slide-toolbar'),
     sorter: element('sorter-list'), sorterView: element('sorter-view'), outline: element('outline-view'), layouts: element('layouts-view'),
     export: element('export-menu'), present: element('present-button'),
+    // CE-28: the editor's toolbar items in the page's own top bar: the deck title, the review pill, the Design quick menu, help and expand.
+    title: element('document-title'), reviewPill: element('toolbar-review'), designMenu: element('toolbar-design'), help: element('toolbar-help'), expand: element('toolbar-expand'),
     status: element('status'), banner: element('restore-banner'), autosave: element('autosave-status'),
     overlay: document.body,
   },
   persistence: hostPersistence,
+  // The page runs its own Review tab (review-controls.js) and feeds the pill its counts; the editor runs no second review.
+  panels: { review: false },
+  // The Design menu's "More design options…" opens the page's Design tab.
+  designMenu: { onOpenPanel: () => showPanel('design', true) },
+  // The title's field keeps the id the page and its tests have always used.
+  on: { mounted: ({ editor: handle }) => handle.deckTitle?.input.setAttribute('id', 'document-name') },
   export: { exportPptx: (deck, request) => pptxExporter({ editor, fonts, measurementFor: value => layoutFor(value, 0).fonts.textMeasurement })(deck, request) },
   // The page has its own Ctrl/Cmd+Z handler below (it reports through the status line).
   shortcuts: false,
@@ -114,6 +122,10 @@ ed = createOpfEditor(document.body, {
   labels: { thumbnails: 'Slide thumbnails' },
 });
 editor = ed.session;
+// The handle, for a same-origin host that embeds the playground in an iframe (pptx.gallery): `iframe.contentWindow.opfEditor` (docs/embedding.md).
+globalThis.opfEditor = ed;
+// The review pill opens the page's own Review tab.
+ed.on('review-open', () => showPanel('review', true));
 // A host page (or a test) that wants the live editor and fonts handle passes `OPF_EDITOR_HOST.onReady`.
 globalThis.OPF_EDITOR_HOST?.onReady?.({ editor: ed, session: editor, fonts });
 const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'variant', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
@@ -206,7 +218,6 @@ function render({ presentation: deck, slideIndex, geometry, diagnostics }) {
   element('slide-number').textContent = String(slideIndex + 1).padStart(2, '0');
   element('slide-title').textContent = deck.slides[slideIndex].title ?? 'Untitled slide';
   element('page-position').textContent = `Slide ${slideIndex + 1} of ${deck.slides.length}`;
-  element('document-name').value = deck.name ?? 'Untitled presentation';
   element('notes').value = deck.slides[slideIndex].notes ?? '';
   element('undo').disabled = !editor.canUndo; element('redo').disabled = !editor.canRedo;
   // The accent font makes the font scheme an object ({id, accent}); the select shows its id.
@@ -343,8 +354,6 @@ for (const panel of inspectorPanels) {
   };
 }
 element('zoom').onchange = updateZoom;
-element('document-name').onchange = () => act(() => editor.set('name',element('document-name').value.trim() || 'Untitled presentation'));
-element('document-name').onkeydown = event => { if(event.key==='Enter') event.currentTarget.blur(); };
 element('apply-notes').onclick = () => act(() => editor.set(`slides.${ed.slideIndex}.notes`,element('notes').value));
 element('download').onclick = () => {
   if(!ed.commit())return;
@@ -392,7 +401,7 @@ installMobileControls();
 installTemplateControls({editor,getCanvas:()=>ed.canvas,getSlideIndex:()=>ed.slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{ed.setSlide(value);},status,fonts});
 // RR-29: the Review tab. A finding's go-to selects the slide and the content; the panel re-checks after every redraw (render()).
 const openPropertiesAt = pointer => { element('open-properties').click(); propertiesInspector?.navigate(pointer); };
-review = installReviewControls({editor,getSlideIndex:()=>ed.slideIndex,goTo:(index,path)=>{keepInspectorPanel=true;try{ed.goTo(index,path);}finally{keepInspectorPanel=false;}selectedPath=path;select(path);},openProperties:openPropertiesAt,focusContentField:()=>{pendingContentFocus=true;ed.refresh();},status,measurementFor:(deck,index)=>layoutFor(deck,index).fonts.textMeasurement});
+review = installReviewControls({editor,getSlideIndex:()=>ed.slideIndex,goTo:(index,path)=>{keepInspectorPanel=true;try{ed.goTo(index,path);}finally{keepInspectorPanel=false;}selectedPath=path;select(path);},openProperties:openPropertiesAt,focusContentField:()=>{pendingContentFocus=true;ed.refresh();},status,measurementFor:(deck,index)=>layoutFor(deck,index).fonts.textMeasurement,onCounts:(counts)=>ed.reviewPill?.update(counts)});
 review?.refresh();
 installChartControls({editor,getSelectedPath:()=>selectedPath,status});
 installNumberingControls({editor,getCanvas:()=>ed.canvas,getSlideIndex:()=>ed.slideIndex,getSelectedPath:()=>selectedPath,status});

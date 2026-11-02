@@ -43,6 +43,14 @@
       "style": "./dist/styles.css",
       "default": "./dist/styles.css"
     },
+    "./styles.layered.css": {
+      "style": "./dist/styles.layered.css",
+      "default": "./dist/styles.layered.css"
+    },
+    "./icons": {
+      "types": "./dist/icons.d.ts",
+      "default": "./dist/icons.js"
+    },
     "./canvas": {
       "types": "./dist/canvas.d.ts",
       "default": "./dist/canvas.js"
@@ -263,9 +271,37 @@
       "types": "./dist/agent-handoff-dialog.d.ts",
       "default": "./dist/agent-handoff-dialog.js"
     },
+    "./editor-expand": {
+      "types": "./dist/editor-expand.d.ts",
+      "default": "./dist/editor-expand.js"
+    },
+    "./design-menu": {
+      "types": "./dist/design-menu.d.ts",
+      "default": "./dist/design-menu.js"
+    },
     "./slide-navigator": {
       "types": "./dist/slide-navigator.d.ts",
       "default": "./dist/slide-navigator.js"
+    },
+    "./deck-title": {
+      "types": "./dist/deck-title.d.ts",
+      "default": "./dist/deck-title.js"
+    },
+    "./toolbar": {
+      "types": "./dist/toolbar.d.ts",
+      "default": "./dist/toolbar.js"
+    },
+    "./review-pill": {
+      "types": "./dist/review-pill.d.ts",
+      "default": "./dist/review-pill.js"
+    },
+    "./shortcuts-sheet": {
+      "types": "./dist/shortcuts-sheet.d.ts",
+      "default": "./dist/shortcuts-sheet.js"
+    },
+    "./toolbar-actions": {
+      "types": "./dist/toolbar-actions.d.ts",
+      "default": "./dist/toolbar-actions.js"
     },
     "./thumbnail-strip": {
       "types": "./dist/thumbnail-strip.d.ts",
@@ -279,6 +315,14 @@
       "types": "./dist/workspace.d.ts",
       "default": "./dist/workspace.js"
     },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "default": "./dist/element.js"
+    },
+    "./element/define": {
+      "types": "./dist/element-define.d.ts",
+      "default": "./dist/element-define.js"
+    },
     "./canvas-variables": {
       "types": "./dist/canvas-variables.d.ts",
       "default": "./dist/canvas-variables.js"
@@ -287,7 +331,9 @@
   "types": "./dist/index.d.ts",
   "sideEffects": [
     "./dist/source-worker.js",
-    "./dist/styles.css"
+    "./dist/styles.css",
+    "./dist/styles.layered.css",
+    "./dist/element-define.js"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -301,6 +347,7 @@
     "prepack": "pnpm run build",
     "check:font-hotlinks:built": "node ../../scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",
+    "build:chrome-examples": "node scripts/build-chrome-examples.mjs",
     "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
@@ -339,7 +386,8 @@
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
     "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs",
     "test:workspace-browser": "node test/workspace-browser.mjs",
-    "test:workspace-react-browser": "node test/workspace-react-browser.mjs"
+    "test:workspace-react-browser": "node test/workspace-react-browser.mjs",
+    "test:element-browser": "node test/element-browser.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",

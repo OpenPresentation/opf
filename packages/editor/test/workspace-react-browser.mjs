@@ -44,7 +44,7 @@ async function run(label, alias, expectedMajor) {
     // ---- StrictMode: one editor survives -----------------------------------------------------------------------------------------------
     await ev((d) => {
       const { React, createRoot } = window.R, h = window.h;
-      const { OpfEditor, useOpfDocument, useOpfSelection } = window.opfWs.react;
+      const { OpfEditor, useOpfDocument, useOpfSelection, useOpfDeckName } = window.opfWs.react;
       window.changes = [];
       // A probe that shows StrictMode really runs effects twice in this build: mount, cleanup, mount.
       window.probe = { mounts: 0, unmounts: 0 };
@@ -53,10 +53,13 @@ async function run(label, alias, expectedMajor) {
         const [editor, setEditor] = React.useState(null);
         const doc = useOpfDocument(editor);
         const selection = useOpfSelection(editor);
+        const [deckName, setDeckName] = useOpfDeckName(editor);
+        window.setDeckNameFromReact = setDeckName;
         return h('div', null,
           h(Probe),
           h('output', { id: 'name' }, doc?.name ?? 'none'),
           h('output', { id: 'selection' }, selection?.path ?? 'none'),
+          h('output', { id: 'deck-name' }, deckName || 'none'),
           show ? h(OpfEditor, { id: 'react-editor', className: 'mine', style: { width: 1100, height: 700 }, document: d, ...window.base(), theme: window.theme, readOnly: window.readOnly, view: window.view,
             onEditor: (value) => { if (value) window.fixture.created.push(value); else window.fixture.nulls += 1; setEditor(value); },
             onChange: (detail) => window.changes.push(`${label}:${detail.document.name}`) }) : null);
@@ -87,6 +90,15 @@ async function run(label, alias, expectedMajor) {
     assert.ok((await ev(() => window.changes)).some((entry) => entry === 'a:Renamed'));
     mark(`${label}: useOpfDocument and useOpfSelection follow the editor, and onChange fires`);
 
+    // CE-28: useOpfDeckName follows the name from anywhere and renames through the editor (one undoable edit).
+    await page.waitForFunction(() => document.querySelector('#deck-name').textContent === 'Renamed', undefined, { timeout: 10000 });
+    assert.equal(await ev(() => window.setDeckNameFromReact('From React')), true);
+    await page.waitForFunction(() => document.querySelector('#deck-name').textContent === 'From React' && document.querySelector('#react-editor .opf-title-input').value === 'From React', undefined, { timeout: 10000 });
+    assert.equal(await ev(() => window.fixture.created.at(-1).getDocument().name), 'From React');
+    await ev(() => window.fixture.created.at(-1).undo());
+    await page.waitForFunction(() => document.querySelector('#deck-name').textContent === 'Renamed', undefined, { timeout: 10000 });
+    mark(`${label}: useOpfDeckName shows the deck name, follows undo and renames through the editor`);
+
     // The latest callback: re-render with another closure.
     await ev(() => window.mount({ label: 'b' }));
     await ev(() => window.fixture.created.at(-1).session.set('name', 'Renamed twice'));
@@ -111,6 +123,7 @@ async function run(label, alias, expectedMajor) {
     const gone = await ev(() => ({ ...window.leaks(), destroyed: window.fixture.created.every((e) => e.destroyed), name: document.querySelector('#name').textContent }));
     assert.equal(gone.destroyed, true);
     assert.equal(gone.name, 'none', 'the hooks return undefined once the editor is gone');
+    assert.equal(await ev(() => document.querySelector('#deck-name').textContent), 'none', 'useOpfDeckName is empty without an editor');
     assert.deepEqual({ listeners: gone.listeners, observers: gone.observers }, { listeners: warm.listeners, observers: warm.observers }, 'unmount removes every listener and observer');
     mark(`${label}: unmount destroys the editor and leaves no listener or observer behind`);
 

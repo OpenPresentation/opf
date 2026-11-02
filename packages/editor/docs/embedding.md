@@ -26,7 +26,7 @@ The editor owns the content of the element you give it (it replaces it, and `des
 
 ## Layouts and parts
 
-`layout: "full"` (default) builds a bar (Undo, Redo, Find, the view switch, Export, Present), the source pane, the slide, the slide row (previous, counter, next and thumbnails), a status line and a side panel (Review, and Design when on). `"canvas"` builds the slide and its slide row. `"source"` builds only the source pane (its own bar, problems and status; no slide stage, no status line, no slide chunk), which fills the element. `"studio"` is the Presentation and Slide Studio and `"playground"` its first-contact preset, which `editor.setLayout()` switches between in place ([studio.md](studio.md)). `panels` turns any part on or off:
+`layout: "full"` (default) builds a toolbar (the deck title, Undo, Redo, Find, the view switch, autosave, Export, Present, expand and ⋯; see [Toolbar and presets](#toolbar-and-presets)), the source pane, the slide, the slide row (previous, counter, next and thumbnails), a status line and a side panel (Review, and Design when on). `"canvas"` builds the slide and its slide row. `"embed"` (CE-28) builds the slide alone under a compact toolbar, for a page that shows a deck (a homepage hero): no source, no slide row, no side panel. `"viewer"` is a deck to look at: read-only (unless you pass `readOnly: false`), the slide with its title, counter, Present and expand, no source, no strip and no Undo keys; Export when the `toolbar` lists it. `"source"` builds only the source pane (its own bar, problems and status; no slide stage, no status line, no slide chunk), which fills the element. `"studio"` is the Presentation and Slide Studio and `"playground"` its first-contact preset, which `editor.setLayout()` switches between in place ([studio.md](studio.md)). `panels` turns any part on or off:
 
 | `panels.` | Part | Default in `full` |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ createOpfEditor(page, {
 });
 ```
 
-Slot names: `source`, `canvas`, `slide` (the element hidden while another view shows), `properties`, `navigator`, `thumbnails`, `slides`, `slideToolbar`, `sorter`, `outline`, `layouts`, `export`, `present`, `review`, `design`, `find`, `banner` and `autosave` (the restore prompt and the autosave line), `status`, `overlay`.
+Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `views`, `expand`, `designMenu`, `reviewPill`, `help` and `actions` (see [Toolbar and presets](#toolbar-and-presets)), `source`, `canvas`, `slide` (the element hidden while another view shows), `properties`, `navigator`, `thumbnails`, `slides`, `slideToolbar`, `sorter`, `outline`, `layouts`, `export`, `present`, `review`, `design`, `find`, `banner` and `autosave` (the restore prompt and the autosave line), `status`, `overlay`.
 
 ## Options
 
@@ -75,16 +75,106 @@ Slot names: `source`, `canvas`, `slide` (the element hidden while another view s
 | `persistence` | `{ key, storage, debounceMs, ... }` (see "Autosave and restore" in the README); `key` is required |
 | `readOnly` | refuse every write from the editor's parts and lock the slide and the code; the host's own writes to `editor.session` still work |
 | `density`, `exportMode` | `"comfortable" | "touch" | "auto"` (follows the pointer); `"menu" | "sheet" | "auto"` (the sheet at 900px and under) |
-| `theme` | see [theming](theming.md) |
+| `toolbar` | the toolbar's items in order, or `false` for no bar; see [Toolbar and presets](#toolbar-and-presets) |
+| `expand` | `{ target, fullscreen }` for the expanded editor (the `expand` item, `editor.expand()`), or `false` to turn it off |
+| `actions` | the host's own toolbar buttons (`{ id, label, icon, title, run, enabled, pressed, primary }`); see [Actions](#actions) |
+| `designMenu` | `{ onOpenPanel }`: the Design quick menu's "More design options…" opens your own Design panel (the editor's own panel wins when it has one) |
+| `slideActions` | "+" and the context menu on the thumbnail strip (default true in `full` and `embed`) |
+| `guardUnload` | `true` (the browser asks before the page closes while `dirty`) or `(editor) => boolean`; see [Unsaved changes and save](#unsaved-changes-and-save) |
+| `icons` | the chrome's icons by name, one flat map; see [styling](styling.md) |
+| `theme` | see [theming](theming.md) and, for class hooks, layers and icons, [styling](styling.md) |
 | `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
 ## The handle
 
-`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `setSourceText(text, { format, name, rebase })` (raw text in the source pane, below) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
+`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `setSourceText(text, { format, name, rebase })` (raw text in the source pane, below) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `getDeckName()`, `setDeckName(name)` · `expand(on)`, `expanded` · `dirty`, `markSaved()`, `save()` · `setActions(list)` · `shortcuts()` · `toolbar`, `deckTitle`, `designMenu`, `reviewPill`, `helpButton`, `toolbarActions` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
 
-Events: `mounted` (the parts exist; the first update may still wait for fonts), `ready` (the first update is done), `change` (`{ document, canUndo, canRedo, event }`), `selection`, `cursor` (the caret of the source pane, below), `slide`, `view`, `source` (the verdict on the text: `valid`, `invalid` or `syntax`), `checking`, `fonts`, `geometry`, `sync` (after every update once fonts are ready, with the slide's geometry and layout notes computed when read), `render`, `draft`, `commit`, `cancel`, `status`, `error`, `kept`, `rename`, `export`, `persistence`, `review`, `panel`, `destroy`; the Studio adds `zoom`, `layout`, `command` and `layoutStudio`, and its `selection` carries the list (`items`, `primary`, `source`). An exception thrown by a listener is reported to `error` and does not stop the others.
+Events: `mounted` (the parts exist; the first update may still wait for fonts), `ready` (the first update is done), `change` (`{ document, canUndo, canRedo, event }`), `selection`, `cursor` (the caret of the source pane, below), `slide`, `view`, `source` (the verdict on the text: `valid`, `invalid` or `syntax`), `checking`, `fonts`, `geometry`, `sync` (after every update once fonts are ready, with the slide's geometry and layout notes computed when read), `render`, `draft`, `commit`, `cancel`, `status`, `error`, `kept`, `rename`, `export`, `persistence`, `review`, `panel`, `deckName` (`{ name, previous }`), `expand` (`{ expanded }`), `dirty` (`{ dirty }`), `save` (`{ document, text, format, draft }`), `review-open` (`{ counts, findings }`), `destroy`; the Studio adds `zoom`, `layout`, `command` and `layoutStudio`, and its `selection` carries the list (`items`, `primary`, `source`). An exception thrown by a listener is reported to `error` and does not stop the others.
 
 While the text in the source pane is not a valid deck, the editor says so (`editor.inSync` is `false`): the slide shows the last valid document and is locked, Export, Present and Undo wait for the fix.
+
+## Toolbar and presets
+
+CE-28. The bar of the built layouts is a toolbar of named items (`src/toolbar.js`, `@openpresentation/opf-editor/toolbar`). It stays on one row: when the items do not fit the width of the bar (the bar's own width, so an editor in a narrow column collapses too, not only on a phone), the collapsible ones move into the ⋯ menu, lowest priority first, and come back as the bar widens. The ⋯ menu is a `role="menu"` built from what each collapsed part offers (its `menuItems()`): the arrow keys, Home and End move, Enter and Space run an item, Escape closes it and gives the focus back to ⋯, Tab leaves it. An item that opens something (Find's field, a popover) keeps the focus it takes. Under a coarse pointer every control of the bar is 44px and the title field 16px.
+
+There are three ways to adopt it:
+
+- **A. A preset.** `layout: "full"`, `"canvas"`, `"embed"` or `"viewer"` builds its toolbar. `toolbar: [...]` replaces the preset with your list, in your order, and an item can carry its own priority: `toolbar: ["title", "history", "spacer", { id: "export", priority: 90 }, "more"]`.
+- **B. Items in your own elements.** `slots: { title, history, counter, views, expand, designMenu, reviewPill, help, actions }` mounts those items in your elements (your own header, say) and leaves them out of the bar; `toolbar: false` builds no bar at all. Slots that name only these items (and `toolbar`) keep the built layout. `slots.toolbar` is the element the whole bar is built in, the only way to have it with your own `slots` arrangement. When the expand button sits in a header outside the editor's element, give `expand: { target }` a wrapper that contains both: the expanded editor is an overlay, and what it does not contain is covered.
+- **C. Headless.** Build your own bar from the handle (`getDeckName`, `setDeckName`, `undo`, `redo`, `setSlide`, `present`, `expand`) and its events (`deckName`, `change`, `slide`, `expand`), or from the part factories (`createDeckTitle` in `/deck-title`, `createExpandController` and `createExpandButton` in `/editor-expand`, `createSlideNavigator` in `/slide-navigator`, `createToolbar` in `/toolbar`, `createDesignMenu`, `createReviewPill`, `createHelpButton` and `createToolbarActions` in their own entries).
+
+```js
+// The homepage hero: the slide, its name, Undo and Redo, the counter, Expand and Present.
+createOpfEditor(hero, { document, fonts, catalogs, layout: "embed" });
+
+// The title and the counter in the host's own header; no bar.
+createOpfEditor(el, { document, fonts, catalogs, toolbar: false, slots: { title: headerTitle, counter: headerCounter } });
+```
+
+| Item | What it is | Priority | In ⋯ when collapsed |
+| --- | --- | --- | --- |
+| `title` | the deck's `name`, edited in place (Enter renames and keeps the focus in the field, blur renames, Escape puts it back; an empty name removes it) | 95, fixed: it shrinks instead | – |
+| `history` | Undo and Redo | 80 | Undo, Redo |
+| `counter` | previous, the counter, next: a second slide navigator on the one slide index (it binds the arrow keys only when there is no slide row) | 85 | Previous slide, Next slide |
+| `views` | the view switch (only with more than one view) | 40 | each view, the one on show checked |
+| `find` | the Find button | 50 | Find… |
+| `autosave` | the autosave line (with `persistence`) | 20 | – |
+| `export` | the Export menu | 65 | Export… (opens the Export sheet, which keeps its progress and result on screen) |
+| `present` | the Present button | 75 | Present |
+| `expand` | expand the editor to fill the window (Escape returns it) | 70 | Expand editor |
+| `design` | the Design quick menu: theme, colors, fonts and this slide's layout, each one undoable edit; "More design options…" opens the Design panel when there is one, or yours (`designMenu.onOpenPanel`). A preset leaves it out where the Design side panel is on (not in `embed`) | 35 | Design… |
+| `review` | the review pill ("Valid", "3 issues"), fed by the Review counts; it opens the Review panel. Listed in a layout without one (the embed), the review runs headless for it and pressing it emits `review-open` (`{ counts, findings }`) for you to show the findings | 30 | Review (3) |
+| `help` | the keyboard shortcuts sheet, listing `editor.shortcuts()` (the bindings this editor has); "?" opens it, except in `embed` and `viewer` | 10 | Keyboard shortcuts |
+| `actions` | your own buttons (`actions`, `setActions`); hidden while there are none | 25; 90 while one action is `primary` (unless `toolbar` gives it a priority) | one entry per action |
+| `more` | the ⋯ menu, shown only while something is in it | fixed | – |
+| `spacer`, `\|` | the free space; a divider, shown only between two visible items | – | – |
+| `zoom` | the Studio's own; left out by the workspace | – | – |
+
+| Layout | Default `toolbar` |
+| --- | --- |
+| `full` | `title`, `history`, `find`, `views`, `spacer`, `actions`, `design`, `review`, `autosave`, `export`, `present`, `help`, `expand`, `more` |
+| `canvas` | `title`, `history`, `spacer`, `actions`, `expand`, `more` |
+| `embed` | `title`, `history`, `counter`, `spacer`, `actions`, `design`, `expand`, `present`, `more` |
+| `viewer` | `title` (read-only), `counter`, `spacer`, `actions`, `present`, `expand`, `more` |
+| `source`, `slots` | none (`slots.toolbar` with a `toolbar` list builds one) |
+| `studio`, `playground` | the Studio's own bar, which shows the deck title and the expand button (before `topbarEnd`); `toolbar` is ignored, and the Studio's shortcut sheet lists its commands with the chrome's keys, the same list as `editor.shortcuts()` |
+
+An item the editor has nothing for is left out (Export with `panels.export: false`, the views in a layout with one view). The embed and viewer layouts keep their keys to themselves: the arrows, F5, Ctrl/Cmd Z and S and "?" act only while the focus is inside the editor, so the page around it keeps its own. The strip's "+" and context menu (`slideActions`) are on in `full` (and an embed with thumbnails); "+" offers the deck's layouts, and read-only removes it.
+
+### Actions
+
+```js
+const editor = createOpfEditor(el, {
+  document, fonts, catalogs,
+  actions: [
+    { id: "share", label: "Share", primary: true, run: () => openShareDialog(editor.getDocument()) },
+    { id: "publish", label: "Publish", enabled: () => !editor.dirty, run: () => publish(editor.getDocument()) },
+  ],
+});
+editor.setActions([...]); // replace them later
+```
+
+Each `enabled()` and `pressed()` is read again after every change, selection, read-only switch, `dirty` change, expand and slide change; the buttons are disabled while the source text is not a valid deck. In the ⋯ menu each action is one entry.
+
+### Unsaved changes and save
+
+`editor.dirty` is true while the document differs from the baseline (what was last loaded with `setDocument` or `setSourceText`, or saved), or while the source pane holds a draft that is not a valid deck (it never reaches the document) whose text differs from the baseline's; `dirty` (`{ dirty }`) is told on every change of it. A copy or a download of the source (and a JSON, YAML or Markdown export) counts as saved. Ctrl/Cmd+S inside the editor (or on the page's body in `full`, `canvas` and the Studio, as Undo) emits `save` with `{ document, text, format, draft }` (`text` is the pane's text, a draft too, so you can keep it as a file) and keeps the browser's Save page from opening, only while something listens to `save`; `editor.save()` does the same from your own button. Call `editor.markSaved()` once you have stored it: it records the baseline and, with `persistence`, tells autosave too. `guardUnload: true` makes the browser ask before the page closes while dirty; a function `(editor) => boolean` decides itself, for a host with state of its own. React: `useOpfDirty(editor)`; Svelte: `opfDirty(editor)`.
+
+```js
+const editor = createOpfEditor(el, { document, fonts, catalogs, guardUnload: true });
+editor.on("save", async ({ document, text, draft }) => {
+  await store(draft ? text : JSON.stringify(document));
+  editor.markSaved();
+});
+```
+
+### Embedding in an iframe
+
+The package playground (`examples/playground.html`, built by `pnpm run build:playground`) is what pptx.gallery embeds in an iframe. It shows the toolbar items in its own top bar (the title, the review pill, the Design menu, help and expand) and exposes the editor's handle as `window.opfEditor`: a same-origin host uses `iframe.contentWindow.opfEditor` (`getDocument`, `setDocument`, `on("change")`, `dirty`, `markSaved`, ...). A cross-origin host would need a `postMessage` protocol, which is not part of this package.
+
+**The deck name.** `editor.getDeckName()` is the document's `name` (`""` without one; `getName`, `setName` and the `rename` event stay the source pane's file name). `editor.setDeckName(name)` renames as one validated, undoable edit through the session (trimmed; empty removes `name`), after committing an open canvas edit; it returns `false` while read-only, while the source text is not a valid deck, or when the edit was refused, and is queued before mount. `deckName` (`{ name, previous }`) is told whenever the name changes: from the title, the source pane, undo or the host. React: `const [name, setName] = useOpfDeckName(editor)`. Svelte: `opfDeckName(editor)` from `@openpresentation/opf-editor/svelte` is a store (`$name`, `bind:value={$name}`).
+
+**Expand.** `editor.expand()` (or the `expand` item) makes the editor fill the window in place, without moving it in the DOM, so nothing is lost; Escape, the button again or `editor.expand(false)` returns it, and `expand` (`{ expanded }`) is told each time. The page behind is inert while it is expanded; your own header elements given as slots stay usable. `expand: { fullscreen: true }` also asks the browser for full screen (best effort), and `--opf-expand-z` sets the overlay's z-index (default 1000; the presenter is above it).
 
 ## The source pane's hooks (CE-17)
 

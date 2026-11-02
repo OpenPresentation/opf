@@ -4,7 +4,7 @@
 // the same text measurement as the preview).
 import { createReviewPanel } from '../src/review-panel.js';
 
-export function installReviewControls({ editor, getSlideIndex, goTo, openProperties, focusContentField, status, measurementFor }) {
+export function installReviewControls({ editor, getSlideIndex, goTo, openProperties, focusContentField, status, measurementFor, onCounts }) {
   const tab = document.getElementById('tab-review');
   const host = document.getElementById('review-controls');
   if (!tab || !host) return undefined;
@@ -25,7 +25,10 @@ export function installReviewControls({ editor, getSlideIndex, goTo, openPropert
       else focusContentField();
     },
     onStatus: (message) => status(message),
-    onChange: ({ total, unavailable }) => {
+    onChange: (counts) => {
+      // CE-28: the editor's review pill in the top bar shows the same counts.
+      onCounts?.(counts);
+      const { total, unavailable } = counts;
       tab.textContent = !unavailable && total ? `Review (${total})` : 'Review';
       tab.setAttribute('aria-label', !unavailable && total ? `Review, ${total} finding${total === 1 ? '' : 's'}` : 'Review');
     },

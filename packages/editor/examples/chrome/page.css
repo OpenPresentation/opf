@@ -1,0 +1,21 @@
+/* The page chrome of the examples: a neutral host page. The editor's own look comes from styles.css and its --opf-ui-* tokens. */
+:root { color-scheme: light; --page-bg: #f6f7f9; --page-fg: #1f2933; --page-muted: #5f6b7a; --page-line: #d5dae1; --page-card: #ffffff; --page-accent: #1d4ed8; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 24px; background: var(--page-bg); color: var(--page-fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h1 { margin: 0 0 4px; font-size: 22px; }
+p.lead { margin: 0 0 20px; color: var(--page-muted); max-width: 64ch; }
+a { color: var(--page-accent); }
+code { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #e9edf2; padding: 1px 5px; border-radius: 4px; }
+.card { background: var(--page-card); border: 1px solid var(--page-line); border-radius: 12px; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+.note { color: var(--page-muted); font-size: 13px; }
+.host-button, .host-field { font: inherit; padding: 6px 12px; border: 1px solid var(--page-line); border-radius: 8px; background: var(--page-card); color: inherit; }
+.host-button { cursor: pointer; }
+.host-button:disabled { opacity: 0.5; cursor: default; }
+.host-field { min-width: 18ch; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; border: 1px solid var(--page-line); background: var(--page-card); }
+.badge[data-dirty="true"] { border-color: #b45309; color: #92400e; background: #fef3c7; }
+nav.index ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 720px; }
+nav.index li { background: var(--page-card); border: 1px solid var(--page-line); border-radius: 10px; padding: 12px 16px; }
+nav.index li a { font-weight: 600; }
+nav.index li span { display: block; color: var(--page-muted); font-size: 14px; }

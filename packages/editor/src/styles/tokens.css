@@ -39,6 +39,20 @@
   --opf-ui-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.1);
   --opf-ui-ease: 120ms ease;
 
+  /* Component tokens (CE-29). The defaults derive from the tokens above, so they follow the scheme and a host's theme; set one to restyle
+     the bar, the deck title or the expanded editor's layer without touching a component. docs/styling.md says where each is read. */
+  --opf-ui-bar-bg: var(--opf-ui-surface);
+  --opf-ui-bar-fg: var(--opf-ui-fg);
+  --opf-ui-bar-border: var(--opf-ui-border);
+  --opf-ui-bar-gap: 8px;
+  --opf-ui-bar-padding: 6px 12px;
+  --opf-ui-bar-height: 0px;
+  --opf-ui-title-font: var(--opf-ui-font);
+  --opf-ui-title-size: 15px;
+  --opf-ui-title-weight: 600;
+  --opf-ui-title-fg: var(--opf-ui-fg);
+  --opf-ui-z-overlay: 1000;
+
   color-scheme: light;
 }
 

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Full layout: save, share and unsaved changes</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="stylesheet" href="./page.css">
+<style>
+  #editor { height: 640px; }
+</style>
+</head>
+<body>
+<h1>Full layout</h1>
+<p class="lead">The whole editor with two buttons of the host's own, a Ctrl/Cmd+S that stores the deck in this browser, and a browser prompt before the page closes with unsaved changes.</p>
+<div class="row">
+  <span id="dirty" class="badge" data-dirty="false">All changes saved</span>
+  <span id="status" class="note" role="status"></span>
+</div>
+<div id="editor" class="card"></div>
+<script type="module" src="./full.js"></script>
+</body>
+</html>

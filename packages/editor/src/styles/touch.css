@@ -216,3 +216,87 @@
     min-height: 44px;
   }
 }
+
+/* ---- deck title (CE-28): the presentation name field ---------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-title-input,
+  .opf-title[data-density="touch"] .opf-title-input {
+    height: auto;
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
+
+/* ---- toolbar (CE-28): the ⋯ button and its menu ----------------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-tb .opf-tb-more-button,
+  .opf-tb[data-density="touch"] .opf-tb-more-button {
+    min-width: 44px;
+    height: 44px;
+  }
+  .opf-tb .opf-tb-menu-item,
+  .opf-tb[data-density="touch"] .opf-tb-menu-item {
+    min-height: 44px;
+  }
+}
+
+/* ---- CE-28: the expand-editor button (src/editor-expand.js) ---------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-expand-button,
+  .opf-expand-button[data-density="touch"] {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* CE-29: the Design quick menu (src/design-menu.js). */
+@media (pointer: coarse) {
+  .opf-design-menu,
+  .opf-design-menu[data-density="touch"] {
+    --opf-design-menu-row: 44px;
+  }
+  .opf-design-menu .opf-design-menu-trigger,
+  .opf-design-menu[data-density="touch"] .opf-design-menu-trigger {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-design-menu .opf-design-menu-close {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ---- CE-29 toolbar parts: the review pill (review-pill.js), the help button and its sheet (shortcuts-sheet.js), the host's action buttons (toolbar-actions.js) -- */
+@media (pointer: coarse) {
+  .opf-review-pill,
+  .opf-review-pill[data-density="touch"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 14px;
+  }
+  .opf-help-button,
+  .opf-help-button[data-density="touch"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-actions-button,
+  .opf-actions[data-density="touch"] .opf-actions-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 14px;
+  }
+}
+
+/* Thumbnail strip slide management (CE-29): the "+" button and the context and layout menu items. */
+@media (pointer: coarse) {
+  .opf-thumbs .opf-thumbs-add {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-thumbs[data-orientation="vertical"] .opf-thumbs-add {
+    height: 44px;
+  }
+  .opf-thumbs-menu .opf-thumbs-menu-item {
+    min-height: 44px;
+  }
+}

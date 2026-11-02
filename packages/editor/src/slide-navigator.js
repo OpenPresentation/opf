@@ -1,7 +1,8 @@
 // Slide navigator (RR-98): previous and next buttons around a mono "01 / 03" counter. It owns no document state, only the slide index the host
 // shows; the slide count follows the editor session (or a presentation the host hands in). Plain DOM, no framework, no network.
 // Icons are the Lucide ChevronLeft and ChevronRight paths (ISC license), inlined.
-const SVG_NS = "http://www.w3.org/2000/svg";
+import { normalizeIcons, resolveIcon } from "./icons.js";
+
 const CHEVRONS = { previous: "m15 18-6-6 6-6", next: "m9 18 6-6-6-6" };
 
 const DEFAULT_LABELS = {
@@ -19,21 +20,8 @@ export function formatSlideCounter(index, count) {
   return `${pad(count === 0 ? 0 : index + 1)} / ${pad(count)}`;
 }
 
-function chevron(name) {
-  const svg = document.createElementNS(SVG_NS, "svg");
-  svg.setAttribute("class", "opf-nav-icon");
-  svg.setAttribute("viewBox", "0 0 24 24");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  svg.setAttribute("fill", "none");
-  svg.setAttribute("stroke", "currentColor");
-  svg.setAttribute("stroke-width", "2");
-  svg.setAttribute("stroke-linecap", "round");
-  svg.setAttribute("stroke-linejoin", "round");
-  const path = document.createElementNS(SVG_NS, "path");
-  path.setAttribute("d", CHEVRONS[name]);
-  svg.append(path);
-  return svg;
+function chevron(doc, name, given) {
+  return resolveIcon(doc, given, CHEVRONS[name], { name, className: "opf-nav-icon" });
 }
 
 /** True when a page-level key press belongs to something else: typing, an editor, a menu or a dialog. */
@@ -72,6 +60,7 @@ export function createSlideNavigator(container, options = {}) {
     return Array.isArray(deck?.slides) ? deck.slides.length : 0;
   };
 
+  const icons = normalizeIcons(options.icons, ["previous", "next"], "createSlideNavigator icons");
   const element = doc.createElement("div");
   element.className = "opf-nav";
   element.dataset.density = density;
@@ -84,7 +73,7 @@ export function createSlideNavigator(container, options = {}) {
     node.dataset.action = name;
     node.setAttribute("aria-label", labels[name]);
     node.title = labels[name];
-    node.append(chevron(name));
+    node.append(chevron(doc, name, icons[name]));
     return node;
   };
   const previous = button("previous");
