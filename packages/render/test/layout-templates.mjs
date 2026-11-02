@@ -172,7 +172,8 @@ for (const { keys, deck } of [templateDeck('agenda'), templateDeck('table-beside
   }
 }
 // LH-83: table-beside 5 long fits once recomposed as the automatic grid, so it no longer overflows or paginates.
-for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 5 long', 'faq 6 long', 'table-beside 6 long', 'timeline 5 long', 'timeline 6 long']) {
+// Wave 2: faq 5 long and timeline 5 long fit once recomposed too (a recomposition as large as the layout with less overflow is kept).
+for (const name of ['agenda 5 long', 'agenda 6 long', 'list 5 long', 'list 6 long', 'faq 6 long', 'table-beside 6 long', 'timeline 6 long']) {
   assert.ok(overflowing.get(name) > 0, `${name} carries text-overflow before pagination`);
   assert.ok(paginated.some(({ source }) => source === name), `${name} is paginated`);
 }

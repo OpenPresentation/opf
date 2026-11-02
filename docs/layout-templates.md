@@ -250,6 +250,10 @@ slide that pins any block with `region` keeps the binding above as written.
      3 to 6. Mosaic pictures are cropped to fill (`cover`) unless the block, slide, deck or theme sets `imageFit` (the
      layout's own `contain` gives way). A lead plus cards is the first block across the region (a short one at the lead
      size) over the others in the balanced grid below, each row at the height it needs, placed by the region's anchor.
+   - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and
+     `small-cell`): measured blocks such as tables or timelines that need more room than the joined cells give stay below
+     the grid with `opf/layout-unplaced`, where they read whole (three tables in `table-beside`'s narrow region broke their
+     words).
 
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
 above; a body region before a heading region). Headings are centred vertically in their region unless every row it spans is

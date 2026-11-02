@@ -2939,6 +2939,9 @@ export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions 
 }
 /** composeSlide composes a template slide's body again with this flag: the automatic grid, keeping the record's design and composition. */
 const RECOMPOSE = Symbol('opf.recompose');
+/** composeSlide composes a template slide again with this flag: grouping leaves the blocks below the grid in place (no LH-46 join). */
+const UNJOINED = Symbol('opf.unjoined');
+const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
 // so reaching it is no squeeze.
@@ -2982,7 +2985,15 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
  * so the choice is deterministic.
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = composeLayout(input, options);
+  let result = composeLayout(input, options);
+  // Wave 2 (LH-46 with LH-44 and LH-41): extra blocks that join a fixed region share its cells. Measured blocks (tables, timelines,
+  // code) that need more room than those cells give overflow there, where below the grid they read whole (three tables in
+  // table-beside's narrow region broke their words). The joined composition is kept unless leaving the extra blocks below the grid
+  // overflows less.
+  if (result.regions && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && overflowCount(result) > 0) {
+    const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
+    if (overflowCount(unjoined) < overflowCount(result)) result = unjoined;
+  }
   if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
   const blocks = record(input).blocks;
   if (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) return result;
@@ -3984,7 +3995,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
-    const binding = groupBinding(bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(slide, options.slideIndex ?? 0));
+    const binding = groupBinding(bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(slide, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true });
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
     const blockUnit = (bound: BoundBlock): Pending => {

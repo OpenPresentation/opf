@@ -102,7 +102,7 @@ export interface GroupedBinding extends RegionBindingResult {
 }
 
 /** Run the grouping rules on a template slide's binding. `nodes` are the slide's root nodes (`rootNodes`). */
-export function groupBinding(binding: RegionBindingResult, template: LayoutTemplate, nodes: readonly RootNode[]): GroupedBinding {
+export function groupBinding(binding: RegionBindingResult, template: LayoutTemplate, nodes: readonly RootNode[], options: { join?: boolean } = {}): GroupedBinding {
   const units = new Map<string, BoundBlock[][]>(binding.regions.map(entry => [entry.name, [...entry.blocks, ...entry.overflow].map(block => [block])]));
   let below: BoundBlock[][] = binding.below.map(block => [block]);
   const arrangements = new Map<string, JoinedArrangement>();
@@ -169,6 +169,8 @@ export function groupBinding(binding: RegionBindingResult, template: LayoutTempl
   for (const name of moved) if (name !== undefined && units.get(name)!.length >= 2 && units.get(name)!.length <= MOVED_ROW_MAX) arrangements.set(name, 'row');
 
   // 3. LH-46, LH-47: a block that went below the grid joins the region that accepts it while that region has room for siblings.
+  // `join: false` (composeSlide, when the joined cells overflow more) leaves them below the grid.
+  if (options.join === false) { for (const list of units.values()) list.sort(byOrder); below.sort(byOrder); return result(); }
   const joined = new Set<string>();
   below = below.filter(unit => {
     const block = unit[0]!;
