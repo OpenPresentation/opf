@@ -1,4 +1,4 @@
-# Layout harvest: burndown and improvement catalog
+# Layout harvest: burndown and improvement catalogdone ([opf#964](https://github.com/OpenPresentation/opf/pull/964)) |done ([opf#964](https://github.com/OpenPresentation/opf/pull/964)) |
 
 Goal and boundary: [README.md](README.md). Status values: `todo`, `in-progress`, `done`, `descoped`. Whoever changes an item's state edits its row and appends a log line in the same pull request.
 
@@ -35,7 +35,7 @@ Sources:
 | LH-10 | Prose measure cap of 55 to 65 characters, with overflow into columns | SG | core | No body paragraph in the sampler runs past 75 characters a line | P2 | todo |
 | LH-11 | No line break between a number and its unit or %, or before a closing quotation mark or `. , ; : )` | PX, SG | core | "26 %" and "$4.8 M" style pairs never split across lines | P2 | todo |
 | LH-12 | PPTX audit: theme slots and scheme colours, chart text in theme fonts, `txBox` and shape names, zero insets where aligned, stacked `outEnd` guard, secondary-axis combos | PX | pptx | A conformance test over the exported XML of every example deck | P1 | done ([opf#949](https://github.com/OpenPresentation/opf/pull/949)) |
-| LH-13 | Skill updates: outline titles first, a content-to-structure table, vertical budget, placeholders for missing facts, notes as a script | SG, PX | skills | `opf-author` and `opf-layout` teach each rule with an OPF example | P2 | todo |
+| LH-13 | Skill updates: outline titles first, a content-to-structure table, vertical budget, placeholders for missing facts, notes as a script | SG, PX | skills | `opf-author` and `opf-layout` teach each rule with an OPF example | P2 | done ([opf#964](https://github.com/OpenPresentation/opf/pull/964)) |
 | LH-14 | Optional named icons on items, metrics and group headings | SG, CD | schema, render, pptx, assets | About 30 bundled icons drawn on a chip in both engines | P3 | todo |
 | LH-15 | Horizontal metric for wide, short tiles; hairline rule style for metrics | CD | core, render | A 2 × 2 metric grid draws number left, label right | P3 | todo |
 | LH-16 | Duration-proportional timeline for ranged events | CD | core, render, pptx | "Weeks 2–5" spans four times "Week 1" | P3 | todo |
@@ -53,7 +53,7 @@ Sources:
 | LH-34 | Image callouts: labels as real text over a picture | SG | schema, core, engines | `image.callouts` draw as text boxes in both engines | P3 | todo |
 | LH-35 | Colour never alone: sentiment and trend carry a sign and text; series colours differ in lightness | SG | render, pptx, validator | `opf/chart-color-only` checks lightness; trend draws a glyph | P3 | todo |
 | LH-36 | Gallery palette discipline check | SG, PX | gallery tooling | A `check:` script on colour schemes (dark, light, 1 to 2 accents, lightness spread) | P3 | todo |
-| LH-37 | Gallery review checklist against slide-design clichés (title underline bars, side stripes, default gradients) | SG, PX | gallery docs | Checklist in `docs/default-catalog.md`; records reviewed | P3 | todo |
+| LH-37 | Gallery review checklist against slide-design clichés (title underline bars, side stripes, default gradients) | SG, PX | gallery docs | Checklist in `docs/default-catalog.md`; records reviewed | P3 | done ([opf#964](https://github.com/OpenPresentation/opf/pull/964)) |
 | LH-38 | Header and footer sit about half a content margin from the slide edge | SG | core | Furniture rows read as chrome in the sampler | P3 | todo |
 | LH-39 | Metric proportions: value about 4× its label, line-height 1, never wraps | SG | core | A wide value such as "$1.24M" stays on one line in a narrow tile | P3 | todo |
 | LH-40 | Dense code, quote and metric blocks degrade with a finding instead of failing the export | CD (LH-27 corpus) | render, pptx | The code layout with five blocks of the corpus (batch-13 s29, batch-17 s04) renders and exports in non-strict mode with `opf/layout-overflow`; strict mode still fails | P1 | todo |
@@ -129,3 +129,4 @@ Independent items (PPTX, validator, skills, gallery tooling) can land at any tim
 - 2026-11-02: LH-27 batches 05–08, 15 and 16 (300 more slides, two dark) reviewed by three reviewers; LH-64 to LH-75 added and nine items widened. The most consistent findings were extra blocks in fixed regions (LH-46, about 20 slides per 100), several timelines (LH-41), empty bodies (LH-48, LH-65) and wrapping titles (LH-51, 19 of 100 dark slides). LH-64 corrects LH-22: text-only cards set at their foot read as empty.
 - 2026-11-02: LH-27 complete: all 18 batches (844 slides, 5 dark) built in Claude Design and reviewed; batches 09–13, 17 and 18 add LH-76 to LH-85 and widen six items. The implementation order above is the reviewers' cross-batch synthesis. LH-12 merged (opf#949).
 - 2026-11-02: LH-64 and LH-04 done (opf#956): body-text cards in bottom/middle regions hug a short text and centre, unequal texts start at the card top, and top-anchored cards hug their content; comparison stays without cards (dense options at 18 px). Full-width rows for long texts split out as LH-86.
+- 2026-11-02: LH-13 and LH-37 done ([opf#964](https://github.com/OpenPresentation/opf/pull/964)): the opf-author storyline guide and the opf-layout vertical budget (measured with composeSlide); the gallery review checklist in docs/default-catalog.md. Review of the 3 themes and 15 colour schemes: no gradient, emoji, title rule, card stripe or cream-serif-terracotta default; low-contrast tints in 10 of 15 schemes (accent1 under 3:1 in 8, an accent under 1.5:1 in 8, light2 invisible in 3), listed in the PR.
