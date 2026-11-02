@@ -157,7 +157,7 @@ assert.doesNotMatch(sameOverride, /<a:schemeClr/);
 
 // FF-24b: default text pairs only with an opaque light/dark theme background, and
 // only where the resolved default color is exactly the paired deck slot.
-const pairing = async (design, slide = {title: 'Pair', text: 'Body', items: [{text: 'Item', description: 'Muted'}]}) => {
+const pairing = async (design, slide = {title: 'Pair', text: 'Body', items: [{text: 'Item', description: 'Muted'}, 'Second']}) => {
   const entries = parts(await toPptx({design, slides: [slide]}));
   return {xml: slideXml(entries), colors: themeOf(entries).colors, entries};
 };

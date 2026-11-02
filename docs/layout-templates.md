@@ -112,7 +112,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `flow` | `none`, `grid`, `column`, `auto` | `auto` |
 | `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
-| `listColumns` | `"auto"` (a list that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
+| `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -225,7 +225,17 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 `weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A list in a region
 with `listColumns: "auto"` (the lone list of the design, and, since the RR-81 review, any list of the region that does not
 fit its own cell), or any list payload with `columns: "auto"`, tries 1, 2 then 3 columns at the starting size (a column at
-least a quarter of the slide wide); `columns: 2` or `3` fixes the count.
+least a quarter of the slide wide); `columns: 2` or `3` fixes the count. `auto` never deals a list of 6 or fewer entries
+across columns (LH-42): such a list shrinks in its one column instead.
+
+**Several lists in a region (LH-42).** A region (on a slide without `design.contentDirection`) that
+receives 2 or more lists and nothing else lays them out one list per cell, a card when the slide draws cards, so sibling
+lists never read as one table: 2 to 4 lists in that many columns, a multiple of 3 in 3 columns, any other count in 4
+(7 as 4 + 3). A column stays at least 7.5 list ems (240 px) wide; a narrower region fills its rows evenly (4 lists in 2 x 2),
+and a region taller than wide stacks up to 3 lists and takes at most 2 columns. Each row is as tall as its tallest list needs,
+descriptions and nested entries counted, at the largest one size at which every row fits, and the region's lists share that
+size. Cards share the height left over, so they fill the region; lists without cards keep their rows and the region's
+`anchor` places them. No list of the grid is dealt across columns.
 
 ### Tracks
 

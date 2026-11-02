@@ -73,7 +73,7 @@ try {
   await button('Apply changes').click();
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.title"]').waitFor();
   await settle();
-  await waitDrawn(['•', '◦', '◦', '•', '•'], 'bullets before numbering');
+  await waitDrawn(['•', '–', '–', '•', '•'], 'bullets before numbering');
   mark('bulleted list before numbering');
 
   // Open the dialog: the slide's list, not numbered yet.
@@ -166,7 +166,7 @@ try {
   await dialog.getByLabel('Number this list').uncheck();
   await waitDoc(current => current.slides[0].numbering === undefined, 'numbering off');
   await settle();
-  await waitDrawn(['•', '◦', '◦', '•', '•'], 'bullets again');
+  await waitDrawn(['•', '–', '–', '•', '•'], 'bullets again');
   await dialog.locator('#numbering-close').click();
   await button('Undo').click();
   await waitDoc(current => Array.isArray(current.slides[0].numbering), 'one Undo restores the numbering');
