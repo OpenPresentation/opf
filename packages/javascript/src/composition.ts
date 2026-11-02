@@ -300,6 +300,8 @@ export interface ComposedItem {
    * (core `emphasisSurface`), not the slide's. Absent on every other item.
    */
   emphasis?: true;
+  /** LH-68: this metric is laid out as a tile of its card (a `metrics: "tile"` region). Absent on every other item. */
+  metricTile?: true;
 }
 /**
  * LH-06: the one contrasting surface of a slide. `path` is the block or group drawn on it (every item under that path carries
@@ -1637,6 +1639,11 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * delta and trend at the foot of the box. Pass the start alignment (`align: 'left'`).
    */
   tile?: boolean;
+  /**
+   * LH-68: the smallest size of each role in canvas pixels (composition passes a tile the sizes its metric fitted at as a stack): a role starts
+   * at least there and fits down no further; a part that does not fit at it overflows.
+   */
+  minimumSizes?: Partial<Record<MetricTextRole, number>>;
 }
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
 export const METRIC_TILE_VALUE_SHARE = 0.25;
@@ -1676,10 +1683,11 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
     // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
-    const nominal=Math.min((role==='value'?valueSize:role==='description'?20:role==='trend'?18:23)*scale,options.roleSizes?.[role]??Infinity);
+    const least=snapFontSizeUp(Math.max(minimum,options.minimumSizes?.[role]??0));
+    const nominal=Math.max(Math.min((role==='value'?valueSize:role==='description'?20:role==='trend'?18:23)*scale,options.roleSizes?.[role]??Infinity),least);
     const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
-      box:{...box,height:0},requestedFontSize:gridFontSize(nominal,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
+      box:{...box,height:0},requestedFontSize:gridFontSize(nominal,least),minFontSize:least,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
     parts.push(part);
   }
@@ -1731,19 +1739,19 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (!usable(area)) return undefined;
     // Derive sizes from the requested size: repeated subtraction accumulates rounding
     // error and can add an extra trial at very small floors.
-    for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-minimum)/scale));step<=steps;step++) {
-      const size=gridFontSize(primary.requestedFontSize-step*scale,minimum);
+    for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) {
+      const size=gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize);
       const natural=measure(primary,size,area.width);
       const fit={...natural,overflow:!!natural.placement?.overflow||singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
-      if (!fit.overflow||size===minimum) return fit;
+      if (!fit.overflow||size===primary.minFontSize) return fit;
     }
   };
   type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
   type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
   let selected:Candidate|undefined,attempts=0;
-  const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-minimum)/scale))));
+  const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-part.minFontSize)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
-    const measured=new Map(metadata.map(part=>[part,measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),box.width)]));
+    const measured=new Map(metadata.map(part=>[part,measure(part,gridFontSize(part.requestedFontSize-reduction*scale,part.minFontSize),box.width)]));
     const measuredUnit=unit?measured.get(unit):undefined;
     const unitWidth=unit&&measuredUnit?naturalWidth(unit,measuredUnit):0;
     const unitFit=unit&&measuredUnit&&unitWidth>0?place(unit,measuredUnit,unitWidth):measuredUnit;
@@ -2988,8 +2996,35 @@ export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions 
 const RECOMPOSE = Symbol('opf.recompose');
 /** composeSlide composes a template slide again with this flag: grouping leaves the blocks below the grid in place (no LH-46 join). */
 const UNJOINED = Symbol('opf.unjoined');
-/** composeSlide composes a slide again with this flag: no automatic foot band or pill (LH-06), when the body overflows with it. */
+/** composeSlide composes a slide again with this flag: no automatic foot band or pill (LH-06), to compare the slide without it. */
 const PLAIN_EMPHASIS = Symbol('opf.plainEmphasis');
+/** LH-06: the size (canvas px) the automatic band or pill text starts at, when larger than its own: what the block fitted at without it. */
+const EMPHASIS_SIZE = Symbol('opf.emphasisSize');
+/** LH-06: compose the pill at the foot of the body, where it has room, rather than right after the text it follows. */
+const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
+/** LH-68: compose the metrics of `metrics: "tile"` regions as stacks (what wave 2 drew), to compare. */
+const NO_TILES = Symbol('opf.noTiles');
+/** LH-68: each tile metric's fitted sizes as a stack, by item path and role: the floor of its tile's sizes. */
+const TILE_FLOORS = Symbol('opf.tileFloors');
+/**
+ * LH-06, LH-68: the fitted size of every body block of a composition, by path: a text or list, each visible part of a quote, code panel,
+ * metric or timeline (`<item path>#<role>`), a table's smallest cell. Headings are not body.
+ */
+function bodySizes(result: SlideComposition, options: ComposeSlideOptions): Map<string, number> {
+  const scale = Math.min(result.width, result.height) / 720, sizes = new Map<string, number>();
+  const add = (key: string, size: number | undefined) => { if (size !== undefined && Number.isFinite(size)) sizes.set(key, Math.min(size, sizes.get(key) ?? Infinity)); };
+  for (const item of result.items) {
+    if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag') continue;
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal) { for (const part of internal.parts as readonly { role: string; fit?: { fontSize: number }; visible?: boolean }[]) if (part.visible !== false) add(`${item.path}#${part.role}`, part.fit?.fontSize); }
+    else if (item.field === 'table') {
+      let table: TableLayout | undefined;
+      try { table = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation }); } catch { table = undefined; }
+      for (const row of table?.rows ?? []) for (const cell of row.cells) add(item.path, cell.fit.fontSize);
+    } else add(item.path, item.text?.fontSize);
+  }
+  return sizes;
+}
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
@@ -3036,21 +3071,38 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
  * so the choice is deterministic.
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  let result = composeLayout(input, options);
   // Wave 2 (LH-46 with LH-44 and LH-41): extra blocks that join a fixed region share its cells. Measured blocks (tables, timelines,
   // code) that need more room than those cells give overflow there, where below the grid they read whole (three tables in
   // table-beside's narrow region broke their words). The joined composition is kept unless leaving the extra blocks below the grid
   // overflows less.
-  if (result.regions && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && overflowCount(result) > 0) {
-    const unjoined = composeLayout(input, { ...options, [UNJOINED]: true } as ComposeSlideOptions);
-    if (overflowCount(unjoined) < overflowCount(result)) result = unjoined;
-  }
-  // LH-06: an automatic foot band or pill takes its height from the body; it is kept unless the body without it overflows less or leaves
-  // fewer blocks below the layout's grid.
+  const compose = (settings: ComposeSlideOptions): SlideComposition => {
+    const joined = composeLayout(input, settings);
+    if (!joined.regions || (settings as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(joined) === 0) return joined;
+    const unjoined = composeLayout(input, { ...settings, [UNJOINED]: true } as ComposeSlideOptions);
+    return overflowCount(unjoined) < overflowCount(joined) ? unjoined : joined;
+  };
+  let chosen = options, result = compose(chosen);
+  // LH-06, LH-68: a rule of this composition (scorecard tiles, an automatic foot band or pill) never costs a block its fitted size. Each is
+  // compared with the slide composed without it (what wave 2 drew) and kept only when it leaves fewer findings (it trades size to fit,
+  // never below the floor), or as many and no body size smaller (bodySizes). The tile and the band or pill start at the sizes there.
   const findings = (entry: SlideComposition) => overflowCount(entry) + entry.diagnostics.filter(diagnostic => diagnostic.code === 'layout-unplaced').length;
-  if (result.emphasis && result.emphasis.source !== 'authored' && findings(result) > 0) {
-    const plain = composeLayout(input, { ...options, [PLAIN_EMPHASIS]: true } as ComposeSlideOptions);
-    if (findings(plain) < findings(result)) result = plain;
+  const keeps = (ruled: SlideComposition, without: SlideComposition): boolean => {
+    if (findings(ruled) !== findings(without)) return findings(ruled) < findings(without);
+    const sizes = bodySizes(without, options);
+    for (const [path, size] of bodySizes(ruled, options)) if (size < (sizes.get(path) ?? 0) - FONT_GRID_EPSILON) return false;
+    return true;
+  };
+  if (result.items.some(item => item.metricTile)) {
+    const stacked = compose({ ...chosen, [NO_TILES]: true } as ComposeSlideOptions), floors = new Map<string, Partial<Record<string, number>>>();
+    for (const item of stacked.items) if (item.metricLayout) floors.set(item.path, Object.fromEntries(item.metricLayout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize])));
+    const floored = { ...chosen, [TILE_FLOORS]: floors } as ComposeSlideOptions, tiled = compose(floored);
+    if (keeps(tiled, stacked)) { chosen = floored; result = tiled; } else { chosen = { ...chosen, [NO_TILES]: true } as ComposeSlideOptions; result = stacked; }
+  }
+  if (result.emphasis && result.emphasis.source !== 'authored') {
+    const plainOptions = { ...chosen, [PLAIN_EMPHASIS]: true } as ComposeSlideOptions, plain = compose(plainOptions), textPath = `${result.emphasis.path}.text`;
+    const own = (entry: SlideComposition) => entry.items.find(item => item.path === textPath)?.text?.fontSize ?? 0;
+    if (own(result) < own(plain) - FONT_GRID_EPSILON) { chosen = { ...chosen, [EMPHASIS_SIZE]: own(plain) } as ComposeSlideOptions; result = compose(chosen); }
+    if (!result.emphasis || result.emphasis.source === 'authored' || !keeps(result, plain)) { chosen = plainOptions; result = plain; }
   }
   if (!result.regions || options.recompose === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
   const blocks = record(input).blocks;
@@ -3059,7 +3111,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   if (!before.sizes.some(entry => entry.atFloor)) return result;
   let automatic: SlideComposition;
   // A strict automatic grid that does not fit is no better than the layout: the layout's result stands.
-  try { automatic = composeLayout(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
+  try { automatic = composeLayout(input, { ...chosen, [RECOMPOSE]: true } as ComposeSlideOptions); }
   catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
   const after = bodyReadability(automatic, options);
   const scale = Math.min(result.width, result.height) / 720, layoutSize = Math.min(...before.sizes.map(entry => entry.size)), size = Math.min(...after.sizes.map(entry => entry.size));
@@ -3349,7 +3401,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return text ? text : undefined;
   };
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
-  const autoEmphasis = ((): { block: number; shape: 'band' | 'pill' } | undefined => {
+  const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
     if ((options as Record<symbol, unknown>)[PLAIN_EMPHASIS] === true || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
@@ -3358,7 +3410,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (text === undefined || !last) return undefined;
     const length = [...text].length, before = flowed.slice(0, -1).map((entry: { block: unknown }) => plainText(entry.block));
     const long = (other: string | undefined) => other === undefined || [...other].length > EMPHASIS_BAND_MAX_CHARACTERS;
-    if (before.length === 1 && before[0] !== undefined && long(before[0]) && length <= EMPHASIS_PILL_MAX_CHARACTERS) return { block: last.index, shape: 'pill' };
+    if (before.length === 1 && before[0] !== undefined && long(before[0]) && length <= EMPHASIS_PILL_MAX_CHARACTERS) return { block: last.index, shape: 'pill', follows: flowed[0]!.index };
     return length <= EMPHASIS_BAND_MAX_CHARACTERS && before.every(long) ? { block: last.index, shape: 'band' } : undefined;
   })();
   // The band spans the body's width; the pill hugs its one line. Each is drawn at the foot of the body, which ends a gap above it; a
@@ -3367,7 +3419,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (autoEmphasis) {
     const blockPath = `${path}.blocks.${autoEmphasis.block}`, textPath = `${blockPath}.text`, value = record(slide.blocks[autoEmphasis.block]).text;
     const text = contentText('text', value)!, pill = autoEmphasis.shape === 'pill';
-    const left = area.left + padding, width = area.right - area.left - padding * 2, size = (pill ? EMPHASIS_PILL_SIZE : PROSE_NOMINAL_SIZE) * scale;
+    const left = area.left + padding, width = area.right - area.left - padding * 2, size = Math.max((pill ? EMPHASIS_PILL_SIZE : PROSE_NOMINAL_SIZE) * scale, Number((options as Record<symbol, unknown>)[EMPHASIS_SIZE] ?? 0));
     const padX = pill ? round(size * .9) : CARD_INSET * scale, padY = round(size * (pill ? .4 : .6));
     const side = alignmentFor('text'), atEnd = rtl ? side === 'left' : side === 'right';
     const inner = pill ? Math.min(width - 2 * padX, widthFor('text', textPath)(text, size) * 1.04 + 2 * rasterPadding + 2 * scale) : width - 2 * padX;
@@ -3382,7 +3434,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         emphasis: { path: blockPath, box: { x, y: top, width: round(outer), height }, radius: pill ? height / 2 : CARD_RADIUS * scale, shape: pill ? 'pill' : 'band', source: pill ? 'pill' : 'foot-band' },
         item: { path: textPath, field: 'text', type: 'text', value, payload: { type: 'text', text: value }, box, text: fit, textStyle: styleFor('text', textPath), composition, alignment: pill ? 'center' : side, emphasis: true },
       };
-      bodyBottom = top - gap;
+      if (!pill || (options as Record<symbol, unknown>)[PILL_AT_FOOT] === true) bodyBottom = top - gap;
     }
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
@@ -3489,10 +3541,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
     textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),
-    align:tile?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile}:{}),
+    align:tile?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
   });
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
-  const metricTiles = new WeakSet<Pending>();
+  const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
   // region (horizontal only, compact at four or more, all at one size) or a lone timeline that may grow. `sizes` is `role` for
   // the role sizes, `floor` for the readability floor and `placed` for the size the region chose.
@@ -3888,7 +3940,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       ...(frameBox && !emphasized ? {frameBox} : {}),
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile ? 'left' : alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
-      ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}) });
+      ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
     if (emphasized && frameBox) {
       const own = surface && surface.path === node.emphasis ? surface.box : undefined;
@@ -4154,7 +4206,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const units = contents.get(region.name) ?? [];
       if (region.flow === 'auto') for (const unit of units) { unit.auto = true; unit.lone = units.length === 1; }
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
-      if (region.metrics === 'tile') for (const unit of units) if (!unit.children && unit.field === 'metric') metricTiles.add(unit);
+      if (region.metrics === 'tile' && (options as Record<symbol, unknown>)[NO_TILES] !== true) for (const unit of units) if (!unit.children && unit.field === 'metric') metricTiles.add(unit);
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
@@ -4709,6 +4761,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   sharePeerSizes();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
+  // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
+  // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
+  if (autoSurface && autoEmphasis?.follows !== undefined && (options as Record<symbol, unknown>)[PILL_AT_FOOT] !== true) {
+    const prefix = `${path}.blocks.${autoEmphasis.follows}.`, owner = items.filter(item => item.path.startsWith(prefix) && item.text);
+    const textBottom = Math.max(...owner.map(item => item.box.y + ('richLines' in item.text! ? (item.text as RichTextFit).height : (item.text as TextFit).placement?.height ?? item.text!.lines.length * item.text!.lineHeight)));
+    const column = owner[0]?.box, surfaceBox = autoSurface.emphasis.box, top = round(textBottom + gap);
+    if (!column || !Number.isFinite(textBottom) || top + surfaceBox.height > bodyBottom + .01) return composeLayout(input, { ...options, [PILL_AT_FOOT]: true } as ComposeSlideOptions);
+    const side = alignmentFor('text'), atEnd = rtl ? side === 'left' : side === 'right', width = surfaceBox.width;
+    const x = round(side === 'center' ? column.x + (column.width - width) / 2 : atEnd ? column.x + column.width - width : column.x);
+    const item = autoSurface.item, dx = x - surfaceBox.x, dy = top - surfaceBox.y, box = { ...item.box, x: item.box.x + dx, y: item.box.y + dy };
+    autoSurface.emphasis.box = { ...surfaceBox, x, y: top };
+    item.box = box;
+    item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
+  }
   if (autoSurface) items.push(autoSurface.item);
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts).
   shareSiblingChartAxes(items, options.presentation);
