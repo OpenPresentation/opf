@@ -169,14 +169,14 @@ importers:
         specifier: 0.4.4
         version: 0.4.4
       '@expo-google-fonts/noto-sans-devanagari':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.4.2
+        version: 0.4.2
       '@expo-google-fonts/noto-sans-ethiopic':
         specifier: 0.4.2
         version: 0.4.2
       '@expo-google-fonts/noto-sans-georgian':
-        specifier: 0.4.3
-        version: 0.4.3
+        specifier: 0.4.4
+        version: 0.4.4
       '@expo-google-fonts/noto-sans-gujarati':
         specifier: 0.4.2
         version: 0.4.2
@@ -526,8 +526,8 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@expo-google-fonts/noto-sans-georgian':
-        specifier: 0.4.3
-        version: 0.4.3
+        specifier: 0.4.4
+        version: 0.4.4
       '@expo-google-fonts/noto-sans-symbols-2':
         specifier: 0.4.1
         version: 0.4.1
@@ -608,14 +608,14 @@ importers:
         specifier: 0.4.4
         version: 0.4.4
       '@expo-google-fonts/noto-sans-devanagari':
-        specifier: 0.4.1
-        version: 0.4.1
+        specifier: 0.4.2
+        version: 0.4.2
       '@expo-google-fonts/noto-sans-ethiopic':
         specifier: 0.4.2
         version: 0.4.2
       '@expo-google-fonts/noto-sans-georgian':
-        specifier: 0.4.3
-        version: 0.4.3
+        specifier: 0.4.4
+        version: 0.4.4
       '@expo-google-fonts/noto-sans-gujarati':
         specifier: 0.4.2
         version: 0.4.2
@@ -1067,14 +1067,14 @@ packages:
   '@expo-google-fonts/noto-sans-bengali@0.4.4':
     resolution: {integrity: sha512-Ya58tLTEdP4P5EF3ZXTM829/g57mbfW8OrD16MMZr2sC3nIKItl/3J9tZlk1nrtqfFGzIgxb+zt/hLjAaTAQgQ==}
 
-  '@expo-google-fonts/noto-sans-devanagari@0.4.1':
-    resolution: {integrity: sha512-26boYPNKGP1r4R5MxsMAY/zCQOwiXLOJzX8sh1a2oEWyQurQsyniaCv4992c+9jjwshEEt2NNVv5GcnyzaL7QQ==}
+  '@expo-google-fonts/noto-sans-devanagari@0.4.2':
+    resolution: {integrity: sha512-tYN501LDwk9bVc4HlHjAG2l2du08rvjexMdf3bO6u4idUk4mI1QxdnCaOfBq+U27RHM33CR5PmYfXcgEHXrovg==}
 
   '@expo-google-fonts/noto-sans-ethiopic@0.4.2':
     resolution: {integrity: sha512-puS0u1/7b0kZ6fqOYaSlCdai8zHuD9CQY2qlyJEtYzUC5Nd1fH3QENmQc0a1Gcqe0q9s3n7440eNJSLK2mGouw==}
 
-  '@expo-google-fonts/noto-sans-georgian@0.4.3':
-    resolution: {integrity: sha512-qvQ/DE/F10hZPD/vYSm68aNWjOLyxGrCC3NzZR3L0RWpo2njqePvNjXcAcR9yvLwrREOmlWGtUD7GTAuIjlkzA==}
+  '@expo-google-fonts/noto-sans-georgian@0.4.4':
+    resolution: {integrity: sha512-/PsBmFiT2z8BC1UWnvwIe5C5fTGXdWUtVy6LN/gLGpR2KqUfSjVt14nN/qQD1+hMtuH9pGA2MhMBsO8ck033jA==}
 
   '@expo-google-fonts/noto-sans-gujarati@0.4.2':
     resolution: {integrity: sha512-KtJySkho6C2Yf28dZx1SYwAs671hncIpBpIlTDzxLv7i7iOFJ2p74nzyP23aY04HUm28ELX7r86Dmui/qpLpMg==}
@@ -2857,11 +2857,11 @@ snapshots:
 
   '@expo-google-fonts/noto-sans-bengali@0.4.4': {}
 
-  '@expo-google-fonts/noto-sans-devanagari@0.4.1': {}
+  '@expo-google-fonts/noto-sans-devanagari@0.4.2': {}
 
   '@expo-google-fonts/noto-sans-ethiopic@0.4.2': {}
 
-  '@expo-google-fonts/noto-sans-georgian@0.4.3': {}
+  '@expo-google-fonts/noto-sans-georgian@0.4.4': {}
 
   '@expo-google-fonts/noto-sans-gujarati@0.4.2': {}
 
