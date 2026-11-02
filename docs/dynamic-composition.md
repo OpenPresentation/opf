@@ -120,24 +120,31 @@ These rules (layout harvest LH-70, LH-72, LH-67, LH-78) read block kinds, counts
 and apply in automatic composition and in a layout's regions alike; a right-to-left deck mirrors them. A slide's own
 `composition.mode`, `columns` or `weights`, and `design.contentDirection`, keep their arrangement.
 
+**Readable size wins over the ideal measure.** `composeSlide` composes a slide with these rules and, when one of them changed
+something, without them too. It keeps the result with them only when no block's fitted body size is smaller (each text, list and
+table, and each main part of a quote, code panel, metric or timeline), or when it reports less overflow; it never overflows or
+splits words more. Otherwise it tries each rule on its own and keeps the ones that pass. LH-72's start alignment and sibling quotes
+sharing one size are always applied.
+
 - **Paragraph columns.** Three to six sibling paragraphs of similar length (100 to 240 characters each, the longest less
-  than twice the shortest) are parallel items, so they are set as a grid of columns 45 to 65 average characters wide. The
-  shapes are the balanced grids of 2 to 4 columns with no row of one cell (3 in a row; 4 in a row or 2 x 2; 5 as 3 + 2; 6 as
-  3 x 2 or 2 x 3); each takes the largest size of the type scale at which its narrowest column keeps 45 characters and its
-  rows fit, and the shape with the largest size wins. On a wide slide this is usually two columns at 21 or 24 px, and three
-  only at the floor. `explain` reports `paragraph-columns`.
-- **Centred layouts centre only short text.** When the content alignment is `center` and comes from the layout record or
+  than twice the shortest) are parallel items, so they are set as a grid of columns 45 to 65 average characters wide, when that
+  is as large as their own arrangement. The shapes have 2 to 4 full columns (3 as 2 + 1 or a row; 4 as 2 x 2, 3 + 1 or a row;
+  6 as 2 x 3 or 3 x 2); each takes the largest size of the type scale at which its narrowest column keeps 45 characters and its
+  rows fit, and the largest wins. On a wide slide that is two columns at 21 or 24 px; three columns at a 45-character measure
+  exist only at the floor, so three paragraphs usually keep their own arrangement. `explain` reports `paragraph-columns`.
+- **Centered layouts center only short text.** When the content alignment is `center` and comes from the layout record or
   the theme, a paragraph or list over two lines or 120 characters is start-aligned in a column at most 65 characters wide,
-  centred in its cell, and its siblings follow it. An alignment the slide or the deck sets is the author's and is kept.
-- **Lead plus stack.** Of three to five sibling texts or quotes, a paragraph of at least 100 characters at least 2.5 times the median length of the others
-  and twice the next longest leads: a cell 55% of the width at full height, a text starting at the lead size (32 px), beside
-  a stack of the others at one size. A chart or picture with two compact siblings (metrics, or texts and quotes of at most
-  120 characters) leads at 58%. The lead sits at the start unless it is the last block. A `flow: grid` region keeps its
-  grid. `explain` reports `lead-stack`.
+  centered in its cell, and its siblings follow it. An alignment the slide or the deck sets is the author's and is kept.
+- **Lead plus stack.** Of three to five sibling texts or quotes, a paragraph of at least 100 characters, at least 2.5 times
+  the median length of the others and twice the next longest, leads: a cell 55% of the width at full height, a text starting
+  at the lead size (32 px), beside a stack of the others at one size. A chart or picture with two compact siblings (metrics, or
+  texts and quotes of at most 120 characters) leads at 58%. The lead sits at the start unless it is the last block. A
+  `flow: grid` region keeps its grid. `explain` reports `lead-stack`.
 - **Quotes beside other blocks.** A quote beside a block of another kind, or one of three or more quotes, starts at the
-  lead size and steps down until it takes at most four lines (never below the 28 px body size), on a card that hugs it; a
-  card the slide does not otherwise draw is left out when it would make the quote overflow. A lone quote, and one or two
-  quotes alone on a slide, keep the 40 px display size. Sibling quotes share one body size, as sibling paragraphs do.
+  lead size and steps down until it takes at most four lines (never below the 28 px body size), on a card that hugs it, when
+  that makes no quote smaller; otherwise it keeps its size, on a card when the card costs no size. A card the slide does not
+  otherwise draw is left out when it would make the quote overflow. A lone quote, and one or two quotes alone on a slide, keep
+  the 40 px display size. Sibling quotes share one body size, as sibling paragraphs do.
 
 ## Nested groups
 

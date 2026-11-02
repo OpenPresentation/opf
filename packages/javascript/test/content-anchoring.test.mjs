@@ -25,9 +25,8 @@ test('single and stacked quotes/metrics anchor as compact units without shrinkin
  for(const blocks of [[{quote}],[{metric:{value:52,label:'Trial users'}}],[{quote},{metric:{value:52,label:'Trial users'}}]]){
   const top=compose('top',blocks),middle=compose('middle',blocks),bottom=compose('bottom',blocks);
   for(const result of [middle,bottom]){
-   // LH-78: a quote beside a metric is drawn on a card, so the unit is its card (frameBox).
-   assert.equal(result.diagnostics.length,0);const region=result.regions[0];const first={box:result.items[0].frameBox??result.items[0].box},last={box:result.items.at(-1).frameBox??result.items.at(-1).box};
-   assert.ok(first.box.y>(top.items[0].frameBox??top.items[0].box).y);assert.ok(last.box.y+last.box.height<=region.box.y+region.box.height+.01);
+   assert.equal(result.diagnostics.length,0);const region=result.regions[0];const first=result.items[0],last=result.items.at(-1);
+   assert.ok(first.box.y>top.items[0].box.y);assert.ok(last.box.y+last.box.height<=region.box.y+region.box.height+.01);
    const occupiedBottom=last.box.y+last.box.height;
    if(result===middle)assert.ok(Math.abs((first.box.y+occupiedBottom)/2-(region.box.y+region.box.height/2))<.01);
    else assert.ok(Math.abs(occupiedBottom-region.box.y-region.box.height)<.01);

@@ -60,14 +60,15 @@ test('LH-03 with LH-60: the chart layer is decided for the construct drawn', () 
 const paragraph = (name) => `${name} should focus the next cycle on one measurable change while making the operating tradeoffs clear to its stakeholders.`;
 
 test('LH-70 with LH-46: a statement of similar paragraphs is a grid of columns, not a lead over cards, in both directions', () => {
-  const slide = { title: 'The ask', blocks: ['Harborline Bank', 'Relay Cloud', 'Juniper Legal', 'Easton Library'].map((name) => ({ text: paragraph(name) })) };
+  // Six paragraphs: two columns at the size the statement's lead plus cards had, so the guard keeps them.
+  const slide = sampleSlide(layouts.statement, 6, 'long');
   for (const direction of [undefined, 'rtl']) {
     const result = composeSlide(slide, { layout: layouts.statement, ...(direction ? { direction } : {}) });
     assert.deepEqual(overflow(result), []);
     const texts = result.items.filter((item) => item.field === 'text');
     assert.equal(new Set(texts.map((item) => Math.round(item.box.width))).size, 1, 'equal columns: no lead');
     assert.equal(new Set(texts.map((item) => item.text.fontSize)).size, 1, 'one size (LH-43)');
-    assert.ok(texts.every((item) => item.alignment === 'left'), 'long text in a centred layout is start-aligned (LH-72)');
+    assert.ok(texts.every((item) => item.alignment === 'left'), 'long text in a centered layout is start-aligned (LH-72)');
   }
 });
 
