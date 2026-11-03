@@ -70,7 +70,7 @@ export const LEG_PLAN = Object.freeze({
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
   pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
-  editor: { full: [["tests", 2], ["playground", 4], ["browser", 2]], contract: [["tests", 2]] },
+  editor: { full: [["tests", 2], ["playground", 4], ["browser", 3]], contract: [["tests", 2]] },
 });
 
 /** The jobs that are not packages and have one `tests` leg (they have no tiers: a skipped one has no leg at all). */
