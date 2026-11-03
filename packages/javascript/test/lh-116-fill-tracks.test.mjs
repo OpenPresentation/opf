@@ -1,5 +1,5 @@
 // LH-116, LH-101, LH-102 and the widened LH-80, LH-64, LH-47 and LH-10: a picture track starts under a title that wraps beside it, a
-// lone code panel takes the body, an under-filled layout body sits in the middle, a row of cards of mixed kinds starts at one anchor,
+// lone code snippet grows and centers (code that fills the body takes it), an under-filled layout body sits in the middle, a row of cards of mixed kinds starts at one anchor,
 // the automatic grid's short last row stretches, and a paragraph in a layout region keeps the reading measure.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -44,19 +44,23 @@ test('LH-80 widened: a picture track never wraps a table cell the slide set on o
   assert.deepEqual(findings(result), []);
 });
 
-test('LH-101: a lone code panel takes the whole body with its lines in the middle; its size is unchanged', () => {
+test('LH-101: a lone code snippet grows and its panel hugs it in the middle of the body; code that fills the body takes the whole panel', () => {
+  // Wave 4 golden review: a five-line snippet on a full-body panel left most of a dark panel empty. A snippet grows in type-scale steps
+  // (up to the code display size) and its panel hugs it, centered; only code that fills at least LONE_TARGET of the body is the body.
   const code = { code: { source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts' } };
   const result = composeSlide({ title: 'Code payload', blocks: [code] }), panel = item(result, 'code');
-  const bottom = result.contentBox.y + result.contentBox.height;
-  assert.ok(Math.abs(panel.box.y + panel.box.height - bottom) < 1, `${panel.box.y + panel.box.height} vs ${bottom}`);
-  assert.ok(panel.box.height > 0.8 * (bottom - (item(result, 'title').box.y + item(result, 'title').box.height)), 'the panel is the body');
-  const source = panel.codeLayout.parts.find((part) => part.role === 'body'), middle = source.box.y + source.box.height / 2;
-  assert.ok(Math.abs(middle - (panel.box.y + panel.box.height / 2)) < 20, `${middle} vs the panel's middle`);
-  assert.equal(panel.codeLayout.bounds.height, panel.box.height);
+  const top = item(result, 'title').box.y + item(result, 'title').box.height, bottom = result.contentBox.y + result.contentBox.height;
+  assert.ok(panel.box.height < 0.6 * (bottom - top), 'the panel hugs the snippet');
+  assert.ok(Math.abs(panel.box.y - top - (bottom - panel.box.y - panel.box.height)) < 0.25 * (bottom - top), 'in the middle of the body');
+  const source = panel.codeLayout.parts.find((part) => part.role === 'body');
   const hugging = item(composeSlide({ title: 'Code payload', blocks: [code] }, { fill: false }), 'code');
-  assert.ok(hugging.box.height < panel.box.height / 2, 'fill: false keeps the hugging panel');
-  assert.ok(source.fit.fontSize >= hugging.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize);
+  assert.ok(source.fit.fontSize > hugging.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, 'the code grew');
   assert.deepEqual(findings(result), []);
+  const long = { code: { source: Array.from({ length: 13 }, (_, line) => `const value${line} = compute(${line});`).join('\n'), language: 'ts', filename: 'values.ts' } };
+  const full = composeSlide({ title: 'Code payload', blocks: [long] }), whole = item(full, 'code');
+  assert.ok(Math.abs(whole.box.y + whole.box.height - (full.contentBox.y + full.contentBox.height)) < 1, 'code that fills the body takes the whole panel');
+  assert.equal(whole.codeLayout.bounds.height, whole.box.height);
+  assert.deepEqual(findings(full), []);
 });
 
 test('LH-101: layoutCode `fill` sets the lines in the middle of the box and reports the box as the panel', () => {

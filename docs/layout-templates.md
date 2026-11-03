@@ -419,8 +419,9 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.
-- **A lone code panel (LH-101)** takes the whole body, its lines in the middle of the panel (`layoutCode`'s `fill`), after it
-  grows as above.
+- **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
+  60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
+  body, its lines in the middle of the panel (`layoutCode`'s `fill`).
 - **A body of other kinds (LH-102).** A body of text, lists, quotes, metrics, code, tables or timelines (a picture only in a bled
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps

@@ -5391,10 +5391,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
     let best = need();
-    // LH-101: a lone code panel takes the whole cell (it grows first, as the others do), its lines in the middle of the panel
-    // (layoutCode's `fill`), as Claude Design draws one snippet on a full-body panel instead of a strip hugging it.
+    // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
+    // the middle of the body. Only code that then fills at least LONE_TARGET of the body takes the whole cell, its lines in the middle of
+    // the panel (layoutCode's `fill`): a five-line snippet on a full-body panel left most of a dark panel empty (wave 4 golden review).
     const panel = node.field === 'code', wholePanel = () => { fullPanels.add(node); return cell; };
-    if (best >= LONE_FILL * inner.height) return panel && best <= inner.height ? wholePanel() : undefined;
+    const fillsPanel = () => panel && best >= LONE_TARGET * inner.height - 1e-6 && best <= inner.height;
+    // A panel's need counts its insets and its filename row, so a panel under LONE_TARGET still grows and centers.
+    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : undefined;
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     if (prose) {
       const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;
@@ -5431,7 +5434,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
       if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
     }
-    if (panel) return wholePanel();
+    if (fillsPanel()) return wholePanel();
     // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }

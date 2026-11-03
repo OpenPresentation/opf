@@ -1511,14 +1511,14 @@
    "bytes": 17076
   },
   "code 1 short": {
-   "svg": "b6bab6df188ea8686c64add305745ca7bb11c4866c0f1d0be3816cea46b0e2c4",
-   "png": "ab7066b0fad64a5ffe6346b832f8fabc1710b9eb411279fafb0dc1de156209bd",
-   "bytes": 5154
+   "svg": "965f00472f0daedc0ee685377771a4972e50e666231c9010ff58da86d4c91dbc",
+   "png": "dc0347412404ceb72c8b2ef058b4faadcb2fc66d632f30bac1dcdffd7349000a",
+   "bytes": 5125
   },
   "code 2 short": {
-   "svg": "3646e98e337f45460d4d293829f7f7a6ff5ab9237c03918e801f1663e48a4d14",
-   "png": "31c75e75ef6b048b993c7a2efaa13d42f21689154fe87ea28d224113c2673c3f",
-   "bytes": 5677
+   "svg": "a357ad7b68a2fad55bf0928808c16f87d7b7e8f9a6f2010064e640bee22a75bb",
+   "png": "a4e135d5511dd6b652612412222b7244ec87355332ad22c65cad00f05cde86e2",
+   "bytes": 5744
   },
   "code 3 short": {
    "svg": "a3ced029f25c0d629cd83eabb7148fb2849b2ea3f8d87a54a175c25ddd852f51",
@@ -2316,9 +2316,9 @@
    "bytes": 11194
   },
   "paginated code 5 long page 5": {
-   "svg": "e217ab2f7a56c254c8eca9e4ef9bc3283abda3523b93abf977ce0324c395675c",
-   "png": "5e4a90dd0f65451130d466c9a867c375a38727e0d4dd4c4d2e189fac3f434401",
-   "bytes": 6622
+   "svg": "712e145b81fa2afda5d279a92d2540d759c062d91168da77a5aed3efd9e486af",
+   "png": "074b9bc4e76b090250fed663b7e9565ee7f43d475caec00d3d9c19de89e7da19",
+   "bytes": 6645
   },
   "paginated code 6 long page 1": {
    "svg": "e3f56eb0aa66d078b99ebf9dbb55e9e3844aed3785a9dba46a9f3d802f70212c",
