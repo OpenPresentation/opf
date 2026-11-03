@@ -1417,6 +1417,11 @@ export interface QuoteLayout {
   parts: QuoteTextPart[];
   /** Present when the quote has a photo; absent otherwise, and then the layout is the footer-only layout. */
   photo?: QuotePhoto;
+  /**
+   * LH-114: the accent rule over a pull line (`pull`): QUOTE_PULL_RULE reference pixels at the start edge, drawn in the deck's primary
+   * color by both engines. Absent for every other quote.
+   */
+  rule?: LayoutBox;
   diagnostics: QuoteLayoutDiagnostic[];
   overflow: boolean;
 }
@@ -1473,9 +1478,22 @@ export interface QuoteBodyOptions extends QuoteLayoutOptions {
    * then fits its box from there as usual.
    */
   bodyLines?: number;
+  /**
+   * LH-114: lay the quote out as a pull line across its box: an accent rule (`rule`), the body under it with no card inset, and one
+   * caption line "— Name, Role" (the source after an en dash) under the body. The body is set in the regular weight, as a lead.
+   * Composition sets it for a short quote under or over data.
+   */
+  pull?: boolean;
 }
 /** LH-78: a quote beside other blocks starts at the lead size and fits in this many lines. */
 const QUOTE_BESIDE_LINES = 4;
+/** LH-114: a pull line's accent rule (width and height) and its gaps under the rule and under the body, in reference pixels. */
+export const QUOTE_PULL_RULE = { width: 80, height: 6 } as const;
+const QUOTE_PULL_GAPS = { rule: 16, body: 10 } as const;
+/** LH-114: what opens a pull line's caption, and what joins the role to the name there (the source still follows an en dash). */
+export const QUOTE_PULL_PREFIX = '— ', QUOTE_PULL_ROLE_SEPARATOR = ', ';
+/** LH-114: a pull line's body takes at most this many lines; composition keeps the card for a quote that needs more. */
+export const QUOTE_PULL_LINES = 2;
 /**
  * LH-40: the room a part that found no usable space is drawn in at the readability floor: its own box moved into the cell, down to the
  * cell's foot, with the cell's width when it has none of its own. Its text overflows this room; the finding says so.
@@ -1530,13 +1548,16 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     parts.push(part);
     return part;
   };
-  // Footer lines: the attribution, the role on its own line below it, and the source after an en dash on the last line.
+  // Footer lines: the attribution, the role on its own line below it, and the source after an en dash on the last line. A pull line
+  // (LH-114) sets them as one caption: "— Name, Role – Source".
+  const pull = options.pull === true && quote.photo === undefined;
   let footer = '';
   const footerSources:QuoteTextSource[] = [];
   for (const field of ['attribution','role','source'] as const) {
     const text = quote[field];
     if (!text) continue;
-    if (footer) footer += field === 'role' ? '\n' : QUOTE_SOURCE_SEPARATOR;
+    if (footer) footer += field === 'role' ? pull ? QUOTE_PULL_ROLE_SEPARATOR : '\n' : QUOTE_SOURCE_SEPARATOR;
+    else if (pull) footer = QUOTE_PULL_PREFIX;
     footerSources.push(source(`${path}.${field}`,text,footer.length));
     footer += text;
   }
@@ -1547,7 +1568,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   const marks = quoteMarksFor(options.language);
   const body = add('body',`${marks.open}${quoteText}${marks.close}`,[source(bodyPath,quoteText,marks.open.length)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    options.bodySize ?? grownRoleSize(QUOTE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.quote),options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
+    options.bodySize ?? grownRoleSize(QUOTE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.quote),options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',pull?400:600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
   const footerSize = grownRoleSize(17,options.growth,LONE_DISPLAY_SIZES.quoteFooter);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
@@ -1560,7 +1581,9 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     : part.runs ? fitRichText(part.runs,area,size,floor,{style:part.style,textMeasurement:options.textMeasurement,...(options.citationMarker?{citationMarker:options.citationMarker}:{}),...(options.direction?{direction:options.direction}:{})})
     : fitText(part.text,area,size,floor,textWidthMeasurer(part.style,options.textMeasurement),options.direction);
   const heightOf = (fit:TextFit|RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length*fit.lineHeight;
-  const inner = {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
+  // LH-114: a pull line has no card inset; its body runs under the rule across the whole box.
+  const ruleHeight = QUOTE_PULL_RULE.height * scale, ruleGap = QUOTE_PULL_GAPS.rule * scale;
+  const inner = pull ? {x:box.x,y:box.y+ruleHeight+ruleGap,width:box.width,height:box.height-ruleHeight-ruleGap} : {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
   // LH-78: the body's starting size steps down, one reference pixel at a time, until it takes at most `bodyLines` lines across the
   // quote's width, down to the body text size; a body that needs more there starts there.
   if (options.bodyLines !== undefined && usable({...inner,height:1e6})) {
@@ -1568,8 +1591,22 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const linesAt = (size:number) => { const trial = fit(body,{...inner,height:1e6},size,size)!; return 'richLines' in trial ? (trial as RichTextFit).richLines.length : trial.lines.length; };
     while (body.requestedFontSize > lowest && linesAt(body.requestedFontSize) > options.bodyLines) body.requestedFontSize = gridFontSize(Math.max(lowest, body.requestedFontSize - scale), minimum);
   }
-  let photo: QuotePhoto | undefined, photoFits = true;
-  if (!hasBlock) body.fit=fit(body,body.box);
+  let photo: QuotePhoto | undefined, photoFits = true, rule: LayoutBox | undefined;
+  if (pull) {
+    // LH-114: the rule at the start edge, the body under it, and the caption one gap under the body's last line. Each part fits its own
+    // room in the box; a box too short for them overflows with the usual findings below.
+    rule = {x:rtl?box.x+box.width-QUOTE_PULL_RULE.width*scale:box.x,y:box.y,width:QUOTE_PULL_RULE.width*scale,height:ruleHeight};
+    const caption = attribution ? fit(attribution,{...inner,height:1e6},attribution.requestedFontSize,attribution.requestedFontSize) : undefined;
+    const captionHeight = caption ? heightOf(caption) : 0, bodyGap = attribution ? QUOTE_PULL_GAPS.body * scale : 0;
+    body.box = {...inner,height:Math.max(0,inner.height-captionHeight-bodyGap)};
+    body.fit = fit(body,body.box);
+    if (body.fit && attribution) {
+      const bodyBottom = body.box.y + (body.fit.placement?.height ?? heightOf(body.fit));
+      attribution.box = {...inner,y:bodyBottom+bodyGap,height:Math.max(0,inner.y+inner.height-bodyBottom-bodyGap)};
+      attribution.fit = fit(attribution,attribution.box);
+    }
+    if (body.fit && !body.fit.overflow) body.box.height = body.fit.placement?.height ?? heightOf(body.fit);
+  } else if (!hasBlock) body.fit=fit(body,body.box);
   else if (usable(inner) && inner.height>18) {
     const available=inner.height-18;
     const preferredBody=fit(body,inner,body.requestedFontSize,body.requestedFontSize)!;
@@ -1618,7 +1655,8 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   }
   // A successful quote is one compact editorial unit, not a body at the top and attribution at the bottom.
   // Keep failed allocations intact so readability-floor/overlap diagnostics retain their original evidence.
-  if (body.fit && !body.fit.overflow && photoFits && (!attribution || attribution.fit && !attribution.fit.overflow)) {
+  // A pull line (LH-114) already placed its caption one gap under the body.
+  if (!pull && body.fit && !body.fit.overflow && photoFits && (!attribution || attribution.fit && !attribution.fit.overflow)) {
     body.box.height = body.fit.placement?.height ?? heightOf(body.fit);
     const footerTop = body.box.y + body.box.height + 18;
     const previousTop = Math.min(attribution?.box.y ?? Infinity, photo?.box.y ?? Infinity);
@@ -1652,6 +1690,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
   const occupiedParts = parts.filter(part => part.fit).map(part => ({...part.box, height:part.fit!.placement?.height ?? heightOf(part.fit!)}));
   if (photo) occupiedParts.push(photo.box);
+  if (rule) occupiedParts.push(rule);
   const bottom = Math.max(box.y, ...occupiedParts.map(area => area.y + area.height));
   const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
   // LH-40: a part with no room is set at the floor in what its cell leaves; it overflows, and its finding above stands.
@@ -1659,7 +1698,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     const room = floorRoom(part.box, box), floorFit = fit(part, {...room, height:Math.max(room.height, minimum*1.22)}, minimum, minimum);
     if (floorFit) { part.box = room; part.fit = {...floorFit, overflow:true}; }
   }
-  return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
+  return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),...(rule?{rule}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface MetricContent {
@@ -1944,8 +1983,13 @@ const TIMELINE_RING_RATIO = 1.6;
  * Role sizes in reference pixels. LH-41: a compact band (one of several timelines stacked in a region) uses the smaller set,
  * as Claude Design's compact bands do, so four to nine bands read at one modest size.
  */
-const TIMELINE_ROLE_SIZES = {name:24,description:18,when:18,what:22,'event-description':18} as const;
-const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-description':16} as const;
+const TIMELINE_ROLE_SIZES = {name:24,description:18,when:18,what:22,'event-description':18,status:16} as const;
+const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-description':16,status:16} as const;
+/**
+ * LH-121: the word drawn under an event's label for its status (`statusWords`). English only: a deck in another language keeps the
+ * status in its markers and connector, until the catalog carries localized words.
+ */
+export const TIMELINE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> = { done: 'Done', current: 'Current', planned: 'Planned' };
 /** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
 const TIMELINE_GROWTH = 4;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
@@ -1955,7 +1999,8 @@ const TIMELINE_BAND_MIN_HEIGHT = 56;
 export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
 export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
 export interface TimelineTextPart {
-  role: 'name' | 'description' | 'when' | 'what' | 'event-description';
+  /** `status` (LH-121) is a generated word under the label, never a source field: such parts are in `statusLabels`, not `parts`. */
+  role: 'name' | 'description' | 'when' | 'what' | 'event-description' | 'status';
   eventIndex?: number;
   /** The event's status; absent for metadata parts and for events without a status. */
   status?: TimelineStatus;
@@ -1994,6 +2039,16 @@ export interface TimelineLayout {
    */
   markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
+  /**
+   * LH-121: the part of the connector drawn in the primary color, from the first event to the current one (to the last `done` one when
+   * no event is current). The rest of the connector stays in the border color. Absent when no event is done or current.
+   */
+  progress?: {x1:number;y1:number;x2:number;y2:number};
+  /**
+   * LH-121: the status word under each label of an event with a status (TIMELINE_STATUS_WORDS), with `statusWords`. Generated text,
+   * not source: its `sources` are empty, and import reads the status from the markers.
+   */
+  statusLabels?: TimelineTextPart[];
   /** LH-41: what the drawn timeline covers (its parts, markers and rings). Its height is the height the timeline needs. */
   bounds: LayoutBox;
   diagnostics: TimelineLayoutDiagnostic[];
@@ -2013,6 +2068,8 @@ export interface TimelineLayoutOptions extends QuoteLayoutOptions {
    * No part goes below `minFontSize`.
    */
   sizeOffset?: number;
+  /** LH-121: draw a status word under the label of each event with a status (English decks only; see TIMELINE_STATUS_WORDS). */
+  statusWords?: boolean;
 }
 
 /** Preserve event order and field boundaries while trying at most 100 readable arrangements. */
@@ -2039,7 +2096,13 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(roles[role]*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,700);add('description',timeline.description,`${path}.description`,400);
-  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,500,index);add('what',event.what,`${eventPath(index)}.what`,600,index);add('event-description',event.description,`${eventPath(index)}.description`,400,index);});
+  // LH-121: the status word sits right under the label, before the event's description.
+  const words=options.statusWords===true&&(options.language===undefined||/^en(-|$)/i.test(options.language));
+  timeline.events.forEach((event,index)=>{
+    add('when',event.when,`${eventPath(index)}.when`,500,index);add('what',event.what,`${eventPath(index)}.what`,600,index);
+    if(words&&event.status){const before=source.length;add('status',TIMELINE_STATUS_WORDS[event.status],`${eventPath(index)}.status`,500,index);source[before]!.sources=[];}
+    add('event-description',event.description,`${eventPath(index)}.description`,400,index);
+  });
   const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
   for(const part of source)if(part.eventIndex===undefined)metadata.push(part);else events[part.eventIndex]!.push(part);
   const cache=new Map<string,{fit:SourceTextFit;ink:TextLineInk[];height:number}>();
@@ -2060,7 +2123,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     if(!Number.isFinite(height))throw new RangeError('Timeline text exceeds finite layout coordinates.');
     measured={fit,ink,height};cache.set(key,measured);return measured;
   };
-  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];connector:TimelineLayout['connector'];diagnostics:TimelineLayoutDiagnostic[];score:number};
+  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
   let selected:Candidate|undefined,attempts=0;
   // The search starts `sizeOffset` from the role sizes and steps down one reference pixel at a time to the floor.
   const sizeAt=(part:TimelineTextPart,reduction:number)=>gridFontSize(part.requestedFontSize+(offset-reduction)*scale,minimum);
@@ -2129,7 +2192,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const whenOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='when'),whatOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='what')!;
         const pair=(fields:TimelineTextPart[])=>{const when=whenOf(fields);return when?{when:lineWidth(when,reduction)+scale,what:lineWidth(whatOf(fields),reduction)+scale}:undefined;};
         const inline=!!options.compact&&events.every(fields=>{const widths=pair(fields);return !widths||widths.when+pairGap+widths.what<=bandWidth+.01;});
-        const below=(fields:TimelineTextPart[])=>fields.filter(part=>inline?part.role==='event-description':part.role!=='when');
+        const below=(fields:TimelineTextPart[])=>fields.filter(part=>inline?part.role==='event-description'||part.role==='status':part.role!=='when');
         const rowHeight=(fields:TimelineTextPart[])=>{const widths=pair(fields);return widths?Math.max(heightOf(whenOf(fields)!,widths.when,'left'),heightOf(whatOf(fields),widths.what,'left')):heightOf(whatOf(fields),bandWidth,'center');};
         const whenHeights=events.map(fields=>{const when=whenOf(fields);return when&&!inline?heightOf(when,bandWidth,'center'):0;});
         const belowHeights=events.map(fields=>(inline?rowHeight(fields)+(below(fields).length?fieldGap:0):0)+below(fields).reduce((height,part)=>height+heightOf(part,bandWidth,'center'),0)+Math.max(0,below(fields).length-1)*fieldGap);
@@ -2184,7 +2247,10 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       }
       for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const firstMarker=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(firstMarker.x,last.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,last.x),y2:last.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:last.x,y2:last.y};
-      const candidate={arrangement,parts,markers,connector,diagnostics,score};
+      // LH-121: progress runs from the first event to the current one, or to the last done one when none is current.
+      const current=markers.findIndex(entry=>entry.status==='current'),reached=current>=0?current:markers.map(entry=>entry.status).lastIndexOf('done');
+      const end=reached>0?markers[reached]!:undefined,progress=end?rtl?{x1:Math.min(firstMarker.x,end.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,end.x),y2:end.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:end.x,y2:end.y}:undefined;
+      const candidate={arrangement,parts,markers,connector,...(progress?{progress}:{}),diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
       return diagnostics;
   };
@@ -2205,7 +2271,9 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const cover=(x:number,y:number,width:number,height:number)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+width);bottom=Math.max(bottom,y+height);};
   for(const part of result.parts)cover(part.box.x,part.box.y,part.box.width,part.box.height);
   for(const marker of result.markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;cover(marker.x-extent,marker.y-extent,2*extent,2*extent);}
-  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:result.diagnostics.length>0};
+  // LH-121: the status words are drawn, measured and covered like the other parts, but they are not source fields.
+  const statusLabels=result.parts.filter(part=>part.role==='status'),parts=result.parts.filter(part=>part.role!=='status');
+  return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,parts,...(statusLabels.length?{statusLabels}:{}),bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:result.diagnostics.length>0};
 }
 
 export interface CodeContent { source: string; language?: string; filename?: string }
@@ -3132,6 +3200,10 @@ const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
 const TILE_FLOORS = Symbol('opf.tileFloors');
 /** LH-06: the longest last text that becomes a foot band, and the longest that becomes a pill beside a lone long text, in characters. */
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
+/** LH-06 (widened): a last text of up to this many characters is a foot band when it follows two or more charts or tables (a takeaway). */
+export const EMPHASIS_TAKEAWAY_MAX_CHARACTERS = 120;
+/** LH-114: the longest quote (its text, without the marks) drawn as a pull line, in characters. */
+export const QUOTE_PULL_MAX_CHARACTERS = 140;
 /** LH-48: composeSlide composes an under-filled body again with its paragraphs and lists this many type-scale steps larger (growBody). */
 const GROW = Symbol('opf.grow');
 /** LH-48: composeSlide composes an under-filled body again in the middle of the space under the headings (growBody). */
@@ -3163,7 +3235,9 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
     if (internal) {
       for (const part of internal.parts as readonly { role: string; text: string; requestedFontSize: number; minFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]) {
         if (part.visible === false) continue;
-        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit?.fontSize, `${item.path}:${part.role}`);
+        // LH-114: a pull line's body is a lead, not the quote's display size on a card: it keeps a key of its own, so the guard holds it to
+        // the slide's smallest body size (every other block still keeps its own size), not to the card's larger quote.
+        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit?.fontSize, `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
         split(part.text, part.fit);
       }
     } else if (item.field === 'table') {
@@ -3182,14 +3256,15 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
 /**
  * The wave 3 rules that rearrange or resize a slide's blocks, each of which must leave every block at least the size the slide has
  * without them: LH-89's nested gaps from the slide's gap (`nested-gaps`), LH-65's empty columns giving way (`empty-columns`), LH-72's measure column (`centered-column`), LH-78's lead size and card for a quote beside other blocks (`quote-beside`)
- * and the card alone (`quote-card`), LH-06's automatic foot band or pill (`emphasis-band`), LH-68's scorecard tiles (`metric-tiles`),
+ * and the card alone (`quote-card`), LH-06's automatic foot band or pill (`emphasis-band`), LH-114's pull line (`pull-quote`), LH-121's
+ * status words under a timeline's labels (`timeline-status`), LH-68's scorecard tiles (`metric-tiles`),
  * LH-86's long texts as full-width rows (`long-text-rows`), LH-66's minimum measure in the automatic grid (`reading-measure`), LH-67's
  * lead plus stack (`lead-stack`) and LH-70's paragraph columns (`paragraph-columns`). LH-80 and LH-49's tracks are alternatives
  * composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share';
 /** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
@@ -3198,6 +3273,8 @@ const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: Re
  */
 const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
+/** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
+const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
 /** LH-67 with LH-48: compositions with a lead plus stack, whose hierarchy (a larger lead) LH-48's body growth would flatten. */
 const LEAD_STACKS = new WeakSet<SlideComposition>();
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
@@ -3210,9 +3287,9 @@ function shrinks(next: SlideComposition, base: SlideComposition, options: Compos
 // composeLayout, fillLone): the height the blocks' text covers (their extents joined where they overlap, as side by side), over the body
 // (the content box below the headings). `spare`: the height left under the content. Undefined for any other body.
 function bodyFill(result: SlideComposition): { fill: number; spare: number } | undefined {
-  // LH-06's band or pill keeps its own size and place; the blocks above it are the body that grows.
+  // LH-06's band or pill and LH-114's pull line keep their own size and place; the blocks above (or below) them are the body that grows.
   if (LEAD_STACKS.has(result)) return undefined;
-  const body = result.items.filter(item => !headings.has(item.field) && !(item.emphasis && result.emphasis?.source !== 'authored'));
+  const body = result.items.filter(item => !headings.has(item.field) && !(item.emphasis && result.emphasis?.source !== 'authored') && !item.quoteLayout?.rule);
   // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
   if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3239,7 +3316,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
   if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
-  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored')).map(item => item.text!.fontSize));
+  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
   let best = result, steps = 0;
@@ -3248,7 +3325,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options)) break;
     best = grown; steps = next;
   }
-  const centered = attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
+  // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
+  const centered = result.items.some(item => item.quoteLayout?.rule) ? undefined : attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
   if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) best = centered;
   return best === result ? undefined : best;
 }
@@ -3307,6 +3385,11 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
         if (readsWell(trial)) { kept = rules; result = trial; }
       }
     }
+    // LH-114: a pull line's quote is set at the lead size, which the guard does not hold against the card. Another arrangement of the
+    // slide (a track, LH-48's growth) is compared with this one, so for that comparison its quote counts at the size it has without the
+    // rules: an arrangement that draws the quote on a card again keeps that size; one that keeps the pull line is held to the lead.
+    const pulled = result!.items.filter(item => item.quoteLayout?.rule).map(item => `${item.path}:body`), sizes = bodyReadability(base, options).byPath;
+    if (pulled.some(key => sizes.has(key))) PULL_SIZES.set(result!, new Map(pulled.flatMap(key => sizes.has(key) ? [[key, sizes.get(key)!] as const] : [])));
   } else if (!result) throw failure;
   return result!;
 }
@@ -3463,7 +3546,8 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
   const measure = Math.min(Infinity, ...narrow.map(item => item.box.width / (AVERAGE_CHARACTER_EM * item.text!.fontSize)));
-  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks: read.byPath };
+  const pulled = PULL_SIZES.get(result), blocks = pulled ? new Map([...read.byPath, ...pulled]) : read.byPath;
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks };
 }
 /**
  * Wave 3: `after` reads as well as `before`: no more findings, no more words split, no more prose under the minimum measure and none
@@ -3866,7 +3950,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const length = [...text].length, before = flowed.slice(0, -1).map((entry: { block: unknown }) => plainText(entry.block));
     const long = (other: string | undefined) => other === undefined || [...other].length > EMPHASIS_BAND_MAX_CHARACTERS;
     if (before.length === 1 && before[0] !== undefined && long(before[0]) && length <= EMPHASIS_PILL_MAX_CHARACTERS) return { block: last.index, shape: 'pill', follows: flowed[0]!.index };
-    return length <= EMPHASIS_BAND_MAX_CHARACTERS && before.every(long) ? { block: last.index, shape: 'band' } : undefined;
+    // LH-06 (widened): a takeaway of up to EMPHASIS_TAKEAWAY_MAX_CHARACTERS right after two or more charts or tables (a run of them, so a
+    // note paired with the chart before it reads as that chart's note, not as the slide's takeaway) is the band too.
+    const isData = (entry: { block: unknown }) => { const host = record(entry.block); return !Array.isArray(host.blocks) && (host.chart !== undefined || host.table !== undefined); };
+    let data = 0;
+    for (let index = flowed.length - 2; index >= 0 && isData(flowed[index]!); index--) data++;
+    const limit = data >= 2 ? EMPHASIS_TAKEAWAY_MAX_CHARACTERS : EMPHASIS_BAND_MAX_CHARACTERS;
+    return length <= limit && before.every(long) ? { block: last.index, shape: 'band' } : undefined;
   })();
   // The band spans the body's width; the pill hugs its one line. Each is drawn at the foot of the body, which ends a gap above it; a
   // surface that would take more than EMPHASIS_BAND_MAX_SHARE of the body is not drawn.
@@ -3891,6 +3981,54 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         item: { path: textPath, field: 'text', type: 'text', value, payload: { type: 'text', text: value }, box, text: fit, textStyle: styleFor('text', textPath), composition, alignment: pill ? 'center' : side, emphasis: true },
       };
       if (!pill || (options as Record<symbol, unknown>)[PILL_AT_FOOT] === true) bodyBottom = top - gap;
+    }
+  }
+  // LH-114: a pull line. A quote of QUOTE_PULL_MAX_CHARACTERS or fewer that shares the body with data (a table, a list of three or more
+  // entries, or two or more other blocks) is drawn across the body as its own row: an accent rule, the quote at the lead size in at most
+  // QUOTE_PULL_LINES lines and one caption line. It is the last row when the quote is the last block, and the first row (under the
+  // headings) when it is the first block of an automatic slide (a layout's headings sit in its own title area). The data takes the full
+  // width beside it. A quote beside one compact block keeps its card (LH-78), as does a quote with a photo, a region, a caption or an
+  // emphasis of its own, a quote in the middle, one of several quotes, and a slide with its own arrangement (as the band above).
+  const pullQuote = ((): { block: number; position: 'foot' | 'top' } | undefined => {
+    if (!ruleOn('pull-quote') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks)) return undefined;
+    const own = record(slide.composition);
+    if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
+    const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || (autoSurface && index === autoEmphasis?.block) ? [] : [{ host: record(block), index }]);
+    const quotes = flowed.filter((entry: { host: Record<string, any> }) => entry.host.quote !== undefined);
+    if (flowed.length < 2 || quotes.length !== 1) return undefined;
+    const entry = quotes[0]!, at = flowed.indexOf(entry), host = entry.host, quote = typeof host.quote === 'string' ? { text: host.quote } : record(host.quote);
+    const position = at === flowed.length - 1 ? 'foot' : at === 0 && !useTemplate ? 'top' : undefined;
+    if (!position || host.emphasis === true || host.region !== undefined || host.caption !== undefined || quote.photo !== undefined || fields.some(field => field !== 'quote' && host[field] !== undefined)) return undefined;
+    const text = contentText('quote', quote)?.trim();
+    if (!text || [...text].length > QUOTE_PULL_MAX_CHARACTERS) return undefined;
+    const others = flowed.filter((other: { host: Record<string, any> }) => other !== entry), entries = (other: Record<string, any>) => Array.isArray(other.items) ? other.items.length : Array.isArray(other.bullets) ? other.bullets.length : 0;
+    const data = (other: Record<string, any>) => !Array.isArray(other.blocks) && (other.table !== undefined || entries(other) >= 3);
+    return others.length >= 2 || data(others[0]!.host) ? { block: entry.index, position } : undefined;
+  })();
+  // The pull line is laid out across the body's width from the top of a tall box, which measures its height; it is drawn at the foot
+  // (the body ends a gap above it) or under the headings (the body starts a gap below it). A body under twice its height, or a quote
+  // that needs more than QUOTE_PULL_LINES lines at the body text size, keeps the card.
+  let pullItem: ComposedItem | undefined, placePull: ((top: number) => ComposedItem) | undefined;
+  if (pullQuote) {
+    const blockPath = `${path}.blocks.${pullQuote.block}`, quotePath = `${blockPath}.quote`, value = record(slide.blocks[pullQuote.block]).quote as string | QuoteContent;
+    const x = area.left + padding, width = area.right - area.left - padding * 2, language = quoteLanguage(options.presentation, options.slideIndex);
+    const lay = (top: number, room: number) => layoutQuote(value, { x, y: top, width, height: room }, {
+      fontFamilies: options.fontFamilies, textMeasurement: options.textMeasurement, scale, minFontSize: composition.minFontSize, path: quotePath, direction: textDirection,
+      ...(citationMarker ? { citationMarker } : {}), ...(language !== undefined ? { language } : {}), pull: true, bodySize: LEAD_NOMINAL_SIZE, bodyLines: QUOTE_PULL_LINES });
+    const measured = lay(y, Math.max(scale, bodyBottom - y)), bodyPart = measured.parts.find(part => part.role === 'body');
+    const lines = bodyPart?.fit ? 'richLines' in bodyPart.fit ? (bodyPart.fit as RichTextFit).richLines.length : bodyPart.fit.lines.length : Infinity;
+    const height = round(measured.bounds.height);
+    if (!measured.overflow && lines <= QUOTE_PULL_LINES && 2 * (height + gap) <= bodyBottom - y) {
+      fire('pull-quote');
+      const top = pullQuote.position === 'foot' ? round(bodyBottom - height) : round(y);
+      // The pull line is laid out again where it finally sits (pullStack, after the body), so its parts are measured in place.
+      placePull = (at: number): ComposedItem => {
+        const quoteLayout = lay(at, height), body = quoteLayout.parts.find(part => part.role === 'body')!;
+        return { path: quotePath, field: 'quote', type: 'quote', value, payload: { type: 'quote', quote: value }, box: { x, y: at, width, height }, text: body.fit,
+          textStyle: body.style, composition, alignment: alignmentFor('quote'), quoteLayout };
+      };
+      pullItem = placePull(top);
+      if (pullQuote.position === 'foot') bodyBottom = top - gap; else { y = top + height + gap; items.push(pullItem); }
     }
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
@@ -3921,7 +4059,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const regionsInReadingOrder = visualReadingOrder(regions.map(key => ({ key, box: regionBox(regionParts(key)!, contentBox, gap) }))).map(entry => entry.key);
   const pending: Pending[] = regions.length
     ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
-    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   // LH-06: the one block or group drawn on the emphasis surface: the first `emphasis: true` in reading order. Any other is drawn plain,
   // and reported: a slide has one emphasis.
@@ -4025,7 +4163,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const timelineHints = new WeakMap<Pending, { horizontal?: true; compact?: true; inlineHeader?: boolean; sizeOffset?: number; grow?: true }>();
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number) => {
     const hint = timelineHints.get(node);
+    // LH-121: status words under the labels, a guarded rule (they take height the timeline's text might need).
+    const events = Array.isArray(node.value) ? node.value : record(node.value).events, statusWords = ruleOn('timeline-status') && Array.isArray(events) && events.some((event: unknown) => record(event).status !== undefined) && (deckLanguage() === undefined || /^en(-|$)/i.test(deckLanguage()!));
+    if (statusWords) fire('timeline-status');
     return layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
+      ...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
       ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),
       sizeOffset: sizeOffset ?? (sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
@@ -4365,8 +4507,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let y = area.y + Math.max(0, (area.height - heights.reduce((sum, size) => sum + size, 0) - between * (boxes.length - 1)) / 2);
     return boxes.map((box, index) => { const next = { ...box, y, height: heights[index]! }; y += heights[index]! + between; return next; });
   };
+  // LH-114: with a pull line the data and the pull line are one stack at the top of the body (pullStack), so the split is not centered.
   const fillsSplit = (nodes: Pending[], boxes: LayoutBox[], area: LayoutBox, settings: Composition, cols: number): boolean =>
-    area === contentBox && cols === nodes.length && splitBlocks(nodes) && splitFill(nodes, boxes, area, settings) < SPLIT_FILL;
+    !pullItem && area === contentBox && cols === nodes.length && splitBlocks(nodes) && splitFill(nodes, boxes, area, settings) < SPLIT_FILL;
   const placeSplitBlock = (node: Pending, cell: LayoutBox, settings: Composition): void => {
     const first = items.length;
     // A card fills its cell; what it holds is centered inside the card's own insets (those of the whole card, not of a card as short
@@ -4467,7 +4610,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       // LH-52 with LH-48: a stack of paragraphs and lists keeps its top, as LH-48's grown stack does (the editor resizes its tracks from
       // the top); a stack with a panel, table, timeline or media block sits in the middle of the body.
-      if (area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      if (!pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
@@ -4941,7 +5084,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
     height = Math.min(cell.height, height);
-    return { ...cell, y: cell.y + (cell.height - height) / 2, height };
+    // LH-114: with a pull line the block and the pull line are one stack at the top of the body (pullStack).
+    return { ...cell, y: pullItem ? cell.y : cell.y + (cell.height - height) / 2, height };
   };
   // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
   // cell's height wide (a metric beside its note in a wide cell), else the figure above its text. One rule for every pair of a
@@ -5202,8 +5346,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
-    // LH-06: the block drawn as the automatic foot band or pill is bound to no region (an empty block in its place keeps every index).
-    const bound = autoSurface ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => index === autoEmphasis?.block ? {} : block) } : slide;
+    // LH-06, LH-114: the block drawn as the automatic foot band or pill, and the quote drawn as a pull line, are bound to no region (an
+    // empty block in its place keeps every index).
+    const unbound = (index: number) => (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block);
+    const bound = autoSurface || pullItem ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => unbound(index) ? {} : block) } : slide;
     // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide leaves the rule out (its guard).
     const { binding, region: longTextRegion } = (!ruleOn('long-text-rows') ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true }), plan);
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
@@ -5311,8 +5457,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const region of plan.regions) if (!unitsOf(region.name).length && region.empty !== 'keep') empty.add(region.name);
     if (plan.title && !titleFields.length) empty.add('title');
     if (plan.subtitle && !subtitleFields.length) empty.add('subtitle');
+    // LH-122: an empty region alone in an auto row above another body region (the timeline layout's lead) takes no height either way;
+    // joining the region below would hand that region its row and the gap under the headings, so it stays, zero high.
+    const ownRows = areaRects(cells), bodyName = (name: string) => regionOf.has(name);
+    const stays = (name: string) => { const rect = ownRows.get(name); return !!rect && rect.rowSpan === 1 && rowSizes[rect.row] === 'auto' && cells[rect.row]!.every(cell => cell === name || cell === '.') && cells.slice(rect.row + 1).some(row => row.some(bodyName)); };
     // The implicit row below the grid holds what no region took; nothing collapses into it.
-    const collapsed = collapseAreas(cells, empty, name => name === 'title' || name === 'subtitle', name => name !== BELOW);
+    const collapsed = collapseAreas(cells, new Set([...empty].filter(name => !bodyName(name) || !stays(name))), name => name === 'title' || name === 'subtitle', name => name !== BELOW);
     const rects = areaRects(collapsed.grid), ownRects = areaRects(cells);
     // LH-65: a column that holds only empty regions (and heading or below-the-grid areas that span other columns too) gives way: it
     // takes no width and no gap, and the columns left share the width by their own sizes, so 2 blocks in three columns draw 1:1, not
@@ -5945,6 +6095,38 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
   }
   if (autoSurface) items.push(autoSurface.item);
+  // LH-114: the data and the pull line are one stack. A pull line reserved at the foot moves up to one gap under the lowest content of
+  // the body (a table's last row, a text's last line, a card's edge, a chart's box), and one reserved under the headings moves down
+  // to one gap above the highest, so a body that hugs its content does not leave the pull line a block away from its data. The body
+  // never moves; with the pull line it is not centered (LH-52, LH-48's CENTER), so the stack sits at the top of the body.
+  if (pullItem && placePull) {
+    const pulled = pullItem, own = new Set([pulled.path, autoSurface?.item.path]), placedPaths = new Set(placed.map(entry => `${entry.hostPath}.image`));
+    const body = items.filter(item => !headings.has(item.field) && !own.has(item.path) && !placedPaths.has(item.path));
+    const textHeight = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.placement?.height ?? fit.lines.length * fit.lineHeight;
+    const extent = (item: ComposedItem): [number, number] => {
+      if (item.frameBox) return [item.frameBox.y, item.frameBox.y + item.frameBox.height];
+      const internal = (item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout) as { bounds?: LayoutBox } | undefined;
+      if (internal?.bounds) return [internal.bounds.y, internal.bounds.y + internal.bounds.height];
+      if (item.field === 'table') {
+        try {
+          const rows = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap(row => row.cells.map(cell => cell.box));
+          if (rows.length) return [Math.min(...rows.map(box => box.y)), Math.max(...rows.map(box => box.y + box.height))];
+        } catch { /* the item's box below */ }
+      }
+      if (item.text && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) {
+        const lines = 'richLines' in item.text ? undefined : (item.text as TextFit).placement?.lines;
+        return lines?.length ? [Math.min(...lines.map(line => line.y)), Math.max(...lines.map(line => line.y + line.height))] : [item.box.y, item.box.y + textHeight(item.text)];
+      }
+      const box = item.image?.box ?? item.box;
+      return [box.y, box.y + box.height];
+    };
+    if (body.length) {
+      const extents = body.map(extent), top = Math.min(...extents.map(([from]) => from)), bottom = Math.max(...extents.map(([, to]) => to));
+      const at = pullQuote?.position === 'foot' ? round(Math.min(pulled.box.y, bottom + gap)) : round(Math.max(pulled.box.y, top - gap - pulled.box.height));
+      if (Math.abs(at - pulled.box.y) > .5) { const moved = placePull(at); if (items.includes(pulled)) items[items.indexOf(pulled)] = moved; pullItem = moved; }
+    }
+  }
+  if (pullItem && pullQuote?.position === 'foot') items.push(pullItem);
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts); LH-93: and one plot height (chart-plot.ts).
   const chartMeasure = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 400, italic: false, path}, options.textMeasurement), options.textMeasurement);
   const plotGeometry = (item: unknown) => ({scale, minFontSize: (item as ComposedItem).composition.minFontSize, measure: chartMeasure, direction: rtl ? 'rtl' as const : 'ltr' as const, language: deckLanguage()});

@@ -18,8 +18,11 @@ const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts"
 // WI-2 (whole-group placement): four records were redrawn on purpose (their grid is an all-auto stack the 4.0.0 form could not
 // express) and one record is new. They are tested by single-message-layouts.test.mjs; every other record must still compile to
 // exactly its 4.0.0 grid. The layout harvest redrew five more on purpose (full-height cards in pillars, team, scorecard and
-// two-column; a full-height picture beside a text column in hero), tested by layout-harvest.test.mjs.
-const REDESIGNED = new Set(["statement", "closing", "quote", "comparison", "pillars", "team", "scorecard", "hero", "two-column"]);
+// two-column; a full-height picture beside a text column in hero), tested by layout-harvest.test.mjs. LH-122 added the timeline
+// layout's lead region (a text authored before the timeline sits under the title), tested in core (lh-114-pull-quotes.test.mjs).
+const REDESIGNED = new Set(["statement", "closing", "quote", "comparison", "pillars", "team", "scorecard", "hero", "two-column", "timeline"]);
+/** LH-122: regions added since 4.0.0 that only text authored before the primary block binds to, so older decks keep their order. */
+const LEADS_ADDED = { timeline: ["lead"] };
 const sameAsBefore = (record) => !ADDED.has(record.id) && !REDESIGNED.has(record.id);
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
@@ -83,7 +86,7 @@ for (const record of records) {
     assert.ok(Array.isArray(record.regions), "regions is the ordered array");
     assert.ok(["row", "column"].includes(record.direction), "the direction is written");
     // hero reads its picture last (lead, support, media): text still binds lead then support, and a picture binds to media by role.
-    if (!ADDED.has(record.id) && record.id !== "hero") assert.deepEqual(bodyRegions(record).map(([name]) => name), Object.keys(old[record.id].regions), "fixture decks keep their block order");
+    if (!ADDED.has(record.id) && record.id !== "hero") assert.deepEqual(bodyRegions(record).map(([name]) => name).filter((name) => !(LEADS_ADDED[record.id] ?? []).includes(name)), Object.keys(old[record.id].regions), "fixture decks keep their block order");
     const walk = (list, depth) => {
       assert.ok(depth <= 3 && list.length >= 1 && list.length <= 12);
       for (const entry of list) if (entry.regions) walk(entry.regions, depth + 1);

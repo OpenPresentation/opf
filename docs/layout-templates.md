@@ -228,7 +228,12 @@ kind `group`.
    joins step 2.
 2. **Everything else.** Of the regions that accept the block and have room, the lowest role rank wins (pictures:
    media, primary, secondary, supporting; every other kind: primary, secondary, supporting, media), then the first in
-   reading order (the order of the `regions` list, depth first).
+   reading order (the order of the `regions` list, depth first). Then source order is kept across regions where the
+   layout allows it (LH-122): a block drawn on the wrong side of another bound block moves to the equally ranked region
+   that accepts it, has room and leaves it out of order with the fewest blocks, being drawn before a block it follows
+   counting more than being drawn after one it precedes. The `timeline` layout has a `lead` region (text, auto height)
+   between the title and the timeline and `notes` after it, so a text authored before the timeline is its lead and one
+   after it (or between two timelines) a note.
 3. **No candidate.** The block goes to the overflow region whatever its `accepts` while it has room, and beyond `max`
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.

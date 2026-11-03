@@ -3706,6 +3706,13 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
     });
   }
   if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  // LH-114: a pull line's accent rule, a native rectangle in the primary color where core placed it (as the preview draws it), tagged
+  // into the quote's group so an unchanged export imports back with the quote.
+  if (layout.rule) {
+    const objectName = `OPF quote rule ${group}`, rule = layout.rule;
+    slide.addShape('rect', {objectName, x: rule.x / 96, y: rule.y / 96, w: rule.width / 96, h: rule.height / 96, fill: {color: context.colors.accent}, line: {transparency: 100}});
+    context.quoteTags.set(objectName, {v: 1, role: 'rule', group});
+  }
 }
 
 // FA-12: the attributed person's headshot is a native picture in the core circle frame: cropped to fill it (a:srcRect after the bytes
@@ -3740,6 +3747,12 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  // LH-121: the connector up to the current event, a second native line in the primary color over the first.
+  if(layout.progress){
+    const progressName=`OPF timeline ${group} progress`,{x1,y1,x2,y2}=layout.progress;
+    slide.addShape('line',{objectName:progressName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.accent,width:3*scale*.75}});
+    context.timelineTags.set(progressName,{v:1,group,role:'progress'});
+  }
   // FA-11: a status draws from the deck's colors through core's shared shapes: native ellipses (solid fill, or the
   // background fill plus a line for a hollow marker or a ring) and a muted text color for a planned event.
   const statusColors={background:`#${normalizeHex(context.colors.background)}`,primary:`#${context.colors.accent}`,text:`#${normalizeHex(context.colors.text)}`,mutedText:`#${context.colors.mutedText}`};
@@ -3760,6 +3773,13 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   for(const [index,part]of layout.parts.entries()){
     const statusColor=part.status==='planned'?normalizeHex(timelineTextColor(part,statusColors)):undefined;
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
+  }
+  // LH-121: the generated status words, tagged into the group as `status` so import consumes them (the status comes from the markers).
+  for(const label of layout.statusLabels??[]){
+    if(!label.fit)continue;
+    const objectName=`OPF timeline ${group} status ${label.eventIndex}`;
+    addMeasuredPayloadText(slide,label.text,label.box,context,options,{path:label.path,fit:label.fit,textStyle:label.style,align:label.alignment,diagnosticsHandled:true,objectName,color:normalizeHex(timelineTextColor(label,statusColors))});
+    for(let line=0;line<label.fit.lines.length;line++)context.timelineTags.set(`${objectName} line ${line}`,{v:1,group,role:'status',eventIndex:label.eventIndex});
   }
 }
 

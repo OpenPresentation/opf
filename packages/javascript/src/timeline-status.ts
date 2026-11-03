@@ -63,9 +63,14 @@ export function timelineMarkerShapes(marker: TimelineLayout['markers'][number], 
   return shapes;
 }
 
-/** The color of one timeline text part: muted for a planned event, the normal text color otherwise, kept at >= 4.5:1. */
-export function timelineTextColor(part: Pick<TimelineTextPart, 'status'>, colors: TimelineStatusColors): string {
-  if (part.status !== 'planned') return colors.text;
-  const background = normalize(colors.background) ?? '#FFFFFF', muted = normalize(colors.mutedText);
+/**
+ * The color of one timeline text part: muted for a planned event, the normal text color otherwise, kept at >= 4.5:1. A status word
+ * (LH-121, role `status`) is in the primary color for the current event and muted for the others.
+ */
+export function timelineTextColor(part: Pick<TimelineTextPart, 'status'> & { role?: TimelineTextPart['role'] }, colors: TimelineStatusColors): string {
+  const background = normalize(colors.background) ?? '#FFFFFF';
+  if (part.role === 'status' && part.status === 'current') { const primary = normalize(colors.primary); return primary ? legible(primary, background, TIMELINE_TEXT_MIN_CONTRAST) : colors.primary; }
+  if (part.status !== 'planned' && part.role !== 'status') return colors.text;
+  const muted = normalize(colors.mutedText);
   return muted ? legible(muted, background, TIMELINE_TEXT_MIN_CONTRAST) : colors.mutedText;
 }

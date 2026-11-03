@@ -189,8 +189,39 @@ export function bindRegions(slide: unknown, layout: unknown, options: BindRegion
     overflow.binding.overflow.push(bound);
     result.diagnostics.push({ code: 'layout-unplaced', path: node.path, region: overflowName, message: `No region of the layout has room for this block; it is drawn in '${overflowName}' beyond its ${overflow.region.max} block${overflow.region.max === 1 ? '' : 's'}. Paginate to move it to a continuation slide, choose another layout, or remove a block.` });
   }
-  // Within a region, blocks keep source order whatever step bound them.
+  // LH-122: step 2 keeps source order across regions where the layout allows it. A block it bound to a region on the wrong side of
+  // another bound block moves to the equally ranked region that accepts it, has room and leaves it out of order with the fewest blocks.
+  // Being drawn before a block it follows in the source (met before its context) weighs more than being drawn after one it precedes, so
+  // a block between two others stays after the first. A layout with a lead region over its primary region (the timeline layout's lead
+  // and notes) then takes a text authored before the timeline as the lead, and one after it (or between two timelines) as a note.
   const order = new Map(nodes.map((node, position) => [node.path, position]));
+  const regionAt = new Map<string, number>();
+  for (const { binding, order: at } of byName.values()) for (const block of binding.blocks) regionAt.set(block.path, at);
+  const outOfOrder = (path: string, at: number) => {
+    let count = 0;
+    for (const [other, region] of regionAt) {
+      if (other === path || region === at) continue;
+      if (order.get(other)! < order.get(path)!) { if (region > at) count += nodes.length + 1; } else if (region < at) count++;
+    }
+    return count;
+  };
+  for (const node of rest) {
+    const from = regionAt.get(node.path), current = [...byName.values()].find(entry => entry.order === from);
+    if (!current || !regionAccepts(current.region, node.value)) continue;
+    const rank = regionRoleRank(current.region.role, node.kind);
+    let best = { entry: current, count: outOfOrder(node.path, current.order) };
+    if (!best.count) continue;
+    for (const [name, entry] of byName) {
+      if (entry === current || !regionAccepts(entry.region, node.value) || !room(name) || regionRoleRank(entry.region.role, node.kind) !== rank) continue;
+      const count = outOfOrder(node.path, entry.order);
+      if (count < best.count) best = { entry, count };
+    }
+    if (best.entry === current) continue;
+    const moved = current.binding.blocks.splice(current.binding.blocks.findIndex(block => block.path === node.path), 1)[0]!;
+    best.entry.binding.blocks.push(moved);
+    regionAt.set(node.path, best.entry.order);
+  }
+  // Within a region, blocks keep source order whatever step bound them.
   for (const binding of regions) binding.blocks.sort((a, b) => order.get(a.path)! - order.get(b.path)!);
   return result;
 }
