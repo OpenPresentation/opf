@@ -1895,13 +1895,13 @@
  ],
  "metrics 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
-  "region metrics 57.6,306.5,1164.8,196.9 grid 4",
+  "region metrics 57.6,299.7,1164.8,210.6 grid 4",
   "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.metric metrics 57.6,306.5,279.2,196.9 76px",
-  "item blocks.1.text metrics 348.8,306.5,279.2,196.9 28px",
-  "item blocks.2.metric metrics 652,306.5,279.2,196.9 76px",
-  "item blocks.3.text metrics 943.2,306.5,279.2,196.9 28px"
+  "item blocks.0.metric metrics 57.6,299.7,279.2,210.6 120px",
+  "item blocks.1.text metrics 348.8,299.7,279.2,210.6 28px",
+  "item blocks.2.metric metrics 652,299.7,279.2,210.6 120px",
+  "item blocks.3.text metrics 943.2,299.7,279.2,210.6 28px"
  ],
  "metrics 5 short": [
   "area title 57.6,57.6,1164.8,65.9",

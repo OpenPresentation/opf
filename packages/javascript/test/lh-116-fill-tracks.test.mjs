@@ -95,7 +95,8 @@ test('LH-102: a body that fills the layout keeps its place', () => {
 
 for (const direction of ['ltr', 'rtl']) {
   test(`LH-64 widened (${direction}): a list, a table and a quote in a row of cards start at one anchor`, () => {
-    const slide = { title: 'Vendor selection shortlist', blocks: [{ items: ['Must support single sign-on', 'Data stays in region', 'Implementation under 90 days'] }, { table: { columns: ['Vendor', 'Score', 'Price'], rows: [['Apex', '86', '$120K'], ['Brightline', '79', '$98K'], ['Cobalt', '72', '$85K']] } }, { quote: { text: 'Apex answered every security question in writing, in two days.', attribution: 'Security reviewer' } }] };
+    // A quote over 140 characters keeps its card (a shorter one beside a table is LH-114's pull line: layout-interactions.test.mjs).
+    const slide = { title: 'Vendor selection shortlist', blocks: [{ items: ['Must support single sign-on', 'Data stays in region', 'Implementation under 90 days'] }, { table: { columns: ['Vendor', 'Score', 'Price'], rows: [['Apex', '86', '$120K'], ['Brightline', '79', '$98K'], ['Cobalt', '72', '$85K']] } }, { quote: { text: 'Apex answered every security question in writing, in two days, and its references described the same speed after go-live, through two audits.', attribution: 'Security reviewer' } }] };
     const result = composeSlide(slide, { layout: layouts['three-column'], direction, fill: false });
     const tops = body(result).map((entry) => Math.round(entry.box.y));
     assert.equal(new Set(tops).size, 1, `${tops}`);

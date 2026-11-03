@@ -109,7 +109,9 @@ describe("LH-120: a bar chart in a row of three takes 40%", () => {
       blocks: [
         { items: ["Low usage", "Slow support", "Price increase"] },
         { chart: { type: "bar", data: { columns: ["Driver", "Share (%)"], rows: [["Low usage", 34], ["Support delays", 24], ["Price", 19], ["Integrations", 14], ["Champion left", 9]] } } },
-        { quote: { text: "Nobody called.", attribution: "Exit interview" } },
+        // An emphasized quote keeps its card in the row (a plain short quote beside a list of 3 is LH-114's pull line, which leaves the
+        // list and the chart a row of two: layout-interactions.test.mjs).
+        { quote: { text: "Nobody called.", attribution: "Exit interview" }, emphasis: true },
       ],
     };
     const items = composeSlide(slide, { width: 1280, height: 720 }).items.filter((item) => item.path.startsWith("slides.0.blocks"));

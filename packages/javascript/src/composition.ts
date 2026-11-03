@@ -3612,6 +3612,8 @@ const CENTERED_FIELDS: ReadonlySet<string> = new Set(['text', 'items', 'bullets'
  */
 function centerTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || !result.regions || overflowCount(result) > 0 || !isLayoutTemplate(options.layout) || layoutTemplate(options.layout).stack !== undefined) return undefined;
+  // LH-114 with LH-102: a body with a pull line is one stack with its data at the top of the body (as growBody leaves it), never centered.
+  if (result.items.some(item => item.quoteLayout?.rule)) return undefined;
   const bled = new Set(result.regions.filter(region => region.bleed).map(region => region.name));
   const bodyOf = (composed: SlideComposition) => composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored'));
   const body = bodyOf(result);
@@ -3813,23 +3815,27 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
  * Wave 3: how well a composition reads, for comparing it with the same slide composed another way (the one measure of the wave 3 guard).
  * `overflows`: its findings (text-overflow, small-cell, layout-unplaced); `blocks`: the body size of every text, list and table and of
  * each main part of a quote, code panel, metric or timeline (bodyReadability's `byPath`); `narrow` and `measure`: the paragraphs under
- * the minimum measure (LH-66) and the shortest of their measures.
+ * the minimum measure (LH-66) and the shortest of their measures; `shortPlots`: the charts whose plot is under LH-49's minimum height.
  */
-interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number }
+interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number; shortPlots: number }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
   const measure = Math.min(Infinity, ...narrow.map(item => item.box.width / (AVERAGE_CHARACTER_EM * item.text!.fontSize)));
   const pulled = PULL_SIZES.get(result), blocks = pulled ? new Map([...read.byPath, ...pulled]) : read.byPath;
-  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells };
+  const charts = result.items.filter(item => item.field === 'chart' && item.chart), scale = Math.min(result.width, result.height) / 720;
+  const shortPlots = charts.length ? charts.filter(item => shortPlot(item, bodyHeight(result), scale, false)).length : 0;
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots };
 }
 /**
  * Wave 3: `after` reads as well as `before`: no more findings, no more words split, no more prose under the minimum measure and none
  * on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A rule or arrangement never costs
- * the text its size: only to leave fewer findings may `after` be smaller, and never below the readability floor.
+ * the text its size: only to leave fewer findings may `after` be smaller, and never below the readability floor. Wave 4: nor does it
+ * leave more charts with a plot under LH-49's minimum height (a pull line took the quote out of a 2 x 2 grid of a metric, a chart, a
+ * table and a quote, and the three left in a row squeezed the chart's plot to a strip: b02 s29, b12 s19, b15 s44).
  */
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
-  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01) return false;
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
   const kept = after.size >= before.size - FONT_GRID_EPSILON && [...before.blocks].every(([path, size]) => (after.blocks.get(path) ?? Infinity) >= size - FONT_GRID_EPSILON);
   return kept || (after.overflows < before.overflows && after.size >= floor - FONT_GRID_EPSILON);
 }
@@ -5015,6 +5021,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-107: a waterfall's roles, signed labels and caption (chart-marks.ts).
       const waterfall = chartWaterfall(drawn.chart, drawn.data, geometry);
       if (waterfall) layer = {...layer, waterfall: waterfall.waterfall, ...(waterfall.header ? {header: waterfall.header} : {})};
+      // LH-107 with LH-113: one emphasis per chart. A waterfall in its role colors (totals strong, gains in the accent, losses gray) has
+      // that as its emphasis, so it takes no focus from the slide's texts (neither engine would draw one on its bars).
+      if (waterfall?.waterfall.colors && layer?.focus) { const {focus: _focus, ...rest} = layer; layer = rest; }
       // LH-108: a value list beside a pie in place of its slice names.
       const list = chartValueList(drawn.chart, drawn.data, geometry, {...(layer?.focus ? {focus: layer.focus} : {}), ...(slices ? {slices} : {})});
       if (list) { const {slices: _slices, ...rest} = layer ?? {}; layer = {...rest, valueList: list}; }

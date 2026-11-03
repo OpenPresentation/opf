@@ -1,7 +1,8 @@
-// The rules where two layout-harvest features meet: wave 2 (packages/render/test/golden/notes/LH-wave-2.md) and wave 3 (LH-wave-3.md).
+// The rules where two layout-harvest features meet: wave 2 (packages/render/test/golden/notes/LH-wave-2.md), wave 3 (LH-wave-3.md) and
+// wave 4 (LH-wave-4.md).
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide } from '../dist/composition.js';
+import { chartPlotBox, composeSlide } from '../dist/composition.js';
 import { layouts, sampleSlide } from './support/template-samples.mjs';
 
 const overflow = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow' || entry.code === 'small-cell');
@@ -365,5 +366,94 @@ test('LH-116 with LH-80 and LH-51: a picture track spans the title band only bes
     const image = (result) => result.items.find((item) => item.field === 'image').image.box;
     assert.ok(image(long).y > 100 && image(short).y === 0, `${direction}: ${image(long).y}, ${image(short).y}`);
     assert.equal(long.items.find((item) => item.field === 'title').text.lines.length, 1);
+  }
+});
+
+// Wave 4 (packages/render/test/golden/notes/LH-wave-4.md).
+const arabic = (slide) => ({ presentation: { language: 'ar', slides: [slide] }, slideIndex: 0 });
+const bodyItems = (result) => result.items.filter((item) => item.path.includes('.blocks.'));
+
+test('Wave 4 guard: no rule leaves a chart plot under the LH-49 minimum (LH-114 with LH-112 on a metric, a chart, a table and a quote)', () => {
+  // A short quote beside a table is LH-114's pull line; taking it out of the 2 x 2 grid left a metric, a chart and a table in a row of
+  // three, and the chart's plot a strip under 120 px (b02 s29, b12 s19, b15 s44). The guard counts such plots, so the grid stays.
+  const slide = { title: 'Decision and follow through', composition: { mode: 'auto' }, blocks: [
+    { metric: { value: '42 pts', label: 'Primary signal', description: 'Prepare displaced workers for regional growth sectors', trend: 'down' } },
+    { chart: { type: 'line', data: { columns: ['Quarter', 'Current', 'Baseline'], rows: [['Q1', 21, 18], ['Q2', 25, 20], ['Q3', 28, 22], ['Q4', 32, 24]] } } },
+    { table: { columns: ['Workstream', 'Owner', 'Status', 'Decision'], rows: [['Workforce development', 'Program lead', 'At risk', 'Continue'], ['Data and reporting', 'Analytics', 'On track', 'Tighten metric definitions'], ['Field adoption', 'Operations', 'Watch', 'Add weekly office hours']] } },
+    { quote: { text: 'The path is workable if we keep the metric simple and the decision owner visible.', attribution: 'Working group' } },
+  ] };
+  for (const options of [{}, arabic(slide)]) {
+    const result = composeSlide(slide, options), scale = Math.min(result.width, result.height) / 720;
+    const chart = result.items.find((item) => item.field === 'chart');
+    assert.ok(chartPlotBox(chart, scale).height >= 120 * scale - .5, `plot ${chartPlotBox(chart, scale).height}`);
+    assert.deepEqual(overflow(result), []);
+  }
+});
+
+test('LH-112 with LH-102: a display-size metric beside a picture is centered in the body as a block and stays start-aligned', () => {
+  const picture = { image: { src: `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600"><rect width="1200" height="1600" fill="#3f8a55"/></svg>').toString('base64')}`, alt: 'Chargers' } };
+  const slide = { title: 'Charging network uptime', blocks: [{ metric: { value: '99.2%', label: 'Network uptime', description: 'All 480 chargers, rolling 90 days', delta: '+1.4 pts', trend: 'up' } }, picture] };
+  // A metric whose own text is right to left starts at the right of a right-to-left slide (RR-05).
+  const ar = { ...slide, blocks: [{ metric: { value: '99.2%', label: 'جاهزية الشبكة', description: 'جميع أجهزة الشحن خلال 90 يوما', delta: '+1.4 نقطة', trend: 'up' } }, picture] };
+  for (const [deck, options, start] of [[slide, { layout: layouts.hero }, 'left'], [ar, { layout: layouts.hero, ...arabic(ar) }, 'right']]) {
+    const result = composeSlide(deck, options), metric = result.items.find((item) => item.metricLayout);
+    assert.equal(metric.metricLayout.alignment, start, 'LH-102 moves the block, never its alignment');
+    assert.ok(metric.metricLayout.display && metric.metricLayout.parts.find((part) => part.role === 'value').fit.fontSize >= 120);
+    const title = result.items.find((item) => item.field === 'title'), above = metric.box.y - (title.box.y + title.box.height), below = result.contentBox.y + result.contentBox.height - (metric.box.y + metric.box.height);
+    assert.ok(above > 40 && Math.abs(above - below) < 0.25 * (above + below), `${above} above, ${below} below`);
+  }
+});
+
+test('LH-114 with LH-102 and LH-64: a layout body with a pull line keeps its cards at the top, at one start, the pull line under them', () => {
+  const slide = { title: 'Vendor selection shortlist', blocks: [{ items: ['Must support single sign-on', 'Data stays in region', 'Implementation under 90 days'] }, { table: { columns: ['Vendor', 'Score', 'Price'], rows: [['Apex', 86, '$120K'], ['Brightline', 79, '$98K'], ['Cobalt', 72, '$85K']] } }, { quote: { text: 'Apex answered every security question in writing, in two days.', attribution: 'Security reviewer' } }] };
+  for (const options of [{ layout: layouts['three-column'] }, { layout: layouts['three-column'], ...arabic(slide) }]) {
+    const result = composeSlide(slide, options), [list, table, quote] = bodyItems(result);
+    assert.ok(quote.quoteLayout.rule, 'the quote is the pull line');
+    assert.equal(Math.round(list.box.y), Math.round(table.box.y), 'one start for the list and the table (LH-64)');
+    const top = composeSlide(slide, { ...options, fill: false }), [topList] = bodyItems(top);
+    assert.ok(Math.abs(list.box.y - topList.box.y) < 1, 'not centered (LH-102): the stack keeps the top of the body');
+    assert.ok(quote.box.y >= Math.max(list.box.y + list.box.height, table.box.y + table.box.height) - 1, 'the pull line under its data');
+    assert.deepEqual(overflow(result), []);
+  }
+});
+
+test('LH-120 with LH-114: a short quote beside a list of three is the pull line, so the bar chart shares a row of two (at least 40%)', () => {
+  const slide = { title: 'Why mid-market customers churn', blocks: [{ items: ['Low usage', 'Slow support', 'Price increase'] }, { chart: { type: 'bar', data: { columns: ['Driver', 'Share (%)'], rows: [['Low usage', 34], ['Support delays', 24], ['Price', 19], ['Integrations', 14], ['Champion left', 9]] } } }, { quote: { text: 'Nobody called.', attribution: 'Exit interview' } }] };
+  for (const options of [{}, arabic(slide)]) {
+    const result = composeSlide(slide, options), list = result.items.find((item) => item.field === 'items'), chart = result.items.find((item) => item.field === 'chart'), quote = result.items.find((item) => item.quoteLayout);
+    assert.ok(quote.quoteLayout.rule);
+    assert.equal(Math.round(list.box.y), Math.round(chart.box.y), 'list and chart share a row');
+    assert.ok(chart.box.width / (chart.box.width + list.box.width) >= .4 - 1e-6);
+  }
+});
+
+test('LH-120 with LH-115: a bar chart in a row of three beside a table of its keys takes 40% and draws its bars on the table rows', () => {
+  const keys = ['North', 'South', 'East', 'West'];
+  const slide = { title: 'Revenue by region', blocks: [{ metric: { value: '$112M', label: 'Total revenue', delta: '+8%', trend: 'up' } }, { chart: { type: 'bar', data: { columns: ['Region', 'Revenue ($M)'], rows: keys.map((key, index) => [key, 40 - index * 7]) } } }, { table: { columns: ['Region', 'Owner', 'Revenue'], rows: keys.map((key, index) => [key, ['Ana', 'Ben', 'Chloe', 'Dev'][index], `$${40 - index * 7}M`]) } }] };
+  for (const options of [{}, arabic(slide)]) {
+    const result = composeSlide(slide, options), blocks = bodyItems(result), chart = blocks.find((item) => item.field === 'chart');
+    assert.ok(chart.box.width / blocks.reduce((sum, item) => sum + item.box.width, 0) >= .38, 'LH-120');
+    assert.ok(chart.chart.layer.rows, 'LH-115: the bars sit on the table rows');
+    assert.deepEqual(overflow(result), []);
+  }
+});
+
+test('LH-113 with LH-107 and LH-108: one emphasis per chart; a waterfall keeps its roles, a pie list bolds what a sibling text names', () => {
+  const waterfall = composeSlide({ title: 'Revenue bridge', blocks: [{ chart: { type: 'waterfall', data: { columns: ['Step', 'Revenue'], rows: [['Start', 100], ['Price increases', 12], ['Volume', -5], ['End', 107]] } } }, { text: 'Price increases added twelve points to the start.' }] }).items.find((item) => item.field === 'chart');
+  assert.ok(waterfall.chart.layer.waterfall, 'LH-107 roles');
+  assert.equal(waterfall.chart.layer.focus, undefined, 'the named step is not a focus on a waterfall in its role colors');
+  const pie = composeSlide({ title: 'Where the budget goes', blocks: [{ chart: { type: 'pie', data: { columns: ['Channel', 'Share'], rows: [['Paid search', 40], ['Events', 25], ['Social', 20], ['Email', 15]] } } }, { text: 'Events return the most per dollar.' }] }).items.find((item) => item.field === 'chart');
+  assert.deepEqual(pie.chart.layer.focus.categories, [1], 'LH-113: the sibling text names Events');
+  assert.ok(pie.chart.layer.valueList, 'LH-108');
+});
+
+test('LH-53 with LH-118: no deck draws the trend word; right to left the arrow sits at the reading start of the delta line', () => {
+  for (const [options, rtl] of [[{}, false], [{ presentation: { language: 'ar', slides: [] } }, true]]) {
+    const result = composeSlide({ title: 'نتائج', blocks: [{ text: 'ارتفعت المبيعات في جميع المناطق خلال الربع الثالث.' }, { metric: { value: '+16%', label: 'نمو المبيعات', delta: '+8 نقاط', trend: 'up' } }] }, options);
+    const layout = result.items.find((item) => item.metricLayout).metricLayout, trend = layout.parts.find((part) => part.role === 'trend'), delta = layout.parts.find((part) => part.role === 'delta');
+    assert.equal(trend.visible, false, 'the trend word is the alternative text of the arrow, not drawn');
+    const origin = delta.linePositions[0], width = delta.fit.sourceLines[0].width;
+    if (rtl) assert.ok(layout.trendBox.x >= origin.x + width - .01, 'at the right of the delta');
+    else assert.ok(layout.trendBox.x + layout.trendBox.width <= origin.x + .01, 'at the left of the delta');
   }
 });
