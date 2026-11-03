@@ -864,6 +864,15 @@
               "name": "title"
             },
             {
+              "name": "lead",
+              "size": "auto",
+              "accepts": [
+                "text"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            },
+            {
               "name": "timeline",
               "accepts": [
                 "timeline"
