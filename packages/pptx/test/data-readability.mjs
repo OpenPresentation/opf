@@ -69,12 +69,18 @@ let checked = 0;
   const slide = text(entries, 'ppt/slides/slide1.xml');
   const shape = [...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map((match) => match[0]).find((xml) => /name="OPF metric \d+ value line 1"/.test(xml));
   assert.ok(shape, 'the metric value shape');
-  const color = shape.match(/<a:rPr[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)?.[1];
+  // LH-57: the default accent (#2874A6) is 3.42:1 on the navy, so the value takes the slide's text color in both engines: natively the
+  // label's own fill (a scheme color), in the preview the label's color.
+  const label = [...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map((match) => match[0]).find((xml) => /name="OPF metric \d+ label line 1"/.test(xml));
+  const fillOf = (xml) => xml.match(/<a:rPr[\s\S]*?<a:solidFill>([\s\S]*?)<\/a:solidFill>/)?.[1];
+  assert.ok(fillOf(shape));
+  assert.equal(fillOf(shape), fillOf(label), 'the native value takes the text color');
   const svg = toSvg(deck, 1, {trace: true});
-  const previewValue = [...svg.matchAll(/<text\b([^>]*data-opf-metric-role="value"[^>]*)>/g)].map((match) => attrs(match[1]).fill)[0];
-  assert.equal(`#${color}`, previewValue.toUpperCase(), 'the native value colour is the preview value colour');
+  const fillIn = (role) => [...svg.matchAll(new RegExp(`<text\\b([^>]*data-opf-metric-role="${role}"[^>]*)>`, 'g'))].map((match) => attrs(match[1]).fill)[0];
+  const previewValue = fillIn('value');
+  assert.equal(previewValue.toUpperCase(), fillIn('label').toUpperCase(), 'the preview value takes the text color');
   const background = rects(svg).find((rect) => rect.width === '1280' && rect.height === '720')?.fill ?? '#011842';
-  assert.ok(colorContrast(`#${color}`, background) >= 4.5, `${color} on ${background}`);
+  assert.ok(colorContrast(previewValue, background) >= 4.5, `${previewValue} on ${background}`);
   checked += 2;
 }
 
