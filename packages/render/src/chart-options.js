@@ -97,9 +97,9 @@ export function labelString(c, { category, value, share, format }) {
 
 const labelSize = (c, text) => ({ width: c.width(text) + c.fontPx * 0.5, height: c.lineHeight });
 
-function drawLabel(c, text, rect, path, fill) {
+function drawLabel(c, text, rect, path, fill, weight = 400) {
   if (!text) return;
-  const element = c.textElement(text, rect, path, "center", fill);
+  const element = c.textElement(text, rect, path, "center", fill, weight);
   if (element) c.children.push(element);
 }
 
@@ -112,7 +112,7 @@ export function labelFill(c, position, fill) {
  * A label on a bar or column. `rect` is the mark, `direction` the way the bar grows from its base
  * ("up", "down", "right" or "left"), so inside-end and outside-end follow the sign of the value.
  */
-export function drawBarLabel(c, text, rect, direction, path, fill) {
+export function drawBarLabel(c, text, rect, direction, path, fill, weight = 400) {
   const position = c.dataLabels.position ?? "center";
   const { width, height } = labelSize(c, text);
   let x, y;
@@ -136,7 +136,7 @@ export function drawBarLabel(c, text, rect, direction, path, fill) {
     else if (position === "inside-base") x = sign < 0 ? baseEdge - width : baseEdge;
     else x = centerX;
   }
-  drawLabel(c, text, { x, y, width, height }, path, labelFill(c, position, fill));
+  drawLabel(c, text, { x, y, width, height }, path, labelFill(c, position, fill), weight);
 }
 
 /** A label beside a point mark (line and scatter): above, below, left, right or centred on it. `position` overrides the chart's (a combo chart's line series). */

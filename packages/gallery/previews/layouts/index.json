@@ -76,7 +76,7 @@
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 2814
+      "bytes": 3271
     },
     {
       "id": "faq",
@@ -86,7 +86,7 @@
     {
       "id": "metrics",
       "file": "metrics.svg",
-      "bytes": 3783
+      "bytes": 3786
     },
     {
       "id": "scorecard",
@@ -126,12 +126,12 @@
     {
       "id": "table-beside",
       "file": "table-beside.svg",
-      "bytes": 6738
+      "bytes": 6811
     },
     {
       "id": "code",
       "file": "code.svg",
-      "bytes": 2980
+      "bytes": 2984
     },
     {
       "id": "hero",
@@ -141,7 +141,7 @@
     {
       "id": "dashboard",
       "file": "dashboard.svg",
-      "bytes": 9796
+      "bytes": 9799
     },
     {
       "id": "team",

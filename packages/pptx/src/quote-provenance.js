@@ -3,7 +3,7 @@ import {isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
-import {unwrapQuoteMarks} from '@openpresentation/opf/composition';
+import {unwrapQuoteMarks,QUOTE_PULL_PREFIX,QUOTE_PULL_ROLE_SEPARATOR} from '@openpresentation/opf/composition';
 
 // FF-57: a `quote` payload exports as native text lines (a body part and an optional footer part). Each line shape carries an
 // OPF_QUOTE_V1 tag, so an unchanged export imports back as {quote: ...} instead of loose text blocks. Like timelines, only topology
@@ -16,8 +16,9 @@ const TAG='OPF_QUOTE_V1',REL='http://schemas.openxmlformats.org/officeDocument/2
 const SEPARATOR=' \u2013 ',LEGACY_SEPARATOR=' - ',FIELDS=['attribution','role','source'];
 // Every non-empty footer field list, in core's order (attribution, role, source).
 const FOOTERS=['["attribution"]','["role"]','["source"]','["attribution","role"]','["attribution","source"]','["role","source"]','["attribution","role","source"]'];
-// Core joins the role to the line above with a line break and the source with " \u2013 ".
-const separatorBefore=field=>field==='role'?'\n':SEPARATOR;
+// Core joins the role to the line above with a line break and the source with " \u2013 ". A pull line (LH-114) is one caption that
+// opens with QUOTE_PULL_PREFIX and joins the role with QUOTE_PULL_ROLE_SEPARATOR.
+const separatorBefore=(field,pull)=>field==='role'?pull?QUOTE_PULL_ROLE_SEPARATOR:'\n':SEPARATOR;
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 export const attachQuoteTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfQuote','quote',{pictures:true,signed:true});
@@ -25,15 +26,16 @@ export const quotePhotoName=group=>`OPF quote photo ${group}`;
 
 // The manifest rides on the first body line. `footer` lists which fields the footer part joins (core writes the attribution, the role
 // on its own line and the source after " \u2013 ", skipping an absent field) and, from two fields on, where each separator starts, so an
-// unchanged footer splits back exactly. `photo` records that a headshot picture belongs to the quote.
+// unchanged footer splits back exactly. `photo` records that a headshot picture belongs to the quote; `pull` that it is a pull line
+// (LH-114), whose caption opens with the prefix and whose accent rule is a tagged rectangle of the group.
 export function quoteManifest(value,layout) {
-  const shorthand=typeof value==='string',fields=shorthand?[]:FIELDS.filter(field=>value[field]);
-  const splits=[];let length=0;
+  const shorthand=typeof value==='string',fields=shorthand?[]:FIELDS.filter(field=>value[field]),pull=!!layout.rule;
+  const splits=[];let length=pull&&fields.length?QUOTE_PULL_PREFIX.length:0;
   for(const [index,field] of fields.entries()){
-    if(index>0){splits.push(length);length+=separatorBefore(field).length;}
+    if(index>0){splits.push(length);length+=separatorBefore(field,pull).length;}
     length+=value[field].length;
   }
-  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),
+  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),...(pull?{pull:true}:{}),
     // A rich body (FA-10) has richLines instead of sourceLines; both write one native shape per fitted line.
     parts:layout.parts.map(part=>({role:part.role,lines:(part.fit.sourceLines??part.fit.lines).length}))};
 }
@@ -48,6 +50,7 @@ function validateManifest(manifest) {
   }
   if(count>10000)throw Error('Too many quote source lines.');
   if(manifest.photo!==undefined&&(manifest.photo!==true||manifest.shorthand))throw Error('Invalid quote photo.');
+  if(manifest.pull!==undefined&&(manifest.pull!==true||manifest.photo))throw Error('Invalid quote pull line.');
   const footer=manifest.footer;
   if(roles.length===2){
     if(manifest.shorthand||!footer||!FOOTERS.includes(JSON.stringify(footer.fields)))throw Error('Invalid quote footer fields.');
@@ -60,12 +63,14 @@ function validateManifest(manifest) {
 const unwrap=unwrapQuoteMarks;
 // Split the current footer text back into fields. A separator whose recorded position no longer matches is searched for from the end of
 // the previous field; a footer with a missing separator keeps everything as the attribution.
-function footerFields(text,footer,report) {
+function footerFields(text,footer,report,pull) {
   const {fields}=footer;
-  if(fields.length===1)return {[fields[0]]:text};
-  const out={};let from=0;
+  // A pull line's caption opens with the prefix core wrote; a caption whose prefix was deleted keeps all of its text.
+  const start=pull&&text.startsWith(QUOTE_PULL_PREFIX)?QUOTE_PULL_PREFIX.length:0;
+  if(fields.length===1)return {[fields[0]]:text.slice(start)};
+  const out={};let from=start;
   for(let index=1;index<fields.length;index++){
-    const separator=separatorBefore(fields[index]),recorded=footer.splits[index-1];
+    const separator=separatorBefore(fields[index],pull),recorded=footer.splits[index-1];
     const legacy=separator===SEPARATOR?LEGACY_SEPARATOR:separator,both=[separator,legacy];
     const found=both.find(candidate=>recorded>=from&&text.startsWith(candidate,recorded));
     const at=found!==undefined?recorded:Math.min(...both.map(candidate=>text.indexOf(candidate,from)).filter(position=>position>=0),Infinity);
@@ -97,10 +102,12 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     }catch{report({code:'invalid-quote-provenance',message:'Invalid quote tags; ordinary import retains current native text.'});}
   }
   for(const members of groups.values())try{
-    const group=members.filter(item=>!item.picture),photos=members.filter(item=>item.picture);
+    const group=members.filter(item=>!item.picture&&item.data.role!=='rule'),photos=members.filter(item=>item.picture),rules=members.filter(item=>!item.picture&&item.data.role==='rule');
     const anchors=group.filter(item=>item.data.anchor!==undefined);if(anchors.length!==1)throw Error('Missing or duplicated quote anchor.');
     const anchor=anchors[0],manifest=anchor.data.anchor,count=validateManifest(manifest);
     if(anchor.data.role!=='text'||anchor.data.part!==0||anchor.data.line!==0||group.length!==count||new Set(group.map(item=>item.shape)).size!==count)throw Error('Incomplete or duplicated quote lines.');
+    // LH-114: a pull line's accent rule is one rectangle with no text.
+    if(rules.length>(manifest.pull?1:0)||rules.some(item=>item.ambiguous||item.shape['p:spPr']?.['a:prstGeom']?.prst!=='rect'||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet)))throw Error('Invalid quote rule.');
     if(photos.length>(manifest.photo?1:0)||photos.some(item=>item.ambiguous||item.data.role!=='photo'||item.picture['p:nvPicPr']?.['p:cNvPr']?.name!==quotePhotoName(anchor.data.group)))throw Error('Invalid quote photo identity.');
     const ordered=manifest.parts.map(part=>Array(part.lines));
     for(const item of group){
@@ -118,7 +125,7 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     const rich=richParts?unwrapQuoteRuns(headingValue(richParts,base)):undefined;
     // Only when it reads as the same words as the plain path (the native text is authoritative).
     if(Array.isArray(rich)&&rich.map(run=>typeof run==='string'?run:run.text).join('')===quote.text)quote={text:rich};
-    if(footer)quote={...quote,...footerFields(footer,manifest.footer,diagnostic=>local.push(diagnostic))};
+    if(footer)quote={...quote,...footerFields(footer,manifest.footer,diagnostic=>local.push(diagnostic),manifest.pull===true)};
     // The headshot is the current native picture; a deleted or unreadable one is reported, never invented.
     if(manifest.photo){
       const image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
@@ -127,9 +134,9 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     }
     if(manifest.shorthand&&Object.keys(quote).length===1)quote=quote.text;
     if(!isValidFormat({slides:[{quote}]}))throw Error('Current native text does not form a valid quote.');
-    for(const item of group)consumed.add(item.shape);
+    for(const item of [...group,...rules])consumed.add(item.shape);
     for(const item of photos)consumedPictures.add(item.picture);
-    items.push({shapes:group.map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});
+    items.push({shapes:[...group,...rules].map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});
     for(const diagnostic of local)report(diagnostic);
     if(!groupUnchanged(group,paragraphs))report({code:'quote-import-reflow',message:'Quote text, attribution, role, source and photo were recovered from the current native text and picture. Native formatting, positions and font theme are not reconstructed; review the reflowed quote.'});
   }catch(error){report({code:'invalid-quote-provenance',message:`${error.message} Ordinary import retains current native text without restoring old source words.`});}

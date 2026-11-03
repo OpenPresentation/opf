@@ -1100,6 +1100,34 @@ export function chartContextColors(surface: string, text: string, count: number,
   return steps.slice(0, Math.max(1, count)).reverse();
 }
 
+/**
+ * LH-107: the three colors of a waterfall by role (Claude Design and Few: the totals carry the story, the gains the accent, the losses
+ * stand back). `increase` is the series color at full strength (`accent`). `total` is the strong color: the scheme's `dark2` when it keeps
+ * 3:1 against the backdrop and a color difference of {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from the accent, else the text
+ * color (made legible on the backdrop: the strong neutral on a dark slide). `decrease` is the first context neutral
+ * ({@link chartContextColors}), kept apart from the other two; `labeled` (every bar carries its signed value) lets it be the light gray.
+ */
+export function chartWaterfallColors(surface: string, accent: string, text: string, strong: string | undefined, options: { labeled?: boolean } = {}): { total: string; increase: string; decrease: string } {
+  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
+  const increase = normalizeHexColor(accent)?.slice(0, 7) ?? chartColorForFill(fill, '#000000');
+  const ink = textColorForFill(fill, normalizeHexColor(text)?.slice(0, 7) ?? '#000000');
+  const candidate = normalizeHexColor(strong)?.slice(0, 7);
+  const apart = (hex: string) => labDifference(labOf(opaqueChannels(hex)!), labOf(opaqueChannels(increase)!)) >= CHART_CONTEXT_FOCUS_DIFFERENCE;
+  const total = candidate && opaqueChannels(candidate) && (colorContrast(candidate, fill) ?? 0) >= CHART_CONTEXT_MIN_CONTRAST && apart(candidate) ? candidate : ink;
+  const decrease = chartContextColors(fill, ink, 1, { labeled: options.labeled === true, avoid: [increase, total] })[0]!;
+  return { total, increase, decrease };
+}
+
+/** LH-110: how far the shaded band of a period the title names is mixed from the backdrop towards the text color. */
+export const CHART_BAND_MIX = 0.06;
+
+/** LH-110: the fill of a period band: the backdrop mixed {@link CHART_BAND_MIX} towards the text color, a faint neutral under the marks. */
+export function chartBandColor(surface: string, text: string): string {
+  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
+  const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');
+  return mixChannels(opaqueChannels(fill)!, opaqueChannels(ink)!, CHART_BAND_MIX);
+}
+
 function chartContextFloor(from: readonly number[], to: readonly number[], fill: string, floor: number): string {
   let amount = CHART_HIGHLIGHT_MUTED_MIX, muted = mixChannels(from, to, amount);
   while ((colorContrast(muted, fill) ?? Infinity) < floor && amount < 1) {
@@ -1210,4 +1238,28 @@ export function surfaceAltColor(surface: string, text: string): string {
     if (step(band)) return band;
   }
   return mixChannels(from, toText, SURFACE_ALT_MIX);
+}
+
+// --------------------------------------------------------------- highlighted table rows (LH-113)
+
+/** LH-113: share of the accent mixed into the table surface for a highlighted row. */
+export const TABLE_HIGHLIGHT_MIX = 0.15;
+
+/**
+ * LH-113: the fill of a highlighted table row (`table.highlight`, or the rows the slide's texts name): the table surface mixed
+ * {@link TABLE_HIGHLIGHT_MIX} of the way towards the accent (a pale accent tint on a light table, a dark one on a dark table), mixed less
+ * when the cell text would fall under 4.5:1 on it (never less readable than on the surface itself). Pure arithmetic on opaque colors, so
+ * the preview and the PPTX export, which both pass their own `surface`, accent and text roles, draw and write the same color. An
+ * unresolved surface is white, an unresolved accent black, an unresolved text color the surface's best contrast partner.
+ */
+export function tableHighlightColor(surface: string, accent: string, text: string): string {
+  const fill = (normalizeHexColor(surface) ?? '#FFFFFF').slice(0, 7);
+  const ink = (normalizeHexColor(text) ?? textColorForFill(fill, '#000000')).slice(0, 7);
+  const from = opaqueChannels(fill)!, to = opaqueChannels((normalizeHexColor(accent) ?? '#000000').slice(0, 7)) ?? [0, 0, 0];
+  const plain = colorContrast(ink, fill) ?? 0;
+  for (let percent = Math.round(TABLE_HIGHLIGHT_MIX * 100); percent >= 1; percent--) {
+    const tint = mixChannels(from, to, percent / 100), contrast = colorContrast(ink, tint) ?? 0;
+    if (contrast >= 4.5 || contrast >= plain) return tint;
+  }
+  return fill.toUpperCase();
 }

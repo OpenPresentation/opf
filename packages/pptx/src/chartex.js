@@ -19,7 +19,7 @@ import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
 import {insideLabelColor} from './chart-fallback.js';
-import {waterfallSteps} from '@openpresentation/opf/composition';
+import {waterfallSignedFormat, waterfallSteps} from '@openpresentation/opf/composition';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -165,8 +165,10 @@ function waterfallTotals(values) {
 
 // Per-point fills where the construct colours points, not series: a treemap
 // tile per category, a waterfall bar by sign (LH-59: a total in the third colour). The preview paints the same.
-export function chartexPointColors(layoutId, values, palette) {
+// LH-107: a waterfall with core's roles (`waterfall.roles`) and their colors (`waterfall.colors`, RRGGBB by role) paints each bar by role.
+export function chartexPointColors(layoutId, values, palette, waterfall) {
   if (layoutId === 'treemap') return values.map((value, index) => value === null ? null : palette[index % palette.length]);
+  if (layoutId === 'waterfall' && waterfall?.colors) return values.map((value, index) => value === null ? null : waterfall.colors[waterfall.roles[index]] ?? null);
   if (layoutId === 'waterfall') {
     const totals = waterfallTotals(values);
     return values.map((value, index) => value === null ? null : palette[(totals.has(index) ? 2 : value < 0 ? 1 : 0) % palette.length]);
@@ -186,7 +188,7 @@ const axisTitle = (value, text, run) => {
     `<a:p><a:pPr algn="ctr"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(value)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 };
 
-function axes(spec, gridColor, text, titles = {}, run = {}, code) {
+function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
@@ -195,7 +197,8 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code) {
   if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
   // RR-54: the value axis shows the first series' number format (none when that series has none) (CT_Axis: numFmt follows tickLabels); a binned axis counts.
   const numberFormat = code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
-  const value = `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
+  // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
+  const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
   const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
@@ -234,14 +237,34 @@ function pointLabelField(content) {
 // empty run), while any text in the paragraph keeps the label's own content (the visibility's category, value or series name) drawn
 // with the paragraph's defRPr. So the paragraph holds one text field of the label's content (the classic chart's label field, which
 // PowerPoint keeps when it saves the file again), and the colour, size and face sit in its defRPr and the field's rPr alike.
-function pointTextProperties(labelColor, font, size, field) {
-  const face = escapeXml(font);
+function pointTextProperties(labelColor, font, size, field, bold = false) {
+  const face = escapeXml(font), weight = bold ? ' b="1"' : '';
   const run = `${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/>`;
-  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}">${run}</a:defRPr></a:pPr>` +
-    `<a:fld id="${field.id}" type="${field.type}"><a:rPr lang="en-US" sz="${size}">${run}</a:rPr><a:t>${field.text}</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+  return `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}"${weight}>${run}</a:defRPr></a:pPr>` +
+    `<a:fld id="${field.id}" type="${field.type}"><a:rPr lang="en-US" sz="${size}"${weight}>${run}</a:rPr><a:t>${field.text}</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
 }
 
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = []}) {
+// LH-107: a waterfall's default labels: every bar's value outside its end, a step signed by the number format (`"+"0.0;"−"0.0;0.0`, core
+// waterfallSignedFormat) and a total (core's roles) in the column's own format, bold, as the preview draws them.
+function waterfallLabels(waterfall, entry, {labelColor, font, textSize, code}) {
+  const totals = waterfall.roles.flatMap((role, row) => role === 'total' && entry.values[row] !== null && entry.values[row] !== undefined ? [row] : []);
+  const field = pointLabelField(['value']);
+  const points = totals.map(row => `<cx:dataLabel idx="${row}"><cx:numFmt formatCode="${escapeXml(code ?? 'General')}" sourceLinked="0"/>${pointTextProperties(labelColor, font, textSize, field, true)}<cx:visibility seriesName="0" categoryName="0" value="1"/></cx:dataLabel>`).join('');
+  return `<cx:dataLabels pos="outEnd"><cx:numFmt formatCode="${escapeXml(waterfallSignedFormat(code))}" sourceLinked="0"/>${textProperties(labelColor, font, textSize)}<cx:visibility seriesName="0" categoryName="0" value="1"/>${points}</cx:dataLabels>`;
+}
+
+// LH-107: the caption a waterfall without its value axis carries above its plot (core's header caption), bold at the start of the chart.
+function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
+  if (!caption) return '';
+  const face = escapeXml(font), props = `sz="${textSize}" b="1"`;
+  const fill = `<a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/>`;
+  return `<cx:title pos="t" align="${rtl ? 'max' : 'min'}" overlay="0"><cx:tx><cx:rich><a:bodyPr spcFirstLastPara="1" vertOverflow="ellipsis" horzOverflow="overflow" wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" anchorCtr="1"/><a:lstStyle/>` +
+    `<a:p><a:pPr algn="${rtl ? 'r' : 'l'}"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(caption)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
+}
+
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], waterfall, rtl = false}) {
+  // LH-107: core's waterfall layer applies to the native waterfall only.
+  if (spec.layoutId !== 'waterfall') waterfall = undefined;
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -255,14 +278,14 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   const plotted = series.map((entry, index) => {
     const color = palette[index % palette.length];
     const letter = columnLetters(index + 2);
-    const pointFills = chartexPointColors(spec.layoutId, entry.values, palette)
+    const pointFills = chartexPointColors(spec.layoutId, entry.values, palette, waterfall)
       .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}</cx:spPr></cx:dataPt>` : '').join('');
     // Box whiskers, median lines and mean markers are drawn with the series line; without one PowerPoint used black (native check 2026-09-30).
     const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
     const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${waterfall?.labels && !options?.dataLabels && !options?.dataLabelsOff ? waterfallLabels(waterfall, entry, {labelColor: markLabelColor ?? labelColor, font, textSize, code: formats[index]}) : dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
@@ -278,7 +301,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart><cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0])}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0], waterfall?.valueAxis === false)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';

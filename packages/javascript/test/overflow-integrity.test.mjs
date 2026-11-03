@@ -85,7 +85,9 @@ test('a metric that reaches past its card is reported', () => {
     layout: 'scorecard',
     title: 'Digital Services Modernization: next steps',
     blocks: [
-      { metric: { value: '42%', label: 'Review cycle reduction', description: 'Median reduction across customer review workflows.', delta: '+11 pts', trend: 'up' } },
+      // LH-53: the trend arrow takes no line of its own, so the first metric is longer (a unit, a longer description and delta) to stay
+      // taller than the row's other metrics.
+      { metric: { value: '42%', unit: 'median', label: 'Review cycle reduction', description: 'Median reduction across customer review workflows, measured over the last two quarters.', delta: '+11 pts against the prior period', trend: 'up' } },
       metric('11 days', 'Prepare council to vote on mixed-income zoning changes', 'up'),
       metric('91%', 'Balance platform reliability work with customer-facing commitments', 'flat'),
       metric('11 days', 'Launch an integrated campaign around the new benchmark report', 'down'),

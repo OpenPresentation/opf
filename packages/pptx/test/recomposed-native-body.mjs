@@ -42,7 +42,9 @@ const layoutOf = (entries, slide) => {
   for (const shape of bodies) {
     const {paragraphs, lstStyle, bodyPr} = format(shape);
     assert.equal(paragraphs.length, 6);
-    for (const pPr of [...paragraphs, lstStyle]) assert.match(pPr, /<a:spcBef><a:spcPts val="0"\/><\/a:spcBef><a:spcAft><a:spcPts val="0"\/><\/a:spcAft>/);
+    // LH-98: core's line pitch as exact spacing, and core's gap between entries as space before each later entry.
+    for (const pPr of [paragraphs[0], lstStyle]) assert.match(pPr, /<a:lnSpc><a:spcPts val="\d+"\/><\/a:lnSpc><a:spcBef><a:spcPts val="0"\/><\/a:spcBef><a:spcAft><a:spcPts val="0"\/><\/a:spcAft>/);
+    for (const pPr of paragraphs.slice(1)) assert.match(pPr, /<a:lnSpc><a:spcPts val="\d+"\/><\/a:lnSpc><a:spcBef><a:spcPts val="[1-9]\d*"\/><\/a:spcBef><a:spcAft><a:spcPts val="0"\/><\/a:spcAft>/);
     assert.match(bodyPr, /lIns="0" tIns="0" rIns="0" bIns="0"[^>]*anchor="t"/);
   }
   for (const other of bodies.filter(shape => shape !== bound[0])) assert.deepEqual(format(bound[0]), format(other), 'the placeholder is formatted as the text boxes are');

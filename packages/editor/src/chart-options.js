@@ -10,7 +10,7 @@
 // axis (`secondaryAxis`) and that axis's title. (RR-96) `colors` edits `chart.colors`, the series (or slice) colors by position, each a hex
 // color, a scheme slot such as `accent3` (it keeps following the deck) or a `var:` color variable.
 import { resolveChartData, resolveSlideContext } from "@openpresentation/opf";
-import { chartOptionSupport, chartOptionTarget, chartSeriesPalette } from "@openpresentation/opf/composition";
+import { chartOptionSupport, chartOptionTarget, chartSeriesPalette, smallChart } from "@openpresentation/opf/composition";
 import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
@@ -90,15 +90,19 @@ const names = (value) => (Array.isArray(value) ? [...new Set(value.filter((entry
  * `fields.dataLabels` the contents and positions it accepts (`positions` is empty when labels have no position choice).
  * `fields.axisTitles.secondary` is true on a combo chart, whose `combo.series` lists the plotted series ({ name, role, axis });
  * pass the `presentation` for a dataset-backed chart.
+ * LH-100: `options.layer` is the chart layer core composed for the chart (`item.chart.layer` of the slide's composition); a small chart
+ * (LH-03) whose value labels core draws by default reads as labeled, so `fields.dataLabels.defaultOn` is true and switching labels off
+ * writes `dataLabels: false`. Without a layer the rule is read without the chart's box (counts only, not whether the labels fit).
  */
-export function readChartOptions(chart, presentation) {
+export function readChartOptions(chart, presentation, options = {}) {
   const target = chartOptionTarget(chart?.type);
   // A chart type outside the catalog is never restricted: every field is offered (a secondary axis exists only on combo charts).
-  const support = target ? chartOptionSupport(target) : {
+  const own = target ? chartOptionSupport(target) : {
     axisTitles: { category: true, value: true, secondary: false }, legend: true,
     dataLabels: { supported: true, content: CONTENT_ORDER, positions: [...POSITIONS], defaultPosition: null, defaultOn: false },
     highlight: { series: true, categories: true },
   };
+  const support = own.dataLabels.defaultOn || !defaultValueLabels(chart, presentation, options) ? own : { ...own, dataLabels: { ...own.dataLabels, defaultOn: true } };
   const titles = isObject(chart?.axisTitles) ? chart.axisTitles : {};
   const labels = chart?.dataLabels;
   const labelObject = isObject(labels) ? labels : {};
@@ -125,7 +129,7 @@ export function readChartOptions(chart, presentation) {
       axisTitles: { category: typeof titles.category === "string" ? titles.category : "", value: typeof titles.value === "string" ? titles.value : "", secondary: typeof titles.secondary === "string" ? titles.secondary : "" },
       legend: typeof chart?.legend === "string" ? chart.legend : "default",
       dataLabels: {
-        // Funnel and treemap label their marks by default, so `dataLabels: false` is what switches them off.
+        // Funnel and treemap label their marks by default, and so does a small chart (LH-03, LH-100), so `dataLabels: false` is what switches them off.
         on: labels === true || isObject(labels) || (labels === undefined && support.dataLabels.defaultOn),
         explicit: labels !== undefined,
         content: Array.isArray(labelObject.content) && labelObject.content.length ? CONTENT_ORDER.filter((part) => labelObject.content.includes(part)) : (labels === undefined && support.dataLabels.defaultOn ? [target?.kind === "treemap" ? "category" : "value"] : ["value"]),
@@ -134,6 +138,21 @@ export function readChartOptions(chart, presentation) {
       },
     },
   };
+}
+
+// LH-100: whether core draws the chart's value labels when it has no `dataLabels` of its own: the small-chart treatment (LH-03) of the
+// composed chart layer when the host passes one for a chart without `dataLabels` (an absent layer is no treatment), else core's
+// small-chart rule on the resolved data alone (a layer composed with explicit labels no longer says what the default is).
+function defaultValueLabels(chart, document, options) {
+  if (!isObject(chart)) return false;
+  if (chart.dataLabels === undefined && Object.hasOwn(options, "layer")) return options.layer?.small?.labels === true;
+  const { dataLabels: _labels, ...plain } = chart;
+  try {
+    const resolved = resolveChartData(plain, document);
+    return Boolean(resolved?.ok && smallChart(plain, resolved)?.labels);
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -284,10 +303,10 @@ function paletteOf(document, parts) {
  * `var:<id>`; `null` or `""` leaves that position to the deck palette), at most 24; it replaces the whole list, and trailing positions left to the palette are dropped.
  * Fields the chart type cannot show are never written. The document is not modified.
  */
-export function prepareChartOptions(presentation, chartPath, change) {
+export function prepareChartOptions(presentation, chartPath, change, options = {}) {
   const before = checkFormat(presentation);
   const { parts, chart } = chartAt(presentation, chartPath);
-  const read = readChartOptions(chart, presentation);
+  const read = readChartOptions(chart, presentation, options);
   const wanted = desired(chart, change, read.fields, read.choices, read.state, presentation, parts);
   const patches = [];
   for (const [key, value] of Object.entries(wanted)) {
@@ -306,13 +325,14 @@ function checkEditor(editor) {
   if (!editor || typeof editor.applyPatch !== "function" || typeof editor.subscribe !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
 }
 
-/** Apply a chart option change to an editor session as one undoable edit. Returns the editor change. */
+/** Apply a chart option change to an editor session as one undoable edit. Returns the editor change. `meta.layer` (LH-100) is the chart layer core composed for the chart, as `readChartOptions` takes it; the rest of `meta` goes with the edit. */
 export function setChartOptions(editor, chartPath, change, meta = {}) {
   checkEditor(editor);
-  const prepared = prepareChartOptions(editor.presentation, chartPath, change);
+  const { layer, ...rest } = meta;
+  const prepared = prepareChartOptions(editor.presentation, chartPath, change, Object.hasOwn(meta, "layer") ? { layer } : {});
   const { presentation, patches, ...summary } = prepared;
   void presentation;
   if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
-  const applied = editor.applyPatch(patches, { ...meta, source: meta.source ?? "chart-option", action: prepared.action, path: chartPath });
+  const applied = editor.applyPatch(patches, { ...rest, source: rest.source ?? "chart-option", action: prepared.action, path: chartPath });
   return { ...applied, ...summary };
 }

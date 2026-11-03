@@ -120,8 +120,9 @@ for (const {trend, align, deck} of decks) {
   const xs = points.split(' ').map(pair => Number(pair.split(',')[0])), ys = points.split(' ').map(pair => Number(pair.split(',')[1]));
   const box = {x: Math.min(...xs), y: Math.min(...ys), width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys)};
   for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(shape.box[key] - box[key]) < .01, `${trend}/${align}: arrow ${key} (${shape.box[key]} vs ${box[key]})`);
-  // Trend and delta text share the arrow's colour in both engines; the other fields keep theirs.
-  for (const role of ['trend', 'delta']) {
+  // The delta text shares the arrow's color in both engines; the other fields keep theirs. LH-53: neither engine draws the trend word.
+  assert.ok(!svg.includes('data-opf-metric-role="trend"') && !shapes(xml).some(item => / trend line \d+$/.test(item.name)), `${trend}/${align}: no trend word`);
+  for (const role of ['delta']) {
     const text = svg.match(new RegExp(`<text\\b[^>]*data-opf-metric-role="${role}"[^>]*>`))[0];
     const native = shapes(xml).find(item => item.name === `OPF metric 1 ${role} line 1` || new RegExp(`^OPF metric \\d+ ${role} line 1$`).test(item.name));
     assert.equal(/\bfill="#([0-9A-F]{6})"/.exec(text)[1], native.runs[0][1], `${trend}/${align}: ${role} colour`);

@@ -55,6 +55,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // world chart over quarters, drawn as columns (LH-60), takes the column chart's header row too, so its digest moved again.
 // LH wave 3: the digests below are LH-105's, drawn on LH-92 (ring names on the two-series pie and doughnut); table-styled moved again with
 // LH-48 (a lone table grows) when the wave was integrated.
+// LH-117 moved table-styled: its Growth column (8.2, 0.4, "n/a": two numbers in three cells) is a column of text now, but its header's
+// align "right" is the column's, so "n/a" is drawn at the right too (it started at the left); the other cells draw as before.
 // LH-105 moved 29 (column, stacked-column, 100pct-stacked-column, bar, stacked-bar, 100pct-stacked-bar, line, line-with-markers, stacked-line, stacked-line-with-markers, area, stacked-area, 100pct-stacked-area, pie, doughnut, scatter, radar, radar-with-markers, filled-radar, treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world, column-no-options, line-string-numbers, histogram-lone-column): no chart draws a panel, the scheme series are softened, line charts name their series at
 // the line ends, a pie names its slices, the value axis has at most six intervals and nominal categories have no last-point emphasis.
 const REVIEWED_SVG_DIGESTS = {
@@ -88,7 +90,7 @@ const REVIEWED_SVG_DIGESTS = {
   'column-no-options': 'c74a507b8909ef64e0e44353',
   'line-string-numbers': '892f93f3d8fc81ad13662b4a',
   'histogram-lone-column': '7c2a1efedb26d08e1fce33d1',
-  'table-styled': '1fb1ac9862fa48e2107a7043',
+  'table-styled': '8685c7ee57a5e3143c31d132',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 
@@ -243,9 +245,9 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   for (const text of ['Region', 'Revenue', 'Growth', 'EMEA', '$8.2', '40%', '$6.1', '52.0%', 'n/a']) assert.ok(shown.includes(text), `${text} is drawn (${shown.join(' | ')})`);
   assert.ok(!shown.includes('8.2') && !shown.includes('0.52'), 'the authored numbers are not drawn');
   assert.ok(paths(svg).some((path) => path.startsWith('slides.0.table.rows.0.1')), 'cells keep their authored paths');
-  // The same table with the formatted text and resulting numeric alignment written out by hand draws the same.
-  const right = (value) => ({ value, style: { align: 'right' } });
-  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', right('$8.2'), right('40%')], ['APAC', right('$6.1'), right('52.0%')], ['AMER', 'n/a', null]] };
+  // The same table with the formatted text written out by hand draws the same. LH-117: a column aligns by how its cells read, so the
+  // written text aligns as the formatted numbers do (Revenue, two numbers in three cells, reads as text; Growth's header aligns it right).
+  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
   const strip = (markup) => markup.replace(/ data-opf-path="[^"]*"/g, '');
   assert.equal(strip(render(doc({ title: 'T', table: written }), { trace: true })), strip(svg), 'formatting a cell draws what its text would draw');
 

@@ -128,8 +128,9 @@ for(const id of ['pie','doughnut']){
     }
     const holes=slices.filter(s=>(s.d.match(/A /g)??[]).length===2).length;
     assert.equal(holes,id==='pie'&&rings===1?0:slices.length,`${id}: ring slices`);
-    // LH-105: one series names its categories on the slices (no legend); nested rings keep the legend of their categories.
-    assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),rings===1?[]:palette.slice(0,4),`${id}: legend per category`);
+    // LH-105: one series names its categories on the slices (no legend); nested rings keep the legend of their categories. LH-108: in
+    // the whole body one series lists its categories and values beside it instead, with a swatch per category in its color.
+    assert.deepEqual(marks(svg,'rect',/\.data\.rows\.\d+\.0$/).map(r=>r.fill),palette.slice(0,4),`${id}: a swatch per category`);
     assert.ok(['North','South','East','West'].every(t=>texts(svg).includes(t)));
     checks++;
   }
@@ -240,9 +241,11 @@ for(const id of CHARTEX){
   checks++;
 }
 {
-  // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connectors between bars.
+  // Waterfall: floating bars from the running total, connectors between bars. LH-107: increases in the series color at full strength,
+  // decreases in the context gray (no total here: the end is not the sum before it).
   const svg=render('waterfall',{columns:['Step','Value'],rows:[['Start',100],['Gain',24],['Loss',-8],['End',10]]}),bars=marks(svg,'rect',/rows\.\d+\.1$/);
-  assert.deepEqual(bars.map(b=>b.fill),[palette[0],palette[0],palette[1],palette[0]],'colour by sign');
+  const fills=bars.map(b=>b.fill);
+  assert.ok(fills[0]===fills[1]&&fills[1]===fills[3]&&fills[2]!==fills[0],'colour by sign');
   const top=r=>Number(r.y),bottom=r=>Number(r.y)+Number(r.height);
   assert.ok(Math.abs(bottom(bars[1])-top(bars[0]))<0.01,'the second bar starts where the first ends');
   assert.ok(Math.abs(top(bars[2])-top(bars[1]))<0.01,'a decrease starts at the previous total');

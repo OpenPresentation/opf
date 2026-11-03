@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {gallery} from '@openpresentation/gallery';
 import {resolveSlideContext} from '../dist/index.js';
-import {composeSlide, layoutMetric} from '../dist/composition.js';
+import {composeSlide, layoutMetric, METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE} from '../dist/composition.js';
 
 const metric={value:42,unit:'ms',label:'Latency\nProduction',description:'All requests',delta:'-3',trend:'down'};
 const box={x:40,y:60,width:800,height:500};
@@ -20,9 +20,12 @@ function aligned(layout,cell,alignment='center') {
     close(unit.box.x,value.box.x+value.box.width+8);
     close(value.linePositions[0].baseline,unit.linePositions[0].baseline);
   }
+  // LH-53: the trend arrow precedes its host line (the delta, else the label or description): the arrow, its gap and the line align as one.
+  const host=layout.trendBox?['delta','label','description'].map(role=>layout.parts.find(part=>part.role===role&&part.visible)).find(Boolean):undefined;
   for(const part of layout.parts) {
     if(layout.arrangement==='inline-unit'&&(part.role==='value'||part.role==='unit'))continue;
-    for(const [index,line] of part.fit.sourceLines.entries())close(part.linePositions[index].x,cell.x+(cell.width-line.width)*factor);
+    const room=part===host?part.fit.fontSize*(METRIC_TREND_ARROW_SIZE+METRIC_TREND_ARROW_GAP):0;
+    for(const [index,line] of part.fit.sourceLines.entries())close(part.linePositions[index].x,cell.x+room+(cell.width-room-line.width)*factor);
   }
 }
 

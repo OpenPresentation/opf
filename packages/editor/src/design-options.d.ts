@@ -80,7 +80,7 @@ export interface DesignOptionChange extends Omit<EditorChange, "presentation" | 
   warnings: DesignWarning[];
 }
 
-/** Compute the patch for one option. `null` removes it at that scope; the watermark object merges the fields passed. `imageFit` is the default fit of image blocks (cover, contain, stretch). */
+/** Compute the patch for one option. `null` removes it at that scope; the watermark object merges the fields passed. `imageFit` is the default fit of image blocks (cover, contain, stretch, auto). */
 export declare function prepareDesignOption(presentation: unknown, option: DesignOptionId, value: unknown, options?: DesignOptionOptions): PreparedDesignOption;
 /** Set one option as a single undoable transaction. */
 export declare function setDesignOption(editor: EditorSession, option: DesignOptionId, value: unknown, options?: DesignOptionOptions): DesignOptionChange;

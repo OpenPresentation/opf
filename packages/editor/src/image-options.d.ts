@@ -1,6 +1,6 @@
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
-export declare const IMAGE_FITS: readonly ["cover", "contain", "stretch"];
+export declare const IMAGE_FITS: readonly ["cover", "contain", "stretch", "auto"];
 export declare const IMAGE_SHAPES: readonly ["rectangle", "rounded", "circle", "hexagon"];
 export declare const IMAGE_EDGES: readonly ["left", "right", "top", "bottom"];
 export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"];

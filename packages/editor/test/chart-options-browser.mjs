@@ -25,8 +25,9 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 
 const data = { columns: ['Quarter', 'North', 'South'], rows: [['Q1', 10, 5], ['Q2', 20, 8], ['Q3', 15, 12]] };
 // LH-03: a small chart (one or two series of at most eight points) labels its values by default, so turning data labels on would not
-// change its preview. Nine months make the column chart one that draws no labels until the control turns them on.
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+// change its preview. Seventeen months make the column chart one that draws no labels until the control turns them on (LH-111: a small
+// chart labels up to 16 points per series when the labels fit).
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan 27', 'Feb 27', 'Mar 27', 'Apr 27', 'May 27'];
 const columnData = { columns: ['Month', 'North', 'South'], rows: months.map((month, index) => [month, 10 + (index * 7) % 13, 5 + (index * 5) % 11]) };
 const source = {
   name: 'Chart options',

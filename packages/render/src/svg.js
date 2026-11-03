@@ -2,9 +2,9 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
+  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
-  timelineMarkerShapes, timelineTextColor, layoutWatermark,
+  timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
@@ -1418,11 +1418,13 @@ function renderMetric(item, box, bound, options) {
   const layout=item.metricLayout;
   if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
   const children=[];
-  // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
+  // RR-07, LH-53: a trend draws core's arrow (before the delta; the trend word is not drawn) and colors the delta text.
+  // LH-54: a metric in a card is colored against the card fill, not the slide behind it. LH-57: on a dark one, a value whose accent
+  // falls under 4.5:1 takes the text color.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
   const trendMark=metricTrendMark(layout,bound,backdrop);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color.
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1484,6 +1486,8 @@ function renderQuote(item, box, bound, options) {
   });
   // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
   if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
+  // LH-114: a pull line's accent rule, in the primary color (core places it; the PPTX export draws the same rectangle).
+  if (layout.rule) children.unshift(tag('rect', {...HIDDEN, x: stableNumber(layout.rule.x), y: stableNumber(layout.rule.y), width: stableNumber(layout.rule.width), height: stableNumber(layout.rule.height), fill: bound.design.colors.primary, ...(options.trace ? {'data-opf-quote-rule': 'true'} : {})}));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
 }
 
@@ -1500,6 +1504,8 @@ function renderTimeline(item, box, bound, options) {
   if(!layout)throw new OPFRenderError('missing-timeline-layout','Timeline rendering requires a coordinated core build with shared timeline geometry.',{path:item.path});
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
   const children=[tag('line',{...HIDDEN,...layout.connector,stroke:bound.design.colors.border,'stroke-width':3*scale,...traceAttrs(options,item.path)})];
+  // LH-121: the connector up to the current event in the primary color, over the border-colored rest.
+  if(layout.progress)children.push(tag('line',{...HIDDEN,...layout.progress,stroke:bound.design.colors.primary,'stroke-width':3*scale,...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-progress':'true'}:{})}));
   // FA-11: status colors come from the deck (core's timelineMarkerShapes / timelineTextColor); a marker with no status draws the plain primary circle.
   const background=bound.design.backgroundColor??bound.design.colors.background;
   const statusColors={background,primary:bound.design.colors.primary,text:bound.design.colors.text,mutedText:bound.design.colors.mutedText};
@@ -1517,13 +1523,23 @@ function renderTimeline(item, box, bound, options) {
       fill:part.status?timelineTextColor(part,statusColors):bound.design.colors.text,diagnosticsHandled:true,options,
     })));
   }
+  // LH-121: the generated status word under each label; it traces to its event, not to a source field.
+  for(const label of layout.statusLabels??[]){
+    if(!label.fit)continue;
+    children.push(tag('g',options.trace?{'data-opf-timeline-role':'status'}:{},renderTextBox(label.text,label.box,bound,{
+      path:label.path.replace(/\.status$/,''),fit:label.fit,textStyle:label.style,fontFamily:label.requestedStyle.fontFamily,align:label.alignment,
+      fill:timelineTextColor(label,statusColors),diagnosticsHandled:true,options,
+    })));
+  }
   return tag('g',{...traceAttrs(options,item.path),...(options.trace?{'data-opf-timeline-arrangement':layout.arrangement}:{})},children.join('\n'));
 }
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {}), ...(item.tableGrowth ? {growth:item.tableGrowth} : {}), ...(item.tableHighlight ? {highlight:item.tableHighlight} : {})});
   const children = [];
+  // LH-113: a highlighted row (table.highlight, or the rows the slide's texts name) draws on an accent tint of the surface.
+  const highlightFill = layout.rows.some((row) => row.cells.some((cell) => cell.highlighted)) ? tableHighlightColor(bound.design.colors.surface, bound.design.colors.primary, bound.design.colors.text) : undefined;
   // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
   const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
   // WI-5 (P20): a table draws horizontal rules only by default (the header rule and a rule under every row, as the PPTX export writes them).
@@ -1531,7 +1547,7 @@ function renderTable(item, box, bound, options) {
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
-    const defaultFill = cell.header ? bound.design.colors.primary : bound.design.colors.surface;
+    const defaultFill = cell.header ? bound.design.colors.primary : cell.highlighted ? highlightFill : bound.design.colors.surface;
     const fill = style.fill == null
       ? defaultFill
       : resolveColorRef(style.fill, bound, defaultFill);
@@ -1841,11 +1857,15 @@ function rtlTrailingSpace(text) {
  * chunk with the outer face first and, when a fallback face covers every character, replaces every glyph with that face's (the Latin
  * phrase of an Arabic item took a wider fallback face and ran into the bullet).
  */
-function scriptLine(text, style, bound, type, { rtl = false, placement, runPlacement, trace, fontSize } = {}) {
+function scriptLine(text, style, bound, type, { rtl = false, numbers = rtl, placement, runPlacement, trace, fontSize } = {}) {
   const value = String(text ?? "");
   const scripts = (style?.lang && bound.scriptFontsFor?.(style.lang)) || bound.scriptFonts;
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
+  // LH-118: inside a right-to-left line each number is a left-to-right isolate, so "+16%" keeps its sign before its digits (core
+  // isolateNumbers; the PPTX export writes the same numbers as en-US runs).
+  // `numbers` asks for it in a fragment of a flowing right-to-left line, which is one isolate across its fragments.
+  const escaped = text => escapeText(numbers && text ? isolateNumbers(text) : text);
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
   if (!placement && runPlacement && runs.length > 1) placement = runPlacement;
   // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
@@ -1856,14 +1876,14 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, runPlace
   if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
     // RR-38: a replacement the policy scales (Arabic Typesetting -> Noto Naskh Arabic, 0.64) is drawn at the scaled size; the caller applies it.
-    return { content: isolate(escapeText(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
+    return { content: isolate(escaped(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
   }
   const baseSize = placement?.fontSize ?? fontSize;
   const adjusted = run => run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
-    return { content: isolate(runs.map(run => run.own ? escapeText(run.text)
-      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), "font-size": adjusted(run), style: nestedReset(style, run) }, escapeText(run.text))).join("")), ...shiftOf(runs) };
+    return { content: isolate(runs.map(run => run.own ? escaped(run.text)
+      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), "font-size": adjusted(run), style: nestedReset(style, run) }, escaped(run.text))).join("")), ...shiftOf(runs) };
   }
   const natural = symbols ? scripts.runWidths(runs, placement.fontSize, style, { natural: true }) : undefined;
   const total = widths.reduce((sum, width) => sum + width, 0), factor = total > 0 ? placement.width / total : 1;
@@ -1886,7 +1906,7 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, runPlace
       "font-size": adjusted(run),
       style: run.own ? undefined : nestedReset(style, run),
       ...(trace ? trace(start, offset - trail.length) : {})
-    }, isolate(escapeText(drawn)));
+    }, isolate(escaped(drawn)));
   }).join("");
   return { content, positioned: true, ...shiftOf(runs) };
 }
@@ -2090,7 +2110,7 @@ function renderRichLines(value,fit,box,bound,config) {
     const drawnText=trail?fragment.text.slice(0,-trail.length):fragment.text,drawnWidth=fragment.width-gap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
-    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
+    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,numbers:rtl&&run.code!==true,
       placement:fixedAdvance&&!asFlow?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,
       runPlacement:measuredLine&&!fixedAdvance?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
     if(scripted.positioned)fixedAdvance=false;

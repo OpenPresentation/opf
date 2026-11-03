@@ -138,6 +138,8 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         ...(bulletProperties['a:buAutoNum'] ? {autoNum: {type: bulletProperties['a:buAutoNum'].type, startAt: bulletProperties['a:buAutoNum'].startAt}} : {})} : {};
       const runs = [];
       let runIndex = 0;
+      // LH-118: a right-to-left deck's paragraph without a letter (a number such as "+16%") is exported left to right, its number an en-US run.
+      const letterless = extras.rtlDeck === true && !/[\p{L}\p{Nl}]/u.test(nodes(content, 'a:r').map(node => text(child(node['a:r'], 'a:t'))).join(''));
       for (const node of content) {
         const tag = ['a:r','a:fld','a:br'].find(name => Object.hasOwn(node, name));
         if (!tag) continue;
@@ -145,7 +147,8 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         const current = tag === 'a:br' ? '\n' : text(child(node[tag], 'a:t'));
         const properties = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
         // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
-        const phrase = nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' && properties.lang === 'en-US' && LATIN_ONLY.test(current);
+        // LH-118: so is a number (core numberRanges), in a right-to-left paragraph or a letterless one.
+        const phrase = (nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' || letterless) && properties.lang === 'en-US' && LATIN_ONLY.test(current);
         const style = bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, {...extras, inheritedBody, ...(phrase ? {deckLang: undefined} : {})});
         // Supported canonical forms may intentionally omit a resolved family
         // (code:true) or the resolved theme hyperlink color (link without color).

@@ -289,7 +289,9 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
   const series = asArray(chart?.['cx:plotArea']?.['cx:plotAreaRegion']?.['cx:series']).find(entry => entry?.ownerIdx === undefined);
   const labels = series?.['cx:dataLabels'];
   const defaultContent = type === 'treemap' ? ['category'] : type === 'funnel' ? ['value'] : undefined;
-  if (labels) {
+  // LH-107: a waterfall's signed values (a "+" format, core waterfallSignedFormat) are its default labels, not an option.
+  const signed = type === 'waterfall' && /^"\+"/.test(String(labels?.['cx:numFmt']?.formatCode ?? ''));
+  if (labels && !signed) {
     const visibility = labels['cx:visibility'] ?? {};
     const content = [];
     if (cxFlag(visibility.categoryName)) content.push('category');
@@ -306,6 +308,7 @@ export function chartOptionsFromChartex(space, {type, seriesCount}) {
     for (const key of Object.keys(result)) if (result[key] === undefined) delete result[key];
     if (content.length && !(isDefault && !result.separator)) out.dataLabels = Object.keys(result).length ? result : true;
     else if (!content.length && defaultContent) out.dataLabels = false;
-  } else if (defaultContent) out.dataLabels = false;
+  // LH-107: a waterfall without labels was exported with `dataLabels: false` (or with labels too wide to fit, which draws the same).
+  } else if (!signed && (defaultContent || type === 'waterfall')) out.dataLabels = false;
   return {options: out, notes};
 }

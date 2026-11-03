@@ -391,6 +391,8 @@ export function createStudio(ctx) {
   };
   s.slideLabel = (node) => node.label;
   s.slideUsesLayout = () => scene().layout;
+  // LH-100: the composition of a slide as the canvas drew it (composed here when the canvas has not), for panels that read core's choices.
+  s.slideGeometry = (index = ctx.slideIndex()) => geometry(session.snapshot().presentation, index);
 
   // ---- tools and zoom ---------------------------------------------------------------------------------------------------------------------
   s.setTool = (tool) => {

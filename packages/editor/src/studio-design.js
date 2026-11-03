@@ -297,7 +297,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     if (arrangement) { const entry = panel(arrangement); entry.host.hidden = false; entry.controls.refresh(); }
     // The chart's options and a list's numbering follow the selection in their own panels.
     if (next === "chart") {
-      chartPanel ??= createChartOptionsPanel(el("div", `${p}-design-chart`), { editor: ui, getSelectedPath: selectedPath, onStatus: (message) => studio.status(message) });
+      chartPanel ??= createChartOptionsPanel(el("div", `${p}-design-chart`), { editor: ui, getSelectedPath: selectedPath, getGeometry: (index) => studio.slideGeometry?.(index), onStatus: (message) => studio.status(message) });
       own.append(chartPanel.element.parentElement ?? chartPanel.element);
       chartPanel.refresh();
     }

@@ -414,7 +414,7 @@ test('legs: every package has a plan for both tiers, a skipped job has no legs, 
     assert.deepEqual(legsFor(id, 'full').map((leg) => leg.name), [id], `${id} has one leg named like the job`);
   }
   assert.deepEqual(legsFor('render', 'full').map((leg) => leg.name), ['render (tests 1/4)', 'render (tests 2/4)', 'render (tests 3/4)', 'render (tests 4/4)', 'render (browser)']);
-  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['editor (tests 1/2)', 'editor (tests 2/2)', 'editor (playground 1/4)', 'editor (playground 2/4)', 'editor (playground 3/4)', 'editor (playground 4/4)', 'editor (browser 1/2)', 'editor (browser 2/2)']);
+  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['editor (tests 1/2)', 'editor (tests 2/2)', 'editor (playground 1/4)', 'editor (playground 2/4)', 'editor (playground 3/4)', 'editor (playground 4/4)', 'editor (browser 1/3)', 'editor (browser 2/3)', 'editor (browser 3/3)']);
   assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/4', '2/4', '3/4', '4/4']);
   assert.deepEqual(legsFor('lint', 'full').map((leg) => leg.name), ['lint (static)', 'lint (checks 1/2)', 'lint (checks 2/2)']);
   assert.deepEqual(legsFor('core', 'full').map((leg) => leg.name), ['core'], 'the old check names are kept');
@@ -446,7 +446,7 @@ test('legs follow the decision: only jobs that run have legs, forced runs have e
   assert.equal(engine.legs.some((leg) => leg.job === 'gallery' || leg.job === 'core' || leg.job === 'audit'), false);
   const forced = targetScope(['scripts/anything.mjs']);
   assert.equal(forced.legs.filter((leg) => leg.job === 'render').length, 5);
-  assert.equal(forced.legs.filter((leg) => leg.job === 'editor').length, 8);
+  assert.equal(forced.legs.filter((leg) => leg.job === 'editor').length, 9);
   assert.equal(forced.legs.filter((leg) => leg.job === 'gallery').length, 1);
   assert.deepEqual(jobsOf(forced), JOB_ORDER.filter((job) => job !== 'audit'), 'every job but the audit');
   const docs = targetScope(['docs/programs/monorepo/README.md']);

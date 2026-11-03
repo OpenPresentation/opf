@@ -96,8 +96,9 @@ test('LH-67: one text much longer than its siblings leads at 55% of the width, o
 });
 
 test('LH-67: a chart with two compact siblings takes about 58% at full height', () => {
+  // The quote sits between the others: a last (or first) one would be LH-114's pull line under the chart and the metric.
   const chart = { chart: { type: 'column', data: { columns: ['Quarter', 'Current'], rows: [['Q1', 19], ['Q2', 23], ['Q3', 26]] } } };
-  const result = composeSlide({ title: 'Grant equity review', blocks: [chart, { metric: { value: '31%', label: 'Primary signal' } }, { quote: { text: 'The new workflow made exceptions visible.', attribution: 'VP Operations' } }] }, { explain: true });
+  const result = composeSlide({ title: 'Grant equity review', blocks: [chart, { quote: { text: 'The new workflow made exceptions visible.', attribution: 'VP Operations' } }, { metric: { value: '31%', label: 'Primary signal' } }] }, { explain: true });
   assert.equal(result.explanation.decisions[0].reason, 'lead-stack');
   const item = result.items.find((entry) => entry.field === 'chart');
   assert.ok(Math.abs(item.box.width / (result.contentBox.width - 24) - 0.58) < 0.01, `share ${item.box.width / result.contentBox.width}`);

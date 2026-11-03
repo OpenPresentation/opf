@@ -25,8 +25,8 @@ for (const direction of ['ltr', 'rtl']) {
     assert.ok(near((top + bottom) / 2, center(area), 24), 'the code sits in the middle of its panel');
     assert.ok(near(center(text.box), center(area), 4), 'the text is centered');
     assert.ok(text.text.fontSize >= 28 - 1e-9, 'nothing shrinks');
-    // The same blocks at the top (wave 2) kept the same sizes: only the placement moves.
-    assert.equal(panel.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, composeSlide({ title: 'Decision options', composition: { mode: 'row' }, blocks: [code] }, { direction }).items.find((item) => item.field === 'code').codeLayout.parts.find((part) => part.role === 'body').fit.fontSize);
+    // The same blocks at the top (fill: false) keep the same sizes: only the placement moves. (A lone code panel would grow, LH-101.)
+    assert.equal(panel.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, composeSlide({ title: 'Decision options', composition: { mode: 'row' }, blocks: [code, paragraph('Oaktrail Animal Health')] }, { direction, fill: false }).items.find((item) => item.field === 'code').codeLayout.parts.find((part) => part.role === 'body').fit.fontSize);
   });
 }
 

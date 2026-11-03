@@ -38,11 +38,11 @@ test('a rich cell in a numeric column keeps the column alignment', () => {
   const table = {columns: ['Region', 'Revenue'], rows: [['North', 513], ['South', [{text: '720', bold: true}]], ['East', {value: [{text: '88'}]}]]};
   const layout = layoutTable(table, box);
   assert.deepEqual(cellsOf(layout), [['left', 'right'], ['left', 'right'], ['left', 'right'], ['left', 'right']]);
-  // A column with no number stays textual, and a text cell keeps the column textual (only the number itself right-aligns).
+  // A column with no number stays textual. LH-117: a column where fewer than 75% of the cells read as numbers is textual, every cell of it.
   const text = layoutTable({columns: ['A', 'B'], rows: [['x', [{text: 'rich'}]]]}, box);
   assert.deepEqual(cellsOf(text), [['left', 'left'], ['left', 'left']]);
   const mixed = layoutTable({columns: ['A', 'B'], rows: [['x', 5], ['y', 'n/a'], ['z', [{text: '7'}]]]}, box);
-  assert.deepEqual(cellsOf(mixed).map(row => row[1]), ['left', 'right', 'left', 'left']);
+  assert.deepEqual(cellsOf(mixed).map(row => row[1]), ['left', 'left', 'left', 'left']);
   // RTL mirrors the numeric default; an explicit style.align still wins.
   assert.equal(layoutTable(table, box, {direction: 'rtl'}).rows[2].cells[1].alignment, 'left');
   const aligned = layoutTable({columns: ['A', 'B'], rows: [['x', 5], ['y', {value: [{text: '7'}], style: {align: 'center'}}]]}, box);

@@ -115,15 +115,26 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   const indent = list ? item.text.listEntries[0].marker.indent * .75 : undefined;
   const paragraphOptions = !list ? {bullet: false} : plan.numbering ? {bullet: {type: 'number', style: plan.numbering.style, startAt: plan.numbering.startAt, indent}, hanging: indent / 4, indentLevel: 0}
     : {bullet: {characterCode: '2022', indent}, hanging: indent / 4, indentLevel: 0};
+  // LH-98: core's measured line pitch as exact spacing, as native titles write it, and core's gap between list entries as space before
+  // each later entry, so the native body ends where core's body box ends. A multiple (122%) applies to the face's own line height
+  // (its ascent plus descent), which draws lines about 20% taller than core measured. A list entry is one paragraph (an entry with a
+  // hard break falls back to measured shapes), so paragraph `index` is entry `index`.
+  const entries = list ? item.text.listEntries : undefined;
+  const pitch = index => (entries?.[index]?.text ?? item.text).lineHeight * .75;
+  const gapBefore = index => {
+    const entry = entries?.[index], previous = entries?.[index - 1];
+    return entry && previous ? Math.max(0, entry.textBox.y - (previous.textBox.y + previous.textBox.height)) * .75 : 0;
+  };
   const runs = paragraphs.flatMap((paragraph, index) => {
     if (!paragraph.length) paragraph = [{text: '', options: {}}];
-    return paragraph.map((run, position) => ({...run, options: {...run.options, ...paragraphOptions,
+    const spacing = {lineSpacing: pitch(index), ...(gapBefore(index) > 0 ? {paraSpaceBefore: gapBefore(index)} : {})};
+    return paragraph.map((run, position) => ({...run, options: {...run.options, ...paragraphOptions, ...spacing,
       breakLine: position === paragraph.length - 1 && index < paragraphs.length - 1}}));
   });
   const objectName = `OPF native body ${item.path}`;
   slide.addText(runs, {...helpers.textBoxOptions({x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96}, context, item.text.fontSize * .75),
     ...baseFont, ...paragraphOptions, objectName, align: item.alignment ?? 'left', valign: {top: 'top', middle: 'mid', bottom: 'bottom'}[anchor],
-    fit: 'none', wrap: true, lineSpacingMultiple: 1.22, bold: false, italic: false});
+    fit: 'none', wrap: true, lineSpacing: pitch(0), lineSpacingMultiple: undefined, bold: false, italic: false});
   // Defaults for blank/appended paragraphs must name the selected family too.
   const defaults = `<a:defRPr sz="${Math.round(item.text.fontSize * 75)}" b="${baseFont.bold ? 1 : 0}" i="${baseFont.italic ? 1 : 0}"><a:solidFill>${helpers.solidColorXml(context.textColor)}</a:solidFill><a:latin typeface="${escapeXml(baseFont.fontFace)}"/></a:defRPr>`;
   return {objectName, defaults};
@@ -136,7 +147,12 @@ export function nativeTitleAutofit(xml, names) {
     ? shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>') : shape);
 }
 
-const NO_PARAGRAPH_SPACE = '<a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft>';
+const NO_SPACE_BEFORE = '<a:spcBef><a:spcPts val="0"/></a:spcBef>', NO_SPACE_AFTER = '<a:spcAft><a:spcPts val="0"/></a:spcAft>';
+// The spacing a paragraph does not write (LH-98 writes space before the later list entries), as 0, in schema order: lnSpc, spcBef, spcAft.
+const zeroParagraphSpace = pPr => {
+  if (!pPr.includes('<a:spcBef>')) pPr = pPr.includes('</a:lnSpc>') ? pPr.replace('</a:lnSpc>', `</a:lnSpc>${NO_SPACE_BEFORE}`) : pPr.replace(/^(<a:pPr\b[^>]*>)/, `$1${NO_SPACE_BEFORE}`);
+  return pPr.includes('<a:spcAft>') ? pPr : pPr.replace('</a:spcBef>', `</a:spcBef>${NO_SPACE_AFTER}`);
+};
 
 /** Only prototype objects receive explicit no-autofit and paragraph typing defaults. */
 export function nativeBodyDefaults(xml, records) {
@@ -148,8 +164,7 @@ export function nativeBodyDefaults(xml, records) {
     shape = shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>');
     // LH-91: no space before or after a paragraph, as core measured the lines. A body bound to a placeholder would otherwise take the
     // master's body style (spcBef 20%), and each paragraph would sit lower than in a text box beside it.
-    shape = shape.replace(/<a:pPr\b([^>]*?)\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g, (pPr, empty) => empty !== undefined ? `<a:pPr${empty}>${NO_PARAGRAPH_SPACE}</a:pPr>`
-      : pPr.includes('<a:spcBef>') ? pPr : pPr.includes('</a:lnSpc>') ? pPr.replace('</a:lnSpc>', `</a:lnSpc>${NO_PARAGRAPH_SPACE}`) : pPr.replace(/^(<a:pPr\b[^>]*>)/, `$1${NO_PARAGRAPH_SPACE}`));
+    shape = shape.replace(/<a:pPr\b([^>]*?)\/>|<a:pPr\b[^>]*>[\s\S]*?<\/a:pPr>/g, (pPr, empty) => empty !== undefined ? `<a:pPr${empty}>${NO_SPACE_BEFORE}${NO_SPACE_AFTER}</a:pPr>` : zeroParagraphSpace(pPr));
     const pPr = shape.match(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/)?.[0] ?? '<a:pPr/>';
     const paragraphDefault = pPr.replace(/<a:pPr\b/, '<a:defPPr').replace(/<\/a:pPr>/, '</a:defPPr>').replace(/<a:defRPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:defRPr>)/g, '');
     const withDefaults = paragraphDefault.endsWith('/>') ? paragraphDefault.slice(0, -2) + `>${defaults}</a:defPPr>` : paragraphDefault.replace('</a:defPPr>', `${defaults}</a:defPPr>`);

@@ -18,6 +18,7 @@ import {applyFrameAlt,readFrameAlt,writeFrameAlt} from './frame-alt.js';
 import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptions,reportChartOptionDiagnostics,resolveChartOptionsFor} from './chart-options.js';
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
+import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -59,7 +60,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
+  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -334,6 +335,8 @@ export async function toPptx(input, options = {}) {
   context.nativeBodies = new Map();
   context.nativeTitles = new Set();
   context.timelineTags = new Map();
+  // LH-108 to LH-110: the shapes a chart's value list, stacked names and reference marks are drawn with (src/chart-marks.js).
+  context.chartMarkTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
@@ -1108,7 +1111,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   nativeContext.signalRoles = roles;
   const readBody = nativeBodyReader(slidePath, {
     part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
-  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily});
+  }, relationships, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.${diagnostic.path}`}), {deckLang: options.deckLang, codeFamily: options.codeFamily, rtlDeck: options.rtlDeck === true});
   const code = importCodeGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.code`}));
   const metric = importMetricGroups(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.metric`}));
   const cards = importCardFrames(shapes, paragraphs, relationships, entries, diagnostic => options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
@@ -1118,6 +1121,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const headings=importHeadingGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}),readBody);
   const plainText=importPlainTextGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
+  // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
+  const chartMarks=importChartMarks(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
     picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
       // The recorded crop is re-derived from the circular frame of the quote photo.
@@ -1159,6 +1164,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (role) roles.set(shapeKeys.get(shape), role);
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
+    if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
@@ -1181,7 +1187,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
-  const dataContext = label => ({datasets: options.dataProvenance?.datasets, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
+  const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
   for (const [index, frame] of frames.entries()) {
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
@@ -1285,7 +1291,7 @@ function importGraphicFrame(entries, frame, slidePath, relationships, importedTa
   if (chartRelId) {
     const imported = chartExRelId
       ? chartexFromRelationship(entries, relationships, chartExRelId, report)
-      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report);
+      : chartFromRelationship(entries, slidePath, relationships, chartRelId, report, {marked: data.markedCharts?.has(name) === true});
     const stored = imported && record('chart');
     const part = relationships.get(chartRelId)?.path;
     const restored = stored && part && entries[part]
@@ -1654,7 +1660,7 @@ function payloadFromSlideItem(item, report) {
   return null;
 }
 
-function chartFromRelationship(entries, slidePath, relationships, relId, report) {
+function chartFromRelationship(entries, slidePath, relationships, relId, report, {marked = false} = {}) {
   const relationship = relationships.get(relId);
   if (!relationship?.path || !entries[relationship.path]) return null;
   const doc = parseRequiredXml(entries, relationship.path);
@@ -1684,7 +1690,10 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   const headerCaption = doc["c:chartSpace"]?.["c:chart"]?.["c:title"]?.["c:layout"]?.["c:manualLayout"] !== undefined;
   const withOptions = chart => {
     // LH-105: series names at the line ends or category names on the slices, without a legend, are the default direct labels.
-    const direct = !nativeLegend && directLabelDefaults(chartNode.node, String(chartNode.type).includes('line') ? 'line' : chartNode.type);
+    // LH-109: a stacked chart's values inside its segments are the default whether its names stand beside it or its legend stayed.
+    // LH-108, LH-109: a chart whose value list or series names were drawn as tagged shapes (`marked`) has no legend by default.
+    const stacked = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'}[chartNode.type];
+    const direct = marked || ((!nativeLegend || stacked !== undefined) && directLabelDefaults(chartNode.node, stacked ?? (String(chartNode.type).includes('line') ? 'line' : chartNode.type)));
     const {options, notes} = chartOptionsFromClassic(doc["c:chartSpace"], {layer: {header: headerCaption || headerLegend, headerLegend, direct},chartNode: chartNode.node, target: chartTargetFor(chartNode.type), seriesCount: series.length, circular: chartNode.type === 'pie' || chartNode.type === 'doughnut', scatter: chartNode.type === 'scatter', seriesFormats: valueCodes,
       ...(combo ? {combo: {lineNode: combo.lines[0]?.node, secondaryValueAxis: secondaryValueAxisOf(plotArea, combo)}} : {})});
     for (const note of notes) report?.(note);
@@ -2469,7 +2478,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction, tableGrowth: item.tableGrowth }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction, tableGrowth: item.tableGrowth, tableHighlight: item.tableHighlight }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -2582,7 +2591,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addCodePayload(slide, payload.code, codeLayout, region, context, path, options);
       break;
     case "metric":
-      addMetricPayload(slide, payload.metric,metricLayout,context,path,options);
+      addMetricPayload(slide, payload.metric,metricLayout,context,path,options,presentation);
       break;
     case "quote":
       await addQuotePayload(slide, presentation, payload.quote, quoteLayout, context, options, path);
@@ -3009,10 +3018,15 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   for (const {adaptation, message} of chartData.adaptations ?? []) options.onDiagnostic?.({code: "chart-data-adapted", path, message, adaptation});
   // RR-35: axis titles, legend position and data labels (core resolves them against what the chart type can show).
   // LH-03, LH-81: the chart layer composition decided (src/chart-layer.js); a small chart's default value labels count as data labels.
-  const layer = chartData.chartex ? undefined : chartLayout?.layer;
+  // LH-107: a waterfall's layer (roles, labels, caption) belongs to the native waterfall; its clustered-column fallback takes none of it.
+  const layer = chartData.chartex || chartLayout?.layer?.waterfall ? undefined : chartLayout?.layer;
   const authoredOptions = resolveChartOptionsFor(chart);
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
-  const chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  // LH-109: a stacked column or area chart labels its segments with their values by default (in the middle of a column; an area point
+  // has no position); the values that do not fit are hidden per point after the labels are written (src/chart-marks.js).
+  const stackLabels = Boolean(layer?.stack?.values.some(row => row.some(Boolean)) && !chartOptions.dataLabels);
+  if (stackLabels) chartOptions = {...chartOptions, active: true, dataLabels: {content: ['value'], position: chartTargetFor(chart.type)?.kind === 'area' ? null : 'center', separator: ', '}};
 
   // LH-03, LH-105: no chart has a panel (the chart and plot areas are unfilled); its colours are judged against the card or the slide
   // background it stands on, as the preview does.
@@ -3062,7 +3076,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     chartSoftColors(panelFill, preferredPalette, {legible: legibleSeries}));
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {}),
     // LH-105: the series names at the line ends and the category names on the slices (src/chart-direct-labels.js).
-    ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {})});
+    ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {}),
+    ...(stackLabels ? {stackValues: layer.stack.values} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
@@ -3081,7 +3096,11 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
+    // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colors the preview draws.
+    const waterfall = chartLayout?.layer?.waterfall;
+    const waterfallInfo = waterfall ? {...waterfall, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
+      ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3102,7 +3121,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     w: region.w,
     h: region.h,
     // LH-105: a line chart that names its series at the line ends and a pie that names its slices draw no legend.
-    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
+    // LH-108, LH-109: nor does a pie with its value list, or a stacked chart that names its series beside the last column.
+    showLegend: !layer?.endLabels && !(layer?.slices && !chartOptions.dataLabels) && !layer?.valueList && !layer?.stack?.names && (circular || chartData.series.length > (chartData.type === 'scatter' ? 2 : 1)),
     ...classicChartOptions(chartOptions, {labelColor, font: context.fonts.body, textSize}),
     showTitle: false,
     chartColors,
@@ -3157,7 +3177,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     slide.addChart(...comboChart(chartData, chartOptionsXml, {palette, chartOptions, labelColor, font: context.fonts.body, textSize}));
     return;
   }
+  // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
+  const marks = layer && (layer.references || layer.valueList || layer.stack?.names) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
+    paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
+      slice: row => (highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length],
+      series: index => (highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length]}} : undefined;
+  if (marks) addChartMarks(slide, layer, 'under', marks);
   slide.addChart(chartData.type, chartData.series, chartOptionsXml);
+  if (marks) addChartMarks(slide, layer, 'over', marks);
 }
 
 // FA-15: a combo chart is one PptxGenJS multi-type chart: a clustered column c:barChart on the primary axes, a c:lineChart with
@@ -3217,17 +3244,24 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     scale, minFontSize:context.composition?.minFontSize, fontFamily:context.fonts.body, textMeasurement:options.textMeasurement, path, alignment:context.tableAlignment,
     ...(context.direction === 'rtl' ? {direction: 'rtl'} : {}), ...(presentation ? {presentation} : {}),
     // LH-48: a lone table that composition grew is laid out at the same growth as the preview.
-    ...(context.tableGrowth ? {growth: context.tableGrowth} : {})
+    ...(context.tableGrowth ? {growth: context.tableGrowth} : {}),
+    // LH-113: the highlighted body rows composition gave the table (table.highlight, or the rows the slide's texts name).
+    ...(context.tableHighlight ? {highlight: context.tableHighlight} : {})
   });
   const columnCount = layout.columnCount;
+  // LH-113: a highlighted row's cells take the accent tint of the surface the preview draws (core tableHighlightColor), an sRGB literal;
+  // their text keeps the body text's theme color where it is the same color as on the surface.
+  const highlightHex = layout.rows.some(row => row.cells.some(cell => cell.highlighted)) ? tableHighlightColor(`#${context.colors.surface}`, `#${context.colors.accent}`, `#${context.colors.text}`).replace(/^#/, '').toUpperCase() : undefined;
   const rows = layout.rows.map(row => row.cells.map(cell => {
     const {header,rich,fit} = cell;
     const cellStyle = cell.style ?? {};
-    const defaultFillHex = header ? context.colors.accent : context.colors.surface;
+    const tinted = cell.highlighted && cellStyle.fill === undefined && highlightHex !== undefined;
+    const defaultFillHex = header ? context.colors.accent : tinted ? highlightHex : context.colors.surface;
     const baseFill = exportColor(cellStyle.fill ?? defaultFillHex, context, defaultFillHex);
     // FF-24c: engine chrome resolves from scheme roles (header accent1, body surface), so it follows the deck theme like a named fill.
-    const fillReference = cellStyle.fill ?? (header ? 'accent1' : 'surface');
-    const fillValue = schemeColorValue(fillReference, baseFill, context);
+    const fillReference = cellStyle.fill ?? (header ? 'accent1' : tinted ? `#${highlightHex}` : 'surface');
+    const keepsText = tinted && textColorForFill(`#${highlightHex}`, `#${context.colors.text}`) === textColorForFill(`#${context.colors.surface}`, `#${context.colors.text}`);
+    const fillValue = schemeColorValue(keepsText ? 'surface' : fillReference, keepsText ? context.colors.surface : baseFill, context);
     // RR-96: header text is the role (bg1 or tx1) that reads better on the fill, as the preview chooses it (core readableSchemeColor).
     const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
     const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
@@ -3277,7 +3311,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
         // Rich runs carry resolved alpha. A translucent cell default would
         // overwrite an explicit opaque run because PptxGenJS inherits falsy 0.
         ...(cellStyle.color && !rich ? {transparency:alpha(baseColor)} : {}),
-        fill: { color: nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
+        fill: { color: tinted ? highlightHex : nativeColor(fillReference, baseFill, context), ...(cellStyle.fill ? {transparency:alpha(baseFill)} : {}) },
       },
     };
   }));
@@ -3609,14 +3643,19 @@ function codePanelColor(context) {
   return context.roles.neutrals?.codePanel?.hex ?? '#111827';
 }
 
-function addMetricPayload(slide,value,layout,context,path,options) {
+function addMetricPayload(slide,value,layout,context,path,options,presentation) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
-  // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
+  // RR-07, LH-53: a trend adds one native arrow shape where core placed it (before the delta; the trend word is not drawn) and colors
+  // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
+  // dark one, a value whose accent falls under 4.5:1 takes the text color.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
   const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color, as the preview does.
+  // LH-57: when the value takes the text color, it is written as the slide's own text color (a scheme color where the text is one).
+  const textHex=`#${normalizeHex(context.colors.text)}`,valueHex=metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,textHex).toUpperCase();
+  const valueColor=valueHex===textHex.toUpperCase()?context.textColor:valueHex.slice(1);
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
@@ -3669,6 +3708,13 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
     });
   }
   if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  // LH-114: a pull line's accent rule, a native rectangle in the primary color where core placed it (as the preview draws it), tagged
+  // into the quote's group so an unchanged export imports back with the quote.
+  if (layout.rule) {
+    const objectName = `OPF quote rule ${group}`, rule = layout.rule;
+    slide.addShape('rect', {objectName, x: rule.x / 96, y: rule.y / 96, w: rule.width / 96, h: rule.height / 96, fill: {color: context.colors.accent}, line: {transparency: 100}});
+    context.quoteTags.set(objectName, {v: 1, role: 'rule', group});
+  }
 }
 
 // FA-12: the attributed person's headshot is a native picture in the core circle frame: cropped to fill it (a:srcRect after the bytes
@@ -3703,6 +3749,12 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   const {x1,y1,x2,y2}=layout.connector;
   slide.addShape('line',{objectName:connectorName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.border,width:3*scale*.75}});
   context.timelineTags.set(connectorName,{v:1,group,role:'connector'});
+  // LH-121: the connector up to the current event, a second native line in the primary color over the first.
+  if(layout.progress){
+    const progressName=`OPF timeline ${group} progress`,{x1,y1,x2,y2}=layout.progress;
+    slide.addShape('line',{objectName:progressName,x:x1/96,y:y1/96,w:(x2-x1)/96,h:(y2-y1)/96,line:{color:context.colors.accent,width:3*scale*.75}});
+    context.timelineTags.set(progressName,{v:1,group,role:'progress'});
+  }
   // FA-11: a status draws from the deck's colors through core's shared shapes: native ellipses (solid fill, or the
   // background fill plus a line for a hollow marker or a ring) and a muted text color for a planned event.
   const statusColors={background:`#${normalizeHex(context.colors.background)}`,primary:`#${context.colors.accent}`,text:`#${normalizeHex(context.colors.text)}`,mutedText:`#${context.colors.mutedText}`};
@@ -3723,6 +3775,13 @@ function addTimelinePayload(slide, value, layout, context, options, path) {
   for(const [index,part]of layout.parts.entries()){
     const statusColor=part.status==='planned'?normalizeHex(timelineTextColor(part,statusColors)):undefined;
     addMeasuredPayloadText(slide,part.text,part.box,context,options,{path:part.path,fit:part.fit,textStyle:part.style,align:part.alignment,diagnosticsHandled:true,timeline:{group,part:index,anchor},...(statusColor?{color:statusColor}:{})});
+  }
+  // LH-121: the generated status words, tagged into the group as `status` so import consumes them (the status comes from the markers).
+  for(const label of layout.statusLabels??[]){
+    if(!label.fit)continue;
+    const objectName=`OPF timeline ${group} status ${label.eventIndex}`;
+    addMeasuredPayloadText(slide,label.text,label.box,context,options,{path:label.path,fit:label.fit,textStyle:label.style,align:label.alignment,diagnosticsHandled:true,objectName,color:normalizeHex(timelineTextColor(label,statusColors))});
+    for(let line=0;line<label.fit.lines.length;line++)context.timelineTags.set(`${objectName} line ${line}`,{v:1,group,role:'status',eventIndex:label.eventIndex});
   }
 }
 
@@ -4529,6 +4588,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachChartMarkTags(entries,context.chartMarkTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);
@@ -4571,6 +4631,9 @@ async function normalizePptxZip(raw, context) {
       // colour that contrasts with each slice, as the preview draws them.
       const ringed=optionKind==='pie'&&/<c:doughnutChart>/.test(decodeText(entries[chartPart]));
       if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:ringed?{...chartOptions,dataLabels:{...chartOptions.dataLabels,position:null}}:chartOptions,kind:ringed?'doughnut':optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
+      // LH-109: the segment values that do not fit their segments are hidden, point by point.
+      const {stackValues}=context.chartHeadings.get(name);
+      if(stackValues&&chartOptions?.dataLabels)entries[chartPart]=encodeText(applyStackValueDeletes(decodeText(entries[chartPart]),stackValues));
       // LH-92: each ring of a nested-ring doughnut names its series on the slice core chose, after the data labels it may join.
       const {ringNames,palette:slicePalette}=context.chartHeadings.get(name);
       if(ringNames)entries[chartPart]=encodeText(applyRingLabels(decodeText(entries[chartPart]),ringNames,{labels:chartOptions?.dataLabels,fills:series=>highlight?.pointFills(series)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));

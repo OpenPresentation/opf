@@ -182,7 +182,7 @@ The rows are kept only when their smallest body size is at least the one the reg
 otherwise the layout's regions stand.
 
 Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
-block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
+block's own, or `auto` that resolves to contain: LH-104, the `image` layout's default) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
 anchor down the cell, so a landscape picture beside text starts on the text's first line instead of floating in the middle of
 a tall cell. A video draws in a 16:9 frame, the largest that fits its cell, placed the same way. A frame the block shapes with
 `aspectRatio` or a circle stays centered, and `cover` and `stretch` fill the cell. `image-beside` and `logos` write
@@ -228,7 +228,12 @@ kind `group`.
    joins step 2.
 2. **Everything else.** Of the regions that accept the block and have room, the lowest role rank wins (pictures:
    media, primary, secondary, supporting; every other kind: primary, secondary, supporting, media), then the first in
-   reading order (the order of the `regions` list, depth first).
+   reading order (the order of the `regions` list, depth first). Then source order is kept across regions where the
+   layout allows it (LH-122): a block drawn on the wrong side of another bound block moves to the equally ranked region
+   that accepts it, has room and leaves it out of order with the fewest blocks, being drawn before a block it follows
+   counting more than being drawn after one it precedes. The `timeline` layout has a `lead` region (text, auto height)
+   between the title and the timeline and `notes` after it, so a text authored before the timeline is its lead and one
+   after it (or between two timelines) a note.
 3. **No candidate.** The block goes to the overflow region whatever its `accepts` while it has room, and beyond `max`
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.
@@ -414,6 +419,17 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.
+- **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
+  60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
+  body, its lines in the middle of the panel (`layoutCode`'s `fill`).
+- **A body of other kinds (LH-102).** A body of text, lists, quotes, metrics, code, tables or timelines (a picture only in a bled
+  region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
+  of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
+  the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+- **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
+  kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
+- **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that
+  measure at the start edge, unless the body would then fill too much to grow: a readable size outranks the measure.
 
 ### Recomposition at the readability floor (LH-83)
 

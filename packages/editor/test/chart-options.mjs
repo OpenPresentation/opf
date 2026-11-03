@@ -26,12 +26,14 @@ assert.equal(parseChartPath("slides.0.chart"), "slides.0.chart");
 assert.equal(parseChartPath("slides.0.blocks.1.text"), undefined);
 assert.equal(parseChartPath("not a path ["), undefined);
 
-// The offered fields follow core's support table for every chart type.
+// The offered fields follow core's support table for every chart type. A composed layer without the small-chart treatment (LH-100: a
+// chart too large to label, or labels that do not fit) leaves the table as it is; a small chart's default labels are in lh-100-chart-label-default.mjs.
+const plain = { layer: undefined };
 for (const type of ["column", "bar", "stacked-column", "line", "area", "pie", "doughnut", "scatter", "radar", "histogram", "pareto", "waterfall", "funnel", "treemap", "box-and-whisker", "world"]) {
-  const { fields } = readChartOptions({ type, data });
+  const { fields } = readChartOptions({ type, data }, undefined, plain);
   assert.deepEqual(fields, (({ axisTitles, legend, dataLabels, highlight }) => ({ axisTitles, legend, dataLabels, highlight }))(chartOptionSupport(chartOptionTarget(type))), `${type}: the fields are core's support table`);
 }
-assert.deepEqual(readChartOptions({ type: "column", data }).state, {
+assert.deepEqual(readChartOptions({ type: "column", data }, undefined, plain).state, {
   alt: "", decorative: false,
   axisTitles: { category: "", value: "", secondary: "" }, legend: "default",
   dataLabels: { on: false, explicit: false, content: ["value"], position: "auto", separator: ", " },
@@ -126,9 +128,10 @@ assert.equal(readChartOptions({ type: "treemap", data, dataLabels: false }).stat
   // A separator never holds a line break.
   setChartOptions(editor, C, { dataLabels: { content: ["category", "value"], separator: "a\nb" } });
   assert.equal(editor.get(`${C}.dataLabels.separator`), "a b");
-  // Off removes the field on a chart that has no default labels.
+  // Off writes false: this small chart (two series of three points) labels its values by default (LH-03, LH-100). On a chart with no
+  // default labels off removes the field (lh-100-chart-label-default.mjs).
   assert.equal(setChartOptions(editor, C, { dataLabels: false }).changed, true);
-  assert.equal(editor.get(`${C}.dataLabels`), undefined);
+  assert.equal(editor.get(`${C}.dataLabels`), false);
   while (editor.snapshot().undoDepth) editor.undo();
   assert.deepEqual(editor.presentation, before);
 

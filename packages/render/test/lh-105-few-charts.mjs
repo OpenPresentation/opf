@@ -41,8 +41,9 @@ for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
   const fills = tags(svg, 'rect').filter((rect) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(rect['data-opf-path'] ?? '')).map((rect) => rect.fill.toUpperCase());
   assert.deepEqual(fills, [strong, context, context, context, context, context]);
   assert.ok(colorContrast(context, backdrop) >= 1.6);
-  // Unlabeled context bars (dataLabels: false) keep 3:1; two context series of a stacked chart take two grays.
-  const stacked = toSvg(deck({ title: 'Subscriptions drive the growth', chart: { type: 'stacked-column', data: { columns: ['Quarter', 'Subscriptions', 'Services', 'Hardware'], rows: [['Q1', 12, 8, 4], ['Q2', 14, 9, 4], ['Q3', 16, 9, 4], ['Q4', 19, 9, 5]] } } }), 1, { trace: true });
+  // Unlabeled context bars keep 3:1; two context series of a stacked chart take two grays. (LH-109: a stacked chart labels its segments
+  // and names its series by default, so this one keeps a legend to stay unlabeled.)
+  const stacked = toSvg(deck({ title: 'Subscriptions drive the growth', chart: { type: 'stacked-column', legend: 'right', data: { columns: ['Quarter', 'Subscriptions', 'Services', 'Hardware'], rows: [['Q1', 12, 8, 4], ['Q2', 14, 9, 4], ['Q3', 16, 9, 4], ['Q4', 19, 9, 5]] } } }), 1, { trace: true });
   const segment = (column) => tags(stacked, 'rect').find((rect) => rect['data-opf-path'] === `slides.0.chart.data.rows.0.${column}`).fill.toUpperCase();
   assert.equal(segment(1), strong);
   assert.notEqual(segment(2), segment(3), 'the two context segments differ');
@@ -71,13 +72,14 @@ for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
   checks += 5;
 }
 
-// 4. A pie names its slices and draws no legend; a small slice's name sits outside.
+// 4. A pie names its slices and draws no legend. (LH-108: in the whole body a pie lists its values
+//    beside it instead; beside a text it names its slices.)
 {
-  const input = deck({ title: 'Budget', chart: { type: 'pie', data: { columns: ['Team', 'Budget'], rows: [['Engineering', 80], ['Sales', 17], ['Legal and compliance', 3]] } } });
+  const input = deck({ title: 'Budget', composition: { mode: 'row' }, text: 'Engineering takes most of the budget.', chart: { type: 'pie', data: { columns: ['Team', 'Budget'], rows: [['Engineering', 45], ['Sales', 30], ['Marketing', 25]] } } });
   const svg = toSvg(input, 1, { trace: true });
   assert.equal(tags(svg, 'rect').filter((rect) => /^slides\.0\.chart\.data\.rows\.\d\.0$/.test(rect['data-opf-path'] ?? '')).length, 0, 'no legend swatches');
   const names = texts(svg).filter((entry) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(entry['data-opf-path'] ?? '')).map((entry) => entry.body);
-  assert.deepEqual(names, ['Engineering', 'Sales', 'Legal and compliance']);
+  assert.deepEqual(names, ['Engineering', 'Sales', 'Marketing']);
   const explicit = toSvg(deck({ title: 'Budget', chart: { ...input.slides[0].chart, legend: 'right' } }), 1, { trace: true });
   assert.ok(tags(explicit, 'rect').some((rect) => /^slides\.0\.chart\.data\.rows\.\d\.0$/.test(rect['data-opf-path'] ?? '')), 'an explicit legend keeps the legend');
   checks += 3;

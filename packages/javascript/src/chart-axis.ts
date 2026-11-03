@@ -81,6 +81,9 @@ function pickStep(min: number, max: number, limit: number, steps: readonly numbe
   return steps.find((step) => Math.round((max - min) / step) <= limit) ?? max - min;
 }
 
+/** LH-119: a labeled line with a hidden value axis drops zero when its minimum is at least this share of its maximum (5/6 otherwise). */
+export const CHART_LABELED_ZERO_SHARE = 0.75;
+
 /** LH-59: an axis ends at most this fraction of the plotted range above the data maximum (1.25 x the maximum on a zero-based axis). */
 export const CHART_AXIS_MAX_OVERSHOOT = 0.25;
 
@@ -97,8 +100,12 @@ export const CHART_AXIS_MAX_OVERSHOOT = 0.25;
  * fit, each a multiple of that unit (0, 400, 800; one interval, 0 and 150, on the shortest axes), keeping zero on a tick. `endOnTick`
  * keeps the untightened axis, for a chart whose outermost gridline is the axis end (the radar's outer ring, the combo chart's gridlines
  * shared by its two axes).
+ *
+ * LH-119: `labeled` is a line whose every point carries its value label and whose value axis is hidden: nothing reads a length from zero,
+ * so zero is dropped once every value sits in the top quarter of the range ({@link CHART_LABELED_ZERO_SHARE}: the minimum at least 0.75 of
+ * the maximum), and the line keeps the plot's height for its shape.
  */
-export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, { percent = false, endOnTick = false }: { percent?: boolean; endOnTick?: boolean } = {}): ChartScale {
+export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, { percent = false, endOnTick = false, labeled = false }: { percent?: boolean; endOnTick?: boolean; labeled?: boolean } = {}): ChartScale {
   const limit = Number.isFinite(maxIntervals) ? Math.max(1, Math.floor(maxIntervals)) : 10;
   if (percent) {
     const min = dataMin < -1e-9 ? -1 : 0;
@@ -111,8 +118,8 @@ export function niceScale(dataMin: number, dataMax: number, maxIntervals = 10, {
   }
   let lo = Math.min(dataMin, 0);
   let hi = Math.max(dataMax, 0);
-  if (dataMin > 0 && dataMax - dataMin < dataMax / 6) lo = dataMin;
-  if (dataMax < 0 && dataMax - dataMin < -dataMin / 6) hi = dataMax;
+  if (dataMin > 0 && (labeled ? dataMin >= CHART_LABELED_ZERO_SHARE * dataMax : dataMax - dataMin < dataMax / 6)) lo = dataMin;
+  if (dataMax < 0 && (labeled ? dataMax <= CHART_LABELED_ZERO_SHARE * dataMin : dataMax - dataMin < -dataMin / 6)) hi = dataMax;
   if (hi === lo) {
     if (hi === 0) hi = 1;
     else if (hi > 0) lo = 0;
@@ -312,6 +319,10 @@ export interface ChartAxisGeometry {
   minFontSize?: number;
   /** LH-60: the deck language, which names the places a map chart plots (a map over other categories is drawn as columns). */
   language?: string;
+  /** LH-119: the chart is a line whose points carry their value labels and whose value axis is hidden (the small chart, LH-03). */
+  labeled?: boolean;
+  /** LH-110: values the axis must hold besides the data (the reference lines the title names). */
+  include?: readonly number[];
 }
 
 /**
@@ -351,8 +362,9 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const stackedGrouping = spec.grouping === 'stacked' || percent;
   const extents = stacks.flat().flatMap((point) => (point === null ? [] : spec.kind === 'line' || !stackedGrouping ? [point.to] : [point.from, point.to]));
   const anchor = spec.kind === 'bar' || spec.kind === 'area' ? [0] : [];
-  const dataMin = extents.length ? Math.min(...extents, ...anchor) : 0;
-  const dataMax = extents.length ? Math.max(...extents, ...anchor) : 1;
+  const include = (geometry.include ?? []).filter(Number.isFinite);
+  const dataMin = extents.length ? Math.min(...extents, ...anchor, ...include) : 0;
+  const dataMax = extents.length ? Math.max(...extents, ...anchor, ...include) : 1;
   const pad = 10 * scale;
   const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;
@@ -360,7 +372,7 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const legendBand = options.legend === 'top' || options.legend === 'bottom' ? lineHeight + pad : 0;
   const titleBand = options.axisTitles.category ? lineHeight : 0;
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
-  const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent });
+  const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent, labeled: geometry.labeled === true && spec.kind === 'line' });
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
 }
 

@@ -467,9 +467,10 @@
           "enum": [
             "cover",
             "contain",
-            "stretch"
+            "stretch",
+            "auto"
           ],
-          "description": "Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame."
+          "description": "Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the picture and contains otherwise."
         },
         "listBullet": {
           "type": "string",

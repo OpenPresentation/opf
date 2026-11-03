@@ -1,0 +1,10 @@
+---
+type: changed
+packages: [opf, render, pptx]
+---
+LH-117, LH-118, LH-119, LH-120, LH-111 (layout harvest; output-changing for tables of numbers written as text, right-to-left decks, small line and column charts and bar charts beside two blocks):
+    - LH-117: a table column aligns by how its cells read, not by their JSON type. When at least 75% of its body cells read as numbers (`numericText`: an optional sign, currency, thousands separators, percent sign, scale or one-word unit, such as `"$42"`, `"+3%"`, `"14,500"`, `"50 GB"`), every cell of the column and its header align at the end edge; every cell of any other column starts at the start edge, a JSON number among words included. A cell's own `align` wins, then its header's (the column's), then the design's. The preview and the PPTX export draw the same, and import does not write the default back.
+    - LH-118: a number with a sign, currency or percent sign reads left to right inside right-to-left text ("+16%" drew as "16%+"). The preview draws it as a left-to-right isolate (core `numberRanges`, `isolateNumbers`); the PPTX export writes it as its own `en-US` run and a paragraph of only such a number left to right (`rtl="0"`) at its physical alignment, which PowerPoint draws correctly (it draws isolate characters as boxes). The English trend word (up, down, flat) no longer shows on right-to-left slides: LH-53 draws no trend word in any deck (the arrow alone shows the trend).
+    - LH-119: a small line chart (value labels on every point, no value axis) drops zero from its scale once its minimum is at least 0.75 of its maximum (`niceScale(..., {labeled: true})`, `CHART_LABELED_ZERO_SHARE`; it was the top sixth).
+    - LH-120: in a row of three blocks a horizontal bar chart takes 40% of the width (guarded rule `bar-chart-share`), and in the preview a bar's category label wraps onto two lines (its longest word given up to 40% of the chart) before it is ellipsized.
+    - LH-111: `SMALL_CHART_MAX_POINTS` is 16 (was 8): within it a chart is small when its value labels fit beside each other at the chart text size, so twelve monthly columns are labeled when their labels fit.

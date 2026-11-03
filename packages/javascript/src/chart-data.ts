@@ -43,6 +43,7 @@ export type DataDiagnosticCode =
   | 'chart-highlight-unknown-name'
   | 'chart-highlight-adapted'
   | 'chart-series-dropped'
+  | 'table-highlight-unknown-name'
   | 'number-format-invalid';
 
 export interface DataDiagnostic {
@@ -796,6 +797,7 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
     formatDiagnostics(dataset.columns, columnsPath, diagnostics);
     const selection = selectFields(dataset.columns, table.fields, at(base, 'fields'), columnsPath, diagnostics);
     const rows = dataset.rows.map((row: unknown) => selection.indices.map(index => (Array.isArray(row) && index < row.length ? row[index] : null) as DataTableCell));
+    highlightDiagnostics(table, rows, base, diagnostics);
     return { columns: selection.columns as DataTableHeader[], rows, formats: selection.formats, dataset: id, diagnostics };
   }
   const columns = Array.isArray(table.columns) ? (table.columns as DataTableHeader[]) : undefined;
@@ -814,7 +816,26 @@ export function resolveTableData(table: unknown, document?: unknown, options: Da
   if (Array.isArray(table.rows)) table.rows.forEach((row: unknown, rowIndex: number) => {
     if (Array.isArray(row)) row.forEach((cell, index) => { check(cell, at(base, 'rows', rowIndex, index)); });
   });
+  highlightDiagnostics(table, rows, base, diagnostics);
   return { ...(columns ? { columns } : {}), rows, formats, diagnostics };
+}
+
+/** LH-113: the text of a table cell as its key (the first column): a string, a number, rich runs or a styled cell's value. */
+export function tableKeyText(cell: unknown): string {
+  const text = (value: unknown): string => value === null || value === undefined ? '' : typeof value === 'string' ? value : typeof value === 'number' || typeof value === 'boolean' ? String(value)
+    : Array.isArray(value) ? value.map(text).join('') : record(value) ? text(value.text ?? value.value) : '';
+  return text(cell).replace(/\s+/g, ' ').trim();
+}
+
+/** LH-113: `table.highlight.rows` names body rows by their key (first-column) text; a name no row has is `table-highlight-unknown-name`. */
+function highlightDiagnostics(table: unknown, rows: readonly (readonly unknown[])[], base: string, diagnostics: DataDiagnostic[]): void {
+  if (!record(table) || !record(table.highlight) || !Array.isArray(table.highlight.rows)) return;
+  const keys = new Set(rows.map(row => tableKeyText(row[0])));
+  table.highlight.rows.forEach((name: unknown, index: number) => {
+    if (typeof name === 'string' && keys.has(name)) return;
+    const shown = [...keys].slice(0, 12).map(entry => JSON.stringify(entry)).join(', ');
+    diagnostics.push({ code: 'table-highlight-unknown-name', severity: 'error', path: at(base, 'highlight', 'rows', index), message: `highlight names row ${JSON.stringify(name)}, which no body row has as its first cell${shown ? `; the rows are ${shown}${keys.size > 12 ? ', ...' : ''}` : ''}` });
+  });
 }
 
 /** Display value of a table cell: a number with a format (cell, else column) becomes formatted text; anything else is returned unchanged. */

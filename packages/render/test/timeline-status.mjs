@@ -21,9 +21,12 @@ const plain = toSvg(deckOf([]), 1, options);
 assert.ok(!plain.includes('status'));
 assert.equal(circles(plain).length, 3);
 for (const circle of circles(plain)) assert.deepEqual(Object.keys(circle).sort(), ['aria-hidden', 'cx', 'cy', 'data-opf-path', 'fill', 'r']); // FA-30: the marker is decorative
-const done = toSvg(deckOf(['done', 'done', 'done']), 1, options);
-assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(plain));
-assert.equal(toSvg(deckOf(['done', 'done', 'done']), 1, { fonts: { textMeasurement: fonts.textMeasurement } }), toSvg(deckOf([]), 1, { fonts: { textMeasurement: fonts.textMeasurement } }));
+// LH-121: a done event adds the progress line (and, in an English deck, a status word under its label); in a deck with no status
+// words the markers are those of the plain timeline and the drawing differs only by the progress line.
+const german = (deck) => ({ ...deck, language: 'de' }), lines = (svg) => svg.replace(/<line\b[^>]*\/>\n?/g, '');
+const done = toSvg(german(deckOf(['done', 'done', 'done'])), 1, options);
+assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-timeline-shape': h, ...rest }) => rest), circles(toSvg(german(deckOf([])), 1, options)));
+assert.equal(lines(toSvg(german(deckOf(['done', 'done', 'done'])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })), lines(toSvg(german(deckOf([])), 1, { fonts: { textMeasurement: fonts.textMeasurement } })));
 
 // All three states.
 for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {

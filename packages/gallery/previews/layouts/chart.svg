@@ -31,8 +31,8 @@
 <line stroke="#BFBFBF" stroke-width="1.333" x1="155.6" x2="1202.4" y1="497.36" y2="497.36"/>
 <g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="679" xml:space="preserve" y="560.16">Week</text></g>
 <g transform="rotate(-90 72.6 378)"><g><text fill="#595959" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="middle" x="72.6" xml:space="preserve" y="385.8">Task completion</text></g></g></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="619.36">Test with two teams for six weeks. Measure task completion and time before </text>
-<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="653.52">deciding what to scale.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="619.36">Test with two teams for six weeks. Measure task completion and time </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="28" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="653.52">before deciding what to scale.</text></g>
 <g/>
 <g><g><g><text fill="#011842" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>
