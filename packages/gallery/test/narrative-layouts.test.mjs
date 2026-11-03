@@ -15,5 +15,7 @@ test('every narrative beat names an existing v2 intent template', () => {
 });
 
 test('image templates preserve whole-picture fitting', () => {
-  for (const id of ['image', 'image-beside']) assert.equal(gallery.layouts[id].design.imageFit, 'contain', id);
+  // LH-104: the image layout covers only a near-fitting picture (auto) and shows any other whole; image-beside keeps contain.
+  assert.equal(gallery.layouts.image.design.imageFit, 'auto');
+  assert.equal(gallery.layouts['image-beside'].design.imageFit, 'contain');
 });

@@ -1106,7 +1106,7 @@ export function createDesignControls(container, options = {}) {
     enumField("contentAlignment", "Content alignment", ["left", "center", "right"], {});
     enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "When a slide sets no arrangement");
     enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "left", "right"], { none: "None (equal)" }, "Where the main chart sits");
-    enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame" }, "When an image block sets no fit");
+    enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame", auto: "Auto (cover a near fit, else whole)" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {
       empty: "Default",
       onChange: (value) => run(() => setDesignOption(editor, "contentBox", value === "" ? null : value === "yes", scoped()), "Content box changed."),
@@ -1231,7 +1231,7 @@ export function createDesignControls(container, options = {}) {
     const treat = (fields, done) => run(() => setImageTreatment(editor, dynamic.imagePath, fields), done);
     const fit = selectField("img-fit", "Fit", {
       empty: "Presentation default",
-      help: "Cover crops to fill; contain shows it all; stretch distorts",
+      help: "Cover crops to fill; contain shows it all; stretch distorts; auto covers when the crop is small, else shows it all",
       onChange: (value) => treat({ fit: value === "" ? null : value }, "Image fit changed."),
     });
     fit.setOptions(IMAGE_FITS.map((value) => ({ value, label: titleCase(value) })));

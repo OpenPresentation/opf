@@ -20,9 +20,11 @@ const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&"
 /**
  * Mount the panel in `host`. `getSelectedPath()` returns the selected OPF path (any path inside a chart selects it);
  * `onStatus(message)` receives a short message after each change. Returns `{ element, refresh, destroy }`;
- * call `refresh()` when the selection changes (the panel also refreshes on every editor change).
+ * call `refresh()` when the selection changes (the panel also refreshes on every editor change). `getGeometry(slideIndex)` (optional)
+ * returns the slide's composition as the canvas drew it; without it the panel composes the slide through the session. LH-100: the
+ * "Data labels" box reads the chart layer core composed, so it is checked on a small chart whose value labels are drawn by default.
  */
-export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatus = () => {} }) {
+export function createChartOptionsPanel(host, { editor, getSelectedPath, getGeometry, onStatus = () => {} }) {
   const id = `opf-chart-options-${++counter}`;
   const root = document.createElement("section");
   root.className = "opf-chart-options";
@@ -65,6 +67,20 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
   let chartPath;
   let colorState = { entries: [], count: 0 };
 
+  // LH-100: `{ layer }` of the chart as composed on its slide (the layer is undefined when core gave it none), or `{}` when the slide
+  // cannot be composed here, which reads core's small-chart rule on the data alone.
+  function layerOptions(path) {
+    const slideIndex = Number(/^slides\.(\d+)\./.exec(path)?.[1]);
+    if (!Number.isInteger(slideIndex)) return {};
+    try {
+      const geometry = getGeometry ? getGeometry(slideIndex) : editor.composeSlide?.(slideIndex);
+      const item = geometry?.items?.find((entry) => entry.field === "chart" && entry.path === path);
+      return item ? { layer: item.chart?.layer } : {};
+    } catch {
+      return {};
+    }
+  }
+
   function refresh() {
     const path = parseChartPath(getSelectedPath?.() ?? "");
     let chart;
@@ -75,7 +91,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       return;
     }
     chartPath = path;
-    const { fields: support, state, choices, combo, colors } = readChartOptions(chart, editor.presentation);
+    const { fields: support, state, choices, combo, colors } = readChartOptions(chart, editor.presentation, layerOptions(path));
     root.hidden = false;
     const setValue = (input, value) => { if (input !== document.activeElement && input.value !== value) input.value = value; };
     setValue(fields.alt, state.alt);
@@ -211,7 +227,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
   function commit(change, message) {
     if (!chartPath) return;
     try {
-      const result = setChartOptions(editor, chartPath, change, { source: "chart-options-panel" });
+      const result = setChartOptions(editor, chartPath, change, { source: "chart-options-panel", ...layerOptions(chartPath) });
       if (result.changed) onStatus(message);
     } catch (error) {
       onStatus(error?.message ?? String(error));

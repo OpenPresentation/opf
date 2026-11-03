@@ -4,6 +4,8 @@ export interface ChartOptionsPanelOptions {
   editor: EditorSession;
   /** The selected OPF path; any path inside a chart selects it. */
   getSelectedPath: () => string | undefined;
+  /** LH-100: the slide's composition as the canvas drew it (`{ items }`); the panel reads the chart layer core composed. Without it the panel composes the slide through the session. */
+  getGeometry?: (slideIndex: number) => { items: ReadonlyArray<{ path: string; field: string; chart?: { layer?: unknown } }> } | undefined;
   onStatus?: (message: string) => void;
 }
 export interface ChartOptionsPanel {

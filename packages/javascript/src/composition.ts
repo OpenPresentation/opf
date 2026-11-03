@@ -8,7 +8,7 @@ import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-l
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
 import {chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartDrawPlan} from './chart-fallback.js';
-import {intrinsicImageAspect} from './image-aspect.js';
+import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
@@ -392,6 +392,8 @@ export interface ComposedHeadingArea {
 }
 /** How a picture fills its frame: cover crops around the focus, contain shows all of it, stretch scales it to the frame. */
 export type ImageFit = 'cover' | 'contain' | 'stretch';
+/** A fit as authored (block `fit`, `design.imageFit`): one of ImageFit, or `auto` (LH-104), which core resolves per frame (autoImageFit). */
+export type ImageFitOption = ImageFit | 'auto';
 /** A background also tiles: the picture repeats at its own size from the canvas's top-left corner. */
 export type BackgroundImageFit = ImageFit | 'tile';
 /** A slide or frame edge, physical (already mirrored in a right-to-left deck). */
@@ -452,8 +454,10 @@ export interface ComposedImage {
   region: LayoutBox;
   /** Picture frame inside the region: the band inside the slide padding for an inset placement, then the largest centered box with `aspectRatio` (a circle uses 1). */
   box: LayoutBox;
-  /** The block's own fit, else the effective design.imageFit, else cover. */
+  /** The effective fit: the block's own fit, else the effective design.imageFit, else cover, with `auto` resolved for this frame (autoImageFit). */
   fit: ImageFit;
+  /** LH-104: present when the fit asked for was `auto`; `fit` is what it resolved to (cover or contain), for example to show "Auto (cover)". */
+  autoFit?: true;
   focus: ImageFocus;
   /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
   shape: ImageShape;
@@ -699,7 +703,7 @@ const round = (value: number) => Math.round(value * 1e6) / 1e6 || value;
 /** Default share of the slide width (left/right) or height (top/bottom) given to a placed image's band. */
 const PLACEMENT_BAND = 0.5;
 const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'] as const;
-const IMAGE_FITS = ['cover', 'contain', 'stretch'] as const;
+const IMAGE_FITS = ['cover', 'contain', 'stretch', 'auto'] as const;
 const BACKGROUND_FITS = ['cover', 'contain', 'stretch', 'tile'] as const;
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
 const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
@@ -759,15 +763,38 @@ export function imageShape(kind: ImageShape['kind'], box: LayoutBox, cornerRadiu
 }
 
 /**
+ * LH-104: `fit: "auto"` crops a picture only when the crop is small. A cover crop keeps coverKept of the picture along the dimension it
+ * crops; at 0.85 at most 7.5% goes off each edge, which a photo loses without losing its subject, while a 16:9 photo in a 2:1 band
+ * (0.89) still fills it and a 3:2 photo in a square frame (0.67) would lose a sixth of each side and is shown whole. Tuned on the
+ * LH-27, chart and mixed corpora and the examples (596 pictures of known size): 0.80 crops 18 more of them, 0.90 28 fewer.
+ */
+export const AUTO_FIT_MIN_KEPT = 0.85;
+/** The share of a picture of `aspect` (width / height, EXIF-corrected) a cover crop into `frame` keeps along the cropped dimension; 1 when either is unknown. */
+export function coverKept(frame: { width: number; height: number }, aspect: number | undefined): number {
+  const frameAspect = frame.width / frame.height;
+  return aspect === undefined || !(aspect > 0) || !Number.isFinite(aspect) || !(frameAspect > 0) || !Number.isFinite(frameAspect) ? 1 : Math.min(frameAspect / aspect, aspect / frameAspect);
+}
+/**
+ * LH-104: what `fit: "auto"` draws in `frame`: cover when the crop keeps at least AUTO_FIT_MIN_KEPT of the picture (coverKept), else
+ * contain. An SVG (a diagram or a logo, whose crop cuts content) and a picture whose size core cannot read are always contained.
+ */
+export function autoImageFit(frame: { width: number; height: number }, aspect: number | undefined, options: { svg?: boolean } = {}): 'cover' | 'contain' {
+  if (options.svg || aspect === undefined || !(aspect > 0) || !Number.isFinite(aspect)) return 'contain';
+  return coverKept(frame, aspect) >= AUTO_FIT_MIN_KEPT - 1e-9 ? 'cover' : 'contain';
+}
+
+/**
  * The shared fit math every engine uses (FA-22). `aspect` is the picture's width / height. cover scales the picture
  * to cover the frame and centers the focus point in the frame as far as the picture still covers it, so the focus
  * point always stays in view ({0.5, 0.5} is a center crop, {0, 0} keeps the top-left corner). contain scales it to
  * fit and centers it; stretch fills the frame exactly. Focus applies to cover only; without one, a portrait picture cropped
  * into a wider frame keeps its heads (defaultImageFocus), every other crop is centered. `crop` holds the DrawingML
- * srcRect insets as fractions of the picture: positive insets crop, negative insets pad.
+ * srcRect insets as fractions of the picture: positive insets crop, negative insets pad. `auto` (LH-104) is resolved by autoImageFit
+ * for a raster picture; an SVG is always contained, so pass its fit resolved (composeImage does).
  */
-export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus?: ImageFocus): ImageFitPlacement {
+export function fitImage(frame: LayoutBox, requested: ImageFitOption, aspect: number, focus?: ImageFocus): ImageFitPlacement {
   if (![frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) || frame.width <= 0 || frame.height <= 0) throw new RangeError('An image frame needs finite coordinates and a positive size.');
+  const fit: ImageFit = requested === 'auto' ? autoImageFit(frame, aspect) : requested;
   if (fit === 'stretch' || !Number.isFinite(aspect) || aspect <= 0) return { image: roundBox(frame), crop: { left: 0, top: 0, right: 0, bottom: 0 } };
   const wide = aspect > frame.width / frame.height, cover = fit === 'cover';
   const width = wide === cover ? frame.height * aspect : frame.width, height = wide === cover ? frame.height : frame.width / aspect;
@@ -836,17 +863,23 @@ function containedBox(cell: LayoutBox, aspect: number, anchor: RegionAnchor): La
  * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
-function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFit; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
   const kindName: ImageShape['kind'] = Object.hasOwn(IMAGE_SHAPES, host.shape) ? host.shape : 'rectangle';
   const { scale } = context;
-  const fit: ImageFit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
-  const pictureAspect = intrinsicImageAspect(host.image, context.assets);
+  const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
+  // LH-80 with LH-104: an automatic track is a frame the engine chose to crop the picture into, so `auto` covers it there.
+  const decided: ImageFitOption = requested === 'auto' && context.placement?.automatic ? 'cover' : requested;
+  const size = intrinsicImageSize(host.image, context.assets), pictureAspect = size ? size.width / size.height : undefined;
   let box: LayoutBox = { ...frameArea };
   const aspect = kindName === 'circle' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
   if (aspect) {
     const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
     box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
-  } else if (context.anchor && fit === 'contain' && pictureAspect) {
+  }
+  // LH-104: `auto` is decided on the frame the picture would fill (the cell, or the frame the block shapes), before a contained
+  // picture's frame takes the picture's own proportions; preview and export both draw the composed fit.
+  const fit: ImageFit = decided === 'auto' ? autoImageFit(box, pictureAspect, { svg: size?.svg }) : decided;
+  if (!aspect && context.anchor && fit === 'contain' && pictureAspect) {
     // WI-3 (P12): a contained picture is the whole picture, so its frame is the picture's own shape inside the cell.
     const frameWidth = Math.min(box.width, box.height * pictureAspect);
     box = { x: box.x + (box.width - frameWidth) / 2, y: box.y, width: frameWidth, height: frameWidth / pictureAspect };
@@ -857,7 +890,7 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   box = roundBox(box);
   const focus = authoredFocus(host.focus) ?? (pictureAspect ? defaultImageFocus(box, fit, pictureAspect) : imageFocus(undefined));
   const shape = imageShape(kindName, box, finite(host.cornerRadius, 0, 0.5));
-  const result: ComposedImage = { region: roundBox(region), box, fit, focus, shape };
+  const result: ComposedImage = { region: roundBox(region), box, fit, ...(requested === 'auto' ? { autoFit: true as const } : {}), focus, shape };
   const border = record(host.border), borderWidth = finite(border.width, 0, 64);
   if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
   const opacity = finite(host.opacity, 0, 1);
@@ -3667,7 +3700,8 @@ function chartRecomposition(input: unknown, options: ComposeSlideOptions, result
  *    design, no frame shape) takes a full-height track at the slide edge, cover-cropped (LH-84 focus) and bled: the start side when it is
  *    the first block, the end side otherwise (the top or bottom of a portrait canvas). The headings and the other blocks compose beside it
  *    in the slide's own mode. The track is 50, 45, 40 or 35% of the slide, of those whose crop keeps at least half of the picture's
- *    width or height (MEDIA_TRACK_MIN_KEPT): a wide picture takes a wide track or none.
+ *    width or height (MEDIA_TRACK_MIN_KEPT): a wide picture takes a wide track or none. A track is a frame the engine chooses for the
+ *    picture and crops it by design: a `fit: "auto"` (LH-104) takes it as no fit would, and the picture is cover-cropped in it.
  *  - LH-49: the slide's one chart block among other blocks (no picture, no design.chartPrimary) whose plot is under its minimum
  *    (CHART_MIN_PLOT_PX, CHART_MIN_PLOT_SHARE of the body, CHART_MAX_PLOT_ASPECT) takes the filling track: the root's first column
  *    (it is the first block) or last, 60, 55 or 50% of the content width (the first that reads as well) against a column of the others

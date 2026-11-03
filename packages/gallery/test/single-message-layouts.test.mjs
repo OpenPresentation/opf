@@ -100,10 +100,11 @@ test('agenda-split binds three, six and nine entries without findings, the list 
   }
 });
 
-test('the image record says the picture is shown whole', () => {
+test('the image record says when the picture fills the frame and when it is shown whole', () => {
   const record = gallery.layouts.image;
   assert.match(record.summary, /shown whole/);
   assert.match(record.description, /whole/);
   assert.match(record.description, /cover/);
-  assert.equal(record.design.imageFit, 'contain');
+  // LH-104: auto covers a near-fitting picture and shows any other whole.
+  assert.equal(record.design.imageFit, 'auto');
 });
