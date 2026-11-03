@@ -336,10 +336,12 @@ jobs:
         working-directory: packages/editor
         run: node ../../scripts/quarantine.mjs run-suite playground --shard "${{ matrix.index }}/${{ matrix.count }}"
 
-      - name: Standalone browser suites
+      # The standalone suite is 55 tests and 23 to 32 minutes in one job depending on the runner (2026-11-02): each `browser i/n`
+      # leg runs every n-th test. Without --shard every leg ran the whole suite, so adding legs shortened none of them.
+      - name: Standalone browser suites (shard ${{ matrix.index }} of ${{ matrix.count }})
         if: ${{ matrix.job == 'editor' && matrix.kind == 'browser' }}
         working-directory: packages/editor
-        run: node ../../scripts/quarantine.mjs run-suite browser
+        run: node ../../scripts/quarantine.mjs run-suite browser --shard "${{ matrix.index }}/${{ matrix.count }}"
 
       - name: Editor quarantined tests (non-blocking)
         if: ${{ always() && matrix.job == 'editor' && matrix.kind != 'tests' }}
