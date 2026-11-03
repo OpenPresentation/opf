@@ -1,15 +1,15 @@
 /**
- * Metric trend mark (RR-07, FA-06): the arrow and colour that show `metric.trend` and
- * `metric.sentiment` in the SVG preview and the PPTX export. Core's metric layout places the trend word (up, down, flat) as ordinary
- * text; this derives, from that accepted line geometry, one arrow beside it so both engines draw
- * the same shape in the same place and colour. The word stays the text alternative: the arrow
- * adds a visual cue and an `ariaLabel`, never rewritten source text. The arrow always points the
- * way the trend does; its colour (and the trend and delta text colour) follows the sentiment, which
- * defaults to the conventional reading of the trend (up positive, down negative, flat neutral).
+ * Metric trend mark (RR-07, FA-06, LH-53): the arrow and color that show `metric.trend` and
+ * `metric.sentiment` in the SVG preview and the PPTX export. Core's metric layout places the arrow
+ * (`trendBox`: before the delta, else the label or description, on its line) and draws no
+ * trend word; this gives the arrow its shape and color so both engines draw it alike. The word
+ * stays the text alternative (`ariaLabel`), never rewritten source text. The arrow always points the
+ * way the trend does; its color (and the delta text color) follows the sentiment, which defaults
+ * to the conventional reading of the trend (up positive, down negative, flat neutral).
  */
 import type { MetricLayout } from './composition.js';
 import { isDarkColor } from './color.js';
-import { legible, luminance, normalize } from './legible-color.js';
+import { contrast, legible, luminance, normalize } from './legible-color.js';
 
 export type MetricTrend = 'up' | 'down' | 'flat';
 /** Whether a change is good news: the colour of the trend mark. */
@@ -23,20 +23,25 @@ function metricEffectiveSentiment(trend: MetricTrend, sentiment?: MetricSentimen
 /** The DrawingML preset geometry that draws each trend (`a:prstGeom prst`). */
 export const METRIC_TREND_SHAPES: Readonly<Record<MetricTrend, 'upArrow' | 'downArrow' | 'rightArrow'>> = Object.freeze({ up: 'upArrow', down: 'downArrow', flat: 'rightArrow' });
 export const METRIC_TREND_MIN_CONTRAST = 4.5;
+/** LH-53: the arrow is this share of its line's font size square, and this share of it apart from the delta it precedes. */
+export const METRIC_TREND_ARROW_SIZE = .72, METRIC_TREND_ARROW_GAP = .3;
 /** WI-5 (P18, decision D3): the contrast a metric value keeps on a dark surface when it takes its colour from the scheme. */
 export const METRIC_VALUE_MIN_CONTRAST = 4.5;
 
 /**
- * The colour a metric value draws in: `color` (the scheme's primary), lifted with {@link legible} to {@link METRIC_VALUE_MIN_CONTRAST}
- * (4.5:1) against `background` when the background is dark ({@link isDarkColor}) and the colour falls short. A light surface and a colour that
- * already reaches 4.5:1 return `color` unchanged, and so does a value that is not an opaque hex (the palette is kept; only the
- * default blue on the default navy, 3.42:1, was in question). A metric value never has an explicit colour of its own, so the preview and the PPTX
- * export both call this for every value, with the same two inputs.
+ * The color a metric value draws in: `color` (the scheme's primary) unless the background is dark ({@link isDarkColor}) and the color
+ * falls short of {@link METRIC_VALUE_MIN_CONTRAST} (4.5:1) against it. Then (LH-57) the value takes `text`, the light text color of the dark
+ * slide or card, so the number stays the strongest element instead of a lightened accent (Claude Design draws such values in the text
+ * color); without `text` the color is lifted with {@link legible} as before. `text` is lifted to 4.5:1 too if it falls short. A light
+ * surface and a color that already reaches 4.5:1 return `color` unchanged, and so does a value that is not an opaque hex. A metric value
+ * never has an explicit color of its own, so the preview and the PPTX export both call this for every value, with the same inputs.
  */
-export function metricValueColor(color: string, background: string): string {
+export function metricValueColor(color: string, background: string, text?: string): string {
   const foreground = normalize(color), surface = normalize(background);
   if (!foreground || !surface || !isDarkColor(surface)) return color;
-  return legible(foreground, surface, METRIC_VALUE_MIN_CONTRAST);
+  if (contrast(foreground, surface) >= METRIC_VALUE_MIN_CONTRAST) return color;
+  const light = text === undefined ? undefined : normalize(text);
+  return legible(light ?? foreground, surface, METRIC_VALUE_MIN_CONTRAST);
 }
 
 export interface MetricTrendColorOptions {
@@ -99,38 +104,17 @@ export function metricTrendPoints(shape: MetricTrendMark['shape'], box: MetricTr
 }
 
 /**
- * LH-118: whether a metric draws its trend word (up, down, flat), which is English: only in a deck whose language is English or unset.
- * Elsewhere the arrow alone shows the trend, in the word's place (metricTrendMark with `word: false`); the word stays in the source and
- * in the arrow's text alternative, and the PPTX export keeps its line as a hidden shape, so the metric imports with its trend.
+ * The arrow for a laid-out metric, or undefined when the metric has no trend or core placed no arrow. LH-53: core's metric layout places
+ * it (`layout.trendBox`: square, METRIC_TREND_ARROW_SIZE of its line's size, on the baseline before the delta, else before the label or
+ * the description); the trend word is not drawn and is the arrow's text alternative. The color follows `options.sentiment`, else the
+ * layout's own (`metric.sentiment`), else the trend's default.
  */
-export function metricTrendWordShown(language: unknown): boolean {
-  return typeof language !== 'string' || language.trim() === '' || /^en(?:-|$)/i.test(language.trim());
-}
-
-/**
- * The arrow for a laid-out metric, or undefined when the metric has no (visible) trend or the
- * arrow has no room. It is square, as tall as the trend word's capitals, on the baseline, and
- * sits after the word for left-aligned metrics and before it for centred or right-aligned ones,
- * so it grows away from the alignment edge. It never leaves the trend field's box. The colour
- * follows `options.sentiment`, else the layout's own (`metric.sentiment`), else the trend's default.
- * With `word: false` (LH-118, metricTrendWordShown) the word is not drawn and the arrow takes its place: at the start of the word's line,
- * its middle or its end, as the metric is aligned.
- */
-export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorOptions & { word?: boolean }): MetricTrendMark | undefined {
+export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorOptions): MetricTrendMark | undefined {
   const part = layout.parts.find(candidate => candidate.role === 'trend');
-  if (!part || !part.visible || !part.fit || part.fit.sourceLines.length === 0) return undefined;
+  if (!part || !layout.trendBox) return undefined;
   const trend = part.text.trim() as MetricTrend;
   if (!Object.hasOwn(METRIC_TREND_SHAPES, trend)) return undefined;
-  const line = part.fit.sourceLines[0]!, origin = part.linePositions[0];
-  if (!origin || line.width <= 0) return undefined;
-  const size = part.fit.fontSize * .72, gap = part.fit.fontSize * .3, left = part.box.x, right = part.box.x + part.box.width;
-  const after = origin.x + line.width + gap, before = origin.x - gap - size;
-  const fitsAfter = after + size <= right + .01, fitsBefore = before >= left - .01;
-  const factor = layout.alignment === 'right' ? 1 : layout.alignment === 'center' ? .5 : 0;
-  const x = options.word === false ? Math.min(Math.max(origin.x + (line.width - size) * factor, left), right - size)
-    : layout.alignment === 'left' ? (fitsAfter ? after : fitsBefore ? before : undefined) : (fitsBefore ? before : fitsAfter ? after : undefined);
-  if (x === undefined) return undefined;
-  const shape = METRIC_TREND_SHAPES[trend], box = { x, y: origin.baseline - size, width: size, height: size };
+  const shape = METRIC_TREND_SHAPES[trend], box = { ...layout.trendBox };
   const sentiment = metricEffectiveSentiment(trend, options.sentiment ?? layout.sentiment);
   return { trend, sentiment, shape, box, points: metricTrendPoints(shape, box), color: metricTrendColor(trend, { ...options, sentiment }), ariaLabel: `Trend: ${trend}`, path: part.path };
 }

@@ -3,7 +3,7 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
-  metricTrendMark as coreMetricTrendMark, metricTrendWordShown, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
@@ -1418,17 +1418,17 @@ function renderMetric(item, box, bound, options) {
   const layout=item.metricLayout;
   if (!layout) throw new OPFRenderError('missing-metric-layout','Metric rendering requires coordinated core metric geometry.',{path:item.path});
   const children=[];
-  // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
+  // RR-07, LH-53: a trend draws core's arrow (before the delta; the trend word is not drawn) and colors the delta text.
+  // LH-54: a metric in a card is colored against the card fill, not the slide behind it. LH-57: on a dark one, a value whose accent
+  // falls under 4.5:1 takes the text color.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
-  // LH-118: the trend word is English; outside an English deck the arrow alone shows the trend, in the word's place.
-  const trendWord=metricTrendWordShown(bound.presentation?.language);
-  const trendMark=metricTrendMark(layout,bound,backdrop,trendWord);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
+  const trendMark=metricTrendMark(layout,bound,backdrop);
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color.
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
-    if (!part.visible||(part.role==='trend'&&!trendWord)) continue;
+    if (!part.visible) continue;
     if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,diagnostics:layout.diagnostics});
     const partRtl=paragraphRtl(bound,part.text);
     // Anchor untabbed lines at the accepted alignment edge, as PPTX export does,
@@ -1466,8 +1466,8 @@ function renderMetric(item, box, bound, options) {
 }
 
 // The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
-function metricTrendMark(layout,bound,background,word=true) {
-  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex,...(word?{}:{word:false})});
+function metricTrendMark(layout,bound,background) {
+  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
 }
 
 function renderQuote(item, box, bound, options) {

@@ -8,7 +8,9 @@ const slide = {title: 'Quarterly review', subtitle: 'Supporting context', blocks
 const alignments = composition => composition.items.map(item => [item.field, item.alignment]);
 
 test('composed metrics default to center and other items default to left alignment', () => {
-  assert.deepEqual(alignments(composeSlide(slide)), [['title', 'left'], ['subtitle', 'left'], ['text', 'left'], ['metric', 'center'], ['items', 'left']]);
+  // LH-112: a metric beside one or two blocks of other kinds starts at the start edge; alone or among metrics it is centered.
+  assert.deepEqual(alignments(composeSlide(slide)), [['title', 'left'], ['subtitle', 'left'], ['text', 'left'], ['metric', 'left'], ['items', 'left']]);
+  assert.deepEqual(alignments(composeSlide({...slide, blocks: [{metric: {value: 42, label: 'Accounts'}}, {metric: {value: 7, label: 'Regions'}}]})).slice(2), [['metric', 'center'], ['metric', 'center']]);
 });
 
 test('the heading group follows titleAlignment and every other item follows contentAlignment', () => {

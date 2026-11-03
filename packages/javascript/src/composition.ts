@@ -15,7 +15,7 @@ import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
-import type {MetricSentiment} from './metric-trend.js';
+import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 /** The pixel size and aspect (width / height) of an embedded picture (a data URI, or an `asset:<id>` that names one), the reading composeSlide uses, for engines that place host-resolved pictures. */
 export {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
@@ -51,7 +51,7 @@ export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuot
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForRoles, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
-export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricTrendWordShown, metricValueColor} from './metric-trend.js';
+export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
@@ -610,9 +610,10 @@ export interface SlideComposition {
    * The headings sit above the body as on an automatic slide; `regions` and `headingAreas` are absent. Absent on every other slide.
    * LH-49: the same when the layout left a chart's plot shorter than its minimum and the automatic grid draws it taller and reads as
    * well (no block smaller unless the layout overflows): `chart` holds the shortest plot height (chartPlotBox) of the layout's
-   * composition and of this one, in reference pixels.
+   * composition and of this one, in reference pixels. LH-61: `kpis` when the layout stacked one or two metrics over a chart and this
+   * composition sets them in a column beside it (kpiColumn), the chart's plot at least as tall.
    */
-  recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number } };
+  recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number }; kpis?: true };
   /** LH-06: the slide's emphasis surface (at most one), when a block or group asks for it or an automatic rule gives one. */
   emphasis?: ComposedEmphasis;
   /**
@@ -1488,11 +1489,15 @@ export interface QuoteLayoutOptions {
 }
 /**
  * LH-48: the largest size, in reference pixels, a role of a lone block grows to (`growth`): text one and a half times its role size,
- * still under the title's 54; a list, a quote, code and a metric's parts by about as much; a metric's value to twice its role size.
+ * still under the title's 54; a list, a quote, code and a metric's parts by about as much. LH-101: a lone metric's value grows to its
+ * display size, about three times its role size (Claude Design draws a lone figure at about 230 px).
  */
-export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, quoteFooter: 24, code: 32, codeHeader: 18, value: 152, unit: 28, label: 28, delta: 28, description: 22, trend: 20 } as const;
-/** LH-48: a body under LONE_FILL of its height at its role sizes grows, to at most LONE_TARGET of it. */
-export const LONE_FILL = .5, LONE_TARGET = .6;
+export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, quoteFooter: 24, code: 32, codeHeader: 18, value: 232, unit: 28, label: 28, delta: 28, description: 22, trend: 20 } as const;
+/**
+ * LH-48: a body under LONE_FILL of its height at its role sizes grows, to at most LONE_TARGET of it. LH-101: a lone metric, whose value is
+ * one short line, grows to at most LONE_METRIC_TARGET.
+ */
+export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
 /** LH-48: a role size grown by `growth` (at least 1), capped at its display size; a role already larger keeps its size. */
 function grownRoleSize(size: number, growth: number | undefined, display: number): number {
   const factor = growth !== undefined && Number.isFinite(growth) && growth > 1 ? growth : 1;
@@ -1741,7 +1746,7 @@ export interface MetricContent {
   unit?: string;
   delta?: string | number;
   trend?: 'up' | 'down' | 'flat';
-  /** Whether the change is good news; colours the trend arrow, trend word and delta text (see metricTrendColor). */
+  /** Whether the change is good news; colors the trend arrow and the delta text (see metricTrendColor). */
   sentiment?: MetricSentiment;
 }
 /** The text fields of a metric, each laid out as its own part. `sentiment` is metadata, not text. */
@@ -1775,9 +1780,19 @@ export interface MetricLayout {
   algorithm: 'metric-flow-v1';
   alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
-  arrangement: 'inline-unit' | 'stacked';
+  /** `band` (LH-15): the value at the start edge and the other fields in a column beside it, for a wide, short cell. */
+  arrangement: 'inline-unit' | 'stacked' | 'band';
   /** The metric's `sentiment`, passed through for metricTrendMark; omitted when the content has none. */
   sentiment?: MetricSentiment;
+  /**
+   * LH-53: the box of the trend arrow, square and on the baseline of its line: before the first line of the delta (at the reading start: the
+   * left, or the right in a right-to-left metric), or of the label, then the description, when the metric has no delta; on a line of its own
+   * when it has none of them. The trend word is not drawn (its part is not `visible`); it stays the arrow's text alternative
+   * (metricTrendMark). Absent without a trend.
+   */
+  trendBox?: LayoutBox;
+  /** LH-112: the value asked for a display size (`display`), not its role size. */
+  display?: true;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -1805,15 +1820,44 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * at least there and fits down no further; a part that does not fit at it overflows.
    */
   minimumSizes?: Partial<Record<MetricTextRole, number>>;
+  /**
+   * LH-112: the value's display size, in reference pixels, for a metric that shares the body with other blocks: it starts at `start` and
+   * grows toward `max` while its one line stays within METRIC_DISPLAY_WIDTH of the box's width and its line height within
+   * METRIC_DISPLAY_HEIGHT of `height` (canvas pixels: the cell or body it shares; the box's height when absent). It replaces the value's
+   * role size and still fits down to the readability floor.
+   */
+  display?: { start: number; max: number; height?: number };
+  /** LH-15: lay the metric out as a band (the value at the start, the other fields in a column beside it) when that fits; start-aligned. */
+  band?: boolean;
 }
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
 export const METRIC_TILE_VALUE_SHARE = 0.25;
+/**
+ * LH-112: a value at display size keeps its one line within this share of its box's width, and its line height within this share of the
+ * box's height (Claude Design draws a metric beside a chart or a paragraph at 120 to 160 px, about a third of its cell tall).
+ */
+export const METRIC_DISPLAY_WIDTH = .9, METRIC_DISPLAY_HEIGHT = .4;
+/** A metric value's role size in reference pixels (WI-1). */
+export const METRIC_ROLE_VALUE_SIZE = 76;
+/** LH-15: a band's value takes at most this share of the width, and the column beside it at least METRIC_BAND_MIN_COLUMN reference px. */
+export const METRIC_BAND_VALUE_SHARE = .6, METRIC_BAND_MIN_COLUMN = 200;
+/** LH-15: composition draws a metric at display size as a band in a cell at least this many times as wide as it is tall. */
+export const METRIC_BAND_RATIO = 3;
+/** LH-53: a unit on its value's line is drawn at this share of the value's size (Claude Design sets "18%" as one figure). */
+export const METRIC_UNIT_SHARE = .6;
+/**
+ * LH-112: the display size of a metric beside other blocks, in reference pixels: one metric starts at 120 and grows to 160, two start at 90
+ * and grow to 120 (layoutMetric's `display`).
+ */
+export const METRIC_DISPLAY_SIZES = { one: { start: 120, max: 160 }, two: { start: 90, max: 120 } } as const;
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
- * share a baseline; longer values or units stack. No locale formatting, trend icons or rewritten
- * source text are invented here: the trend stays its word, and metricTrendMark derives the arrow
- * beside it from these accepted parts. Consumers must reuse these accepted parts and source ranges.
+ * share a baseline; longer values or units stack. No locale formatting or rewritten source text is
+ * invented here. LH-53: the trend is drawn as an arrow, not as its word (an English word, which also
+ * showed on right-to-left slides): the arrow sits before the delta on one line ("↑ +7 pts"), or on a
+ * line of its own without a delta (`trendBox`), and the trend part keeps its source text as the
+ * arrow's text alternative (metricTrendMark). Consumers must reuse these accepted parts and source ranges.
  */
 export function layoutMetric(value: string | number | MetricContent, box: LayoutBox, options: MetricLayoutOptions = {}): MetricLayout {
   const scalar = typeof value === 'string' || typeof value === 'number';
@@ -1834,7 +1878,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
-  const requestedAlignment=options.align??'center';
+  // LH-15: a band is start-aligned.
+  const requestedAlignment=options.band?'left':options.align??'center';
   if (!['left','center','right'].includes(requestedAlignment)) throw new RangeError('Invalid metric alignment.');
   const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
@@ -1852,10 +1897,17 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
     parts.push(part);
   }
-  const primary=parts[0]!,metadata=parts.filter(part=>part!==primary&&part.visible),unit=metadata.find(part=>part.role==='unit');
+  // LH-53: the trend takes no line of its own: its arrow sits before the delta, else the label, else the description (the host), which is
+  // measured that much narrower (arrowRoom).
+  const trendPart=parts.find(part=>part.role==='trend'),arrowHost=trendPart?(['delta','label','description'] as const).map(role=>parts.find(part=>part.role===role&&part.visible)).find(Boolean):undefined;
+  const primary=parts[0]!,metadata=parts.filter(part=>part!==primary&&part.visible&&!(part===trendPart&&arrowHost)),unit=metadata.find(part=>part.role==='unit');
   // Logical alignment (RR-05): in a right-to-left deck a metric whose own text is right-to-left starts at the right edge.
   const metricDirection:TextDirection|undefined=options.direction==='rtl'?paragraphDirection((['label','description','unit'] as const).map(role=>parts.find(part=>part.role===role)?.text).find(Boolean)??primary.text,'rtl'):undefined;
   const alignment=physicalAlignment(requestedAlignment,metricDirection);
+  // The arrow goes before the delta in reading order: on its left, or on its right in a right-to-left metric.
+  const arrowLeft=metricDirection!=='rtl',arrowRoom=(size:number)=>size*(METRIC_TREND_ARROW_SIZE+METRIC_TREND_ARROW_GAP);
+  const lineBox=(part:MetricTextPart,area:LayoutBox,y:number,height:number,size:number):LayoutBox=>part===arrowHost
+    ?{x:arrowLeft?area.x+arrowRoom(size):area.x,y,width:Math.max(Number.MIN_VALUE,area.width-arrowRoom(size)),height}:{...area,y,height};
   const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height,area.x+area.width,area.y+area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
   const occupied=(fit:CodeTextFit)=>fit.placement?.height??fit.lines.length*fit.lineHeight;
   const gap=8*scale,primaryGap=12*scale;
@@ -1896,6 +1948,20 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
     return fit;
   };
+  // LH-112: a value at display size grows from display.start toward display.max, in 4 px steps, while its line height keeps within
+  // METRIC_DISPLAY_HEIGHT of the reference height (display.height, else the box's) and its one line within METRIC_DISPLAY_WIDTH of the
+  // box's width. At or under its start it keeps one line: the largest size down to the role size at which it does (a figure does not wrap).
+  if (options.display&&!options.tile) {
+    const start=Math.min(options.display.start,options.display.max),reference=options.display.height??box.height,role=METRIC_ROLE_VALUE_SIZE;
+    const oneLine=(size:number)=>{
+      const fit=measure(primary,gridFontSize(size*scale,primary.minFontSize),box.width);
+      return fit.lines.length===1&&naturalWidth(primary,fit)<=METRIC_DISPLAY_WIDTH*box.width+.01;
+    };
+    let size:number|undefined;
+    for (let next=options.display.max;next>start+1e-9&&size===undefined;next-=4) if (next*scale*1.22<=METRIC_DISPLAY_HEIGHT*reference+.01&&oneLine(next)) size=next;
+    for (let next=start;next>role+1e-9&&size===undefined;next-=4) if (oneLine(next)) size=next;
+    primary.requestedFontSize=gridFontSize(Math.max(Math.min((size??role)*scale,options.roleSizes?.value??Infinity),primary.minFontSize),primary.minFontSize);
+  }
   const fitValue=(area:LayoutBox,singleLine:boolean)=>{
     if (!usable(area)) return undefined;
     // Derive sizes from the requested size: repeated subtraction accumulates rounding
@@ -1912,13 +1978,41 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   let selected:Candidate|undefined,attempts=0;
   const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-part.minFontSize)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
-    const measured=new Map(metadata.map(part=>[part,measure(part,gridFontSize(part.requestedFontSize-reduction*scale,part.minFontSize),box.width)]));
+    const measureAt=(width:number)=>new Map(metadata.map(part=>{
+      const size=gridFontSize(part.requestedFontSize-reduction*scale,part.minFontSize);
+      return [part,measure(part,size,part===arrowHost?Math.max(Number.MIN_VALUE,width-arrowRoom(size)):width)] as const;
+    }));
+    const measured=measureAt(box.width);
     const measuredUnit=unit?measured.get(unit):undefined;
     const unitWidth=unit&&measuredUnit?naturalWidth(unit,measuredUnit):0;
     const unitFit=unit&&measuredUnit&&unitWidth>0?place(unit,measuredUnit,unitWidth):measuredUnit;
     const inline=unitFit?.lines.length===1&&unitWidth>0&&unitWidth<=box.width*.35&&unitWidth+gap<box.width;
-    for (const arrangement of (inline?['inline-unit','stacked']:['stacked']) as MetricLayout['arrangement'][]) {
+    for (const arrangement of [...(options.band?['band']:[]),...(inline?['inline-unit','stacked']:['stacked'])] as MetricLayout['arrangement'][]) {
+      // LH-15: a band that fits is kept.
+      if (arrangement!=='band'&&selected?.arrangement==='band'&&!selected.overflow) continue;
       attempts++;
+      if (arrangement==='band') {
+        // LH-15: the value at the start edge, at most METRIC_BAND_VALUE_SHARE of the width, and the other fields in a column beside it, the
+        // two centered on the band's height.
+        const share={...box,width:box.width*METRIC_BAND_VALUE_SHARE},valueFit=fitValue(share,true);
+        const valueWidth=valueFit?Math.min(share.width,naturalWidth(primary,valueFit)||valueFit.fontSize):0,columnWidth=box.width-valueWidth-2*primaryGap;
+        if (!valueFit||columnWidth<METRIC_BAND_MIN_COLUMN*scale) continue;
+        const column=measureAt(columnWidth),valueHeight=occupied(valueFit),startLeft=alignment!=='right';
+        const columnHeight=metadata.reduce((sum,part)=>sum+occupied(column.get(part)!),0)+Math.max(0,metadata.length-1)*gap,height=Math.max(valueHeight,columnHeight);
+        if (!Number.isFinite(columnHeight)) throw new RangeError('Metric metadata exceeds finite coordinates.');
+        const columnArea={...box,x:startLeft?box.x+valueWidth+2*primaryGap:box.x,width:columnWidth};
+        const allocations:Allocation[]=[{part:primary,box:{x:startLeft?box.x:box.x+box.width-valueWidth,y:box.y+(height-valueHeight)/2,width:valueWidth,height:valueHeight},fit:place(primary,valueFit,valueWidth)}];
+        let y=box.y+(height-columnHeight)/2;
+        for (const part of metadata) {
+          const natural=column.get(part)!,lineHeight=occupied(natural),area=lineBox(part,columnArea,y,lineHeight,natural.fontSize);
+          allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}});
+          y+=lineHeight+gap;
+        }
+        const overflow=valueFit.overflow||height>box.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area));
+        const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
+        if (!overflow||!selected) selected={arrangement,allocations,score,overflow};
+        continue;
+      }
       // LH-68: a tile leads with its label (the eyebrow), each lead part a gap above the next.
       const lead=options.tile?metadata.filter(part=>part.role==='label'):[];
       const tail=metadata.filter(part=>(arrangement!=='inline-unit'||part!==unit)&&!lead.includes(part));
@@ -1929,24 +2023,34 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const valueFit=fitValue(area,arrangement==='inline-unit'),valueHeight=valueFit?occupied(valueFit):0;
       const allocations:Allocation[]=[];
       let leadY=box.y;
-      for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural); allocations.push({part,box:{...box,y:leadY,height},fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>box.width+.01)}}); leadY+=height+gap; }
+      for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),area=lineBox(part,box,leadY,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap; }
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
-        const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
-        const unitBaseline=unitFit.placement?.lines.at(-1)?.baseline??occupied(unitFit)-unitFit.lineHeight+unitFit.fontSize;
-        const valueY=top+Math.max(0,unitBaseline-valueBaseline),unitY=top+Math.max(0,valueBaseline-unitBaseline);
         const measuredWidth=naturalWidth(primary,valueFit);
         const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
+        // LH-53: a unit beside its value is drawn at METRIC_UNIT_SHARE of the value's size on its baseline, so "18 %" reads as one figure,
+        // when it still fits on the line; otherwise at its own size.
+        let inlineFit=unitFit,inlineWidth=unitWidth;
+        // In whole points of the reference size, so the size is on the font grid at every canvas scale.
+        const unitSize=gridFontSize(Math.round(METRIC_UNIT_SHARE*valueFit.fontSize/scale*.75)/.75*scale,unit.minFontSize);
+        if (unitSize>unitFit.fontSize+1e-9) {
+          const natural=measure(unit,unitSize,box.width),width=naturalWidth(unit,natural);
+          if (natural.lines.length===1&&width>0&&valueWidth+gap+width<=box.width+.01) { inlineFit=place(unit,natural,width); inlineWidth=width; }
+        }
+        const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
+        const unitBaseline=inlineFit.placement?.lines.at(-1)?.baseline??occupied(inlineFit)-inlineFit.lineHeight+inlineFit.fontSize;
+        const valueY=top+Math.max(0,unitBaseline-valueBaseline),unitY=top+Math.max(0,valueBaseline-unitBaseline);
         allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,valueFit,valueWidth)});
-        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:unitWidth,height:occupied(unitFit)},fit:{...unitFit,overflow:!!unitFit.placement?.overflow}});
-        primaryHeight=Math.max(valueY-top+valueHeight,unitY-top+occupied(unitFit));
+        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
+        primaryHeight=Math.max(valueY-top+valueHeight,unitY-top+occupied(inlineFit));
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
       // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
       // from its value on tall cells and wastes space needed by longer labels.
       let y=top+primaryHeight+(tail.length?primaryGap:0);
       for (const part of tail) {
         const natural=measured.get(part)!,height=occupied(natural);
-        allocations.push({part,box:{...box,y,height},fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>box.width+.01)}});
+        const area=lineBox(part,box,y,height,natural.fontSize);
+        allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}});
         y+=height+gap;
       }
       // LH-68: a tile sets its description, delta and trend at its foot (a stacked unit stays under the value).
@@ -1954,9 +2058,12 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const drop=foot.length?box.y+box.height-Math.max(...foot.map(entry=>entry.box.y+entry.box.height)):0;
       if (drop>0) for (const entry of foot) entry.box={...entry.box,y:entry.box.y+drop};
       const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
-      const score=allocations.reduce((sum,{part,fit})=>sum+(part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
+      // LH-53: a unit drawn larger than it asked for (METRIC_UNIT_SHARE) is no gain that offsets smaller metadata.
+      const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
       const candidate={arrangement,allocations,score,overflow};
-      if (!selected||!overflow&&(selected.overflow||score<selected.score)||overflow&&selected.overflow) selected=candidate;
+      // LH-53: a later candidate (more reduced metadata) must score a whole reference pixel better: on a near tie the metadata keeps its
+      // size and the value gives way, as when the trend took a line of its own.
+      if (!selected||!overflow&&(selected.overflow||score<selected.score-1)||overflow&&selected.overflow) selected=candidate;
     }
     if (selected&&!selected.overflow&&selected.score===0) break;
   }
@@ -1976,6 +2083,22 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }));
   };
   for (const part of parts) position(part);
+  // LH-53: the trend arrow, METRIC_TREND_ARROW_SIZE of its line's size and on that line's baseline: before the host's first line, or on
+  // the trend's own line (placed by the alignment) without a host. The trend part then draws nothing; its source text stays the arrow's
+  // text alternative.
+  let trendBox:LayoutBox|undefined,trendBottom=box.y;
+  if (trendPart) {
+    const host=arrowHost?.fit&&arrowHost.linePositions.length?arrowHost:!arrowHost&&trendPart.fit&&trendPart.linePositions.length?trendPart:undefined;
+    if (host) {
+      const line=host.fit!.sourceLines[0]!,origin=host.linePositions[0]!,size=host.fit!.fontSize*METRIC_TREND_ARROW_SIZE,arrowGap=host.fit!.fontSize*METRIC_TREND_ARROW_GAP;
+      const x=host===arrowHost?(arrowLeft?origin.x-arrowGap-size:origin.x+line.width+arrowGap):alignment==='left'?host.box.x:alignment==='right'?host.box.x+host.box.width-size:host.box.x+(host.box.width-size)/2;
+      trendBox={x,y:origin.baseline-size,width:size,height:size};
+      if (host===trendPart) trendBottom=trendPart.box.y+occupied(trendPart.fit!);
+    }
+    const size=trendPart.fit?.fontSize??trendPart.requestedFontSize;
+    trendPart.visible=false;trendPart.linePositions=[];trendPart.box=trendBox??{...box,height:0};
+    trendPart.fit={lines:[],sourceLines:[],fontSize:size,lineHeight:size*1.22,tabSize:4,tabWidth:0,overflow:false};
+  }
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
   for (const part of parts.filter(part=>part.visible)) {
@@ -1993,14 +2116,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  const bottom = Math.max(box.y, ...visible.map(part => part.box.y + occupied(part.fit!)));
+  const bottom = Math.max(box.y, trendBottom, ...visible.map(part => part.box.y + occupied(part.fit!)));
   const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
   // LH-40: a field with no room is set at the floor in what its cell leaves; it overflows, and its finding above stands.
   if (options.floorFallback) for (const part of parts) if (part.visible&&!part.fit) {
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
-  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
@@ -3280,9 +3403,12 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
     if (internal) {
       for (const part of internal.parts as readonly { role: string; text: string; requestedFontSize: number; minFontSize: number; fit?: { fontSize: number }; visible?: boolean }[]) {
         if (part.visible === false) continue;
+        // LH-112: a value at display size reads at its role size (METRIC_ROLE_VALUE_SIZE); what it has above that is display headroom, which
+        // an arrangement may spend (a KPI column, a picture track) like the free space around it.
+        const display = part.role === 'value' && item.metricLayout?.display ? METRIC_ROLE_VALUE_SIZE * scale : Infinity;
         // LH-114: a pull line's body is a lead, not the quote's display size on a card: it keeps a key of its own, so the guard holds it to
         // the slide's smallest body size (every other block still keeps its own size), not to the card's larger quote.
-        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit?.fontSize, `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
+        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit === undefined ? undefined : Math.min(part.fit.fontSize, display), `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
         split(part.text, part.fit);
       }
     } else if (item.field === 'table') {
@@ -3305,20 +3431,25 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * status words under a timeline's labels (`timeline-status`), LH-68's scorecard tiles (`metric-tiles`),
  * LH-86's long texts as full-width rows (`long-text-rows`), LH-66's minimum measure in the automatic grid (`reading-measure`), LH-67's
  * lead plus stack (`lead-stack`), LH-70's paragraph columns (`paragraph-columns`), LH-10's reading measure in a layout's regions
- * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`) and LH-47's stretched short last row of the
- * automatic grid (`short-row`). LH-80 and LH-49's tracks are alternatives
- * composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
+ * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
+ * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
+ * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks. LH-80 and LH-49's tracks are
+ * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'region-measure' | 'mixed-cards' | 'short-row';
-/** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share'];
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-display';
+/**
+ * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
+ * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
+ * without it.
+ */
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
  * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
  */
-const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row']);
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
 /** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
 const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
@@ -3460,6 +3591,8 @@ function settle(input: unknown, options: ComposeSlideOptions, result: SlideCompo
     const plain = { ...options, [NO_REGION_MEASURE]: true } as ComposeSlideOptions, wide = growBody(input, plain, guardedCompose(input, plain));
     if (wide) return wide;
   }
+  const kpis = kpiColumn(input, options, result);
+  if (kpis) return kpis;
   if (!result.regions) return timelineUnderChart(input, options, result) ?? automaticTracks(input, options, result);
   const blocks = record(input).blocks;
   const recomposed = options.recompose === false || (Array.isArray(blocks) && blocks.some(block => record(block).region !== undefined)) ? result
@@ -3601,6 +3734,42 @@ function timelineUnderChart(input: unknown, options: ComposeSlideOptions, base: 
   if (!chartItem || !timelineItem || timelineItem.timelineLayout!.arrangement !== 'band' || timelineItem.box.y < chartItem.box.y + chartItem.box.height - .5) return undefined;
   if (shortPlot(chartItem, bodyHeight(result), scale, false)) return undefined;
   return result;
+}
+/** LH-61: the shares of the content width a chart beside its KPI column tries, widest first (the column takes the rest, about a third). */
+const KPI_CHART_SHARES: readonly number[] = [.67, .6];
+/**
+ * LH-61: a slide whose body is one or two metrics and one chart, and at most one table, with the metrics composed above the chart (a
+ * dashboard stacks its KPI row over its charts), is composed again with the metrics and the table in a column about a third of the width
+ * (KPI_CHART_SHARES) and the chart in a full-height track beside it: the automatic grid for a layout template (as LH-49 recomposes it, with
+ * the record's design), the chart track for an automatic slide. The chart keeps its side of the metrics (after them, at the end). Kept
+ * (`track`; on a template slide also `recomposed`) when its plot is at least as tall and it reads as well as `result` (readsAsWell);
+ * otherwise undefined. A slide with promoted regions, a block pinned to a region or placed, a layout master and, on a template slide,
+ * `recompose: false` keep their composition.
+ */
+function kpiColumn(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
+  const slide = record(input), blocks = slide.blocks;
+  if (!Array.isArray(blocks) || Object.keys(slide).some(key => regionParts(key)) || (result.regions && options.recompose === false)) return undefined;
+  if (blocks.some(block => record(block).region !== undefined || record(block).placement !== undefined || Array.isArray(record(block).blocks))) return undefined;
+  const kinds = blocks.map(block => ['metric', 'chart', 'table'].find(field => record(block)[field] !== undefined) ?? 'other');
+  const count = (kind: string) => kinds.filter(entry => entry === kind).length;
+  if (count('other') || count('chart') !== 1 || count('metric') < 1 || count('metric') > 2 || count('table') > 1) return undefined;
+  const chart = result.items.find(item => item.field === 'chart'), metrics = result.items.filter(item => item.field === 'metric');
+  if (!chart || metrics.length !== count('metric') || !metrics.every(item => item.box.y + item.box.height <= chart.box.y + 1)) return undefined;
+  const scale = Math.min(result.width, result.height) / 720, landscape = result.width >= result.height;
+  if (!landscape) return undefined;
+  const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale), plot = chartPlotBox(chart, scale);
+  const chartIndex = kinds.indexOf('chart'), edge: ImageEdge = chartIndex === 0 ? 'left' : 'right';
+  for (const share of KPI_CHART_SHARES) {
+    const extra = { [CHART_TRACK]: { edge, share, mode: 'column' }, ...(result.regions ? { [RECOMPOSE]: true } : {}) };
+    const next = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor), placed = next?.items.find(item => item.field === 'chart');
+    if (!next || !placed || overflowCount(next) > overflowCount(result) || !readsAsWell(before, trackQuality(next, options), floor)) continue;
+    const nextPlot = chartPlotBox(placed, scale);
+    if (nextPlot.height < plot.height - .5) continue;
+    const after = trackQuality(next, options), physical: ImageEdge = result.direction === 'rtl' ? (edge === 'left' ? 'right' : 'left') : edge;
+    const track = { kind: 'chart' as const, edge: physical, size: round(placed.box.width / result.width), path: `slides.${options.slideIndex ?? 0}.blocks.${chartIndex}` };
+    return { ...next, track, ...(result.regions ? { recomposed: { layoutSize: before.size / scale, size: after.size / scale, chart: { layoutPlot: round(plot.height / scale), plot: round(nextPlot.height / scale) }, kpis: true as const } } : {}) };
+  }
+  return undefined;
 }
 /** composeSlide composes an automatic slide again with one of these: its one picture as a side band (LH-80), its one chart as the root's first or last track (LH-49). */
 const MEDIA_TRACK = Symbol('opf.mediaTrack');
@@ -4186,6 +4355,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
+  // LH-112: one or two metrics that share the body with one or two blocks of other kinds are drawn at display size (METRIC_DISPLAY_SIZES),
+  // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,
+  // LH-101) and a grid of metrics alone keep their centered sizes; a scorecard tile keeps LH-68's.
+  const metricDisplay = new Map<string, { start: number; max: number }>();
+  {
+    const leaves: Pending[] = [], walk = (nodes: Pending[]): void => { for (const node of nodes) if (node.children) walk(node.children); else leaves.push(node); };
+    walk(pending);
+    const metrics = leaves.filter(node => node.field === 'metric'), others = leaves.length - metrics.length;
+    const sizes = metrics.length === 1 ? METRIC_DISPLAY_SIZES.one : METRIC_DISPLAY_SIZES.two;
+    if (metrics.length >= 1 && metrics.length <= 2 && others >= 1 && others <= 2) for (const node of metrics) metricDisplay.set(node.path, sizes);
+  }
   // LH-06: the one block or group drawn on the emphasis surface: the first `emphasis: true` in reading order. Any other is drawn plain,
   // and reported: a slide has one emphasis.
   const emphasisPaths: string[] = [];
@@ -4278,11 +4458,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,...grownOptions(node),
     ...(fullPanels.has(node)&&!hug?{fill:true}:{}),
   });
-  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
-    textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
-    align:tile?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
-  });
+  // LH-112: whether a metric beside other blocks is start-aligned (metric-start, or with its display size, metric-display): unless the slide
+  // or the deck sets the content alignment (a layout's or theme's centering is the default for short text, as LH-70 reads it).
+  const metricStarts = (node: Pending): boolean => metricDisplay.has(node.path) && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
+  // The display size grows against the slide's body height (contentBox), so the height a metric needs (naturalHeight) and its placed
+  // layout ask for the same value.
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => {
+    const starts = !tile && metricStarts(node), display = !tile && ruleOn('metric-display') ? metricDisplay.get(node.path) : undefined;
+    if (starts && alignmentFor('metric') !== 'left') fire('metric-start');
+    if (display) fire('metric-display');
+    const metricOptions: MetricLayoutOptions = {
+      fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
+      textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
+      align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
+      ...(display?{display:{...display,height:contentBox.height}}:{}),
+    };
+    // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
+    // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
+    const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
+    return layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
+  };
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
@@ -4948,7 +5143,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
-      text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
@@ -5207,7 +5402,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
     } else {
       let chosen: number | undefined;
-      for (let power = 1; power <= 5; power++) {
+      // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
+      const target = node.field === 'metric' ? LONE_METRIC_TARGET : LONE_TARGET;
+      for (let power = 1; power <= (node.field === 'metric' ? 9 : 5); power++) {
         const growth = TYPE_SCALE_RATIO ** power;
         growthOf.set(node, growth);
         const height = need();
@@ -5220,7 +5417,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const layout = node.field === 'quote' ? measureQuote(node, inner, settings) : node.field === 'code' ? measureCode(node, inner, settings) : measureMetric(node, inner, settings);
           fits = !layout.overflow && (layout.parts as readonly { fit?: { fontSize: number }; requestedFontSize: number; visible?: boolean }[]).every(part => part.visible === false || (part.fit !== undefined && part.fit.fontSize >= part.requestedFontSize - 1e-9));
         }
-        if (height > LONE_TARGET * inner.height || !fits) break;
+        if (height > target * inner.height || !fits) break;
         chosen = growth; best = height;
       }
       if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
@@ -6204,7 +6401,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // This automatic hint preserves its 3:2 track geometry; a template remains authoritative.
   // LH-49: the chart track automaticTracks chose splits the root the same way, whatever the slide's own mode; the other blocks keep that
   // mode in their column.
-  const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as { edge: ImageEdge; share: number } | undefined;
+  // LH-61: a KPI column (kpiColumn) stacks the other blocks in a column whatever the slide's own mode.
+  const chartTrack = (options as Record<symbol, unknown>)[CHART_TRACK] as { edge: ImageEdge; share: number; mode?: Composition['mode'] } | undefined;
   const chartHint = chartTrack?.edge ?? hints.chartPrimary;
   const chartSide = chartHint === 'left' || chartHint === 'right' || chartHint === 'top' || chartHint === 'bottom' ? chartHint : undefined;
   const chartIndex = pending.findIndex(node => !node.children && node.field === 'chart');
@@ -6225,7 +6423,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   else if (chartPrimary) {
     const primary = pending[chartIndex]!, rest = pending.filter((_, index) => index !== chartIndex);
-    const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
+    const support: Pending = { field: 'blocks', type: 'group', value: rest.map(node => node.payload), path, payload: {}, children: rest, composition: chartTrack?.mode ? { mode: chartTrack.mode } : chartTrack && ownMode ? { mode: ownMode } : {}, synthetic: true };
     arrange(firstChart ? [primary, support] : [support, primary], contentBox, rootSettings, 0);
   } else {
     const grouped = groupRoot(pending), roots = grouped?.nodes ?? pending;

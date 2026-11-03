@@ -8,6 +8,8 @@ const content={value:'f\t1',unit:'ms',label:'  Tall\r\n\tlabel  ',description:'\
 function completeAndContained(layout,cell,padding){
   assert.equal(layout.overflow,false);
   for(const part of layout.parts){
+    // LH-53: the trend is drawn as an arrow inside the cell; its part has no lines.
+    if(part.role==='trend'&&!part.visible){const box=layout.trendBox;assert.ok(box.x>=cell.x-1e-8&&box.x+box.width<=cell.x+cell.width+1e-8&&box.y>=cell.y-1e-8);continue;}
     assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);
     assert.ok(part.fit.fontSize>=part.minFontSize);
     assert.equal(part.linePositions.length,part.fit.sourceLines.length);

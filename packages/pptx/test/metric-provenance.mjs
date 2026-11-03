@@ -11,8 +11,10 @@ const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipS
 const metricOf=slide=>slide.metric??slide.blocks?.[0]?.metric;
 const metric=async bytes=>metricOf((await fromPptx(bytes)).slides[0]);
 assert.deepEqual(await metric(bytes),original);
-const changed=modify(entries=>slide(entries,xml=>xml.replace('>42</a:t>','>43</a:t>').replace('>flat</a:t>','>down</a:t>').replace('>Unchanged</a:t>','>Changed</a:t>')));
-assert.deepEqual(await metric(changed),{...original,value:43,trend:'down',description:original.description.replace('Unchanged','Changed')});
+// LH-53: the trend is exported as its arrow (no native text), so it comes back from the manifest unchanged.
+assert.ok(!dec.decode(unzipSync(bytes)['ppt/slides/slide1.xml']).includes('>flat</a:t>'));
+const changed=modify(entries=>slide(entries,xml=>xml.replace('>42</a:t>','>43</a:t>').replace('>Unchanged</a:t>','>Changed</a:t>')));
+assert.deepEqual(await metric(changed),{...original,value:43,description:original.description.replace('Unchanged','Changed')});
 for(const literal of ['0.00',' 1 ','9007199254740993','']){
   const diagnostics=[],result=await fromPptx(modify(entries=>slide(entries,xml=>xml.replace('>0</a:t>',`>${literal}</a:t>`))),{onDiagnostic:d=>diagnostics.push(d)});
   assert.equal(metricOf(result.slides[0]).delta,literal);assert.ok(diagnostics.some(d=>d.code==='metric-value-type-changed'));
@@ -32,7 +34,11 @@ const corruptions={
     const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
     manifest.parts[0].lines[0].nextStart++;entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(manifest)).toString('hex').toUpperCase()));
   },
-  invalidTrend:entries=>slide(entries,xml=>xml.replace('>flat</a:t>','>sideways</a:t>')),
+  // LH-53: the trend has no native text (it is the arrow), so an invalid trend can only come from a damaged manifest.
+  invalidTrend:entries=>{
+    const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
+    manifest.value.trend='sideways';entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(manifest)).toString('hex').toUpperCase()));
+  },
   mixedIdentity:entries=>{
     const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),tag=xml.match(/<p:tag\s[^>]+\/>/)[0].replace('OPF_METRIC_V1','OPF_CODE_V1');
     entries[file]=enc.encode(xml.replace('</p:tagLst>',tag+'</p:tagLst>'));
@@ -42,7 +48,7 @@ for(const [name,mutate] of Object.entries(corruptions)){
   const diagnostics=[],result=await fromPptx(modify(mutate),{onDiagnostic:d=>diagnostics.push(d)});
   assert.ok(result.slides[0].metric===undefined&&!result.slides[0].blocks?.some(b=>b.type==='metric'),name+' must not restore stale metric source');
   assert.ok(diagnostics.some(d=>d.code==='invalid-metric-provenance'),name+' explains fallback');
-  if(name==='invalidTrend')assert.ok(JSON.stringify(result).includes('sideways'));
+  if(name==='invalidTrend')assert.ok(JSON.stringify(result).includes('Unchanged'),'the visible native text is kept');
 }
 // Source tags of either payload cannot simultaneously claim the same native shape.
 const code=unzipSync(await toPptx({slides:[{code:'Current visible code'}]}));

@@ -2793,7 +2793,7 @@
         "trend": {
           "type": "string",
           "enum": ["up", "down", "flat"],
-          "description": "Metric trend direction. The preview and the PowerPoint export draw an arrow beside the trend word that always points the way the trend does (up, down or flat) and colour the arrow, the trend word and the delta text by `sentiment`."
+          "description": "Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and color the arrow and the delta text by `sentiment`. The word itself is not drawn; it is the arrow's text alternative."
         },
         "sentiment": {
           "type": "string",

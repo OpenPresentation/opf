@@ -21,7 +21,9 @@ function validateManifest(manifest) {
   const roles=scalar(manifest.value)?['value']:['value','unit','label','description','delta','trend'].filter(role=>manifest.value[role]!==undefined);
   if (!Array.isArray(manifest.parts)||manifest.parts.length!==roles.length||manifest.part!==0||manifest.line!==0) throw new Error('Invalid metric parts.');
   for (const [index,part] of manifest.parts.entries()) {
-    const source=String(sourceFor(manifest.value,roles[index])),visible=roles[index]==='value'||source.length>0;
+    // LH-53: a trend is drawn as an arrow (the group's mark), so its part is not visible and has no lines; older exports drew its word.
+    const source=String(sourceFor(manifest.value,roles[index])),visible=roles[index]==='value'||source.length>0,arrow=roles[index]==='trend'&&part.role==='trend'&&part.visible===false;
+    if (arrow) { if (!Array.isArray(part.lines)||part.lines.length) throw new Error('Invalid source part.'); continue; }
     if (part.role!==roles[index]||part.visible!==visible||!Array.isArray(part.lines)||visible&&!part.lines.length||!visible&&part.lines.length) throw new Error('Invalid source part.');
     let cursor=0;
     for (const [i,line] of part.lines.entries()) {

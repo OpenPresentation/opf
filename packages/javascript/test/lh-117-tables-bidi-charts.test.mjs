@@ -4,8 +4,8 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import {
-  CHART_LABELED_ZERO_SHARE, SMALL_CHART_MAX_POINTS, TABLE_NUMERIC_SHARE, composeSlide, isolateNumbers, layoutMetric, layoutTable,
-  metricTrendMark, metricTrendWordShown, niceScale, numberRanges, numericText, resolveChartData, smallChart,
+  CHART_LABELED_ZERO_SHARE, SMALL_CHART_MAX_POINTS, TABLE_NUMERIC_SHARE, composeSlide, isolateNumbers, layoutTable,
+  niceScale, numberRanges, numericText, resolveChartData, smallChart,
 } from "../dist/composition.js";
 
 const box = { x: 0, y: 0, width: 900, height: 400 };
@@ -68,17 +68,6 @@ describe("LH-118: numbers in right-to-left text", () => {
     assert.equal(isolateNumbers("+16%"), "⁦+16%⁩");
     assert.equal(isolateNumbers("+8 نقاط"), "⁦+8⁩ نقاط");
     assert.equal(isolateNumbers("نص"), "نص");
-  });
-
-  test("the trend word shows only in English; elsewhere the arrow takes its place", () => {
-    for (const language of [undefined, "", "en", "en-GB", "EN-us"]) assert.equal(metricTrendWordShown(language), true, String(language));
-    for (const language of ["ar", "de-DE", "he", "ja"]) assert.equal(metricTrendWordShown(language), false, language);
-    const layout = layoutMetric({ value: "+16%", label: "نمو", trend: "up" }, { x: 0, y: 0, width: 400, height: 300 }, { align: "center" });
-    const part = layout.parts.find((candidate) => candidate.role === "trend"), line = part.fit.sourceLines[0], origin = part.linePositions[0];
-    const beside = metricTrendMark(layout, { background: "#FFFFFF" }), alone = metricTrendMark(layout, { background: "#FFFFFF", word: false });
-    assert.ok(beside.box.x + beside.box.width <= origin.x + 1e-6, "beside the word, before it when centered");
-    assert.ok(Math.abs(alone.box.x + alone.box.width / 2 - (origin.x + line.width / 2)) < 1e-6, "without the word, centered where it was");
-    assert.equal(alone.ariaLabel, beside.ariaLabel);
   });
 });
 

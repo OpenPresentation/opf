@@ -1,6 +1,6 @@
 // LH-117, LH-118, LH-120 in the preview: a column of numbers written as text is drawn at the end of its cells; a signed or percent number
-// in right-to-left text is a left-to-right isolate ("+16%", not "16%+"); the English trend word is drawn only in an English deck (the arrow
-// takes its place elsewhere); and a bar chart's category labels wrap onto two lines before they are ellipsized.
+// in right-to-left text is a left-to-right isolate ("+16%", not "16%+"); no deck draws the English trend word (LH-53 with LH-118: the
+// arrow alone shows the trend); and a bar chart's category labels wrap onto two lines before they are ellipsized.
 import assert from 'node:assert/strict';
 import { toSvg } from './catalog-harness.mjs';
 
@@ -23,18 +23,19 @@ let checks = 0;
   assert.ok(raw('slides.0.blocks.0.metric.delta').includes(`${LRI}+8${PDI}`), 'the delta number is a left-to-right isolate');
   assert.ok(svg.includes(`${LRI}+3%${PDI}`) && svg.includes(`${LRI}-2.5%${PDI}`), 'numeric table cells are isolates');
   assert.ok(!svg.includes(`${LRI}1,200`), 'bare digits are not isolated');
-  // The trend word (English) is not drawn in an Arabic deck; the arrow still is.
+  // The trend word (English) is not drawn (LH-53); the arrow is.
   assert.equal(all.filter((entry) => entry['data-opf-path'] === 'slides.0.blocks.0.metric.trend').length, 0, 'no trend word');
   assert.match(svg, /aria-label="Trend: up"/);
   checks += 6;
 }
 
-// A left-to-right deck draws no isolate and keeps its trend word.
+// A left-to-right deck draws no isolate, and no trend word either (LH-53): the arrow alone.
 {
   const svg = toSvg({ design: { fontScheme: 'roboto' }, slides: [{ title: 'Growth', metric: { value: '+16%', label: 'Annual growth', trend: 'up' } }] }, 1, { trace: true });
   assert.ok(!svg.includes(LRI), 'no isolate left to right');
-  assert.equal(texts(svg).filter((entry) => entry['data-opf-path'] === 'slides.0.metric.trend').map((entry) => entry.body.trim()).join(''), 'up');
-  checks += 2;
+  assert.equal(texts(svg).filter((entry) => entry['data-opf-path'] === 'slides.0.metric.trend').length, 0, 'no trend word');
+  assert.match(svg, /aria-label="Trend: up"/);
+  checks += 3;
 }
 
 // LH-117: the cells (and header) of a column of numbers written as text end at the cell's right edge.
@@ -62,4 +63,4 @@ let checks = 0;
   checks += 3;
 }
 
-console.log(`LH-117/118/120 preview passed: ${checks} checks (bidi-safe numbers, trend word only in English, numeric columns end-aligned, bar labels wrap).`);
+console.log(`LH-117/118/120 preview passed: ${checks} checks (bidi-safe numbers, no trend word, numeric columns end-aligned, bar labels wrap).`);

@@ -9,6 +9,8 @@ function sourceIsComplete(result) {
   for(const part of result.parts) {
     assert.equal(part.text,String(part.sources[0].value));
     assert.deepEqual(part.sources.map(({path,start,end})=>({path,start,end})),[{path:part.path,start:0,end:part.text.length}]);
+    // LH-53: a trend is drawn as an arrow; its part keeps the source and has no lines.
+    if(part.role==='trend'&&!part.visible) { assert.deepEqual(part.fit.sourceLines,[]); continue; }
     if(part.fit) {
       assert.equal(restored(part),part.text);
       assert.deepEqual(part.fit.lines,part.fit.sourceLines.map(line=>part.text.slice(line.start,line.end)));
@@ -26,7 +28,9 @@ test('metric value, unit, labels, zero delta and trend retain their own editable
   assert.equal(result.textMeasurement,'estimated');
   assert.deepEqual(Object.fromEntries(result.parts.map(part=>[part.role,part.sources[0].value])),value);
   assert.equal(result.parts.find(part=>part.role==='delta').text,'0');
-  assert.ok(result.parts.every(part=>part.visible&&part.path==='slides.2.left.metric.'+part.role));
+  assert.ok(result.parts.every(part=>(part.visible||part.role==='trend')&&part.path==='slides.2.left.metric.'+part.role));
+  assert.equal(result.parts.find(part=>part.role==='trend').visible,false,'LH-53: the trend is drawn as an arrow');
+  assert.ok(result.trendBox);
   sourceIsComplete(result);
   for(const scalar of [0,-12.5,'0','  42  ','42\r\npercent']) {
     const single=layoutMetric(scalar,box,{path:'slides.1.metric'});
@@ -131,13 +135,14 @@ test('empty optional fields retain source without blank spacing and an empty val
   const metric={value:'',unit:'',label:'',description:'',delta:'',trend:'flat'};
   const result=layoutMetric(metric,box);
   assert.equal(result.overflow,false);assert.equal(result.parts.length,6);
-  for(const part of result.parts.filter(part=>!part.visible)) {
+  for(const part of result.parts.filter(part=>!part.visible&&part.role!=='trend')) {
     assert.equal(part.text,'');assert.equal(part.box.height,0);assert.deepEqual(part.fit.lines,[]);
   }
   assert.equal(result.parts[0].visible,true);assert.ok(result.parts[0].box.height>0);assert.ok(result.parts[0].box.width>0);
   sourceIsComplete(result);
   const noEmpty=layoutMetric({value:'',trend:'flat'},box);
-  assert.deepEqual(result.parts.filter(part=>part.visible),noEmpty.parts);
+  assert.deepEqual(result.parts.filter(part=>part.visible),noEmpty.parts.filter(part=>part.visible));
+  assert.deepEqual(result.trendBox,noEmpty.trendBox);
 });
 
 test('metric whitespace, tabs and Unicode retain exact line and segment boundaries',()=>{

@@ -66,7 +66,9 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
     assert.equal(shape.fillColor.role, sentiment === 'neutral' ? 'tx2' : undefined, `${id}: ${sentiment === 'neutral' ? 'the neutral is the muted text role' : 'the semantic colour is a literal'}`);
     assert.equal(color, fill, `${id}: export and preview agree on the colour`);
     assert.ok(colorContrast(`#${color}`, background) >= 4.5, id);
-    for (const role of ['trend', 'delta']) {
+    // LH-53: the trend word is not drawn in either engine (the arrow carries it); the delta takes the arrow's color.
+    assert.ok(!shapes(parts).some(item => / trend line \d+$/.test(item.name)), `${id}: no native trend word`);
+    for (const role of ['delta']) {
       assert.deepEqual(fieldColor(parts, role), shape.fillColor, `${id}: native ${role} text colour`);
       const text = svg.match(new RegExp(`<text\\b[^>]*data-opf-metric-role="${role}"[^>]*>`))[0];
       assert.equal(/\bfill="#([0-9A-F]{6})"/.exec(text)[1], color, `${id}: preview ${role} text colour`);

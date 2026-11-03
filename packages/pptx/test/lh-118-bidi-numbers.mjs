@@ -2,7 +2,8 @@
 // without writing that alignment back. In a right-to-left deck each signed, currency or percent number is its own en-US run (PowerPoint
 // orders a number of an Arabic run by Arabic rules: "+16%" drew as "%16+"), and a paragraph of only such a number is written left to
 // right at its physical alignment (as an en-US run in a right-to-left paragraph PowerPoint still drew "16%+"; verified with PowerPoint's
-// own slide export, LH-118). The English trend word is a hidden shape outside an English deck, so the metric imports with its trend.
+// own slide export, LH-118). The trend word is not drawn in any deck (LH-53, which replaces LH-118's hidden word): the metric's manifest
+// keeps its trend, so it imports with it.
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync, zipSync} from 'fflate';
 import {fromPptx, toPptx} from '../dist/index.js';
@@ -22,7 +23,7 @@ const paragraphs = xml => [...xml.matchAll(/<a:p>([\s\S]*?)<\/a:p>/g)].map(([, b
 const attribute = (tag, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(tag)?.[1];
 let checks = 0;
 
-// Right to left: numbers as en-US runs, a number-only paragraph left to right, the trend word hidden; the export imports unchanged.
+// Right to left: numbers as en-US runs, a number-only paragraph left to right, no trend word; the export imports unchanged.
 {
   const deck = {language: 'ar', slides: [{title: 'أداء المبيعات', blocks: [
     {metric: {value: '+16%', label: 'نمو المبيعات السنوي', delta: '+8 نقاط', trend: 'up'}},
@@ -40,7 +41,7 @@ let checks = 0;
   assert.deepEqual(cell.runs, ['en-US:-2.5%']);
   assert.equal(attribute(cell.pPr, 'algn'), 'r', 'a numeric cell keeps the physical right of the right-to-left start');
   assert.deepEqual(text.find(paragraph => paragraph.text.includes('فقط')).runs, ['ar-SA:ارتفعت المبيعات ', 'en-US:+16%', 'ar-SA: و 2026 فقط.'], 'bare digits stay in the Arabic run');
-  assert.match(out.slide(1), /name="OPF metric 1 trend line 1" hidden="1"/, 'the English trend word is hidden');
+  assert.doesNotMatch(out.slide(1), /name="OPF metric 1 trend line/, 'no trend word shape (LH-53)');
   const round = await fromPptx(out.bytes);
   assert.deepEqual(round.slides[0].blocks, deck.slides[0].blocks, 'the metric (with its trend) and the table import unchanged');
   assert.equal(round.slides[1].text, deck.slides[1].text);
@@ -52,7 +53,7 @@ let checks = 0;
   checks += 13;
 }
 
-// An English deck keeps its trend word and writes no number runs; a column of numbers written as text is right-aligned and imports
+// An English deck writes no number runs and no trend word (LH-53); a column of numbers written as text is right-aligned and imports
 // without an alignment.
 {
   const deck = {slides: [{title: 'Pricing', table: {columns: ['Region', 'Price', 'Status'], rows: [['North', '$42', 'Hold'], ['South', '$38', '+3%']]}}, {title: 'Growth', metric: {value: '+16%', label: 'Annual growth', trend: 'up'}}]};
@@ -60,11 +61,11 @@ let checks = 0;
   const cells = paragraphs(out.slide(1));
   for (const text of ['Price', '$42', '$38']) assert.equal(attribute(cells.find(paragraph => paragraph.text === text).pPr, 'algn'), 'r', text);
   for (const text of ['Status', 'Hold', '+3%']) assert.notEqual(attribute(cells.find(paragraph => paragraph.text === text).pPr, 'algn'), 'r', text);
-  assert.doesNotMatch(out.slide(2), /hidden="1"/);
+  assert.doesNotMatch(out.slide(2), /hidden="1"|OPF metric 1 trend line/);
   const round = await fromPptx(out.bytes);
   assert.deepEqual(round.slides[0].table, deck.slides[0].table, 'the default alignment is not written back');
   assert.deepEqual(round.slides[1].metric, deck.slides[1].metric);
   checks += 9;
 }
 
-console.log(`LH-117/118 PPTX passed: ${checks} checks (numbers as en-US runs, number-only paragraphs left to right, hidden trend word, numeric columns right-aligned, unchanged import).`);
+console.log(`LH-117/118 PPTX passed: ${checks} checks (numbers as en-US runs, number-only paragraphs left to right, no trend word, numeric columns right-aligned, unchanged import).`);

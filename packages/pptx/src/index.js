@@ -59,7 +59,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricTrendWordShown, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -3646,14 +3646,16 @@ function codePanelColor(context) {
 function addMetricPayload(slide,value,layout,context,path,options,presentation) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
-  // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  // LH-54: a metric in a card is coloured against the card fill (context.cardFill), as the preview does.
+  // RR-07, LH-53: a trend adds one native arrow shape where core placed it (before the delta; the trend word is not drawn) and colors
+  // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
+  // dark one, a value whose accent falls under 4.5:1 takes the text color.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
-  // LH-118: the trend word is English; outside an English deck the arrow alone shows the trend, in the word's place, as in the preview.
-  // The word's line is still written, as a hidden shape, so the metric's provenance (and its trend) survives import.
-  const trendWord=metricTrendWordShown(presentation?.language);
-  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {}),...(trendWord ? {} : {word:false})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop).slice(1).toUpperCase():context.textColor;
+  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  // LH-53: a unit on its value's line is part of the figure and takes the value's color, as the preview does.
+  // LH-57: when the value takes the text color, it is written as the slide's own text color (a scheme color where the text is one).
+  const textHex=`#${normalizeHex(context.colors.text)}`,valueHex=metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,textHex).toUpperCase();
+  const valueColor=valueHex===textHex.toUpperCase()?context.textColor:valueHex.slice(1);
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
@@ -3672,7 +3674,7 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         ...nativeFontOptions(part.style),
         color:partColor(part),align:layout.alignment,...(part.fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),fit:'none',wrap:false,lineSpacingMultiple:1,
-        tabStops:tabStops.length?tabStops:undefined,objectName,...(part.role==='trend'&&!trendWord?{hidden:true}:{}),
+        tabStops:tabStops.length?tabStops:undefined,objectName,
       });
     }
   }
