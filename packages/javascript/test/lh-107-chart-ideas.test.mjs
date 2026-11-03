@@ -30,7 +30,7 @@ describe("LH-107: waterfall roles", () => {
     assert.equal(waterfallSignedFormat(undefined), '"+"General;"−"General;General');
   });
 
-  test("role colours: dark2 for totals when it reads on the backdrop, else the text colour; losses a light gray", () => {
+  test("role colors: dark2 for totals when it reads on the backdrop, else the text color; losses a light gray", () => {
     const light = chartWaterfallColors("#FFFFFF", "#2874A6", "#000000", "#011842", { labeled: true });
     assert.equal(light.total, "#011842");
     assert.equal(light.increase, "#2874A6");

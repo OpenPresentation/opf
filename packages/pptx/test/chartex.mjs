@@ -199,7 +199,7 @@ for (const id of chartexIds) {
     assert.equal(new Set(pointFills.map(([, color]) => color)).size, data.rows.length, 'distinct tile colours');
     assert.equal(pointFills[0][1], classicSeriesColor);
   } else if (id === 'waterfall') {
-    // LH-107: increases in the series colour at full strength, decreases in the context gray: one colour per sign.
+    // LH-107: increases in the series color at full strength, decreases in the context gray: one color per sign.
     const up = pointFills[data.rows.findIndex((row) => row[1] >= 0)][1];
     assert.deepEqual(pointFills.map(([, color]) => color === up ? 'up' : 'down'), data.rows.map((row) => row[1] < 0 ? 'down' : 'up'), 'increase and decrease colours by sign');
   } else {
@@ -210,7 +210,7 @@ for (const id of chartexIds) {
   const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill>${labelColor}</a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
   // LH-56: the labels inside treemap tiles and funnel bars take a colour per fill (test/chart-fallbacks.mjs); every other text element
   // keeps the deck's label colour.
-  // LH-107: a waterfall's default labels sit outside its bars in the full text colour, as the preview draws value labels.
+  // LH-107: a waterfall's default labels sit outside its bars in the full text color, as the preview draws value labels.
   const inside = id === 'treemap' || id === 'funnel' || id === 'waterfall';
   const textBlocks = [...(inside ? cx.replace(/<cx:dataLabels\b[\s\S]*?<\/cx:dataLabels>/g, '') : cx).matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);

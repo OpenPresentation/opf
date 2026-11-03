@@ -3,7 +3,7 @@
 // Composition decides them (core chart-marks.ts, `ComposedChart.layer`); the preview (opf-render charts.js) draws them and this module
 // writes what a native chart part cannot hold as native shapes over (or under) the chart frame, at the boxes core gave them:
 //
-//   value list (LH-108)        the unit, then per row a swatch (a rectangle in the slice's colour), the category and the value
+//   value list (LH-108)        the unit, then per row a swatch (a rectangle in the slice's color), the category and the value
 //                              (right-aligned text boxes) and a hairline between rows, beside the pie; the chart part draws the pie in
 //                              core's square (the plot area's inner manual layout) without a legend.
 //   stacked names (LH-109)     per series a swatch and its name beside the last column; the chart part has no legend and its plot is
@@ -30,7 +30,7 @@ const inches = box => ({x: box.x / 96, y: box.y / 96, w: Math.max(0.001, box.wid
 
 /**
  * Add a chart's marks to the slide: `phase` 'under' (before the chart frame: the period bands) or 'over' (after it: the reference lines,
- * the value list and the stacked names). `paint` gives the colours (RRGGBB): `text` (the full text colour), `chartText` (the chart text
+ * the value list and the stacked names). `paint` gives the colors (RRGGBB): `text` (the full text color), `chartText` (the chart text
  * neutral), `grid` (the gridline neutral), `surface` (the backdrop, #RRGGBB), `slice(row)` and `series(j)`; `font` the body face, `size`
  * the chart text size in points, `scale` the slide's pixel scale, `tags` the export's tag map.
  */

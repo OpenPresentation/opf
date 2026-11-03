@@ -41,7 +41,7 @@ for (const type of ['bar', 'stacked-bar', '100pct-stacked-bar']) {
 }
 
 // 2. Waterfall: Start 100, +24, -8, End 116. The end equals the running sum, so it is a total bar from zero, and its top meets the
-//    connector from the step before it. LH-107: the start it runs from is a total too, both in the strong colour, the increase in the
+//    connector from the step before it. LH-107: the start it runs from is a total too, both in the strong color, the increase in the
 //    accent and the decrease in the context gray. (Without labels the value axis stays, so its end can be read.)
 {
   const svg = render({ type: 'waterfall', dataLabels: false, data: { columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]] } });

@@ -19,7 +19,7 @@ for (const type of Object.keys(CHART_TYPES)) {
   assert.doesNotMatch(decorative, /aria-label="[^"]*North/, `${type}: no label on a decorative chart`);
 }
 
-// The wrapper adds nothing else: taking its two tags out of a labelled chart reproduces the plain SVG byte for byte. (LH-113: an alt that
+// The wrapper adds nothing else: taking its two tags out of a labeled chart reproduces the plain SVG byte for byte. (LH-113: an alt that
 // names a series or category is a focus source and emphasizes it, so this alt names none.)
 const neutral = 'Both regions grow through the year.';
 for (const type of ['column', 'pie', 'waterfall', 'line']) {

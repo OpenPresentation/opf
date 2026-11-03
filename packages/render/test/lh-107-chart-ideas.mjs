@@ -1,4 +1,4 @@
-// LH-107 to LH-110 in the preview: a waterfall's role colours, signed labels and dashed connectors; the value list beside a pie; values
+// LH-107 to LH-110 in the preview: a waterfall's role colors, signed labels and dashed connectors; the value list beside a pie; values
 // inside stacked segments with the series named beside the last column; the reference line and period band the title names. Composition
 // decides them (core chart-marks.ts); this asserts what the preview draws from them.
 import assert from 'node:assert/strict';
@@ -13,7 +13,7 @@ const deck = (slide) => ({ design: { fontScheme: 'roboto', colorScheme: 'cool-ho
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 let checks = 0;
 
-// 1. Waterfall: totals in the strong colour, gains in the accent, losses in the light context gray; signed labels (U+2212), bold totals;
+// 1. Waterfall: totals in the strong color, gains in the accent, losses in the light context gray; signed labels (U+2212), bold totals;
 //    dashed connectors; no value axis tick labels.
 {
   const input = deck({ title: 'Price and volume more than offset cost increases', chart: { type: 'waterfall', data: { columns: ['Step', 'Operating profit ($M)'], rows: [['2024 profit', 42], ['Volume', 9.3], ['Price', 6.1], ['Materials', -7.4], ['Labor', -5.2], ['Currency', -2.1], ['2025 profit', 42.7]] } } });
@@ -37,7 +37,7 @@ let checks = 0;
   checks += 6;
 }
 
-// 2. A pie in the whole body draws its value list: a swatch per row in the slice colour, the name and the value, the focus bold.
+// 2. A pie in the whole body draws its value list: a swatch per row in the slice color, the name and the value, the focus bold.
 {
   const svg = toSvg(deck({ title: 'Enterprise accounts bring 62% of revenue', chart: { type: 'pie', data: { columns: ['Segment', 'Revenue ($M)'], rows: [['Enterprise', 62.4], ['Mid-market', 25.1], ['Small business', 12.5]] } } }), 1, { trace: true });
   const values = texts(svg).filter((entry) => /^slides\.0\.chart\.data\.rows\.\d\.1$/.test(entry['data-opf-path'] ?? ''));

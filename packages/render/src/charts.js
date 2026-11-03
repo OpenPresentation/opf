@@ -956,7 +956,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   }));
 }
 
-// LH-110: the reference lines the title names, dashed across the plot in the chart text colour, each labeled bold in the text colour
+// LH-110: the reference lines the title names, dashed across the plot in the chart text color, each labeled bold in the text color
 // where core placed the label (the plot's start, under or over the line).
 function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
@@ -965,8 +965,8 @@ function drawReferenceLines(c, lines) {
   }
 }
 
-// LH-109: the series names beside a stacked chart's last column or band, each a swatch in the series colour and the name in the chart
-// text colour (bold, in the text colour, for a series the title names), in the box core placed it.
+// LH-109: the series names beside a stacked chart's last column or band, each a swatch in the series color and the name in the chart
+// text color (bold, in the text color, for a series the title names), in the box core placed it.
 function drawStackNames(c, names) {
   for (const entry of names?.entries ?? []) {
     const s = c.series()[entry.series];
@@ -980,8 +980,8 @@ function drawStackNames(c, names) {
 }
 
 // LH-108: the value list beside a pie (core chartValueList): the unit over the values, then one row per category: a swatch in the
-// slice's colour, the category and its value at the row's end, a hairline between rows. The rows the title names are bold in the text
-// colour; the others (when some are bold) in the chart text colour.
+// slice's color, the category and its value at the row's end, a hairline between rows. The rows the title names are bold in the text
+// color; the others (when some are bold) in the chart text color.
 function drawValueList(c, list) {
   const end = rtl(c) ? "left" : "right", start = rtl(c) ? "right" : "left";
   const emphasis = list.rows.some((row) => row.bold);
@@ -1515,7 +1515,7 @@ function renderHistogramChart(c, spec) {
 // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
 // LH-59: a last value equal to the running sum of the steps before it is a total (core's waterfallSteps): it stands on zero in the third
 // palette colour, as PowerPoint draws the cx:subtotals point the export writes.
-// LH-107: core's roles (layer.waterfall): totals in the strong colour, gains in the accent, losses in the context gray (core
+// LH-107: core's roles (layer.waterfall): totals in the strong color, gains in the accent, losses in the context gray (core
 // chartWaterfallColors), signed default labels (a total's bold and unsigned), dashed connectors and, with default labels, no value axis.
 const waterfallColor = (bar, palette) => palette[(bar.total ? 2 : bar.value < 0 ? 1 : 0) % palette.length];
 function renderWaterfallChart(c) {

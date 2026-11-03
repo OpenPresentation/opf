@@ -1101,10 +1101,10 @@ export function chartContextColors(surface: string, text: string, count: number,
 }
 
 /**
- * LH-107: the three colours of a waterfall by role (Claude Design and Few: the totals carry the story, the gains the accent, the losses
- * stand back). `increase` is the series colour at full strength (`accent`). `total` is the strong colour: the scheme's `dark2` when it keeps
- * 3:1 against the backdrop and a colour difference of {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from the accent, else the text
- * colour (made legible on the backdrop: the strong neutral on a dark slide). `decrease` is the first context neutral
+ * LH-107: the three colors of a waterfall by role (Claude Design and Few: the totals carry the story, the gains the accent, the losses
+ * stand back). `increase` is the series color at full strength (`accent`). `total` is the strong color: the scheme's `dark2` when it keeps
+ * 3:1 against the backdrop and a color difference of {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from the accent, else the text
+ * color (made legible on the backdrop: the strong neutral on a dark slide). `decrease` is the first context neutral
  * ({@link chartContextColors}), kept apart from the other two; `labeled` (every bar carries its signed value) lets it be the light gray.
  */
 export function chartWaterfallColors(surface: string, accent: string, text: string, strong: string | undefined, options: { labeled?: boolean } = {}): { total: string; increase: string; decrease: string } {
@@ -1118,10 +1118,10 @@ export function chartWaterfallColors(surface: string, accent: string, text: stri
   return { total, increase, decrease };
 }
 
-/** LH-110: how far the shaded band of a period the title names is mixed from the backdrop towards the text colour. */
+/** LH-110: how far the shaded band of a period the title names is mixed from the backdrop towards the text color. */
 export const CHART_BAND_MIX = 0.06;
 
-/** LH-110: the fill of a period band: the backdrop mixed {@link CHART_BAND_MIX} towards the text colour, a faint neutral under the marks. */
+/** LH-110: the fill of a period band: the backdrop mixed {@link CHART_BAND_MIX} towards the text color, a faint neutral under the marks. */
 export function chartBandColor(surface: string, text: string): string {
   const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
   const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');

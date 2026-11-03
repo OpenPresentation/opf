@@ -3,7 +3,7 @@
 // (opf-pptx) draw the same chart:
 //
 //   waterfall roles (LH-107)   a waterfall's bars by role: the totals (the last bar when it is the sum before it, and the first bar it
-//                              starts from) in the strong colour, the gains in the accent, the losses in the context gray, each bar
+//                              starts from) in the strong color, the gains in the accent, the losses in the context gray, each bar
 //                              with its signed value (+9.3, −7.4; a total unsigned) and the value axis dropped; dashed connectors.
 //   value list (LH-108)        a pie or one-series doughnut of two to eight categories in a box wide enough draws a value list beside it
 //                              (swatch, category, value right-aligned, the focused rows bold) instead of slice labels or a legend.
@@ -58,7 +58,7 @@ export interface ChartLayerWaterfall {
   labels: boolean;
   /** False when the value axis is dropped: the labels carry the values (the chart has no value axis title). */
   valueAxis: boolean;
-  /** True when the bars take the role colours (core `chartWaterfallColors`); a chart with `colors` keeps its palette positions. */
+  /** True when the bars take the role colors (core `chartWaterfallColors`); a chart with `colors` keeps its palette positions. */
   colors: boolean;
 }
 
@@ -145,7 +145,7 @@ export interface ChartLayerValueList {
 
 /**
  * LH-108: the value list of a pie or one-series doughnut (the drawn type) without `legend` or `dataLabels`, or undefined when its slice
- * labels (LH-105) or legend read better. The list is one row per category with a value (two to eight): a swatch in the slice's colour,
+ * labels (LH-105) or legend read better. The list is one row per category with a value (two to eight): a swatch in the slice's color,
  * the category, and its value right-aligned in the column's number format; the rows the title names (`focus`, LH-105) are bold. It takes
  * the end of the chart box (the start right to left), 45% of it or what its text needs, the pie the rest, two text sizes apart; the rows
  * are up to 2.4 lines apart and at least 1.25. It is drawn only when the pie keeps the radius it has alone in the box (90% of half the
@@ -200,7 +200,7 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
 
 const STACKED: Readonly<Record<string, 'bar' | 'area'>> = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'};
 
-/** LH-109: one series name beside the last column or band: its swatch and name in `box`, centred on its segment's middle when it can be. */
+/** LH-109: one series name beside the last column or band: its swatch and name in `box`, centered on its segment's middle when it can be. */
 export interface ChartStackName { series: number; name: string; bold?: boolean; box: Box }
 
 /** LH-109: how a stacked column or area chart labels itself. */
@@ -249,7 +249,7 @@ function stackValueFits(chart: Record<string, unknown>, data: ResolvedChartData,
   return shape.series.map((entry, j) => entry.values.map((value, i) => {
     const point = shape.stacks[j]![i];
     if (percent || value === null || !point || value === 0) return false;
-    // An area starts and ends at its first and last points: a value centred there would hang half outside the band.
+    // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
     if (shape.kind === 'area' && (i === 0 || i === last)) return false;
     const format = typeof data.formats[j + 1] === 'string' && data.formats[j + 1] !== '' ? data.formats[j + 1] : undefined;
     const height = Math.abs(shape.at(point.to) - shape.at(point.from));
@@ -259,7 +259,7 @@ function stackValueFits(chart: Record<string, unknown>, data: ResolvedChartData,
 
 /**
  * LH-109: the series names beside the last column (or band) of a stacked chart for a plot, or undefined when they cannot be placed: each
- * name (a swatch 0.6 text sizes square, 0.4 of space and the name) centred on its segment's middle in the last category, a quarter text
+ * name (a swatch 0.6 text sizes square, 0.4 of space and the name) centered on its segment's middle in the last category, a quarter text
  * size past the column's edge (the band's end on an area); then moved apart in segment order so no two are closer than a text line,
  * within the plot. `relaxed` places them however far they move (after a shared plot moved them); otherwise a name moved more than a
  * line from its segment fails, and the chart keeps its legend.

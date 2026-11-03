@@ -4,7 +4,7 @@
 // (opf-render) and the PPTX export (opf-pptx) draw the same chart:
 //
 //   small chart (LH-03)   a clustered column, bar or line chart of one or two series whose value labels fit beside each other (LH-111:
-//                         up to sixteen points) labels every mark with its value and drops the value axis, its gridlines and the grey chart panel; a one-series column or bar chart
+//                         up to sixteen points) labels every mark with its value and drops the value axis, its gridlines and the gray chart panel; a one-series column or bar chart
 //                         draws its last point in a stronger shade of the series colour and the others in the series colour (LH-95).
 //   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption when it adds to the
 //                         legend ("Revenue by quarter")

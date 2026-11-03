@@ -19,7 +19,7 @@ async function exported(slide) {
 }
 let checks = 0;
 
-// 1. Waterfall (native chartex): role colours per point, signed number format, bold unsigned totals, no value axis, the caption title.
+// 1. Waterfall (native chartex): role colors per point, signed number format, bold unsigned totals, no value axis, the caption title.
 {
   const {text, chart} = await exported({title: 'Price and volume more than offset cost increases', chart: {type: 'waterfall', data: {columns: ['Step', 'Operating profit ($M)'], rows: [['2024 profit', 42], ['Volume', 9.3], ['Price', 6.1], ['Materials', -7.4], ['Labor', -5.2], ['Currency', -2.1], ['2025 profit', 42.7]]}}});
   const xml = text('ppt/charts/chartEx1.xml');

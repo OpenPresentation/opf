@@ -3096,7 +3096,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colours the preview draws.
+    // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colors the preview draws.
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;

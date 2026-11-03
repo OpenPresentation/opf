@@ -165,7 +165,7 @@ function waterfallTotals(values) {
 
 // Per-point fills where the construct colours points, not series: a treemap
 // tile per category, a waterfall bar by sign (LH-59: a total in the third colour). The preview paints the same.
-// LH-107: a waterfall with core's roles (`waterfall.roles`) and their colours (`waterfall.colors`, RRGGBB by role) paints each bar by role.
+// LH-107: a waterfall with core's roles (`waterfall.roles`) and their colors (`waterfall.colors`, RRGGBB by role) paints each bar by role.
 export function chartexPointColors(layoutId, values, palette, waterfall) {
   if (layoutId === 'treemap') return values.map((value, index) => value === null ? null : palette[index % palette.length]);
   if (layoutId === 'waterfall' && waterfall?.colors) return values.map((value, index) => value === null ? null : waterfall.colors[waterfall.roles[index]] ?? null);
