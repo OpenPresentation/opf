@@ -2,8 +2,8 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
-  metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  metricTrendMark as coreMetricTrendMark, metricTrendWordShown, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
@@ -1421,12 +1421,14 @@ function renderMetric(item, box, bound, options) {
   // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
   // LH-54: a metric in a card is coloured against the card fill, not the slide behind it.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
-  const trendMark=metricTrendMark(layout,bound,backdrop);
+  // LH-118: the trend word is English; outside an English deck the arrow alone shows the trend, in the word's place.
+  const trendWord=metricTrendWordShown(bound.presentation?.language);
+  const trendMark=metricTrendMark(layout,bound,backdrop,trendWord);
   const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,backdrop):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
-    if (!part.visible) continue;
+    if (!part.visible||(part.role==='trend'&&!trendWord)) continue;
     if (!part.fit||part.linePositions?.length!==part.fit.sourceLines.length) throw new OPFRenderError('layout-overflow','Metric content has no accepted internal line positions; increase its cell size or coordinate package versions.',{path:part.path,diagnostics:layout.diagnostics});
     const partRtl=paragraphRtl(bound,part.text);
     // Anchor untabbed lines at the accepted alignment edge, as PPTX export does,
@@ -1464,8 +1466,8 @@ function renderMetric(item, box, bound, options) {
 }
 
 // The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
-function metricTrendMark(layout,bound,background) {
-  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
+function metricTrendMark(layout,bound,background,word=true) {
+  return coreMetricTrendMark(layout,{background,neutral:bound.design.roles.neutrals.trendNeutral.hex,...(word?{}:{word:false})});
 }
 
 function renderQuote(item, box, bound, options) {
@@ -1841,11 +1843,15 @@ function rtlTrailingSpace(text) {
  * chunk with the outer face first and, when a fallback face covers every character, replaces every glyph with that face's (the Latin
  * phrase of an Arabic item took a wider fallback face and ran into the bullet).
  */
-function scriptLine(text, style, bound, type, { rtl = false, placement, runPlacement, trace, fontSize } = {}) {
+function scriptLine(text, style, bound, type, { rtl = false, numbers = rtl, placement, runPlacement, trace, fontSize } = {}) {
   const value = String(text ?? "");
   const scripts = (style?.lang && bound.scriptFontsFor?.(style.lang)) || bound.scriptFonts;
   rtl = rtl && value !== "";
   const isolate = content => rtl ? `${RIGHT_TO_LEFT_ISOLATE}${content}${POP_DIRECTIONAL_ISOLATE}` : content;
+  // LH-118: inside a right-to-left line each number is a left-to-right isolate, so "+16%" keeps its sign before its digits (core
+  // isolateNumbers; the PPTX export writes the same numbers as en-US runs).
+  // `numbers` asks for it in a fragment of a flowing right-to-left line, which is one isolate across its fragments.
+  const escaped = text => escapeText(numbers && text ? isolateNumbers(text) : text);
   const runs = value && scripts ? scripts.plan(value, style) : [{ text: value, own: true }];
   if (!placement && runPlacement && runs.length > 1) placement = runPlacement;
   // RR-38: PowerPoint's baseline of a line in Arabic Typesetting sits above core's (one em below the line top): the caller moves it up by `baselineShift` em.
@@ -1856,14 +1862,14 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, runPlace
   if (runs.length === 1 && !(symbols && placement && placement.width > 0)) {
     const [run] = runs;
     // RR-38: a replacement the policy scales (Arabic Typesetting -> Noto Naskh Arabic, 0.64) is drawn at the scaled size; the caller applies it.
-    return { content: isolate(escapeText(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
+    return { content: isolate(escaped(run.own ? value : run.text)), family: run.own ? undefined : fontStack(run.stack ?? run.family, type), ...(run.sizeAdjust ? { sizeAdjust: run.sizeAdjust } : {}), ...shiftOf(runs) };
   }
   const baseSize = placement?.fontSize ?? fontSize;
   const adjusted = run => run.sizeAdjust && baseSize > 0 ? stableNumber(adjustedFontSize(baseSize, run.sizeAdjust)) : undefined;
   const widths = placement && placement.width > 0 ? scripts.runWidths(runs, placement.fontSize, style) : undefined;
   if (!widths) {
-    return { content: isolate(runs.map(run => run.own ? escapeText(run.text)
-      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), "font-size": adjusted(run), style: nestedReset(style, run) }, escapeText(run.text))).join("")), ...shiftOf(runs) };
+    return { content: isolate(runs.map(run => run.own ? escaped(run.text)
+      : tag("tspan", { "font-family": fontStack(run.stack ?? run.family, type), "font-size": adjusted(run), style: nestedReset(style, run) }, escaped(run.text))).join("")), ...shiftOf(runs) };
   }
   const natural = symbols ? scripts.runWidths(runs, placement.fontSize, style, { natural: true }) : undefined;
   const total = widths.reduce((sum, width) => sum + width, 0), factor = total > 0 ? placement.width / total : 1;
@@ -1886,7 +1892,7 @@ function scriptLine(text, style, bound, type, { rtl = false, placement, runPlace
       "font-size": adjusted(run),
       style: run.own ? undefined : nestedReset(style, run),
       ...(trace ? trace(start, offset - trail.length) : {})
-    }, isolate(escapeText(drawn)));
+    }, isolate(escaped(drawn)));
   }).join("");
   return { content, positioned: true, ...shiftOf(runs) };
 }
@@ -2090,7 +2096,7 @@ function renderRichLines(value,fit,box,bound,config) {
     const drawnText=trail?fragment.text.slice(0,-trail.length):fragment.text,drawnWidth=fragment.width-gap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
-    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,
+    const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,numbers:rtl&&run.code!==true,
       placement:fixedAdvance&&!asFlow?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,
       runPlacement:measuredLine&&!fixedAdvance?{x:originX+fragmentX+gap,width:drawnWidth,fontSize:fragment.fontSize}:undefined,fontSize:fragment.fontSize});
     if(scripted.positioned)fixedAdvance=false;

@@ -99,13 +99,24 @@ export function metricTrendPoints(shape: MetricTrendMark['shape'], box: MetricTr
 }
 
 /**
+ * LH-118: whether a metric draws its trend word (up, down, flat), which is English: only in a deck whose language is English or unset.
+ * Elsewhere the arrow alone shows the trend, in the word's place (metricTrendMark with `word: false`); the word stays in the source and
+ * in the arrow's text alternative, and the PPTX export keeps its line as a hidden shape, so the metric imports with its trend.
+ */
+export function metricTrendWordShown(language: unknown): boolean {
+  return typeof language !== 'string' || language.trim() === '' || /^en(?:-|$)/i.test(language.trim());
+}
+
+/**
  * The arrow for a laid-out metric, or undefined when the metric has no (visible) trend or the
  * arrow has no room. It is square, as tall as the trend word's capitals, on the baseline, and
  * sits after the word for left-aligned metrics and before it for centred or right-aligned ones,
  * so it grows away from the alignment edge. It never leaves the trend field's box. The colour
  * follows `options.sentiment`, else the layout's own (`metric.sentiment`), else the trend's default.
+ * With `word: false` (LH-118, metricTrendWordShown) the word is not drawn and the arrow takes its place: at the start of the word's line,
+ * its middle or its end, as the metric is aligned.
  */
-export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorOptions): MetricTrendMark | undefined {
+export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorOptions & { word?: boolean }): MetricTrendMark | undefined {
   const part = layout.parts.find(candidate => candidate.role === 'trend');
   if (!part || !part.visible || !part.fit || part.fit.sourceLines.length === 0) return undefined;
   const trend = part.text.trim() as MetricTrend;
@@ -115,7 +126,9 @@ export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorO
   const size = part.fit.fontSize * .72, gap = part.fit.fontSize * .3, left = part.box.x, right = part.box.x + part.box.width;
   const after = origin.x + line.width + gap, before = origin.x - gap - size;
   const fitsAfter = after + size <= right + .01, fitsBefore = before >= left - .01;
-  const x = layout.alignment === 'left' ? (fitsAfter ? after : fitsBefore ? before : undefined) : (fitsBefore ? before : fitsAfter ? after : undefined);
+  const factor = layout.alignment === 'right' ? 1 : layout.alignment === 'center' ? .5 : 0;
+  const x = options.word === false ? Math.min(Math.max(origin.x + (line.width - size) * factor, left), right - size)
+    : layout.alignment === 'left' ? (fitsAfter ? after : fitsBefore ? before : undefined) : (fitsBefore ? before : fitsAfter ? after : undefined);
   if (x === undefined) return undefined;
   const shape = METRIC_TREND_SHAPES[trend], box = { x, y: origin.baseline - size, width: size, height: size };
   const sentiment = metricEffectiveSentiment(trend, options.sentiment ?? layout.sentiment);

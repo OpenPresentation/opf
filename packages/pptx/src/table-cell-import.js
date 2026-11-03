@@ -45,7 +45,7 @@ function solid(properties, context, report, kind) {
   return undefined;
 }
 
-export function nativeCellStyle(properties, body, context, scale, report) {
+export function nativeCellStyle(properties, body, context, scale, report, {rtlDeck = false} = {}) {
   const style = {fill:'#00000000', align:'left', verticalAlign:'top', padding:{}, borders:{}};
   const fill = solid(properties, context, report, 'cell-fill');
   if (properties._opfUnresolvedTableFill) report('unsupported-table-cell-fill','The native fill style reference or placeholder color could not be resolved from this archive.');
@@ -64,8 +64,10 @@ export function nativeCellStyle(properties, body, context, scale, report) {
   const alignments = nodes(body,'a:p').map(paragraph => {
     const p = drawingObject(paragraph['a:p'])['a:pPr'] ?? {};
     const algn = p.algn ?? listStyle[`a:lvl${Number(p.lvl ?? 0)+1}pPr`]?.algn ?? listStyle['a:defPPr']?.algn ?? 'l';
-    // Alignment is logical for right-to-left text (RR-05): an rtl paragraph aligned right starts at the start edge.
-    return p.rtl === '1' || p.rtl === 1 ? ({l:'r',r:'l'}[algn] ?? algn) : algn;
+    // Alignment is logical for right-to-left text (RR-05): an rtl paragraph aligned right starts at the start edge. LH-118: so is a
+    // paragraph without a letter in a right-to-left deck, which the export writes left to right (a number such as "+3%").
+    const letterless = rtlDeck && !/[\p{L}\p{Nl}]/u.test(nodes(paragraph['a:p'], 'a:r').map(run => (child(run['a:r'], 'a:t') ?? []).map(node => node['#text'] ?? '').join('')).join(''));
+    return p.rtl === '1' || p.rtl === 1 || letterless ? ({l:'r',r:'l'}[algn] ?? algn) : algn;
   });
   const alignment = {l:'left',ctr:'center',r:'right'}[alignments[0] ?? 'l'];
   if (alignment) style.align = alignment;

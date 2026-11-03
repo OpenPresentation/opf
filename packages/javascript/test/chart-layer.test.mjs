@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { chartEmphasisColors, chartHeader, chartHeaderCaption, chartLayer, chartLayerDataLabels, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, composeSlide, resolveChartData, smallChart } from "../dist/composition.js";
+import { chartEmphasisColors, chartHeader, chartHeaderCaption, chartLayer, chartLayerDataLabels, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, composeSlide, resolveChartData, SMALL_CHART_MAX_POINTS, smallChart } from "../dist/composition.js";
 import { colorSchemes } from "./support/catalog.mjs";
 
 // CIE L* of an sRGB hex color.
@@ -33,8 +33,9 @@ describe("small charts (LH-03)", () => {
   });
 
   test("the rule is the counts and the type, not the slide", () => {
-    const many = { type: "column", data: { columns: ["Month", "Visits"], rows: Array.from({ length: 9 }, (_, index) => [`M${index + 1}`, index * 3]) } };
-    assert.equal(smallChart(many, resolveChartData(many)), undefined, "nine points");
+    // LH-111: up to sixteen points; the labels' fit decides within it.
+    const many = { type: "column", data: { columns: ["Month", "Visits"], rows: Array.from({ length: 17 }, (_, index) => [`M${index + 1}`, index * 3]) } };
+    assert.equal(smallChart(many, resolveChartData(many)), undefined, "seventeen points");
     const three = { type: "column", data: { columns: ["Q", "A", "B", "C"], rows: [["Q1", 1, 2, 3]] } };
     assert.equal(smallChart(three, resolveChartData(three)), undefined, "three series");
     for (const type of ["stacked-column", "100pct-stacked-bar", "stacked-line", "area", "combo", "pie", "scatter"]) {
@@ -189,7 +190,7 @@ describe("the header row (LH-81)", () => {
         const data = { columns: ["C", ...Array.from({ length: series }, (_, index) => `Series ${index + 1}`)], rows: Array.from({ length: points }, (_, row) => [`P${row}`, ...Array.from({ length: series }, () => row + 1)]) };
         for (const type of ["column", "bar", "line", "area", "stacked-column", "combo"]) {
           const layer = layerOf({ type, data });
-          if (layer?.small) assert.ok(series <= 2 && points <= 8, `${type} ${series}x${points}`);
+          if (layer?.small) assert.ok(series <= 2 && points <= SMALL_CHART_MAX_POINTS, `${type} ${series}x${points}`);
           if (layer?.header?.legend) assert.ok(series >= 2 && series <= 4, `${type} ${series}x${points}`);
         }
       }

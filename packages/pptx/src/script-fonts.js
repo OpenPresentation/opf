@@ -6,7 +6,7 @@
 //
 // When the resolver throws for a deck, the exporter writes what it wrote before FF-07 (lang="en-US", empty theme ea/cs, no
 // rtl) and reports `language-export-unavailable`.
-import {paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
+import {numberRanges, paragraphDirection, physicalAlignment, resolveScriptFonts as coreResolveScriptFonts} from "@openpresentation/opf/composition";
 
 // OPF 0.15 (FA-23): core resolves the font-scheme references a deck or a language object names against the document's
 // catalogs and the host's registered `catalogs` (Catalog[]), the same option the slide context takes. `catalogs` is passed
@@ -349,10 +349,25 @@ export function latinPhrases(text) {
 const encodeText = value => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 const RUN = /<a:r>(<a:rPr\b[^>]*\/>|<a:rPr\b[^>]*[^/]>[\s\S]*?<\/a:rPr>)<a:t>([^<]*)<\/a:t><\/a:r>/g;
 
-/** Split the runs of a right-to-left paragraph so each Latin phrase is its own en-US run. */
+/**
+ * LH-118: the left-to-right pieces of a right-to-left paragraph's run: its Latin phrases and its numbers (core numberRanges: "+16%",
+ * "-2.5%", "$42"), merged where they meet or overlap. PowerPoint orders a number of an Arabic or Hebrew run by that language's rules
+ * ("+16%" drew as "%16+"); as an en-US run it reads as written, as the preview's left-to-right isolate does. PowerPoint draws the
+ * isolate characters themselves (LRI, PDI) as boxes, so the export never writes them.
+ */
+export function leftToRightPieces(text) {
+  const ranges = [...latinPhrases(text), ...numberRanges(text)].sort((a, b) => a[0] - b[0] || b[1] - a[1]), merged = [];
+  for (const [from, to] of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && from <= last[1]) last[1] = Math.max(last[1], to); else merged.push([from, to]);
+  }
+  return merged;
+}
+
+/** Split the runs of a right-to-left paragraph so each Latin phrase and each number is its own en-US run. */
 function splitLatinRuns(body) {
   return body.replace(RUN, (run, properties, escaped) => {
-    const text = decodeText(escaped), phrases = latinPhrases(text);
+    const text = decodeText(escaped), phrases = leftToRightPieces(text);
     if (!phrases.length) return run;
     const make = (value, lang) => `<a:r>${lang ? properties.replace(/\slang="[^"]*"/, ` lang="${lang}"`) : properties}<a:t>${encodeText(value)}</a:t></a:r>`;
     const pieces = [];
@@ -381,7 +396,10 @@ function paragraphRtl(xml, deckDirection, {notes = false} = {}) {
     const properties = /^(\s*)<a:pPr\b([^>]*?)(\/?)>/.exec(body);
     const marked = properties && / rtl="([01])"/.exec(properties[2]);
     const rtl = marked ? marked[1] === "1" : paragraphDirection(text, deckDirection) === "rtl";
-    const value = rtl ? "1" : "0";
+    // LH-118: a right-to-left paragraph of only numbers and neutrals ("+16%", "-2.5%") is written left to right, its alignment kept at
+    // the physical edge it had: PowerPoint orders such a paragraph by its own rules even as an en-US run ("+16%" drew as "16%+").
+    const numeric = rtl && !/[\p{L}\p{Nl}]/u.test(text) && numberRanges(text).length > 0;
+    const value = rtl && !numeric ? "1" : "0";
     if (rtl) body = splitLatinRuns(body);
     if (!properties) return `<a:p><a:pPr rtl="${value}"${rtl ? " algn=\"r\"" : ""}/>${body}</a:p>`;
     let attributes = / rtl="[^"]*"/.test(properties[2]) ? properties[2].replace(/ rtl="[^"]*"/, ` rtl="${value}"`) : `${properties[2]} rtl="${value}"`;

@@ -3,8 +3,8 @@
 // Composition decides them once per chart item (ComposedChart.layer), from the chart, its resolved data and its box, so the preview
 // (opf-render) and the PPTX export (opf-pptx) draw the same chart:
 //
-//   small chart (LH-03)   a clustered column, bar or line chart of one or two series with eight or fewer points labels every mark with
-//                         its value and drops the value axis, its gridlines and the grey chart panel; a one-series column or bar chart
+//   small chart (LH-03)   a clustered column, bar or line chart of one or two series whose value labels fit beside each other (LH-111:
+//                         up to sixteen points) labels every mark with its value and drops the value axis, its gridlines and the grey chart panel; a one-series column or bar chart
 //                         draws its last point in a stronger shade of the series colour and the others in the series colour (LH-95).
 //   header row (LH-81)    a column, bar, line, area or combo chart without its own caption draws a caption when it adds to the
 //                         legend ("Revenue by quarter")
@@ -22,8 +22,11 @@ import type {ChartLayerFocus} from './chart-focus.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
-/** A small chart has at most this many points per series (LH-03). */
-export const SMALL_CHART_MAX_POINTS = 8;
+/**
+ * A small chart has at most this many points per series (LH-03). LH-111: within it the labels decide: a chart is small when its value
+ * labels fit beside each other at the chart text size (smallChart), so twelve monthly columns are labeled when their labels fit (it was 8).
+ */
+export const SMALL_CHART_MAX_POINTS = 16;
 /** The header row shows at most this many legend swatches; a chart with more series keeps its side legend (LH-81). */
 export const CHART_HEADER_MAX_LEGEND = 4;
 
@@ -201,7 +204,7 @@ export function valueLabel(value: number, format: string | undefined): string {
 
 /**
  * LH-03: the small-chart treatment of a chart, or undefined. A clustered column, bar or line chart (with or without markers) of one or
- * two series, each of eight or fewer points, whose `dataLabels` is not `false`. With a geometry, the value labels must also fit beside
+ * two series, each of at most SMALL_CHART_MAX_POINTS (16) points, whose `dataLabels` is not `false`. With a geometry, the value labels must also fit beside
  * each other: a column or line label no wider than the room between neighbouring marks, a bar label no taller than its bar's slot.
  */
 export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: ChartLayerGeometry): ChartLayerSmall | undefined {

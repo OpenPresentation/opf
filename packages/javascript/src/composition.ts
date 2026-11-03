@@ -27,6 +27,7 @@ import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
+export {isolateNumbers,numberRanges,numericText} from './number-text.js';
 import {listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
 export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
@@ -37,6 +38,7 @@ export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logo
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {layoutVariantApplies} from './color.js';
+import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
 export {applyLuminance, clrMapAttributes, colorMapFor, deckBackgroundIsFixed, isColorVariant, isFixedBackground, layoutColorVariant, layoutVariantApplies, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
@@ -47,7 +49,7 @@ export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuot
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForRoles, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
-export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
+export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricTrendWordShown, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
@@ -2774,8 +2776,10 @@ function contentText(field: string, value: unknown): string | undefined {
   if (field === "quote") return flatten(record(value).text ?? value);
   return undefined;
 }
+/** LH-117: the share of a column's body cells that must read as numbers (numericText) for the column to align as numbers. */
+export const TABLE_NUMERIC_SHARE = 0.75;
 export interface TableLayoutOptions {
-  /** Explicit resolved design alignment; absent uses typed numeric right/text left defaults. Cell style.align wins. */
+  /** Explicit resolved design alignment; absent, a column of numbers (LH-117) aligns at the end and every other at the start. A cell's style.align wins, then its header's. */
   alignment?: 'left' | 'center' | 'right';
   scale?: number;
   minFontSize?: number;
@@ -2798,7 +2802,7 @@ export interface TableLayoutOptions {
   growth?: number;
 }
 export interface TableCellLayout {
-  /** Logical alignment, shared by preview and native export. Numeric default resolves to the physical right even in RTL. */
+  /** Logical alignment, shared by preview and native export. A column of numbers (LH-117) resolves to the physical right even in RTL. */
   alignment: 'left' | 'center' | 'right';
   value: unknown;
   input: unknown;
@@ -2848,26 +2852,29 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const inline = inlineTableData(value, options.presentation);
   const grid = tableGrid(inline,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
-  // Classify typed values before formatting (a numeric format may display a string). Never coerce authored numeric-looking strings.
-  const numeric = new Set(grid.rows.flat().filter(cell => !cell.header && typeof cell.value === 'number' && Number.isFinite(cell.value)));
-  // A rich (TextRun[]) cell carries a number's styling, not its type: it does not make a column of numbers textual.
-  const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
-    const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.value !== null && cell.value !== undefined);
-    return body.some(cell => numeric.has(cell)) && body.every(cell => cell.colSpan === 1 && (numeric.has(cell) || Array.isArray(cell.value)));
-  }));
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
     if (cell.header) continue;
     const shown = tableCellDisplayValue(cell.input as DataTableCell, formats[cell.column]);
     if (shown !== cell.input) cell.value = typeof shown === 'object' && shown !== null && !Array.isArray(shown) ? shown.value : shown;
   }
+  // LH-117: a column aligns by how its cells read, not by their JSON type. It is a column of numbers when at least
+  // TABLE_NUMERIC_SHARE of its body cells (one column wide, not empty) read as numbers as shown (numericText: "$42", "+3%", "14,500",
+  // "50 GB", a JSON number in its format; a rich cell by its text). Every cell of it, the header too, then aligns at the end; every
+  // cell of any other column starts at the start edge, a JSON number among words included (5 beside "50 GB" and "Email"). A cell's own
+  // align wins, then its column's (its header's align), then the design's.
+  const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
+    const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.colSpan === 1 && cell.value !== null && cell.value !== undefined && flatten(cell.value).trim() !== '');
+    return body.length > 0 && body.filter(cell => numericText(flatten(cell.value))).length >= TABLE_NUMERIC_SHARE * body.length;
+  }));
+  const columnAlign = new Map(grid.rows.flat().flatMap(cell => cell.header && cell.colSpan === 1 && cell.style.align ? [[cell.column, cell.style.align] as const] : []));
   const columnCount=grid.columnCount;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=0;
     const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header||cell.style.bold?700:400,italic:false,path:cell.valuePath};
-    const numericDefault = numeric.has(cell) || ((cell.header || Array.isArray(cell.value)) && cell.colSpan === 1 && numericColumns.has(cell.column));
-    const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
+    const numericDefault = cell.colSpan === 1 && numericColumns.has(cell.column);
+    const alignment = cell.style.align ?? (cell.header ? undefined : columnAlign.get(cell.column)) ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
     return {...cell,padding,width,textStyle:style,alignment};
   });
   const columnWidths=Array<number>(columnCount).fill(box.width/columnCount);
@@ -3167,9 +3174,9 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * lead plus stack (`lead-stack`) and LH-70's paragraph columns (`paragraph-columns`). LH-80 and LH-49's tracks are alternatives
  * composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share';
 /** The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'quote-beside', 'quote-card', 'emphasis-band', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
@@ -4119,6 +4126,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   //    when that shortens the longer block and adds the shorter at most one line; peers keep equal widths.
   // Explicit weights, a layout and every other row keep the equal tracks.
   const WEIGHTED_DEMAND_RATIO = 2.5, WEIGHTED_SHARES = [.55, .6, .65, .7];
+  // LH-120: the share of a row of three blocks a horizontal bar chart takes (its category labels share its width with the bars).
+  const BAR_CHART_MIN_SHARE = .4, HORIZONTAL_BAR_CHARTS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
   // LH-44: the widest share of a row or area a table asks for, and the type its neighbours may give up for it (reference px, summed).
   const TABLE_MAX_SHARE = .65, TABLE_NEIGHBOUR_REDUCTION = 4;
   const tableCardInset = () => hasCards ? 2 * CARD_INSET * scale : 0;
@@ -4159,6 +4168,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     const table = tableRowWeights(nodes, count, cols, area, rowGap, settings);
     if (table) return table;
+    // LH-120: a bar chart's category labels sit beside its bars and take their width from it, so a bar chart in a row of three takes
+    // BAR_CHART_MIN_SHARE of the row (its labels fit or wrap instead of being cut) and the other two share the rest (guarded rule
+    // 'bar-chart-share': kept only when no block reads smaller).
+    const bars = nodes.flatMap((node, index) => !node.children && node.field === 'chart' && HORIZONTAL_BAR_CHARTS.has(String(record(node.value).type ?? '').trim().toLowerCase()) ? [index] : []);
+    if (count === 3 && bars.length === 1 && ruleOn('bar-chart-share')) {
+      fire('bar-chart-share');
+      const total = equal.reduce((sum, box) => sum + box.width, 0);
+      return nodes.map((_, index) => index === bars[0] ? BAR_CHART_MIN_SHARE * total : (1 - BAR_CHART_MIN_SHARE) * total / 2);
+    }
     const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
     if (count !== 2 || !nodes.every(prose)) return undefined;
     const need = (node: Pending, width: number) => naturalHeight(node, width, hasCards, undefined, settings);
@@ -4450,7 +4468,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
-    const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language});
+    // LH-119: a small chart without its value axis labels every point with its value, so a line's scale drops zero sooner (niceScale).
+    const hiddenAxis = layer?.small?.valueAxis === false;
+    const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language, ...(hiddenAxis ? {labeled: true} : {})});
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105: the series or categories the slide title names are the chart's focus (chart-focus.ts); a focus replaces the small chart's
     // last-point emphasis.
@@ -5931,7 +5951,7 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   return { width, height };
 }
 // RR-92: the value axis (scale, intervals and the axis of a category chart), shared by the preview and the PPTX export.
-export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
+export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';

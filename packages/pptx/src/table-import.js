@@ -152,7 +152,7 @@ export function importTableFrames(slidePath, archive, relationships, report, dim
       return {
         geometry,
         value:cellText(body, context, relationships, emit, headers && rowIndex === 0, defaults.text),
-        style:nativeCellStyle(mergeCellBorderOverrides(defaults.cell,cellProperties,inherited),body,context,scale,emit),
+        style:nativeCellStyle(mergeCellBorderOverrides(defaults.cell,cellProperties,inherited),body,context,scale,emit,{rtlDeck}),
         borderEdges:[['left','a:lnL'],['right','a:lnR'],['top','a:lnT'],['bottom','a:lnB']]
           .filter(([,key])=>Object.hasOwn(inherited,key)).map(([edge])=>edge),
       };
