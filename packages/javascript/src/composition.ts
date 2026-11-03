@@ -3305,7 +3305,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options)) break;
     best = grown; steps = next;
   }
-  const centered = attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
+  // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
+  const centered = result.items.some(item => item.quoteLayout?.rule) ? undefined : attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
   if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) best = centered;
   return best === result ? undefined : best;
 }
@@ -3955,7 +3956,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // The pull line is laid out across the body's width from the top of a tall box, which measures its height; it is drawn at the foot
   // (the body ends a gap above it) or under the headings (the body starts a gap below it). A body under twice its height, or a quote
   // that needs more than QUOTE_PULL_LINES lines at the body text size, keeps the card.
-  let pullItem: ComposedItem | undefined;
+  let pullItem: ComposedItem | undefined, placePull: ((top: number) => ComposedItem) | undefined;
   if (pullQuote) {
     const blockPath = `${path}.blocks.${pullQuote.block}`, quotePath = `${blockPath}.quote`, value = record(slide.blocks[pullQuote.block]).quote as string | QuoteContent;
     const x = area.left + padding, width = area.right - area.left - padding * 2, language = quoteLanguage(options.presentation, options.slideIndex);
@@ -3967,10 +3968,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const height = round(measured.bounds.height);
     if (!measured.overflow && lines <= QUOTE_PULL_LINES && 2 * (height + gap) <= bodyBottom - y) {
       fire('pull-quote');
-      const top = pullQuote.position === 'foot' ? round(bodyBottom - height) : round(y), quoteLayout = lay(top, height);
-      const body = quoteLayout.parts.find(part => part.role === 'body')!;
-      pullItem = { path: quotePath, field: 'quote', type: 'quote', value, payload: { type: 'quote', quote: value }, box: { x, y: top, width, height }, text: body.fit,
-        textStyle: body.style, composition, alignment: alignmentFor('quote'), quoteLayout };
+      const top = pullQuote.position === 'foot' ? round(bodyBottom - height) : round(y);
+      // The pull line is laid out again where it finally sits (pullStack, after the body), so its parts are measured in place.
+      placePull = (at: number): ComposedItem => {
+        const quoteLayout = lay(at, height), body = quoteLayout.parts.find(part => part.role === 'body')!;
+        return { path: quotePath, field: 'quote', type: 'quote', value, payload: { type: 'quote', quote: value }, box: { x, y: at, width, height }, text: body.fit,
+          textStyle: body.style, composition, alignment: alignmentFor('quote'), quoteLayout };
+      };
+      pullItem = placePull(top);
       if (pullQuote.position === 'foot') bodyBottom = top - gap; else { y = top + height + gap; items.push(pullItem); }
     }
   }
@@ -4436,8 +4441,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let y = area.y + Math.max(0, (area.height - heights.reduce((sum, size) => sum + size, 0) - between * (boxes.length - 1)) / 2);
     return boxes.map((box, index) => { const next = { ...box, y, height: heights[index]! }; y += heights[index]! + between; return next; });
   };
+  // LH-114: with a pull line the data and the pull line are one stack at the top of the body (pullStack), so the split is not centered.
   const fillsSplit = (nodes: Pending[], boxes: LayoutBox[], area: LayoutBox, settings: Composition, cols: number): boolean =>
-    area === contentBox && cols === nodes.length && splitBlocks(nodes) && splitFill(nodes, boxes, area, settings) < SPLIT_FILL;
+    !pullItem && area === contentBox && cols === nodes.length && splitBlocks(nodes) && splitFill(nodes, boxes, area, settings) < SPLIT_FILL;
   const placeSplitBlock = (node: Pending, cell: LayoutBox, settings: Composition): void => {
     const first = items.length;
     // A card fills its cell; what it holds is centered inside the card's own insets (those of the whole card, not of a card as short
@@ -4538,7 +4544,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       // LH-52 with LH-48: a stack of paragraphs and lists keeps its top, as LH-48's grown stack does (the editor resizes its tracks from
       // the top); a stack with a panel, table, timeline or media block sits in the middle of the body.
-      if (area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      if (!pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
@@ -4987,7 +4993,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
     height = Math.min(cell.height, height);
-    return { ...cell, y: cell.y + (cell.height - height) / 2, height };
+    // LH-114: with a pull line the block and the pull line are one stack at the top of the body (pullStack).
+    return { ...cell, y: pullItem ? cell.y : cell.y + (cell.height - height) / 2, height };
   };
   // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
   // cell's height wide (a metric beside its note in a wide cell), else the figure above its text. One rule for every pair of a
@@ -5988,7 +5995,37 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.text = fitPlacedText('text', item.value, contentText('text', item.value)!, box, item.text!.fontSize, item.text!.fontSize, item.path, 'center');
   }
   if (autoSurface) items.push(autoSurface.item);
-  // LH-114: a pull line at the foot is the last block (one under the headings was pushed before the body).
+  // LH-114: the data and the pull line are one stack. A pull line reserved at the foot moves up to one gap under the lowest content of
+  // the body (a table's last row, a text's last line, a card's edge, a chart's box), and one reserved under the headings moves down
+  // to one gap above the highest, so a body that hugs its content does not leave the pull line a block away from its data. The body
+  // never moves; with the pull line it is not centered (LH-52, LH-48's CENTER), so the stack sits at the top of the body.
+  if (pullItem && placePull) {
+    const pulled = pullItem, own = new Set([pulled.path, autoSurface?.item.path]), placedPaths = new Set(placed.map(entry => `${entry.hostPath}.image`));
+    const body = items.filter(item => !headings.has(item.field) && !own.has(item.path) && !placedPaths.has(item.path));
+    const textHeight = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).height : fit.placement?.height ?? fit.lines.length * fit.lineHeight;
+    const extent = (item: ComposedItem): [number, number] => {
+      if (item.frameBox) return [item.frameBox.y, item.frameBox.y + item.frameBox.height];
+      const internal = (item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout) as { bounds?: LayoutBox } | undefined;
+      if (internal?.bounds) return [internal.bounds.y, internal.bounds.y + internal.bounds.height];
+      if (item.field === 'table') {
+        try {
+          const rows = layoutTable(item.value, item.box, { scale, minFontSize: item.composition.minFontSize, fontFamily: options.fontFamilies?.body, ...(options.fontFamilies?.code ? { codeFontFamily: options.fontFamilies.code } : {}), textMeasurement: options.textMeasurement, presentation: options.presentation, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap(row => row.cells.map(cell => cell.box));
+          if (rows.length) return [Math.min(...rows.map(box => box.y)), Math.max(...rows.map(box => box.y + box.height))];
+        } catch { /* the item's box below */ }
+      }
+      if (item.text && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) {
+        const lines = 'richLines' in item.text ? undefined : (item.text as TextFit).placement?.lines;
+        return lines?.length ? [Math.min(...lines.map(line => line.y)), Math.max(...lines.map(line => line.y + line.height))] : [item.box.y, item.box.y + textHeight(item.text)];
+      }
+      const box = item.image?.box ?? item.box;
+      return [box.y, box.y + box.height];
+    };
+    if (body.length) {
+      const extents = body.map(extent), top = Math.min(...extents.map(([from]) => from)), bottom = Math.max(...extents.map(([, to]) => to));
+      const at = pullQuote?.position === 'foot' ? round(Math.min(pulled.box.y, bottom + gap)) : round(Math.max(pulled.box.y, top - gap - pulled.box.height));
+      if (Math.abs(at - pulled.box.y) > .5) { const moved = placePull(at); if (items.includes(pulled)) items[items.indexOf(pulled)] = moved; pullItem = moved; }
+    }
+  }
   if (pullItem && pullQuote?.position === 'foot') items.push(pullItem);
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts); LH-93: and one plot height (chart-plot.ts).
   const chartMeasure = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 400, italic: false, path}, options.textMeasurement), options.textMeasurement);

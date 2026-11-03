@@ -3,7 +3,7 @@
 // and lengths, never a slide id, and works right to left.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { bindRegions, composeSlide, layoutQuote, layoutTimeline, QUOTE_PULL_RULE, TIMELINE_STATUS_WORDS } from '../dist/composition.js';
+import { bindRegions, composeSlide, layoutQuote, layoutTable, layoutTimeline, QUOTE_PULL_RULE, TIMELINE_STATUS_WORDS } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 
 const layout = (id) => layouts[id];
@@ -16,8 +16,14 @@ const pull = (result) => result.items.find((item) => item.quoteLayout?.rule);
 const card = (result) => result.items.find((item) => item.quoteLayout && !item.quoteLayout.rule);
 const findings = (result) => result.diagnostics.filter((entry) => ['text-overflow', 'small-cell', 'layout-unplaced'].includes(entry.code));
 const lines = (fit) => (fit.richLines ?? fit.lines).length;
+// Where a body item's drawn content ends: a table's last row, a text's last line, a chart's box.
+const contentBottom = (item) => {
+  if (item.field === 'table') return Math.max(...layoutTable(item.value, item.box, { minFontSize: item.composition.minFontSize, ...(item.tableGrowth ? { growth: item.tableGrowth } : {}) }).rows.flatMap((row) => row.cells.map((cell) => cell.box.y + cell.box.height)));
+  if (item.text && (item.field === 'items' || item.field === 'text')) return item.box.y + item.text.lines.length * item.text.lineHeight;
+  return item.box.y + item.box.height;
+};
 
-test('LH-114: a short quote under a table, a long list or two blocks is a full-width pull line at the foot', () => {
+test('LH-114: a short quote under a table, a long list or two blocks is a full-width pull line one gap under the data', () => {
   for (const blocks of [[table, quote], [list(3), quote], [list(4), chart('Churn'), quote]]) {
     for (const direction of ['ltr', 'rtl']) {
       const slide = { title: 'Why customers churn', blocks };
@@ -37,7 +43,9 @@ test('LH-114: a short quote under a table, a long list or two blocks is a full-w
       assert.equal(lines(footer.fit), 1, 'one caption line');
       // The pull line spans the body's width, below every other body block, and is the last item (reading order).
       assert.ok(Math.abs(item.box.width - result.contentBox.width) < 1);
-      for (const other of result.items.filter((entry) => entry !== item && entry.field !== 'title')) assert.ok(other.box.y + other.box.height <= item.box.y + 0.5, other.path);
+      // The data and the pull line are one stack: the pull line sits one gap (24 px on this canvas) under the lowest content.
+      const bottom = Math.max(...result.items.filter((entry) => entry !== item && entry.field !== 'title').map(contentBottom));
+      assert.ok(bottom <= item.box.y + 0.5 && item.box.y - bottom <= 24 + 1, `${blocks.length} blocks ${direction}: ${bottom} -> ${item.box.y}`);
       assert.equal(result.items.at(-1), item);
     }
   }
