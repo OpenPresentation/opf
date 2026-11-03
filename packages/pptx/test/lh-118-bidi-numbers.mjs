@@ -34,7 +34,8 @@ let checks = 0;
   const value = slide.find(paragraph => paragraph.text === '+16%');
   assert.deepEqual(value.runs, ['en-US:+16%']);
   assert.equal(attribute(value.pPr, 'rtl'), '0', 'a number-only paragraph is written left to right');
-  assert.equal(attribute(value.pPr, 'algn'), 'ctr', 'at the alignment it had');
+  // LH-112: a metric beside other blocks starts at the reading start, the right of a right-to-left slide; the left-to-right paragraph keeps it.
+  assert.equal(attribute(value.pPr, 'algn'), 'r', 'at the alignment it had');
   assert.deepEqual(slide.find(paragraph => paragraph.text === '+8 نقاط').runs, ['en-US:+8', 'ar-SA: نقاط']);
   assert.equal(attribute(slide.find(paragraph => paragraph.text === '+8 نقاط').pPr, 'rtl'), '1');
   const cell = slide.find(paragraph => paragraph.text === '-2.5%');
