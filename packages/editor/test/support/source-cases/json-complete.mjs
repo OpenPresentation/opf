@@ -97,7 +97,7 @@ const ENUMS = [
   ['design.contentAlignment', '{"slides":[],"design":{"contentAlignment":"|"}}', ['left', 'center', 'right']],
   ['design.contentDirection', '{"slides":[],"design":{"contentDirection":"|"}}', ['horizontal', 'vertical']],
   ['design.chartPrimary', '{"slides":[],"design":{"chartPrimary":"|"}}', ['none', 'top', 'bottom', 'left', 'right']],
-  ['design.imageFit', '{"slides":[],"design":{"imageFit":"|"}}', ['cover', 'contain', 'stretch']],
+  ['design.imageFit', '{"slides":[],"design":{"imageFit":"|"}}', ['cover', 'contain', 'stretch', 'auto']],
   ['design.listBullet', '{"slides":[],"design":{"listBullet":"|"}}', ['character', 'image', 'none']],
   ['slide.type', '{"slides":[{"type":"|"}]}', ['text', 'list', 'image', 'chart', 'table', 'video', 'code', 'metric', 'quote', 'timeline']],
   ['organization.role', '{"slides":[],"organization":{"id":"a","name":"A","role":"|"}}', ['primary', 'partner', 'client', 'sponsor', 'host']],
