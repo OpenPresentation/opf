@@ -207,7 +207,9 @@ pass are kept. LH-72's start alignment and sibling quotes sharing one size are a
   accent rule in the primary color at the start edge, the quote at the lead size (32 px, stepping down to 28 px to take at most two
   lines) in the regular weight, and one caption line "— Name, Role" (the source after an en dash) under it. It is the last row when
   the quote is the last block, and the first row under the headings when it is the first block of an automatic slide; the data takes
-  the full width beside it, and in a layout the quote is bound to no region. A quote beside one compact block (a metric, a chart, a
+  the full width beside it, and in a layout the quote is bound to no region. The data and the pull line are one stack at the top of the
+  body: the pull line sits one gap under the lowest content (a table's last row, a text's last line, a card's edge, a chart's box), or
+  one gap above the highest, and the body is not centered (LH-52, LH-48), though LH-48 still grows the data. LH-06's band stays at the foot. A quote beside one compact block (a metric, a chart, a
   short text, a list of one or two entries) keeps its card, as does a quote in the middle, one of several quotes, a quote with a
   photo, a region pin, a caption or `emphasis: true`, a quote that needs more than two lines, and a slide with an arrangement of its
   own. The quote layout reports the rule as `quoteLayout.rule`; the preview draws it as a rectangle and the PPTX export as a tagged
