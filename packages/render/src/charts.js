@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -197,6 +197,12 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices.
   c.endLabels = layer?.endLabels;
   if (layer?.endLabels) c.legendManaged = true;
+  // LH-107 to LH-110 (core chart-marks.ts): a waterfall's roles, a pie's value list, a stacked chart's values and names, the title's
+  // reference marks.
+  c.waterfall = layer?.waterfall;
+  c.valueList = layer?.valueList;
+  c.stack = layer?.stack;
+  if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
   const inset = layer?.plot;
   c.plotBox = inset && { x: box.x + inset.left, y: box.y + inset.top, width: Math.max(1, box.width - inset.left - inset.right), height: Math.max(1, box.height - inset.top - inset.bottom) };
@@ -218,7 +224,21 @@ export function renderCatalogChart(item, box, bound, options, svg) {
     c.dataLabels = { content: ["category"], position: "inside-end", separator: ", " };
     c.sliceLabels = new Map(layer.slices.labels.map((entry) => [entry.row, entry.position]));
   }
+  // LH-109: a stacked chart's default labels are the values inside the segments that hold them.
+  if (layer?.stack?.values.some((row) => row.some(Boolean)) && !c.dataLabels) {
+    c.dataLabels = { content: ["value"], position: "center", separator: ", " };
+    c.stackValues = layer.stack.values;
+  }
+  // LH-107: a waterfall's default labels are its signed values over (a loss: under) each bar.
+  if (layer?.waterfall?.labels && !c.dataLabels) {
+    c.dataLabels = { content: ["value"], position: "outside-end", separator: ", " };
+    c.waterfallSigned = true;
+  }
+  // LH-110: the period band lies under the marks, the reference lines over them.
+  for (const band of layer?.references?.bands ?? []) c.mark("rect", { ...band.box, fill: chartBandColor(c.surface, c.labelColor) }, `${c.path}.data.rows.${band.row}.0`);
   render(c, spec);
+  drawReferenceLines(c, layer?.references?.lines);
+  drawStackNames(c, layer?.stack?.names);
   if (resolved.active) drawAxisTitles(c);
   return svg.tag("g", { ...svg.traceAttrs(options, item.path), "data-opf-chart": options.trace ? id : undefined }, c.children.join("\n"));
 }
@@ -327,15 +347,15 @@ const neutrals = bound.design.roles.neutrals;
       for (const [key, value] of Object.entries(attrs)) out[key] = numericAttrs.has(key) && typeof value === "number" ? n(value) : value;
       children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, tracePath(path)) : {}) }));
     },
-    textElement(value, rect, path, align = "center", fill = chartTextColor) {
+    textElement(value, rect, path, align = "center", fill = chartTextColor, weight = 400) {
       if (!(rect.width > 0 && rect.height > 0)) return "";
       return svg.renderTextBox(String(value), rect, bound, {
-        path: tracePath(path), fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
+        path: tracePath(path), fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: weight,
         fill, options, align, verticalAlign: "middle"
       });
     },
-    text(value, rect, path, align = "center") {
-      const element = c.textElement(value, rect, path, align);
+    text(value, rect, path, align = "center", fill = chartTextColor, weight = 400) {
+      const element = c.textElement(value, rect, path, align, fill, weight);
       if (element) children.push(element);
     },
     series(first = 1) {
@@ -872,7 +892,7 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
         rect = { x, y: Math.min(a, b), width: geometry.width, height: Math.abs(b - a) };
         c.mark("rect", { ...rect, fill: color }, path);
       }
-      if (c.dataLabels) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }) });
+      if (c.dataLabels && c.stackValues?.[j]?.[i] !== false) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }) });
     });
   });
   // RR-35: data labels sit on top of every bar.
@@ -930,10 +950,53 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   }
   // RR-35: an area's label sits in the area at each category, halfway between its lower and upper edge.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (!point) return;
+    if (!point || c.stackValues?.[j]?.[i] === false) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
     drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (categorySlot(i) + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
+}
+
+// LH-110: the reference lines the title names, dashed across the plot in the chart text colour, each labeled bold in the text colour
+// where core placed the label (the plot's start, under or over the line).
+function drawReferenceLines(c, lines) {
+  for (const line of lines ?? []) {
+    c.mark("line", { x1: line.x1, y1: line.y, x2: line.x2, y2: line.y, stroke: c.chartTextColor, "stroke-width": c.pt, "stroke-dasharray": `${c.num(4 * c.pt)} ${c.num(3 * c.pt)}` });
+    c.text(line.text, line.label, c.path, rtl(c) ? "right" : "left", c.labelColor, 700);
+  }
+}
+
+// LH-109: the series names beside a stacked chart's last column or band, each a swatch in the series colour and the name in the chart
+// text colour (bold, in the text colour, for a series the title names), in the box core placed it.
+function drawStackNames(c, names) {
+  for (const entry of names?.entries ?? []) {
+    const s = c.series()[entry.series];
+    if (!s) continue;
+    const swatch = names.swatch, middle = entry.box.y + entry.box.height / 2, path = `${c.path}.data.columns.${s.column}`;
+    const x = rtl(c) ? entry.box.x + entry.box.width - swatch : entry.box.x;
+    c.mark("rect", { x, y: middle - swatch / 2, width: swatch, height: swatch, fill: seriesColor(c, entry.series) }, path);
+    const textX = rtl(c) ? entry.box.x : entry.box.x + swatch + c.fontPx * 0.4;
+    c.text(entry.name, { x: textX, y: entry.box.y, width: Math.max(1, entry.box.width - swatch - c.fontPx * 0.4), height: entry.box.height }, path, rtl(c) ? "right" : "left", entry.bold ? c.labelColor : c.chartTextColor, entry.bold ? 700 : 400);
+  }
+}
+
+// LH-108: the value list beside a pie (core chartValueList): the unit over the values, then one row per category: a swatch in the
+// slice's colour, the category and its value at the row's end, a hairline between rows. The rows the title names are bold in the text
+// colour; the others (when some are bold) in the chart text colour.
+function drawValueList(c, list) {
+  const end = rtl(c) ? "left" : "right", start = rtl(c) ? "right" : "left";
+  const emphasis = list.rows.some((row) => row.bold);
+  if (list.header) c.text(list.header.text, list.header.box, `${c.path}.data.columns.1`, end);
+  list.rows.forEach((row, index) => {
+    const { box } = row, middle = box.y + box.height / 2, path = `${c.path}.data.rows.${row.row}.1`;
+    if (index) gridline(c, box.x, box.y, box.x + box.width, box.y);
+    const swatchX = rtl(c) ? box.x + box.width - list.swatch : box.x;
+    c.mark("rect", { x: swatchX, y: middle - list.swatch / 2, width: list.swatch, height: list.swatch, fill: sliceColor(c, row.row) }, `${c.path}.data.rows.${row.row}.0`);
+    const fill = row.bold || !emphasis ? c.labelColor : c.chartTextColor, weight = row.bold ? 700 : 400;
+    const inner = { x: box.x + (rtl(c) ? 0 : list.swatch + list.gap), y: box.y, width: Math.max(1, box.width - list.swatch - list.gap), height: box.height };
+    c.text(row.value, inner, path, end, fill, weight);
+    const valueWidth = c.width(row.value) * (row.bold ? 1.08 : 1) + c.fontPx;
+    c.text(row.name, { ...inner, x: rtl(c) ? inner.x + valueWidth : inner.x, width: Math.max(1, inner.width - valueWidth) }, `${c.path}.data.rows.${row.row}.0`, start, fill, weight);
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1067,7 +1130,9 @@ function renderCircularChart(c, spec) {
   const legendWidth = legendEntries(c, categories.map((name, i) => ({
     name, color: sliceColor(c, i), path: `${c.path}.data.rows.${i}.0`
   })));
-  const area = { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
+  // LH-108: with a value list, the pie fills the square core gave it.
+  const list = c.valueList;
+  const area = list ? list.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
   const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column] }))) : null;
@@ -1076,7 +1141,7 @@ function renderCircularChart(c, spec) {
   const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
   const outside = outsideTexts.length > 0;
   const reserve = outside ? outsideLabelReserve(c, outsideTexts) : { x: 0, y: 0 };
-  const r = outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const r = list ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (rings.every((ring) => !ring.total)) {
     c.text("No positive chart values", area, c.path);
@@ -1119,6 +1184,7 @@ function renderCircularChart(c, spec) {
       start += delta;
     });
   });
+  if (list) drawValueList(c, list);
 }
 
 // LH-92: a ring's name, centred in its band at the slice's middle and turned along the ring by core's rotation (the PPTX label's
@@ -1369,9 +1435,10 @@ function probeTicks(dataMin, dataMax) {
 
 // Vertical layout shared by the axis-bearing constructs: category labels below,
 // value ticks on the left (and a percentage axis on the right for pareto).
-function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentAxis = false }) {
+function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentAxis = false, labelRoom = false }) {
   const { box, pad, fontPx } = c;
-  const top = box.y + pad + c.lineHeight / 2;
+  // LH-107: a waterfall without its value axis keeps a line above the tallest bar for its label.
+  const top = box.y + pad + (labelRoom ? c.lineHeight : c.lineHeight / 2);
   const tickWidth = Math.max(0, ...tickLabels.map((label) => c.width(label))) + fontPx * 0.5;
   const x = box.x + pad + tickWidth;
   const right = box.x + box.width - pad - legendWidth - (percentAxis ? c.width("100%") + fontPx : fontPx / 2);
@@ -1448,29 +1515,42 @@ function renderHistogramChart(c, spec) {
 // Waterfall: floating bars from the running total, increases and decreases in the first two palette colours, connector lines between bars.
 // LH-59: a last value equal to the running sum of the steps before it is a total (core's waterfallSteps): it stands on zero in the third
 // palette colour, as PowerPoint draws the cx:subtotals point the export writes.
+// LH-107: core's roles (layer.waterfall): totals in the strong colour, gains in the accent, losses in the context gray (core
+// chartWaterfallColors), signed default labels (a total's bold and unsigned), dashed connectors and, with default labels, no value axis.
 const waterfallColor = (bar, palette) => palette[(bar.total ? 2 : bar.value < 0 ? 1 : 0) % palette.length];
 function renderWaterfallChart(c) {
   const { column, values, categories } = chartexValues(c.rows, c.columns);
   const format = c.formats[column];
-  const bars = waterfallSteps(values, c.path).map((step) => ({ ...step, i: step.index }));
+  const layer = c.waterfall;
+  const bars = waterfallSteps(values, c.path).map((step) => ({ ...step, i: step.index, role: layer?.roles[step.index] ?? null }));
+  const roleColors = layer?.colors ? chartWaterfallColors(c.surface, c.strongColors[0], c.labelColor, c.bound.design.colorScheme?.dark2, { labeled: layer.labels }) : undefined;
+  const colorOf = (bar) => roleColors && bar.role ? roleColors[bar.role] : waterfallColor(bar, c.colors);
+  const hidden = layer?.valueAxis === false;
   const extents = bars.flatMap((bar) => [bar.from, bar.to]);
   const dataMin = extents.length ? Math.min(0, ...extents) : 0, dataMax = extents.length ? Math.max(0, ...extents) : 1;
-  const probe = { ticks: probeTicks(dataMin, dataMax) };
-  const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)) });
+  const probe = { ticks: hidden ? [] : probeTicks(dataMin, dataMax) };
+  const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)), labelRoom: hidden });
   const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
-  const { at } = valueAxis(c, plot, scale, format);
+  let at;
+  if (hidden) {
+    // The category axis line stays, at zero; the labels carry the values.
+    at = (value) => plot.y + axisFraction(value, scale, true) * plot.height;
+    const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
+    axisLine(c, plot.x, crossing, plot.x + plot.width, crossing);
+  } else ({ at } = valueAxis(c, plot, scale, format));
   const width = band / 1.5, offset = (band - width) / 2;
   bars.forEach((bar, k) => {
     const a = at(bar.from), b = at(bar.to);
     const x = plot.x + bar.i * band + offset;
-    c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: waterfallColor(bar, c.colors) }, `${c.path}.data.rows.${bar.i}.${column}`);
+    c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: colorOf(bar) }, `${c.path}.data.rows.${bar.i}.${column}`);
     const next = bars[k + 1];
-    if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt });
+    if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt, ...(layer ? { "stroke-dasharray": `${c.num(3 * c.pt)} ${c.num(2 * c.pt)}` } : {}) });
   });
   // RR-35: data labels show each step's value (not the running total) on the floating bars.
   if (c.dataLabels) bars.forEach((bar) => {
     const a = at(bar.from), b = at(bar.to);
-    drawBarLabel(c, labelString(c, { category: categories[bar.i], value: bar.value, format }), { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, waterfallColor(bar, c.colors));
+    const text = c.waterfallSigned ? waterfallLabelText(bar.value, format, bar.role) : labelString(c, { category: categories[bar.i], value: bar.value, format });
+    drawBarLabel(c, text, { x: plot.x + bar.i * band + offset, y: Math.min(a, b), width, height: Math.abs(b - a) }, bar.value >= 0 ? "up" : "down", `${c.path}.data.rows.${bar.i}.${column}`, colorOf(bar), c.waterfallSigned && bar.role === "total" ? 700 : 400);
   });
 }
 

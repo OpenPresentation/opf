@@ -1100,6 +1100,34 @@ export function chartContextColors(surface: string, text: string, count: number,
   return steps.slice(0, Math.max(1, count)).reverse();
 }
 
+/**
+ * LH-107: the three colours of a waterfall by role (Claude Design and Few: the totals carry the story, the gains the accent, the losses
+ * stand back). `increase` is the series colour at full strength (`accent`). `total` is the strong colour: the scheme's `dark2` when it keeps
+ * 3:1 against the backdrop and a colour difference of {@link CHART_CONTEXT_FOCUS_DIFFERENCE} (CIE76) from the accent, else the text
+ * colour (made legible on the backdrop: the strong neutral on a dark slide). `decrease` is the first context neutral
+ * ({@link chartContextColors}), kept apart from the other two; `labeled` (every bar carries its signed value) lets it be the light gray.
+ */
+export function chartWaterfallColors(surface: string, accent: string, text: string, strong: string | undefined, options: { labeled?: boolean } = {}): { total: string; increase: string; decrease: string } {
+  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
+  const increase = normalizeHexColor(accent)?.slice(0, 7) ?? chartColorForFill(fill, '#000000');
+  const ink = textColorForFill(fill, normalizeHexColor(text)?.slice(0, 7) ?? '#000000');
+  const candidate = normalizeHexColor(strong)?.slice(0, 7);
+  const apart = (hex: string) => labDifference(labOf(opaqueChannels(hex)!), labOf(opaqueChannels(increase)!)) >= CHART_CONTEXT_FOCUS_DIFFERENCE;
+  const total = candidate && opaqueChannels(candidate) && (colorContrast(candidate, fill) ?? 0) >= CHART_CONTEXT_MIN_CONTRAST && apart(candidate) ? candidate : ink;
+  const decrease = chartContextColors(fill, ink, 1, { labeled: options.labeled === true, avoid: [increase, total] })[0]!;
+  return { total, increase, decrease };
+}
+
+/** LH-110: how far the shaded band of a period the title names is mixed from the backdrop towards the text colour. */
+export const CHART_BAND_MIX = 0.06;
+
+/** LH-110: the fill of a period band: the backdrop mixed {@link CHART_BAND_MIX} towards the text colour, a faint neutral under the marks. */
+export function chartBandColor(surface: string, text: string): string {
+  const fill = normalizeHexColor(surface)?.slice(0, 7) ?? '#FFFFFF';
+  const ink = normalizeHexColor(text)?.slice(0, 7) ?? textColorForFill(fill, '#000000');
+  return mixChannels(opaqueChannels(fill)!, opaqueChannels(ink)!, CHART_BAND_MIX);
+}
+
 function chartContextFloor(from: readonly number[], to: readonly number[], fill: string, floor: number): string {
   let amount = CHART_HIGHLIGHT_MUTED_MIX, muted = mixChannels(from, to, amount);
   while ((colorContrast(muted, fill) ?? Infinity) < floor && amount < 1) {

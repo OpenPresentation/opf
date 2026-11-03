@@ -65,7 +65,8 @@ const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map
 // none of these defaults back.
 // LH-105: a line chart of two to four series names its series at the line ends (no legend, and its small-chart value labels give way),
 // and a pie or doughnut names its slices (no legend).
-const SMALL = new Set(['column']), HEADER = new Set(['column', 'bar', 'area', 'stacked-column']), DIRECT = new Set(['line', 'pie', 'doughnut']);
+// LH-109: a stacked column chart prints its segment values and names its series beside its last column (no legend).
+const SMALL = new Set(['column', 'stacked-column']), HEADER = new Set(['column', 'bar', 'area', 'stacked-column']), DIRECT = new Set(['line', 'pie', 'doughnut', 'stacked-column']);
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: dataOf(type)});
   assert.doesNotMatch(result.classic, /<c:(?:catAx|valAx)>(?:(?!<\/c:(?:catAx|valAx)>)[\s\S])*<c:title>/, `${type}: no axis title by default`);
@@ -188,8 +189,9 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
       if (out.separator === ', ') delete out.separator;
       return Object.keys(out).length ? out : true;
     })();
-    // LH-03: plain value labels on a small chart (a clustered column or line chart of two series of four points) are its default.
-    assert.deepEqual(back, wanted === true && ['column', 'line', 'line-with-markers'].includes(type) ? undefined : wanted, `${label}: round trip`);
+    // LH-03: plain value labels on a small chart (a clustered column or line chart of two series of four points) are its default. LH-109:
+    // so are a stacked column or area chart's values in its segments.
+    assert.deepEqual(back, wanted === true && ['column', 'line', 'line-with-markers', 'stacked-column', '100pct-stacked-column', 'stacked-area', '100pct-stacked-area'].includes(type) ? undefined : wanted, `${label}: round trip`);
   }
   // Pie labels hide per point in PptxGenJS output; the options write a visible label for every point.
   const pie = await exportDeck({type: 'pie', data: pieData, dataLabels: {position: 'inside-end', content: ['value']}});
@@ -234,8 +236,13 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   assert.equal(waterfall.imported.type, 'waterfall');
 
   const plain = await exportDeck({type: 'waterfall', data: single});
-  assert.doesNotMatch(plain.chartex, /<cx:title>|<cx:dataLabels/, 'no options, no new chartex elements');
+  // LH-107: without options a waterfall carries its signed values (and its caption once its value axis goes); they import as no option.
+  assert.match(plain.chartex, /<cx:dataLabels pos="outEnd"><cx:numFmt formatCode="&quot;\+&quot;/, 'the default signed labels');
   assert.equal(plain.imported.dataLabels, undefined);
+  assert.deepEqual(plain.imported.axisTitles, undefined, 'the caption is not an axis title');
+  const off = await exportDeck({type: 'waterfall', data: single, dataLabels: false});
+  assert.doesNotMatch(off.chartex, /<cx:title>|<cx:dataLabels/, 'dataLabels false: no labels, no caption');
+  assert.equal(off.imported.dataLabels, false);
 
   // The treemap and funnel label their marks by default; dataLabels picks the content, false removes the labels.
   for (const [type, defaults] of [['treemap', 'categoryName="1" value="0"'], ['funnel', 'categoryName="0" value="1"']]) {

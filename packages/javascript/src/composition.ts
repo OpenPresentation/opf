@@ -1,11 +1,12 @@
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {chartTextSize,chartValueAxis,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
-import {chartLayer,type ChartLayer} from './chart-layer.js';
+import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
+import {chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
@@ -4515,9 +4516,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const drawn = plan?.fallback && resolved.ok ? {chart: {...(node.value as Record<string, unknown>), type: plan.type}, data: {...resolved, columns: plan.columns, rows: plan.rows, formats: plan.formats}} : {chart: node.value, data: resolved};
     const geometry = {box, scale, minFontSize: settings.minFontSize, measure, direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {}), captioned: node.caption !== undefined};
     let layer = drawn.data.ok ? chartLayer(drawn.chart, drawn.data, geometry) : undefined;
+    const titleText = [annotationText(slide.title), annotationText(slide.subtitle)].filter(Boolean).join('. ');
+    // LH-110: the reference values the title names; the value axis holds them.
+    const references = drawn.data.ok ? chartTitleReferences(drawn.chart, drawn.data, {text: titleText, ...(language !== undefined ? {language} : {})}) : undefined;
+    const include = references?.lines.map(line => line.value);
     // LH-119: a small chart without its value axis labels every point with its value, so a line's scale drops zero sooner (niceScale).
     const hiddenAxis = layer?.small?.valueAxis === false;
-    const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language, ...(hiddenAxis ? {labeled: true} : {})});
+    const axisFor = (headerHeight: number) => chartValueAxis(node.value, resolved, {width: box.width, height: Math.max(1, box.height - headerHeight), scale, minFontSize: settings.minFontSize, language, ...(hiddenAxis ? {labeled: true} : {}), ...(include?.length ? {include} : {})});
     let valueAxis = axisFor(layer?.header?.height ?? 0);
     // LH-105, LH-113: the series or categories the slide names are the chart's focus (chart-focus.ts): the title's, else what its other
     // texts, list entries, quotes and chart alts name together; a focus replaces the small chart's last-point emphasis.
@@ -4531,11 +4536,30 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (ends) ({layer, valueAxis} = ends);
     const slices = drawn.data.ok ? chartSliceLabels(drawn.chart, drawn.data, geometry) : undefined;
     if (slices) layer = {...layer, slices};
+    if (drawn.data.ok) {
+      // LH-107: a waterfall's roles, signed labels and caption (chart-marks.ts).
+      const waterfall = chartWaterfall(drawn.chart, drawn.data, geometry);
+      if (waterfall) layer = {...layer, waterfall: waterfall.waterfall, ...(waterfall.header ? {header: waterfall.header} : {})};
+      // LH-108: a value list beside a pie in place of its slice names.
+      const list = chartValueList(drawn.chart, drawn.data, geometry, {...(layer?.focus ? {focus: layer.focus} : {}), ...(slices ? {slices} : {})});
+      if (list) { const {slices: _slices, ...rest} = layer ?? {}; layer = {...rest, valueList: list}; }
+      // LH-109: values inside stacked segments and the series names beside the last column.
+      const data = drawn.data;
+      const stack = chartStack(drawn.chart, data, layer, geometry, axisFor, legend => chartHeader(drawn.chart, data, geometry, {legend}));
+      if (stack) ({layer, valueAxis} = stack);
+      // LH-110: the reference line and band, placed against the chart's plot (pinned here when nothing else pinned it).
+      if (references && valueAxis) {
+        const plotGeometry = {scale, minFontSize: settings.minFontSize, measure: (text: string, size: number) => measure(text, size, 400), direction: rtl ? 'rtl' as const : 'ltr' as const, ...(language !== undefined ? {language} : {})};
+        const plot = layer?.plot ?? chartPlotInset(drawn.chart, data, {valueAxis, ...(layer ? {layer} : {})}, {...plotGeometry, box});
+        const placed = plot ? placeReferences({lines: references.lines, rows: references.rows}, data, valueAxis, box, plot, {...plotGeometry, bold: (text, size) => measure(text, size, 700)}) : undefined;
+        if (placed && plot) layer = {...layer, plot, references: placed};
+      }
+    }
     // LH-105: the context of a focus may be a light neutral when every context mark carries its text (value labels, names at the line
     // ends, names on the slices); an unlabeled context is read against the axis and keeps 3:1.
     if (layer?.focus) {
       const record = node.value as Record<string, unknown>;
-      const labeled = Boolean(layer.small?.labels || layer.endLabels || layer.slices || (record?.dataLabels !== undefined && record.dataLabels !== false));
+      const labeled = Boolean(layer.small?.labels || layer.endLabels || layer.slices || layer.valueList || layer.stack?.names || (record?.dataLabels !== undefined && record.dataLabels !== false));
       layer = {...layer, focus: {...layer.focus, ...(labeled ? {labeled} : {})}};
     }
     return valueAxis || layer ? {...(valueAxis ? {valueAxis} : {}), ...(layer ? {layer} : {})} : undefined;
@@ -5927,6 +5951,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   shareSiblingPlots(shareSiblingChartAxes(items, options.presentation), plotGeometry, options.presentation);
   // LH-105: a shared plot moves the line ends, so their names are placed again.
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
+  // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
+  // (a deck without a bold body face must not fail on a slide that never draws one).
+  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references);
+  if (marked.length) {
+    const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
+    refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
+  }
   // LH-113: a table draws the rows its `highlight` names, else the rows the slide's texts name (chart-focus.ts), on the highlight tint.
   for (const item of items) {
     if (item.field !== 'table') continue;
@@ -6059,6 +6090,8 @@ export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
+export {chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
+export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartLayerValueList,ChartStackName,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND} from './chart-layer.js';
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
@@ -6066,7 +6099,7 @@ export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLa
 export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';
 export {chartTitleFocus,chartSlideFocus,slideFocusSources,tableSlideFocus,tableHighlightRows,focusHits,type ChartLayerFocus,type FocusSource} from './chart-focus.js';
 export {alignBarRows,type ChartLayerRows} from './chart-rows.js';
-export {chartContextColor,chartContextColors,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
+export {chartWaterfallColors,chartBandColor,CHART_BAND_MIX,chartContextColor,chartContextColors,CHART_CONTEXT_MIN_CONTRAST,CHART_CONTEXT_LABELED_MIN_CONTRAST,CHART_CONTEXT_FOCUS_DIFFERENCE} from './color.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
 export {chartNumber,formatDataNumber,numberFormatError,toExcelNumberFormat,fromExcelNumberFormat,inlineDatasets,inlineTableData,inlineChartData,isDatasetRef,isXYChartType,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText} from './chart-data.js';

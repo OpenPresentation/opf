@@ -35,8 +35,11 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
     if (layer.small.valueAxis === false) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
   }
   const header = layer.header;
-  if (!header && !layer.plot && !layer.rows) return {options, layout};
+  // LH-108: a pie with its value list is drawn in core's square (the plot area's inner layout), the list beside it.
+  const pie = layer.valueList?.pie;
+  if (!header && !layer.plot && !layer.rows && !pie) return {options, layout};
   const left = region.x * 96, top = region.y * 96, width = region.w * 96, height = region.h * 96;
+  if (pie) layout.plot = {x: fraction((pie.x - left) / width), y: fraction((pie.y - top) / height), w: fraction(pie.width / width), h: fraction(pie.height / height), target: 'inner'};
   // LH-93: a chart that shares its value axis with siblings has core's plot box, the plot itself without its tick and category labels
   // (layoutTarget inner), so its plot is as tall as theirs in PowerPoint too.
   const plot = layer.plot;

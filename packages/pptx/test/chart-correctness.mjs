@@ -44,7 +44,7 @@ let checks = 0;
   }
 }
 
-// 3. Waterfall (native chartex): Start 100, +24, -8, End 116. The end is a subtotal and takes the third colour.
+// 3. Waterfall (native chartex): Start 100, +24, -8, End 116. The end is a subtotal.
 {
   const total = {columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]]};
   const steps = {columns: ['Quarter', 'Value'], rows: [['Q1', 23], ['Q2', 27], ['Q3', 30], ['Q4', 34]]};
@@ -53,9 +53,9 @@ let checks = 0;
   assert.match(withTotal.xml, /<cx:layoutPr><cx:visibility connectorLines="1"\/><cx:subtotals><cx:idx val="3"\/><\/cx:subtotals><\/cx:layoutPr>/);
   const fills = [...withTotal.xml.matchAll(/<cx:dataPt idx="(\d)"><cx:spPr><a:solidFill>(<a:[^>]*?\/?>)/g)].map(([, idx, fill]) => [Number(idx), fill]);
   assert.equal(fills.length, 4);
-  assert.equal(fills[0][1], fills[1][1], 'increases share the first colour');
-  assert.notEqual(fills[2][1], fills[0][1], 'a decrease takes the second colour');
-  assert.ok(fills[3][1] !== fills[0][1] && fills[3][1] !== fills[2][1], 'the total takes its own (third) colour');
+  // LH-107: the start the total runs from is a total too; both take the strong colour, the increase the accent, the decrease the gray.
+  assert.equal(fills[0][1], fills[3][1], 'the opening and closing totals share a colour');
+  assert.ok(fills[1][1] !== fills[0][1] && fills[2][1] !== fills[0][1] && fills[1][1] !== fills[2][1], 'totals, increases and decreases differ');
   assert.match(withoutTotal.xml, /<cx:layoutPr><cx:visibility connectorLines="1"\/><\/cx:layoutPr>/, 'a last value that is not the running sum is a step');
   checks++;
 }

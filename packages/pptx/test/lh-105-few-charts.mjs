@@ -64,8 +64,9 @@ let checks = 0;
 }
 
 // 3. A pie names its slices (inside the end, or outside a small slice) with leader lines on and no legend; import writes nothing back.
+//    (LH-108: in the whole body a pie lists its values beside it instead; beside a text it names its slices.)
 {
-  const {xml, chart} = await exported(deckOf({title: 'Budget', chart: {type: 'pie', data: {columns: ['Team', 'Budget'], rows: [['Engineering', 80], ['Sales', 17], ['Legal and compliance', 3]]}}}));
+  const {xml, chart} = await exported(deckOf({title: 'Budget', composition: {mode: 'row'}, text: 'Engineering takes most of the budget.', chart: {type: 'pie', data: {columns: ['Team', 'Budget'], rows: [['Engineering', 80], ['Sales', 17], ['Legal', 3]]}}}));
   assert.doesNotMatch(xml, /<c:legend>/, 'no legend');
   const points = [...xml.matchAll(/<c:dLbl><c:idx val="(\d+)"\/>([\s\S]*?)<\/c:dLbl>/g)].map(([, idx, body]) => [Number(idx), body.match(/<c:dLblPos val="(\w+)"\/>/)?.[1], /<c:showCatName val="1"\/>/.test(body)]);
   assert.deepEqual(points, [[0, 'inEnd', true], [1, 'inEnd', true], [2, 'outEnd', true]]);

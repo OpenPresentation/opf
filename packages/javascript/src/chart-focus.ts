@@ -38,17 +38,20 @@ const FOCUS_TYPES = new Set(['column', 'stacked-column', '100pct-stacked-column'
 const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
 /** The words of a text: letters and digits of any script, a possessive dropped, lower case. */
-function words(text: string, language: string): string[] {
+export function words(text: string, language: string): string[] {
   return text.normalize('NFKC').replace(/\([^)]*\)|\[[^\]]*\]/g, ' ').replace(/['’]s\b/gu, '').toLocaleLowerCase(language)
     .split(/[^\p{L}\p{N}\p{M}]+/u).filter(Boolean);
 }
 
-/** One digit-group-aware number in a title, with the decimals it is written to and whether a percent sign follows. */
-function titleNumbers(text: string): {value: number; decimals: number; percent: boolean}[] {
+/**
+ * One digit-group-aware number in a title, with the decimals it is written to and whether a percent sign follows; `text` is the number
+ * as written (ASCII digits) and `before` the title text before it (LH-110 reads the comparison word there).
+ */
+export function titleNumbers(text: string): {value: number; decimals: number; percent: boolean; text: string; before: string}[] {
   const ascii = text.normalize('NFKC').replace(/\p{Nd}/gu, char => { const code = char.codePointAt(0)!; let zero = code; while (code - zero < 9 && /\p{Nd}/u.test(String.fromCodePoint(zero - 1))) zero--; return String((code - zero) % 10); });
   return [...ascii.matchAll(/(?<![\p{L}\d.])(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s?(%)?/gu)].map(match => {
     const decimals = match[2] ? match[2].length - 1 : 0;
-    return {value: Number(`${match[1]!.replace(/,/g, '')}${match[2] ?? ''}`), decimals, percent: match[3] !== undefined};
+    return {value: Number(`${match[1]!.replace(/,/g, '')}${match[2] ?? ''}`), decimals, percent: match[3] !== undefined, text: match[0].trim(), before: ascii.slice(0, match.index ?? 0)};
   });
 }
 

@@ -99,5 +99,13 @@ export function directLabelDefaults(group, kind) {
     });
   }
   if (kind === 'pie' || kind === 'doughnut') return series.length === 1 && levelOff && points[0].length > 0 && points[0].every(point => only(point, 'c:showCatName'));
+  // LH-109: a stacked column or area chart whose every series shows its values (in the middle of a column), with only hidden or
+  // recoloured points, carries the default values inside its segments.
+  if ((kind === 'bar' || kind === 'area') && ['stacked', 'percentStacked'].includes(group?.['c:grouping']?.val)) {
+    return series.length >= 2 && series.every((ser, index) => {
+      const labels = ser?.['c:dLbls'];
+      return labels && only(labels, 'c:showVal') && (kind === 'area' || labels['c:dLblPos']?.val === 'ctr') && points[index].every(point => only(point, 'c:showVal'));
+    });
+  }
   return false;
 }

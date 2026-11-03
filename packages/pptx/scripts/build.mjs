@@ -40,6 +40,7 @@ await copyFile(new URL('src/chart-data.js', root), new URL('chart-data.js', dist
 await copyFile(new URL('src/chart-highlight.js', root), new URL('chart-highlight.js', dist));
 await copyFile(new URL('src/chart-layer.js', root), new URL('chart-layer.js', dist));
 await copyFile(new URL('src/chart-direct-labels.js', root), new URL('chart-direct-labels.js', dist));
+await copyFile(new URL('src/chart-marks.js', root), new URL('chart-marks.js', dist));
 await copyFile(new URL('src/chart-scheme-colors.js', root), new URL('chart-scheme-colors.js', dist));
 await copyFile(new URL('src/chart-order.js', root), new URL('chart-order.js', dist));
 await copyFile(new URL('src/chart-fallback.js', root), new URL('chart-fallback.js', dist));

@@ -40,19 +40,21 @@ for (const type of ['bar', 'stacked-bar', '100pct-stacked-bar']) {
   checks++;
 }
 
-// 2. Waterfall: Start 100, +24, -8, End 116. The end equals the running sum, so it is a total bar from zero in the third colour, and its
-//    top meets the connector from the step before it.
+// 2. Waterfall: Start 100, +24, -8, End 116. The end equals the running sum, so it is a total bar from zero, and its top meets the
+//    connector from the step before it. LH-107: the start it runs from is a total too, both in the strong colour, the increase in the
+//    accent and the decrease in the context gray. (Without labels the value axis stays, so its end can be read.)
 {
-  const svg = render({ type: 'waterfall', data: { columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]] } });
+  const svg = render({ type: 'waterfall', dataLabels: false, data: { columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]] } });
   const bar = (row) => rects(svg).find((r) => r['data-opf-path'] === `slides.0.chart.data.rows.${row}.1`);
   const [start, expansion, churn, end] = [0, 1, 2, 3].map(bar);
   const bottom = (r) => Number(r.y) + Number(r.height);
   assert.ok(Math.abs(bottom(start) - bottom(end)) < 0.01, 'the total stands on zero, like the first step');
   assert.ok(Math.abs(Number(end.height) - Number(start.height) * 1.16) < 0.05, 'the total is 116 tall, not stacked on the running total');
   assert.ok(Math.abs(Number(churn.y) + Number(churn.height) - Number(end.y)) < 0.05, 'the total reaches the running total after the last step');
-  assert.notEqual(end.fill, start.fill, 'the total has its own colour');
+  assert.equal(end.fill, start.fill, 'the opening and closing totals share the strong colour');
+  assert.notEqual(end.fill, expansion.fill, 'the total has its own colour');
   assert.notEqual(end.fill, churn.fill, 'the total is not coloured as a decrease');
-  assert.equal(start.fill, expansion.fill, 'increases share a colour');
+  assert.notEqual(expansion.fill, churn.fill, 'an increase and a decrease differ');
   const { end: axisMax } = axisEnd(svg, 'slides.0.chart', false);
   assert.ok(axisMax >= 124 - 0.5 && axisMax <= 124 * 1.25 + 0.5, `the axis ends near the peak of 124, not at 250 or 500 (${axisMax})`);
   checks++;
