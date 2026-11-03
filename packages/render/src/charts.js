@@ -200,6 +200,9 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
   const inset = layer?.plot;
   c.plotBox = inset && { x: box.x + inset.left, y: box.y + inset.top, width: Math.max(1, box.width - inset.left - inset.right), height: Math.max(1, box.height - inset.top - inset.bottom) };
+  // LH-115: a horizontal bar chart beside a table of the same keys draws each category on its table row (core chart-rows.ts): offsets
+  // from the top of the chart box, taken before the header row narrows c.box.
+  c.alignedRows = layer?.rows && { top: box.y + layer.rows.top, bottom: box.y + layer.rows.bottom, centers: layer.rows.centers.map((center) => box.y + center) };
   if (layer?.header) drawHeader(c, spec, layer.header);
   if (!resolved.active) reportOptionDiagnostics(c, resolved);
   if (resolved.active) {
@@ -758,7 +761,7 @@ function renderCategoryChart(c, spec) {
   const labelRoom = hidden && horizontal && c.dataLabels ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format })) + fontPx * 0.5))) : 0;
   const right = box.x + box.width - pad - legendWidth;
   const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
-  let plot, scale, valueTickWidth;
+  let plot, scale, valueTickWidth, rowTop;
   if (horizontal) {
     // LH-120: the label gutter is at most 30% of the chart, or up to 40% for a word that does not break (a label's longest word fits
     // before a label is ellipsized; longer labels wrap onto two lines, planRowLabels).
@@ -772,11 +775,14 @@ function renderCategoryChart(c, spec) {
     scale = scaleFor(width);
     // RR-54: a formatted value axis keeps its end labels inside the chart.
     if (valueFormat !== undefined && !percent) ({ x, width, scale } = insetForEndLabels(c, x, width, valueFormat, scaleFor));
-    plot = { x, y: top, width, height: Math.max(1, bottom - top) };
+    const aligned = c.alignedRows?.centers.length === count ? c.alignedRows : undefined;
+    plot = aligned ? { x, y: aligned.top, width, height: Math.max(1, aligned.bottom - aligned.top) } : { x, y: top, width, height: Math.max(1, bottom - top) };
     // LH-59: the categories read top to bottom in data order (PowerPoint's reversed category axis, which the export writes).
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     const rowBand = plot.height / count;
-    drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, box.x + pad, (i) => plot.y + i * rowBand);
+    // LH-115: on a table's rows each category's band is centered on its row (rows of unequal height keep the even band thickness).
+    rowTop = aligned ? (i) => aligned.centers[i] - rowBand / 2 : (i) => plot.y + i * rowBand;
+    drawRowLabels(c, planRowLabels(c, entries, rowBand, categoryWidth), entries, rowBand, categoryWidth, box.x + pad, rowTop);
   } else {
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     if (rtl) entries.reverse();
@@ -819,7 +825,7 @@ function renderCategoryChart(c, spec) {
     }
   }
   const band = (horizontal ? plot.height : plot.width) / count;
-  if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot });
+  if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot, rowTop });
   else if (spec.kind === "line") drawLines(c, spec, series, stacks, { plot, band, at, categorySlot });
   else drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot });
   // The value axis line goes with its tick labels (LH-03); the category axis line stays, at zero.
@@ -843,7 +849,7 @@ export function barGeometry(band, seriesCount, grouping) {
   return { group: width, width, offset: (band - width) / 2, clustered: false };
 }
 
-function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot = (i) => i }) {
+function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot = (i) => i, rowTop = (i) => plot.y + i * band }) {
   // Bars grow from zero, or from the axis minimum (maximum, for all-negative data) when zero is off the axis.
   const base = (value) => Math.min(scale.max, Math.max(scale.min, value));
   const geometry = barGeometry(band, series.length, spec.grouping);
@@ -858,7 +864,7 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
       let rect;
       if (horizontal) {
         // LH-59: the first category and its first series at the top (PowerPoint's reversed category axis, c:orientation maxMin).
-        const y = plot.y + i * band + geometry.offset + slot;
+        const y = rowTop(i) + geometry.offset + slot;
         rect = { x: Math.min(a, b), y, width: Math.abs(b - a), height: geometry.width };
         c.mark("rect", { ...rect, fill: color }, path);
       } else {

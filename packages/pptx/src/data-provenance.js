@@ -484,6 +484,11 @@ export function restoreTableData(table, record, {datasets, report, evidence: cur
       if (target && c < target.length && sameCell(r, c)) target[c] = clone(cell);
       else changed++;
     }));
+    // LH-113: the authored highlight names rows by their key text; it is kept while every row it names still has that key.
+    if (object(authored.highlight)) {
+      if (validWith({table: {...next, highlight: authored.highlight}})) next.highlight = clone(authored.highlight);
+      else report({code: 'table-data-provenance-changed', message: 'The table highlight was not restored: a row it names no longer has that text in its first cell; the native cell fills are retained.'});
+    }
     if (!validWith({table: next})) {
       report({code: 'table-data-provenance-changed', message: 'The authored cells no longer form a valid table with the native grid; native cells are retained.'});
       return table;

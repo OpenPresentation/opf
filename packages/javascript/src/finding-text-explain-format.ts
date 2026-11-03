@@ -98,6 +98,11 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 15]] }, highlight: { categories: ["Q9"] } } },
     { title: "Revenue", chart: { type: "column", data: { columns: ["Quarter", "Revenue"], rows: [["Q1", 12], ["Q2", 15]] }, highlight: { categories: ["Q2"] } } },
   ),
+  "opf/table-highlight-unknown-name": ex(
+    "Name a row of the table in `highlight.rows` by the text of its first cell; a name that matches no row highlights nothing.",
+    { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["South"] } } },
+    { title: "Pricing", table: { columns: ["Region", "Change"], rows: [["Northeast", "Hold"], ["Southeast", "+3%"]], highlight: { rows: ["Southeast"] } } },
+  ),
   "opf/variable-format": ex(
     "Give the variable a `format` that fits its type and its values: `#,##0.0` for a number, a date pattern for a date.",
     { variables: { amount: { type: "number", value: 1e308, format: "0%" } }, slides: [{ title: "Value {{amount}}" }] },

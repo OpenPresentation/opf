@@ -1211,3 +1211,27 @@ export function surfaceAltColor(surface: string, text: string): string {
   }
   return mixChannels(from, toText, SURFACE_ALT_MIX);
 }
+
+// --------------------------------------------------------------- highlighted table rows (LH-113)
+
+/** LH-113: share of the accent mixed into the table surface for a highlighted row. */
+export const TABLE_HIGHLIGHT_MIX = 0.15;
+
+/**
+ * LH-113: the fill of a highlighted table row (`table.highlight`, or the rows the slide's texts name): the table surface mixed
+ * {@link TABLE_HIGHLIGHT_MIX} of the way towards the accent (a pale accent tint on a light table, a dark one on a dark table), mixed less
+ * when the cell text would fall under 4.5:1 on it (never less readable than on the surface itself). Pure arithmetic on opaque colors, so
+ * the preview and the PPTX export, which both pass their own `surface`, accent and text roles, draw and write the same color. An
+ * unresolved surface is white, an unresolved accent black, an unresolved text color the surface's best contrast partner.
+ */
+export function tableHighlightColor(surface: string, accent: string, text: string): string {
+  const fill = (normalizeHexColor(surface) ?? '#FFFFFF').slice(0, 7);
+  const ink = (normalizeHexColor(text) ?? textColorForFill(fill, '#000000')).slice(0, 7);
+  const from = opaqueChannels(fill)!, to = opaqueChannels((normalizeHexColor(accent) ?? '#000000').slice(0, 7)) ?? [0, 0, 0];
+  const plain = colorContrast(ink, fill) ?? 0;
+  for (let percent = Math.round(TABLE_HIGHLIGHT_MIX * 100); percent >= 1; percent--) {
+    const tint = mixChannels(from, to, percent / 100), contrast = colorContrast(ink, tint) ?? 0;
+    if (contrast >= 4.5 || contrast >= plain) return tint;
+  }
+  return fill.toUpperCase();
+}
