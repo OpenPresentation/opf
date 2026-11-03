@@ -1,6 +1,6 @@
 // LH-104: `fit: "auto"` (and `design.imageFit: "auto"`) covers when the crop keeps at least 85% of the picture along the cropped
 // dimension and contains otherwise; an SVG and a picture of unknown size are contained. Core decides it (fitImage, composeImage), so
-// the preview and the PPTX export draw the same fit, and the composed image says which fit `auto` took. LH-80 tracks use the same rule.
+// the preview and the PPTX export draw the same fit, and the composed image says which fit `auto` took. An LH-80 track keeps its own test and crops an `auto` picture as it crops any.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { AUTO_FIT_MIN_KEPT, PORTRAIT_FOCUS_Y, autoImageFit, composeSlide, coverKept, fitImage } from '../dist/composition.js';
@@ -97,19 +97,22 @@ test('LH-104: the gallery image layout shows a near-fitting photo full frame and
   assert.equal(diagram.fit, 'contain');
 });
 
-test('LH-104: an LH-80 track crops no more than auto would, unless the slide reads better with it', () => {
-  // A 9:10 picture fills a half-slide track (it keeps 99%).
-  const near = composeSlide({ title: 'Signal trend', blocks: [{ image: png(900, 1000) }, { text: paragraph }] });
-  assert.equal(near.track?.kind, 'picture');
-  assert.ok(coverKept(picture(near).box, 0.9) >= AUTO_FIT_MIN_KEPT);
-  // A 16:10 photo would lose 44% in the widest track: beside a paragraph and a quote the slide reads as well without it, so it stays in the flow.
+test('LH-104 with LH-80: a track is a frame the engine chose to crop into, so auto takes it as no fit does', () => {
   const quote = { quote: { text: 'Teams already know where the friction is.', attribution: 'Sponsor' } };
-  const wide = composeSlide({ title: 'Signal trend', blocks: [{ image: png(1600, 1000) }, { text: paragraph }, quote] });
-  assert.equal(wide.track, undefined);
-  assert.equal(picture(wide).fit, 'contain');
-  // Beside one paragraph the track lets the paragraph take a larger size than the flow does, so it is kept (the wave 3 size guard).
-  assert.equal(composeSlide({ title: 'Signal trend', blocks: [{ image: png(1600, 1000) }, { text: paragraph }] }).track?.kind, 'picture');
-  // With auto, an SVG or a picture of unknown size takes no track (it is shown whole).
-  assert.equal(composeSlide({ title: 'T', design: { imageFit: 'auto' }, blocks: [{ image: svg(900, 1000) }, { text: paragraph }] }).track, undefined);
-  assert.equal(composeSlide({ title: 'T', design: { imageFit: 'auto' }, blocks: [{ image: png(900, 1000) }, { text: paragraph }] }).track?.kind, 'picture');
+  const blocks = (image) => [{ image: png(1600, 1000), ...image }, { text: paragraph }, quote];
+  const plain = composeSlide({ title: 'Signal trend', blocks: blocks({}) });
+  assert.equal(plain.track?.kind, 'picture', 'a 16:10 photo takes LH-80 track (it keeps half or more)');
+  // An explicit auto, or design.imageFit auto, takes the same track, cover-cropped there with autoFit reported.
+  for (const result of [composeSlide({ title: 'Signal trend', blocks: blocks({ fit: 'auto' }) }), composeSlide({ title: 'Signal trend', design: { imageFit: 'auto' }, blocks: blocks({}) })]) {
+    assert.deepEqual(result.track, plain.track);
+    assert.equal(picture(result).fit, 'cover');
+    assert.equal(picture(result).autoFit, true);
+    assert.ok(coverKept(picture(result).box, 1.6) < AUTO_FIT_MIN_KEPT, 'a crop auto would not take in a frame of its own');
+  }
+  // An SVG keeps LH-80's behavior too; an explicit contain still opts out of the track.
+  assert.equal(composeSlide({ title: 'T', blocks: [{ image: svg(1600, 1000), fit: 'auto' }, { text: paragraph }, quote] }).track?.kind, 'picture');
+  assert.equal(composeSlide({ title: 'T', blocks: blocks({ fit: 'contain' }) }).track, undefined);
+  // An authored placement is the block's own frame: auto decides there (a 16:10 photo in a half-slide band is shown whole).
+  const placed = picture(composeSlide({ title: 'T', blocks: [{ image: png(1600, 1000), fit: 'auto', placement: { edge: 'left', size: 0.5 } }, { text: paragraph }] }));
+  assert.equal(placed.fit, 'contain');
 });

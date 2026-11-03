@@ -858,6 +858,8 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   const kindName: ImageShape['kind'] = Object.hasOwn(IMAGE_SHAPES, host.shape) ? host.shape : 'rectangle';
   const { scale } = context;
   const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
+  // LH-80 with LH-104: an automatic track is a frame the engine chose to crop the picture into, so `auto` covers it there.
+  const decided: ImageFitOption = requested === 'auto' && context.placement?.automatic ? 'cover' : requested;
   const size = intrinsicImageSize(host.image, context.assets), pictureAspect = size ? size.width / size.height : undefined;
   let box: LayoutBox = { ...frameArea };
   const aspect = kindName === 'circle' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
@@ -867,7 +869,7 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   }
   // LH-104: `auto` is decided on the frame the picture would fill (the cell, or the frame the block shapes), before a contained
   // picture's frame takes the picture's own proportions; preview and export both draw the composed fit.
-  const fit: ImageFit = requested === 'auto' ? autoImageFit(box, pictureAspect, { svg: size?.svg }) : requested;
+  const fit: ImageFit = decided === 'auto' ? autoImageFit(box, pictureAspect, { svg: size?.svg }) : decided;
   if (!aspect && context.anchor && fit === 'contain' && pictureAspect) {
     // WI-3 (P12): a contained picture is the whole picture, so its frame is the picture's own shape inside the cell.
     const frameWidth = Math.min(box.width, box.height * pictureAspect);
@@ -3400,7 +3402,7 @@ const MEDIA_TRACK = Symbol('opf.mediaTrack');
 const CHART_TRACK = Symbol('opf.chartTrack');
 /** LH-80: the shares of the slide's width (height on a portrait canvas) a picture's track tries, widest first. */
 const MEDIA_TRACK_SHARES: readonly number[] = [.5, .45, .4, .35];
-/** LH-80: a track whose crop keeps less than AUTO_FIT_MIN_KEPT is tried only to read better, and never keeps under half of the picture's width (or height). */
+/** LH-80: a picture's track keeps at least this share of the picture's width (or height) in its cover crop; a narrower track is not tried. */
 const MEDIA_TRACK_MIN_KEPT = .5;
 /** LH-49: the shares of the slide's width (height on a portrait canvas) a chart's track tries, widest first (3:2 is design.chartPrimary's). */
 const CHART_TRACK_SHARES: readonly number[] = [.6, .55, .5];
@@ -3489,10 +3491,9 @@ function chartRecomposition(input: unknown, options: ComposeSlideOptions, result
  *  - LH-80: the slide's one picture block among other blocks (no placement of its own, no `contain` or `stretch` fit by the block or the
  *    design, no frame shape) takes a full-height track at the slide edge, cover-cropped (LH-84 focus) and bled: the start side when it is
  *    the first block, the end side otherwise (the top or bottom of a portrait canvas). The headings and the other blocks compose beside it
- *    in the slide's own mode. The track is 50, 45, 40 or 35% of the slide, of those whose crop `fit: "auto"` would take (LH-104: it keeps
- *    AUTO_FIT_MIN_KEPT of the picture's width or height; an `auto` SVG or picture of unknown size takes none). A cover picture no share
- *    crops that lightly takes a track keeping at least half of it (MEDIA_TRACK_MIN_KEPT) only when the slide then reads better, with a
- *    larger smallest body size or fewer findings; otherwise it stays in the flow.
+ *    in the slide's own mode. The track is 50, 45, 40 or 35% of the slide, of those whose crop keeps at least half of the picture's
+ *    width or height (MEDIA_TRACK_MIN_KEPT): a wide picture takes a wide track or none. A track is a frame the engine chooses for the
+ *    picture and crops it by design: a `fit: "auto"` (LH-104) takes it as no fit would, and the picture is cover-cropped in it.
  *  - LH-49: the slide's one chart block among other blocks (no picture, no design.chartPrimary) whose plot is under its minimum
  *    (CHART_MIN_PLOT_PX, CHART_MIN_PLOT_SHARE of the body, CHART_MAX_PLOT_ASPECT) takes the filling track: the root's first column
  *    (it is the first block) or last, 60, 55 or 50% of the content width (the first that reads as well) against a column of the others
@@ -3516,25 +3517,15 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
     const index = pictures[0]!, host = record(blocks[index]), fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : base.design.imageFit;
     if (fit === 'contain' || fit === 'stretch' || host.aspectRatio !== undefined || (host.shape !== undefined && host.shape !== 'rectangle' && host.shape !== 'rounded')) return base;
     const edge: ImageEdge = landscape ? (index === 0 ? 'left' : 'right') : (index === 0 ? 'top' : 'bottom');
-    const picture = intrinsicImageSize(host.image, record(options.presentation).assets), aspect = picture ? picture.width / picture.height : undefined;
-    // LH-104: an `auto` fit contains an SVG and a picture of unknown size, and a contained picture takes no track.
-    if (fit === 'auto' && (!picture || picture.svg)) return base;
-    const kept = (share: number) => coverKept(landscape ? { width: share * base.width, height: base.height } : { width: base.width, height: share * base.height }, aspect);
-    type Track = { result: SlideComposition; size: number; read: TrackQuality };
-    const pick = (minKept: number, better: (read: TrackQuality) => boolean): Track | undefined => {
-      let best: Track | undefined;
-      for (const size of MEDIA_TRACK_SHARES.filter(share => kept(share) >= minKept - 1e-9)) {
-        const result = attempt(MEDIA_TRACK, { block: index, edge, size }), read = result && quality(result);
-        if (!result || !read || !readsAsWell(before, read, floor) || !better(read)) continue;
-        const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
-        if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
-      }
-      return best;
-    };
-    // The wave 3 size guard: a cover picture whose crop `auto` would not take still gets a track that keeps half of it when the slide
-    // reads better with it (a larger smallest body size or fewer findings), so no slide loses body size to LH-104.
-    const best = pick(AUTO_FIT_MIN_KEPT, () => true)
-      ?? (fit !== 'auto' ? pick(MEDIA_TRACK_MIN_KEPT, read => read.size > before.size + FONT_GRID_EPSILON || read.overflows < before.overflows) : undefined);
+    const aspect = intrinsicImageAspect(host.image, record(options.presentation).assets);
+    const kept = (size: number) => { const frame = landscape ? size * base.width / base.height : base.width / (size * base.height); return aspect ? Math.min(frame / aspect, aspect / frame) : 1; };
+    let best: { result: SlideComposition; size: number; read: TrackQuality } | undefined;
+    for (const size of MEDIA_TRACK_SHARES.filter(share => kept(share) >= MEDIA_TRACK_MIN_KEPT - 1e-9)) {
+      const result = attempt(MEDIA_TRACK, { block: index, edge, size }), read = result && quality(result);
+      if (!result || !read || !readsAsWell(before, read, floor)) continue;
+      const tie = best && read.size > best.read.size - FONT_GRID_EPSILON;
+      if (!best || read.size > best.read.size + FONT_GRID_EPSILON || (tie && read.total > best.read.total + scale) || (tie && read.total > best.read.total - scale && kept(size) > kept(best.size) + 1e-9)) best = { result, size, read };
+    }
     if (!best) return base;
     // A placed picture is listed before the flowed body; a track keeps the blocks' reading order, so the picture of a later block is
     // listed after the blocks before it (the order the preview, the PPTX export and `opf/reading-order` read).
