@@ -1,0 +1,9 @@
+{
+  "name": "Unicode text",
+  "language": "ar",
+  "slides": [
+    { "title": "مرحبا بالعالم", "text": "نص من اليمين إلى اليسار" },
+    { "title": "日本語のスライド", "text": "縦書きではない日本語のテキスト" },
+    { "title": "Combining marks: Å ñ ẞ", "text": "Emoji 👩🏽‍💻 and escapes é \" \\" }
+  ]
+}

@@ -37,6 +37,7 @@
       {"match": [".github/workflows/ci.yml", ".github/workflows/nightly.yml", ".github/workflows/full-ci.yml", ".github/workflows/slow-checks.yml", ".github/actions/setup-workspace/", "scripts/ci-scope.mjs", "scripts/ci-verify.mjs", "scripts/ci-report-issue.mjs"], "run": ["check:ci-workflows", "check:ci-scope", "check:playwright-pin"]},
       {"match": ["packages/javascript/src/catalog-schemas.ts", "packages/gallery/package.json", "packages/gallery/src/index.d.ts", "scripts/check-catalog-schema.mjs", "scripts/check-catalog-schema.test.mjs"], "run": ["check:catalog-schema"]},
       {"match": ["spec/"], "run": ["check:spec"]},
+      {"match": ["conformance/", "spec/schemas/", "packages/javascript/src/"], "run": ["check:conformance"]},
       {"match": ["examples/"], "run": ["check:examples", "check:examples-convert", "check:text"]},
       {"match": ["scripts/ci-test-shards.mjs", "scripts/ci-test-weights.json"], "run": ["check:ci-shards"]},
       {"match": ["docs/", "README.md", "PRODUCT.md", "AGENTS.md", "skills/", "llms.txt"], "run": ["check:text"]},

@@ -1,0 +1,23 @@
+{
+  "extensions": {
+    "example.com": {
+      "slides": "not the slides array",
+      "$schema": "not a schema",
+      "id": "s1",
+      "theme": { "dark": true },
+      "unicode": "ⓘ émoji 🎉 العربية 日本語",
+      "empty": {},
+      "list": [],
+      "nothing": null,
+      "number": -0.000125,
+      "big": 9007199254740991
+    }
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "title": "Extension content is opaque",
+      "extensions": { "example.com": { "id": "s1", "blocks": "not blocks", "type": "not a kind" } }
+    }
+  ]
+}

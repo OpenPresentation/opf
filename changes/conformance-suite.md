@@ -1,0 +1,5 @@
+---
+type: added
+packages: []
+---
+A first OPF conformance suite (`conformance/`, `docs/conformance.md`): 76 cases (13 valid and 32 invalid core documents with the expected result, the JSON Pointer of the expected error and the schema keyword or rule each rests on, plus the 31 technical example decks), and a runner, `node conformance/run.mjs` (`pnpm conformance`), that checks a library (an adapter module with `check` and `roundTrip`) or a command (`--check-command`, `--write-command`) and writes a Markdown or JSON conformance report with a sha256 of the suite. Two levels can be claimed: Core Reader (JSON syntax, schema validity, required fields, ids and document-internal references, the `extensions` rules, unknown catalog records accepted) and Core Writer (a round trip keeps every `extensions` object and id and stays valid); Renderer and Converter are planned. The reference implementation and the `opf` CLI pass both levels; `pnpm check:conformance` keeps the reference passing. No spec, schema or package change.

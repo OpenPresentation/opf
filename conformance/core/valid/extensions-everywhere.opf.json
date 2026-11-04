@@ -1,0 +1,22 @@
+{
+  "name": "Extensions at every scope",
+  "extensions": {
+    "example.com": { "workflow": "review", "approvals": [{ "by": "ana", "at": "2026-11-04T10:00:00Z" }] },
+    "tool.example.org": { "version": 3, "flags": [true, false, null], "nested": { "deep": { "deeper": { "value": 1.5 } } } }
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "title": "Slide scope",
+      "extensions": { "example.com": { "generation": { "model": "any", "prompt": "Summarize Q3" } } },
+      "blocks": [
+        { "id": "b1", "text": "Payload scope", "extensions": { "example.com": { "locked": true } } },
+        {
+          "id": "g1",
+          "extensions": { "example.com": { "note": "group scope" } },
+          "blocks": [{ "id": "b2", "text": "Nested payload scope", "extensions": { "example.com": { "comment": "keep me" } } }]
+        }
+      ]
+    }
+  ]
+}

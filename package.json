@@ -20,6 +20,8 @@
     "check:changes": "node --test scripts/changelog-fragments.test.mjs scripts/changes-config.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
     "check:changed": "node scripts/check-changed.mjs",
+    "check:conformance": "node --test scripts/conformance.test.mjs",
+    "conformance": "node conformance/run.mjs",
     "check:rebuilt-release-files": "node --test scripts/rebuilt-release-files.test.mjs",
     "check:archive-tar": "node --test scripts/archive-tar.test.mjs",
     "check:agent-tools": "node --test scripts/agent-slot.test.mjs scripts/agent-format.test.mjs scripts/check-changed.test.mjs scripts/package-manager.test.mjs",
