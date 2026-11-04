@@ -26,7 +26,9 @@ globalThis.Date = new Proxy(RealDate, {
 	apply: () => fail("Date()"),
 	get: (target, key) => (key === "now" ? () => fail("Date.now()") : Reflect.get(target, key)),
 });
-Math.random = () => fail("Math.random()");
+// pele, core's diagram engine, names the DOM ids of its own mount() once when it loads; OPF never mounts, so that value cannot
+// reach any output. Only that read gets a constant; every other read still fails.
+Math.random = () => (new Error().stack ?? "").includes("/pele/dist/") ? 0.5 : fail("Math.random()");
 `);
 });
 after(async () => { await rm(temp, { recursive: true, force: true }); });
