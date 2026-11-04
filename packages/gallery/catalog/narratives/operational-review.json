@@ -1,0 +1,88 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "operational-review",
+  "name": "Operational Review",
+  "summary": "Logical management arc for reviewing how an operation is running: the situation, the complication that threatens it, the resolution, and the roadmap and action plan that deliver it. Built for operations, program and service reviews where the audience needs a decision and a plan, not a story.",
+  "audienceFit": [
+    "leadership",
+    "executives",
+    "managers",
+    "cross-functional-partners"
+  ],
+  "duration": {
+    "min": 20,
+    "max": 45
+  },
+  "tags": [
+    "management",
+    "operations",
+    "review",
+    "internal"
+  ],
+  "beats": [
+    {
+      "id": "headline",
+      "name": "Headline",
+      "description": "Open with the operation under review and the one-sentence conclusion of the whole review, so the audience knows where it is going before the detail starts.",
+      "instructions": "State the conclusion first",
+      "type": "text",
+      "layout": "cover"
+    },
+    {
+      "id": "situation",
+      "name": "Situation",
+      "description": "Describe how the operation runs today with the few metrics that define it: volume, quality, cost, time. Stick to facts the room will agree with.",
+      "instructions": "Establish the facts",
+      "type": "metric",
+      "layout": "metrics"
+    },
+    {
+      "id": "complication",
+      "name": "Complication",
+      "description": "Name what has changed or is at risk: the trend, constraint or failure that makes the current way of running unsustainable. Quantify the cost of doing nothing.",
+      "instructions": "Show what is at stake",
+      "type": "chart",
+      "layout": "chart"
+    },
+    {
+      "id": "root-causes",
+      "name": "Root Causes",
+      "description": "Explain why the complication is happening. Separate causes the team controls from those it does not, and point to the evidence for each.",
+      "instructions": "Diagnose the cause",
+      "type": "text",
+      "layout": "two-column"
+    },
+    {
+      "id": "resolution",
+      "name": "Resolution",
+      "description": "Recommend the change that resolves the complication, with the expected effect on the metrics from the situation slide. One recommendation, stated plainly.",
+      "instructions": "Recommend the fix",
+      "type": "text",
+      "layout": "statement"
+    },
+    {
+      "id": "roadmap",
+      "name": "Roadmap",
+      "description": "Lay out the phases that deliver the resolution, with what each phase changes and the milestone that marks it done.",
+      "instructions": "Sequence the change",
+      "type": "timeline",
+      "layout": "timeline"
+    },
+    {
+      "id": "action-plan",
+      "name": "Action Plan",
+      "description": "List the immediate actions with an owner and a due date for each, plus the risks to watch. This is the slide people will screenshot.",
+      "instructions": "Assign owners and dates",
+      "type": "text",
+      "layout": "list"
+    },
+    {
+      "id": "decision",
+      "name": "Decision",
+      "description": "Close with the decision or support you need from this audience today, and what happens next once you have it.",
+      "instructions": "Ask for the decision",
+      "type": "text",
+      "layout": "closing"
+    }
+  ]
+}

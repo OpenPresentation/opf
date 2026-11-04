@@ -64,11 +64,11 @@
     },
     "narratives": {
       "mode": "mirror",
-      "records": 48,
-      "contentSha256": "437fa62f13b45cf1f0525339f217ec6178457ae58d8b03458ed126c1222f9e80",
+      "records": 50,
+      "contentSha256": "edcb089c5899ca3e589348d1da693b8933f3933be1653aee0dd129e6bfc80de3",
       "gallery": {
-        "records": 48,
-        "contentSha256": "437fa62f13b45cf1f0525339f217ec6178457ae58d8b03458ed126c1222f9e80"
+        "records": 50,
+        "contentSha256": "edcb089c5899ca3e589348d1da693b8933f3933be1653aee0dd129e6bfc80de3"
       }
     },
     "purposes": {

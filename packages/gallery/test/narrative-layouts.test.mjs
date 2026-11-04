@@ -11,7 +11,7 @@ test('every narrative beat names an existing v2 intent template', () => {
       references++;
     }
   }
-  assert.equal(references, 344);
+  assert.equal(references, 362);
 });
 
 test('image templates preserve whole-picture fitting', () => {

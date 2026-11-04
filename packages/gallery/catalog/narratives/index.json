@@ -3,7 +3,7 @@
   "kind": "narratives",
   "version": "1",
   "description": "Catalog of narrative templates available in the openpresentation.org catalog. Each entry is a lightweight summary; full beat definitions live in the per-template JSON files alongside this index. Entries are grouped by usage: foundational arcs first, then pitches, sales and GTM, strategy and consulting, storytelling, keynotes and inspiration, rhythm-of-business reviews, data-driven analyses, and workforce reviews.",
-  "contentSha256": "437fa62f13b45cf1f0525339f217ec6178457ae58d8b03458ed126c1222f9e80",
+  "contentSha256": "edcb089c5899ca3e589348d1da693b8933f3933be1653aee0dd129e6bfc80de3",
   "records": [
     {
       "id": "problem-solution",
@@ -416,6 +416,28 @@
         "advisory"
       ],
       "file": "challenge-resolution.json"
+    },
+    {
+      "id": "operational-review",
+      "name": "Operational Review",
+      "summary": "Logical management arc for reviewing how an operation is running: the situation, the complication that threatens it, the resolution, and the roadmap and action plan that deliver it. Built for operations, program and service reviews where the audience needs a decision and a plan, not a story.",
+      "audienceFit": [
+        "leadership",
+        "executives",
+        "managers",
+        "cross-functional-partners"
+      ],
+      "duration": {
+        "min": 20,
+        "max": 45
+      },
+      "tags": [
+        "management",
+        "operations",
+        "review",
+        "internal"
+      ],
+      "file": "operational-review.json"
     },
     {
       "id": "project-proposal",
@@ -864,6 +886,28 @@
         "operations"
       ],
       "file": "weekly-progress.json"
+    },
+    {
+      "id": "quarterly-review",
+      "name": "Quarterly Review",
+      "summary": "Rhythm-of-business arc for a quarterly team or department update: objectives, wins, progress, financials, challenges, lessons, next-quarter goals, recognition, discussion, conclusion. The team-facing sibling of Weekly Progress; for a leadership business review with asks, use Quarterly Business Review.",
+      "audienceFit": [
+        "managers",
+        "teams",
+        "leadership",
+        "cross-functional-partners"
+      ],
+      "duration": {
+        "min": 30,
+        "max": 60
+      },
+      "tags": [
+        "rhythm-of-business",
+        "quarterly",
+        "internal",
+        "review"
+      ],
+      "file": "quarterly-review.json"
     },
     {
       "id": "status-update",

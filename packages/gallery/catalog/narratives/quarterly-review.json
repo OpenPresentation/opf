@@ -1,0 +1,104 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-narrative/v1",
+  "id": "quarterly-review",
+  "name": "Quarterly Review",
+  "summary": "Rhythm-of-business arc for a quarterly team or department update: objectives, wins, progress, financials, challenges, lessons, next-quarter goals, recognition, discussion, conclusion. The team-facing sibling of Weekly Progress; for a leadership business review with asks, use Quarterly Business Review.",
+  "audienceFit": [
+    "managers",
+    "teams",
+    "leadership",
+    "cross-functional-partners"
+  ],
+  "duration": {
+    "min": 30,
+    "max": 60
+  },
+  "tags": [
+    "rhythm-of-business",
+    "quarterly",
+    "internal",
+    "review"
+  ],
+  "beats": [
+    {
+      "id": "objectives",
+      "name": "Objectives",
+      "description": "Restate what the team committed to at the start of the quarter, with the measure for each. The audience should know what 'on track' meant before they see any results.",
+      "instructions": "Set the expectations",
+      "type": "text",
+      "layout": "cover"
+    },
+    {
+      "id": "success-stories",
+      "name": "Success Stories",
+      "description": "Lead with two or three concrete wins: what happened, who made it happen, and what it changed for customers or the business. Specific and dated beats general and enthusiastic.",
+      "instructions": "Highlight wins",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "progress-overview",
+      "name": "Progress Overview",
+      "description": "Score each objective against its measure with a simple status (met, partly met, missed) and the one number that proves it. Let the audience scan the whole quarter in one slide.",
+      "instructions": "Assess performance",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "financial-performance",
+      "name": "Financial Performance",
+      "description": "Show the quarter's key financial metrics against plan and against last quarter: revenue, spend, margin or whatever the team is accountable for. One headline number, then the variance that matters.",
+      "instructions": "Review metrics",
+      "type": "metric",
+      "layout": "metrics"
+    },
+    {
+      "id": "challenges",
+      "name": "Challenges",
+      "description": "Name what did not go to plan and why, without blame. Pair each challenge with what the team is doing about it or the help it needs.",
+      "instructions": "Address difficulties",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "lessons-learned",
+      "name": "Lessons Learned",
+      "description": "Turn the quarter into insight: what the team now knows that it did not know ninety days ago, and how that changes how it works.",
+      "instructions": "Share insights",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "goals-next-quarter",
+      "name": "Goals Next Quarter",
+      "description": "Set the next quarter's objectives with a measure and an owner each. Fewer and sharper than this quarter's list is usually right.",
+      "instructions": "Set targets",
+      "type": "text",
+      "layout": "list"
+    },
+    {
+      "id": "highlights-recognition",
+      "name": "Highlights & Recognition",
+      "description": "Recognize specific people and contributions by name. Written recognition in the deck travels further than a mention in the room.",
+      "instructions": "Acknowledge contributions",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "discussion-feedback",
+      "name": "Discussion & Feedback",
+      "description": "Open the floor with two or three framed questions, so the discussion lands on the decisions and trade-offs the team actually needs input on.",
+      "instructions": "Encourage input",
+      "type": "text",
+      "layout": "text"
+    },
+    {
+      "id": "conclusion",
+      "name": "Conclusion",
+      "description": "Close with the quarter in one sentence and the one thing everyone should do or remember next. End on momentum, not on the agenda.",
+      "instructions": "Summarize & inspire",
+      "type": "text",
+      "layout": "closing"
+    }
+  ]
+}
