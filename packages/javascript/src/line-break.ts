@@ -4,7 +4,8 @@
  * - a number stays with its unit: "26 %", "$4.8 M", "12 km", "3 x", "5 pm" are one unbreakable piece, and so are the digits, the
  *   decimal separator and the sign or currency symbol of a figure ("4.8", "$4");
  * - a line never starts with a closing mark (`. , ; : ! ? ) ] } %`, a closing quotation mark, their CJK and Arabic forms) and never
- *   ends with an opening one.
+ *   ends with an opening one;
+ * - LH-150: a ratio, a figure, a slash and a figure ("4.6 / 5", "3/4", "$2 / $3"), is one piece: it never breaks at or beside its slash.
  * The rules read characters only (no language tag), so they hold for right-to-left and CJK text. A unit outside the lexicon is bound
  * by the author with a no-break space, which the breaker already keeps whole. `bindNoBreak` writes the same rule as U+00A0 for a
  * PowerPoint that wraps the text itself.
@@ -51,6 +52,12 @@ function glues(previous: string, next: string): boolean {
   // A closing mark after a space (French "mot :", "mot ?") stays with the word before it.
   return onlyClosing(next) || endsNumber(previous) && isUnitWord(next);
 }
+/** LH-150: the slashes of a ratio: the solidus, the division slash and the fraction slash. */
+const RATIO_SLASHES = new Set(['/', '∕', '⁄']);
+/** Whether the word starts a figure ("5", "$3", "-2"): a digit, after at most a sign or currency symbol. */
+const startsNumber = (word: string | undefined): boolean => word !== undefined && /^[\p{Sc}+\-−]?\p{Nd}/u.test(word);
+/** LH-150: whether `first`, a lone slash and `last` (words with one space between each) read as a ratio, "4.6 / 5". */
+const ratio = (first: string | undefined, slash: string | undefined, last: string | undefined): boolean => first !== undefined && endsNumber(first) && slash !== undefined && RATIO_SLASHES.has(slash) && startsNumber(last);
 
 /** A token of the prose line breaker: its source offset and text, the shape of a `matchAll` result (`index`, `[0]`). */
 export interface ProseToken { index: number; 0: string }
@@ -69,7 +76,16 @@ export function proseTokens(text: string): ProseToken[] {
     // Word, one plain space, word: merge while the pair is bound ("4 x 5" binds both pairs).
     while (!BREAKING_SPACE.test(token[0]) && index + 2 < raw.length) {
       const space = raw[index + 1]!, word = raw[index + 2]!;
-      if (!GLUE_SPACE.test(space[0]) || BREAKING_SPACE.test(word[0]) || space.index !== end || word.index !== end + 1 || !glues(last, word[0])) break;
+      if (!GLUE_SPACE.test(space[0]) || BREAKING_SPACE.test(word[0]) || space.index !== end || word.index !== end + 1) break;
+      // LH-150: figure, slash, figure ("4.6 / 5") binds both spaces at once.
+      const after = raw[index + 3], figure = raw[index + 4];
+      if (!glues(last, word[0]) && after && figure && GLUE_SPACE.test(after[0]) && after.index === word.index + word[0].length && figure.index === after.index + 1 && ratio(last, word[0], figure[0])) {
+        end = figure.index + figure[0].length;
+        last = figure[0];
+        index += 4;
+        continue;
+      }
+      if (!glues(last, word[0])) break;
       end = word.index + word[0].length;
       last = word[0];
       index += 2;
@@ -111,6 +127,8 @@ export function lineMayStartAt(text: string, index: number): boolean {
   const beforeThat = codePointBefore(text, index - before.length);
   if (isDigit(at) && (isDigit(before) || /^\p{Sc}$/u.test(before) || ((before === '.' || before === ',') && isDigit(beforeThat)))) return false;
   if (isDigit(before) && (SYMBOL_UNITS.includes(at) || CJK_UNITS.includes(at))) return false;
+  // LH-150: a ratio written without spaces ("3/4", "4.6/5") stays whole at its slash.
+  if ((RATIO_SLASHES.has(at) && isDigit(before)) || (RATIO_SLASHES.has(before) && isDigit(at) && isDigit(beforeThat))) return false;
   if (isDigit(before) && /^\p{L}$/u.test(at)) {
     const unit = LETTERS.exec(text.slice(index, index + 16))?.[0].replace(TRAILING, '');
     if (unit && UNITS.has(unit)) return false;
@@ -139,10 +157,14 @@ export function unbindNoBreak(text: string): string {
   if (!text.includes('\u00a0')) return text;
   const pieces = text.split('\u00a0');
   let result = pieces[0]!;
+  const lastWord = (text: string): string => text.slice(text.search(/[^\s\u00a0]*$/u));
   for (let index = 1; index < pieces.length; index++) {
-    const previous = result.slice(result.search(/[^\s\u00a0]*$/u)), next = pieces[index]!.split(/[\s\u00a0]/u)[0]!;
-    // Only the pair the rule binds: a figure and its unit, or a word and a closing mark; the author's other no-break spaces stay.
-    result += (previous && next && glues(previous, next) ? ' ' : '\u00a0') + pieces[index]!;
+    const previous = lastWord(result), [next, following] = pieces.slice(index).join('\u00a0').split(/[\s\u00a0]+/u);
+    const before = lastWord(result.slice(0, result.length - previous.length).replace(/[\s\u00a0]+$/u, ''));
+    // Only the pair the rule binds: a figure and its unit, or a word and a closing mark, and the two spaces of a ratio (LH-150); the
+    // author's other no-break spaces stay.
+    const bound = !!previous && !!next && (glues(previous, next) || ratio(previous, next, following) || ratio(before, previous, next));
+    result += (bound ? ' ' : '\u00a0') + pieces[index]!;
   }
   return result;
 }
