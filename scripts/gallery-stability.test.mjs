@@ -23,7 +23,9 @@ before(async () => {
 });
 
 const release = (version, edit = () => {}, catalogSchema = built.CATALOG_SCHEMA) => {
-  const gallery = structuredClone(built.gallery);
+  // LH-14: the icon-set loaders are functions, which structuredClone cannot copy; a release keeps the same loaders.
+  const { iconSets, ...records } = built.gallery;
+  const gallery = { ...structuredClone(records), iconSets };
   const catalogDisplay = structuredClone(built.catalogDisplay);
   edit(gallery, catalogDisplay);
   return { version, module: { gallery, catalogDisplay, CATALOG_SCHEMA: catalogSchema } };

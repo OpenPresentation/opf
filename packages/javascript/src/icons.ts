@@ -410,11 +410,11 @@ export function documentIcons(input: unknown): { path: string; value: unknown }[
     if (value.icon !== undefined) found.push({ path: `${path}.icon`, value: value.icon });
     if (isRec(value.metric) && value.metric.icon !== undefined) found.push({ path: `${path}.metric.icon`, value: value.metric.icon });
     if (Array.isArray(value.items)) value.items.forEach((entry, index) => { if (isRec(entry) && entry.icon !== undefined) found.push({ path: `${path}.items.${index}.icon`, value: entry.icon }); });
-    if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => payload(block, `${path}.blocks.${index}`, depth + 1));
+    if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => { payload(block, `${path}.blocks.${index}`, depth + 1); });
   };
   // A slide holds root payload fields (items, metric) or blocks, as a group does.
   const slide = (value: unknown, path: string) => payload(value, path, 0);
-  if (isRec(input) && Array.isArray(input.slides)) input.slides.forEach((value, index) => slide(value, `slides.${index}`));
+  if (isRec(input) && Array.isArray(input.slides)) input.slides.forEach((value, index) => { slide(value, `slides.${index}`); });
   else slide(input, 'slide');
   return found;
 }
