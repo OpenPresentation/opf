@@ -80,7 +80,7 @@ const GOLDEN = {
   "layout-failed": ["Slide 1 (layout `broken`) couldn't be laid out: Invalid composition.padding, so the geometry checks were skipped.", "fix the composition setting or content named above."],
   "reading-order-differs": ["`blocks.0` is read at position 1 but appears at position 2 on slide 2, so a screen reader reads the slide out of order.", "reorder the blocks so the reading order follows what people see, or pin them to layout regions."],
   "schema-without-keyword": ["must NOT be valid.", "inspect this schema constraint and preserve unrelated content."],
-  "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 18 px, 56% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
+  "text-shrunk": ["The list on slide 1 (and 2 more blocks) is shrunk to 20 px, 63% of its 32 px starting size, so the slide is likely too dense.", "split it with `opf paginate`, move detail to the speaker notes, or shorten the text."],
   "centered-body": ["A centered list on slide 1 runs 6 lines (275 characters); each line starts at a different place, which is harder to read.", "set `contentAlignment: \"left\"` in the slide's design, or cut it to a line or two."],
   "tight-spacing-gap": ["Two blocks on slide 1 are 0.08 in apart, closer than 0.25 in, so they read as one crowded block.", "raise `composition.gap`, use fewer blocks or nested groups, or split the slide."],
   "tight-spacing-margin": ["A block on slide 1 is 0.15 in from the slide edge, closer than 0.5 in.", "raise `composition.padding`, or place a picture meant to reach the edge with `placement`."],
