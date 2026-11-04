@@ -10,6 +10,6 @@ if (process.argv[3] === 'precompiled') await import('../../dist/precompiled.js')
 const opf = await import('../../dist/browser.js');
 // A run that is expected to fail on every document (Ajv with code generation disallowed) logs the whole generated function each time.
 const limit = Number(process.env.OPF_EDGE_LIMIT) || Infinity;
-const results = Object.fromEntries(corpus().slice(0, limit).map((document) => [document.id, evaluate(opf, document)]));
+const results = Object.fromEntries(await Promise.all(corpus().slice(0, limit).map(async (document) => [document.id, await evaluate(opf, document)])));
 writeFileSync(process.argv[2], JSON.stringify(results));
 console.log(`${Object.keys(results).length} documents`);

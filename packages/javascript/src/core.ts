@@ -98,6 +98,8 @@ export type {
 } from "./spec-files.js";
 
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, ComposeSlideOptions } from "./composition.js";
+// Browsers and edge runtimes load each diagram type on demand: a host that validates or draws diagrams there awaits ensureDiagrams first.
+export { diagramsPending, ensureDiagrams } from "./diagram.js";
 
 // OPF 0.15 catalogs: references, the one resolution rule, and the authoring helpers (FA-20).
 export {

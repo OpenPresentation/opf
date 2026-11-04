@@ -7,6 +7,6 @@ export default {
 	async fetch(request) {
 		if (request.method !== 'POST') return new Response('ok');
 		const documents = await request.json();
-		return Response.json(Object.fromEntries(documents.map((document) => [document.id, evaluate(opf, document)])));
+		return Response.json(Object.fromEntries(await Promise.all(documents.map(async (document) => [document.id, await evaluate(opf, document)]))));
 	},
 };
