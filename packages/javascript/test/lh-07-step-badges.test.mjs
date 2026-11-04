@@ -99,11 +99,27 @@ for (const direction of ['ltr', 'rtl']) {
   });
 }
 
-test('LH-07: an agenda whose list is not numbered draws as before', () => {
+test('LH-07: an agenda is ordered by nature: an unnumbered list draws beside badges, as drawing only', () => {
   const slide = { title: 'Agenda', blocks: [{ items: ['Where we are today', 'What the pilot showed', 'The decision we need'] }] };
-  const result = composeSlide(slide, { layout: agenda });
-  assert.equal(result.steps, undefined);
-  assert.deepEqual(body(result).map((entry) => [entry.box, entry.text.fontSize]), body(composeSlide(slide, { layout: plain(agenda) })).map((entry) => [entry.box, entry.text.fontSize]));
+  const before = structuredClone(slide), result = composeSlide(slide, { layout: agenda }), without = composeSlide(slide, { layout: plain(agenda) });
+  assert.deepEqual(result.steps?.map((entry) => entry.form), ['column']);
+  assert.deepEqual(result.steps[0].badges.map((badge) => badge.label), ['1', '2', '3']);
+  // The numbers are the badges' drawing: no badge names a list number, and the document is unchanged.
+  assert.ok(result.steps[0].badges.every((badge) => badge.list === undefined));
+  assert.deepEqual(slide, before);
+  assert.equal(body(result)[0].payload.numbering, undefined);
+  assert.equal(body(result)[0].text.fontSize, body(without)[0].text.fontSize);
+});
+
+test('LH-07: the unnumbered lists of one agenda count on from one list to the next', () => {
+  const slide = { title: 'Agenda', blocks: [{ items: ['Results', 'Drivers', 'Plan'] }, { items: ['Risks', 'Decisions'] }] };
+  const result = composeSlide(slide, { layout: agenda }), without = composeSlide(slide, { layout: plain(agenda) });
+  const labels = (result.steps ?? []).map((entry) => entry.badges.map((badge) => badge.label));
+  assert.deepEqual(labels, [['1', '2', '3'], ['4', '5']]);
+  // The count runs over the whole agenda: with a list that cannot take badges (one entry), the unnumbered lists keep their markers.
+  const partial = composeSlide({ title: 'Agenda', blocks: [{ items: ['Results', 'Drivers', 'Plan'] }, { items: [{ text: 'Decisions', description: 'What we need today' }] }] }, { layout: agenda });
+  assert.equal(partial.steps, undefined);
+  assert.deepEqual(body(result).map((entry) => entry.text.fontSize), body(without).map((entry) => entry.text.fontSize));
 });
 
 for (const direction of ['ltr', 'rtl']) {

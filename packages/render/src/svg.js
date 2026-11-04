@@ -912,16 +912,18 @@ function imageRecolorMatrix(recolor, bound) {
 // LH-07: core's step badges, connectors and flows (geometry.steps), under the text they number, as the PPTX export draws them: the chips
 // (card fill and border), the connector (border color), each badge (a primary circle with its numeral centered in the bold body face, in
 // the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset).
+// With trace each shape names the block or entry it numbers in data-opf-step-path, not data-opf-path: it is the layout's drawing, so
+// hit-testing and the region groups still find each item by its own text.
 function renderSteps(bound, options) {
   const steps = bound.geometry.steps;
   if (!steps?.length) return '';
   const primary = bound.design.colors.primary, numeral = readableSchemeColor(primary, bound.design.roles).hex, family = fontStack(bound.design.fonts.body, bound.design.fontScheme.type);
   return steps.map(step => {
     const parts = [];
-    for (const chip of step.chips ?? []) parts.push(tag('rect', {...HIDDEN, x: chip.box.x, y: chip.box.y, width: chip.box.width, height: chip.box.height, rx: chip.radius, fill: bound.design.roles.neutrals.card.hex, stroke: bound.design.roles.neutrals.cardBorder.hex, ...traceAttrs(options, chip.path)}));
-    if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...traceAttrs(options, step.path)}));
+    for (const chip of step.chips ?? []) parts.push(tag('rect', {...HIDDEN, x: chip.box.x, y: chip.box.y, width: chip.box.width, height: chip.box.height, rx: chip.radius, fill: bound.design.roles.neutrals.card.hex, stroke: bound.design.roles.neutrals.cardBorder.hex, ...(options.trace ? {'data-opf-step-path': chip.path} : {})}));
+    if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...(options.trace ? {'data-opf-step-path': step.path} : {})}));
     for (const badge of step.badges) {
-      parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...traceAttrs(options, badge.path)}));
+      parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
       parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
     }
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));

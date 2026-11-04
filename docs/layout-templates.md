@@ -406,10 +406,13 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
   centered. The badges of a row share one line, and a connector in the border color runs through their centers. A one-entry numbered
   list gives its badge its number and draws as a heading over its description (LH-77); any other block is numbered by its position.
   Each block keeps the band for its badge in the height it asks for and in its cell.
-- **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for a numbered list): each entry draws beside its
+- **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for every list of two or more entries of one level,
+  numbered or not, since an agenda runs in time): each entry draws beside its
   badge in the list's marker column (the side its paragraph starts), centered on its first line, with a connector down the column. The
-  badges are at least 0.4 of their width apart. The list keeps its numbers (`marker.number`); a list in a `steps` region without
-  `numbering` is counted in arabic.
+  badges are at least 0.4 of their width apart. The list keeps its numbers (`marker.number`); a list without `numbering` is counted in
+  arabic as drawing only: the document keeps no numbering and the PPTX import gives the list back unnumbered. In a `numbered`
+  region the unnumbered lists count on from one list to the next, as one agenda, and keep their markers when one of the region's
+  lists cannot take badges (a lone entry, nested entries), so a part of the agenda is never numbered alone.
 - **A flow** (`steps`): a lone list of 3 to 6 entries of one or two words (24 characters at most), without descriptions, is a row of
   chips (cards) joined by accent block arrows in reading order. The chips share the region's width when the widest entry fits each,
   else each hugs its entry; each entry is a list column centered in its chip.

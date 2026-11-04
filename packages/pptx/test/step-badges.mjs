@@ -13,11 +13,12 @@ const deck = {
     {layout: 'process', title: 'Three steps from evidence to decision', blocks: [step('Establish a baseline', 'Measure the current rate.', 1), step('Run the pilot', 'Test with two teams.', 2), step('Decide what to scale', 'Agree the next step.', 3)]},
     {layout: 'agenda', title: 'Today’s agenda', blocks: [{numbering: 'arabic', items: ['Where we are today', 'What the pilot showed', 'The decision we need']}]},
     {layout: 'process', title: 'How support works', blocks: [{items: ['Queue', 'Route', 'Resolve']}]},
+    {layout: 'agenda-split', title: 'What we will cover', blocks: [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]},
   ],
 };
 const before = structuredClone(deck);
 const geometry = resolvePresentation(deck).slides.map(slide => slide.geometry);
-assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['flow']]);
+assert.deepEqual(geometry.map(slide => slide.steps?.map(entry => entry.form)), [['row'], ['column'], ['flow'], ['column']]);
 const bytes = await toPptx(deck), zip = unzipSync(bytes);
 const emu = value => Number(value) / 9525, near = (actual, expected, label) => assert.ok(Math.abs(actual - expected) < .01, `${label}: ${actual} vs ${expected}`);
 for (const [index, slide] of geometry.entries()) {
@@ -62,5 +63,7 @@ assert.deepEqual(blocks[0].map(block => block.items[0].text), ['Establish a base
 assert.ok(blocks[0].every(block => block.numbering !== undefined), 'each step keeps its numbering');
 assert.deepEqual(blocks[1], [{items: ['Where we are today', 'What the pilot showed', 'The decision we need'], numbering: 'arabic'}]);
 assert.deepEqual(blocks[2], [{items: ['Queue', 'Route', 'Resolve']}], 'a flow imports as its list, with no numbering it never had');
+// An agenda's badges number an unnumbered list as drawing only: it imports as written, one list without numbering.
+assert.deepEqual(blocks[3], [{items: ['Customer feedback themes', 'Support performance', 'Product reliability']}]);
 assert.deepEqual(deck, before, 'export leaves the deck unchanged');
 console.log('LH-07 step badges: native badges, connectors, chips and arrows export and import');

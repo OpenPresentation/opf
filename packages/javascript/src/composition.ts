@@ -3528,6 +3528,8 @@ const LEAD_STACKS = new WeakSet<SlideComposition>();
  * readable size outranks the measure.
  */
 const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Symbol('opf.noRegionMeasure');
+/** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
+const NO_STEPS = Symbol('opf.noSteps');
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
 function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
   const before = bodyReadability(base, options).byPath;
@@ -3591,7 +3593,14 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
-  return settle(input, options, guardedCompose(input, options));
+  const result = settle(input, options, guardedCompose(input, options));
+  if (!result.steps) return result;
+  // LH-07: step badges are drawing and never worth a size. Their band changes how much of the body a slide fills, and so whether LH-48
+  // grows it, so the guard alone, which holds each arrangement to the slide's own composition, cannot see a block that the whole slide
+  // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
+  const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
+  const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
+  return readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain;
 }
 /**
  * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition): the slide is composed with every guarded
@@ -4010,7 +4019,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'step-badges' && (options as Record<symbol, unknown>)[NO_STEPS] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -4148,11 +4157,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return list;
   };
   // LH-07: the lists of a `sequence` region (composeTemplate marks them by path). A badge list draws its entries beside step badges,
-  // numbered in arabic when the payload has no numbering; a step heading is a one-entry numbered list whose number its block's badge
-  // draws, so it fits as a heading list (LH-77) without the number.
-  const badgeLists = new Set<string>(), stepHeadings = new Set<string>();
+  // numbered in arabic when the payload has no numbering (from its badgeStarts entry: an agenda's unnumbered lists count on); a step
+  // heading is a one-entry numbered list whose number its block's badge draws, so it fits as a heading list (LH-77) without the number.
+  const badgeLists = new Set<string>(), stepHeadings = new Set<string>(), badgeStarts = new Map<string, number>();
+  const badgeNumbering = (path: string, numbering: unknown): NumberingInput => {
+    if (numbering !== undefined) return numbering as NumberingInput;
+    const start = badgeStarts.get(path) ?? 1;
+    return start > 1 ? { start } : 'arabic';
+  };
   const listOptionsFor = (field: string, path: string, numbering: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
-    : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:(numbering ?? 'arabic') as NumberingInput,badges:true}
+    : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
     : {...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
@@ -5267,8 +5281,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
     if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
-    // LH-07: a badge list is numbered (in arabic when the payload is not), so its columns continue the count.
-    const numbering = (node.payload.numbering ?? (badgeLists.has(node.path) ? 'arabic' : undefined)) as NumberingInput | undefined;
+    // LH-07: a badge list is numbered (badgeNumbering when the payload is not), so its columns continue the count.
+    const numbering = (badgeLists.has(node.path) ? badgeNumbering(node.path, node.payload.numbering) : node.payload.numbering) as NumberingInput | undefined;
     const listOptions: ListFitOptions = badgeLists.has(node.path) ? listOptionsFor(node.field, node.path, numbering) : { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
     const columnBoxes = (count: number): LayoutBox[] => {
@@ -5785,24 +5799,39 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
   // LH-07: the steps of a `sequence` region. A lone list of a `steps` region whose 3 to 6 entries are one or two words is a flow; any
-  // other lone list of two or more entries of one level (in a `numbered` region, a numbered one) draws them beside badges; two or more
-  // text and list blocks of a `steps` region are steps side by side, a one-entry numbered list giving its number to its badge.
+  // other lone list of two or more entries of one level draws them beside badges; two or more text and list blocks of a `steps` region
+  // are steps side by side, a one-entry numbered list giving its number to its badge. Every list of two or more entries of one level in a
+  // `numbered` region (an agenda, ordered by nature: it runs in time) draws beside badges, numbered or not; the unnumbered lists of the
+  // region count on from one list to the next in reading order (badgeStarts), as one agenda. Those numbers are drawing only: the payload
+  // keeps no numbering, and its badges name no list number (ComposedStepBadge.list), so an export gives the list back as written.
   const markSteps = (sequence: 'steps' | 'numbered', units: Pending[]): void => {
     const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
     const entries = (unit: Pending): unknown[] => Array.isArray(unit.value) ? unit.value : [];
     const flat = (unit: Pending) => entries(unit).every(entry => (record(entry).level ?? 0) === 0), numbered = (unit: Pending) => unit.payload.numbering !== undefined;
-    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2 && (sequence === 'steps' || numbered(unit));
+    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2;
+    if (sequence === 'numbered') {
+      // The count runs over the whole agenda: when one of its lists cannot take badges (a lone entry, nested entries), the unnumbered
+      // ones keep their markers rather than number a part of it.
+      const whole = units.every(unit => !isList(unit) || badgeList(unit));
+      let next = 1;
+      for (const unit of units) {
+        if (!badgeList(unit) || (!whole && !numbered(unit))) continue;
+        badgeLists.add(unit.path);
+        if (!numbered(unit)) { badgeStarts.set(unit.path, next); next += entries(unit).length; }
+        fire('step-badges');
+      }
+      return;
+    }
     if (units.length === 1 && badgeList(units[0]!)) {
       const unit = units[0]!, values = entries(unit);
-      const short = sequence === 'steps' && values.length >= STEP_FLOW_MIN && values.length <= STEP_FLOW_MAX && values.every(value => {
+      const short = values.length >= STEP_FLOW_MIN && values.length <= STEP_FLOW_MAX && values.every(value => {
         const object = record(value), text = flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim();
-        return object.description === undefined && text.length > 0 && text.length <= STEP_FLOW_CHARACTERS && text.split(/s+/u).length <= 2;
+        return object.description === undefined && text.length > 0 && text.length <= STEP_FLOW_CHARACTERS && text.split(/\s+/u).length <= 2;
       });
       (short ? stepFlows : badgeLists).add(unit.path);
       fire('step-badges');
       return;
     }
-    if (sequence === 'numbered') { for (const unit of units) if (badgeList(unit)) { badgeLists.add(unit.path); fire('step-badges'); } return; }
     if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit)))) return;
     for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
     fire('step-badges');

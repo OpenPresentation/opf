@@ -52,8 +52,8 @@ export interface LayoutRegion {
   metrics?: 'tile';
   /**
    * LH-07: the region lists the steps of a sequence. `steps`: its blocks (or a lone list's entries) are steps, drawn under numbered
-   * badges joined by a connector, and a lone list of short entries is a flow of chips joined by arrows. `numbered`: only a numbered
-   * list draws its entries under badges. Absent: the region's content draws as any other.
+   * badges joined by a connector, and a lone list of short entries is a flow of chips joined by arrows. `numbered` (an agenda): every
+   * list draws its entries beside badges, numbered or not (an unnumbered one is counted as drawing only). Absent: the region's content draws as any other.
    */
   sequence?: 'steps' | 'numbered';
   anchor: RegionAnchor;
