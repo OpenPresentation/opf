@@ -1829,7 +1829,14 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
   display?: { start: number; max: number; height?: number };
   /** LH-15: lay the metric out as a band (the value at the start, the other fields in a column beside it) when that fits; start-aligned. */
   band?: boolean;
+  /**
+   * LH-39: a value of one word (a figure such as "$1.24M") never wraps: it is set on one line at the largest size that holds it, not split
+   * inside the figure at a larger size. Default true; composition passes false for a slide's composition without its guarded rules.
+   */
+  figure?: boolean;
 }
+/** LH-39: the metric layouts that set a figure on one line where it would have wrapped (the guarded rule `metric-figure`). */
+const FIGURE_LINES = new WeakSet<MetricLayout>(), FIGURE_FITS = new WeakSet<CodeTextFit>();
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
 export const METRIC_TILE_VALUE_SHARE = 0.25;
 /**
@@ -1845,6 +1852,20 @@ export const METRIC_BAND_VALUE_SHARE = .6, METRIC_BAND_MIN_COLUMN = 200;
 export const METRIC_BAND_RATIO = 3;
 /** LH-53: a unit on its value's line is drawn at this share of the value's size (Claude Design sets "18%" as one figure). */
 export const METRIC_UNIT_SHARE = .6;
+/**
+ * LH-127: the advance in em of the characters a figure is written in, in a heavy sans face: the widest of Roboto, Arial and Calibri at
+ * weight 800, which is narrower than core's portable estimate for a digit (.62) and much narrower for a separator (.54). Without a host
+ * measurement an inline unit is placed after the figure by this table, so it does not float in the estimate's slack. A character of
+ * another kind (a letter, a percent sign, a script) is not in the table and keeps the estimate.
+ */
+const FIGURE_ADVANCES: Readonly<Record<string, number>> = {
+  ...Object.fromEntries([...'0123456789$€£¥+−'].map(character => [character, .58])), '.': .3, ',': .3, '-': .42, ' ': .32,
+};
+function figureWidth(text: string, size: number): number | undefined {
+  let units = 0;
+  for (const character of text) { const advance = FIGURE_ADVANCES[character]; if (advance === undefined) return undefined; units += advance; }
+  return units * size;
+}
 /**
  * LH-112: the display size of a metric beside other blocks, in reference pixels: one metric starts at 120 and grows to 160, two start at 90
  * and grow to 120 (layoutMetric's `display`).
@@ -1964,14 +1985,24 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const fitValue=(area:LayoutBox,singleLine:boolean)=>{
     if (!usable(area)) return undefined;
-    // Derive sizes from the requested size: repeated subtraction accumulates rounding
-    // error and can add an extra trial at very small floors.
-    for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) {
-      const size=gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize);
-      const natural=measure(primary,size,area.width);
-      const fit={...natural,overflow:!!natural.placement?.overflow||singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
-      if (!fit.overflow||size===primary.minFontSize) return fit;
+    const attempt=(strict:boolean)=>{
+      // Derive sizes from the requested size: repeated subtraction accumulates rounding
+      // error and can add an extra trial at very small floors.
+      for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) {
+        const size=gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize);
+        const natural=measure(primary,size,area.width);
+        const fit={...natural,overflow:!!natural.placement?.overflow||strict&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+        if (!fit.overflow||size===primary.minFontSize) return fit;
+      }
+    };
+    // LH-39: a figure (a value of one word, "$1.24M") never wraps: it is set on one line at the largest size that holds it, which a split
+    // inside the figure ("$1.24" over "M") would otherwise beat by a larger size. When no size down to the floor holds it on one line, the
+    // wrapped fit stands, as before. A value of several words ("Q4 2026 plan") may still wrap between words.
+    if (options.figure!==false&&!singleLine&&!/\s/u.test(primary.text.trim())) {
+      const whole=attempt(true);
+      if (whole&&!whole.overflow) { if (attempt(false)?.lines.length!==1) FIGURE_FITS.add(whole); return whole; }
     }
+    return attempt(singleLine);
   };
   type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
   type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
@@ -2026,7 +2057,16 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),area=lineBox(part,box,leadY,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap; }
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
-        const measuredWidth=naturalWidth(primary,valueFit);
+        // LH-127: the unit follows the value line as it is drawn. With a host measurement that is the measured line (its ink, with an
+        // outline measure). Without one the portable estimate is slack for a figure (about a fifth too wide for "2.4"), which left the unit
+        // floating a few characters away at display size: a figure is then measured by FIGURE_ADVANCES, and its line takes that width, so
+        // an engine that centers or ends the line on its accepted width draws it where the unit expects it.
+        let figureFit=valueFit;
+        if (!options.textMeasurement&&valueFit.lines.length===1) {
+          const width=figureWidth(primary.text,valueFit.fontSize);
+          if (width!==undefined&&width<naturalWidth(primary,valueFit)) figureFit={...valueFit,sourceLines:valueFit.sourceLines.map(line=>({...line,width,segments:line.segments.map(segment=>({...segment,width:segment.kind==='text'?width:segment.width}))}))};
+        }
+        const measuredWidth=naturalWidth(primary,figureFit);
         const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
         // LH-53: a unit beside its value is drawn at METRIC_UNIT_SHARE of the value's size on its baseline, so "18 %" reads as one figure,
         // when it still fits on the line; otherwise at its own size.
@@ -2040,7 +2080,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
         const unitBaseline=inlineFit.placement?.lines.at(-1)?.baseline??occupied(inlineFit)-inlineFit.lineHeight+inlineFit.fontSize;
         const valueY=top+Math.max(0,unitBaseline-valueBaseline),unitY=top+Math.max(0,valueBaseline-unitBaseline);
-        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,valueFit,valueWidth)});
+        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,figureFit,valueWidth)});
         allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
         primaryHeight=Math.max(valueY-top+valueHeight,unitY-top+occupied(inlineFit));
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
@@ -2068,6 +2108,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (selected&&!selected.overflow&&selected.score===0) break;
   }
   for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
+  const figureLine=!!primary.fit&&FIGURE_FITS.has(primary.fit);
   const alignmentFactor=alignment==='center'?.5:alignment==='right'?1:0;
   if (selected!.arrangement==='inline-unit'&&unit) {
     const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
@@ -2123,7 +2164,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
-  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  if (figureLine) FIGURE_LINES.add(layout);
+  return layout;
 }
 
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
@@ -3433,16 +3476,17 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * lead plus stack (`lead-stack`), LH-70's paragraph columns (`paragraph-columns`), LH-10's reading measure in a layout's regions
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
- * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks. LH-80 and LH-49's tracks are
+ * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, and LH-39's figure on one line
+ * where it would wrap (`metric-figure`). LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-display';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
@@ -3560,6 +3604,12 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
     const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
     if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
     if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(ALL_RULES, seeds));
+    // LH-39: a figure kept on one line may read smaller than the wrapped one; the full set without it is the slide the guard compared
+    // before the rule existed, so it is tried first rather than rebuilt rule by rule.
+    if (!readsWell(result) && fired.has('metric-figure')) {
+      const without = attempt(ruled(new Set([...ALL_RULES].filter(rule => rule !== 'metric-figure')), seeds));
+      if (readsWell(without)) result = without;
+    }
     if (!readsWell(result)) {
       let kept: ReadonlySet<GuardedRule> = NO_RULES;
       result = base;
@@ -4478,11 +4528,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),
+      figure:ruleOn('metric-figure'),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
     const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
-    return layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
+    const laid = layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
+    if (FIGURE_LINES.has(laid)) fire('metric-figure');
+    return laid;
   };
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
