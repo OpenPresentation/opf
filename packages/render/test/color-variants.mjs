@@ -67,20 +67,26 @@ const rolesOf = (input) => resolvePresentation(input).slides[0].design.roles;
   assert.equal(chartPaletteForFill(roles.background, chartSeriesPalette(colors, undefined, {accents}))[0].toUpperCase(), colors.accent3.toUpperCase(), 'series 1 is accent3 at full strength');
 }
 
-// A picture that names its tone gets the tone's variant and a scrim of its bg1; without a tone there is none.
+// A picture that names its tone gets the tone's variant, and the text on it core's automatic scrim (LH-02) in that variant's bg1.
 {
   const picture = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
   const input = (tone) => ({design: {colorScheme: colors, background: {type: 'image', src: picture, alt: 'Backdrop', ...(tone ? {tone} : {})}}, slides: [{title: 'T', text: ['Body']}]});
-  const toned = toSvg(input('dark'), 1, {trace: true}), plain = toSvg(input(undefined), 1, {trace: true});
+  const scrimOf = (svg) => {
+    const rect = tags(svg, 'rect').find((entry) => entry['data-opf-scrim']);
+    const stops = tags(svg, 'stop');
+    return rect && {color: (rect.fill.startsWith('url(') ? stops[0]['stop-color'] : rect.fill).toUpperCase(), opacity: Math.max(...stops.map((stop) => Number(stop['stop-opacity'])), Number(rect['fill-opacity'] ?? 0))};
+  };
+  const toned = toSvg(input('dark'), 1, {trace: true});
   assert.equal(titleFill(toned), colors.light1.toUpperCase(), 'tone dark picks the dark1 variant: light text');
-  const scrim = tags(toned, 'rect').find((rect) => rect['data-opf-tone-overlay'] === 'dark');
-  assert.ok(scrim, 'a tone scrim covers the picture');
-  assert.equal(scrim.fill.toUpperCase(), colors.dark1);
-  assert.ok(Number(scrim.opacity) > 0 && Number(scrim.opacity) < 1);
-  assert.ok(!/data-opf-tone-overlay/.test(plain), 'no tone, no scrim');
+  const scrim = scrimOf(toned);
+  assert.ok(scrim, 'the scrim lies under the text');
+  assert.equal(scrim.color, colors.dark1);
+  assert.ok(scrim.opacity > 0 && scrim.opacity < 1);
+  assert.ok(!/data-opf-tone-overlay/.test(toned), 'the renderer draws no scrim of its own');
   const light = toSvg(input('light'), 1, {trace: true});
   assert.equal(titleFill(light), colors.dark1);
-  assert.equal(tags(light, 'rect').find((rect) => rect['data-opf-tone-overlay'] === 'light').fill.toUpperCase(), colors.light1.toUpperCase());
+  assert.equal(scrimOf(light).color, colors.light1.toUpperCase());
+  assert.equal(scrimOf(toSvg(input(undefined), 1, {trace: true})).color, colors.light1.toUpperCase(), 'without a tone, the light variant\'s bg1');
 }
 
 console.log('Color variants passed: per-deck and per-slide variants, the dark1 shorthand, variant neutrals on every chart line and frame, accent order and picture tone.');

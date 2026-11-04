@@ -115,6 +115,8 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     slideCount: options.slideCount ?? slides.length,
     fontFamilies: resolveFontFamilies(fontScheme),
     darkBackground: roles.dark,
+    // LH-02: the colors the automatic scrim of a picture background is sized for.
+    roles: { text: roles.text, textSecondary: roles.textSecondary, primary: roles.primary, background: roles.background },
     ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
     // OPF 0.19: a theme may carry the shared design keys (between the deck's design and the layout record's).
     ...(theme.design !== undefined && rec(theme.design) === theme.design ? { themeDesign: theme.design } : {}),

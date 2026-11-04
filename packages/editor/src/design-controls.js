@@ -639,6 +639,8 @@ export function createDesignControls(container, options = {}) {
     const focusX = numberField("bg-focus-x", "Focus X", { min: 0, max: 1, step: 0.05, help: "0 left to 1 right" });
     const focusY = numberField("bg-focus-y", "Focus Y", { min: 0, max: 1, step: 0.05, help: "0 top to 1 bottom" });
     const overlay = overlayFields("bg-overlay", "Overlay");
+    // LH-02: without an overlay, core draws an automatic scrim behind text on the picture; `overlay: false` turns it off.
+    const scrimOff = checkField("bg-scrim-off", "No automatic scrim", { help: "Without an overlay, a scrim keeps text on the picture readable. Check to show the picture as it is." });
     const bgRecolor = selectField("bg-recolor", "Recolor", { empty: "None", help: "Changes the picture, not the overlay" });
     bgRecolor.setOptions([
       { value: "grayscale", label: "Grayscale" },
@@ -661,7 +663,7 @@ export function createDesignControls(container, options = {}) {
         ...(x !== "" || y !== "" ? { focus: { x: x === "" ? 0.5 : Number(x), y: y === "" ? 0.5 : Number(y) } } : {}),
         ...(opacityValue() === undefined ? {} : { opacity: opacityValue() }),
         ...(recolorValue() ? { recolor: recolorValue() } : {}),
-        ...(overlay.value() ? { overlay: overlay.value() } : {}),
+        ...(overlay.value() ? { overlay: overlay.value() } : scrimOff.input.checked ? { overlay: false } : {}),
       };
     };
     const bgImage = imageCluster("bg-image", "Background image", {
@@ -672,7 +674,7 @@ export function createDesignControls(container, options = {}) {
       },
       help: "Asset, URL or data URL. Enter applies.",
     });
-    imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap);
+    imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap, scrimOff.wrap);
 
     const patternPanel = panel("pattern", "Pattern");
     const preset = selectField("bg-preset", "Pattern", { help: "PowerPoint presets, exported as native fills" });
@@ -731,7 +733,8 @@ export function createDesignControls(container, options = {}) {
       bgAlt.set(current.type === "image" ? (current.alt ?? "") : "");
       focusX.set(current.type === "image" && current.focus ? String(current.focus.x) : "");
       focusY.set(current.type === "image" && current.focus ? String(current.focus.y) : "");
-      overlay.set(current.type === "image" ? current.overlay : undefined);
+      overlay.set(current.type === "image" && current.overlay ? current.overlay : undefined);
+      scrimOff.set(current.type === "image" && current.overlay === false);
       const recolor = current.type === "image" ? current.recolor : undefined;
       bgRecolor.set(recolor === "grayscale" ? "grayscale" : recolor && typeof recolor === "object" ? "duotone" : "");
       bgDuoDark.set(recolor && typeof recolor === "object" ? recolor.dark : "");

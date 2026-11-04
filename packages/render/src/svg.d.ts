@@ -101,6 +101,12 @@ export interface ToSvgOptions {
   glyphFallback?: "chain" | "none";
   /** Unscaled reference-pixel clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
+  /**
+   * LH-02: the luminance grid of a picture (WCAG relative luminance per cell, row order over the whole picture), when the host can read
+   * its pixels: the automatic scrim under text on a picture background is then sized for the picture under the text, not for any
+   * picture (core `ComposeSlideOptions.pictureLuminance`). Pass the same function to the PPTX export, so both draw the same scrim.
+   */
+  pictureLuminance?: (src: string) => { columns: number; rows: number; values: ArrayLike<number> } | undefined;
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;

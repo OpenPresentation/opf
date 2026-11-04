@@ -22,7 +22,7 @@ export type BackgroundSpec =
   | { type: "theme"; slot: (typeof THEME_BACKGROUND_SLOTS)[number] }
   | { type: "solid"; color: string; opacity?: number }
   | { type: "gradient"; gradient: { angle?: number; stops: GradientStop[] }; opacity?: number }
-  | { type: "image"; src: string; alt?: string; fit?: (typeof IMAGE_BACKGROUND_FITS)[number]; focus?: ImageFocus; opacity?: number; recolor?: "grayscale" | { dark: string; light: string }; overlay?: ImageOverlay }
+  | { type: "image"; src: string; alt?: string; fit?: (typeof IMAGE_BACKGROUND_FITS)[number]; focus?: ImageFocus; opacity?: number; recolor?: "grayscale" | { dark: string; light: string }; overlay?: ImageOverlay | false }
   | { type: "pattern"; pattern: { preset: string; foregroundColor?: string; backgroundColor?: string }; opacity?: number };
 
 /** Whether `value` is a ColorRef: a hex color, a scheme slot or role name, or `var:<id>`. */
@@ -44,7 +44,8 @@ export interface BackgroundState {
   fit?: string;
   focus?: ImageFocus;
   recolor?: "grayscale" | { dark: string; light: string };
-  overlay?: ImageOverlay;
+  /** LH-02: `false` when the automatic scrim is turned off. */
+  overlay?: ImageOverlay | false;
   preset?: string;
   foregroundColor?: string;
   backgroundColor?: string;

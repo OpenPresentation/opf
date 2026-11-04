@@ -68,6 +68,13 @@ const textContrast: RuleText = (finding) => {
 const textOnImage: RuleText = (finding) => {
   const ratio = measuredNumber(finding, "ratio");
   const needed = measuredNumber(finding, "needed");
+  const scrim = measuredNumber(finding, "scrimOpacity");
+  // LH-02: the note that core drew its automatic scrim behind the text.
+  if (scrim !== undefined)
+    return {
+      message: `Text sits on this picture, so a scrim at ${num(scrim * 100)}% is drawn behind it to keep it readable${needed !== undefined ? ` at ${num(needed)}:1` : ""}.`,
+      next: `nothing is needed; to choose your own scrim, set the background's ${code("overlay")}, or ${code("overlay: false")} to show the picture without one.`,
+    };
   return {
     message: `Contrast over this picture can't be measured${ratio !== undefined && needed !== undefined ? `: against the lightest or darkest possible pixels it is as low as ${num(ratio, 1)}:1, and ${num(needed)}:1 is needed` : ""}.`,
     next: `add a full-frame ${code("overlay")} to the background image, so the text stays readable on any picture.`,

@@ -103,9 +103,10 @@ export function normalizeBackground(spec) {
         }
       };
       const focus = spec.focus === undefined || spec.focus === null ? undefined : wrap(() => normalizeFocus(spec.focus));
-      const overlay = spec.overlay === undefined || spec.overlay === null ? undefined : wrap(() => normalizeOverlay(spec.overlay));
+      // LH-02: `false` turns off core's automatic scrim behind text on the picture.
+      const overlay = spec.overlay === undefined || spec.overlay === null ? undefined : spec.overlay === false ? false : wrap(() => normalizeOverlay(spec.overlay));
       const recolor = spec.recolor === undefined || spec.recolor === null || spec.recolor === "" ? undefined : wrap(() => normalizeRecolor(spec.recolor));
-      const value = { type: "image", src, ...(alt ? { alt } : {}), ...(fit ? { fit } : {}), ...(focus ? { focus } : {}), ...(opacity === undefined ? {} : { opacity }), ...(recolor ? { recolor } : {}), ...(overlay ? { overlay } : {}) };
+      const value = { type: "image", src, ...(alt ? { alt } : {}), ...(fit ? { fit } : {}), ...(focus ? { focus } : {}), ...(opacity === undefined ? {} : { opacity }), ...(recolor ? { recolor } : {}), ...(overlay !== undefined ? { overlay } : {}) };
       // A cover image with nothing else is the shorthand string.
       return Object.keys(value).length === 2 ? src : value;
     }
@@ -152,7 +153,7 @@ export function readBackground(presentation, { slideIndex } = {}) {
   if (value.type === "theme") return { ...base, slot: value.slot };
   if (value.type === "solid") return { ...base, color: value.color };
   if (value.type === "gradient") return { ...base, angle: value.gradient?.angle, stops: structuredClone(value.gradient?.stops ?? []) };
-  if (value.type === "image") return { ...base, src: value.src, alt: value.alt, fit: value.fit, focus: value.focus && { ...value.focus }, recolor: value.recolor && structuredClone(value.recolor), overlay: value.overlay && { ...value.overlay } };
+  if (value.type === "image") return { ...base, src: value.src, alt: value.alt, fit: value.fit, focus: value.focus && { ...value.focus }, recolor: value.recolor && structuredClone(value.recolor), overlay: value.overlay === false ? false : value.overlay && { ...value.overlay } };
   if (value.type === "pattern") return { ...base, preset: value.pattern?.preset, foregroundColor: value.pattern?.foregroundColor, backgroundColor: value.pattern?.backgroundColor };
   return base;
 }

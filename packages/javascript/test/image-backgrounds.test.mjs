@@ -23,9 +23,12 @@ const inside = (point, box) => point.x >= box.x - 1e-6 && point.x <= box.x + box
 
 test('the object form composes a whole-canvas frame with fit, focus, opacity and alt', () => {
   const result = composeSlide({ title: 'Shipping, rebuilt', design: { background: { type: 'image', src: './images/harbour.jpg', alt: 'Container ships at dawn', fit: 'contain', focus: { x: 0.5, y: 0.7 }, opacity: 0.8 } } });
-  assert.deepEqual(result.backgroundImage, { path: 'slides.0.design.background', src: './images/harbour.jpg', alt: 'Container ships at dawn', fit: 'contain', focus: { x: 0.5, y: 0.7 }, box: canvas, opacity: 0.8 });
+  // LH-02: the title on the picture gets the automatic scrim (picture-scrim.test.mjs).
+  const { scrims, ...picture } = result.backgroundImage;
+  assert.equal(scrims[0].path, 'slides.0.design.background.overlay');
+  assert.deepEqual(picture, { path: 'slides.0.design.background', src: './images/harbour.jpg', alt: 'Container ships at dawn', fit: 'contain', focus: { x: 0.5, y: 0.7 }, box: canvas, opacity: 0.8 });
   // Defaults: cover, centered focus, opacity 1 (not reported).
-  const plain = composeSlide({ title: 'T', design: { background: { type: 'image', src: 'asset:hero' } } });
+  const plain = composeSlide({ title: 'T', design: { background: { type: 'image', src: 'asset:hero', overlay: false } } });
   assert.deepEqual(plain.backgroundImage, { path: 'slides.0.design.background', src: 'asset:hero', fit: 'cover', focus: { x: 0.5, y: 0.5 }, box: canvas });
 });
 

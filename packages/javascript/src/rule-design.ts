@@ -325,7 +325,8 @@ export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, 
  */
 export function resolveDesign(document: Rec, index: number, context: SlideContext): ResolvedDesign {
 	const deck = rec(document.design),
-		own = rec(rec(rec(document.slides)[index]).design);
+		// LH-02: the slide's own design (its background, tone or variant); `rec` of the slides array is empty, which dropped it.
+		own = rec(rec(Array.isArray(document.slides) ? document.slides[index] : undefined).design);
 	// The slide -> deck -> theme -> font scheme chain is resolveSlideContext's; the layout and accessibility rules read the same records it composes with.
 	const { options, diagnostics, resolved } = context;
 	const { theme, colorScheme, fontScheme, fontSchemePath } = resolved;
@@ -408,6 +409,8 @@ export interface BackgroundImageLayer {
 	/** Overlay colour and opacity over the picture, when the background image has a full-frame overlay. */
 	overlay?: { color: string; opacity: number };
 	opacity?: number;
+	/** LH-02: the darkest and lightest gray (0 to 255) the host measured under the text, which then bounds the picture instead of the full ramp. */
+	grays?: readonly [number, number];
 }
 
 const GREY_RAMP = [0, 32, 64, 96, 128, 160, 192, 224, 255].map((v) => toHex([v, v, v]));
@@ -456,7 +459,8 @@ export function backdropColors(
 		}
 		case 'image': {
 			const opacity = layer?.opacity ?? backdrop.opacity;
-			const colors = GREY_RAMP.map((grey) => {
+			const ramp = layer?.grays ? [...new Set([layer.grays[0], ...[0, 32, 64, 96, 128, 160, 192, 224, 255].filter((v) => v > layer.grays![0] && v < layer.grays![1]), layer.grays[1]])].map((v) => toHex([v, v, v])) : GREY_RAMP;
+			const colors = ramp.map((grey) => {
 				let color = blend(grey, backdrop.base, opacity);
 				if (layer?.overlay) color = blend(layer.overlay.color, color, layer.overlay.opacity);
 				return color;

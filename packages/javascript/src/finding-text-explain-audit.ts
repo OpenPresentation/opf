@@ -24,8 +24,8 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { design: WHITE, slides: [{ title: "Results", text: [{ text: "Readable note", color: "text" }] }] },
   ),
   "opf/text-on-image": ex(
-    "Add a full-frame overlay to the background image, or put the text on a solid or gradient background or a card, so contrast does not depend on the picture.",
-    { design: WHITE, slides: [{ title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg" } } }] },
+    "Without an overlay, core draws a scrim behind text on a picture so it reads at 4.5:1 and notes it here. With the scrim turned off (`overlay: false`), add a full-frame overlay to the background image, or put the text on a solid or gradient background or a card, so contrast does not depend on the picture.",
+    { design: WHITE, slides: [{ title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg", overlay: false } } }] },
     { design: WHITE, slides: [{ title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg", overlay: { color: "#FFFFFF", opacity: 1 } } } }] },
   ),
   "opf/missing-alt-text": ex(

@@ -34,14 +34,14 @@ The effective background is the slide's `design.background`, then the deck's, th
 | `focus` | `{ x, y }` in 0 to 1: the point of the picture that a `cover` crop keeps in view. The default is the center. |
 | `opacity` | Picture opacity. The overlay keeps its own. |
 | `recolor` | `"grayscale"`, or `{ dark, light }` for duotone, as on an image block. Recolor and opacity apply to the picture's pixels; the overlay is drawn above them. |
-| `overlay` | A scrim over the whole picture, or a band along one edge (`edge`, `size`; see [Overlay](#overlay)). |
+| `overlay` | A scrim over the whole picture, or a band along one edge (`edge`, `size`; see [Overlay](#overlay)). Without one, core draws an [automatic scrim](#automatic-scrim) behind text on the picture; `false` turns it off. |
 | `tone` | `dark` or `light` (from core 0.23.0): the variant the slide takes (`dark1` or `light1`) so text and lines read on the picture. Absent: the deck's variant, else light. |
 
 A picture or gradient background can carry `tone: "dark"` or `"light"` (from core 0.23.0). The tone picks the color map (`dark1` or `light1`, see `design.variant` in [design resolution](design-resolution.md#color-variants)) so the slide's text, borders and chart furniture are chosen to read on the picture. Without a tone the picture takes the deck's variant, else counts as light, as before.
 
 The string shorthand `"asset:hero"` (or any source starting with `asset:`, `https://`, `data:`, `./` or `../`) is a cover picture background. Theme slots (`light1`) and hex colours keep their meaning, and any other string is invalid.
 
-`composeSlide` reports the picture as `SlideComposition.backgroundImage`: the canvas `box`, `fit`, `focus`, `opacity`, `recolor`, the overlay box, and the fit placement when core can read the picture's proportions. The headings and the body compose exactly as on a slide without the background. A slide with only a title over a picture background is a cover, and its title centers like any cover's.
+`composeSlide` reports the picture as `SlideComposition.backgroundImage`: the canvas `box`, `fit`, `focus`, `opacity`, `recolor`, the overlay box, the [automatic scrim](#automatic-scrim) (`scrim`), and the fit placement when core can read the picture's proportions. The headings and the body compose exactly as on a slide without the background. A slide with only a title over a picture background is a cover, and its title centers like any cover's.
 
 ## Image blocks
 
@@ -82,9 +82,21 @@ Placement is the only mechanism that moves content aside. A background never doe
 
 ## Overlay
 
-`{ color, opacity, edge?, size? }` is shared by backgrounds and image blocks. Without `edge` it covers the whole frame in the frame's shape. With `edge` (`top`, `bottom`, `left` or `right`) it covers a band of `size` (default 0.3) of the frame along that edge, for example a caption strip. An edge overlay on a non-rectangle image frame reports `unsupported-image-treatment` at `...overlay.edge`, and neither engine draws it. That diagnostic never fails strict layout. Text over a picture background is certified readable (`opf/text-on-image`) only through a full-frame overlay strong enough for every possible pixel; an edge band does not count.
+`{ color, opacity, edge?, size? }` is shared by backgrounds and image blocks. Without `edge` it covers the whole frame in the frame's shape. With `edge` (`top`, `bottom`, `left` or `right`) it covers a band of `size` (default 0.3) of the frame along that edge, for example a caption strip. An edge overlay on a non-rectangle image frame reports `unsupported-image-treatment` at `...overlay.edge`, and neither engine draws it. That diagnostic never fails strict layout. Text over a picture background is certified readable (`opf/text-on-image`) through a full-frame overlay strong enough for every possible pixel, or core's [automatic scrim](#automatic-scrim) when there is no overlay; an edge band does not count.
 
 An unchanged export imports back as the same OPF: the background and the image blocks with their treatments, plus a data URI of each embedded picture. The `OPF_IMAGE_V1` and `OPF_IMAGE_OVERLAY_V1` shape tags record the native geometry of an image block. A picture that was moved, re-cropped or recolored stays an ordinary image and reports its provenance diagnostic. An edited overlay drops only the overlay.
+
+## Automatic scrim
+
+Text over a photograph reads only as well as the photograph allows (LH-02). When text sits on a picture background and the background has no `overlay` key, core adds a scrim behind the text in the slide's background color (`bg1` of the slide's variant, the color the text was chosen for: dark under light text, light under dark text). `SlideComposition.backgroundImage.scrim` reports it, and both engines draw it directly above the picture, beneath furniture and content: the preview as a rectangle with an SVG linear gradient, the PPTX export as one native rectangle with a gradient fill (`a:gradFill` of `bg1` with `a:alpha` stops), or a plain alpha fill for a band of one opacity. It is never baked into the picture, and it moves and resizes nothing.
+
+- **What it covers.** Every item drawn straight on the picture (not a picture, video, code panel or table, which draw on fills of their own, nor an item on a card or the emphasis surface), every caption, and the header and footer text, each by the part of its box its lines cover, plus a margin of 24 reference pixels. A right-to-left slide covers whole boxes.
+- **Its form.** A gradient from the bottom edge when the text sits in the lower part of the slide, from the top when it sits in the upper part, from the side when it is a column at the left or right, solid over the text and fading out over a fifth of the slide past it; otherwise a band across the text that fades out above and below. `form`, `edge`, `box`, `axis` and `stops` describe it.
+- **Its opacity.** The lowest, in hundredths, at which the slide's text color reads at 4.5:1 over every pixel the picture could have under the text: the gray ramp from black to white, through the picture's `opacity`. The muted color of header, footer and attribution text reaches 4.5:1 too, and the primary color of a metric value or timeline 3:1. `contrast` is the worst ratio reached and `basis` is `worst-case`.
+- **Measured pictures.** Core reads no pixels itself. A host that can (`ComposeSlideOptions.pictureLuminance`, also an option of the preview and the PPTX export) returns a luminance grid of the picture, and the scrim is then sized for the grays under the text (`basis: 'sampled'`, `grays`): none at all on a dark photo under light text. A recolored picture is not the one measured and keeps the worst case. Give the preview and the export the same function, or neither, so they draw the same scrim.
+- **The author decides.** Any `overlay` of the author's, full-frame or an edge band, replaces the scrim, and `overlay: false` turns it off: the picture shows as it is, and `opf/text-on-image` says contrast cannot be guaranteed. A picture that names its `tone` gets the same scrim in its variant's background color (it replaces the 40% scrim of RR-96).
+
+`opf/text-on-image` notes the scrim (its opacity and form) as an info finding, and the contrast rules count it over the text it covers. An unchanged export imports back as the same background: the scrim shape is no content.
 
 ## pptx.gallery treatments
 
