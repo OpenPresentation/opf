@@ -69,7 +69,7 @@ try {
   assert.equal(await root.getAttribute('aria-modal'), 'true');
   assert.equal(await root.getAttribute('aria-label'), 'Presentation');
   assert.equal(await page.evaluate(() => window.presenter.element === document.querySelector('.opf-presenter')), true, 'element is the root');
-  assert.equal(await page.evaluate(() => Object.keys(window.presenter).sort().join()), 'destroy,element,getSlide,goTo,isRunning,next,previous,start,stop');
+  assert.equal(await page.evaluate(() => Object.keys(window.presenter).sort().join()), 'destroy,element,getPage,getSlide,goTo,isRunning,next,previous,start,stop');
   assert.equal(await shown(), -1, 'no slide is shown before start()');
   assert.deepEqual(await page.evaluate(() => window.svgCalls ?? []), [], 'nothing is drawn until start()');
   mark('hidden until start, role=dialog aria-modal with a label');
