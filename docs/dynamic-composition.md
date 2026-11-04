@@ -107,7 +107,7 @@ minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's rea
 a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
 LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
-and LH-07's step badges and flows of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)). LH-39's figure on one line
+LH-07's step badges and flows of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)). LH-39's figure on one line
 (`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
 the next smaller type-scale step (a slide that composes no metric is not composed again for it).
 An eyebrow is set at its own role size (0.6 of its paragraph's, from 20 to 24 px), like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,

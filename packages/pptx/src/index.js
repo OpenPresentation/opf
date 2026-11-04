@@ -2786,7 +2786,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
   // the scheme's border neutral, as the preview draws them. The export draws them again from the list, so import reads them as no content.
   if(fit.rules?.length){
     const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720,color=normalizeHex(context.roles?.neutrals?.border?.hex??`#${context.colors.border}`);
-    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color,width:LIST_RULE_WIDTH*scale*.75},objectName:`OPF list rule ${path} ${index}`}));
+    // LH-136: the accent rule over a display heading is a native line of core's thickness, in the tag's color.
+    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color:rule.accent?pptxColor(tagColor(context)):color,width:(rule.thickness??LIST_RULE_WIDTH*scale)*.75},objectName:`OPF list rule ${path} ${index}`}));
   }
 }
 
@@ -3782,7 +3783,8 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
   // LH-57: when the value takes the text color, it is written as the slide's own text color (a scheme color where the text is one).
   const textHex=`#${normalizeHex(context.colors.text)}`,valueHex=metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,textHex).toUpperCase();
   const valueColor=valueHex===textHex.toUpperCase()?context.textColor:valueHex.slice(1);
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:context.textColor;
+  // LH-135: a label drawn as the metric's eyebrow is written in the eyebrow's color (eyebrowColor), capitals and tracking as the tag's.
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:layout.eyebrow&&part.role==='label'?pptxColor(eyebrowColor(context)):context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
@@ -3799,7 +3801,7 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
       const anchor=origin.x+line.width*factor;
       slide.addText(part.text.slice(line.start,line.end),{
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
-        ...nativeFontOptions(part.style),
+        ...nativeFontOptions(part.style),...eyebrowOptions(part.style,part.fit.fontSize),
         color:partColor(part),align:layout.alignment,...(part.fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });

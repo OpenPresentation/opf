@@ -487,6 +487,20 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
   region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
   at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
+  tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
+  metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price
+  under it at display size (80 to 96 px, 96 to 128 px for two tiers, stepped down to the one line the card holds, so "$49" and
+  "$1,200/mo" never split), then the description and the details, from the top of the card. The cards share one top edge and one
+  height (LH-22's full-height cards) and every item of a tier shares the tier's `frameBox`, so a card is drawn once. The prices that
+  reach their 76 px role size read at one size; each tier's details keep the size they fit at. The guard holds every block to the
+  size it had as two cards, so a price too wide for the narrower card (a four-tier row with "$1,200/mo") keeps them. A group with
+  `emphasis: true` keeps LH-06's surface and the other tiers are cards. The group's `composition` is read as a column.
+- **Pillars with one-word titles (LH-136).** A slide whose body is 2 to 5 lists of one entry each, a single word (at most 14
+  characters) with its description, draws each as the word at display size (2.3 times the description's size, stepped down to one
+  line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
+  line in PowerPoint, `ListFit.rules` with `accent`), with no card. Sibling words read at one size. Any other set, a title of
+  several words included, keeps its cards. fitList's `display` option (with `heading`) draws one list this way.
 - **A lone timeline (LH-129)** in a template's timeline region, or an automatic slide's only block, first tries three and then two
   steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
   its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few

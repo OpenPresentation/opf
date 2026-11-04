@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf, render, pptx]
+---
+LH-135, LH-136 (drawing changes for pricing tiers and one-word pillar titles only): a slide whose body is 2 to 5 groups of a labeled metric and a list or text (pricing tiers) draws each as one card of equal height in one row, with the tier name as the metric's eyebrow (`MetricLayout.eyebrow`, `MetricLayoutOptions.eyebrow`: bold capitals with tracking, in the eyebrow's color, as an editable run with `cap="all"` in PowerPoint), the price at display size on one line and the details from the top of the card (guarded rule `tier-cards`, `TIER_VALUE_SIZES`); a slide of 2 to 5 one-entry lists whose titles are each one word draws the word at display size over an accent rule without a card (guarded rule `pillar-words`, `fitList`'s `display` option, accent `ListFit.rules` with a `thickness`, a native line in PowerPoint). Both rules sit inside the size guard, so no block reads smaller than before except the label, which becomes an eyebrow at the tag's 22 px; other pillars and tiers keep their cards.

@@ -1949,6 +1949,8 @@ export interface MetricLayout {
   trendBox?: LayoutBox;
   /** LH-112: the value asked for a display size (`display`), not its role size. */
   display?: true;
+  /** LH-135: the label leads the metric as its eyebrow (`MetricLayoutOptions.eyebrow`): drawn in the tag's color. */
+  eyebrow?: true;
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -1985,6 +1987,12 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
   display?: { start: number; max: number; height?: number };
   /** LH-15: lay the metric out as a band (the value at the start, the other fields in a column beside it) when that fits; start-aligned. */
   band?: boolean;
+  /**
+   * LH-135: the label is the metric's eyebrow: it leads the metric above the value, bold at EYEBROW_TAG_SIZE and in capitals with
+   * EYEBROW_TRACKING where its script has case (the tag's style); engines draw it in the tag's color (`MetricLayout.eyebrow`). The value
+   * and the other fields follow it as in a tile, but the description stays under the value.
+   */
+  eyebrow?: boolean;
   /**
    * LH-39: a value of one word (a figure such as "$1.24M") never wraps: it is set on one line at the largest size that holds it, not split
    * inside the figure at a larger size. Default true; composition passes false for a slide's composition without its guarded rules.
@@ -2048,6 +2056,16 @@ function figureWidth(text: string, size: number): number | undefined {
  * and grow to 120 (layoutMetric's `display`).
  */
 export const METRIC_DISPLAY_SIZES = { one: { start: 120, max: 160 }, two: { start: 90, max: 120 } } as const;
+/**
+ * LH-135: the display size of a pricing tier's price, in reference pixels, by how many tiers share the slide: two start at 96 and grow to
+ * 128, three to five start at 80 and grow to 96 (the narrower cards), and each steps down to the one line its card holds. Equal caps keep
+ * the prices of a set of tiers at one size wherever they all fit (a word such as "Custom" may need less).
+ */
+export const TIER_VALUE_SIZES = { few: { start: 96, max: 128 }, many: { start: 80, max: 96 } } as const;
+/** LH-135: a slide of pricing tiers has at most this many (more are a grid of cards, not a comparison). */
+export const TIER_MAX = 5;
+/** LH-136: a set of pillars drawn as display words has at most PILLAR_MAX of them, each title a word of at most PILLAR_WORD_MAX characters. */
+export const PILLAR_MAX = 5, PILLAR_WORD_MAX = 14;
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
@@ -2089,8 +2107,10 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
     const least=snapFontSizeUp(Math.max(minimum,options.minimumSizes?.[role]??0));
-    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:23,options.growth,LONE_DISPLAY_SIZES[role])*scale,options.roleSizes?.[role]??Infinity),least);
-    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:role==='description'?400:500,italic:false,path};
+    // LH-135: an eyebrow label is the tag's size and style (bold, capitals and tracking where its script has case, in the accent family).
+    const eyebrow=options.eyebrow===true&&role==='label'&&!options.tile,caps=eyebrow&&eyebrowCaps(text);
+    const nominal=Math.max(Math.min(grownRoleSize(role==='value'?valueSize:role==='description'?20:role==='trend'?18:eyebrow?EYEBROW_TAG_SIZE:23,eyebrow?undefined:options.growth,LONE_DISPLAY_SIZES[role])*scale,options.roleSizes?.[role]??Infinity),least);
+    const requestedStyle:TextStyle={fontFamily:(role==='value'?options.fontFamilies?.heading:eyebrow?options.fontFamilies?.accent??options.fontFamilies?.body:options.fontFamilies?.body)??'sans-serif',fontWeight:role==='value'?800:eyebrow?700:role==='description'?400:500,italic:false,path,...(caps?{caps:true,tracking:EYEBROW_TRACKING}:{})};
     const part:MetricTextPart={role,path,text,sources:[{path,value:sourceValue,start:0,end:text.length}],visible:role==='value'||text.length>0,linePositions:[],
       box:{...box,height:0},requestedFontSize:gridFontSize(nominal,least),minFontSize:least,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     if (!part.visible) part.fit={lines:[],sourceLines:[],fontSize:part.requestedFontSize,lineHeight:part.requestedFontSize*1.22,tabSize:4,tabWidth:0,overflow:false};
@@ -2159,6 +2179,12 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     let size:number|undefined;
     for (let next=options.display.max;next>start+1e-9&&size===undefined;next-=4) if (next*scale*1.22<=METRIC_DISPLAY_HEIGHT*reference+.01&&oneLine(next)) size=next;
     for (let next=start;next>role+1e-9&&size===undefined;next-=4) if (oneLine(next)) size=next;
+    // LH-135: a pricing tier's price gives way to its label and description: it takes at most the height the box leaves over them at their
+    // starting sizes (down to its role size), so the box's metadata is not reduced for display headroom.
+    if (options.eyebrow&&size!==undefined) {
+      const others=metadata.reduce((sum,part)=>sum+occupied(measure(part,part.requestedFontSize,part===arrowHost?Math.max(Number.MIN_VALUE,box.width-arrowRoom(part.requestedFontSize)):box.width)),0)+metadata.length*gap+primaryGap;
+      size=Math.min(size,Math.max(role,Math.floor((box.height-others)/(1.22*scale)/4)*4));
+    }
     primary.requestedFontSize=gridFontSize(Math.max(Math.min((size??role)*scale,options.roleSizes?.value??Infinity),primary.minFontSize),primary.minFontSize);
   }
   const fitValue=(area:LayoutBox,singleLine:boolean)=>{
@@ -2226,7 +2252,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         continue;
       }
       // LH-68: a tile leads with its label (the eyebrow), each lead part a gap above the next.
-      const lead=options.tile?metadata.filter(part=>part.role==='label'):[];
+      // LH-135: so does an eyebrow label.
+      const lead=options.tile||options.eyebrow?metadata.filter(part=>part.role==='label'):[];
       const tail=metadata.filter(part=>(arrangement!=='inline-unit'||part!==unit)&&!lead.includes(part));
       const tailHeight=tail.reduce((sum,part)=>sum+occupied(measured.get(part)!),0)+Math.max(0,tail.length-1)*gap;
       const leadHeight=lead.reduce((sum,part)=>sum+occupied(measured.get(part)!)+gap,0),top=box.y+leadHeight;
@@ -2348,7 +2375,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
-  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),...(options.eyebrow&&!options.tile&&parts.some(part=>part.role==='label')?{eyebrow:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
   if (figureLine) FIGURE_LINES.add(layout);
   return layout;
 }
@@ -3145,7 +3172,11 @@ export interface ListEntryLayout {
  */
 export const PICTURE_BULLET_SCALE=0.65;
 /** LH-08: a hairline between two rows of a list drawn as ruled rows (`design.listStyle: "rows"`): from `x` across `width`, centered on `y`. */
-export interface ListRule { x:number; y:number; width:number }
+export interface ListRule { x:number; y:number; width:number;
+  /** LH-136: the rule's thickness in canvas pixels (LIST_RULE_WIDTH of the scale when absent). */
+  thickness?:number;
+  /** LH-136: the rule is the accent rule over a display heading (`ListFitOptions.display`): drawn in the accent, not the border neutral. */
+  accent?:true }
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number;
   /** LH-08: the hairlines of a list drawn as ruled rows, one between every two first-level entries; engines draw each LIST_RULE_WIDTH thick in the scheme's border neutral. */
   rules?:ListRule[] }
@@ -3176,6 +3207,14 @@ export interface ListFitOptions extends RichTextOptions {
    */
   heading?:boolean;
   /**
+   * LH-136: the heading of a one-entry heading list (`heading`) is a display word over an accent rule: the word at LIST_DISPLAY_SCALE times
+   * the list size (stepped down to the one line the box holds, never to under LIST_HEADING_SCALE), a rule of LIST_DISPLAY_RULE em across the
+   * box above it (`ListFit.rules`, `accent`), then the description at the list size. Ignored unless the list is a heading list.
+   */
+  display?:boolean;
+  /** LH-136: the display word is at most this size in canvas pixels, so sibling pillars read at one word size (composition passes the smallest any of them fitted at). */
+  displayMax?:number;
+  /**
    * LH-08: ruled rows (effective `design.listStyle: "rows"`): each first-level entry is a row, a hairline between two rows (`ListFit.rules`)
    * and LIST_ROWS_GAP em between them; no bullet (numbers stay). When every entry has a description and sits at the first level, the labels
    * are bold and, when the widest fits LIST_ROWS_LABEL_SHARE of the width on one line, sit in a column beside their descriptions (one em
@@ -3192,6 +3231,8 @@ export interface ListFitOptions extends RichTextOptions {
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
+/** LH-136: a display heading is this many times the list size, over a rule of LIST_DISPLAY_RULE em with LIST_DISPLAY_GAP em under it. */
+export const LIST_DISPLAY_SCALE=2.3, LIST_DISPLAY_RULE=.14, LIST_DISPLAY_GAP=.3;
 /**
  * LH-07: a step badge is this many times its step's text size across (the list size, or a paragraph's size), and its numeral is set
  * at that text size, so a badge never draws a number smaller than the text it numbers (Claude Design: a 54 to 70 px circle over 20 to
@@ -3290,7 +3331,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   };
   const layout=(fontSize:number):ListFit=>{
     if(rows)return rowsLayout(fontSize);
-    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[];
+    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],accentRules:ListRule[]=[];
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
@@ -3306,8 +3347,24 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
-      const text=heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
-        :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
+      // LH-136: a display heading under an accent rule across the box: the word at LIST_DISPLAY_SCALE times the list size, stepped down to one line.
+      const displayed=heading&&options.display===true;
+      let displayText:RichTextFit|undefined;
+      if(displayed){
+        const thickness=fontSize*LIST_DISPLAY_RULE;
+        accentRules.push({x:box.x,y:y+thickness/2,width:box.width,thickness,accent:true});
+        y+=thickness+fontSize*LIST_DISPLAY_GAP;textBox.y=y;
+        const wordOptions={...options,style:{...style,fontWeight:700}},target=Math.min(fontSize*LIST_DISPLAY_SCALE,options.displayMax??Infinity),least=Math.min(fontSize*LIST_HEADING_SCALE,target);
+        const wordAt=(size:number,area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize*LIST_DISPLAY_SCALE,wordOptions,minFontSize)(size);
+        const natural=Math.max(...wordAt(target,{...textBox,width:1e6}).richLines.map(line=>line.width));
+        let size=natural>width?Math.max(least,target*width/natural):target;
+        displayText=wordAt(size,textBox);
+        // The word gives way to the description: it takes at most the height the box leaves over the description at the list size.
+        const room=box.height-(y-box.y)-fontSize*.35-(item.descriptionRuns===undefined?0:richTextLayouter(item.descriptionRuns,{x,y:0,width,height:1e6},requestedSize,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize).height);
+        for(let step=0;step<48&&(displayText.richLines.length>1||displayText.height>room)&&size>least+1e-6;step++){size=Math.max(least,size*.96);displayText=wordAt(size,textBox);}
+      }
+      const text=displayText??(heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
+        :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize));
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
       // badge starts lower by the difference, so the badge stays inside the entry.
@@ -3316,7 +3373,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
         const ratio=heading?1:.82;
-        y+=fontSize*(heading?.25:.12);descriptionBox={x,y,width,height:box.height};
+        y+=fontSize*(displayed?.35:heading?.25:.12);descriptionBox={x,y,width,height:box.height};
         description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
         descriptionBox.height=description.height;lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));y+=description.height;
       }
@@ -3331,7 +3388,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       if(item.index<source.length-1)y+=badged?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
-    return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(options.direction==='rtl'?{directions}:{})};
+    return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(accentRules.length?{rules:accentRules}:{}),...(options.direction==='rtl'?{directions}:{})};
   };
   let minimum=minFontSize;
   for(const item of source) {
@@ -3756,7 +3813,8 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
         const display = part.role === 'value' && item.metricLayout?.display ? METRIC_ROLE_VALUE_SIZE * scale : Infinity;
         // LH-114: a pull line's body is a lead, not the quote's display size on a card: it keeps a key of its own, so the guard holds it to
         // the slide's smallest body size (every other block still keeps its own size), not to the card's larger quote.
-        if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit === undefined ? undefined : Math.min(part.fit.fontSize, display), `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
+        // LH-135: a label drawn as the metric's eyebrow is set at the tag's role size: it is no body, as LH-50's eyebrow is none.
+        if (MAIN_PARTS.has(part.role) && !(part.role === 'label' && item.metricLayout?.eyebrow) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit === undefined ? undefined : Math.min(part.fit.fontSize, display), `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
         split(part.text, part.fit);
         // LH-39: a figure (a value of one word, LH-150: as the no-break rules bind it) on more than one line is split, wherever the break
         // falls ("$1." over "24M").
@@ -3787,16 +3845,18 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
  * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`), and LH-08's ruled rows for
  * a list of short labels with descriptions (`list-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`),
- * whose badges take height the steps' text might need, and LH-149's half steps of the type scale for fitted body text (`half-steps`). LH-80 and LH-49's tracks are
- * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
+ * whose badges take height the steps' text might need, LH-149's half steps of the type scale for fitted body text (`half-steps`), LH-135's
+ * pricing tiers as one card each (`tier-cards`) and LH-136's one-word pillar titles at display size over an accent rule (`pillar-words`).
+ * LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only
+ * place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges' | 'tier-cards' | 'pillar-words';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges', 'tier-cards', 'pillar-words'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
 const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
@@ -4723,9 +4783,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // Wave 5: a badge list keeps its badges and never takes LH-08's automatic rows (fitList draws rows instead of badges): the sequence
   // region asked for steps. Its other lists, and a slide whose badges the guard refused (NO_STEPS), may still be ruled.
+  // LH-136: the lists drawn as display words (fitList's `display`), by path (pillarWords is filled once the slide's blocks are collected).
+  const pillarWords = new Set<string>(), wordCaps = new Map<string, number>();
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
-    : {...richOptions(styleFor(field,path)),heading:true,...(value!==undefined&&listRows(value)?{rows:true}:{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
+    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{})}:{}),...(value!==undefined&&listRows(value)?{rows:true}:{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
@@ -5053,6 +5115,35 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const sizes = metrics.length === 1 ? METRIC_DISPLAY_SIZES.one : METRIC_DISPLAY_SIZES.two;
     if (metrics.length >= 1 && metrics.length <= 2 && others >= 1 && others <= 2) for (const node of metrics) metricDisplay.set(node.path, sizes);
   }
+  // LH-135: pricing tiers. A slide whose body is 2 to 5 groups, each a metric with a label (the tier's name and price) followed by a list or
+  // text (what the tier includes), draws each group as one equal card: the label as the metric's eyebrow, the price at display size, and
+  // the details under it, from the top of the card (placeNode). `tierGroups`: the groups' paths; `tierMetricPaths`: each one's
+  // metric with its display sizes; `tierPrices`: the items of those metrics. Each tier keeps the sizes it fits at (the guard holds every block
+  // to the size it had as two cards), except that prices which reach their role size share the smallest of them (before sharePeerSizes).
+  const tierGroups = new Set<string>(), tierMetricPaths = new Map<string, { start: number; max: number }>(), tierPrices: number[] = [];
+  const tierOf = (node: Pending): boolean => {
+    const kids = node.children, own = record(node.composition);
+    if (!kids || kids.length < 2 || kids.length > 3 || (own.mode !== undefined && own.mode !== 'column' && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return false;
+    const label = record(kids[0]!.value).label;
+    return kids[0]!.field === 'metric' && !kids[0]!.children && kids[0]!.caption === undefined && typeof label === 'string' && label.trim() !== ''
+      && kids.slice(1).every(kid => !kid.children && kid.caption === undefined && (kid.field === 'items' || kid.field === 'bullets' || kid.field === 'text'));
+  };
+  if (ruleOn('tier-cards') && hasCards && pending.length >= 2 && pending.length <= TIER_MAX && pending.every(tierOf)) {
+    const sizes = pending.length === 2 ? TIER_VALUE_SIZES.few : TIER_VALUE_SIZES.many;
+    for (const node of pending) { tierGroups.add(node.path); tierMetricPaths.set(node.children![0]!.path, sizes); }
+  }
+  // LH-136: pillars whose titles are one word. A slide whose body is 2 to 5 lists of one entry each, a single word with its description,
+  // draws each as the word at display size over an accent rule, with no card (the word says what the card would: the pillar's name).
+  // Any other set of pillars, a title of several words included, keeps its cards.
+  const wordPillar = (node: Pending): boolean => {
+    const entries = node.value, entry = Array.isArray(entries) && entries.length === 1 ? record(entries[0]) : undefined;
+    return !node.children && node.caption === undefined && (node.field === 'items' || node.field === 'bullets') && node.payload.numbering === undefined && entry !== undefined
+      && typeof entry.text === 'string' && entry.text.trim() !== '' && !/\s/u.test(entry.text.trim()) && [...entry.text.trim()].length <= PILLAR_WORD_MAX && entry.description !== undefined && (entry.level ?? 0) === 0;
+  };
+  if (ruleOn('pillar-words') && pending.length >= 2 && pending.length <= PILLAR_MAX && pending.every(wordPillar)) {
+    for (const node of pending) pillarWords.add(node.path);
+    fire('pillar-words');
+  }
   // LH-06: the one block or group drawn on the emphasis surface: the first `emphasis: true` in reading order. Any other is drawn plain,
   // and reported: a slide has one emphasis.
   const emphasisPaths: string[] = [];
@@ -5060,7 +5151,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   findEmphasis(pending);
   const chosenEmphasis = emphasisPaths[0];
   for (const ignored of emphasisPaths.slice(1)) diagnostics.push({ code: 'emphasis-ignored', path: ignored, message: 'A slide draws one emphasis surface: the first block or group with emphasis: true has it, and this one is drawn without it.' });
-  let surface: ComposedEmphasis | undefined = autoSurface?.emphasis, insideEmphasis = false;
+  let surface: ComposedEmphasis | undefined = autoSurface?.emphasis, insideEmphasis = false, insideTier = false;
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
   // WI-1 (N1), LH-43: indexes into `items` of sibling blocks (the cells of a flow or a region, or regions of one role side
   // by side); after composition the text and lists of each set share the smallest size any of them fitted at.
@@ -5158,24 +5249,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   });
   // LH-112: whether a metric beside other blocks is start-aligned (metric-start, or with its display size, metric-display): unless the slide
   // or the deck sets the content alignment (a layout's or theme's centering is the default for short text, as LH-70 reads it).
-  const metricStarts = (node: Pending): boolean => metricDisplay.has(node.path) && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
+  const metricStarts = (node: Pending): boolean => tierMetricPaths.has(node.path) || metricDisplay.has(node.path) && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
   // The display size grows against the slide's body height (contentBox), so the height a metric needs (naturalHeight) and its placed
   // layout ask for the same value.
   const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => {
-    const starts = !tile && metricStarts(node), display = !tile && ruleOn('metric-display') ? metricDisplay.get(node.path) : undefined;
-    if (starts && alignmentFor('metric') !== 'left') fire('metric-start');
-    if (display) fire('metric-display');
+    const tier = tile ? undefined : tierMetricPaths.get(node.path);
+    const starts = !tile && metricStarts(node), display = tile ? undefined : tier ?? (ruleOn('metric-display') ? metricDisplay.get(node.path) : undefined);
+    if (!tier && starts && alignmentFor('metric') !== 'left') fire('metric-start');
+    if (display && !tier) fire('metric-display');
     const metricOptions: MetricLayoutOptions = {
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,floorFallback,
       textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
-      ...(display?{display:{...display,height:contentBox.height}}:{}),
-      figure:ruleOn('metric-figure'),
+      ...(display?{display:{...display,height:contentBox.height}}:{}),...(tier?{eyebrow:true}:{}),
+      // LH-135: a tier's price is a figure whatever the guard's other rules do (LH-127): "$1,200/mo" never splits.
+      figure:ruleOn('metric-figure')||tier!==undefined,
       ...(deckLanguage()!==undefined?{language:deckLanguage()}:{}),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
-    const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
+    const band = display !== undefined && !tier && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
     const laid = layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
     if (FIGURE_LINES.has(laid)) fire('metric-figure');
     return laid;
@@ -5317,13 +5410,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // as its content, so a one-line paragraph's short cell is not "too small" (small-cell made paginate split a slide that fits). A
   // block the stack had to squeeze below its need is not one of them.
   const contentSized = new WeakSet<Pending>();
-  const stackedBoxes = (nodes: Pending[], area: LayoutBox, requestedGap: number, settings: Composition, cards = hasCards, anchor: 'top' | 'middle' | 'bottom' = 'top'): LayoutBox[] => {
+  const stackedBoxes = (nodes: Pending[], area: LayoutBox, requestedGap: number, settings: Composition, cards = hasCards && !insideTier, anchor: 'top' | 'middle' | 'bottom' = 'top'): LayoutBox[] => {
     const between = Math.max(0, Math.min(requestedGap, area.width / 2, area.height / (nodes.length * 2)));
     const space = Math.max(0, area.height - between * (nodes.length - 1)), share = space / nodes.length;
     const elastic = nodes.map(node => !measuredNode(node)), stretch = elastic.filter(Boolean).length;
     const needs = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings));
     const floors = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings, true));
     let heights = shareHeights(needs, floors, space);
+    // LH-135: a tier's price takes the height its details leave (between its role size and its display size), so the details keep the
+    // size they fit at, and the metric's label and description keep theirs.
+    const priceAt = nodes.findIndex(node => tierMetricPaths.has(node.path));
+    if (priceAt >= 0 && needs[priceAt]! > floors[priceAt]! + 1e-6) {
+      const others = needs.reduce((sum, need, index) => index === priceAt ? sum : sum + need, 0);
+      if (floors[priceAt]! + others <= space + 1e-6) heights = needs.map((need, index) => index === priceAt ? Math.min(need, Math.max(floors[priceAt]!, space - others)) : need);
+    }
     // WI-4: prose and lists that do not fit at their role sizes shrink together to the largest one size that fits, instead of each
     // block taking the size its share of the column happens to allow (23, 21 and 25 px in one column).
     const textual = nodes.every(node => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets'));
@@ -5775,6 +5875,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // a card of its own. A group's children are arranged inside the card's inset.
     const emphasized = !insideEmphasis && node.emphasis !== undefined && node.emphasis === chosenEmphasis;
     if (node.children) {
+      // LH-135: a pricing tier is one card of its cell (the cell's top edge one half gap down, as every filled card's is): its children are
+      // placed in the card's insets with no card of their own, from the top, and share the card's frame (one card under the first of them).
+      if (tierGroups.has(node.path) && !emphasized && !insideEmphasis && cards) {
+        const drop = frame ? gap * CARD_FILL_SPACE : 0, card = acceptedBox(frame ? { ...frame, y: frame.y + drop, height: Math.max(scale, frame.height - drop) } : box);
+        const own = inheritedSettings(settings, { ...node.composition, mode: 'column' }), inner = inset(payloadBox(card, true), own), first = items.length;
+        if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+        insideTier = true;
+        try { arrange(node.children, inner, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
+        finally { insideTier = false; }
+        for (const item of items.slice(first)) item.frameBox = card;
+        const price = items.findIndex((item, index) => index >= first && item.metricLayout !== undefined);
+        if (price >= 0) tierPrices.push(price);
+        fire('tier-cards');
+        return;
+      }
       if (emphasized) surface = { path: node.emphasis!, box: acceptedBox(frame ?? box), radius: CARD_RADIUS * scale, shape: 'card', source: 'authored' };
       const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized ? payloadBox(frame ?? box, true) : box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
@@ -5789,6 +5904,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (lone) { box = lone; frame = undefined; metricReferenceHeight = undefined; contentSized.add(node); }
     const onSurface = emphasized || insideEmphasis;
     if (onSurface) cards = emphasized;
+    else if (insideTier) cards = false;
     // LH-78: a quote beside other blocks is drawn on a card, unless the card's inset would make it overflow (below). On the emphasis
     // surface (LH-06) the surface is its card.
     const quoteCard = !cards && !onSurface && besideQuote(node);
@@ -6091,12 +6207,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const code = measureCode(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, false, true), source = code.parts.find(part => part.role === 'body');
       content = source?.fit ? source.box.y + source.fit.lines.length * source.fit.lineHeight + 18 : 1e6;
     }
-    else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings).bounds.height;
+    // LH-135: a tier's price at the floor of its stack is at its role size, not scaled down: display headroom is the only thing it gives up.
+    else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings, false, atFloor && tierMetricPaths.has(node.path) ? {value: METRIC_ROLE_VALUE_SIZE * scale} : undefined).bounds.height;
     // LH-41: laid out as the region will (a band, compact, at its role sizes or the floor): its name, label bands and markers.
     else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role').bounds.height + scale;
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
-    if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
+    if (atFloor && !tierMetricPaths.has(node.path) && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
     const body = content + (node.caption !== undefined ? 32 * scale : 0) + eyebrowNeed;
     return body + verticalPad(body);
   };
@@ -6637,6 +6754,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
     const arrangementOf = (region: LayoutRegion, units: Pending[], cell: LayoutBox): 'grid' | 'row' | 'column' => {
       if (region.name === longTextRegion) return 'column';
+      // LH-135: pricing tiers are compared side by side, in one row of equal cards.
+      if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
       if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
@@ -6931,7 +7050,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const cell = { ...area, width: Math.max(scale, area.width), height: Math.max(scale, area.height) };
       templateCell = true;
       try {
-        const cards = hasCards && !region.bleed;
+        // LH-136: a region of pillars drawn as display words has no cards.
+        const cards = hasCards && !region.bleed && !(units.length > 0 && units.every(unit => pillarWords.has(unit.path)));
         if (region.name === overridden) {
           arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
           return 'composition';
@@ -7096,6 +7216,36 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!layout || !frame || layout.overflow) continue;
       const bottom = Math.max(layout.bounds.y + layout.bounds.height, ...layout.parts.map(part => part.box.y + part.box.height), ...(layout.photo ? [layout.photo.box.y + layout.photo.box.height] : []));
       item.frameBox = acceptedBox({ ...frame, height: Math.min(frame.height, bottom - frame.y + (item.box.y - frame.y)) });
+    }
+  };
+  // LH-135: the prices of the tiers that reach their role size read at one size, the smallest of them (a word that fits only below it,
+  // "Custom", keeps its own). The tiers' other blocks stay as they are: they are no peers of the tiers' prices.
+  const shareTierPrices = (): void => {
+    const priceOf = (index: number) => items[index]!.metricLayout?.parts.find(part => part.role === 'value');
+    const alike = tierPrices.filter(index => (priceOf(index)?.fit?.fontSize ?? 0) >= METRIC_ROLE_VALUE_SIZE * scale - FONT_GRID_EPSILON);
+    if (alike.length < 2) return;
+    const size = Math.min(...alike.map(index => priceOf(index)!.fit!.fontSize));
+    for (const index of alike) {
+      if (priceOf(index)!.fit!.fontSize <= size + 1e-9) continue;
+      const item = items[index]!, refit = metricRefits.get(index)?.({ value: size });
+      const value = refit?.parts.find(part => part.role === 'value');
+      if (!refit || refit.overflow || !value?.fit || Math.abs(value.fit.fontSize - size) > 1e-9) continue;
+      item.metricLayout = refit;
+      item.text = value.fit;
+    }
+  };
+  // LH-136: sibling pillars read their display words at one size, the smallest any of them fitted at (a long word steps down to its one line);
+  // each description keeps its own fit, so no size the guard holds falls.
+  const shareWords = (): void => {
+    const words = items.filter(item => pillarWords.has(item.path) && item.text !== undefined && 'listEntries' in item.text);
+    const sizeOf = (item: ComposedItem) => (item.text as ListFit).listEntries[0]?.text.fontSize ?? Infinity;
+    if (words.length < 2) return;
+    const size = Math.min(...words.map(sizeOf));
+    for (const item of words) {
+      if (sizeOf(item) <= size + 1e-9) continue;
+      wordCaps.set(item.path, size);
+      const fit = item.text!, refit = fitContent(item.field, item.value, contentText(item.field, item.value) ?? '', item.box, fit.fontSize, fit.fontSize, item.path, item.payload.numbering, item.alignment);
+      if (!refit.overflow && Math.abs(refit.fontSize - fit.fontSize) < 1e-9) item.text = refit; else wordCaps.delete(item.path);
     }
   };
   const shareStartAlignment = (): void => {
@@ -7268,6 +7418,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (roots.length === 1 && !roots[0]!.children) roots[0]!.fills = true;
     if (grouped?.settings) arrange(grouped.nodes, contentBox, grouped.settings, 0, gap); else arrange(grouped?.nodes ?? pending, contentBox, rootSettings, 0);
   }
+  // LH-135: the prices of the tiers that reach their role size read at one size (a word that fits only below it, "Custom", keeps its own).
+  shareTierPrices();
+  shareWords();
   sharePeerSizes();
   capSizes();
   shareStartAlignment();
