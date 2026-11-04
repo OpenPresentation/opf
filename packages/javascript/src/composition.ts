@@ -4056,7 +4056,8 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
  * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
- * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`), and LH-08's ruled rows for
+ * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`, with LH-152's label of a
+ * list or group), and LH-08's ruled rows for
  * a list of short labels with descriptions (`list-rows`), LH-133's questions and terms as ruled rows or a grid under accent rules
  * (`pair-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`), whose badges take height the steps' text
  * might need, with LH-134's numerals of a few takeaways and an agenda's numbered rows (`numerals`), LH-149's half steps of the type scale
@@ -5227,20 +5228,45 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // accent, in capitals with tracking where the script has case) EYEBROW_GAP of a gap over the text, in its cell. Only root blocks of plain
   // text with no caption or emphasis of their own, on a slide that pins no block to a region. `eyebrowOf`: the eyebrow of each paragraph
   // (by its block path); `eyebrowBlocks`: the label blocks, which are no block of the body.
-  const eyebrowOf = new Map<string, { path: string; value: unknown }>(), eyebrowBlocks = new Set<number>();
+  // LH-152: the same label before a list or a group, at the root or inside a group, is the eyebrow of that list or group, as Claude Design
+  // heads a column with its name, instead of a cell of its own beside it (an equal-width row cell half a slide from its list). A group's
+  // first child that is a label, followed by two or more blocks none of which is a label, names the whole group: it is the group's
+  // eyebrow. A root label before a root list stays a block on a layout with a `sequence` region, whose lists draw step badges (LH-07).
+  // `eyebrowHosts`: the block paths of every label drawn as an eyebrow, which are no block of the body.
+  const eyebrowOf = new Map<string, { path: string; value: unknown }>(), eyebrowBlocks = new Set<number>(), eyebrowHosts = new Set<string>();
   if (ruleOn('eyebrow') && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && !regions.length && Array.isArray(slide.blocks) && !slide.blocks.some((block: unknown) => record(block).region !== undefined)) {
     const plainBlock = (host: Record<string, any>) => host.text !== undefined && host.caption === undefined && host.emphasis === undefined && !Array.isArray(host.blocks) && fields.every(field => field === 'text' || host[field] === undefined);
-    const flowed: { host: Record<string, any>; index: number }[] = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ host: record(block), index }]);
-    for (let at = 0; at + 1 < flowed.length; at++) {
-      const label = flowed[at]!, text = flowed[at + 1]!;
-      if (!plainBlock(label.host) || !plainBlock(text.host) || !eyebrowLabel(label.host.text, text.host.text)) continue;
-      const labelPath = `${path}.blocks.${label.index}.text`;
-      eyebrowBlocks.add(label.index);
-      eyebrowOf.set(`${path}.blocks.${text.index}`, { path: labelPath, value: label.host.text });
-      eyebrowLabels.set(labelPath, eyebrowCaps(annotationText(label.host.text)));
-      at++;
-    }
-    if (eyebrowBlocks.size) fire('eyebrow');
+    const listBlock = (host: Record<string, any>) => (host.items !== undefined || host.bullets !== undefined) && host.caption === undefined && host.emphasis === undefined && !Array.isArray(host.blocks) && fields.every(field => field === 'items' || field === 'bullets' || host[field] === undefined);
+    const groupBlock = (host: Record<string, any>) => Array.isArray(host.blocks) && host.emphasis === undefined;
+    const sequence = template?.regions.some(region => region.sequence !== undefined) === true;
+    const label = (host: Record<string, any>) => plainBlock(host) && isLabelText(host.text);
+    const mark = (labelBase: string, owner: string, value: unknown) => {
+      const labelPath = `${labelBase}.text`;
+      eyebrowHosts.add(labelBase);
+      eyebrowOf.set(owner, { path: labelPath, value });
+      eyebrowLabels.set(labelPath, eyebrowCaps(annotationText(value)));
+    };
+    // A group's content is no label alone: it holds a block that is not a short label (a list, a paragraph, a metric, any other payload).
+    const content = (host: Record<string, any>, depth: number): boolean => Array.isArray(host.blocks) ? depth < MAX_COMPOSITION_DEPTH && host.blocks.some((block: unknown) => content(record(block), depth + 1)) : !emptyHost(host) && !label(host);
+    // An explicit arrangement (a `composition` mode, weights or columns of the slide or the group) places its blocks as authored: only
+    // LH-50's root paragraphs take eyebrows there, as before.
+    const arrangedBy = (composition: unknown) => ['mode', 'weights', 'columns'].some(key => record(composition)[key] !== undefined);
+    const scan = (blocks: unknown[], base: string, nested: boolean, depth: number, arranged: boolean): void => {
+      const flowed: { host: Record<string, any>; index: number }[] = blocks.flatMap((block: unknown, index: number) => (!nested && placedBlocks.has(index)) || emptyHost(record(block)) ? [] : [{ host: record(block), index }]);
+      if (nested && !arranged && flowed.length >= 3 && label(flowed[0]!.host) && !flowed.slice(1).some(entry => label(entry.host))) mark(`${base}.blocks.${flowed[0]!.index}`, base, flowed[0]!.host.text);
+      else if (!(nested && arranged)) for (let at = 0; at + 1 < flowed.length; at++) {
+        const first = flowed[at]!, next = flowed[at + 1]!;
+        if (!plainBlock(first.host)) continue;
+        const paragraph = plainBlock(next.host) && eyebrowLabel(first.host.text, next.host.text);
+        if (!paragraph && !(!arranged && isLabelText(first.host.text) && (nested || !sequence) && (listBlock(next.host) || (groupBlock(next.host) && content(next.host, depth))))) continue;
+        mark(`${base}.blocks.${first.index}`, `${base}.blocks.${next.index}`, first.host.text);
+        if (!nested) eyebrowBlocks.add(first.index);
+        at++;
+      }
+      if (depth < MAX_COMPOSITION_DEPTH) for (const entry of flowed) if (groupBlock(entry.host)) scan(entry.host.blocks, `${base}.blocks.${entry.index}`, true, depth + 1, arrangedBy(entry.host.composition));
+    };
+    scan(slide.blocks, path, false, 0, arrangedBy(slide.composition));
+    if (eyebrowHosts.size) fire('eyebrow');
   }
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
@@ -5357,22 +5383,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
     /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
     cardCell?: boolean;
-    /** LH-50: the label drawn as this paragraph's eyebrow. */
+    /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
     eyebrow?: { path: string; value: unknown } };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
       const settings = record(host.composition) as Composition;
       assertComposition(settings);
-      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}),
-        children: host.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
+      // LH-152: a group may carry the eyebrow of its first child; a label drawn as an eyebrow is no child.
+      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...(eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
+        children: host.blocks.flatMap((block: unknown, index: number) => eyebrowHosts.has(`${basePath}.blocks.${index}`) ? [] : collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
-      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...(field === 'text' && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
+      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -5404,7 +5431,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const tierGroups = new Set<string>(), tierMetricPaths = new Map<string, { start: number; max: number }>(), tierPrices: number[] = [];
   const tierOf = (node: Pending): boolean => {
     const kids = node.children, own = record(node.composition);
-    if (!kids || kids.length < 2 || kids.length > 3 || (own.mode !== undefined && own.mode !== 'column' && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return false;
+    // LH-152 with LH-135: a group headed by a label (its eyebrow) keeps its own drawing; the tier card has no band for that eyebrow.
+    if (!kids || node.eyebrow || kids.length < 2 || kids.length > 3 || (own.mode !== undefined && own.mode !== 'column' && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return false;
     const label = record(kids[0]!.value).label;
     return kids[0]!.field === 'metric' && !kids[0]!.children && kids[0]!.caption === undefined && typeof label === 'string' && label.trim() !== ''
       && kids.slice(1).every(kid => !kid.children && kid.caption === undefined && (kid.field === 'items' || kid.field === 'bullets' || kid.field === 'text'));
@@ -6202,10 +6230,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (emphasized) surface = { path: node.emphasis!, box: acceptedBox(frame ?? box), radius: CARD_RADIUS * scale, shape: 'card', source: node.emphasis === featuredPath ? 'featured' : 'authored' };
       const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized || ownCard ? cellCardPayload(frame ?? box, node) : box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+      // LH-152: a group's eyebrow takes a band at the top of the group; its children are arranged under it, and it is drawn over them
+      // at the end (placeEyebrows), at the size its band was reserved for.
+      const brow = node.eyebrow ? groupEyebrow(node, inner.width) : undefined, first = items.length;
+      const under = brow ? { ...inner, y: inner.y + brow.band, height: Math.max(scale, inner.height - brow.band) } : inner;
       insideEmphasis ||= emphasized;
       if (ownCard) insideCard = acceptedBox(frame ?? box);
-      try { arrange(node.children, inner, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
+      try { arrange(node.children, under, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
       finally { if (emphasized) insideEmphasis = false; if (ownCard) insideCard = undefined; }
+      if (brow && items.length > first) groupEyebrows.push({ members: items.slice(first), eyebrow: node.eyebrow!, size: brow.size, band: brow.band });
       return;
     }
     // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
@@ -6499,7 +6532,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         return sum + (row ? between : 0) + Math.max(0, ...members.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
       }, 0);
     }
-    if (node.children) { const width = cards && cardedNode(node) ? inner : cellWidth, content = node.children.reduce((sum, child) => sum + naturalHeight(child, width, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
+    // LH-152: a group's eyebrow band above its children.
+    if (node.children) { const width = cards && cardedNode(node) ? inner : cellWidth, content = node.children.reduce((sum, child) => sum + naturalHeight(child, width, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + (node.eyebrow ? groupEyebrow(node, inner).band : 0); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
@@ -6629,6 +6663,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const coverPictures = new WeakSet<Pending>();
   // LH-50: the eyebrow of each placed paragraph, drawn over its final box once every pass has moved it (placeEyebrows).
   const eyebrowsOf = new Map<ComposedItem, { path: string; value: unknown }>();
+  // LH-152: the eyebrow of each placed group, drawn over the items placed in it (`members`) at `size`, in the band of `band` it reserved.
+  const groupEyebrows: { members: ComposedItem[]; eyebrow: { path: string; value: unknown }; size: number; band: number }[] = [];
+  // LH-152: a group's eyebrow is sized for the first paragraph or list it holds (in reading order), at that block's starting size, or
+  // for a paragraph at its role size when it holds none; `band` is its height and EYEBROW_GAP of a gap.
+  const groupEyebrow = (node: Pending, width: number): { size: number; band: number } => {
+    const proseOf = (nodes: readonly Pending[]): Pending | undefined => { for (const child of nodes) { const found = child.children ? proseOf(child.children) : child.field === 'text' || child.field === 'items' || child.field === 'bullets' ? child : undefined; if (found) return found; } return undefined; };
+    const prose = proseOf(node.children ?? []), size = prose ? proseMeasure(prose, width).size : PROSE_NOMINAL_SIZE * scale;
+    return { size, band: eyebrowBand(node.eyebrow!, width, size) };
+  };
   // LH-58, LH-82, automatic composition only (a template groups its binding, groupBinding): the root blocks, one node each, of a
   // slide with no composition of its own, as repeated pairs (one cell per pair) or, for interleaved blocks of two kinds with
   // unequal counts, a grid of the majority kind above a row of the others (one column of the two). Undefined: as authored.
@@ -8141,6 +8184,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const box = { x: owner.box.x, y: owner.box.y - band, width: owner.box.width, height }, fit = fitEyebrow(eyebrow, box, paragraph, owner.alignment);
     items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: owner.composition, alignment: owner.alignment ?? alignmentFor('text'),
       eyebrow: true, ...(owner.frameBox ? { frameBox: owner.frameBox } : {}), ...(owner.region !== undefined ? { region: owner.region } : {}), ...(owner.emphasis ? { emphasis: true as const } : {}) });
+  }
+  // LH-152: each group's eyebrow over the span its items finally cover (their cards included), in the band the group left above them.
+  for (const { members, eyebrow, size, band } of groupEyebrows) {
+    const placedMembers = members.filter(item => items.includes(item));
+    if (!placedMembers.length) continue;
+    const at = Math.min(...placedMembers.map(item => items.indexOf(item))), outer = placedMembers.map(item => item.frameBox ?? item.box);
+    const x = Math.min(...outer.map(box => box.x)), right = Math.max(...outer.map(box => box.x + box.width)), top = Math.min(...outer.map(box => box.y));
+    const box = { x, y: top - band, width: right - x, height: band - gap * EYEBROW_GAP }, alignment = alignmentFor('text'), fit = fitEyebrow(eyebrow, box, size, alignment), lead = items[at]!;
+    items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: lead.composition, alignment,
+      eyebrow: true, ...(lead.region !== undefined ? { region: lead.region } : {}) });
   }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];
