@@ -106,7 +106,10 @@ automatic band or pill, LH-114's pull line, LH-121's timeline status words, LH-6
 minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's reading measure in a layout's regions, LH-64's one start for
 a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
-and LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)).
+LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
+and LH-07's step badges and flows of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)). LH-39's figure on one line
+(`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
+the next smaller type-scale step (a slide that composes no metric is not composed again for it).
 An eyebrow is set at its own role size (0.6 of its paragraph's, from 20 to 24 px), like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
 so the guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
 keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the
@@ -120,9 +123,12 @@ size is compared at its 76 px role size: what it has above that is headroom an a
   size) and LH-06's band or pill (its text starts at the size the block had), and the result with the rules is kept when it reads as
   well. When it does not, each rule that changed something is added on its own, smallest change first, and kept while the slide still
   reads as well.
-- The slide then settles: an under-filled body grows (LH-48), a layout may be recomposed as the automatic grid (LH-49, LH-83), and an
-  automatic slide may give its picture or chart a track (LH-80, LH-49). Each of those arrangements is composed with the rules that read
-  well in it and kept only when it reads as well as the guarded composition.
+- The slide then settles: a message set in the middle of the slide grows (LH-129), an under-filled body grows (LH-48), a layout may
+  be recomposed as the automatic grid (LH-49, LH-83), and an automatic slide may give its picture or chart a track (LH-80, LH-49). Each
+  of those arrangements is composed with the rules that read well in it and kept only when it reads as well as the guarded composition.
+- A slide that draws step badges (LH-07) is settled once more without them and keeps them only when every block reads as well, since a
+  badge band changes how much of the body is filled and so whether LH-48 or LH-129 grows it. The automatic scrim of a picture
+  background (LH-02) is computed last, over the slide that is kept, and changes no box or size.
 
 LH-52 and LH-71 only place blocks at the sizes they already have and are not guarded; LH-72's start alignment and sibling quotes of one
 row sharing a size are always applied. The rules meet as follows:
@@ -140,6 +146,11 @@ row sharing a size are always applied. The rules meet as follows:
   the text. A picture track (LH-80) keeps only the rules that read well beside it (a quote's lead size that would make it smaller is
   left out).
 - Charts that LH-49 recomposes share their value axis and plot height (LH-33, LH-93) in the recomposed grid.
+- A list in a `sequence` region keeps LH-07's badges and takes no automatic ruled rows (LH-08); its other lists, and a slide whose
+  badges the guard refused, may still be ruled.
+- LH-129 grows a cover's or section's title and subtitle but not its tag: the tag is LH-32's eyebrow at its 22 px role size, which is
+  also its display size.
+- LH-50's eyebrows apply on slides without layout regions and LH-07's steps only in layout regions, so a step never carries an eyebrow.
 
 ## Metrics beside other blocks
 
