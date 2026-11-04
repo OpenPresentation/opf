@@ -1,7 +1,7 @@
 // LH-127: an inline unit follows its value as it is drawn, with a host measurement and without one. LH-39: a figure never wraps.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, layoutMetric } from '../dist/composition.js';
+import { METRIC_UNIT_GAP, composeSlide, layoutMetric } from '../dist/composition.js';
 
 const box = { x: 0, y: 0, width: 600, height: 360 };
 const part = (layout, role) => layout.parts.find((entry) => entry.role === role);
@@ -23,7 +23,8 @@ test('LH-127: without a measurement the unit sits one gap after the figure, as i
       // Where the figure is drawn (its line is anchored on the accepted alignment point) and where its ink ends.
       const factor = align === 'left' ? 0 : align === 'center' ? .5 : 1, line = value.fit.sourceLines[0].width;
       const start = origin.x + (line - trueWidth) * factor, end = start + trueWidth;
-      assert.ok(Math.abs(unit.box.x - end - 8) <= 3, `${align}: the unit starts a gap after the figure's end (${(unit.box.x - end).toFixed(1)} px)`);
+      const gap = Math.max(8, METRIC_UNIT_GAP * size);
+      assert.ok(Math.abs(unit.box.x - end - gap) <= 3, `${align}: the unit starts a gap after the figure's end (${(unit.box.x - end).toFixed(1)} px)`);
     }
   }
 });
@@ -37,7 +38,7 @@ test('LH-127: the figure line takes its measured width, so engines that anchor o
     const one = layoutMetric({ value: text, unit: 'k' }, box, { display, align: 'left' }), unit = part(one, 'unit');
     if (one.arrangement !== 'inline-unit') continue;
     const value = part(one, 'value');
-    assert.ok(unit.box.x - (value.box.x + value.fit.sourceLines[0].width) <= 8 + 1e-6, text);
+    assert.ok(Math.abs(unit.box.x - (value.box.x + value.fit.sourceLines[0].width) - Math.max(8, METRIC_UNIT_GAP * value.fit.fontSize)) < 1e-6, text);
   }
 });
 
@@ -67,13 +68,35 @@ test('LH-39: a figure that cannot fit on one line down to the floor wraps as bef
   assert.ok(part(layout, 'value').fit.fontSize >= 16);
 });
 
-test('LH-39: in a composition the guard keeps every block at its size, so a figure shrinks only where it costs nothing', () => {
-  const slide = {
-    title: 'Why This Matters', composition: { mode: 'row' },
-    blocks: [{ metric: { value: '2.4x', label: 'Primary signal', description: 'Decide which roadmap bets move into the second half build window', trend: 'up' } },
-      { chart: { type: 'line', data: { columns: ['Quarter', 'Current'], rows: [['Q1', 20], ['Q2', 24], ['Q3', 27]] } } },
-      { quote: { text: 'The path is workable if we keep the metric simple and the decision owner visible.', attribution: 'Transportation working group' } }],
-  };
-  const metric = composeSlide(slide).items.find((item) => item.metricLayout).metricLayout;
-  assert.ok(part(metric, 'value').fit.fontSize >= 72, 'the value keeps the size it had');
+test('LH-127: the gap is about 0.12 em of the value, at least 8 px, with and without a measurement', () => {
+  const estimated = layoutMetric(kpi, box, { display, align: 'left' }), real = layoutMetric(kpi, box, { display, align: 'left', textMeasurement: measured });
+  for (const layout of [estimated, real]) {
+    const value = part(layout, 'value'), unit = part(layout, 'unit');
+    assert.equal(value.fit.fontSize, 120);
+    assert.ok(Math.abs(unit.box.x - (value.box.x + value.fit.sourceLines[0].width) - 14.4) < 1e-6, 'about 14 px at 120 px');
+  }
+  const small = layoutMetric({ value: '5', unit: 'x' }, { x: 0, y: 0, width: 300, height: 100 }, { align: 'left' });
+  assert.ok(part(small, 'unit').box.x - part(small, 'value').box.width >= 8);
+});
+
+const chart = { chart: { type: 'bar', data: { columns: ['Quarter', 'Revenue'], rows: [['Q1', 12], ['Q2', 15], ['Q3', 19]] } } };
+const valueAt = (composed, index) => composed.items.filter((item) => item.metricLayout)[index].metricLayout.parts.find((entry) => entry.role === 'value');
+
+test('LH-39: a split figure counts as unreadable: the row takes one size on the type scale, one line each', () => {
+  const slide = { title: 'Figures beside a chart', blocks: ['$1.24M', '$0.98M', '$2.31M'].map((value, index) => ({ metric: { value, label: `Revenue ${index + 1}`, delta: '+4%', trend: 'up' } })).concat([chart]) };
+  const composed = composeSlide(slide), values = [0, 1, 2].map((index) => valueAt(composed, index));
+  for (const value of values) assert.equal(value.fit.sourceLines.length, 1, 'no figure is split');
+  assert.equal(new Set(values.map((value) => value.fit.fontSize)).size, 1, 'the three figures stay one size');
+  assert.ok(values[0].fit.fontSize >= 16);
+});
+
+test('LH-39: the figure a guarded composition can keep at its size is kept (three large figures in a 2 + 1 grid)', () => {
+  const slide = { title: 'Three figures', blocks: ['$1,240,000', '$980,500', '$2,310,000'].map((value, index) => ({ metric: { value, label: `Revenue ${index + 1}` } })) };
+  const composed = composeSlide(slide);
+  for (const index of [0, 1, 2]) { assert.equal(valueAt(composed, index).fit.sourceLines.length, 1); assert.equal(valueAt(composed, index).fit.fontSize, 76); }
+});
+
+test('LH-39: a size drop is taken only for a split figure: a slide whose figures fit keeps every block', () => {
+  const slide = { title: 'Why', composition: { mode: 'row' }, blocks: [{ metric: { value: '12', label: 'Signal' } }, chart, { quote: { text: 'The path is workable if we keep the metric simple.', attribution: 'Working group' } }] };
+  assert.equal(valueAt(composeSlide(slide), 0).fit.fontSize >= 72, true);
 });

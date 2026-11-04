@@ -1835,6 +1835,19 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    */
   figure?: boolean;
 }
+/**
+ * LH-17: the largest size of the type scale at or under `size` (canvas px), the scale rising from the floor (reference px) by
+ * TYPE_SCALE_RATIO, rounded to whole reference pixels (see composeSlide's scaleSizes).
+ */
+const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
+function typeScaleStep(size: number, floorPx: number, scale: number): number {
+  let step = snapFontSizeUp(floorPx * scale);
+  for (let power = 1; ; power++) {
+    const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
+    if (next > size + 1e-9) return step;
+    step = Math.max(step, next);
+  }
+}
 /** LH-39: the metric layouts that set a figure on one line where it would have wrapped (the guarded rule `metric-figure`). */
 const FIGURE_LINES = new WeakSet<MetricLayout>(), FIGURE_FITS = new WeakSet<CodeTextFit>();
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
@@ -1852,6 +1865,8 @@ export const METRIC_BAND_VALUE_SHARE = .6, METRIC_BAND_MIN_COLUMN = 200;
 export const METRIC_BAND_RATIO = 3;
 /** LH-53: a unit on its value's line is drawn at this share of the value's size (Claude Design sets "18%" as one figure). */
 export const METRIC_UNIT_SHARE = .6;
+/** LH-127: the gap between an inline unit and its value, as a share of the value's size (a figure and its unit read as one, not touching). */
+export const METRIC_UNIT_GAP = .12;
 /**
  * LH-127: the advance in em of the characters a figure is written in, in a heavy sans face: the widest of Roboto, Arial and Calibri at
  * weight 800, which is narrower than core's portable estimate for a digit (.62) and much narrower for a separator (.54). Without a host
@@ -1985,21 +2000,23 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const fitValue=(area:LayoutBox,singleLine:boolean)=>{
     if (!usable(area)) return undefined;
-    const attempt=(strict:boolean)=>{
+    const attempt=(strict:boolean,scaled=false)=>{
       // Derive sizes from the requested size: repeated subtraction accumulates rounding
-      // error and can add an extra trial at very small floors.
-      for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) {
-        const size=gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize);
+      // error and can add an extra trial at very small floors. LH-39: a figure set on one line steps down the type scale instead.
+      const sizes:number[]=[];
+      if (scaled) for (let size=primary.requestedFontSize;;size=typeScaleStep(size-1e-6,primary.minFontSize/scale,scale)) { sizes.push(size); if (size<=primary.minFontSize+1e-9) break; }
+      else for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) sizes.push(gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize));
+      for (const size of sizes) {
         const natural=measure(primary,size,area.width);
         const fit={...natural,overflow:!!natural.placement?.overflow||strict&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
-        if (!fit.overflow||size===primary.minFontSize) return fit;
+        if (!fit.overflow||size===sizes[sizes.length-1]) return fit;
       }
     };
-    // LH-39: a figure (a value of one word, "$1.24M") never wraps: it is set on one line at the largest size that holds it, which a split
+    // LH-39: a figure (a value of one word, "$1.24M") never wraps: it is set on one line at the largest size of the type scale that holds it, which a split
     // inside the figure ("$1.24" over "M") would otherwise beat by a larger size. When no size down to the floor holds it on one line, the
     // wrapped fit stands, as before. A value of several words ("Q4 2026 plan") may still wrap between words.
     if (options.figure!==false&&!singleLine&&!/\s/u.test(primary.text.trim())) {
-      const whole=attempt(true);
+      const whole=attempt(true,true);
       if (whole&&!whole.overflow) { if (attempt(false)?.lines.length!==1) FIGURE_FITS.add(whole); return whole; }
     }
     return attempt(singleLine);
@@ -2077,11 +2094,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
           const natural=measure(unit,unitSize,box.width),width=naturalWidth(unit,natural);
           if (natural.lines.length===1&&width>0&&valueWidth+gap+width<=box.width+.01) { inlineFit=place(unit,natural,width); inlineWidth=width; }
         }
+        // LH-127: the gap before the unit is METRIC_UNIT_GAP of the value's size, at least the metadata gap, and no more than the line has
+        // left (the fit above reserved only the metadata gap, so the value keeps the size it had).
+        const unitGap=Math.max(gap,Math.min(METRIC_UNIT_GAP*valueFit.fontSize,box.width-valueWidth-inlineWidth));
         const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
         const unitBaseline=inlineFit.placement?.lines.at(-1)?.baseline??occupied(inlineFit)-inlineFit.lineHeight+inlineFit.fontSize;
         const valueY=top+Math.max(0,unitBaseline-valueBaseline),unitY=top+Math.max(0,valueBaseline-unitBaseline);
         allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,figureFit,valueWidth)});
-        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
+        allocations.push({part:unit,box:{x:box.x+valueWidth+unitGap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
         primaryHeight=Math.max(valueY-top+valueHeight,unitY-top+occupied(inlineFit));
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
       // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
@@ -3430,9 +3450,10 @@ const MAIN_PARTS: ReadonlySet<string> = new Set(['body', 'value', 'label', 'what
 // grid too narrow for its content draws them. Headings are not body.
 // `byPath` (wave 3): the smallest of those sizes per item or part path, which the wave 3 guard compares block by block.
 // `wrappedCells` (LH-80 widened): the table cells set on more than one line.
-function bodyReadability(result: SlideComposition, options: ComposeSlideOptions): { sizes: { size: number; atFloor: boolean }[]; overflows: number; splitWords: number; byPath: Map<string, number>; wrappedCells: number } {
+function bodyReadability(result: SlideComposition, options: ComposeSlideOptions): { sizes: { size: number; atFloor: boolean }[]; overflows: number; splitWords: number; byPath: Map<string, number>; wrappedCells: number; splitValues: Set<string> } {
   const scale = Math.min(result.width, result.height) / 720, sizes: { size: number; atFloor: boolean }[] = [], byPath = new Map<string, number>();
   let splitWords = 0, wrappedCells = 0;
+  const splitValues = new Set<string>();
   const split = (text: unknown, fit: unknown) => { if (typeof text === 'string' && Array.isArray(record(fit).sourceLines) && breaksInsideWord(text, fit as SourceTextFit)) splitWords++; };
   for (const item of result.items) {
     if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag') continue;
@@ -3453,6 +3474,8 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
         // the slide's smallest body size (every other block still keeps its own size), not to the card's larger quote.
         if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit === undefined ? undefined : Math.min(part.fit.fontSize, display), `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
         split(part.text, part.fit);
+        // LH-39: a figure (a value of one word) on more than one line is split, wherever the break falls ("$1." over "24M").
+        if (part.role === 'value' && item.metricLayout && !/\s/u.test(part.text.trim()) && ((part.fit as { sourceLines?: unknown[] } | undefined)?.sourceLines?.length ?? 0) > 1) splitValues.add(`${item.path}:value`);
       }
     } else if (item.field === 'table') {
       let table: TableLayout | undefined;
@@ -3460,7 +3483,7 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
       for (const row of table?.rows ?? []) for (const cell of row.cells) { add(cell.fit.fontSize); if (('richLines' in cell.fit ? (cell.fit as RichTextFit).richLines.length : cell.fit.lines.length) > 1) wrappedCells++; }
     } else { add(item.text?.fontSize); split(item.value, item.text); }
   }
-  return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords, byPath, wrappedCells };
+  return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords, byPath, wrappedCells, splitValues };
 }
 /**
  * Wave 3: composeLayout applies a guarded rule only when it is in RULES (every one when RULES is absent), and records in FIRED the
@@ -3487,7 +3510,11 @@ type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region
  * without it.
  */
 const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
-const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
+const NO_RULES: ReadonlySet<GuardedRule> = new Set();
+/** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
+const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
+/** LH-39: the rules (and seeds) a guarded composition was kept with, for the figure trial on top of them. */
+const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRule>; seeds: Record<symbol, unknown> }>();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
@@ -3581,20 +3608,20 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
  * fired is added on its own, in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the
  * ideal measure, card or arrangement. Throws the strict composition's error when nothing composes.
  */
-function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
+function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const fired = new Set<GuardedRule>(), ruled = (rules: ReadonlySet<GuardedRule>, extra: Record<symbol, unknown> = {}) => ({ ...options, [RULES]: rules, ...extra } as ComposeSlideOptions);
   const attempt = (settings: ComposeSlideOptions): SlideComposition | undefined => {
     try { return composeArranged(input, settings); } catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
   let failure: unknown, result: SlideComposition | undefined;
-  try { result = composeArranged(input, ruled(ALL_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
+  try { result = composeArranged(input, ruled(CORE_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
   if (fired.size && result && AT_REQUEST.has(result) && [...fired].every(rule => PLACEMENT_RULES.has(rule))) {
     const read = trackQuality(result, options);
-    if (read.overflows === 0 && read.splitWords === 0 && read.narrow === 0) return result;
+    if (read.overflows === 0 && read.splitWords === 0 && read.narrow === 0) { KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} }); return result; }
   }
   if (fired.size) {
     let base: SlideComposition;
-    try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; return result; }
+    try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} }); return result; }
     const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), before = trackQuality(base, options);
     const readsWell = (next: SlideComposition | undefined): next is SlideComposition => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
     // LH-68, LH-06: a tile metric starts every role at its stacked size in `base`, and a band or pill text at its block's size there.
@@ -3603,29 +3630,44 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
     const surface = result?.emphasis && result.emphasis.source !== 'authored' ? result.emphasis.path : undefined;
     const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
     if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
-    if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(ALL_RULES, seeds));
-    // LH-39: a figure kept on one line may read smaller than the wrapped one; the full set without it is the slide the guard compared
-    // before the rule existed, so it is tried first rather than rebuilt rule by rule.
-    if (!readsWell(result) && fired.has('metric-figure')) {
-      const without = attempt(ruled(new Set([...ALL_RULES].filter(rule => rule !== 'metric-figure')), seeds));
-      if (readsWell(without)) result = without;
-    }
+    if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(CORE_RULES, seeds));
+    let keptRules: ReadonlySet<GuardedRule> = CORE_RULES;
     if (!readsWell(result)) {
       let kept: ReadonlySet<GuardedRule> = NO_RULES;
       result = base;
+      keptRules = NO_RULES;
       for (const rule of GUARDED_RULES) {
         if (!fired.has(rule)) continue;
         const rules = new Set([...kept, rule]), trial = attempt(ruled(rules, seeds));
-        if (readsWell(trial)) { kept = rules; result = trial; }
+        if (readsWell(trial)) { kept = rules; result = trial; keptRules = rules; }
       }
     }
+    KEPT_RULES.set(result!, { rules: keptRules, seeds });
     // LH-114: a pull line's quote is set at the lead size, which the guard does not hold against the card. Another arrangement of the
     // slide (a track, LH-48's growth) is compared with this one, so for that comparison its quote counts at the size it has without the
     // rules: an arrangement that draws the quote on a card again keeps that size; one that keeps the pull line is held to the lead.
     const pulled = result!.items.filter(item => item.quoteLayout?.rule).map(item => `${item.path}:body`), sizes = bodyReadability(base, options).byPath;
     if (pulled.some(key => sizes.has(key))) PULL_SIZES.set(result!, new Map(pulled.flatMap(key => sizes.has(key) ? [[key, sizes.get(key)!] as const] : [])));
   } else if (!result) throw failure;
+  else KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} });
   return result!;
+}
+/**
+ * The guarded composition (guardedCore), then LH-39's figure on one line: the rules it kept plus `metric-figure`, taken when a figure
+ * would wrap otherwise and the slide reads as well (readsAsWellFigure: a split figure may take the next smaller size, and only it).
+ */
+function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const plain = guardedCore(input, options), used = KEPT_RULES.get(plain);
+  if (!used) return plain;
+  const fired = new Set<GuardedRule>();
+  let figured: SlideComposition;
+  try { figured = composeArranged(input, { ...options, [RULES]: new Set([...used.rules, 'metric-figure']), [FIRED]: fired, ...used.seeds } as ComposeSlideOptions); } catch (error) { if (error instanceof OPFCompositionError) return plain; throw error; }
+  const scale = Math.min(plain.width, plain.height) / 720, floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * scale);
+  if (!fired.has('metric-figure') || !readsAsWellFigure(trackQuality(plain, options), trackQuality(figured, options), floor)) return plain;
+  const pulled = PULL_SIZES.get(plain);
+  if (pulled) PULL_SIZES.set(figured, pulled);
+  KEPT_RULES.set(figured, { rules: new Set([...used.rules, 'metric-figure']), seeds: used.seeds });
+  return figured;
 }
 /**
  * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template
@@ -3723,8 +3765,13 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
   const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
-  const ruled = compose(ALL_RULES, fired);
-  if (!fired.size || reads(ruled)) return ruled;
+  const ruled = compose(CORE_RULES, fired);
+  // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
+  const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
+    const collect = new Set<GuardedRule>(), next = compose(new Set([...rules, 'metric-figure']), collect);
+    return next && collect.has('metric-figure') && readsAsWellFigure(before, trackQuality(next, options), floor) ? next : current;
+  };
+  if (!fired.size || reads(ruled)) return figure(CORE_RULES, ruled);
   // As guardedCompose: without the rules, then each rule that fired added on its own while the arrangement still reads as well.
   let kept: ReadonlySet<GuardedRule> = NO_RULES, best = compose(NO_RULES);
   for (const rule of GUARDED_RULES) {
@@ -3732,7 +3779,7 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     const rules = new Set([...kept, rule]), trial = compose(rules);
     if (reads(trial)) { kept = rules; best = trial; }
   }
-  return best;
+  return figure(kept, best);
 }
 /**
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
@@ -3867,7 +3914,7 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
  * each main part of a quote, code panel, metric or timeline (bodyReadability's `byPath`); `narrow` and `measure`: the paragraphs under
  * the minimum measure (LH-66) and the shortest of their measures; `shortPlots`: the charts whose plot is under LH-49's minimum height.
  */
-interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number; shortPlots: number }
+interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number; shortPlots: number; splitValues: Set<string> }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
@@ -3875,19 +3922,30 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   const pulled = PULL_SIZES.get(result), blocks = pulled ? new Map([...read.byPath, ...pulled]) : read.byPath;
   const charts = result.items.filter(item => item.field === 'chart' && item.chart), scale = Math.min(result.width, result.height) / 720;
   const shortPlots = charts.length ? charts.filter(item => shortPlot(item, bodyHeight(result), scale, false)).length : 0;
-  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots };
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots, splitValues: read.splitValues };
 }
 /**
- * Wave 3: `after` reads as well as `before`: no more findings, no more words split, no more prose under the minimum measure and none
+ * Wave 3: `after` reads as well as `before`: no more findings, no more words split (LH-39: nor figures split across lines), no more prose under the minimum measure and none
  * on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A rule or arrangement never costs
  * the text its size: only to leave fewer findings may `after` be smaller, and never below the readability floor. Wave 4: nor does it
  * leave more charts with a plot under LH-49's minimum height (a pull line took the quote out of a 2 x 2 grid of a metric, a chart, a
  * table and a quote, and the three left in a row squeezed the chart's plot to a strip: b02 s29, b12 s19, b15 s44).
  */
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
-  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.splitValues.size > before.splitValues.size || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
   const kept = after.size >= before.size - FONT_GRID_EPSILON && [...before.blocks].every(([path, size]) => (after.blocks.get(path) ?? Infinity) >= size - FONT_GRID_EPSILON);
   return kept || (after.overflows < before.overflows && after.size >= floor - FONT_GRID_EPSILON);
+}
+/**
+ * LH-39: readsAsWell, or a figure set on one line at a smaller size. A figure split across lines ("$1." over "24M") reads as badly as an
+ * overflow, so `after` may take a smaller size for a metric value that was split in `before` (and only for one), when it splits fewer
+ * words, nothing else reads worse and no size falls under the floor.
+ */
+function readsAsWellFigure(before: TrackQuality, after: TrackQuality, floor: number): boolean {
+  if (readsAsWell(before, after, floor)) return true;
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.splitValues.size >= before.splitValues.size || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
+  for (const [path, size] of before.blocks) if ((after.blocks.get(path) ?? Infinity) < size - FONT_GRID_EPSILON && !before.splitValues.has(path)) return false;
+  return after.size >= floor - FONT_GRID_EPSILON;
 }
 /**
  * LH-49: whether a composed chart's plot (chartPlotBox) is under the minimum of a body `bodyHeight` tall: too short or, with `aspect`,
@@ -4451,15 +4509,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // lead six from 32. A block that shrinks takes the largest size of the scale its fit allows, instead of any size between, so a deck's
   // fitted body sizes are a few, and siblings of different kinds land on the same ones. A block keeps its starting size when it fits
   // there, on the scale or not (a raised floor). Per slide and deterministic: the scale depends only on the floor and the canvas.
-  const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
-  const scaleStep = (size: number, floorPx: number): number => {
-    let step = snapFontSizeUp(floorPx * scale);
-    for (let power = 1; ; power++) {
-      const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
-      if (next > size + 1e-9) return step;
-      step = Math.max(step, next);
-    }
-  };
+  const scaleStep = (size: number, floorPx: number): number => typeScaleStep(size, floorPx, scale);
   // The sizes a joint fit tries, largest first: the start, then every step of the scale under it, down to the floor.
   const scaleSizes = (start: number, floorPx: number): number[] => {
     const sizes = [Math.max(start, snapFontSizeUp(floorPx * scale))];

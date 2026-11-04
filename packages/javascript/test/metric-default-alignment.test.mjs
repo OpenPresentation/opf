@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {gallery} from '@openpresentation/gallery';
 import {resolveSlideContext} from '../dist/index.js';
-import {composeSlide, layoutMetric, METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE} from '../dist/composition.js';
+import {composeSlide, layoutMetric, METRIC_TREND_ARROW_GAP, METRIC_UNIT_GAP, METRIC_TREND_ARROW_SIZE} from '../dist/composition.js';
 
 const metric={value:42,unit:'ms',label:'Latency\nProduction',description:'All requests',delta:'-3',trend:'down'};
 const box={x:40,y:60,width:800,height:500};
@@ -16,8 +16,10 @@ function aligned(layout,cell,alignment='center') {
   const factor=alignment==='center'?.5:alignment==='right'?1:0;
   const [value,unit]=layout.parts;
   if(layout.arrangement==='inline-unit') {
-    close(value.box.x,cell.x+(cell.width-value.box.width-unit.box.width-8)*factor);
-    close(unit.box.x,value.box.x+value.box.width+8);
+    // LH-127: the gap is METRIC_UNIT_GAP of the value's size, at least 8.
+    const gap=Math.max(8,METRIC_UNIT_GAP*value.fit.fontSize);
+    close(value.box.x,cell.x+(cell.width-value.box.width-unit.box.width-gap)*factor);
+    close(unit.box.x,value.box.x+value.box.width+gap);
     close(value.linePositions[0].baseline,unit.linePositions[0].baseline);
   }
   // LH-53: the trend arrow precedes its host line (the delta, else the label or description): the arrow, its gap and the line align as one.

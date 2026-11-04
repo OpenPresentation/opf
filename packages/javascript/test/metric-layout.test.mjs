@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {layoutMetric,OPFCompositionError} from '../dist/composition.js';
+import {layoutMetric,METRIC_UNIT_GAP,OPFCompositionError} from '../dist/composition.js';
 import { layoutMetric as rootLayoutMetric } from '../dist/composition.js';
 
 const box={x:40,y:60,width:800,height:400};
@@ -45,7 +45,8 @@ test('short units stay next to the value on the same baseline; long units and va
   const [value,unit]=result.parts;
   assert.ok(Math.abs(value.box.y+value.fit.fontSize-unit.box.y-unit.fit.fontSize)<1e-8);
   assert.ok(unit.box.x-value.box.x<box.width/2,'Unit follows the actual value, not the far cell edge');
-  assert.equal(unit.box.x,value.box.x+value.box.width+8);
+  // LH-127: the gap is METRIC_UNIT_GAP of the value's size, at least 8.
+  assert.equal(unit.box.x,value.box.x+value.box.width+Math.max(8,METRIC_UNIT_GAP*value.fit.fontSize));
   for(const metric of [{value:42,unit:'milliseconds across all production requests'}, {value:'A long primary value '.repeat(6),unit:'ms'}]) {
     const stacked=layoutMetric(metric,box);
     assert.equal(stacked.arrangement,'stacked');assert.equal(stacked.overflow,false);
@@ -73,9 +74,10 @@ test('metric alignment positions the inline pair together and records exact orig
     const [value,unit,label]=layout.parts;
     const width=value.fit.sourceLines[0].width;
     assert.equal(value.box.width,width,'A narrow digit does not reserve an extra font-size-wide gap');
-    assert.equal(unit.box.x,value.box.x+width+8);
+    const gap=Math.max(8,METRIC_UNIT_GAP*value.fit.fontSize);
+    assert.equal(unit.box.x,value.box.x+width+gap);
     assert.equal(value.linePositions[0].baseline,unit.linePositions[0].baseline);
-    assert.equal(value.box.x,cell.x+(cell.width-width-8-unit.box.width)*factor);
+    assert.equal(value.box.x,cell.x+(cell.width-width-gap-unit.box.width)*factor);
     for(const part of [value,unit,label])for(const [index,line] of part.fit.sourceLines.entries()) {
       assert.equal(part.linePositions[index].x,part.box.x+(part.box.width-line.width)*factor);
       assert.equal(part.linePositions[index].baseline,part.box.y+part.fit.fontSize+index*part.fit.lineHeight);
