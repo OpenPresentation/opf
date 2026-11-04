@@ -416,7 +416,7 @@ the slide's design, the deck's, the theme's, then the layout record's.
 
 ### Eyebrows (LH-32, LH-50)
 
-The slide `tag` is an eyebrow: `EYEBROW_FONT_SIZE` (16 reference px, its role size as before), bold, in the primary color (the text color
+The slide `tag` is an eyebrow: `EYEBROW_TAG_SIZE` (22 reference px, 0.4 of the title's role size; it was 16), bold, in the primary color (the text color
 when the primary is under 4.5:1 on the backdrop), and, where its script has case (`eyebrowCaps`: every letter cased and capitals of the
 same length), in capitals with `EYEBROW_TRACKING` (0.08 em) of letter spacing. The document keeps the text as written: core sets
 `textStyle.caps` and `textStyle.tracking` and measures the capitals with the spacing (`textWidthMeasurer`, `measureTextOutline`); the
@@ -426,7 +426,9 @@ the joining of a cursive script).
 
 A short label next to a longer text is that text's eyebrow (LH-50): a root text block of one line, 2 to 32 characters, 3 words or fewer
 and no full stop (`isLabelText`), right before a plain text block that is no label and at least twice as long (`eyebrowLabel`). The two
-are one block of the body: the label is bound to no region and takes no cell; it is drawn as an eyebrow `EYEBROW_GAP` (half a gap) over
+are one block of the body: the label is bound to no region and takes no cell; it is drawn as an eyebrow at `eyebrowSize` of the paragraph (`EYEBROW_SHARE`, 0.6 of its size, from `EYEBROW_MIN_SIZE` 20 to
+`EYEBROW_MAX_SIZE` 24 reference px, and always under the paragraph's size: one step of the type scale under a paragraph of 20 px or less, never
+under the floor), `EYEBROW_GAP` (half a gap) over
 the paragraph, at the paragraph's x, width and alignment, and is listed before it (`ComposedItem.eyebrow`). On a card the eyebrow carries
 its paragraph's `frameBox`, and engines draw that card once, under the eyebrow. Blocks with a caption, an `emphasis` of their own, or on
 a slide that pins a block to a region, are composed as written; a labeled paragraph is never LH-06's band or pill. The rule is guarded

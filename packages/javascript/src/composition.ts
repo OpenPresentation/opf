@@ -104,8 +104,25 @@ export interface TextStyle { fontFamily: string; fontWeight: number; italic?: bo
   tracking?: number }
 /** LH-32: the letter spacing of an eyebrow (the slide tag, LH-50's label), in em; Claude Design tracks its eyebrows by about 0.08 to 0.12 em. */
 export const EYEBROW_TRACKING = 0.08;
-/** LH-32, LH-50: the size of an eyebrow in reference pixels: the slide tag's role size, the readability floor of the default composition. */
-export const EYEBROW_FONT_SIZE = 16;
+/**
+ * LH-32: the size of the slide tag drawn as an eyebrow, in reference pixels: 0.4 of the title's 54 px role size, so a cover or section tag
+ * reads at about 8 to 9 pt projected from a 1920 px slide (the 16 px of the floor read as about 6 pt).
+ */
+export const EYEBROW_TAG_SIZE = 22;
+/**
+ * LH-50: a label drawn as an eyebrow is EYEBROW_SHARE of the size of the paragraph it labels, from EYEBROW_MIN_SIZE to EYEBROW_MAX_SIZE
+ * reference pixels (Claude Design's smallest text in these decks is about 24 px at 1920), and always under the paragraph's size (eyebrowSize).
+ */
+export const EYEBROW_SHARE = 0.6, EYEBROW_MIN_SIZE = 20, EYEBROW_MAX_SIZE = 24;
+/**
+ * LH-50: the size of the eyebrow over a paragraph set at `paragraph` canvas pixels: EYEBROW_SHARE of it, clamped to EYEBROW_MIN_SIZE to
+ * EYEBROW_MAX_SIZE times `scale`; when that is not under the paragraph's size (a paragraph at 20 px or less), one step of the type scale
+ * under it, never under `floor` (the readability floor, in canvas pixels).
+ */
+export function eyebrowSize(paragraph: number, scale: number, floor: number): number {
+  const target = Math.min(EYEBROW_MAX_SIZE * scale, Math.max(EYEBROW_MIN_SIZE * scale, EYEBROW_SHARE * paragraph));
+  return Math.max(floor, snapFontSizeDown(target < paragraph - FONT_GRID_EPSILON ? target : paragraph / (PROSE_NOMINAL_SIZE / 16) ** .25));
+}
 /** LH-50: the space between a label drawn as an eyebrow and the text under it, as a share of the composition gap. */
 export const EYEBROW_GAP = 0.5;
 /**
@@ -350,7 +367,7 @@ export interface ComposedItem {
   /** LH-68: this metric is laid out as a tile of its card (a `metrics: "tile"` region). Absent on every other item. */
   metricTile?: true;
   /**
-   * LH-50: this text block is a label drawn as the eyebrow of the paragraph after it (the next item): at EYEBROW_FONT_SIZE, bold, in
+   * LH-50: this text block is a label drawn as the eyebrow of the paragraph after it (the next item): at eyebrowSize of it, bold, in
    * capitals with EYEBROW_TRACKING where its script has case (its `textStyle`). Engines draw it in the tag's color: the primary, or the
    * text color where the primary is under 4.5:1 on its backdrop. On a card it carries its paragraph's `frameBox`: the two share one card,
    * which engines draw once, under the eyebrow. Absent on every other item.
@@ -4199,7 +4216,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     for (const field of fields) {
       const value = slide[field], text = annotationText(value), fieldPath = `${path}.${field}`, box = boxFor(field);
-      const requested = (field === 'title' ? 54 : field === 'tag' ? EYEBROW_FONT_SIZE : PROSE_NOMINAL_SIZE) * scale;
+      const requested = (field === 'title' ? 54 : field === 'tag' ? EYEBROW_TAG_SIZE : PROSE_NOMINAL_SIZE) * scale;
       if (field !== 'title' || !title) { push(field, value, fieldPath, box, fitPlacedText(field, value, text, box, requested, minSize, fieldPath)); continue; }
       const fitted = fitTitle(value, text, box, requested, fieldPath);
       // LH-76: a "Topic: qualifier" title that still wraps sets the topic as the title on one line and the qualifier below it at
@@ -4220,11 +4237,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),heading:true,...(listRows(value)?{rows:true}:{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
-  // LH-50: a label's eyebrow fit at EYEBROW_FONT_SIZE in `box`, and the band it takes over its text: its height and EYEBROW_GAP of a gap.
-  const fitEyebrow = (eyebrow: { path: string; value: unknown }, box: LayoutBox, alignment?: 'left' | 'center' | 'right') =>
-    fitPlacedText('text', eyebrow.value, annotationText(eyebrow.value), box, EYEBROW_FONT_SIZE * scale, minSize, eyebrow.path, alignment);
-  const eyebrowBand = (eyebrow: { path: string; value: unknown }, width: number): number => {
-    const fit = fitEyebrow(eyebrow, { x: 0, y: 0, width: Math.max(scale, width), height: 1e6 });
+  // LH-50: a label's eyebrow fit in `box` over a paragraph set at `paragraph` px (eyebrowSize), and the band it takes over its text: its
+  // height and EYEBROW_GAP of a gap. A paragraph's band is reserved at its starting size, and its eyebrow drawn at its final size, which is
+  // never larger, so the eyebrow always fits its band.
+  const fitEyebrow = (eyebrow: { path: string; value: unknown }, box: LayoutBox, paragraph: number, alignment?: 'left' | 'center' | 'right') =>
+    fitPlacedText('text', eyebrow.value, annotationText(eyebrow.value), box, eyebrowSize(paragraph, scale, minSize), minSize, eyebrow.path, alignment);
+  const eyebrowBand = (eyebrow: { path: string; value: unknown }, width: number, paragraph: number): number => {
+    const fit = fitEyebrow(eyebrow, { x: 0, y: 0, width: Math.max(scale, width), height: 1e6 }, paragraph);
     return ('richLines' in fit ? (fit as RichTextFit).height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0)) + gap * EYEBROW_GAP;
   };
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
@@ -5263,7 +5282,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
     // LH-50: a paragraph's eyebrow takes a band at the top of its box; it is placed over the text's final box at the end (placeEyebrows).
-    const brow = node.eyebrow ? eyebrowBand(node.eyebrow, box.width) : 0;
+    const brow = node.eyebrow ? eyebrowBand(node.eyebrow, box.width, proseMeasure(node, box.width).size) : 0;
     if (brow) box = { ...box, y: box.y + brow, height: Math.max(scale, box.height - brow) };
     const textValue = contentText(node.field, node.value);
     const measureInternal = (floorFallback = false) => [
@@ -5511,9 +5530,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
-    let content: number;
+    let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
       const prose = proseMeasure(node, inner), size=sizeOverride ?? (atFloor ? floorSize : prose.size);
+      // LH-50: a paragraph's eyebrow over it, at the size it takes over the paragraph at `size`.
+      if (node.eyebrow) eyebrowNeed = eyebrowBand(node.eyebrow, inner, size);
       // LH-42: the floor is the one the placed fit uses, not the trial size: a list's descriptions (0.82 of its size) may reach the
       // floor, so a floor of `size` measured a described list one size step above `size` (24.4 px for a trial of 20).
       const value = contentText(node.field, node.value) ?? '', measured = (width: number) => fitContent(node.field, node.value, value, { x: 0, y: 0, width, height: 1e6 }, size, Math.min(size, floorSize), node.path, node.payload.numbering);
@@ -5536,7 +5557,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
-    const body = content + (node.caption !== undefined ? 32 * scale : 0) + (node.eyebrow ? eyebrowBand(node.eyebrow, inner) : 0);
+    const body = content + (node.caption !== undefined ? 32 * scale : 0) + eyebrowNeed;
     return body + verticalPad(body);
   };
   // LH-48: the one block of a slide body (fills: the only root block, or a template's only block) that fills under LONE_FILL of its cell's
@@ -6738,8 +6759,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   for (const [owner, eyebrow] of eyebrowsOf) {
     const at = items.indexOf(owner);
     if (at < 0) continue;
-    const band = eyebrowBand(eyebrow, owner.box.width), height = band - gap * EYEBROW_GAP;
-    const box = { x: owner.box.x, y: owner.box.y - band, width: owner.box.width, height }, fit = fitEyebrow(eyebrow, box, owner.alignment);
+    const paragraph = owner.text?.fontSize ?? PROSE_NOMINAL_SIZE * scale, band = eyebrowBand(eyebrow, owner.box.width, paragraph), height = band - gap * EYEBROW_GAP;
+    const box = { x: owner.box.x, y: owner.box.y - band, width: owner.box.width, height }, fit = fitEyebrow(eyebrow, box, paragraph, owner.alignment);
     items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: owner.composition, alignment: owner.alignment ?? alignmentFor('text'),
       eyebrow: true, ...(owner.frameBox ? { frameBox: owner.frameBox } : {}), ...(owner.region !== undefined ? { region: owner.region } : {}), ...(owner.emphasis ? { emphasis: true as const } : {}) });
   }

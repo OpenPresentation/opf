@@ -107,7 +107,7 @@ minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's rea
 a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
 and LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)).
-An eyebrow is set at the tag's role size, like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
+An eyebrow is set at its own role size (0.6 of its paragraph's, from 20 to 24 px), like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
 so the guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
 keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the
 card's size. The display size is tried last, so it never displaces an arrangement that reads well without it, and a value at display

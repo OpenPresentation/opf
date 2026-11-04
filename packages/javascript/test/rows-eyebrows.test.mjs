@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {
-  composeSlide, EYEBROW_FONT_SIZE, EYEBROW_TRACKING, eyebrowCaps, eyebrowLabel, fitList, isLabelText, LIST_ROWS_GAP, measureText, styledText,
+  composeSlide, EYEBROW_MAX_SIZE, EYEBROW_MIN_SIZE, EYEBROW_TAG_SIZE, EYEBROW_TRACKING, eyebrowSize, eyebrowCaps, eyebrowLabel, fitList, isLabelText, LIST_ROWS_GAP, measureText, styledText,
   textWidthMeasurer, trackingWidth,
 } from '../dist/composition.js';
 import {validate} from '../dist/index.js';
@@ -41,12 +41,22 @@ test('LH-32: the slide tag is an eyebrow: bold, capitals and tracking where its 
   assert.equal(latin.textStyle.caps, true);
   assert.equal(latin.textStyle.tracking, EYEBROW_TRACKING);
   assert.equal(latin.textStyle.fontWeight, 700);
-  assert.equal(latin.text.fontSize, EYEBROW_FONT_SIZE);
+  assert.equal(latin.text.fontSize, EYEBROW_TAG_SIZE);
   assert.equal(latin.value, 'Compliance', 'the document keeps the text as written');
   const arabic = tagOf(composeSlide({tag: 'مراجعة ربع سنوية', title: 'نتائج التجربة'}, {presentation: {language: 'ar', slides: []}}));
   assert.equal(arabic.textStyle.caps, undefined);
   assert.equal(arabic.textStyle.tracking, undefined);
   assert.equal(arabic.textStyle.fontWeight, 700);
+});
+
+test('LH-50: an eyebrow is 0.6 of its paragraph, 20 to 24 px, and under the paragraph', () => {
+  assert.equal(eyebrowSize(28, 1, 16), 20);
+  assert.equal(eyebrowSize(37, 1, 16), 22.2);
+  assert.equal(eyebrowSize(43, 1, 16), 24);
+  assert.equal(eyebrowSize(43 * 1.5, 1.5, 24), 36, 'scales with the canvas');
+  assert.ok(eyebrowSize(21, 1, 16) < 21);
+  assert.ok(eyebrowSize(18, 1, 16) < 18 && eyebrowSize(18, 1, 16) >= 16);
+  assert.equal(eyebrowSize(16, 1, 16), 16, 'never under the floor');
 });
 
 test('LH-50: a label is one line of 2 to 32 characters and at most 3 words, with no full stop', () => {
@@ -69,7 +79,10 @@ test('LH-50: a short label before a longer paragraph is drawn as its eyebrow, in
       const eyebrow = texts[at], body = texts[at + 1];
       assert.equal(eyebrow.eyebrow, true);
       assert.equal(body.eyebrow, undefined);
-      assert.equal(eyebrow.text.fontSize, EYEBROW_FONT_SIZE);
+      // 0.6 of its paragraph's size, from 20 to 24 px, under the paragraph's size.
+      assert.equal(eyebrow.text.fontSize, eyebrowSize(body.text.fontSize, 1, 16));
+      assert.ok(eyebrow.text.fontSize >= Math.min(EYEBROW_MIN_SIZE, body.text.fontSize - 1) && eyebrow.text.fontSize <= EYEBROW_MAX_SIZE);
+      assert.ok(eyebrow.text.fontSize < body.text.fontSize);
       assert.equal(eyebrow.textStyle.caps, true);
       assert.ok(eyebrow.box.y + eyebrow.box.height <= body.box.y + 1e-6, 'over its paragraph');
       assert.equal(eyebrow.box.x, body.box.x);
@@ -81,7 +94,7 @@ test('LH-50: a short label before a longer paragraph is drawn as its eyebrow, in
   }
   // The label is no body block, so the paragraphs read at least as large as they do with the label as a block.
   const plain = composeSlide({title: 'Pilot review', blocks: blocks.map(block => ({...block, emphasis: false}))});
-  const sizes = composed => composed.items.filter(item => item.field === 'text' && !item.eyebrow && item.text.fontSize > EYEBROW_FONT_SIZE).map(item => item.text.fontSize);
+  const sizes = composed => composed.items.filter(item => item.field === 'text' && !item.eyebrow && item.text.fontSize > EYEBROW_MAX_SIZE).map(item => item.text.fontSize);
   const withEyebrows = composeSlide({title: 'Pilot review', blocks});
   assert.ok(Math.min(...sizes(withEyebrows)) >= Math.min(...sizes(plain).filter((_, index) => index % 2)) - 1e-6);
 });

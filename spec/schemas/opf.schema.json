@@ -1982,7 +1982,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow (LH-32): 16 reference pixels, bold, in the primary color (the text color where that is under 4.5:1 on the background) and, where its script has case, in capitals with 0.08 em of letter spacing (PowerPoint: cap=all and spc on the authored text). Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow (LH-32): 22 reference pixels, bold, in the primary color (the text color where that is under 4.5:1 on the background) and, where its script has case, in capitals with 0.08 em of letter spacing (PowerPoint: cap=all and spc on the authored text). Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Intro", "Confidential", "Appendix"]
         },
         "text": {
