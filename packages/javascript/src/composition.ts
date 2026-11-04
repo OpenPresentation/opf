@@ -3720,15 +3720,16 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
   let splitWords = 0, wrappedCells = 0;
   const splitValues = new Set<string>();
   const split = (text: unknown, fit: unknown) => { if (typeof text === 'string' && Array.isArray(record(fit).sourceLines) && breaksInsideWord(text, fit as SourceTextFit)) splitWords++; };
+  // LH-149: a paragraph or list that shrank onto a half step counts at the step under it (halfStepFloors): one LH-17 would have set at
+  // the floor is at the floor.
+  const half = halfStepFloors(result);
   for (const item of result.items) {
     // LH-50: a label drawn as an eyebrow is set at the tag's role size, like the tag: it is no body.
     if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag' || item.eyebrow) continue;
-    const floorPx = item.composition.minFontSize ?? 16, floor = snapFontSizeUp(floorPx * scale);
-    // LH-149: the half step above the floor (17 px at 16) counts as the floor: a body LH-17 would have set at the floor fits there now.
-    const low = Math.max(floor, snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** .5) * scale));
+    const floor = snapFontSizeUp((item.composition.minFontSize ?? 16) * scale);
     const add = (size: number | undefined, key = item.path) => {
       if (size === undefined || !Number.isFinite(size)) return;
-      sizes.push({ size, atFloor: size <= low + FONT_GRID_EPSILON });
+      sizes.push({ size, atFloor: Math.min(size, half.get(key) ?? Infinity) <= floor + FONT_GRID_EPSILON });
       byPath.set(key, Math.min(byPath.get(key) ?? Infinity, size));
     };
     const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
@@ -3875,6 +3876,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
   const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
   const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
+  // LH-144: a cap (composition.maxFontSize, a paginated page) sets both at the same size, so it decides on the slide without the cap, as
+  // the first page decided: a page does not gain or lose its badges because the cap evened the sizes out.
+  const own = record(record(input).composition);
+  if (own.maxFontSize !== undefined) {
+    const { maxFontSize: _cap, ...rest } = own, free = { ...record(input), composition: rest };
+    const freeResult = settle(free, options, guardedCompose(free, options)), freePlain = settle(free, plainOptions, guardedCompose(free, plainOptions));
+    return withPictureScrim(input, options, freeResult.steps && readsAsWell(trackQuality(freePlain, options), trackQuality(freeResult, options), floor) ? result : plain);
+  }
   return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
 }
 /**
@@ -4194,6 +4203,30 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
  * regions or a block pinned to a region (`region`), a layout master and `recompose: false` keep the layout's composition unchanged.
  * Both passes are pure, so the choice is deterministic.
  */
+/**
+ * LH-149: the paragraphs and lists of a composition set on a half step of the type scale (typeScaleStep's `half`), each with LH-17's
+ * step under it. Every choice between arrangements (the guard's rule sets, step badges, tracks, LH-83's recomposition, LH-48's growth)
+ * counts such a size at that step (trackQuality, wholeStepSmallest), so a gain of half a step alone (16 to 17 px) keeps the arrangement
+ * the slide has: the half steps let siblings sized together lose less, and never change which arrangement wins.
+ */
+function halfStepFloors(result: SlideComposition): Map<string, number> {
+  const scale = Math.min(result.width, result.height) / 720, half = new Map<string, number>(), stepped = (result as unknown as Record<symbol, ReadonlySet<string> | undefined>)[HALF_STEPPED];
+  // Only the blocks that shrank onto a half step (composeLayout marks them): a list in columns or a block at its start that happens to
+  // be 30 px is no half step of the scale.
+  if (!stepped) return half;
+  for (const item of result.items) {
+    if (!item.text || !stepped.has(item.path)) continue;
+    half.set(item.path, Math.min(half.get(item.path) ?? Infinity, typeScaleStep(item.text.fontSize + 1e-6, item.composition.minFontSize ?? 16, scale)));
+  }
+  return half;
+}
+/** LH-149: the paths of a composition's paragraphs and lists that shrank onto a half step of the type scale (an own symbol, so copies keep it). */
+const HALF_STEPPED = Symbol('opf.halfStepped');
+/** LH-149: a composition's smallest body size, a half step counted at the step under it (halfStepFloors). */
+function wholeStepSmallest(result: SlideComposition, options: ComposeSlideOptions): number {
+  const half = halfStepFloors(result), sizes = [...bodyReadability(result, options).byPath].map(([path, size]) => Math.min(size, half.get(path) ?? Infinity));
+  return sizes.length ? Math.min(...sizes) : Infinity;
+}
 function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   const before = bodyReadability(result, options);
   if (!before.sizes.some(entry => entry.atFloor)) return result;
@@ -4205,7 +4238,9 @@ function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: 
   const scale = Math.min(result.width, result.height) / 720, layoutSize = Math.min(...before.sizes.map(entry => entry.size)), size = Math.min(...after.sizes.map(entry => entry.size));
   // Wave 2 (LH-83 with LH-43): sibling sets share one size, so an automatic grid that fits everything at the floor no longer shows a
   // larger smallest size than the overfull layout; it is kept too, since it draws what the layout overflows.
-  const larger = size > layoutSize + FONT_GRID_EPSILON, fitsMore = size >= layoutSize - FONT_GRID_EPSILON && after.overflows < before.overflows;
+  // LH-149: larger counting a half step at the step under it (wholeStepSmallest), so the agenda's badges are not traded for 16 to 17 px.
+  const larger = size > layoutSize + FONT_GRID_EPSILON && wholeStepSmallest(automatic, options) > wholeStepSmallest(result, options) + FONT_GRID_EPSILON;
+  const fitsMore = size >= layoutSize - FONT_GRID_EPSILON && after.overflows < before.overflows;
   if (!after.sizes.length || !(larger || fitsMore) || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
   return { ...automatic, recomposed: { layoutSize: layoutSize / scale, size: size / scale } };
 }
@@ -4324,10 +4359,12 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
   const measure = Math.min(Infinity, ...narrow.map(item => item.box.width / (AVERAGE_CHARACTER_EM * item.text!.fontSize)));
-  const pulled = PULL_SIZES.get(result), blocks = pulled ? new Map([...read.byPath, ...pulled]) : read.byPath;
+  // LH-149: a paragraph or list on a half step counts at the step under it (halfStepFloors), here and so in every comparison of arrangements.
+  const half = halfStepFloors(result), pulled = PULL_SIZES.get(result);
+  const blocks = new Map([...(pulled ? new Map([...read.byPath, ...pulled]) : read.byPath)].map(([path, size]) => [path, Math.min(size, half.get(path) ?? Infinity)] as const));
   const charts = result.items.filter(item => item.field === 'chart' && item.chart), scale = Math.min(result.width, result.height) / 720;
   const shortPlots = charts.length ? charts.filter(item => shortPlot(item, bodyHeight(result), scale, false)).length : 0;
-  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots, splitValues: read.splitValues };
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size), ...[...half].flatMap(([path, size]) => read.byPath.has(path) ? [size] : [])) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots, splitValues: read.splitValues };
 }
 /**
  * Wave 3: `after` reads as well as `before`: no more findings, no more words split (LH-39: nor figures split across lines), no more prose under the minimum measure and none
@@ -7454,6 +7491,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   });
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(explanation?{explanation}:{}) };
   if (atRequest) AT_REQUEST.add(composed);
+  // LH-149: the paragraphs and lists that shrank onto a half step of the scale, for the comparisons of arrangements (halfStepFloors).
+  if (ruleOn('half-steps')) {
+    const stepped = new Set<string>();
+    let skipped = 0;
+    items.forEach((item, position) => {
+      if (item.eyebrow) { skipped++; return; }
+      const start = bodyStarts.get(position - skipped), floorPx = item.composition.minFontSize ?? 16, size = item.text?.fontSize;
+      if (start === undefined || size === undefined || item.listColumns || size >= start - FONT_GRID_EPSILON) return;
+      if (Math.abs(typeScaleStep(size + 1e-6, floorPx, scale) - size) > 1e-6 && Math.abs(typeScaleStep(size + 1e-6, floorPx, scale, true) - size) < 1e-6) stepped.add(item.path);
+    });
+    if (stepped.size) (composed as unknown as Record<symbol, ReadonlySet<string>>)[HALF_STEPPED] = stepped;
+  }
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);

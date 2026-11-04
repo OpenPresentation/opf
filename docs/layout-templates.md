@@ -362,7 +362,9 @@ steps matter most to siblings sized jointly: one size for all of them, the large
 the size they fit cost every sibling a step (six FAQ pairs that fit 24 px drew at 21, now 23). They are a guarded rule
 (`half-steps`): a joint fit at a half step gives its rows other heights than the step under it, so the half steps are kept only
 where no block reads smaller than without them (dense comparison options that would reach 20 px only by setting the verdict
-under them from 28 to 21 px keep 18 and 28). The scale depends only on the floor and the canvas, so every slide composes
+under them from 28 to 21 px keep 18 and 28). Half steps never change which arrangement wins: every choice between arrangements
+(the guard's rule sets, step badges, tracks, LH-83's recomposition at the floor) counts a block that shrank onto a half step at the
+step under it, so a gain of half a step alone (16 to 17 px) keeps the slide's arrangement and an agenda keeps its step badges. The scale depends only on the floor and the canvas, so every slide composes
 independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit

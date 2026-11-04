@@ -49,6 +49,16 @@ describe('LH-149: jointly sized siblings take the half steps of the type scale',
     assert.ok(FULL.every((size) => HALF.includes(size)), 'the half steps keep every step of LH-17');
   });
 
+  test('a half step never changes the arrangement: a long agenda keeps its template and step badges', () => {
+    const long = 'Customers told us onboarding took too long, so we rebuilt it around three steps, measured every one of them and removed the two that nobody needed; the flow now takes four minutes instead of twenty.';
+    for (const count of [3, 4]) {
+      const slide = { title: 'Agenda', subtitle: 'a longer title that may need a second line on the slide', blocks: Array.from({ length: count }, () => ({ items: Array.from({ length: 7 }, (_, item) => `Item ${item + 1}: ${long.slice(0, 70)}`) })) };
+      const result = composeSlide(slide, { layout: layouts.agenda });
+      assert.equal(result.recomposed, undefined, `${count} lists: no recomposition for half a step`);
+      assert.ok(result.regions?.some((region) => region.name === 'items'), `${count} lists: the template's region`);
+    }
+  });
+
   test('right to left, the same pairs take the same size', () => {
     const arabic = { ...faq, blocks: faq.blocks.map((block) => ({ ...block, text: 'من يشارك؟\nفريقان ميدانيان يضمان اثنين وخمسين مشاركاً في المجموع.' })) };
     const ltr = composeSlide(arabic, { layout: layouts.faq });
