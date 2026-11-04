@@ -23,6 +23,8 @@ async function pixels(png) {
 for (const treatment of TREATMENTS) {
   const slug = treatment.slug, expected = reference.treatments[slug];
   const document = treatmentDocument(treatment, picture);
+  // LH-02: the 0.14 renders predate core's automatic scrim behind text on a background picture without an overlay, so it is set aside here.
+  for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.overlay === undefined) background.overlay = false; }
   const diagnostics = [];
   const svg = toSvg(document, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.deepEqual(diagnostics.filter(entry => entry.code.startsWith('unresolved-')).map(entry => entry.code), [], `${slug}: a self-contained treatment resolves everything`);
