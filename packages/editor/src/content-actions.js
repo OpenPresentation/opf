@@ -106,6 +106,49 @@ export function shiftListItems(editor, blockPath, indices, delta, options = {}, 
   return apply(editor, prepareListShift(editor.presentation, blockPath, indices, delta, options), meta, "list-level");
 }
 
+// --- a metric's trend (LH-123) -----------------------------------------------------------------
+
+/** The trends a metric can show, as the schema's `Metric.trend` has them; the drawn arrow points up, down or right (flat). */
+export const METRIC_TRENDS = Object.freeze(["up", "down", "flat"]);
+
+/**
+ * The trend of the metric block at `blockPath` for a form: `{ path, trend, scalar }`, where `path` is the metric's own path, `trend` its
+ * trend (undefined when it has none) and `scalar` whether the metric is a bare value (setting a trend then makes it `{ value, trend }`).
+ * Undefined for a block that is not a metric.
+ */
+export function readMetricTrend(presentation, blockPath) {
+  const found = readBlockContent(presentation, blockPath);
+  if (!found || found.kind !== "metric") return undefined;
+  const metric = found.owner.metric;
+  const object = Boolean(metric) && typeof metric === "object" && !Array.isArray(metric);
+  return { path: [...found.path, "metric"].join("."), trend: object && METRIC_TRENDS.includes(metric.trend) ? metric.trend : undefined, scalar: !object };
+}
+
+/**
+ * Compute the patch that sets a metric's trend (`up`, `down` or `flat`), or removes it with `null`. A bare value (`metric: 42`) becomes
+ * `{ value: 42, trend }`. `changed` is false when the metric already has that trend.
+ */
+export function prepareMetricTrend(presentation, blockPath, trend) {
+  const found = readMetricTrend(presentation, blockPath);
+  if (!found) throw refuse("Choose a metric block to set its trend.", { path: blockPath });
+  if (trend !== null && !METRIC_TRENDS.includes(trend)) throw fail("invalid-metric-trend", `A metric's trend is one of ${METRIC_TRENDS.join(", ")}, or null to remove it.`, { trend });
+  const parts = found.path.split(".");
+  const pointer = opfPathToJsonPointer([...parts, ...(found.scalar ? [] : ["trend"])]);
+  const metric = getValueAtPath(presentation, parts);
+  let patches;
+  if (found.scalar) patches = trend === null ? [] : [{ op: "replace", path: pointer, value: { value: metric, trend } }];
+  else if (trend === null) patches = metric.trend === undefined ? [] : [{ op: "remove", path: pointer }];
+  else patches = metric.trend === trend ? [] : [{ op: metric.trend === undefined ? "add" : "replace", path: pointer, value: trend }];
+  return finish(presentation, patches, { path: found.path, changed: patches.length > 0, lossless: true, loss: [], trend });
+}
+/** Set (or, with `null`, remove) a metric's trend as one undoable step. Returns the session change plus `changed` and `trend`. */
+export function setMetricTrend(editor, blockPath, trend, meta = {}) {
+  requireEditor(editor);
+  const prepared = prepareMetricTrend(editor.presentation, blockPath, trend);
+  const result = apply(editor, prepared, meta, "metric-trend");
+  return { ...result, trend };
+}
+
 // --- structure inside one slide ----------------------------------------------------------------
 
 /** One slide-level transform as a guarded replace of that slide. */

@@ -66,7 +66,21 @@ try {
     assert.equal(await page.evaluate(()=>Boolean(editor.composeSlide(0,{fonts}).items[0].frameBox)),cards);
     assert.equal(geometry.alignment,alignment);
     // LH-53: the trend is drawn as an arrow, not as text, so it has no inline text target; every drawn part does.
-    assert.equal(await target('slides.0.metric.trend').count(),0);assert.ok(geometry.trendBox);
+    // LH-123: the arrow is a target of its own over core's trendBox, and it opens the trend field instead of editing text.
+    assert.ok(geometry.trendBox);
+    {
+      const arrow=target('slides.0.metric.trend');
+      assert.equal(await arrow.count(),1);assert.equal(await arrow.getAttribute('data-opf-trend-arrow'),'');
+      assert.equal(await arrow.locator('text').count(),0);assert.equal(await arrow.getAttribute('aria-label'),'Edit trend: flat');
+      const rect=arrow.locator(':scope > rect.opf-selection'),box={x:Number(await rect.getAttribute('x')),y:Number(await rect.getAttribute('y')),width:Number(await rect.getAttribute('width')),height:Number(await rect.getAttribute('height'))};
+      assert.ok(box.x<=geometry.trendBox.x&&box.y<=geometry.trendBox.y&&box.x+box.width>=geometry.trendBox.x+geometry.trendBox.width&&box.y+box.height>=geometry.trendBox.y+geometry.trendBox.height,'the target covers the arrow');
+      await arrow.focus();await page.keyboard.press('Enter');
+      const field=page.getByRole('form',{name:'Content properties'}).getByLabel('trend');
+      assert.deepEqual(await field.locator('option').evaluateAll(options=>options.map(option=>option.value)),['up','down','flat']);
+      await field.selectOption('up');await page.getByRole('button',{name:'Apply',exact:true}).click();
+      assert.equal((await presentation()).slides[0].metric.trend,'up');
+      await page.getByRole('button',{name:'Undo',exact:true}).click();assert.deepEqual(await presentation(),deck);
+    }
     for(const part of geometry.parts.filter(part=>part.visible)){
       assert.equal(await target(part.path).count(),1);
       const origins=await target(part.path).locator('text').evaluateAll(nodes=>nodes.map(node=>({x:Number(node.getAttribute('x')),baseline:Number(node.getAttribute('y')),anchor:node.getAttribute('text-anchor')})));

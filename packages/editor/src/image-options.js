@@ -148,6 +148,19 @@ export function readImageTreatments(presentation, blockPath) {
   return out;
 }
 
+/**
+ * LH-126: the fit core composed for the image block at `blockPath`, from a slide's composed geometry (`session.composeSlide(index)`):
+ * `{ fit, auto }`, where `fit` is what the picture is drawn with (cover, contain or stretch) and `auto` whether the fit asked for was
+ * `auto` (the block's own, `design.imageFit` or the layout's default), which `fit` then resolved for this frame. Undefined when the
+ * geometry holds no such picture, for example a slide that cannot be composed here.
+ */
+export function readEffectiveImageFit(geometry, blockPath) {
+  const path = (Array.isArray(blockPath) ? blockPath.join(".") : String(blockPath)).replace(/\.image$/, "");
+  const item = geometry?.items?.find((entry) => entry.field === "image" && (entry.path === `${path}.image` || entry.path === path));
+  const composed = item?.image;
+  return IMAGE_FITS.includes(composed?.fit) ? { fit: composed.fit, auto: composed.autoFit === true } : undefined;
+}
+
 /** The patches that set (a value) or remove (`null`) treatment fields of the image block at `blockPath`. */
 export function imageTreatmentPatches(presentation, blockPath, fields) {
   if (!isObject(fields)) throw bad("Pass the image settings to change, for example { fit: \"contain\" }.", { fields });

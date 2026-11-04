@@ -516,7 +516,7 @@
 
 .opf-dc-variants {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   gap: 6px;
   margin: 0 0 8px;
 }
@@ -551,6 +551,16 @@
   border-color: var(--opf-ui-accent);
   outline: 2px solid var(--opf-ui-accent);
   outline-offset: -1px;
+}
+
+/* LH-97: the four backgrounds take a quarter of the row, the six accents a sixth: two rows of swatches. */
+.opf-dc-variant {
+  grid-column: span 3;
+}
+
+.opf-dc-variant.opf-dc-variant-accent {
+  grid-column: span 2;
+  min-height: 44px;
 }
 
 .opf-dc-variant-text {

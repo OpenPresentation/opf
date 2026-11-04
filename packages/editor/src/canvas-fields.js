@@ -62,9 +62,12 @@ export function createCanvasDraft(presentation, path, value) {
 
 /** The progress states of a timeline event (`TimelineEvent.status`). */
 export const TIMELINE_STATUS_CHOICES = Object.freeze(["done", "current", "planned"]);
-/** The fixed choices of a form field, or undefined for free text: an event's `status` inside a timeline payload. */
+/** The trends of a metric (`Metric.trend`); LH-123 edits them from the arrow drawn for the trend. */
+export const METRIC_TREND_CHOICES = Object.freeze(["up", "down", "flat"]);
+/** The fixed choices of a form field, or undefined for free text: an event's `status` inside a timeline payload, a metric's `trend`. */
 export function fieldChoices(field) {
   const segments = splitOpfPath(field.path);
+  if (segments.at(-1) === "trend" && segments.at(-2) === "metric") return METRIC_TREND_CHOICES;
   return segments.at(-1) === "status" && segments.at(-3) === "timeline"
     ? TIMELINE_STATUS_CHOICES
     : segments.at(-1) === "status" && segments.at(-3) === "events" && segments.at(-4) === "timeline"

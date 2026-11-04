@@ -44,7 +44,8 @@ import {
 import { ACCENT_SLOTS } from "./color-slots.js";
 import { readDesignVariant, setDesignVariant, variantSwatches } from "./design-variants.js";
 import { createContentControls, iconNode, shortReason } from "./content-controls.js";
-import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
+import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
+import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, readTableStyle, setTableAlt, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
 import { OPFEditorError } from "./index.js";
@@ -115,7 +116,9 @@ const titleCase = (text) => text.charAt(0).toUpperCase() + text.slice(1);
  * after a content conversion or replacement with the path to keep selected (the block, or the inline
  * payload field), because the host's old selection path may no longer exist. `showPath` (default true) shows the
  * selected block's path as a copyable chip under the selection section's Advanced; `blockActions` (`{ before, after }`)
- * adds host actions to the selected block's arrange toolbar.
+ * adds host actions to the selected block's arrange toolbar. `getGeometry(slideIndex)` (optional) returns the composed geometry of a
+ * slide as the host draws it (with its fonts), which the image section reads to show the fit an `auto` fit resolved to (LH-126); without
+ * it the panel composes the slide with `editor.composeSlide`.
  *
  * Every option is a visible control with a short label. A hint is the control's tooltip and accessible description, never a
  * paragraph; an option that does not apply is shown disabled, with its reason as its tooltip.
@@ -129,6 +132,12 @@ export function createDesignControls(container, options = {}) {
   const sections = (options.sections ?? DESIGN_CONTROL_SECTIONS).filter((name) => DESIGN_CONTROL_SECTIONS.includes(name));
   const getSlide = () => options.getSlideIndex?.() ?? 0;
   const getSelected = () => options.getSelectedPath?.();
+  // The composed geometry of the slide that holds `path` (an OPF path such as slides.1.blocks.0), or undefined when it cannot be composed here.
+  const geometryFor = (path) => {
+    const index = Number(/^slides\.(\d+)(?:\.|$)/.exec(path)?.[1]);
+    if (!Number.isInteger(index)) return undefined;
+    try { return options.getGeometry ? options.getGeometry(index) : editor.composeSlide?.(index); } catch { return undefined; }
+  };
   // One catalog list for every picker and switch: the session's registered catalogs, then the panel's own `catalogs`.
   const catalogOptions = () => ({ catalogs: mergeCatalogs(editor.catalogs, options.catalogs), vocabularies: options.vocabularies });
   const state = { scope: options.scope === "slide" ? "slide" : "deck" };
@@ -518,7 +527,9 @@ export function createDesignControls(container, options = {}) {
   if (built.variant) {
     const { body } = built.variant;
     const view = () => ({ ...scoped(), catalogs: catalogOptions().catalogs });
-    const SLOT_LABELS = { light1: "Light 1", light2: "Light 2", dark1: "Dark 1", dark2: "Dark 2" };
+    const SLOT_LABELS = { light1: "Light 1", light2: "Light 2", dark1: "Dark 1", dark2: "Dark 2", ...Object.fromEntries(ACCENT_SLOTS.map((slot, index) => [slot, `Accent ${index + 1}`])) };
+    // LH-97: what a layout's variant is called when it decides the selected swatch ("surface" and "brand" are relative to the deck's tone).
+    const LAYOUT_ROLE_LABELS = { surface: "the layout's surface variant", brand: "the layout's brand variant" };
     const gallery = h("div", { class: "opf-dc-variants", role: "radiogroup", "aria-label": "Color variant" });
     const sameAsDeck = button("Same as presentation", () => run(() => setDesignVariant(editor, null, view()), "This slide follows the presentation's color variant."), { quiet: true });
     const accentRows = ACCENT_SLOTS.map((_, index) => {
@@ -553,25 +564,31 @@ export function createDesignControls(container, options = {}) {
     syncs.push(() => {
       const current = readDesignVariant(editor.presentation, view());
       const swatches = variantSwatches(editor.presentation, view());
-      const signature = JSON.stringify([swatches, state.scope]);
+      // LH-97: a slide whose layout decides its variant shows that variant as the selected swatch, named for what the layout authored.
+      const fromLayout = state.scope === "slide" && current.scope === "layout" ? current.layout : undefined;
+      const layoutNote = fromLayout ? `from ${LAYOUT_ROLE_LABELS[fromLayout.role] ?? "the layout"}` : "";
+      const signature = JSON.stringify([swatches, state.scope, layoutNote]);
       if (gallery.dataset.signature !== signature) {
         gallery.dataset.signature = signature;
         gallery.replaceChildren(...swatches.map((entry) => {
           const chip = (color, className) => h("span", { class: className, style: color ? `background:${color}` : undefined, "aria-hidden": "true" });
+          const accent = ACCENT_SLOTS.includes(entry.slot);
+          const origin = entry.selected && layoutNote ? ` (${layoutNote})` : "";
           return h("button", {
             type: "button",
-            class: "opf-dc-variant",
+            class: accent ? "opf-dc-variant opf-dc-variant-accent" : "opf-dc-variant",
             role: "radio",
             "aria-checked": String(entry.selected),
             "data-variant": entry.slot,
-            "aria-label": `${SLOT_LABELS[entry.slot]}: ${entry.slot} background${entry.dark ? " (dark)" : ""}`,
-            title: `${SLOT_LABELS[entry.slot]}: ${entry.slot} background`,
+            ...(entry.selected && layoutNote ? { "data-variant-source": "layout" } : {}),
+            "aria-label": `${SLOT_LABELS[entry.slot]}: ${entry.slot} background${entry.dark ? " (dark)" : ""}${origin}`,
+            title: `${SLOT_LABELS[entry.slot]}: ${entry.slot} background${origin}`,
             style: entry.background ? `background:${entry.background};color:${entry.text ?? "inherit"}` : undefined,
             onclick: () => pick(entry.slot),
-          }, h("span", { class: "opf-dc-variant-text", "aria-hidden": "true" }, "Aa"), h("span", { class: "opf-dc-variant-chips", "aria-hidden": "true" }, chip(entry.surface, "opf-dc-variant-chip"), ...entry.accents.map((color) => chip(color, "opf-dc-variant-chip"))));
+          }, h("span", { class: "opf-dc-variant-text", "aria-hidden": "true" }, "Aa"), accent ? undefined : h("span", { class: "opf-dc-variant-chips", "aria-hidden": "true" }, chip(entry.surface, "opf-dc-variant-chip"), ...entry.accents.map((color) => chip(color, "opf-dc-variant-chip"))));
         }));
       }
-      const note = current.scope === "default" ? "default" : state.scope === "slide" ? (current.inherited ? "from the presentation" : "set on this slide") : "";
+      const note = current.scope === "default" ? "default" : state.scope === "slide" ? (fromLayout ? layoutNote : current.inherited ? "from the presentation" : "set on this slide") : "";
       gallery.setAttribute("aria-description", note);
       sameAsDeck.hidden = !(state.scope === "slide" && current.own !== undefined);
       accentRows.forEach((row, index) => row.set(current.accents[index]));
@@ -1205,6 +1222,13 @@ export function createDesignControls(container, options = {}) {
       },
     });
     replace.setOptions(BLOCK_REPLACEMENTS.map((value) => ({ value, label: BLOCK_KIND_LABELS[value] })));
+    // LH-123: the metric's trend, the other way to change what the canvas shows as an arrow (a press on the arrow opens the same field).
+    const trend = selectField("metric-trend", "Trend", {
+      empty: "None",
+      help: "The arrow beside the change: up, down or flat",
+      onChange: (value) => run(() => setMetricTrend(editor, dynamic.blockPath, value === "" ? null : value), value === "" ? "Trend removed." : `Trend set to ${value}.`),
+    });
+    trend.setOptions(METRIC_TRENDS.map((value) => ({ value, label: titleCase(value) })));
     const chartType = selectField("chart-type", "Chart type", {
       help: "Types this data supports",
       onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
@@ -1218,8 +1242,8 @@ export function createDesignControls(container, options = {}) {
       clipboard.writeText(path).then(() => say(`Copied ${path}.`), () => complain("Could not copy the path."));
     });
     const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
-    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
-    dynamic.selection = { details, convert, replace, chartType, pathChip, advanced };
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
+    dynamic.selection = { details, convert, replace, chartType, trend, pathChip, advanced };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
@@ -1230,11 +1254,15 @@ export function createDesignControls(container, options = {}) {
     const { body, details } = built.image;
     const treat = (fields, done) => run(() => setImageTreatment(editor, dynamic.imagePath, fields), done);
     const fit = selectField("img-fit", "Fit", {
-      empty: "Presentation default",
       help: "Cover crops to fill; contain shows it all; stretch distorts; auto covers when the crop is small, else shows it all",
       onChange: (value) => treat({ fit: value === "" ? null : value }, "Image fit changed."),
     });
-    fit.setOptions(IMAGE_FITS.map((value) => ({ value, label: titleCase(value) })));
+    // LH-126: an `auto` fit is decided per frame, so the select says what it came to: "Auto (cover)", and, when the block sets none and the
+    // deck default (or the layout's) is auto, "Presentation default (Auto, cover)".
+    const fitOptions = (block, effective) => [
+      { value: "", label: `Presentation default${effective?.auto && block.fit === undefined ? ` (Auto, ${effective.fit})` : ""}` },
+      ...IMAGE_FITS.map((value) => ({ value, label: value === "auto" && effective?.auto && block.fit === "auto" ? `Auto (${effective.fit})` : titleCase(value) })),
+    ];
     const focusCommit = () => {
       const x = focusX.input.value, y = focusY.input.value;
       treat({ focus: x === "" && y === "" ? null : { x: x === "" ? 0.5 : Number(x), y: y === "" ? 0.5 : Number(y) } }, "Focus point changed.");
@@ -1288,6 +1316,7 @@ export function createDesignControls(container, options = {}) {
       details,
       load(path) {
         const current = readImageTreatments(editor.presentation, path);
+        fit.setOptions(fitOptions(current, readEffectiveImageFit(geometryFor(path), path)));
         fit.set(current.fit ?? "");
         focusX.set(current.focus ? String(current.focus.x) : "");
         focusY.set(current.focus ? String(current.focus.y) : "");
@@ -1455,6 +1484,9 @@ export function createDesignControls(container, options = {}) {
       ui.pathChip.setAttribute("aria-label", `Copy path ${path ?? ""}`);
       for (const field of [ui.convert, ui.replace]) field.wrap.hidden = !content;
       ui.chartType.wrap.hidden = true;
+      const metricTrend = content?.kind === "metric" ? readMetricTrend(document_, blockPath) : undefined;
+      ui.trend.wrap.hidden = !metricTrend;
+      if (metricTrend) ui.trend.set(metricTrend.trend ?? "");
       if (content) {
         const targets = blockConversionTargets(document_, blockPath);
         // Every type is listed; one this content cannot become is disabled, with the reason as its tooltip and accessible description.

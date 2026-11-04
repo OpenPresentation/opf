@@ -175,8 +175,8 @@ globalThis.opfEditor = ed;
 ed.on('review-open', () => showPanel('review', true));
 // A host page (or a test) that wants the live editor and fonts handle passes `OPF_EDITOR_HOST.onReady`.
 globalThis.OPF_EDITOR_HOST?.onReady?.({ editor: ed, session: editor, fonts });
-const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'variant', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
-const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
+const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getGeometry: index => editor.composeSlide(index, layoutFor(editor.presentation, index)), getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'variant', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
+const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getGeometry: index => editor.composeSlide(index, layoutFor(editor.presentation, index)), getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
 // RR-24: "Edit data" opens the data grid for the selected chart or table over the bottom of the canvas (it never moves the slide), so edits show in the preview at once.
 let dataGridOpen = false, dataGrid;
 const syncDataGrid = () => {

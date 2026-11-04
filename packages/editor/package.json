@@ -355,6 +355,7 @@
     "test:title-split-editing-browser": "node test/title-split-editing-browser.mjs",
     "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
     "test:metric-browser": "node test/metric-browser.mjs",
+    "test:variant-trend-fit-browser": "node test/variant-trend-fit-browser.mjs",
     "test:rich-input-browser": "node test/rich-input-browser.mjs",
     "test:json": "pnpm run build:deps && pnpm run build && node test/json-source.mjs && node test/json-options.mjs",
     "test:json-browser": "node test/json-editor-browser.mjs",
