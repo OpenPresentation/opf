@@ -59,7 +59,9 @@ const isMac = () => /Mac|iPhone|iPad/.test(globalThis.navigator?.platform ?? "")
  * sections). Options: `editor`, `getSlideIndex()`, `setSlideIndex(index)`, `renderThumbnail(presentation, index)` (an HTML string), `variant`
  * (`"navigator"` or `"sorter"`), `toolbar` (an element to fill with the action buttons), `contentActions` (the RR-26 split and merge
  * functions: `{ splitSlideByBlocks, mergeSlides }`), `layoutOptions(presentation)` (layout choices for "Add slide with layout"), `onStatus(message)`
- * `autoRender` (false to skip the first draw) and `onError(error)`. Returns `{ render, getSelection, setSelection, openLayoutPicker, destroy }`.
+ * `autoRender` (false to skip the first draw), `pagesOf(presentation, index)` (LH-99: how many pages the export draws the slide on; a slide
+ * that continues on two or more is drawn as a stack with its page count, and keeps its index) and `onError(error)`. Returns `{ render,
+ * getSelection, setSelection, openLayoutPicker, destroy }`.
  */
 export function createSlideManager(container, options) {
   const { editor } = options;
@@ -163,6 +165,13 @@ export function createSlideManager(container, options) {
     const label = el("span", { class: "thumbnail-title", text: slideTitle(slide) || "Untitled slide" });
     const content = el("span", { class: "thumbnail-content", draggable: "true" }, thumbnail, label);
     if (hidden) content.append(" ", el("span", { class: "slide-badge", text: "Hidden" }));
+    // LH-99: a slide the export continues on further pages is a stack of pages with its page count; it stays one card, at its index.
+    let pages = 1;
+    try { pages = Math.max(1, Math.trunc(Number(options.pagesOf?.(presentation, index) ?? 1)) || 1); } catch { pages = 1; }
+    if (pages > 1) {
+      button.dataset.pages = String(pages);
+      content.append(" ", el("span", { class: "slide-badge slide-pages", text: `${pages} pages` }));
+    }
     // The explicit spaces keep the number, title and badge apart in the computed name; hidden elements still describe the button.
     button.append(number, " ", content, el("span", { id: `${id}-${index}-position`, hidden: true, text: position }));
     button.addEventListener("click", (event) => choose(index, event));

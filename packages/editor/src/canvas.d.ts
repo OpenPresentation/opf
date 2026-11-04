@@ -92,6 +92,15 @@ export interface CanvasEditorOptions {
     geometry: SlideComposition;
     draft: boolean;
   }) => void;
+  /**
+   * LH-99: name the pages the export continues an overfull slide on (LH-90) and preview each one read only, over the canvas. The slide is
+   * edited as written. Default true.
+   */
+  continuation?: boolean;
+  /** LH-99: the indicator's text. */
+  pageLabels?: { pages?: (count: number) => string; page?: (page: number, count: number) => string; preview?: (page: number, count: number) => string; back?: string };
+  /** LH-99: the page count of the showing slide changed, or a page preview opened (`page` from 0) or closed (`page: null`). */
+  onPages?: (event: { slideIndex: number; count: number; page: number | null }) => void;
 }
 export interface CanvasEditor {
   editor: EditorSession;
@@ -132,6 +141,10 @@ export interface CanvasEditor {
    */
   reveal(path: string, options?: { focus?: boolean }): string | null;
   setRenderOptions(options: ToSvgOptions): boolean;
+  /** LH-99: the pages the export draws the showing slide on (`count` 1 when it does not continue) and the page previewed (null while editing). */
+  readonly pages: { count: number; page: number | null };
+  /** LH-99: preview export page `page` (from 0) of the showing slide read only, or go back to editing with `null`. */
+  previewPage(page: number | null): boolean;
   destroy(): void;
 }
 export declare function allocatedSelectionBox(

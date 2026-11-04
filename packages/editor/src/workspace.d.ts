@@ -366,6 +366,12 @@ export interface OpfEditorOptions {
 
   /** Refuse every write that comes through the editor's own parts, and lock the slide. The host can still write to `handle.session` and call `setDocument`. */
   readOnly?: boolean;
+  /**
+   * LH-99: show where the export continues an overfull slide on further pages (LH-90). Default true: the thumbnails draw such a slide as a
+   * stack with its page count, the canvas names its pages and previews each one read only, and the presenter shows them as steps after the
+   * slide. The document is never changed and no slide index shifts. `false` draws every slide as written.
+   */
+  continuation?: boolean;
   /** `"auto"` (default) follows `(pointer: coarse)`. */
   density?: OpfEditorDensity | "auto";
   /** `"auto"` (default) shows the sheet at 900px and under. */

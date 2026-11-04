@@ -735,6 +735,16 @@
   opacity: 0.55;
 }
 
+/* LH-99: a slide the export continues on further pages is a stack of pages (two offset sheets behind its thumbnail). */
+.opf-slides .slide-card[data-pages] .thumbnail {
+  margin: 0 6px 6px 0;
+  box-shadow:
+    3px 3px 0 -1px var(--opf-ui-surface),
+    3px 3px 0 0 var(--opf-ui-border-strong),
+    6px 6px 0 -1px var(--opf-ui-surface),
+    6px 6px 0 0 var(--opf-ui-border-strong);
+}
+
 .opf-slides .slide-card.is-drag-source {
   opacity: 0.45;
 }

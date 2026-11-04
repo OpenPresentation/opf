@@ -36,6 +36,13 @@ export interface PresenterOptions {
   onExit?(index: number): void;
   /** The shown slide changed (deck index): by key, click, swipe or `next`, `previous` and `goTo`. Also once at start when a hidden slide was requested. */
   onSlideChange?(index: number): void;
+  /** LH-99: the shown page changed (deck index, 0-based page), a page step of a continued slide included. */
+  onPageChange?(index: number, page: number): void;
+  /**
+   * LH-99: show a slide the export continues on further pages (LH-90) as those pages, steps after the slide. Default true; `false` draws
+   * every slide as written. Indexes stay source slides.
+   */
+  continuation?: boolean;
   /** `"touch"` makes the exit button 40px. Default `"comfortable"` (32px). */
   density?: "comfortable" | "touch";
   /** Show hidden slides too (default false: they are skipped, as the exports skip them). */
@@ -54,14 +61,16 @@ export interface Presenter {
   start(slideIndex?: number): Promise<"fullscreen" | "overlay">;
   /** Close the presentation, leave full screen, return focus to the element that was focused at `start`, and call `onExit(index)`. */
   stop(): void;
-  /** Show the next slide that is not hidden. Returns false at the end. */
+  /** Show the next step: the next page of a continued slide, else the next slide that is not hidden. Returns false at the end. */
   next(): boolean;
-  /** Show the previous slide that is not hidden. Returns false at the start. */
+  /** Show the previous step: the previous page, else the last page of the previous slide that is not hidden. Returns false at the start. */
   previous(): boolean;
   /** Show a slide by its deck index (a hidden slide shows the next one that is not hidden). Returns false when the shown slide did not change. */
   goTo(index: number): boolean;
   /** The deck index of the shown slide; -1 when stopped or when every slide is hidden. */
   getSlide(): number;
+  /** LH-99: the 0-based page shown of a slide the export continues; 0 for every other slide and when stopped. */
+  getPage(): number;
   isRunning(): boolean;
   /** `stop()`, then remove the element. */
   destroy(): void;
