@@ -2123,7 +2123,9 @@ function resolvePresentationContext(presentation, options, core = coreContext({.
   // A theme-slot background (the theme's own, or a slot name) with no variant keeps the slot's color: the scheme's `background` role does not
   // restyle it, as the preview draws it.
   const slotBackground = design.variant === undefined && (typeof definition === 'string' || definition?.type === 'theme');
-  if (core.resolved.roles && isSingleColorBackground(definition) && !slotBackground) background = normalizeHex(roles.background);
+  // A picture's base color is the variant's bg1 too, as the preview's canvas (its contrast backdrop, and the color of the automatic scrim, LH-02):
+  // the tag and an eyebrow are judged against it, so a section on a photo writes the tag in the color the preview draws.
+  if (core.resolved.roles && (isSingleColorBackground(definition) || definition?.type === 'image') && !slotBackground) background = normalizeHex(roles.background);
   else if (slotBackground && roles.background !== `#${background}`) roles = {...roles, background: `#${background}`};
   const textColor = normalizeHex(roles.text);
 
