@@ -51,6 +51,13 @@ export const REVIEWED_FONT_SETS = Object.freeze({
     versions: Object.freeze(['0.18.1', '0.20.0', '0.20.2', '0.20.4']),
     note: 'Hashed from the published tarballs of those four versions, which are byte-identical in font files (RR-90). The office pack of renderer 0.20.4: 78 open faces plus 16 Intos faces list as 94 lazy fonts.',
   }),
+  '3b31770aa1bc828a93d762672637978fd5aaa3ee71e514716287955163bc1a57': Object.freeze({
+    manifestSha256: 'aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b',
+    files: 143,
+    count: 94,
+    versions: Object.freeze(['0.31.0']),
+    note: 'opf#982: only dist/font-manifest.js changed, for the npm script faces Noto Sans Devanagari 0.4.2 (2.007: new GSUB, GPOS, GDEF and cmap; metrics, glyph set and advances unchanged) and Noto Sans Georgian 0.4.4 (2.005, smaller GSUB), licenses unchanged. No file under fonts/ changed, so the vendored faces still list as 94 lazy fonts.',
+  }),
 });
 
 /**
