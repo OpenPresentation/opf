@@ -1,0 +1,11 @@
+---
+type: changed
+packages: [opf, render, pptx]
+---
+LH-129 (layout harvest; output-changing): layout templates that set their message in the middle of the slide grow their type to fill it, as LH-48 grows an automatic body.
+
+- **Headings that are the message.** A slide whose title stands free (centered in a sized title area, or in a stacked record) over no primary or secondary block (the gallery's `cover`, `section` and `closing`, and a slide with no body and no layout record, which composes as a cover) grows its title, subtitle and tag by one, two or three steps of the type scale, each up to its display size (new `HEADING_DISPLAY_SIZES`: title 75 px, subtitle 37 px, tag 21 px). A title over a primary block (a quote's, a statement's) keeps its size.
+- **A stacked record's body.** A `stack` template (`statement`, `quote`, `closing`) grows its paragraphs and lists by the same steps (up to a list's 37 px display size) and its quotes by the scale's ratio on every role (quote 40 to 56 px, attribution to 24 px).
+- **The rule.** The largest step is kept at which nothing overflows, every text is at least as large as at the step before and one is larger, no heading takes another line, every region keeps its arrangement and blocks, LH-06's band or pill stays, the slide reads as well under the wave 3 guard, and the text covers at most 60% of the content box (`LONE_TARGET`). `fill: false` keeps the role sizes.
+- **Lone timelines** (a template's timeline region or an automatic slide's only block) first try two or three steps of the type scale on their labels (18 and 22 px roles to 24 and 28, or 28 and 32 px) and keep them when the timeline keeps its arrangement, fits its box and no label (name, date, event) takes another line; otherwise LH-41's few pixels apply as before.
+- Across the 844 corpus slides 46 grow (14 covers, 4 sections, 7 closings, 3 quotes, 6 statements, 1 automatic slide with no body, and 11 lone timelines: 8 in the `timeline` layout, 2 in `process`, 1 automatic) and none loses size or gains a finding. Of the 360 composition goldens, 26 cases moved (cover, statement, closing and quote with short content, and the long statement and closing), none gained a finding.

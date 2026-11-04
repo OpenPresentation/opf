@@ -50,13 +50,14 @@ test('blocks below the grid read at the size of the parallel columns they contin
 
 test("a lone primary region keeps its own size over the other blocks (a statement's message)", () => {
   const blocks = [{ text: long('Civic Arts Commission') }, ...['Measure the result.', 'Gradient backgrounds carry angle and color stops.', 'Support it with evidence.', long('Test with two teams')].map((text) => ({ text }))];
-  const result = composeSlide({ title: 'Grant equity review', blocks }, { layout: layouts.statement });
+  // `fill: false`: LH-129 grows a statement whose body leaves the slide mostly empty (the message alone), which is not this rule.
+  const result = composeSlide({ title: 'Grant equity review', blocks }, { layout: layouts.statement, fill: false });
   const message = result.items.find((item) => item.path === 'slides.0.blocks.0.text');
   const others = result.items.filter((item) => item.field === 'text' && item.path !== 'slides.0.blocks.0.text' && item.path.includes('.blocks.'));
   assert.ok(others.length > 0);
   // Wave 2: with LH-46 the other blocks join the statement's region as cards under the message (a lead over cards) instead of a row
   // below the grid. The message keeps the size it has alone and never takes a smaller size from the cards.
-  const alone = composeSlide({ title: 'Grant equity review', blocks: blocks.slice(0, 1) }, { layout: layouts.statement }).items.find((item) => item.path === 'slides.0.blocks.0.text');
+  const alone = composeSlide({ title: 'Grant equity review', blocks: blocks.slice(0, 1) }, { layout: layouts.statement, fill: false }).items.find((item) => item.path === 'slides.0.blocks.0.text');
   assert.equal(message.text.fontSize, alone.text.fontSize);
   assert.ok(others.every((item) => item.text.fontSize <= message.text.fontSize), `${message.text.fontSize} over ${others.map((item) => item.text.fontSize)}`);
 });

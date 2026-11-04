@@ -67,9 +67,12 @@ test('a layout\'s lone block takes the body: its region reaches the foot when th
   assert.ok(Math.abs(region.width - result.contentBox.width) < 1, 'the full width');
   assert.ok(item.text.fontSize > 28);
   assert.ok(Math.abs(middle(item.frameBox ?? item.box) - middle(region)) < 1, 'the card hugs it in the middle');
-  // A stacked record (the statement) already centers its message and keeps its sizes.
+  // A stacked record (the statement) already centers its message; LH-129 grows it in the stack (template-fill.test.mjs), and
+  // `fill: false` keeps its sizes.
   const stacked = composeSlide({ title: 'Statement', blocks: [{ text: statement }] }, { layout: layouts.statement });
-  assert.deepEqual(stacked.items.map((entry) => entry.box), composeSlide({ title: 'Statement', blocks: [{ text: statement }] }, { layout: layouts.statement, fill: false }).items.map((entry) => entry.box));
+  const kept = composeSlide({ title: 'Statement', blocks: [{ text: statement }] }, { layout: layouts.statement, fill: false });
+  assert.ok(stacked.items.at(-1).text.fontSize > kept.items.at(-1).text.fontSize);
+  assert.equal(stacked.items[0].text.fontSize, kept.items[0].text.fontSize, 'a title over a primary message keeps its size');
 });
 
 test('LH-65: two blocks in three columns draw 1:1; the empty column gives way', () => {

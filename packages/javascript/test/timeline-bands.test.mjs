@@ -87,11 +87,11 @@ describe('one timeline', () => {
 		assert.equal(compact.parts.find((part) => part.role === 'what').fit.fontSize, 18);
 	});
 
-	test('a lone timeline in its region grows its type a little when it fits', () => {
+	test('a lone timeline in its region grows its type when it fits: by steps of the type scale (LH-129), else a little', () => {
 		const composed = composeSlide({ title: 'Plan', blocks: [{ timeline: events('Team').slice(0, 3).map(({ when, what }) => ({ when, what })) }] }, { layout: layouts.timeline });
 		const [item] = timelines(composed);
 		const what = item.timelineLayout.parts.find((part) => part.role === 'what').fit.fontSize;
-		assert.ok(what > 22 && what <= 26, `${what}`);
+		assert.ok([28, 32].includes(what) || (what > 22 && what <= 26), `${what}`);
 		assert.deepEqual(composed.diagnostics, []);
 	});
 

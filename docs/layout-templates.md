@@ -415,10 +415,24 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown.** A stacked record (`statement`, `quote`, `closing`, which already center their message), blocks below
+- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
+  LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.
+- **A message in the middle of the slide (LH-129).** A slide whose title stands free (centered in a sized title area, or in a
+  stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
+  layout record, grows its title, subtitle and tag by one, two or three steps of the type scale, each up to its display size
+  (`HEADING_DISPLAY_SIZES`: title 75 px, subtitle 37, tag 21); a title over a primary block (a quote's, a statement's) keeps its
+  size. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
+  display size, quotes by the scale's ratio on every role (`LONE_DISPLAY_SIZES`). The largest step is kept at which nothing
+  overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
+  region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
+  at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **A lone timeline (LH-129)** in a template's timeline region, or an automatic slide's only block, first tries three and then two
+  steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
+  its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few
+  pixels as before.
 - **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
   60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
   body, its lines in the middle of the panel (`layoutCode`'s `fill`).
