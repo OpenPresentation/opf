@@ -79,6 +79,10 @@ export async function pdfiumText(bytes) {
   try { return document.getPage(0).getText().replace(/\s+/g, " ").trim(); } finally { document.destroy(); }
 }
 
+/** How PDFium reads back a right-to-left line: from build 8046 (@hyzyla/pdfium 3) it gives the words in visual order, left to
+ * right, each word in logical order. It reads Chromium's own PDF of the same line that way too, so this is PDFium, not the writer. */
+export const pdfiumRtlLine = (text) => text.split(" ").reverse().join(" ");
+
 /** poppler's pdftotext when it is installed, else null. */
 export async function popplerText(bytes) {
   const { spawnSync } = await import("node:child_process");

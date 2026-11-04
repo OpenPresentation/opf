@@ -12,7 +12,7 @@ import { loadCorpora, loadFaces } from '../scripts/script-corpora.mjs';
 import { toPdf } from '../dist/index.js';
 import { loadFonts } from '../dist/fonts-node.js';
 import { FontEmbedder } from '../dist/pdf-fonts.js';
-import { openPdf, pageText, pdfiumText, popplerText } from './pdf-helpers.mjs';
+import { openPdf, pageText, pdfiumRtlLine, pdfiumText, popplerText } from './pdf-helpers.mjs';
 
 const fonts = await loadFonts({ pack: 'office', scripts: 'all' });
 const corpora = await loadCorpora();
@@ -169,7 +169,7 @@ for (const text of ['Quarterly review: revenue grew 12% year on year.', 'Résum�
     for (const [reader, read] of Object.entries(readers)) {
       if (skip.includes(reader)) continue;
       const got = await read(pdf);
-      if (got !== null) assert.equal(strip(got), strip(expected), `${name}: ${reader} reads "${got}" from the HarfBuzz PDF, expected "${expected}"`);
+      if (got !== null) assert.equal(strip(got), strip(reader === 'pdfium' && text.startsWith('⁧') ? pdfiumRtlLine(expected) : expected), `${name}: ${reader} reads "${got}" from the HarfBuzz PDF, expected "${expected}"`);
     }
   }
 }
