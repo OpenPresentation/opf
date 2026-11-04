@@ -69,8 +69,8 @@ Slot names: `toolbar` and the toolbar items `title`, `history`, `counter`, `view
 | `onAddAsset` | stores an uploaded image yourself and returns its reference (the design controls' hook) |
 | `variables` | `"authored"` (default) shows `{{variables}}` as written; `"resolved"` fills them in, except in a template deck, routes a press on filled-in text to its properties form and a press on text without a field of its own (a generated value) to the source pane. `{ focusSource() }` is `"resolved"` with your own code editor: the editor calls `focusSource` instead of focusing its source pane (an `embed` beside your own JSON editor, say); a throw is an `error` event |
 | `source` | `format`, `name`, `text`, `worker` (the Web Worker for the pane's text checks: `true`, a `Worker`, a function or a worker script's URL; see [The source worker](#the-source-worker)), `checks`, `outline`, `applyDelay`, `cursorDelay`, `onCopy`, `onDownload`, `onRename`, `resolvePreview` |
-| `canvas` | more options for the canvas: `textEntry`, `imageTools`, `layoutEditing` |
-| `export` | more options for the Export menu: `exportPptx(deck, { signal, onProgress })`, `items`, `label`, `onDownload` |
+| `canvas` | more options for the canvas: `textEntry`, `imageTools`, `layoutEditing`, `measurePictures` (default on: the photo behind the text is measured in the page so its automatic scrim fits it) |
+| `export` | more options for the Export menu: `exportPptx(deck, { signal, onProgress, pictureLuminance })`, `items`, `label`, `onDownload` |
 | `review`, `find`, `design` | `true`, or the options of that panel (`review.hook` is the hosted reviewer) |
 | `persistence` | `{ key, storage, debounceMs, ... }` (see "Autosave and restore" in the README); `key` is required |
 | `readOnly` | refuse every write from the editor's parts and lock the slide and the code; the host's own writes to `editor.session` still work |

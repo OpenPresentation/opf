@@ -27,6 +27,7 @@ const INFO = new Set([
 	"svg-sanitized",
 	"script-font-unavailable",
 	"media-provenance-omitted",
+	"picture-not-measured",
 ]);
 
 const HELP: Record<string, string> = {
@@ -34,6 +35,7 @@ const HELP: Record<string, string> = {
 	"small-cell": "Give the table more room or fewer columns, or run opf paginate.",
 	"slide-continued": "To keep one slide, shorten or remove blocks or choose a layout with more room. opf paginate writes the split into the deck; --keep-slides (paginate: false) draws the slide as written, overlapping.",
 	"unresolved-asset": "Embed the image as a data URI, or keep the file inside the deck folder (see --asset-dir). URLs are never fetched.",
+	"picture-not-measured": "Check that the picture is a PNG, JPEG, GIF, WebP or SVG, and that the optional sharp peer is installed (npm install sharp). Until then the scrim under text on it is sized for any picture from black to white, which always reads.",
 	"asset-blocked": "Move the file under the deck folder or pass --asset-dir <directory> that contains it.",
 	"script-font-not-installed": "Install the Noto script package named in the message next to the CLI, then run the command again.",
 	"font-glyph-fallback": "The chosen font lacks these characters; a bundled font draws them. Supply a font with --fonts to change that.",

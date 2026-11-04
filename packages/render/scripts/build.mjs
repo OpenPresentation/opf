@@ -15,3 +15,6 @@ for (const name of ["deck-runtime.js","preview-fonts.js","preview-fonts-node.js"
 
 // RR-63: the lazy converter loader and the PNG and PDF format entries (`/png`, `/pdf`).
 for (const name of ["converters.js","png.js","png.d.ts","pdf.js","pdf.d.ts"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));
+
+// LH-145: measurePictures, the picture sampler of the automatic scrim (edge-safe core, and the Node decoder).
+for (const name of ["measure-pictures.js","measure-pictures-node.js"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));

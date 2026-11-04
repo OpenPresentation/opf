@@ -11,6 +11,7 @@ import { createAgentHandoffDialog } from "./agent-handoff-dialog.js";
 import { prepareSave } from "./catalogs.js";
 import { el, icon, saveBlob } from "./export-dom.js";
 import { convert, exportFileName, slidesToConvert } from "./export.js";
+import { measureDeck } from "./picture-luminance.js";
 
 const PPTX_TYPE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
 export const EXPORT_DISABLED_REASON = "Showing the last valid slides. Fix the JSON to resume editing and downloads.";
@@ -240,7 +241,9 @@ export function createExportMenu(container, options = {}) {
   async function exportSlides(deck, format, signal, label) {
     const progress = reporter(label, signal);
     if (format === "pptx") {
-      const out = await abortable(Promise.resolve().then(() => options.exportPptx(deck, { signal, onProgress: progress })), signal);
+      // LH-145: the same picture measurements the preview and the other exports use, so the PPTX draws the same scrim (pass it to `toPptx` as `pictureLuminance`).
+      const pictureLuminance = await abortable(measureDeck(deck, { ...(options.renderOptions ?? {}), catalogs: catalogsNow() }), signal);
+      const out = await abortable(Promise.resolve().then(() => options.exportPptx(deck, { signal, onProgress: progress, ...(pictureLuminance ? { pictureLuminance } : {}) })), signal);
       const raw = out instanceof Blob || out instanceof ArrayBuffer || ArrayBuffer.isView(out) ? { bytes: out } : out;
       if (!raw || raw.bytes === undefined) throw new Error("The PowerPoint export returned no data.");
       const blob = raw.bytes instanceof Blob ? raw.bytes : new Blob([raw.bytes], { type: PPTX_TYPE });

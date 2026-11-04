@@ -15,6 +15,7 @@ import { pointerFromPath } from "@openpresentation/opf/patch";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import { mergeCatalogs, prepareSave } from "./catalogs.js";
 import { fontGate } from "./font-gate.js";
+import { measureDeck } from "./picture-luminance.js";
 import { createZip } from "./zip.js";
 
 export const EXPORT_FORMATS = Object.freeze({
@@ -241,6 +242,9 @@ export async function convert(input, options = {}) {
     const detail = { family: face.family, weight: face.weight, ...(face.italic ? { italic: true } : {}) };
     note(findingOf("fonts", { code: "export-font-license", message: `${fontLabel(face)} is not embedded: its license is not one of OFL-1.1, Apache-2.0, MIT or UFL-1.0.`, ...detail }, deck));
   });
+  // LH-145: the pictures behind the text are read once, so the scrim under text on a photo is sized for the photo, as in the preview.
+  const pictureLuminance = await measureDeck(deck, renderOptions);
+  check();
   progress("render", 0, numbers.length, "Drawing slides…");
   await yieldToHost();
   // RR-65, RR-64: the handle's subset engine (a browser handle created with `subsetWasm`) cuts each face a standalone SVG embeds to the
@@ -258,6 +262,7 @@ export async function convert(input, options = {}) {
   };
   const svgs = toSvg(deck, numbers, {
     ...renderOptions,
+    ...(pictureLuminance ? { pictureLuminance } : {}),
     ...(toPdf && renderOptions.text === "paths" ? { text: "fonts" } : {}),
     fonts: drawFonts,
     // The PDF reports problems by element path; the SVG and PNG are the plain drawing.

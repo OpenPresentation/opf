@@ -25,6 +25,11 @@ export interface ExportPptxOptions {
   signal: AbortSignal;
   /** Tell the menu how far along the export is; `message` is shown in the status line. */
   onProgress(progress: { stage?: string; done?: number; total?: number; message?: string }): void;
+  /**
+   * LH-145: the luminance sampler of the deck's picture backgrounds, measured once in the page like the preview's. Pass it to `toPptx` as
+   * `pictureLuminance`, so the PowerPoint file draws the same automatic scrim as the preview. Absent when the deck has no measurable picture.
+   */
+  pictureLuminance?: (src: string) => import("@openpresentation/opf/composition").PictureLuminance | undefined;
 }
 export type ExportPptxResult = Uint8Array | ArrayBuffer | Blob | { bytes: Uint8Array | ArrayBuffer | Blob; fileName?: string; warnings?: ExportNote[] };
 
