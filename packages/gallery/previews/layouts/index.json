@@ -6,12 +6,12 @@
     {
       "id": "cover",
       "file": "cover.svg",
-      "bytes": 1924
+      "bytes": 1997
     },
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 927
+      "bytes": 1011
     },
     {
       "id": "agenda",
@@ -31,7 +31,7 @@
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 995
+      "bytes": 1182
     },
     {
       "id": "text",
@@ -81,7 +81,7 @@
     {
       "id": "faq",
       "file": "faq.svg",
-      "bytes": 5480
+      "bytes": 3694
     },
     {
       "id": "metrics",

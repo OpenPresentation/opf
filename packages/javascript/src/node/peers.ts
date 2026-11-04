@@ -77,6 +77,8 @@ export interface RenderModule {
 	toPng(svg: string, options?: Record<string, unknown>): Promise<Uint8Array>;
 	/** SVG slides as one PDF, a page each. */
 	toPdf(svgs: string[], options?: Record<string, unknown>): Promise<Uint8Array>;
+	/** LH-145: the luminance sampler of the deck's picture backgrounds (`pictureLuminance`). Absent from releases before LH-145. */
+	measurePictures?(presentation: unknown, options?: Record<string, unknown>): Promise<(src: string) => unknown>;
 }
 export interface FontsNodeModule {
 	loadFonts(options?: Record<string, unknown>): Promise<FontsHandle>;

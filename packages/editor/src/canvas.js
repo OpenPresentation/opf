@@ -28,6 +28,7 @@ import { FONTS_PENDING, fontGate, fontsPendingError, whenFontsReady } from "./fo
 import { checkFormat, firstErrorMessage } from "./checks.js";
 import { createCanvasPages } from "./canvas-pages.js";
 import { continuationOf, pageCount } from "./continuation.js";
+import { createPictureMeter } from "./picture-luminance.js";
 export { getEditableFields } from "./canvas-fields.js";
 export { whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
 
@@ -83,7 +84,10 @@ export function createCanvasEditor(container, options = {}) {
   const resolveOptions = () => ({ ...renderOptions, catalogs: mergeCatalogs(editor.catalogs, renderOptions.catalogs) });
   // RR-61: the handle measures, and the canvas embeds no face: the browser handle already added its faces to the page, so
   // `@font-face` data would repeat megabytes of base64 in every redraw. Exports keep the default and carry the faces they draw.
-  const drawOptions = (extra) => ({ ...resolveOptions(), fonts: handle, text: "system", ...extra });
+  // LH-145: the pictures behind the text are measured once (in the page, cached), so the automatic scrim under text on a photo is sized for
+  // the photo: none on a dark one under light text. A host's own `renderOptions.pictureLuminance` wins; `measurePictures: false` turns it off.
+  const pictures = options.measurePictures === false ? null : createPictureMeter({ onChange: () => { if (!disposed && !active) show(); } });
+  const drawOptions = (extra) => ({ ...(pictures ? { pictureLuminance: pictures.sampler } : {}), ...resolveOptions(), fonts: handle, text: "system", ...extra });
   let slideIndex = options.slideIndex ?? 0,
     // RR-32: the canvas edits the document as authored, so a template's {{tokens}} stay visible and an inline edit never
     // overwrites one with its resolved text. The Fill template panel previews the resolved deck. Pass `variables` to override.
@@ -319,6 +323,7 @@ export function createCanvasEditor(container, options = {}) {
     slideIndex = Math.max(0, Math.min(slideIndex, slides.length - 1));
     const svgText = toSvg(presentation, slideIndex + 1, drawOptions({ trace: true }));
     preview.innerHTML = svgText;
+    pictures?.update(presentation, resolveOptions());
     const svg = preview.querySelector("svg");
     svg.setAttribute("role", "group");
     svg.setAttribute("aria-label", "Editable slide");
@@ -1254,6 +1259,7 @@ export function createCanvasEditor(container, options = {}) {
       layoutHandles.destroy();
       blockControls.destroy();
       pages?.destroy();
+      pictures?.dispose();
       unsubscribe();
       resize.disconnect();
       win.visualViewport?.removeEventListener("resize", keepEditVisible);

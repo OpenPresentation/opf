@@ -86,7 +86,8 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
 An entry of `regions` is one of three things:
 
 - a **region**: `{ "name": "...", "size"?, ...rules }`, the rules below;
-- a **heading region**: `{ "name": "title" }` or `{ "name": "subtitle" }`, which take only a `size`;
+- a **heading region**: `{ "name": "title" }` or `{ "name": "subtitle" }`, which take only a `size`, an `anchor` and (the
+  `title`) a `rule` (see [Display headings](#display-headings-lh-130));
 - a **split**: `{ "direction": "row" | "column", "regions": [...], "size"?, "anchor"? }`, a nested list.
 
 `size` is a number above 0 and up to 100 (default 1). Siblings share their parent's length in proportion, separated by the
@@ -123,11 +124,36 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 A block's `region` selects a named region; that region's `anchor` controls vertical placement inside it. Region names such
 as `main` and `aside` have no special positioning behavior. Declare the names in the layout's region list. Write `anchor`
 once on the record (or on a split) when every region under it shares it: body regions inherit it, a region's own `anchor`
-wins, and the heading regions never inherit it.
+wins, and the heading regions never inherit it (they set their own, see [Display headings](#display-headings-lh-130)).
 
 Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
 substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. A region's
 anchor never moves the title: it stays in its own heading region. Anchoring does not enlarge short text to fill unused space.
+
+#### Display headings (LH-130)
+
+A heading region takes its own `anchor`, which places the heading group (tag, title and subtitle) in a sized area: `middle`
+(the default) centers it, `bottom` sets it at the foot of the area and `top` at its top. An `auto` area is as tall as the
+group, so its anchor changes nothing. The `title` region also takes `rule: true`: a slide whose headings are its message
+(no primary or secondary region holds a block and nothing sits below the grid) and that has a title but no tag draws a short
+accent rule, 80 by 5 px at a 720 px short edge, half a gap above the title at its start edge (the right in a right-to-left
+title). A tag is the group's eyebrow and takes the rule's place. Both engines fill it in the tag's color: the primary, or the
+text color where the primary is under 4.5:1 on the slide (`SlideComposition.titleRule`; the PPTX export writes a native
+rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's drawing). The gallery `cover` and `section` use
+both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
+Design sets it, with the section's tag ("Part 1") as its eyebrow.
+
+Over a picture background a `bottom` heading group stays low only where the picture is calm under its text: the host measured
+the picture (`pictureLuminance`, which `measurePictures` returns, LH-145), the grays under the group's text span at most
+`CALM_PICTURE_SPREAD` (48 of 256 levels, seen through the author's overlay) and the text color reads 4.5:1 over every one of them
+without a scrim. Otherwise, and in a run that measured nothing, the group is centered in its area as before LH-130, keeping its
+start alignment, rule and eyebrow: the low part of a photo is often its busiest (lit windows, a field of panels). Plain and
+variant backgrounds keep the low anchor.
+
+Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
+size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the
+longer, and no line but the last ending in a one-letter word or an article. A title that already wraps keeps the breaks its
+role size balanced (LH-148). Nothing is set smaller than without the growth.
 
 #### Placing the whole group
 
@@ -356,9 +382,16 @@ texts is a short row and a row of long ones a tall one. The cells of one row kee
 Sets that mix in other blocks (a metric, a picture, a chart) keep their rows and share sizes as above.
 
 A block that shrinks takes a size of the type scale (LH-17): from `minFontSize` up by a ratio of (28/16)^¼, rounded to whole
-reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor. Prose has five sizes from its 28 px start to the
-floor, and a list or lead six from 32 px; a block that fits at its starting size keeps it, on the scale or not. The scale
-depends only on the floor and the canvas, so every slide composes independently and the engines agree.
+reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor, with the half step between each two (LH-149: the
+ratio to a half power, 17, 20, 23, 26 and 30 px). A block that fits at its starting size keeps it, on the scale or not. The half
+steps matter most to siblings sized jointly: one size for all of them, the largest at which every row fits, so a whole step under
+the size they fit cost every sibling a step (six FAQ pairs that fit 24 px drew at 21, now 23). They are a guarded rule
+(`half-steps`): a joint fit at a half step gives its rows other heights than the step under it, so the half steps are kept only
+where no block reads smaller than without them (dense comparison options that would reach 20 px only by setting the verdict
+under them from 28 to 21 px keep 18 and 28). Half steps never change which arrangement wins: every choice between arrangements
+(the guard's rule sets, step badges, tracks, LH-83's recomposition at the floor) counts a block that shrank onto a half step at the
+step under it, so a gain of half a step alone (16 to 17 px) keeps the slide's arrangement and an agenda keeps its step badges. The scale depends only on the floor and the canvas, so every slide composes
+independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
 uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
@@ -366,7 +399,10 @@ beyond the room go to the overflow region and, through `paginate`, to a continua
 `opf/text-overflow` or `opf/layout-unplaced` diagnostic.
 
 Pagination continues on a new slide with the same layout: blocks beyond a region's `max` move first, in source order, and
-carry a `region` pin to the region they came from. A block that no region of the layout accepts, on a layout with no
+carry a `region` pin to the region they came from. The pages of one slide share its type sizes (LH-144): each page after the
+first carries `composition.maxFontSize`, the largest size the first page draws for the kinds of block it holds (paragraphs,
+lists, quotes, metrics, timelines), so a last page with one timeline or a short list does not read larger than the pages before
+it. The cap only lowers sizes, never under `minFontSize`; headings, tables, code and charts keep theirs. A block that no region of the layout accepts, on a layout with no
 overflow region, stays below the grid on every page and never drives a split.
 
 The export does one split on its own (LH-90). A slide whose body is two or more units of one kind (eight timelines, five
@@ -416,12 +452,19 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
 - **A flow** (`steps`): a lone list of 3 to 6 entries of one or two words (24 characters at most), without descriptions, is a row of
   chips (cards) joined by accent block arrows in reading order. The chips share the region's width when the widest entry fits each,
   else each hugs its entry; each entry is a list column centered in its chip.
+- **Numbered rows** (`numbered`, LH-134): an agenda whose every entry, in every list of the region, has a description draws as ruled
+  rows instead of badges: each number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at
+  the row's start (the right in a right-to-left list), the label bold and the description in a second column beside it when the labels
+  fit 40% of the width, a hairline between two rows and no connector. One entry without a description keeps every list of the agenda
+  beside badges, so an agenda is drawn one way. The numbers stay drawing, as the badges' are.
 
-Steps keep their text size: the badges are a guarded rule (`step-badges`), so a slide whose blocks would get smaller under them draws
-as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list grows (LH-48) as the plain list
-would, as long as it fits with its badges. The preview draws the badges, connector, chips and arrows from `steps`, and the PPTX export
-writes them as native shapes (an ellipse holding its numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets),
-tagged so that import consumes them and gives a list its numbering back.
+Steps keep their text size: the badges are a guarded rule (`step-badges`, and `numerals` for numbered rows), so a slide whose blocks
+would get smaller under them draws as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list
+grows (LH-48) as the plain list would, as long as it fits with its badges (or numerals). The preview draws the badges, numerals,
+connector, chips and arrows from `steps`, and the PPTX export writes them as native shapes (an ellipse holding its numeral, a text box
+holding a numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets), tagged so that import consumes them and gives a
+list its numbering back. Which of numerals, badges and plain rows a list takes is one rule, written down in
+[Dynamic composition](dynamic-composition.md#numerals-badges-or-rows-lh-134).
 
 ### A body that fills too little (LH-48)
 
@@ -458,6 +501,20 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
   region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
   at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
+  tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
+  metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price
+  under it at display size (80 to 96 px, 96 to 128 px for two tiers, stepped down to the one line the card holds, so "$49" and
+  "$1,200/mo" never split), then the description and the details, from the top of the card. The cards share one top edge and one
+  height (LH-22's full-height cards) and every item of a tier shares the tier's `frameBox`, so a card is drawn once. The prices that
+  reach their 76 px role size read at one size; each tier's details keep the size they fit at. The guard holds every block to the
+  size it had as two cards, so a price too wide for the narrower card (a four-tier row with "$1,200/mo") keeps them. A group with
+  `emphasis: true` keeps LH-06's surface and the other tiers are cards. The group's `composition` is read as a column.
+- **Pillars with one-word titles (LH-136).** A slide whose body is 2 to 5 lists of one entry each, a single word (at most 14
+  characters) with its description, draws each as the word at display size (2.3 times the description's size, stepped down to one
+  line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
+  line in PowerPoint, `ListFit.rules` with `accent`), with no card. Sibling words read at one size. Any other set, a title of
+  several words included, keeps its cards. fitList's `display` option (with `heading`) draws one list this way.
 - **A lone timeline (LH-129)** in a template's timeline region, or an automatic slide's only block, first tries three and then two
   steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
   its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few

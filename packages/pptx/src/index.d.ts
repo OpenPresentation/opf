@@ -1,4 +1,5 @@
 import type { Catalog, Finding, Fonts, LayoutDiagnostic, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
+import type { PictureLuminance } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-pptx";
 
 export declare const releaseLane: Readonly<{
@@ -206,6 +207,11 @@ export interface ToPptxOptions {
   fonts?: Fonts;
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
+  /**
+   * LH-02, LH-145: the luminance grid of a picture background, when the host can read its pixels; the automatic scrim under text on a picture is then sized for the
+   * picture, not for any picture. `measurePictures(deck)` of `@openpresentation/opf-render` returns it; pass the same function to `toSvg`, so both engines draw the same scrim.
+   */
+  pictureLuminance?: (src: string) => PictureLuminance | undefined;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
   onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;

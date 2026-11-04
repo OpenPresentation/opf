@@ -16,6 +16,7 @@
 // header caption. PPTX import does not write these defaults back as options (src/chart-options.js in opf-pptx).
 import {chartOptionTarget, chartLabelText, formatChartLabelNumber} from './chart-options.js';
 import {chartTextSize} from './chart-axis.js';
+import {groupsThousands} from './number-grouping.js';
 import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-data.js';
 import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
@@ -31,6 +32,8 @@ export const SMALL_CHART_MAX_SERIES = 2;
 export const SMALL_CHART_MAX_POINTS = 16;
 /** The header row shows at most this many legend swatches; a chart with more series keeps its side legend (LH-81). */
 export const CHART_HEADER_MAX_LEGEND = 4;
+/** LH-143: a legend wider than the header row wraps onto at most this many rows before the chart keeps its side legend. */
+export const CHART_HEADER_LEGEND_ROWS = 2;
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -212,9 +215,31 @@ export function chartHeaderCaption(chart: unknown, columns: readonly string[], l
   return english && category ? `${series} by ${sentenceCaseCategory(category)}` : series;
 }
 
-/** The label text of a value as the engines draw a default value label: the column's number format, else the General form. */
-export function valueLabel(value: number, format: string | undefined): string {
-  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value)}, ['value']);
+/**
+ * The label text of a value as the engines draw a default value label: the column's number format, else the General form. LH-141: with
+ * `group` (the column has no format and groups its thousands, `columnGroup`) a whole number of four digits or more is grouped by the language.
+ */
+export function valueLabel(value: number, format: string | undefined, group?: {language?: string}): string {
+  return chartLabelText({value: format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group)}, ['value']);
+}
+
+const groupColumns = new WeakMap<object, Map<number, boolean>>();
+/** LH-141: whether the data's value column `column` groups the thousands of its default labels: no number format of its own and only whole numbers, one of four digits (`groupsThousands`). */
+export function columnGroups(data: ResolvedChartData, column: number): boolean {
+  if (!data.ok) return false;
+  const known = groupColumns.get(data) ?? new Map<number, boolean>();
+  groupColumns.set(data, known);
+  const cached = known.get(column);
+  if (cached !== undefined) return cached;
+  const format = data.formats[column], groups = (typeof format !== 'string' || format === '') && groupsThousands(data.rows.map(row => chartNumber(row[column])));
+  known.set(column, groups);
+  return groups;
+}
+
+/** LH-141: a value of the data's column `column` as its default label prints it: the column's format, else the General form (grouped by `language` where `columnGroups`). */
+export function columnValueLabel(data: ResolvedChartData, column: number, value: number, language?: string): string {
+  const format = data.ok && typeof data.formats[column] === 'string' && data.formats[column] !== '' ? data.formats[column] : undefined;
+  return valueLabel(value, format, columnGroups(data, column) ? {language} : undefined);
 }
 
 /**
@@ -239,7 +264,7 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
     const {box, scale} = geometry;
     const fontPx = chartTextSize({width: box.width, height: box.height, scale, minFontSize: geometry.minFontSize}) * scale;
     const pad = 10 * scale;
-    const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(valueLabel(value, data.formats[j + 1]), fontPx, 400)])));
+    const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx, 400)])));
     if (spec.horizontal) {
       // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, PptxGenJS gap width
       // 150%), one series' a category apart.
@@ -271,8 +296,10 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
  *
  * The row starts `pad` below the box top and is one line (1.5 chart text sizes) tall. The caption (bold, chart text size) sits at the
  * start of the row (the right edge right to left). The legend (two to four series) follows at the end of the same
- * row when caption and legend fit with two text sizes between them, else at the start of a second row; a legend wider than the
- * chart is not moved into the header (the side legend stays). Each entry is its key (a swatch 0.6 text sizes square, or a line key
+ * row when caption and legend fit with two text sizes between them, else at the start of a second row. LH-143: a legend wider than the
+ * row wraps its entries onto a second row (CHART_HEADER_LEGEND_ROWS), so the legend stands on top and the plot keeps the chart's whole
+ * width whichever font an engine measures it in (a legend that fit one row in one font and not in another moved to the side in one engine
+ * only); only an entry wider than the row, or a legend of more than two rows, keeps the side legend. Each entry is its key (a swatch 0.6 text sizes square, or a line key
  * 1.4 wide), 0.4 text sizes of space and its name, entries 0.8 text sizes apart, the metrics of the preview's legends.
  */
 export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, options: {legend?: boolean} = {}): ChartLayerHeader | undefined {
@@ -296,7 +323,30 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
     const sized = names.map((name, series) => ({series, name, key: lineKey(series) ? 'line' as const : undefined,
       width: (lineKey(series) ? fontPx * 1.4 : fontPx * 0.6) + fontPx * 0.4 + geometry.measure(name, fontPx, 400)}));
     const legendWidth = sized.reduce((sum, entry) => sum + entry.width, 0) + spacing * (sized.length - 1);
-    if (legendWidth <= available + 0.01) {
+    // LH-143: the entries in rows of at most the available width; undefined when one entry is wider or the rows exceed the limit.
+    const wrapped = (() => {
+      const lines: (typeof sized)[] = [[]];
+      let used = 0;
+      for (const entry of sized) {
+        if (entry.width > available + 0.01) return undefined;
+        const line = lines[lines.length - 1]!, next = line.length ? used + spacing + entry.width : entry.width;
+        if (line.length && next > available + 0.01) { lines.push([entry]); used = entry.width; } else { line.push(entry); used = next; }
+      }
+      return lines.length <= CHART_HEADER_LEGEND_ROWS ? lines : undefined;
+    })();
+    if (wrapped && wrapped.length > 1) {
+      // Wrapped: the legend starts the row under the caption (or the first row), each line from the start.
+      const first = text ? 1 : 0;
+      rows = Math.max(rows, first + wrapped.length);
+      const entries: ChartHeaderLegendEntry[] = [];
+      const widths = wrapped.map(line => line.reduce((sum, entry) => sum + entry.width, 0) + spacing * (line.length - 1));
+      wrapped.forEach((line, index) => {
+        let x = left;
+        const y = box.y + pad + (first + index) * lineHeight;
+        for (const entry of line) { entries.push({series: entry.series, name: entry.name, ...(entry.key ? {key: entry.key} : {}), box: {x, y, width: entry.width, height: lineHeight}}); x += entry.width + spacing; }
+      });
+      legend = {box: {x: left, y: box.y + pad + first * lineHeight, width: Math.max(...widths), height: wrapped.length * lineHeight}, entries: entries.sort((a, b) => a.series - b.series)};
+    } else if (legendWidth <= available + 0.01) {
       const sameRow = text !== undefined && captionWidth + 2 * fontPx + legendWidth <= available + 0.01;
       const row = sameRow || !text ? 0 : 1;
       rows = Math.max(rows, row + 1);
@@ -321,6 +371,14 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
     ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
     height: pad + rows * lineHeight,
   };
+}
+
+/**
+ * LH-03, LH-142: true when the chart draws no value axis: no tick labels, gridlines or value axis line, because its labels carry the values
+ * (a small chart's value labels, a horizontal stacked bar chart's segment values). Both engines read this one answer.
+ */
+export function chartValueAxisHidden(layer: ChartLayer | undefined): boolean {
+  return layer?.small?.valueAxis === false || layer?.stack?.valueAxis === false;
 }
 
 /** The chart layer of a chart item: its small-chart treatment and its header row, or undefined when it has neither. */

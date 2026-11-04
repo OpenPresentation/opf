@@ -835,7 +835,7 @@ _No named properties._
 | `diagram` | no | `oneOf:string / ref:Diagram` | Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families) drawn in the deck's fonts and colors. A string is shorthand... |
 | `caption` | no | `ref:Caption` | Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups. |
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
-| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
+| `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
 
 
@@ -1342,7 +1342,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1352,4 +1352,5 @@ _No named properties._
 | `padding` | no | `number` | Inset as a fraction of the container short edge. Default 0.08 on a slide, 0 inside a group. |
 | `weights` | no | `array<number>` | Relative track sizes: columns for row/grid/auto, rows for column. Omitted tracks have weight 1; extra weights are ignored. |
 | `minFontSize` | no | `number` | Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size. |
+| `maxFontSize` | no | `number` | Largest body text size in reference pixels at a 720-pixel canvas short edge: paragraphs, lists, quotes, metrics and timelines are never set larger, their growth included (headings, tables, code and charts keep their s... |
 | `overflow` | no | `enum:warn \| error` | warn returns diagnostics for content that does not fit; error rejects layout. Content is never silently removed. Default warn. |

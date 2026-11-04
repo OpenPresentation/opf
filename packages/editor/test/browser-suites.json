@@ -186,6 +186,10 @@
           "command": "pnpm run test:canvas-a11y-browser"
         },
         {
+          "id": "browser:picture-luminance",
+          "command": "pnpm run test:picture-luminance-browser"
+        },
+        {
           "id": "browser:json-editor",
           "command": "pnpm run test:json-browser artifacts/json-editor-browser.json"
         },

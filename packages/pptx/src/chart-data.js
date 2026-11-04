@@ -11,8 +11,9 @@
 import {
   chartNumber, fromExcelNumberFormat, inlineChartData, inlineTableData, isDatasetRef, resolveChartData, resolveTableData, tableCellDisplayValue, toExcelNumberFormat
 } from '@openpresentation/opf';
+import {GROUPED_LABEL_CODE, groupsThousands} from '@openpresentation/opf/composition';
 
-export {chartNumber, fromExcelNumberFormat, inlineChartData, inlineTableData, isDatasetRef, resolveChartData, resolveTableData, tableCellDisplayValue, toExcelNumberFormat};
+export {chartNumber, fromExcelNumberFormat, groupsThousands, inlineChartData, inlineTableData, isDatasetRef, resolveChartData, resolveTableData, tableCellDisplayValue, toExcelNumberFormat};
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
@@ -52,12 +53,16 @@ export function excelCode(format) {
  *   x       the X column's code (scatter c:xVal and the horizontal value axis);
  *   axis    the value axis code (the first plotted series' format, as Excel does), or undefined to keep the axis;
  *   secondaryAxis  a combo chart's secondary value axis code (its first series' format, FA-15), or undefined to keep it;
+ *   groups  per series: true when its default value labels group their thousands (LH-141: no format of its own, whole numbers, one of
+ *           four digits); its labels (not its cache or the axis) take `#,##0`, as the preview prints them;
  *   labels  false when the labels show percentages (the percent label keeps PowerPoint's own percent form);
  *   scatter true for an XY chart (two value axes: axPos b/t is X).
  * Every c:numCache of a series takes its code, every c:numFmt of a series' data labels too; the chart group's labels
  * take the first series' code.
  */
-export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxis, labels = true, scatter = false}) {
+export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxis, groups = [], labels = true, scatter = false}) {
+  // The code of a series' labels: its own format, else the grouped General form of a series that groups.
+  const labelCodes = series.map((code, index) => code ?? (groups[index] ? GROUPED_LABEL_CODE : undefined));
   // CT_NumData: formatCode is the cache's first child (PptxGenJS writes none on pie and doughnut series).
   const formatCode = (text, code) => code === undefined ? text : /<c:formatCode>/.test(text)
     ? text.replace(/<c:formatCode>[^<]*<\/c:formatCode>/g, `<c:formatCode>${escapeXml(code)}</c:formatCode>`)
@@ -67,18 +72,18 @@ export function applyChartNumberFormats(xml, {series = [], x, axis, secondaryAxi
   // show the first series' format. When shown labels differ by series, each series gets a copy of the group's labels,
   // in the CT_RadarSer / CT_ScatterSer position (before trendline, errBars, cat, val, xVal and yVal).
   const group = xml.split(/<c:ser>[\s\S]*?<\/c:ser>/).join('').match(/<c:dLbls>[\s\S]*?<\/c:dLbls>/)?.[0];
-  const ownLabels = labels && group && /<c:showVal val="1"\/>/.test(group) && series.some(code => code !== series[0]);
+  const ownLabels = labels && group && /<c:showVal val="1"\/>/.test(group) && labelCodes.some(code => code !== labelCodes[0]);
   let index = 0;
   const out = (ownLabels ? xml.replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => /<c:dLbls>/.test(ser) ? ser : ser.replace(/<c:(?:trendline|errBars|cat|val|xVal|yVal)>/, at => `${group}${at}`)) : xml).replace(/<c:ser>[\s\S]*?<\/c:ser>/g, ser => {
-    const code = series[index++];
+    const code = series[index], labelCode = labelCodes[index++];
     const result = ser.replace(/<c:(val|yVal|xVal)>[\s\S]*?<\/c:\1>/g, (role, name) => formatCode(role, name === 'xVal' ? x : code));
-    return labelFormats(result, code);
+    return labelFormats(result, labelCode);
   });
   // The chart group's own label block (outside every c:ser) follows the group's first series. Only a combo chart has more than
   // one group (FA-15: its line groups follow their own first series).
   let first = 0;
   const grouped = out.replace(/<c:(barChart|lineChart|areaChart|pieChart|doughnutChart|scatterChart|radarChart)>[\s\S]*?<\/c:\1>/g, group => {
-    const code = series[first];
+    const code = labelCodes[first];
     first += group.match(/<c:ser>/g)?.length ?? 0;
     return group.split(/(<c:ser>[\s\S]*?<\/c:ser>)/).map((part, position) => position % 2 ? part : labelFormats(part, code)).join('');
   });

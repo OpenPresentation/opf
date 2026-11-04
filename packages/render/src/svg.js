@@ -1,9 +1,9 @@
 // The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
-  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, textColorForFill, chartColorForFill,
+  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
-  metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
@@ -30,6 +30,8 @@ import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
 import { deckInternals } from "./svg-internals.js";
 
 export const packageName = "@openpresentation/opf-render";
+// LH-145: the picture sampler of the automatic scrim (the canvas decoder; the Node entry replaces it with the sharp one).
+export { measurePictures } from "./measure-pictures.js";
 
 export const releaseLane = Object.freeze({
   githubRepository: "OpenPresentation/opf",
@@ -722,6 +724,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     renderSteps(bound, options),
+    renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
     renderFootnotes(bound, options, drawHelpers),
@@ -926,7 +929,9 @@ function imageRecolorMatrix(recolor, bound) {
 
 // LH-07: core's step badges, connectors and flows (geometry.steps), under the text they number, as the PPTX export draws them: the chips
 // (card fill and border), the connector (border color), each badge (a primary circle with its numeral centered in the bold body face, in
-// the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset).
+// the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset). LH-134: a
+// numeral (badge.numeral) draws no circle, its label bold in the tag's color (the primary, or the text color where the primary reads under
+// 4.5:1 on the slide), as the export writes it.
 // With trace each shape names the block or entry it numbers in data-opf-step-path, not data-opf-path: it is the layout's drawing, so
 // hit-testing and the region groups still find each item by its own text.
 function renderSteps(bound, options) {
@@ -938,12 +943,22 @@ function renderSteps(bound, options) {
     for (const chip of step.chips ?? []) parts.push(tag('rect', {...HIDDEN, x: chip.box.x, y: chip.box.y, width: chip.box.width, height: chip.box.height, rx: chip.radius, fill: bound.design.roles.neutrals.card.hex, stroke: bound.design.roles.neutrals.cardBorder.hex, ...(options.trace ? {'data-opf-step-path': chip.path} : {})}));
     if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...(options.trace ? {'data-opf-step-path': step.path} : {})}));
     for (const badge of step.badges) {
-      parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
-      parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
+      if (!badge.numeral) parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
+      // LH-137: a check-mark badge (a summary list's tile) draws core's check polygon in the numeral's color in place of a numeral.
+      if (badge.check) parts.push(tag('path', {...HIDDEN, d: `M${badge.check.map(([px, py]) => `${stableNumber(px)} ${stableNumber(py)}`).join(' L')} Z`, fill: numeral}));
+      else parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: badge.numeral ? tagFill(bound.design) : numeral, 'aria-hidden': 'true', ...(badge.numeral && options.trace ? {'data-opf-step-path': badge.path} : {})}, escapeText(badge.label)));
     }
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
+}
+// LH-130: the short accent rule core sets above a cover's or section's title (geometry.titleRule), filled in the tag's color (tagFill), as
+// the PPTX export draws it. With trace it names the title it stands for in data-opf-title-rule, not data-opf-path: it is the layout's
+// drawing, so hit-testing still finds the title by its own text.
+function renderTitleRule(bound, options) {
+  const rule = bound.geometry.titleRule;
+  if (!rule) return '';
+  return tag('rect', {...HIDDEN, x: stableNumber(rule.box.x), y: stableNumber(rule.box.y), width: stableNumber(rule.box.width), height: stableNumber(rule.box.height), fill: tagFill(bound.design), ...(options.trace ? {'data-opf-title-rule': rule.path} : {})});
 }
 // DrawingML's rightArrow preset at its default adjustments (adj1 = adj2 = 50000): a shaft half the box's height and a head as long as
 // half its smaller side; leftArrow is its mirror.
@@ -964,7 +979,9 @@ function renderSlideContent(bound, width, height, options) {
   let surfaceDrawn=false,previousFrame;
   return bound.geometry.items.map(item => {
     const itemBound=item.emphasis&&onSurface ? onSurface : bound;
-    const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})) : '';
+    // LH-131: a featured before and after pair's arrow (emphasis.arrow), a primary block arrow as LH-07's flows draw theirs, with the surface.
+    const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})
+      +(emphasis.arrow?tag('path',{...HIDDEN,d:blockArrowPath(emphasis.arrow.box,emphasis.arrow.direction),fill:bound.design.colors.primary,...(options.trace?{'data-opf-emphasis-arrow':emphasis.path}:{})}):'')) : '';
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
     // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
     // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
@@ -1084,15 +1101,19 @@ function listEntriesSvg(item, fit, bound, options) {
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
     else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
-    const config={path:entry.textPath,align:'left',fill:bound.design.colors.text,rich:Array.isArray(entry.value),options};
+    // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
+    const config={path:entry.textPath,align:'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
   }
   // LH-08: a list drawn as ruled rows (design.listStyle: rows) draws core's hairlines between its rows, LIST_RULE_WIDTH thick in the
-  // scheme's border neutral, as the PPTX export draws them as native lines.
+  // scheme's border neutral, as the PPTX export draws them as native lines. LH-133: an accent rule (over a cell of a grid of questions) is
+  // LIST_ACCENT_RULE_WIDTH thick in the tag's color on its backdrop.
   if(fit.rules?.length){
-    const thickness=LIST_RULE_WIDTH*Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,stroke=bound.design.roles.neutrals.border.hex;
-    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke,'stroke-width':stableNumber(thickness),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
+    // LH-136: the accent rule over a display heading is core's own thickness; LH-133's accent rules over question cells are
+    // LIST_ACCENT_RULE_WIDTH thick. Both are in the tag's color on their backdrop.
+    const unit=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,border=bound.design.roles.neutrals.border.hex;
+    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke:rule.accent?eyebrowFill(bound.design,item):border,'stroke-width':stableNumber(rule.thickness??(rule.accent?LIST_ACCENT_RULE_WIDTH:LIST_RULE_WIDTH)*unit),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
   }
   return children;
 }
@@ -1479,9 +1500,13 @@ function renderMetric(item, box, bound, options) {
   // LH-54: a metric in a card is colored against the card fill, not the slide behind it. LH-57: on a dark one, a value whose accent
   // falls under 4.5:1 takes the text color.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
-  const trendMark=metricTrendMark(layout,bound,backdrop);
+  // LH-137: a delta pill (layout.deltaPill) is filled with core metricPillFill under the delta and its arrow, which are colored against it.
+  const pillFill=layout.deltaPill?metricPillFill(backdrop,bound.design.colors.text):undefined;
+  if (layout.deltaPill) { const pill=layout.deltaPill.box; children.push(tag('rect',{...HIDDEN,x:stableNumber(pill.x),y:stableNumber(pill.y),width:stableNumber(pill.width),height:stableNumber(pill.height),rx:stableNumber(layout.deltaPill.radius),fill:pillFill,...(options.trace?{'data-opf-metric-role':'pill'}:{})})); }
+  const trendMark=metricTrendMark(layout,bound,pillFill??backdrop);
   // LH-53: a unit on its value's line is part of the figure and takes the value's color.
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
+  // LH-135: a label drawn as the metric's eyebrow takes the eyebrow's color on its backdrop (eyebrowFill), in capitals with core's tracking.
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):layout.eyebrow&&part.role==='label'?eyebrowFill(bound.design,item):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1496,23 +1521,23 @@ function renderMetric(item, box, bound, options) {
       const origin=part.linePositions[index];
       if(factor&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
-        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
         ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
           'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
       },line.segments.map(segment=>segmentSpan({
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
+      },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
-        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
         ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
           'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
       },line.segments.map(segment=>segmentSpan({x:stableNumber(origin.x+segment.x),
         ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
+      },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
     });
     children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,
       'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),

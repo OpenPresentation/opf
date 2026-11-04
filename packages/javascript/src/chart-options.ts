@@ -6,6 +6,7 @@
 // show is adapted the same way everywhere and reported with the same
 // `chart-option-adapted` diagnostic. Decks that carry none of the three fields
 // resolve to `active: false` and nothing in any engine changes.
+import {groupNumber} from './number-grouping.js';
 
 /** The chart constructs the engines draw. Every catalog chart type id resolves to one (see `chartOptionTarget`). */
 /** `combo` (FA-15) draws clustered columns and line series in one plot, the lines optionally on a secondary value axis. */
@@ -282,9 +283,12 @@ export function resolveChartOptions(chart: unknown, target?: ChartOptionTarget):
   return result;
 }
 
-/** A General-format number as a label: at most twelve significant digits, no exponent unless the value needs one. */
-export function formatChartLabelNumber(value: number): string {
-  return String(Number(value.toPrecision(12)));
+/**
+ * A General-format number as a label: at most twelve significant digits, no exponent unless the value needs one. LH-141: with `group` (the
+ * series' labels group their thousands, see `groupsThousands`) a whole number of four digits or more groups them by `language`.
+ */
+export function formatChartLabelNumber(value: number, group?: {language?: string}): string {
+  return group ? groupNumber(value, group.language) : String(Number(value.toPrecision(12)));
 }
 
 /** A share as PowerPoint's `0%` label. */

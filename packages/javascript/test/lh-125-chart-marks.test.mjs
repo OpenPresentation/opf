@@ -82,7 +82,7 @@ describe("LH-125: a doughnut's hole", () => {
     const list = layerOf({ title: "Two in three tickets are resolved on first contact", chart: doughnut() }).valueList;
     const hole = list.hole;
     assert.equal(hole.row, 0);
-    assert.equal(hole.value.text, "6240");
+    assert.equal(hole.value.text, "6,240");
     assert.ok(hole.value.size > 20, "larger than the chart text");
     const cx = list.pie.x + list.pie.width / 2, cy = list.pie.y + list.pie.height / 2, radius = list.pie.width / 4;
     for (const part of [hole.value, hole.name].filter(Boolean)) {

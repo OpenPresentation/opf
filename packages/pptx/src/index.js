@@ -9,7 +9,7 @@ import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slid
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
-import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
+import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
@@ -20,6 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
+import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -60,9 +61,9 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, groupsAxisTicks, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -349,6 +350,8 @@ export async function toPptx(input, options = {}) {
   context.chartMarkTags = new Map();
   // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
   context.stepTags = new Map();
+  // LH-130: the accent rule core sets above a cover's or section's title (src/title-rule.js).
+  context.titleRuleTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
@@ -1142,6 +1145,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
+  // LH-130: a cover's or section's title rule is its layout's drawing, not content.
+  const titleRules=importTitleRules(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
     picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
       // The recorded crop is re-derived from the circular frame of the quote photo.
@@ -1191,6 +1196,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
+    if (titleRules.has(shape)) { roles.set(shapeKeys.get(shape), 'title-rule'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
@@ -1651,12 +1657,15 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
 
 // Adjacent native bullet boxes on the same text column form one imported list.
 // This is a geometry heuristic, not a lossless reconstruction of arbitrary PPTX.
+// LH-133: two lists the export named (`OPF list <path> line N`, merged by mergeOpfListShapes) are the lists their names say, so they
+// stay apart however close they sit (one-question blocks of a FAQ stacked as ruled rows).
 function mergeAdjacentBulletShapes(items) {
   const result=[];
+  const named=value=>/^OPF list (.+) line \d+$/.test(value?.name??'');
   for(const item of items){
     const previous=result.at(-1);
     const bullets=value=>value?.kind==='text'&&value.paragraphs.length&&value.paragraphs.every(p=>p.bullet);
-    if(bullets(previous)&&bullets(item)&&previous.bounds&&item.bounds
+    if(bullets(previous)&&bullets(item)&&!(named(previous)&&named(item))&&previous.bounds&&item.bounds
       &&Math.abs(previous.bounds.x-item.bounds.x)<.05
       &&item.bounds.y>=previous.bounds.y+previous.bounds.h-.02
       &&item.bounds.y-(previous.bounds.y+previous.bounds.h)<.3){
@@ -2229,6 +2238,11 @@ function eyebrowColor(context) {
   if (contrastRatio(context.colors.accent, backdrop) < TAG_MIN_CONTRAST) return context.textColor;
   return nativeColor('primary', context.colors.accent, context);
 }
+// LH-133: the literal of eyebrowColor (a glossary's term, an accent rule), for the run look import compares with and for line shapes.
+function eyebrowHex(context) {
+  const backdrop = context.cardFill ? normalizeHex(context.cardFill) : context.colors.background;
+  return contrastRatio(context.colors.accent, backdrop) < TAG_MIN_CONTRAST ? context.colors.text : context.colors.accent;
+}
 const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
 // A link run with no color of its own is written in the theme hyperlink color (a:schemeClr hlink where the deck theme
@@ -2276,15 +2290,44 @@ function pptxColor(value) {
   return /^(?:tx[12]|bg[12]|accent[1-6])$/.test(value) ? value : normalizeHex(value);
 }
 
-// Deck-level theme background for the slide master, so slides added in
-// PowerPoint match. The vendored layout already uses bg1, so only a theme
-// background on another slot (dark themes, light2, accents) changes the master.
+// Deck-level background for the slide master, so slides added in PowerPoint match. The vendored layout already uses bg1, so a theme
+// background on another slot (dark themes, light2, accents) changes the master, and so does a fixed background (LH-139): a hex color, a
+// gradient or a pattern is the same native fill the slides write (a slide's own background still overrides it), and a picture is a picture
+// fill of the media a slide of the deck embeds (`image`, completed at packaging by masterPictureBackground). The layouts then inherit the
+// master's background; a layout variant (LH-01) writes its own bg1 background after this pass and stays per layout.
 function masterBackground(context) {
-  const deck = {...context, schemeOverride: false};
-  const value = schemeBackgroundValue(deck.backgroundDefinition, deck);
-  const fill = schemeBackgroundFill(deck.backgroundDefinition, deck);
-  if (!value || value === 'bg1' || !fill || fill.includes('<a:alpha')) return null;
-  return {fill, text: defaultTextSchemeValues(deck).text ?? normalizeHex(context.colors.text)};
+  const deck = {...context, schemeOverride: false}, definition = deck.backgroundDefinition;
+  const text = defaultTextSchemeValues(deck).text ?? normalizeHex(context.colors.text);
+  if (definition?.type === 'image') return {fill: undefined, image: true, text};
+  const value = schemeBackgroundValue(definition, deck);
+  if (value === 'bg1' || definition === undefined) return null;
+  if (value) {
+    const fill = schemeBackgroundFill(definition, deck);
+    return !fill || fill.includes('<a:alpha') ? null : {fill, text};
+  }
+  const fill = nativeBackgroundFill(definition, {width: context.dimensions.widthInches, height: context.dimensions.heightInches}, deck.colors.background, deck.colors.text,
+    (reference, hex) => schemeColorValue(reference, hex, deck), reference => resolveBackgroundColorRef(reference, deck.colorScheme, deck.variables));
+  return fill ? {fill, text} : null;
+}
+
+// LH-139: the picture fill of the master for a deck whose background is a picture (masterBackground `image`). It reuses the media the first slide
+// that draws the deck's picture embeds (its native background fill, or the full-slide picture of one with alt text), related to the master too,
+// with the same fit, focus, opacity and recolor. A deck whose picture no slide drew (it could not be read) keeps the master as it was.
+function masterPictureBackground(entries, context, imageMetadata) {
+  const wanted = context.masterBackground, picture = context.masterPicture;
+  if (!wanted?.image) return;
+  context.masterBackground = null;
+  const master = 'ppt/slideMasters/slideMaster1.xml', rels = 'ppt/slideMasters/_rels/slideMaster1.xml.rels';
+  if (!picture || !entries[master] || !entries[rels]) return;
+  const xml = decodeText(entries[picture.part]);
+  const shape = picture.name ? xml.match(/<p:pic>[\s\S]*?<\/p:pic>/g)?.find(pic => pic.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] === picture.name) : xml.match(/<p:bg>[\s\S]*?<\/p:bg>/)?.[0];
+  const embed = shape?.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+  const target = embed && parseRelationships(entries, picture.part).get(embed)?.path, metadata = target && imageMetadata.get(target);
+  if (!metadata) return;
+  const relsXml = decodeText(entries[rels]);
+  const id = `rId${Math.max(0, ...[...relsXml.matchAll(/\bId="rId(\d+)"/g)].map(match => Number(match[1]))) + 1}`;
+  entries[rels] = encodeText(relsXml.replace('</Relationships>', `<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../${target.slice('ppt/'.length)}"/></Relationships>`));
+  context.masterBackground = {fill: nativeImageBackgroundFill(id, metadata, {...picture.fit, fitImage}), text: wanted.text};
 }
 
 // The theme part carries the deck-level scheme (slide overrides stay literal)
@@ -2451,7 +2494,9 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
-  addSteps(slide, geometry.steps, slideContext, context.stepTags);
+  addSteps(slide, geometry.steps, {...slideContext, stepNumeral: tagColor(slideContext)}, context.stepTags, geometry.direction === 'rtl');
+  // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
+  addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
@@ -2475,6 +2520,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.cardTags.set(`OPF card ${emphasisPath}`, emphasisPath);
       slide.addShape('roundRect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, rectRadius: radius / 96,
         fill: {color: emphasisContext.colors.background, transparency: 0}, line: {type: 'none'}, objectName: `OPF card ${emphasisPath}`});
+      // LH-131: a featured before and after pair's arrow, drawn and tagged as LH-07's flow arrows are (OPF_STEPS_V1, consumed on import:
+      // the layout's drawing, not content), in the accent where core placed it, with the surface as the preview draws it.
+      const arrow = geometry.emphasis.arrow;
+      if (arrow) {
+        const objectName = `OPF steps ${emphasisPath} arrow`;
+        slide.addShape(arrow.direction === 'left' ? 'leftArrow' : 'rightArrow', {x: arrow.box.x / 96, y: arrow.box.y / 96, w: arrow.box.width / 96, h: arrow.box.height / 96,
+          fill: {color: normalizeHex(slideContext.colors.accent)}, line: {type: 'none'}, objectName});
+        context.stepTags.set(objectName, {v: 1, path: emphasisPath, form: 'pair', sequence: 0, role: 'arrow'});
+      }
     }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox): the card is drawn once, under the eyebrow, and
@@ -2700,7 +2754,8 @@ function addTextPayload(slide, value, region, context, path) {
 function listRunLook(fit,style,context){
   // LH-08: the label of a ruled row with a description is written bold, as a heading list's entry is.
   const entryStyle=(entry,kind)=>kind==='text'&&(entry.heading||entry.text.richLines.some(line=>line.fragments.some(fragment=>fragment.run?.bold===undefined&&fragment.style.fontWeight!==style.fontWeight)))?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
-  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?context.colors.text:context.colors.mutedText))));
+  // LH-133: a glossary's term is written in the accent (eyebrowHex), so that is its look.
+  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?entry.accent?eyebrowHex(context):context.colors.text:context.colors.mutedText))));
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
@@ -2768,14 +2823,19 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:nativeFontOptions(entry.marker.style).fontFace,objectName,align:lineAlign,fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
       });
     };
-    addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
+    // LH-133: a glossary's term (entry.accent) is written in the tag's color on its backdrop, as the preview draws it.
+    if(entry.accent)addLines(entry.text,entry.textBox,eyebrowHex(context),eyebrowColor(context),true);
+    else addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
     if(entry.description)addLines(entry.description,entry.descriptionBox,context.colors.mutedText,context.mutedColor,false);
   }
   // LH-08: a list drawn as ruled rows (design.listStyle: rows): core's hairlines between its rows as native lines, LIST_RULE_WIDTH thick in
   // the scheme's border neutral, as the preview draws them. The export draws them again from the list, so import reads them as no content.
+  // LH-133: an accent rule (over a cell of a grid of questions) is LIST_ACCENT_RULE_WIDTH thick in the tag's color on its backdrop.
   if(fit.rules?.length){
     const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720,color=normalizeHex(context.roles?.neutrals?.border?.hex??`#${context.colors.border}`);
-    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color,width:LIST_RULE_WIDTH*scale*.75},objectName:`OPF list rule ${path} ${index}`}));
+    // LH-136: the accent rule over a display heading is a native line of core's thickness; LH-133's accent rules over question cells are
+    // LIST_ACCENT_RULE_WIDTH thick. Both are in the tag's color on their backdrop.
+    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color:rule.accent?normalizeHex(eyebrowHex(context)):color,width:(rule.thickness??(rule.accent?LIST_ACCENT_RULE_WIDTH:LIST_RULE_WIDTH)*scale)*.75},objectName:`OPF list rule ${path} ${index}`}));
   }
 }
 
@@ -3005,6 +3065,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     if (!name) { useFallbackBackground(slide, presentation, background, slideIndex, slideContext, context, options); return; }
     owner = name;
     overlayName = imageOverlayName(name);
+    recordMasterPicture(context, background, part, effects, box, name);
   } else {
     // An SVG background is its PNG raster at the slide's size: a slide background picture fill carries no SVG.
     const outcome = { box, cover: background.fit === 'cover' };
@@ -3020,6 +3081,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       fit: background.fit, focus: background.focus, opacity: background.opacity ?? 1, recolor: effects.recolor, path: background.path,
       width: box.w * 96, height: box.h * 96, report: options.onDiagnostic
     } });
+    recordMasterPicture(context, background, part, effects, box);
   }
   // LH-02: core's automatic scrims under the text (no overlay of the author's): each one native rectangle in the slide background color (bg1 of the
   // slide's variant once scheme colors are written), whose fill packaging turns into a linear gradient with alpha stops (attachScrims)
@@ -3031,6 +3093,13 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     if (scrim.stops.some(stop => stop.opacity !== scrim.opacity)) (context.scrims[`ppt/slides/slide${slideIndex + 1}.xml`] ??= new Map()).set(name, scrim);
   });
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
+}
+
+// LH-139: the first slide that draws the deck's own picture background (not a slide's) is the media the slide master's picture fill reuses.
+function recordMasterPicture(context, background, part, effects, box, shapeName) {
+  if (context.masterPicture || !context.masterBackground?.image || /^slides\./.test(background.path ?? '')) return;
+  context.masterPicture = {part, name: shapeName,
+    fit: {fit: background.fit, focus: background.focus, opacity: background.opacity ?? 1, recolor: effects.recolor, width: box.w * 96, height: box.h * 96}};
 }
 
 // LH-02: a gradient scrim's solid fill becomes a linear gradient along core's axis (90 degrees down a vertical scrim, 0 across a
@@ -3207,8 +3276,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // The value axis shows the first plotted series' format (General when it has none), as the preview does.
   // A combo chart's secondary value axis shows its first series' format (FA-15).
   const secondaryIndex = chartData.combo?.findIndex((entry) => entry.axis === 'secondary') ?? -1;
-  const numberFormats = chartData.formats && {...chartData.formats, axis: chartData.spec.grouping === 'percentStacked' ? undefined : chartData.formats.series[0],
-    ...(secondaryIndex >= 0 ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
+  // LH-141: a value axis with no format whose ticks (core's composed axis) are whole numbers of four digits takes `#,##0`, as the preview groups them.
+  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis);
+  const numberFormats = (chartData.formats ?? (axisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
+    ...(secondaryIndex >= 0 && chartData.formats ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,markLabelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
@@ -3815,12 +3886,20 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
   // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
   // dark one, a value whose accent falls under 4.5:1 takes the text color.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
-  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  // LH-137: a delta pill (layout.deltaPill), a native rounded rectangle in core metricPillFill under the delta and its arrow, which are
+  // colored against it; tagged into the metric's group as decoration (role 'pill'), as the preview draws it.
+  const pillFill=layout.deltaPill?metricPillFill(backdrop,`#${normalizeHex(context.colors.text)}`):undefined;
+  if (layout.deltaPill) {
+    const pill=layout.deltaPill.box,objectName=`OPF metric ${group} pill`;
+    slide.addShape('roundRect',{objectName,x:pill.x/96,y:pill.y/96,w:pill.width/96,h:pill.height/96,rectRadius:layout.deltaPill.radius/96,fill:{color:normalizeHex(pillFill)},line:{type:'none'}});
+  }
+  const trendMark=metricTrendMark(layout,{background:pillFill??backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
   // LH-53: a unit on its value's line is part of the figure and takes the value's color, as the preview does.
   // LH-57: when the value takes the text color, it is written as the slide's own text color (a scheme color where the text is one).
   const textHex=`#${normalizeHex(context.colors.text)}`,valueHex=metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,textHex).toUpperCase();
   const valueColor=valueHex===textHex.toUpperCase()?context.textColor:valueHex.slice(1);
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:context.textColor;
+  // LH-135: a label drawn as the metric's eyebrow is written in the eyebrow's color (eyebrowColor), capitals and tracking as the tag's.
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?valueColor:layout.eyebrow&&part.role==='label'?pptxColor(eyebrowColor(context)):context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
@@ -3837,12 +3916,14 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
       const anchor=origin.x+line.width*factor;
       slide.addText(part.text.slice(line.start,line.end),{
         ...textBoxOptions({x:(anchor-part.box.width*factor)/96,y:(origin.baseline-part.fit.fontSize)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
-        ...nativeFontOptions(part.style),
+        ...nativeFontOptions(part.style),...eyebrowOptions(part.style,part.fit.fontSize),
         color:partColor(part),align:layout.alignment,...(part.fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       });
     }
   }
+  // LH-137: the pill's tag follows the text's, so the metric's manifest stays its first tag (the pill shape is drawn first, under the text).
+  if (layout.deltaPill) context.metricTags.set(`OPF metric ${group} pill`,{v:1,group,role:'pill'});
   if(trendMark) {
     const objectName=`OPF metric ${group} trend mark`;
     context.metricTags.set(objectName,{v:1,group,role:'mark'});
@@ -4334,7 +4415,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
     // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
     ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
-  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
+  // LH-141: `groups` flags the series whose default value labels group their thousands (PowerPoint's own labels take `#,##0`).
+  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined || formats.groups?.some(Boolean) ? {...result, formats} : result;
   if (data.columns.length === 1) {
     const heading = data.columns[0];
     // The lone column holds the chart's values. Each cell is read with chartNumber and each non-numeric cell is counted
@@ -4406,6 +4488,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   }
   // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
   const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
+  const plottedSeries = spec.family === 'xy' ? series.slice(1) : series;
+  formats.groups = formats.series.map((code, index) => code === undefined && groupsThousands(plottedSeries[index].values.map(chartNumber)));
   return withFormats({...mapped, series, hasCategories: true, adaptations, notNumeric}, formats);
 }
 
@@ -4762,6 +4846,7 @@ async function normalizePptxZip(raw, context) {
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
+  attachTitleRuleTags(entries,context.titleRuleTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);
@@ -4920,6 +5005,7 @@ async function normalizePptxZip(raw, context) {
   });
   // A picture repeated across slides embeds once (after fitting, which needs each slide's own relationship).
   dedupeMedia(entries, imageMetadata, resolveRelationshipTarget);
+  masterPictureBackground(entries, context, imageMetadata);
   // The media keys of the logo-reference pictures, now that the package holds its final media (src/furniture-provenance.js).
   stampFurnitureImageKeys(entries, context.furnitureManifests, context.furnitureImages, parseRelationships);
   // Charts and notes follow the language and fonts of the slide they belong to.

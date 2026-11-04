@@ -92,6 +92,12 @@ export interface ExportOptions {
 	date?: string;
 	/** The directory a presentation's relative image paths resolve against. Omitted: no local file is read (data URIs and remote references work as the engines handle them). */
 	assetDir?: string;
+	/**
+	 * LH-145: read the pixels of the picture backgrounds (data URIs, `asset:` references and local files, each decoded once) so the automatic
+	 * scrim under text on a picture is sized for the picture in every format: none on a dark photo under light text. Default true. `false`
+	 * sizes every scrim for any picture from black to white, which is what a machine without the optional `sharp` peer draws.
+	 */
+	measurePictures?: boolean;
 	/** `svg` and `png`: one zip of the slides instead of one file per slide. */
 	zip?: boolean;
 	/** The base name of the files (`name-1.png` for slide 1, padded to the largest slide number written; `name.pdf`). Omitted: the presentation's `filename`, else its slugified `name`, else `deck`. */
@@ -363,6 +369,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			return { files: [], fonts: fontSummary(), skippedHidden: [], failure: failureOf(error) };
 		}
 	}
+	// LH-145: the picture backgrounds are measured once, after pagination (which copies a slide's design), and both engines get the same sampler.
+	const pictureLuminance = options.measurePictures === false ? undefined : await measurePictureBackgrounds(renderer, deck, resolver, catalogs, reporter);
 	const slideCount = (deck as { slides?: unknown[] }).slides?.length ?? 0;
 	// Per-slide output and PDF skip hidden slides (the presenter's sequence) unless includeHidden; slides named with `slides`
 	// are exactly the slides written, hidden or not. The slide numbers in file names stay the document's own.
@@ -384,7 +392,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			const pictures = options.as === "images";
 			// LH-20: a pictures-only PPTX draws each slide as the PNG preview draws it: the same renderer, fonts, image resolver and date.
 			const slideRasterizer = async (picture: unknown, slide: number, size: { scale: number }) => {
-				const svg = renderer.render.module.toSvg(picture, slide, { fonts: { textMeasurement: handle.textMeasurement, embeddedFonts: [] }, imageResolver: resolver.forSvg, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("render", diagnostic), catalogs, ...(date ? { date } : {}) });
+				const svg = renderer.render.module.toSvg(picture, slide, { fonts: { textMeasurement: handle.textMeasurement, embeddedFonts: [] }, imageResolver: resolver.forSvg, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("render", diagnostic), catalogs, ...(pictureLuminance ? { pictureLuminance } : {}), ...(date ? { date } : {}) });
 				return new Uint8Array(await renderer.render.module.toPng(svg, { fonts: handle, scale: size.scale }));
 			};
 			const bytes = await module.toPptx(deck, {
@@ -395,6 +403,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				svgRasterizer: async (svg: string, size: { scale: number; text: boolean }) => new Uint8Array(await renderer.render.module.toPng(svg, { scale: size.scale, background: "rgba(0, 0, 0, 0)", fonts: size.text ? handle : NO_FONTS })),
 				onDiagnostic: (diagnostic: Diagnostic) => reporter.add("pptx", diagnostic),
 				catalogs,
+				...(pictureLuminance ? { pictureLuminance } : {}),
 				// opf-pptx still names its option `chartex` and its picture choice `fallback`.
 				...(options.charts ? { chartex: options.charts === "picture" ? "fallback" : options.charts } : {}),
 				...(options.provenance ? { provenance: options.provenance === "none" ? false : options.provenance } : {}),
@@ -432,6 +441,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 			imageResolver: resolver.forSvg,
 			onDiagnostic: (diagnostic: Diagnostic) => reporter.add("render", diagnostic),
 			catalogs,
+			...(pictureLuminance ? { pictureLuminance } : {}),
 			...(date ? { date } : {}),
 		};
 		const svgs: { slide: number; id: string | undefined; svg: string }[] = [];
@@ -476,6 +486,22 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 		if (missing) throw missing;
 		reportThrown(reporter, format === "pptx" ? "pptx" : "render", error);
 		return { files: [], fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden: [], failure: failureOf(error) };
+	}
+}
+
+/**
+ * LH-145: the sampler of the deck's picture backgrounds, or undefined when the renderer predates it or nothing could be measured (every
+ * scrim is then sized for any picture). A picture it cannot decode is reported once, as a note.
+ */
+async function measurePictureBackgrounds(renderer: Renderer, deck: unknown, resolver: DrawEnvironment["resolver"], catalogs: readonly Catalog[], reporter: Reporter): Promise<((src: string) => unknown) | undefined> {
+	const measure = renderer.render.module.measurePictures;
+	if (typeof measure !== "function") return undefined;
+	try {
+		const sampler = (await measure.call(renderer.render.module, deck, { imageResolver: resolver.forMeasure, catalogs, onDiagnostic: (diagnostic: Diagnostic) => reporter.add("render", diagnostic, "info") })) as ((src: string) => unknown) & { measured?: number };
+		return sampler.measured ? sampler : undefined;
+	} catch (error) {
+		reporter.add("render", { code: "picture-not-measured", path: "", message: `The pictures could not be measured, so every scrim is sized for any picture: ${error instanceof Error ? error.message : String(error)}` }, "info");
+		return undefined;
 	}
 }
 

@@ -61,7 +61,7 @@ test('contentDirection leaves promoted regions and nested groups untouched', () 
 });
 
 test('chartPrimary splits the first chart from a synthetic container of the other nodes', () => {
-  const slide = {title: 'Chart', blocks: [{text: 'Intro'}, chart, {text: 'Support'}, {items: ['a', 'b']}]};
+  const slide = {title: 'Chart', blocks: [{text: 'Intro'}, chart, {text: 'Support follows.'}, {items: ['a', 'b']}]};
   const control = composeSlide(slide, {explain: true});
   const gap = 720 / 30, width = control.contentBox.width, height = control.contentBox.height;
   for (const [side, expect] of [

@@ -312,12 +312,14 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `name`
-- Purpose: A reserved heading region: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and 'subtitle' takes the subtitle out of it. A heading region takes only a size. At most one of each; a 'subtitle' needs a 'title'.
+- Purpose: A reserved heading region: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and 'subtitle' takes the subtitle out of it. A heading region takes a size and an anchor, and the 'title' a rule; the content rules belong on body regions. At most one of each; a 'subtitle' needs a 'title'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `name` | yes | `enum:title \| subtitle` | 'title' or 'subtitle'. |
 | `size` | no | `ref:RegionSize` |  |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low (LH-130),... |
+| `rule` | no | `boolean` | 'title' only: draw a short accent rule (80 by 5 px at a 720 px short edge) half a gap above the title, at the title's start edge, on a slide with a title and no tag; a tag is the group's eyebrow and takes the rule's p... |
 
 #### Split
 

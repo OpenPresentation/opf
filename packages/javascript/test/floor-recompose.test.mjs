@@ -9,6 +9,8 @@ import { resolveSlideContext } from '../dist/index.js';
 import { layouts, sampleSlide } from './support/template-samples.mjs';
 
 const FLOOR = 16;
+// LH-149: the half step above the floor counts as the floor (a layout that set a block there would have set it at the floor before).
+const FLOOR_STEP = 17;
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
 const overflows = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow').length;
 const blocksDrawn = (result) => new Set(result.items.flatMap((item) => (/\.blocks\.(\d+)/.exec(item.path) ? [/\.blocks\.(\d+)/.exec(item.path)[1]] : [])));
@@ -40,7 +42,7 @@ test('the gallery layouts at their sample content: a slide the layout fits above
       assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6 || overflows(result) < overflows(kept), `${key}: no smaller body unless it overflows less`);
     } else {
       // Recomposed only from the floor, to a larger smallest size, with no more overflow and every block still drawn.
-      assert.ok(result.recomposed.layoutSize <= FLOOR + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
+      assert.ok(result.recomposed.layoutSize <= FLOOR_STEP + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
       // Larger, or (wave 2, sibling sets share one size) as large with less overflow.
       assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
     }

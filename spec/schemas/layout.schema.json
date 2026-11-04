@@ -78,7 +78,7 @@
         "middle",
         "bottom"
       ],
-      "description": "Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is inherited, and only by body regions: the heading regions 'title' and 'subtitle' never take it, and the other region rules stay per region. One exception places the whole slide: when the record is a column and every entry of its 'regions' list is sized 'auto' (heading regions included), the record has no numeric row to hold the leftover height, so its 'anchor' places the whole stack, title and subtitle included, in the content box's leftover height: 'middle' centres it, 'bottom' sits it at the foot, 'top' (default) starts it at the top as before. A record with any numeric entry, a row record and an anchor on a split keep the rule above. Default 'top'."
+      "description": "Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is inherited, and only by body regions: the heading regions 'title' and 'subtitle' never take it (they set their own, HeadingRegion.anchor), and the other region rules stay per region. One exception places the whole slide: when the record is a column and every entry of its 'regions' list is sized 'auto' (heading regions included), the record has no numeric row to hold the leftover height, so its 'anchor' places the whole stack, title and subtitle included, in the content box's leftover height: 'middle' centres it, 'bottom' sits it at the foot, 'top' (default) starts it at the top as before. A record with any numeric entry, a row record and an anchor on a split keep the rule above. Default 'top'."
     },
     "regions": {
       "type": "array",
@@ -87,7 +87,7 @@
       "items": {
         "$ref": "#/$defs/RegionEntry"
       },
-      "description": "The record's regions in reading order: 1 to 12 entries, each a region ({ name, size?, ...rules }) or a split ({ direction, regions, size?, anchor? }). Every region is declared once, here, with its content rules; a block can target a body region with 'region': '<name>'. Names are unique across the whole record. 'size' is a number above 0 and up to 100 (default 1) that siblings share in proportion, separated by the gap; 'auto' is the height the content needs, allowed only in a column. 'title' and 'subtitle' are heading regions that take only a size (default auto in a column, 1 in a row): 'title' holds the slide's heading group (tag, title and subtitle, stacked) and a 'subtitle' region takes the subtitle out of it, and a 'subtitle' needs a 'title'. A record with no 'title' region gets an implicit auto row on top for a slide that has headings. Splits nest at most three levels (the record's own list is level 1). Rules the schema cannot express (a reserved or repeated name, a 'subtitle' without a 'title', 'auto' outside a column, nesting too deep, more than 12 rows or columns once compiled) are the validate findings opf/layout-template and opf/layout-region.",
+      "description": "The record's regions in reading order: 1 to 12 entries, each a region ({ name, size?, ...rules }) or a split ({ direction, regions, size?, anchor? }). Every region is declared once, here, with its content rules; a block can target a body region with 'region': '<name>'. Names are unique across the whole record. 'size' is a number above 0 and up to 100 (default 1) that siblings share in proportion, separated by the gap; 'auto' is the height the content needs, allowed only in a column. 'title' and 'subtitle' are heading regions that take only a size (default auto in a column, 1 in a row), an anchor and (the 'title') a rule: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and a 'subtitle' region takes the subtitle out of it, and a 'subtitle' needs a 'title'. A record with no 'title' region gets an implicit auto row on top for a slide that has headings. Splits nest at most three levels (the record's own list is level 1). Rules the schema cannot express (a reserved or repeated name, a 'subtitle' without a 'title', 'auto' outside a column, nesting too deep, more than 12 rows or columns once compiled) are the validate findings opf/layout-template and opf/layout-region.",
       "examples": [
         [
           {
@@ -234,7 +234,7 @@
       "required": [
         "name"
       ],
-      "description": "A reserved heading region: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and 'subtitle' takes the subtitle out of it. A heading region takes only a size. At most one of each; a 'subtitle' needs a 'title'.",
+      "description": "A reserved heading region: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and 'subtitle' takes the subtitle out of it. A heading region takes a size and an anchor, and the 'title' a rule; the content rules belong on body regions. At most one of each; a 'subtitle' needs a 'title'.",
       "properties": {
         "name": {
           "type": "string",
@@ -246,6 +246,19 @@
         },
         "size": {
           "$ref": "#/$defs/RegionSize"
+        },
+        "anchor": {
+          "type": "string",
+          "enum": [
+            "top",
+            "middle",
+            "bottom"
+          ],
+          "description": "Vertical position of the heading group in its area when the area is sized (a number): 'middle' (default) centers it, 'bottom' sets it at the foot of the area, as a cover or section sets its display title low (LH-130), 'top' at the top. An 'auto' area is as tall as the group, so the anchor changes nothing there. A heading region never inherits the 'anchor' of the record or a split."
+        },
+        "rule": {
+          "type": "boolean",
+          "description": "'title' only: draw a short accent rule (80 by 5 px at a 720 px short edge) half a gap above the title, at the title's start edge, on a slide with a title and no tag; a tag is the group's eyebrow and takes the rule's place (LH-130). Engines draw it in the tag's color, the primary or the text color where the primary is under 4.5:1 on the slide. Default false."
         }
       }
     },

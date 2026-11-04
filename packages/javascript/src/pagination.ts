@@ -1,6 +1,6 @@
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
-import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
+import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
 import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
 import { resolveDrawnFontFamilies } from './drawn-font-families.js';
@@ -145,6 +145,22 @@ function leafFor(path: string, field: string, value: any): Leaf {
     }
   }
   return leaf;
+}
+
+/**
+ * LH-144: the largest size a composed slide draws for each kind of body block, in reference pixels: a paragraph's or list's text
+ * (`text`, `list`), a quote's, metric's or timeline's largest part. Tables, code and charts are not capped (composition.maxFontSize).
+ */
+function bodySizes(composed: SlideComposition): Map<string, number> {
+  const scale = Math.min(composed.width, composed.height) / 720, sizes = new Map<string, number>();
+  const add = (kind: string, size: number | undefined) => { if (size !== undefined && Number.isFinite(size) && size > 0) sizes.set(kind, Math.max(sizes.get(kind) ?? 0, Math.round(size / scale * 100) / 100)); };
+  for (const item of composed.items) {
+    if (headingFields.has(item.field) || item.eyebrow) continue;
+    const layout = item.quoteLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (layout) add(item.field, Math.max(0, ...(layout.parts as readonly { fit?: { fontSize: number }; visible?: boolean }[]).flatMap(part => part.visible === false || !part.fit ? [] : [part.fit.fontSize])));
+    else if (item.text && !item.codeLayout && (item.field === 'text' || item.field === 'items' || item.field === 'bullets')) add(item.field === 'text' ? 'text' : 'list', item.text.fontSize);
+  }
+  return sizes;
 }
 
 /** Explicit, lossless authoring transform. It never changes slide count during rendering. */
@@ -302,11 +318,19 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     return {slide,mappings};
   };
   const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
+  // LH-144: the largest body size the first page draws for each kind of block (reference pixels). A later page is capped at the largest of
+  // these for the kinds it holds (composition.maxFontSize), so a last page with one timeline, list or paragraph does not read larger than
+  // the pages before it. A cap only lowers sizes, so a page that fits without it fits with it; breaks are chosen without it.
+  let firstSizes: Map<string, number> | undefined;
+  const kindOf = (field: string) => field === 'items' || field === 'bullets' ? 'list' : field;
   const finish = () => {
     if (!selected.size) return;
     if (slides.length >= maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
     const {slide,mappings} = project(selected,slides.length);
-    const issues = fit(geometry(slide,slides.length).diagnostics);
+    const cap = firstSizes && Math.max(0, ...[...selected.values()].map(portion => firstSizes!.get(kindOf(portion.leaf.field)) ?? 0));
+    if (cap) slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
+    const drawn = geometry(slide,slides.length), issues = fit(drawn.diagnostics);
+    if (!firstSizes) firstSizes = bodySizes(drawn);
     if (issues.length) throw new OPFPaginationError('A continuation page does not fit at its final page number. No partial result was returned.',issues);
     assignPageIds(slide,slides.length);
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).

@@ -19,11 +19,15 @@ const field = (result, name) => result.items.find((item) => item.field === name)
 
 for (const direction of ['ltr', 'rtl']) {
   test(`wave 5 (${direction}): a list in a sequence region keeps LH-07's badges and takes no LH-08 rows`, () => {
-    const slide = { title: 'Today’s agenda', blocks: [{ items: labeled }] };
-    const result = composeSlide(slide, { layout: agenda, direction });
-    const fit = list(result).text;
-    assert.ok(fit.listEntries.every((entry) => entry.badge), 'every entry beside its badge');
+    // LH-134 (wave 6): an agenda whose every entry has a description draws numbered ruled rows instead; one without keeps the badges.
+    const bare = labeled.map((entry) => entry.text);
+    const fit = list(composeSlide({ title: 'Today’s agenda', blocks: [{ items: bare }] }, { layout: agenda, direction })).text;
+    assert.ok(fit.listEntries.every((entry) => entry.badge && !entry.badge.numeral), 'every entry beside its badge');
     assert.equal(fit.rules, undefined, 'no hairlines');
+    const slide = { title: 'Today’s agenda', blocks: [{ items: labeled }] };
+    const rows = list(composeSlide(slide, { layout: agenda, direction })).text;
+    assert.ok(rows.listEntries.every((entry) => entry.badge?.numeral), 'LH-134: numbered rows');
+    assert.equal(rows.rules?.length, labeled.length - 1);
     // Without the sequence the same list is ruled, as LH-08 rules a list of short labels with descriptions.
     const ruled = list(composeSlide(slide, { layout: plain(agenda), direction })).text;
     assert.equal(ruled.rules?.length, labeled.length - 1);
@@ -48,7 +52,7 @@ test('wave 5: the automatic scrim covers the slide LH-07 keeps, over the grown t
   const scrims = result.backgroundImage?.scrims ?? [];
   assert.ok(scrims.length > 0, 'a scrim');
   const entries = list(result).text.listEntries;
-  assert.ok(entries.every((entry) => entry.badge), 'the badges are kept');
+  assert.ok(entries.every((entry) => entry.badge), 'the badges (LH-134: the numerals of its rows) are kept');
   const top = Math.min(...entries.map((entry) => entry.textBox.y)), bottom = Math.max(...entries.map((entry) => (entry.descriptionBox ?? entry.textBox).y + (entry.descriptionBox ?? entry.textBox).height));
   assert.ok(scrims.some((scrim) => scrim.box.y <= top + 0.5 && scrim.box.y + scrim.box.height >= bottom - 0.5), 'the list lies under a scrim');
 });

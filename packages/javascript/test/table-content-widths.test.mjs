@@ -28,7 +28,9 @@ describe('no mid-word breaks', () => {
 		const layout = layoutTable(fixture, box, { textMeasurement: measurement });
 		assert.equal(layout.overflow, false);
 		assert.equal(layout.splitsWords, false);
-		assert.equal(layout.rows[0].cells[0].fit.fontSize, 25, 'the default cell size is kept');
+		// LH-150: "4.6 / 5" is one word (175 px at 25 px), so the table takes the next size down to keep the ratio whole.
+		assert.equal(layout.rows[0].cells[0].fit.fontSize, 24, 'one size under the default keeps the ratio whole');
+		for (const cell of layout.rows.flatMap((row) => row.cells)) if (String(cell.value).includes('/')) assert.equal(cell.fit.lines.length, 1, String(cell.value));
 		assertWholeWords(layout);
 	});
 
@@ -38,7 +40,8 @@ describe('no mid-word breaks', () => {
 		assert.ok(equal < 125);
 		const layout = layoutTable(fixture, box, { textMeasurement: measurement });
 		const widest = Math.max(...layout.rows.flatMap((row) => row.cells.filter((cell) => cell.column === 0).map((cell) => cell.textBox.width)));
-		assert.ok(widest >= 150, `the first column's text width is ${widest}`);
+		const size = layout.rows[0].cells[0].fit.fontSize;
+		assert.ok(widest >= 'satisfaction'.length * size * 0.5, `the first column's text width is ${widest} at ${size} px`);
 	});
 
 	test('a word that cannot fit shrinks the table before any line breaks inside it', () => {
