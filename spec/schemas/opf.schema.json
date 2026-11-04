@@ -775,6 +775,11 @@
           "enum": ["character", "image", "none"],
           "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square with side 0.65 times the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field. 'none' draws no marker and no hanging indent, so each entry's text (and its description) starts at the left edge of the list: use it for label-and-description lists such as pillars, team members and questions with answers. Nested levels keep their indent. A list that sets numbering still draws its numbers."
         },
+        "listStyle": {
+          "type": "string",
+          "enum": ["stack", "rows"],
+          "description": "How list entries are arranged (LH-08). 'stack' draws each entry's text with its description under it, the entries close together, as before. 'rows' draws ruled rows: a hairline between two first-level entries (the scheme's border neutral, 1 reference pixel), 0.8 em between rows and no bullet (a numbered list keeps its numbers); when every entry has a description and sits at the first level, the labels are bold and, when the widest fits 40% of the list's width on one line, sit in a column beside their descriptions, first baselines aligned, else each description sits under its label. Both engines draw the rules (PowerPoint: native lines). Effective value: the slide's design, then the deck's design, then the theme's design.listStyle, then the layout record's design.listStyle. Without one, a list of two or more first-level entries that each pair a short label (3 words or fewer, no full stop) with a description is drawn as rows when that sets no block of the slide smaller, and every other list is stacked."
+        },
         "mirror": {
           "type": "boolean",
           "description": "Draw the slide's template layout mirrored (OPF 0.19): each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change. Effective value: the slide's design, then the deck's design, then the layout record's design.mirror, then false. Slides without a template layout ignore it."
@@ -1977,7 +1982,7 @@
               "items": { "$ref": "#/$defs/TextRun" }
             }
           ],
-          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
+          "description": "Small slide-level label or badge. A v2 layout renders this before the title in its title heading group; tag is not a separate layout area. Engines draw it as an eyebrow (LH-32): 16 reference pixels, bold, in the primary color (the text color where that is under 4.5:1 on the background) and, where its script has case, in capitals with 0.08 em of letter spacing (PowerPoint: cap=all and spc on the authored text). Use a string for plain text or TextRun[] for inline rich text (a colored word, bold, a link, a citation or footnote marker); the heading keeps its size and fitting rules either way, and run colors resolve like body text.",
           "examples": ["Intro", "Confidential", "Appendix"]
         },
         "text": {

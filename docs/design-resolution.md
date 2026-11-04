@@ -399,6 +399,39 @@ The synthetic container has no OPF path, so it records no `groups`, `flows` or e
 
 `none` draws no marker and no hanging indent, for lists that are a label with its explanation (pillars, team members, questions with answers). Every entry's text and description start at the left edge of the list box, and each `listEntries[]` marker is `{ none: true, text: '', indent: 0 }` (its `x`, `y` and `style` still give the first baseline and font). A nested `level` still steps in by 1.1 em. A list that sets `numbering` keeps its numbers, as it does for `image`. The preview draws nothing for the marker, and the exporter writes `a:buNone` with no margin or indent; a re-import reads the list back through the line roles recorded in the slide's provenance (a PPTX without that record keeps one text shape per line).
 
+### `listStyle` (LH-08, vetoable)
+
+`stack` draws each entry's text with its description under it, the entries close together. `rows` draws ruled rows: a hairline
+(`ListFit.rules`, `LIST_RULE_WIDTH` = 1 reference pixel in the scheme's `neutrals.border`) between two first-level entries, `LIST_ROWS_GAP`
+(0.8 em) between rows, and no bullet; a numbered list keeps its numbers. When every entry has a description and sits at the first level,
+the labels are bold and, when the widest fits `LIST_ROWS_LABEL_SHARE` (40%) of the list's width on one line, sit in a column beside
+their descriptions with their first baselines aligned (the label column at the right in a right-to-left list); otherwise each
+description sits under its label. The preview draws the hairlines as SVG lines and the PPTX export as native line shapes (`OPF list rule
+<path> N`), at the same geometry. Text sizes keep their roles: the description is 0.82 of the list size, as in a stacked list.
+
+Without a `listStyle` anywhere, a list of two or more first-level entries that each pair a short label (3 words or fewer and at most 32
+characters, no full stop: `isLabelText`) with a description is drawn as rows, under the size guard (the guarded rule `list-rows`): a
+slide keeps the rows only when no block reads smaller than it does with the list stacked. Every other list is stacked. Effective value:
+the slide's design, the deck's, the theme's, then the layout record's.
+
+### Eyebrows (LH-32, LH-50)
+
+The slide `tag` is an eyebrow: `EYEBROW_FONT_SIZE` (16 reference px, its role size as before), bold, in the primary color (the text color
+when the primary is under 4.5:1 on the backdrop), and, where its script has case (`eyebrowCaps`: every letter cased and capitals of the
+same length), in capitals with `EYEBROW_TRACKING` (0.08 em) of letter spacing. The document keeps the text as written: core sets
+`textStyle.caps` and `textStyle.tracking` and measures the capitals with the spacing (`textWidthMeasurer`, `measureTextOutline`); the
+preview draws the capitals with `letter-spacing`, and the PPTX export writes the authored text with `cap="all"` and `spc`, so it stays
+editable and imports as written. Arabic, Hebrew, CJK and other scripts without case keep their letters and spacing (tracking would break
+the joining of a cursive script).
+
+A short label next to a longer text is that text's eyebrow (LH-50): a root text block of one line, 2 to 32 characters, 3 words or fewer
+and no full stop (`isLabelText`), right before a plain text block that is no label and at least twice as long (`eyebrowLabel`). The two
+are one block of the body: the label is bound to no region and takes no cell; it is drawn as an eyebrow `EYEBROW_GAP` (half a gap) over
+the paragraph, at the paragraph's x, width and alignment, and is listed before it (`ComposedItem.eyebrow`). On a card the eyebrow carries
+its paragraph's `frameBox`, and engines draw that card once, under the eyebrow. Blocks with a caption, an `emphasis` of their own, or on
+a slide that pins a block to a region, are composed as written; a labeled paragraph is never LH-06's band or pill. The rule is guarded
+(`eyebrow`): the paragraphs keep at least the size they have with the label as a block of its own.
+
 ### `fontScheme.accent`
 
 `resolveFontFamilies()` returns `accent` only when the effective scheme defines an `accent` role (a family string or a `Font` object). The slide `tag` (eyebrow) and the quote body use `fonts.accent ?? <current family>` (body for the tag, heading for the quote body); nothing else changes. The renderer loads and embeds it, the exporter writes it on those runs (`a:latin`) while the theme fonts stay major/minor, and import keeps restoring `design.fontScheme` from provenance. None of the bundled examples sets an accent font.

@@ -379,7 +379,7 @@ the slide as written. See [dynamic composition](dynamic-composition.md#paginatio
 ## Design keys
 
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,
-`contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`), the layout's `design`, then the engine
+`contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
 default. `design.mirror: true` draws a template mirrored (each row's cells and the column sizes reversed); a right-to-left
 deck mirrors on top. `layout: "auto"` is automatic composition: reserved, never a catalog id, and `opf format` drops it.
 

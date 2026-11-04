@@ -4,7 +4,8 @@ import {composeSlide, fitList} from '../dist/composition.js';
 import {validate} from '../dist/index.js';
 
 // design.listBullet: "none" draws no marker and no hanging indent. A label and its description keep their two roles
-// (a 32 px label and a smaller muted description), and a numbered list keeps its numbers.
+// (a 32 px label and a smaller muted description), and a numbered list keeps its numbers. The lists are stacked (`listStyle: "stack"`):
+// a list of short labels with descriptions is otherwise drawn as ruled rows (LH-08), which draw no bullet either way.
 const LABELLED = [
   {text: 'Clear scope', description: 'Two teams and one workflow keep the pilot focused.'},
   {text: 'Consistent measures', description: 'Track completion and task time against a baseline.'},
@@ -13,8 +14,8 @@ const layout = design => ({id: 'labels', design, regions: [{name: 'title'}, {nam
 const listOf = composed => composed.items.find(item => item.field === 'items');
 
 test('none draws no marker geometry and no indent; labels and descriptions keep their roles', () => {
-  const plain = listOf(composeSlide({title: 'T', items: LABELLED}));
-  const none = listOf(composeSlide({title: 'T', items: LABELLED, design: {listBullet: 'none'}}));
+  const plain = listOf(composeSlide({title: 'T', items: LABELLED, design: {listStyle: 'stack'}}));
+  const none = listOf(composeSlide({title: 'T', items: LABELLED, design: {listBullet: 'none', listStyle: 'stack'}}));
   for (const entry of plain.text.listEntries) assert.equal(entry.marker.none, undefined);
   assert.deepEqual(plain.text.listEntries.map(entry => entry.marker.text), ['•', '•']);
   for (const entry of none.text.listEntries) {
@@ -37,12 +38,12 @@ test('none draws no marker geometry and no indent; labels and descriptions keep 
 });
 
 test('none comes from the layout, the deck or the slide, in that order of precedence', () => {
-  const slide = {title: 'T', items: LABELLED, layout: 'labels'};
+  const slide = {title: 'T', items: LABELLED, layout: 'labels'}, stack = {listStyle: 'stack'};
   const markers = (composed) => listOf(composed).text.listEntries.map(entry => entry.marker.none === true);
-  assert.deepEqual(markers(composeSlide(slide, {layout: layout({listBullet: 'none'})})), [true, true]);
-  assert.deepEqual(markers(composeSlide(slide, {layout: layout({listBullet: 'none'}), presentation: {design: {listBullet: 'character'}}})), [false, false]);
-  assert.deepEqual(markers(composeSlide({...slide, design: {listBullet: 'none'}}, {layout: layout({}), presentation: {design: {listBullet: 'character'}}})), [true, true]);
-  assert.deepEqual(markers(composeSlide(slide, {layout: layout({}), presentation: {design: {listBullet: 'none'}}})), [true, true]);
+  assert.deepEqual(markers(composeSlide(slide, {layout: layout({listBullet: 'none', ...stack})})), [true, true]);
+  assert.deepEqual(markers(composeSlide(slide, {layout: layout({listBullet: 'none', ...stack}), presentation: {design: {listBullet: 'character'}}})), [false, false]);
+  assert.deepEqual(markers(composeSlide({...slide, design: {listBullet: 'none'}}, {layout: layout(stack), presentation: {design: {listBullet: 'character'}}})), [true, true]);
+  assert.deepEqual(markers(composeSlide(slide, {layout: layout(stack), presentation: {design: {listBullet: 'none'}}})), [true, true]);
 });
 
 test('none keeps nested levels indented and a numbered list keeps its numbers', () => {

@@ -86,6 +86,31 @@ export function textLength(value: unknown): number {
 
 type RootNode = BoundBlock & { value: Record<string, any> };
 
+/** LH-50: a label has at most this many words and characters. */
+export const EYEBROW_LABEL_WORDS = 3, EYEBROW_LABEL_CHARS = 32;
+/** LH-50: the grouping kind of a paragraph that has a label as its eyebrow: it pairs with nothing (repeatedPairs, majorityKind). */
+export const EYEBROW_TEXT_KIND = 'text:eyebrow';
+const plainOf = (value: unknown): string | undefined => typeof value === 'string' ? value : Array.isArray(value) && value.every(run => typeof run === 'string' || (run && typeof run === 'object' && typeof (run as { text?: unknown }).text === 'string'))
+  ? value.map(run => typeof run === 'string' ? run : (run as { text: string }).text).join('') : undefined;
+/**
+ * LH-50: a paragraph that reads as a label: one line of 2 to EYEBROW_LABEL_CHARS characters and at most EYEBROW_LABEL_WORDS words, with no
+ * full stop at its end. A single character ("A", "1") is a marker or a placeholder, not a name.
+ */
+export function isLabelText(value: unknown): boolean {
+  const text = plainOf(value)?.trim();
+  if (!text || /[\r\n\u2028\u2029]/.test(text) || [...text].length < 2 || [...text].length > EYEBROW_LABEL_CHARS || /[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(text)) return false;
+  return text.split(/\s+/u).length <= EYEBROW_LABEL_WORDS;
+}
+/**
+ * LH-50: a short label next to a longer text is that text's eyebrow: `label` reads as a label (isLabelText), and `text`, the paragraph right
+ * after it, is no label itself and at least PAIR_LENGTH_RATIO times as long. Claude Design draws such a label ("Signal", "Inputs") small,
+ * in capitals, over the text it names, in the text's cell.
+ */
+export function eyebrowLabel(label: unknown, text: unknown): boolean {
+  const name = plainOf(label)?.trim(), body = plainOf(text)?.trim();
+  return !!name && !!body && isLabelText(name) && !isLabelText(body) && [...body].length >= PAIR_LENGTH_RATIO * [...name].length;
+}
+
 /** A grouping node of a root node of the binding. */
 export function groupingNode(node: { kind: string; value: Record<string, any> }): GroupingNode {
   return { kind: node.kind, ...(node.kind === 'group' ? { group: true } : {}), ...(node.kind === 'text' ? { length: textLength(node.value.text ?? node.value.bullets) } : {}) };
@@ -102,7 +127,7 @@ export interface GroupedBinding extends RegionBindingResult {
 }
 
 /** Run the grouping rules on a template slide's binding. `nodes` are the slide's root nodes (`rootNodes`). */
-export function groupBinding(binding: RegionBindingResult, template: LayoutTemplate, nodes: readonly RootNode[], options: { join?: boolean } = {}): GroupedBinding {
+export function groupBinding(binding: RegionBindingResult, template: LayoutTemplate, nodes: readonly RootNode[], options: { join?: boolean; labeled?: ReadonlySet<string> } = {}): GroupedBinding {
   const units = new Map<string, BoundBlock[][]>(binding.regions.map(entry => [entry.name, [...entry.blocks, ...entry.overflow].map(block => [block])]));
   let below: BoundBlock[][] = binding.below.map(block => [block]);
   const arrangements = new Map<string, JoinedArrangement>();
@@ -135,7 +160,8 @@ export function groupBinding(binding: RegionBindingResult, template: LayoutTempl
     .sort((a, b) => regionRoleRank(a.role, block.kind) - regionRoleRank(b.role, block.kind) || regionByName.get(a.name)!.order - regionByName.get(b.name)!.order);
 
   // 1. LH-58: repeated pairs are one cell each, in the region their figure binds to.
-  const pairs = repeatedPairs(nodes.map(groupingNode));
+  // LH-50: a paragraph with an eyebrow pairs with nothing.
+  const pairs = repeatedPairs(nodes.map(node => options.labeled?.has(node.path) ? { kind: EYEBROW_TEXT_KIND } : groupingNode(node)));
   if (pairs) {
     const figure = nodes[pairs.figure]!, target = homeOf(figure)[0];
     if (target && pairs.count <= Math.max(target.max, JOINED_FIXED_MAX)) {

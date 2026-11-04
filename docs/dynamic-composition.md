@@ -104,8 +104,10 @@ then never below the readability floor. A rule never adds a finding, splits a wo
 The guarded rules are LH-89's nested gaps, LH-65's empty columns, LH-72's measure column, LH-78's quote lead size and card, LH-06's
 automatic band or pill, LH-114's pull line, LH-121's timeline status words, LH-68's scorecard tiles, LH-86's long-text rows, LH-66's
 minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's reading measure in a layout's regions, LH-64's one start for
-a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, and LH-112's start
-alignment and display size of a metric beside other blocks (with LH-15's band). A pull line sets its quote at the lead size on purpose,
+a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
+alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
+and LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)).
+An eyebrow is set at the tag's role size, like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
 so the guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
 keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the
 card's size. The display size is tried last, so it never displaces an arrangement that reads well without it, and a value at display

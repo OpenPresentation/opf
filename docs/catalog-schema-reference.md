@@ -367,6 +367,7 @@ _No named properties._
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the pictu... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
+| `listStyle` | no | `enum:stack \| rows` | As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout. |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
 | `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'su... |
 

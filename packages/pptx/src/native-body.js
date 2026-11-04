@@ -40,6 +40,10 @@ function planOne(item, geometry, automatic, reject) {
   if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length)) {
     reject('complex-composition'); return undefined;
   }
+  // LH-50: a label core draws as an eyebrow, and the paragraph under it, keep their measured shapes: a native body at the region would
+  // start its text over the eyebrow.
+  const at = geometry.items.indexOf(item);
+  if (item.eyebrow || geometry.items[at - 1]?.eyebrow) { reject('complex-composition'); return undefined; }
   if (item.listColumns?.length > 1) { reject('multi-column'); return undefined; }
   if (item.text?.overflow) { reject('overflow'); return undefined; }
   if (geometry.direction === 'rtl' || item.text?.directions?.includes('rtl')) { reject('unsupported-text'); return undefined; }
