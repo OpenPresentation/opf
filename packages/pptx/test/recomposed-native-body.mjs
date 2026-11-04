@@ -30,7 +30,9 @@ const layoutOf = (entries, slide) => {
 // 1. Native: no fallback; the recomposed slide's first list is the Body placeholder of its own layout variant.
 {
   const {bytes, entries, diagnostics} = await exported({bodyText: 'native'});
-  assert.deepEqual(diagnostics.filter(item => item.code === 'native-body-fallback').map(item => item.path), [], 'every list keeps a native body');
+  // LH-07: slide 2's agenda list (on its layout) is drawn beside step badges at core's measured lines, so it keeps measured shapes; every
+  // list of the recomposed slide, which has no sequence region, keeps a native body.
+  assert.deepEqual(diagnostics.filter(item => item.code === 'native-body-fallback').map(item => `${item.path} ${item.reason}`), ['slides.1.blocks.0.items step-badges']);
   const slide = strFromU8(entries['ppt/slides/slide1.xml']);
   const bodies = [...slide.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => shape).filter(shape => shape.includes('name="OPF native body '));
   assert.equal(bodies.length, 3, 'one native body per list');

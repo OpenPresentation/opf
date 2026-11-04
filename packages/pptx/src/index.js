@@ -19,6 +19,7 @@ import {applyDataLabels,chartOptionsFromClassic,chartTargetFor,classicChartOptio
 import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions,withoutLayerDefaults} from './chart-layer.js';
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
+import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -339,6 +340,8 @@ export async function toPptx(input, options = {}) {
   context.timelineTags = new Map();
   // LH-108 to LH-110: the shapes a chart's value list, stacked names and reference marks are drawn with (src/chart-marks.js).
   context.chartMarkTags = new Map();
+  // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
+  context.stepTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
@@ -1044,7 +1047,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
-  const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles))
+  const content = mergeAdjacentBulletShapes(restoreStepNumbers(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles), nativeContext.stepNumbers))
     .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? [], inferredStretch: item.inferredStretch}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
@@ -1129,6 +1132,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const timelines=importTimelineGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}`}));
   // LH-108 to LH-110: a chart's value list, stacked names and reference marks are its defaults, not content.
   const chartMarks=importChartMarks(shapes,relationships,entries);
+  // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
+  const stepShapes=importStepShapes(shapes,relationships,entries);
+  nativeContext.stepNumbers=stepShapes.numbers;
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
     picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
       // The recorded crop is re-derived from the circular frame of the quote photo.
@@ -1171,6 +1177,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
+    if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
@@ -2424,6 +2431,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
+  // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
+  addSteps(slide, geometry.steps, slideContext, context.stepTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
@@ -4664,6 +4673,7 @@ async function normalizePptxZip(raw, context) {
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
+  attachStepTags(entries,context.stepTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);

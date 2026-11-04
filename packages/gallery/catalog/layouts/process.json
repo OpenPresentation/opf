@@ -25,7 +25,8 @@
         "group"
       ],
       "role": "primary",
-      "flow": "grid"
+      "flow": "grid",
+      "sequence": "steps"
     }
   ],
   "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",

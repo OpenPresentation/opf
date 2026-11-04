@@ -112,6 +112,14 @@ export function formatListNumber(value: number, style: NumberingStyleName = 'ara
   return suffix === 'period' ? `${bare}.` : suffix === 'paren' ? `${bare})` : `(${bare})`;
 }
 
+/**
+ * LH-07: the number of a list entry without its suffix (`4`, `iv`, `C`): the numeral a step badge draws, since the circle
+ * already sets it apart from the text.
+ */
+export function listNumberLabel(number: Pick<ListNumber, 'value' | 'style'>): string {
+  return bareNumber(number.value, number.style) ?? String(number.value);
+}
+
 /** The number of one list entry. */
 export interface ListNumber {
   /** Position of the entry in the list. */

@@ -16,12 +16,12 @@
     {
       "id": "agenda",
       "file": "agenda.svg",
-      "bytes": 2032
+      "bytes": 2532
     },
     {
       "id": "agenda-split",
       "file": "agenda-split.svg",
-      "bytes": 2196
+      "bytes": 2704
     },
     {
       "id": "statement",
@@ -71,7 +71,7 @@
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 5662
+      "bytes": 6163
     },
     {
       "id": "timeline",

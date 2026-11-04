@@ -51,6 +51,8 @@ function planOne(item, geometry, automatic, reject) {
   let values, numbering;
   if (list) {
     const entries = item.text?.listEntries;
+    // LH-07: entries drawn beside step badges sit at core's measured lines, which native paragraphs (PowerPoint's own wrap) cannot promise.
+    if (entries?.some(entry => entry.badge)) { reject('step-badges'); return undefined; }
     if (item.bulletImage || !entries?.length || entries.some(entry => entry.level !== 0 || entry.description || entry.marker?.none) ||
       item.value.some(entry => entry && !Array.isArray(entry) && typeof entry === 'object' && Object.keys(entry).some(key => key !== 'text' && key !== 'level'))) {
       reject('unsupported-list'); return undefined;
