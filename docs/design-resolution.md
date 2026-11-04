@@ -411,7 +411,10 @@ description sits under its label. The preview draws the hairlines as SVG lines a
 
 Without a `listStyle` anywhere, a list of two or more first-level entries that each pair a short label (3 words or fewer and at most 32
 characters, no full stop: `isLabelText`) with a description is drawn as rows, under the size guard (the guarded rule `list-rows`): a
-slide keeps the rows only when no block reads smaller than it does with the list stacked. Every other list is stacked. Effective value:
+slide keeps the rows only when no block reads smaller than it does with the list stacked. A list of questions with answers is ruled the
+same way (`pair-rows`, LH-133), each question in a column of 40% of the width, and a glossary's terms draw in the accent; a few
+numbered takeaways and an agenda with descriptions draw numerals beside their rows (LH-134). See
+[Questions and terms](dynamic-composition.md#questions-and-terms-lh-133). Every other list is stacked. Effective value:
 the slide's design, the deck's, the theme's, then the layout record's.
 
 ### Eyebrows (LH-32, LH-50)

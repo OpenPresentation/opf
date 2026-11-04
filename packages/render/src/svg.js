@@ -1,7 +1,7 @@
 // The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
-  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, textColorForFill, chartColorForFill,
+  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
@@ -926,7 +926,9 @@ function imageRecolorMatrix(recolor, bound) {
 
 // LH-07: core's step badges, connectors and flows (geometry.steps), under the text they number, as the PPTX export draws them: the chips
 // (card fill and border), the connector (border color), each badge (a primary circle with its numeral centered in the bold body face, in
-// the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset).
+// the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset). LH-134: a
+// numeral (badge.numeral) draws no circle, its label bold in the tag's color (the primary, or the text color where the primary reads under
+// 4.5:1 on the slide), as the export writes it.
 // With trace each shape names the block or entry it numbers in data-opf-step-path, not data-opf-path: it is the layout's drawing, so
 // hit-testing and the region groups still find each item by its own text.
 function renderSteps(bound, options) {
@@ -938,8 +940,8 @@ function renderSteps(bound, options) {
     for (const chip of step.chips ?? []) parts.push(tag('rect', {...HIDDEN, x: chip.box.x, y: chip.box.y, width: chip.box.width, height: chip.box.height, rx: chip.radius, fill: bound.design.roles.neutrals.card.hex, stroke: bound.design.roles.neutrals.cardBorder.hex, ...(options.trace ? {'data-opf-step-path': chip.path} : {})}));
     if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...(options.trace ? {'data-opf-step-path': step.path} : {})}));
     for (const badge of step.badges) {
-      parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
-      parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
+      if (!badge.numeral) parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
+      parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: badge.numeral ? tagFill(bound.design) : numeral, 'aria-hidden': 'true', ...(badge.numeral && options.trace ? {'data-opf-step-path': badge.path} : {})}, escapeText(badge.label)));
     }
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
@@ -1082,15 +1084,17 @@ function listEntriesSvg(item, fit, bound, options) {
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
     else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
-    const config={path:entry.textPath,align:'left',fill:bound.design.colors.text,rich:Array.isArray(entry.value),options};
+    // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
+    const config={path:entry.textPath,align:'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
   }
   // LH-08: a list drawn as ruled rows (design.listStyle: rows) draws core's hairlines between its rows, LIST_RULE_WIDTH thick in the
-  // scheme's border neutral, as the PPTX export draws them as native lines.
+  // scheme's border neutral, as the PPTX export draws them as native lines. LH-133: an accent rule (over a cell of a grid of questions) is
+  // LIST_ACCENT_RULE_WIDTH thick in the tag's color on its backdrop.
   if(fit.rules?.length){
-    const thickness=LIST_RULE_WIDTH*Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,stroke=bound.design.roles.neutrals.border.hex;
-    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke,'stroke-width':stableNumber(thickness),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
+    const unit=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,border=bound.design.roles.neutrals.border.hex;
+    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke:rule.accent?eyebrowFill(bound.design,item):border,'stroke-width':stableNumber((rule.accent?LIST_ACCENT_RULE_WIDTH:LIST_RULE_WIDTH)*unit),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
   }
   return children;
 }

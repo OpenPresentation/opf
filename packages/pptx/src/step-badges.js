@@ -6,6 +6,8 @@
 //   badge      an ellipse in the accent (primary) color holding its numeral as its own text: bold body face at core's size, centered,
 //              in the scheme color readable on the accent (core readableSchemeColor)
 //   arrow      a flow's arrow between two chips: the rightArrow (leftArrow in a right-to-left deck) preset in the accent color
+//   numeral    LH-134: a numeral beside a ruled row (core `badge.numeral`): a text box at core's line box holding the numeral, bold body face
+//              at core's size, centered, in the tag's color (`context.stepNumeral`), with no fill or line
 //
 // The text of each step stays the list or text it is, at core's measured lines. Every shape carries an OPF_STEPS_V1 tag naming the
 // sequence's path and the shape's role, and import consumes the tagged shapes: they are the layout's drawing of the sequence, which a
@@ -45,6 +47,13 @@ export function addSteps(slide, steps, context, tags) {
       tag(objectName, 'connector');
     }
     for (const [index, badge] of step.badges.entries()) {
+      if (badge.numeral) {
+        const objectName = name('numeral', index);
+        slide.addText(badge.label, {...box(badge.numeral), color: context.stepNumeral ?? accent, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
+          align: 'center', valign: 'top', margin: 0, fit: 'none', wrap: false, lineSpacingMultiple: 1, paraSpaceAfter: 0, objectName});
+        tag(objectName, 'numeral', {entry: badge.path, label: badge.label, ...(badge.list ? {list: badge.list} : {})});
+        continue;
+      }
       const objectName = name('badge', index);
       slide.addText(badge.label, {shape: 'ellipse', x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius),
         fill: {color: accent}, line: {type: 'none'}, color: numeral, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
