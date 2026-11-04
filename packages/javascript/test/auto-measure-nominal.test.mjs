@@ -14,6 +14,7 @@ const textMeasurement = {
   outlineBounds: (text, size) => (text ? { x: 0, y: -0.8 * size, width: text.length * size * 0.5, height: size } : null),
 };
 const note = 'Next step: agree the pilot owner by Friday.';
+// LH-129: the closing is composed with `fill: false`, since its stacked body otherwise grows by steps of the type scale.
 // LH-06: the notes opt out of the automatic foot band (`emphasis: false`), which would otherwise draw this short last text.
 
 for (const [id, regionName, slide, size] of [
@@ -22,7 +23,7 @@ for (const [id, regionName, slide, size] of [
   ['closing', 'details', { title: 'Thank you', text: note }, 32],
 ]) {
   test(`${id}: a single-line auto note composes at exactly ${size} px`, () => {
-    const result = composeSlide(slide, { layout: layouts[id], textMeasurement });
+    const result = composeSlide(slide, { layout: layouts[id], textMeasurement, ...(id === 'closing' ? { fill: false } : {}) });
     const item = result.items.find((entry) => entry.region === regionName && entry.field === 'text');
     assert.ok(item, JSON.stringify(result.items.map((entry) => [entry.region, entry.field])));
     assert.equal(item.text.fontSize, size);

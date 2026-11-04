@@ -2,20 +2,20 @@
  "cover 1 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 column 1",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,720"
  ],
  "cover 2 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 grid 2",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,348",
   "item blocks.1.image media 652,372,628,348"
  ],
  "cover 3 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 grid 3",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,464",
   "item blocks.1.image media 652,488,302,232",
   "item blocks.2.image media 978,488,302,232"
@@ -23,7 +23,7 @@
  "cover 4 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 grid 4",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,464",
   "item blocks.1.image media 652,488,193.3,232",
   "item blocks.2.image media 869.3,488,193.3,232",
@@ -32,7 +32,7 @@
  "cover 5 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 grid 5",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,348",
   "item blocks.1.image media 652,372,302,162",
   "item blocks.2.image media 978,372,302,162",
@@ -42,7 +42,7 @@
  "cover 6 short": [
   "area title 57.6,57.6,570.4,604.8",
   "region media 652,0,628,720 grid 6",
-  "item title - 57.6,327.1,570.4,65.9 54px",
+  "item title - 57.6,314.3,570.4,91.5 75px",
   "item blocks.0.image media 652,0,628,348",
   "item blocks.1.image media 652,372,193.3,162",
   "item blocks.2.image media 869.3,372,193.3,162",
@@ -463,61 +463,61 @@
   "diagnostic text-overflow blocks.5.items"
  ],
  "statement 1 short": [
-  "area title 57.6,298,1164.8,65.9",
-  "region message 57.6,387.9,1164.8,34.2 column 1",
-  "item title - 57.6,298,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,387.9,1164.8,34.2 28px"
+  "area title 57.6,292.5,1164.8,65.9",
+  "region message 57.6,382.4,1164.8,45.1 column 1",
+  "item title - 57.6,292.5,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,382.4,1164.8,45.1 37px"
  ],
  "statement 2 short": [
-  "area title 57.6,266.5,1164.8,65.9",
-  "region message 57.6,356.3,1164.8,97.2 grid 2",
-  "item title - 57.6,266.5,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,356.3,1164.8,39 28px",
-  "item blocks.1.text message 57.6,419.4,1164.8,34.2 28px"
+  "area title 57.6,257.9,1164.8,65.9",
+  "region message 57.6,347.8,1164.8,114.3 grid 2",
+  "item title - 57.6,257.9,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,347.8,1164.8,45.1 37px",
+  "item blocks.1.text message 57.6,416.9,1164.8,45.1 37px"
  ],
  "statement 3 short": [
-  "area title 57.6,266.5,1164.8,65.9",
-  "region message 57.6,356.3,1164.8,97.2 grid 3",
-  "item title - 57.6,266.5,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,356.3,1164.8,39 28px",
-  "item blocks.1.text message 57.6,419.4,573.9,34.2 28px",
-  "item blocks.2.text message 648.5,419.4,573.9,34.2 28px"
+  "area title 57.6,257.9,1164.8,65.9",
+  "region message 57.6,347.8,1164.8,114.3 grid 3",
+  "item title - 57.6,257.9,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,347.8,1164.8,45.1 37px",
+  "item blocks.1.text message 57.6,416.9,571.1,45.1 37px",
+  "item blocks.2.text message 651.3,416.9,571.1,45.1 37px"
  ],
  "statement 4 short": [
-  "area title 57.6,266.5,1164.8,65.9",
-  "region message 57.6,356.3,1164.8,97.2 grid 4",
-  "item title - 57.6,266.5,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,356.3,1164.8,39 28px",
-  "item blocks.1.text message 57.6,419.4,376.9,34.2 28px",
-  "item blocks.2.text message 451.6,419.4,376.9,34.2 28px",
-  "item blocks.3.text message 845.5,419.4,376.9,34.2 28px"
+  "area title 57.6,257.9,1164.8,65.9",
+  "region message 57.6,347.8,1164.8,114.3 grid 4",
+  "item title - 57.6,257.9,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,347.8,1164.8,45.1 37px",
+  "item blocks.1.text message 57.6,416.9,373.2,45.1 37px",
+  "item blocks.2.text message 453.4,416.9,373.2,45.1 37px",
+  "item blocks.3.text message 849.2,416.9,373.2,45.1 37px"
  ],
  "statement 5 short": [
-  "area title 57.6,237.4,1164.8,65.9",
-  "region message 57.6,327.3,1164.8,155.4 grid 5",
-  "item title - 57.6,237.4,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,327.3,1164.8,39 28px",
-  "item blocks.1.text message 57.6,390.3,573.9,34.2 28px",
-  "item blocks.2.text message 648.5,390.3,573.9,34.2 28px",
-  "item blocks.3.text message 57.6,448.5,573.9,34.2 28px",
-  "item blocks.4.text message 648.5,448.5,573.9,34.2 28px"
+  "area title 57.6,223.4,1164.8,65.9",
+  "region message 57.6,313.2,1164.8,183.4 grid 5",
+  "item title - 57.6,223.4,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,313.2,1164.8,45.1 37px",
+  "item blocks.1.text message 57.6,382.4,571.1,45.1 37px",
+  "item blocks.2.text message 651.3,382.4,571.1,45.1 37px",
+  "item blocks.3.text message 57.6,451.5,571.1,45.1 37px",
+  "item blocks.4.text message 651.3,451.5,571.1,45.1 37px"
  ],
  "statement 6 short": [
-  "area title 57.6,237.4,1164.8,65.9",
-  "region message 57.6,327.3,1164.8,155.4 grid 6",
-  "item title - 57.6,237.4,1164.8,65.9 54px",
-  "item blocks.0.text message 57.6,327.3,1164.8,39 28px",
-  "item blocks.1.text message 57.6,390.3,376.9,34.2 28px",
-  "item blocks.2.text message 451.6,390.3,376.9,34.2 28px",
-  "item blocks.3.text message 845.5,390.3,376.9,34.2 28px",
-  "item blocks.4.text message 57.6,448.5,573.9,34.2 28px",
-  "item blocks.5.text message 648.5,448.5,573.9,34.2 28px"
+  "area title 57.6,223.4,1164.8,65.9",
+  "region message 57.6,313.2,1164.8,183.4 grid 6",
+  "item title - 57.6,223.4,1164.8,65.9 54px",
+  "item blocks.0.text message 57.6,313.2,1164.8,45.1 37px",
+  "item blocks.1.text message 57.6,382.4,373.2,45.1 37px",
+  "item blocks.2.text message 453.4,382.4,373.2,45.1 37px",
+  "item blocks.3.text message 849.2,382.4,373.2,45.1 37px",
+  "item blocks.4.text message 57.6,451.5,571.1,45.1 37px",
+  "item blocks.5.text message 651.3,451.5,571.1,45.1 37px"
  ],
  "statement 1 long": [
-  "area title 57.6,213.8,1164.8,131.8",
-  "region message 57.6,369.6,1164.8,136.6 column 1",
-  "item title - 57.6,213.8,1164.8,131.8 54px",
-  "item blocks.0.text message 185,369.6,910,136.6 28px"
+  "area title 57.6,191.8,1164.8,131.8",
+  "region message 57.6,347.6,1164.8,180.6 column 1",
+  "item title - 57.6,191.8,1164.8,131.8 54px",
+  "item blocks.0.text message 57.6,347.6,1164.8,180.6 37px"
  ],
  "statement 2 long": [
   "area title 57.6,133.5,1164.8,131.8",
@@ -565,61 +565,61 @@
   "item blocks.5.text message 652,542.8,570.4,105.5 21px"
  ],
  "closing 1 short": [
-  "area title 57.6,295.5,1164.8,65.9",
-  "region details 57.6,385.4,1164.8,39 grid 1",
-  "item title - 57.6,295.5,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,385.4,1164.8,39 32px"
+  "area title 57.6,279.7,1164.8,91.5",
+  "region details 57.6,395.2,1164.8,45.1 grid 1",
+  "item title - 57.6,279.7,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,395.2,1164.8,45.1 37px"
  ],
  "closing 2 short": [
-  "area title 57.6,298,1164.8,65.9",
-  "region details 57.6,387.9,1164.8,34.2 grid 2",
-  "item title - 57.6,298,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,387.9,573.9,34.2 28px",
-  "item blocks.1.text details 648.5,387.9,573.9,34.2 28px"
+  "area title 57.6,279.7,1164.8,91.5",
+  "region details 57.6,395.2,1164.8,45.1 grid 2",
+  "item title - 57.6,279.7,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,395.2,571.1,45.1 37px",
+  "item blocks.1.text details 651.3,395.2,571.1,45.1 37px"
  ],
  "closing 3 short": [
-  "area title 57.6,298,1164.8,65.9",
-  "region details 57.6,387.9,1164.8,34.2 grid 3",
-  "item title - 57.6,298,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,387.9,376.9,34.2 28px",
-  "item blocks.1.text details 451.6,387.9,376.9,34.2 28px",
-  "item blocks.2.text details 845.5,387.9,376.9,34.2 28px"
+  "area title 57.6,279.7,1164.8,91.5",
+  "region details 57.6,395.2,1164.8,45.1 grid 3",
+  "item title - 57.6,279.7,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,395.2,373.2,45.1 37px",
+  "item blocks.1.text details 453.4,395.2,373.2,45.1 37px",
+  "item blocks.2.text details 849.2,395.2,373.2,45.1 37px"
  ],
  "closing 4 short": [
-  "area title 57.6,268.9,1164.8,65.9",
-  "region details 57.6,358.8,1164.8,92.3 grid 4",
-  "item title - 57.6,268.9,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,358.8,570.9,34.6 28px",
-  "item blocks.1.text details 651.5,358.8,570.9,34.6 28px",
-  "item blocks.2.text details 57.6,416.5,570.9,34.6 28px",
-  "item blocks.3.text details 651.5,416.5,570.9,34.6 28px"
+  "area title 57.6,245.1,1164.8,91.5",
+  "region details 57.6,360.6,1164.8,114.3 grid 4",
+  "item title - 57.6,245.1,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,360.6,570.4,45.1 37px",
+  "item blocks.1.text details 652,360.6,570.4,45.1 37px",
+  "item blocks.2.text details 57.6,429.8,570.4,45.1 37px",
+  "item blocks.3.text details 652,429.8,570.4,45.1 37px"
  ],
  "closing 5 short": [
-  "area title 57.6,268.9,1164.8,65.9",
-  "region details 57.6,358.8,1164.8,92.3 grid 5",
-  "item title - 57.6,268.9,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,358.8,372.9,34.6 28px",
-  "item blocks.1.text details 453.6,358.8,372.9,34.6 28px",
-  "item blocks.2.text details 849.5,358.8,372.9,34.6 28px",
-  "item blocks.3.text details 57.6,416.5,570.9,34.6 28px",
-  "item blocks.4.text details 651.5,416.5,570.9,34.6 28px"
+  "area title 57.6,245.1,1164.8,91.5",
+  "region details 57.6,360.6,1164.8,114.3 grid 5",
+  "item title - 57.6,245.1,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,360.6,372.3,45.1 37px",
+  "item blocks.1.text details 453.9,360.6,372.3,45.1 37px",
+  "item blocks.2.text details 850.1,360.6,372.3,45.1 37px",
+  "item blocks.3.text details 57.6,429.8,570.4,45.1 37px",
+  "item blocks.4.text details 652,429.8,570.4,45.1 37px"
  ],
  "closing 6 short": [
-  "area title 57.6,268.9,1164.8,65.9",
-  "region details 57.6,358.8,1164.8,92.3 grid 6",
-  "item title - 57.6,268.9,1164.8,65.9 54px",
-  "item blocks.0.text details 57.6,358.8,372.9,34.6 28px",
-  "item blocks.1.text details 453.6,358.8,372.9,34.6 28px",
-  "item blocks.2.text details 849.5,358.8,372.9,34.6 28px",
-  "item blocks.3.text details 57.6,416.5,372.9,34.6 28px",
-  "item blocks.4.text details 453.6,416.5,372.9,34.6 28px",
-  "item blocks.5.text details 849.5,416.5,372.9,34.6 28px"
+  "area title 57.6,245.1,1164.8,91.5",
+  "region details 57.6,360.6,1164.8,114.3 grid 6",
+  "item title - 57.6,245.1,1164.8,91.5 75px",
+  "item blocks.0.text details 57.6,360.6,372.3,45.1 37px",
+  "item blocks.1.text details 453.9,360.6,372.3,45.1 37px",
+  "item blocks.2.text details 850.1,360.6,372.3,45.1 37px",
+  "item blocks.3.text details 57.6,429.8,372.3,45.1 37px",
+  "item blocks.4.text details 453.9,429.8,372.3,45.1 37px",
+  "item blocks.5.text details 850.1,429.8,372.3,45.1 37px"
  ],
  "closing 1 long": [
-  "area title 57.6,213.8,1164.8,131.8",
-  "region details 57.6,369.6,1164.8,136.6 grid 1",
-  "item title - 57.6,213.8,1164.8,131.8 54px",
-  "item blocks.0.text details 185,369.6,910,136.6 28px"
+  "area title 57.6,178.4,1164.8,158.6",
+  "region details 57.6,361,1164.8,180.6 grid 1",
+  "item title - 57.6,178.4,1164.8,158.6 65px",
+  "item blocks.0.text details 57.6,361,1164.8,180.6 37px"
  ],
  "closing 2 long": [
   "area title 57.6,179.6,1164.8,131.8",
@@ -894,55 +894,55 @@
   "diagnostic text-overflow blocks.5.items"
  ],
  "quote 1 short": [
-  "area title 57.6,253.3,1164.8,65.9",
-  "region quotes 57.6,343.2,1164.8,123.5 grid 1",
-  "item title - 57.6,253.3,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,343.2,1164.8,123.5 40px"
+  "area title 57.6,239.3,1164.8,65.9",
+  "region quotes 57.6,329.1,1164.8,151.6 grid 1",
+  "item title - 57.6,239.3,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,329.1,1164.8,151.6 56px"
  ],
  "quote 2 short": [
-  "area title 57.6,253.3,1164.8,65.9",
-  "region quotes 57.6,343.2,1164.8,123.5 grid 2",
-  "item title - 57.6,253.3,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,343.2,570.4,123.5 40px",
-  "item blocks.1.quote quotes 652,343.2,570.4,123.5 40px"
+  "area title 57.6,239.3,1164.8,65.9",
+  "region quotes 57.6,329.1,1164.8,151.6 grid 2",
+  "item title - 57.6,239.3,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,329.1,570.4,151.6 56px",
+  "item blocks.1.quote quotes 652,329.1,570.4,151.6 56px"
  ],
  "quote 3 short": [
-  "area title 57.6,253.3,1164.8,65.9",
-  "region quotes 57.6,343.2,1164.8,123.5 grid 3",
-  "item title - 57.6,253.3,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,343.2,372.3,123.5 40px",
-  "item blocks.1.quote quotes 453.9,343.2,372.3,123.5 40px",
-  "item blocks.2.quote quotes 850.1,343.2,372.3,123.5 40px"
+  "area title 57.6,220,1164.8,65.9",
+  "region quotes 57.6,309.9,1164.8,190.1 grid 3",
+  "item title - 57.6,220,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,309.9,372.3,190.1 46px",
+  "item blocks.1.quote quotes 453.9,309.9,372.3,190.1 46px",
+  "item blocks.2.quote quotes 850.1,309.9,372.3,190.1 46px"
  ],
  "quote 4 short": [
-  "area title 57.6,179.5,1164.8,65.9",
-  "region quotes 57.6,269.4,1164.8,271.1 grid 4",
-  "item title - 57.6,179.5,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,269.4,570.4,123.5 40px",
-  "item blocks.1.quote quotes 652,269.4,570.4,123.5 40px",
-  "item blocks.2.quote quotes 57.6,416.9,570.4,123.5 40px",
-  "item blocks.3.quote quotes 652,416.9,570.4,123.5 40px"
+  "area title 57.6,151.5,1164.8,65.9",
+  "region quotes 57.6,241.3,1164.8,327.2 grid 4",
+  "item title - 57.6,151.5,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,241.3,570.4,151.6 56px",
+  "item blocks.1.quote quotes 652,241.3,570.4,151.6 56px",
+  "item blocks.2.quote quotes 57.6,416.9,570.4,151.6 56px",
+  "item blocks.3.quote quotes 652,416.9,570.4,151.6 56px"
  ],
  "quote 5 short": [
-  "area title 57.6,179.5,1164.8,65.9",
-  "region quotes 57.6,269.4,1164.8,271.1 grid 5",
-  "item title - 57.6,179.5,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,269.4,372.3,123.5 40px",
-  "item blocks.1.quote quotes 453.9,269.4,372.3,123.5 40px",
-  "item blocks.2.quote quotes 850.1,269.4,372.3,123.5 40px",
-  "item blocks.3.quote quotes 57.6,416.9,570.4,123.5 40px",
-  "item blocks.4.quote quotes 652,416.9,570.4,123.5 40px"
+  "area title 57.6,113,1164.8,65.9",
+  "region quotes 57.6,202.9,1164.8,404.2 grid 5",
+  "item title - 57.6,113,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,202.9,372.3,190.1 46px",
+  "item blocks.1.quote quotes 453.9,202.9,372.3,190.1 46px",
+  "item blocks.2.quote quotes 850.1,202.9,372.3,190.1 46px",
+  "item blocks.3.quote quotes 57.6,443.5,570.4,137 46px",
+  "item blocks.4.quote quotes 652,443.5,570.4,137 46px"
  ],
  "quote 6 short": [
-  "area title 57.6,179.5,1164.8,65.9",
-  "region quotes 57.6,269.4,1164.8,271.1 grid 6",
-  "item title - 57.6,179.5,1164.8,65.9 54px",
-  "item blocks.0.quote quotes 57.6,269.4,372.3,123.5 40px",
-  "item blocks.1.quote quotes 453.9,269.4,372.3,123.5 40px",
-  "item blocks.2.quote quotes 850.1,269.4,372.3,123.5 40px",
-  "item blocks.3.quote quotes 57.6,416.9,372.3,123.5 40px",
-  "item blocks.4.quote quotes 453.9,416.9,372.3,123.5 40px",
-  "item blocks.5.quote quotes 850.1,416.9,372.3,123.5 40px"
+  "area title 57.6,113,1164.8,65.9",
+  "region quotes 57.6,202.9,1164.8,404.2 grid 6",
+  "item title - 57.6,113,1164.8,65.9 54px",
+  "item blocks.0.quote quotes 57.6,202.9,372.3,190.1 46px",
+  "item blocks.1.quote quotes 453.9,202.9,372.3,190.1 46px",
+  "item blocks.2.quote quotes 850.1,202.9,372.3,190.1 46px",
+  "item blocks.3.quote quotes 57.6,416.9,372.3,190.1 46px",
+  "item blocks.4.quote quotes 453.9,416.9,372.3,190.1 46px",
+  "item blocks.5.quote quotes 850.1,416.9,372.3,190.1 46px"
  ],
  "quote 1 long": [
   "area title 57.6,147.2,1164.8,131.8",

@@ -116,7 +116,8 @@ const composeTreatment = (slide, override = {}) => {
   const index = fixture.slides.indexOf(slide);
   const presentation = { ...fixture, slides: fixture.slides.map((entry, at) => (at === index ? { ...entry, ...override } : entry)) };
   const context = resolveSlideContext(presentation, index);
-  return composeSlide(presentation.slides[index], context.options);
+  // `fill: false`: the frozen 0.14 headings are at their role sizes; LH-129 grows the headings of a slide with no body (a cover).
+  return composeSlide(presentation.slides[index], { ...context.options, fill: false });
 };
 const frameOf = (image) => ({ fit: image.fit, box: image.box, shape: image.shape, ...(image.border ? { border: image.border } : {}), ...(image.opacity !== undefined ? { opacity: image.opacity } : {}),
   ...(image.recolor ? { recolor: image.recolor } : {}), ...(image.overlay ? { overlay: { color: image.overlay.color, opacity: image.overlay.opacity, box: image.overlay.box, shape: image.overlay.shape } } : {}) });

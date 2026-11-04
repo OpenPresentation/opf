@@ -1616,6 +1616,28 @@ export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, qu
  * one short line, grows to at most LONE_METRIC_TARGET.
  */
 export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
+/**
+ * LH-129: the largest size, in reference pixels, a heading of a slide whose headings are its message (a cover, a section, a closing)
+ * grows to: the title to about Claude Design's 78 px display title, the subtitle two steps of the type scale above its role size. The
+ * tag is LH-32's eyebrow, already set at its EYEBROW_TAG_SIZE role size (22 px), which is its display size too: it keeps that size
+ * (wave 5; LH-129 alone grew a 16 px tag to 21 px).
+ */
+export const HEADING_DISPLAY_SIZES = { title: 75, subtitle: 37, tag: EYEBROW_TAG_SIZE } as const;
+/**
+ * LH-129: `size` (canvas px) grown by `steps` steps of the type scale (the floor `floorPx` times (28/16)^(1/4) to a power, as LH-17's
+ * scale), each step the scale's next size above the last, stopping before a step above `display`.
+ */
+function typeScaleStepsUp(size: number, steps: number, display: number, floorPx: number, scale: number): number {
+  const ratio = (PROSE_NOMINAL_SIZE / 16) ** .25;
+  let grown = size;
+  for (let step = 0; step < steps; step++) {
+    let next = Infinity;
+    for (let power = 0; power < 64; power++) { const candidate = snapFontSizeDown(Math.round(floorPx * ratio ** power) * scale); if (candidate > grown + 1e-9) { next = candidate; break; } }
+    if (next > display + 1e-9) break;
+    grown = next;
+  }
+  return grown;
+}
 /** LH-48: a role size grown by `growth` (at least 1), capped at its display size; a role already larger keeps its size. */
 function grownRoleSize(size: number, growth: number | undefined, display: number): number {
   const factor = growth !== undefined && Number.isFinite(growth) && growth > 1 ? growth : 1;
@@ -2329,6 +2351,11 @@ const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-de
 export const TIMELINE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> = { done: 'Done', current: 'Current', planned: 'Planned' };
 /** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
 const TIMELINE_GROWTH = 4;
+/**
+ * LH-129: the growths (reference pixels on every role) a lone timeline tries first, largest first: three and two steps of the type scale
+ * above its 18 and 22 px label roles (to 28 and 32, or 24 and 28 px).
+ */
+const TIMELINE_STEP_GROWTH = [10, 6] as const;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
 const TIMELINE_FLOOR_OFFSET = 1000;
 /** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
@@ -3656,6 +3683,16 @@ export const QUOTE_PULL_MAX_CHARACTERS = 140;
 const GROW = Symbol('opf.grow');
 /** LH-48: composeSlide composes an under-filled body again in the middle of the space under the headings (growBody). */
 const CENTER = Symbol('opf.center');
+/** LH-129: composeSlide composes a slide whose headings are its message again with them this many type-scale steps larger (growTemplate). */
+const HEADING_STEPS = Symbol('opf.headingSteps');
+/**
+ * LH-129: compositions whose headings are the message: they stand free (centered in a sized title area, or in a stacked record) and no
+ * primary or secondary region holds a block (a cover, a section, a closing), or the slide has no body and no layout record (a cover by
+ * the record rule), so growTemplate may grow them.
+ */
+const HEADING_MESSAGES = new WeakSet<SlideComposition>();
+/** LH-129: compositions with a grown heading that fit only below its step of the type scale (growTemplate does not keep them). */
+const HEADINGS_OFF_SCALE = new WeakSet<SlideComposition>();
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -3937,6 +3974,30 @@ function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposi
   else KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} });
   return result!;
 }
+// LH-129: the text a composition draws, by item path and part (headings by field): its size, its line count, and the height the text
+// covers (the union of every text's extent, joined where texts sit side by side). Pictures, charts and other drawings do not count.
+function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; covered: number; top: number; bottom: number } {
+  const sizes = new Map<string, number>(), lines = new Map<string, number>(), extents: [number, number][] = [];
+  const lineCount = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+  const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+  for (const item of result.items) {
+    const key = headings.has(item.field) ? `${item.path}:${item.field}` : item.path, internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal) {
+      for (const part of internal.parts as readonly { role: string; box: LayoutBox; fit?: { fontSize: number }; visible?: boolean }[]) {
+        if (part.visible === false || !part.fit) continue;
+        sizes.set(`${key}:${part.role}`, Math.min(sizes.get(`${key}:${part.role}`) ?? Infinity, part.fit.fontSize));
+        extents.push([part.box.y, part.box.y + part.box.height]);
+      }
+    } else if (item.text) {
+      sizes.set(key, Math.min(sizes.get(key) ?? Infinity, item.text.fontSize));
+      lines.set(key, (lines.get(key) ?? 0) + lineCount(item.text));
+      extents.push([item.box.y, item.box.y + Math.min(item.box.height, textHeight(item.text))]);
+    }
+  }
+  let covered = 0, reach = -Infinity;
+  for (const [from, to] of extents.sort((a, b) => a[0] - b[0])) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
+  return { sizes, lines, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
+}
 /**
  * The guarded composition (guardedCore), then LH-39's figure on one line: the rules it kept plus `metric-figure`, taken when a figure
  * would wrap otherwise and the slide reads as well (readsAsWellFigure: a split figure may take the next smaller size, and only it).
@@ -3955,13 +4016,57 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
   return figured;
 }
 /**
- * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template
- * slide is recomposed as the automatic grid when the layout leaves a chart's plot too short (LH-49, chartRecomposition) or a body role
- * at the readability floor (LH-83, recomposeAtFloor); an automatic slide gives its one picture or chart a track (LH-80, LH-49,
- * automaticTracks). Each arrangement is composed under the guard (guardedCompose, composeVariant).
+ * LH-129: LH-48's fill for the layout templates that set their message in the middle of the slide. A stacked record (statement, quote,
+ * closing) grows its body: its paragraphs and lists one, two or three steps of the type scale larger (GROW, up to a list's display
+ * size), its quotes by the scale's ratio on every role. A slide whose headings are its message (HEADING_MESSAGES: a cover, a section, a
+ * closing, a slide with no body and no layout record) grows its title, subtitle and tag the same number of steps (HEADING_STEPS), each up to its display size
+ * (HEADING_DISPLAY_SIZES); a title over a primary block (a quote's, a statement's) keeps its size, so it never outshouts the message.
+ * The largest step is kept at which nothing overflows, every text is at least as large as at the step before and one is larger, no
+ * heading takes more lines than at its role size, the slide reads as well under the guard (composeVariant, readsAsWell, shrinks), and
+ * the text covers at most LONE_TARGET of the content box (as LH-48 grows a body). The region structure is the record's: the stack
+ * or the centered title area places the larger text as it placed the smaller.
+ */
+function growTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
+  if (options.fill === false || overflowCount(result) > 0) return undefined;
+  const stacked = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined, message = HEADING_MESSAGES.has(result);
+  if (!stacked && !message) return undefined;
+  // A body set at the readability floor is not short content.
+  if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
+  const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale), before = trackQuality(result, options);
+  // The frame the text fills: the content box; on a slide with no layout record, whose content box is what the headings leave, the
+  // slide inside its padding down to the content box's foot (where the automatic composition centers a cover).
+  const start = textExtent(result), frameBottom = result.contentBox.y + result.contentBox.height;
+  const frameTop = result.regions ? result.contentBox.y : Math.min(result.contentBox.y, (result.composition.padding ?? .08) * Math.min(result.width, result.height)), height = frameBottom - frameTop;
+  if (height <= 0 || start.covered >= LONE_TARGET * height) return undefined;
+  let best = result, bestText = start;
+  const arrangement = (composed: SlideComposition) => (composed.regions ?? []).map(region => `${region.name}:${region.arrangement ?? '-'}:${region.content.join()}`).join(';');
+  const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis?.source !== 'authored')).map(item => item.text!.fontSize));
+  for (let steps = 1; steps <= 3; steps++) {
+    const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
+    if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
+    // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays.
+    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape) break;
+    // Paragraphs and lists that shared one size keep one size (LH-43): a long one that fits only a step lower holds the others there.
+    if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) break;
+    const text = textExtent(grown);
+    const kept = [...bestText.sizes].every(([key, size]) => (text.sizes.get(key) ?? 0) >= size - FONT_GRID_EPSILON), larger = [...text.sizes].some(([key, size]) => size > (bestText.sizes.get(key) ?? Infinity) + FONT_GRID_EPSILON);
+    const wraps = [...start.lines].some(([key, count]) => key.endsWith(':title') || key.endsWith(':subtitle') || key.endsWith(':tag') ? (text.lines.get(key) ?? 0) > count : false);
+    if (!kept || !larger || wraps || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
+    best = grown; bestText = text;
+  }
+  return best === result ? undefined : best;
+}
+/**
+ * The slide after its guarded composition (`result`): a message set in the middle of the slide grows (LH-129, growTemplate); an
+ * under-filled body of paragraphs and lists grows (LH-48, growBody); a template slide is recomposed as the automatic grid when the
+ * layout leaves a chart's plot too short (LH-49, chartRecomposition) or a body role at the readability floor (LH-83, recomposeAtFloor);
+ * an automatic slide gives its one picture or chart a track (LH-80, LH-49, automaticTracks). Each arrangement is composed under the
+ * guard (guardedCompose, composeVariant).
  */
 function settle(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
+  const filled = growTemplate(input, options, result);
+  if (filled) return filled;
   const grown = growBody(input, options, result);
   if (grown) return grown;
   if (REGION_MEASURED.has(result) && bodyFill(result)) {
@@ -4463,7 +4568,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return match.index > 0 && value.slice(start).trim() ? { topicEnd: match.index, start } : undefined;
   };
   // The heading group (tag, title, subtitle) stacked from `y` at an area's width, half a gap apart. `title`: how a content
-  // slide's title fits ('step', LH-51; 'split', LH-51 and LH-76); covers, sections and stacked records keep the role size.
+  // slide's title fits ('step', LH-51; 'split', LH-51 and LH-76); covers, sections and stacked records start at the role size (LH-129
+  // may grow them, HEADING_STEPS).
+  const headingSteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[HEADING_STEPS] ?? 0)) || 0);
+  let headingOffScale = false, headingMessage = false;
   const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split'): ComposedItem[] => {
     const list: ComposedItem[] = [];
     let top = y;
@@ -4475,8 +4583,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     for (const field of fields) {
       const value = slide[field], text = annotationText(value), fieldPath = `${path}.${field}`, box = boxFor(field);
-      const requested = (field === 'title' ? 54 : field === 'tag' ? EYEBROW_TAG_SIZE : PROSE_NOMINAL_SIZE) * scale;
-      if (field !== 'title' || !title) { push(field, value, fieldPath, box, fitPlacedText(field, value, text, box, requested, minSize, fieldPath)); continue; }
+      const role = (field === 'title' ? 54 : field === 'tag' ? EYEBROW_TAG_SIZE : PROSE_NOMINAL_SIZE) * scale;
+      // LH-129: headings that are the slide's message (growTemplate) grow by its steps of the type scale, each up to its display size.
+      const requested = !title && headingSteps > 0 && (field === 'title' || field === 'subtitle' || field === 'tag') ? typeScaleStepsUp(role, headingSteps, HEADING_DISPLAY_SIZES[field] * scale, composition.minFontSize ?? 16, scale) : role;
+      if (field !== 'title' || !title) {
+        const fit = fitPlacedText(field, value, text, box, requested, minSize, fieldPath);
+        // A grown heading that fits only below its step is off the type scale: growTemplate does not keep that step.
+        if (requested > role && fit.fontSize < requested - FONT_GRID_EPSILON) headingOffScale = true;
+        push(field, value, fieldPath, box, fit); continue;
+      }
       const fitted = fitTitle(value, text, box, requested, fieldPath);
       // LH-76: a "Topic: qualifier" title that still wraps sets the topic as the title on one line and the qualifier below it at
       // the subtitle size, when the slide has no subtitle and the topic fits one line. The document is unchanged: both items
@@ -4633,6 +4748,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     y = item.box.y + item.box.height + gap * 0.5;
   }
   if (headingItems.length) {
+    // LH-129: a slide with no body (a cover by the record rule) has its headings as its message, as a cover record does.
+    if (isCover && headingItems.some(item => item.field === 'title')) headingMessage = true;
     if (isCover) {
       // Center the tag/title/subtitle group between the image-safe top (or header furniture)
       // and the bottom (or footer furniture); a group taller than that span is not moved.
@@ -4964,6 +5081,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const placeTimeline = (node: Pending, box: LayoutBox, settings: Composition): TimelineLayout => {
     const placed = measureTimeline(node, box, settings, 'placed');
     if (!timelineHints.get(node)?.grow && !node.lone || placed.overflow) return placed;
+    // LH-129: first by the type scale's steps, as LH-48 grows a lone block: two or three steps of its labels (18 and 22 px roles to
+    // 24 and 28, or 28 and 32), when it keeps its arrangement and fits its box; then by LH-41's few pixels.
+    // A label that wraps at the larger size reads worse than the smaller one on its line: every label (the name, a date, an event)
+    // keeps its line count; descriptions may wrap.
+    const lines = (layout: TimelineLayout) => layout.parts.map(part => part.role === 'description' || part.role === 'event-description' ? 0 : part.fit?.lines.length ?? 0).join();
+    for (const growth of TIMELINE_STEP_GROWTH) {
+      const grown = measureTimeline(node, box, settings, 'placed', growth);
+      if (!grown.overflow && grown.arrangement === placed.arrangement && lines(grown) === lines(placed)) return grown;
+    }
     for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
       const grown = measureTimeline(node, box, settings, 'placed', growth);
       if (!grown.overflow && grown.arrangement === placed.arrangement) return grown;
@@ -6253,6 +6379,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const bodyUnits = [...contents.values()].flat().concat(belowUnits);
     const loneUnit = options.fill !== false && plan.stack === undefined && bodyUnits.length === 1 && !bodyUnits[0]!.children ? bodyUnits[0] : undefined;
     if (loneUnit) loneUnit.fills = true;
+    // LH-129: a stacked record's body grows with the slide (growTemplate, GROW): its paragraphs and lists by the type scale's steps
+    // (proseMeasure) and its quotes by the scale's ratio on every role, each up to its display size (LONE_DISPLAY_SIZES).
+    if (plan.stack !== undefined && bodySteps) for (const unit of bodyUnits) if (!unit.children && unit.field === 'quote') growthOf.set(unit, TYPE_SCALE_RATIO ** bodySteps);
     // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
     // measure of the region (row needs, floors, placement) sees them as drawn. A lone timeline may grow when it fits (placeTimeline).
     const timelineBands = (units: Pending[]) => units.length > 1 && units.every(unit => !unit.children && unit.field === 'timeline' && unit.caption === undefined);
@@ -6568,6 +6697,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
       const centred = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto');
       const shift = centred ? Math.max(0, (cell.height - groupHeight(list)) / 2) : 0;
+      // LH-129: a title that stands free (centered in its area, or in a stack) over no primary or secondary block is the slide's message.
+      if (name === 'title' && list.some(item => item.field === 'title') && (centred || plan.stack !== undefined) && plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length) headingMessage = true;
       for (const item of list) {
         if (shift) { item.box.y += shift; if (item.text) item.text = translateTextFit(item.text, shift); }
         if (furniture && item.box.y + item.box.height > bodyBottom + .01) diagnostics.push({ code: 'text-overflow', path: item.path, message: 'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.' });
@@ -7241,6 +7372,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (atRequest) AT_REQUEST.add(composed);
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
+  if (headingMessage) HEADING_MESSAGES.add(composed);
+  if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
   return composed;
 }
 

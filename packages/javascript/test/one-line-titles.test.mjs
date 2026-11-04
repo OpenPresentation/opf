@@ -35,12 +35,11 @@ test('a title that wraps even at the smallest step wraps at the role size', () =
   assert.ok(item.text.lines.length > 1);
 });
 
-test('covers, sections and statements keep their size', () => {
+test('covers, sections and statements never step their title down; a cover or section title grows (LH-129)', () => {
   const text = 'Revenue grew in every region this quarter, led by EMEA';
-  assert.equal(title({ title: text }, layouts.cover).text.fontSize, 54);
-  assert.equal(title({ title: text }, layouts.section).text.fontSize, 54);
+  for (const layout of [layouts.cover, layouts.section, layouts.text]) assert.ok(title({ title: text }, layout).text.fontSize >= 54, 'a slide with no body is a cover');
+  assert.ok(title({ title: text }, layouts.section).text.fontSize > 54, 'its headings are the message (LH-129)');
   assert.equal(title({ title: text, text: 'One message.' }, layouts.statement).text.fontSize, 54);
-  assert.equal(title({ title: text }, layouts.text).text.fontSize, 54, 'a slide with no body is a cover');
 });
 
 test('a "Topic: qualifier" title that still wraps splits at the colon', () => {

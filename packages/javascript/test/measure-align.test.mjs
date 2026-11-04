@@ -124,7 +124,8 @@ test('LH-78: sibling quotes share one size, a card never makes a quote overflow,
   assert.deepEqual(overflow(result), []);
   assert.equal(new Set(quotes(result).map(bodySize)).size, 1, 'one size');
   // Short quotes fit at the display size, so the lead size (which would make them smaller) is not taken.
-  const short = quotes(composeSlide({ title: 'Voices', blocks: [quote('Short and clear.'), quote('Keep it simple.'), quote('Name the owner.')] }, { layout: layouts.quote }));
+  // `fill: false`: LH-129 grows a quote slide that leaves the slide mostly empty, which is not this rule.
+  const short = quotes(composeSlide({ title: 'Voices', blocks: [quote('Short and clear.'), quote('Keep it simple.'), quote('Name the owner.')] }, { layout: layouts.quote, fill: false }));
   assert.ok(short.every((item) => bodySize(item) === 40), 'the display size');
   const long = 'Exceptions need a brief review of the decision, its reversibility, and the evidence that is still missing, and the owner should name the latest useful decision date. '.repeat(2);
   const crowded = composeSlide({ title: 'Voices', blocks: Array.from({ length: 6 }, () => quote(long)) }, { layout: layouts.quote });
