@@ -1,0 +1,33 @@
+{
+  "deck": "technical/diagrams.opf.json",
+  "entries": {
+    "technical/diagrams.opf.json#0": {
+      "sha256": "0f725032ad0334f61c3eeb318d62fae90f651e7356c917b3ec6f7e30b2a0d99f",
+      "bytes": 8624
+    },
+    "technical/diagrams.opf.json#1": {
+      "sha256": "91ebe04747882c876c45203a3049eaa32a56ad0e4ae95497bf9225114d6db33c",
+      "bytes": 11569
+    },
+    "technical/diagrams.opf.json#2": {
+      "sha256": "f22b4776227a1984021a0f10985d3043148d7f8957caddb73049be9a2cf78772",
+      "bytes": 9742
+    },
+    "technical/diagrams.opf.json#3": {
+      "sha256": "2e2033f896383c663211a9f241fe2b127c029ae9d9070c56f3e2207449cf70c2",
+      "bytes": 8098
+    },
+    "technical/diagrams.opf.json#4": {
+      "sha256": "96d5001f51c1b82c17dcc7c8cce85ccdd9b36e87565af2637c22fd9f6655fe1b",
+      "bytes": 11441
+    },
+    "technical/diagrams.opf.json#5": {
+      "sha256": "207f86309cb258a17d5588bef37849f132330c546fe51bdea596db7d34fcb3b4",
+      "bytes": 6481
+    },
+    "technical/diagrams.opf.json#6": {
+      "sha256": "13ad54fa27b72732cde6b24b1db0bba079b88d889cf770aef7aea16bcc7cdaf6",
+      "bytes": 8694
+    }
+  }
+}

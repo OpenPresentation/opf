@@ -53,7 +53,10 @@ assert.ok(!Object.keys(bundle.metafile.inputs).some(input => /sharp|resvg|raster
 const split = await build({stdin: {contents: "import '../dist/element-define.js';", resolveDir: path.join(root, 'test'), loader: 'js'}, bundle: true, platform: 'browser', format: 'esm', splitting: true, outdir: path.join(outputDirectory, 'split'), write: false, minify: true, metafile: true});
 const chunks = split.outputFiles.map(file => ({name: path.basename(file.path), text: file.text}));
 assert.ok(chunks.length >= 2, `the player is a separate chunk loaded on demand (got ${chunks.map(chunk => chunk.name)})`);
-const mainChunk = chunks.find(chunk => /opf-deck/.test(chunk.text) && /attachShadow/.test(chunk.text));
+// The element's chunk is the output of the page's own entry (stdin): the player chunk also defines the element's tag, and core's
+// diagram types add chunks of their own (esbuild records each dynamic import as an entry too), so the order of the outputs says nothing.
+const entryOutput = Object.entries(split.metafile.outputs).find(([, output]) => output.entryPoint === '<stdin>')?.[0];
+const mainChunk = chunks.find(chunk => entryOutput && path.basename(entryOutput) === chunk.name && /opf-deck/.test(chunk.text) && /attachShadow/.test(chunk.text));
 assert.ok(mainChunk && !/PlayerSession|Speaker view/.test(mainChunk.text), 'the element chunk carries no slideshow code');
 assert.ok(chunks.some(chunk => /Speaker view/.test(chunk.text)), 'the player chunk exists');
 const serverOnly = await build({stdin: {contents: "import {toHtml} from '../dist/element.js'; console.log(toHtml);", resolveDir: path.join(root, 'test'), loader: 'js'}, bundle: true, platform: 'node', format: 'esm', write: false, minify: true});

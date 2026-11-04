@@ -26,7 +26,11 @@ const LEADS_ADDED = { timeline: ["lead"] };
 const sameAsBefore = (record) => !ADDED.has(record.id) && !REDESIGNED.has(record.id);
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
-const ACCEPTS_ADDED = { "team/people": ["list"] }; // WI-6: a name with its role and description is one `items` entry
+const ACCEPTS_ADDED = {
+  "team/people": ["list"], // WI-6: a name with its role and description is one `items` entry
+  // Diagrams: the regions that hold a figure take a `diagram` too.
+  ...Object.fromEntries(["chart/charts", "chart-beside/chart", "image/media", "image-beside/media", "hero/media", "comparison/first", "comparison/second", "process/steps", "timeline/timeline"].map((region) => [region, ["diagram"]])),
+};
 /** Records that did not exist in 4.0.0: they have no grid to be equal to. */
 const ADDED = new Set(["three-column", "agenda-split"]);
 /** The generic column layouts take any content: their regions list every kind, which no other record does (WI-3). */

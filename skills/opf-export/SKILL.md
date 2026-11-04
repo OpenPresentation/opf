@@ -86,6 +86,8 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | Double border, shadow, shadow spread | OPF has no key for them, so no deck carries one and neither engine draws one | none |
 | SVG image with a duotone recolor or a non-rectangular shape, an SVG background with the tile fit, an SVG quote photo, an SVG picture bullet | Its PNG raster instead of a native SVG picture | `export-lossy`, `svg-rasterized` |
 | Any other SVG image | A native SVG picture over a PNG fallback | none |
+| `diagram` (Mermaid source) | A native SVG picture over a PNG fallback, drawn by core in the deck's fonts and colors, with `alt` (else a text derived from the diagram's labels) as the picture's description; `fromPptx` brings it back as a diagram. It is a picture, not editable PowerPoint shapes or connectors: PowerPoint's "Convert to Shape" can turn it into shapes, but that is PowerPoint's own conversion, not an OPF export | none |
+| `diagram` whose source cannot be parsed, or over 20,000 characters or 500 edges | A "Diagram unavailable" placeholder, as in the preview | a located finding (`The diagram cannot be drawn (line 2, column 9): ...`) |
 | Animated WebP (default `images: compatible`) | A still PNG of the first frame; `--images preserve` keeps the WebP | `export-lossy`, `image-animation` |
 | Still WebP | A PNG with the same pixels | none |
 | Image that is not PNG, JPEG, GIF, WebP or SVG (BMP, TIFF, AVIF) | The unavailable-image placeholder, as in the preview | `unresolved-asset`, reason `unsupported-format` |

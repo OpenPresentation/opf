@@ -27,7 +27,8 @@
             "image",
             "chart",
             "table",
-            "group"
+            "group",
+            "diagram"
           ],
           "role": "primary",
           "flow": "none"
@@ -41,7 +42,8 @@
             "image",
             "chart",
             "table",
-            "group"
+            "group",
+            "diagram"
           ],
           "role": "primary",
           "flow": "none"

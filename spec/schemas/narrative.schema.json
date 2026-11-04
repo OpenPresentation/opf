@@ -167,7 +167,8 @@
             "code",
             "metric",
             "quote",
-            "timeline"
+            "timeline",
+            "diagram"
           ],
           "description": "Default content kind for the beat's slide: the same values as Slide.type. Helps engines and planners choose a layout when only the beat is known."
         },

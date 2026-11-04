@@ -179,7 +179,7 @@ export function freshName(base: string, taken: readonly string[] = []): string {
 }
 
 /** The kind of block a document node holds: `text`, `chart`, `image`, ... from its keys. */
-const BLOCK_KINDS = ["chart", "image", "video", "table", "code", "metric", "quote", "timeline", "items", "bullets", "text"];
+const BLOCK_KINDS = ["chart", "image", "video", "table", "code", "metric", "quote", "timeline", "diagram", "items", "bullets", "text"];
 export function blockKind(node: unknown): string | undefined {
   if (!isRecord(node)) return undefined;
   if (typeof node.type === "string" && node.type !== "group") return node.type;

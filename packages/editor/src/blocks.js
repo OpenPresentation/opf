@@ -53,7 +53,7 @@ export function listBlockContainers(presentation,{slideIndex,includeImplicit=fal
   return result;
 }
 
-const contentFields=['text','items','bullets','image','video','chart','table','code','metric','quote','timeline'];
+const contentFields=['text','items','bullets','image','video','chart','table','code','diagram','metric','quote','timeline'];
 const isRegion=key=>/^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:left|center|right)(?:\+(?:left|center|right))*)?|(?:left|center|right)(?:\+(?:left|center|right))*)$/.test(key);
 function preparedChange(presentation,container,next,path) {
   const pointer=opfPathToJsonPointer(container);
@@ -150,6 +150,7 @@ export function createContentBlock(kind,{source}={}) {
     metric:{metric:{value:42,label:'Metric'}},
     quote:{quote:{text:'Add a quotation',attribution:'Source'}},
     code:{code:{source:'const message = "Hello";',language:'javascript'}},
+    diagram:{diagram:'flowchart LR\n  Plan --> Build --> Ship'},
     timeline:{timeline:[{when:'Now',what:'First milestone'},{when:'Next',what:'Second milestone'}]},
     group:{composition:{mode:'column'},blocks:[{text:'First point'},{text:'Second point'}]}
   };

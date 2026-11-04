@@ -233,7 +233,7 @@ const contentRules: ValidationRule[] = [
 				if (slide.slide.layout === 'blank') continue;
 				const has = (value: unknown) => value !== undefined && value !== null && !(typeof value === 'string' && value.trim() === '') && !(Array.isArray(value) && value.length === 0);
 				const hasText = slide.texts.some((tv) => plainText(tv.value).trim() !== '');
-				const hasObject = slidePayloads(slide.slide, slide.path).some((p) => ['image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'].some((field) => has(p.node[field])));
+				const hasObject = slidePayloads(slide.slide, slide.path).some((p) => ['image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'].some((field) => has(p.node[field])));
 				const hasBackgroundImage = imageBackground(rec(slide.slide.design).background) !== undefined;
 				if (hasText || hasObject || hasBackgroundImage) continue;
 				context.report(emptySlideRule, { path: slide.path, slide, message: `Slide ${slide.index + 1} has no title and no content.`, help: 'Add content, delete the slide, or give it the blank layout if it is intentionally empty.' });

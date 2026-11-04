@@ -139,7 +139,7 @@ describe("stats: structure", () => {
 
   test("counts payload kinds across roots, blocks, regions and groups", () => {
     assert.deepEqual(result.payloads, {
-      text: 2, items: 0, bullets: 1, quote: 1, metric: 1, code: 1, timeline: 1, chart: 2, table: 2, image: 4, video: 1,
+      text: 2, items: 0, bullets: 1, quote: 1, metric: 1, code: 1, timeline: 1, diagram: 0, chart: 2, table: 2, image: 4, video: 1,
       blocks: 6, regions: 3, groups: 1, maxDepth: 2,
     });
   });

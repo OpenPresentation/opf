@@ -48,7 +48,8 @@ const placeholders = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([s
   box: shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/)?.slice(1).map(Number)}));
 // The placeholder kind of a region and its index: a base per kind plus the region's position among that kind's regions.
 const kindOf = region => {
-  const accepts = new Set(region.accepts), only = (...kinds) => [...accepts].every(kind => kinds.includes(kind));
+  // A diagram never binds to a placeholder, so it does not change the kind.
+  const accepts = new Set(region.accepts.filter(kind => kind !== 'diagram')), only = (...kinds) => [...accepts].every(kind => kinds.includes(kind));
   return only('image') ? 'pic' : only('chart') ? 'chart' : only('table') ? 'tbl' : only('video') ? 'media'
     : region.role === 'media' && accepts.has('image') && only('image', 'video', 'group') ? 'pic' : only('text', 'list') ? 'body' : 'obj';
 };

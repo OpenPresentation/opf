@@ -35,7 +35,7 @@ import { formatPointer, jsonEqual, parsePointer } from "@openpresentation/opf/pa
 const PREFIX = "opf-studio";
 const WIDE = 1100, NARROW = 760;
 const SIZES = { left: [232, 176, 360], right: [280, 240, 420], split: [0.42, 0.2, 0.8], stack: [0.5, 0.15, 0.85] };
-const INSERT_ICONS = { text: "AlignLeft", list: "List", image: "Image", video: "Video", chart: "ChartColumn", table: "Table", code: "Code", metric: "Hash", quote: "Quote", timeline: "CalendarRange", group: "Group" };
+const INSERT_ICONS = { text: "AlignLeft", list: "List", image: "Image", video: "Video", chart: "ChartColumn", table: "Table", code: "Code", diagram: "Workflow", metric: "Hash", quote: "Quote", timeline: "CalendarRange", group: "Group" };
 const PLACEHOLDER_PICTURE = `data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900"><rect width="1600" height="900" fill="#e4e8ef"/><path d="M640 600l160-200 120 140 80-90 160 150z" fill="#b4bdcb"/><circle cx="1010" cy="330" r="50" fill="#b4bdcb"/></svg>')}`;
 // The clipboard of every Studio on the page, so copy in one editor and paste in another works (the system clipboard gets OPF text too).
 let clipboard = null;

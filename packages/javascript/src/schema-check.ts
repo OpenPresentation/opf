@@ -88,7 +88,8 @@ type ContentKind =
   | "code"
   | "metric"
   | "quote"
-  | "timeline";
+  | "timeline"
+  | "diagram";
 
 interface ContentKindSpec {
   fields: readonly string[];
@@ -138,10 +139,14 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["timeline"],
     required: ["timeline"],
   },
+  diagram: {
+    fields: ["diagram"],
+    required: ["diagram"],
+  },
 };
 
 // RR-34: payload kinds whose blocks may carry a caption.
-const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video"]);
+const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
 // FA-22: fit, focus, the image treatments and placement belong to image payloads only.
 const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"] as const;
 
@@ -246,6 +251,7 @@ function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   if (hasOwn(value, "metric")) kinds.push("metric");
   if (hasOwn(value, "quote")) kinds.push("quote");
   if (hasOwn(value, "timeline")) kinds.push("timeline");
+  if (hasOwn(value, "diagram")) kinds.push("diagram");
 
   return kinds;
 }

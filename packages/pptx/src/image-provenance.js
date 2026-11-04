@@ -24,7 +24,7 @@ const decoder = new TextDecoder('utf-8', {fatal:true}), encoder = new TextEncode
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 // Whitespace-only text between elements is not identity: the vendored writer indents, PowerPoint drops it on save.
-const canonical = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
+export const canonical = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
 
 /** An image block's own fields (everything but its type, asset, id, caption and extensions). */
@@ -67,7 +67,7 @@ function blipEffects(effects) {
 }
 
 // Native blip fill without its package-local relationship id.
-function blipFillIdentity(blipFill) {
+export function blipFillIdentity(blipFill) {
   const {['a:blip']: blip, ...rest} = normalizeCrop(blipFill) ?? {};
   const {['r:embed']: _embed, ...blipRest} = withoutSvgBlip(blip) ?? {};
   return {...rest, 'a:blip': blipRest};

@@ -69,10 +69,11 @@ const CENTERED_TITLE = new Set(['cover', 'section']);
 /**
  * The placeholder type of a body region: `pic` when it accepts only pictures (or is a `media` region whose leaf kinds are
  * pictures and video), `chart` when only charts, `tbl` when only tables, `media` when only video, `body` when only text and
- * lists, otherwise a content placeholder, `obj` (written without a type, as PowerPoint does).
+ * lists, otherwise a content placeholder, `obj` (written without a type, as PowerPoint does). A diagram never binds to a placeholder
+ * (it is drawn as a free picture), so a region's `diagram` kind leaves its placeholder type as it was.
  */
 export function placeholderType(region) {
-  const accepts = new Set(region.accepts);
+  const accepts = new Set((region.accepts ?? []).filter(kind => kind !== 'diagram'));
   const only = (...kinds) => [...accepts].every(kind => kinds.includes(kind));
   if (only('image')) return 'pic';
   if (only('chart')) return 'chart';

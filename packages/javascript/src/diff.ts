@@ -223,7 +223,7 @@ export function diff(a: unknown, b: unknown, options: DiffOptions = {}): Present
 // ---------------------------------------------------------------------------
 // Readable report
 
-const CONTENT_KINDS = ["blocks", "chart", "table", "code", "metric", "quote", "timeline", "image", "video", "items", "bullets", "text"];
+const CONTENT_KINDS = ["blocks", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "image", "video", "items", "bullets", "text"];
 function shorten(text: string, max = 60) {
   const flat = text.replace(/\s+/gu, " ");
   return flat.length > max ? `${flat.slice(0, max - 1)}…` : flat;

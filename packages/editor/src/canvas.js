@@ -14,6 +14,7 @@ import {
   getEditableFields,
   emptyLike,
   fieldChoices,
+  isDiagramSource,
   parseCanvasValue,
   createCanvasDraft,
 } from "./canvas-fields.js";
@@ -645,7 +646,7 @@ export function createCanvasEditor(container, options = {}) {
   function editKind(path) {
     const value = editor.get(path), target = getTarget(path);
     if (value === undefined || !target) return null;
-    if ((typeof value === "string" || typeof value === "number") && target.querySelector("text") && !/\.(image|video)$/.test(path))
+    if ((typeof value === "string" || typeof value === "number") && target.querySelector("text") && !/\.(image|video|diagram)$/.test(path))
       return "text";
     if (Array.isArray(value) && target.hasAttribute("data-opf-rich-text")) return "rich-text";
     return "properties";
@@ -732,7 +733,7 @@ export function createCanvasEditor(container, options = {}) {
     if (
       (typeof value === "string" || typeof value === "number") &&
       text &&
-      !/\.(image|video)$/.test(path)
+      !/\.(image|video|diagram)$/.test(path)
     ) {
       const input = doc.createElement("textarea");
       input.className = "opf-inline-input";
@@ -886,13 +887,17 @@ export function createCanvasEditor(container, options = {}) {
         input.type = "checkbox";
         input.checked = field.value;
       } else {
-        input.rows = field.type === "number" ? 1 : 2;
+        // Mermaid source is several lines of code: more rows, a monospace face and no spell check.
+        const source = isDiagramSource(field);
+        input.rows = field.type === "number" ? 1 : source ? 8 : 2;
         input.value = field.value === null ? "null" : String(field.value);
+        if (source) input.spellcheck = false;
       }
       input.setAttribute("aria-label", label.textContent);
       input.style.cssText =
         "display:block;width:100%;font:12px/1.5 system-ui;padding:6px;min-height:0;box-sizing:border-box;border:1px solid #e0dae8;border-radius:4px;color:#332e40;background:white";
       if (field.type === "boolean") input.style.width = "auto";
+      if (isDiagramSource(field)) input.style.fontFamily = "ui-monospace,SFMono-Regular,Menlo,Consolas,monospace";
       label.append(input);
       panel.append(label);
       inputs.push({ field, input });

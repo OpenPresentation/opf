@@ -90,7 +90,7 @@ const CELL_FILLS = [
   ["background", "Background"],
   ["text", "Text color"],
 ];
-const BLOCK_REPLACEMENTS = ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group"];
+const BLOCK_REPLACEMENTS = ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group"];
 
 let instances = 0;
 
@@ -1224,7 +1224,7 @@ export function createDesignControls(container, options = {}) {
         reselect(path);
       },
     });
-    replace.setOptions(BLOCK_REPLACEMENTS.map((value) => ({ value, label: BLOCK_KIND_LABELS[value] })));
+    replace.setOptions(BLOCK_REPLACEMENTS.map((value) => ({ value, label: BLOCK_KIND_LABELS[value] ?? titleCase(value) })));
     // LH-123: the metric's trend, the other way to change what the canvas shows as an arrow (a press on the arrow opens the same field).
     const trend = selectField("metric-trend", "Trend", {
       empty: "None",

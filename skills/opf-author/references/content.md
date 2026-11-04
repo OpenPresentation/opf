@@ -22,7 +22,31 @@ Consult the installed schema for optional fields and constraints. This guide sel
 | Code with emphasized lines | `{"code":{"source":"a\nb\nc\nd","language":"javascript","highlight":[2,[3,4]]}}` (1-based lines and inclusive ranges; the rest is dimmed) |
 | Timeline | `{"timeline":[{"when":"Now","what":"Prototype"},{"when":"Next","what":"Review"}]}` |
 | Timeline with progress | `{"timeline":[{"when":"Q1","what":"Discovery","status":"done"},{"when":"Q2","what":"Pilot","status":"current"},{"when":"Q3","what":"Rollout","status":"planned"}]}` |
+| Diagram | `{"diagram":"flowchart LR
+  A[Brief] --> B{Approved?}
+  B -->|yes| C[Build]
+  B -->|no| A"}` (Mermaid source; the object form `{"source":"...","alt":"..."}` adds a text alternative) |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |
+
+## Diagrams
+
+A `diagram` is Mermaid source (version 12.1 syntax) that the engines parse, lay out with the deck's measured fonts and draw in the deck's colors. Pick the payload by what the content is: a `chart` for numbers on axes, a `timeline` for dated or ordered events (with `status`), a `diagram` for structure and flow. A string is shorthand for `{"source": ...}`; the object form takes `alt` (and `syntax`, which is `mermaid`, the only value). The first line of the source names the family: `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2`, `erDiagram`, `gantt`, `pie`, `quadrantChart`, `mindmap`, `timeline`, `journey`, `xychart`, `sankey`, `gitGraph`, `C4Context`, `block`, `architecture-beta`, `kanban`, `packet`, `radar-beta`, `treemap`, `venn-beta`, `ishikawa`, `requirementDiagram` and the other built-in families; ZenUML is not supported.
+
+```json
+{"title": "A rejected brief returns to its author",
+ "diagram": {"source": "flowchart LR
+  A[Brief] --> B{Approved?}
+  B -->|yes| C[Build]
+  B -->|no| A", "alt": "A brief goes to review; approved work is built, rejected work returns to the brief."},
+ "caption": "Figure 1. The review loop"}
+```
+
+- Write `alt` for every diagram: what it shows, not that it is a diagram. Without one, engines derive a text from the diagram type and its labels. A `caption` works as on an image or chart.
+- The deck decides colors and fonts: node fills are tints of the slide variant's first accent, data series (pie, xychart, timeline sections, mindmap branches) use the chart series palette, and text keeps 4.5:1, on light and dark slides alike. Do not write Mermaid themes or `themeVariables`; they are ignored. Leave out `style`, `classDef` and C4 `UpdateElementStyle` colors too: the engine applies and keeps them, so those shapes no longer follow the deck's colors or variant. The repository's `docs/diagrams.md` is the full guide.
+- Size follows the block: the diagram is drawn at the largest label size that fits (up to 32 reference pixels) and never below the readability floor. When it does not fit, it is drawn smaller and the slide gets a `text-overflow` finding with advice. Give a big diagram a slide or region of its own, turn `flowchart LR` into `TB` (or the reverse), cut nodes into two diagrams, or shorten labels. Do not shrink it by lowering `minFontSize`.
+- A source that cannot be parsed reports a located finding (`The diagram cannot be drawn (line 2, column 9): ...`) and draws a "Diagram unavailable" placeholder: fix the source at that line and column. The limits are 20,000 characters of source and 500 edges.
+- In Markdown a diagram is a fenced block with the info word `mermaid`, and its `alt` follows the word: ```` ```mermaid alt="What it shows" ````.
+- PPTX export writes the diagram as a native SVG picture with a PNG fallback (crisp, `alt` as its description, recolorable as a picture); the nodes are not editable PowerPoint shapes. Say so if the user needs to edit the diagram in PowerPoint: they edit the OPF source and export again.
 
 Timeline `status` is progress only: `done` (filled marker), `current` ("we are here": ringed marker, bold label) and `planned` (hollow marker, muted text). Mark at most one event `current`, and write risk or blockers in the event text, not in a status. [A complete roadmap](../assets/roadmap-status.opf.json) shows all three.
 

@@ -28,7 +28,7 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
 const valueAt = (document, pointer) => { const found = readPointer(document, pointer); return found.found ? found.value : undefined; };
 const parentPointer = (pointer) => formatPointer(parsePointer(pointer).slice(0, -2));
 const plural = (count, one, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
-const KIND_WORDS = { text: "text", list: "list", image: "image", video: "video", chart: "chart", table: "table", code: "code", metric: "metric", quote: "quote", timeline: "timeline", group: "group" };
+const KIND_WORDS = { text: "text", list: "list", image: "image", video: "video", chart: "chart", table: "table", code: "code", diagram: "diagram", metric: "metric", quote: "quote", timeline: "timeline", group: "group" };
 const HEADING_REFUSALS = { move: "move", group: "be grouped", delete: "be deleted; clear its text instead", duplicate: "be duplicated", copy: "be copied as a block" };
 const wordList = (list) => (list.length <= 1 ? list.join("") : `${list.slice(0, -1).join(", ")} and ${list.at(-1)}`);
 

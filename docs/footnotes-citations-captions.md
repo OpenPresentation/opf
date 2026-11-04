@@ -33,7 +33,7 @@ and the editor. A deck without the new fields validates, composes, previews and 
 
 Validation (`validate`, category `format`, errors): `cite-unknown-reference` (an id missing from `references`, at
 the `cite` field), `reference-id-duplicate`, `caption-unsupported-payload` (a caption on a text, list,
-code, metric, quote or timeline payload, on a group, or on a slide root with several payloads) and
+code, metric, quote or timeline payload (a diagram takes one), on a group, or on a slide root with several payloads) and
 `cite-unsupported-location` (`cite`/`footnote` on a run in a table cell, a caption, a reference text or a
 footnote text, where no engine draws a marker). Each is reported under its code as the rule id
 (`opf/cite-unknown-reference`), and the `references` category adds the warning `opf/unused-reference` for a

@@ -15,7 +15,8 @@
       "name": "media",
       "accepts": [
         "image",
-        "video"
+        "video",
+        "diagram"
       ],
       "role": "media",
       "flow": "none",

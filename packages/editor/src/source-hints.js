@@ -25,14 +25,14 @@ const MAX_ROWS = 7;
 // ---- the words ---------------------------------------------------------------------------------------------------------------------
 const KEY_WORDS = {
   title: "Slide title", subtitle: "Subtitle", items: "List of points", text: "Body text", image: "Picture", video: "Video", chart: "Chart", table: "Table",
-  quote: "Quote", code: "Code", metric: "Key number", timeline: "Timeline", notes: "Speaker notes", layout: "Layout of the slide", id: "A name for this object", type: "Content kind",
+  quote: "Quote", code: "Code", diagram: "Diagram", metric: "Key number", timeline: "Timeline", notes: "Speaker notes", layout: "Layout of the slide", id: "A name for this object", type: "Content kind",
   region: "Region of the layout to place it in",
 };
 // The slide key that holds content of a kind a region accepts, and the other way round.
-const KEY_OF_KIND = { text: "text", list: "items", image: "image", video: "video", chart: "chart", table: "table", quote: "quote", code: "code", metric: "metric", timeline: "timeline" };
+const KEY_OF_KIND = { text: "text", list: "items", image: "image", video: "video", chart: "chart", table: "table", quote: "quote", code: "code", diagram: "diagram", metric: "metric", timeline: "timeline" };
 const KIND_OF_KEY = Object.fromEntries(Object.entries(KEY_OF_KIND).map(([kind, key]) => [key, kind]));
 // Which key a region that takes many kinds is filled by first (a slide's own list or text).
-const KEY_PREFERENCE = ["items", "text", "image", "chart", "table", "quote", "code", "metric", "timeline", "video"];
+const KEY_PREFERENCE = ["items", "text", "image", "chart", "table", "quote", "code", "diagram", "metric", "timeline", "video"];
 const joinWords = (words) => (words.length > 1 ? `${words.slice(0, -1).join(", ")} or ${words.at(-1)}` : (words[0] ?? ""));
 
 function clip(text, length = 58) {

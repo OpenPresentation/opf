@@ -889,7 +889,8 @@
               "name": "charts",
               "accepts": [
                 "chart",
-                "group"
+                "group",
+                "diagram"
               ],
               "role": "primary",
               "flow": "grid"
@@ -975,7 +976,8 @@
             {
               "name": "timeline",
               "accepts": [
-                "timeline"
+                "timeline",
+                "diagram"
               ],
               "role": "primary",
               "flow": "column"
@@ -1015,7 +1017,8 @@
                   "name": "chart",
                   "size": 3,
                   "accepts": [
-                    "chart"
+                    "chart",
+                    "diagram"
                   ],
                   "role": "primary",
                   "flow": "none"
@@ -1059,7 +1062,8 @@
                   "name": "media",
                   "accepts": [
                     "image",
-                    "video"
+                    "video",
+                    "diagram"
                   ],
                   "role": "media",
                   "flow": "none",

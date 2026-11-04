@@ -38,6 +38,7 @@ A slide carries one message. Pick the structure from the content, not from habit
 | Figures that sit in a sentence | layout `metrics`, one `metric` block per figure |
 | Options compared on the same criteria | layout `comparison` (two options) or a `table` (more, or more criteria) |
 | A sequence of steps or dates | layout `process` or `timeline`, with a `timeline` payload |
+| A flow, a system, messages between parties, states or a hierarchy | a `diagram` (Mermaid source) with an `alt`, alone on the slide or beside the text that explains it |
 | One message that should stand alone | layout `statement` |
 | Someone else's words | layout `quote`, with `attribution` |
 

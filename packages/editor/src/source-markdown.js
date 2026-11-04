@@ -332,8 +332,8 @@ export function markdownOptions(context, { catalogs, text, explicit, makers, sco
   if (context.region === "fence-info") {
     if (context.mode === "kind") {
       let order = 0;
-      for (const kind of ["chart", "metric", "timeline", "opf-block", "opf-slide"]) {
-        const doc = { chart: "A chart: the type, then CSV with a header row", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
+      for (const kind of ["chart", "mermaid", "metric", "timeline", "opf-block", "opf-slide"]) {
+        const doc = { chart: "A chart: the type, then CSV with a header row", mermaid: "A diagram: Mermaid source, starting with its type (flowchart LR, sequenceDiagram, ...)", metric: "One big number: value, label, unit, delta", timeline: "Events, one per line", "opf-block": "A content block written as YAML", "opf-slide": "Slide fields written as YAML" }[kind];
         options.push(kindOption(kind, "keyword", "fence", doc, boostAt(order++), "fence", { word: kind }));
       }
       for (const language of LANGUAGES) options.push(kindOption(language, "text", "code", `Code in ${language}`, boostAt(order++), "fence", { word: language }));
@@ -503,6 +503,7 @@ export const SYNTAX_FIELDS = {
   quote: { key: "quote", written: "> text, then > — Name, Title" },
   chart: { key: "chart", written: "```chart column, then CSV" },
   metric: { key: "metric", written: "```metric, then key: value lines" },
+  mermaid: { key: "diagram", written: "```mermaid, then the Mermaid source" },
   timeline: { key: "timeline", written: "```timeline, then one event per line" },
   code: { key: "code", written: "```js title=\"file\"" },
   image: { key: "image", written: "![alt](src)" },

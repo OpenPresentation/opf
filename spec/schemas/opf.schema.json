@@ -1938,7 +1938,7 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline"],
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram"],
           "description": "Optional full-slide content kind. When omitted, engines infer the kind from root payload fields."
         },
         "beat": {
@@ -2056,9 +2056,16 @@
           "$ref": "#/$defs/Timeline",
           "description": "Full-slide timeline payload. An array is shorthand for { \"events\": value }; object form carries optional name and description metadata. Presence of this field infers type 'timeline'."
         },
+        "diagram": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/Diagram" }
+          ],
+          "description": "Full-slide diagram payload: Mermaid source drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'."
+        },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for the slide's root image, chart, table or video payload. Valid only when the slide root holds exactly one of those payloads."
+          "description": "Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads."
         },
         "blocks": {
           "type": "array",
@@ -2259,7 +2266,7 @@
         "type": {
           "type": "string",
           "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline",
-            "group"],
+            "diagram", "group"],
           "description": "Optional content kind. When omitted, engines infer the kind from the fields present."
         },
         "text": {
@@ -2459,9 +2466,23 @@
             }
           ]
         },
+        "diagram": {
+          "oneOf": [
+            { "type": "string" },
+            { "$ref": "#/$defs/Diagram" }
+          ],
+          "description": "Diagram payload: Mermaid source (flowchart, sequence, state, class, ER, mindmap, timeline, journey, C4, architecture and the other built-in Mermaid families) drawn in the deck's fonts and colors. A string is shorthand for { \"source\": value }; object form carries the source syntax and a text alternative. Presence of this field infers type 'diagram'.",
+          "examples": [
+            "flowchart LR\n  A[Brief] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A",
+            {
+              "source": "sequenceDiagram\n  Client->>API: POST /decks\n  API-->>Client: 201 Created",
+              "alt": "The client creates a deck and the API answers 201 Created."
+            }
+          ]
+        },
         "caption": {
           "$ref": "#/$defs/Caption",
-          "description": "Caption for an image, chart, table or video payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
+          "description": "Caption for an image, chart, table, video or diagram payload, composed inside the block's region (below the media by default). Invalid on other payload kinds and on groups."
         },
         "blocks": {
           "type": "array",
@@ -2565,6 +2586,15 @@
         },
         {
           "if": {
+            "required": ["type"],
+            "properties": { "type": { "const": "diagram" } }
+          },
+          "then": {
+            "required": ["diagram"]
+          }
+        },
+        {
+          "if": {
             "required": [
               "type"
             ],
@@ -2659,6 +2689,11 @@
                 {
                   "required": [
                     "timeline"
+                  ]
+                },
+                {
+                  "required": [
+                    "diagram"
                   ]
                 }
               ]
@@ -2808,6 +2843,31 @@
           "type": "string",
           "enum": ["positive", "negative", "neutral"],
           "description": "Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide background. When absent the colour follows the trend: up is positive, down is negative and flat is neutral. Set it when the direction is not the verdict, for example positive on a falling churn, cost or latency trend. The arrow always keeps the direction of `trend`. Only the trend arrow and the trend and delta text take the colour, so sentiment has no visible effect on a metric without a trend."
+        }
+      }
+    },
+    "Diagram": {
+      "type": "object",
+      "description": "A diagram written as text. Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { \"source\": value }.",
+      "additionalProperties": false,
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timeline, journey, quadrantChart, xychart, sankey, gitGraph, C4Context, block, architecture-beta, kanban, packet, radar-beta, treemap, venn-beta, ishikawa, requirementDiagram and the other built-in families; ZenUML is not supported). Mermaid themes, colors in themeVariables and click callbacks are ignored: the deck's design decides the colors and fonts.",
+          "examples": ["flowchart LR\n  A[Idea] --> B[Prototype] --> C[Launch]", "mindmap\n  root((Strategy))\n    Growth\n    Efficiency\n    People"]
+        },
+        "syntax": {
+          "type": "string",
+          "enum": ["mermaid"],
+          "default": "mermaid",
+          "description": "The language of 'source'. Mermaid is the only syntax today."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels.",
+          "examples": ["Ideas move from brief to approval; approved work is built, rejected work returns to the brief."]
         }
       }
     },

@@ -7,7 +7,7 @@ import { hitRow, rovingTabStop, rowDropMode, showTreeDrop, treeItem, treeKeyActi
 import { isTypingTarget } from "./studio-kit/dom.js";
 
 const ICON_OF = { slide: "Square", heading: "Heading", region: "Columns2", group: "Group", implicit: "AlignLeft", part: "GitCommitHorizontal" };
-const TYPE_ICON = { text: "AlignLeft", list: "List", image: "Image", video: "Video", chart: "ChartColumn", table: "Table", code: "Code", metric: "Hash", quote: "Quote", timeline: "CalendarRange" };
+const TYPE_ICON = { text: "AlignLeft", list: "List", image: "Image", video: "Video", chart: "ChartColumn", table: "Table", code: "Code", diagram: "Workflow", metric: "Hash", quote: "Quote", timeline: "CalendarRange" };
 
 /**
  * Mount the layers tree in `container`. `adapter` is the slide adapter, `studio` the controller. Returns `{ element, render, paintSelection,

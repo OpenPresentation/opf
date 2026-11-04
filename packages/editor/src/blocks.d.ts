@@ -11,5 +11,5 @@ export declare function prepareBlockDuplicate(presentation:unknown,path:string):
 export declare function prepareBlockRemove(presentation:unknown,path:string):PreparedBlockChange;
 /** Replace one complete block (or a slide/region's single content field). Replacement only: the old payload is discarded and nothing is converted between content types. Keeps `id` and `extensions` when the new block sets none. */
 export declare function prepareBlockReplace(presentation:unknown,path:string,block:unknown):PreparedBlockChange;
-export type ContentBlockKind='text'|'list'|'chart'|'table'|'metric'|'quote'|'code'|'timeline'|'group'|'image'|'video';
+export type ContentBlockKind='text'|'list'|'chart'|'table'|'metric'|'quote'|'code'|'diagram'|'timeline'|'group'|'image'|'video';
 export declare function createContentBlock(kind:ContentBlockKind,options?:{source?:string}):Record<string,unknown>;

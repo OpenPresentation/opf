@@ -1,3 +1,4 @@
+import { diagramsPending, ensureDiagrams } from "@openpresentation/opf/composition";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
@@ -330,7 +331,10 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
   let embedded, stale = true;
   const addFaces = registry.addFaces;
   registry.addFaces = (added) => { const result = addFaces(added); stale = true; return result; };
+  // A diagram type the page has not loaded yet (core's browser engine loads each type on demand) is pending as `diagram:<type>`;
+  // `ensure` loads it first, since the font analysis measures a diagram's labels only once its type is loaded.
   const pending = (presentation, renderOptions) => [
+    ...diagramsPending(presentation).map((type) => `diagram:${type}`),
     ...registry.pendingLazyFonts(presentation, renderOptions).map((face) => face.file),
     ...registry.pendingScripts(presentation, renderOptions),
   ];
@@ -345,12 +349,14 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /**
-     * Load the vendored and script faces the presentation draws, each hash-verified, all or nothing, and repeat while loading
+     * Load the diagram types the presentation draws (core loads each on demand in a browser), then the vendored and script faces
+     * it draws, each hash-verified, all or nothing, and repeat while loading
      * changes what is needed (a script face can need a vendored one). Cheap when nothing is needed. Besides `signal`, the call
      * takes the `toSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
      * does not resolve rejects with what `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
      */
     async ensure(presentation, callOptions = {}) {
+      const diagrams = await ensureDiagrams(presentation);
       const lazy = [], scripts = [];
       let uncovered = [];
       for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {
@@ -360,7 +366,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
         if (needLazy) lazy.push(...(await registry.ensureLazyFonts(presentation, callOptions)));
         if (needScripts) { const result = await registry.ensureScripts(presentation, callOptions); scripts.push(...result.loaded); uncovered = result.uncovered; }
       }
-      return { scripts, lazy, uncovered };
+      return { scripts, lazy, uncovered, ...(diagrams.length ? { diagrams } : {}) };
     },
     /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
     pending,

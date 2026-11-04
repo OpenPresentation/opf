@@ -347,7 +347,7 @@ export const COMMON_KEYS: Readonly<{ deck: readonly string[]; slide: readonly st
   /** The root of a document. */
   deck: Object.freeze(["name", "slides", "design", "language", "audience", "purpose", "tone", "narrative", "organization", "speaker"]),
   /** A slide (`slides[n]`). */
-  slide: Object.freeze(["title", "subtitle", "layout", "items", "text", "notes", "image", "chart", "table", "quote", "code", "metric", "timeline", "blocks", "design", "id", "section", "tag", "hidden", "beat"]),
+  slide: Object.freeze(["title", "subtitle", "layout", "items", "text", "notes", "image", "chart", "table", "quote", "code", "metric", "timeline", "diagram", "blocks", "design", "id", "section", "tag", "hidden", "beat"]),
   /** `design`, on the deck and on a slide. */
   design: Object.freeze(["theme", "colorScheme", "fontScheme", "dimensions", "background", "header", "footer"]),
 });

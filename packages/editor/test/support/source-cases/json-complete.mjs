@@ -42,7 +42,7 @@ const CTRL = [
   ['object-valued key after the colon', '{\n  "slides": [],\n  "design": |\n}', ['{}'], null],
   ['inside an existing {}', '{\n  "slides": [],\n  "design": {|}\n}', ['theme', 'colorScheme', 'fontScheme', 'background'], null],
   ['array item (audience)', '{\n  "slides": [],\n  "audience": ["|"]\n}', ['board', 'customer'], null],
-  ['slide type enum', '{\n  "slides": [{"type": "|"}]\n}', ['chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'video'], [10, 10]],
+  ['slide type enum', '{\n  "slides": [{"type": "|"}]\n}', ['chart', 'code', 'diagram', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'video'], [11, 11]],
   ['chart type enum', '{\n  "slides": [{"chart": {"type": "|"}}]\n}', ['area', 'bar', 'column', 'line', 'pie'], null],
   ['inside slides []', '{\n  "slides": [|]\n}', ['{}', 'slide'], null],
   ['blank document', '|', ['deck', '{}'], null],
@@ -99,7 +99,7 @@ const ENUMS = [
   ['design.chartPrimary', '{"slides":[],"design":{"chartPrimary":"|"}}', ['none', 'top', 'bottom', 'left', 'right']],
   ['design.imageFit', '{"slides":[],"design":{"imageFit":"|"}}', ['cover', 'contain', 'stretch', 'auto']],
   ['design.listBullet', '{"slides":[],"design":{"listBullet":"|"}}', ['character', 'image', 'none']],
-  ['slide.type', '{"slides":[{"type":"|"}]}', ['text', 'list', 'image', 'chart', 'table', 'video', 'code', 'metric', 'quote', 'timeline']],
+  ['slide.type', '{"slides":[{"type":"|"}]}', ['text', 'list', 'image', 'chart', 'table', 'video', 'code', 'metric', 'quote', 'timeline', 'diagram']],
   ['organization.role', '{"slides":[],"organization":{"id":"a","name":"A","role":"|"}}', ['primary', 'partner', 'client', 'sponsor', 'host']],
 ];
 const BOOLS = [

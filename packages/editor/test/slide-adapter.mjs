@@ -236,7 +236,7 @@ const content = (adapter, key) => adapter.scene().contentChildren(key ?? adapter
   const chartRegion = regions.find((node) => node.region === "chart"), notes = regions.find((node) => node.region === "notes");
   assert.ok(chartRegion && notes, "the chart-beside layout has a chart and a notes region");
   assert.deepEqual(content(adapter, chartRegion.key).map((node) => node.key), ["/slides/@r/blocks/@c"]);
-  assert.equal(adapter.trialMove(["/slides/@r/blocks/@n"], chartRegion.key, 0).reason, "Region chart accepts only chart.");
+  assert.match(adapter.trialMove(["/slides/@r/blocks/@n"], chartRegion.key, 0).reason, /^Region chart accepts only chart( and diagram)?\.$/);
   // A block from inside a group moves into the notes region: it becomes a root block pinned to the region.
   const inNotes = content(adapter, notes.key).map((node) => node.key);
   const moved = roundTrip(context, "move", ["/slides/@r/blocks/@m/blocks/@m2"], notes.key, inNotes.length);

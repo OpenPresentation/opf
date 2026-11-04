@@ -66,6 +66,19 @@ export const schemaEnginePlugin = (conditions = []) => ({
   },
 });
 
+/**
+ * An esbuild plugin that resolves `#diagram-engine` as a browser bundler does: to the lazy engine, pele's core with each diagram type
+ * in a chunk of its own loaded on demand (src/diagram-engine-lazy.ts). The dynamic imports of pele's diagram types stay external: a
+ * bundler splits them into chunks a page loads only when a deck draws that type, so they are not part of what an entry loads first.
+ */
+export const diagramEnginePlugin = () => ({
+  name: 'diagram-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#diagram-engine$/ }, () => ({ path: path.join(packageRoot, 'src', 'diagram-engine-lazy.ts') }));
+    build.onResolve({ filter: /^\.\/chunks\// }, (args) => args.kind === 'dynamic-import' && /[\\/]pele[\\/]/.test(args.importer) ? { path: args.path, external: true } : undefined);
+  },
+});
+
 /** The tsup entries of the core package, as { name: source }. */
 export function tsupEntries(text) {
   const block = /entry\s*[:=]\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
@@ -95,7 +108,7 @@ export async function measure(only) {
       write: false,
       metafile: true,
       logLevel: 'silent',
-      plugins: [schemaEnginePlugin()],
+      plugins: [schemaEnginePlugin(), diagramEnginePlugin()],
     });
     const code = result.outputFiles[0].contents;
     const output = Object.values(result.metafile.outputs)[0];

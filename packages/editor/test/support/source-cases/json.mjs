@@ -45,7 +45,7 @@ const CTRL = [
   ['catalog ref after the colon', '{\n  "slides": [{"layout": |}]\n}', ['agenda', 'chart', 'closing', 'cover']],
   ['just after a closing quote', '{\n  "slides": [{"layout": "cover"|}]\n}', ['cover']],
   ['inside an existing {}', '{\n  "slides": [],\n  "design": {|}\n}', ['theme', 'colorScheme', 'fontScheme', 'background']],
-  ['slide type enum', '{\n  "slides": [{"type": "|"}]\n}', ['chart', 'code', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'video']],
+  ['slide type enum', '{\n  "slides": [{"type": "|"}]\n}', ['chart', 'code', 'diagram', 'image', 'list', 'metric', 'quote', 'table', 'text', 'timeline', 'video']],
   ['chart type enum', '{\n  "slides": [{"chart": {"type": "|"}}]\n}', ['area', 'bar', 'column', 'line', 'pie']],
   ['audience item', '{\n  "slides": [],\n  "audience": ["|"]\n}', ['board', 'customer']],
   ['tone', '{\n  "slides": [],\n  "tone": "|"\n}', ['formal', 'casual', 'technical']],

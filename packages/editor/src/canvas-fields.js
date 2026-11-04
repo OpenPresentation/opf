@@ -74,6 +74,11 @@ export function fieldChoices(field) {
       ? TIMELINE_STATUS_CHOICES
       : undefined;
 }
+/** Whether a form field holds Mermaid source (a diagram given as a string, or a diagram object's `source`). */
+export function isDiagramSource(field) {
+  const segments = splitOpfPath(field.path);
+  return field.type === "string" && (segments.at(-1) === "diagram" || (segments.at(-1) === "source" && segments.at(-2) === "diagram"));
+}
 /**
  * A blank copy of `value`'s shape for the "Add" button: texts empty, numbers 0, booleans false, `type`, `mode` and
  * `language` kept. A timeline event's `status` is left out, so a new event starts with no status instead of a copy.

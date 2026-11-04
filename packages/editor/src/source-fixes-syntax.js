@@ -290,6 +290,7 @@ const markdownRules = {
     return [];
   },
   "markdown/chart-attributes": (text, finding) => unknownAttribute(text, finding, "chart", ["alt"]),
+  "markdown/diagram-attributes": (text, finding) => unknownAttribute(text, finding, "diagram", ["alt"]),
   "markdown/timeline-attributes": (text, finding) => unknownAttribute(text, finding, "timeline", ["name", "description"]),
   "markdown/metric-block": (text, finding) => {
     const open = lineStart(text, finding.location.offset);

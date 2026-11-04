@@ -20,7 +20,7 @@ export function installCanvasVariableEditing(host, editor, canvas, { resolved = 
     if (!target || !host.contains(target) || !target.querySelector("text")) return;
     const path = target.getAttribute("data-opf-path");
     const value = editor.get(path);
-    const inline = ((typeof value === "string" || typeof value === "number") && !/\.(image|video)$/.test(path))
+    const inline = ((typeof value === "string" || typeof value === "number") && !/\.(image|video|diagram)$/.test(path))
       || (Array.isArray(value) && target.hasAttribute("data-opf-rich-text"));
     if (value !== undefined && (!inline || !hasSourceToken(value))) return;
     event.preventDefault();

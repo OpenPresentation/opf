@@ -47,7 +47,7 @@ export const CAPTION_MAX_RATIO = 0.35;
 /** A footnote area takes at most this fraction of the span between heading top and footer band. */
 export const FOOTNOTE_MAX_RATIO = 0.35;
 /** Payload fields whose blocks may carry a caption. */
-export const CAPTIONABLE_FIELDS: readonly string[] = Object.freeze(['image', 'chart', 'table', 'video']);
+export const CAPTIONABLE_FIELDS: readonly string[] = Object.freeze(['image', 'chart', 'table', 'video', 'diagram']);
 
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);

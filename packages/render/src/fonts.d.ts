@@ -67,7 +67,8 @@ export interface TextOutlines {
   shape?(face: { hash: string; data: Uint8Array }, text: string, options?: { direction?: "ltr" | "rtl"; lang?: string; features?: Record<string, boolean> }): { gid: number; codePoints: number[]; advance: number; xOffset: number; yOffset: number }[];
 }
 /** What `fonts.ensure(presentation)` loaded: the script packages and vendored faces that were missing, and drawn CJK characters no face covers. */
-export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[] }
+/** What `ensure` loaded. `diagrams`: the diagram types it loaded (in a browser, core loads each type on demand; Node has them all). */
+export interface EnsureResult { scripts: string[]; lazy: LazyFont[]; uncovered: string[]; diagrams?: string[] }
 /** The fonts handle `loadFonts()` returns from `/fonts-node` and `/fonts-browser`: pass it as `{ fonts }` to every deck-level function. */
 export interface FontsHandle extends RenderFonts {
   readonly textMeasurement: FontRegistry["textMeasurement"];
@@ -82,7 +83,7 @@ export interface FontsHandle extends RenderFonts {
   readonly substitutions: FontResolution[];
   /** Load the script (and, in a browser, vendored) faces the presentation's text needs. Cheap when nothing is missing. */
   ensure(presentation: unknown, options?: object): Promise<EnsureResult>;
-  /** Synchronous: the files and script packages `ensure` would load. Empty means a render can start now. */
+  /** Synchronous: the files and script packages `ensure` would load, and in a browser the diagram types (`diagram:<type>`). Empty means a render can start now. */
   pending(presentation: unknown, renderOptions?: object): string[];
   /** Remove the faces this handle added to the document (a browser handle). */
   dispose?(): void;

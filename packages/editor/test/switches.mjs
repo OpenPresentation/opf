@@ -433,7 +433,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   reject("image-treatments", { fit: "cover" }, { path: "slides.2.blocks.0" }, "not-an-image-block");
   reject("socials", { platform: "no-such-platform", handle: "x" }, {}, "unknown-catalog-id");
   reject("socials", { platform: "x", handle: "" }, {}, "invalid-switch-value");
-  reject("blocks", "diagram", { path: "slides.2.blocks.0" }, "invalid-switch-value");
+  reject("blocks", "gauge", { path: "slides.2.blocks.0" }, "invalid-switch-value");
   reject("font-schemes", "georgia", { slideIndex: 9 }, "slide-index-out-of-range");
   reject("slide-sizes", "a5", {}, "invalid-switch-value");
   reject("slide-sizes", "", {}, "invalid-switch-value");

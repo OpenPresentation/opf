@@ -8,7 +8,7 @@ test('layout summaries derive content and headings from template regions', () =>
   assert.deepEqual(layoutContent(gallery.layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
   assert.deepEqual(layoutContent({ regions: [{ name: 'title' }] }), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
   assert.deepEqual(layoutContent({}), { kind: 'title', count: 0, heading: { title: false, subtitle: false, tag: false } });
-  assert.match(layoutStructure(gallery.layouts['chart-beside']), /chart \(none: chart\)/);
+  assert.match(layoutStructure(gallery.layouts['chart-beside']), /chart \(none: chart, diagram\)/);
 });
 
 test('all 30 gallery layouts validate and report their body region counts', () => {
