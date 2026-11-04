@@ -565,7 +565,7 @@ Default severity: **error**. Cost: structure. A layout template's region list is
 
 Default severity: **error**. Cost: structure. A layout template's regions are not valid.
 
-**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
+**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size, an anchor and (the title) a rule; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
 
 **Basis.** spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)
 

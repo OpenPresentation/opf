@@ -100,7 +100,8 @@ test("rules are kept exactly: nothing but `accepts` is inherited or dropped, and
     if (sameAsBefore(record)) assertSameGrid(record, old[record.id]);
     const written = (list) => list.flatMap((entry) => (entry.regions ? written(entry.regions) : [entry]));
     for (const entry of written(record.regions)) {
-      if (entry.name === "title" || entry.name === "subtitle") assert.deepEqual(Object.keys(entry).filter((key) => key !== "name" && key !== "size"), [], `${record.id}/${entry.name}: a heading takes only size`);
+      // LH-130: a heading takes a size and an anchor, and the title a rule (cover and section set their display title low with a rule).
+      if (entry.name === "title" || entry.name === "subtitle") assert.deepEqual(Object.keys(entry).filter((key) => !["name", "size", "anchor", ...(entry.name === "title" ? ["rule"] : [])].includes(key)), [], `${record.id}/${entry.name}: a heading takes only size, anchor and (the title) rule`);
       else if (EVERY_KIND.has(record.id)) assert.deepEqual([...entry.accepts].sort(), [...REGION_KINDS].sort(), `${record.id}/${entry.name} accepts every kind`);
       else assert.ok(entry.accepts && entry.accepts.length < REGION_KINDS.length, `${record.id}/${entry.name} has no reason to omit accepts`);
     }

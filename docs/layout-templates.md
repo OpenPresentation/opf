@@ -86,7 +86,8 @@ picture two thirds as wide, bled to the slide's edges. A heading region may sit 
 An entry of `regions` is one of three things:
 
 - a **region**: `{ "name": "...", "size"?, ...rules }`, the rules below;
-- a **heading region**: `{ "name": "title" }` or `{ "name": "subtitle" }`, which take only a `size`;
+- a **heading region**: `{ "name": "title" }` or `{ "name": "subtitle" }`, which take only a `size`, an `anchor` and (the
+  `title`) a `rule` (see [Display headings](#display-headings-lh-130));
 - a **split**: `{ "direction": "row" | "column", "regions": [...], "size"?, "anchor"? }`, a nested list.
 
 `size` is a number above 0 and up to 100 (default 1). Siblings share their parent's length in proportion, separated by the
@@ -123,11 +124,29 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 A block's `region` selects a named region; that region's `anchor` controls vertical placement inside it. Region names such
 as `main` and `aside` have no special positioning behavior. Declare the names in the layout's region list. Write `anchor`
 once on the record (or on a split) when every region under it shares it: body regions inherit it, a region's own `anchor`
-wins, and the heading regions never inherit it.
+wins, and the heading regions never inherit it (they set their own, see [Display headings](#display-headings-lh-130)).
 
 Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
 substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. A region's
 anchor never moves the title: it stays in its own heading region. Anchoring does not enlarge short text to fill unused space.
+
+#### Display headings (LH-130)
+
+A heading region takes its own `anchor`, which places the heading group (tag, title and subtitle) in a sized area: `middle`
+(the default) centers it, `bottom` sets it at the foot of the area and `top` at its top. An `auto` area is as tall as the
+group, so its anchor changes nothing. The `title` region also takes `rule: true`: a slide whose headings are its message
+(no primary or secondary region holds a block and nothing sits below the grid) and that has a title but no tag draws a short
+accent rule, 80 by 5 px at a 720 px short edge, half a gap above the title at its start edge (the right in a right-to-left
+title). A tag is the group's eyebrow and takes the rule's place. Both engines fill it in the tag's color: the primary, or the
+text color where the primary is under 4.5:1 on the slide (`SlideComposition.titleRule`; the PPTX export writes a native
+rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's drawing). The gallery `cover` and `section` use
+both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
+Design sets it, with the section's tag ("Part 1") as its eyebrow.
+
+Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
+size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the
+longer, and no line but the last ending in a one-letter word or an article. A title that already wraps keeps the breaks its
+role size balanced (LH-148). Nothing is set smaller than without the growth.
 
 #### Placing the whole group
 

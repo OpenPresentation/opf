@@ -20,7 +20,7 @@ export const REGION_FLOWS = ['none', 'grid', 'column', 'auto'] as const;
 export type RegionFlow = typeof REGION_FLOWS[number];
 export const REGION_ANCHORS = ['top', 'middle', 'bottom'] as const;
 export type RegionAnchor = typeof REGION_ANCHORS[number];
-/** The two heading regions. They hold the slide's headings, take only a `size`, and have no content rules. */
+/** The two heading regions. They hold the slide's headings, take a `size` and an `anchor` (the `title` also a `rule`), and have no content rules. */
 export const HEADING_AREAS = ['title', 'subtitle'] as const;
 /**
  * Names a body region may not take: the heading words, `auto`, and the six promoted-region words, so `region=` in the
@@ -97,6 +97,13 @@ export interface LayoutTemplate {
    * otherwise (including `top`, where the stack starts at the top as it always did).
    */
   stack?: 'middle' | 'bottom';
+  /**
+   * LH-130: a heading region's own `anchor`, which places the heading group in its area: a sized area centers it when the region
+   * sets none, as before; an `auto` area is as tall as the group. Absent when no heading region sets one.
+   */
+  headingAnchors?: Partial<Record<'title' | 'subtitle', RegionAnchor>>;
+  /** LH-130: the `title` region asks for a short accent rule above the title, drawn when the slide has no tag (the eyebrow takes its place). */
+  titleRule?: true;
 }
 
 /** A problem with a template: `layout-template` for the tree itself, `layout-region` for the regions. */
@@ -206,6 +213,8 @@ function parse(layout: unknown): Parsed {
   const add = (code: LayoutTemplateIssue['code'], path: string, message: string) => issues.push({ code, path, message });
   const regions: LayoutRegion[] = [];
   const names = new Set<string>();
+  const headingAnchors: Partial<Record<'title' | 'subtitle', RegionAnchor>> = {};
+  let titleRule = false;
 
   const directionOf = (path: string, raw: unknown, fallback: 'row' | 'column'): 'row' | 'column' => {
     if (raw === undefined) return fallback;
@@ -249,7 +258,14 @@ function parse(layout: unknown): Parsed {
       if (names.has(name)) add('layout-region', `${at}/name`, `region name '${name}' is used twice; names are unique across the whole record`);
       names.add(name);
       if (heading) {
-        for (const key of Object.keys(entry)) if (key !== 'name' && key !== 'size') add('layout-region', `${at}/${key}`, `'${name}' is a heading region and takes only a size; '${key}' belongs on a body region`);
+        // LH-130: a heading region takes a size, an anchor for its group and (the title) a rule; content rules belong on a body region.
+        const own = name === 'title' ? ['name', 'size', 'anchor', 'rule'] : ['name', 'size', 'anchor'];
+        for (const key of Object.keys(entry)) if (!own.includes(key)) add('layout-region', `${at}/${key}`, `'${name}' is a heading region and takes only ${name === 'title' ? 'a size, an anchor and a rule' : 'a size and an anchor'}; '${key}' belongs on a body region`);
+        anchorCheck(`${at}/anchor`, entry.anchor);
+        if (entry.rule !== undefined && typeof entry.rule !== 'boolean') add('layout-region', `${at}/rule`, `rule is true or false, not ${JSON.stringify(entry.rule)}`);
+        const anchor = anchorOf(entry.anchor);
+        if (anchor) headingAnchors[name as 'title' | 'subtitle'] = anchor;
+        if (name === 'title' && entry.rule === true) titleRule = true;
       } else {
         if (reserved.has(name)) add('layout-region', `${at}/name`, `'${name}' is reserved and cannot name a body region (reserved: ${RESERVED_REGION_NAMES.join(', ')})`);
         else if (!NAME.test(name)) add('layout-region', `${at}/name`, `'${name}' is not a region name (lowercase letters, digits and hyphens, starting with a letter)`);
@@ -305,6 +321,8 @@ function parse(layout: unknown): Parsed {
       title: names.has('title'),
       subtitle: names.has('subtitle'),
       ...(stack ? { stack } : {}),
+      ...(Object.keys(headingAnchors).length ? { headingAnchors } : {}),
+      ...(titleRule ? { titleRule: true as const } : {}),
     },
   };
 }
