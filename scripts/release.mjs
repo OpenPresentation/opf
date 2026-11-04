@@ -535,8 +535,16 @@ export async function verifyRelease(deps, version, { tag = defaultTag(version), 
   return { ok: results.every((entry) => entry.ok), results };
 }
 
-/** The GitHub release body: the package changelog sections grouped by package, then the packages released with no change. */
-export function releaseNotes(root, version, { date = new Date().toISOString().slice(0, 10) } = {}) {
+/** GitHub refuses a release body over 125,000 characters (`body is too long`); the notes stay a little under it. */
+export const RELEASE_BODY_LIMIT = 120_000;
+const REPOSITORY_URL = 'https://github.com/OpenPresentation/opf';
+
+/**
+ * The GitHub release body: the package changelog sections grouped by package, then the packages released with no change. Notes longer
+ * than `limit` (0.32.0's were 303,081 characters, and GitHub refused them) become a list of each package's changelog at the tag, or of
+ * the release's fragments for a prerelease, so the release is always created.
+ */
+export function releaseNotes(root, version, { date = new Date().toISOString().slice(0, 10), limit = RELEASE_BODY_LIMIT } = {}) {
   const config = loadConfig(root);
   const prerelease = isPrerelease(version);
   const fragments = prerelease ? readFragments(root, config) : [];
@@ -557,7 +565,12 @@ export function releaseNotes(root, version, { date = new Date().toISOString().sl
     else sections.push(`## ${name}\n\n${body}`);
   }
   if (unchanged.length) sections.push(`Released with the set, no changes: ${unchanged.map((name) => `\`${name}\``).join(', ')}.`);
-  return `${sections.join('\n\n')}\n`;
+  const body = `${sections.join('\n\n')}\n`;
+  if (body.length <= limit) return body;
+  const links = prerelease
+    ? [`- [The release's changelog fragments](${REPOSITORY_URL}/tree/${tagOf(version)}/changes)`]
+    : PACKAGES.map(({ key, name }) => `- [${name}](${REPOSITORY_URL}/blob/${tagOf(version)}/${config.targets[key].split(path.sep).join('/')})`);
+  return `The notes of ${version} are longer than a GitHub release allows (${body.length.toLocaleString('en-US')} characters), so they are in ${prerelease ? 'the fragments' : "each package's changelog"} at ${tagOf(version)}:\n\n${links.join('\n')}\n`;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------

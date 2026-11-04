@@ -24,6 +24,7 @@ import {
   readReleaseManifest,
   registryLagMessage,
   releaseNotes,
+  RELEASE_BODY_LIMIT,
   smoke,
   resolveVersion,
   setPeerHintsText,
@@ -672,6 +673,23 @@ test('notes: the release body is grouped by package and names the packages relea
     assert.match(body, /## @openpresentation\/cli\n\n- Shared\./);
     assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-render`, `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`, `@openpresentation\/mcp`\./);
     assert.throws(() => releaseNotes(root, '0.27.0'), /has no 0\.27\.0 section/);
+  } finally {
+    cleanup();
+  }
+});
+
+test('notes: a body longer than a GitHub release allows becomes links to each package changelog at the tag', async () => {
+  const { root, cleanup } = fixture({ fragments: { a: fragment('added', ['opf', 'cli'], 'Shared.') } });
+  try {
+    const plan = await planPrepare({ root, input: '0.26.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-23' });
+    for (const { file, text } of plan.writes) writeFileSync(path.join(root, file), text);
+    const full = releaseNotes(root, '0.26.0');
+    assert.equal(releaseNotes(root, '0.26.0', { limit: full.length }), full);
+    const short = releaseNotes(root, '0.26.0', { limit: 10 });
+    assert.match(short, /^The notes of 0\.26\.0 are longer than a GitHub release allows \([\d,]+ characters\), so they are in each package's changelog at v0\.26\.0:/);
+    assert.match(short, /- \[@openpresentation\/opf\]\(https:\/\/github\.com\/OpenPresentation\/opf\/blob\/v0\.26\.0\/CHANGELOG\.md\)/);
+    assert.match(short, /- \[@openpresentation\/cli\]\(https:\/\/github\.com\/OpenPresentation\/opf\/blob\/v0\.26\.0\/packages\/cli\/CHANGELOG\.md\)/);
+    assert.ok(short.length < RELEASE_BODY_LIMIT);
   } finally {
     cleanup();
   }
