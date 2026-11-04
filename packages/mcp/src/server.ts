@@ -7,7 +7,7 @@ import "@openpresentation/opf/precompiled";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GetPromptResult, ReadResourceResult, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import { catalogDisplay, gallery } from "@openpresentation/gallery";
-import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, schemaEntries, stringify, validate } from "@openpresentation/opf";
+import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, schemaEntries, stringify, validate } from "@openpresentation/opf";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { getAtPointer } from "@openpresentation/opf/patch";
 import { fromYaml } from "@openpresentation/opf/yaml";
@@ -104,17 +104,32 @@ const countsOf = (findings: readonly { severity: FindingSeverity }[]) => {
 const CATALOGS: readonly Catalog[] = [gallery];
 const WRITE_CHECK: ValidateOptions = { only: ["format", "references"], catalogs: CATALOGS };
 
-/** The `readDeckReport` of core's node engine, by the public readers: the report of deck text in any of the three forms. */
-function readReport(raw: string, format: DeckFormat, options: ValidateOptions): ValidationReport {
-	if (format === "yaml") {
-		const { presentation: _deck, format: _format, ...report } = fromYaml(raw, { validate: options, catalogs: CATALOGS }) as ValidationReport & { presentation: unknown; format?: string };
-		return report;
+/** The YAML or Markdown deck read from its text, and its report. */
+function readText(raw: string, format: "yaml" | "markdown", options: ValidateOptions): { presentation: unknown; report: ValidationReport } {
+	const read = (format === "yaml" ? fromYaml(raw, { validate: options, catalogs: CATALOGS }) : fromMarkdown(raw, { validate: options, catalogs: CATALOGS })) as ValidationReport & { presentation: unknown; format?: string };
+	const { presentation, format: _format, ...report } = read;
+	return { presentation, report };
+}
+
+/**
+ * The `readDeckReport` of core's node engine, by the public readers: the report of deck text in any of the three forms. In a Worker,
+ * core loads each diagram type on first use, so the deck's diagram types are loaded first (`ensureDiagrams`) and its diagrams are
+ * checked there as in Node, where every type is loaded and nothing is pending.
+ */
+async function readReport(raw: string, format: DeckFormat, options: ValidateOptions): Promise<ValidationReport> {
+	if (format === "json") {
+		let deck: unknown;
+		try {
+			deck = JSON.parse(raw);
+		} catch {
+			// validate reports the syntax error
+		}
+		if (deck !== undefined) await ensureDiagrams(deck);
+		return validate(raw, options);
 	}
-	if (format === "markdown") {
-		const { presentation: _deck, format: _format, ...report } = fromMarkdown(raw, { validate: options, catalogs: CATALOGS }) as ValidationReport & { presentation: unknown; format?: string };
-		return report;
-	}
-	return validate(raw, options);
+	// A YAML or Markdown deck's diagrams are known once it is read, so it is read again only when that loaded a diagram type.
+	const first = readText(raw, format, options);
+	return (await ensureDiagrams(first.presentation)).length > 0 ? readText(raw, format, options).report : first.report;
 }
 
 /** The form of the text a tool was given: the `format` argument; else JSON for an object or text that starts with `{` or `[`. */
