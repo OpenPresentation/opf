@@ -28,7 +28,9 @@ try{
  handle('/slides/0/blocks/0').click();editor.set('slides.0.notes','Updated externally');check(!host.querySelector('[role=dialog]'),'external changes dismiss stale move controls');editor.undo();
  canvas.beginEdit('slides.0.blocks.2.text');check(!host.querySelector('[data-block-path]'),'inline editing hides move handles');canvas.cancel();
  canvas.setLayoutEditing(false);check(!host.querySelector('[data-block-path]'),'leaving Arrange hides block controls');canvas.setLayoutEditing(true);
- const strict={slides:[{composition:{mode:'row',weights:[4,1],overflow:'error'},blocks:[{text:'Evidence remains complete. '.repeat(40)},{text:'Short'}]}]};
+ // A sentence, not a label: LH-50 (LH wave 5, #1010) draws a short label such as "Short" before a longer paragraph as that paragraph's
+ // eyebrow, so after the move the long text would take the whole row instead of the narrow track and nothing would overflow.
+ const strict={slides:[{composition:{mode:'row',weights:[4,1],overflow:'error'},blocks:[{text:'Evidence remains complete. '.repeat(40)},{text:'Short note.'}]}]};
  editor.applyPatch([{op:'replace',path:'',value:strict}]);const beforeStrict=JSON.stringify(editor.presentation);
  handle('/slides/0/blocks/0').click();button('Later').click();check(JSON.stringify(editor.presentation)===beforeStrict,'move into a strict overflowing slot is rejected before commit');check(errors.length===1,'strict move failure is reported');errors=[];
  check(errors.length===0,'valid block interactions produce no errors');

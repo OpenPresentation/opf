@@ -103,7 +103,11 @@ for (const device of devices.filter((entry) => !process.argv[2] || entry.name.in
     await page.touchscreen.tap(hit.x + hit.width / 2, hit.y + hit.height / 2);
     await page.locator('.opf-inline-input').waitFor();
     assert.equal(await page.evaluate(() => document.querySelector('meta[name=viewport]').content.includes('maximum-scale=1')), true, tag('no browser zoom while typing'));
-    await page.keyboard.press('End');
+    // The tap puts the caret where the finger lands. Since LH-48 (LH waves 3 and 4) grows the slide's lone text, the middle of its target
+    // falls inside the text, not past its end, so move the caret to the end of the text: End does that on Windows and Linux, but on macOS
+    // it only scrolls, and Cmd+Down is the text field's end of document.
+    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+ArrowDown' : 'Control+End');
+    assert.ok(await page.evaluate(() => { const input = document.querySelector('.opf-inline-input'); return input.selectionStart === input.value.length && input.selectionEnd === input.value.length; }), tag('the caret is at the end of the text'));
     await page.keyboard.insertText(' Done.');
     // A tap outside commits.
     await page.touchscreen.tap(...(await centre(page.locator('#page-position'))));

@@ -245,7 +245,11 @@ try {
   ]});
   const native = await run(['convert', 'embedded.opf.json', 'embedded.pptx', '--fail-on', 'warning']);
   assert.equal(native.ok, true); assert.equal(native.written, true);
-  assert.deepEqual(native.counts, {error: 0, warning: 0, info: 0}, JSON.stringify(native.findings));
+  // LH-28 (#966): a PPTX export that names a family that is not Office-safe carries one info note, pptx/typeface-not-office-safe;
+  // this deck keeps the default theme's Aptos and Aptos Display. That note is about fonts, by design, so the pictures add no
+  // finding: no error, no warning, and no info but that one note (a CLI from before LH-28, such as 0.31.0 from the registry, has none).
+  assert.deepEqual({error: native.counts.error, warning: native.counts.warning}, {error: 0, warning: 0}, JSON.stringify(native.findings));
+  assert.ok(native.counts.info <= 1 && native.findings.every(item => item.ruleId === 'pptx/typeface-not-office-safe' && item.severity === 'info'), JSON.stringify(native.findings));
   assert.deepEqual(unresolved(native), []);
   for (const slide of [1, 2, 3]) {
     const xml = await slideXml('embedded.pptx', slide);
