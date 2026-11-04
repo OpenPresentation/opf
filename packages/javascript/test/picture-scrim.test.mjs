@@ -45,8 +45,9 @@ test('the form follows where the text sits: a gradient from the bottom, the top 
   // A narrow column at the right: a gradient across from the right edge.
   const right = scrimGeometry({ x: 760, y: 120, width: 460, height: 480 }, 1280, 720, 24);
   assert.deepEqual([right.edge, right.axis, right.box.x + right.box.width], ['right', 'horizontal', 1280]);
-  // Composed: a title and a short text at the top fade down from the top edge.
-  const top = composed(deck([{ title: 'What we heard', text: 'Shorter waits at the pier.', design: picture() }])).result.backgroundImage.scrims?.[0];
+  // Composed: a title and a short text at the top fade down from the top edge (at the role sizes, in place: LH-48 would center the
+  // short text, and LH-147 move the title down with it).
+  const top = composed(deck([{ title: 'What we heard', text: 'Shorter waits at the pier.', design: picture() }]), 0, { fill: false }).result.backgroundImage.scrims?.[0];
   assert.deepEqual([top.edge, top.box.y, top.stops[0].opacity, top.stops.at(-1).opacity], ['top', 0, top.opacity, 0]);
   // A centered cover title: a band across the text that fades out above and below.
   // Wave 5: LH-129 grows a cover title to its 75 px display size, which stays a band (below); the band's proportions are pinned at the
@@ -103,7 +104,7 @@ test('header and footer text get scrims of their own at their edges, and the mut
   for (const part of result.furniture.parts) if (part.type === 'text') assert.ok(scrims.some((scrim) => inside(part.box, scrim.text)), `the ${part.kind} lies under a scrim`);
   assert.ok(worstOverRamp(context.options.roles.textSecondary, scrims[0]) >= 4.5, 'the muted color reads too');
   // Scrims along one axis whose solid parts meet are one: a title at the top and a header share the top scrim.
-  const top = composed(deck([{ title: 'Results', text: 'Revenue rose.', design: { ...picture(), header: { left: { text: 'Quarterly review' } } } }])).result.backgroundImage.scrims;
+  const top = composed(deck([{ title: 'Results', text: 'Revenue rose.', design: { ...picture(), header: { left: { text: 'Quarterly review' } } } }]), 0, { fill: false }).result.backgroundImage.scrims;
   assert.deepEqual(top.map((scrim) => scrim.edge), ['top']);
   // A quote's attribution is drawn in the muted color.
   const quote = composed(deck([{ blocks: [{ quote: { text: 'The trails are busier than ever.', attribution: 'Park ranger' } }], design: picture({ tone: 'dark' }) }]));

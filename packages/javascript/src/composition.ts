@@ -3757,18 +3757,20 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
  * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
- * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`), and LH-08's ruled rows for
+ * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`, with LH-152's label of a
+ * list or group), and LH-08's ruled rows for
  * a list of short labels with descriptions (`list-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`),
- * whose badges take height the steps' text might need. LH-80 and LH-49's tracks are
+ * whose badges take height the steps' text might need, and LH-147's headings that join a centered body far below them
+ * (`heading-group`, applied by composeSlide to the settled slide, groupHeadings). LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges' | 'heading-group';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges', 'heading-group'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
 const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
@@ -3779,7 +3781,7 @@ const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRul
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
  * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
  */
-const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start']);
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'heading-group']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
 /** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
 const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
@@ -3857,13 +3859,61 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
   const result = settle(input, options, guardedCompose(input, options));
-  if (!result.steps) return withPictureScrim(input, options, result);
+  if (!result.steps) return withPictureScrim(input, options, groupHeadings(result));
   // LH-07: step badges are drawing and never worth a size. Their band changes how much of the body a slide fills, and so whether LH-48
   // grows it, so the guard alone, which holds each arrangement to the slide's own composition, cannot see a block that the whole slide
   // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
   const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
   const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
-  return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
+  return withPictureScrim(input, options, groupHeadings(readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain));
+}
+/** LH-147: compositions whose body sits in the middle of the space under the headings by LH-48 or LH-102 (not a layout's own anchor). */
+const BODY_CENTERED = new WeakSet<SlideComposition>();
+/**
+ * LH-147: the space, in reference pixels at 720, between the headings' last line and a centered body above which the headings join the
+ * body (groupHeadings). Measured with the engines' text measurement on the 123 centered slides of the corpora: a body more than 160 px
+ * under its headings is one short block (a paragraph of up to four lines, three or four short entries, a code snippet, a short table
+ * and its note) and floats; the PR767 audit rejected 160 and 191 px (P01, P02). Bodies of 120 to 160 px are two or more blocks or
+ * several rows that already reach toward the headings, and keep LH-48's placement, as Claude Design keeps its title at the top.
+ */
+const HEADING_GROUP_SPACE = 160;
+/**
+ * LH-147: a body that LH-48 or LH-102 set in the middle of the space under the headings, more than HEADING_GROUP_SPACE below their last
+ * line, takes its headings with it: the title, subtitle and tag move down to one gap above the body, so headings and body are one group
+ * in the middle of the slide (the PR767 audit's P01, P02 and P34) instead of a body floating far under a title left at the top margin.
+ * Only the headings move, by the space the centering left above the body less a gap; the centering put as much space under the body,
+ * so the group sits in the middle. Sizes never change, and a body beside the headings (a picture track, a side title), a stacked record
+ * (statement, quote, closing), a slide whose headings are its message and a body with a pull line keep their place.
+ */
+function groupHeadings(result: SlideComposition): SlideComposition {
+  if (!BODY_CENTERED.has(result)) return result;
+  const heads = result.items.filter(item => headings.has(item.field)), body = result.items.filter(item => !headings.has(item.field));
+  if (!body.length || !heads.some(item => item.field === 'title' || item.field === 'subtitle')) return result;
+  const scale = Math.min(result.width, result.height) / 720, gap = (result.composition.gap ?? 1 / 30) * Math.min(result.width, result.height);
+  // What is drawn: a text's lines (a box can be taller than its lines), a card's edge, the parts of a quote, code panel, metric or timeline.
+  const linesOf = (item: ComposedItem) => item.text && !('richLines' in item.text) ? (item.text as TextFit).placement?.lines : undefined;
+  const lastLine = (item: ComposedItem): number => { const lines = linesOf(item); return lines?.length ? Math.max(...lines.map(line => line.y + line.height)) : item.box.y + item.box.height; };
+  const drawnTop = (item: ComposedItem): number => {
+    if (item.frameBox) return Math.min(item.frameBox.y, item.box.y);
+    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout, lines = linesOf(item);
+    const parts = internal ? (internal.parts as readonly { box: LayoutBox; visible?: boolean }[]).filter(part => part.visible !== false) : [];
+    if (parts.length) return Math.min(...parts.map(part => part.box.y));
+    return lines?.length ? Math.min(...lines.map(line => line.y)) : item.box.y;
+  };
+  // LH-07's badges, connectors and chips and LH-06's surface are drawn with the body too.
+  const drawings = [...(result.steps ?? []).flatMap(steps => [...steps.badges.map(badge => badge.cy - badge.radius), ...(steps.connector ? [Math.min(steps.connector.y1, steps.connector.y2)] : []), ...(steps.chips ?? []).map(chip => chip.box.y), ...(steps.arrows ?? []).map(arrow => arrow.box.y)]), ...(result.emphasis ? [result.emphasis.box.y] : [])];
+  const headBottom = Math.max(...heads.map(lastLine)), bodyTop = Math.min(...body.map(drawnTop), ...drawings);
+  const space = bodyTop - headBottom;
+  if (space <= HEADING_GROUP_SPACE * scale || heads.some(item => item.box.y >= bodyTop)) return result;
+  const dy = space - gap, moved = (box: LayoutBox): LayoutBox => ({ ...box, y: round(box.y + dy) });
+  const items = result.items.map(item => headings.has(item.field) ? { ...item, box: moved(item.box), ...(item.text ? { text: translateTextFit(item.text, dy) } : {}) } : item);
+  // A template's heading areas move with their headings, so every heading stays in its area; the regions stay the layout's cells, the
+  // body in the middle of them (the headings now sit in the top of the body's cell). PowerPoint's layout placeholders are composed apart
+  // (composeLayoutAreas), from the empty layout.
+  const headingAreas = result.headingAreas?.map(area => area.collapsed ? area : { ...area, box: moved(area.box), ...(area.parts ? { parts: { title: moved(area.parts.title), subtitle: moved(area.parts.subtitle) } } : {}) });
+  const grouped: SlideComposition = { ...result, items, ...(headingAreas ? { headingAreas } : {}) };
+  for (const set of [AT_REQUEST, LEAD_STACKS, REGION_MEASURED, HEADING_MESSAGES, HEADINGS_OFF_SCALE]) if (set.has(result)) set.add(grouped);
+  return grouped;
 }
 /**
  * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
@@ -4797,20 +4847,45 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // accent, in capitals with tracking where the script has case) EYEBROW_GAP of a gap over the text, in its cell. Only root blocks of plain
   // text with no caption or emphasis of their own, on a slide that pins no block to a region. `eyebrowOf`: the eyebrow of each paragraph
   // (by its block path); `eyebrowBlocks`: the label blocks, which are no block of the body.
-  const eyebrowOf = new Map<string, { path: string; value: unknown }>(), eyebrowBlocks = new Set<number>();
+  // LH-152: the same label before a list or a group, at the root or inside a group, is the eyebrow of that list or group, as Claude Design
+  // heads a column with its name, instead of a cell of its own beside it (an equal-width row cell half a slide from its list). A group's
+  // first child that is a label, followed by two or more blocks none of which is a label, names the whole group: it is the group's
+  // eyebrow. A root label before a root list stays a block on a layout with a `sequence` region, whose lists draw step badges (LH-07).
+  // `eyebrowHosts`: the block paths of every label drawn as an eyebrow, which are no block of the body.
+  const eyebrowOf = new Map<string, { path: string; value: unknown }>(), eyebrowBlocks = new Set<number>(), eyebrowHosts = new Set<string>();
   if (ruleOn('eyebrow') && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && !regions.length && Array.isArray(slide.blocks) && !slide.blocks.some((block: unknown) => record(block).region !== undefined)) {
     const plainBlock = (host: Record<string, any>) => host.text !== undefined && host.caption === undefined && host.emphasis === undefined && !Array.isArray(host.blocks) && fields.every(field => field === 'text' || host[field] === undefined);
-    const flowed: { host: Record<string, any>; index: number }[] = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ host: record(block), index }]);
-    for (let at = 0; at + 1 < flowed.length; at++) {
-      const label = flowed[at]!, text = flowed[at + 1]!;
-      if (!plainBlock(label.host) || !plainBlock(text.host) || !eyebrowLabel(label.host.text, text.host.text)) continue;
-      const labelPath = `${path}.blocks.${label.index}.text`;
-      eyebrowBlocks.add(label.index);
-      eyebrowOf.set(`${path}.blocks.${text.index}`, { path: labelPath, value: label.host.text });
-      eyebrowLabels.set(labelPath, eyebrowCaps(annotationText(label.host.text)));
-      at++;
-    }
-    if (eyebrowBlocks.size) fire('eyebrow');
+    const listBlock = (host: Record<string, any>) => (host.items !== undefined || host.bullets !== undefined) && host.caption === undefined && host.emphasis === undefined && !Array.isArray(host.blocks) && fields.every(field => field === 'items' || field === 'bullets' || host[field] === undefined);
+    const groupBlock = (host: Record<string, any>) => Array.isArray(host.blocks) && host.emphasis === undefined;
+    const sequence = template?.regions.some(region => region.sequence !== undefined) === true;
+    const label = (host: Record<string, any>) => plainBlock(host) && isLabelText(host.text);
+    const mark = (labelBase: string, owner: string, value: unknown) => {
+      const labelPath = `${labelBase}.text`;
+      eyebrowHosts.add(labelBase);
+      eyebrowOf.set(owner, { path: labelPath, value });
+      eyebrowLabels.set(labelPath, eyebrowCaps(annotationText(value)));
+    };
+    // A group's content is no label alone: it holds a block that is not a short label (a list, a paragraph, a metric, any other payload).
+    const content = (host: Record<string, any>, depth: number): boolean => Array.isArray(host.blocks) ? depth < MAX_COMPOSITION_DEPTH && host.blocks.some((block: unknown) => content(record(block), depth + 1)) : !emptyHost(host) && !label(host);
+    // An explicit arrangement (a `composition` mode, weights or columns of the slide or the group) places its blocks as authored: only
+    // LH-50's root paragraphs take eyebrows there, as before.
+    const arrangedBy = (composition: unknown) => ['mode', 'weights', 'columns'].some(key => record(composition)[key] !== undefined);
+    const scan = (blocks: unknown[], base: string, nested: boolean, depth: number, arranged: boolean): void => {
+      const flowed: { host: Record<string, any>; index: number }[] = blocks.flatMap((block: unknown, index: number) => (!nested && placedBlocks.has(index)) || emptyHost(record(block)) ? [] : [{ host: record(block), index }]);
+      if (nested && !arranged && flowed.length >= 3 && label(flowed[0]!.host) && !flowed.slice(1).some(entry => label(entry.host))) mark(`${base}.blocks.${flowed[0]!.index}`, base, flowed[0]!.host.text);
+      else if (!(nested && arranged)) for (let at = 0; at + 1 < flowed.length; at++) {
+        const first = flowed[at]!, next = flowed[at + 1]!;
+        if (!plainBlock(first.host)) continue;
+        const paragraph = plainBlock(next.host) && eyebrowLabel(first.host.text, next.host.text);
+        if (!paragraph && !(!arranged && isLabelText(first.host.text) && (nested || !sequence) && (listBlock(next.host) || (groupBlock(next.host) && content(next.host, depth))))) continue;
+        mark(`${base}.blocks.${first.index}`, `${base}.blocks.${next.index}`, first.host.text);
+        if (!nested) eyebrowBlocks.add(first.index);
+        at++;
+      }
+      if (depth < MAX_COMPOSITION_DEPTH) for (const entry of flowed) if (groupBlock(entry.host)) scan(entry.host.blocks, `${base}.blocks.${entry.index}`, true, depth + 1, arrangedBy(entry.host.composition));
+    };
+    scan(slide.blocks, path, false, 0, arrangedBy(slide.composition));
+    if (eyebrowHosts.size) fire('eyebrow');
   }
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
@@ -4910,22 +4985,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
-    /** LH-50: the label drawn as this paragraph's eyebrow. */
+    /** LH-50: the label drawn as this paragraph's eyebrow (LH-152: or this list's or group's). */
     eyebrow?: { path: string; value: unknown } };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
       const settings = record(host.composition) as Composition;
       assertComposition(settings);
-      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true ? { emphasis: basePath } : {}),
-        children: host.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
+      // LH-152: a group may carry the eyebrow of its first child; a label drawn as an eyebrow is no child.
+      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true ? { emphasis: basePath } : {}), ...(eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
+        children: host.blocks.flatMap((block: unknown, index: number) => eyebrowHosts.has(`${basePath}.blocks.${index}`) ? [] : collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
-      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true ? { emphasis: basePath } : {}), ...(field === 'text' && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
+      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true ? { emphasis: basePath } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -5019,6 +5095,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-48: the growth a lone block was given (placeNode), read by every measure of it so its needs and its layout agree.
   const growthOf = new WeakMap<Pending, number>(), proseGrowth = new WeakMap<Pending, number>();
   let loneGrowth = false;
+  // LH-147: whether the body was set in the middle of the space under the headings (LH-48's lone block or CENTER, LH-102), not by an
+  // anchor of the layout.
+  let bodyCentered = (options as Record<symbol, unknown>)[CENTER] === true;
   const grownOptions = (node: Pending): { growth?: number } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth } : {}; };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
@@ -5652,9 +5731,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (emphasized) surface = { path: node.emphasis!, box: acceptedBox(frame ?? box), radius: CARD_RADIUS * scale, shape: 'card', source: 'authored' };
       const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized ? payloadBox(frame ?? box, true) : box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+      // LH-152: a group's eyebrow takes a band at the top of the group; its children are arranged under it, and it is drawn over them
+      // at the end (placeEyebrows), at the size its band was reserved for.
+      const brow = node.eyebrow ? groupEyebrow(node, inner.width) : undefined, first = items.length;
+      const under = brow ? { ...inner, y: inner.y + brow.band, height: Math.max(scale, inner.height - brow.band) } : inner;
       insideEmphasis ||= emphasized;
-      try { arrange(node.children, inner, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
+      try { arrange(node.children, under, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
       finally { if (emphasized) insideEmphasis = false; }
+      if (brow && items.length > first) groupEyebrows.push({ members: items.slice(first), eyebrow: node.eyebrow!, size: brow.size, band: brow.band });
       return;
     }
     // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
@@ -5933,7 +6017,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         return sum + (row ? between : 0) + Math.max(0, ...members.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
       }, 0);
     }
-    if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
+    // LH-152: a group's eyebrow band above its children.
+    if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + (node.eyebrow ? groupEyebrow(node, inner).band : 0); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
@@ -6039,6 +6124,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
     height = Math.min(cell.height, height);
     // LH-114: with a pull line the block and the pull line are one stack at the top of the body (pullStack).
+    if (!pullItem) bodyCentered = true;
     return { ...cell, y: pullItem ? cell.y : cell.y + (cell.height - height) / 2, height };
   };
   // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
@@ -6051,6 +6137,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const coverPictures = new WeakSet<Pending>();
   // LH-50: the eyebrow of each placed paragraph, drawn over its final box once every pass has moved it (placeEyebrows).
   const eyebrowsOf = new Map<ComposedItem, { path: string; value: unknown }>();
+  // LH-152: the eyebrow of each placed group, drawn over the items placed in it (`members`) at `size`, in the band of `band` it reserved.
+  const groupEyebrows: { members: ComposedItem[]; eyebrow: { path: string; value: unknown }; size: number; band: number }[] = [];
+  // LH-152: a group's eyebrow is sized for the first paragraph or list it holds (in reading order), at that block's starting size, or
+  // for a paragraph at its role size when it holds none; `band` is its height and EYEBROW_GAP of a gap.
+  const groupEyebrow = (node: Pending, width: number): { size: number; band: number } => {
+    const proseOf = (nodes: readonly Pending[]): Pending | undefined => { for (const child of nodes) { const found = child.children ? proseOf(child.children) : child.field === 'text' || child.field === 'items' || child.field === 'bullets' ? child : undefined; if (found) return found; } return undefined; };
+    const prose = proseOf(node.children ?? []), size = prose ? proseMeasure(prose, width).size : PROSE_NOMINAL_SIZE * scale;
+    return { size, band: eyebrowBand(node.eyebrow!, width, size) };
+  };
   // LH-58, LH-82, automatic composition only (a template groups its binding, groupBinding): the root blocks, one node each, of a
   // slide with no composition of its own, as repeated pairs (one cell per pair) or, for interleaved blocks of two kinds with
   // unequal counts, a grid of the majority kind above a row of the others (one column of the two). Undefined: as authored.
@@ -7311,6 +7406,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: owner.composition, alignment: owner.alignment ?? alignmentFor('text'),
       eyebrow: true, ...(owner.frameBox ? { frameBox: owner.frameBox } : {}), ...(owner.region !== undefined ? { region: owner.region } : {}), ...(owner.emphasis ? { emphasis: true as const } : {}) });
   }
+  // LH-152: each group's eyebrow over the span its items finally cover (their cards included), in the band the group left above them.
+  for (const { members, eyebrow, size, band } of groupEyebrows) {
+    const placedMembers = members.filter(item => items.includes(item));
+    if (!placedMembers.length) continue;
+    const at = Math.min(...placedMembers.map(item => items.indexOf(item))), outer = placedMembers.map(item => item.frameBox ?? item.box);
+    const x = Math.min(...outer.map(box => box.x)), right = Math.max(...outer.map(box => box.x + box.width)), top = Math.min(...outer.map(box => box.y));
+    const box = { x, y: top - band, width: right - x, height: band - gap * EYEBROW_GAP }, alignment = alignmentFor('text'), fit = fitEyebrow(eyebrow, box, size, alignment), lead = items[at]!;
+    items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: lead.composition, alignment,
+      eyebrow: true, ...(lead.region !== undefined ? { region: lead.region } : {}) });
+  }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
@@ -7377,6 +7482,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);
   if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
+  if (bodyCentered && ruleOn('heading-group') && template?.stack === undefined && !headingMessage && !pullItem) BODY_CENTERED.add(composed);
   return composed;
 }
 

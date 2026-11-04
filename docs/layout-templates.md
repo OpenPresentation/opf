@@ -444,6 +444,12 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
+- **Headings join a body far below them (LH-147).** When either rule (or LH-102's centered layout body) leaves the body more
+  than 160 px (at a 720-pixel short edge) under the last line of its headings, the title, subtitle and tag move down to one gap
+  above the body, so headings and body are one group in the middle of the slide; the template's heading areas move with them.
+  Such a body is one short block (a paragraph of up to four lines, a few short entries, a snippet, a short table and its note),
+  which otherwise floats under a title left at the top margin. A taller body, a body beside the headings (a picture track, a side
+  title), a stacked record and a body with a pull line keep their places. Only the headings move: no size changes.
 - **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a

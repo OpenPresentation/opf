@@ -158,9 +158,9 @@ describe("resolveSlideContext", () => {
       assert.equal(items, 1);
       assert.ok(Math.abs(title.box.y + title.box.height / 2 - height / 2) < height * 0.05, JSON.stringify(slide));
     }
-    // With a body the title is not centred: it sits at the top.
+    // With a body the title is not centred: it sits at the top (at the role sizes: LH-147 groups the title with a short centered body).
     const { options } = context({ slides: [{ title: "T", text: "Body" }] }, 0);
-    assert.ok(composeSlide({ title: "T", text: "Body" }, options).items.find((item) => item.field === "title").box.y < options.height * 0.2);
+    assert.ok(composeSlide({ title: "T", text: "Body" }, { ...options, fill: false }).items.find((item) => item.field === "title").box.y < options.height * 0.2);
   });
 
   test("the document's own records resolve before the registered catalogs", () => {

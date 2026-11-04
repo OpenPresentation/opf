@@ -204,7 +204,9 @@ describe('footnote area', () => {
     const gap = 720 / 30;
     assert.ok(Math.abs(plain.contentBox.height - marked.contentBox.height - box.height - gap / 2) < 1e-6);
     assert.equal(marked.contentBox.y, plain.contentBox.y);
-    assert.deepEqual(marked.items.find(item => item.field === 'title').box, plain.items.find(item => item.field === 'title').box);
+    // LH-147: a short body in the middle of the content area takes its title with it, so the title is compared at the role sizes, in place.
+    const fixed = (slide) => geometry(slide, document, 0, { fill: false }).items.find(item => item.field === 'title').box;
+    assert.deepEqual(fixed(document.slides[0]), fixed({ ...document.slides[0], text: 'Growth was strong and margins held. Note' }));
     assert.deepEqual(marked.diagnostics, []);
   });
   test('with a footer the area sits directly above the footer band', () => {

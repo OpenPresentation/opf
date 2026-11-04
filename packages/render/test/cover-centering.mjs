@@ -44,9 +44,10 @@ for (const bound of resolved.slides) {
     near((first.y + last.y + last.height) / 2, (top + bottom) / 2, `slide ${bound.index}: group center`);
     for (const item of items) { near(item.box.x, items[0].box.x, `${item.path} shared x`); near(item.box.width, items[0].box.width, `${item.path} shared width`); }
   } else {
-    // Content: the title keeps the top origin and the body follows it.
-    near(first.y, top, 'content title origin');
+    // Content: the title keeps the top origin, or (LH-147) sits one gap above a short body that LH-48 centered; the body follows it.
     const body = bound.geometry.items.find(item => item.field === 'text');
+    if (Math.abs(body.box.y - (last.y + last.height) - gap) > 1) near(first.y, top, 'content title origin');
+    else assert.ok(first.y > top + gap, 'a grouped title left the top margin with its body');
     assert.ok(body.box.y >= last.y + last.height - 1e-6, 'body follows the title');
   }
   // Drawn heading text lies inside its composed box, so no line escapes the recentered group.

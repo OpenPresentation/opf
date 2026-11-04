@@ -434,6 +434,15 @@ its paragraph's `frameBox`, and engines draw that card once, under the eyebrow. 
 a slide that pins a block to a region, are composed as written; a labeled paragraph is never LH-06's band or pill. The rule is guarded
 (`eyebrow`): the paragraphs keep at least the size they have with the label as a block of its own.
 
+The same label heads a list or a group (LH-152), at the root or inside a group, instead of taking an equal-width cell beside it half a
+slide away: a label right before a list (`items` or `bullets`) or a group is that list's or group's eyebrow, and a group's first child that
+is a label, followed by two or more blocks none of which is a label, is the eyebrow of the whole group. A list's eyebrow is drawn as a
+paragraph's is. A group's eyebrow takes a band at the top of the group, sized for the first paragraph or list the group holds, and is drawn
+over the span its blocks finally cover (their cards included), at the content alignment, before them in reading order. Two groups with
+eyebrows stay side by side or stacked as peers. An explicit arrangement (a `composition` mode, weights or columns of the slide or
+of the group) keeps its blocks as authored, a group of labels alone heads nothing, a root label before a root list stays a block on a
+layout with a `sequence` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
+
 ### `fontScheme.accent`
 
 `resolveFontFamilies()` returns `accent` only when the effective scheme defines an `accent` role (a family string or a `Font` object). The slide `tag` (eyebrow) and the quote body use `fonts.accent ?? <current family>` (body for the tag, heading for the quote body); nothing else changes. The renderer loads and embeds it, the exporter writes it on those runs (`a:latin`) while the theme fonts stay major/minor, and import keeps restoring `design.fontScheme` from provenance. None of the bundled examples sets an accent font.

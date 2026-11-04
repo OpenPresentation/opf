@@ -49,7 +49,9 @@ test('LH-101: a lone code snippet grows and its panel hugs it in the middle of t
   // (up to the code display size) and its panel hugs it, centered; only code that fills at least LONE_TARGET of the body is the body.
   const code = { code: { source: 'export const valid = result.errors.length === 0;', language: 'ts', filename: 'validator.ts' } };
   const result = composeSlide({ title: 'Code payload', blocks: [code] }), panel = item(result, 'code');
-  const top = item(result, 'title').box.y + item(result, 'title').box.height, bottom = result.contentBox.y + result.contentBox.height;
+  // LH-147: the headings of a body centered far below them join it; the body is centered in the space under the headings as placed at the role sizes.
+  const placed = item(composeSlide({ title: 'Code payload', blocks: [code] }, { fill: false }), 'title').box;
+  const top = placed.y + placed.height, bottom = result.contentBox.y + result.contentBox.height;
   assert.ok(panel.box.height < 0.6 * (bottom - top), 'the panel hugs the snippet');
   assert.ok(Math.abs(panel.box.y - top - (bottom - panel.box.y - panel.box.height)) < 0.25 * (bottom - top), 'in the middle of the body');
   const source = panel.codeLayout.parts.find((part) => part.role === 'body');
@@ -84,7 +86,8 @@ for (const direction of ['ltr', 'rtl']) {
     const y = (composed) => Math.min(...body(composed).map((entry) => entry.box.y));
     assert.ok(y(result) > y(top) + 50, `${y(result)} vs ${y(top)}`);
     const end = result.contentBox.y + result.contentBox.height, last = Math.max(...body(result).map((entry) => entry.box.y + entry.box.height));
-    const title = item(result, 'title'), above = y(result) - (title.box.y + title.box.height);
+    // LH-147: the headings of a body centered far below them join it; the body is centered in the space under the headings as placed at the role sizes.
+    const title = item(top, 'title'), above = y(result) - (title.box.y + title.box.height);
     assert.ok(Math.abs(above - (end - last)) < 0.15 * (end - title.box.y), `${above} above, ${end - last} below`);
     assert.equal(item(result, 'text').text.fontSize, item(top, 'text').text.fontSize);
     assert.deepEqual(findings(result), []);

@@ -103,7 +103,8 @@ test('a body of short paragraphs grows together, keeps one size and sits in the 
     assert.equal(new Set(sizes).size, 1, `${direction}: one size (LH-43): ${sizes}`);
     assert.ok(sizes[0] > body(kept)[0].text.fontSize && sizes[0] <= LONE_DISPLAY_SIZES.list, `${direction}: ${sizes[0]}`);
     const top = Math.min(...items.map((item) => item.box.y)), bottom = Math.max(...items.map((item) => item.box.y + item.text.lines.length * item.text.lineHeight));
-    const title = result.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
+    // LH-147: the headings of a body centered far below them join it; the body is centered in the space under the headings as placed at the role sizes.
+    const title = kept.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
     assert.ok(Math.abs(top - (title.y + title.height) - (end - bottom)) < 40, `${direction}: about as much space above as below`);
   }
 });
