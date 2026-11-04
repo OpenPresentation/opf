@@ -8,7 +8,8 @@ import { composeSlide, layoutMetric } from '../dist/composition.js';
 // (16, 18, 21, 24, 28 and 32 px at the default floor) instead of any size between.
 const { layouts } = gallery;
 const long = (name) => `${name} should focus the next cycle on improving evaluation timelines and family communication while making the operating tradeoffs clear to student services stakeholders.`;
-const SCALE = [16, 18, 21, 24, 28, 32];
+// LH-17's steps with LH-149's half steps between them.
+const SCALE = [16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32];
 // LH-50: a label drawn as the eyebrow of the text after it is set at the tag's size, not shared with its siblings.
 const sizesOf = (result, field = 'text') => result.items.filter((item) => item.field === field && item.path.includes('.blocks.') && !item.eyebrow).map((item) => item.text.fontSize);
 const overflow = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow');
@@ -114,11 +115,11 @@ test('a shrunk text or list takes a size of the type scale, and unshrunk blocks 
 });
 
 test('the scale follows a raised floor and the canvas scale, and keeps a start that is off it', () => {
-  // A 20 px floor: 20, 23, 26, 30 and 35 px; a 28 px paragraph that fits keeps 28 (`fill: false`: LH-48 would grow the short body).
+  // A 20 px floor: 20, 23, 26, 30 and 35 px, with the half steps 21, 25, 28 and 33 (LH-149); a 28 px paragraph that fits keeps 28 (`fill: false`: LH-48 would grow the short body).
   const fits = composeSlide({ title: 'Short', composition: { minFontSize: 20 }, blocks: [{ text: 'A short point.' }, { text: 'Another one.' }] }, { layout: layouts['two-column'], fill: false });
   assert.deepEqual(sizesOf(fits), [28, 28]);
   const dense = composeSlide({ title: 'Dense', composition: { minFontSize: 20 }, blocks: Array.from({ length: 4 }, (_, index) => ({ text: long(`Team ${index}`).repeat(2) })) }, { layout: layouts['two-column'] });
-  for (const size of sizesOf(dense)) assert.ok([20, 23, 26, 28].includes(size), String(size));
+  for (const size of sizesOf(dense)) assert.ok([20, 21, 23, 25, 26, 28].includes(size), String(size));
   // At 1920 x 1080 every step is 1.5 times the reference size.
   const large = composeSlide({ title: 'Dense', blocks: Array.from({ length: 6 }, (_, index) => ({ text: long(`Team ${index}`) })) }, { layout: layouts['three-column'], width: 1920, height: 1080 });
   for (const size of sizesOf(large)) assert.ok([...SCALE.map((step) => step * 1.5), 42].includes(size), String(size));

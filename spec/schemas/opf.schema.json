@@ -2473,7 +2473,7 @@
         },
         "composition": {
           "$ref": "#/$defs/Composition",
-          "description": "Arrangement within this group. Only minFontSize and overflow inherit from the parent; strict overflow cannot be weakened."
+          "description": "Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened."
         },
         "emphasis": {
           "type": "boolean",
@@ -3959,7 +3959,7 @@
     "Composition": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.",
+      "description": "Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize, maxFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize, maxFontSize and overflow rather than mode, columns or weights.",
       "properties": {
         "mode": {
           "type": "string",
@@ -4005,6 +4005,12 @@
           "minimum": 8,
           "maximum": 32,
           "description": "Minimum readable text size in reference pixels at a 720-pixel canvas short edge. Default 16. Overflow is diagnosed when text cannot fit at this size."
+        },
+        "maxFontSize": {
+          "type": "number",
+          "minimum": 8,
+          "maximum": 200,
+          "description": "Largest body text size in reference pixels at a 720-pixel canvas short edge: paragraphs, lists, quotes, metrics and timelines are never set larger, their growth included (headings, tables, code and charts keep their sizes). Never lowers text under minFontSize. paginate writes it on the pages after the first, so the pages of one slide share its type sizes."
         },
         "overflow": {
           "type": "string",

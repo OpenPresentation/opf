@@ -356,9 +356,16 @@ texts is a short row and a row of long ones a tall one. The cells of one row kee
 Sets that mix in other blocks (a metric, a picture, a chart) keep their rows and share sizes as above.
 
 A block that shrinks takes a size of the type scale (LH-17): from `minFontSize` up by a ratio of (28/16)^¼, rounded to whole
-reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor. Prose has five sizes from its 28 px start to the
-floor, and a list or lead six from 32 px; a block that fits at its starting size keeps it, on the scale or not. The scale
-depends only on the floor and the canvas, so every slide composes independently and the engines agree.
+reference pixels, which is 16, 18, 21, 24, 28 and 32 px at the default floor, with the half step between each two (LH-149: the
+ratio to a half power, 17, 20, 23, 26 and 30 px). A block that fits at its starting size keeps it, on the scale or not. The half
+steps matter most to siblings sized jointly: one size for all of them, the largest at which every row fits, so a whole step under
+the size they fit cost every sibling a step (six FAQ pairs that fit 24 px drew at 21, now 23). They are a guarded rule
+(`half-steps`): a joint fit at a half step gives its rows other heights than the step under it, so the half steps are kept only
+where no block reads smaller than without them (dense comparison options that would reach 20 px only by setting the verdict
+under them from 28 to 21 px keep 18 and 28). Half steps never change which arrangement wins: every choice between arrangements
+(the guard's rule sets, step badges, tracks, LH-83's recomposition at the floor) counts a block that shrank onto a half step at the
+step under it, so a gain of half a step alone (16 to 17 px) keeps the slide's arrangement and an agenda keeps its step badges. The scale depends only on the floor and the canvas, so every slide composes
+independently and the engines agree.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
 uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks
@@ -366,7 +373,10 @@ beyond the room go to the overflow region and, through `paginate`, to a continua
 `opf/text-overflow` or `opf/layout-unplaced` diagnostic.
 
 Pagination continues on a new slide with the same layout: blocks beyond a region's `max` move first, in source order, and
-carry a `region` pin to the region they came from. A block that no region of the layout accepts, on a layout with no
+carry a `region` pin to the region they came from. The pages of one slide share its type sizes (LH-144): each page after the
+first carries `composition.maxFontSize`, the largest size the first page draws for the kinds of block it holds (paragraphs,
+lists, quotes, metrics, timelines), so a last page with one timeline or a short list does not read larger than the pages before
+it. The cap only lowers sizes, never under `minFontSize`; headings, tables, code and charts keep theirs. A block that no region of the layout accepts, on a layout with no
 overflow region, stays below the grid on every page and never drives a split.
 
 The export does one split on its own (LH-90). A slide whose body is two or more units of one kind (eight timelines, five
