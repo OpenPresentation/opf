@@ -2,8 +2,8 @@
   "deck": "gallery/presentation-types/developer-conference-talk.opf.json",
   "entries": {
     "gallery/presentation-types/developer-conference-talk.opf.json#0": {
-      "sha256": "3938e1bb3ea35d42282c7d848fdfbd9b69c33ef35d4299d3dc75a73b70d7843e",
-      "bytes": 6189
+      "sha256": "a79f99d39b35023f90c3fa3335ec190b04c8038d9e4741027ea7b96d1c71582c",
+      "bytes": 7360
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#1": {
       "sha256": "0d80f1556a23cab5c9a91beb3a582a996f37442dd20d717cc93227d8e1281bee",
@@ -18,8 +18,8 @@
       "bytes": 10320
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#4": {
-      "sha256": "2cc59eb4d91034376a3378267f5f2c76397ab25fec27aa549b497a712cb6ce6e",
-      "bytes": 11123
+      "sha256": "2f3bb37c31b3d2b1aee707a9d8252a91e3c5e7dc30d1b9aaebd6185dd8c2c588",
+      "bytes": 13938
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#5": {
       "sha256": "ed93cf6b56f096c2af9ecd28743c8998c83cc1b896fcbced1a837e996dc672a0",
