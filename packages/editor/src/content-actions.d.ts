@@ -57,6 +57,18 @@ export declare function prepareListShift(presentation: unknown, blockPath: strin
 /** Nest (`delta` 1) or un-nest (`delta` -1) list items as one undoable step. */
 export declare function shiftListItems(editor: EditorSession, blockPath: string, indices: number[], delta: number, options?: ListShiftOptions, meta?: Record<string, unknown>): ContentActionChange;
 
+/** The trends a metric can show: `Metric.trend`. */
+export declare const METRIC_TRENDS: readonly ["up", "down", "flat"];
+export type MetricTrendName = (typeof METRIC_TRENDS)[number];
+/** A metric block's trend for a form (LH-123): the metric's own path, its trend (undefined when it has none) and whether the metric is a bare value. */
+export interface MetricTrendState { path: string; trend?: MetricTrendName; scalar: boolean }
+/** The trend of the metric block at `blockPath`, or undefined when the block is not a metric. */
+export declare function readMetricTrend(presentation: unknown, blockPath: string): MetricTrendState | undefined;
+/** The patch that sets a metric's trend (`up`, `down`, `flat`) or removes it with `null`; a bare value becomes `{ value, trend }`. Throws `content-action-refused` for a block that is not a metric and `invalid-metric-trend` for another value. */
+export declare function prepareMetricTrend(presentation: unknown, blockPath: string, trend: MetricTrendName | null): PreparedContentAction & { trend: MetricTrendName | null };
+/** Set or remove a metric's trend as one undoable step. */
+export declare function setMetricTrend(editor: EditorSession, blockPath: string, trend: MetricTrendName | null, meta?: Record<string, unknown>): ContentActionChange & { trend: MetricTrendName | null };
+
 export declare function prepareGroupBlocks(presentation: unknown, containerPath: string, indices: number[], options?: DryRunOptions & { composition?: Record<string, unknown> }): PreparedContentAction;
 export declare function prepareUngroupBlock(presentation: unknown, groupPath: string, options?: DryRunOptions): PreparedContentAction;
 export declare function prepareBlocksToRegions(presentation: unknown, slideIndex: number, regions: string[], options?: DryRunOptions): PreparedContentAction;

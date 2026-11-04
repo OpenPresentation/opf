@@ -123,7 +123,7 @@ export function createCanvasEditor(container, options = {}) {
   notice.hidden = true;
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   const report = (error) => {
@@ -407,6 +407,34 @@ export function createCanvasEditor(container, options = {}) {
           event.stopPropagation();
           beginEdit(path);
         }
+      });
+      if (path === selectedPath) node.setAttribute("data-canvas-selected", "");
+    }
+    // LH-123: the trend is drawn as an arrow, not typed (LH-53), so it has no text to edit in place. The arrow is a target of its own over
+    // core's `trendBox`; a press opens the trend field (the properties form, with the choices up, down and flat), like Enter on it.
+    for (const item of geometry.items) {
+      const layout = item.metricLayout, part = layout?.parts.find((candidate) => candidate.role === "trend");
+      if (!layout?.trendBox || !part || seen.has(part.path) || typeof getValueAtPath(presentation, part.path) !== "string") continue;
+      const host = [...svg.querySelectorAll("g[data-canvas-target]")].find((node) => node.getAttribute("data-opf-path") === item.path);
+      if (!host) continue;
+      const path = part.path, trend = getValueAtPath(presentation, path);
+      seen.add(path);
+      const node = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+      for (const [key, value] of Object.entries({ "data-opf-path": path, "data-canvas-target": "", "data-opf-trend-arrow": "", role: "button", tabindex: "0", "aria-label": `Edit trend: ${trend}` }))
+        node.setAttribute(key, value);
+      const box = layout.trendBox, rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+      // The arrow is a few slide units, so its target is at least 8 units larger each way (a touch screen grows it to about 44 pixels).
+      const padX = Math.max(8, touchPad(svg, box.width)), padY = Math.max(8, touchPad(svg, box.height));
+      for (const [key, value] of Object.entries({ x: box.x - padX, y: box.y - padY, width: box.width + 2 * padX, height: box.height + 2 * padY, fill: "transparent", stroke: "transparent", "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "pointer-events": "all" }))
+        rect.setAttribute(key, value);
+      rect.classList.add("opf-selection");
+      node.append(rect);
+      host.append(node);
+      const open = () => { if (active && active.path !== path && !commit()) return; startEdit(path); };
+      node.addEventListener("click", (event) => { event.stopPropagation(); open(); });
+      node.addEventListener("dblclick", (event) => { event.preventDefault(); event.stopPropagation(); });
+      node.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " " || event.key === "F2") { event.preventDefault(); event.stopPropagation(); open(); }
       });
       if (path === selectedPath) node.setAttribute("data-canvas-selected", "");
     }

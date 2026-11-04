@@ -90,6 +90,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       scope: name === "deck" ? "deck" : "slide",
       getSlideIndex: () => studio.slideIndex,
       getSelectedPath: selectedPath,
+      getGeometry: (index) => studio.slideGeometry?.(index),
       catalogs,
       ...(onAddAsset ? { onAddAsset } : {}),
       onSelectPath: (path) => studio.revealPath(path),

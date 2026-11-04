@@ -1140,6 +1140,8 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         getSlideIndex: () => slideIndex,
         getSelectedPath: () => selection?.path,
+        // LH-126: the image section reads the fit an `auto` fit resolved to from the slide as the canvas draws it (with the fonts).
+        getGeometry: (index) => session.composeSlide(index, layoutFor(session.presentation, index)),
         catalogs: hostCatalogs,
         ...(options.onAddAsset ? { onAddAsset: options.onAddAsset } : {}),
         onSelectPath: (path) => {
