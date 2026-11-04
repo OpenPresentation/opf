@@ -25,7 +25,7 @@ const hex = value => String(value).replace(/^#/, '').slice(0, 6).toUpperCase();
  * Draw a slide's sequences (core `geometry.steps`) before its content, in core's paint order. `context` is the slide's export context
  * (colors, roles, fonts); `tags` collects each shape's name and record for attachStepTags.
  */
-export function addSteps(slide, steps, context, tags) {
+export function addSteps(slide, steps, context, tags, rtl = false) {
   if (!steps?.length) return;
   const accent = hex(context.colors.accent), numeral = hex(context.roles ? readableSchemeColor(`#${accent}`, context.roles).hex : '#FFFFFF');
   const card = hex(context.roles?.neutrals?.card?.hex ?? `#${context.colors.surface}`), cardBorder = hex(context.roles?.neutrals?.cardBorder?.hex ?? `#${context.colors.border}`);
@@ -48,7 +48,11 @@ export function addSteps(slide, steps, context, tags) {
       const objectName = name('badge', index);
       slide.addText(badge.label, {shape: 'ellipse', x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius),
         fill: {color: accent}, line: {type: 'none'}, color: numeral, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
-        align: 'center', valign: 'middle', margin: 0, fit: 'none', wrap: false, objectName});
+        align: 'center', valign: 'middle', margin: 0, fit: 'none', wrap: false, objectName,
+        // LH-146: in a right-to-left deck a Latin numeral is an en-US run, not the deck language's: PowerPoint draws the digits of a run tagged
+        // with a right-to-left language in the complex-script font (smaller and lighter than the bold body face the preview draws), and runs
+        // name no cs face (FF-05). Left-to-right decks keep their bytes.
+        ...(rtl && /^[\p{Script=Latin}\d .,:;+*/()#-]+$/u.test(badge.label) ? {lang: 'en-US'} : {})});
       tag(objectName, 'badge', {entry: badge.path, label: badge.label, ...(badge.list ? {list: badge.list} : {})});
     }
     for (const [index, arrow] of (step.arrows ?? []).entries()) {
