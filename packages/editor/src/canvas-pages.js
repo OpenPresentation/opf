@@ -9,7 +9,7 @@
 const BAR_CSS = "position:absolute;right:8px;bottom:8px;z-index:7;align-items:center;gap:4px;max-width:calc(100% - 16px);padding:3px 4px 3px 10px;font:12px/1.4 system-ui;color:#2d2a40;background:#ffffffee;border:1px solid #c9c3e8;border-radius:6px;box-shadow:0 1px 3px #0002";
 const BUTTON_CSS = "min-width:26px;min-height:24px;padding:0 6px;font:600 12px/1 system-ui;color:inherit;background:transparent;border:1px solid #c9c3e8;border-radius:4px;cursor:pointer";
 const LAYER_CSS = "position:absolute;inset:0;z-index:6;flex-direction:column;background:#fff";
-const CAPTION_CSS = "position:absolute;left:8px;bottom:8px;display:flex;align-items:center;gap:8px;max-width:calc(100% - 16px);padding:4px 4px 4px 10px;font:12px/1.4 system-ui;color:#2d2a40;background:#ffffffee;border:1px solid #c9c3e8;border-radius:6px;box-shadow:0 1px 3px #0002";
+const CAPTION_CSS = "position:absolute;left:8px;top:8px;display:flex;align-items:center;gap:8px;max-width:calc(100% - 16px);padding:4px 4px 4px 10px;font:12px/1.4 system-ui;color:#2d2a40;background:#ffffffee;border:1px solid #c9c3e8;border-radius:6px;box-shadow:0 1px 3px #0002";
 
 // The inline styles set the display, so showing and hiding sets it too (an inline display beats the [hidden] rule).
 const toggle = (node, shown) => { node.hidden = !shown; node.style.display = shown ? "flex" : "none"; };
