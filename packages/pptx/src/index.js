@@ -20,6 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
+import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
 import {attachCardTags,importCardFrames} from './card-provenance.js';
@@ -342,6 +343,8 @@ export async function toPptx(input, options = {}) {
   context.chartMarkTags = new Map();
   // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
   context.stepTags = new Map();
+  // LH-130: the accent rule core sets above a cover's or section's title (src/title-rule.js).
+  context.titleRuleTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
   context.furnitureTags = new Map();
@@ -1135,6 +1138,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
+  // LH-130: a cover's or section's title rule is its layout's drawing, not content.
+  const titleRules=importTitleRules(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
     picture=>importPicture(entries,picture,slidePath,relationships,diagnostic=>{
       // The recorded crop is re-derived from the circular frame of the quote photo.
@@ -1178,6 +1183,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
+    if (titleRules.has(shape)) { roles.set(shapeKeys.get(shape), 'title-rule'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
@@ -2435,6 +2441,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
   addSteps(slide, geometry.steps, slideContext, context.stepTags);
+  // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
+  addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
@@ -4676,6 +4684,7 @@ async function normalizePptxZip(raw, context) {
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
+  attachTitleRuleTags(entries,context.titleRuleTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
   attachFurnitureFields(entries,context.furnitureFields);

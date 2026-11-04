@@ -375,10 +375,14 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
       const sliceParts = slide.headingAreas[0].parts;
       assert.ok(near(sliceParts.subtitle.y, subtitle.box.y) && near(sliceParts.title.y + sliceParts.title.height, heading.box.y + heading.box.height), id);
     }
-    // Without a subtitle on the slide, the subtitle box starts half a gap under the title.
-    const lone = composeSlide({ title: 'Title' }, { layout: layouts.section });
+    // Without a subtitle on the slide, the subtitle box starts half a gap under the title (a centered title area).
+    const centered = { ...layouts.section, regions: [{ name: 'title', size: 1 }] };
+    const lone = composeSlide({ title: 'Title' }, { layout: centered });
     const titleItem = lone.items[0], parts = lone.headingAreas[0].parts;
     assert.ok(near(parts.subtitle.y, titleItem.box.y + titleItem.box.height + 12));
+    // LH-130: a title set at the foot of its area (the gallery section) leaves the subtitle box no height below it, at the area's foot.
+    const low = composeSlide({ title: 'Title' }, { layout: layouts.section }), lowParts = low.headingAreas[0].parts;
+    assert.ok(near(lowParts.subtitle.y, low.headingAreas[0].box.y + low.headingAreas[0].box.height) && lowParts.subtitle.height === 0);
   });
 });
 

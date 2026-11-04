@@ -722,6 +722,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     renderSteps(bound, options),
+    renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
     renderFootnotes(bound, options, drawHelpers),
@@ -944,6 +945,14 @@ function renderSteps(bound, options) {
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
+}
+// LH-130: the short accent rule core sets above a cover's or section's title (geometry.titleRule), filled in the tag's color (tagFill), as
+// the PPTX export draws it. With trace it names the title it stands for in data-opf-title-rule, not data-opf-path: it is the layout's
+// drawing, so hit-testing still finds the title by its own text.
+function renderTitleRule(bound, options) {
+  const rule = bound.geometry.titleRule;
+  if (!rule) return '';
+  return tag('rect', {...HIDDEN, x: stableNumber(rule.box.x), y: stableNumber(rule.box.y), width: stableNumber(rule.box.width), height: stableNumber(rule.box.height), fill: tagFill(bound.design), ...(options.trace ? {'data-opf-title-rule': rule.path} : {})});
 }
 // DrawingML's rightArrow preset at its default adjustments (adj1 = adj2 = 50000): a shaft half the box's height and a head as long as
 // half its smaller side; leftArrow is its mirror.

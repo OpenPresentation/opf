@@ -1,0 +1,6 @@
+---
+type: changed
+packages: [opf, render, pptx, gallery]
+drawing: ["layouts:cover", "layouts:section"]
+---
+LH-130, LH-148: covers and sections set their display title low at the start edge, as Claude Design does. A heading region of a layout record takes its own `anchor` (`bottom` sets the heading group at the foot of a sized area; `middle` stays the default) and the `title` region takes `rule: true`, a short accent rule (80 by 5 px) half a gap above a title that has no tag, at the start edge of its first line; a tag stays the group's eyebrow and takes the rule's place, and the rule is drawn only where the headings are the slide's message (no body), so it never costs a body its room. Core composes it as `SlideComposition.titleRule`; the preview draws it as a rectangle and the PPTX export as a native rectangle tagged `OPF_TITLE_RULE_V1` (import consumes it), both in the tag's color. The gallery `cover` and `section` use `anchor: "bottom"` and `rule: true` with start alignment; the section keeps its `accent1` variant (a fixed deck background still wins, LH-103). LH-148: a heading that LH-129 grows keeps the line breaks WI-4 balanced at its role size, so "A smaller pilot. / A clearer decision." no longer turns into "A smaller pilot. A / clearer decision." at the grown size: growth stops at the largest step that keeps the breaks.

@@ -724,6 +724,13 @@ export interface SlideComposition {
   /** LH-07: the step badges, connectors and flows of the slide's `sequence` regions, in reading order; absent when none draws. */
   steps?: ComposedSteps[];
   /**
+   * LH-130: the short accent rule above the title that the layout's `title` region asks for (`rule: true`) on a slide with a title and
+   * no tag: `box` in canvas pixels (TITLE_RULE_SIZE), at the title's start edge (its alignment, mirrored for a right-to-left title),
+   * half a gap above it; `path` is the title's. Engines fill it in the tag's color: the primary, or the text color where the primary
+   * is under 4.5:1 on the slide's backdrop. Absent otherwise.
+   */
+  titleRule?: { path: string; box: LayoutBox };
+  /**
    * LH-80, LH-49: automatic composition gave the slide's one picture (`picture`) or one chart (`chart`) a full-height track of its own
    * at `edge` (physical), `size` of the slide's width (left, right) or height (top, bottom); `path` is the block's. A picture's track
    * bleeds to the slide edges (its `image.placement` is `automatic`); a chart's is the root's first or last column. Absent otherwise.
@@ -1623,6 +1630,12 @@ export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
  * (wave 5; LH-129 alone grew a 16 px tag to 21 px).
  */
 export const HEADING_DISPLAY_SIZES = { title: 75, subtitle: 37, tag: EYEBROW_TAG_SIZE } as const;
+/**
+ * LH-130: the short accent rule a layout's `title` region asks for (`rule: true`), in reference pixels: Claude Design's cover draws an
+ * 80 by 5 px bar in the accent half a gap above a start-aligned display title. It stands where the eyebrow would, so a slide with a tag
+ * draws the tag instead.
+ */
+export const TITLE_RULE_SIZE = { width: 80, height: 5 } as const;
 /**
  * LH-129: `size` (canvas px) grown by `steps` steps of the type scale (the floor `floorPx` times (28/16)^(1/4) to a power, as LH-17's
  * scale), each step the scale's next size above the last, stopping before a step above `display`.
@@ -3977,9 +3990,11 @@ function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposi
 }
 // LH-129: the text a composition draws, by item path and part (headings by field): its size, its line count, and the height the text
 // covers (the union of every text's extent, joined where texts sit side by side). Pictures, charts and other drawings do not count.
-function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; covered: number; top: number; bottom: number } {
-  const sizes = new Map<string, number>(), lines = new Map<string, number>(), extents: [number, number][] = [];
+// LH-148: `breaks`, the words of each line of a title or subtitle, so growTemplate can tell where a grown heading breaks.
+function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; breaks: Map<string, string>; covered: number; top: number; bottom: number } {
+  const sizes = new Map<string, number>(), lines = new Map<string, number>(), breaks = new Map<string, string>(), extents: [number, number][] = [];
   const lineCount = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+  const lineWords = (fit: TextFit | RichTextFit) => ('richLines' in fit ? (fit as RichTextFit).richLines.map(line => line.fragments.map(fragment => fragment.kind === 'tab' ? ' ' : fragment.text).join('')) : fit.lines).map(line => line.trim().replace(/\s+/gu, ' ')).join('\n');
   const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
   for (const item of result.items) {
     const key = headings.has(item.field) ? `${item.path}:${item.field}` : item.path, internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
@@ -3992,12 +4007,13 @@ function textExtent(result: SlideComposition): { sizes: Map<string, number>; lin
     } else if (item.text) {
       sizes.set(key, Math.min(sizes.get(key) ?? Infinity, item.text.fontSize));
       lines.set(key, (lines.get(key) ?? 0) + lineCount(item.text));
+      if (item.field === 'title' || item.field === 'subtitle') breaks.set(key, lineWords(item.text));
       extents.push([item.box.y, item.box.y + Math.min(item.box.height, textHeight(item.text))]);
     }
   }
   let covered = 0, reach = -Infinity;
   for (const [from, to] of extents.sort((a, b) => a[0] - b[0])) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
-  return { sizes, lines, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
+  return { sizes, lines, breaks, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
 }
 /**
  * The guarded composition (guardedCore), then LH-39's figure on one line: the rules it kept plus `metric-figure`, taken when a figure
@@ -4053,7 +4069,12 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     const text = textExtent(grown);
     const kept = [...bestText.sizes].every(([key, size]) => (text.sizes.get(key) ?? 0) >= size - FONT_GRID_EPSILON), larger = [...text.sizes].some(([key, size]) => size > (bestText.sizes.get(key) ?? Infinity) + FONT_GRID_EPSILON);
     const wraps = [...start.lines].some(([key, count]) => key.endsWith(':title') || key.endsWith(':subtitle') || key.endsWith(':tag') ? (text.lines.get(key) ?? 0) > count : false);
-    if (!kept || !larger || wraps || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
+    // LH-148: a wrapped title or subtitle keeps the lines WI-4 balanced at its role size. Line widths grow in proportion with the size, so
+    // the balancer picks the same breaks at a larger size unless its best line no longer fits the width ("A smaller pilot. / A clearer
+    // decision." would turn into "A smaller pilot. A / clearer decision."): that step is not kept, and the heading stays at the largest
+    // step that keeps its breaks.
+    const rebroken = [...start.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
+    if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
     best = grown; bestText = text;
   }
   return best === result ? undefined : best;
@@ -4575,9 +4596,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // may grow them, HEADING_STEPS).
   const headingSteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[HEADING_STEPS] ?? 0)) || 0);
   let headingOffScale = false, headingMessage = false;
-  const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split'): ComposedItem[] => {
+  // LH-130: the accent rule of a heading group (headingGroup's `rule`), by the group's item list: it stands above the title and is part
+  // of the group's height (groupHeight), and the template moves it with the group.
+  const groupRules = new WeakMap<ComposedItem[], LayoutBox>();
+  let titleRule: SlideComposition['titleRule'];
+  const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split', rule = false): ComposedItem[] => {
     const list: ComposedItem[] = [];
     let top = y;
+    // LH-130: a rule stands where the eyebrow would: half a gap above the title, at the start edge of its first line.
+    if (rule && fields.includes('title') && !fields.includes('tag')) {
+      const width = TITLE_RULE_SIZE.width * scale, ruleHeight = TITLE_RULE_SIZE.height * scale;
+      const side = physicalAlignment(alignmentFor('title'), paragraphDirection(annotationText(slide.title), deckDirection));
+      groupRules.set(list, { x: side === 'left' ? x : side === 'right' ? x + areaWidth - width : x + (areaWidth - width) / 2, y: top, width, height: ruleHeight });
+      top += ruleHeight + gap * 0.5;
+    }
     const boxFor = (field: string) => ({ x, y: top, width: areaWidth, height: Math.max(height * (field === 'title' ? 0.26 : field === 'subtitle' ? 0.12 : 0.045), minSize * 1.22 + 2 * rasterPadding) });
     const push = (field: string, value: unknown, itemPath: string, box: LayoutBox, text: TextFit | RichTextFit, titleSplit?: ComposedItem['titleSplit']) => {
       box.height = Math.min(box.height, Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0));
@@ -6492,8 +6524,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const titleRect = rects.get('title');
     const titleMode = hasBodyPayload && plan.stack === undefined && titleRect && rowSizes.slice(titleRect.row, titleRect.row + titleRect.rowSpan).every(size => size === 'auto') ? plan.subtitle ? 'step' as const : 'split' as const : undefined;
     // The heading group (tag, title, subtitle stacked as in 0.18), measured at an area's width.
-    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined);
-    const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - list[0]!.box.y : 0;
+    // LH-129: no primary or secondary region holds a block and nothing sits below the grid, so the headings are the slide's message.
+    // LH-130: only then does the title take the rule its region asks for: a display title's mark, which never costs a body its room.
+    const headingsAlone = () => plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length;
+    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && headingsAlone());
+    const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - (groupRules.get(list)?.y ?? list[0]!.box.y) : 0;
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
     const arrangementOf = (region: LayoutRegion, units: Pending[], cell: LayoutBox): 'grid' | 'row' | 'column' => {
@@ -6692,16 +6727,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const bottom = near(cell.y + cell.height, frame.y + frame.height) ? area.bottom : cell.y + cell.height;
       return { x: left, y: top, width: right - left, height: bottom - top };
     };
-    // Headings: centred vertically in their area unless every row the area spans is auto.
+    // Headings: centred vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
+    // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
     const placeHeadings = (name: 'title' | 'subtitle', fields: string[]) => {
       const rect = rects.get(name), original = ownRects.get(name);
       if (!rect) { if (original) headingAreas.push({ name, box: roundBox(physical(logical(original))), collapsed: true }); return; }
       const cell = physical(logical(rect));
       const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
-      const centred = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto');
-      const shift = centred ? Math.max(0, (cell.height - groupHeight(list)) / 2) : 0;
-      // LH-129: a title that stands free (centered in its area, or in a stack) over no primary or secondary block is the slide's message.
-      if (name === 'title' && list.some(item => item.field === 'title') && (centred || plan.stack !== undefined) && plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length) headingMessage = true;
+      const sized = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto'), anchor = plan.headingAnchors?.[name] ?? 'middle';
+      const shift = sized ? Math.max(0, (cell.height - groupHeight(list)) * (anchor === 'bottom' ? 1 : anchor === 'middle' ? .5 : 0)) : 0;
+      // LH-129: a title that stands free (in a sized area, or in a stack) over no primary or secondary block is the slide's message.
+      if (name === 'title' && list.some(item => item.field === 'title') && (sized || plan.stack !== undefined) && headingsAlone()) headingMessage = true;
+      const rule = groupRules.get(list);
+      if (rule) titleRule = { path: `${path}.title`, box: roundBox({ ...rule, y: rule.y + shift }) };
       for (const item of list) {
         if (shift) { item.box.y += shift; if (item.text) item.text = translateTextFit(item.text, shift); }
         if (furniture && item.box.y + item.box.height > bodyBottom + .01) diagnostics.push({ code: 'text-overflow', path: item.path, message: 'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.' });
@@ -7371,7 +7409,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = bodyStarts.get(index);
     return start !== undefined && item.text.fontSize >= snapFontSizeDown(start) - FONT_GRID_EPSILON;
   });
-  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(explanation?{explanation}:{}) };
   if (atRequest) AT_REQUEST.add(composed);
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
