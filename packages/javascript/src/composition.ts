@@ -6238,7 +6238,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (ownCard) insideCard = acceptedBox(frame ?? box);
       try { arrange(node.children, under, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
       finally { if (emphasized) insideEmphasis = false; if (ownCard) insideCard = undefined; }
-      if (brow && items.length > first) groupEyebrows.push({ members: items.slice(first), eyebrow: node.eyebrow!, size: brow.size, band: brow.band });
+      if (brow && items.length > first) groupEyebrows.push({ members: items.slice(first), eyebrow: node.eyebrow!, size: brow.size, band: brow.band, ...(emphasized || ownCard ? { carded: true } : {}) });
       return;
     }
     // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
@@ -6664,7 +6664,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-50: the eyebrow of each placed paragraph, drawn over its final box once every pass has moved it (placeEyebrows).
   const eyebrowsOf = new Map<ComposedItem, { path: string; value: unknown }>();
   // LH-152: the eyebrow of each placed group, drawn over the items placed in it (`members`) at `size`, in the band of `band` it reserved.
-  const groupEyebrows: { members: ComposedItem[]; eyebrow: { path: string; value: unknown }; size: number; band: number }[] = [];
+  // `carded`: the group is drawn on one card of its own (LH-131's featured cell or a plain cell card, or the emphasis surface), so its band
+  // was left inside that card and the eyebrow goes there, over its blocks' own boxes, on the card's backdrop.
+  const groupEyebrows: { members: ComposedItem[]; eyebrow: { path: string; value: unknown }; size: number; band: number; carded?: true }[] = [];
   // LH-152: a group's eyebrow is sized for the first paragraph or list it holds (in reading order), at that block's starting size, or
   // for a paragraph at its role size when it holds none; `band` is its height and EYEBROW_GAP of a gap.
   const groupEyebrow = (node: Pending, width: number): { size: number; band: number } => {
@@ -8186,14 +8188,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       eyebrow: true, ...(owner.frameBox ? { frameBox: owner.frameBox } : {}), ...(owner.region !== undefined ? { region: owner.region } : {}), ...(owner.emphasis ? { emphasis: true as const } : {}) });
   }
   // LH-152: each group's eyebrow over the span its items finally cover (their cards included), in the band the group left above them.
-  for (const { members, eyebrow, size, band } of groupEyebrows) {
+  // LH-131 with LH-152: a group drawn on one card of its own takes its eyebrow inside that card, over its blocks' boxes, with the card's
+  // frame (or the emphasis surface) as its backdrop, as a paragraph's eyebrow on a card does.
+  for (const { members, eyebrow, size, band, carded } of groupEyebrows) {
     const placedMembers = members.filter(item => items.includes(item));
     if (!placedMembers.length) continue;
-    const at = Math.min(...placedMembers.map(item => items.indexOf(item))), outer = placedMembers.map(item => item.frameBox ?? item.box);
+    const at = Math.min(...placedMembers.map(item => items.indexOf(item))), outer = placedMembers.map(item => carded ? item.box : item.frameBox ?? item.box);
     const x = Math.min(...outer.map(box => box.x)), right = Math.max(...outer.map(box => box.x + box.width)), top = Math.min(...outer.map(box => box.y));
     const box = { x, y: top - band, width: right - x, height: band - gap * EYEBROW_GAP }, alignment = alignmentFor('text'), fit = fitEyebrow(eyebrow, box, size, alignment), lead = items[at]!;
     items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: lead.composition, alignment,
-      eyebrow: true, ...(lead.region !== undefined ? { region: lead.region } : {}) });
+      eyebrow: true, ...(lead.region !== undefined ? { region: lead.region } : {}), ...(carded && lead.frameBox ? { frameBox: lead.frameBox } : {}), ...(carded && lead.emphasis ? { emphasis: true as const } : {}) });
   }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];
