@@ -1089,8 +1089,9 @@ function listEntriesSvg(item, fit, bound, options) {
   // LH-08: a list drawn as ruled rows (design.listStyle: rows) draws core's hairlines between its rows, LIST_RULE_WIDTH thick in the
   // scheme's border neutral, as the PPTX export draws them as native lines.
   if(fit.rules?.length){
+    // LH-136: the accent rule over a display heading is core's own thickness, in the tag's color.
     const thickness=LIST_RULE_WIDTH*Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,stroke=bound.design.roles.neutrals.border.hex;
-    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke,'stroke-width':stableNumber(thickness),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
+    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke:rule.accent?tagFill(bound.design):stroke,'stroke-width':stableNumber(rule.thickness??thickness),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
   }
   return children;
 }
@@ -1479,7 +1480,8 @@ function renderMetric(item, box, bound, options) {
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
   const trendMark=metricTrendMark(layout,bound,backdrop);
   // LH-53: a unit on its value's line is part of the figure and takes the value's color.
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
+  // LH-135: a label drawn as the metric's eyebrow takes the eyebrow's color on its backdrop (eyebrowFill), in capitals with core's tracking.
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):layout.eyebrow&&part.role==='label'?eyebrowFill(bound.design,item):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1494,23 +1496,23 @@ function renderMetric(item, box, bound, options) {
       const origin=part.linePositions[index];
       if(factor&&!line.segments.some(segment=>segment.kind==='tab'))return tag('text',{x:stableNumber(origin.x+line.width*factor),y:stableNumber(origin.baseline),'text-anchor':factor===1?'end':'middle',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
-        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
         ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
           'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
       },line.segments.map(segment=>segmentSpan({
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
+      },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
       return tag('text',{x:stableNumber(origin.x),y:stableNumber(origin.baseline),'text-anchor':'start',
         'font-family':fontStack(part.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(part.fit.fontSize),
-        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
+        'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,'letter-spacing':part.style.tracking?stableNumber(part.style.tracking*part.fit.fontSize):undefined,
         'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:partFill(part),
         ...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,'data-opf-text-start':line.start,
           'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
       },line.segments.map(segment=>segmentSpan({x:stableNumber(origin.x+segment.x),
         ...(segment.kind==='tab'?{textLength:stableNumber(segment.width),lengthAdjust:'spacingAndGlyphs'}:{}),
         ...(options.trace?{'data-opf-segment':segment.kind,'data-opf-text-start':segment.start,'data-opf-text-end':segment.end}:{}),
-      },segment,part.text.slice(segment.start,segment.end),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
+      },segment,styledText(part.text.slice(segment.start,segment.end),part.style),part.style,bound,bound.design.fontScheme.type,{rtl:partRtl(line.start),fontSize:part.fit.fontSize})).join(''));
     });
     children.push(tag('g',{...traceAttrs(options,part.path),...(options.trace?{'data-opf-metric-role':part.role,
       'data-opf-box-x':part.box.x,'data-opf-box-y':part.box.y,'data-opf-box-width':part.box.width,'data-opf-box-height':part.box.height}:{}),
