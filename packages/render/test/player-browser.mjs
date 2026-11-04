@@ -33,6 +33,14 @@ const deckText = await readFile(path.join(root, 'test/fixtures/player-deck.opf.j
 const deck = JSON.parse(deckText);
 const xssDeck = {name: 'Notes are text', slides: [{id: 'a', title: 'First', notes: '<img src=x onerror="window.__pwned=1"> <b>not bold</b>', section: '<i>S</i>'}, {id: 'b', title: 'Second'}]};
 const hiddenFirst = {name: 'Hidden first', slides: [{id: 'h', title: 'Hidden', hidden: true}, {id: 'v1', title: 'Visible one'}, {id: 'v2', title: 'Visible two'}]};
+// LH-99: eight timelines overflow one slide; the export continues them on two pages (LH-90), and the hosts show those pages as steps.
+const timeline = index => ({timeline: {name: `Workstream ${index + 1} execution path`, description: `Major milestones for workstream ${index + 1}.`, events: [
+  {when: 'May', what: 'Baseline', description: 'Confirm current state, owners, and constraints.'},
+  {when: 'Jun', what: 'Pilot', description: 'Run a narrow pilot with visible success criteria.'},
+  {when: 'Jul', what: 'Scale', description: 'Expand the approach after risk review.'},
+  {when: 'Aug', what: 'Embed', description: 'Move reporting and routines into steady-state operations.'},
+]}});
+const overfullDeck = {name: 'Plan', slides: [{id: 'intro', title: 'Plan for the next cycle'}, {id: 'plan', title: 'Execution paths for the next cycle', notes: 'Walk through each path.', blocks: Array.from({length: 8}, (_, index) => timeline(index))}, {id: 'backup', title: 'Backup', hidden: true}, {id: 'close', title: 'Next steps'}]};
 const arabicDeck = {name: 'عرض تجريبي', language: 'ar', slides: [{id: 'one', title: 'مرحبا بالعالم', text: 'هذا اختبار للعرض'}, {id: 'two', title: 'الشريحة الثانية', items: ['الأول', 'الثاني']}]};
 
 // --- the bundle: the element (registered), the player, and the renderer, as a page would import them ---------------
@@ -68,6 +76,8 @@ const pages = {
   '/nofonts.html': shell('<opf-deck id="d" src="/deck.opf.json" fonts="/no-such-fonts/"></opf-deck>'),
   '/empty.html': shell('<div id="host"></div>'),
   '/arabic.html': shell('<opf-deck id="d" src="/arabic.opf.json" fonts="/opf-fonts/"></opf-deck>'),
+  '/overfull.html': shell('<opf-deck id="d" class="exact" src="/overfull.opf.json" fonts="/opf-fonts/" thumbnails present></opf-deck>'),
+  '/overfull-off.html': shell('<opf-deck id="d" class="exact" src="/overfull.opf.json" fonts="/opf-fonts/" thumbnails present continuation="off"></opf-deck>'),
   '/ssr.html': shell(toHtml(deck, '1-', {embed: true, fonts: '/opf-fonts/', attributes: {id: 'd'}}).replace('<opf-deck', '<opf-deck').replace(/^/, '')).replace('<script src="/bundle.js"></script>', ''),
 };
 const requests = [];
@@ -80,6 +90,7 @@ const server = http.createServer(async (request, response) => {
   if (url.pathname === '/axe.js') return send(200, 'text/javascript', axeSource);
   if (url.pathname === '/deck.opf.json') return send(200, 'application/json', deckText);
   if (url.pathname === '/arabic.opf.json') return send(200, 'application/json', JSON.stringify(arabicDeck));
+  if (url.pathname === '/overfull.opf.json') return send(200, 'application/json', JSON.stringify(overfullDeck));
   if (url.pathname === '/slow.json') { await new Promise(resolve => setTimeout(resolve, 400)); return send(200, 'application/json', deckText); }
   if (url.pathname === '/broken.json') return send(200, 'application/json', '{"slides": 5');
   if (url.pathname === '/fallback.json') return send(200, 'text/html', '<!doctype html><html><body>SPA fallback</body></html>');
@@ -173,7 +184,7 @@ try {
   // Navigation: buttons, keyboard, thumbnails, the slide attribute and property, events.
   await deckEl(page).locator('button.next').click();
   assert.equal(await titleOf(page), 'Agenda');
-  assert.deepEqual(await events(page), [{slide: 2, total: 5, index: 1, id: 'agenda', title: 'Agenda', notes: 'Keep this under one minute.', section: 'Opening'}], 'slidechange carries the slide, the document index and the plain-text notes');
+  assert.deepEqual(await events(page), [{slide: 2, total: 5, index: 1, page: 1, pages: 1, id: 'agenda', title: 'Agenda', notes: 'Keep this under one minute.', section: 'Opening'}], 'slidechange carries the slide, the document index and the plain-text notes');
   await deckEl(page).locator('button.next').click();
   assert.equal(await titleOf(page), 'Revenue grew 18 percent', 'the hidden slide between Agenda and Revenue is skipped');
   assert.equal((await events(page))[0].index, 3);
@@ -691,6 +702,83 @@ try {
   const degradedEvents = await degraded.evaluate(async () => { const element = document.getElementById('d'); const seen = []; element.addEventListener('error', event => seen.push(event.detail)); await element.ready; await new Promise(resolve => setTimeout(resolve, 50)); return {seen, title: element.currentSlide.title}; });
   assert.equal(degradedEvents.title, 'Quarterly review', 'unreachable fonts do not stop the deck');
   await degraded.close();
+
+  // ------------------------------------------------------------------------------------------------------------------
+  // LH-99: an overfull slide shows the export's continuation pages as steps after it; no source index shifts.
+  {
+    const dump = async (target, name) => { if (process.env.PLAYER_DUMP) await writeFile(path.join(outputDirectory, name), await target.screenshot()); };
+    const before = await open('/overfull-off.html');
+    assert.deepEqual(await before.evaluate(() => { const element = document.getElementById('d'); element.goto(2); return [element.slide, element.total, element.page, element.pages]; }), [2, 3, 1, 1], 'continuation="off" draws the slide as written');
+    await dump(before, 'continuation-deck-before.png');
+    await before.close();
+
+    const overfull = await open('/overfull.html');
+    await record(overfull);
+    const at = () => overfull.evaluate(() => { const element = document.getElementById('d'); return {slide: element.slide, total: element.total, page: element.page, pages: element.pages, index: element.currentSlide.index}; });
+    const drawnWorkstreams = async () => (await slideText(overfull)).join(' ').match(/Workstream \d/g)?.map(text => Number(text.slice(-1))) ?? [];
+    assert.deepEqual(await at(), {slide: 1, total: 3, page: 1, pages: 1, index: 0}, 'three source slides play; the continuation adds none');
+    const thumbs = await overfull.evaluate(() => [...document.getElementById('d').shadowRoot.querySelectorAll('.thumbs li')].map(li => [li.dataset.pages ?? '', li.querySelector('button').getAttribute('aria-label')]));
+    assert.deepEqual(thumbs, [['', 'Go to Slide 1 of 3: Plan for the next cycle'], ['2', 'Go to Slide 2 of 3, 2 pages: Execution paths for the next cycle'], ['', 'Go to Slide 3 of 3: Next steps']], 'one thumbnail per source slide; the continued one is a stack with its page count');
+    await deckEl(overfull).locator('button.next').click();
+    assert.deepEqual(await at(), {slide: 2, total: 3, page: 1, pages: 2, index: 1});
+    assert.equal(await counter(overfull).innerText(), '2 / 3 \u00B7 1/2');
+    assert.equal(await viewport(overfull).getAttribute('aria-label'), 'Slide 2 of 3, page 1 of 2: Execution paths for the next cycle');
+    assert.deepEqual(await drawnWorkstreams(), [1, 2, 3, 4], 'page 1 draws the first four timelines');
+    await dump(overfull, 'continuation-deck-page-1.png');
+    await viewport(overfull).focus();
+    await overfull.keyboard.press('ArrowRight');
+    assert.deepEqual(await at(), {slide: 2, total: 3, page: 2, pages: 2, index: 1}, 'a page step keeps the slide number and the document index');
+    assert.deepEqual(await drawnWorkstreams(), [5, 6, 7, 8], 'page 2 draws the other four');
+    assert.equal(await counter(overfull).innerText(), '2 / 3 \u00B7 2/2');
+    await dump(overfull, 'continuation-deck-page-2.png');
+    await overfull.keyboard.press('ArrowRight');
+    assert.deepEqual(await at(), {slide: 3, total: 3, page: 1, pages: 1, index: 3}, 'the slide after it is still slide 3 (document index 3: the hidden slide is skipped)');
+    await overfull.keyboard.press('ArrowLeft');
+    assert.deepEqual(await at(), {slide: 2, total: 3, page: 2, pages: 2, index: 1}, 'back lands on the last page');
+    assert.deepEqual((await events(overfull)).map(event => [event.slide, event.index, event.page, event.pages]), [[2, 1, 1, 2], [2, 1, 2, 2], [3, 3, 1, 1], [2, 1, 2, 2]], 'every step fires slidechange with the source slide and its page');
+    await overfull.evaluate(() => { document.getElementById('d').slide = 3; });
+    assert.deepEqual(await at(), {slide: 3, total: 3, page: 1, pages: 1, index: 3}, 'the slide attribute addresses source slides');
+    assert.equal(await overfull.evaluate(() => document.getElementById('d').goto(2)), true);
+    assert.deepEqual(await at(), {slide: 2, total: 3, page: 1, pages: 2, index: 1}, 'goto(n) is source slide n, on its first page');
+    await overfull.locator('opf-deck#d').locator('.thumbs li').nth(2).locator('button').click();
+    assert.deepEqual(await at(), {slide: 3, total: 3, page: 1, pages: 1, index: 3}, 'a thumbnail selects its source slide');
+    await overfull.evaluate(() => document.getElementById('d').goto(2));
+    await overfull.evaluate(() => document.getElementById('d').next());
+
+    // The player starts on the element's page and steps the same way; the element follows it.
+    await overfull.evaluate(async () => {
+      window.__steps = [];
+      const session = await document.getElementById('d').present({fullscreen: false});
+      window.__overfullShow = session;
+      session.addEventListener('slidechange', event => window.__steps.push([event.detail.slide, event.detail.index, event.detail.page, event.detail.pages]));
+    });
+    const show = () => overfull.evaluate(() => { const session = window.__overfullShow; return [session.slide, session.total, session.page, session.pages]; });
+    const hud = overfull.locator('[data-opf-player]').locator('.counter');
+    assert.deepEqual(await show(), [2, 3, 2, 2], 'the show starts on the page the element showed');
+    assert.equal(await hud.innerText(), '2 / 3 \u00B7 2/2');
+    const shownText = () => overfull.locator('[data-opf-player]').locator('section svg text').allTextContents();
+    assert.match((await shownText()).join(' '), /Workstream 5/);
+    await dump(overfull, 'continuation-player-page-2.png');
+    await overfull.keyboard.press('ArrowLeft');
+    assert.deepEqual(await show(), [2, 3, 1, 2]);
+    await dump(overfull, 'continuation-player-page-1.png');
+    await overfull.keyboard.press('End');
+    assert.deepEqual(await show(), [3, 3, 1, 1]);
+    await overfull.keyboard.press('2');
+    await overfull.keyboard.press('Enter');
+    assert.deepEqual(await show(), [2, 3, 1, 2], 'a slide number then Enter goes to source slide 2, page 1');
+    await overfull.keyboard.press('ArrowRight');
+    assert.deepEqual(await show(), [2, 3, 2, 2]);
+    assert.deepEqual(await overfull.evaluate(() => window.__steps.splice(0)), [[2, 1, 1, 2], [3, 3, 1, 1], [2, 1, 1, 2], [2, 1, 2, 2]]);
+    assert.deepEqual(await at(), {slide: 2, total: 3, page: 2, pages: 2, index: 1}, 'the element follows the show to the page');
+    await overfull.keyboard.press('Escape');
+    await overfull.close();
+
+    const plainShow = await open('/empty.html', {wait: false});
+    const off = await plainShow.evaluate(async (document_) => { const session = await window.opf.present(document_, {fullscreen: false, startSlide: 2, continuation: false, channel: false}); const result = [session.slide, session.page, session.pages]; session.close(); return result; }, overfullDeck);
+    assert.deepEqual(off, [2, 1, 1], 'present(..., { continuation: false }) draws the slide as written');
+    await plainShow.close();
+  }
 
   assert.deepEqual(problems, [], 'no page errors or console errors');
   console.log('player browser checks passed');

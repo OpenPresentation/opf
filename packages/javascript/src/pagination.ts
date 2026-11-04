@@ -81,6 +81,20 @@ function sliceRichText(value: any, start: number, end: number): any {
     return [typeof run === 'string' ? text.slice(left, right) : { ...run, text: text.slice(left, right) }];
   });
 }
+/**
+ * LH-128: the offsets just after each sentence end of a text (a stop, question or exclamation mark with any closing quote or bracket
+ * and the space after it, or a blank line). A list marker at the start of a sentence ("2. ", "b. ") is not a sentence of its own.
+ */
+function sentenceEnds(text: string): number[] {
+  const ends: number[] = [];
+  let from = 0;
+  for (const match of text.matchAll(/[.!?][”"')]*\s+|\n\s*\n/gu)) {
+    if (/^(\d{1,3}|\p{L})$/u.test(text.slice(from, match.index).trim())) continue;
+    ends.push(match.index + match[0].length);
+    from = match.index + match[0].length;
+  }
+  return ends;
+}
 /** The deck-level fields a single slide needs to validate: the references it cites and the datasets it plots. */
 const deckContext = (presentation: unknown): Record<string, unknown> => {
   const deck = isRecord(presentation) ? presentation : {};
@@ -355,13 +369,18 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
         if (best>start && leaf.unit==='utf16' && leaf.field!=='code') {
           const text=textOf(leaf.field==='quote' ? (typeof leaf.value==='string'?leaf.value:leaf.value.text) : leaf.value);
           const prefix=text.slice(start,best);
-          const sentences=[...prefix.matchAll(/[.!?][”"')]*\s+|\n\s*\n/gu)];
-          const lastSentence=sentences.at(-1);
-          const sentenceEnd=lastSentence ? start+lastSentence.index!+lastSentence[0].length : start;
+          const ends=sentenceEnds(text), sentenceEnd=ends.filter(offset=>offset>start&&offset<=best).at(-1) ?? start;
           const match=/\s+\S*$/u.exec(prefix);
           const wordEnd=match ? start+match.index+match[0].length-match[0].trimStart().length : best;
-          const preferred=sentenceEnd>start+(best-start)*0.6 ? sentenceEnd : wordEnd;
-          if (preferred>start && boundaries.includes(preferred) && !diagnosticsFor(new Map(selected).set(leaf.path,make(preferred))).length) best=preferred;
+          // LH-128: a page ends at the last sentence end that fits, wherever it falls: a page that ends inside a sentence leaves the rest of
+          // it to the next page as a fragment ("twenty."). When not even the first sentence fits beside what the page holds, it moves whole
+          // to the next page if it fits a page alone; it is split inside only when no page can hold it.
+          const stop=ends.find(offset=>offset>start) ?? end;
+          if (sentenceEnd<=start && selected.size && boundaries.includes(stop) && !diagnosticsFor(new Map().set(leaf.path,make(stop))).length) best=start;
+          else {
+            const preferred=sentenceEnd>start ? sentenceEnd : wordEnd;
+            if (preferred>start && boundaries.includes(preferred) && !diagnosticsFor(new Map(selected).set(leaf.path,make(preferred))).length) best=preferred;
+          }
         }
       }
       if (best>start) { selected.set(leaf.path,make(best)); finish(); start=best; }
@@ -486,6 +505,26 @@ export function continueOverfull(input: unknown, options: PresentationPagination
     return {sourceSlideIndex,slideIndices:Array.from({length:count},(_,page)=>outputStart+page),kind,blocks,units:blocks.map(page=>units.filter(unit=>page.includes(unit[0]!)).length),pages};
   });
   return {presentation:result.presentation,continued,layout};
+}
+
+/**
+ * LH-99: the pages of every source slide in a `continueOverfull` result, for hosts that draw slide by slide (the player, `<opf-deck>`,
+ * the editor). `pages[i]` lists the output indices that draw source slide `i`, in order: one for a slide kept as written, two or more
+ * for a continued one. A host keeps addressing source slides (numbers, links, selection, `goto`) and steps through a slide's pages
+ * as sub-steps, so a continuation never shifts a source index.
+ */
+export function continuationPages(result: Pick<ContinuationResult, 'continued'>, slideCount: number): number[][] {
+  if (!Number.isInteger(slideCount) || slideCount < 0) throw new RangeError('slideCount must be a whole number of source slides.');
+  const bySource = new Map(result.continued.map(entry=>[entry.sourceSlideIndex,entry.slideIndices]));
+  const pages: number[][] = [];
+  // A kept slide moves down by the pages the continued slides before it added.
+  let output = 0;
+  for (let index = 0; index < slideCount; index++) {
+    const indices = bySource.get(index) ?? [output];
+    pages.push([...indices]);
+    output = indices.at(-1)! + 1;
+  }
+  return pages;
 }
 
 /**

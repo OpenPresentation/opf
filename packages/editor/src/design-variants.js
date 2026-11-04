@@ -5,17 +5,17 @@
 // `prepare…` form that returns the patch without touching a session and a session form that commits it as one undoable edit, like
 // every other design option; the preview and the PowerPoint export read the variant from core, nothing is drawn here.
 import { resolveSlideContext } from "@openpresentation/opf";
-import { normalizeColorVariant } from "@openpresentation/opf/composition";
+import { colorMapFor, normalizeColorVariant } from "@openpresentation/opf/composition";
 import { getValueAtPath, opfPathToJsonPointer } from "./index.js";
 import { checkedDocument, designPatches, fail } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
-import { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS, readSchemeSlots } from "./color-slots.js";
+import { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS, VARIANT_SLOTS, readSchemeSlots } from "./color-slots.js";
 
-export { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS };
+export { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS, VARIANT_SLOTS };
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const sameOrder = (accents) => accents.every((slot, index) => slot === ACCENT_SLOTS[index]);
 
-/** For each background slot: the slots the variant maps to the text, the alternate surface and the secondary text (the schema's ColorVariant table). */
+/** For each of the four background slots (an accent background takes its text from the scheme, see {@link variantSwatches}): the slots the variant maps to the text, the alternate surface and the secondary text (the schema's ColorVariant table). */
 export const VARIANT_MAPS = Object.freeze({
   light1: Object.freeze({ bg1: "light1", tx1: "dark1", bg2: "light2", tx2: "dark2", dark: false }),
   light2: Object.freeze({ bg1: "light2", tx1: "dark1", bg2: "light2", tx2: "dark2", dark: false }),
@@ -29,10 +29,10 @@ export const VARIANT_MAPS = Object.freeze({
  */
 export function normalizeVariant(value) {
   const spec = typeof value === "string" ? { background: value } : value;
-  if (!isObject(spec)) throw fail("invalid-variant", `A variant is a background slot (${VARIANT_BACKGROUND_SLOTS.join(", ")}) or { background, accents }.`, { value });
+  if (!isObject(spec)) throw fail("invalid-variant", `A variant is a background slot (${VARIANT_SLOTS.join(", ")}) or { background, accents }.`, { value });
   const extra = Object.keys(spec).filter((key) => key !== "background" && key !== "accents");
   if (extra.length) throw fail("invalid-variant", `A variant has a background and optionally accents, not ${extra.join(", ")}.`, { fields: extra });
-  if (!VARIANT_BACKGROUND_SLOTS.includes(spec.background)) throw fail("invalid-variant", `The variant background is one of ${VARIANT_BACKGROUND_SLOTS.join(", ")}.`, { background: spec.background });
+  if (!VARIANT_SLOTS.includes(spec.background)) throw fail("invalid-variant", `The variant background is one of ${VARIANT_SLOTS.join(", ")}.`, { background: spec.background });
   if (spec.accents === undefined || spec.accents === null) return spec.background;
   const accents = spec.accents;
   if (!Array.isArray(accents) || accents.length !== ACCENT_SLOTS.length || new Set(accents).size !== ACCENT_SLOTS.length || accents.some((slot) => !ACCENT_SLOTS.includes(slot)))
@@ -55,46 +55,61 @@ const ownVariant = (presentation, base) => {
   return isObject(design) && design.variant !== undefined ? design.variant : undefined;
 };
 
+/** The roles-and-layout view core resolves for one slide, or undefined when the document cannot be resolved (older core, a broken document). */
+function resolveSlide(presentation, slide, catalogs) {
+  try {
+    return resolveSlideContext(presentation, Math.min(Math.max(slide, 0), Math.max((presentation.slides?.length ?? 1) - 1, 0)), catalogs ? { catalogs } : {}).resolved;
+  } catch { return undefined; }
+}
+
 /**
  * The variant at a scope, for a panel. `own` is what that scope's `design.variant` says (`{ background, accents? }`, undefined when
  * it sets none), `background` and `accents` the slide's effective variant (core's resolution: a slide's variant, a theme-slot
- * background, a picture or gradient `tone`, the deck's variant, the theme's, then the default; `accents` always has the six slots in
- * order), `scope` where `own` comes from ("slide", "deck" or "default") and `inherited` whether a slide takes it from the deck.
+ * background, a picture or gradient `tone`, a layout's variant (LH-01, LH-103), the deck's variant, the theme's, then the default;
+ * `accents` always has the six slots in order), `scope` where the variant comes from ("slide", "layout", "deck" or "default") and
+ * `inherited` whether a slide takes it from the deck. LH-97: when a slide's layout decides the variant (a section on an accent, a
+ * statement on `surface`, a closing on `brand`), `scope` is "layout", `background` is the slot the layout's variant resolved to for
+ * this deck and `layout` says what the record authored (`role`: "surface" or "brand" for the tone-relative values, else undefined). The
+ * deck scope never reports a layout: a layout belongs to its slides, so the deck's own variant is read from a slide that has none.
  */
 export function readDesignVariant(presentation, options = {}) {
   const { base } = scopeOf(presentation, options);
   const own = ownVariant(presentation, base);
   const deck = ownVariant(presentation, []);
-  let effective;
-  try {
-    const slide = options.slideIndex ?? 0;
-    effective = resolveSlideContext(presentation, Math.min(Math.max(slide, 0), Math.max((presentation.slides?.length ?? 1) - 1, 0)), options.catalogs ? { catalogs: options.catalogs } : {}).resolved?.roles?.variant;
-  } catch { /* older core or an unresolvable document: fall back to what the document says */ }
+  const slideScope = options.slideIndex !== undefined;
+  let resolved = resolveSlide(presentation, options.slideIndex ?? 0, options.catalogs);
+  // Deck scope: slide 1's layout must not stand in for the deck, so a layout variant there is read again from a plain slide.
+  if (!slideScope && resolved?.layoutVariant) resolved = resolveSlide({ ...presentation, slides: [{ title: "" }] }, 0, options.catalogs);
+  const effective = resolved?.roles?.variant;
   const fallback = asObject(own ?? deck) ?? { background: "light1" };
   const shown = isObject(effective) && typeof effective.background === "string" ? effective : fallback;
-  const slideScope = options.slideIndex !== undefined;
+  const authored = resolved?.layout?.design?.variant;
+  const layout = slideScope && own === undefined && resolved?.layoutVariant ? { background: resolved.layoutVariant.background, ...(authored === "surface" || authored === "brand" ? { role: authored } : {}) } : undefined;
   return {
     own: own === undefined ? undefined : asObject(own),
     background: shown.background,
     accents: Array.isArray(shown.accents) ? [...shown.accents] : [...ACCENT_SLOTS],
-    scope: own !== undefined ? (slideScope ? "slide" : "deck") : slideScope && deck !== undefined ? "deck" : "default",
-    inherited: slideScope && own === undefined,
+    scope: own !== undefined ? (slideScope ? "slide" : "deck") : layout ? "layout" : slideScope && deck !== undefined ? "deck" : "default",
+    inherited: slideScope && own === undefined && !layout,
+    ...(layout ? { layout } : {}),
   };
 }
 
 /**
- * The four variants as swatches built from the deck's own scheme slots at a scope: for each of `light1`, `light2`, `dark1` and `dark2`
- * the colors of its background, text, alternate surface and first three accents (in the effective accent order), and whether it is
- * the effective one. A color the scheme leaves out is undefined.
+ * The variants as swatches built from the deck's own scheme slots at a scope: for each of `light1`, `light2`, `dark1` and `dark2`
+ * (PowerPoint's Variants gallery) and then `accent1` to `accent6` (LH-97: an accent can be the slide background) the colors of its
+ * background, text, alternate surface and first three accents (in the effective accent order), and whether it is the effective one,
+ * which includes a variant a layout decides. The text and surface come from core's `colorMapFor` (an accent takes the light or the dark
+ * text family by contrast). A color the scheme leaves out is undefined.
  */
 export function variantSwatches(presentation, options = {}) {
   const slots = readSchemeSlots(presentation, { slideIndex: options.slideIndex ?? 0, catalogs: options.catalogs });
   const current = readDesignVariant(presentation, options);
-  return VARIANT_BACKGROUND_SLOTS.map((slot) => {
-    const map = VARIANT_MAPS[slot];
+  return VARIANT_SLOTS.map((slot) => {
+    const map = colorMapFor(slot, slots);
     return {
       slot,
-      dark: map.dark,
+      dark: map.tx1 === "light1",
       background: slots[map.bg1],
       text: slots[map.tx1],
       surface: slots[map.bg2],

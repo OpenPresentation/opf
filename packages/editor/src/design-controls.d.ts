@@ -24,6 +24,8 @@ export interface DesignControlsOptions {
   catalogs?: readonly Catalog[];
   /** Display metadata for the engine vocabularies (languages, chart types, social platforms): `catalogDisplay` from `@openpresentation/gallery`. */
   vocabularies?: SwitchVocabularies;
+  /** The composed geometry of a slide as the host draws it (with its fonts); the image section reads it to show the fit an `auto` fit resolved to (LH-126). Without it the panel composes the slide with `editor.composeSlide`. */
+  getGeometry?: (slideIndex: number) => unknown;
   /** Called after every committed change (never for a refused one). */
   onChange?: (change: unknown) => void;
   /** Called after a content conversion or replacement with the path to keep selected (the block, or the inline payload field), since the old selection path may no longer exist. */

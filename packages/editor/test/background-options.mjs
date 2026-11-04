@@ -57,6 +57,8 @@ const forms = [
   },
   { name: "image with fit", spec: { type: "image", src: "asset:photo", fit: "tile", opacity: 0.8 }, stored: { type: "image", src: "asset:photo", fit: "tile", opacity: 0.8 }, draws: true },
   { name: "image with focus, alt and overlay", spec: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, stored: { type: "image", src: "asset:photo", alt: "A photo", fit: "stretch", focus: { x: 0.5, y: 0.7 }, overlay: { color: "dark1", opacity: 0.4 } }, draws: true },
+  // LH-02: `overlay: false` turns off core's automatic scrim under text on the picture.
+  { name: "image without the automatic scrim", spec: { type: "image", src: "asset:photo", overlay: false }, stored: { type: "image", src: "asset:photo", overlay: false }, draws: true },
   { name: "image shorthand", spec: "asset:photo", stored: "asset:photo", draws: true },
   {
     name: "pattern with colors",

@@ -2,13 +2,14 @@
 // the slide a page shows is the slide the preview, the editor and the PDF show. Importing this module touches no DOM, so it
 // is safe on a server (Next.js); `defineOpfDeck()` registers the tag in a browser.
 import {
-  DeckError, createCursor, createDeckStore, isRtlLanguage, localIsoDate, parseDeckDocument, parseSlideNumber, presentableIndexes,
+  DeckError, counterText, createCursor, createDeckStore, isRtlLanguage, localIsoDate, parseDeckDocument, parseSlideNumber, presentableIndexes,
   prepareSlideSvg, sanitizeSvgTree, slideInfo, slideLabel, svgDimensions, plainText,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
 import { toSvg } from "./svg.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { selectSlides, slideArguments } from "./slide-sources.js";
+import { continuationPages, continueOverfull } from "@openpresentation/opf/pagination";
 
 export { DeckError } from "./deck-runtime.js";
 export { loadPreviewFonts, previewBaseFaces, previewFontLayout } from "./preview-fonts.js";
@@ -42,6 +43,9 @@ button[aria-disabled="true"] { opacity: 0.45; cursor: default; }
 .thumbs .frame svg.opf-slide { display: block; width: 100%; height: 100%; pointer-events: none; }
 .thumb, .thumbs .thumb:hover { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; min-height: 0; background: transparent; }
 .thumb[aria-current="true"] { outline: 3px solid var(--opf-deck-accent, Highlight); outline-offset: 0; }
+.thumbs li[data-pages] .frame { box-shadow: 3px 3px 0 -1px var(--opf-deck-stage, #f1f1f1), 3px 3px 0 0 var(--opf-deck-border, rgb(128 128 128 / 0.6)), 6px 6px 0 -1px var(--opf-deck-stage, #f1f1f1), 6px 6px 0 0 var(--opf-deck-border, rgb(128 128 128 / 0.6)); }
+.thumbs li[data-pages] { margin-right: 6px; margin-bottom: 6px; }
+.thumbs .pages { position: absolute; right: 4px; bottom: 4px; padding: 0 5px; border-radius: 4px; font: 600 11px/16px system-ui, sans-serif; color: #fff; background: rgb(0 0 0 / 0.66); pointer-events: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .flip { display: inline-block; }
 .rtl .flip { transform: scaleX(-1); }
@@ -79,7 +83,7 @@ export function defineOpfDeck(tagName = OPF_DECK_TAG) {
 function createElementClass() {
   const Base = HTMLElement;
   return class OpfDeckElement extends Base {
-    static get observedAttributes() { return ["src", "slide", "fonts", "thumbnails", "controls", "present", "include-hidden", "label", "keyboard"]; }
+    static get observedAttributes() { return ["src", "slide", "fonts", "thumbnails", "controls", "present", "include-hidden", "label", "keyboard", "continuation"]; }
 
     #root; #parts = {}; #built = false; #store; #cursor; #deck; #generation = 0; #abort; #documentValue; #fonts; #renderOptions = {};
     #readyPromise = Promise.resolve(); #state = "idle"; #error; #observer; #thumbsBuilt = false; #pointer; #session; #announce = false;
@@ -106,7 +110,7 @@ function createElementClass() {
 
     attributeChangedCallback(name, before, after) {
       if (before === after || !this.#built) return;
-      if (name === "src" || name === "fonts" || name === "include-hidden") { if (this.isConnected) this.#start(); return; }
+      if (name === "src" || name === "fonts" || name === "include-hidden" || name === "continuation") { if (this.isConnected) this.#start(); return; }
       if (name === "slide") { this.#applySlideAttribute(); return; }
       this.#sync();
     }
@@ -130,6 +134,17 @@ function createElementClass() {
 
     /** Number of slides in the sequence that plays. */
     get total() { return this.#cursor?.total ?? 0; }
+
+    /**
+     * LH-99: the 1-based page of the showing slide, and how many pages it draws on. A slide the export continues (LH-90) draws on
+     * two or more; its pages are steps after it, and `slide`, `goto` and the counter keep numbering source slides.
+     */
+    get page() { return this.#cursor ? this.#cursor.page + 1 : 1; }
+    get pages() { return this.#cursor?.pages ?? 1; }
+
+    /** LH-99: whether an overfull slide shows the export's continuation pages (default true; the `continuation="off"` attribute turns it off). */
+    get continuation() { return truthy(this.getAttribute("continuation") ?? "on"); }
+    set continuation(value) { if (value) this.removeAttribute("continuation"); else this.setAttribute("continuation", "off"); }
 
     /**
      * The fonts the deck draws with: the URL of the self-hosted font root (the `fonts` attribute; see the package README), or a
@@ -160,7 +175,7 @@ function createElementClass() {
     get ready() { return this.#readyPromise; }
 
     /** What the showing slide is: id, title, plain-text notes, section. */
-    get currentSlide() { return this.#cursor && this.#deck ? { ...slideInfo(this.#deck, this.#cursor.index), slide: this.#cursor.number, total: this.#cursor.total } : undefined; }
+    get currentSlide() { return this.#cursor && this.#deck ? { ...slideInfo(this.#deck, this.#cursor.index), slide: this.#cursor.number, total: this.#cursor.total, page: this.#cursor.page + 1, pages: this.#cursor.pages } : undefined; }
 
     next() { return this.#go(() => this.#cursor?.next()); }
     previous() { return this.#go(() => this.#cursor?.previous()); }
@@ -183,10 +198,10 @@ function createElementClass() {
       const { present } = await import("./player.js");
       const session = await present(this.#deck, {
         store: this.#store, fonts: this.#fonts ?? this.#resolvedFonts, renderOptions: this.#renderOptions,
-        includeHidden: this.includeHidden, startSlide: this.#cursor.number, ...options, returnFocus,
+        includeHidden: this.includeHidden, startSlide: this.#cursor.number, startPage: this.#cursor.page + 1, continuation: this.continuation, ...options, returnFocus,
       });
       this.#session = session;
-      session.addEventListener("slidechange", (event) => { if (this.#cursor && event.detail?.index !== undefined && this.#cursor.gotoIndex(event.detail.index)) { this.#show({ announce: false }); this.#emitChange(); } });
+      session.addEventListener("slidechange", (event) => { if (this.#cursor && event.detail?.index !== undefined && this.#cursor.gotoIndex(event.detail.index, (event.detail.page ?? 1) - 1)) { this.#show({ announce: false }); this.#emitChange(); } });
       session.addEventListener("close", () => {
         if (this.#session === session) this.#session = undefined;
         this.#show({ announce: false });
@@ -229,13 +244,14 @@ function createElementClass() {
         }
         this.#resolvedFonts = registry;
         const date = this.#renderOptions.date ?? localIsoDate();
-        let store = createDeckStore({ document: deck, fonts: registry, renderOptions: this.#renderOptions, date });
+        const continuation = this.continuation;
+        let store = createDeckStore({ document: deck, fonts: registry, renderOptions: this.#renderOptions, date, continuation });
         try { await store.ready(signal); } catch (cause) {
           if (stale()) return;
           if (!registry) throw cause;
           this.#report(cause, false);
           this.#resolvedFonts = undefined;
-          store = createDeckStore({ document: deck, renderOptions: this.#renderOptions, date });
+          store = createDeckStore({ document: deck, renderOptions: this.#renderOptions, date, continuation });
         }
         if (stale()) return;
         // Draw the first slide before accepting the deck, so an invalid document fails here and not on the first click.
@@ -243,7 +259,7 @@ function createElementClass() {
         if (sequence.length) store.svg(sequence[Math.min(Math.max((parseSlideNumber(this.getAttribute("slide")) ?? 1) - 1, 0), sequence.length - 1)]);
         this.#deck = deck;
         this.#store = store;
-        this.#cursor = createCursor(sequence, (parseSlideNumber(this.getAttribute("slide")) ?? 1) - 1);
+        this.#cursor = createCursor(sequence, (parseSlideNumber(this.getAttribute("slide")) ?? 1) - 1, { pagesOf: (index) => store.pages(index) });
         this.#thumbsBuilt = false;
         this.#state = "ready";
         this.#show({ announce: false });
@@ -286,9 +302,9 @@ function createElementClass() {
     #prefetch() {
       const store = this.#store, cursor = this.#cursor;
       if (!store || !cursor) return;
-      const next = cursor.sequence[cursor.position + 1];
-      if (next === undefined) return;
-      const run = () => { try { if (this.#store === store) store.svg(next); } catch { /* reported when the slide is shown */ } };
+      const next = cursor.peek(1);
+      if (!next) return;
+      const run = () => { try { if (this.#store === store) store.svg(next.index, next.page); } catch { /* reported when the slide is shown */ } };
       if (typeof requestIdleCallback === "function") requestIdleCallback(run, { timeout: 500 }); else setTimeout(run, 0);
     }
 
@@ -393,7 +409,7 @@ function createElementClass() {
     #emitChange() {
       if (!this.#cursor || !this.#deck) return;
       const info = slideInfo(this.#deck, this.#cursor.index);
-      this.dispatchEvent(new CustomEvent("slidechange", { detail: { slide: this.#cursor.number, total: this.#cursor.total, index: info.index, id: info.id, title: info.title, notes: info.notes, section: info.section }, bubbles: true, composed: true }));
+      this.dispatchEvent(new CustomEvent("slidechange", { detail: { slide: this.#cursor.number, total: this.#cursor.total, index: info.index, page: this.#cursor.page + 1, pages: this.#cursor.pages, id: info.id, title: info.title, notes: info.notes, section: info.section }, bubbles: true, composed: true }));
     }
 
     #renderState() {
@@ -420,10 +436,10 @@ function createElementClass() {
       parts.deck.classList.toggle("rtl", Boolean(rtl));
       const info = store.info(cursor.index);
       let svg;
-      try { svg = store.svg(cursor.index); } catch (error) {
+      try { svg = store.svg(cursor.index, cursor.page); } catch (error) {
         this.#state = "error"; this.#error = error; this.#renderState(); this.#report(error, true); return;
       }
-      const label = slideLabel(info, cursor.number, cursor.total);
+      const label = slideLabel(info, cursor.number, cursor.total, cursor.page + 1, cursor.pages);
       const template = this.ownerDocument.createElement("template");
       template.innerHTML = prepareSlideSvg(svg);
       const node = template.content.firstElementChild;
@@ -431,10 +447,10 @@ function createElementClass() {
       const { width, height } = svgDimensions(svg);
       parts.deck.style.setProperty("--ratio", `${width} / ${height}`);
       parts.viewport.setAttribute("aria-label", label);
-      parts.counterText.textContent = `${cursor.number} / ${cursor.total}`;
+      parts.counterText.textContent = counterText(cursor.number, cursor.total, cursor.page + 1, cursor.pages);
       parts.counterLabel.textContent = label;
-      parts.prev.setAttribute("aria-disabled", String(cursor.number <= 1));
-      parts.next.setAttribute("aria-disabled", String(cursor.number >= cursor.total));
+      parts.prev.setAttribute("aria-disabled", String(cursor.atStart));
+      parts.next.setAttribute("aria-disabled", String(cursor.atEnd));
       parts.bar.hidden = this.getAttribute("controls") === "none" || !cursor.total;
       parts.present.hidden = !this.hasAttribute("present");
       parts.thumbsWrap.hidden = !this.hasAttribute("thumbnails");
@@ -454,12 +470,15 @@ function createElementClass() {
       const first = sequence.length ? svgDimensions(store.svg(sequence[0])) : { width: 16, height: 9 };
       const items = sequence.map((index, position) => {
         const info = store.info(index);
+        const pages = store.pages(index);
         const li = doc.createElement("li");
         const button = doc.createElement("button");
         button.type = "button";
         button.className = "thumb";
         button.setAttribute("part", "thumbnail");
-        button.setAttribute("aria-label", `Go to ${slideLabel(info, position + 1, sequence.length)}`);
+        // LH-99: a slide the export continues is one thumbnail (its first page) drawn as a stack, with its page count.
+        const label = slideLabel(info, position + 1, sequence.length);
+        button.setAttribute("aria-label", `Go to ${pages > 1 ? label.replace(/^(Slide \d+ of \d+)/, `$1, ${pages} pages`) : label}`);
         button.tabIndex = position === cursor.position ? 0 : -1;
         // The drawing is a sibling under the button, not its content: the slide's own text is not the button's visible
         // label (axe label-content-name-mismatch, WCAG 2.5.3), and the button's name is the slide's label. The button
@@ -470,6 +489,14 @@ function createElementClass() {
         frame.setAttribute("aria-hidden", "true");
         button.addEventListener("click", () => { this.#announce = true; this.#go(() => this.#cursor?.goto(position + 1)); });
         li.append(button, frame);
+        if (pages > 1) {
+          li.dataset.pages = String(pages);
+          const badge = doc.createElement("span");
+          badge.className = "pages";
+          badge.setAttribute("aria-hidden", "true");
+          badge.textContent = `${pages} pages`;
+          li.append(badge);
+        }
         li._frame = frame; li._index = index;
         return li;
       });
@@ -543,11 +570,24 @@ export function toHtml(input, slides, options) {
   const attributeText = Object.entries(attributes).filter(([, value]) => value !== undefined && value !== false).map(([name, value]) => (value === true ? ` ${name}` : ` ${name}="${escapeHtml(value)}"`)).join("")
     + (options.thumbnails ? " thumbnails" : "") + (options.present ? " present" : "") + (options.includeHidden ? " include-hidden" : "");
   const date = options.renderOptions?.date ?? options.date;
-  const figures = shown.map((position) => {
+  // LH-99: a slide the export continues (LH-90) is drawn as its pages, one figure each, numbered as sub-steps of the source slide.
+  let continued;
+  if (options.continuation !== false) {
+    try {
+      const measurement = renderFonts?.textMeasurement;
+      const result = continueOverfull(deck, { catalogs: options.renderOptions?.catalogs ?? [], ...(measurement ? { fonts: { textMeasurement: measurement } } : {}), ...(date ? { date } : {}), ...(options.renderOptions?.strictReferences === true ? { strictReferences: true } : {}) });
+      if (result.continued.length) continued = { presentation: result.presentation, pages: continuationPages(result, deck.slides.length) };
+    } catch { /* drawn as written; toSvg reports why */ }
+  }
+  const figures = shown.flatMap((position) => {
     const index = sequence[position];
+    const pages = continued ? continued.pages[index] : [index];
+    return pages.map((output, page) => figure(continued ? continued.presentation : deck, output, index, position, page, pages.length));
+  });
+  function figure(drawnDeck, output, index, position, page, pages) {
     // Shared rules are deduplicated across slides, so the slides embed whole faces and the shared set is cut below to what
     // every slide draws (RR-65); per-slide subsets would differ and repeat each face once per slide.
-    let svg = toSvg(deck, index + 1, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { text: "system" } : {}), ...(fontMode === "shared" ? { subsetFonts: false } : {}), ...(date ? { date } : {}) });
+    let svg = toSvg(drawnDeck, output + 1, { ...options.renderOptions, fonts: renderFonts, ...(fontMode === "external" ? { text: "system" } : {}), ...(fontMode === "shared" ? { subsetFonts: false } : {}), ...(date ? { date } : {}) });
     if (fontMode === "shared") {
       drawnFaces(svg, sharedCharacters);
       svg = svg.replace(/<style>(@font-face[\s\S]*?)<\/style>/g, (_, css) => {
@@ -558,9 +598,9 @@ export function toHtml(input, slides, options) {
     }
     const { width, height } = svgDimensions(svg);
     const prepared = prepareSlideSvg(svg).replace(/^<svg\b/, `<svg style="display:block;width:100%;height:auto;aspect-ratio:${width} / ${height}"`);
-    const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length);
+    const label = slideLabel(slideInfo(deck, index), position + 1, sequence.length, page + 1, pages);
     return `<figure role="group" aria-roledescription="slide" aria-label="${escapeHtml(label)}" style="margin:0 0 8px">${prepared}</figure>`;
-  });
+  }
   const titles = slides === undefined && sequence.length > 1
     ? `<nav aria-label="Slides"><ol>${sequence.map((index) => `<li>${escapeHtml(slideInfo(deck, index).title)}</li>`).join("")}</ol></nav>` : "";
   const embedded = options.embed ? `<script type="application/opf+json">${JSON.stringify(deck).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029")}</script>` : "";

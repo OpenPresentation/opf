@@ -304,7 +304,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
   for (const [index, slide] of deck.slides.entries()) {
     const context = resolveSlideContext(deck, index, {});
     // The layout's own regions (recompose: false): a slide LH-49 recomposes for a short chart plot still uses its layout's placeholders.
-    const geometry = composeSlide(context.slide, {...context.options, recompose: false});
+    // At the role sizes (fill: false): the empty layout's placeholders hold the role-size heading, which LH-129 grows on a filled cover.
+    const geometry = composeSlide(context.slide, {...context.options, recompose: false, fill: false});
     const shapes = placeholders(text(parts, layoutOf(parts, index + 1)));
     for (const region of geometry.regions) {
       assert.equal(region.collapsed, undefined, `${slide.layout}.${region.name} is filled`);

@@ -349,6 +349,7 @@ _No named properties._
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
+| `sequence` | no | `enum:steps \| numbered` | The region lists the steps of a sequence (LH-07). 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its n... |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown w... |
 | `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 
@@ -367,6 +368,7 @@ _No named properties._
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
 | `imageFit` | no | `enum:cover \| contain \| stretch \| auto` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame, 'auto' covers when the crop keeps at least 85% of the pictu... |
 | `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
+| `listStyle` | no | `enum:stack \| rows` | As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout. |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
 | `variant` | no | `oneOf:ref:ColorVariantSlot / ref:ColorVariant / ref:LayoutVariantRole` | The color variant slides on this layout draw on (LH-01): a background slot ('accent1', 'dark1', ...) or the ColorVariant object, as design.variant, or a value relative to the deck's own variant (LayoutVariantRole: 'su... |
 

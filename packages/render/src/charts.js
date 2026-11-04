@@ -239,6 +239,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   render(c, spec);
   drawReferenceLines(c, layer?.references?.lines);
   drawStackNames(c, layer?.stack?.names);
+  drawStackEnds(c, layer?.stack?.ends);
   if (resolved.active) drawAxisTitles(c);
   return svg.tag("g", { ...svg.traceAttrs(options, item.path), "data-opf-chart": options.trace ? id : undefined }, c.children.join("\n"));
 }
@@ -679,8 +680,8 @@ function planCategoryAxis(c, entries, geometry) {
   return { ...axis, plan };
 }
 
-function drawBottomLabels(c, plan, plot, entries) {
-  const y = plot.y + plot.height, band = plot.width / Math.max(1, entries.length), lineH = c.textHeight;
+function drawBottomLabels(c, plan, plot, entries, drop = 0) {
+  const y = plot.y + plot.height + drop, band = plot.width / Math.max(1, entries.length), lineH = c.textHeight;
   for (const label of plan.labels) {
     const path = entries[label.i].path;
     if (plan.angle) {
@@ -781,7 +782,7 @@ function renderCategoryChart(c, spec) {
   const labelRoom = hidden && horizontal && c.dataLabels ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format })) + fontPx * 0.5))) : 0;
   const right = box.x + box.width - pad - legendWidth;
   const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
-  let plot, scale, valueTickWidth, rowTop;
+  let plot, scale, valueTickWidth, rowTop, labelPlot;
   if (horizontal) {
     // LH-120: the label gutter is at most 30% of the chart, or up to 40% for a word that does not break (a label's longest word fits
     // before a label is ellipsized; longer labels wrap onto two lines, planRowLabels).
@@ -797,6 +798,8 @@ function renderCategoryChart(c, spec) {
     if (valueFormat !== undefined && !percent) ({ x, width, scale } = insetForEndLabels(c, x, width, valueFormat, scaleFor));
     const aligned = c.alignedRows?.centers.length === count ? c.alignedRows : undefined;
     plot = aligned ? { x, y: aligned.top, width, height: Math.max(1, aligned.bottom - aligned.top) } : { x, y: top, width, height: Math.max(1, bottom - top) };
+    // LH-125: a horizontal stacked bar chart draws its plot where core pinned it (its names stand in a row above); the PPTX export pins the same.
+    if (c.plotBox && !aligned) { plot = { ...c.plotBox }; scale = scaleFor(plot.width); }
     // LH-59: the categories read top to bottom in data order (PowerPoint's reversed category axis, which the export writes).
     const entries = categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` }));
     const rowBand = plot.height / count;
@@ -809,10 +812,14 @@ function renderCategoryChart(c, spec) {
     // LH-93: a chart that shares its value axis with siblings draws its plot in the box core gave the set (one plot height); its tick
     // labels sit beside it and its category labels under it, laid out as they would be for a plot of its own.
     const shared = c.plotBox;
+    // LH-125: a stacked area runs edge to edge: its n categories stand on the plot's n points, so their labels are laid out as the centers of
+    // n bands over a plot one band wider (labelPlot); the end labels reach half their width past the plot, which core left room for.
+    const edgeToEdge = spec.kind === "area" && c.stack?.edge === true && count >= 2;
+    labelPlot = shared && edgeToEdge ? { x: shared.x - shared.width / (count - 1) / 2, y: shared.y, width: shared.width + shared.width / (count - 1), height: shared.height } : shared;
     const axis = shared ? {
       scale: categoryScale(c, dataMin, dataMax, shared.height, c.lineHeight * 1.2, percent), plot: shared,
       tickWidth: rtl ? Math.max(1, right - shared.x - shared.width) : undefined,
-      plan: planBottomLabels(c, entries, shared, Math.max(c.lineHeight + c.textHeight, c.box.height * 0.4), { minX: shared.x - fontPx * 0.5, maxX: shared.x + shared.width + fontPx * 0.5, rotatedMinX: c.box.x + c.pad })
+      plan: planBottomLabels(c, entries, labelPlot, Math.max(c.lineHeight + c.textHeight, c.box.height * 0.4), edgeToEdge ? { minX: c.box.x, maxX: c.box.x + c.box.width, rotatedMinX: c.box.x + c.pad } : { minX: shared.x - fontPx * 0.5, maxX: shared.x + shared.width + fontPx * 0.5, rotatedMinX: c.box.x + c.pad })
     } : planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
@@ -826,7 +833,8 @@ function renderCategoryChart(c, spec) {
     });
     ({ plot, scale } = axis);
     valueTickWidth = axis.tickWidth;
-    drawBottomLabels(c, axis.plan, plot, entries);
+    // LH-125: an edge-to-edge area's first label stands under the value axis's zero label: its labels sit a fifth of a text size lower (core reserves it).
+    drawBottomLabels(c, axis.plan, labelPlot ?? plot, entries, labelPlot !== undefined && labelPlot !== plot ? c.fontPx * 0.2 : 0);
   }
   c.plotArea = plot;
   const at = (value) => horizontal ? plot.x + axisFraction(value, scale) * plot.width : plot.y + axisFraction(value, scale, true) * plot.height;
@@ -847,7 +855,7 @@ function renderCategoryChart(c, spec) {
   const band = (horizontal ? plot.height : plot.width) / count;
   if (spec.kind === "bar") drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot, rowTop });
   else if (spec.kind === "line") drawLines(c, spec, series, stacks, { plot, band, at, categorySlot });
-  else drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot });
+  else drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot, edge: labelPlot !== undefined && labelPlot !== plot });
   // The value axis line goes with its tick labels (LH-03); the category axis line stays, at zero.
   if (horizontal) {
     axisLine(c, crossing, plot.y, crossing, plot.y + plot.height);
@@ -940,10 +948,12 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
 
 const rtl = (c) => c.bound.geometry?.direction === "rtl";
 
-function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot = (i) => i }) {
+function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot = (i) => i, edge = false }) {
+  // LH-125: an edge-to-edge area (core layer.stack.edge) stands on its points: the first at the plot's start, the last at its end.
+  const pointX = edge ? (i) => plot.x + categorySlot(i) * plot.width / (stacks[0].length - 1) : (i) => plot.x + (categorySlot(i) + 0.5) * band;
   for (let j = 0; j < series.length; j++) {
     const s = series[j];
-    const points = stacks[j].map((point, i) => ({ x: plot.x + (categorySlot(i) + 0.5) * band, from: point.from, to: point.to }));
+    const points = stacks[j].map((point, i) => ({ x: pointX(i), from: point.from, to: point.to }));
     const upper = points.map((p) => `${c.num(p.x)} ${c.num(at(p.to))}`);
     const lower = points.slice().reverse().map((p) => `${c.num(p.x)} ${c.num(p.from === 0 ? crossing : at(p.from))}`);
     c.mark("path", { d: `M ${upper.join(" L ")} L ${lower.join(" L ")} Z`, fill: seriesColor(c, j) }, `${c.path}.data.columns.${s.column}`);
@@ -952,7 +962,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (!point || c.stackValues?.[j]?.[i] === false) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
-    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (categorySlot(i) + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), pointX(i), (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
 }
 
@@ -962,6 +972,16 @@ function drawReferenceLines(c, lines) {
   for (const line of lines ?? []) {
     c.mark("line", { x1: line.x1, y1: line.y, x2: line.x2, y2: line.y, stroke: c.chartTextColor, "stroke-width": c.pt, "stroke-dasharray": `${c.num(4 * c.pt)} ${c.num(3 * c.pt)}` });
     c.text(line.text, line.label, c.path, rtl(c) ? "right" : "left", c.labelColor, 700);
+  }
+}
+
+// LH-125: the values at the first and last points of an edge-to-edge stacked area, inside the band at the plot's edges, in the color that
+// contrasts with the series' fill, aligned to the edge, in the box core placed them.
+function drawStackEnds(c, ends) {
+  for (const entry of ends ?? []) {
+    const s = c.series()[entry.series];
+    if (!s) continue;
+    c.text(entry.text, entry.box, `${c.path}.data.rows.${entry.row}.${s.column}`, entry.align, labelFill(c, "center", seriesColor(c, entry.series)));
   }
 }
 
@@ -997,6 +1017,17 @@ function drawValueList(c, list) {
     const valueWidth = c.width(row.value) * (row.bold ? 1.08 : 1) + c.fontPx;
     c.text(row.name, { ...inner, x: rtl(c) ? inner.x + valueWidth : inner.x, width: Math.max(1, inner.width - valueWidth) }, `${c.path}.data.rows.${row.row}.0`, start, fill, weight);
   });
+  // LH-125: a doughnut prints the value of the slice the title names in its hole, large and bold in the slice's color made legible as text,
+  // its category under it in the chart text color.
+  const hole = list.hole;
+  if (hole) {
+    const element = c.svg.renderTextBox(hole.value.text, hole.value.box, c.bound, {
+      path: c.tracePath(`${c.path}.data.rows.${hole.row}.1`), fontSize: hole.value.size / c.u, fontFamily: c.bound.design.fonts.body, fontWeight: 700,
+      fill: chartSeriesLabelColor(c.surface, sliceColor(c, hole.row)), options: c.options, align: "center", verticalAlign: "middle"
+    });
+    if (element) c.children.push(element);
+    if (hole.name) c.text(hole.name.text, hole.name.box, `${c.path}.data.rows.${hole.row}.0`, "center");
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -1544,7 +1575,7 @@ function renderWaterfallChart(c) {
     const x = plot.x + bar.i * band + offset;
     c.mark("rect", { x, y: Math.min(a, b), width, height: Math.abs(b - a), fill: colorOf(bar) }, `${c.path}.data.rows.${bar.i}.${column}`);
     const next = bars[k + 1];
-    if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt, ...(layer ? { "stroke-dasharray": `${c.num(3 * c.pt)} ${c.num(2 * c.pt)}` } : {}) });
+    if (next) c.mark("line", { x1: x + width, y1: b, x2: plot.x + next.i * band + offset, y2: b, stroke: c.axisColor, "stroke-width": c.pt, ...(layer ? { "stroke-dasharray": `${c.num(4 * c.pt)} ${c.num(3 * c.pt)}` } : {}) });
   });
   // RR-35: data labels show each step's value (not the running total) on the floating bars.
   if (c.dataLabels) bars.forEach((bar) => {

@@ -7,7 +7,8 @@ const ITEMS = [
   { text: 'Clear scope', description: 'Two teams and one workflow keep the pilot focused.' },
   { text: 'Consistent measures', description: 'Track completion and task time against a baseline.' },
 ];
-const deck = (design, extra = {}) => ({ design: { background: { type: 'solid', color: '#FFFFFF' }, ...design }, slides: [{ title: 'Pillars', items: ITEMS, ...extra }] });
+// Stacked (`listStyle: stack`): a list of short labels with descriptions is otherwise drawn as ruled rows (LH-08), with no bullet either way.
+const deck = (design, extra = {}) => ({ design: { background: { type: 'solid', color: '#FFFFFF' }, listStyle: 'stack', ...design }, slides: [{ title: 'Pillars', items: ITEMS, ...extra }] });
 // A list marker is the aria-hidden text the renderer draws before an entry (picture bullets are aria-hidden images).
 const markers = svg => [...svg.matchAll(/<text\b[^>]*\baria-hidden="true"[^>]*>([^<]*)<\/text>/g)].map(match => match[1]);
 const textX = (svg, word) => +svg.match(new RegExp(`<text\\b[^>]*\\bx="([\\d.]+)"[^>]*>(?:<tspan[^>]*>)?${word}`))[1];

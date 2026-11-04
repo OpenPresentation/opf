@@ -50,6 +50,12 @@ export interface LayoutRegion {
   listColumns: 'auto' | 1;
   /** LH-68: `tile` when a metric in the region is laid out from its whole card; absent for the default `stack` (value, label and the rest as one block). */
   metrics?: 'tile';
+  /**
+   * LH-07: the region lists the steps of a sequence. `steps`: its blocks (or a lone list's entries) are steps, drawn under numbered
+   * badges joined by a connector, and a lone list of short entries is a flow of chips joined by arrows. `numbered` (an agenda): every
+   * list draws its entries beside badges, numbered or not (an unnumbered one is counted as drawing only). Absent: the region's content draws as any other.
+   */
+  sequence?: 'steps' | 'numbered';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -139,6 +145,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     bleed: entry.bleed === true,
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
+    ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

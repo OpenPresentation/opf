@@ -104,7 +104,8 @@ const open = async (document) => {
   assert.ok(diagnostics.some(d => d.code === 'unsupported-color-map'), 'the unsupported map is reported');
 }
 
-// 7. A picture background with a tone gets the preview's scrim: the tone variant's bg1 at 40%, directly above the picture and below the content.
+// 7. A picture background with a tone gets the preview's scrim (core's automatic scrim, LH-02): the tone variant's bg1 under the text, directly
+// above the picture and below the content.
 {
   const src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
   const toned = tone => deck(undefined, [{title: 'Cover', text: 'Readable', design: {background: {type: 'image', src, alt: 'A picture', ...(tone ? {tone} : {})}}}]);
@@ -113,8 +114,8 @@ const open = async (document) => {
     const {text, theme, override} = await open(toned(tone));
     const xml = text('ppt/slides/slide1.xml'), shape = scrim(xml);
     assert.ok(shape, `${tone}: the scrim shape`);
-    assert.match(shape, /<a:solidFill><a:schemeClr val="bg1"><a:alpha val="40000"\/><\/a:schemeClr><\/a:solidFill>/, `${tone}: bg1 at 40%`);
-    assert.match(shape, /<a:off x="0" y="0"\/><a:ext cx="12192000" cy="6858000"\/>/, `${tone}: the full slide`);
+    assert.match(shape, /<a:gradFill rotWithShape="1"><a:gsLst>(<a:gs pos="\d+"><a:schemeClr val="bg1"><a:alpha val="\d+"\/><\/a:schemeClr><\/a:gs>)+<\/a:gsLst><a:lin ang="(0|5400000)" scaled="0"\/><\/a:gradFill>/, `${tone}: a gradient of bg1 with alpha stops`);
+    assert.match(shape, /<a:off x="0" y="0"\/>/, `${tone}: from the slide edge`);
     assert.equal(override(1).bg1, slot, `${tone}: the slide map is the tone's`);
     assert.ok(xml.indexOf('<p:pic>') < xml.indexOf('name="OPF background tone') && xml.indexOf('name="OPF background tone') < xml.indexOf('Readable'), `${tone}: picture, scrim, then content`);
     assert.ok(dark ? theme.dk1 : theme.lt1);

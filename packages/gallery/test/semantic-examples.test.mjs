@@ -74,6 +74,7 @@ test('process numbering appears once: from the list, never typed into the label'
   assert.deepEqual(slide.blocks.map(block => block.items[0].start), [1, 2, 3]);
   assert.ok(slide.blocks.every(block => !/^\d/.test(block.items[0].text)));
   const svg = toSvg(deck('process'), 1, {catalogs: [gallery]});
-  assert.deepEqual(markers(svg), ['1.', '2.', '3.'], 'one number per step, and no bullet glyph beside it');
+  // LH-07: the process layout draws each step's number in its badge (a numeral without the period), and no marker beside the text.
+  assert.deepEqual(markers(svg), ['1', '2', '3'], 'one number per step, and no bullet glyph beside it');
   assert.equal((svg.match(/>\s*\d\.\s/g) ?? []).length, 0, 'no typed number in the label text');
 });

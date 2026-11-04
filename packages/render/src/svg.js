@@ -1,7 +1,7 @@
 // The layout engine lives in core's `/composition` entry. Every name is a static import, so a core without one fails to
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
-  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
+  layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
@@ -337,6 +337,19 @@ function tagFill(design) {
   const background = design.backgroundColor ?? design.colors.background;
   return contrastRatio(design.colors.primary, background) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
 }
+// LH-50: a label core draws as an eyebrow (item.eyebrow) takes the tag's color on its backdrop: its card's fill when it is on one.
+function eyebrowFill(design, item) {
+  const backdrop = item.frameBox ? design.roles.neutrals.card.hex : design.backgroundColor ?? design.colors.background;
+  return contrastRatio(design.colors.primary, backdrop) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
+}
+// LH-32: the escaped text of a tracked line with its last character in a tspan of no letter spacing: core spaces an eyebrow's letters
+// between characters (trackingWidth), and a trailing spacing would move a centered or right-aligned line by a rasterizer's own reading.
+function untrackLast(content) {
+  if (typeof content !== "string" || content.includes("<")) return content;
+  const last = /(&#?\w+;|[\s\S])$/u.exec(content);
+  return last && last.index > 0 ? `${content.slice(0, last.index)}<tspan letter-spacing="0">${last[1]}</tspan>` : content;
+}
+const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
 const LINK_URL = /^(https?:|mailto:|tel:)/i;
 
@@ -608,7 +621,7 @@ function bindSlide(presentation, index, context) {
   // The rule is core's resolveDrawnFontFamilies, which validate and paginate compose with too (WI-1, P24); the renderer decides
   // the two exceptions from the font policy and symbol tables it already holds.
   design.fonts = resolveDrawnFontFamilies(design.fonts, textMeasurement, (named, resolved) => isSymbolEncodedFamily(named) || fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase());
-  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement });
+  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement, ...(typeof context.options.pictureLuminance === "function" ? { pictureLuminance: context.options.pictureLuminance } : {}) });
   return {
     scriptFonts,
     scriptFontsFor,
@@ -708,6 +721,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   let content = [
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
+    renderSteps(bound, options),
     ...renderSlideContent(bound, width, height, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
     renderFootnotes(bound, options, drawHelpers),
@@ -820,17 +834,19 @@ function renderBackgroundImage(background, bound, width, height, options) {
   const id = `opf-s${bound.index + 1}-background`, matrix = imageRecolorMatrix(background.recolor, bound);
   const defs = matrix ? tag("defs", {}, tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix }))) : "";
   const pixels = matrix || background.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: background.opacity === undefined ? undefined : preciseNumber(background.opacity) }, picture) : picture;
-  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : toneOverlay(bound, width, height, options)].filter(Boolean).join("\n");
+  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : (background.scrims ?? []).map((scrim, index) => renderPictureScrim(scrim, index, bound, options)).join("\n")].filter(Boolean).join("\n");
 }
 
-// RR-96: a picture that names its tone (`dark` or `light`) is a picture the text must read on: with no overlay of its own, the slide
-// background colour (bg1 of the tone's variant, so dark text colours get a dark scrim and light ones a light one) covers it at 40%.
-// Core resolves the variant from the tone but exposes no overlay for it, so this scrim is the renderer's own (reported in RR-96).
-const TONE_OVERLAY_OPACITY = 0.4;
-function toneOverlay(bound, width, height, options) {
-  const tone = isPlainObject(bound.design.background) ? bound.design.background.tone : undefined;
-  if (tone !== "dark" && tone !== "light") return "";
-  return tag("rect", { ...HIDDEN, x: 0, y: 0, width, height, fill: bound.design.colors.background, opacity: TONE_OVERLAY_OPACITY, ...(options.trace ? { "data-opf-tone-overlay": tone } : {}) });
+// LH-02: core's automatic scrims under the text on a picture (backgroundImage.scrims) in the slide background color: each a rectangle filled
+// with a linear gradient along its axis whose stops carry the opacity (a band of one opacity is a plain fill), the geometry the PPTX
+// export writes as a native gradient fill. It replaces RR-96's renderer-own 40% scrim on a picture that names its tone.
+function renderPictureScrim(scrim, index, bound, options) {
+  const trace = options.trace ? { "data-opf-scrim": scrim.edge ?? scrim.form } : {};
+  const rect = { ...HIDDEN, x: stableNumber(scrim.box.x), y: stableNumber(scrim.box.y), width: stableNumber(scrim.box.width), height: stableNumber(scrim.box.height) };
+  if (scrim.stops.every(stop => stop.opacity === scrim.opacity)) return tag("rect", { ...rect, fill: scrim.color, "fill-opacity": preciseNumber(scrim.opacity), ...trace });
+  const id = `opf-s${bound.index + 1}-scrim-${index + 1}`, vertical = scrim.axis === "vertical";
+  const stops = scrim.stops.map(stop => tag("stop", { offset: preciseNumber(stop.position), "stop-color": scrim.color, "stop-opacity": preciseNumber(stop.opacity) })).join("");
+  return tag("defs", {}, tag("linearGradient", { id, x1: 0, y1: 0, x2: vertical ? 0 : 1, y2: vertical ? 1 : 0 }, stops)) + tag("rect", { ...rect, fill: `url(#${id})`, ...trace });
 }
 
 // tile: a pattern cell of the picture's intrinsic size, anchored at the canvas origin.
@@ -908,20 +924,53 @@ function imageRecolorMatrix(recolor, bound) {
   return [...rows, '0 0 0 1 0'].join(' ');
 }
 
+// LH-07: core's step badges, connectors and flows (geometry.steps), under the text they number, as the PPTX export draws them: the chips
+// (card fill and border), the connector (border color), each badge (a primary circle with its numeral centered in the bold body face, in
+// the scheme color readable on the primary) and the arrows (primary block arrows, DrawingML's rightArrow or leftArrow preset).
+// With trace each shape names the block or entry it numbers in data-opf-step-path, not data-opf-path: it is the layout's drawing, so
+// hit-testing and the region groups still find each item by its own text.
+function renderSteps(bound, options) {
+  const steps = bound.geometry.steps;
+  if (!steps?.length) return '';
+  const primary = bound.design.colors.primary, numeral = readableSchemeColor(primary, bound.design.roles).hex, family = fontStack(bound.design.fonts.body, bound.design.fontScheme.type);
+  return steps.map(step => {
+    const parts = [];
+    for (const chip of step.chips ?? []) parts.push(tag('rect', {...HIDDEN, x: chip.box.x, y: chip.box.y, width: chip.box.width, height: chip.box.height, rx: chip.radius, fill: bound.design.roles.neutrals.card.hex, stroke: bound.design.roles.neutrals.cardBorder.hex, ...(options.trace ? {'data-opf-step-path': chip.path} : {})}));
+    if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...(options.trace ? {'data-opf-step-path': step.path} : {})}));
+    for (const badge of step.badges) {
+      parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
+      parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
+    }
+    for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
+    return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
+  }).join('\n');
+}
+// DrawingML's rightArrow preset at its default adjustments (adj1 = adj2 = 50000): a shaft half the box's height and a head as long as
+// half its smaller side; leftArrow is its mirror.
+function blockArrowPath(box, direction) {
+  const {x, y, width, height} = box, head = Math.min(width, height) / 2, top = y + height / 4, bottom = y + height * 3 / 4, middle = y + height / 2, n = stableNumber;
+  const points = direction === 'left'
+    ? [[x, middle], [x + head, y], [x + head, top], [x + width, top], [x + width, bottom], [x + head, bottom], [x + head, y + height]]
+    : [[x, top], [x + width - head, top], [x + width - head, y], [x + width, middle], [x + width - head, y + height], [x + width - head, bottom], [x, bottom]];
+  return `M${points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`;
+}
+
 function renderSlideContent(bound, width, height, options) {
   for (const diagnostic of [...bound.design.diagnostics, ...bound.geometry.diagnostics]) reportDiagnostic(diagnostic, options);
   // LH-06: core's emphasis surface (geometry.emphasis) is drawn under the first item on it, in the fill core's emphasisSurface gives the
   // slide; every item on it (item.emphasis) is drawn with the surface's roles, whose text reaches 4.5:1 on the fill, as the PPTX export does.
   const emphasis=bound.geometry.emphasis;
   const onSurface=emphasis ? emphasisBound(bound, emphasisSurface(bound.design.colorScheme, bound.design.roles)) : undefined;
-  let surfaceDrawn=false;
+  let surfaceDrawn=false,previousFrame;
   return bound.geometry.items.map(item => {
     const itemBound=item.emphasis&&onSurface ? onSurface : bound;
     const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})) : '';
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
     // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
     // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
-    const frame=item.frameBox;
+    // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox); a card is drawn once, under the first of its items.
+    const frame=item.frameBox&&!sameBox(item.frameBox,previousFrame)?item.frameBox:undefined;
+    previousFrame=item.frameBox;
     const surface=under+(frame ? tag('rect',{...HIDDEN,x:frame.x,y:frame.y,width:frame.width,height:frame.height,rx:8*Math.min(width,height)/720,fill:bound.design.roles.neutrals.card.hex,stroke:bound.design.roles.neutrals.cardBorder.hex,...traceAttrs(options,item.path)}) : '');
     // RR-34: a captioned item draws its media in item.box and its caption band after it (src/annotations.js).
     const drawn=surface+renderPayload(item, item.box, { ...itemBound, composition: item.composition }, options)+(item.caption?renderCaption(item,{ ...itemBound, composition: item.composition },options,drawHelpers):'');
@@ -996,7 +1045,7 @@ function renderTextPayload(item, box, bound, options) {
     // The slide tag is the eyebrow label: it draws in the primary colour (scheme accent1), as the
     // PPTX export writes it, or in the text colour when the primary is under 4.5:1 against the
     // slide background (FF-61). Every other text payload here uses the text colour.
-    fill: item.field === "tag" ? tagFill(bound.design) : bound.design.colors.text,
+    fill: item.field === "tag" ? tagFill(bound.design) : item.eyebrow ? eyebrowFill(bound.design, item) : bound.design.colors.text,
     fit: item.text,
     textStyle: item.textStyle,
     diagnosticsHandled: Boolean(item.text),
@@ -1036,6 +1085,12 @@ function listEntriesSvg(item, fit, bound, options) {
     const config={path:entry.textPath,align:'left',fill:bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
+  }
+  // LH-08: a list drawn as ruled rows (design.listStyle: rows) draws core's hairlines between its rows, LIST_RULE_WIDTH thick in the
+  // scheme's border neutral, as the PPTX export draws them as native lines.
+  if(fit.rules?.length){
+    const thickness=LIST_RULE_WIDTH*Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720,stroke=bound.design.roles.neutrals.border.hex;
+    for(const rule of fit.rules)children.push(tag('line',{x1:stableNumber(rule.x),y1:stableNumber(rule.y),x2:stableNumber(rule.x+rule.width),y2:stableNumber(rule.y),stroke,'stroke-width':stableNumber(thickness),'aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));
   }
   return children;
 }
@@ -2107,7 +2162,11 @@ function renderRichLines(value,fit,box,bound,config) {
       gap=full>0?Math.min(fragment.width,Math.max(0,fragment.width*(1-measure(fragment.text.slice(0,-trail.length),fragment.fontSize)/full))):0;
       if(!asFlow)position.x=stableNumber(originX+fragmentX+gap);
     }
-    const drawnText=trail?fragment.text.slice(0,-trail.length):fragment.text,drawnWidth=fragment.width-gap;
+    // LH-32: an eyebrow run (core's style.caps, style.tracking) draws its capitals with core's letter spacing.
+    // LH-32: a tracked run (an eyebrow) keeps its natural advance: its letter spacing is in core's width, and a textLength would leave the
+    // trailing spacing to each rasterizer's own reading.
+    const tracked=fragment.kind!=='tab'&&!!fragment.style.tracking;
+    const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
     const scripted=fragment.kind==='tab'?{content:escapeText(fragment.text)}:scriptLine(drawnText,fragment.style,bound,run.code===true?'monospace':bound.design.fontScheme.type,{rtl:rtl&&!asFlow,numbers:rtl&&run.code!==true,
@@ -2118,7 +2177,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
     if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
@@ -2195,7 +2254,7 @@ function renderTextBox(text, box, bound, config) {
     if(tabs) content=sourceLine.segments.map(segment=>{
       const segmentText=line.slice(segment.start-sourceLine.start,segment.end-sourceLine.start),fixed=segment.kind==='tab'||placed;
       const traced=(start,end)=>config.options.trace?{'data-opf-source-start':sourceOffset+start,'data-opf-source-end':sourceOffset+end,'data-opf-segment':segment.kind}:{};
-      const scripted=segment.kind==='tab'?{content:escapeText(segmentText)}:scriptLine(segmentText,style,bound,type,{rtl,
+      const scripted=segment.kind==='tab'?{content:escapeText(segmentText)}:scriptLine(styledText(segmentText,style),style,bound,type,{rtl,
         placement:placed?{x:origin+segment.x,width:segment.width,fontSize:size}:undefined,fontSize:size,
         trace:config.options.trace?(start,end)=>traced(segment.start+start,segment.start+end):undefined});
       if(scripted.positioned)return scripted.content;
@@ -2210,16 +2269,22 @@ function renderTextBox(text, box, bound, config) {
       // 2026-10-02), so a soft-wrapped line that keeps its trailing space, or a leading space, draws without it (RR-05).
       const edge=rtl&&alignment==='right'?/^(\s*)([\s\S]*?)(\s*)$/.exec(line):null,trimmed=edge&&edge[2]&&(edge[1]||edge[3])?edge:null;
       if(trimmed){const measureEdge=textWidthMeasurer(style,config.options.textMeasurement);trimWidth=measureEdge(trimmed[1],size)+measureEdge(trimmed[3],size);}
-      ({content,family,positioned=false,sizeAdjust,baselineShift:shift=0}=scriptLine(trimmed?trimmed[2]:line,style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined,fontSize:size}));
+      ({content,family,positioned=false,sizeAdjust,baselineShift:shift=0}=scriptLine(styledText(trimmed?trimmed[2]:line,style),style,bound,type,{rtl,placement:placed?.width>0?{x:placed.x+trimWidth,width:placed.width-trimWidth,fontSize:size}:undefined,fontSize:size}));
     }
     // Positioned script runs carry their own x and textLength (FF-19).
     const start=tabs||positioned;
+    // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
+    // differ on whether a trailing spacing counts toward a middle or end anchor.
+    if(style.tracking&&!start)content=untrackLast(content);
     return tag("text", {
     x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
+    // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
+    // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts toward it).
+    "letter-spacing": style.tracking ? stableNumber(style.tracking * size) : undefined,
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
-    textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
+    textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
   }, content);

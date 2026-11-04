@@ -149,6 +149,11 @@
             "none"
           ],
           "description": "As design.listBullet of a deck."
+        },
+        "listStyle": {
+          "type": "string",
+          "enum": ["stack", "rows"],
+          "description": "As design.listStyle of a deck."
         }
       },
       "examples": [

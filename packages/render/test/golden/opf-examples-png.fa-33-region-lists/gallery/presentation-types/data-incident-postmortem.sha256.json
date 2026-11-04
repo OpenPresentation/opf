@@ -2,8 +2,8 @@
   "deck": "gallery/presentation-types/data-incident-postmortem.opf.json",
   "entries": {
     "gallery/presentation-types/data-incident-postmortem.opf.json#0": {
-      "sha256": "37515f3afb1f8593ff9a62ad1afa99e22f8053d869f22eeb1ecb21e6e101a0ae",
-      "bytes": 14970
+      "sha256": "fe16dbe37653e39b6ff6b51b744a31df9043bb3661fc6fa24e6750dad22f332f",
+      "bytes": 17088
     },
     "gallery/presentation-types/data-incident-postmortem.opf.json#1": {
       "sha256": "2fca8fee9d4e9fb2596cfa7062e56c8aff5e7e70e17dbd1f4c23ca8533484af9",
@@ -18,8 +18,8 @@
       "bytes": 16487
     },
     "gallery/presentation-types/data-incident-postmortem.opf.json#4": {
-      "sha256": "64952b433a6222dbfd33855a9539ba7950f0d0ea1d85b24eec2c40cfef3307b0",
-      "bytes": 20094
+      "sha256": "f3482dde81e55bc0e1e6d31b847d00c850cab817afb1a1c7853f7bee9c220f31",
+      "bytes": 23013
     },
     "gallery/presentation-types/data-incident-postmortem.opf.json#5": {
       "sha256": "63d15d98267d653d24b4c627a0b45d844d448ee02eca1790f01dd763dbbd5b22",

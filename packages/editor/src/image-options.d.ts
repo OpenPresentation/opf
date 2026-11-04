@@ -36,6 +36,10 @@ export declare function normalizeFocus(value: unknown): ImageFocus;
 export declare function normalizeOverlay(value: unknown): ImageOverlay;
 export declare function normalizeRecolor(value: unknown): "grayscale" | { dark: string; light: string };
 export declare function normalizePlacement(value: unknown): ImagePlacement;
+/** What core composed for an image block (LH-126): the fit it is drawn with, and whether the fit asked for was `auto`, which `fit` then resolved. */
+export interface EffectiveImageFit { fit: Exclude<(typeof IMAGE_FITS)[number], "auto">; auto: boolean }
+/** The fit core composed for the image block at `blockPath`, read from a slide's composed geometry (`session.composeSlide(index)`); undefined when the geometry holds no such picture. */
+export declare function readEffectiveImageFit(geometry: unknown, blockPath: string | string[]): EffectiveImageFit | undefined;
 /** The image block's framing for a form. Throws `not-an-image-block`. */
 export declare function readImageTreatments(presentation: unknown, blockPath: string | string[]): ImageTreatmentState;
 /** The patches that set (a value) or remove (`null`) the fields. Throws `invalid-image-treatment`, `placement-not-top-level` or `placement-edge-taken`. */

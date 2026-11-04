@@ -1,13 +1,17 @@
 <svg aria-label="Three parts, one decision" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
 <rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><line aria-hidden="true" stroke="#CCCCCC" stroke-width="2" x1="684.375" x2="684.375" y1="266.49" y2="447.78999999999996"/>
+<circle aria-hidden="true" cx="684.375" cy="266.49" fill="#2874A6" r="32.375"/>
+<text aria-hidden="true" fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="37" font-weight="700" text-anchor="middle" x="684.375" y="279.44">1</text>
+<circle aria-hidden="true" cx="684.375" cy="357.14" fill="#2874A6" r="32.375"/>
+<text aria-hidden="true" fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="37" font-weight="700" text-anchor="middle" x="684.375" y="370.09">2</text>
+<circle aria-hidden="true" cx="684.375" cy="447.78999999999996" fill="#2874A6" r="32.375"/>
+<text aria-hidden="true" fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="37" font-weight="700" text-anchor="middle" x="684.375" y="460.74">3</text></g>
 <g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="346.76">Three parts, </text>
 <text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="412.64">one decision</text></g>
-<g><text aria-hidden="true" fill="#000000" font-family="Aptos, sans-serif" font-size="37" x="652" y="316.07">•</text>
-<g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="692.7" xml:space="preserve" y="316.07"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Define the problem</tspan></text></g>
-<text aria-hidden="true" fill="#000000" font-family="Aptos, sans-serif" font-size="37" x="652" y="371.57">•</text>
-<g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="692.7" xml:space="preserve" y="371.57"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Review the pilot evidence</tspan></text></g>
-<text aria-hidden="true" fill="#000000" font-family="Aptos, sans-serif" font-size="37" x="652" y="427.07">•</text>
-<g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="692.7" xml:space="preserve" y="427.07"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Agree the next decision</tspan></text></g></g>
+<g><g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="735.25" xml:space="preserve" y="279.44"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Define the problem</tspan></text></g>
+<g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="735.25" xml:space="preserve" y="370.09"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Review the pilot evidence</tspan></text></g>
+<g><text font-family="Aptos, sans-serif" font-size="37" font-weight="400" text-anchor="start" x="735.25" xml:space="preserve" y="460.74"><tspan fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-style="normal" font-weight="400" xml:space="preserve">Agree the next decision</tspan></text></g></g>
 <g/>
 <g><g><g><text fill="#011842" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>

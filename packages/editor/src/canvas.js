@@ -25,6 +25,8 @@ import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { createImageCropper } from "./image-cropper.js";
 import { FONTS_PENDING, fontGate, fontsPendingError, whenFontsReady } from "./font-gate.js";
 import { checkFormat, firstErrorMessage } from "./checks.js";
+import { createCanvasPages } from "./canvas-pages.js";
+import { continuationOf, pageCount } from "./continuation.js";
 export { getEditableFields } from "./canvas-fields.js";
 export { whenFontsReady, FONTS_PENDING, FONTS_UNAVAILABLE } from "./font-gate.js";
 
@@ -123,9 +125,29 @@ export function createCanvasEditor(container, options = {}) {
   notice.hidden = true;
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas [data-opf-trend-arrow]{cursor:pointer}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
+  // LH-99: a slide the export continues on further pages (LH-90) is edited as written; the indicator names its pages and previews each
+  // one read only (`continuation: false` turns it off). `onPages({ slideIndex, count, page })` hears the count and the preview.
+  const pages = options.continuation === false ? null : createCanvasPages(root, {
+    labels: options.pageLabels,
+    onChange: ({ page }) => options.onPages?.({ slideIndex, count: pages?.count ?? 1, page }),
+  });
+  let pagesToken = 0;
+  // Measured after the draw, from the committed document (never a draft), so typing never waits on the split.
+  function updatePages(presentation) {
+    if (!pages) return;
+    const token = ++pagesToken, index = slideIndex;
+    win.setTimeout(() => {
+      if (disposed || token !== pagesToken || index !== slideIndex) return;
+      const continuation = continuationOf(presentation, { fonts: handle, catalogs: resolveOptions().catalogs, date: renderOptions.date });
+      const count = pageCount(continuation, index);
+      const before = pages.count;
+      pages.update(count, (page) => toSvg(continuation.presentation, continuation.pages[index][page] + 1, drawOptions({ trace: false })));
+      if (before !== count) options.onPages?.({ slideIndex: index, count, page: pages.page });
+    }, 0);
+  }
   const report = (error) => {
     notice.hidden = false;
     notice.textContent = error.message;
@@ -410,6 +432,34 @@ export function createCanvasEditor(container, options = {}) {
       });
       if (path === selectedPath) node.setAttribute("data-canvas-selected", "");
     }
+    // LH-123: the trend is drawn as an arrow, not typed (LH-53), so it has no text to edit in place. The arrow is a target of its own over
+    // core's `trendBox`; a press opens the trend field (the properties form, with the choices up, down and flat), like Enter on it.
+    for (const item of geometry.items) {
+      const layout = item.metricLayout, part = layout?.parts.find((candidate) => candidate.role === "trend");
+      if (!layout?.trendBox || !part || seen.has(part.path) || typeof getValueAtPath(presentation, part.path) !== "string") continue;
+      const host = [...svg.querySelectorAll("g[data-canvas-target]")].find((node) => node.getAttribute("data-opf-path") === item.path);
+      if (!host) continue;
+      const path = part.path, trend = getValueAtPath(presentation, path);
+      seen.add(path);
+      const node = doc.createElementNS("http://www.w3.org/2000/svg", "g");
+      for (const [key, value] of Object.entries({ "data-opf-path": path, "data-canvas-target": "", "data-opf-trend-arrow": "", role: "button", tabindex: "0", "aria-label": `Edit trend: ${trend}` }))
+        node.setAttribute(key, value);
+      const box = layout.trendBox, rect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+      // The arrow is a few slide units, so its target is at least 8 units larger each way (a touch screen grows it to about 44 pixels).
+      const padX = Math.max(8, touchPad(svg, box.width)), padY = Math.max(8, touchPad(svg, box.height));
+      for (const [key, value] of Object.entries({ x: box.x - padX, y: box.y - padY, width: box.width + 2 * padX, height: box.height + 2 * padY, fill: "transparent", stroke: "transparent", "stroke-width": 1.5, "vector-effect": "non-scaling-stroke", "pointer-events": "all" }))
+        rect.setAttribute(key, value);
+      rect.classList.add("opf-selection");
+      node.append(rect);
+      host.append(node);
+      const open = () => { if (active && active.path !== path && !commit()) return; startEdit(path); };
+      node.addEventListener("click", (event) => { event.stopPropagation(); open(); });
+      node.addEventListener("dblclick", (event) => { event.preventDefault(); event.stopPropagation(); });
+      node.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " " || event.key === "F2") { event.preventDefault(); event.stopPropagation(); open(); }
+      });
+      if (path === selectedPath) node.setAttribute("data-canvas-selected", "");
+    }
     // WCAG 4.1.2 / axe nested-interactive: an interactive element must not contain interactive descendants. A target that holds
     // other targets is a named group; the button and the tab stop move to its selection handle (the transparent rect that already
     // covers it and takes its pointer presses), so the container stays selectable by click, Tab and Enter, and its children stay buttons.
@@ -443,6 +493,7 @@ export function createCanvasEditor(container, options = {}) {
       geometry,
       draft: !!active || !!layoutHandles.editingPath,
     });
+    if (!active && !layoutHandles.editingPath && presentation === current()) updatePages(presentation);
   }
   const coarse = win.matchMedia?.("(pointer: coarse)");
   function touchPad(svg, size) {
@@ -1040,6 +1091,7 @@ export function createCanvasEditor(container, options = {}) {
     slideIndex = index;
     selectedPath = null;
     imageCropper?.sync(null);
+    pages?.close();
     renderFor();
     return true;
   }
@@ -1174,6 +1226,13 @@ export function createCanvasEditor(container, options = {}) {
       targetMode = mode;
       if (!active) renderFor();
     },
+    /**
+     * LH-99: the pages the export draws the showing slide on (`count`, 1 when it does not continue) and the 0-based page previewed (`page`,
+     * null while the slide is edited). The slide index does not change.
+     */
+    get pages() { return { count: pages?.count ?? 1, page: pages?.page ?? null }; },
+    /** LH-99: preview export page `page` (from 0) of the showing slide read only, or go back to editing with `null`. */
+    previewPage(page) { if (!pages) return false; if (page === null || page === undefined) return pages.close(); if (!commit()) return false; return pages.open(page); },
     setRenderOptions(next) {
       if (!commit()) return false;
       richToolbar.hide();
@@ -1189,6 +1248,7 @@ export function createCanvasEditor(container, options = {}) {
       richToolbar.destroy();
       layoutHandles.destroy();
       blockControls.destroy();
+      pages?.destroy();
       unsubscribe();
       resize.disconnect();
       win.visualViewport?.removeEventListener("resize", keepEditVisible);

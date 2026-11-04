@@ -9,6 +9,7 @@ import { el, icon } from "./export-dom.js";
 import { whenFontsReady } from "./font-gate.js";
 import { normalizeIcons, resolveIcon } from "./icons.js";
 import { formatSlideCounter } from "./slide-navigator.js";
+import { continuationOf, pageCount } from "./continuation.js";
 
 const COUNTER_MS = 2000;
 const PRELOAD_DELAY_MS = 20;
@@ -65,6 +66,8 @@ const DEFAULT_LABELS = {
   exitTitle: "Exit (Esc)",
   /** What the live region announces, for example "Slide 3 of 12". */
   position: (position, count) => `Slide ${position} of ${count}`,
+  /** LH-99: added after the position on a page of a slide the export continues, for example ", page 2 of 2". */
+  page: (page, count) => `, page ${page} of ${count}`,
   loading: "Loading fonts…",
   empty: "No visible slides to present. Unhide a slide first.",
 };
@@ -87,7 +90,11 @@ const clampIndex = (deck, wanted) => Math.max(0, Math.min((Array.isArray(deck?.s
  * their `{{variables}}` resolved), `slideIndex` (the slide `start()` shows, 0-based), `onExit(index)` (the presenter closed, on the slide it showed),
  * `onSlideChange(index)` (the shown slide changed), `density` (`"comfortable"` or `"touch"`), `includeHidden` (default false) and `labels`. Indexes are always positions in the deck, hidden slides included.
  *
- * Returns `{ element, start(slideIndex?), stop(), next(), previous(), goTo(index), getSlide(), isRunning(), destroy() }`.
+ * LH-99: a slide the export continues on further pages (LH-90) shows those pages as steps after it (`continuation: false` draws every slide
+ * as written): `next` and `previous` step through them, `goTo(index)` and every index stay source slides, `getPage()` is the 0-based page
+ * shown and `onPageChange(index, page)` hears every page step.
+ *
+ * Returns `{ element, start(slideIndex?), stop(), next(), previous(), goTo(index), getSlide(), getPage(), isRunning(), destroy() }`.
  */
 export function createPresenter(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
@@ -105,10 +112,15 @@ export function createPresenter(container, options = {}) {
   const deckNow = () => (editor ? (editor.snapshot?.().presentation ?? editor.presentation) : typeof source === "function" ? source() : source);
   const resolveOptions = () => ({ ...(options.renderOptions ?? {}), catalogs: mergeCatalogs(editor?.catalogs, options.renderOptions?.catalogs) });
   const drawOptions = () => ({ ...resolveOptions(), fonts: options.fonts, text: "system", trace: false });
-  // Drawn slides by deck index, for the deck object they were drawn from: a new snapshot (an edit) or a new start() draws again.
+  // Drawn slides by deck index and page, for the deck object they were drawn from: a new snapshot (an edit) or a new start() draws again.
   let drawn = new Map(), drawnFor;
+  // LH-99: the export's continuation of the deck, measured with the fonts the slides draw with. When a slide continues, every slide is
+  // drawn from the export's deck, so each page and its slide number are the ones the PDF and the PPTX draw.
+  const continuationNow = (deck) => (options.continuation === false ? null : continuationOf(deck, { fonts: options.fonts, catalogs: resolveOptions().catalogs, date: options.renderOptions?.date, exact: true }));
+  const pagesOf = (deck, index) => pageCount(continuationNow(deck), index);
+  const stepKey = (index, page) => `${index}:${page}`;
 
-  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, returnTo = null, pendingRequests = 0;
+  let active = false, destroyed = false, current = -1, currentPage = 0, opener = null, enteredFullscreen = false, returnTo = null, pendingRequests = 0;
   let counterTimer, preloadTimer, renderToken = 0, swipe = null, clickGuardUntil = 0;
 
   // ---- the DOM ----------------------------------------------------------------------------------------------------------------------------
@@ -142,33 +154,42 @@ export function createPresenter(container, options = {}) {
       slide.innerHTML = html;
     } else showMessage(typeof html === "string" ? html : "Preview unavailable");
   }
-  // Draw the listed slides that are not drawn yet, in one renderer call (it composes the deck once). A slide that cannot be drawn keeps the renderer's message.
-  function draw(deck, indices) {
+  // Draw the listed steps (`[index, page]`) that are not drawn yet, in one renderer call (it composes the deck once). A slide that cannot be drawn keeps the renderer's message.
+  function draw(deck, steps) {
     if (deck !== drawnFor) { drawn = new Map(); drawnFor = deck; }
-    const missing = indices.filter((index) => !drawn.has(index));
+    const missing = steps.filter(([index, page]) => !drawn.has(stepKey(index, page)));
     if (!missing.length) return;
     const options = drawOptions();
+    const continuation = continuationNow(deck);
+    const source = continuation ? continuation.presentation : deck;
+    const numberOf = ([index, page]) => (continuation ? continuation.pages[index][Math.min(page, continuation.pages[index].length - 1)] : index) + 1;
     try {
-      const images = toSvg(deck, missing.map((index) => index + 1), options);
-      missing.forEach((index, position) => drawn.set(index, images[position]));
+      const images = toSvg(source, missing.map(numberOf), options);
+      missing.forEach((step, position) => drawn.set(stepKey(...step), images[position]));
     } catch {
       // One bad slide must not hide the others.
-      for (const index of missing) {
-        try { drawn.set(index, toSvg(deck, index + 1, options)); } catch (error) { drawn.set(index, error?.message ?? "Preview unavailable"); }
+      for (const step of missing) {
+        try { drawn.set(stepKey(...step), toSvg(source, numberOf(step), options)); } catch (error) { drawn.set(stepKey(...step), error?.message ?? "Preview unavailable"); }
       }
     }
   }
-  function preload(deck, shown, index) {
-    win.clearTimeout(preloadTimer);
+  /** The step before and after `[index, page]` among the slides shown: the pages of a continued slide, then the next slide. */
+  function neighbors(deck, shown, index, page) {
     const at = shown.indexOf(index);
-    const wanted = [shown[at - 1], shown[at + 1]].filter((value) => value !== undefined);
+    const before = page > 0 ? [index, page - 1] : shown[at - 1] !== undefined ? [shown[at - 1], pagesOf(deck, shown[at - 1]) - 1] : undefined;
+    const after = page + 1 < pagesOf(deck, index) ? [index, page + 1] : shown[at + 1] !== undefined ? [shown[at + 1], 0] : undefined;
+    return [before, after].filter(Boolean);
+  }
+  function preload(deck, shown, index, page) {
+    win.clearTimeout(preloadTimer);
+    const wanted = neighbors(deck, shown, index, page);
     if (!wanted.length) return;
     preloadTimer = win.setTimeout(() => {
       if (active) draw(deck, wanted);
     }, PRELOAD_DELAY_MS);
   }
   // Draw the slide once the faces its deck needs are loaded (a deck in loaded faces draws synchronously).
-  function render(index) {
+  function render(index, page = 0) {
     const token = ++renderToken;
     const deck = deckNow();
     const renderOptions = resolveOptions();
@@ -177,25 +198,31 @@ export function createPresenter(container, options = {}) {
       isCurrent: () => active && token === renderToken,
       loading: () => showMessage(labels.loading),
       ready: () => {
-        draw(deck, [index]);
-        paint(drawn.get(index));
-        preload(deck, visibleIndices(deck, includeHidden), index);
+        // The pages are known once the faces are: a slide shown before that is shown again on its page.
+        const pages = pagesOf(deck, index);
+        const shownPage = Math.min(page, pages - 1);
+        if (index === current && shownPage !== currentPage) currentPage = shownPage;
+        announce(deck, index, shownPage, pages);
+        draw(deck, [[index, shownPage]]);
+        paint(drawn.get(stepKey(index, shownPage)));
+        preload(deck, visibleIndices(deck, includeHidden), index, shownPage);
       },
       failed: (error) => showMessage(error?.message ?? "Preview unavailable"),
     });
   }
-  function announce(deck, index) {
+  function announce(deck, index, page = 0, pages = 1) {
     const shown = visibleIndices(deck, includeHidden);
     const position = shown.indexOf(index);
-    counter.textContent = formatSlideCounter(Math.max(0, position), shown.length);
-    live.textContent = position < 0 ? "" : labels.position(position + 1, shown.length);
+    counter.textContent = `${formatSlideCounter(Math.max(0, position), shown.length)}${pages > 1 ? ` \u00B7 ${page + 1}/${pages}` : ""}`;
+    live.textContent = position < 0 ? "" : `${labels.position(position + 1, shown.length)}${pages > 1 ? labels.page(page + 1, pages) : ""}`;
   }
 
-  function show(wanted, { notify = true } = {}) {
+  function show(wanted, { notify = true, page = 0 } = {}) {
     const deck = deckNow();
     const index = resolve(deck, wanted);
     if (index < 0) {
       current = -1;
+      currentPage = 0;
       renderToken++;
       showMessage(labels.empty);
       counter.textContent = formatSlideCounter(0, 0);
@@ -203,19 +230,28 @@ export function createPresenter(container, options = {}) {
       return false;
     }
     const changed = index !== current;
+    const pageChanged = changed || page !== currentPage;
     current = index;
+    currentPage = page;
     announce(deck, index);
-    render(index);
+    render(index, page);
     if (changed && notify) options.onSlideChange?.(index);
-    return changed;
+    if (pageChanged && notify) options.onPageChange?.(index, page);
+    return pageChanged;
   }
   function move(step) {
     if (!active || current < 0) return false;
-    const shown = visibleIndices(deckNow(), includeHidden);
+    const deck = deckNow();
+    // LH-99: the pages of a slide the export continues are steps of that slide.
+    const pages = pagesOf(deck, current);
+    if (step > 0 && currentPage + 1 < pages) return show(current, { page: currentPage + 1 });
+    if (step < 0 && currentPage > 0) return show(current, { page: Math.min(currentPage, pages) - 1 });
+    const shown = visibleIndices(deck, includeHidden);
     const at = shown.indexOf(current);
     // The shown slide can be gone (the deck changed under it): step from where it was.
     const target = at >= 0 ? shown[at + step] : step > 0 ? shown.find((index) => index > current) : [...shown].reverse().find((index) => index < current);
-    return target === undefined ? false : show(target);
+    // Back from a slide lands on the last page of the slide before, as reading backwards does.
+    return target === undefined ? false : show(target, { page: step < 0 ? pagesOf(deck, target) - 1 : 0 });
   }
 
   // ---- the counter ------------------------------------------------------------------------------------------------------------------------
@@ -304,7 +340,7 @@ export function createPresenter(container, options = {}) {
     else if (NEXT_KEYS.has(key)) move(1);
     else if (PREVIOUS_KEYS.has(key)) move(-1);
     else if (key === "Home") show(0);
-    else if (key === "End") show(Number.MAX_SAFE_INTEGER);
+    else if (key === "End") { const deck = deckNow(), last = resolve(deck, Number.MAX_SAFE_INTEGER); show(last, { page: last < 0 ? 0 : pagesOf(deck, last) - 1 }); }
     else handled = false;
     if (handled) { event.preventDefault(); event.stopPropagation(); }
   }
@@ -361,6 +397,7 @@ export function createPresenter(container, options = {}) {
     returnTo = null;
     opener = doc.activeElement && doc.activeElement !== doc.body ? doc.activeElement : null;
     current = -1;
+    currentPage = 0;
     drawn = new Map();
     drawnFor = undefined;
     root.hidden = false;
@@ -412,6 +449,8 @@ export function createPresenter(container, options = {}) {
     goTo: (index) => (active ? show(index) : false),
     /** The deck index of the shown slide (-1 when stopped or empty). */
     getSlide: () => (active ? current : -1),
+    /** LH-99: the 0-based page shown of a slide the export continues (0 for every other slide, and when stopped). */
+    getPage: () => (active && current >= 0 ? currentPage : 0),
     isRunning: () => active,
     destroy() {
       if (destroyed) return;

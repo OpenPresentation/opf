@@ -17,6 +17,12 @@
 // everything else stay editable shapes at core's geometry (the slide's OPF_SLIDE_V1 content topology names the region of
 // each root block); the slide does not instantiate those placeholders, so a filled slide shows no prompt.
 //
+// LH-96: a template whose record names a layout variant (section, statement, quote and closing in the gallery) carries that variant's
+// color map (`p:clrMapOvr` with the map core resolves for the deck, `template.colorMap`) and a bg1 background, so a slide added in
+// PowerPoint (New Slide, Change Layout) draws on the variant as an exported one does. A deck whose background is fixed (LH-103) has
+// no layout variant, so its layouts stay as before. The placeholders name tx1 for their text, which the layout's map points at the
+// variant's text slot whatever the master's text style says.
+//
 // Accepted one-line plain titles bind to the native title placeholder; long and rich titles remain tagged line shapes.
 // Automatic slides use OPF auto (titleOnly), independently of registered catalogs. Layout prompts carry explicit OPF typography.
 //
@@ -243,12 +249,12 @@ export function layoutPlaceholders(template) {
 }
 
 const PROMPTS = {title: 'Click to edit Master title style', ctrTitle: 'Click to edit Master title style', subTitle: 'Click to edit Master subtitle style', body: 'Click to edit Master text styles', obj: 'Click to edit Master text styles'};
-function placeholderShape(placeholder, id) {
+function placeholderShape(placeholder, id, {textColor} = {}) {
   const style = placeholder.style;
   const align = {left: 'l', center: 'ctr', right: 'r'}[style?.alignment] ?? 'l';
   // Each copy inherits its own master's chosen heading/body fonts (including script-profile variants).
   const fontRole = placeholder.type === 'title' || placeholder.type === 'ctrTitle' ? 'mj' : 'mn';
-  const defaults = style ? `<a:defRPr sz="${Math.round(style.fontSize * 75)}"${Number(style.fontWeight) >= 600 ? ' b="1"' : ''}><a:latin typeface="${fontRole === 'mj' ? '+mj-lt' : '+mn-lt'}"/><a:ea typeface="+${fontRole}-ea"/><a:cs typeface="+${fontRole}-cs"/></a:defRPr>` : '';
+  const defaults = style ? `<a:defRPr sz="${Math.round(style.fontSize * 75)}"${Number(style.fontWeight) >= 600 ? ' b="1"' : ''}>${textColor ? `<a:solidFill><a:schemeClr val="${textColor}"/></a:solidFill>` : ''}<a:latin typeface="${fontRole === 'mj' ? '+mj-lt' : '+mn-lt'}"/><a:ea typeface="+${fontRole}-ea"/><a:cs typeface="+${fontRole}-cs"/></a:defRPr>` : '';
   const listStyle = defaults ? `<a:lstStyle>${Array.from({length: 9}, (_, level) => `<a:lvl${level + 1}pPr algn="${align}">${defaults}</a:lvl${level + 1}pPr>`).join('')}</a:lstStyle>` : '<a:lstStyle/>';
   const typeAttribute = placeholder.type === 'obj' ? '' : ` type="${placeholder.type}"`;
   const idx = placeholder.idx !== undefined ? ` idx="${placeholder.idx}"` : '';
@@ -257,6 +263,19 @@ function placeholderShape(placeholder, id) {
   return `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${escapeXml(placeholder.name)}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph${typeAttribute}${idx}/></p:nvPr></p:nvSpPr>` +
     `<p:spPr><a:xfrm><a:off x="${placeholder.x}" y="${placeholder.y}"/><a:ext cx="${placeholder.cx}" cy="${placeholder.cy}"/></a:xfrm></p:spPr>` +
     `<p:txBody><a:bodyPr${placeholder.anchor ? ` anchor="${placeholder.anchor}"` : ''}/>${listStyle}${paragraph}</p:txBody></p:sp>`;
+}
+
+/**
+ * LH-96: the layout part on its variant: the variant's color map as the layout's override and a background on bg1 (the map's background
+ * slot), the fill a slide on that variant writes, in place of the layout's own or the master's.
+ */
+function withLayoutVariant(xml, colorMap) {
+  const map = Object.entries(colorMap).map(([role, slot]) => ` ${role}="${slot}"`).join('');
+  const background = '<p:bg><p:bgPr><a:solidFill><a:schemeClr val="bg1"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>';
+  const override = /<p:clrMapOvr>[\s\S]*?<\/p:clrMapOvr>/;
+  if (!override.test(xml)) throw new Error('Slide layout has no color map override.');
+  return xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, '').replace(/<p:cSld\b[^>]*>/, open => `${open}${background}`)
+    .replace(override, `<p:clrMapOvr><a:overrideClrMapping${map}/></p:clrMapOvr>`);
 }
 
 /**
@@ -277,7 +296,7 @@ export function layoutTagValue(template, {record = false} = {}) {
  * maps an object name on a slide to {slide, region, object} (`picture`, `chart` or `table`). `partText(path, xml)` applies the
  * deck's language to a generated part.
  */
-export function writeTemplateLayouts(output, slides, templates, bindings = new Map(), partText = (path, xml) => xml, {records = false, automaticSlides = []} = {}) {
+export function writeTemplateLayouts(output, slides, templates, bindings = new Map(), partText = (path, xml) => xml, {records = false, automaticSlides = [], masterColorMap} = {}) {
   if (!slides.some(Boolean) && !templates.length && !automaticSlides.some(Boolean)) return;
   const all = [...templates];
   for (const plan of slides) if (plan && !all.some(template => template.key === plan.template.key)) all.push({...plan.template, areaOptions: plan.areaOptions});
@@ -328,7 +347,8 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
       xml = xml.replace(/<p:sldLayout\b[^>]*>/, open => `${open.slice(0, -1).replace(/\s+(?:type|userDrawn|showMasterSp)="[^"]*"/g, '')} type="${type}" userDrawn="1">`);
       xml = xml.replace(/(<p:cSld\b[^>]*?)(\s+name="[^"]*")?(\s*>)/, (match, open, _name, close) => `${open} name="${escapeXml(name)}"${close}`);
       let nextId = Math.max(1, ...[...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match => Number(match[1]))) + 1;
-      const shapes = placeholders.map(placeholder => placeholderShape(placeholder, nextId++)).join('');
+      const shapes = placeholders.map(placeholder => placeholderShape(placeholder, nextId++, {textColor: template.colorMap ? 'tx1' : undefined})).join('');
+      if (template.colorMap) xml = withLayoutVariant(xml, template.colorMap);
       const groupEnd = xml.indexOf('</p:grpSpPr>');
       if (groupEnd < 0 || /<p:custDataLst>\s*<p:tags\b[^>]*\/>\s*<\/p:custDataLst>\s*<\/p:cSld>/.test(xml)) throw new Error(`${base} cannot take template placeholders.`);
       xml = xml.slice(0, groupEnd + '</p:grpSpPr>'.length) + shapes + xml.slice(groupEnd + '</p:grpSpPr>'.length);
@@ -348,7 +368,7 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
       const masterXml = read(master);
       if (!masterXml.includes('</p:sldLayoutIdLst>')) throw new Error(`${master} has no layout list.`);
       write(master, masterXml.replace('</p:sldLayoutIdLst>', `<p:sldLayoutId id="${nextLayoutId++}" r:id="${added.rid}"/></p:sldLayoutIdLst>`));
-      created.set(key, {path, placeholders: new Map(placeholders.map(item => [item.name, item]))});
+      created.set(key, {path, placeholders: new Map(placeholders.map(item => [item.name, item])), colorMap: template.colorMap});
     }
   }
   // Automatic composition is its own titleOnly layout, independently of catalog region templates.
@@ -389,6 +409,12 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
     write(slideRels, read(slideRels).replace(/<Relationship\b[^>]*\/>/g, node => attribute(node, 'Type') === `${REL}/slideLayout` ? node.replace(/\sTarget="[^"]*"/, ` Target="${relativeTarget(slidePath, layout.path)}"`) : node));
     // The lone picture, chart or table of a `none` region becomes its placeholder's content.
     let slideXml = read(slidePath), changed = false;
+    // LH-96: a slide with no override of its own would inherit its layout's variant map in PowerPoint; where the slide draws on the
+    // master's map (its own variant or background, or a variant equal to the deck's) it states that map, so it looks as it did.
+    if (layout.colorMap && masterColorMap && slideXml.includes('<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>')) {
+      slideXml = slideXml.replace('<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>', `<p:clrMapOvr><a:overrideClrMapping${Object.entries(masterColorMap).map(([role, slot]) => ` ${role}="${slot}"`).join('')}/></p:clrMapOvr>`);
+      changed = true;
+    }
     for (const [objectName, binding] of bindings) {
       if (binding.slide !== index) continue;
       const placeholder = layout.placeholders.get(binding.region);

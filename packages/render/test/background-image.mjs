@@ -23,7 +23,10 @@ const deckWith = (background, design = {}, slide = {}) => ({ design: { colorSche
 const geometryOf = deck => composeSlide(deck.slides[0], resolveSlideContext(deck, 0, {}).options);
 const attr = (tag, name) => tag?.match(new RegExp(`\\s${name}="([^"]*)"`))?.[1];
 const element = (svg, name, filter = '') => [...svg.matchAll(new RegExp(`<${name}\\b[^>]*>`, 'g'))].map(m => m[0]).find(tag => tag.includes(filter));
+// LH-02: the pixel checks read the picture itself, so they turn off core's automatic scrim behind the title (`overlay: false`).
+const withoutScrim = deck => ({ ...deck, slides: deck.slides.map(slide => { const background = slide.design?.background; return background && typeof background === 'object' && background.overlay === undefined ? { ...slide, design: { ...slide.design, background: { ...background, overlay: false } } } : slide; }) });
 async function raster(deck, options) {
+  deck = withoutScrim(deck);
   const { data, info } = await sharp(await toPng(toSvg(deck, 1, options), { scale: 0.25 })).raw().toBuffer({ resolveWithObject: true });
   return (x, y) => [...data.subarray((Math.round(y * 0.25) * info.width + Math.round(x * 0.25)) * info.channels, (Math.round(y * 0.25) * info.width + Math.round(x * 0.25)) * info.channels + 3)];
 }

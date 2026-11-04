@@ -21,6 +21,7 @@ import { SOURCE_CHECKS, copyText, downloadSourceFile, lf, reportSource } from ".
 import { createThemeController } from "./workspace-theme.js";
 import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
+import { continuationOf, pageCount } from "./continuation.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
 // The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
@@ -616,6 +617,8 @@ export function createOpfEditor(element, options = {}) {
       onError: (error) => report(error),
       autoRender: false,
       contentActions: { splitSlideByBlocks, mergeSlides },
+      // LH-99: the pages the export continues an overfull slide on, measured as the thumbnails draw.
+      pagesOf: (deck, index) => options.continuation === false ? 1 : pageCount(continuationOf(deck, { fonts, catalogs: renderOptions().catalogs, date: renderOptions().date }), index),
     };
   }
   function markView(view) {
@@ -738,6 +741,7 @@ export function createOpfEditor(element, options = {}) {
       strip = createThumbnailStrip(slots.thumbnails, {
         editor: ui,
         fonts,
+        continuation: options.continuation !== false,
         slideIndex,
         density,
         ...iconsFor("strip"),
@@ -881,6 +885,7 @@ export function createOpfEditor(element, options = {}) {
       ...(studioLayout ? { textEntry: layout === "playground" ? "click" : "dblclick", targets: layout === "playground" ? "interactive" : "passive", escape: "commit" } : {}),
       editor: ui,
       fonts,
+      continuation: options.continuation !== false,
       renderOptions: renderOptions(),
       slideIndex,
       ...(slots.properties ? { propertiesContainer: slots.properties } : {}),
@@ -1096,6 +1101,7 @@ export function createOpfEditor(element, options = {}) {
       presenter = createPresenter(overlay, {
         editor: ui,
         fonts,
+        continuation: options.continuation !== false,
         get renderOptions() {
           return renderOptions();
         },
@@ -1140,6 +1146,8 @@ export function createOpfEditor(element, options = {}) {
         editor: ui,
         getSlideIndex: () => slideIndex,
         getSelectedPath: () => selection?.path,
+        // LH-126: the image section reads the fit an `auto` fit resolved to from the slide as the canvas draws it (with the fonts).
+        getGeometry: (index) => session.composeSlide(index, layoutFor(session.presentation, index)),
         catalogs: hostCatalogs,
         ...(options.onAddAsset ? { onAddAsset: options.onAddAsset } : {}),
         onSelectPath: (path) => {

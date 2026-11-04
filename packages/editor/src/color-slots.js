@@ -7,6 +7,8 @@ import { resolveSlideContext } from "@openpresentation/opf";
 export const VARIANT_BACKGROUND_SLOTS = Object.freeze(["light1", "light2", "dark1", "dark2"]);
 /** The six accent slots, in the scheme's own order. */
 export const ACCENT_SLOTS = Object.freeze(["accent1", "accent2", "accent3", "accent4", "accent5", "accent6"]);
+/** LH-97: every slot a variant can put behind the slide (the schema's ColorVariantSlot): the four backgrounds, then the six accents. */
+export const VARIANT_SLOTS = Object.freeze([...VARIANT_BACKGROUND_SLOTS, ...ACCENT_SLOTS]);
 
 const HEX = /^#[0-9a-f]{6}$/i;
 

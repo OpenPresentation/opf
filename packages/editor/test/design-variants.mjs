@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import { createEditorSession } from "../dist/index.js";
 import { readSchemeSlots } from "../dist/color-slots.js";
-import { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS, normalizeVariant, prepareDesignVariant, readDesignVariant, setDesignVariant, variantSwatches } from "../dist/design-variants.js";
+import { ACCENT_SLOTS, VARIANT_BACKGROUND_SLOTS, VARIANT_SLOTS, normalizeVariant, prepareDesignVariant, readDesignVariant, setDesignVariant, variantSwatches } from "../dist/design-variants.js";
 
 const deck = (design = {}, slides) => ({
   name: "Variants fixture",
@@ -84,13 +84,14 @@ for (const [value, pattern] of [
   assert.equal(editor.get("design.variant"), "light1", "the scheme's own order collapses to the slot");
 }
 
-// Four swatches from the deck's own slots, like the Variants gallery.
+// Ten swatches from the deck's own slots: the four of the Variants gallery, then the six accents (LH-97).
 {
   const editor = session({ variant: "dark1" });
   const swatches = variantSwatches(editor.presentation);
-  assert.deepEqual(swatches.map((entry) => entry.slot), VARIANT_BACKGROUND_SLOTS);
-  assert.deepEqual(swatches.map((entry) => entry.selected), [false, false, true, false]);
-  assert.deepEqual(swatches.map((entry) => entry.dark), [false, false, true, true]);
+  assert.deepEqual(swatches.map((entry) => entry.slot), VARIANT_SLOTS);
+  assert.deepEqual(swatches.map((entry) => entry.slot).slice(0, 4), VARIANT_BACKGROUND_SLOTS);
+  assert.deepEqual(swatches.map((entry) => entry.selected), [false, false, true, false, false, false, false, false, false, false]);
+  assert.deepEqual(swatches.slice(0, 4).map((entry) => entry.dark), [false, false, true, true]);
   for (const entry of swatches) {
     assert.match(entry.background, /^#[0-9a-f]{6}$/i);
     assert.match(entry.text, /^#[0-9a-f]{6}$/i);

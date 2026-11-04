@@ -6,14 +6,14 @@ import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
-import {chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
+import {restackForRows,chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
-import {groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
+import {EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -30,8 +30,8 @@ export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGIN
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 export {isolateNumbers,numberRanges,numericText} from './number-text.js';
-import {listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
-export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
+import {listNumberLabel,listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumberLabel,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
 import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type LogoVariant} from './logos.js';
@@ -39,7 +39,9 @@ export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-import {layoutVariantApplies} from './color.js';
+import {layoutVariantApplies,resolveColorRoles} from './color.js';
+import {pictureScrims,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
+export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -94,7 +96,57 @@ export interface LayoutDiagnostic {
 export interface FontFaceSelection { family: string; bold: boolean; italic: boolean }
 export interface TextStyle { fontFamily: string; fontWeight: number; italic?: boolean; path?: string; fontFace?: FontFaceSelection;
   /** BCP-47 tag of a run that overrides the deck language (`TextRun.lang`); absent when the deck language applies. */
-  lang?: string }
+  lang?: string;
+  /**
+   * LH-32: drawn in capitals (an eyebrow). The text stays as authored: it is measured and drawn upper-cased (`toUpperCase`), and
+   * PowerPoint draws it with `cap="all"`. Set only where capitals keep the text's UTF-16 length (eyebrowCaps), so offsets hold.
+   */
+  caps?: boolean;
+  /** LH-32: letter spacing in em between characters (SVG `letter-spacing` with none after the last, PowerPoint `spc`). */
+  tracking?: number }
+/** LH-32: the letter spacing of an eyebrow (the slide tag, LH-50's label), in em; Claude Design tracks its eyebrows by about 0.08 to 0.12 em. */
+export const EYEBROW_TRACKING = 0.08;
+/**
+ * LH-32: the size of the slide tag drawn as an eyebrow, in reference pixels: 0.4 of the title's 54 px role size, so a cover or section tag
+ * reads at about 8 to 9 pt projected from a 1920 px slide (the 16 px of the floor read as about 6 pt).
+ */
+export const EYEBROW_TAG_SIZE = 22;
+/**
+ * LH-50: a label drawn as an eyebrow is EYEBROW_SHARE of the size of the paragraph it labels, from EYEBROW_MIN_SIZE to EYEBROW_MAX_SIZE
+ * reference pixels (Claude Design's smallest text in these decks is about 24 px at 1920), and always under the paragraph's size (eyebrowSize).
+ */
+export const EYEBROW_SHARE = 0.6, EYEBROW_MIN_SIZE = 20, EYEBROW_MAX_SIZE = 24;
+/**
+ * LH-50: the size of the eyebrow over a paragraph set at `paragraph` canvas pixels: EYEBROW_SHARE of it, clamped to EYEBROW_MIN_SIZE to
+ * EYEBROW_MAX_SIZE times `scale`; when that is not under the paragraph's size (a paragraph at 20 px or less), one step of the type scale
+ * under it, never under `floor` (the readability floor, in canvas pixels).
+ */
+export function eyebrowSize(paragraph: number, scale: number, floor: number): number {
+  const target = Math.min(EYEBROW_MAX_SIZE * scale, Math.max(EYEBROW_MIN_SIZE * scale, EYEBROW_SHARE * paragraph));
+  return Math.max(floor, snapFontSizeDown(target < paragraph - FONT_GRID_EPSILON ? target : paragraph / (PROSE_NOMINAL_SIZE / 16) ** .25));
+}
+/** LH-50: the space between a label drawn as an eyebrow and the text under it, as a share of the composition gap. */
+export const EYEBROW_GAP = 0.5;
+/**
+ * LH-32: whether `text` draws as an eyebrow in capitals with tracking: it has a letter, every letter has case (Latin, Greek, Cyrillic,
+ * Armenian and the like) and capitals keep its UTF-16 length. A script without case (Arabic, Hebrew, CJK, Devanagari) keeps its letters
+ * and its spacing, since tracking breaks the joining of a cursive script; such an eyebrow is set bold in the accent only.
+ */
+export function eyebrowCaps(text: string): boolean {
+  return /\p{L}/u.test(text) && !/[\p{Lo}\p{Lm}]/u.test(text) && text.toUpperCase().length === text.length;
+}
+/** LH-32: what a style draws for `text`: its capitals when the style sets `caps`. */
+export function styledText(text: string, style: Pick<TextStyle, 'caps'>): string { return style.caps ? text.toUpperCase() : text; }
+/**
+ * LH-32: the advance a style's tracking adds to `text` at `fontSize`: the tracking between every two characters. None after the last one, so
+ * a centered or right-aligned eyebrow ends on its last letter (the preview draws the last character with no spacing after it).
+ */
+export function trackingWidth(text: string, fontSize: number, style: Pick<TextStyle, 'tracking'>): number {
+  if (!style.tracking) return 0;
+  let count = 0;
+  for (const _ of text) count++;
+  return style.tracking * fontSize * Math.max(0, count - 1);
+}
 /** Role families. `accent` is present only when the scheme defines an accent role; the slide tag and quote body use it. */
 export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
 /** Documented monospace fallback for the code role when a resolved scheme defines no `code`. */
@@ -143,28 +195,35 @@ export interface Fonts {
 }
 export type MeasureTextWidth = (text: string, fontSize: number) => number;
 export function resolveTextStyle(style: TextStyle, measurement?: TextMeasurement): TextStyle {
-  return measurement?.resolveStyle ? measurement.resolveStyle(style) : style;
+  if (!measurement?.resolveStyle) return style;
+  // LH-32: a host that rebuilds the style keeps its capitals and tracking.
+  const resolved = measurement.resolveStyle(style);
+  return style.caps || style.tracking ? { ...resolved, ...(style.caps ? { caps: true } : {}), ...(style.tracking ? { tracking: style.tracking } : {}) } : resolved;
 }
 export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasurement): MeasureTextWidth {
   // Without a host measurement a monospace family is measured on its 0.6 em cells: the proportional estimate is about
   // 15% short for code, so a code line it accepted ran past its panel once drawn in the bundled Roboto Mono.
-  if (!measurement) return isMonospaceFamily(style.fontFamily) ? measureMonospaceText : measureText;
-  return (text, size) => {
+  const base: MeasureTextWidth = !measurement ? isMonospaceFamily(style.fontFamily) ? measureMonospaceText : measureText : (text, size) => {
     const width = measurement.measure(text, size, style);
     if (!Number.isFinite(width) || width < 0) throw new RangeError('Text measurement must return a finite, nonnegative width.');
     return width;
   };
+  // LH-32: an eyebrow is measured as drawn: its capitals, plus its tracking between characters.
+  if (!style.caps && !style.tracking) return base;
+  return (text, size) => base(styledText(text, style), size) + trackingWidth(text, size, style);
 }
 /** Validate an optional host outline measurement without inventing raster coverage. */
 export function measureTextOutline(text: string, fontSize: number, style: TextStyle, measurement?: TextMeasurement): LayoutBox | null | undefined {
   if (measurement?.outlineBounds === undefined) return undefined;
   if (typeof measurement.outlineBounds !== 'function') throw new TypeError('Text outline provider must be a function.');
-  const bounds = measurement.outlineBounds(text, fontSize, style);
+  const bounds = measurement.outlineBounds(styledText(text, style), fontSize, style);
   if (bounds === null) return null;
   if (!bounds || ![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite) || bounds.width < 0 || bounds.height < 0) {
     throw new RangeError('Text outline measurement must return null or finite bounds with nonnegative dimensions.');
   }
-  return {x:bounds.x,y:bounds.y,width:bounds.width,height:bounds.height};
+  // LH-32: tracking moves every glyph after the first by the spacing before it.
+  const spread = trackingWidth(text, fontSize, style);
+  return {x:bounds.x,y:bounds.y,width:bounds.width+spread,height:bounds.height};
 }
 export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }
 export interface TextPlacementLine {
@@ -309,6 +368,13 @@ export interface ComposedItem {
   emphasis?: true;
   /** LH-68: this metric is laid out as a tile of its card (a `metrics: "tile"` region). Absent on every other item. */
   metricTile?: true;
+  /**
+   * LH-50: this text block is a label drawn as the eyebrow of the paragraph after it (the next item): at eyebrowSize of it, bold, in
+   * capitals with EYEBROW_TRACKING where its script has case (its `textStyle`). Engines draw it in the tag's color: the primary, or the
+   * text color where the primary is under 4.5:1 on its backdrop. On a card it carries its paragraph's `frameBox`: the two share one card,
+   * which engines draw once, under the eyebrow. Absent on every other item.
+   */
+  eyebrow?: true;
   /** LH-48: the growth (`TableLayoutOptions.growth`) of a lone table that filled too little of the body; engines lay the table out with it. */
   tableGrowth?: number;
   /**
@@ -330,6 +396,38 @@ export interface ComposedEmphasis {
   shape: 'card' | 'band' | 'pill';
   source: 'authored' | 'foot-band' | 'pill';
 }
+/**
+ * LH-07: one drawn sequence of a `sequence` region (layout record): what the engines draw besides its text, in canvas pixels.
+ * - `row`: the region's blocks side by side, each under a badge; `connector` runs through the badge centers of the row.
+ * - `column`: a list's entries, each beside a badge in the list's marker column; `connector` runs down that column.
+ * - `flow`: a short list's entries in `chips` (one per entry; its text is the list column of the same index) with `arrows` between.
+ * Paint order: chips, connector, badges, arrows, then the text. A badge is an accent (`primary`) circle of `radius` around
+ * (`cx`, `cy`) with its `label` centered on it in the bold body face at `fontSize`, its baseline at `baseline`, in the scheme
+ * color readable on the accent (`readableSchemeColor`); the connector is a `border` colored line `lineWidth` wide; a chip is a card
+ * (`neutrals.card` fill, `cardBorder` line) with corner `radius`; an arrow is an accent block arrow filling its `box` and pointing
+ * to `direction`, as DrawingML's `rightArrow` (`leftArrow`) preset draws it with its default adjustments: a shaft half the box's
+ * height, a head as long as half the box's smaller side. In a right-to-left deck a row's badges sit at the start (right) of their
+ * blocks and a flow runs right to left; a list's badges sit on the side each entry's paragraph starts, as its markers would.
+ */
+export interface ComposedSteps {
+  form: 'row' | 'column' | 'flow';
+  /** The `sequence` region. */
+  region: string;
+  /** `row`: the region's first block; `column` and `flow`: the list's payload path. */
+  path: string;
+  badges: ComposedStepBadge[];
+  connector?: { x1: number; y1: number; x2: number; y2: number };
+  chips?: { path: string; box: LayoutBox; radius: number }[];
+  arrows?: { box: LayoutBox; direction: 'right' | 'left' }[];
+  lineWidth: number;
+}
+/**
+ * LH-07: one numbered circle of a sequence (`ComposedSteps.badges`); `path` is the step's block (`row`) or list entry (`column`).
+ * `list` names the list entry whose number the badge draws in place of its marker (its payload path, the entry's index and the
+ * number), so an exporter can keep the list's numbering; absent when the badge numbers a block by its position or the list has no
+ * `numbering` of its own (a list of a `steps` region is then counted in arabic).
+ */
+export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> } }
 /** One column of a list laid out in columns (`ComposedItem.listColumns`). */
 export interface ComposedListColumn {
   box: LayoutBox;
@@ -494,6 +592,13 @@ export interface ComposedBackgroundImage {
   /** Luminance-based recolor of the pixels (Rec. 601 weights on sRGB values), as on an image block. */
   recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
   overlay?: ComposedOverlay;
+  /**
+   * LH-02: the automatic scrims behind the text on this picture (picture-scrim.ts), in paint order, drawn directly above the picture and
+   * beneath furniture and content: one for the body and headings, one for the header and one for the footer, merged where they meet.
+   * Present when text sits on the picture and the background has no `overlay` key: an overlay of the author's replaces them and
+   * `overlay: false` turns them off.
+   */
+  scrims?: ComposedScrim[];
   /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
   picture?: ImageFitPlacement;
 }
@@ -616,6 +721,8 @@ export interface SlideComposition {
   recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number }; kpis?: true };
   /** LH-06: the slide's emphasis surface (at most one), when a block or group asks for it or an automatic rule gives one. */
   emphasis?: ComposedEmphasis;
+  /** LH-07: the step badges, connectors and flows of the slide's `sequence` regions, in reading order; absent when none draws. */
+  steps?: ComposedSteps[];
   /**
    * LH-80, LH-49: automatic composition gave the slide's one picture (`picture`) or one chart (`chart`) a full-height track of its own
    * at `edge` (physical), `size` of the slide's width (left, right) or height (top, bottom); `path` is the block's. A picture's track
@@ -684,6 +791,17 @@ export interface ComposeSlideOptions {
   fill?: boolean;
   /** Return candidate scores and coverage without changing the selected geometry. */
   explain?: boolean;
+  /**
+   * LH-02: the slide's resolved color roles the automatic scrim of a picture background reads (the text colors and the scrim's,
+   * the slide background). `resolveSlideContext` passes them; without them the default scheme's roles for `darkBackground` apply.
+   */
+  roles?: { text: string; textSecondary: string; primary: string; background: string };
+  /**
+   * LH-02: a host that can read a picture's pixels returns its luminance grid (WCAG relative luminance per cell, row order), and the
+   * automatic scrim is then sized for the picture under the text instead of for any picture. Engines that draw the same slide must be
+   * given the same function, or none (then every scrim is sized for the worst case, black to white).
+   */
+  pictureLuminance?: (src: string) => PictureLuminance | undefined;
 }
 export class OPFCompositionError extends Error {
   readonly code = "layout-overflow";
@@ -1498,6 +1616,28 @@ export const LONE_DISPLAY_SIZES = { text: 43, list: 37, table: 32, quote: 56, qu
  * one short line, grows to at most LONE_METRIC_TARGET.
  */
 export const LONE_FILL = .5, LONE_TARGET = .6, LONE_METRIC_TARGET = .8;
+/**
+ * LH-129: the largest size, in reference pixels, a heading of a slide whose headings are its message (a cover, a section, a closing)
+ * grows to: the title to about Claude Design's 78 px display title, the subtitle two steps of the type scale above its role size. The
+ * tag is LH-32's eyebrow, already set at its EYEBROW_TAG_SIZE role size (22 px), which is its display size too: it keeps that size
+ * (wave 5; LH-129 alone grew a 16 px tag to 21 px).
+ */
+export const HEADING_DISPLAY_SIZES = { title: 75, subtitle: 37, tag: EYEBROW_TAG_SIZE } as const;
+/**
+ * LH-129: `size` (canvas px) grown by `steps` steps of the type scale (the floor `floorPx` times (28/16)^(1/4) to a power, as LH-17's
+ * scale), each step the scale's next size above the last, stopping before a step above `display`.
+ */
+function typeScaleStepsUp(size: number, steps: number, display: number, floorPx: number, scale: number): number {
+  const ratio = (PROSE_NOMINAL_SIZE / 16) ** .25;
+  let grown = size;
+  for (let step = 0; step < steps; step++) {
+    let next = Infinity;
+    for (let power = 0; power < 64; power++) { const candidate = snapFontSizeDown(Math.round(floorPx * ratio ** power) * scale); if (candidate > grown + 1e-9) { next = candidate; break; } }
+    if (next > display + 1e-9) break;
+    grown = next;
+  }
+  return grown;
+}
 /** LH-48: a role size grown by `growth` (at least 1), capped at its display size; a role already larger keeps its size. */
 function grownRoleSize(size: number, growth: number | undefined, display: number): number {
   const factor = growth !== undefined && Number.isFinite(growth) && growth > 1 ? growth : 1;
@@ -1829,7 +1969,27 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
   display?: { start: number; max: number; height?: number };
   /** LH-15: lay the metric out as a band (the value at the start, the other fields in a column beside it) when that fits; start-aligned. */
   band?: boolean;
+  /**
+   * LH-39: a value of one word (a figure such as "$1.24M") never wraps: it is set on one line at the largest size that holds it, not split
+   * inside the figure at a larger size. Default true; composition passes false for a slide's composition without its guarded rules.
+   */
+  figure?: boolean;
 }
+/**
+ * LH-17: the largest size of the type scale at or under `size` (canvas px), the scale rising from the floor (reference px) by
+ * TYPE_SCALE_RATIO, rounded to whole reference pixels (see composeSlide's scaleSizes).
+ */
+const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
+function typeScaleStep(size: number, floorPx: number, scale: number): number {
+  let step = snapFontSizeUp(floorPx * scale);
+  for (let power = 1; ; power++) {
+    const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
+    if (next > size + 1e-9) return step;
+    step = Math.max(step, next);
+  }
+}
+/** LH-39: the metric layouts that set a figure on one line where it would have wrapped (the guarded rule `metric-figure`). */
+const FIGURE_LINES = new WeakSet<MetricLayout>(), FIGURE_FITS = new WeakSet<CodeTextFit>();
 /** LH-68: the share of a tile's height its value asks for (Claude Design's scorecard values are about a quarter of the card). */
 export const METRIC_TILE_VALUE_SHARE = 0.25;
 /**
@@ -1845,6 +2005,22 @@ export const METRIC_BAND_VALUE_SHARE = .6, METRIC_BAND_MIN_COLUMN = 200;
 export const METRIC_BAND_RATIO = 3;
 /** LH-53: a unit on its value's line is drawn at this share of the value's size (Claude Design sets "18%" as one figure). */
 export const METRIC_UNIT_SHARE = .6;
+/** LH-127: the gap between an inline unit and its value, as a share of the value's size (a figure and its unit read as one, not touching). */
+export const METRIC_UNIT_GAP = .12;
+/**
+ * LH-127: the advance in em of the characters a figure is written in, in a heavy sans face: the widest of Roboto, Arial and Calibri at
+ * weight 800, which is narrower than core's portable estimate for a digit (.62) and much narrower for a separator (.54). Without a host
+ * measurement an inline unit is placed after the figure by this table, so it does not float in the estimate's slack. A character of
+ * another kind (a letter, a percent sign, a script) is not in the table and keeps the estimate.
+ */
+const FIGURE_ADVANCES: Readonly<Record<string, number>> = {
+  ...Object.fromEntries([...'0123456789$€£¥+−'].map(character => [character, .58])), '.': .3, ',': .3, '-': .42, ' ': .32,
+};
+function figureWidth(text: string, size: number): number | undefined {
+  let units = 0;
+  for (const character of text) { const advance = FIGURE_ADVANCES[character]; if (advance === undefined) return undefined; units += advance; }
+  return units * size;
+}
 /**
  * LH-112: the display size of a metric beside other blocks, in reference pixels: one metric starts at 120 and grows to 160, two start at 90
  * and grow to 120 (layoutMetric's `display`).
@@ -1964,14 +2140,26 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const fitValue=(area:LayoutBox,singleLine:boolean)=>{
     if (!usable(area)) return undefined;
-    // Derive sizes from the requested size: repeated subtraction accumulates rounding
-    // error and can add an extra trial at very small floors.
-    for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) {
-      const size=gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize);
-      const natural=measure(primary,size,area.width);
-      const fit={...natural,overflow:!!natural.placement?.overflow||singleLine&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
-      if (!fit.overflow||size===primary.minFontSize) return fit;
+    const attempt=(strict:boolean,scaled=false)=>{
+      // Derive sizes from the requested size: repeated subtraction accumulates rounding
+      // error and can add an extra trial at very small floors. LH-39: a figure set on one line steps down the type scale instead.
+      const sizes:number[]=[];
+      if (scaled) for (let size=primary.requestedFontSize;;size=typeScaleStep(size-1e-6,primary.minFontSize/scale,scale)) { sizes.push(size); if (size<=primary.minFontSize+1e-9) break; }
+      else for (let step=0,steps=Math.max(76,Math.ceil((primary.requestedFontSize-primary.minFontSize)/scale));step<=steps;step++) sizes.push(gridFontSize(primary.requestedFontSize-step*scale,primary.minFontSize));
+      for (const size of sizes) {
+        const natural=measure(primary,size,area.width);
+        const fit={...natural,overflow:!!natural.placement?.overflow||strict&&natural.lines.length!==1||occupied(natural)>area.height+.01||natural.sourceLines.some(line=>line.width>area.width+.01)};
+        if (!fit.overflow||size===sizes[sizes.length-1]) return fit;
+      }
+    };
+    // LH-39: a figure (a value of one word, "$1.24M") never wraps: it is set on one line at the largest size of the type scale that holds it, which a split
+    // inside the figure ("$1.24" over "M") would otherwise beat by a larger size. When no size down to the floor holds it on one line, the
+    // wrapped fit stands, as before. A value of several words ("Q4 2026 plan") may still wrap between words.
+    if (options.figure!==false&&!singleLine&&!/\s/u.test(primary.text.trim())) {
+      const whole=attempt(true,true);
+      if (whole&&!whole.overflow) { if (attempt(false)?.lines.length!==1) FIGURE_FITS.add(whole); return whole; }
     }
+    return attempt(singleLine);
   };
   type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
   type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
@@ -2026,7 +2214,16 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),area=lineBox(part,box,leadY,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap; }
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
-        const measuredWidth=naturalWidth(primary,valueFit);
+        // LH-127: the unit follows the value line as it is drawn. With a host measurement that is the measured line (its ink, with an
+        // outline measure). Without one the portable estimate is slack for a figure (about a fifth too wide for "2.4"), which left the unit
+        // floating a few characters away at display size: a figure is then measured by FIGURE_ADVANCES, and its line takes that width, so
+        // an engine that centers or ends the line on its accepted width draws it where the unit expects it.
+        let figureFit=valueFit;
+        if (!options.textMeasurement&&valueFit.lines.length===1) {
+          const width=figureWidth(primary.text,valueFit.fontSize);
+          if (width!==undefined&&width<naturalWidth(primary,valueFit)) figureFit={...valueFit,sourceLines:valueFit.sourceLines.map(line=>({...line,width,segments:line.segments.map(segment=>({...segment,width:segment.kind==='text'?width:segment.width}))}))};
+        }
+        const measuredWidth=naturalWidth(primary,figureFit);
         const valueWidth=Math.min(area.width,measuredWidth||valueFit.fontSize);
         // LH-53: a unit beside its value is drawn at METRIC_UNIT_SHARE of the value's size on its baseline, so "18 %" reads as one figure,
         // when it still fits on the line; otherwise at its own size.
@@ -2037,11 +2234,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
           const natural=measure(unit,unitSize,box.width),width=naturalWidth(unit,natural);
           if (natural.lines.length===1&&width>0&&valueWidth+gap+width<=box.width+.01) { inlineFit=place(unit,natural,width); inlineWidth=width; }
         }
+        // LH-127: the gap before the unit is METRIC_UNIT_GAP of the value's size, at least the metadata gap, and no more than the line has
+        // left (the fit above reserved only the metadata gap, so the value keeps the size it had).
+        const unitGap=Math.max(gap,Math.min(METRIC_UNIT_GAP*valueFit.fontSize,box.width-valueWidth-inlineWidth));
         const valueBaseline=valueFit.placement?.lines.at(-1)?.baseline??valueHeight-valueFit.lineHeight+valueFit.fontSize;
         const unitBaseline=inlineFit.placement?.lines.at(-1)?.baseline??occupied(inlineFit)-inlineFit.lineHeight+inlineFit.fontSize;
         const valueY=top+Math.max(0,unitBaseline-valueBaseline),unitY=top+Math.max(0,valueBaseline-unitBaseline);
-        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,valueFit,valueWidth)});
-        allocations.push({part:unit,box:{x:box.x+valueWidth+gap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
+        allocations.push({part:primary,box:{...area,y:valueY,width:valueWidth,height:valueHeight},fit:place(primary,figureFit,valueWidth)});
+        allocations.push({part:unit,box:{x:box.x+valueWidth+unitGap,y:unitY,width:inlineWidth,height:occupied(inlineFit)},fit:{...inlineFit,overflow:!!inlineFit.placement?.overflow}});
         primaryHeight=Math.max(valueY-top+valueHeight,unitY-top+occupied(inlineFit));
       } else allocations.push({part:primary,box:valueFit?{...area,height:valueHeight}:area,fit:valueFit});
       // Keep related fields together. An arbitrary percentage gap disconnects a stacked unit
@@ -2068,6 +2268,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     if (selected&&!selected.overflow&&selected.score===0) break;
   }
   for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
+  const figureLine=!!primary.fit&&FIGURE_FITS.has(primary.fit);
   const alignmentFactor=alignment==='center'?.5:alignment==='right'?1:0;
   if (selected!.arrangement==='inline-unit'&&unit) {
     const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
@@ -2123,7 +2324,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
-  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  if (figureLine) FIGURE_LINES.add(layout);
+  return layout;
 }
 
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
@@ -2148,6 +2351,11 @@ const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-de
 export const TIMELINE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> = { done: 'Done', current: 'Current', planned: 'Planned' };
 /** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
 const TIMELINE_GROWTH = 4;
+/**
+ * LH-129: the growths (reference pixels on every role) a lone timeline tries first, largest first: three and two steps of the type scale
+ * above its 18 and 22 px label roles (to 28 and 32, or 24 and 28 px).
+ */
+const TIMELINE_STEP_GROWTH = [10, 6] as const;
 /** LH-41: a size offset that takes every timeline part to the readability floor (to measure how far a timeline can shrink). */
 const TIMELINE_FLOOR_OFFSET = 1000;
 /** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
@@ -2888,6 +3096,11 @@ export interface ListEntryLayout {
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end';none?:true};
   /** LH-77: the entry of a heading list (`ListFitOptions.heading`): bold at LIST_HEADING_SCALE times the list size, with no marker. */
   heading?:true;
+  /**
+   * LH-07: the entry's step badge (`ListFitOptions.badges`): a circle of `diameter` centered at (`cx`, `cy`) in the marker column,
+   * with `label` (the number without its suffix) at `fontSize`. The marker itself draws nothing (`none`); `number` is kept.
+   */
+  badge?:{cx:number;cy:number;diameter:number;label:string;fontSize:number};
   /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
   direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
@@ -2907,7 +3120,17 @@ export interface ListEntryLayout {
  * anti-aliasing, so the true side is about 0.65). The export needs no size: PowerPoint sizes the bullet itself.
  */
 export const PICTURE_BULLET_SCALE=0.65;
-export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number }
+/** LH-08: a hairline between two rows of a list drawn as ruled rows (`design.listStyle: "rows"`): from `x` across `width`, centered on `y`. */
+export interface ListRule { x:number; y:number; width:number }
+export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number;
+  /** LH-08: the hairlines of a list drawn as ruled rows, one between every two first-level entries; engines draw each LIST_RULE_WIDTH thick in the scheme's border neutral. */
+  rules?:ListRule[] }
+/** LH-08: the space between two rows of a ruled list, in em of the list size; its hairline sits in the middle. */
+export const LIST_ROWS_GAP=.8;
+/** LH-08: a ruled list sets its labels beside their descriptions when the widest label takes at most this share of the list's width on one line. */
+export const LIST_ROWS_LABEL_SHARE=.4;
+/** LH-08: the thickness of a row's hairline, in reference pixels (0.75 pt at 1280 × 720). */
+export const LIST_RULE_WIDTH=1;
 export interface ListFitOptions extends RichTextOptions {
   /**
    * Number the entries instead of bulleting them (the payload's `numbering` field). The hanging indent becomes the larger of
@@ -2928,9 +3151,33 @@ export interface ListFitOptions extends RichTextOptions {
    * no numbering. composeSlide sets it for a list block whose only entry has a description.
    */
   heading?:boolean;
+  /**
+   * LH-08: ruled rows (effective `design.listStyle: "rows"`): each first-level entry is a row, a hairline between two rows (`ListFit.rules`)
+   * and LIST_ROWS_GAP em between them; no bullet (numbers stay). When every entry has a description and sits at the first level, the labels
+   * are bold and, when the widest fits LIST_ROWS_LABEL_SHARE of the width on one line, sit in a column beside their descriptions (one em
+   * apart, the first baselines aligned); otherwise each description sits under its label, as in a stacked list. Ignored for fewer than 2 entries.
+   */
+  rows?:boolean;
+  /**
+   * LH-07: draw each entry's number in a step badge (`ListEntryLayout.badge`) instead of a marker: a circle STEP_LIST_BADGE times the
+   * list size across in the marker column, its numeral STEP_BADGE_NUMERAL of that and never under the floor, centered on the
+   * entry's first line; entries are at least STEP_BADGE_GAP of a badge apart, so the connector between them shows. Needs
+   * `numbering` and entries of level 0; ignored otherwise.
+   */
+  badges?:boolean;
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
+/**
+ * LH-07: a step badge is this many times its step's text size across (the list size, or a paragraph's size), and its numeral is set
+ * at that text size, so a badge never draws a number smaller than the text it numbers (Claude Design: a 54 to 70 px circle over 20 to
+ * 28 px step text).
+ */
+export const STEP_BADGE=1.75;
+/** LH-07: the space between a badge and its step's text, and the least space between two badges of a column, as a share of its diameter. */
+export const STEP_BADGE_GAP=.4;
+/** LH-07: a flow (chips joined by arrows) is a lone list of this many entries at least and at most, each of one or two words and at most STEP_FLOW_CHARACTERS long. */
+export const STEP_FLOW_MIN=3, STEP_FLOW_MAX=6, STEP_FLOW_CHARACTERS=24;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -2959,29 +3206,89 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined;
+  // LH-07: entries drawn beside step badges (numbered, one level).
+  const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
   // A native auto-number takes the weight and slant of the paragraph's first run.
   const markerStyleFor=(item:typeof source[number]):TextStyle=>{
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
     return {...options.style,path:item.textPath,fontWeight:first?.bold===undefined?options.style.fontWeight:first.bold?700:400,italic:first?.italic??options.style.italic};
   };
+  // LH-08: ruled rows (ListFitOptions.rows).
+  const rows=options.rows===true&&!heading&&source.length>=2,described=rows&&source.every(item=>item.descriptionRuns!==undefined);
+  const rowsLayout=(fontSize:number):ListFit=>{
+    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
+    const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
+    const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
+    // Only numbers keep a hanging indent: a row needs no bullet. A nested level steps in by 1.1 em under its row.
+    const indent=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):0,nest=fontSize*1.1;
+    const labelStyle=(item:typeof source[number]):TextStyle=>({...options.style,path:item.textPath,...(described?{fontWeight:700}:{})});
+    const labelAt=(item:typeof source[number],area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize,{...options,style:labelStyle(item)},minFontSize)(fontSize);
+    // The label column: the widest label on one line, when that takes at most LIST_ROWS_LABEL_SHARE of the width.
+    let column=0;
+    if(described&&source.every(item=>item.level===0)){
+      const widest=Math.max(...source.map(item=>Math.max(0,...labelAt(item,{x:0,y:0,width:1e6,height:1e6}).richLines.map(line=>line.width))));
+      const need=indent+widest*1.001+1;
+      if(need<=LIST_ROWS_LABEL_SHARE*box.width)column=need;
+    }
+    const between=fontSize,side=column>0;
+    for(const item of source){
+      const rtl=item.direction==='rtl',first=item.index===0;
+      // A hairline in the middle of the gap above every first-level row but the first; a nested entry stays close under its row.
+      if(!first){
+        const space=fontSize*(item.level===0?LIST_ROWS_GAP:.28);
+        if(item.level===0)rules.push({x:box.x,y:y+space/2,width:box.width});
+        y+=space;
+      }
+      const offset=side?0:Math.min(box.width,item.level*nest),width=Math.max(1,side?column-indent:box.width-offset-indent);
+      if(offset+indent>=box.width)overflow=true;
+      const x=rtl?box.x+(side?box.width-column:0):box.x+offset+indent;
+      const textBox={x,y,width,height:box.height},text=labelAt(item,textBox);
+      textBox.height=text.height;
+      let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined,bottom=y+text.height;
+      if(item.descriptionRuns!==undefined){
+        const ratio=.82,dx=side?(rtl?box.x:box.x+column+between):x,dWidth=side?Math.max(1,box.width-column-between):width;
+        descriptionBox={x:dx,y:side?y:bottom+fontSize*.12,width:dWidth,height:box.height};
+        description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
+        // Beside its label, a description's first baseline sits on the label's.
+        if(side)descriptionBox.y+=Math.max(0,(text.richLines[0]?.baseline??fontSize)-(description.richLines[0]?.baseline??fontSize*ratio));
+        descriptionBox.height=description.height;bottom=Math.max(bottom,descriptionBox.y+description.height);
+      }
+      lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));
+      if(description){lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));}
+      overflow||=text.overflow||!!description?.overflow;
+      const number=numbers?.[item.index];
+      const marker={text:number?number.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset):box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{none:true as const}),...(rtl?{anchor:'end' as const}:{})};
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(item.direction?{direction:item.direction}:{})});
+      y=bottom;
+    }
+    const height=y-box.y;
+    return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,rules,...(options.direction==='rtl'?{directions}:{})};
+  };
   const layout=(fontSize:number):ListFit=>{
+    if(rows)return rowsLayout(fontSize);
     let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[];
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
     // LH-77: the one described entry of a heading list draws without a marker or an indent, bold and a step up over its description.
-    const none=(options.bullet==='none'||heading)&&!numbers;
-    const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
+    const diameter=badged?fontSize*STEP_BADGE:0;
+    const none=((options.bullet==='none'||heading)&&!numbers)||badged;
+    // LH-07: a badge column is the badge and half an em before the text.
+    const hanging=badged?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
       const rtl=item.direction==='rtl';
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=none&&!badged?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
       const text=heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
         :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
+      // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
+      // badge starts lower by the difference, so the badge stays inside the entry.
+      const center=badged?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=badged?Math.max(0,diameter/2-center):0;
+      if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
         const ratio=heading?1:.82;
@@ -2991,11 +3298,13 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),
+      if(badged)y=Math.max(y,textBox.y+center+diameter/2);
+      const marker={text:number&&!badged?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number),fontSize}:undefined;
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
-      if(item.index<source.length-1)y+=fontSize*.28;
+      if(item.index<source.length-1)y+=badged?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(options.direction==='rtl'?{directions}:{})};
@@ -3308,7 +3617,7 @@ const LAYOUT_MASTER = Symbol('opf.layoutMaster');
 function mergeListColumns(columns: readonly ComposedListColumn[]): ListFit {
   const fits = columns.map(column => column.text), first = fits[0]!;
   const directions = fits.flatMap(fit => fit.directions ?? []);
-  return { ...first, listEntries: fits.flatMap(fit => fit.listEntries), lines: fits.flatMap(fit => fit.lines), height: Math.max(...fits.map(fit => fit.height)), overflow: fits.some(fit => fit.overflow), ...(first.directions ? { directions } : {}) };
+  return { ...first, listEntries: fits.flatMap(fit => fit.listEntries), lines: fits.flatMap(fit => fit.lines), height: Math.max(...fits.map(fit => fit.height)), overflow: fits.some(fit => fit.overflow), ...(first.directions ? { directions } : {}), ...(fits.some(fit => fit.rules) ? { rules: fits.flatMap(fit => fit.rules ?? []) } : {}) };
 }
 /** Options of `composeLayoutAreas`: those of composeSlide (canvas, deck, theme, direction, ...) plus the layout's own. */
 export interface LayoutAreasOptions extends Omit<ComposeSlideOptions, 'layout' | 'explain'> {
@@ -3375,6 +3684,16 @@ export const QUOTE_PULL_MAX_CHARACTERS = 140;
 const GROW = Symbol('opf.grow');
 /** LH-48: composeSlide composes an under-filled body again in the middle of the space under the headings (growBody). */
 const CENTER = Symbol('opf.center');
+/** LH-129: composeSlide composes a slide whose headings are its message again with them this many type-scale steps larger (growTemplate). */
+const HEADING_STEPS = Symbol('opf.headingSteps');
+/**
+ * LH-129: compositions whose headings are the message: they stand free (centered in a sized title area, or in a stacked record) and no
+ * primary or secondary region holds a block (a cover, a section, a closing), or the slide has no body and no layout record (a cover by
+ * the record rule), so growTemplate may grow them.
+ */
+const HEADING_MESSAGES = new WeakSet<SlideComposition>();
+/** LH-129: compositions with a grown heading that fit only below its step of the type scale (growTemplate does not keep them). */
+const HEADINGS_OFF_SCALE = new WeakSet<SlideComposition>();
 const overflowCount = (result: SlideComposition): number => result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length;
 // LH-83: the parts that carry the reading text of a quote, code panel, metric or timeline. The others (attribution, filename,
 // language, unit, delta, description, trend, a timeline's name, dates and notes) ask for 14 to 20 px, near the floor by design,
@@ -3387,12 +3706,14 @@ const MAIN_PARTS: ReadonlySet<string> = new Set(['body', 'value', 'label', 'what
 // grid too narrow for its content draws them. Headings are not body.
 // `byPath` (wave 3): the smallest of those sizes per item or part path, which the wave 3 guard compares block by block.
 // `wrappedCells` (LH-80 widened): the table cells set on more than one line.
-function bodyReadability(result: SlideComposition, options: ComposeSlideOptions): { sizes: { size: number; atFloor: boolean }[]; overflows: number; splitWords: number; byPath: Map<string, number>; wrappedCells: number } {
+function bodyReadability(result: SlideComposition, options: ComposeSlideOptions): { sizes: { size: number; atFloor: boolean }[]; overflows: number; splitWords: number; byPath: Map<string, number>; wrappedCells: number; splitValues: Set<string> } {
   const scale = Math.min(result.width, result.height) / 720, sizes: { size: number; atFloor: boolean }[] = [], byPath = new Map<string, number>();
   let splitWords = 0, wrappedCells = 0;
+  const splitValues = new Set<string>();
   const split = (text: unknown, fit: unknown) => { if (typeof text === 'string' && Array.isArray(record(fit).sourceLines) && breaksInsideWord(text, fit as SourceTextFit)) splitWords++; };
   for (const item of result.items) {
-    if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag') continue;
+    // LH-50: a label drawn as an eyebrow is set at the tag's role size, like the tag: it is no body.
+    if (item.field === 'title' || item.field === 'subtitle' || item.field === 'tag' || item.eyebrow) continue;
     const floor = snapFontSizeUp((item.composition.minFontSize ?? 16) * scale);
     const add = (size: number | undefined, key = item.path) => {
       if (size === undefined || !Number.isFinite(size)) return;
@@ -3410,6 +3731,8 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
         // the slide's smallest body size (every other block still keeps its own size), not to the card's larger quote.
         if (MAIN_PARTS.has(part.role) && part.requestedFontSize > part.minFontSize + FONT_GRID_EPSILON) add(part.fit === undefined ? undefined : Math.min(part.fit.fontSize, display), `${item.path}:${item.quoteLayout?.rule && part.role === 'body' ? 'pull' : part.role}`);
         split(part.text, part.fit);
+        // LH-39: a figure (a value of one word) on more than one line is split, wherever the break falls ("$1." over "24M").
+        if (part.role === 'value' && item.metricLayout && !/\s/u.test(part.text.trim()) && ((part.fit as { sourceLines?: unknown[] } | undefined)?.sourceLines?.length ?? 0) > 1) splitValues.add(`${item.path}:value`);
       }
     } else if (item.field === 'table') {
       let table: TableLayout | undefined;
@@ -3417,7 +3740,7 @@ function bodyReadability(result: SlideComposition, options: ComposeSlideOptions)
       for (const row of table?.rows ?? []) for (const cell of row.cells) { add(cell.fit.fontSize); if (('richLines' in cell.fit ? (cell.fit as RichTextFit).richLines.length : cell.fit.lines.length) > 1) wrappedCells++; }
     } else { add(item.text?.fontSize); split(item.value, item.text); }
   }
-  return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords, byPath, wrappedCells };
+  return { sizes, overflows: result.diagnostics.filter(entry => entry.code === 'text-overflow' || entry.code === 'small-cell').length, splitWords, byPath, wrappedCells, splitValues };
 }
 /**
  * Wave 3: composeLayout applies a guarded rule only when it is in RULES (every one when RULES is absent), and records in FIRED the
@@ -3433,17 +3756,24 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * lead plus stack (`lead-stack`), LH-70's paragraph columns (`paragraph-columns`), LH-10's reading measure in a layout's regions
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
- * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks. LH-80 and LH-49's tracks are
+ * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
+ * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`), and LH-08's ruled rows for
+ * a list of short labels with descriptions (`list-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`),
+ * whose badges take height the steps' text might need. LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-display';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
-const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges'];
+const NO_RULES: ReadonlySet<GuardedRule> = new Set();
+/** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
+const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
+/** LH-39: the rules (and seeds) a guarded composition was kept with, for the figure trial on top of them. */
+const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRule>; seeds: Record<symbol, unknown> }>();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
@@ -3461,6 +3791,8 @@ const LEAD_STACKS = new WeakSet<SlideComposition>();
  * readable size outranks the measure.
  */
 const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Symbol('opf.noRegionMeasure');
+/** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
+const NO_STEPS = Symbol('opf.noSteps');
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
 function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
   const before = bodyReadability(base, options).byPath;
@@ -3473,7 +3805,7 @@ function shrinks(next: SlideComposition, base: SlideComposition, options: Compos
 function bodyFill(result: SlideComposition): { fill: number; spare: number } | undefined {
   // LH-06's band or pill and LH-114's pull line keep their own size and place; the blocks above (or below) them are the body that grows.
   if (LEAD_STACKS.has(result)) return undefined;
-  const body = result.items.filter(item => !headings.has(item.field) && !(item.emphasis && result.emphasis?.source !== 'authored') && !item.quoteLayout?.rule);
+  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && result.emphasis?.source !== 'authored') && !item.quoteLayout?.rule);
   // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
   if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3500,7 +3832,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
   if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
-  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
+  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis?.source !== 'authored') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
   let best = result, steps = 0;
@@ -3524,8 +3856,70 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
-  return settle(input, options, guardedCompose(input, options));
+  const result = settle(input, options, guardedCompose(input, options));
+  if (!result.steps) return withPictureScrim(input, options, result);
+  // LH-07: step badges are drawing and never worth a size. Their band changes how much of the body a slide fills, and so whether LH-48
+  // grows it, so the guard alone, which holds each arrangement to the slide's own composition, cannot see a block that the whole slide
+  // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
+  const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
+  const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
+  return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
 }
+/**
+ * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
+ * contrast rules sample there and the automatic scrim (LH-02) covers it. Quote, metric and timeline items, and items without lines, keep their box.
+ */
+export function textInkBox(item: ComposedItem, measurement: TextMeasurement | undefined): LayoutBox {
+  const fit = item.text;
+  if (!fit || !Array.isArray(fit.lines) || !fit.lines.length || !item.textStyle || item.quoteLayout || item.metricLayout || item.timelineLayout) return item.box;
+  try {
+    const measure = textWidthMeasurer(item.textStyle, measurement);
+    const width = Math.min(item.box.width, Math.max(...fit.lines.map((line) => measure(line, fit.fontSize))));
+    const height = Math.min(item.box.height, fit.lines.length * fit.lineHeight);
+    const x = item.alignment === 'center' ? item.box.x + (item.box.width - width) / 2 : item.alignment === 'right' ? item.box.x + item.box.width - width : item.box.x;
+    return { x, y: item.box.y, width, height };
+  } catch {
+    return item.box;
+  }
+}
+/**
+ * LH-02: the automatic scrims of a picture background (picture-scrim.ts) over the slide's final geometry; they change no box or size. They
+ * cover every item drawn straight on the picture (not a picture, video, code panel or table, which draw on fills of their own, nor an
+ * item on a card or the emphasis surface), every caption and the header and footer text; a right-to-left slide covers whole boxes. The
+ * slide's text color reaches 4.5:1 there, the muted color of header and footer text and of a quote, metric or timeline's footer too,
+ * and the primary color of a metric value or timeline 3:1 (display sizes). An `overlay` key on the background (an overlay of the author's, or `false`) means no scrim.
+ */
+function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  const background = result.backgroundImage;
+  if (!background) return result;
+  const authored = background.path === 'theme' ? options.themeBackground : background.path === 'design.background' ? record(record(options.presentation).design).background : record(record(input).design).background;
+  if (background.overlay || record(authored).overlay !== undefined) return result;
+  // The body and headings, the header and the footer each get a scrim of their own, so header and footer text at the slide's edges
+  // does not stretch the body's scrim over the whole picture.
+  const body: LayoutBox[] = [], header: LayoutBox[] = [], footer: LayoutBox[] = [];
+  let accent = false, muted = false, line = 0;
+  for (const item of result.items) {
+    if (item.caption) body.push(item.caption.box);
+    if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
+    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table'].includes(item.field)) continue;
+    body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
+    if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
+    if (item.metricLayout || item.timelineLayout) accent = true;
+  }
+  for (const part of result.furniture?.parts ?? []) if (part.type === 'text') { (part.kind === 'header' ? header : footer).push(part.box); muted = true; }
+  const roles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+  const texts = [{ color: roles.text, target: 4.5 }, ...(muted ? [{ color: roles.textSecondary, target: 4.5 }] : []), ...(accent ? [{ color: roles.primary, target: 3 }] : [])];
+  // A recolored picture's pixels are not the ones measured, so it is bounded by the worst case.
+  const luminance = background.recolor ? undefined : options.pictureLuminance?.(background.src);
+  const scrims = pictureScrims({
+    path: background.path, width: result.width, height: result.height, groups: [body, header, footer], texts, color: roles.background, bases: [roles.background, '#FFFFFF'],
+    ...(background.opacity !== undefined ? { opacity: background.opacity } : {}), ...(background.picture ? { picture: background.picture.image } : {}),
+    ...(luminance ? { luminance } : {}), scale: Math.min(result.width, result.height) / 720, ...(line ? { line } : {}),
+  });
+  if (scrims.length) result.backgroundImage = { ...background, scrims };
+  return result;
+}
+
 /**
  * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition): the slide is composed with every guarded
  * rule (GuardedRule), recording which changed something. When none did, that is the result: one composition, as before wave 3. When
@@ -3537,20 +3931,20 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
  * fired is added on its own, in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the
  * ideal measure, card or arrangement. Throws the strict composition's error when nothing composes.
  */
-function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
+function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const fired = new Set<GuardedRule>(), ruled = (rules: ReadonlySet<GuardedRule>, extra: Record<symbol, unknown> = {}) => ({ ...options, [RULES]: rules, ...extra } as ComposeSlideOptions);
   const attempt = (settings: ComposeSlideOptions): SlideComposition | undefined => {
     try { return composeArranged(input, settings); } catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
   let failure: unknown, result: SlideComposition | undefined;
-  try { result = composeArranged(input, ruled(ALL_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
+  try { result = composeArranged(input, ruled(CORE_RULES, { [FIRED]: fired })); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; failure = error; }
   if (fired.size && result && AT_REQUEST.has(result) && [...fired].every(rule => PLACEMENT_RULES.has(rule))) {
     const read = trackQuality(result, options);
-    if (read.overflows === 0 && read.splitWords === 0 && read.narrow === 0) return result;
+    if (read.overflows === 0 && read.splitWords === 0 && read.narrow === 0) { KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} }); return result; }
   }
   if (fired.size) {
     let base: SlideComposition;
-    try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; return result; }
+    try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} }); return result; }
     const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), before = trackQuality(base, options);
     const readsWell = (next: SlideComposition | undefined): next is SlideComposition => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
     // LH-68, LH-06: a tile metric starts every role at its stacked size in `base`, and a band or pill text at its block's size there.
@@ -3559,32 +3953,122 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
     const surface = result?.emphasis && result.emphasis.source !== 'authored' ? result.emphasis.path : undefined;
     const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
     if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
-    if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(ALL_RULES, seeds));
+    if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(CORE_RULES, seeds));
+    let keptRules: ReadonlySet<GuardedRule> = CORE_RULES;
     if (!readsWell(result)) {
       let kept: ReadonlySet<GuardedRule> = NO_RULES;
       result = base;
+      keptRules = NO_RULES;
       for (const rule of GUARDED_RULES) {
         if (!fired.has(rule)) continue;
         const rules = new Set([...kept, rule]), trial = attempt(ruled(rules, seeds));
-        if (readsWell(trial)) { kept = rules; result = trial; }
+        if (readsWell(trial)) { kept = rules; result = trial; keptRules = rules; }
       }
     }
+    KEPT_RULES.set(result!, { rules: keptRules, seeds });
     // LH-114: a pull line's quote is set at the lead size, which the guard does not hold against the card. Another arrangement of the
     // slide (a track, LH-48's growth) is compared with this one, so for that comparison its quote counts at the size it has without the
     // rules: an arrangement that draws the quote on a card again keeps that size; one that keeps the pull line is held to the lead.
     const pulled = result!.items.filter(item => item.quoteLayout?.rule).map(item => `${item.path}:body`), sizes = bodyReadability(base, options).byPath;
     if (pulled.some(key => sizes.has(key))) PULL_SIZES.set(result!, new Map(pulled.flatMap(key => sizes.has(key) ? [[key, sizes.get(key)!] as const] : [])));
   } else if (!result) throw failure;
+  else KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} });
   return result!;
 }
+// LH-129: the text a composition draws, by item path and part (headings by field): its size, its line count, and the height the text
+// covers (the union of every text's extent, joined where texts sit side by side). Pictures, charts and other drawings do not count.
+function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; covered: number; top: number; bottom: number } {
+  const sizes = new Map<string, number>(), lines = new Map<string, number>(), extents: [number, number][] = [];
+  const lineCount = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+  const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+  for (const item of result.items) {
+    const key = headings.has(item.field) ? `${item.path}:${item.field}` : item.path, internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
+    if (internal) {
+      for (const part of internal.parts as readonly { role: string; box: LayoutBox; fit?: { fontSize: number }; visible?: boolean }[]) {
+        if (part.visible === false || !part.fit) continue;
+        sizes.set(`${key}:${part.role}`, Math.min(sizes.get(`${key}:${part.role}`) ?? Infinity, part.fit.fontSize));
+        extents.push([part.box.y, part.box.y + part.box.height]);
+      }
+    } else if (item.text) {
+      sizes.set(key, Math.min(sizes.get(key) ?? Infinity, item.text.fontSize));
+      lines.set(key, (lines.get(key) ?? 0) + lineCount(item.text));
+      extents.push([item.box.y, item.box.y + Math.min(item.box.height, textHeight(item.text))]);
+    }
+  }
+  let covered = 0, reach = -Infinity;
+  for (const [from, to] of extents.sort((a, b) => a[0] - b[0])) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
+  return { sizes, lines, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
+}
 /**
- * The slide after its guarded composition (`result`): an under-filled body of paragraphs and lists grows (LH-48, growBody); a template
- * slide is recomposed as the automatic grid when the layout leaves a chart's plot too short (LH-49, chartRecomposition) or a body role
- * at the readability floor (LH-83, recomposeAtFloor); an automatic slide gives its one picture or chart a track (LH-80, LH-49,
- * automaticTracks). Each arrangement is composed under the guard (guardedCompose, composeVariant).
+ * The guarded composition (guardedCore), then LH-39's figure on one line: the rules it kept plus `metric-figure`, taken when a figure
+ * would wrap otherwise and the slide reads as well (readsAsWellFigure: a split figure may take the next smaller size, and only it).
+ */
+function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const plain = guardedCore(input, options), used = KEPT_RULES.get(plain);
+  // Wave 5: the rule changes only a metric's layout, so a slide that composes no metric is not composed again for it.
+  if (!used || !plain.items.some(item => item.metricLayout)) return plain;
+  const fired = new Set<GuardedRule>();
+  let figured: SlideComposition;
+  try { figured = composeArranged(input, { ...options, [RULES]: new Set([...used.rules, 'metric-figure']), [FIRED]: fired, ...used.seeds } as ComposeSlideOptions); } catch (error) { if (error instanceof OPFCompositionError) return plain; throw error; }
+  const scale = Math.min(plain.width, plain.height) / 720, floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * scale);
+  if (!fired.has('metric-figure') || !readsAsWellFigure(trackQuality(plain, options), trackQuality(figured, options), floor)) return plain;
+  const pulled = PULL_SIZES.get(plain);
+  if (pulled) PULL_SIZES.set(figured, pulled);
+  KEPT_RULES.set(figured, { rules: new Set([...used.rules, 'metric-figure']), seeds: used.seeds });
+  return figured;
+}
+/**
+ * LH-129: LH-48's fill for the layout templates that set their message in the middle of the slide. A stacked record (statement, quote,
+ * closing) grows its body: its paragraphs and lists one, two or three steps of the type scale larger (GROW, up to a list's display
+ * size), its quotes by the scale's ratio on every role. A slide whose headings are its message (HEADING_MESSAGES: a cover, a section, a
+ * closing, a slide with no body and no layout record) grows its title, subtitle and tag the same number of steps (HEADING_STEPS), each up to its display size
+ * (HEADING_DISPLAY_SIZES); a title over a primary block (a quote's, a statement's) keeps its size, so it never outshouts the message.
+ * The largest step is kept at which nothing overflows, every text is at least as large as at the step before and one is larger, no
+ * heading takes more lines than at its role size, the slide reads as well under the guard (composeVariant, readsAsWell, shrinks), and
+ * the text covers at most LONE_TARGET of the content box (as LH-48 grows a body). The region structure is the record's: the stack
+ * or the centered title area places the larger text as it placed the smaller.
+ */
+function growTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
+  if (options.fill === false || overflowCount(result) > 0) return undefined;
+  const stacked = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined, message = HEADING_MESSAGES.has(result);
+  if (!stacked && !message) return undefined;
+  // A body set at the readability floor is not short content.
+  if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
+  const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale), before = trackQuality(result, options);
+  // The frame the text fills: the content box; on a slide with no layout record, whose content box is what the headings leave, the
+  // slide inside its padding down to the content box's foot (where the automatic composition centers a cover).
+  const start = textExtent(result), frameBottom = result.contentBox.y + result.contentBox.height;
+  const frameTop = result.regions ? result.contentBox.y : Math.min(result.contentBox.y, (result.composition.padding ?? .08) * Math.min(result.width, result.height)), height = frameBottom - frameTop;
+  if (height <= 0 || start.covered >= LONE_TARGET * height) return undefined;
+  let best = result, bestText = start;
+  const arrangement = (composed: SlideComposition) => (composed.regions ?? []).map(region => `${region.name}:${region.arrangement ?? '-'}:${region.content.join()}`).join(';');
+  const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis?.source !== 'authored')).map(item => item.text!.fontSize));
+  for (let steps = 1; steps <= 3; steps++) {
+    const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
+    if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
+    // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays.
+    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape) break;
+    // Paragraphs and lists that shared one size keep one size (LH-43): a long one that fits only a step lower holds the others there.
+    if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) break;
+    const text = textExtent(grown);
+    const kept = [...bestText.sizes].every(([key, size]) => (text.sizes.get(key) ?? 0) >= size - FONT_GRID_EPSILON), larger = [...text.sizes].some(([key, size]) => size > (bestText.sizes.get(key) ?? Infinity) + FONT_GRID_EPSILON);
+    const wraps = [...start.lines].some(([key, count]) => key.endsWith(':title') || key.endsWith(':subtitle') || key.endsWith(':tag') ? (text.lines.get(key) ?? 0) > count : false);
+    if (!kept || !larger || wraps || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
+    best = grown; bestText = text;
+  }
+  return best === result ? undefined : best;
+}
+/**
+ * The slide after its guarded composition (`result`): a message set in the middle of the slide grows (LH-129, growTemplate); an
+ * under-filled body of paragraphs and lists grows (LH-48, growBody); a template slide is recomposed as the automatic grid when the
+ * layout leaves a chart's plot too short (LH-49, chartRecomposition) or a body role at the readability floor (LH-83, recomposeAtFloor);
+ * an automatic slide gives its one picture or chart a track (LH-80, LH-49, automaticTracks). Each arrangement is composed under the
+ * guard (guardedCompose, composeVariant).
  */
 function settle(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   if ((options as Record<symbol, unknown>)[LAYOUT_MASTER] === true) return result;
+  const filled = growTemplate(input, options, result);
+  if (filled) return filled;
   const grown = growBody(input, options, result);
   if (grown) return grown;
   if (REGION_MEASURED.has(result) && bodyFill(result)) {
@@ -3615,7 +4099,7 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
   // LH-114 with LH-102: a body with a pull line is one stack with its data at the top of the body (as growBody leaves it), never centered.
   if (result.items.some(item => item.quoteLayout?.rule)) return undefined;
   const bled = new Set(result.regions.filter(region => region.bleed).map(region => region.name));
-  const bodyOf = (composed: SlideComposition) => composed.items.filter(item => !headings.has(item.field) && !(item.emphasis && composed.emphasis?.source !== 'authored'));
+  const bodyOf = (composed: SlideComposition) => composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis?.source !== 'authored'));
   const body = bodyOf(result);
   if (!body.length || !body.every(item => item.region !== undefined && (bled.has(item.region) || CENTERED_FIELDS.has(item.field))) || body.every(item => bled.has(item.region!))) return undefined;
   // A body of one region's one block is LH-48's lone block, which fillLone already grew and set in the middle of the body.
@@ -3673,8 +4157,14 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
   const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
-  const ruled = compose(ALL_RULES, fired);
-  if (!fired.size || reads(ruled)) return ruled;
+  const ruled = compose(CORE_RULES, fired);
+  // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
+  const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
+    if (!current?.items.some(item => item.metricLayout)) return current;
+    const collect = new Set<GuardedRule>(), next = compose(new Set([...rules, 'metric-figure']), collect);
+    return next && collect.has('metric-figure') && readsAsWellFigure(before, trackQuality(next, options), floor) ? next : current;
+  };
+  if (!fired.size || reads(ruled)) return figure(CORE_RULES, ruled);
   // As guardedCompose: without the rules, then each rule that fired added on its own while the arrangement still reads as well.
   let kept: ReadonlySet<GuardedRule> = NO_RULES, best = compose(NO_RULES);
   for (const rule of GUARDED_RULES) {
@@ -3682,7 +4172,7 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     const rules = new Set([...kept, rule]), trial = compose(rules);
     if (reads(trial)) { kept = rules; best = trial; }
   }
-  return best;
+  return figure(kept, best);
 }
 /**
  * LH-83: a layout template that sets a body role at the readability floor gave its content too little room. The same blocks are
@@ -3817,7 +4307,7 @@ export function chartPlotBox(item: Pick<ComposedItem, 'box' | 'chart' | 'composi
  * each main part of a quote, code panel, metric or timeline (bodyReadability's `byPath`); `narrow` and `measure`: the paragraphs under
  * the minimum measure (LH-66) and the shortest of their measures; `shortPlots`: the charts whose plot is under LH-49's minimum height.
  */
-interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number; shortPlots: number }
+interface TrackQuality { overflows: number; splitWords: number; size: number; total: number; narrow: number; measure: number; blocks: Map<string, number>; wrappedCells: number; shortPlots: number; splitValues: Set<string> }
 function trackQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
   const read = bodyReadability(result, options), unplaced = result.diagnostics.filter(entry => entry.code === 'layout-unplaced').length;
   const narrow = result.items.filter(item => item.text && underMeasure(item.field, item.value, item.box.width, item.text.fontSize));
@@ -3825,19 +4315,30 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   const pulled = PULL_SIZES.get(result), blocks = pulled ? new Map([...read.byPath, ...pulled]) : read.byPath;
   const charts = result.items.filter(item => item.field === 'chart' && item.chart), scale = Math.min(result.width, result.height) / 720;
   const shortPlots = charts.length ? charts.filter(item => shortPlot(item, bodyHeight(result), scale, false)).length : 0;
-  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots };
+  return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size)) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots, splitValues: read.splitValues };
 }
 /**
- * Wave 3: `after` reads as well as `before`: no more findings, no more words split, no more prose under the minimum measure and none
+ * Wave 3: `after` reads as well as `before`: no more findings, no more words split (LH-39: nor figures split across lines), no more prose under the minimum measure and none
  * on a shorter measure than before, and no block's body size smaller (nor the smallest body size). A rule or arrangement never costs
  * the text its size: only to leave fewer findings may `after` be smaller, and never below the readability floor. Wave 4: nor does it
  * leave more charts with a plot under LH-49's minimum height (a pull line took the quote out of a 2 x 2 grid of a metric, a chart, a
  * table and a quote, and the three left in a row squeezed the chart's plot to a strip: b02 s29, b12 s19, b15 s44).
  */
 function readsAsWell(before: TrackQuality, after: TrackQuality, floor: number): boolean {
-  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.splitValues.size > before.splitValues.size || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
   const kept = after.size >= before.size - FONT_GRID_EPSILON && [...before.blocks].every(([path, size]) => (after.blocks.get(path) ?? Infinity) >= size - FONT_GRID_EPSILON);
   return kept || (after.overflows < before.overflows && after.size >= floor - FONT_GRID_EPSILON);
+}
+/**
+ * LH-39: readsAsWell, or a figure set on one line at a smaller size. A figure split across lines ("$1." over "24M") reads as badly as an
+ * overflow, so `after` may take a smaller size for a metric value that was split in `before` (and only for one), when it splits fewer
+ * words, nothing else reads worse and no size falls under the floor.
+ */
+function readsAsWellFigure(before: TrackQuality, after: TrackQuality, floor: number): boolean {
+  if (readsAsWell(before, after, floor)) return true;
+  if (after.overflows > before.overflows || after.splitWords > before.splitWords || after.splitValues.size >= before.splitValues.size || after.narrow > before.narrow || after.measure < before.measure - .01 || after.shortPlots > before.shortPlots) return false;
+  for (const [path, size] of before.blocks) if ((after.blocks.get(path) ?? Infinity) < size - FONT_GRID_EPSILON && !before.splitValues.has(path)) return false;
+  return after.size >= floor - FONT_GRID_EPSILON;
 }
 /**
  * LH-49: whether a composed chart's plot (chartPlotBox) is under the minimum of a body `bodyHeight` tall: too short or, with `aspect`,
@@ -3943,7 +4444,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'step-badges' && (options as Record<symbol, unknown>)[NO_STEPS] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -3972,13 +4473,30 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
     (field === 'title' || ((field === 'tag' || (subtitleInGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
       ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
+  // LH-50: the paths of the text blocks drawn as the eyebrow of the text after them (eyebrowLabel), each with whether it is set in
+  // capitals (eyebrowCaps). Filled when the body's blocks are grouped, before any of them is fitted.
+  const eyebrowLabels = new Map<string, boolean>();
+  const tagCaps = eyebrowCaps(annotationText(slide.tag));
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
-  const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
-    fontFamily: (field === "title" ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : field === "tag" ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
-    fontWeight: field === "title" ? 700 : 400, path,
-  }, options.textMeasurement);
+  // LH-32: an eyebrow (the tag, LH-50's label) is bold, and in capitals with EYEBROW_TRACKING where its script has case (eyebrowCaps).
+  const styleFor = (field: string, path: string): TextStyle => {
+    const eyebrow = field === 'tag' || eyebrowLabels.has(path), caps = field === 'tag' ? tagCaps : eyebrowLabels.get(path) === true;
+    return resolveTextStyle({
+      fontFamily: (field === "title" ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : eyebrow ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
+      fontWeight: field === "title" || eyebrow ? 700 : 400, path, ...(caps ? { caps: true, tracking: EYEBROW_TRACKING } : {}),
+    }, options.textMeasurement);
+  };
   const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
   const noListBullet = listBullet?.value === 'none';
+  // LH-08: ruled rows. `design.listStyle: "rows"` draws every list of the slide as ruled rows, `"stack"` none; without it a list of two or
+  // more first-level entries that each pair a short label (isLabelText) with a description is drawn as rows (the guarded rule `list-rows`),
+  // as Claude Design rules such a list, and the guard keeps it only where no block reads smaller.
+  const listRows = (value: unknown): boolean => {
+    if (hints.listStyle !== undefined) return hints.listStyle === 'rows';
+    if (!ruleOn('list-rows') || !Array.isArray(value) || value.length < 2 || !value.every(entry => { const object = record(entry); return object.description !== undefined && (object.level ?? 0) === 0 && isLabelText(object.text); })) return false;
+    fire('list-rows');
+    return true;
+  };
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
     const resolved = resolveLogo(options.presentation, slide, { shape: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
@@ -4053,7 +4571,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return match.index > 0 && value.slice(start).trim() ? { topicEnd: match.index, start } : undefined;
   };
   // The heading group (tag, title, subtitle) stacked from `y` at an area's width, half a gap apart. `title`: how a content
-  // slide's title fits ('step', LH-51; 'split', LH-51 and LH-76); covers, sections and stacked records keep the role size.
+  // slide's title fits ('step', LH-51; 'split', LH-51 and LH-76); covers, sections and stacked records start at the role size (LH-129
+  // may grow them, HEADING_STEPS).
+  const headingSteps = Math.max(0, Math.floor(Number((options as Record<symbol, unknown>)[HEADING_STEPS] ?? 0)) || 0);
+  let headingOffScale = false, headingMessage = false;
   const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split'): ComposedItem[] => {
     const list: ComposedItem[] = [];
     let top = y;
@@ -4065,8 +4586,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     for (const field of fields) {
       const value = slide[field], text = annotationText(value), fieldPath = `${path}.${field}`, box = boxFor(field);
-      const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : PROSE_NOMINAL_SIZE) * scale;
-      if (field !== 'title' || !title) { push(field, value, fieldPath, box, fitPlacedText(field, value, text, box, requested, minSize, fieldPath)); continue; }
+      const role = (field === 'title' ? 54 : field === 'tag' ? EYEBROW_TAG_SIZE : PROSE_NOMINAL_SIZE) * scale;
+      // LH-129: headings that are the slide's message (growTemplate) grow by its steps of the type scale, each up to its display size.
+      const requested = !title && headingSteps > 0 && (field === 'title' || field === 'subtitle' || field === 'tag') ? typeScaleStepsUp(role, headingSteps, HEADING_DISPLAY_SIZES[field] * scale, composition.minFontSize ?? 16, scale) : role;
+      if (field !== 'title' || !title) {
+        const fit = fitPlacedText(field, value, text, box, requested, minSize, fieldPath);
+        // A grown heading that fits only below its step is off the type scale: growTemplate does not keep that step.
+        if (requested > role && fit.fontSize < requested - FONT_GRID_EPSILON) headingOffScale = true;
+        push(field, value, fieldPath, box, fit); continue;
+      }
       const fitted = fitTitle(value, text, box, requested, fieldPath);
       // LH-76: a "Topic: qualifier" title that still wraps sets the topic as the title on one line and the qualifier below it at
       // the subtitle size, when the slide has no subtitle and the topic fits one line. The document is unchanged: both items
@@ -4080,12 +4608,35 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     return list;
   };
+  // LH-07: the lists of a `sequence` region (composeTemplate marks them by path). A badge list draws its entries beside step badges,
+  // numbered in arabic when the payload has no numbering (from its badgeStarts entry: an agenda's unnumbered lists count on); a step
+  // heading is a one-entry numbered list whose number its block's badge draws, so it fits as a heading list (LH-77) without the number.
+  const badgeLists = new Set<string>(), stepHeadings = new Set<string>(), badgeStarts = new Map<string, number>();
+  const badgeNumbering = (path: string, numbering: unknown): NumberingInput => {
+    if (numbering !== undefined) return numbering as NumberingInput;
+    const start = badgeStarts.get(path) ?? 1;
+    return start > 1 ? { start } : 'arabic';
+  };
+  // Wave 5: a badge list keeps its badges and never takes LH-08's automatic rows (fitList draws rows instead of badges): the sequence
+  // region asked for steps. Its other lists, and a slide whose badges the guard refused (NO_STEPS), may still be ruled.
+  const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+    : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
+    : {...richOptions(styleFor(field,path)),heading:true,...(value!==undefined&&listRows(value)?{rows:true}:{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,listOptionsFor(field,path,numbering,value))
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
+  // LH-50: a label's eyebrow fit in `box` over a paragraph set at `paragraph` px (eyebrowSize), and the band it takes over its text: its
+  // height and EYEBROW_GAP of a gap. A paragraph's band is reserved at its starting size, and its eyebrow drawn at its final size, which is
+  // never larger, so the eyebrow always fits its band.
+  const fitEyebrow = (eyebrow: { path: string; value: unknown }, box: LayoutBox, paragraph: number, alignment?: 'left' | 'center' | 'right') =>
+    fitPlacedText('text', eyebrow.value, annotationText(eyebrow.value), box, eyebrowSize(paragraph, scale, minSize), minSize, eyebrow.path, alignment);
+  const eyebrowBand = (eyebrow: { path: string; value: unknown }, width: number, paragraph: number): number => {
+    const fit = fitEyebrow(eyebrow, { x: 0, y: 0, width: Math.max(scale, width), height: 1e6 }, paragraph);
+    return ('richLines' in fit ? (fit as RichTextFit).height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0)) + gap * EYEBROW_GAP;
+  };
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
   const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
@@ -4200,6 +4751,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     y = item.box.y + item.box.height + gap * 0.5;
   }
   if (headingItems.length) {
+    // LH-129: a slide with no body (a cover by the record rule) has its headings as its message, as a cover record does.
+    if (isCover && headingItems.some(item => item.field === 'title')) headingMessage = true;
     if (isCover) {
       // Center the tag/title/subtitle group between the image-safe top (or header furniture)
       // and the bottom (or footer furniture); a group taller than that span is not moved.
@@ -4239,14 +4792,36 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const text = host.text === undefined ? undefined : contentText('text', host.text)?.trim();
     return text ? text : undefined;
   };
+  // LH-50: a short label (isLabelText: 3 words or fewer, no full stop) right before a longer paragraph is that paragraph's eyebrow, as
+  // Claude Design draws "Signal" over the text it names: the two are one block of the body, the label drawn as an eyebrow (bold, in the
+  // accent, in capitals with tracking where the script has case) EYEBROW_GAP of a gap over the text, in its cell. Only root blocks of plain
+  // text with no caption or emphasis of their own, on a slide that pins no block to a region. `eyebrowOf`: the eyebrow of each paragraph
+  // (by its block path); `eyebrowBlocks`: the label blocks, which are no block of the body.
+  const eyebrowOf = new Map<string, { path: string; value: unknown }>(), eyebrowBlocks = new Set<number>();
+  if (ruleOn('eyebrow') && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true && !regions.length && Array.isArray(slide.blocks) && !slide.blocks.some((block: unknown) => record(block).region !== undefined)) {
+    const plainBlock = (host: Record<string, any>) => host.text !== undefined && host.caption === undefined && host.emphasis === undefined && !Array.isArray(host.blocks) && fields.every(field => field === 'text' || host[field] === undefined);
+    const flowed: { host: Record<string, any>; index: number }[] = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ host: record(block), index }]);
+    for (let at = 0; at + 1 < flowed.length; at++) {
+      const label = flowed[at]!, text = flowed[at + 1]!;
+      if (!plainBlock(label.host) || !plainBlock(text.host) || !eyebrowLabel(label.host.text, text.host.text)) continue;
+      const labelPath = `${path}.blocks.${label.index}.text`;
+      eyebrowBlocks.add(label.index);
+      eyebrowOf.set(`${path}.blocks.${text.index}`, { path: labelPath, value: label.host.text });
+      eyebrowLabels.set(labelPath, eyebrowCaps(annotationText(label.host.text)));
+      at++;
+    }
+    if (eyebrowBlocks.size) fire('eyebrow');
+  }
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
   const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
     if (!ruleOn('emphasis-band') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
-    const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) ? [] : [{ block, index }]);
+    const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) ? [] : [{ block, index }]);
     const last = flowed[flowed.length - 1], text = flowed.length >= 2 && last ? plainText(last.block) : undefined;
     if (text === undefined || !last) return undefined;
+    // LH-50: a paragraph with an eyebrow keeps it: it is placed as a block of the body, never as the band or pill.
+    if (eyebrowOf.has(path + '.blocks.' + last.index)) return undefined;
     const length = [...text].length, before = flowed.slice(0, -1).map((entry: { block: unknown }) => plainText(entry.block));
     const long = (other: string | undefined) => other === undefined || [...other].length > EMPHASIS_BAND_MAX_CHARACTERS;
     if (before.length === 1 && before[0] !== undefined && long(before[0]) && length <= EMPHASIS_PILL_MAX_CHARACTERS) return { block: last.index, shape: 'pill', follows: flowed[0]!.index };
@@ -4293,7 +4868,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!ruleOn('pull-quote') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
-    const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || (autoSurface && index === autoEmphasis?.block) ? [] : [{ host: record(block), index }]);
+    const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) ? [] : [{ host: record(block), index }]);
     const quotes = flowed.filter((entry: { host: Record<string, any> }) => entry.host.quote !== undefined);
     if (flowed.length < 2 || quotes.length !== 1) return undefined;
     const entry = quotes[0]!, at = flowed.indexOf(entry), host = entry.host, quote = typeof host.quote === 'string' ? { text: host.quote } : record(host.quote);
@@ -4334,7 +4909,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+    /** LH-50: the label drawn as this paragraph's eyebrow. */
+    eyebrow?: { path: string; value: unknown } };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -4348,7 +4925,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
-      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true ? { emphasis: basePath } : {}),
+      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true ? { emphasis: basePath } : {}), ...(field === 'text' && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -4359,7 +4936,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const regionsInReadingOrder = visualReadingOrder(regions.map(key => ({ key, box: regionBox(regionParts(key)!, contentBox, gap) }))).map(entry => entry.key);
   const pending: Pending[] = regions.length
     ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
-    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
+    : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || eyebrowBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   // LH-112: one or two metrics that share the body with one or two blocks of other kinds are drawn at display size (METRIC_DISPLAY_SIZES),
   // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,
@@ -4401,15 +4978,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // lead six from 32. A block that shrinks takes the largest size of the scale its fit allows, instead of any size between, so a deck's
   // fitted body sizes are a few, and siblings of different kinds land on the same ones. A block keeps its starting size when it fits
   // there, on the scale or not (a raised floor). Per slide and deterministic: the scale depends only on the floor and the canvas.
-  const TYPE_SCALE_RATIO = (PROSE_NOMINAL_SIZE / 16) ** .25;
-  const scaleStep = (size: number, floorPx: number): number => {
-    let step = snapFontSizeUp(floorPx * scale);
-    for (let power = 1; ; power++) {
-      const next = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale);
-      if (next > size + 1e-9) return step;
-      step = Math.max(step, next);
-    }
-  };
+  const scaleStep = (size: number, floorPx: number): number => typeScaleStep(size, floorPx, scale);
   // The sizes a joint fit tries, largest first: the start, then every step of the scale under it, down to the floor.
   const scaleSizes = (start: number, floorPx: number): number[] => {
     const sizes = [Math.max(start, snapFontSizeUp(floorPx * scale))];
@@ -4478,12 +5047,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       textRasterPadding:options.textRasterPadding,...(roleSizes?{roleSizes}:{}),...grownOptions(node),
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),
+      figure:ruleOn('metric-figure'),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
     const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
-    return layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
+    const laid = layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
+    if (FIGURE_LINES.has(laid)) fire('metric-figure');
+    return laid;
   };
+  // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
+  // its badge above its text, in the height it asks for (naturalHeight) and in its cell (placeNode), so the badge never costs a row or
+  // a neighbor its room. A flow list (stepFlows, by path) is drawn as chips once placed.
+  const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepFlows = new Set<string>();
+  const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
@@ -4507,6 +5084,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const placeTimeline = (node: Pending, box: LayoutBox, settings: Composition): TimelineLayout => {
     const placed = measureTimeline(node, box, settings, 'placed');
     if (!timelineHints.get(node)?.grow && !node.lone || placed.overflow) return placed;
+    // LH-129: first by the type scale's steps, as LH-48 grows a lone block: two or three steps of its labels (18 and 22 px roles to
+    // 24 and 28, or 28 and 32), when it keeps its arrangement and fits its box; then by LH-41's few pixels.
+    // A label that wraps at the larger size reads worse than the smaller one on its line: every label (the name, a date, an event)
+    // keeps its line count; descriptions may wrap.
+    const lines = (layout: TimelineLayout) => layout.parts.map(part => part.role === 'description' || part.role === 'event-description' ? 0 : part.fit?.lines.length ?? 0).join();
+    for (const growth of TIMELINE_STEP_GROWTH) {
+      const grown = measureTimeline(node, box, settings, 'placed', growth);
+      if (!grown.overflow && grown.arrangement === placed.arrangement && lines(grown) === lines(placed)) return grown;
+    }
     for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
       const grown = measureTimeline(node, box, settings, 'placed', growth);
       if (!grown.overflow && grown.arrangement === placed.arrangement) return grown;
@@ -5097,6 +5683,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     box = payloadBox(box, cards);
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
+    // LH-50: a paragraph's eyebrow takes a band at the top of its box; it is placed over the text's final box at the end (placeEyebrows).
+    const brow = node.eyebrow ? eyebrowBand(node.eyebrow, box.width, proseMeasure(node, box.width).size) : 0;
+    if (brow) box = { ...box, y: box.y + brow, height: Math.max(scale, box.height - brow) };
+    // LH-07: a step's badge band, at its starting size, above its text.
+    if (stepUnits.has(node)) { const band = stepBand(proseMeasure(node, box.width).size); box = { ...box, y: box.y + band, height: Math.max(scale, box.height - band) }; }
     const textValue = contentText(node.field, node.value);
     const measureInternal = (floorFallback = false) => [
       node.field === 'quote' ? measureQuote(node,box,settings,floorFallback) : undefined,
@@ -5162,6 +5753,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const x = Math.min(frameBox.x, own?.x ?? Infinity), y = Math.min(frameBox.y, own?.y ?? Infinity);
       surface = { path: node.emphasis!, box: { x, y, width: right - x, height: bottom - y }, radius: CARD_RADIUS * scale, shape: 'card', source: 'authored' };
     }
+    if (brow) eyebrowsOf.set(items[items.length - 1]!, node.eyebrow!);
     if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, roleSizes => measureMetric(node, metricBox, settings, false, roleSizes, tile)); }
     // LH-67: the lead of a lead plus stack keeps its larger size; it is neither stepped nor shared.
     if (stackLeads.has(node)) leadItems.add(items.length - 1);
@@ -5186,8 +5778,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
     if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
-    const numbering = node.payload.numbering as NumberingInput | undefined;
-    const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
+    // LH-07: a badge list is numbered (badgeNumbering when the payload is not), so its columns continue the count.
+    const numbering = (badgeLists.has(node.path) ? badgeNumbering(node.path, node.payload.numbering) : node.payload.numbering) as NumberingInput | undefined;
+    const listOptions: ListFitOptions = badgeLists.has(node.path) ? listOptionsFor(node.field, node.path, numbering) : { ...richOptions(styleFor(node.field, node.path)), ...(listRows(values) ? { rows: true } : {}), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
     const columnBoxes = (count: number): LayoutBox[] => {
       const between = columnGap(count), columnWidth = (box.width - between * (count - 1)) / count;
@@ -5342,9 +5935,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
-    let content: number;
+    let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
       const prose = proseMeasure(node, inner), size=sizeOverride ?? (atFloor ? floorSize : prose.size);
+      // LH-50: a paragraph's eyebrow over it, at the size it takes over the paragraph at `size`.
+      if (node.eyebrow) eyebrowNeed = eyebrowBand(node.eyebrow, inner, size);
       // LH-42: the floor is the one the placed fit uses, not the trial size: a list's descriptions (0.82 of its size) may reach the
       // floor, so a floor of `size` measured a described list one size step above `size` (24.4 px for a trial of 20).
       const value = contentText(node.field, node.value) ?? '', measured = (width: number) => fitContent(node.field, node.value, value, { x: 0, y: 0, width, height: 1e6 }, size, Math.min(size, floorSize), node.path, node.payload.numbering);
@@ -5355,6 +5950,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // WI-1: the height the placed text takes (its outlines and raster padding included), the same measure the fit that
       // places it checks, so a box of this height holds the text at the starting size instead of one grid step smaller.
       content = Math.max('height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+      if (stepUnits.has(node)) content += stepBand(fit.fontSize);
     } else if (node.field === 'quote') content = measureQuote(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings).bounds.height + 18;
     else if (node.field === 'code') {
       // WI-1: measured as layoutCode lays it out: the header lines, the source at its starting size and the insets.
@@ -5367,7 +5963,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
-    const body = content + (node.caption !== undefined ? 32 * scale : 0);
+    const body = content + (node.caption !== undefined ? 32 * scale : 0) + eyebrowNeed;
     return body + verticalPad(body);
   };
   // LH-48: the one block of a slide body (fills: the only root block, or a template's only block) that fills under LONE_FILL of its cell's
@@ -5390,7 +5986,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (inner.width <= 0 || inner.height <= 0) return undefined;
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
-    let best = need();
+    // LH-07: a badge list grows as the plain list would (its badges do not count against the body it fills), as long as it fits with them.
+    const plainNeed = () => { const badged = badgeLists.delete(node.path); try { return need(); } finally { if (badged) badgeLists.add(node.path); } };
+    let best = plainNeed();
     // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
     // the middle of the body. Only code that then fills at least LONE_TARGET of the body takes the whole cell, its lines in the middle of
     // the panel (layoutCode's `fill`): a five-line snippet on a full-body panel left most of a dark panel empty (wave 4 golden review).
@@ -5406,12 +6004,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const step = scaleAbove(size, settings.minFontSize ?? 16);
         if (step > display + 1e-9) break;
         proseGrowth.set(node, step);
-        const height = need(), measure = proseMeasure(node, inner.width);
+        const height = plainNeed(), measure = proseMeasure(node, inner.width);
         const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
         if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9) break;
         chosen = step; best = height; size = step;
       }
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
+      if (badgeLists.has(node.path)) best = need();
     } else {
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
@@ -5450,6 +6049,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const pairUnit = (members: Pending[]): Pending => ({ field: 'blocks', type: 'group', value: members.map(member => member.payload), path: members[0]!.path, payload: {}, children: members, composition: { mode: 'column' }, synthetic: true, gap: gap / 2, orient: true });
   // LH-46: the pictures of a mosaic, drawn cover-cropped.
   const coverPictures = new WeakSet<Pending>();
+  // LH-50: the eyebrow of each placed paragraph, drawn over its final box once every pass has moved it (placeEyebrows).
+  const eyebrowsOf = new Map<ComposedItem, { path: string; value: unknown }>();
   // LH-58, LH-82, automatic composition only (a template groups its binding, groupBinding): the root blocks, one node each, of a
   // slide with no composition of its own, as repeated pairs (one cell per pair) or, for interleaved blocks of two kinds with
   // unequal counts, a grid of the majority kind above a row of the others (one column of the two). Undefined: as authored.
@@ -5457,7 +6058,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (useTemplate || regions.length || !Array.isArray(slide.blocks) || chartPrimary || modeFor(rootSettings) !== 'auto' || rootSettings.columns !== undefined || rootSettings.weights?.length) return undefined;
     const blockOf = (node: Pending) => node.children ? node.path : node.path.slice(0, node.path.lastIndexOf('.'));
     if (new Set(nodes.map(blockOf)).size !== nodes.length || slide.blocks.some((block: unknown) => record(block).region !== undefined)) return undefined;
-    const grouping = nodes.map(node => node.children ? { kind: 'group', group: true } : { kind: kind(node.field), ...(node.field === 'text' ? { length: textLength(node.value) } : {}) });
+    // LH-50: a paragraph with an eyebrow pairs with nothing.
+    const grouping = nodes.map(node => node.children ? { kind: 'group', group: true } : node.eyebrow ? { kind: EYEBROW_TEXT_KIND } : { kind: kind(node.field), ...(node.field === 'text' ? { length: textLength(node.value) } : {}) });
     const pairs = repeatedPairs(grouping);
     if (pairs) return { nodes: Array.from({ length: pairs.count }, (_, pair) => pairUnit([nodes[2 * pair]!, nodes[2 * pair + 1]!])) };
     const split = majorityKind(grouping);
@@ -5698,15 +6300,53 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
+  // LH-07: the steps of a `sequence` region. A lone list of a `steps` region whose 3 to 6 entries are one or two words is a flow; any
+  // other lone list of two or more entries of one level draws them beside badges; two or more text and list blocks of a `steps` region
+  // are steps side by side, a one-entry numbered list giving its number to its badge. Every list of two or more entries of one level in a
+  // `numbered` region (an agenda, ordered by nature: it runs in time) draws beside badges, numbered or not; the unnumbered lists of the
+  // region count on from one list to the next in reading order (badgeStarts), as one agenda. Those numbers are drawing only: the payload
+  // keeps no numbering, and its badges name no list number (ComposedStepBadge.list), so an export gives the list back as written.
+  const markSteps = (sequence: 'steps' | 'numbered', units: Pending[]): void => {
+    const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
+    const entries = (unit: Pending): unknown[] => Array.isArray(unit.value) ? unit.value : [];
+    const flat = (unit: Pending) => entries(unit).every(entry => (record(entry).level ?? 0) === 0), numbered = (unit: Pending) => unit.payload.numbering !== undefined;
+    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2;
+    if (sequence === 'numbered') {
+      // The count runs over the whole agenda: when one of its lists cannot take badges (a lone entry, nested entries), the unnumbered
+      // ones keep their markers rather than number a part of it.
+      const whole = units.every(unit => !isList(unit) || badgeList(unit));
+      let next = 1;
+      for (const unit of units) {
+        if (!badgeList(unit) || (!whole && !numbered(unit))) continue;
+        badgeLists.add(unit.path);
+        if (!numbered(unit)) { badgeStarts.set(unit.path, next); next += entries(unit).length; }
+        fire('step-badges');
+      }
+      return;
+    }
+    if (units.length === 1 && badgeList(units[0]!)) {
+      const unit = units[0]!, values = entries(unit);
+      const short = values.length >= STEP_FLOW_MIN && values.length <= STEP_FLOW_MAX && values.every(value => {
+        const object = record(value), text = flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim();
+        return object.description === undefined && text.length > 0 && text.length <= STEP_FLOW_CHARACTERS && text.split(/\s+/u).length <= 2;
+      });
+      (short ? stepFlows : badgeLists).add(unit.path);
+      fire('step-badges');
+      return;
+    }
+    if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit)))) return;
+    for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
+    fire('step-badges');
+  };
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
     // LH-06, LH-114: the block drawn as the automatic foot band or pill, and the quote drawn as a pull line, are bound to no region (an
     // empty block in its place keeps every index).
-    const unbound = (index: number) => (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block);
-    const bound = autoSurface || pullItem ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => unbound(index) ? {} : block) } : slide;
+    const unbound = (index: number) => eyebrowBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block);
+    const bound = autoSurface || pullItem || eyebrowBlocks.size ? { ...slide, blocks: slide.blocks.map((block: unknown, index: number) => unbound(index) ? {} : block) } : slide;
     // LH-86: long texts side by side become full-width rows of the row's first region (longTextRows), unless composeSlide leaves the rule out (its guard).
-    const { binding, region: longTextRegion } = (!ruleOn('long-text-rows') ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true }), plan);
+    const { binding, region: longTextRegion } = (!ruleOn('long-text-rows') ? (grouped: GroupedBinding) => ({ binding: grouped, region: undefined }) : longTextRows)(groupBinding(bindRegions(bound, layout, { slideIndex: options.slideIndex ?? 0 }), plan, rootNodes(bound, options.slideIndex ?? 0), { join: (options as Record<symbol, unknown>)[UNJOINED] !== true, labeled: new Set(eyebrowOf.keys()) }), plan);
     for (const entry of binding.diagnostics) diagnostics.push({ code: entry.code, path: entry.path, message: entry.message, ...(entry.region !== undefined ? { region: entry.region } : {}) });
     // A bound root node as composition reads it; a block with several payload fields stacks them in its cell.
     const blockUnit = (bound: BoundBlock): Pending => {
@@ -5729,6 +6369,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       else if (ruleOn('region-measure')) for (const unit of units) if (!unit.children && unit.field === 'text') unit.measure = true;
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
       if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
+      if (region.sequence && ruleOn('step-badges')) markSteps(region.sequence, units);
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
@@ -5741,6 +6382,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const bodyUnits = [...contents.values()].flat().concat(belowUnits);
     const loneUnit = options.fill !== false && plan.stack === undefined && bodyUnits.length === 1 && !bodyUnits[0]!.children ? bodyUnits[0] : undefined;
     if (loneUnit) loneUnit.fills = true;
+    // LH-129: a stacked record's body grows with the slide (growTemplate, GROW): its paragraphs and lists by the type scale's steps
+    // (proseMeasure) and its quotes by the scale's ratio on every role, each up to its display size (LONE_DISPLAY_SIZES).
+    if (plan.stack !== undefined && bodySteps) for (const unit of bodyUnits) if (!unit.children && unit.field === 'quote') growthOf.set(unit, TYPE_SCALE_RATIO ** bodySteps);
     // LH-41: several timelines in one region are the bands of one stack (horizontal only; compact at four or more), so that every
     // measure of the region (row needs, floors, placement) sees them as drawn. A lone timeline may grow when it fits (placeTimeline).
     const timelineBands = (units: Pending[]) => units.length > 1 && units.every(unit => !unit.children && unit.field === 'timeline' && unit.caption === undefined);
@@ -6056,6 +6700,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
       const centred = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto');
       const shift = centred ? Math.max(0, (cell.height - groupHeight(list)) / 2) : 0;
+      // LH-129: a title that stands free (centered in its area, or in a stack) over no primary or secondary block is the slide's message.
+      if (name === 'title' && list.some(item => item.field === 'title') && (centred || plan.stack !== undefined) && plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length) headingMessage = true;
       for (const item of list) {
         if (shift) { item.box.y += shift; if (item.text) item.text = translateTextFit(item.text, shift); }
         if (furniture && item.box.y + item.box.height > bodyBottom + .01) diagnostics.push({ code: 'text-overflow', path: item.path, message: 'Repeated furniture leaves too little room for this heading. Change the header/footer or slide design.' });
@@ -6504,7 +7150,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
   // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
   // (a deck without a bold body face must not fail on a slide that never draws one).
-  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references);
+  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
   if (marked.length) {
     const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
     refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
@@ -6537,8 +7183,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const layer = chart.chart.layer, authored = record(chart.value);
       // Each bar beside its key: the middle of the key cell's text (cells set their text at the top of the row).
       const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
-      const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: layer.header?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
-      if (rows) { chart.chart.layer = { ...layer, rows }; break; }
+      const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: (layer.stack?.legend ?? layer.header)?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
+      // LH-125: a horizontal stacked bar chart gives up its pinned plot and names row for the table's rows, keeping its legend (restackForRows).
+      if (rows) { chart.chart.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart.valueAxis, plotGeometry(chart)); break; }
     }
   }
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
@@ -6557,10 +7204,113 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (from > to) { items.splice(from, 1); items.splice(to, 0, timelineItem); }
     }
   }
+  // LH-07: what the `sequence` regions draw besides their text (ComposedSteps): the badges composeTemplate's lists already placed
+  // (`column`), a badge over each step set side by side (`row`, in the band placeNode left above its text), and the chips of a flow.
+  // A badge is STEP_BADGE times its step's text size across with its numeral at that size; it sits STEP_BADGE_GAP of a badge above
+  // its text, at the start of its block (the right in a right-to-left deck) or over its middle when the block is centered.
+  const stepSequences = (): ComposedSteps[] => {
+    const result: ComposedSteps[] = [], lineWidth = 2 * scale;
+    const badgeOf = (path: string, cx: number, cy: number, diameter: number, label: string, fontSize: number, list?: ComposedStepBadge['list']): ComposedStepBadge => ({ path, cx, cy, radius: diameter / 2, label, fontSize, baseline: cy + fontSize * .35, ...(list ? { list } : {}) });
+    const numberOf = (number: ListNumber) => ({ value: number.value, style: number.style, suffix: number.suffix });
+    const connector = (badges: ComposedStepBadge[]) => badges.length > 1 ? { connector: { x1: badges[0]!.cx, y1: badges[0]!.cy, x2: badges.at(-1)!.cx, y2: badges.at(-1)!.cy } } : {};
+    for (const region of template!.regions) {
+      if (!region.sequence) continue;
+      const members = items.filter(item => item.region === region.name && !headings.has(item.field)), drawn: LayoutBox[] = [];
+      for (const item of members) {
+        if (stepFlows.has(item.path)) { const flow = stepFlow(item, region.name, lineWidth); if (flow) { result.push(flow); drawn.push(item.box); } continue; }
+        const fits = item.listColumns?.length ? item.listColumns.map(column => column.text) : item.text && 'listEntries' in item.text ? [item.text as ListFit] : [];
+        for (const fit of fits) {
+          const badges = fit.listEntries.flatMap(entry => entry.badge ? [badgeOf(entry.textPath ?? item.path, entry.badge.cx, entry.badge.cy, entry.badge.diameter, entry.badge.label, entry.badge.fontSize, entry.marker.number && item.payload.numbering !== undefined ? { path: item.path, index: entry.index, number: numberOf(entry.marker.number) } : undefined)] : []);
+          if (badges.length) result.push({ form: 'column', region: region.name, path: item.path, badges, ...connector(badges), lineWidth });
+        }
+      }
+      const stepped = members.filter(item => stepPaths.has(item.path) && item.text && !item.listColumns);
+      if (stepped.length >= 2 && stepped.length === members.length) {
+        // Rows: steps whose boxes overlap vertically; each row's badges share one line.
+        const rows: ComposedItem[][] = [];
+        for (const item of [...stepped].sort((a, b) => a.box.y - b.box.y)) {
+          const row = rows.find(entry => entry.some(other => item.box.y < other.box.y + other.box.height && other.box.y < item.box.y + item.box.height));
+          if (row) row.push(item); else rows.push([item]);
+        }
+        const position = new Map(stepped.map((item, index) => [item, index]));
+        const top = (item: ComposedItem) => (item.text as ListFit).listEntries?.[0]?.textBox.y ?? item.text!.placement?.lines[0]?.y ?? item.box.y;
+        for (const row of rows) {
+          const size = Math.max(...row.map(item => item.text!.fontSize)), diameter = STEP_BADGE * size, cy = Math.min(...row.map(top)) - diameter * STEP_BADGE_GAP - diameter / 2;
+          const badges = row.map(item => {
+            const side = item.alignment === 'center' ? 'center' : rtl ? (item.alignment === 'left' ? 'right' : 'left') : item.alignment;
+            const cx = side === 'center' ? item.box.x + item.box.width / 2 : side === 'right' ? item.box.x + item.box.width - diameter / 2 : item.box.x + diameter / 2;
+            const own = stepHeadings.has(item.path) ? listNumbers(item.value as unknown[], item.payload.numbering as NumberingInput)[0] : undefined;
+            return badgeOf(item.path.replace(/\.(text|items|bullets)$/, ''), cx, cy, diameter, own ? listNumberLabel(own) : String(position.get(item)! + 1), size, own ? { path: item.path, index: 0, number: numberOf(own) } : undefined);
+          }).sort((a, b) => rtl ? b.cx - a.cx : a.cx - b.cx);
+          result.push({ form: 'row', region: region.name, path: badges[0]!.path, badges, ...connector(badges), lineWidth });
+        }
+      }
+      // The region's cell holds what it draws.
+      const composed = templateRegions.find(entry => entry.name === region.name);
+      const extents = [...result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius }))), ...drawn];
+      if (composed && extents.length) {
+        const box = composed.box, x = Math.min(box.x, ...extents.map(extent => extent.x)), y = Math.min(box.y, ...extents.map(extent => extent.y));
+        composed.box = roundBox({ x, y, width: Math.max(box.x + box.width, ...extents.map(extent => extent.x + extent.width)) - x, height: Math.max(box.y + box.height, ...extents.map(extent => extent.y + extent.height)) - y });
+      }
+    }
+    return result;
+  };
+  // LH-07: a flow: the list's entries in a row of chips, in reading order (from the right in a right-to-left deck), with an arrow
+  // between each two. The chips share the region's width when the widest entry fits every chip, else each hugs its entry; the entries
+  // keep the list's size, so a flow that does not fit on one line at it is not drawn and the list stays as it was. The row is centered
+  // on the list's middle. Each entry is a list column (ComposedItem.listColumns) centered in its chip.
+  const stepFlow = (item: ComposedItem, region: string, lineWidth: number): ComposedSteps | undefined => {
+    const values = item.value as ListValue[], fit = item.text as ListFit, size = fit.fontSize, area = templateRegions.find(entry => entry.name === region)?.box ?? item.box;
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
+    const single = (index: number, box: LayoutBox): ListFit => {
+      const own = fitList([values[index]!], box, size, size, listOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+      return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${index}.description` })) };
+    };
+    const measured = values.map((_, index) => single(index, { x: 0, y: 0, width: 1e5, height: 1e5 }).listEntries[0]!);
+    if (!fit.listEntries.length || measured.some(entry => entry.text.richLines.length !== 1)) return undefined;
+    const widths = measured.map(entry => entry.text.richLines[0]!.width), lineHeight = Math.max(...measured.map(entry => entry.text.height));
+    const padX = .9 * size, padY = .6 * size, slot = 2.4 * size, count = values.length, room = area.width - slot * (count - 1);
+    const equal = count * (Math.max(...widths) + 2 * padX) <= room;
+    if (!equal && widths.reduce((sum, width) => sum + width + 2 * padX, 0) > room) return undefined;
+    const chipWidths = widths.map(width => equal ? room / count : width + 2 * padX), chipHeight = lineHeight + 2 * padY;
+    const middle = fit.listEntries[0]!.textBox.y + fit.height / 2, y = middle - chipHeight / 2;
+    const total = chipWidths.reduce((sum, width) => sum + width, 0) + slot * (count - 1);
+    let start = area.x + (area.width - total) / 2;
+    const chips: NonNullable<ComposedSteps['chips']> = [], columns: ComposedListColumn[] = [];
+    for (let index = 0; index < count; index++) {
+      const width = chipWidths[index]!, x = rtl ? area.x + area.width - (start - area.x) - width : start;
+      start += width + slot;
+      const box = { x: x + (width - widths[index]!) / 2 - 1, y: y + padY, width: widths[index]! + 2, height: lineHeight };
+      const text = single(index, box);
+      if (text.overflow || text.listEntries[0]!.text.richLines.length !== 1) return undefined;
+      chips.push({ path: text.listEntries[0]!.textPath!, box: { x, y, width, height: chipHeight }, radius: CARD_RADIUS * scale });
+      columns.push({ box, start: index, end: index + 1, text });
+    }
+    // Arrows point in reading order, from one chip's end edge to the next chip's start edge, half an em clear of both and .6 em tall.
+    const arrows = chips.slice(1).map((chip, index) => {
+      const previous = chips[index]!, left = rtl ? chip.box.x + chip.box.width : previous.box.x + previous.box.width, right = rtl ? previous.box.x : chip.box.x, tall = .6 * size;
+      return { box: { x: left + .5 * size, y: y + (chipHeight - tall) / 2, width: Math.max(scale, right - left - size), height: tall }, direction: rtl ? 'left' as const : 'right' as const };
+    });
+    item.listColumns = columns;
+    item.text = mergeListColumns(columns);
+    item.box = { x: Math.min(...chips.map(chip => chip.box.x)), y, width: total, height: chipHeight };
+    return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
+  };
+  const steps = useTemplate ? stepSequences() : [];
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
 
+  // LH-50: each eyebrow over its paragraph's final box (passes above may have centered, shared or moved it), in the band the paragraph left
+  // for it, at the paragraph's alignment and width; it is listed before its paragraph (reading order) and carries `eyebrow`.
+  for (const [owner, eyebrow] of eyebrowsOf) {
+    const at = items.indexOf(owner);
+    if (at < 0) continue;
+    const paragraph = owner.text?.fontSize ?? PROSE_NOMINAL_SIZE * scale, band = eyebrowBand(eyebrow, owner.box.width, paragraph), height = band - gap * EYEBROW_GAP;
+    const box = { x: owner.box.x, y: owner.box.y - band, width: owner.box.width, height }, fit = fitEyebrow(eyebrow, box, paragraph, owner.alignment);
+    items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: owner.composition, alignment: owner.alignment ?? alignmentFor('text'),
+      eyebrow: true, ...(owner.frameBox ? { frameBox: owner.frameBox } : {}), ...(owner.region !== undefined ? { region: owner.region } : {}), ...(owner.emphasis ? { emphasis: true as const } : {}) });
+  }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
@@ -6607,7 +7357,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
   // Wave 3: every body block fitted at the size it asked for (a paragraph or list at its starting size, each visible part of a quote, code
   // panel, metric or timeline at its role size), so no arrangement of the same requests could set one larger (composeSlide's guard).
-  const atRequest = !loneGrowth && items.every((item, index) => {
+  // LH-50: an eyebrow, inserted before its paragraph at the end, is set at its role size; the others keep the index they were placed at.
+  let eyebrowsBefore = 0;
+  const atRequest = !loneGrowth && items.every((item, position) => {
+    if (item.eyebrow) { eyebrowsBefore++; return true; }
+    const index = position - eyebrowsBefore;
     if (headings.has(item.field) || item.emphasis) return true;
     const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
     if (internal && (internal.parts as readonly { requestedFontSize: number; fit?: { fontSize: number } }[]).some(part => part.fit && part.fit.fontSize > part.requestedFontSize + FONT_GRID_EPSILON)) return false;
@@ -6617,10 +7371,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = bodyStarts.get(index);
     return start !== undefined && item.text.fontSize >= snapFontSizeDown(start) - FONT_GRID_EPSILON;
   });
-  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(explanation?{explanation}:{}) };
   if (atRequest) AT_REQUEST.add(composed);
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
+  if (headingMessage) HEADING_MESSAGES.add(composed);
+  if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
   return composed;
 }
 
@@ -6642,8 +7398,8 @@ export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
-export {chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
-export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartLayerValueList,ChartStackName,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
+export {restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
+export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND} from './chart-layer.js';
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
@@ -6663,7 +7419,7 @@ export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHint
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
-export { groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
+export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';

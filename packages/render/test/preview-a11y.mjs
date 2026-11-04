@@ -31,10 +31,12 @@ assert.equal(all.filter((node) => node.attrs['aria-roledescription']).length, 1,
 // A title with runs names the slide by its plain text.
 assert.equal(parseXml(toSvg(deck({ title: ['Bold ', { text: 'title', bold: true }] }), 1)).attrs['aria-label'], 'Bold title');
 
+const drawn = (node, word) => textContent(node).includes(word) || textContent(node).includes(word.toUpperCase());
 // 2. Text is reachable: no role="img" or aria-hidden ancestor above any of the slide's words.
 const texts = textsOf(svg);
 for (const word of ['Draft', 'Quarterly review', 'Sales Q2', 'Body paragraph', 'First point', 'Second point', 'memorable', 'Ada', '42%', 'Growth', 'Col A', 'Col B', 'cell x', 'cell y', 'An inline note', 'Header text', 'Footer text']) {
-  const found = texts.filter((node) => textContent(node).includes(word));
+  // LH-32: the tag ('Draft') is an eyebrow, drawn in capitals.
+  const found = texts.filter((node) => drawn(node, word));
   assert.ok(found.length, `${word} is drawn`);
   assert.ok(found.some(reachable), `${word} is reachable, not under role=img or aria-hidden`);
 }
@@ -44,7 +46,7 @@ for (const node of skipped) assert.ok(node.attrs['aria-hidden'] === 'true' || an
 assert.ok(skipped.some((node) => textContent(node) === '•'), 'the bullet marker is hidden');
 // Painted order is reading order: tag, title, subtitle, body, list, quote, metric, then footnotes, header and footer.
 const order = ['Draft', 'Quarterly review', 'Sales Q2', 'Body paragraph', 'First point', 'memorable', '42%', 'An inline note', 'Header text', 'Footer text'];
-const at = order.map((word) => texts.findIndex((node) => textContent(node).includes(word)));
+const at = order.map((word) => texts.findIndex((node) => drawn(node, word)));
 assert.deepEqual([...at].sort((a, b) => a - b), at, `painted order is reading order (${at})`);
 
 // 3. Decorative drawing is hidden: the background, table cell fills and borders, the footnote rule, and an alt="" picture.

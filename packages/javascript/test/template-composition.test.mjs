@@ -268,8 +268,8 @@ describe('anchor', () => {
 });
 
 describe('design keys: theme level and precedence', () => {
-  test('the six keys a theme may carry rank below the deck and above the layout', () => {
-    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet']);
+  test('the seven keys a theme may carry rank below the deck and above the layout', () => {
+    assert.deepEqual([...THEME_DESIGN_KEYS], ['titleAlignment', 'contentAlignment', 'contentBox', 'contentDirection', 'imageFit', 'listBullet', 'listStyle']);
     const layout = { design: { contentBox: false, titleAlignment: 'right' } };
     const theme = { design: { contentBox: true, titleAlignment: 'center', chartPrimary: 'left' } };
     const fromTheme = resolveDesignHints({ layout, theme });
@@ -341,7 +341,8 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
       const kept = { ...record, regions: keepAll(record.regions) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
-      const composed = composeSlide(slide, { layout: kept, presentation });
+      // `fill: false`: the placeholders hold the role sizes; LH-129 grows the headings of a slide whose headings are its message.
+      const composed = composeSlide(slide, { layout: kept, presentation, fill: false });
       const { areas } = composeLayoutAreas(record, { presentation, placements });
       for (const region of composed.regions) assert.deepEqual(areas.find((area) => area.name === region.name).box, region.box, `${id} ${region.name}`);
       assert.deepEqual(areas.find((area) => area.name === 'title').box, composed.headingAreas.find((area) => area.name === 'title').box, `${id} title`);

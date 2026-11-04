@@ -516,7 +516,7 @@
 
 .opf-dc-variants {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(12, 1fr);
   gap: 6px;
   margin: 0 0 8px;
 }
@@ -551,6 +551,16 @@
   border-color: var(--opf-ui-accent);
   outline: 2px solid var(--opf-ui-accent);
   outline-offset: -1px;
+}
+
+/* LH-97: the four backgrounds take a quarter of the row, the six accents a sixth: two rows of swatches. */
+.opf-dc-variant {
+  grid-column: span 3;
+}
+
+.opf-dc-variant.opf-dc-variant-accent {
+  grid-column: span 2;
+  min-height: 44px;
 }
 
 .opf-dc-variant-text {
@@ -733,6 +743,16 @@
 
 .opf-slides .slide-card[data-hidden="true"] .thumbnail {
   opacity: 0.55;
+}
+
+/* LH-99: a slide the export continues on further pages is a stack of pages (two offset sheets behind its thumbnail). */
+.opf-slides .slide-card[data-pages] .thumbnail {
+  margin: 0 6px 6px 0;
+  box-shadow:
+    3px 3px 0 -1px var(--opf-ui-surface),
+    3px 3px 0 0 var(--opf-ui-border-strong),
+    6px 6px 0 -1px var(--opf-ui-surface),
+    6px 6px 0 0 var(--opf-ui-border-strong);
 }
 
 .opf-slides .slide-card.is-drag-source {

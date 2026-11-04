@@ -183,9 +183,9 @@ try {
     // The source last: leaving it applies the image with the settings above (Apply then has nothing left to change).
     await field(design, 'Background image source').fill('asset:photo');
   }), current => JSON.stringify(current.design.background) === JSON.stringify({ type: 'image', src: 'asset:photo', alt: 'A pixel backdrop', fit: 'stretch', focus: { x: 0.5, y: 0.7 }, overlay: { color: 'dark1', opacity: 0.4 } }), { preview: true });
-  // RR-96: the color variant gallery (the document and Undo only: the preview follows the variant once the renderer reads core's roles, step 2 of RR-96), four swatches from the deck's own scheme slots, and the accent order. A choice writes the slot name.
+  // RR-96: the color variant gallery (the document and Undo only: the preview follows the variant once the renderer reads core's roles, step 2 of RR-96), the four backgrounds and the six accents as swatches from the deck's own scheme slots, and the accent order. A choice writes the slot name.
   const variantRadio = name => design.getByRole('radio', { name: new RegExp('^' + name + ':') });
-  assert.deepEqual(await design.locator('[data-variant]').evaluateAll(nodes => nodes.map(node => node.dataset.variant)), ['light1', 'light2', 'dark1', 'dark2'], 'the four variants');
+  assert.deepEqual(await design.locator('[data-variant]').evaluateAll(nodes => nodes.map(node => node.dataset.variant)), ['light1', 'light2', 'dark1', 'dark2', 'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6'], 'the four variants and the six accents (LH-97)');
   assert.equal(await variantRadio('Light 1').getAttribute('aria-checked'), 'true', 'the classic theme is light1');
   await step('color variant', () => variantRadio('Dark 1').click(), current => current.design.variant === 'dark1');
   await step('color variant accent order', async () => { await field(design, 'Accent 1').selectOption('accent2'); }, current => JSON.stringify(current.design.variant) === JSON.stringify({ background: 'light1', accents: ['accent2', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }));

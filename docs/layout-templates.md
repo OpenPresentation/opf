@@ -114,6 +114,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
+| `sequence` | `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`) | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -379,7 +380,7 @@ the slide as written. See [dynamic composition](dynamic-composition.md#paginatio
 ## Design keys
 
 Per key: the slide's `design`, the deck's `design`, the theme record's `design` (new in 0.19: `titleAlignment`,
-`contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`), the layout's `design`, then the engine
+`contentAlignment`, `contentBox`, `contentDirection`, `imageFit`, `listBullet`, `listStyle`), the layout's `design`, then the engine
 default. `design.mirror: true` draws a template mirrored (each row's cells and the column sizes reversed); a right-to-left
 deck mirrors on top. `layout: "auto"` is automatic composition: reserved, never a catalog id, and `opf format` drops it.
 
@@ -392,7 +393,35 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 | `regions` | Every region in reading order: `name`, `box` (after collapse, mirroring and bleed), `accepts`, `role`, `flow`, `max`, `anchor`, `arrangement` (`grid`, `row`, `column`, or `composition`), `content` (root block paths bound within `max`), `overflow` (paths drawn beyond it), `collapsed`, `bleed` and, on a bled region, `areaBox` (its cell before bleed). It replaces `slots` for templates. |
 | `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. On a template without a `subtitle` area the title area carries `parts: { title, subtitle }`: it is split where the stacked heading group puts the subtitle, so `title` runs from the area's top to the bottom of the title (the tag above it included) and `subtitle` from the subtitle's top (half a gap under the title when the slide has none) to the area's bottom. PowerPoint's `ctrTitle` and `subTitle` placeholders use these boxes. |
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
+| `steps` | LH-07: what each `sequence` region draws besides its text, in reading order: `form` (`row`, `column` or `flow`), `badges` (`cx`, `cy`, `radius`, `label`, `fontSize`, `baseline`, and `list` when the badge draws a list entry's own number), `connector` (`x1`, `y1`, `x2`, `y2`), `chips` and `arrows` of a flow, and `lineWidth`. |
 | `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
+
+### Step sequences (LH-07)
+
+A region with `sequence` lists the steps of a sequence, and composition draws them as Claude Design does:
+
+- **Steps side by side** (`steps`): two or more text or list blocks are the steps. Each draws under a numbered badge, an accent circle
+  1.75 times the step text across with its numeral at the step text size, in the scheme color readable on the accent. The badge sits
+  0.4 of its width above the text, at the block's start (its right edge in a right-to-left deck), or over its middle when the block is
+  centered. The badges of a row share one line, and a connector in the border color runs through their centers. A one-entry numbered
+  list gives its badge its number and draws as a heading over its description (LH-77); any other block is numbered by its position.
+  Each block keeps the band for its badge in the height it asks for and in its cell.
+- **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for every list of two or more entries of one level,
+  numbered or not, since an agenda runs in time): each entry draws beside its
+  badge in the list's marker column (the side its paragraph starts), centered on its first line, with a connector down the column. The
+  badges are at least 0.4 of their width apart. The list keeps its numbers (`marker.number`); a list without `numbering` is counted in
+  arabic as drawing only: the document keeps no numbering and the PPTX import gives the list back unnumbered. In a `numbered`
+  region the unnumbered lists count on from one list to the next, as one agenda, and keep their markers when one of the region's
+  lists cannot take badges (a lone entry, nested entries), so a part of the agenda is never numbered alone.
+- **A flow** (`steps`): a lone list of 3 to 6 entries of one or two words (24 characters at most), without descriptions, is a row of
+  chips (cards) joined by accent block arrows in reading order. The chips share the region's width when the widest entry fits each,
+  else each hugs its entry; each entry is a list column centered in its chip.
+
+Steps keep their text size: the badges are a guarded rule (`step-badges`), so a slide whose blocks would get smaller under them draws
+as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list grows (LH-48) as the plain list
+would, as long as it fits with its badges. The preview draws the badges, connector, chips and arrows from `steps`, and the PPTX export
+writes them as native shapes (an ellipse holding its numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets),
+tagged so that import consumes them and gives a list its numbering back.
 
 ### A body that fills too little (LH-48)
 
@@ -415,10 +444,24 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown.** A stacked record (`statement`, `quote`, `closing`, which already center their message), blocks below
+- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
+  LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
   role sizes. Both engines read the result from core.
+- **A message in the middle of the slide (LH-129).** A slide whose title stands free (centered in a sized title area, or in a
+  stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
+  layout record, grows its title and subtitle by one, two or three steps of the type scale, each up to its display size
+  (`HEADING_DISPLAY_SIZES`: title 75 px, subtitle 37; the tag is LH-32's eyebrow at its 22 px role size and keeps it); a
+  title over a primary block (a quote's, a statement's) keeps its size. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
+  display size, quotes by the scale's ratio on every role (`LONE_DISPLAY_SIZES`). The largest step is kept at which nothing
+  overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
+  region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
+  at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **A lone timeline (LH-129)** in a template's timeline region, or an automatic slide's only block, first tries three and then two
+  steps of the type scale on its labels (its 18 and 22 px roles to 28 and 32, or 24 and 28 px), and keeps the first at which it fits
+  its box in the same arrangement and no label (the name, a date, an event) takes another line; otherwise it grows by LH-41's few
+  pixels as before.
 - **A lone code panel (LH-101)** grows its code in type-scale steps up to the code display size (32 px) while it covers at most
   60% of the body, and its panel hugs it in the middle of the body. Only code that covers at least 60% of the body takes the whole
   body, its lines in the middle of the panel (`layoutCode`'s `fill`).

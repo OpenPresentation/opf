@@ -83,11 +83,13 @@ test('wrapped cover headings recenter as a group and keep line and outline origi
       assert.ok(line.baseline >= line.y && line.baseline <= line.y + line.height);
     }
   }
-  // Placement lines are the same lines a top-anchored composition produces, translated by the shift.
+  // Placement lines are the same lines a top-anchored composition produces, translated by the shift (at the role size: LH-129 grows a
+  // cover's headings, a content title keeps its size).
+  const kept = composeSlide({title: 'Short', subtitle: 'Also short'}, {layout: titleSubtitle, textMeasurement: measurement, fill: false});
   const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]}, textMeasurement: measurement});
-  const dy = byField(short, 'title').box.y - byField(unshifted, 'title').box.y;
+  const dy = byField(kept, 'title').box.y - byField(unshifted, 'title').box.y;
   assert.ok(dy > 0);
-  const moved = byField(short, 'title').text.placement.lines, base = byField(unshifted, 'title').text.placement.lines;
+  const moved = byField(kept, 'title').text.placement.lines, base = byField(unshifted, 'title').text.placement.lines;
   assert.equal(moved.length, base.length);
   moved.forEach((line, index) => {
     assert.ok(Math.abs(line.y - base[index].y - dy) < 1e-6);
