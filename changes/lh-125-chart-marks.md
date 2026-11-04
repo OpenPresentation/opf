@@ -1,0 +1,11 @@
+---
+type: changed
+packages: [opf, render, pptx]
+---
+LH-125 and the rest of LH-107 (output-changing for horizontal stacked bar charts, stacked area charts, doughnuts the slide title names a slice of, every horizontal bar chart in PPTX, and native waterfalls): chart marks follow-ups from the Claude Design chart comparison. Composition decides them on `chart.layer` (core `chart-marks.ts`); the preview and the PPTX export draw them. See `docs/chart-options.md#chart-marks-waterfall-roles-value-lists-stacked-labels-reference-marks`.
+    - **Horizontal stacked bars.** `stacked-bar` and `100pct-stacked-bar` print each segment value that fits inside it (not on a 100% chart) and name their series in a row above the plot, each name where its segment starts in the first bar (`placeBarNames`, `stack.names.above`), instead of a legend; core lays the plot out and pins it (`horizontalStackPlot`, `layer.plot`). A stacked bar chart beside a table keeps this plot and no longer aligns its bars to the table's rows (LH-115).
+    - **Stacked areas run edge to edge.** The first and last categories stand on the plot's edges (`stack.edge`; PPTX `c:crossBetween midCat`), with their labels centered on them, and the values at the first and last points are drawn inside the band at the edges (`stack.ends`; PPTX tagged text boxes).
+    - **A doughnut prints its focus value in the hole** (`valueList.hole`): the value of the one slice the title names, large and bold in the slice's color, with its category under it when that fits.
+    - **Waterfall connectors in both engines.** The connectors between steps are 1 pt dashes (4 on, 3 off) in the axis line color in the preview, and in PowerPoint's native waterfall too: the series' `cx:spPr` carries the dashed `a:ln` PowerPoint draws its connector lines with, and each bar's `cx:dataPt` an `a:ln` with `a:noFill`. The rr-54 byte locks of `bar` and `waterfall` move with it.
+    - **PPTX value labels of a horizontal bar chart** sit at the bottom (`c:tickLblPos nextTo`), where the preview draws them; PowerPoint put them at the top (`low` on a reversed category axis).
+    - **Descoped (LH-124).** A list with one entry per bar category does not become the bar labels: its text would fall from the body size to the chart text size, which the size guard forbids.

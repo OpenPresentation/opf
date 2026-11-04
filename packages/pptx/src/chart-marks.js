@@ -1,4 +1,4 @@
-// LH-107 to LH-110 in the PPTX export and import.
+// LH-107 to LH-110 and LH-125 in the PPTX export and import.
 //
 // Composition decides them (core chart-marks.ts, `ComposedChart.layer`); the preview (opf-render charts.js) draws them and this module
 // writes what a native chart part cannot hold as native shapes over (or under) the chart frame, at the boxes core gave them:
@@ -10,6 +10,9 @@
 //                              pinned (inner manual layout), so the segments stand where core measured them. The values inside the
 //                              segments are the chart's own data labels (c:dLbls, c:dLblPos ctr on columns), one c:dLbl c:delete per
 //                              segment whose value does not fit (`applyStackValueDeletes`).
+//   stacked ends (LH-125)      the first and last values of an edge-to-edge stacked area, text boxes inside the band at the plot's edges
+//                              (the chart part's own labels there are deleted), and a doughnut's focus value and category in its hole
+//                              (text boxes over the chart at core's boxes).
 //   reference marks (LH-110)   a period band (a rectangle under the chart frame: the chart and plot areas are unfilled) and a dashed
 //                              reference line with its bold label (over the frame), on the pinned plot.
 //
@@ -39,9 +42,9 @@ export function addChartMarks(slide, layer, phase, {chart, paint, font, size, sc
   let count = 0;
   const name = role => `${chart} mark ${phase} ${++count} ${role}`;
   const tag = (objectName, role) => tags.set(objectName, {v: 1, chart, role});
-  const text = (value, box, role, {color, bold = false, align = 'left'}) => {
+  const text = (value, box, role, {color, bold = false, align = 'left', fontSize = size}) => {
     const objectName = name(role);
-    slide.addText(String(value), {...inches(box), objectName, isTextBox: true, margin: 0, fontFace: font, fontSize: size, color, bold, align, valign: 'middle', fit: 'none', wrap: false, paraSpaceAfter: 0, lineSpacingMultiple: 1});
+    slide.addText(String(value), {...inches(box), objectName, isTextBox: true, margin: 0, fontFace: font, fontSize, color, bold, align, valign: 'middle', fit: 'none', wrap: false, paraSpaceAfter: 0, lineSpacingMultiple: 1});
     tag(objectName, role);
   };
   const rect = (box, role, fill) => {
@@ -77,6 +80,14 @@ export function addChartMarks(slide, layer, phase, {chart, paint, font, size, sc
       text(row.name, inner, 'list-name', {color, bold: row.bold === true, align: start});
     });
   }
+  // LH-125: a doughnut's hole holds the focused slice's value, large and bold in the slice's color, with its category under it.
+  const hole = list?.hole;
+  if (hole) {
+    text(hole.value.text, hole.value.box, 'hole-value', {color: paint.hole(hole.row), bold: true, align: 'center', fontSize: hole.value.size * 0.75});
+    if (hole.name) text(hole.name.text, hole.name.box, 'hole-name', {color: paint.chartText, align: 'center'});
+  }
+  // LH-125: the values at the ends of an edge-to-edge stacked area, inside the band, in the text color that contrasts with its fill.
+  for (const end of layer.stack?.ends ?? []) text(end.text, end.box, 'stack-end', {color: paint.onSeries(end.series), align: end.align});
   const names = layer.stack?.names;
   for (const entry of names?.entries ?? []) {
     const middle = entry.box.y + entry.box.height / 2, swatch = names.swatch, gap = size * 4 / 3 * 0.4;

@@ -6504,7 +6504,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
   // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
   // (a deck without a bold body face must not fail on a slide that never draws one).
-  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references);
+  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
   if (marked.length) {
     const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
     refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
@@ -6520,7 +6520,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-115: a horizontal bar chart beside a table of the same keys in the same order draws each bar on its table row (chart-rows.ts).
   const rounded = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
   for (const chart of items) {
-    if (chart.field !== 'chart' || !chart.chart?.layer || chart.chart.layer.rows) continue;
+    // LH-125: a horizontal stacked bar chart keeps its own plot (its names stand in a row above it).
+    if (chart.field !== 'chart' || !chart.chart?.layer || chart.chart.layer.rows || chart.chart.layer.stack) continue;
     const data = resolveChartData(chart.value, options.presentation);
     if (!data.ok || data.combo || data.hasX) continue;
     const plan = chartDrawPlan(chart.value, data, { language: deckLanguage() });
@@ -6643,7 +6644,7 @@ export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 export {chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
-export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartLayerValueList,ChartStackName,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
+export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND} from './chart-layer.js';
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';

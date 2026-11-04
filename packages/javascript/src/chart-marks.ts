@@ -1,4 +1,4 @@
-// LH-107 to LH-110: the chart follow-ups from the Claude Design chart comparison (layout harvest chart corpus s09, s13, s14, s16, s17,
+// LH-107 to LH-110, LH-125: the chart follow-ups from the Claude Design chart comparison (layout harvest chart corpus s09, s13, s14, s16, s17,
 // s18, s24). Composition decides them with the rest of the chart layer (chart-layer.ts), so the preview (opf-render) and the PPTX export
 // (opf-pptx) draw the same chart:
 //
@@ -9,6 +9,10 @@
 //                              (swatch, category, value right-aligned, the focused rows bold) instead of slice labels or a legend.
 //   stacked values (LH-109)    a stacked column or area chart draws each segment's value inside it when it fits, and names its series
 //                              beside the last column or band (swatch and name) instead of a legend.
+//   stacked bars (LH-125)      a horizontal stacked bar chart does the same: values inside its segments, its series named in a row above
+//                              the plot, each name where its segment starts in the first bar. A stacked area runs edge to edge, with
+//                              its first and last values inside the band at the plot's edges. A doughnut prints the value of the one
+//                              slice the title names in its hole.
 //   title references (LH-110)  a column, line or area chart whose title compares with a number the data does not hold ("stayed above
 //                              92%") draws a dashed reference line at that value, labeled as the title writes it; a line or area chart
 //                              in time whose title names one period ("overtook on-premises in 2023") shades that period's band.
@@ -16,10 +20,10 @@
 // An explicit option wins: `dataLabels` and `legend` keep the chart as authored (no default labels, no list, no names), `colors` keeps
 // a waterfall's palette positions. PPTX import does not write these defaults back as options.
 import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
-import {chartNumber, resolveChartData, type ResolvedChartData} from './chart-data.js';
+import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
-import {valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices} from './chart-layer.js';
-import {chartPlotInset, type ChartPlotGeometry} from './chart-plot.js';
+import {valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
 
 interface Box { x: number; y: number; width: number; height: number }
@@ -131,10 +135,23 @@ export const CHART_VALUE_LIST_SMALL_SLICE = 0.1;
 /** LH-108: one row of the value list: its category, the value as the column's format prints it, and the row's box (slide pixels). */
 export interface ChartValueListRow { row: number; name: string; value: string; bold?: boolean; box: Box }
 
+/**
+ * LH-125: a doughnut with one focused slice prints that slice's value in its hole, large and bold in the slice's color, with the slice's
+ * category under it in the chart text size (absent when the name does not fit the hole). Boxes are slide pixels, centered in the hole.
+ */
+export interface ChartValueListHole {
+  /** The focused slice's row. */
+  row: number;
+  value: {text: string; box: Box; /** The text size in slide pixels. */ size: number};
+  name?: {text: string; box: Box};
+}
+
 /** LH-108: the value list beside a pie or one-series doughnut. Boxes are slide pixels. */
 export interface ChartLayerValueList {
   /** The square the pie (or doughnut) fills. */
   pie: Box;
+  /** LH-125: the focused slice's value in a doughnut's hole. */
+  hole?: ChartValueListHole;
   /** The values' unit above the value column (the value column's name or the value axis title), at the end of the list's first line. */
   header?: {text: string; box: Box};
   rows: ChartValueListRow[];
@@ -186,8 +203,10 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   const mirror = (part: Box): Box => rtl ? {...part, x: box.x + box.width - (part.x - box.x) - part.width} : part;
   const pie = mirror({x: area.x + pieWidth / 2 - radius, y: area.y + area.height / 2 - radius, width: 2 * radius, height: 2 * radius});
   const listX = area.x + pieWidth + between, listHeight = headerHeight + entries.length * pitch, top = area.y + (area.height - listHeight) / 2;
+  const hole = type === 'doughnut' ? doughnutHole(pie, entries, options.focus?.categories ?? [], {fontPx, textHeight: metrics(box, scale, geometry.minFontSize).textHeight, measure: geometry.measure}) : undefined;
   return {
     pie,
+    ...(hole ? {hole} : {}),
     ...(header ? {header: {text: header, box: mirror({x: listX, y: top, width: listWidth, height: lineHeight})}} : {}),
     rows: entries.map((entry, index) => ({row: entry.row, name: entry.name, value: entry.value, ...(entry.bold ? {bold: true} : {}),
       box: mirror({x: listX, y: top + headerHeight + index * pitch, width: listWidth, height: pitch})})),
@@ -195,23 +214,60 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   };
 }
 
+/**
+ * LH-125: the value of the one slice the title names, in the hole of a doughnut (the hole is half the doughnut's radius, as both engines
+ * draw it): twice the chart text size, bold, or smaller until its text fits 84% of the hole's width (a chord at the text's height), but not
+ * under 1.25 text sizes (then the hole stays empty); the category under it at the chart text size when it fits the same width and both
+ * lines fit the hole's height. Two focused slices or none name no value.
+ */
+function doughnutHole(pie: Box, entries: readonly {row: number; name: string; value: string}[], focus: readonly number[], m: {fontPx: number; textHeight: number; measure: (text: string, size: number, weight: 400 | 700) => number}): ChartValueListHole | undefined {
+  if (focus.length !== 1) return undefined;
+  const entry = entries.find(candidate => candidate.row === focus[0]);
+  if (!entry) return undefined;
+  const radius = pie.width / 2 / 2, usable = 2 * radius * 0.84, cx = pie.x + pie.width / 2, cy = pie.y + pie.height / 2;
+  const natural = m.measure(entry.value, m.fontPx, 700);
+  const size = Math.min(m.fontPx * 2, natural > 0 ? usable * m.fontPx / natural : m.fontPx * 2);
+  if (!(size >= m.fontPx * 1.25) || size * 1.22 > radius * 2 * 0.7) return undefined;
+  const valueHeight = size * 1.22, nameWidth = m.measure(entry.name, m.fontPx, 400);
+  const withName = nameWidth <= usable && valueHeight + m.textHeight * 1.2 <= radius * 2 * 0.7;
+  const total = valueHeight + (withName ? m.textHeight * 1.2 : 0), top = cy - total / 2;
+  const valueWidth = Math.min(usable, natural * size / m.fontPx) + size * 0.1;
+  return {
+    row: entry.row,
+    value: {text: entry.value, size, box: {x: cx - valueWidth / 2, y: top, width: valueWidth, height: valueHeight}},
+    ...(withName ? {name: {text: entry.name, box: {x: cx - (nameWidth + m.fontPx * 0.2) / 2, y: top + valueHeight, width: nameWidth + m.fontPx * 0.2, height: m.textHeight * 1.2}}} : {}),
+  };
+}
+
 // ---------------------------------------------------------------------------------------------------------------------------------
-// LH-109: values inside stacked segments, names beside the last column
+// LH-109, LH-125: values inside stacked segments, names beside the last column (above the first bar), the end points of an area
 
-const STACKED: Readonly<Record<string, 'bar' | 'area'>> = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'};
+const STACKED: Readonly<Record<string, 'bar' | 'area'>> = {'stacked-column': 'bar', '100pct-stacked-column': 'bar', 'stacked-bar': 'bar', '100pct-stacked-bar': 'bar', 'stacked-area': 'area', '100pct-stacked-area': 'area'};
+/** LH-125: a horizontal stacked bar chart: one bar per category from top to bottom, its segments left to right along the value axis. */
+const isHorizontal = (chart: unknown): boolean => typeOf(chart).endsWith('-bar');
 
-/** LH-109: one series name beside the last column or band: its swatch and name in `box`, centered on its segment's middle when it can be. */
+/** LH-109: one series name beside the last column or band (LH-125: above the first bar): its swatch and name in `box`, centered on its segment's middle when it can be. */
 export interface ChartStackName { series: number; name: string; bold?: boolean; box: Box }
 
-/** LH-109: how a stacked column or area chart labels itself. */
+/** LH-125: one end point of a stacked area drawn inside the band at the plot's edge: the value as the column's format prints it, `align`ed to that edge. */
+export interface ChartStackEnd { series: number; row: number; text: string; align: 'left' | 'right'; box: Box }
+
+/** LH-109: how a stacked column, bar or area chart labels itself. */
 export interface ChartLayerStack {
   /** `values[series][row]`: true when that segment's value is drawn inside it (its text fits the segment). */
   values: boolean[][];
-  /** The series names beside the last column or band, and the gutter the plot leaves for them at its end; absent when the legend stays. */
-  names?: {gutter: number; swatch: number; entries: ChartStackName[]};
+  /**
+   * The series names beside the last column or band, and the gutter the plot leaves for them at its end; absent when the legend stays.
+   * LH-125: on a horizontal bar chart (`above`) the names stand in a row above the plot, each at the start of its segment in the first bar.
+   */
+  names?: {gutter: number; swatch: number; entries: ChartStackName[]; above?: boolean};
+  /** LH-125: a stacked area runs edge to edge: its first and last categories stand on the plot's edges (the category axis crosses on the tick marks). */
+  edge?: boolean;
+  /** LH-125: the values at the first and last points of an edge-to-edge area, which fit inside the band beside the plot's edge. */
+  ends?: ChartStackEnd[];
 }
 
-/** True for a stacked column or area chart (not horizontal) of two to six series without `dataLabels` or `legend`. */
+/** True for a stacked column, bar or area chart of two to six series without `dataLabels` or `legend`. */
 function stackCandidate(chart: unknown, data: ResolvedChartData): chart is Record<string, unknown> {
   if (!record(chart) || !data.ok || data.combo || !Object.hasOwn(STACKED, typeOf(chart))) return false;
   const series = data.columns.length - 1;
@@ -223,58 +279,99 @@ const entryCount = (data: ResolvedChartData): number => data.ok ? data.rows.leng
 /** The plot box of an inset. */
 const plotOf = (box: Box, inset: {left: number; top: number; right: number; bottom: number}): Box => ({x: box.x + inset.left, y: box.y + inset.top, width: box.width - inset.left - inset.right, height: box.height - inset.top - inset.bottom});
 
-/** The stacked segments of a chart as the preview draws them, with the plot's value-to-y mapping. */
-function segments(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, plot: Box) {
+/**
+ * The stacked segments of a chart as the preview draws them, with the plot's value mapping (`at`: a value's y on a column or area chart,
+ * its x on a horizontal bar chart). `band` is the distance between categories along the category axis (an edge-to-edge area (`edge`): the
+ * distance between its points, one band fewer than it has rows) and `pointX(row)` the x of a vertical chart's category.
+ */
+function segments(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, plot: Box, edge = false) {
   if (!data.ok) return undefined;
-  const kind = STACKED[typeOf(chart)]!, percent = typeOf(chart).startsWith('100pct');
+  const kind = STACKED[typeOf(chart)]!, percent = typeOf(chart).startsWith('100pct'), horizontal = isHorizontal(chart), rows = data.rows.length;
   const series = data.columns.slice(1).map((_, j) => ({values: data.rows.map(row => chartNumber(row[j + 1]))}));
   let stacks: ReturnType<typeof stackCategoryValues>;
-  try { stacks = stackCategoryValues(series, data.rows.length, kind, percent ? 'percentStacked' : 'stacked'); } catch { return undefined; }
-  const at = (value: number) => plot.y + (axis.max - Math.min(axis.max, Math.max(axis.min, value))) / (axis.max - axis.min) * plot.height;
-  return {kind, series, stacks, at, band: plot.width / data.rows.length};
+  try { stacks = stackCategoryValues(series, rows, kind, percent ? 'percentStacked' : 'stacked'); } catch { return undefined; }
+  const along = (value: number) => (Math.min(axis.max, Math.max(axis.min, value)) - axis.min) / (axis.max - axis.min);
+  const at = horizontal ? (value: number) => plot.x + along(value) * plot.width : (value: number) => plot.y + (1 - along(value)) * plot.height;
+  const spaced = kind === 'area' && edge && rows >= 2;
+  const band = horizontal ? plot.height / rows : spaced ? plot.width / (rows - 1) : plot.width / rows;
+  const pointX = (row: number, rtl: boolean) => { const slot = rtl ? rows - 1 - row : row; return spaced ? plot.x + slot * band : plot.x + (slot + 0.5) * band; };
+  return {kind, horizontal, spaced, series, stacks, at, band, pointX};
 }
 
 /**
- * LH-109: which segment values fit inside their segments (none on a 100% stacked chart, whose axis reads shares): the value's text (the column's format) plus a quarter text size within the
- * column's width (a band over 1.5, the preview's stacked bar) or, on an area, 90% of the category band, and a text line within the segment's
- * height.
+ * LH-125: the value at an end of an edge-to-edge area, inside the band beside the plot's edge: left-aligned at the left edge, right-aligned
+ * at the right (the first category stands at the right edge right to left). It fits when its text lies within half a band (the next point's
+ * own value, centered on that point, keeps the other half) and the band is a text line tall at both ends of the text; it is centered on the
+ * band's middle across its text.
  */
-function stackValueFits(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, plot: Box, geometry: Omit<ChartPlotGeometry, 'box'> & {box: Box}): boolean[][] | undefined {
-  const shape = segments(chart, data, axis, plot);
+function areaEnd(shape: NonNullable<ReturnType<typeof segments>>, j: number, row: number, text: string, m: {fontPx: number; textHeight: number; lineHeight: number}, geometry: {measure: (text: string, size: number) => number; direction?: 'ltr' | 'rtl'}): ChartStackEnd | undefined {
+  const rows = shape.stacks[j]!.length, rtl = geometry.direction === 'rtl', first = row === 0;
+  const point = shape.stacks[j]![row], next = shape.stacks[j]![first ? 1 : rows - 2];
+  if (!point || !next) return undefined;
+  const width = geometry.measure(text, m.fontPx), room = width + m.fontPx * 0.25;
+  if (room > shape.band * 0.5) return undefined;
+  // The band narrows or widens toward the neighbor: its top and bottom at distance d from the edge.
+  const edgeX = shape.pointX(row, rtl), toLeft = (first !== rtl);
+  const bounds = (distance: number) => { const t = distance / shape.band; return {top: shape.at(point.to) + (shape.at(next.to) - shape.at(point.to)) * t, bottom: shape.at(point.from) + (shape.at(next.from) - shape.at(point.from)) * t}; };
+  const near = bounds(0), far = bounds(room);
+  if (Math.abs(near.bottom - near.top) < m.textHeight || Math.abs(far.bottom - far.top) < m.textHeight) return undefined;
+  const middle = bounds(room / 2), centre = (middle.top + middle.bottom) / 2;
+  const boxWidth = width + m.fontPx * 0.3;
+  return {series: j, row, text, align: toLeft ? 'left' : 'right', box: {x: toLeft ? edgeX + m.fontPx * 0.1 : edgeX - m.fontPx * 0.1 - boxWidth, y: centre - m.lineHeight / 2, width: boxWidth, height: m.lineHeight}};
+}
+
+/**
+ * LH-109, LH-125: which segment values fit inside their segments (none on a 100% stacked chart, whose axis reads shares), and the end
+ * points of an edge-to-edge area. A value's text (the column's format) plus a quarter text size must lie within the column's width (a band
+ * over 1.5, the preview's stacked column), a horizontal bar segment's length, or, on an area, 90% of the category band, and a text line within
+ * the segment's height (a bar's thickness). An area's first and last points hold no centered value; an edge-to-edge area draws them as
+ * `ends` when they fit (`areaEnd`).
+ */
+function stackMarks(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, plot: Box, geometry: Omit<ChartPlotGeometry, 'box'> & {box: Box}, edge = false): {values: boolean[][]; ends: ChartStackEnd[]} | undefined {
+  const shape = segments(chart, data, axis, plot, edge);
   if (!shape || !data.ok) return undefined;
-  const {fontPx, textHeight} = metrics(geometry.box, geometry.scale, geometry.minFontSize);
-  const room = shape.kind === 'bar' ? shape.band / 1.5 : shape.band * 0.9, last = entryCount(data) - 1;
+  const m = metrics(geometry.box, geometry.scale, geometry.minFontSize), {fontPx, textHeight} = m;
+  const last = entryCount(data) - 1, ends: ChartStackEnd[] = [];
   // A 100% stacked chart reads shares on its axis; the raw values (which a native label shows) would contradict it.
   const percent = typeOf(chart).startsWith('100pct');
-  return shape.series.map((entry, j) => entry.values.map((value, i) => {
+  const values = shape.series.map((entry, j) => entry.values.map((value, i) => {
     const point = shape.stacks[j]![i];
     if (percent || value === null || !point || value === 0) return false;
-    // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
-    if (shape.kind === 'area' && (i === 0 || i === last)) return false;
     const format = typeof data.formats[j + 1] === 'string' && data.formats[j + 1] !== '' ? data.formats[j + 1] : undefined;
-    const height = Math.abs(shape.at(point.to) - shape.at(point.from));
-    return geometry.measure(valueLabel(value, format), fontPx) + fontPx * 0.25 <= room && textHeight <= height;
+    const text = valueLabel(value, format), wide = geometry.measure(text, fontPx) + fontPx * 0.25;
+    if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= shape.band / 1.5;
+    // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
+    if (shape.kind === 'area' && (i === 0 || i === last)) {
+      const end = shape.spaced ? areaEnd(shape, j, i, text, m, geometry) : undefined;
+      if (end) ends.push(end);
+      return false;
+    }
+    const room = shape.kind === 'bar' ? shape.band / 1.5 : shape.band * 0.9;
+    return wide <= room && textHeight <= Math.abs(shape.at(point.to) - shape.at(point.from));
   }));
+  return {values, ends};
 }
 
 /**
  * LH-109: the series names beside the last column (or band) of a stacked chart for a plot, or undefined when they cannot be placed: each
  * name (a swatch 0.6 text sizes square, 0.4 of space and the name) centered on its segment's middle in the last category, a quarter text
- * size past the column's edge (the band's end on an area); then moved apart in segment order so no two are closer than a text line,
- * within the plot. `relaxed` places them however far they move (after a shared plot moved them); otherwise a name moved more than a
- * line from its segment fails, and the chart keeps its legend.
+ * size past the column's edge (the band's end on an area, its edge-to-edge point: `edge`); then moved apart in segment order so no two are
+ * closer than a text line, within the plot. `relaxed` places them however far they move (after a shared plot moved them); otherwise a name
+ * moved more than a line from its segment fails, and the chart keeps its legend.
  */
-export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis, box: Box, plotInset: {left: number; top: number; right: number; bottom: number}, geometry: Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, relaxed = false, focus?: readonly number[]): ChartStackName[] | undefined {
-  if (!stackCandidate(chart, data) || !data.ok || !(axis.max > axis.min)) return undefined;
+export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis, box: Box, plotInset: {left: number; top: number; right: number; bottom: number}, geometry: Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, relaxed = false, focus?: readonly number[], edge = false): ChartStackName[] | undefined {
+  if (!stackCandidate(chart, data) || !data.ok || isHorizontal(chart) || !(axis.max > axis.min)) return undefined;
   const plot = plotOf(box, plotInset);
   if (!(plot.width > 1 && plot.height > 1)) return undefined;
-  const shape = segments(chart, data, axis, plot);
+  const shape = segments(chart, data, axis, plot, edge);
   if (!shape) return undefined;
   const {fontPx, textHeight, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const rtl = geometry.direction === 'rtl', last = data.rows.length - 1;
   // The last category is the rightmost (the leftmost right to left); the names start past the column's edge or the band's end.
-  const centre = plot.x + ((rtl ? 0 : last) + 0.5) * shape.band, reach = shape.kind === 'bar' ? shape.band / 3 : 0;
-  const edge = rtl ? centre - reach - fontPx * 0.25 : centre + reach + fontPx * 0.25;
+  const centre = shape.pointX(last, rtl), reach = shape.kind === 'bar' ? shape.band / 3 : 0;
+  // An edge-to-edge area's end value stands inside its edge: the names keep a text size and a half clear of it.
+  const lead = shape.spaced ? fontPx * 0.6 : fontPx * 0.25;
+  const start = rtl ? centre - reach - lead : centre + reach + lead;
   const swatch = fontPx * 0.6;
   const placed = shape.series.map((_, j) => {
     const point = shape.stacks[j]![last], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
@@ -291,17 +388,69 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
   for (let index = 0; index < centres.length; index++) centres[index] = Math.max(centres[index]!, index ? centres[index - 1]! + textHeight : top);
   if (!relaxed && order.some((entry, index) => Math.abs(centres[index]! - entry.y) > textHeight + 1e-6)) return undefined;
   const entries = order.map((entry, index): ChartStackName => ({series: entry.j, name: entry.name, ...(entry.bold ? {bold: true} : {}),
-    box: {x: rtl ? edge - entry.width : edge, y: centres[index]! - lineHeight / 2, width: entry.width, height: lineHeight}}));
+    box: {x: rtl ? start - entry.width : start, y: centres[index]! - lineHeight / 2, width: entry.width, height: lineHeight}}));
   // The names must stay inside the chart box.
   if (!relaxed && entries.some(entry => entry.box.x < box.x - 0.5 || entry.box.x + entry.box.width > box.x + box.width + 0.5)) return undefined;
   return entries.sort((a, b) => a.series - b.series);
 }
 
 /**
- * LH-109: the stacked-chart layer and value axis, or undefined for another chart. The header row is laid out again with its caption only
- * and the plot with a gutter at its end as wide as the widest name (LH-105's end-label layout); when the names cannot be placed the chart
- * keeps its header legend and the plot is laid out under it. Either way the plot is pinned (`layer.plot`, which the PPTX export writes as the
- * plot area's inner layout), and the values that fit their segments are recorded.
+ * LH-125: the inner plot of a horizontal stacked bar chart as an inset from its chart box, laid out as the preview lays a horizontal bar chart
+ * out (opf-render charts.js): the category gutter at the start (its widest label, at most 30% of the chart, 40% for a word that does not
+ * break), the plot ending a text size before the chart's padding, the value tick labels under it (a formatted axis keeps its end labels
+ * inside the chart); below the header row. With `namesRow` a row of one text line for the series names (`placeBarNames`) lies between the
+ * header and the plot, which then starts under it. The preview draws its plot here and the PPTX export pins it (the plot area's inner layout).
+ */
+function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+  if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
+  const width = (text: string) => geometry.measure(text, fontPx);
+  const categories = data.rows.map(row => label(row[0]));
+  const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
+  const gutter = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
+  let x = box.x + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - x - fontPx);
+  const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
+  if (format !== undefined && !typeOf(chart).startsWith('100pct')) {
+    const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
+    const lastHalf = width(tickLabel(endTick, false, format)) / 2, right = box.x + box.width - pad;
+    const nextX = Math.max(x, box.x + pad + first);
+    plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;
+  }
+  const below = box.y + (header?.height ?? 0);
+  const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - pad - lineHeight;
+  if (!(bottom - top > 1)) return undefined;
+  return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+}
+
+/**
+ * LH-125: the series names of a horizontal stacked bar chart in the row above its plot: each name (a swatch and the name, as the names
+ * beside a column) starts where its series' segment starts in the first bar, left to right in that order. Undefined (the chart keeps its
+ * header legend) when two names would meet (a text size and a half between them) or the last leaves the chart.
+ */
+function placeBarNames(chart: unknown, data: ResolvedChartData, axis: ChartValueAxis, box: Box, plotInset: ChartPlotInset, geometry: Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, focus?: readonly number[]): ChartStackName[] | undefined {
+  if (!stackCandidate(chart, data) || !data.ok || !isHorizontal(chart) || !(axis.max > axis.min)) return undefined;
+  const plot = plotOf(box, plotInset), shape = plot.width > 1 && plot.height > 1 ? segments(chart, data, axis, plot) : undefined;
+  if (!shape) return undefined;
+  const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize), swatch = fontPx * 0.6, y = plot.y - fontPx * 0.1 - lineHeight;
+  const placed = shape.series.map((_, j) => {
+    const point = shape.stacks[j]![0], name = label(data.columns[j + 1]), bold = focus?.includes(j) === true;
+    const x = point ? Math.min(shape.at(point.from), shape.at(point.to)) : shape.at(0);
+    const width = swatch + fontPx * 0.4 + (bold && geometry.bold ? geometry.bold(name, fontPx) : geometry.measure(name, fontPx)) + fontPx * 0.25;
+    return {j, name, bold, x, width};
+  }).sort((a, b) => a.x - b.x || a.j - b.j);
+  const limit = box.x + box.width - pad / 2;
+  if (placed.some((entry, index) => entry.x + entry.width > (index + 1 < placed.length ? placed[index + 1]!.x - fontPx * 1.5 : limit) + 1e-6)) return undefined;
+  return placed.map((entry): ChartStackName => ({series: entry.j, name: entry.name, ...(entry.bold ? {bold: true} : {}), box: {x: entry.x, y, width: entry.width, height: lineHeight}})).sort((a, b) => a.series - b.series);
+}
+
+/**
+ * LH-109, LH-125: the stacked-chart layer and value axis, or undefined for another chart.
+ *
+ * A column or area chart: the header row is laid out again with its caption only and the plot with a gutter at its end as wide as the
+ * widest name (LH-105's end-label layout); when the names cannot be placed the chart keeps its header legend and the plot is laid out under
+ * it. A stacked area runs edge to edge (`stack.edge`). A horizontal bar chart: the same, with the names in a row above the plot (`placeBarNames`)
+ * and the plot laid out by `horizontalStackPlot`. Either way the plot is pinned (`layer.plot`, which the PPTX export writes as the plot
+ * area's inner layout), and the values that fit their segments (and an area's end points) are recorded.
  */
 export function chartStack(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, geometry: ChartLayerGeometry, axisFor: (headerHeight: number) => ChartValueAxis | undefined, header: (legend: boolean) => ChartLayerHeader | undefined): {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined {
   if (!stackCandidate(chart, data) || !data.ok) return undefined;
@@ -311,29 +460,46 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
   const measure = (text: string, size: number) => geometry.measure(text, size, 400), bold = (text: string, size: number) => geometry.measure(text, size, 700);
   const plotGeometry = {scale, minFontSize: geometry.minFontSize, measure, direction: geometry.direction, language: geometry.language};
   const focus = layer?.focus?.series;
-  const swatch = fontPx * 0.6;
-  // With names: the caption alone above the plot, and a gutter for the widest name past the last column.
-  const named = (() => {
-    const captionOnly = header(false);
-    const valueAxis = axisFor(captionOnly?.height ?? 0);
-    if (!valueAxis) return undefined;
-    const {header: _header, ...rest} = layer ?? {};
-    const base: ChartLayer = {...rest, ...(captionOnly ? {header: captionOnly} : {})};
-    const gutter = fontPx * 0.25 + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
-    const plot = chartPlotInset(chart, data, {valueAxis, layer: {...base, stack: {values: [], names: {gutter, swatch, entries: []}}}}, {...plotGeometry, box});
-    if (!plot) return undefined;
-    const entries = placeStackNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, false, focus);
-    return entries ? {layer: {...base, plot, stack: {values: [], names: {gutter, swatch, entries}}}, valueAxis} : undefined;
-  })();
-  const result = named ?? (() => {
-    const valueAxis = axisFor(layer?.header?.height ?? 0);
-    const plot = valueAxis ? chartPlotInset(chart, data, {valueAxis, layer}, {...plotGeometry, box}) : undefined;
-    return valueAxis && plot ? {layer: {...layer, plot, stack: {values: []}} as ChartLayer, valueAxis} : undefined;
-  })();
+  const swatch = fontPx * 0.6, horizontal = isHorizontal(chart);
+  const edge = !horizontal && STACKED[typeOf(chart)] === 'area' && data.rows.length >= 2;
+  const {header: _header, ...rest} = layer ?? {};
+  let result: {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined;
+  if (horizontal) {
+    // With names: the caption alone above a row of names and the plot; without: the header legend and the plot under it.
+    for (const withNames of [true, false]) {
+      const head = withNames ? header(false) : layer?.header;
+      const valueAxis = axisFor(head?.height ?? 0);
+      const plot = valueAxis ? horizontalStackPlot(chart, data, valueAxis, box, head, withNames, plotGeometry) : undefined;
+      if (!valueAxis || !plot) continue;
+      const base: ChartLayer = {...rest, ...(head ? {header: head} : {}), plot};
+      const entries = withNames ? placeBarNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, focus) : undefined;
+      if (withNames && !entries) continue;
+      result = {layer: {...base, stack: {values: [], ...(entries ? {names: {gutter: 0, swatch, entries, above: true}} : {})}}, valueAxis};
+      break;
+    }
+  } else {
+    // With names: the caption alone above the plot, and a gutter for the widest name past the last column.
+    const named = (() => {
+      const captionOnly = header(false);
+      const valueAxis = axisFor(captionOnly?.height ?? 0);
+      if (!valueAxis) return undefined;
+      const base: ChartLayer = {...rest, ...(captionOnly ? {header: captionOnly} : {})};
+      const gutter = (edge ? fontPx * 0.6 : fontPx * 0.25) + Math.max(...data.columns.slice(1).map((name, j) => swatch + fontPx * 0.4 + (focus?.includes(j) ? bold : measure)(label(name), fontPx) + fontPx * 0.25));
+      const plot = chartPlotInset(chart, data, {valueAxis, layer: {...base, stack: {values: [], ...(edge ? {edge} : {}), names: {gutter, swatch, entries: []}}}}, {...plotGeometry, box});
+      if (!plot) return undefined;
+      const entries = placeStackNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, false, focus, edge);
+      return entries ? {layer: {...base, plot, stack: {values: [], ...(edge ? {edge} : {}), names: {gutter, swatch, entries}}}, valueAxis} : undefined;
+    })();
+    result = named ?? (() => {
+      const valueAxis = axisFor(layer?.header?.height ?? 0);
+      const plot = valueAxis ? chartPlotInset(chart, data, {valueAxis, layer: {...layer, stack: {values: [], ...(edge ? {edge} : {})}}}, {...plotGeometry, box}) : undefined;
+      return valueAxis && plot ? {layer: {...layer, plot, stack: {values: [], ...(edge ? {edge} : {})}} as ChartLayer, valueAxis} : undefined;
+    })();
+  }
   if (!result) return undefined;
-  const values = stackValueFits(chart, data, result.valueAxis, plotOf(box, result.layer.plot!), {...plotGeometry, box});
-  if (!values) return undefined;
-  result.layer.stack = {...result.layer.stack!, values};
+  const marks = stackMarks(chart, data, result.valueAxis, plotOf(box, result.layer.plot!), {...plotGeometry, box}, edge);
+  if (!marks) return undefined;
+  result.layer.stack = {...result.layer.stack!, values: marks.values, ...(marks.ends.length ? {ends: marks.ends} : {})};
   return result;
 }
 
@@ -433,18 +599,24 @@ export function placeReferences(refs: {lines: readonly {value: number; text: str
 interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: ChartValueAxis; layer?: ChartLayer} }
 
 /**
- * LH-109, LH-110 with LH-93: after sibling charts share one plot height, the names beside a stacked chart's last column and the reference
- * marks are placed again against the chart's new plot.
+ * LH-109, LH-110 with LH-93: after sibling charts share one plot height, the names beside a stacked chart's last column, an area's end
+ * values (LH-125) and the reference marks are placed again against the chart's new plot.
  */
 export function refreshChartMarks(items: readonly ComposedChartItem[], geometryFor: (item: ComposedChartItem) => Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, document?: unknown): void {
   for (const item of items) {
     const layer = item.chart?.layer, axis = item.chart?.valueAxis;
-    if (!layer?.plot || !axis || (!layer.stack?.names && !layer.references)) continue;
+    if (!layer?.plot || !axis || (!layer.stack?.names && !layer.stack?.ends && !layer.references)) continue;
     const data = resolveChartData(item.value, document), geometry = geometryFor(item);
     let next: ChartLayer = layer;
-    if (layer.stack?.names) {
-      const entries = placeStackNames(item.value, data, axis, item.box, layer.plot, geometry, true, layer.focus?.series);
-      if (entries) next = {...next, stack: {...layer.stack, names: {...layer.stack.names, entries}}};
+    // The names above a horizontal bar chart (LH-125) and its plot do not move with a shared plot (only vertical charts share one).
+    if (layer.stack?.names && !layer.stack.names.above) {
+      const entries = placeStackNames(item.value, data, axis, item.box, layer.plot, geometry, true, layer.focus?.series, layer.stack.edge === true);
+      if (entries) next = {...next, stack: {...next.stack!, names: {...layer.stack.names, entries}}};
+    }
+    // LH-125: and an edge-to-edge area's end values stand on its band in the new plot.
+    if (layer.stack?.ends && record(item.value) && stackCandidate(item.value, data)) {
+      const marks = stackMarks(item.value, data, axis, plotOf(item.box, layer.plot), {...geometry, box: item.box}, true);
+      if (marks) next = {...next, stack: {...next.stack!, ...(marks.ends.length ? {ends: marks.ends} : {ends: undefined})}};
     }
     if (layer.references) {
       const references = placeReferences({lines: layer.references.lines, rows: layer.references.bands.map(band => band.row)}, data, axis, item.box, layer.plot, geometry);
