@@ -16,3 +16,10 @@ Notes:
 - Use the logo for the mark beside the "OPF" or "Open Presentation" name, and the icon where the mark stands alone in a square.
 - The mark is decorative next to a visible name; give a standalone use an accessible name such as "Open Presentation Format".
 - On a page that switches between light and dark, use a `<picture>` element with `prefers-color-scheme` to pick `opf-logo.svg` or `opf-logo-dark.svg`, as the [README](../../README.md) does.
+
+## Brand story and audiences
+
+- [Brand story](brand-story.md): who OPF is for, the problem it solves, the voice and the words to
+  use (StoryBrand). Proposed, awaiting approval.
+- [Ideal customer profiles](icp.md): AI agent developers, tool builders and enterprises, with the
+  moment, the job and what makes each adopt. Proposed, awaiting approval.
