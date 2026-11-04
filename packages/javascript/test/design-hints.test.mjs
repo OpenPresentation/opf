@@ -18,6 +18,7 @@ const KEYS = {
   imageFit: ['contain', 'stretch'],
   listBullet: ['image', 'character'],
   mirror: [true, false],
+  listStyle: ['rows', 'stack'],
 };
 
 test('the shared key list; the helper is an engine name on the composition entry, not the root', () => {

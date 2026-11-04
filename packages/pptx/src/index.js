@@ -60,7 +60,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -1617,6 +1617,10 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
     if (descriptionLook) for (const paragraph of paragraphs) if (paragraph.description !== undefined) paragraph.description = plain(paragraph.description);
     const first = entries[0].item;
     merged.set(first, {...first, paragraphs, text: paragraphs.map(paragraph => paragraph.text).join('\n'), bounds, visualBounds: undefined, sources: entries.flatMap(({item}) => item.sources ?? [])});
+    // LH-08: the hairlines the export drew between the rows of this list (`OPF list rule <path> N`, no text) are part of its drawing,
+    // not content: the export draws them again from the list.
+    const rulePrefix = `OPF list rule ${path} `;
+    for (const other of items) if (other.kind === 'unknown' && other.name?.startsWith(rulePrefix) && /^\d+$/.test(other.name.slice(rulePrefix.length))) consumed.add(other);
   }
   return items.flatMap(item => merged.has(item) ? [merged.get(item)] : consumed.has(item) ? [] : [item]);
 }
@@ -2193,6 +2197,13 @@ function tagColor(context) {
   if (contrastRatio(context.colors.accent, context.colors.background) < TAG_MIN_CONTRAST) return context.textColor;
   return nativeColor('primary', context.colors.accent, context);
 }
+// LH-50: a label core draws as an eyebrow (item.eyebrow) takes the tag's color on its backdrop: the card's fill when it is on one.
+function eyebrowColor(context) {
+  const backdrop = context.cardFill ? normalizeHex(context.cardFill) : context.colors.background;
+  if (contrastRatio(context.colors.accent, backdrop) < TAG_MIN_CONTRAST) return context.textColor;
+  return nativeColor('primary', context.colors.accent, context);
+}
+const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
 // A link run with no color of its own is written in the theme hyperlink color (a:schemeClr hlink where the deck theme
 // holds that exact color, else the literal), underlined by PowerPoint, as the preview draws it. A run color is kept.
@@ -2412,8 +2423,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
-  let emphasisDrawn = false;
-  for (const item of geometry.items) {
+  let emphasisDrawn = false, previousFrame;
+  for (const [itemIndex, item] of geometry.items.entries()) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
     const boundRegion = template && item.region !== undefined && ['image', 'chart', 'table'].includes(item.field) && !item.caption && !item.frameBox
@@ -2438,14 +2449,18 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         fill: {color: emphasisContext.colors.background, transparency: 0}, line: {type: 'none'}, objectName: `OPF card ${emphasisPath}`});
     }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
-    if (item.frameBox) {
-      const frame=item.frameBox;
-      context.cardTags.set(`OPF card ${item.path}`,item.path);
+    // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox): the card is drawn once, under the eyebrow, and
+    // named for the paragraph (the next item), whose block it is.
+    const sharedCard = sameBox(item.frameBox, previousFrame);
+    previousFrame = item.frameBox;
+    if (item.frameBox && !sharedCard) {
+      const frame=item.frameBox, owner=item.eyebrow&&sameBox(geometry.items[itemIndex+1]?.frameBox,frame)?geometry.items[itemIndex+1]:item;
+      context.cardTags.set(`OPF card ${owner.path}`,owner.path);
       const paint=value=>({color:normalizeHex(value),transparency:/^#[0-9a-f]{8}$/i.test(value)?(1-parseInt(value.slice(7),16)/255)*100:0});
       const surface=cardNeutral?.hex??itemContext.colorScheme.surface??itemContext.colorScheme[itemContext.roles.dark?'dark2':'light2']??`#${itemContext.colors.surface}`;
       slide.addShape('roundRect',{x:frame.x/96,y:frame.y/96,w:frame.width/96,h:frame.height/96,
         rectRadius:8*Math.min(widthInches,heightInches)/720,
-        fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
+        fill:paint(surface),line:{...paint(itemContext.roles.neutrals?.cardBorder?.hex??`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${owner.path}`});
     }
     if (nativeTitle) {
       addNativeTitle(slide, item, itemContext, options, context);
@@ -2456,7 +2471,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.nativeBodies.set(body.objectName, body.defaults);
       if (plan === nativeBody && !plan.carded) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
-      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?(item.titleSplit?'title':item.field):undefined,headingLines:titleSplitLines(item,geometry.items,opfSlide.title),color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
+      addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?(item.titleSplit?'title':item.field):undefined,headingLines:titleSplitLines(item,geometry.items,opfSlide.title),color:item.field==='tag'?tagColor(itemContext):item.eyebrow?eyebrowColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
       // Estimated-font headings use one native text box, which still needs a
       // role tag. Role recovery must not depend on outline measurement support.
@@ -2464,7 +2479,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.headingTags.set(objectName,{v:1,group:item.path,field:split?'title':item.field,line:split?.offset??0,count:split?.count??1});
       slide.addText(item.text.lines.join("\n"), {
         ...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),
-        ...nativeFontOptions(item.textStyle),
+        ...nativeFontOptions(item.textStyle), ...eyebrowOptions(item.textStyle, item.text.fontSize),
         color: item.field === "tag" ? tagColor(itemContext) : itemContext.textColor,
         align: physicalAlignment(item.alignment, item.text.directions?.[0]),
         ...(item.text.directions?.[0] === 'rtl' ? {rtlMode: true} : {}),
@@ -2480,14 +2495,14 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       const heading = item.field !== 'text';
       addRichFitLines(slide, item.text, item.box, itemContext, {
         value: item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
-        fallback: item.field === 'tag' ? tagColor(itemContext) : itemContext.textColor,
+        fallback: item.field === 'tag' ? tagColor(itemContext) : item.eyebrow ? eyebrowColor(itemContext) : itemContext.textColor,
         ...(heading ? {
           objectName: index => `OPF heading ${item.path} line ${index}`,
           tag: (name, index, count, boundary) => context.headingTags.set(name, {v: 1, group: item.path, field: item.field, line: index, count, ...boundary, base: richBase(item.text, item.textStyle, item.field === 'tag' ? tagHex(itemContext) : itemContext.colors.text)})
         } : {})
       });
     } else if (item.field === "text" && typeof item.value === "string") {
-      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
+      slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),...eyebrowOptions(item.textStyle, item.text.fontSize),...(item.eyebrow ? {color: pptxColor(eyebrowColor(itemContext))} : {}),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
     } else if (item.field === "image" && item.image) {
       await drawImage(item, itemContext);
     } else {
@@ -2646,7 +2661,8 @@ function addTextPayload(slide, value, region, context, path) {
 // description?}, or undefined when its entries do not share one (import then reads every run value as observed).
 // LH-77: the entry of a heading list is written bold, so its look is the style core gave a run that states no weight of its own.
 function listRunLook(fit,style,context){
-  const entryStyle=(entry,kind)=>kind==='text'&&entry.heading?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
+  // LH-08: the label of a ruled row with a description is written bold, as a heading list's entry is.
+  const entryStyle=(entry,kind)=>kind==='text'&&(entry.heading||entry.text.richLines.some(line=>line.fragments.some(fragment=>fragment.run?.bold===undefined&&fragment.style.fontWeight!==style.fontWeight)))?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
   const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?context.colors.text:context.colors.mutedText))));
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
@@ -2717,6 +2733,12 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
     };
     addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
     if(entry.description)addLines(entry.description,entry.descriptionBox,context.colors.mutedText,context.mutedColor,false);
+  }
+  // LH-08: a list drawn as ruled rows (design.listStyle: rows): core's hairlines between its rows as native lines, LIST_RULE_WIDTH thick in
+  // the scheme's border neutral, as the preview draws them. The export draws them again from the list, so import reads them as no content.
+  if(fit.rules?.length){
+    const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720,color=normalizeHex(context.roles?.neutrals?.border?.hex??`#${context.colors.border}`);
+    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color,width:LIST_RULE_WIDTH*scale*.75},objectName:`OPF list rule ${path} ${index}`}));
   }
 }
 
@@ -3413,7 +3435,7 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
     const runs = line.fragments.map(fragment => {
       const runColor = exportColor(fragment.run.color, context, context.colors.text);
       const color = nativeColor(fragment.run.color, runColor, context, fallback);
-      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
+      return {text: fragment.text, options: {...nativeFontOptions(fragment.style), ...eyebrowOptions(fragment.style, fragment.nominalSize ?? fragment.fontSize), fontSize: (fragment.nominalSize ?? fragment.fontSize) * .75, color: linkColor(fragment.run, color, context), underline: fragment.run.underline ? {style: 'sng', color: linkColor(fragment.run, color, context)} : undefined, strike: fragment.run.strikethrough ? 'sngStrike' : undefined, baseline: fragment.baselineShift ? -fragment.baselineShift / (fragment.nominalSize ?? fragment.fontSize) * 2000 : undefined, hyperlink: fragment.kind !== 'marker' && fragment.run.link && /^(https?:|mailto:|tel:)/i.test(fragment.run.link) ? {url: fragment.run.link} : undefined, ...langOptions(context, fragment.style.lang)}};
     });
     // Logical alignment (RR-05): a right-to-left paragraph starts at the right edge; every wrapped line shares its paragraph's direction.
     const placed = fit.placement?.lines[index], alignment = placed?.alignment ?? physicalAlignment(logicalAlignment, fit.directions?.[index]), factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
@@ -3513,7 +3535,7 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const lineColor = pptxColor(config.color ?? context.textColor);
     slide.addText(link?.href && line ? [{text: line, options: {hyperlink: {url: link.href}, color: lineColor, underline: {style: 'none'}}}] : line, {
       ...textBoxOptions(area, context, fit.fontSize * .75),
-      ...nativeFontOptions(style),
+      ...nativeFontOptions(style), ...eyebrowOptions(style, fit.fontSize),
       color: lineColor, align: alignment,
       ...(fit.directions?.[index]==='rtl'?{rtlMode:true}:{}),
       // Reuse the frame's existing relationship to cover blank caption boxes.
@@ -4076,6 +4098,12 @@ function chosenFamilyMeasurement(measurement) {
 function langOptions(context, tag) {
   const lang = runLanguageTag(context.scriptFonts, tag);
   return lang ? {lang} : {};
+}
+
+// LH-32: an eyebrow (core's style.caps and style.tracking: the slide tag, a label core sets as one) is written as PowerPoint draws
+// one, the authored text with cap="all" and the tracking as spc (points), so it stays editable as written and import reads its words.
+function eyebrowOptions(style, fontSize) {
+  return style?.caps || style?.tracking ? {...(style.caps ? {caps: 'all'} : {}), ...(style.tracking ? {charSpacing: Math.round(style.tracking * fontSize * .75 * 100) / 100} : {})} : {};
 }
 
 function nativeFontOptions(style) {

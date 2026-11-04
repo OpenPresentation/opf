@@ -481,6 +481,11 @@
           ],
           "description": "Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists)."
         },
+        "listStyle": {
+          "type": "string",
+          "enum": ["stack", "rows"],
+          "description": "As design.listStyle of a deck: 'stack' or 'rows' (ruled rows) for the lists of slides using this layout."
+        },
         "mirror": {
           "type": "boolean",
           "description": "Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do not change."

@@ -9,7 +9,8 @@ import { composeSlide, layoutMetric } from '../dist/composition.js';
 const { layouts } = gallery;
 const long = (name) => `${name} should focus the next cycle on improving evaluation timelines and family communication while making the operating tradeoffs clear to student services stakeholders.`;
 const SCALE = [16, 18, 21, 24, 28, 32];
-const sizesOf = (result, field = 'text') => result.items.filter((item) => item.field === field && item.path.includes('.blocks.')).map((item) => item.text.fontSize);
+// LH-50: a label drawn as the eyebrow of the text after it is set at the tag's size, not shared with its siblings.
+const sizesOf = (result, field = 'text') => result.items.filter((item) => item.field === field && item.path.includes('.blocks.') && !item.eyebrow).map((item) => item.text.fontSize);
 const overflow = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow');
 
 test('the cards of a grid share one size across its rows', () => {
@@ -17,15 +18,19 @@ test('the cards of a grid share one size across its rows', () => {
     'Evidence: share the same geometry.', 'Inputs', 'Pattern backgrounds carry a preset plus colors.', 'Then: explain the change.'].map((text) => ({ text }));
   const result = composeSlide({ title: 'Why this matters', blocks }, { layout: layouts.pillars });
   const sizes = sizesOf(result);
-  assert.equal(sizes.length, 8);
+  // LH-50: "Inputs" is the eyebrow of the paragraph after it.
+  assert.equal(sizes.length, 7);
+  assert.equal(result.items.filter((item) => item.eyebrow).map((item) => item.value).join(), 'Inputs');
   assert.equal(new Set(sizes).size, 1, `one size: ${sizes}`);
   assert.deepEqual(overflow(result), []);
   // The joint fit: the rows are sized at the shared size, so the long row is tall, the row of short texts short, and the shared size
   // is above what equal rows allowed the long cards (18 px).
   assert.ok(sizes[0] >= 21, String(sizes[0]));
-  const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.'));
+  const texts = result.items.filter((item) => item.field === 'text' && item.path.includes('.blocks.') && !item.eyebrow);
   assert.ok(texts[0].box.height > 2 * texts[4].box.height, `${texts[0].box.height} over ${texts[4].box.height}`);
-  for (const row of [texts.slice(0, 4), texts.slice(4)]) assert.equal(new Set(row.map((item) => item.box.height)).size, 1, 'a row keeps one height');
+  // A row keeps one height: its cells share their top and foot (a paragraph under an eyebrow starts below it, LH-50).
+  const cellOf = (item) => { const at = result.items.indexOf(item), above = result.items[at - 1]; return above?.eyebrow ? { top: above.box.y, bottom: item.box.y + item.box.height } : { top: item.box.y, bottom: item.box.y + item.box.height }; };
+  for (const row of [texts.slice(0, 4), texts.slice(4)]) for (const edge of ['top', 'bottom']) assert.equal(new Set(row.map((item) => Math.round(cellOf(item)[edge]))).size, 1, `a row keeps one ${edge}`);
 });
 
 test('the rows of a grid without cards fill the region as before when their needs are equal', () => {

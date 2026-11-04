@@ -34,7 +34,8 @@ assert.deepEqual(markers(first), ['1']);
 assert.deepEqual(markers(second), ['1']);
 // The subtitle link and the tag italic.
 assert.match(first, /<a href="https:\/\/example.com\/report"/);
-assert.match(first, /font-style="italic"[^>]*>review<\/tspan>/);
+// LH-32: the tag is an eyebrow, its runs drawn in capitals (the italic run keeps its slant).
+assert.match(first, /font-style="italic"[^>]*>REVIEW<\/tspan>/);
 // The footnote area lists the reference on both slides.
 assert.match(first, /Annual report/);
 assert.match(second, /Annual report/);
