@@ -439,12 +439,18 @@ export interface ComposedSteps {
  * `list` names the list entry whose number the badge draws in place of its marker (its payload path, the entry's index and the
  * number), so an exporter can keep the list's numbering; absent when the badge numbers a block by its position or the list has no
  * `numbering` of its own (a list of a `steps` region is then counted in arabic).
+ *
+ * LH-134: a badge with a `numeral` is a numeral beside a ruled row (ListFitOptions.numerals), drawn without a circle: its label bold in the
+ * body face at `fontSize`, in the accent (the tag's color: the text color where the primary reads under 4.5:1 on the slide), centered
+ * on `cx` at `baseline`; `numeral` is its line box (the export's text box) and `radius` half its column's width. Its column has no connector.
  */
 /**
  * One badge of a sequence (ComposedSteps). LH-137: a badge with `check` draws a check mark in place of its label (which is empty): the
  * polygon `check` (canvas pixels, checkMarkPoints) filled in the badge's label color.
  */
-export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> }; check?: [number, number][] }
+export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> }; check?: [number, number][];
+  /** LH-134: a numeral beside a ruled row: the line box of its text, drawn without a circle. */
+  numeral?: LayoutBox }
 /** LH-137: the check-mark tiles of a summary list: the fewest and most entries, and the longest entry in characters. */
 export const CHECK_TILE_MIN = 2, CHECK_TILE_MAX = 6, CHECK_TILE_MAX_CHARACTERS = 90;
 /** LH-137: the most lines an entry may take in a tile of the grid before the tiles become one column of wide tiles. */
@@ -3241,8 +3247,15 @@ export interface ListEntryLayout {
   /**
    * LH-07: the entry's step badge (`ListFitOptions.badges`): a circle of `diameter` centered at (`cx`, `cy`) in the marker column,
    * with `label` (the number without its suffix) at `fontSize`. The marker itself draws nothing (`none`); `number` is kept.
+   * LH-134: a `numeral` (`ListFitOptions.numerals`) draws no circle: its label in the accent, bold, centered on `cx` in the line box `numeral`
+   * (`diameter` is its column's width), with its baseline at `cy` + 0.35 of `fontSize`.
    */
-  badge?:{cx:number;cy:number;diameter:number;label:string;fontSize:number};
+  badge?:{cx:number;cy:number;diameter:number;label:string;fontSize:number;numeral?:LayoutBox};
+  /**
+   * LH-133: the entry's label is a term (a ruled row of a glossary, `ListFitOptions.pairs: "term"`): it draws in the accent, the tag's color
+   * on its backdrop (the text color where the primary reads under 4.5:1).
+   */
+  accent?:true;
   /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
   direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
@@ -3262,11 +3275,14 @@ export interface ListEntryLayout {
  * anti-aliasing, so the true side is about 0.65). The export needs no size: PowerPoint sizes the bullet itself.
  */
 export const PICTURE_BULLET_SCALE=0.65;
-/** LH-08: a hairline between two rows of a list drawn as ruled rows (`design.listStyle: "rows"`): from `x` across `width`, centered on `y`. */
+/**
+ * LH-08: a hairline between two rows of a list drawn as ruled rows (`design.listStyle: "rows"`): from `x` across `width`, centered on `y`.
+ * LH-133: an `accent` rule is the rule over a cell of a grid of questions, LIST_ACCENT_RULE_WIDTH thick in the accent (the tag's color).
+ */
 export interface ListRule { x:number; y:number; width:number;
-  /** LH-136: the rule's thickness in canvas pixels (LIST_RULE_WIDTH of the scale when absent). */
+  /** LH-136: the rule's thickness in canvas pixels (LIST_RULE_WIDTH of the scale when absent, LIST_ACCENT_RULE_WIDTH for an accent rule). */
   thickness?:number;
-  /** LH-136: the rule is the accent rule over a display heading (`ListFitOptions.display`): drawn in the accent, not the border neutral. */
+  /** LH-133, LH-136: drawn in the accent (the tag's color on its backdrop), not the border neutral: over a question cell or a display heading. */
   accent?:true }
 export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height:number;
   /** LH-08: the hairlines of a list drawn as ruled rows, one between every two first-level entries; engines draw each LIST_RULE_WIDTH thick in the scheme's border neutral. */
@@ -3275,8 +3291,30 @@ export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height
 export const LIST_ROWS_GAP=.8;
 /** LH-08: a ruled list sets its labels beside their descriptions when the widest label takes at most this share of the list's width on one line. */
 export const LIST_ROWS_LABEL_SHARE=.4;
+/** LH-133: the widest gap between two rows of a spread list (ListFitOptions.spread), in em of the list size (Claude Design spreads an agenda's rows about 2.5 to 4 em apart). */
+export const LIST_ROWS_SPREAD=3;
 /** LH-08: the thickness of a row's hairline, in reference pixels (0.75 pt at 1280 × 720). */
 export const LIST_RULE_WIDTH=1;
+/** LH-133: the thickness of the accent rule over each cell of a grid of questions, in reference pixels (Claude Design: 3 px at 1280 × 720). */
+export const LIST_ACCENT_RULE_WIDTH=3;
+/** LH-133: a question beside its answer takes at most this many lines in its column (LIST_ROWS_LABEL_SHARE of the width); longer, the answer goes under it. */
+export const LIST_QUESTION_LINES=3;
+/**
+ * LH-134: a takeaway's display numeral (`ListFitOptions.numerals: "display"`) is this many times the list size when every takeaway has a
+ * supporting line, the top of its digits on the label's capitals, so it spans about the takeaway and its line (Claude Design: a numeral
+ * about three times the size of the takeaway beside it); beside takeaways of one paragraph it is STEP_BADGE times, a badge's width. A row
+ * numeral (`"row"`) is the list size.
+ */
+export const LIST_NUMERAL_SCALE=2.5;
+/** LH-134: the space between a numeral's column and its row's text, in em of the list size. */
+export const LIST_NUMERAL_GAP=1.5;
+/** LH-134: a lone numbered list of at most this many entries is a few takeaways, drawn beside display numerals. */
+export const NUMERAL_TAKEAWAYS=5;
+/**
+ * LH-133: a region of at least PAIR_GRID_MIN one-question blocks whose questions are at most PAIR_GRID_QUESTION characters and answers at most
+ * PAIR_GRID_ANSWER stays a grid, each cell under an accent rule; fewer or longer questions are ruled rows.
+ */
+export const PAIR_GRID_MIN=6, PAIR_GRID_QUESTION=48, PAIR_GRID_ANSWER=90;
 export interface ListFitOptions extends RichTextOptions {
   /**
    * Number the entries instead of bulleting them (the payload's `numbering` field). The hanging indent becomes the larger of
@@ -3319,6 +3357,31 @@ export interface ListFitOptions extends RichTextOptions {
    * `numbering` and entries of level 0; ignored otherwise.
    */
   badges?:boolean;
+  /**
+   * LH-133: the entries of a ruled list (`rows`) pair a question (`question`) or a term (`term`) with its answer or definition. A question's
+   * column is LIST_ROWS_LABEL_SHARE of the width, the question wrapping in it (at most LIST_QUESTION_LINES lines, else the answer goes under
+   * it); a term draws in the accent (`ListEntryLayout.accent`) in the column of the widest term, as any label does.
+   */
+  pairs?:'question'|'term';
+  /**
+   * LH-133: the labels of every block that shares this list's label column (one-entry pairs stacked as ruled rows: a FAQ written as one block
+   * per question). The column is measured over all of them, so the answers of every block start at one edge, and a one-entry list is a row
+   * whose answer keeps the list size (as the heading list it would otherwise be, LH-77). Needs `rows`.
+   */
+  rowLabels?:readonly ListText[];
+  /**
+   * LH-134: with `rows` and `numbering`, each first-level entry's number is a numeral in the accent in a column at the row's start
+   * (`ListEntryLayout.badge` with its `numeral` line box; the marker draws nothing, as a badge's): `display` sets it at LIST_NUMERAL_SCALE
+   * times the list size (STEP_BADGE times when an entry has no description), the top of its digits on the label's capitals (a few
+   * takeaways), `row` at the list size on the label's baseline, in two digits for an arabic number under 10 (an agenda's numbered rows).
+   * LIST_NUMERAL_GAP em separate the column from the text.
+   */
+  numerals?:'display'|'row';
+  /**
+   * LH-133: with `rows`, the rows fill the box's height (LH-48's fill for a lone ruled list): the gap between two first-level rows grows
+   * evenly, to at most LIST_ROWS_SPREAD em, the hairlines in their middles, and the rows sit in the middle of what is still left.
+   */
+  spread?:boolean;
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
@@ -3361,7 +3424,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     return {index,level,direction,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
-  const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined;
+  // LH-133: a one-entry list that shares its label column with sibling blocks (`rowLabels`) is a ruled row, not a heading list.
+  const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
   // A native auto-number takes the weight and slant of the paragraph's first run.
@@ -3369,29 +3433,45 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
     return {...options.style,path:item.textPath,fontWeight:first?.bold===undefined?options.style.fontWeight:first.bold?700:400,italic:first?.italic??options.style.italic};
   };
-  // LH-08: ruled rows (ListFitOptions.rows).
-  const rows=options.rows===true&&!heading&&source.length>=2,described=rows&&source.every(item=>item.descriptionRuns!==undefined);
-  const rowsLayout=(fontSize:number):ListFit=>{
-    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
+  // LH-08: ruled rows (ListFitOptions.rows). LH-133: one entry is a row when its label column is shared with sibling blocks (rowLabels).
+  const rows=options.rows===true&&!heading&&(source.length>=2||(options.rowLabels!==undefined&&source.length===1)),described=rows&&source.every(item=>item.descriptionRuns!==undefined);
+  // LH-134: numbers drawn as numerals in a column at the start of each row (ListFitOptions.numerals).
+  const numerals=rows&&numbers!==undefined&&options.numerals!==undefined&&source.every(item=>item.level===0)?options.numerals:undefined;
+  const numeralLabels=numerals&&numbers?numbers.map(number=>{const label=listNumberLabel(number);return numerals==='row'&&/^[0-9]$/.test(label)?`0${label}`:label;}):[];
+  // LH-133: `extra` widens the gap between two first-level rows (their hairline stays in its middle) and `top` starts the rows lower (spread).
+  const rowsLayout=(fontSize:number,extra=0,top=0):ListFit=>{
+    let y=box.y+top,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
+    // LH-134: the numerals' column is as wide as the widest numeral, bold at its size.
+    const numeralSize=numerals==='display'?fontSize*(described?LIST_NUMERAL_SCALE:STEP_BADGE):fontSize,numeralStyle:TextStyle={...options.style,path:undefined,fontWeight:700,italic:false};
+    const numeralColumn=numerals?Math.max(...numeralLabels.map(label=>textWidthMeasurer(resolveTextStyle(numeralStyle,options.textMeasurement),options.textMeasurement)(label,numeralSize))):0;
     // Only numbers keep a hanging indent: a row needs no bullet. A nested level steps in by 1.1 em under its row.
-    const indent=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):0,nest=fontSize*1.1;
-    const labelStyle=(item:typeof source[number]):TextStyle=>({...options.style,path:item.textPath,...(described?{fontWeight:700}:{})});
+    const indent=numerals?numeralColumn+fontSize*LIST_NUMERAL_GAP:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):0,nest=fontSize*1.1;
+    const labelStyle=(item:typeof source[number]|undefined):TextStyle=>({...options.style,path:item?.textPath,...(described?{fontWeight:700}:{})});
     const labelAt=(item:typeof source[number],area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize,{...options,style:labelStyle(item)},minFontSize)(fontSize);
-    // The label column: the widest label on one line, when that takes at most LIST_ROWS_LABEL_SHARE of the width.
+    const siblingAt=(label:ListText,area:LayoutBox)=>richTextLayouter(typeof label==='string'?[label]:label,area,requestedSize,{...options,style:labelStyle(undefined)},minFontSize)(fontSize);
+    // The label column: the widest label on one line (LH-133: of this list and of the blocks that share its column), when that takes at most
+    // LIST_ROWS_LABEL_SHARE of the width. LH-133: questions take that share whatever their length and wrap in it, at most LIST_QUESTION_LINES
+    // lines each.
     let column=0;
     if(described&&source.every(item=>item.level===0)){
-      const widest=Math.max(...source.map(item=>Math.max(0,...labelAt(item,{x:0,y:0,width:1e6,height:1e6}).richLines.map(line=>line.width))));
-      const need=indent+widest*1.001+1;
-      if(need<=LIST_ROWS_LABEL_SHARE*box.width)column=need;
+      const wide={x:0,y:0,width:1e6,height:1e6};
+      if(options.pairs==='question'){
+        const share=LIST_ROWS_LABEL_SHARE*box.width,area={x:0,y:0,width:Math.max(1,share-indent),height:1e6};
+        if(share>indent&&source.every(item=>{const fit=labelAt(item,area);return !fit.overflow&&fit.richLines.length<=LIST_QUESTION_LINES;})&&(options.rowLabels??[]).every(label=>{const fit=siblingAt(label,area);return !fit.overflow&&fit.richLines.length<=LIST_QUESTION_LINES;}))column=share;
+      }else{
+        const widest=Math.max(...source.map(item=>Math.max(0,...labelAt(item,wide).richLines.map(line=>line.width))),...(options.rowLabels??[]).map(label=>Math.max(0,...siblingAt(label,wide).richLines.map(line=>line.width))));
+        const need=indent+widest*1.001+1;
+        if(need<=LIST_ROWS_LABEL_SHARE*box.width)column=need;
+      }
     }
     const between=fontSize,side=column>0;
     for(const item of source){
       const rtl=item.direction==='rtl',first=item.index===0;
       // A hairline in the middle of the gap above every first-level row but the first; a nested entry stays close under its row.
       if(!first){
-        const space=fontSize*(item.level===0?LIST_ROWS_GAP:.28);
+        const space=item.level===0?fontSize*LIST_ROWS_GAP+extra:fontSize*.28;
         if(item.level===0)rules.push({x:box.x,y:y+space/2,width:box.width});
         y+=space;
       }
@@ -3402,7 +3482,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       textBox.height=text.height;
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined,bottom=y+text.height;
       if(item.descriptionRuns!==undefined){
-        const ratio=.82,dx=side?(rtl?box.x:box.x+column+between):x,dWidth=side?Math.max(1,box.width-column-between):width;
+        // LH-133: the answer of a one-entry row keeps the list size, as the heading list's description it would otherwise be (LH-77).
+        const ratio=options.rowLabels?1:.82,dx=side?(rtl?box.x:box.x+column+between):x,dWidth=side?Math.max(1,box.width-column-between):width;
         descriptionBox={x:dx,y:side?y:bottom+fontSize*.12,width:dWidth,height:box.height};
         description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
         // Beside its label, a description's first baseline sits on the label's.
@@ -3413,15 +3494,34 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       if(description){lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));}
       overflow||=text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset):box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{none:true as const}),...(rtl?{anchor:'end' as const}:{})};
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(item.direction?{direction:item.direction}:{})});
+      // LH-134: the numeral's baseline is the label's (a row numeral), or the top of its digits (0.7 em, the capitals' height) sits on the
+      // label's capitals (a display numeral). It draws centered in its column, at the row's start, and the row reaches its baseline.
+      let badge:ListEntryLayout['badge'];
+      if(numerals&&number){
+        const label=numeralLabels[item.index]!,first=text.richLines[0]?.baseline??fontSize,baseline=textBox.y+(numerals==='row'?first:first-.7*fontSize+.7*numeralSize);
+        const line=richTextLayouter([label],{x:0,y:0,width:1e6,height:1e6},numeralSize,{...options,style:numeralStyle},0)(numeralSize).richLines[0];
+        const left=rtl?box.x+box.width-numeralColumn:box.x;
+        badge={cx:left+numeralColumn/2,cy:baseline-numeralSize*.35,diameter:numeralColumn,label,fontSize:numeralSize,numeral:{x:left,y:baseline-(line?.baseline??numeralSize),width:numeralColumn,height:line?.height??numeralSize*1.22}};
+        bottom=Math.max(bottom,baseline);
+      }
+      const none=!number||badge!==undefined;
+      const marker={text:number&&!badge?number.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset):box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})};
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(badge?{badge}:{}),...(options.pairs==='term'&&described?{accent:true as const}:{}),...(item.direction?{direction:item.direction}:{})});
       y=bottom;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,rules,...(options.direction==='rtl'?{directions}:{})};
   };
   const layout=(fontSize:number):ListFit=>{
-    if(rows)return rowsLayout(fontSize);
+    if(rows){
+      // LH-133: a spread list (ListFitOptions.spread) takes its box's height: the leftover height is shared evenly between its first-level
+      // rows, each gap at most LIST_ROWS_SPREAD em, and what is still left sits above and below them. A measuring box (no real height) is not spread.
+      const fit=rowsLayout(fontSize),count=source.filter(item=>item.level===0).length;
+      if(!options.spread||fit.overflow||count<2||box.height>=1e5)return fit;
+      const extra=Math.max(0,Math.min((box.height-fit.height)/(count-1),(LIST_ROWS_SPREAD-LIST_ROWS_GAP)*fontSize));
+      const spread=rowsLayout(fontSize,extra);
+      return spread.overflow?fit:rowsLayout(fontSize,extra,Math.max(0,(box.height-spread.height)/2));
+    }
     let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],accentRules:ListRule[]=[];
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
@@ -3487,6 +3587,24 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     if(item.descriptionRuns!==undefined)minimum=Math.max(minimum,heading?richMinimum(item.descriptionRuns,requestedSize,minFontSize):richMinimum(item.descriptionRuns,requestedSize*.82,minFontSize)/.82);
   }
   return fitAtSizes(layout,requestedSize,minimum);
+}
+
+/** LH-133: a question ends with a question mark of its script (Latin and fullwidth `?`, Arabic `؟`, the reversed `⸮`), before any closing quote or bracket. */
+export function questionText(value: unknown): boolean {
+  const text = flatten(value).trim();
+  return /\S/u.test(text) && !/[\r\n\u2028\u2029]/u.test(text) && /[?\uff1f\u061f\u2e2e]["'\u2019\u201d\u00bb)\]]*$/u.test(text);
+}
+/** LH-133: a glossary's term is a label (isLabelText) of at most this many words ("ARR", "CAC payback"); a longer label is a phrase. */
+export const TERM_WORDS = 2;
+/**
+ * LH-133: what a first-level list entry with a description pairs: a question with its answer (`question`), a term with its definition
+ * (`term`, a label of at most TERM_WORDS words) or another short label with its description (`label`); undefined for anything else.
+ */
+export function pairEntry(entry: unknown): 'question' | 'term' | 'label' | undefined {
+  const object = record(entry);
+  if (object.description === undefined || (object.level ?? 0) !== 0 || object.text === undefined) return undefined;
+  if (questionText(object.text)) return 'question';
+  return isLabelText(object.text) ? flatten(object.text).trim().split(/\s+/u).length <= TERM_WORDS ? 'term' : 'label' : undefined;
 }
 
 function contentText(field: string, value: unknown): string | undefined {
@@ -3939,20 +4057,21 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
  * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, LH-39's figure on one line
  * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`), and LH-08's ruled rows for
- * a list of short labels with descriptions (`list-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`),
- * whose badges take height the steps' text might need, LH-149's half steps of the type scale for fitted body text (`half-steps`), LH-135's
- * pricing tiers as one card each (`tier-cards`), LH-136's one-word pillar titles at display size over an accent rule (`pillar-words`), and
- * the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and check-mark tiles (`check-tiles`).
- * LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only
- * place blocks at the sizes they have.
+ * a list of short labels with descriptions (`list-rows`), LH-133's questions and terms as ruled rows or a grid under accent rules
+ * (`pair-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`), whose badges take height the steps' text
+ * might need, with LH-134's numerals of a few takeaways and an agenda's numbered rows (`numerals`), LH-149's half steps of the type scale
+ * for fitted body text (`half-steps`), LH-135's pricing tiers as one card each (`tier-cards`), LH-136's one-word pillar titles at display
+ * size over an accent rule (`pillar-words`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's
+ * delta pill (`delta-pill`) and check-mark tiles (`check-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
+ * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /** LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them. */
 const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'check-tiles'];
@@ -4724,7 +4843,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'step-badges' && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -4771,11 +4890,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-08: ruled rows. `design.listStyle: "rows"` draws every list of the slide as ruled rows, `"stack"` none; without it a list of two or
   // more first-level entries that each pair a short label (isLabelText) with a description is drawn as rows (the guarded rule `list-rows`),
   // as Claude Design rules such a list, and the guard keeps it only where no block reads smaller.
-  const listRows = (value: unknown): boolean => {
-    if (hints.listStyle !== undefined) return hints.listStyle === 'rows';
-    if (!ruleOn('list-rows') || !Array.isArray(value) || value.length < 2 || !value.every(entry => { const object = record(entry); return object.description !== undefined && (object.level ?? 0) === 0 && isLabelText(object.text); })) return false;
+  // LH-133: a list of two or more questions (questionText) that each have an answer is drawn as rows too (the guarded rule `pair-rows`),
+  // each question in a column beside its answer (ListFitOptions.pairs). A glossary's terms (termLists, composeTemplate) draw in the accent.
+  const termLists = new Set<string>();
+  const pairsOf = (value: unknown, path?: string): Pick<ListFitOptions, 'pairs'> => path !== undefined && termLists.has(path) ? { pairs: 'term' }
+    : Array.isArray(value) && value.length >= 2 && value.every(entry => pairEntry(entry) === 'question') ? { pairs: 'question' } : {};
+  const listRows = (value: unknown, path?: string): Pick<ListFitOptions, 'rows' | 'pairs'> => {
+    const pairs = pairsOf(value, path), questions = pairs.pairs === 'question';
+    if (hints.listStyle !== undefined) return hints.listStyle === 'rows' ? { rows: true, ...pairs } : {};
+    if (questions && ruleOn('pair-rows')) { fire('pair-rows'); return { rows: true, ...pairs }; }
+    if (!ruleOn('list-rows') || !Array.isArray(value) || value.length < 2 || !value.every(entry => { const object = record(entry); return object.description !== undefined && (object.level ?? 0) === 0 && isLabelText(object.text); })) return {};
     fire('list-rows');
-    return true;
+    return { rows: true, ...pairs };
   };
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
     const resolved = resolveLogo(options.presentation, slide, { shape: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
@@ -4912,9 +5038,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // region asked for steps. Its other lists, and a slide whose badges the guard refused (NO_STEPS), may still be ruled.
   // LH-136: the lists drawn as display words (fitList's `display`), by path (pillarWords is filled once the slide's blocks are collected).
   const pillarWords = new Set<string>(), wordCaps = new Map<string, number>();
-  const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+  // LH-134: the badge lists whose numbers draw as numerals beside ruled rows instead (composeTemplate): `row` for an agenda whose entries
+  // all have descriptions, `display` for a lone numbered list of a few takeaways. LH-133: the one-question blocks of a region drawn as
+  // ruled rows (pairRowLabels: the questions of the region, so their answers share one column) and those drawn as a grid under accent rules.
+  // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
+  const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
+  const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
+    const own = listOptionsOf(field, path, numbering, value);
+    return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
+  };
+  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+    : numeralLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),rows:true,numerals:numeralLists.get(path)!,...pairsOf(value, path)}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
-    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{})}:{}),...(value!==undefined&&listRows(value)?{rows:true}:{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
+    : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
+    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
@@ -6199,7 +6336,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     // LH-07: a badge list is numbered (badgeNumbering when the payload is not), so its columns continue the count.
     const numbering = (badgeLists.has(node.path) ? badgeNumbering(node.path, node.payload.numbering) : node.payload.numbering) as NumberingInput | undefined;
-    const listOptions: ListFitOptions = badgeLists.has(node.path) ? listOptionsFor(node.field, node.path, numbering) : { ...richOptions(styleFor(node.field, node.path)), ...(listRows(values) ? { rows: true } : {}), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
+    const listOptions: ListFitOptions = badgeLists.has(node.path) ? listOptionsFor(node.field, node.path, numbering) : { ...richOptions(styleFor(node.field, node.path)), ...listRows(values, node.path), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
     const columnBoxes = (count: number): LayoutBox[] => {
       const between = columnGap(count), columnWidth = (box.width - between * (count - 1)) / count;
@@ -6417,7 +6554,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
     // LH-07: a badge list grows as the plain list would (its badges do not count against the body it fills), as long as it fits with them.
-    const plainNeed = () => { const badged = badgeLists.delete(node.path); try { return need(); } finally { if (badged) badgeLists.add(node.path); } };
+    // LH-134: so does a list drawn beside numerals: its numerals and rules are drawing, as badges are.
+    const plainNeed = () => {
+      const badged = badgeLists.delete(node.path), numerals = numeralLists.get(node.path);
+      numeralLists.delete(node.path);
+      try { return need(); } finally { if (badged) badgeLists.add(node.path); if (numerals) numeralLists.set(node.path, numerals); }
+    };
     let best = plainNeed();
     // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
     // the middle of the body. Only code that then fills at least LONE_TARGET of the body takes the whole cell, its lines in the middle of
@@ -6425,7 +6567,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const panel = node.field === 'code', wholePanel = () => { fullPanels.add(node); return cell; };
     const fillsPanel = () => panel && best >= LONE_TARGET * inner.height - 1e-6 && best <= inner.height;
     // A panel's need counts its insets and its filename row, so a panel under LONE_TARGET still grows and centers.
-    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : undefined;
+    // LH-133: a lone list drawn as ruled rows takes the whole cell once it has grown (or when it needs no growth): its rows spread over it.
+    const ruled = (node.field === 'items' || node.field === 'bullets') && listOptionsOf(node.field, node.path, node.payload.numbering, node.value).rows === true;
+    const spreadCell = () => { spreadLists.add(node.path); return cell; };
+    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : ruled ? spreadCell() : undefined;
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     if (prose) {
       const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;
@@ -6466,6 +6611,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
     }
     if (fillsPanel()) return wholePanel();
+    if (ruled) return spreadCell();
     // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
@@ -6747,10 +6893,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // The count runs over the whole agenda: when one of its lists cannot take badges (a lone entry, nested entries), the unnumbered
       // ones keep their markers rather than number a part of it.
       const whole = units.every(unit => !isList(unit) || badgeList(unit));
+      // LH-134: an agenda whose entries all have a description draws as numbered ruled rows, each description in a second column; one
+      // entry without a description anywhere in the region keeps every list's badges, so the agenda is drawn one way.
+      const marked = units.filter(unit => badgeList(unit) && (whole || numbered(unit)));
+      const rows = ruleOn('numerals') && marked.length > 0 && marked.every(unit => entries(unit).every(entry => record(entry).description !== undefined));
       let next = 1;
-      for (const unit of units) {
-        if (!badgeList(unit) || (!whole && !numbered(unit))) continue;
+      for (const unit of marked) {
         badgeLists.add(unit.path);
+        if (rows) { numeralLists.set(unit.path, 'row'); fire('numerals'); }
         if (!numbered(unit)) { badgeStarts.set(unit.path, next); next += entries(unit).length; }
         fire('step-badges');
       }
@@ -6769,6 +6919,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit)))) return;
     for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
     fire('step-badges');
+  };
+  // LH-133: a region whose two or more blocks are each one question with its answer (a one-entry list whose entry is a question with a
+  // description: a FAQ written one block per question) draws them as ruled rows (the guarded rule `pair-rows`), one under another across
+  // the region, each question in a column beside its answer (LIST_ROWS_LABEL_SHARE of the width, shared by every block: pairRowLabels) and a
+  // hairline in the middle of the gap between two blocks (pairRules). PAIR_GRID_MIN or more short ones (a question of at most
+  // PAIR_GRID_QUESTION characters and an answer of at most PAIR_GRID_ANSWER), and questions whose rows the guard refused, stay the grid
+  // the region draws, each cell under an accent rule (pairGrid): a rule sits in the gap above its cell and changes no size.
+  const markPairs = (units: Pending[]): void => {
+    const one = (unit: Pending) => !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets') && unit.payload.numbering === undefined && Array.isArray(unit.value) && unit.value.length === 1 ? record(unit.value[0]) : undefined;
+    if (units.length < 2 || !units.every(unit => { const entry = one(unit); return entry !== undefined && pairEntry(entry) === 'question'; })) return;
+    const short = units.length >= PAIR_GRID_MIN && units.every(unit => { const entry = one(unit)!; return textLength(entry.text) <= PAIR_GRID_QUESTION && textLength(entry.description) <= PAIR_GRID_ANSWER; });
+    if (short || !ruleOn('pair-rows')) { for (const unit of units) pairGrid.add(unit.path); return; }
+    fire('pair-rows');
+    const labels = units.map(unit => one(unit)!.text as ListText);
+    for (const unit of units) pairRowLabels.set(unit.path, labels);
   };
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
@@ -6802,6 +6967,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
       if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
       if (region.sequence && ruleOn('step-badges')) markSteps(region.sequence, units);
+      else if (!region.sequence) markPairs(units);
+    }
+    // LH-134 and LH-133: the slide's lone body block (one block in one region, nothing below the grid). A numbered list of 2 to
+    // NUMERAL_TAKEAWAYS first-level entries outside a `sequence` region (a few takeaways) draws its numbers as display numerals beside ruled
+    // rows; a list of two or more terms with their definitions, most of them one word ("ARR", "Churn"; a glossary, not a list of features
+    // named in two words), draws its terms in the accent.
+    const body = plan.regions.flatMap(region => (contents.get(region.name) ?? []).filter(unit => !headings.has(unit.field)).map(unit => ({ unit, region })));
+    if (body.length === 1 && !binding.belowUnits.length) {
+      const { unit, region } = body[0]!, values: unknown[] = Array.isArray(unit.value) ? unit.value : [];
+      const list = !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets') && !badgeLists.has(unit.path) && !stepFlows.has(unit.path);
+      if (list && !region.sequence && ruleOn('numerals') && unit.payload.numbering !== undefined && values.length >= 2 && values.length <= NUMERAL_TAKEAWAYS && values.every(entry => (record(entry).level ?? 0) === 0)) {
+        badgeLists.add(unit.path); numeralLists.set(unit.path, 'display'); fire('numerals');
+      }
+      if (list && values.length >= 2 && values.every(entry => pairEntry(entry) === 'term') && 2 * values.filter(entry => flatten(record(entry).text).trim().split(/\s+/u).length === 1).length > values.length) termLists.add(unit.path);
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
@@ -6952,6 +7131,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const listGridOf = (region: LayoutRegion, units: Pending[], areaWidth: number, landscape = true): FlowShape | undefined => {
       if (units.length < 2 || direction !== undefined) return undefined;
       if (!units.every(unit => !unit.children && unit.caption === undefined && (unit.field === 'items' || unit.field === 'bullets'))) return undefined;
+      // LH-133: one-question blocks drawn as ruled rows are one column.
+      if (units.every(unit => pairRowLabels.has(unit.path))) return listGridShape(units.length, 1);
       let columns = landscape ? 4 : units.length <= 3 ? 1 : 2;
       while (columns > 1 && (areaWidth - gap * (columns - 1)) / columns < LIST_GRID_COLUMN_EMS * LIST_NOMINAL_SIZE * scale) columns--;
       return listGridShape(units.length, columns);
@@ -7737,18 +7918,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // its text, at the start of its block (the right in a right-to-left deck) or over its middle when the block is centered.
   const stepSequences = (): ComposedSteps[] => {
     const result: ComposedSteps[] = [], lineWidth = 2 * scale;
-    const badgeOf = (path: string, cx: number, cy: number, diameter: number, label: string, fontSize: number, list?: ComposedStepBadge['list']): ComposedStepBadge => ({ path, cx, cy, radius: diameter / 2, label, fontSize, baseline: cy + fontSize * .35, ...(list ? { list } : {}) });
+    const badgeOf = (path: string, cx: number, cy: number, diameter: number, label: string, fontSize: number, list?: ComposedStepBadge['list'], numeral?: LayoutBox): ComposedStepBadge => ({ path, cx, cy, radius: diameter / 2, label, fontSize, baseline: cy + fontSize * .35, ...(list ? { list } : {}), ...(numeral ? { numeral } : {}) });
     const numberOf = (number: ListNumber) => ({ value: number.value, style: number.style, suffix: number.suffix });
     const connector = (badges: ComposedStepBadge[]) => badges.length > 1 ? { connector: { x1: badges[0]!.cx, y1: badges[0]!.cy, x2: badges.at(-1)!.cx, y2: badges.at(-1)!.cy } } : {};
     for (const region of template!.regions) {
-      if (!region.sequence) continue;
+      // LH-134: a region without a sequence draws the numerals of its lone list of takeaways (numeralLists).
       const members = items.filter(item => item.region === region.name && !headings.has(item.field)), drawn: LayoutBox[] = [];
+      if (!region.sequence && !members.some(item => numeralLists.has(item.path))) continue;
       for (const item of members) {
         if (stepFlows.has(item.path)) { const flow = stepFlow(item, region.name, lineWidth); if (flow) { result.push(flow); drawn.push(item.box); } continue; }
         const fits = item.listColumns?.length ? item.listColumns.map(column => column.text) : item.text && 'listEntries' in item.text ? [item.text as ListFit] : [];
         for (const fit of fits) {
-          const badges = fit.listEntries.flatMap(entry => entry.badge ? [badgeOf(entry.textPath ?? item.path, entry.badge.cx, entry.badge.cy, entry.badge.diameter, entry.badge.label, entry.badge.fontSize, entry.marker.number && item.payload.numbering !== undefined ? { path: item.path, index: entry.index, number: numberOf(entry.marker.number) } : undefined)] : []);
-          if (badges.length) result.push({ form: 'column', region: region.name, path: item.path, badges, ...connector(badges), lineWidth });
+          const badges = fit.listEntries.flatMap(entry => entry.badge ? [badgeOf(entry.textPath ?? item.path, entry.badge.cx, entry.badge.cy, entry.badge.diameter, entry.badge.label, entry.badge.fontSize, entry.marker.number && item.payload.numbering !== undefined ? { path: item.path, index: entry.index, number: numberOf(entry.marker.number) } : undefined, entry.badge.numeral)] : []);
+          // LH-134: numerals beside ruled rows are joined by the rows' hairlines, not by a connector.
+          if (badges.length) result.push({ form: 'column', region: region.name, path: item.path, badges, ...(badges.some(badge => badge.numeral) ? {} : connector(badges)), lineWidth });
         }
       }
       const stepped = members.filter(item => stepPaths.has(item.path) && item.text && !item.listColumns);
@@ -7774,7 +7957,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
       // The region's cell holds what it draws.
       const composed = templateRegions.find(entry => entry.name === region.name);
-      const extents = [...result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius }))), ...drawn];
+      const extents = [...result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => badge.numeral ?? ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius }))), ...drawn];
       if (composed && extents.length) {
         const box = composed.box, x = Math.min(box.x, ...extents.map(extent => extent.x)), y = Math.min(box.y, ...extents.map(extent => extent.y));
         composed.box = roundBox({ x, y, width: Math.max(box.x + box.width, ...extents.map(extent => extent.x + extent.width)) - x, height: Math.max(box.y + box.height, ...extents.map(extent => extent.y + extent.height)) - y });
@@ -7823,6 +8006,55 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.box = { x: Math.min(...chips.map(chip => chip.box.x)), y, width: total, height: chipHeight };
     return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
   };
+  // LH-133: the rules of a region's questions (markPairs), added to their lists' rules (ListFit.rules) once every block is placed: a
+  // hairline in the middle of the gap between two ruled rows, across both, and an accent rule over each cell of a grid, half a gap above
+  // its text and never nearer the text above it (a cell of the row above, the headings) than its own.
+  // LH-133: a placed list moved down by `dy` (its box, entries, markers, numerals and rules).
+  const shiftList = (item: ComposedItem, dy: number): void => {
+    if (!dy) return;
+    const fit = item.text as ListFit, down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
+    item.box = down(item.box);
+    item.text = { ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, textBox: down(entry.textBox), ...(entry.descriptionBox ? { descriptionBox: down(entry.descriptionBox) } : {}), marker: down(entry.marker),
+      ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}) })),
+      ...(fit.rules ? { rules: fit.rules.map(down) } : {}) };
+  };
+  const pairRules = (): void => {
+    const listOf = (item: ComposedItem) => item.text && 'listEntries' in item.text && !item.listColumns && (item.text as ListFit).listEntries.length ? item.text as ListFit : undefined;
+    const top = (fit: ListFit) => Math.min(...fit.listEntries.map(entry => Math.min(entry.textBox.y, entry.descriptionBox?.y ?? Infinity)));
+    const bottom = (fit: ListFit) => Math.max(...fit.listEntries.map(entry => Math.max(entry.textBox.y + entry.textBox.height, entry.descriptionBox ? entry.descriptionBox.y + entry.descriptionBox.height : -Infinity)));
+    const add = (item: ComposedItem, fit: ListFit, rule: ListRule) => { item.text = { ...fit, rules: [...(fit.rules ?? []), roundRule(rule)] }; };
+    const roundRule = (rule: ListRule): ListRule => ({ ...rule, x: Math.round(rule.x * 100) / 100, y: Math.round(rule.y * 100) / 100, width: Math.round(rule.width * 100) / 100 });
+    const rowed = items.filter(item => pairRowLabels.has(item.path) && listOf(item)).sort((a, b) => a.box.y - b.box.y);
+    // The rows spread over the body as a lone ruled list does (ListFitOptions.spread): the body (from a gap under the headings above them
+    // to the foot of the content box, whatever LH-48's centering did to their region) is shared evenly between the gaps, each at most
+    // LIST_ROWS_SPREAD em of the rows' size, and what is still left sits above and below them. Their region's cell follows them.
+    const composed = rowed.length > 1 ? templateRegions.find(region => region.name === rowed[0]!.region) : undefined;
+    if (composed && options.fill !== false) {
+      const first = top(listOf(rowed[0]!)!), heads = items.filter(item => headings.has(item.field) && item.box.y + item.box.height <= first + 1e-6);
+      const start = Math.max(contentBox.y, ...heads.map(item => item.box.y + item.box.height + gap)), end = contentBox.y + contentBox.height - scale;
+      const size = Math.min(...rowed.map(item => item.text!.fontSize)), gaps = rowed.slice(1).map((item, index) => top(listOf(item)!) - bottom(listOf(rowed[index]!)!));
+      const natural = bottom(listOf(rowed.at(-1)!)!) - first, extra = Math.max(0, Math.min((end - start - natural) / (rowed.length - 1), LIST_ROWS_SPREAD * size - Math.max(...gaps)));
+      const lead = start + Math.max(0, (end - start - natural - extra * (rowed.length - 1)) / 2) - first;
+      if (natural <= end - start + 1e-6 && (lead > 0 || extra > 0)) {
+        rowed.forEach((item, index) => shiftList(item, lead + extra * index));
+        const y = Math.min(composed.box.y, rowed[0]!.box.y), last = rowed.at(-1)!;
+        composed.box = roundBox({ ...composed.box, y, height: Math.max(composed.box.y + composed.box.height, last.box.y + last.box.height) - y });
+      }
+    }
+    for (let index = 1; index < rowed.length; index++) {
+      const above = rowed[index - 1]!, item = rowed[index]!, fit = listOf(item)!, x = Math.min(above.box.x, item.box.x);
+      add(item, fit, { x, y: (bottom(listOf(above)!) + top(fit)) / 2, width: Math.max(above.box.x + above.box.width, item.box.x + item.box.width) - x });
+    }
+    for (const item of items) {
+      const fit = pairGrid.has(item.path) ? listOf(item) : undefined;
+      if (!fit) continue;
+      const start = top(fit), edges = items.filter(other => other !== item && other.box.x < item.box.x + item.box.width && item.box.x < other.box.x + other.box.width)
+        .map(other => { const own = listOf(other); return own ? bottom(own) : other.box.y + other.box.height; }).filter(edge => edge <= start + 1e-6);
+      const room = edges.length ? (start - Math.max(...edges)) / 2 : gap / 2;
+      add(item, fit, { x: item.box.x, y: start - Math.min(gap / 2, room), width: item.box.width, accent: true });
+    }
+  };
+  if (useTemplate) pairRules();
   const steps = useTemplate ? stepSequences() : [];
   // LH-137: a dark slide whose whole body is one short bulleted list (CHECK_TILE_MIN to CHECK_TILE_MAX entries of one level, no
   // descriptions, each CHECK_TILE_MAX_CHARACTERS or fewer: a summary of decisions or outcomes) draws each entry as a tile of a grid that

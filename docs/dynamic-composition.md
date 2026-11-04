@@ -107,7 +107,9 @@ minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's rea
 a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
 LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
-LH-07's step badges and flows of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)), LH-131's featured card
+LH-133's questions as ruled rows (`pair-rows`, see [Questions and terms](#questions-and-terms-lh-133)), LH-07's step badges and flows
+of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-134's numerals (`numerals`, see
+[Numerals, badges or rows](#numerals-badges-or-rows-lh-134)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)), LH-131's featured card
 of a pair or a set (`featured-card`, see [Emphasis surface](#emphasis-surface-lh-06)), LH-137's delta pill (`delta-pill`) and LH-137's
 check-mark tiles of a dark summary list (`check-tiles`). Those three only draw, so a slide that draws one of them is also composed under the guard without them and keeps the drawing only when no block reads smaller there, nothing more is found and a body role at the readability floor stays at it (the drawing never decides LH-83's recomposition); otherwise each is tried alone on top of the rules that slide kept. LH-39's figure on one line
 (`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
@@ -128,8 +130,8 @@ size is compared at its 76 px role size: what it has above that is headroom an a
 - The slide then settles: a message set in the middle of the slide grows (LH-129), an under-filled body grows (LH-48), a layout may
   be recomposed as the automatic grid (LH-49, LH-83), and an automatic slide may give its picture or chart a track (LH-80, LH-49). Each
   of those arrangements is composed with the rules that read well in it and kept only when it reads as well as the guarded composition.
-- A slide that draws step badges (LH-07) is settled once more without them and keeps them only when every block reads as well, since a
-  badge band changes how much of the body is filled and so whether LH-48 or LH-129 grows it. The automatic scrim of a picture
+- A slide that draws step badges (LH-07) or numerals (LH-134) is settled once more without them and keeps them only when every block
+  reads as well, since a badge band changes how much of the body is filled and so whether LH-48 or LH-129 grows it. The automatic scrim of a picture
   background (LH-02) is computed last, over the slide that is kept, and changes no box or size.
 
 LH-52 and LH-71 only place blocks at the sizes they already have and are not guarded; LH-72's start alignment and sibling quotes of one
@@ -149,10 +151,68 @@ row sharing a size are always applied. The rules meet as follows:
   left out).
 - Charts that LH-49 recomposes share their value axis and plot height (LH-33, LH-93) in the recomposed grid.
 - A list in a `sequence` region keeps LH-07's badges and takes no automatic ruled rows (LH-08); its other lists, and a slide whose
-  badges the guard refused, may still be ruled.
+  badges the guard refused, may still be ruled. An agenda whose entries all have descriptions draws LH-134's numbered rows instead of
+  badges (see [Numerals, badges or rows](#numerals-badges-or-rows-lh-134)).
+- LH-133's questions as ruled rows take the region's blocks out of its grid into one column; six or more short questions keep the grid
+  and only gain their accent rules, which sit in the gaps and change no size.
 - LH-129 grows a cover's or section's title and subtitle but not its tag: the tag is LH-32's eyebrow at its 22 px role size, which is
   also its display size.
 - LH-50's eyebrows apply on slides without layout regions and LH-07's steps only in layout regions, so a step never carries an eyebrow.
+
+## Questions and terms (LH-133)
+
+A question with its answer and a term with its definition are read from the content, never from a slide or layout id: a question is
+an entry (with a description, at the first level) whose text ends with a question mark of its script (`?`, the fullwidth `？`, the
+Arabic `؟`, the reversed `⸮`, before any closing quote or bracket; `questionText`); a term is a short label (`isLabelText`) of at most
+two words (`TERM_WORDS`; `pairEntry`). Claude Design sets an FAQ and a glossary as two-column ruled rows:
+
+- **A list of questions.** A list of two or more first-level questions with answers is drawn as ruled rows (LH-08's rows, under the
+  guarded rule `pair-rows`): each question bold in a column of `LIST_ROWS_LABEL_SHARE` (40%) of the list's width, wrapping in it, its
+  answer beside it with their first baselines aligned. A question that needs more than `LIST_QUESTION_LINES` (3) lines in the column
+  puts every answer under its question instead.
+- **One block per question.** A region whose two or more blocks are each a one-entry list holding a question with its answer (the
+  usual way an FAQ is written) draws them one under another across the region instead of in its grid, each block a ruled row: the
+  questions share one column of 40% of the width and the answers start at one edge, the answer at the list size (as the heading list it
+  would otherwise be), and a hairline in the middle of the gap between two blocks. The import keeps each block (the export names each
+  list, so two stacked lists are never merged into one).
+- **Six or more short questions** (`PAIR_GRID_MIN`; each question at most 48 and each answer at most 90 characters) keep the region's
+  grid (3 × 2 for six), each cell under an accent rule: `LIST_ACCENT_RULE_WIDTH` (3 reference px) in the accent, the tag's color on its
+  backdrop, half a gap over its text and never nearer the text above it than its own. Questions whose rows the guard refused keep the
+  grid with the same rules.
+- **A glossary.** The slide's lone list of two or more terms with definitions, most of them one word ("ARR", "Churn"; a list of
+  features named in two words is not a glossary), draws its terms in the accent (`ListEntryLayout.accent`) in the column of the widest
+  term, its definitions beside them as LH-08's rows.
+
+- **Ruled rows fill the body** (LH-48 for rows). A lone list drawn as ruled rows (LH-08's rows, questions, a glossary, takeaways
+  beside numerals, an agenda's numbered rows) first grows in type-scale steps as any lone list does (toward about 60% of the body, never
+  smaller than before), then takes the whole body: the leftover height is shared evenly between its rows, each gap at most
+  `LIST_ROWS_SPREAD` (3) em, the hairlines in the middle of the gaps and numerals with their rows, and what is still left sits above and
+  below them (`ListFitOptions.spread`). One-question blocks stacked as rows spread over the body the same way, from a gap under the
+  headings to the foot of the content box. Claude Design spreads an agenda's or a FAQ's rows down the slide like this.
+
+Rules and accents are drawing: the preview draws them as SVG lines and text fills, the PPTX export as native lines (`OPF list rule
+<path> N`) and run colors, and the import reads neither as content (a term's accent is the look the export records for its runs). In a
+right-to-left deck the question or term column is at the right and the answers to its left.
+
+## Numerals, badges or rows (LH-134)
+
+A numbered list draws its numbers one way, decided by its region and its content, never by a slide id:
+
+1. **A `steps` region** (a process): LH-07's badges, or a flow of chips.
+2. **A `numbered` region** (an agenda): when every entry of every list of the region has a description, numbered ruled rows: each
+   number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at the row's start, the label
+   bold and the description in a second column (Claude Design's agenda). Otherwise LH-07's badges, for every list of the agenda.
+3. **Elsewhere**, a numbered list that is the slide's lone body block with 2 to `NUMERAL_TAKEAWAYS` (5) first-level entries is a few
+   takeaways: display numerals beside ruled rows, the numeral `LIST_NUMERAL_SCALE` (2.5) times the list size when every takeaway has a
+   supporting line (its digits from the takeaway's capitals to about its line's baseline) and `STEP_BADGE` (1.75) times when one has
+   none, `LIST_NUMERAL_GAP` (1.5 em) before the text.
+4. **Every other numbered list** keeps its native numbers, ruled when LH-08 rules it.
+
+Numerals and badges are drawing, under LH-07's veto: an unnumbered agenda is numbered as drawing only and imports unnumbered, and an
+authored `numbering` comes back from the tag of each numeral or badge (`ComposedStepBadge.list`). Both are guarded (`step-badges`,
+`numerals`), and a slide keeps them only when every block reads as well as without them; a list beside numerals grows (LH-48) as the
+plain list would, as long as it fits with them. A numeral is `ComposedStepBadge.numeral`, its line box: the preview draws its label
+centered on its column in the tag's color, the PPTX export a text box at that box holding the numeral (no ellipse).
 
 ## Metrics beside other blocks
 

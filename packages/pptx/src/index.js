@@ -62,7 +62,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, groupsAxisTicks, GROUPED_LABEL_CODE, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -1640,12 +1640,15 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
 
 // Adjacent native bullet boxes on the same text column form one imported list.
 // This is a geometry heuristic, not a lossless reconstruction of arbitrary PPTX.
+// LH-133: two lists the export named (`OPF list <path> line N`, merged by mergeOpfListShapes) are the lists their names say, so they
+// stay apart however close they sit (one-question blocks of a FAQ stacked as ruled rows).
 function mergeAdjacentBulletShapes(items) {
   const result=[];
+  const named=value=>/^OPF list (.+) line \d+$/.test(value?.name??'');
   for(const item of items){
     const previous=result.at(-1);
     const bullets=value=>value?.kind==='text'&&value.paragraphs.length&&value.paragraphs.every(p=>p.bullet);
-    if(bullets(previous)&&bullets(item)&&previous.bounds&&item.bounds
+    if(bullets(previous)&&bullets(item)&&!(named(previous)&&named(item))&&previous.bounds&&item.bounds
       &&Math.abs(previous.bounds.x-item.bounds.x)<.05
       &&item.bounds.y>=previous.bounds.y+previous.bounds.h-.02
       &&item.bounds.y-(previous.bounds.y+previous.bounds.h)<.3){
@@ -2218,6 +2221,11 @@ function eyebrowColor(context) {
   if (contrastRatio(context.colors.accent, backdrop) < TAG_MIN_CONTRAST) return context.textColor;
   return nativeColor('primary', context.colors.accent, context);
 }
+// LH-133: the literal of eyebrowColor (a glossary's term, an accent rule), for the run look import compares with and for line shapes.
+function eyebrowHex(context) {
+  const backdrop = context.cardFill ? normalizeHex(context.cardFill) : context.colors.background;
+  return contrastRatio(context.colors.accent, backdrop) < TAG_MIN_CONTRAST ? context.colors.text : context.colors.accent;
+}
 const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
 // A link run with no color of its own is written in the theme hyperlink color (a:schemeClr hlink where the deck theme
@@ -2469,7 +2477,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
-  addSteps(slide, geometry.steps, slideContext, context.stepTags, geometry.direction === 'rtl');
+  addSteps(slide, geometry.steps, {...slideContext, stepNumeral: tagColor(slideContext)}, context.stepTags, geometry.direction === 'rtl');
   // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
   addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
@@ -2720,7 +2728,8 @@ function addTextPayload(slide, value, region, context, path) {
 function listRunLook(fit,style,context){
   // LH-08: the label of a ruled row with a description is written bold, as a heading list's entry is.
   const entryStyle=(entry,kind)=>kind==='text'&&(entry.heading||entry.text.richLines.some(line=>line.fragments.some(fragment=>fragment.run?.bold===undefined&&fragment.style.fontWeight!==style.fontWeight)))?entry.text.richLines.flatMap(line=>line.fragments).find(fragment=>fragment.run?.bold===undefined)?.style??{...style,fontWeight:700}:style;
-  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?context.colors.text:context.colors.mutedText))));
+  // LH-133: a glossary's term is written in the accent (eyebrowHex), so that is its look.
+  const looks=kind=>new Set(fit.listEntries.filter(entry=>entry[kind]).map(entry=>JSON.stringify(richBase(entry[kind],entryStyle(entry,kind),kind==='text'?entry.accent?eyebrowHex(context):context.colors.text:context.colors.mutedText))));
   const text=looks('text'),description=looks('description');
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
@@ -2788,15 +2797,19 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         slide.addText(runs,{...textBoxOptions(region,context,text.fontSize*.75),fontFace:nativeFontOptions(entry.marker.style).fontFace,objectName,align:lineAlign,fit:'none',wrap:false,lineSpacingMultiple:1,...paragraph});
       });
     };
-    addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
+    // LH-133: a glossary's term (entry.accent) is written in the tag's color on its backdrop, as the preview draws it.
+    if(entry.accent)addLines(entry.text,entry.textBox,eyebrowHex(context),eyebrowColor(context),true);
+    else addLines(entry.text,entry.textBox,context.colors.text,context.textColor,true);
     if(entry.description)addLines(entry.description,entry.descriptionBox,context.colors.mutedText,context.mutedColor,false);
   }
   // LH-08: a list drawn as ruled rows (design.listStyle: rows): core's hairlines between its rows as native lines, LIST_RULE_WIDTH thick in
   // the scheme's border neutral, as the preview draws them. The export draws them again from the list, so import reads them as no content.
+  // LH-133: an accent rule (over a cell of a grid of questions) is LIST_ACCENT_RULE_WIDTH thick in the tag's color on its backdrop.
   if(fit.rules?.length){
     const scale=Math.min(context.dimensions.widthInches,context.dimensions.heightInches)*96/720,color=normalizeHex(context.roles?.neutrals?.border?.hex??`#${context.colors.border}`);
-    // LH-136: the accent rule over a display heading is a native line of core's thickness, in the tag's color.
-    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color:rule.accent?pptxColor(tagColor(context)):color,width:(rule.thickness??LIST_RULE_WIDTH*scale)*.75},objectName:`OPF list rule ${path} ${index}`}));
+    // LH-136: the accent rule over a display heading is a native line of core's thickness; LH-133's accent rules over question cells are
+    // LIST_ACCENT_RULE_WIDTH thick. Both are in the tag's color on their backdrop.
+    fit.rules.forEach((rule,index)=>slide.addShape('line',{x:rule.x/96,y:rule.y/96,w:rule.width/96,h:0,line:{color:rule.accent?normalizeHex(eyebrowHex(context)):color,width:(rule.thickness??(rule.accent?LIST_ACCENT_RULE_WIDTH:LIST_RULE_WIDTH)*scale)*.75},objectName:`OPF list rule ${path} ${index}`}));
   }
 }
 

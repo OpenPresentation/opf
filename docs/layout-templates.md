@@ -445,12 +445,19 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
 - **A flow** (`steps`): a lone list of 3 to 6 entries of one or two words (24 characters at most), without descriptions, is a row of
   chips (cards) joined by accent block arrows in reading order. The chips share the region's width when the widest entry fits each,
   else each hugs its entry; each entry is a list column centered in its chip.
+- **Numbered rows** (`numbered`, LH-134): an agenda whose every entry, in every list of the region, has a description draws as ruled
+  rows instead of badges: each number a numeral at the list size, bold in the accent and in two digits under 10 ("01"), in a column at
+  the row's start (the right in a right-to-left list), the label bold and the description in a second column beside it when the labels
+  fit 40% of the width, a hairline between two rows and no connector. One entry without a description keeps every list of the agenda
+  beside badges, so an agenda is drawn one way. The numbers stay drawing, as the badges' are.
 
-Steps keep their text size: the badges are a guarded rule (`step-badges`), so a slide whose blocks would get smaller under them draws
-as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list grows (LH-48) as the plain list
-would, as long as it fits with its badges. The preview draws the badges, connector, chips and arrows from `steps`, and the PPTX export
-writes them as native shapes (an ellipse holding its numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets),
-tagged so that import consumes them and gives a list its numbering back.
+Steps keep their text size: the badges are a guarded rule (`step-badges`, and `numerals` for numbered rows), so a slide whose blocks
+would get smaller under them draws as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list
+grows (LH-48) as the plain list would, as long as it fits with its badges (or numerals). The preview draws the badges, numerals,
+connector, chips and arrows from `steps`, and the PPTX export writes them as native shapes (an ellipse holding its numeral, a text box
+holding a numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets), tagged so that import consumes them and gives a
+list its numbering back. Which of numerals, badges and plain rows a list takes is one rule, written down in
+[Dynamic composition](dynamic-composition.md#numerals-badges-or-rows-lh-134).
 
 ### A body that fills too little (LH-48)
 
