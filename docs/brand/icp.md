@@ -6,6 +6,10 @@ implementers and adopters of an open format, not buyers of a product: nobody pay
 [`brand-story.md`](brand-story.md). Nothing here is measured yet; validate it with issues,
 discussions, npm data and interviews with people who have shipped OPF support.
 
+**Own the stack, or have it done (STORYD D-62g).** openpresentation.org is for people who want to
+own their stack: an open format, MIT packages, self-hosted, no account or hosted service required.
+People who want it done (hosted, pay per call) go to pptx.dev, which builds on the same format.
+
 Each ICP names the role and the moment, the job, what goes wrong today, how they want to work and
 what makes them adopt.
 
@@ -60,10 +64,12 @@ what makes them adopt.
 
 ## What these ICPs ask of the project
 
-Gaps the ICPs expose, for the roadmap (not promises):
+Gaps the ICPs expose, for the roadmap (not promises, except where marked decided):
 
-1. A conformance suite and a way to state conformance (ICP 2, ICP 3).
-2. A written governance document and a public decision log for spec changes (ICP 3).
+1. A conformance suite and a way to state conformance (ICP 2, ICP 3). Decided: build it (STORYD
+   D-74).
+2. A written governance document and a public decision log for spec changes (ICP 3). Decided:
+   write it, with a `/governance` page on the site (STORYD D-74).
 3. Versioned spec and schema pages at stable URLs (`/spec/{version}`; frozen schemas exist at
    `/schema/<name>/<version>` on the site) (ICP 2, ICP 3).
 4. An implementations list with neutral entries (all three).
