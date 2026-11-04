@@ -66,4 +66,22 @@ let checks = 0;
   checks += 2;
 }
 
+// 5. LH-115: a stacked bar chart beside a table of the same keys keeps its bars on the table's rows: no names row and no pinned plot, the header
+//    legend stays, and the segment values that fit are printed.
+{
+  const svg = toSvg(deck({ title: 'Energy use by building type', blocks: [
+    { chart: { type: 'stacked-bar', data: { columns: ['Building type', 'Electricity', 'Gas'], rows: [['Office', 12, 6], ['Lab', 30, 12], ['Warehouse', 7, 4], ['Retail', 16, 9]] } } },
+    { table: { columns: ['Building', 'Floor area (sq ft)', 'Annual use (GWh)'], rows: [['Office', '320,000', '5.8'], ['Lab', '90,000', '3.8'], ['Warehouse', '410,000', '4.5'], ['Retail', '180,000', '4.5']] } }] }), 1, { trace: true });
+  const entries = texts(svg);
+  const middle = (entry) => Number(entry.y);
+  const chartLabel = (name) => entries.find((entry) => entry.body === name && /^slides\.0\.(?:blocks\.0\.)?chart/.test(entry['data-opf-path'] ?? ''));
+  const tableCell = (name) => entries.find((entry) => entry.body === name && /table/.test(entry['data-opf-path'] ?? ''));
+  for (const name of ['Office', 'Lab', 'Warehouse', 'Retail']) assert.ok(Math.abs(middle(chartLabel(name)) - middle(tableCell(name))) < 4, `${name}: the bar stands on its table row`);
+  const swatches = tags(svg, 'rect').filter((rect) => /chart\.data\.columns\.(?:\d)$/.test(rect['data-opf-path'] ?? '') && Number(rect.width) < 20);
+  const plotTop = Math.min(...tags(svg, 'rect').filter((rect) => /chart\.data\.rows\.0\.1$/.test(rect['data-opf-path'] ?? '')).map((rect) => Number(rect.y)));
+  assert.ok(swatches.length === 2 && swatches.every((rect) => Number(rect.y) < plotTop - 20), `the legend swatches are the header legend, not names over the first bar (${JSON.stringify(swatches.map((rect) => [rect.x, rect.y, rect.width]))}, bars from ${plotTop})`);
+  assert.ok(entries.some((entry) => entry.body === '12') && entries.some((entry) => entry.body === '30'), 'the values that fit are printed');
+  checks += 4;
+}
+
 console.log(`LH-125 preview passed: ${checks} checks (stacked bars, edge-to-edge area, doughnut hole, waterfall connectors).`);

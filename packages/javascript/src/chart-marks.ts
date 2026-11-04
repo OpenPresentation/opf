@@ -22,6 +22,7 @@
 import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
+import type {ChartLayerRows} from './chart-rows.js';
 import {valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
@@ -265,6 +266,11 @@ export interface ChartLayerStack {
   edge?: boolean;
   /** LH-125: the values at the first and last points of an edge-to-edge area, which fit inside the band beside the plot's edge. */
   ends?: ChartStackEnd[];
+  /**
+   * LH-125: on a horizontal bar chart that names its series above the plot, the header (caption and legend) the chart keeps when its bars
+   * align to a table's rows instead (LH-115, `restackForRows`): that plot is the table's, so no names row stands above it.
+   */
+  legend?: ChartLayerHeader;
 }
 
 /** True for a stacked column, bar or area chart of two to six series without `dataLabels` or `legend`. */
@@ -399,7 +405,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * out (opf-render charts.js): the category gutter at the start (its widest label, at most 30% of the chart, 40% for a word that does not
  * break), the plot ending a text size before the chart's padding, the value tick labels under it (a formatted axis keeps its end labels
  * inside the chart); below the header row. With `namesRow` a row of one text line for the series names (`placeBarNames`) lies between the
- * header and the plot, which then starts under it. The preview draws its plot here and the PPTX export pins it (the plot area's inner layout).
+ * header and the plot, which then starts under it; a side legend takes its width off the plot's end. The preview draws its plot here and the PPTX export pins it (the plot area's inner layout).
  */
 function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
   if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
@@ -408,7 +414,9 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const categories = data.rows.map(row => label(row[0]));
   const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
   const gutter = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
-  let x = box.x + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - x - fontPx);
+  // A chart whose legend is neither in the header nor replaced by names keeps the side legend (up to 45% of the chart), which the plot leaves room for.
+  const side = namesRow || header?.legend ? 0 : Math.min(box.width * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
+  let x = box.x + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (format !== undefined && !typeOf(chart).startsWith('100pct')) {
     const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
@@ -474,7 +482,7 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
       const base: ChartLayer = {...rest, ...(head ? {header: head} : {}), plot};
       const entries = withNames ? placeBarNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, focus) : undefined;
       if (withNames && !entries) continue;
-      result = {layer: {...base, stack: {values: [], ...(entries ? {names: {gutter: 0, swatch, entries, above: true}} : {})}}, valueAxis};
+      result = {layer: {...base, stack: {values: [], ...(entries ? {names: {gutter: 0, swatch, entries, above: true}, ...(layer?.header ? {legend: layer.header} : {})} : {})}}, valueAxis};
       break;
     }
   } else {
@@ -501,6 +509,21 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
   if (!marks) return undefined;
   result.layer.stack = {...result.layer.stack!, values: marks.values, ...(marks.ends.length ? {ends: marks.ends} : {})};
   return result;
+}
+
+/**
+ * LH-125 with LH-115: a horizontal stacked bar chart beside a table of the same keys draws its bars on the table's rows (`rows`), so the plot
+ * is the table's and not the one `chartStack` pinned: the pinned plot and the names row go, the header keeps its legend (`stack.legend`,
+ * else the header it had), and the values that fit their segments are decided again against the aligned plot (the rows' span and the
+ * gutter and value labels the preview leaves). Any other layer is returned with its `rows`.
+ */
+export function restackForRows(chart: unknown, data: ResolvedChartData, layer: ChartLayer, rows: ChartLayerRows, box: Box, axis: ChartValueAxis | undefined, geometry: Omit<ChartPlotGeometry, 'box'>): ChartLayer {
+  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) return {...layer, rows};
+  const {plot: _plot, header: _header, stack, ...rest} = layer;
+  const header = stack.legend ?? layer.header;
+  const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};
+  const marks = plot.width > 1 && plot.height > 1 ? stackMarks(chart, data, axis, plot, {...geometry, box}) : undefined;
+  return {...rest, ...(header ? {header} : {}), rows, stack: {values: marks?.values ?? stack.values.map(row => row.map(() => false))}};
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
