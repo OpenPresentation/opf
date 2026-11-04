@@ -181,11 +181,10 @@ test('a flowed image is body and keeps the content origin; a placed image is not
 });
 test('content and region slides keep the pre-centering geometry', () => {
   const padding = 0.08 * 720;
-  // LH-147: a short body centered by LH-48 takes its headings with it; the cover rule's geometry is checked at the role sizes, in place.
-  const content = composeSlide({title: 'Content', text: 'Body'}, {layout: text1x, fill: false});
+  const content = composeSlide({title: 'Content', text: 'Body'}, {layout: text1x});
   assert.ok(Math.abs(byField(content, 'title').box.y - padding) < 1e-6);
   assert.ok(byField(content, 'text').box.y >= byField(content, 'title').box.y + byField(content, 'title').box.height, 'body follows the title');
-  const blocks = composeSlide({title: 'Blocks', blocks: [{text: 'A'}, {text: 'B'}]}, {fill: false});
+  const blocks = composeSlide({title: 'Blocks', blocks: [{text: 'A'}, {text: 'B'}]});
   assert.ok(Math.abs(byField(blocks, 'title').box.y - padding) < 1e-6);
   const regions = composeSlide({title: 'Promoted', left: {text: 'A'}, right: {text: 'B'}});
   assert.ok(Math.abs(byField(regions, 'title').box.y - padding) < 1e-6);
@@ -220,9 +219,9 @@ test('empty body payloads are not body: such title slides center too', () => {
   // Promoted regions retain their separate geometry and never consume a template.
   const promoted = {title: 'Regions', left: {text: 'x'}, right: {text: 'y'}};
   assert.deepEqual(composeSlide(promoted, {layout: titleSubtitle}).items.map(item=>item.box),composeSlide(promoted).items.map(item=>item.box));
-  // Real automatic body payloads keep the heading origin (at the role sizes: LH-147 groups the headings with a short centered body).
+  // Real automatic body payloads keep the heading origin.
   for (const payload of [{blocks: [{text: 'x'}]}, {text: 'x'}, {items: ['x']}, {image: photo}]) {
-    const result = composeSlide({title: 'Real payload', ...payload}, {fill: false});
+    const result = composeSlide({title: 'Real payload', ...payload});
     assert.ok(Math.abs(byField(result, 'title').box.y - 0.08 * 720) < 1e-6);
   }
 });

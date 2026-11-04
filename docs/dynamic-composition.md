@@ -152,8 +152,6 @@ row sharing a size are always applied. The rules meet as follows:
   also its display size.
 - LH-50's eyebrows apply on slides without layout regions and LH-07's steps only in layout regions, so a step never carries an eyebrow.
   LH-152's root label before a list stays a block on a layout with a `sequence` region for the same reason.
-- LH-147 runs last, on the settled slide (after LH-07's choice with or without badges): it moves only the headings, so it never changes a
-  size the guard compares, and the picture scrim (LH-02) is computed over the moved headings.
 
 ## Metrics beside other blocks
 

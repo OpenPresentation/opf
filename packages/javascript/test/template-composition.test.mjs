@@ -118,8 +118,7 @@ describe('empty regions and headings', () => {
   });
 
   test('content layouts keep the title at the top of an auto row', () => {
-    // At the role sizes: LH-147 groups the title with a short body that LH-48 centers.
-    const result = compose({ title: 'Title', blocks: short(2) }, layouts.text, { fill: false });
+    const result = compose({ title: 'Title', blocks: short(2) }, layouts.text);
     assert.ok(near(result.items[0].box.y, result.contentBox.y));
   });
 
@@ -138,8 +137,7 @@ describe('empty regions and headings', () => {
 
   test('a template without a title area gets an implicit auto row on top', () => {
     const record = { name: 'x', regions: [{ name: 'body', accepts: ['text'] }] };
-    // At the role sizes: LH-147 moves the title of a short centered body down to it, and the region stays the layout's cell.
-    const result = compose({ title: 'Heading', blocks: [text('a')] }, record, { fill: false });
+    const result = compose({ title: 'Heading', blocks: [text('a')] }, record);
     assert.deepEqual(result.headingAreas.map((area) => [area.name, area.implicit]), [['title', true]]);
     assert.ok(region(result, 'body').box.y > result.items[0].box.y + result.items[0].box.height);
   });

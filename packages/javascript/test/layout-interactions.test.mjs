@@ -188,8 +188,7 @@ test('LH-48 with LH-43 and LH-64: an under-filled row of cards grows at one size
     assert.equal(new Set(sizes).size, 1, `${direction}: one size (LH-43)`);
     assert.ok(sizes[0] > kept.items.find((item) => item.frameBox).text.fontSize, `${direction}: grown`);
     assert.equal(new Set(cards.map((item) => item.frameBox.height)).size, 1, `${direction}: one card height (LH-64)`);
-    // LH-147: the headings of a body centered far below them join it; the body is centered in the space under the headings as placed at the role sizes.
-    const title = kept.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
+    const title = result.items.find((item) => item.field === 'title').box, end = result.contentBox.y + result.contentBox.height;
     const card = cards[0].frameBox, above = card.y - (title.y + title.height), below = end - (card.y + card.height);
     assert.ok(Math.abs(above - below) < 30, `${direction}: centered (${above} above, ${below} below)`);
   }
@@ -347,8 +346,7 @@ test('LH-10 with LH-48: a paragraph a layout region sets at the reading measure 
 
 test('LH-102 with LH-48: a layout\'s lone block is centered once (fillLone), and a centered body keeps every size', () => {
   const lone = composeSlide({ title: 'Next steps', items: ['Agree on the owner.', 'Confirm the cadence.', 'Return with a readout.'] }, { layout: layouts.list });
-  // LH-147: the headings of a body centered far below them join it; the body is centered in the space under the headings as placed at the role sizes.
-  const list = lone.items.find((item) => item.field === 'items'), title = composeSlide({ title: 'Next steps', items: ['Agree on the owner.', 'Confirm the cadence.', 'Return with a readout.'] }, { layout: layouts.list, fill: false }).items.find((item) => item.field === 'title');
+  const list = lone.items.find((item) => item.field === 'items'), title = lone.items.find((item) => item.field === 'title');
   const above = list.box.y - (title.box.y + title.box.height), below = lone.contentBox.y + lone.contentBox.height - (list.box.y + list.box.height);
   assert.ok(Math.abs(above - below) < 40, `${above} above, ${below} below`);
   for (const count of [3, 5]) {

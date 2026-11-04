@@ -3760,17 +3760,16 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * where it would wrap (`metric-figure`), LH-50's label as the eyebrow of the paragraph after it (`eyebrow`, with LH-152's label of a
  * list or group), and LH-08's ruled rows for
  * a list of short labels with descriptions (`list-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`),
- * whose badges take height the steps' text might need, and LH-147's headings that join a centered body far below them
- * (`heading-group`, applied by composeSlide to the settled slide, groupHeadings). LH-80 and LH-49's tracks are
+ * whose badges take height the steps' text might need. LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges' | 'heading-group';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges', 'heading-group'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
 const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
@@ -3781,7 +3780,7 @@ const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRul
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
  * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
  */
-const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'heading-group']);
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
 /** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
 const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
@@ -3859,61 +3858,13 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
   const result = settle(input, options, guardedCompose(input, options));
-  if (!result.steps) return withPictureScrim(input, options, groupHeadings(result));
+  if (!result.steps) return withPictureScrim(input, options, result);
   // LH-07: step badges are drawing and never worth a size. Their band changes how much of the body a slide fills, and so whether LH-48
   // grows it, so the guard alone, which holds each arrangement to the slide's own composition, cannot see a block that the whole slide
   // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
   const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
   const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
-  return withPictureScrim(input, options, groupHeadings(readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain));
-}
-/** LH-147: compositions whose body sits in the middle of the space under the headings by LH-48 or LH-102 (not a layout's own anchor). */
-const BODY_CENTERED = new WeakSet<SlideComposition>();
-/**
- * LH-147: the space, in reference pixels at 720, between the headings' last line and a centered body above which the headings join the
- * body (groupHeadings). Measured with the engines' text measurement on the 123 centered slides of the corpora: a body more than 160 px
- * under its headings is one short block (a paragraph of up to four lines, three or four short entries, a code snippet, a short table
- * and its note) and floats; the PR767 audit rejected 160 and 191 px (P01, P02). Bodies of 120 to 160 px are two or more blocks or
- * several rows that already reach toward the headings, and keep LH-48's placement, as Claude Design keeps its title at the top.
- */
-const HEADING_GROUP_SPACE = 160;
-/**
- * LH-147: a body that LH-48 or LH-102 set in the middle of the space under the headings, more than HEADING_GROUP_SPACE below their last
- * line, takes its headings with it: the title, subtitle and tag move down to one gap above the body, so headings and body are one group
- * in the middle of the slide (the PR767 audit's P01, P02 and P34) instead of a body floating far under a title left at the top margin.
- * Only the headings move, by the space the centering left above the body less a gap; the centering put as much space under the body,
- * so the group sits in the middle. Sizes never change, and a body beside the headings (a picture track, a side title), a stacked record
- * (statement, quote, closing), a slide whose headings are its message and a body with a pull line keep their place.
- */
-function groupHeadings(result: SlideComposition): SlideComposition {
-  if (!BODY_CENTERED.has(result)) return result;
-  const heads = result.items.filter(item => headings.has(item.field)), body = result.items.filter(item => !headings.has(item.field));
-  if (!body.length || !heads.some(item => item.field === 'title' || item.field === 'subtitle')) return result;
-  const scale = Math.min(result.width, result.height) / 720, gap = (result.composition.gap ?? 1 / 30) * Math.min(result.width, result.height);
-  // What is drawn: a text's lines (a box can be taller than its lines), a card's edge, the parts of a quote, code panel, metric or timeline.
-  const linesOf = (item: ComposedItem) => item.text && !('richLines' in item.text) ? (item.text as TextFit).placement?.lines : undefined;
-  const lastLine = (item: ComposedItem): number => { const lines = linesOf(item); return lines?.length ? Math.max(...lines.map(line => line.y + line.height)) : item.box.y + item.box.height; };
-  const drawnTop = (item: ComposedItem): number => {
-    if (item.frameBox) return Math.min(item.frameBox.y, item.box.y);
-    const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout, lines = linesOf(item);
-    const parts = internal ? (internal.parts as readonly { box: LayoutBox; visible?: boolean }[]).filter(part => part.visible !== false) : [];
-    if (parts.length) return Math.min(...parts.map(part => part.box.y));
-    return lines?.length ? Math.min(...lines.map(line => line.y)) : item.box.y;
-  };
-  // LH-07's badges, connectors and chips and LH-06's surface are drawn with the body too.
-  const drawings = [...(result.steps ?? []).flatMap(steps => [...steps.badges.map(badge => badge.cy - badge.radius), ...(steps.connector ? [Math.min(steps.connector.y1, steps.connector.y2)] : []), ...(steps.chips ?? []).map(chip => chip.box.y), ...(steps.arrows ?? []).map(arrow => arrow.box.y)]), ...(result.emphasis ? [result.emphasis.box.y] : [])];
-  const headBottom = Math.max(...heads.map(lastLine)), bodyTop = Math.min(...body.map(drawnTop), ...drawings);
-  const space = bodyTop - headBottom;
-  if (space <= HEADING_GROUP_SPACE * scale || heads.some(item => item.box.y >= bodyTop)) return result;
-  const dy = space - gap, moved = (box: LayoutBox): LayoutBox => ({ ...box, y: round(box.y + dy) });
-  const items = result.items.map(item => headings.has(item.field) ? { ...item, box: moved(item.box), ...(item.text ? { text: translateTextFit(item.text, dy) } : {}) } : item);
-  // A template's heading areas move with their headings, so every heading stays in its area; the regions stay the layout's cells, the
-  // body in the middle of them (the headings now sit in the top of the body's cell). PowerPoint's layout placeholders are composed apart
-  // (composeLayoutAreas), from the empty layout.
-  const headingAreas = result.headingAreas?.map(area => area.collapsed ? area : { ...area, box: moved(area.box), ...(area.parts ? { parts: { title: moved(area.parts.title), subtitle: moved(area.parts.subtitle) } } : {}) });
-  const grouped: SlideComposition = { ...result, items, ...(headingAreas ? { headingAreas } : {}) };
-  for (const set of [AT_REQUEST, LEAD_STACKS, REGION_MEASURED, HEADING_MESSAGES, HEADINGS_OFF_SCALE]) if (set.has(result)) set.add(grouped);
-  return grouped;
+  return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
 }
 /**
  * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
@@ -5095,9 +5046,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-48: the growth a lone block was given (placeNode), read by every measure of it so its needs and its layout agree.
   const growthOf = new WeakMap<Pending, number>(), proseGrowth = new WeakMap<Pending, number>();
   let loneGrowth = false;
-  // LH-147: whether the body was set in the middle of the space under the headings (LH-48's lone block or CENTER, LH-102), not by an
-  // anchor of the layout.
-  let bodyCentered = (options as Record<symbol, unknown>)[CENTER] === true;
   const grownOptions = (node: Pending): { growth?: number } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth } : {}; };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
@@ -6124,7 +6072,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
     height = Math.min(cell.height, height);
     // LH-114: with a pull line the block and the pull line are one stack at the top of the body (pullStack).
-    if (!pullItem) bodyCentered = true;
     return { ...cell, y: pullItem ? cell.y : cell.y + (cell.height - height) / 2, height };
   };
   // LH-58: a pair is one cell of its two blocks, half a gap apart: side by side when each half is at least PAIR_ROW_RATIO of the
@@ -7482,7 +7429,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);
   if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
-  if (bodyCentered && ruleOn('heading-group') && template?.stack === undefined && !headingMessage && !pullItem) BODY_CENTERED.add(composed);
   return composed;
 }
 

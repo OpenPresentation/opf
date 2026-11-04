@@ -50,12 +50,7 @@ for (const options of [{}, {fonts}]) {
       near((first + last) / 2, (top + bottom) / 2, `slide ${index} native group center`, 6);
       assert.ok(first > top + 40, `slide ${index}: the cover is not stuck at the top`);
       cover++;
-    } else {
-      // A content title keeps the top origin, or (LH-147) sits one gap above a short body that LH-48 centered.
-      const body = bound.geometry.items.find(item => item.field === 'text'), last = headings.at(-1).box;
-      if (Math.abs(body.box.y - (last.y + last.height) - gap) > 1) near(headings[0].box.y, top, 'content title keeps the top origin', .01);
-      else assert.ok(headings[0].box.y > top + gap, 'a grouped title left the top margin with its body');
-    }
+    } else near(headings[0].box.y, top, 'content title keeps the top origin', .01);
     // Title and subtitle share x and width, so a shared left edge survives centering.
     if (headings.length > 1) for (const item of headings) { near(item.box.x, headings[0].box.x, `${item.path} x`); near(item.box.width, headings[0].box.width, `${item.path} width`); }
   }

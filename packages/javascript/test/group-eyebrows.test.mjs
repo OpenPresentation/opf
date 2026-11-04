@@ -3,46 +3,13 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
 
-// LH-147 (a centered body far below its headings takes them with it), LH-62 (the quote layout keeps its whole-group stack) and LH-152
-// (a short label before a list or a group is its eyebrow).
+// LH-152 (a short label before a list or a group is its eyebrow) and LH-62 (decided: the quote layout keeps its whole-group stack).
 const { layouts } = gallery;
 const item = (result, field) => result.items.find((entry) => entry.field === field);
-const body = (result) => result.items.filter((entry) => !['title', 'subtitle', 'tag'].includes(entry.field));
 const findings = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow' || entry.code === 'small-cell');
 const gap = 720 / 30;
-const LONE = { title: 'Remove the handoff that slows every review', text: 'Give one owner responsibility from intake through decision. A shared queue makes exceptions visible and keeps routine work moving.' };
 
-test('LH-147: a short centered body far under its title takes the title with it, one gap above, the group in the middle', () => {
-  for (const direction of ['ltr', 'rtl']) {
-    const result = composeSlide(LONE, { direction }), placed = composeSlide(LONE, { direction, fill: false });
-    const title = item(result, 'title').box, text = item(result, 'text');
-    assert.ok(title.y > item(placed, 'title').box.y + 100, `${direction}: the title left the top margin`);
-    assert.ok(Math.abs(text.box.y - (title.y + title.height) - gap) < 1e-6, `${direction}: one gap from title to body`);
-    const top = item(placed, 'title').box.y, end = result.contentBox.y + result.contentBox.height, bottom = text.box.y + text.box.height;
-    assert.ok(Math.abs((title.y - top) - (end - bottom)) < gap, `${direction}: as much space above the group as below it`);
-    // Only the title moved: the body keeps LH-48's growth and place.
-    assert.ok(text.text.fontSize > item(placed, 'text').text.fontSize, `${direction}: the body still grows`);
-    assert.equal(item(result, 'title').text.fontSize, item(placed, 'title').text.fontSize);
-    assert.deepEqual(findings(result), []);
-  }
-});
-
-test('LH-147: a body that reaches toward its headings keeps them at the top margin', () => {
-  // Three short paragraphs under a title and subtitle (PR767 P01): LH-48 grows and centers them less than HEADING_GROUP_SPACE below.
-  const slide = { title: 'Learn before scaling', subtitle: 'Illustrative example', blocks: [
-    { text: 'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.' },
-    { text: 'Keep the scope narrow, collect feedback weekly and give each decision a named owner.' },
-    { text: 'Compare the results with the baseline. Expand only when the evidence supports the next step.' }] };
-  const result = composeSlide(slide, { layout: layouts.text }), placed = composeSlide(slide, { layout: layouts.text, fill: false });
-  assert.deepEqual(item(result, 'title').box, item(placed, 'title').box);
-  assert.deepEqual(item(result, 'subtitle').box, item(placed, 'subtitle').box);
-  assert.ok(Math.min(...body(result).map((entry) => entry.box.y)) > Math.min(...body(placed).map((entry) => entry.box.y)), 'the body is centered (LH-48)');
-  // A full body never moved: its title stays where it is.
-  const full = { title: 'Use the same checkpoints', blocks: Array.from({ length: 9 }, (_, index) => ({ text: `Checkpoint ${index + 1}: what must be approved, by whom and when?` })) };
-  assert.deepEqual(item(composeSlide(full), 'title').box, item(composeSlide(full, { fill: false }), 'title').box);
-});
-
-test('LH-147 with LH-62: a stacked record (quote) keeps its own whole-group stack, unchanged', () => {
+test('LH-62: a stacked record (quote) keeps its own whole-group stack, unchanged', () => {
   const slide = { title: 'Why Brightwater Foods switched', blocks: [{ quote: { text: 'We cut stockouts by a third in the first quarter.', attribution: 'Priya Raman' } }] };
   const result = composeSlide(slide, { layout: layouts.quote });
   const title = item(result, 'title').box, quote = item(result, 'quote');

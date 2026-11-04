@@ -12,7 +12,7 @@ const OLD = {
   quote: { id: 'quote', direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'quotes', accepts: ['quote', 'group'], role: 'primary', flow: 'grid' }] },
   comparison: { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }, { name: 'second', accepts: ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'], role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] },
 };
-const compose = (layout, slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, layout: typeof layout === 'string' ? gallery.layouts[layout] : layout, ...options });
+const compose = (layout, slide) => composeSlide(slide, { width: 1280, height: 720, layout: typeof layout === 'string' ? gallery.layouts[layout] : layout });
 const field = (result, name) => result.items.find((item) => item.field === name);
 const bottomOf = (item) => item.box.y + item.box.height;
 const spanOf = (result) => ({ top: Math.min(...result.items.map((item) => item.box.y)), bottom: Math.max(...result.items.map(bottomOf)) });
@@ -36,8 +36,8 @@ test('closing and statement place the support within one gap of the heading grou
     assert.ok(gapBelow > 0 && gapBelow <= GAP + 1, `${id}: support ${gapBelow}px below the subtitle`);
     assert.ok(Math.abs(centred(result)) < 3, `${id}: equal space above and below the group`);
     assert.equal(result.diagnostics.length, 0, id);
-    // Before, the support sat far below the title (at the role sizes: LH-147 now also groups the 0.26.10 record's short support).
-    const before = compose(OLD[id], { title: 'Agree the pilot team', subtitle: SUB, ...support }, { fill: false });
+    // Before, the support sat far below the title.
+    const before = compose(OLD[id], { title: 'Agree the pilot team', subtitle: SUB, ...support });
     assert.ok(field(before, 'text').box.y - bottomOf(field(before, 'subtitle')) > 100, `${id}: the 0.26.10 gap was large`);
   }
 });
@@ -81,9 +81,7 @@ test('comparison puts the verdict right under the options, with the title on top
   const [first, second, verdict] = result.items.filter((item) => item.field === 'text');
   assert.equal(first.box.y, second.box.y);
   assert.ok(verdict.box.y - Math.max(bottomOf(first), bottomOf(second)) <= GAP + 2, 'the verdict follows the options');
-  // The title stays at the top at the role sizes; LH-48 centers short options and LH-147 then takes the headings to them.
-  assert.equal(field(compose('comparison', slide, { fill: false }), 'title').box.y, field(compose(OLD.comparison, slide, { fill: false }), 'title').box.y, 'the title stays at the top');
-  assert.ok(first.box.y - bottomOf(field(result, 'subtitle')) <= GAP + 1, 'a short comparison takes its headings with it (LH-147)');
+  assert.equal(field(result, 'title').box.y, field(before, 'title').box.y, 'the title stays at the top');
   assert.ok(verdict.box.y < before.items.filter((item) => item.field === 'text')[2].box.y - 100, 'the verdict moved up from the foot');
   assert.equal(result.diagnostics.length, 0);
 });
