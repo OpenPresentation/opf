@@ -4451,7 +4451,7 @@ export function messageWords(value: unknown): number {
  * the title is the running head at the top of the slide and the block fills the body as a lone block (statementTemplate). Undefined for
  * any other slide: no body (the headings are the message, LH-129), a quote, several blocks, a subtitle. With no title the block is the message.
  */
-function statementMessage(slide: Record<string, any>, plan: LayoutTemplate): 'title' | 'body' | undefined {
+function statementMessage(slide: Record<string, any>, plan: LayoutTemplate, fill = true): 'title' | 'body' | undefined {
   if (plan.stack === undefined || plan.subtitle || plan.regions.length !== 1 || plan.regions[0]!.role !== 'primary') return undefined;
   const title = annotationText(slide.title).trim();
   if (annotationText(slide.subtitle).trim()) return undefined;
@@ -4464,15 +4464,15 @@ function statementMessage(slide: Record<string, any>, plan: LayoutTemplate): 'ti
   if (payloads.length !== 1) return undefined;
   // A slide with no title has only its block to say: the block is the message.
   const label = !title || messageWords(slide.title) <= SHORT_TEXT_WORDS && !/[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(title);
-  return payloads[0] === 'metric' || (payloads[0] === 'text' && label) ? 'body' : payloads[0] === 'text' ? 'title' : undefined;
+  // With fill off nothing grows, so the stack stays as the record sets it.
+  return payloads[0] === 'metric' || (payloads[0] === 'text' && label) ? fill ? 'body' : undefined : payloads[0] === 'text' ? 'title' : undefined;
 }
 /**
  * LH-09: the template a slide is composed with. A statement whose block is the message (statementMessage `body`) is composed as a
  * content slide: the stack gives way, the title takes its auto row at the top and the message's row the rest of the body, where the
  * lone block grows (fillLone), as Claude Design sets n28's runway figure under a small running head.
  */
-function statementTemplate(plan: LayoutTemplate, slide: Record<string, any>): LayoutTemplate {
-  if (statementMessage(slide, plan) !== 'body') return plan;
+function statementTemplate(plan: LayoutTemplate): LayoutTemplate {
   const row = plan.areas.find(area => area.name === plan.regions[0]!.name)?.row;
   if (row === undefined) return plan;
   const { stack: _stack, ...rest } = plan;
@@ -4973,9 +4973,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // template is refused (OPFLayoutTemplateError) as validate reports it (opf/layout-template, opf/layout-region).
   const recordTemplate: LayoutTemplate | undefined = !recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
   // LH-09: a statement sets its title or its block as the message (statementMessage, the guarded rule `statement-message`).
-  const statement = recordTemplate && ruleOn('statement-message') ? statementMessage(slide, recordTemplate) : undefined;
+  const statement = recordTemplate && ruleOn('statement-message') ? statementMessage(slide, recordTemplate, options.fill !== false) : undefined;
   if (statement) fire('statement-message');
-  const template = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate, slide) : recordTemplate;
+  const template = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate) : recordTemplate;
   // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
   const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
@@ -6797,7 +6797,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // display title's size) in at most MESSAGE_DISPLAY_LINES lines, while it fills at most LONE_TARGET of the body, as Claude Design sets a
       // short message (b09 s36, b07 s25, n28's "14 months"). It is kept only at a step above the size the plain text reached, so the
       // display face, which is wider, never costs it a step (the guarded rule `display-message`).
-      const words = node.field === 'text' ? messageWords(node.value) : Infinity;
+      // A text that cites or carries a footnote is evidence, set as body text: its markers belong to a paragraph, not a display line.
+      const cited = Array.isArray(node.value) && node.value.some(run => run && typeof run === 'object' && ((run as { cite?: unknown }).cite !== undefined || (run as { footnote?: unknown }).footnote !== undefined));
+      const words = node.field === 'text' && !cited ? messageWords(node.value) : Infinity;
       if (words <= SHORT_MESSAGE_WORDS && ruleOn('display-message')) {
         const reached = chosen ?? start, cap = (words <= SHORT_TEXT_WORDS ? HEADING_DISPLAY_SIZES.title : MESSAGE_DISPLAY_SIZE) * scale, plain = { growth: proseGrowth.get(node), best };
         displayTexts.add(node.path);
