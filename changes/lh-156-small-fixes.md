@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf, pptx]
+---
+LH-156, LH-157, LH-38, LH-74: a flow chip fits its entry alone, so its citation marker is looked up at the entry's own index, as a tile's is (a cited flow entry keeps its marker in the preview and the PPTX export); a metric with an inline unit takes its row's shared value, label and description sizes like any sibling (its unit follows its value), so a row of metrics shares one value size (corpus batch-09 s12, batch-06 s27); the header and the footer sit half a content margin (`composition.padding`, 28.8 px at the default on a 720 px short edge) from the top and the bottom edge, the same distance at both, where the header was 2.5% of the height from the top; and a picture alone on a card that covers its frame fills the card to its edges, clipped to the card's radius, with no inset, no card and no stroke under it (a picture with its own shape, radius, aspect ratio or line, or shown whole, keeps the card). Preview and PPTX export draw the same boxes. Drawing change: the gallery `team` layout draws its pictures edge to edge on their cards, and slides with a header move down about 11 px.

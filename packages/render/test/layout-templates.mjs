@@ -45,7 +45,11 @@ for (const { keys, deck } of decks) {
       const first = own[0];
       assert.ok(first, `${key}: ${item.path} is drawn`);
       const opener = `<g data-opf-region="${item.region}">`;
-      assert.equal(svg.slice(first.index - opener.length, first.index), opener, `${key}: ${item.path} is grouped under its region`);
+      // LH-74: a picture that is its own card (no frameBox) opens with its clip definition, so its group opens before that, with nothing between.
+      if (item.frameBox === undefined && item.field === 'image') {
+        const opened = svg.lastIndexOf(opener, first.index);
+        assert.ok(opened >= 0 && !svg.slice(opened + opener.length, first.index).includes('</g>'), `${key}: ${item.path} is grouped under its region`);
+      } else assert.equal(svg.slice(first.index - opener.length, first.index), opener, `${key}: ${item.path} is grouped under its region`);
       // Cards are core's frameBox, drawn as the item's first element; a bled region never has one.
       const card = own.find((tag) => tag.name === 'rect' && attr(tag.attrs, 'stroke') !== undefined && attr(tag.attrs, 'rx') !== undefined && attr(tag.attrs, 'stroke-dasharray') === undefined);
       if (item.frameBox) {
