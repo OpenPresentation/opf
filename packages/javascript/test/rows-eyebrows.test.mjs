@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {
-  composeSlide, EYEBROW_MAX_SIZE, EYEBROW_MIN_SIZE, EYEBROW_TAG_SIZE, EYEBROW_TRACKING, eyebrowSize, eyebrowCaps, eyebrowLabel, fitList, isLabelText, LIST_ROWS_GAP, measureText, styledText,
+  composeSlide, EYEBROW_MAX_SIZE, EYEBROW_MIN_SIZE, EYEBROW_TAG_SIZE, EYEBROW_TRACKING, eyebrowSize, eyebrowCaps, eyebrowLabel, fitList, isLabelText, LIST_ROWS_GAP, LIST_ROWS_SPREAD, measureText, styledText,
   textWidthMeasurer, trackingWidth,
 } from '../dist/composition.js';
 import {validate} from '../dist/index.js';
@@ -132,9 +132,13 @@ test('LH-08: design.listStyle stack opts out, rows draws any list as ruled rows,
   const numbered = listOf(composeSlide({title: 'Agenda', numbering: 'arabic', items: ['Define the problem', 'Review the evidence']}, {presentation: {design: {listStyle: 'rows'}, slides: []}}));
   assert.deepEqual(numbered.text.listEntries.map(entry => entry.marker.text), ['1.', '2.']);
   assert.equal(numbered.text.rules.length, 1);
-  // The rows are LIST_ROWS_GAP em apart.
-  const [first, second] = plain.text.listEntries;
-  assert.ok(Math.abs(second.textBox.y - (first.textBox.y + first.text.height) - LIST_ROWS_GAP * plain.text.fontSize) < 1e-6);
+  // The rows are LIST_ROWS_GAP em apart; LH-133: a lone ruled list spreads them over its body, evenly and at most LIST_ROWS_SPREAD em apart.
+  const kept = listOf(composeSlide({title: 'Agenda', items: ['Define the problem', 'Review the evidence', 'Agree the decision'], design: {listStyle: 'rows'}}, {fill: false}));
+  const [first, second] = kept.text.listEntries;
+  assert.ok(Math.abs(second.textBox.y - (first.textBox.y + first.text.height) - LIST_ROWS_GAP * kept.text.fontSize) < 1e-6);
+  const gaps = plain.text.listEntries.slice(1).map((entry, index) => entry.textBox.y - (plain.text.listEntries[index].textBox.y + plain.text.listEntries[index].text.height));
+  assert.ok(Math.abs(gaps[0] - gaps[1]) < 1e-6 && gaps[0] >= LIST_ROWS_GAP * plain.text.fontSize - 1e-6 && gaps[0] <= LIST_ROWS_SPREAD * plain.text.fontSize + 1e-6);
+  assert.ok(plain.text.fontSize >= kept.text.fontSize, 'never smaller');
 });
 
 test('LH-08: a nested entry stays under its row, and a narrow list sets descriptions under their labels', () => {

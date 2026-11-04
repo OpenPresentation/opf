@@ -181,6 +181,13 @@ two words (`TERM_WORDS`; `pairEntry`). Claude Design sets an FAQ and a glossary 
   features named in two words is not a glossary), draws its terms in the accent (`ListEntryLayout.accent`) in the column of the widest
   term, its definitions beside them as LH-08's rows.
 
+- **Ruled rows fill the body** (LH-48 for rows). A lone list drawn as ruled rows (LH-08's rows, questions, a glossary, takeaways
+  beside numerals, an agenda's numbered rows) first grows in type-scale steps as any lone list does (toward about 60% of the body, never
+  smaller than before), then takes the whole body: the leftover height is shared evenly between its rows, each gap at most
+  `LIST_ROWS_SPREAD` (3) em, the hairlines in the middle of the gaps and numerals with their rows, and what is still left sits above and
+  below them (`ListFitOptions.spread`). One-question blocks stacked as rows spread over the body the same way, from a gap under the
+  headings to the foot of the content box. Claude Design spreads an agenda's or a FAQ's rows down the slide like this.
+
 Rules and accents are drawing: the preview draws them as SVG lines and text fills, the PPTX export as native lines (`OPF list rule
 <path> N`) and run colors, and the import reads neither as content (a term's accent is the look the export records for its runs). In a
 right-to-left deck the question or term column is at the right and the answers to its left.

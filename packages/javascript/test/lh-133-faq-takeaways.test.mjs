@@ -3,12 +3,13 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {
-  composeSlide, fitList, LIST_NUMERAL_GAP, LIST_NUMERAL_SCALE, LIST_ROWS_LABEL_SHARE, NUMERAL_TAKEAWAYS, PAIR_GRID_MIN, pairEntry, questionText, STEP_BADGE,
+  composeSlide, fitList, LIST_NUMERAL_GAP, LIST_ROWS_GAP, LIST_ROWS_SPREAD, LIST_NUMERAL_SCALE, LIST_ROWS_LABEL_SHARE, NUMERAL_TAKEAWAYS, PAIR_GRID_MIN, pairEntry, questionText, STEP_BADGE,
 } from '../dist/composition.js';
 import {layouts} from './support/template-samples.mjs';
 
 const {agenda, faq, list: listLayout} = layouts;
 const style = {fontFamily: 'sans-serif', fontWeight: 400};
+const sorted0 = items => [...items].sort((a, b) => a.box.y - b.box.y);
 const lists = composed => composed.items.filter(item => item.field === 'items');
 const qa = (text, description) => ({region: 'questions', items: [{text, description}]});
 const PILOT = [
@@ -117,6 +118,9 @@ for (const direction of ['ltr', 'rtl']) {
       assert.ok(rtl ? entry.descriptionBox.x < entry.textBox.x : entry.descriptionBox.x > entry.textBox.x, 'the answer beside the question, after it in reading order');
       assert.equal(entry.description.fontSize, item.text.fontSize, 'question and answer at one size');
     }
+    // The rows spread over the body, evenly.
+    const pitches = sorted0(items).slice(1).map((item, index, rest) => item.box.y - (index ? rest[index - 1] : sorted0(items)[0]).box.y);
+    assert.ok(pitches.every(pitch => Math.abs(pitch - pitches[0]) < .05), `pitches ${pitches}`);
     const rules = items.flatMap(item => item.text.rules ?? []);
     assert.equal(rules.length, language.PILOT.length - 1, 'a hairline between two rows');
     assert.ok(rules.every(rule => !rule.accent));
@@ -177,6 +181,10 @@ for (const direction of ['ltr', 'rtl']) {
     assert.ok(steps.badges.every(badge => badge.numeral && badge.fontSize === item.text.fontSize), 'numerals at the list size');
     assert.ok(steps.badges.every(badge => badge.list === undefined), 'an unnumbered agenda is numbered as drawing only (LH-07)');
     assert.equal(item.text.rules.length, language.AGENDA.length - 1);
+    // The rows fill the body (LH-48 for ruled rows): evenly apart, more than LIST_ROWS_GAP and at most LIST_ROWS_SPREAD em, never smaller.
+    const entries = item.text.listEntries, gaps = entries.slice(1).map((entry, index) => entry.textBox.y - (entries[index].textBox.y + Math.max(entries[index].text.height, entries[index].descriptionBox.y + entries[index].descriptionBox.height - entries[index].textBox.y)));
+    assert.ok(gaps.every(gap => Math.abs(gap - gaps[0]) < 1e-6) && gaps[0] > LIST_ROWS_GAP * item.text.fontSize && gaps[0] <= LIST_ROWS_SPREAD * item.text.fontSize + 1e-6, `gaps ${gaps}`);
+    assert.ok(item.text.fontSize >= lists(composeSlide({title: 'Today’s agenda', blocks: [{items: language.AGENDA}]}, {layout: agenda, direction, fill: false}))[0].text.fontSize);
     // Two lists of one agenda, one entry without a description: badges for both, so the agenda is drawn one way.
     const mixed = composeSlide({title: 'Today’s agenda', blocks: [{items: language.AGENDA}, {items: rtl ? ['الخطوات التالية', 'الختام'] : ['Next steps', 'Close']}]}, {layout: agenda, direction});
     assert.ok(lists(mixed).every(item => item.text.listEntries.every(entry => !entry.badge?.numeral)), 'no numbered rows');

@@ -3143,6 +3143,8 @@ export interface ListFit extends TextFit { listEntries:ListEntryLayout[]; height
 export const LIST_ROWS_GAP=.8;
 /** LH-08: a ruled list sets its labels beside their descriptions when the widest label takes at most this share of the list's width on one line. */
 export const LIST_ROWS_LABEL_SHARE=.4;
+/** LH-133: the widest gap between two rows of a spread list (ListFitOptions.spread), in em of the list size (Claude Design spreads an agenda's rows about 2.5 to 4 em apart). */
+export const LIST_ROWS_SPREAD=3;
 /** LH-08: the thickness of a row's hairline, in reference pixels (0.75 pt at 1280 × 720). */
 export const LIST_RULE_WIDTH=1;
 /** LH-133: the thickness of the accent rule over each cell of a grid of questions, in reference pixels (Claude Design: 3 px at 1280 × 720). */
@@ -3219,6 +3221,11 @@ export interface ListFitOptions extends RichTextOptions {
    * LIST_NUMERAL_GAP em separate the column from the text.
    */
   numerals?:'display'|'row';
+  /**
+   * LH-133: with `rows`, the rows fill the box's height (LH-48's fill for a lone ruled list): the gap between two first-level rows grows
+   * evenly, to at most LIST_ROWS_SPREAD em, the hairlines in their middles, and the rows sit in the middle of what is still left.
+   */
+  spread?:boolean;
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
@@ -3273,8 +3280,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   // LH-134: numbers drawn as numerals in a column at the start of each row (ListFitOptions.numerals).
   const numerals=rows&&numbers!==undefined&&options.numerals!==undefined&&source.every(item=>item.level===0)?options.numerals:undefined;
   const numeralLabels=numerals&&numbers?numbers.map(number=>{const label=listNumberLabel(number);return numerals==='row'&&/^[0-9]$/.test(label)?`0${label}`:label;}):[];
-  const rowsLayout=(fontSize:number):ListFit=>{
-    let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
+  // LH-133: `extra` widens the gap between two first-level rows (their hairline stays in its middle) and `top` starts the rows lower (spread).
+  const rowsLayout=(fontSize:number,extra=0,top=0):ListFit=>{
+    let y=box.y+top,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[],rules:ListRule[]=[];
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
     // LH-134: the numerals' column is as wide as the widest numeral, bold at its size.
@@ -3305,7 +3313,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       const rtl=item.direction==='rtl',first=item.index===0;
       // A hairline in the middle of the gap above every first-level row but the first; a nested entry stays close under its row.
       if(!first){
-        const space=fontSize*(item.level===0?LIST_ROWS_GAP:.28);
+        const space=item.level===0?fontSize*LIST_ROWS_GAP+extra:fontSize*.28;
         if(item.level===0)rules.push({x:box.x,y:y+space/2,width:box.width});
         y+=space;
       }
@@ -3347,7 +3355,15 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,rules,...(options.direction==='rtl'?{directions}:{})};
   };
   const layout=(fontSize:number):ListFit=>{
-    if(rows)return rowsLayout(fontSize);
+    if(rows){
+      // LH-133: a spread list (ListFitOptions.spread) takes its box's height: the leftover height is shared evenly between its first-level
+      // rows, each gap at most LIST_ROWS_SPREAD em, and what is still left sits above and below them. A measuring box (no real height) is not spread.
+      const fit=rowsLayout(fontSize),count=source.filter(item=>item.level===0).length;
+      if(!options.spread||fit.overflow||count<2||box.height>=1e5)return fit;
+      const extra=Math.max(0,Math.min((box.height-fit.height)/(count-1),(LIST_ROWS_SPREAD-LIST_ROWS_GAP)*fontSize));
+      const spread=rowsLayout(fontSize,extra);
+      return spread.overflow?fit:rowsLayout(fontSize,extra,Math.max(0,(box.height-spread.height)/2));
+    }
     let y=box.y,overflow=false;const entries:ListEntryLayout[]=[],lines:string[]=[],directions:TextDirection[]=[];
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
@@ -4730,8 +4746,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-134: the badge lists whose numbers draw as numerals beside ruled rows instead (composeTemplate): `row` for an agenda whose entries
   // all have descriptions, `display` for a lone numbered list of a few takeaways. LH-133: the one-question blocks of a region drawn as
   // ruled rows (pairRowLabels: the questions of the region, so their answers share one column) and those drawn as a grid under accent rules.
-  const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>();
-  const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+  // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
+  const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
+  const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
+    const own = listOptionsOf(field, path, numbering, value);
+    return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
+  };
+  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
     : numeralLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),rows:true,numerals:numeralLists.get(path)!,...pairsOf(value, path)}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
     : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
@@ -6114,7 +6135,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const panel = node.field === 'code', wholePanel = () => { fullPanels.add(node); return cell; };
     const fillsPanel = () => panel && best >= LONE_TARGET * inner.height - 1e-6 && best <= inner.height;
     // A panel's need counts its insets and its filename row, so a panel under LONE_TARGET still grows and centers.
-    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : undefined;
+    // LH-133: a lone list drawn as ruled rows takes the whole cell once it has grown (or when it needs no growth): its rows spread over it.
+    const ruled = (node.field === 'items' || node.field === 'bullets') && listOptionsOf(node.field, node.path, node.payload.numbering, node.value).rows === true;
+    const spreadCell = () => { spreadLists.add(node.path); return cell; };
+    if (best >= (panel ? LONE_TARGET : LONE_FILL) * inner.height) return fillsPanel() ? wholePanel() : ruled ? spreadCell() : undefined;
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     if (prose) {
       const start = proseMeasure(node, inner.width).size, display = (node.field === 'text' ? LONE_DISPLAY_SIZES.text : LONE_DISPLAY_SIZES.list) * scale;
@@ -6153,6 +6177,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (chosen === undefined) growthOf.delete(node); else { growthOf.set(node, chosen); loneGrowth = true; }
     }
     if (fillsPanel()) return wholePanel();
+    if (ruled) return spreadCell();
     // The cell the block is placed in: its need, plus a card's vertical insets as payloadBox gives a card that tall, in the middle.
     let height = best;
     if (cards) for (let pass = 0; pass < 3; pass++) { const frame = acceptedBox({ ...cell, height: Math.min(cell.height, height) }), room = payloadBox(frame, true).height; if (room >= best - 1e-6) break; height += best - room; }
@@ -7455,6 +7480,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-133: the rules of a region's questions (markPairs), added to their lists' rules (ListFit.rules) once every block is placed: a
   // hairline in the middle of the gap between two ruled rows, across both, and an accent rule over each cell of a grid, half a gap above
   // its text and never nearer the text above it (a cell of the row above, the headings) than its own.
+  // LH-133: a placed list moved down by `dy` (its box, entries, markers, numerals and rules).
+  const shiftList = (item: ComposedItem, dy: number): void => {
+    if (!dy) return;
+    const fit = item.text as ListFit, down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
+    item.box = down(item.box);
+    item.text = { ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, textBox: down(entry.textBox), ...(entry.descriptionBox ? { descriptionBox: down(entry.descriptionBox) } : {}), marker: down(entry.marker),
+      ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}) })),
+      ...(fit.rules ? { rules: fit.rules.map(down) } : {}) };
+  };
   const pairRules = (): void => {
     const listOf = (item: ComposedItem) => item.text && 'listEntries' in item.text && !item.listColumns && (item.text as ListFit).listEntries.length ? item.text as ListFit : undefined;
     const top = (fit: ListFit) => Math.min(...fit.listEntries.map(entry => Math.min(entry.textBox.y, entry.descriptionBox?.y ?? Infinity)));
@@ -7462,6 +7496,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const add = (item: ComposedItem, fit: ListFit, rule: ListRule) => { item.text = { ...fit, rules: [...(fit.rules ?? []), roundRule(rule)] }; };
     const roundRule = (rule: ListRule): ListRule => ({ ...rule, x: Math.round(rule.x * 100) / 100, y: Math.round(rule.y * 100) / 100, width: Math.round(rule.width * 100) / 100 });
     const rowed = items.filter(item => pairRowLabels.has(item.path) && listOf(item)).sort((a, b) => a.box.y - b.box.y);
+    // The rows spread over the body as a lone ruled list does (ListFitOptions.spread): the body (from a gap under the headings above them
+    // to the foot of the content box, whatever LH-48's centering did to their region) is shared evenly between the gaps, each at most
+    // LIST_ROWS_SPREAD em of the rows' size, and what is still left sits above and below them. Their region's cell follows them.
+    const composed = rowed.length > 1 ? templateRegions.find(region => region.name === rowed[0]!.region) : undefined;
+    if (composed && options.fill !== false) {
+      const first = top(listOf(rowed[0]!)!), heads = items.filter(item => headings.has(item.field) && item.box.y + item.box.height <= first + 1e-6);
+      const start = Math.max(contentBox.y, ...heads.map(item => item.box.y + item.box.height + gap)), end = contentBox.y + contentBox.height - scale;
+      const size = Math.min(...rowed.map(item => item.text!.fontSize)), gaps = rowed.slice(1).map((item, index) => top(listOf(item)!) - bottom(listOf(rowed[index]!)!));
+      const natural = bottom(listOf(rowed.at(-1)!)!) - first, extra = Math.max(0, Math.min((end - start - natural) / (rowed.length - 1), LIST_ROWS_SPREAD * size - Math.max(...gaps)));
+      const lead = start + Math.max(0, (end - start - natural - extra * (rowed.length - 1)) / 2) - first;
+      if (natural <= end - start + 1e-6 && (lead > 0 || extra > 0)) {
+        rowed.forEach((item, index) => shiftList(item, lead + extra * index));
+        const y = Math.min(composed.box.y, rowed[0]!.box.y), last = rowed.at(-1)!;
+        composed.box = roundBox({ ...composed.box, y, height: Math.max(composed.box.y + composed.box.height, last.box.y + last.box.height) - y });
+      }
+    }
     for (let index = 1; index < rowed.length; index++) {
       const above = rowed[index - 1]!, item = rowed[index]!, fit = listOf(item)!, x = Math.min(above.box.x, item.box.x);
       add(item, fit, { x, y: (bottom(listOf(above)!) + top(fit)) / 2, width: Math.max(above.box.x + above.box.width, item.box.x + item.box.width) - x });
