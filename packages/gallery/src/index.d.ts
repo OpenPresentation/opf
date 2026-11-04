@@ -20,7 +20,10 @@ export declare const CATALOG_SCHEMA: 4;
 /** Records of one kind, keyed by id (core's `CatalogRecordMap`). */
 export type GalleryRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;
 
-/** The gallery as a registered catalog: core's `Catalog` shape, `source` and the eight content kinds. */
+import type { GalleryIconSet } from "./icon-sets/icon-set.js";
+export type { GalleryIcon, GalleryIconSet } from "./icon-sets/icon-set.js";
+
+/** The gallery as a registered catalog: core's `Catalog` shape, `source` and the eight content kinds, and the icon sets. */
 export interface GalleryCatalog {
   readonly source: typeof GALLERY_SOURCE;
   readonly layouts: GalleryRecords;
@@ -31,6 +34,11 @@ export interface GalleryCatalog {
   readonly audiences: GalleryRecords;
   readonly purposes: GalleryRecords;
   readonly tones: GalleryRecords;
+  /**
+   * LH-14: the icon sets (`lucide`, `tabler`), each a function that imports the set's module the first time a deck uses it, so the
+   * catalog carries no icon data. Core's `ensureIcons` calls them; `@openpresentation/gallery/icon-sets/<id>` is the same module.
+   */
+  readonly iconSets: Readonly<Record<string, () => Promise<GalleryIconSet>>>;
 }
 
 /**
@@ -86,7 +94,8 @@ export type GalleryKind =
   | "tones"
   | "chartTypes"
   | "languages"
-  | "socialPlatforms";
+  | "socialPlatforms"
+  | "iconSets";
 
 /** Each kind's `index.json`. */
 export declare const catalogIndexes: Readonly<Record<GalleryKind, CatalogIndex>>;

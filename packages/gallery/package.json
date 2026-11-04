@@ -1,7 +1,7 @@
 {
   "name": "@openpresentation/gallery",
   "version": "0.32.0",
-  "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+  "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, and the Lucide and Tabler icon sets, registered with catalogs: [gallery].",
   "license": "MIT",
   "author": "Open Presentation",
   "homepage": "https://www.pptx.gallery",
@@ -23,7 +23,8 @@
     "catalog",
     "layouts",
     "themes",
-    "pptx-gallery"
+    "pptx-gallery",
+    "icons"
   ],
   "type": "module",
   "sideEffects": false,
@@ -38,12 +39,17 @@
       "types": "./dist/previews.d.ts",
       "default": "./dist/previews.js"
     },
+    "./icon-sets/*": {
+      "types": "./dist/icon-sets/icon-set.d.ts",
+      "default": "./dist/icon-sets/*.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
     "CHANGELOG.md",
     "package.json"
   ],
@@ -65,10 +71,14 @@
     "check:previews": "pnpm run build:engines && node scripts/render-previews.mjs --check",
     "check:stability": "pnpm run build:engines && node ../../scripts/gallery-stability.mjs",
     "pack:dry-run": "npm pack --dry-run",
-    "prepack": "node scripts/build.mjs"
+    "prepack": "node scripts/build.mjs",
+    "build:icon-sets": "node scripts/build-icon-sets.mjs",
+    "check:icon-sets": "node scripts/build-icon-sets.mjs --check"
   },
   "devDependencies": {
     "@resvg/resvg-js": "2.6.2",
+    "@tabler/icons": "3.50.0",
+    "lucide-static": "1.68.0",
     "typescript": "~5.9.3"
   }
 }

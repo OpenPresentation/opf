@@ -5,7 +5,7 @@
 // `--list-rules` lists what it can report.
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
+import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, ensureIcons, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
 import { Reporter, assetRoot, localAssetProblems, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
 import { installHint } from "./install.js";
@@ -228,7 +228,10 @@ export async function run(args: string[], host: Host): Promise<void> {
 				// WI-1 (P24): measure with the fonts convert draws with, as paginate does, so a layout that fails or overflows
 				// in the drawn deck is not hidden by the estimate; without opf-render the report says the layout was estimated.
 				const format = inputFormatOf(file, raw, from);
-				const measuring = measures(settings.only) ? await measuringFonts(readDeckReport(raw, { format, validate: false }).presentation, { reporter: new Reporter(), flags: true }) : undefined;
+				const read = readDeckReport(raw, { format, validate: false }).presentation;
+				// LH-14: the icon sets the deck names load first (the gallery loads each on first use), so an unknown icon name is reported.
+				await ensureIcons(read, { catalogs: settings.catalogs });
+				const measuring = measures(settings.only) ? await measuringFonts(read, { reporter: new Reporter(), flags: true }) : undefined;
 				let checked: ReturnType<typeof checkText>;
 				try {
 					checked = checkText(raw, format, measuring?.fonts ? { ...settings, fonts: measuring.fonts } : settings);

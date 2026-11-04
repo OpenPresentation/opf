@@ -7,6 +7,7 @@
 // caller names, so the same presentation gives the same bytes on every machine.
 import { statSync } from "node:fs";
 import path from "node:path";
+import { ensureIcons } from "../icons.js";
 import { type Catalog, type Fonts, continueOverfull, paginate } from "../core.js";
 import { createImageResolver } from "./assets.js";
 import { defaultCatalogs } from "./catalogs.js";
@@ -294,6 +295,9 @@ export async function runExport(presentation: unknown, options: ResolvedExportOp
 	const userFonts = options.fonts ? [] : (ctx.userFonts ?? (await listFontDirectories(options.fontFolders, ctx.flags ? "--fonts" : "fonts")));
 
 	const resolver = createImageResolver(assetRoot(options.assetDir, ctx.flags), reporter, ctx.flags ? "pass --asset-dir" : "pass assetDir");
+	// LH-14: the icon sets the deck names (the gallery loads each set on first use) and its icons' SVG files, read as its images are (the
+	// asset directory only; nothing is fetched), before anything composes the deck.
+	await ensureIcons(presentation, { catalogs, readSource: async (source) => { const uri = resolver.forMeasure(source); return uri?.startsWith("data:image/svg+xml;base64,") ? Buffer.from(uri.slice(26), "base64").toString("utf8") : undefined; } });
 	// RR-59: a standalone SVG (text "fonts") carries the installed script faces its text draws; raster, PDF and PPTX read
 	// them from the font files, so they skip the script data URLs. Without `fonts`, a deck the process's shared handle serves
 	// unchanged borrows it (the pack is prepared once per process); any other deck gets a handle of its own.

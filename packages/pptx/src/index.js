@@ -20,6 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
+import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
@@ -61,7 +62,7 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, groupsAxisTicks, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -280,6 +281,8 @@ export async function toPptx(input, options = {}) {
   assertValidBoundary(presentation);
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
+  // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
+  await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
   if (options.as === 'images') return pictureSlidesPptx(presentation, options);
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
@@ -350,6 +353,7 @@ export async function toPptx(input, options = {}) {
   context.chartMarkTags = new Map();
   // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
   context.stepTags = new Map();
+  context.iconTags = new Map();
   // LH-130: the accent rule core sets above a cover's or section's title (src/title-rule.js).
   context.titleRuleTags = new Map();
   context.quoteTags = new Map();
@@ -661,6 +665,8 @@ export async function fromPptx(input, options = {}) {
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
+  // LH-14: each tagged icon's reference goes back on the entry, metric or group it marked (src/icons.js).
+  restoreIcons(imported, new Map(furnitureContexts.flatMap(context => [...(context.iconReferences ?? [])])));
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1145,6 +1151,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
+  // LH-14: an icon's chip, glyph and picture are the drawing of its `icon`, not content; the references go back on the document.
+  const iconShapes=importIconShapes([...shapes,...(nativeContext.pictures??[])],relationships,entries);
+  nativeContext.iconReferences=iconShapes.references;
   // LH-130: a cover's or section's title rule is its layout's drawing, not content.
   const titleRules=importTitleRules(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
@@ -1196,6 +1205,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
+    if (iconShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'icon'); continue; }
     if (titleRules.has(shape)) { roles.set(shapeKeys.get(shape), 'title-rule'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
@@ -1235,7 +1245,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   for (const [index, picture] of nativeContext.pictures.entries()) {
-    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : undefined;
+    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : iconShapes.consumed.has(picture) ? 'icon' : undefined;
     if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
     if (diagrams.pictures.has(index)) {
       items.push({kind: 'diagram', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), visualBounds: visualBounds(picture['p:spPr']?.['a:xfrm']), payload: diagrams.pictures.get(index), sources: [`pic:${index}`]});
@@ -2607,6 +2617,17 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       if (names.length === 1) context.placeholderBindings.set(names[0], {slide: slideIndex, region: boundRegion.name, object: item.field === 'image' ? 'picture' : item.field});
     }
   }
+  // LH-14: core's icons on their chips, over the cards and surfaces they sit on (src/icons.js). A multicolor icon is an SVG picture with its
+  // PNG fallback, contained in the chip's square at the SVG's own aspect, as an SVG image block is.
+  await addIcons(slide, geometry.icons, slideContext, context.iconTags, async (icon, box, name) => {
+    const aspect = icon.picture.width / icon.picture.height, w = aspect >= 1 ? box.w : box.h * aspect, h = aspect >= 1 ? box.w / aspect : box.h;
+    const area = {x: box.x + (box.w - w) / 2, y: box.y + (box.h - h) / 2, w, h}, outcome = {box: area};
+    const resolved = await resolveSvgImage(encodeText(icon.picture.svg), options, icon.path, outcome);
+    if (!resolved) return false;
+    if (outcome.svg) context.svgPictures.set(name, outcome.svg);
+    slide.addImage({...resolved, objectName: name, ...area, altText: ''});
+    return true;
+  });
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
   addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
   // Core composes furniture above all content and opf-render paints it last, so
@@ -4846,6 +4867,7 @@ async function normalizePptxZip(raw, context) {
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
+  attachIconTags(entries,context.iconTags);
   attachTitleRuleTags(entries,context.titleRuleTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);

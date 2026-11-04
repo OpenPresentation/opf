@@ -25,6 +25,7 @@ const schemaDefinitions = [
   { name: "language", typeName: "Language", file: "language.schema.json" },
   { name: "colorScheme", typeName: "ColorScheme", file: "color-scheme.schema.json", typeFile: "color-scheme" },
   { name: "fontScheme", typeName: "FontScheme", file: "font-scheme.schema.json", typeFile: "font-scheme" },
+  { name: "iconSet", typeName: "IconSet", file: "icon-set.schema.json", typeFile: "icon-set" },
   // The report format every OPF tool shares (validate, the converters, the editor Review panel, hosted reviewers).
   // It is not a catalog kind. Its root schema is open so a richer report (validate's) still validates against it;
   // the generated type is closed so an unknown field is a type error.

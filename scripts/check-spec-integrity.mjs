@@ -44,6 +44,7 @@ const CATALOG_KINDS = [
   { dir: "chart-types", singular: "chart-type", defName: null },
   { dir: "color-schemes", singular: "color-scheme", defName: "ColorScheme" },
   { dir: "font-schemes", singular: "font-scheme", defName: "FontScheme" },
+  { dir: "icon-sets", singular: "icon-set", defName: null },
   { dir: "languages", singular: "language", defName: null },
   { dir: "layouts", singular: "layout", defName: null },
   { dir: "narratives", singular: "narrative", defName: null },

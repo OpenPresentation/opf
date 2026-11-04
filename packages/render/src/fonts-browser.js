@@ -1,4 +1,4 @@
-import { diagramsPending, ensureDiagrams } from "@openpresentation/opf/composition";
+import { diagramsPending, ensureDiagrams, ensureIcons } from "@openpresentation/opf/composition";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
@@ -349,7 +349,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /**
-     * Load the diagram types the presentation draws (core loads each on demand in a browser), then the vendored and script faces
+     * Load the diagram types and the icon sets the presentation draws (core loads each on demand: the sets from `catalogs`, LH-14), then the vendored and script faces
      * it draws, each hash-verified, all or nothing, and repeat while loading
      * changes what is needed (a script face can need a vendored one). Cheap when nothing is needed. Besides `signal`, the call
      * takes the `toSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
@@ -357,6 +357,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
      */
     async ensure(presentation, callOptions = {}) {
       const diagrams = await ensureDiagrams(presentation);
+      await ensureIcons(presentation, { catalogs: renderOptionsFor(callOptions).catalogs });
       const lazy = [], scripts = [];
       let uncovered = [];
       for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {

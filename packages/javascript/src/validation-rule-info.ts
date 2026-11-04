@@ -143,6 +143,8 @@ const referenceRules: ValidationRuleInfo[] = [
 	rule('undeclared-catalog', 'format', 'error', 'A reference names a catalog group the document does not declare.', 'The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve, whatever the host registers, so it is a format error: engines reject the document at their format check instead of drawing a fallback.', { standard: SCHEMA }),
 	rule('unused-reference', 'references', 'warning', 'A reference is never cited.', 'A listed reference that no run cites is not drawn anywhere.', { standard: SCHEMA }),
 	rule('unused-dataset', 'references', 'warning', 'A dataset is never used.', 'A dataset no chart or table references is not drawn anywhere.', { standard: SCHEMA }),
+	rule('icon-unknown', 'references', 'warning', 'An icon names a set or an icon that does not exist.', 'An `icon` is "<set>:<name>" (a set the document embeds or a registered catalog defines, such as lucide and tabler of the gallery), a name of the `icons` of the deck, or an SVG source. One that resolves nowhere is not drawn: the entry, metric or group keeps its text and has no chip.', { standard: SCHEMA, approximations: 'A set a host registers as a loader is checked once it is loaded (ensureIcons): the CLI, the MCP and the Node file API load the sets a deck names before they validate it; the synchronous validate alone checks only the set ids and the sets the document embeds. Suggestions are the nearest names of the set (or of the icons of the deck).' }),
+	rule('icon-invalid', 'references', 'warning', 'The SVG of an icon cannot be drawn as an icon.', 'The SVG of an icon is read, never run: a script, an event handler, an external reference (an href or url() that is not a fragment) or a raster image makes it unusable, as does SVG text that is not well formed or has no size. It is not drawn.', { standard: SCHEMA }),
 	rule('unknown-beat', 'references', 'warning', 'A slide names a beat its narrative does not define.', '`slides[].beat` links a slide to a step of the narrative plan. A beat id the narrative does not have links to nothing; nothing is drawn from a beat.', { standard: SCHEMA, approximations: 'The narrative resolves like every content reference: the document\'s catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked.' }),
 	rule('slide-theme-dimensions', 'references', 'warning', 'A slide theme sets a slide size that differs from the deck.', 'A PPTX has one slide size. The size a slide-level theme carries is never used: design.dimensions of the deck (or of its theme) wins in every engine, and without them the exporter stops with mixed slide sizes.', { standard: SCHEMA }),
 	rule('variable-unknown', 'references', 'warning', 'A `{{token}}` names a variable that is not declared.', 'An undeclared token is shown literally.', { standard: SCHEMA }),
@@ -379,6 +381,14 @@ export const regionFullRule = rule(
 	'A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.',
 	{ cost: 'composition' },
 );
+export const iconDroppedRule = rule(
+	'icon-dropped',
+	'layout',
+	'warning',
+	'An icon is not drawn.',
+	'An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.',
+	{ cost: 'composition' },
+);
 export const unplacedRule = rule(
 	'layout-unplaced',
 	'layout',
@@ -594,6 +604,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	regionKindRule,
 	regionFullRule,
 	unplacedRule,
+	iconDroppedRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

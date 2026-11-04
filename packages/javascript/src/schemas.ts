@@ -11,6 +11,7 @@ export {
   language,
   colorScheme,
   fontScheme,
+  iconSet,
   schemas,
   schemaEntries,
   schemaNames,

@@ -26,6 +26,11 @@ export type CatalogRecords = { readonly [K in CatalogKind]?: CatalogRecordMap };
 export interface Catalog extends CatalogRecords {
   /** The catalog's identity: an HTTPS URL or a `pkg:` reference. Never fetched. */
   readonly source: string;
+  /**
+   * LH-14: the icon sets an `icon` names as `<set>:<name>`, by set id: each the set's record (opf-icon-set/v1 without `$schema`
+   * and `id`), or a function that loads it (the gallery's sets load on first use; `ensureIcons` calls it). See icons.ts.
+   */
+  readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | (() => Promise<unknown>)>>;
 }
 /** The one option every entry point that resolves references accepts. */
 export interface CatalogOptions {
@@ -102,6 +107,11 @@ export function checkCatalogsOption(catalogs: unknown, entry: string): readonly 
     if (!isRec(catalog) || typeof catalog.source !== 'string') throw new OPFCatalogsOptionError(entry, `catalogs[${index}] is not an object with a string source`);
     for (const [kind, records] of Object.entries(catalog)) {
       if (kind === 'source') continue;
+      // LH-14: a registered icon set is its record or a function that loads it.
+      if (kind === 'iconSets') {
+        if (!isRec(records) || Object.values(records).some((set) => typeof set !== 'function' && !isRec(set))) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].iconSets is not an object of icon-set records or loaders keyed by id`);
+        continue;
+      }
       if (!(catalogKinds as readonly string[]).includes(kind)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not a catalog kind`);
       if (!isRec(records)) throw new OPFCatalogsOptionError(entry, `catalogs[${index}].${kind} is not an object of records keyed by id`);
     }
