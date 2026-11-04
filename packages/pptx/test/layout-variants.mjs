@@ -41,7 +41,7 @@ const open = async (document) => {
 };
 
 for (const extra of [{}, {language: 'ar'}]) {
-  const {bytes, override, background} = await open(deck({}, extra));
+  const {bytes, override, background, master} = await open(deck({}, extra));
   // 1. Each layout writes its variant's map; the accent is the background and bg2, light1 the text on classic's dark accent1.
   assert.equal(override(0)?.bg1, 'accent1');
   assert.equal(override(0)?.bg2, 'accent1');
@@ -51,8 +51,8 @@ for (const extra of [{}, {language: 'ar'}]) {
   assert.equal(override(3)?.bg1, 'dk2');
   assert.equal(override(3)?.tx1, 'lt1');
   for (const index of [1, 2, 3]) assert.match(background(index), /<a:schemeClr val="bg1"\/>/, `slide ${index + 1} background follows its map`);
-  // 2. The slide's own variant wins; a slide without a layout variant keeps the master map.
-  assert.equal(override(4), undefined);
+  // 2. The slide's own variant wins (here the master's map, which it states because PowerPoint's section layout carries the variant, LH-96); a slide without a layout variant keeps the master map.
+  assert.deepEqual(override(4), master);
   assert.equal(override(5), undefined);
   // 3. The import reads each override back and drops it where the restored layout gives it.
   const back = await fromPptx(bytes, {catalogs: [gallery]});

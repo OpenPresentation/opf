@@ -427,9 +427,10 @@ export async function toPptx(input, options = {}) {
     for (const plan of plans) if (!reachable.some(template => template.key === plan.template.key)) reachable.push(plan.template);
     context.deckTemplates = reachable.map(template => {
       const used = plans.find(plan => plan.template.key === template.key);
-      if (used) return {...template, areaOptions: used.areaOptions};
+      const colorMap = layoutColorMap(presentation, template, context, options);
+      if (used) return {...template, ...(colorMap ? {colorMap} : {}), areaOptions: used.areaOptions};
       const core = coreContext({...presentation, slides: [{layout: template.reference}]}, 0, options).options;
-      return {...template, areaOptions: {...core, fontFamilies: first.areaOptions.fontFamilies, textRasterPadding: options.textRasterPadding, placements: []}};
+      return {...template, ...(colorMap ? {colorMap} : {}), areaOptions: {...core, fontFamilies: first.areaOptions.fontFamilies, textRasterPadding: options.textRasterPadding, placements: []}};
     });
   }
 
@@ -2212,6 +2213,15 @@ function writeLinkSentinels(xml, sentinels) {
     const link = values.find(([, value]) => value === hex)?.[0];
     return link ? `<a:schemeClr val="${link}"${rest.replace(/<\/a:srgbClr>$/, '</a:schemeClr>')}` : node;
   });
+}
+
+// LH-96: the color map of a template's layout variant, as clrMap attributes: the roles of a slide that only names the layout (core's
+// resolved.layoutVariant is set where the layout names a variant and the deck draws no fixed background, LH-103). Undefined where the
+// layout has none or its map is the master's, so the layout stays as it was.
+function layoutColorMap(presentation, template, context, options) {
+  const {resolved} = coreContext({...presentation, slides: [{layout: template.reference}]}, 0, {...options, textMeasurement: undefined});
+  const attributes = resolved.layoutVariant && resolved.roles?.map ? clrMapAttributes(resolved.roles.map) : undefined;
+  return attributes && JSON.stringify(attributes) !== JSON.stringify(context.clrMap) ? attributes : undefined;
 }
 
 // RR-96: the master's clrMap from the deck variant's map (core clrMapAttributes: bg1, tx1, bg2, tx2, the six accents and the two link slots).
@@ -4796,7 +4806,7 @@ async function normalizePptxZip(raw, context) {
   if (context.templateSlides.some(Boolean) || context.deckTemplates?.length || context.automaticSlides.some(Boolean)) {
     try {
       writeTemplateLayouts(output, context.templateSlides, context.deckTemplates ?? [], context.placeholderBindings,
-        (path, xml) => context.scriptFonts ? partScriptFonts(path, xml, context.scriptFonts, 0) : xml, {records: context.provenanceMode === 'full', automaticSlides: context.automaticSlides});
+        (path, xml) => context.scriptFonts ? partScriptFonts(path, xml, context.scriptFonts, 0) : xml, {records: context.provenanceMode === 'full', automaticSlides: context.automaticSlides, masterColorMap: context.clrMap});
     } catch (error) {
       throw new OPFPptxError('packaging-failed', 'Native slide layouts for the layout templates could not be written.', {cause: errorMessage(error)});
     }
