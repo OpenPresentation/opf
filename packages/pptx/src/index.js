@@ -9,7 +9,7 @@ import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slid
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
-import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
+import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
@@ -4248,7 +4248,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
     // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
     ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
-  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
+  // LH-141: `groups` flags the series whose default value labels group their thousands (PowerPoint's own labels take `#,##0`).
+  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined || formats.groups?.some(Boolean) ? {...result, formats} : result;
   if (data.columns.length === 1) {
     const heading = data.columns[0];
     // The lone column holds the chart's values. Each cell is read with chartNumber and each non-numeric cell is counted
@@ -4320,6 +4321,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   }
   // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
   const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
+  const plottedSeries = spec.family === 'xy' ? series.slice(1) : series;
+  formats.groups = formats.series.map((code, index) => code === undefined && groupsThousands(plottedSeries[index].values.map(chartNumber)));
   return withFormats({...mapped, series, hasCategories: true, adaptations, notNumeric}, formats);
 }
 

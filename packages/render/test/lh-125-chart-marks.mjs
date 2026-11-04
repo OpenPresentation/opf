@@ -22,7 +22,7 @@ let checks = 0;
   assert.ok(Number(swatch(1).y) < Number(segment(1).y), 'the names stand above the first bar');
   assert.ok(texts(svg).some((entry) => entry.body === 'Chat'));
   const values = texts(svg).filter((entry) => /^slides\.0\.chart\.data\.rows\.\d\.\d$/.test(entry['data-opf-path'] ?? '')).map((entry) => entry.body);
-  for (const expected of ['5400', '2100', '4600']) assert.ok(values.includes(expected), `value ${expected}`);
+  for (const expected of ['5,400', '2,100', '4,600']) assert.ok(values.includes(expected), `value ${expected}`);
   checks += 6;
 }
 
@@ -48,7 +48,7 @@ let checks = 0;
 {
   const svg = toSvg(deck({ title: 'Two in three tickets are resolved on first contact', chart: { type: 'doughnut', data: { columns: ['Outcome', 'Tickets'],
     rows: [['Resolved on first contact', 6240], ['Resolved after follow-up', 2180], ['Escalated', 890], ['Unresolved', 310]] } } }), 1, { trace: true });
-  const values = texts(svg).filter((entry) => entry.body === '6240');
+  const values = texts(svg).filter((entry) => entry.body === '6,240');
   assert.equal(values.length, 2, 'the value is in the list and in the hole');
   const sizes = values.map((entry) => Number(entry['font-size']));
   assert.ok(Math.max(...sizes) >= Math.min(...sizes) * 1.8, `the hole value is larger (${sizes.join(', ')})`);

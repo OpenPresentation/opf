@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -192,7 +192,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const resolved = chartLayerDataLabels(resolveOptions(item.value, authoredSpec), layer, spec.kind);
   // FA-14: a highlight changes colours only (no space is reserved), so it is resolved whether or not an option is active.
   c.highlight = highlightFor(c, resolved, spec, data) ?? focusFor(c, layer, spec) ?? emphasisFor(c, layer);
-  c.valueAxisHidden = layer?.small?.valueAxis === false;
+  // LH-03, LH-142: no value axis (a small chart's labels or a horizontal stacked bar chart's segment values carry the values): core decides it.
+  c.valueAxisHidden = chartValueAxisHidden(layer);
   c.ringNames = layer?.rings;
   // LH-105: direct labels instead of a legend: the series names at the line ends, the category names on the slices.
   c.endLabels = layer?.endLabels;
@@ -359,10 +360,14 @@ const neutrals = bound.design.roles.neutrals;
       const element = c.textElement(value, rect, path, align, fill, weight);
       if (element) children.push(element);
     },
+    // LH-141: whether the default value labels of column `column` group their thousands (no format of its own, whole numbers, one of four digits).
+    group: (column) => (formats[column] === undefined || formats[column] === "") && groupsThousands(rows.map((row) => chartNumber(row[column]))),
+    language: bound.presentation?.language,
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
         name: c.label(name), column: first + offset, index: offset,
         ...(formats[first + offset] !== undefined ? { format: formats[first + offset] } : {}),
+        group: c.group(first + offset),
         values: rows.map((row) => chartNumber(row[first + offset]))
       }));
     }
@@ -779,7 +784,7 @@ function renderCategoryChart(c, spec) {
   // LH-03: a small chart without its value axis draws no tick labels and no gridlines; its labels carry the values. The plot keeps a
   // line above the tallest column (or point) for its label, and a horizontal bar chart the widest label's room beyond the longest bar.
   const hidden = c.valueAxisHidden === true;
-  const labelRoom = hidden && horizontal && c.dataLabels ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format })) + fontPx * 0.5))) : 0;
+  const labelRoom = hidden && horizontal && c.dataLabels && !c.stackValues ? Math.max(0, ...series.flatMap((s) => s.values.map((value, i) => value === null ? 0 : c.width(labelString(c, { category: c.label(c.rows[i][0]), value, format: s.format, group: s.group })) + fontPx * 0.5))) : 0;
   const right = box.x + box.width - pad - legendWidth;
   const top = box.y + pad + (hidden && !horizontal && c.dataLabels ? c.lineHeight : c.lineHeight / 2);
   let plot, scale, valueTickWidth, rowTop, labelPlot;
@@ -900,7 +905,7 @@ function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, 
         rect = { x, y: Math.min(a, b), width: geometry.width, height: Math.abs(b - a) };
         c.mark("rect", { ...rect, fill: color }, path);
       }
-      if (c.dataLabels && c.stackValues?.[j]?.[i] !== false) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }) });
+      if (c.dataLabels && c.stackValues?.[j]?.[i] !== false) labels.push({ rect, direction: horizontal ? (point.to >= point.from ? "right" : "left") : (point.to >= point.from ? "up" : "down"), path, color, text: labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }) });
     });
   });
   // RR-35: data labels sit on top of every bar.
@@ -930,7 +935,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
   }
   // RR-35: data labels sit beside each point, over every line.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (categorySlot(i) + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
+    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }), [plot.x + (categorySlot(i) + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
   }));
   // LH-105: each series' last value and name at the end of its line ("61 Enterprise NPS"), in the box core placed it
   // (chart-direct-labels.ts), in its colour made legible as text; bold for a series the title names.
@@ -962,7 +967,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (!point || c.stackValues?.[j]?.[i] === false) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
-    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), pointX(i), (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format, group: s.group }), pointX(i), (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
 }
 
@@ -1135,7 +1140,7 @@ function renderComboChart(c, spec) {
   if (c.dataLabels) for (const s of lines) s.values.forEach((value, i) => {
     if (value === null) return;
     const category = c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]);
-    drawPointLabel(c, labelString(c, { category, value, format: s.format }), point(s, i, value), `${c.path}.data.rows.${i}.${s.column}`, c.dataLabels.linePosition ?? "above");
+    drawPointLabel(c, labelString(c, { category, value, format: s.format, group: s.group }), point(s, i, value), `${c.path}.data.rows.${i}.${s.column}`, c.dataLabels.linePosition ?? "above");
   });
   const primaryX = rtl ? plot.x + plot.width : plot.x, secondaryX = rtl ? plot.x : plot.x + plot.width;
   axisLine(c, primaryX, plot.y, primaryX, plot.y + plot.height);
@@ -1166,7 +1171,7 @@ function renderCircularChart(c, spec) {
   const area = list ? list.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
-  const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column] }))) : null;
+  const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column], group: c.group(ring.column) }))) : null;
   // LH-105: core's slice labels say per slice whether the name sits inside or outside; only the outside names take room around the pie.
   const slicePosition = (i) => c.sliceLabels ? (c.sliceLabels.get(i) === "outside" ? "outside-end" : "inside-end") : undefined;
   const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
@@ -1299,7 +1304,7 @@ function renderScatterChart(c) {
   }
   // RR-35: a scatter label shows the Y value, and the X value as its category.
   if (c.dataLabels) series.forEach((s) => {
-    for (const point of s.points) drawPointLabel(c, labelString(c, { category: formatChartValue(point.x, xFormat), value: point.y, format: s.format }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
+    for (const point of s.points) drawPointLabel(c, labelString(c, { category: formatChartValue(point.x, xFormat), value: point.y, format: s.format, group: s.group }), [xAt(point.x), yAt(point.y)], `${c.path}.data.rows.${point.row}.${s.column}`);
   });
 }
 
@@ -1393,7 +1398,7 @@ function renderRadarChart(c, spec) {
   }
   // RR-35: radar data labels sit above each point (PowerPoint has no position choice for a radar).
   if (c.dataLabels) series.forEach((s) => s.values.forEach((v, i) => {
-    if (v !== null) drawPointLabel(c, labelString(c, { category: categories[i], value: v, format: s.format }), point(i, v), `${c.path}.data.rows.${i}.${s.column}`);
+    if (v !== null) drawPointLabel(c, labelString(c, { category: categories[i], value: v, format: s.format, group: s.group }), point(i, v), `${c.path}.data.rows.${i}.${s.column}`);
   }));
 }
 
