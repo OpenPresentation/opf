@@ -2164,7 +2164,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     const sourceValue=metric[role];
     if (sourceValue===undefined) continue;
     // LH-141: a number as the value prints it groups its thousands by the deck language (`language`); a string is the author's own text.
-    const text=role==='value'&&typeof sourceValue==='number'&&Math.abs(sourceValue)>=NUMBER_GROUPING_MIN?groupNumber(sourceValue,options.language):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
+    // Wave 6 (LH-141 with LH-137): so does a number as the delta, which the pill draws beside the grouped value.
+    const text=(role==='value'||role==='delta')&&typeof sourceValue==='number'&&Math.abs(sourceValue)>=NUMBER_GROUPING_MIN?groupNumber(sourceValue,options.language):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
     // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
