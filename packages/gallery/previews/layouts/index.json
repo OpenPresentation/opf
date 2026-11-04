@@ -6,12 +6,12 @@
     {
       "id": "cover",
       "file": "cover.svg",
-      "bytes": 1925
+      "bytes": 1924
     },
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 926
+      "bytes": 927
     },
     {
       "id": "agenda",
@@ -26,7 +26,7 @@
     {
       "id": "statement",
       "file": "statement.svg",
-      "bytes": 988
+      "bytes": 989
     },
     {
       "id": "closing",
@@ -46,7 +46,7 @@
     {
       "id": "quote",
       "file": "quote.svg",
-      "bytes": 1229
+      "bytes": 1416
     },
     {
       "id": "two-column",
@@ -76,7 +76,7 @@
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 3271
+      "bytes": 3268
     },
     {
       "id": "faq",
