@@ -7,6 +7,9 @@ const original={value:42,unit:'ms',label:'Left\tRight  ',description:'Unchanged\
 const deck={design:{fontScheme:'roboto'},slides:[{metric:original}]},bytes=await toPptx(deck,{fonts});
 const slide=(entries,mutate)=>entries['ppt/slides/slide1.xml']=enc.encode(mutate(dec.decode(entries['ppt/slides/slide1.xml'])));
 const modify=mutate=>{const entries=unzipSync(bytes);mutate(entries);return zipSync(entries);};
+// LH-137: the tags follow the shapes, and a delta pill (decoration, drawn first) has one too: the manifest's tag and a line's are found by role.
+const tagOf=role=>{const entries=unzipSync(bytes);return Object.keys(entries).filter(key=>/^ppt\/tags\/opfMetric\d+\.xml$/.test(key)).find(key=>JSON.parse(Buffer.from(dec.decode(entries[key]).match(/val="([^"]+)"/)[1],'hex').toString()).role===role);};
+const anchorTag=tagOf('anchor'),lineTag=tagOf('line');
 // A root metric payload returns as the slide's own field (content topology).
 const metricOf=slide=>slide.metric??slide.blocks?.[0]?.metric;
 const metric=async bytes=>metricOf((await fromPptx(bytes)).slides[0]);
@@ -25,22 +28,23 @@ assert.deepEqual(await metric(modify(entries=>slide(entries,xml=>{
   return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,()=>shapes[--i]);
 }))),original);
 const corruptions={
-  deletedAnchor:entries=>slide(entries,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/,'')),
+  // LH-137: the anchor is the value's first line (a delta pill, drawn before it, is decoration).
+  deletedAnchor:entries=>slide(entries,xml=>xml.replace(/<p:sp>(?:(?!<p:sp>)[\s\S])*?name="OPF metric 1 value line 1"[\s\S]*?<\/p:sp>/,'')),
   deletedLine:entries=>slide(entries,xml=>xml.replace(/<p:sp>(?:(?!<p:sp>)[\s\S])*?name="OPF metric 1 unit line 1"[\s\S]*?<\/p:sp>/,'')),
   duplicate:entries=>slide(entries,xml=>xml.replace('</p:spTree>',xml.match(/<p:sp>[\s\S]*?<\/p:sp>/)[0]+'</p:spTree>')),
-  missingTag:entries=>{delete entries['ppt/tags/opfMetric2.xml'];},
-  badEncoding:entries=>{entries['ppt/tags/opfMetric2.xml']=enc.encode(dec.decode(entries['ppt/tags/opfMetric2.xml']).replace(/val="[^"]+"/,'val="invalid"'));},
+  missingTag:entries=>{delete entries[lineTag];},
+  badEncoding:entries=>{entries[lineTag]=enc.encode(dec.decode(entries[lineTag]).replace(/val="[^"]+"/,'val="invalid"'));},
   staleRange:entries=>{
-    const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
+    const file=anchorTag,xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
     manifest.parts[0].lines[0].nextStart++;entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(manifest)).toString('hex').toUpperCase()));
   },
   // LH-53: the trend has no native text (it is the arrow), so an invalid trend can only come from a damaged manifest.
   invalidTrend:entries=>{
-    const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
+    const file=anchorTag,xml=dec.decode(entries[file]),hex=xml.match(/val="([^"]+)"/)[1],manifest=JSON.parse(Buffer.from(hex,'hex').toString());
     manifest.value.trend='sideways';entries[file]=enc.encode(xml.replace(hex,Buffer.from(JSON.stringify(manifest)).toString('hex').toUpperCase()));
   },
   mixedIdentity:entries=>{
-    const file='ppt/tags/opfMetric1.xml',xml=dec.decode(entries[file]),tag=xml.match(/<p:tag\s[^>]+\/>/)[0].replace('OPF_METRIC_V1','OPF_CODE_V1');
+    const file=anchorTag,xml=dec.decode(entries[file]),tag=xml.match(/<p:tag\s[^>]+\/>/)[0].replace('OPF_METRIC_V1','OPF_CODE_V1');
     entries[file]=enc.encode(xml.replace('</p:tagLst>',tag+'</p:tagLst>'));
   },
 };

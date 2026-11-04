@@ -39,8 +39,10 @@ test('eight overlapping timelines continue on two slides of four whole timelines
   assert.deepEqual(pages.map((page) => [page.id, page.layout, page.title]), [['plan', 'process', deck.slides[1].title], ['plan--2', 'process', deck.slides[1].title]]);
   assert.equal(pages[0].notes, deck.slides[1].notes);
   assert.equal(pages[1].notes, undefined);
-  // The pages keep the slide's composition as authored (no readability floor is written into them).
-  assert.ok(pages.every((page) => page.composition === undefined));
+  // The pages keep the slide's composition as authored (no readability floor is written into them); LH-144: the second carries the
+  // first page's largest timeline size as its cap, so it does not read larger.
+  assert.equal(pages[0].composition, undefined);
+  assert.deepEqual(Object.keys(pages[1].composition), ['maxFontSize']);
   for (const index of [1, 2]) assert.deepEqual(overflow(composed(result.presentation, index)), [], `page ${index} fits`);
   // The other slides and the input are untouched.
   assert.deepEqual(result.presentation.slides[0], deck.slides[0]);

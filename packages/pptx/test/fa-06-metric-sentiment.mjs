@@ -39,6 +39,8 @@ const MUTED = BEFORE.flat;
 const COLORS = {positive: BEFORE.up, negative: BEFORE.down, neutral: BEFORE.flat};
 const designs = [{colorScheme: 'cool-horizon', background: '#FFFFFF'}, {background: '#0F172A', colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}}];
 const deckOf = (metric, design = designs[0], align = 'left') => ({design: {fontScheme: 'roboto', contentAlignment: align, ...design}, slides: [{metric}]});
+// LH-137: a delta pill is the backdrop of the delta and its arrow, which are colored against its fill (the preview's pill rectangle).
+const backdropOf = (svg, background) => /fill="(#[0-9A-Fa-f]{6})"/.exec(/<rect\b[^>]*data-opf-metric-role="pill"[^>]*>/.exec(svg)?.[0] ?? '')?.[1] ?? background;
 const fieldColor = (parts, role) => shapes(parts).find(item => new RegExp(`^OPF metric \\d+ ${role} line 1$`).test(item.name)).runs[0][1];
 
 let checked = 0;
@@ -46,7 +48,8 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
   const background = design.background, base = {value: 42, unit: 'ms', label: 'Latency', description: 'Median', delta: '-3%', trend};
   const absent = await slideParts(deckOf(base, design, align)), absentXml = absent.xml;
   const [absentArrow] = shapes(absent).filter(shape => / trend mark$/.test(shape.name));
-  assert.equal(absentArrow.fillColor.hex, BEFORE[trend][background], `${trend}/${align}: the colour exported without a sentiment`);
+  const absentBackdrop = backdropOf(toSvg(deckOf(base, design, align), 1, {trace: true}), background);
+  assert.equal(`#${absentArrow.fillColor.hex}`, absentBackdrop === background ? `#${BEFORE[trend][background]}` : metricTrendColor(trend, {background: absentBackdrop, ...(trend === 'flat' && {neutral: `#${MUTED[background]}`})}), `${trend}/${align}: the color exported without a sentiment`);
   // An explicit sentiment equal to the trend's default is the absent one: the same slide XML.
   assert.equal(await slideXml(deckOf({...base, sentiment: DEFAULT[trend]}, design, align)), absentXml, `${trend}/${align}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {
@@ -58,14 +61,14 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
     assert.equal(shape.geometry, GEOMETRY[trend], `${id}: the arrow keeps the direction of the trend`);
     assert.equal(shape.descr, `Trend: ${trend}`);
     assert.equal(label, `Trend: ${trend}`);
-    const color = shape.fillColor.hex;
-    assert.equal(color, COLORS[sentiment][background], id);
+    const color = shape.fillColor.hex, backdrop = backdropOf(svg, background);
+    if (backdrop === background) assert.equal(color, COLORS[sentiment][background], id);
     // Core's colour for the sentiment; the neutral is the deck's muted text colour, which opf-render hands over as `neutral`.
-    assert.equal(`#${color}`, metricTrendColor(trend, {background, sentiment, ...(sentiment === 'neutral' && {neutral: `#${MUTED[background]}`})}));
+    assert.equal(`#${color}`, metricTrendColor(trend, {background: backdrop, sentiment, ...(sentiment === 'neutral' && {neutral: `#${MUTED[background]}`})}));
     // The semantic colours are literal; the neutral is the muted text role, a scheme colour.
     assert.equal(shape.fillColor.role, sentiment === 'neutral' ? 'tx2' : undefined, `${id}: ${sentiment === 'neutral' ? 'the neutral is the muted text role' : 'the semantic colour is a literal'}`);
     assert.equal(color, fill, `${id}: export and preview agree on the colour`);
-    assert.ok(colorContrast(`#${color}`, background) >= 4.5, id);
+    assert.ok(colorContrast(`#${color}`, backdrop) >= 4.5, id);
     // LH-53: the trend word is not drawn in either engine (the arrow carries it); the delta takes the arrow's color.
     assert.ok(!shapes(parts).some(item => / trend line \d+$/.test(item.name)), `${id}: no native trend word`);
     for (const role of ['delta']) {
@@ -88,7 +91,8 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
   const metric = {value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down', sentiment: 'positive'};
   const [shape] = shapes(await slideParts(deckOf(metric))).filter(item => / trend mark$/.test(item.name));
   assert.equal(shape.geometry, 'downArrow');
-  assert.deepEqual(shape.fillColor, {hex: '15803D', role: undefined});
+  // LH-137: green kept at 4.5:1 on the delta's pill (core metricPillFill on white), a step darker than on white.
+  assert.deepEqual(shape.fillColor, {hex: metricTrendColor('down', {background: backdropOf(toSvg(deckOf(metric), 1, {trace: true}), '#FFFFFF'), sentiment: 'positive'}).slice(1), role: undefined});
   assert.deepEqual((await fromPptx(await toPptx(deckOf(metric), {seed: 1}))).slides[0].metric, metric);
 }
 // Without a trend sentiment draws nothing and colours nothing; it still survives the round trip.

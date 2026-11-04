@@ -6,6 +6,9 @@
 //   badge      an ellipse in the accent (primary) color holding its numeral as its own text: bold body face at core's size, centered,
 //              in the scheme color readable on the accent (core readableSchemeColor)
 //   arrow      a flow's arrow between two chips: the rightArrow (leftArrow in a right-to-left deck) preset in the accent color
+//   check      LH-137: a summary tile's check mark over its badge (an ellipse without text): a custom geometry in the numeral's color
+//   numeral    LH-134: a numeral beside a ruled row (core `badge.numeral`): a text box at core's line box holding the numeral, bold body face
+//              at core's size, centered, in the tag's color (`context.stepNumeral`), with no fill or line
 //
 // The text of each step stays the list or text it is, at core's measured lines. Every shape carries an OPF_STEPS_V1 tag naming the
 // sequence's path and the shape's role, and import consumes the tagged shapes: they are the layout's drawing of the sequence, which a
@@ -25,7 +28,9 @@ const hex = value => String(value).replace(/^#/, '').slice(0, 6).toUpperCase();
  * Draw a slide's sequences (core `geometry.steps`) before its content, in core's paint order. `context` is the slide's export context
  * (colors, roles, fonts); `tags` collects each shape's name and record for attachStepTags.
  */
-export function addSteps(slide, steps, context, tags) {
+// LH-146: a badge or numeral label of Latin letters, digits and punctuation ("1", "01", "iv"), written as an en-US run in a right-to-left deck.
+const LATIN_NUMERAL = /^[\p{Script=Latin}\d .,:;+*/()#-]+$/u;
+export function addSteps(slide, steps, context, tags, rtl = false) {
   if (!steps?.length) return;
   const accent = hex(context.colors.accent), numeral = hex(context.roles ? readableSchemeColor(`#${accent}`, context.roles).hex : '#FFFFFF');
   const card = hex(context.roles?.neutrals?.card?.hex ?? `#${context.colors.surface}`), cardBorder = hex(context.roles?.neutrals?.cardBorder?.hex ?? `#${context.colors.border}`);
@@ -45,10 +50,34 @@ export function addSteps(slide, steps, context, tags) {
       tag(objectName, 'connector');
     }
     for (const [index, badge] of step.badges.entries()) {
+      if (badge.numeral) {
+        const objectName = name('numeral', index);
+        slide.addText(badge.label, {...box(badge.numeral), color: context.stepNumeral ?? accent, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
+          align: 'center', valign: 'top', margin: 0, fit: 'none', wrap: false, lineSpacingMultiple: 1, paraSpaceAfter: 0, objectName,
+          // LH-146, for LH-134's numerals too: a Latin numeral in a right-to-left deck is an en-US run, drawn in the bold body face.
+          ...(rtl && LATIN_NUMERAL.test(badge.label) ? {lang: 'en-US'} : {})});
+        tag(objectName, 'numeral', {entry: badge.path, label: badge.label, ...(badge.list ? {list: badge.list} : {})});
+        continue;
+      }
       const objectName = name('badge', index);
+      // LH-137: a check-mark badge (a summary list's tile): the accent ellipse, and core's check polygon over it as a custom geometry in
+      // the numeral's color (points relative to its own box, in inches), each tagged as the badge's drawing.
+      if (badge.check) {
+        slide.addShape('ellipse', {x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius), fill: {color: accent}, line: {type: 'none'}, objectName});
+        tag(objectName, 'badge', {entry: badge.path});
+        const xs = badge.check.map(([x]) => x), ys = badge.check.map(([, y]) => y), left = Math.min(...xs), top = Math.min(...ys), checkName = name('check', index);
+        slide.addShape('custGeom', {x: inches(left), y: inches(top), w: inches(Math.max(...xs) - left), h: inches(Math.max(...ys) - top),
+          points: [...badge.check.map(([x, y]) => ({x: inches(x - left), y: inches(y - top)})), {close: true}], fill: {color: numeral}, line: {type: 'none'}, objectName: checkName});
+        tag(checkName, 'check', {entry: badge.path});
+        continue;
+      }
       slide.addText(badge.label, {shape: 'ellipse', x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius),
         fill: {color: accent}, line: {type: 'none'}, color: numeral, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
-        align: 'center', valign: 'middle', margin: 0, fit: 'none', wrap: false, objectName});
+        align: 'center', valign: 'middle', margin: 0, fit: 'none', wrap: false, objectName,
+        // LH-146: in a right-to-left deck a Latin numeral is an en-US run, not the deck language's: PowerPoint draws the digits of a run tagged
+        // with a right-to-left language in the complex-script font (smaller and lighter than the bold body face the preview draws), and runs
+        // name no cs face (FF-05). Left-to-right decks keep their bytes.
+        ...(rtl && LATIN_NUMERAL.test(badge.label) ? {lang: 'en-US'} : {})});
       tag(objectName, 'badge', {entry: badge.path, label: badge.label, ...(badge.list ? {list: badge.list} : {})});
     }
     for (const [index, arrow] of (step.arrows ?? []).entries()) {

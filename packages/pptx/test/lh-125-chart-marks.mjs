@@ -46,7 +46,7 @@ const check = (condition, message) => { assert.ok(condition, message); checks++;
   const {slide} = await exported({title: 'Two in three tickets are resolved on first contact', chart: {type: 'doughnut', data: {columns: ['Outcome', 'Tickets'],
     rows: [['Resolved on first contact', 6240], ['Resolved after follow-up', 2180], ['Escalated', 890], ['Unresolved', 310]]}}});
   check(/name="OPF chart 1 mark over \d+ hole-value"/.test(slide), 'the hole value is a tagged text box');
-  check(texts(slide).filter(text => text === '6240').length >= 2, 'the value is in the hole and in the list');
+  check(texts(slide).filter(text => text === '6,240').length >= 2, 'the value is in the hole and in the list');
   const size = Number(/name="OPF chart 1 mark over \d+ hole-value"[\s\S]*?<a:rPr[^>]*\bsz="(\d+)"/.exec(slide)?.[1]);
   check(size >= 2000, `the hole value is larger than the chart text (${size})`);
 }

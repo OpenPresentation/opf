@@ -1,7 +1,7 @@
 import type { RenderFonts, ScriptFonts } from "./fonts.js";
 import type { Catalog, Finding, SlideSelection, UnresolvedReferenceDiagnostic } from "@openpresentation/opf";
 export type { SlideSelection } from "@openpresentation/opf";
-import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openpresentation/opf/composition";
+import type { SlideComposition, LayoutDiagnostic, TextMeasurement, PictureLuminance } from "@openpresentation/opf/composition";
 export declare const packageName = "@openpresentation/opf-render";
 
 export declare const releaseLane: Readonly<{
@@ -28,6 +28,11 @@ export declare const engineDefaults: Readonly<{
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
+  /** LH-145: a picture background could not be read or decoded by `measurePictures`; its scrim is sized for any picture. */
+  code: "picture-not-measured";
+  path: string;
+  message: string;
+} | {
   /** A run stays text because its face cannot safely be written as outlines. */
   code: "text-as-paths-fallback";
   reason: "colour-font" | "restricted" | "shaping";
@@ -106,7 +111,7 @@ export interface ToSvgOptions {
    * its pixels: the automatic scrim under text on a picture background is then sized for the picture under the text, not for any
    * picture (core `ComposeSlideOptions.pictureLuminance`). Pass the same function to the PPTX export, so both draw the same scrim.
    */
-  pictureLuminance?: (src: string) => { columns: number; rows: number; values: ArrayLike<number> } | undefined;
+  pictureLuminance?: (src: string) => PictureLuminance | undefined;
   strictAssets?: boolean;
   imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => string | null | undefined;
   onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
@@ -201,6 +206,40 @@ export declare class OPFRenderError extends Error {
  * of `slides` are then undefined. Without it every slide is bound.
  */
 export declare function resolvePresentation(input: unknown, options?: ToSvgOptions, select?: { slides?: number[] }): ResolvedPresentation;
+
+/** The sampler `measurePictures` returns: core's `pictureLuminance` option, plus what it measured. */
+export interface PictureSampler {
+  /** The luminance grid of the picture whose authored source is `src`, or undefined when it was not measured (core then sizes the scrim for any picture). */
+  (src: string): PictureLuminance | undefined;
+  /** The authored sources of the deck's picture backgrounds (slide, deck and theme). */
+  readonly sources: readonly string[];
+  /** How many of them were measured. */
+  readonly measured: number;
+}
+/** The decoded pixels of a picture: 8-bit sRGB in row order, `channels` bytes each (3, or 4 with alpha). */
+export interface DecodedPicture { width: number; height: number; data: ArrayLike<number>; channels: 3 | 4 }
+export interface MeasurePicturesOptions {
+  /** The same resolver `toSvg` takes: turns a source (after `asset:` references) into a data URI, bytes or `{ data, mediaType }`. May be async. */
+  imageResolver?: (src: string | undefined, context: { asset: unknown; path: string }) => unknown;
+  /** Catalogs a theme reference resolves in (its background may be a picture). */
+  catalogs?: readonly Catalog[];
+  /** Reads a resolved `http:`, `https:` or `blob:` address (`fetch`). Without it only data URIs, bytes and resolver results are read, and nothing is fetched. */
+  fetch?: (url: string) => Promise<{ ok?: boolean; status?: number; headers?: { get(name: string): string | null }; arrayBuffer(): Promise<ArrayBuffer> }>;
+  /** A Map the host keeps between calls: each resolved picture is decoded once, however often the deck changes. */
+  cache?: Map<unknown, Promise<PictureLuminance | null>>;
+  /** Decodes picture bytes to at most `maxSide` pixels on the longest side. Default: sharp in Node (the optional peer, loaded on first use), the canvas in a browser. */
+  decode?: (bytes: Uint8Array, mediaType: string | undefined, limits: { maxSide: number }) => Promise<DecodedPicture>;
+  /** The longest side a picture is decoded at (default 1024). */
+  maxSide?: number;
+  /** Called with `picture-not-measured` for a picture that could not be read or decoded; its scrim keeps the worst case. */
+  onDiagnostic?: (diagnostic: RenderDiagnostic) => void;
+}
+/**
+ * LH-145: the luminance sampler of a deck's picture backgrounds, each decoded once. Pass the result as `pictureLuminance` to `toSvg` and to the
+ * PPTX export, so the automatic scrim is sized for the picture under the text in both. Never rejects for a picture it cannot read.
+ */
+export declare function measurePictures(deck: unknown, options?: MeasurePicturesOptions): Promise<PictureSampler>;
+
 
 /** An SVG slide the renderer drew: its text, or its bytes. */
 export type SvgSlide = string | Uint8Array;

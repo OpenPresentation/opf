@@ -8,7 +8,7 @@
  * to the conventional reading of the trend (up positive, down negative, flat neutral).
  */
 import type { MetricLayout } from './composition.js';
-import { isDarkColor } from './color.js';
+import { isDarkColor, surfaceAltColor } from './color.js';
 import { contrast, legible, luminance, normalize } from './legible-color.js';
 
 export type MetricTrend = 'up' | 'down' | 'flat';
@@ -119,3 +119,12 @@ export function metricTrendMark(layout: MetricLayout, options: MetricTrendColorO
   return { trend, sentiment, shape, box, points: metricTrendPoints(shape, box), color: metricTrendColor(trend, { ...options, sentiment }), ariaLabel: `Trend: ${trend}`, path: part.path };
 }
 
+
+/**
+ * LH-137: the fill of a metric's delta pill (`MetricLayout.deltaPill`) on `backdrop` (the slide, card or emphasis surface under the metric):
+ * the backdrop moved toward the text color, as a table's banded row is (core surfaceAltColor), so the pill reads as a step off its backdrop
+ * and the text keeps 4.5:1 on it. Engines color the delta and its trend arrow against this fill (metricTrendMark's `background`).
+ */
+export function metricPillFill(backdrop: string, text: string): string {
+  return surfaceAltColor(backdrop, text);
+}

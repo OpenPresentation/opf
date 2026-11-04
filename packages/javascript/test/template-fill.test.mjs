@@ -10,13 +10,12 @@ const { layouts } = gallery;
 const findings = (result) => result.diagnostics.filter((entry) => entry.code === 'text-overflow' || entry.code === 'small-cell');
 const field = (result, name) => result.items.find((item) => item.field === name);
 const lines = (item) => ('richLines' in item.text ? item.text.richLines.length : item.text.lines.length);
-const middle = (box) => box.y + box.height / 2;
 // The type scale at the default floor and canvas (LH-17): 16 px times (28/16)^(1/4) to a power, in whole pixels.
 const STEPS = [16, 18, 21, 24, 28, 32, 37, 43, 49, 56, 65, 75, 86];
 const sizesOf = (result) => new Map(result.items.filter((item) => item.text).map((item) => [`${item.path}:${item.field}`, item.text.fontSize]));
 const neverSmaller = (grown, kept) => { for (const [key, size] of sizesOf(kept)) assert.ok((sizesOf(grown).get(key) ?? Infinity) >= size - 1e-6, `${key} ${size} -> ${sizesOf(grown).get(key)}`); };
 
-test('a section grows its title and subtitle by steps of the type scale to their display sizes, keeps its eyebrow tag and stays centered', () => {
+test('a section grows its title and subtitle by steps of the type scale to their display sizes, keeps its eyebrow tag and sits at the foot of the slide (LH-130)', () => {
   for (const direction of ['ltr', 'rtl']) {
     const slide = { tag: 'Part 1', title: 'Where we stand', subtitle: 'Results from the first nine months of 2026' };
     const result = composeSlide(slide, { layout: layouts.section, direction }), kept = composeSlide(slide, { layout: layouts.section, direction, fill: false });
@@ -31,8 +30,9 @@ test('a section grows its title and subtitle by steps of the type scale to their
       assert.equal(lines(field(result, name)), lines(field(kept, name)), 'no heading takes another line');
     }
     assert.equal(field(result, 'title').text.fontSize, HEADING_DISPLAY_SIZES.title);
-    const top = field(result, 'tag').box.y, bottom = field(result, 'subtitle').box.y + field(result, 'subtitle').box.height;
-    assert.ok(Math.abs((top + bottom) / 2 - middle(result.contentBox)) < 2, 'the heading group stays in the middle');
+    // LH-130: the section's title area anchors its group at the bottom, so the grown group ends at the foot of the content box.
+    const bottom = field(result, 'subtitle').box.y + field(result, 'subtitle').box.height;
+    assert.ok(Math.abs(bottom - (result.contentBox.y + result.contentBox.height)) < 2, 'the heading group sits at the foot');
   }
 });
 

@@ -14,7 +14,8 @@ test('composition accepts complete metric geometry against its rounded cell and 
     assert.equal(explanation.algorithm,'grid-score-v9');assert.deepEqual(explanation.unmeasuredPayloads,[]);
     const item=ordinary.items[0],value=item.metricLayout.parts.find(part=>part.role==='value');
     assert.equal(item.text,value.fit);assert.equal(item.textStyle,value.style);
-    assert.deepEqual(item.metricLayout,layoutMetric(metric,item.box,{...options,path:item.path,minFontSize:32,scale:options.width/720}));
+    // LH-137: composition asks for the delta pill.
+    assert.deepEqual(item.metricLayout,layoutMetric(metric,item.box,{...options,path:item.path,minFontSize:32,scale:options.width/720,deltaPill:true}));
     assert.ok(item.metricLayout.parts.every(part=>part.fit.fontSize>=32*options.width/720));
     assert.deepEqual(ordinary.diagnostics,[]);
   }

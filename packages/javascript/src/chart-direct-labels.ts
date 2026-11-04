@@ -18,7 +18,7 @@
 // could not be placed natively where the preview draws it.
 import {chartTextSize, stackCategoryValues, type ChartValueAxis} from './chart-axis.js';
 import {chartNumber, resolveChartData, type ResolvedChartData} from './chart-data.js';
-import {chartHeader, CHART_HEADER_MAX_LEGEND, valueLabel, type ChartEndLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerSlices, type ChartSliceLabel} from './chart-layer.js';
+import {chartHeader, CHART_HEADER_MAX_LEGEND, columnValueLabel, type ChartEndLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerSlices, type ChartSliceLabel} from './chart-layer.js';
 import {chartPlotInset, type ChartPlotGeometry} from './chart-plot.js';
 
 interface Box { x: number; y: number; width: number; height: number }
@@ -68,7 +68,7 @@ export function placeEndLabels(chart: unknown, data: ResolvedChartData, axis: Ch
   // The gap and label box of the preview's point labels (drawPointLabel: a marker radius and a quarter text size; text plus half a size).
   const gap = 3 * pt + fontPx * 0.25;
   const placed = series.map((entry, j) => {
-    const text = endLabelText(data, j), bold = focus?.includes(j) === true;
+    const text = endLabelText(data, j, geometry.language), bold = focus?.includes(j) === true;
     return {j, name: entry.name, text, bold, y: at(stacks[j]![last]!.to), width: (bold && geometry.bold ? geometry.bold(text, fontPx) : geometry.measure(text, fontPx)) + fontPx * 0.5};
   });
   const order = [...placed].sort((a, b) => a.y - b.y || a.j - b.j);
@@ -89,11 +89,10 @@ export function placeEndLabels(chart: unknown, data: ResolvedChartData, axis: Ch
 }
 
 /** LH-105: a series' end label: its last value as its data labels print it (the column's format, else General), then its name. */
-export function endLabelText(data: ResolvedChartData, series: number): string {
+export function endLabelText(data: ResolvedChartData, series: number, language?: string): string {
   if (!data.ok) return '';
   const last = data.rows[data.rows.length - 1], value = last ? chartNumber(last[series + 1]) : null, name = label(data.columns[series + 1]);
-  const format = typeof data.formats[series + 1] === 'string' && data.formats[series + 1] !== '' ? data.formats[series + 1] : undefined;
-  return value === null ? name : `${valueLabel(value, format)} ${name}`;
+  return value === null ? name : `${columnValueLabel(data, series + 1, value, language)} ${name}`;
 }
 
 /**
@@ -112,7 +111,7 @@ export function chartEndLabels(chart: unknown, data: ResolvedChartData, layer: C
   const {fontPx, pt} = metrics(box, scale, geometry.minFontSize);
   const measure = (text: string, size: number) => geometry.measure(text, size, 400), bold = (text: string, size: number) => geometry.measure(text, size, 700);
   const focus = layer?.focus?.series;
-  const gutter = 3 * pt + fontPx * 0.25 + Math.max(...data.columns.slice(1).map((_, j) => (focus?.includes(j) ? bold : measure)(endLabelText(data, j), fontPx) + fontPx * 0.5));
+  const gutter = 3 * pt + fontPx * 0.25 + Math.max(...data.columns.slice(1).map((_, j) => (focus?.includes(j) ? bold : measure)(endLabelText(data, j, geometry.language), fontPx) + fontPx * 0.5));
   // The small-chart treatment (value labels, no value axis) gives way: the end labels carry the last values and the axis the rest.
   const {header: _header, small: _small, ...rest} = layer ?? {};
   const base: ChartLayer = {...rest, ...(header ? {header} : {})};

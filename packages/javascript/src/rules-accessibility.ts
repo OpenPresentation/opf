@@ -1,5 +1,6 @@
 import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
 import { type LayoutBox, textInkBox } from './composition.js';
+import { metricValueColor } from './metric-trend.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
@@ -121,6 +122,10 @@ function collectSamples(context: RuleSlide): TextSample[] {
 		}
 		const parts: { path: string; sizePx: number; color: string; label: string }[] = [];
 		const layoutOf = item.quoteLayout ?? item.metricLayout ?? item.timelineLayout;
+		// LH-151: a metric value (and a unit on its line) is judged in the color the engines draw it in: metricValueColor of the primary on
+		// the surface under it (a card's fill, else the slide or emphasis background), as the preview and the PPTX export call it (LH-57).
+		const valueColor = item.metricLayout ? metricValueColor(itemDesign.colors.primary, item.frameBox && !item.emphasis ? design.neutrals.card.hex : itemDesign.colors.background, itemDesign.colors.text) : itemDesign.colors.primary;
+		const valueRole = (role: string) => role === 'value' || (role === 'unit' && item.metricLayout?.arrangement === 'inline-unit');
 		if (layoutOf)
 			for (const part of layoutOf.parts as readonly Rec[]) {
 				if (!part.fit || part.visible === false) continue;
@@ -128,7 +133,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 				parts.push({
 					path: typeof part.path === 'string' && part.path.startsWith('slides.') ? pointerOfDotted(part.path) : itemPath,
 					sizePx: part.fit.fontSize / scale,
-					color: role === 'footer' ? itemDesign.colors.mutedText : role === 'value' && item.metricLayout ? itemDesign.colors.primary : item.timelineLayout ? timelineTextColor(part as { status?: 'done' | 'current' | 'planned' }, { background: itemDesign.colors.background, primary: itemDesign.colors.primary, text: itemDesign.colors.text, mutedText: itemDesign.colors.mutedText }) : itemDesign.colors.text,
+					color: role === 'footer' ? itemDesign.colors.mutedText : valueRole(role) && item.metricLayout ? valueColor : item.timelineLayout ? timelineTextColor(part as { status?: 'done' | 'current' | 'planned' }, { background: itemDesign.colors.background, primary: itemDesign.colors.primary, text: itemDesign.colors.text, mutedText: itemDesign.colors.mutedText }) : itemDesign.colors.text,
 					label: item.field === 'quote' ? (role === 'footer' ? 'Quote attribution' : 'Quote') : item.field === 'metric' ? (role === 'value' ? 'Metric value' : 'Metric label') : 'Timeline text',
 				});
 			}

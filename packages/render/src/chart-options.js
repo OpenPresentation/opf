@@ -85,12 +85,12 @@ export function drawAxisTitles(c) {
 
 const INSIDE = new Set(["center", "inside-end", "inside-base"]);
 
-/** The label text for one mark: the selected parts, the series' number format (General when it has none), integer percent. */
-export function labelString(c, { category, value, share, format }) {
+/** The label text for one mark: the selected parts, the series' number format (General when it has none; LH-141: grouped by the deck language when `group`), integer percent. */
+export function labelString(c, { category, value, share, format, group }) {
   const labels = c.dataLabels;
   const parts = {};
   if (category !== undefined && category !== null) parts.category = String(category);
-  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value);
+  if (typeof value === "number" && Number.isFinite(value)) parts.value = format !== undefined ? formatDataNumber(value, format) : formatChartLabelNumber(value, group ? { language: typeof c.language === "string" ? c.language : undefined } : undefined);
   if (typeof share === "number" && Number.isFinite(share)) parts.percent = formatChartLabelPercent(share);
   return chartLabelText(parts, labels.content, labels.separator);
 }

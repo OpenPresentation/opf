@@ -411,7 +411,10 @@ description sits under its label. The preview draws the hairlines as SVG lines a
 
 Without a `listStyle` anywhere, a list of two or more first-level entries that each pair a short label (3 words or fewer and at most 32
 characters, no full stop: `isLabelText`) with a description is drawn as rows, under the size guard (the guarded rule `list-rows`): a
-slide keeps the rows only when no block reads smaller than it does with the list stacked. Every other list is stacked. Effective value:
+slide keeps the rows only when no block reads smaller than it does with the list stacked. A list of questions with answers is ruled the
+same way (`pair-rows`, LH-133), each question in a column of 40% of the width, and a glossary's terms draw in the accent; a few
+numbered takeaways and an agenda with descriptions draw numerals beside their rows (LH-134). See
+[Questions and terms](dynamic-composition.md#questions-and-terms-lh-133). Every other list is stacked. Effective value:
 the slide's design, the deck's, the theme's, then the layout record's.
 
 ### Eyebrows (LH-32, LH-50)
@@ -433,6 +436,15 @@ the paragraph, at the paragraph's x, width and alignment, and is listed before i
 its paragraph's `frameBox`, and engines draw that card once, under the eyebrow. Blocks with a caption, an `emphasis` of their own, or on
 a slide that pins a block to a region, are composed as written; a labeled paragraph is never LH-06's band or pill. The rule is guarded
 (`eyebrow`): the paragraphs keep at least the size they have with the label as a block of its own.
+
+The same label heads a list or a group (LH-152), at the root or inside a group, instead of taking an equal-width cell beside it half a
+slide away: a label right before a list (`items` or `bullets`) or a group is that list's or group's eyebrow, and a group's first child that
+is a label, followed by two or more blocks none of which is a label, is the eyebrow of the whole group. A list's eyebrow is drawn as a
+paragraph's is. A group's eyebrow takes a band at the top of the group, sized for the first paragraph or list the group holds, and is drawn
+over the span its blocks finally cover (their cards included), at the content alignment, before them in reading order. Two groups with
+eyebrows stay side by side or stacked as peers. An explicit arrangement (a `composition` mode, weights or columns of the slide or
+of the group) keeps its blocks as authored, a group of labels alone heads nothing, a root label before a root list stays a block on a
+layout with a `sequence` region (LH-07 draws step badges on its lists), and two labels in a row are no eyebrows.
 
 ### `fontScheme.accent`
 

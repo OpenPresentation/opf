@@ -2,8 +2,8 @@
   "deck": "gallery/design-and-media/photo-essay-portfolio.opf.json",
   "entries": {
     "gallery/design-and-media/photo-essay-portfolio.opf.json#0": {
-      "sha256": "2a5e5e45cff75b4dc4252e4cfda84c21c7a97f63b2d6c6dab6b99ece4d45bb5a",
-      "bytes": 6788
+      "sha256": "683e417d9fc70c030ebaa8eb8998b0ec599a292299f4bd4fb81f8f4f5403083a",
+      "bytes": 6216
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#1": {
       "sha256": "2006f4557cba72ce7c54282b53c0511b13a5e180d88b27583d2c2b82e103ef11",
@@ -26,8 +26,8 @@
       "bytes": 17841
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#6": {
-      "sha256": "58bfb4d0a33c2a26e67b8af5f3146bb065bde940fad65788161525754e1eba6e",
-      "bytes": 10415
+      "sha256": "b5b540503174984d5d8adf9e8cfb10ba09d0c6aa2e903f3c68cfb01884a91e2e",
+      "bytes": 10878
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#7": {
       "sha256": "6be395502cda295f226a5eb6240d49f6e8a7feaa5e241dc916d8feea3d073294",
