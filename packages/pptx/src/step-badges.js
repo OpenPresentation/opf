@@ -6,6 +6,7 @@
 //   badge      an ellipse in the accent (primary) color holding its numeral as its own text: bold body face at core's size, centered,
 //              in the scheme color readable on the accent (core readableSchemeColor)
 //   arrow      a flow's arrow between two chips: the rightArrow (leftArrow in a right-to-left deck) preset in the accent color
+//   check      LH-137: a summary tile's check mark over its badge (an ellipse without text): a custom geometry in the numeral's color
 //
 // The text of each step stays the list or text it is, at core's measured lines. Every shape carries an OPF_STEPS_V1 tag naming the
 // sequence's path and the shape's role, and import consumes the tagged shapes: they are the layout's drawing of the sequence, which a
@@ -46,6 +47,17 @@ export function addSteps(slide, steps, context, tags, rtl = false) {
     }
     for (const [index, badge] of step.badges.entries()) {
       const objectName = name('badge', index);
+      // LH-137: a check-mark badge (a summary list's tile): the accent ellipse, and core's check polygon over it as a custom geometry in
+      // the numeral's color (points relative to its own box, in inches), each tagged as the badge's drawing.
+      if (badge.check) {
+        slide.addShape('ellipse', {x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius), fill: {color: accent}, line: {type: 'none'}, objectName});
+        tag(objectName, 'badge', {entry: badge.path});
+        const xs = badge.check.map(([x]) => x), ys = badge.check.map(([, y]) => y), left = Math.min(...xs), top = Math.min(...ys), checkName = name('check', index);
+        slide.addShape('custGeom', {x: inches(left), y: inches(top), w: inches(Math.max(...xs) - left), h: inches(Math.max(...ys) - top),
+          points: [...badge.check.map(([x, y]) => ({x: inches(x - left), y: inches(y - top)})), {close: true}], fill: {color: numeral}, line: {type: 'none'}, objectName: checkName});
+        tag(checkName, 'check', {entry: badge.path});
+        continue;
+      }
       slide.addText(badge.label, {shape: 'ellipse', x: inches(badge.cx - badge.radius), y: inches(badge.cy - badge.radius), w: inches(2 * badge.radius), h: inches(2 * badge.radius),
         fill: {color: accent}, line: {type: 'none'}, color: numeral, fontFace: context.fonts.body, fontSize: badge.fontSize * .75, bold: true,
         align: 'center', valign: 'middle', margin: 0, fit: 'none', wrap: false, objectName,

@@ -15,10 +15,17 @@ function aligned(layout,cell,alignment='center') {
   assert.equal(layout.overflow,false);
   const factor=alignment==='center'?.5:alignment==='right'?1:0;
   const [value,unit]=layout.parts;
+  // LH-137: a delta pill beside the value is on the value's line, which is aligned as one with it.
+  const pill=layout.deltaPill?.placement==='beside'?layout.deltaPill.box:undefined;
+  if(pill) {
+    const last=layout.arrangement==='inline-unit'?unit:value,start=Math.min(value.box.x,pill.x),end=Math.max(pill.x+pill.width,last.box.x+last.box.width);
+    close(start,cell.x+(cell.width-(end-start))*factor);
+    assert.ok(pill.x>=last.box.x+last.box.width,'the pill follows the value');
+  }
   if(layout.arrangement==='inline-unit') {
     // LH-127: the gap is METRIC_UNIT_GAP of the value's size, at least 8.
     const gap=Math.max(8,METRIC_UNIT_GAP*value.fit.fontSize);
-    close(value.box.x,cell.x+(cell.width-value.box.width-unit.box.width-gap)*factor);
+    if(!pill)close(value.box.x,cell.x+(cell.width-value.box.width-unit.box.width-gap)*factor);
     close(unit.box.x,value.box.x+value.box.width+gap);
     close(value.linePositions[0].baseline,unit.linePositions[0].baseline);
   }
@@ -26,6 +33,7 @@ function aligned(layout,cell,alignment='center') {
   const host=layout.trendBox?['delta','label','description'].map(role=>layout.parts.find(part=>part.role===role&&part.visible)).find(Boolean):undefined;
   for(const part of layout.parts) {
     if(layout.arrangement==='inline-unit'&&(part.role==='value'||part.role==='unit'))continue;
+    if(pill&&(part.role==='value'||part.role==='delta'))continue;
     const room=part===host?part.fit.fontSize*(METRIC_TREND_ARROW_SIZE+METRIC_TREND_ARROW_GAP):0;
     for(const [index,line] of part.fit.sourceLines.entries())close(part.linePositions[index].x,cell.x+room+(cell.width-room-line.width)*factor);
   }

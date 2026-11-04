@@ -69,6 +69,8 @@ for (const scheme of [...colorSchemeIds, {light1: '#000000', dark1: '#000000', a
 const metricDeck = (metric, design = {}) => ({design: {fontScheme: 'roboto', ...design}, slides: [{metric}]});
 const arrows = svg => [...svg.matchAll(/<g aria-label="([^"]*)" role="img"><polygon fill="(#[0-9A-F]{6})" points="([^"]*)"\/><\/g>/g)]
   .map(([, label, fill, points]) => ({label, fill, points: points.split(' ').map(pair => pair.split(',').map(Number))}));
+// LH-137: a delta pill is the backdrop of the delta and its arrow, which are colored against its fill.
+const backdropOf = (svg, background) => /fill="(#[0-9A-Fa-f]{6})"/.exec(/<rect\b[^>]*data-opf-metric-role="pill"[^>]*>/.exec(svg)?.[0] ?? '')?.[1] ?? background;
 for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['flat', 'rightArrow']]) {
   for (const design of [{colorScheme: 'cool-horizon', background: '#FFFFFF'}, {background: '#0F172A', colorScheme: {light1: '#F8FAFC', dark1: '#0F172A', accent1: '#38BDF8'}}]) {
     const svg = toSvg(metricDeck({value: 42, label: 'Latency', delta: '-3%', trend}, design), 1, {trace: true});
@@ -76,11 +78,11 @@ for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['fla
     assert.equal(found.length, 1, `${trend}: one arrow`);
     assert.equal(found[0].label, `Trend: ${trend}`);
     assert.equal(found[0].points.length, 7, geometry);
-    const background = design.background;
-    assert.ok(colorContrast(found[0].fill, background) >= 4.5, `${trend} ${found[0].fill} on ${background}`);
+    const background = design.background, backdrop = backdropOf(svg, background);
+    assert.ok(colorContrast(found[0].fill, backdrop) >= 4.5, `${trend} ${found[0].fill} on ${background}`);
     // RR-96: a flat trend takes the deck's scheme-derived neutral (core roles.neutrals.trendNeutral) like the export.
     const neutral = resolvePresentation(metricDeck({value: 1, label: 'x', trend}, design)).slides[0].design.roles.neutrals.trendNeutral.hex;
-    assert.equal(found[0].fill, metricTrendColor(trend, {background, neutral}));
+    assert.equal(found[0].fill, metricTrendColor(trend, {background: backdrop, neutral}));
     // LH-53: the trend word is not drawn (it is the arrow's text alternative); the delta text takes the arrow's color.
     const delta = svg.match(/<text\b[^>]*data-opf-metric-role="delta"[^>]*>/)[0];
     assert.equal(/\bfill="([^"]*)"/.exec(delta)[1], found[0].fill, `${trend} delta color`);

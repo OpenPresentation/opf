@@ -8,6 +8,8 @@ const metricDeck = (metric, design = {}) => ({design: {fontScheme: 'roboto', ...
 const arrows = svg => [...svg.matchAll(/<g aria-label="([^"]*)" role="img"><polygon fill="(#[0-9A-F]{6})" points="([^"]*)"\/><\/g>/g)]
   .map(([, label, fill, points]) => ({label, fill, points}));
 const textFill = (svg, role) => /\bfill="([^"]*)"/.exec(svg.match(new RegExp(`<text\\b[^>]*data-opf-metric-role="${role}"[^>]*>`))[0])[1];
+// LH-137: a delta pill is the backdrop of the delta and its arrow, which are colored against its fill.
+const backdropOf = (svg, background) => /fill="(#[0-9A-Fa-f]{6})"/.exec(/<rect\b[^>]*data-opf-metric-role="pill"[^>]*>/.exec(svg)?.[0] ?? '')?.[1] ?? background;
 const DEFAULT = {up: 'positive', down: 'negative', flat: 'neutral'};
 // The colours the preview drew before sentiment existed: up green, down red, flat neutral. RR-96: the neutral is the deck's scheme-derived
 // trend neutral (tx2 of the slide's variant, core roles.neutrals.trendNeutral), so the fixed flat colours below are only the pre-RR-96 record.
@@ -22,7 +24,8 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
   const absent = toSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend}, design), 1, {trace: true});
   const base = arrows(absent);
   assert.equal(base.length, 1, `${trend}: one arrow`);
-  assert.equal(base[0].fill, trend === 'flat' ? neutral : BEFORE[trend][background], `${trend} on ${background}: the colour drawn before sentiment existed`);
+  const backdrop = backdropOf(absent, background);
+  assert.equal(base[0].fill, backdrop !== background ? metricTrendColor(trend, {background: backdrop, neutral}) : trend === 'flat' ? neutral : BEFORE[trend][background], `${trend} on ${background}: the colour drawn before sentiment existed`);
   // An explicit sentiment equal to the trend's default is the absent one, byte for byte.
   assert.equal(toSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment: DEFAULT[trend]}, design), 1, {trace: true}), absent, `${trend}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {
@@ -31,9 +34,9 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
     assert.equal(found.length, 1, `${trend}/${sentiment}: one arrow`);
     assert.equal(found[0].label, `Trend: ${trend}`);
     assert.equal(found[0].points, base[0].points, `${trend}/${sentiment}: the arrow keeps the direction of the trend`);
-    assert.equal(found[0].fill, COLORS[sentiment][background], `${trend}/${sentiment} on ${background}`);
-    assert.equal(found[0].fill, metricTrendColor(trend, {background, sentiment, neutral}));
-    assert.ok(colorContrast(found[0].fill, background) >= 4.5, `${trend}/${sentiment} ${found[0].fill} on ${background}`);
+    if (backdrop === background) assert.equal(found[0].fill, COLORS[sentiment][background], `${trend}/${sentiment} on ${background}`);
+    assert.equal(found[0].fill, metricTrendColor(trend, {background: backdrop, sentiment, neutral}));
+    assert.ok(colorContrast(found[0].fill, backdrop) >= 4.5, `${trend}/${sentiment} ${found[0].fill} on ${background}`);
     assert.equal(textFill(svg, 'delta'), found[0].fill, `${trend}/${sentiment} delta text color`);
     // LH-53: the trend word is not drawn; the arrow, whose text alternative it is, carries the direction.
     assert.ok(!svg.includes(`>${trend}</tspan>`) && !svg.includes('data-opf-metric-role="trend"'), 'the trend word is not drawn');
@@ -45,7 +48,8 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
 // Falling churn that is good news: a downward arrow in green.
 {
   const svg = toSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down', sentiment: 'positive'}, designs[0]), 1, {trace: true});
-  assert.equal(arrows(svg)[0].fill, '#15803D');
+  // LH-137: green kept at 4.5:1 on the delta's pill, a step darker than on white.
+  assert.equal(arrows(svg)[0].fill, metricTrendColor('down', {background: backdropOf(svg, '#FFFFFF'), sentiment: 'positive'}));
   assert.equal(arrows(svg)[0].points, arrows(toSvg(metricDeck({value: 3.1, unit: '%', label: 'Churn', delta: '-0.6 pts', trend: 'down'}, designs[0]), 1, {trace: true}))[0].points);
 }
 // Without a trend sentiment draws nothing and colours nothing.

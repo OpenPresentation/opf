@@ -61,7 +61,7 @@ import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colo
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
   catalogRecords, clrMapAttributes, groupsAxisTicks, GROUPED_LABEL_CODE, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
-  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -2495,6 +2495,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       context.cardTags.set(`OPF card ${emphasisPath}`, emphasisPath);
       slide.addShape('roundRect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, rectRadius: radius / 96,
         fill: {color: emphasisContext.colors.background, transparency: 0}, line: {type: 'none'}, objectName: `OPF card ${emphasisPath}`});
+      // LH-131: a featured before and after pair's arrow, drawn and tagged as LH-07's flow arrows are (OPF_STEPS_V1, consumed on import:
+      // the layout's drawing, not content), in the accent where core placed it, with the surface as the preview draws it.
+      const arrow = geometry.emphasis.arrow;
+      if (arrow) {
+        const objectName = `OPF steps ${emphasisPath} arrow`;
+        slide.addShape(arrow.direction === 'left' ? 'leftArrow' : 'rightArrow', {x: arrow.box.x / 96, y: arrow.box.y / 96, w: arrow.box.width / 96, h: arrow.box.height / 96,
+          fill: {color: normalizeHex(slideContext.colors.accent)}, line: {type: 'none'}, objectName});
+        context.stepTags.set(objectName, {v: 1, path: emphasisPath, form: 'pair', sequence: 0, role: 'arrow'});
+      }
     }
     const region = { x: item.box.x / 96, y: item.box.y / 96, w: item.box.width / 96, h: item.box.height / 96 };
     // LH-50: a label drawn as an eyebrow shares its paragraph's card (the same frameBox): the card is drawn once, under the eyebrow, and
@@ -3778,7 +3787,14 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
   // the delta text. LH-54: a metric in a card is colored against the card fill (context.cardFill), as the preview does. LH-57: on a
   // dark one, a value whose accent falls under 4.5:1 takes the text color.
   const backdrop=context.cardFill??`#${normalizeHex(context.colors.background)}`;
-  const trendMark=metricTrendMark(layout,{background:backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
+  // LH-137: a delta pill (layout.deltaPill), a native rounded rectangle in core metricPillFill under the delta and its arrow, which are
+  // colored against it; tagged into the metric's group as decoration (role 'pill'), as the preview draws it.
+  const pillFill=layout.deltaPill?metricPillFill(backdrop,`#${normalizeHex(context.colors.text)}`):undefined;
+  if (layout.deltaPill) {
+    const pill=layout.deltaPill.box,objectName=`OPF metric ${group} pill`;
+    slide.addShape('roundRect',{objectName,x:pill.x/96,y:pill.y/96,w:pill.width/96,h:pill.height/96,rectRadius:layout.deltaPill.radius/96,fill:{color:normalizeHex(pillFill)},line:{type:'none'}});
+  }
+  const trendMark=metricTrendMark(layout,{background:pillFill??backdrop,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
   // LH-53: a unit on its value's line is part of the figure and takes the value's color, as the preview does.
   // LH-57: when the value takes the text color, it is written as the slide's own text color (a scheme color where the text is one).
   const textHex=`#${normalizeHex(context.colors.text)}`,valueHex=metricValueColor(`#${normalizeHex(context.colors.accent)}`,backdrop,textHex).toUpperCase();
@@ -3807,6 +3823,8 @@ function addMetricPayload(slide,value,layout,context,path,options,presentation) 
       });
     }
   }
+  // LH-137: the pill's tag follows the text's, so the metric's manifest stays its first tag (the pill shape is drawn first, under the text).
+  if (layout.deltaPill) context.metricTags.set(`OPF metric ${group} pill`,{v:1,group,role:'pill'});
   if(trendMark) {
     const objectName=`OPF metric ${group} trend mark`;
     context.metricTags.set(objectName,{v:1,group,role:'mark'});

@@ -62,8 +62,10 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
     if (anchors.length!==1) throw new Error('Missing or duplicated metric anchor.');
     const anchor=anchors[0],manifest=anchor.data;validateManifest(manifest);
     // RR-07: the trend arrow (role 'mark') is generated decoration: at most one, consumed with the group, never source text.
-    const marks=group.filter(item=>item.data.role==='mark'),members=group.filter(item=>item.data.role!=='mark');
+    // LH-137: so is the delta's pill (role 'pill').
+    const marks=group.filter(item=>item.data.role==='mark'),pills=group.filter(item=>item.data.role==='pill'),members=group.filter(item=>item.data.role!=='mark'&&item.data.role!=='pill');
     if (marks.length>1) throw new Error('Duplicated metric trend mark.');
+    if (pills.length>1) throw new Error('Duplicated metric delta pill.');
     const expected=manifest.parts.reduce((sum,part)=>sum+part.lines.length,0);
     if (members.length!==expected||new Set(members.map(item=>item.shape)).size!==expected) throw new Error('Incomplete or duplicated metric shapes.');
     const nativeLines=new Map();
