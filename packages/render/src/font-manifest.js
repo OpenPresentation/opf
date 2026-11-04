@@ -1907,12 +1907,12 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-devanagari",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "pack": "scripts",
       "scripts": [
         "Deva"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-devanagari/v/0.4.1",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-devanagari/v/0.4.2",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "a216f6f8d85c7228093e0ee5e258d9d377e6671f68acb4db1930b29583d0f331",
@@ -1925,14 +1925,14 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Sans Devanagari",
           "weight": 400,
           "italic": false,
-          "sha256": "084a94d89eb54aafb93a056e15425c34fd859f6342875165d304837b3bcfc2d2"
+          "sha256": "30f20b135b2b7b8c370ea30dd8c88f5174c1209f0373534ad4c814717f375b9e"
         },
         {
           "file": "700Bold/NotoSansDevanagari_700Bold.ttf",
           "family": "Noto Sans Devanagari",
           "weight": 700,
           "italic": false,
-          "sha256": "67f1ec9e2ac30b261090e32953b2df0adf6c942ab26ac47efb490fa7315bddab"
+          "sha256": "614d1bf087d082e88f0802a6259d96ec846351c0a6fb736294af01fadd09ebac"
         }
       ]
     },
@@ -2403,12 +2403,12 @@ export const BUNDLED_FONT_MANIFEST=freeze({
     },
     {
       "name": "@expo-google-fonts/noto-sans-georgian",
-      "version": "0.4.3",
+      "version": "0.4.4",
       "pack": "scripts",
       "scripts": [
         "Geor"
       ],
-      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-georgian/v/0.4.3",
+      "source": "https://www.npmjs.com/package/@expo-google-fonts/noto-sans-georgian/v/0.4.4",
       "license": "OFL-1.1",
       "licenseFile": "LICENSE_FONT",
       "licenseSha256": "8c02263c5d73d40544f9ed91e30c4e947407057a3cc430d7b786189aeceff6df",
@@ -2421,14 +2421,14 @@ export const BUNDLED_FONT_MANIFEST=freeze({
           "family": "Noto Sans Georgian",
           "weight": 400,
           "italic": false,
-          "sha256": "35b1dc2d78025505b6d4b7977960060fdb0a9a0dfb21c356fe8ca554172e8f00"
+          "sha256": "78783e9fe5330b28952ee2433340b3f0632974ba854fcbcf83efff1d9bad1574"
         },
         {
           "file": "700Bold/NotoSansGeorgian_700Bold.ttf",
           "family": "Noto Sans Georgian",
           "weight": 700,
           "italic": false,
-          "sha256": "4570253cfb7d734286d56ab3ecff6e4ef2cfe9d77c37dc9e739360da89dccc15"
+          "sha256": "13e854391de82fcc9eb994558233d61de1b7d615883fd5bf87aa61b611c74b94"
         }
       ]
     },
