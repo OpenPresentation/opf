@@ -3,8 +3,8 @@
   "source": {
     "repository": "OpenPresentation/opf",
     "path": "examples",
-    "sha256": "11e67470162c11a8438f6870c8db7cc5ec6685aa9e12cfb648633a4929d4116d",
-    "decks": 130
+    "sha256": "49cd0bc3dfa2e81d5c68005464a55f9bc5ebe71d4d002e79b09a332c0692d580",
+    "decks": 131
   },
   "format": "png-sha256",
   "scale": 0.25,
