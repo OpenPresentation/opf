@@ -20,6 +20,7 @@
       "role": "primary",
       "flow": "column",
       "listColumns": "auto",
+      "sequence": "numbered",
       "anchor": "middle"
     }
   ],

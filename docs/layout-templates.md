@@ -114,6 +114,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
+| `sequence` | `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`) | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -392,7 +393,32 @@ For a slide with a template layout, `composeSlide` adds (see the declarations on
 | `regions` | Every region in reading order: `name`, `box` (after collapse, mirroring and bleed), `accepts`, `role`, `flow`, `max`, `anchor`, `arrangement` (`grid`, `row`, `column`, or `composition`), `content` (root block paths bound within `max`), `overflow` (paths drawn beyond it), `collapsed`, `bleed` and, on a bled region, `areaBox` (its cell before bleed). It replaces `slots` for templates. |
 | `headingAreas` | The `title` (and `subtitle`) areas with their boxes, `collapsed` or `implicit`. On a template without a `subtitle` area the title area carries `parts: { title, subtitle }`: it is split where the stacked heading group puts the subtitle, so `title` runs from the area's top to the bottom of the title (the tag above it included) and `subtitle` from the subtitle's top (half a gap under the title when the slide has none) to the area's bottom. PowerPoint's `ctrTitle` and `subTitle` placeholders use these boxes. |
 | `items[].region` | The region an item was drawn in, for tagging shapes. |
+| `steps` | LH-07: what each `sequence` region draws besides its text, in reading order: `form` (`row`, `column` or `flow`), `badges` (`cx`, `cy`, `radius`, `label`, `fontSize`, `baseline`, and `list` when the badge draws a list entry's own number), `connector` (`x1`, `y1`, `x2`, `y2`), `chips` and `arrows` of a flow, and `lineWidth`. |
 | `items[].listColumns` | A list in columns: one `{ box, start, end, text }` per column at one shared size; numbering continues. The item's `text` is the whole list (every entry at its column's position), so a consumer that ignores `listColumns` still draws every item. Entry paths are the payload's: `<list>.<n>` for a string item, `<list>.<n>.text` for an object. |
+
+### Step sequences (LH-07)
+
+A region with `sequence` lists the steps of a sequence, and composition draws them as Claude Design does:
+
+- **Steps side by side** (`steps`): two or more text or list blocks are the steps. Each draws under a numbered badge, an accent circle
+  1.75 times the step text across with its numeral at the step text size, in the scheme color readable on the accent. The badge sits
+  0.4 of its width above the text, at the block's start (its right edge in a right-to-left deck), or over its middle when the block is
+  centered. The badges of a row share one line, and a connector in the border color runs through their centers. A one-entry numbered
+  list gives its badge its number and draws as a heading over its description (LH-77); any other block is numbered by its position.
+  Each block keeps the band for its badge in the height it asks for and in its cell.
+- **A list's entries** (`steps` for a lone list of two or more entries, `numbered` for a numbered list): each entry draws beside its
+  badge in the list's marker column (the side its paragraph starts), centered on its first line, with a connector down the column. The
+  badges are at least 0.4 of their width apart. The list keeps its numbers (`marker.number`); a list in a `steps` region without
+  `numbering` is counted in arabic.
+- **A flow** (`steps`): a lone list of 3 to 6 entries of one or two words (24 characters at most), without descriptions, is a row of
+  chips (cards) joined by accent block arrows in reading order. The chips share the region's width when the widest entry fits each,
+  else each hugs its entry; each entry is a list column centered in its chip.
+
+Steps keep their text size: the badges are a guarded rule (`step-badges`), so a slide whose blocks would get smaller under them draws
+as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list grows (LH-48) as the plain list
+would, as long as it fits with its badges. The preview draws the badges, connector, chips and arrows from `steps`, and the PPTX export
+writes them as native shapes (an ellipse holding its numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets),
+tagged so that import consumes them and gives a list its numbering back.
 
 ### A body that fills too little (LH-48)
 

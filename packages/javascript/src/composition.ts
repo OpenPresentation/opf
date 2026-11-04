@@ -30,8 +30,8 @@ export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGIN
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 export {isolateNumbers,numberRanges,numericText} from './number-text.js';
-import {listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
-export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
+import {listNumberLabel,listNumbers,sliceNumberedItems,type ListNumber,type NumberingInput} from './numbering.js';
+export {NUMBERING_STYLES,NUMBERING_SUFFIXES,MAX_NUMBERING_VALUE,MAX_ROMAN_VALUE,MAX_NUMBERING_LEVELS,formatListNumber,listNumberLabel,listNumbers,resolveNumbering,numberingAtLevel,numberingStyleDraws,sliceNumberedItems,type Numbering,type NumberingInput,type NumberingStyleName,type NumberingSuffix,type ResolvedNumbering,type ListNumber} from './numbering.js';
 import {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,parseIsoDate,type FurnitureField} from './furniture-fields.js';
 import {substituteSlideTokens,usesSlideBuiltin} from './slide-variables.js';
 import {parseLogoName,resolveLogo,resolveOrganizationLogo,type LogoShape,type LogoVariant} from './logos.js';
@@ -330,6 +330,38 @@ export interface ComposedEmphasis {
   shape: 'card' | 'band' | 'pill';
   source: 'authored' | 'foot-band' | 'pill';
 }
+/**
+ * LH-07: one drawn sequence of a `sequence` region (layout record): what the engines draw besides its text, in canvas pixels.
+ * - `row`: the region's blocks side by side, each under a badge; `connector` runs through the badge centers of the row.
+ * - `column`: a list's entries, each beside a badge in the list's marker column; `connector` runs down that column.
+ * - `flow`: a short list's entries in `chips` (one per entry; its text is the list column of the same index) with `arrows` between.
+ * Paint order: chips, connector, badges, arrows, then the text. A badge is an accent (`primary`) circle of `radius` around
+ * (`cx`, `cy`) with its `label` centered on it in the bold body face at `fontSize`, its baseline at `baseline`, in the scheme
+ * color readable on the accent (`readableSchemeColor`); the connector is a `border` colored line `lineWidth` wide; a chip is a card
+ * (`neutrals.card` fill, `cardBorder` line) with corner `radius`; an arrow is an accent block arrow filling its `box` and pointing
+ * to `direction`, as DrawingML's `rightArrow` (`leftArrow`) preset draws it with its default adjustments: a shaft half the box's
+ * height, a head as long as half the box's smaller side. In a right-to-left deck a row's badges sit at the start (right) of their
+ * blocks and a flow runs right to left; a list's badges sit on the side each entry's paragraph starts, as its markers would.
+ */
+export interface ComposedSteps {
+  form: 'row' | 'column' | 'flow';
+  /** The `sequence` region. */
+  region: string;
+  /** `row`: the region's first block; `column` and `flow`: the list's payload path. */
+  path: string;
+  badges: ComposedStepBadge[];
+  connector?: { x1: number; y1: number; x2: number; y2: number };
+  chips?: { path: string; box: LayoutBox; radius: number }[];
+  arrows?: { box: LayoutBox; direction: 'right' | 'left' }[];
+  lineWidth: number;
+}
+/**
+ * LH-07: one numbered circle of a sequence (`ComposedSteps.badges`); `path` is the step's block (`row`) or list entry (`column`).
+ * `list` names the list entry whose number the badge draws in place of its marker (its payload path, the entry's index and the
+ * number), so an exporter can keep the list's numbering; absent when the badge numbers a block by its position or the list has no
+ * `numbering` of its own (a list of a `steps` region is then counted in arabic).
+ */
+export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> } }
 /** One column of a list laid out in columns (`ComposedItem.listColumns`). */
 export interface ComposedListColumn {
   box: LayoutBox;
@@ -616,6 +648,8 @@ export interface SlideComposition {
   recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number }; kpis?: true };
   /** LH-06: the slide's emphasis surface (at most one), when a block or group asks for it or an automatic rule gives one. */
   emphasis?: ComposedEmphasis;
+  /** LH-07: the step badges, connectors and flows of the slide's `sequence` regions, in reading order; absent when none draws. */
+  steps?: ComposedSteps[];
   /**
    * LH-80, LH-49: automatic composition gave the slide's one picture (`picture`) or one chart (`chart`) a full-height track of its own
    * at `edge` (physical), `size` of the slide's width (left, right) or height (top, bottom); `path` is the block's. A picture's track
@@ -2888,6 +2922,11 @@ export interface ListEntryLayout {
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end';none?:true};
   /** LH-77: the entry of a heading list (`ListFitOptions.heading`): bold at LIST_HEADING_SCALE times the list size, with no marker. */
   heading?:true;
+  /**
+   * LH-07: the entry's step badge (`ListFitOptions.badges`): a circle of `diameter` centered at (`cx`, `cy`) in the marker column,
+   * with `label` (the number without its suffix) at `fontSize`. The marker itself draws nothing (`none`); `number` is kept.
+   */
+  badge?:{cx:number;cy:number;diameter:number;label:string;fontSize:number};
   /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
   direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
@@ -2928,9 +2967,26 @@ export interface ListFitOptions extends RichTextOptions {
    * no numbering. composeSlide sets it for a list block whose only entry has a description.
    */
   heading?:boolean;
+  /**
+   * LH-07: draw each entry's number in a step badge (`ListEntryLayout.badge`) instead of a marker: a circle STEP_LIST_BADGE times the
+   * list size across in the marker column, its numeral STEP_BADGE_NUMERAL of that and never under the floor, centered on the
+   * entry's first line; entries are at least STEP_BADGE_GAP of a badge apart, so the connector between them shows. Needs
+   * `numbering` and entries of level 0; ignored otherwise.
+   */
+  badges?:boolean;
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
+/**
+ * LH-07: a step badge is this many times its step's text size across (the list size, or a paragraph's size), and its numeral is set
+ * at that text size, so a badge never draws a number smaller than the text it numbers (Claude Design: a 54 to 70 px circle over 20 to
+ * 28 px step text).
+ */
+export const STEP_BADGE=1.75;
+/** LH-07: the space between a badge and its step's text, and the least space between two badges of a column, as a share of its diameter. */
+export const STEP_BADGE_GAP=.4;
+/** LH-07: a flow (chips joined by arrows) is a lone list of this many entries at least and at most, each of one or two words and at most STEP_FLOW_CHARACTERS long. */
+export const STEP_FLOW_MIN=3, STEP_FLOW_MAX=6, STEP_FLOW_CHARACTERS=24;
 /**
  * LH-85: the bullet of each nesting level, by `level % LIST_MARKERS.length`, drawn at the entry's size. Every bundled text face has
  * • (U+2022) and the en dash (U+2013); ◦ (U+25E6) and ▪ (U+25AA), the former level 1 and 2 bullets, are missing from most of them
@@ -2959,6 +3015,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined;
+  // LH-07: entries drawn beside step badges (numbered, one level).
+  const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
   // A native auto-number takes the weight and slant of the paragraph's first run.
   const markerStyleFor=(item:typeof source[number]):TextStyle=>{
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
@@ -2970,18 +3028,24 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
     // LH-77: the one described entry of a heading list draws without a marker or an indent, bold and a step up over its description.
-    const none=(options.bullet==='none'||heading)&&!numbers;
-    const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
+    const diameter=badged?fontSize*STEP_BADGE:0;
+    const none=((options.bullet==='none'||heading)&&!numbers)||badged;
+    // LH-07: a badge column is the badge and half an em before the text.
+    const hanging=badged?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
       const rtl=item.direction==='rtl';
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=none&&!badged?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
       const text=heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
         :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize);
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
+      // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
+      // badge starts lower by the difference, so the badge stays inside the entry.
+      const center=badged?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=badged?Math.max(0,diameter/2-center):0;
+      if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
         const ratio=heading?1:.82;
@@ -2991,11 +3055,13 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),
+      if(badged)y=Math.max(y,textBox.y+center+diameter/2);
+      const marker={text:number&&!badged?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number),fontSize}:undefined;
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
-      if(item.index<source.length-1)y+=fontSize*.28;
+      if(item.index<source.length-1)y+=badged?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(options.direction==='rtl'?{directions}:{})};
@@ -3433,16 +3499,17 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * lead plus stack (`lead-stack`), LH-70's paragraph columns (`paragraph-columns`), LH-10's reading measure in a layout's regions
  * (`region-measure`), LH-64's one start for a row of cards of mixed kinds (`mixed-cards`), LH-47's stretched short last row of the
  * automatic grid (`short-row`), LH-120's 40% share of a bar chart in a row of three (`bar-chart-share`), and LH-112's start alignment
- * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks. LH-80 and LH-49's tracks are
+ * (`metric-start`) and display size, with LH-15's band, (`metric-display`) of a metric beside other blocks, and LH-07's step badges and flows
+ * of a `sequence` region (`step-badges`), whose badges take height the steps' text might need. LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-display';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-display' | 'step-badges';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'step-badges'];
 const ALL_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES), NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * The guarded rules that move blocks and change gaps without changing the size any block asks for. When only these changed something
@@ -4080,10 +4147,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     return list;
   };
+  // LH-07: the lists of a `sequence` region (composeTemplate marks them by path). A badge list draws its entries beside step badges,
+  // numbered in arabic when the payload has no numbering; a step heading is a one-entry numbered list whose number its block's badge
+  // draws, so it fits as a heading list (LH-77) without the number.
+  const badgeLists = new Set<string>(), stepHeadings = new Set<string>();
+  const listOptionsFor = (field: string, path: string, numbering: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+    : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:(numbering ?? 'arabic') as NumberingInput,badges:true}
+    : {...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),heading:true,...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,listOptionsFor(field,path,numbering))
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
@@ -4484,6 +4558,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
     return layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
   };
+  // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
+  // its badge above its text, in the height it asks for (naturalHeight) and in its cell (placeNode), so the badge never costs a row or
+  // a neighbour its room. A flow list (stepFlows, by path) is drawn as chips once placed.
+  const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepFlows = new Set<string>();
+  const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.
   const metricTiles = new WeakSet<Pending>(), tileFloors = (options as Record<symbol, unknown>)[TILE_FLOORS] as Map<string, MetricLayoutOptions['minimumSizes']> | undefined;
   // LH-41: how a template region's timeline is laid out (composeTemplate sets it before rows are sized): a band of several in one
@@ -5097,6 +5176,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     box = payloadBox(box, cards);
     let caption = captionOf(node, box);
     if (caption) box = caption.mediaBox;
+    // LH-07: a step's badge band, at its starting size, above its text.
+    if (stepUnits.has(node)) { const band = stepBand(proseMeasure(node, box.width).size); box = { ...box, y: box.y + band, height: Math.max(scale, box.height - band) }; }
     const textValue = contentText(node.field, node.value);
     const measureInternal = (floorFallback = false) => [
       node.field === 'quote' ? measureQuote(node,box,settings,floorFallback) : undefined,
@@ -5186,8 +5267,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
     if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
-    const numbering = node.payload.numbering as NumberingInput | undefined;
-    const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
+    // LH-07: a badge list is numbered (in arabic when the payload is not), so its columns continue the count.
+    const numbering = (node.payload.numbering ?? (badgeLists.has(node.path) ? 'arabic' : undefined)) as NumberingInput | undefined;
+    const listOptions: ListFitOptions = badgeLists.has(node.path) ? listOptionsFor(node.field, node.path, numbering) : { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
     const columnBoxes = (count: number): LayoutBox[] => {
       const between = columnGap(count), columnWidth = (box.width - between * (count - 1)) / count;
@@ -5355,6 +5437,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // WI-1: the height the placed text takes (its outlines and raster padding included), the same measure the fit that
       // places it checks, so a box of this height holds the text at the starting size instead of one grid step smaller.
       content = Math.max('height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+      if (stepUnits.has(node)) content += stepBand(fit.fontSize);
     } else if (node.field === 'quote') content = measureQuote(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings).bounds.height + 18;
     else if (node.field === 'code') {
       // WI-1: measured as layoutCode lays it out: the header lines, the source at its starting size and the insets.
@@ -5390,7 +5473,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (inner.width <= 0 || inner.height <= 0) return undefined;
     // A table needs the height it is drawn at (its preferred rows), every other block the height its content takes.
     const slack = 2 * rasterPadding + scale, need = () => (node.field === 'table' ? measureTable(node, inner.width, settings)?.height ?? Infinity : naturalHeight(node, inner.width, false, undefined, settings)) + slack;
-    let best = need();
+    // LH-07: a badge list grows as the plain list would (its badges do not count against the body it fills), as long as it fits with them.
+    const plainNeed = () => { const badged = badgeLists.delete(node.path); try { return need(); } finally { if (badged) badgeLists.add(node.path); } };
+    let best = plainNeed();
     // LH-101: a lone code panel grows its code in type-scale steps as the other blocks do (up to LONE_DISPLAY_SIZES.code) and hugs it in
     // the middle of the body. Only code that then fills at least LONE_TARGET of the body takes the whole cell, its lines in the middle of
     // the panel (layoutCode's `fill`): a five-line snippet on a full-body panel left most of a dark panel empty (wave 4 golden review).
@@ -5406,12 +5491,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const step = scaleAbove(size, settings.minFontSize ?? 16);
         if (step > display + 1e-9) break;
         proseGrowth.set(node, step);
-        const height = need(), measure = proseMeasure(node, inner.width);
+        const height = plainNeed(), measure = proseMeasure(node, inner.width);
         const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
         if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9) break;
         chosen = step; best = height; size = step;
       }
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
+      if (badgeLists.has(node.path)) best = need();
     } else {
       let chosen: number | undefined;
       // LH-101: a metric's value has room to grow to LONE_DISPLAY_SIZES.value (nine steps); the other blocks reach their displays in five.
@@ -5698,6 +5784,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const templateRegions: ComposedRegion[] = [], headingAreas: ComposedHeadingArea[] = [];
   // OPF 0.19: compose the body and headings through the template's areas (design sections 3 and 4).
   const requestedTemplateGap = gap;
+  // LH-07: the steps of a `sequence` region. A lone list of a `steps` region whose 3 to 6 entries are one or two words is a flow; any
+  // other lone list of two or more entries of one level (in a `numbered` region, a numbered one) draws them beside badges; two or more
+  // text and list blocks of a `steps` region are steps side by side, a one-entry numbered list giving its number to its badge.
+  const markSteps = (sequence: 'steps' | 'numbered', units: Pending[]): void => {
+    const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
+    const entries = (unit: Pending): unknown[] => Array.isArray(unit.value) ? unit.value : [];
+    const flat = (unit: Pending) => entries(unit).every(entry => (record(entry).level ?? 0) === 0), numbered = (unit: Pending) => unit.payload.numbering !== undefined;
+    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2 && (sequence === 'steps' || numbered(unit));
+    if (units.length === 1 && badgeList(units[0]!)) {
+      const unit = units[0]!, values = entries(unit);
+      const short = sequence === 'steps' && values.length >= STEP_FLOW_MIN && values.length <= STEP_FLOW_MAX && values.every(value => {
+        const object = record(value), text = flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim();
+        return object.description === undefined && text.length > 0 && text.length <= STEP_FLOW_CHARACTERS && text.split(/s+/u).length <= 2;
+      });
+      (short ? stepFlows : badgeLists).add(unit.path);
+      fire('step-badges');
+      return;
+    }
+    if (sequence === 'numbered') { for (const unit of units) if (badgeList(unit)) { badgeLists.add(unit.path); fire('step-badges'); } return; }
+    if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit)))) return;
+    for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
+    fire('step-badges');
+  };
   const composeTemplate = (): void => {
     const plan = template!, frame = contentBox;
     // LH-58, LH-82, LH-73, LH-46: blocks are grouped (pairs, kinds, extra blocks of fixed regions) before any cell is placed.
@@ -5729,6 +5838,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       else if (ruleOn('region-measure')) for (const unit of units) if (!unit.children && unit.field === 'text') unit.measure = true;
       // LH-68: a metric of a `metrics: "tile"` region is a tile: it fills its cell (no hugging, no natural height) and is laid out in it.
       if (region.metrics === 'tile' && ruleOn('metric-tiles')) for (const unit of units) if (!unit.children && unit.field === 'metric') { metricTiles.add(unit); fire('metric-tiles'); }
+      if (region.sequence && ruleOn('step-badges')) markSteps(region.sequence, units);
     }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
@@ -6557,6 +6667,99 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (from > to) { items.splice(from, 1); items.splice(to, 0, timelineItem); }
     }
   }
+  // LH-07: what the `sequence` regions draw besides their text (ComposedSteps): the badges composeTemplate's lists already placed
+  // (`column`), a badge over each step set side by side (`row`, in the band placeNode left above its text), and the chips of a flow.
+  // A badge is STEP_BADGE times its step's text size across with its numeral at that size; it sits STEP_BADGE_GAP of a badge above
+  // its text, at the start of its block (the right in a right-to-left deck) or over its middle when the block is centered.
+  const stepSequences = (): ComposedSteps[] => {
+    const result: ComposedSteps[] = [], lineWidth = 2 * scale;
+    const badgeOf = (path: string, cx: number, cy: number, diameter: number, label: string, fontSize: number, list?: ComposedStepBadge['list']): ComposedStepBadge => ({ path, cx, cy, radius: diameter / 2, label, fontSize, baseline: cy + fontSize * .35, ...(list ? { list } : {}) });
+    const numberOf = (number: ListNumber) => ({ value: number.value, style: number.style, suffix: number.suffix });
+    const connector = (badges: ComposedStepBadge[]) => badges.length > 1 ? { connector: { x1: badges[0]!.cx, y1: badges[0]!.cy, x2: badges.at(-1)!.cx, y2: badges.at(-1)!.cy } } : {};
+    for (const region of template!.regions) {
+      if (!region.sequence) continue;
+      const members = items.filter(item => item.region === region.name && !headings.has(item.field)), drawn: LayoutBox[] = [];
+      for (const item of members) {
+        if (stepFlows.has(item.path)) { const flow = stepFlow(item, region.name, lineWidth); if (flow) { result.push(flow); drawn.push(item.box); } continue; }
+        const fits = item.listColumns?.length ? item.listColumns.map(column => column.text) : item.text && 'listEntries' in item.text ? [item.text as ListFit] : [];
+        for (const fit of fits) {
+          const badges = fit.listEntries.flatMap(entry => entry.badge ? [badgeOf(entry.textPath ?? item.path, entry.badge.cx, entry.badge.cy, entry.badge.diameter, entry.badge.label, entry.badge.fontSize, entry.marker.number && item.payload.numbering !== undefined ? { path: item.path, index: entry.index, number: numberOf(entry.marker.number) } : undefined)] : []);
+          if (badges.length) result.push({ form: 'column', region: region.name, path: item.path, badges, ...connector(badges), lineWidth });
+        }
+      }
+      const stepped = members.filter(item => stepPaths.has(item.path) && item.text && !item.listColumns);
+      if (stepped.length >= 2 && stepped.length === members.length) {
+        // Rows: steps whose boxes overlap vertically; each row's badges share one line.
+        const rows: ComposedItem[][] = [];
+        for (const item of [...stepped].sort((a, b) => a.box.y - b.box.y)) {
+          const row = rows.find(entry => entry.some(other => item.box.y < other.box.y + other.box.height && other.box.y < item.box.y + item.box.height));
+          if (row) row.push(item); else rows.push([item]);
+        }
+        const position = new Map(stepped.map((item, index) => [item, index]));
+        const top = (item: ComposedItem) => (item.text as ListFit).listEntries?.[0]?.textBox.y ?? item.text!.placement?.lines[0]?.y ?? item.box.y;
+        for (const row of rows) {
+          const size = Math.max(...row.map(item => item.text!.fontSize)), diameter = STEP_BADGE * size, cy = Math.min(...row.map(top)) - diameter * STEP_BADGE_GAP - diameter / 2;
+          const badges = row.map(item => {
+            const side = item.alignment === 'center' ? 'center' : rtl ? (item.alignment === 'left' ? 'right' : 'left') : item.alignment;
+            const cx = side === 'center' ? item.box.x + item.box.width / 2 : side === 'right' ? item.box.x + item.box.width - diameter / 2 : item.box.x + diameter / 2;
+            const own = stepHeadings.has(item.path) ? listNumbers(item.value as unknown[], item.payload.numbering as NumberingInput)[0] : undefined;
+            return badgeOf(item.path.replace(/\.(text|items|bullets)$/, ''), cx, cy, diameter, own ? listNumberLabel(own) : String(position.get(item)! + 1), size, own ? { path: item.path, index: 0, number: numberOf(own) } : undefined);
+          }).sort((a, b) => rtl ? b.cx - a.cx : a.cx - b.cx);
+          result.push({ form: 'row', region: region.name, path: badges[0]!.path, badges, ...connector(badges), lineWidth });
+        }
+      }
+      // The region's cell holds what it draws.
+      const composed = templateRegions.find(entry => entry.name === region.name);
+      const extents = [...result.filter(entry => entry.region === region.name).flatMap(entry => entry.badges.map(badge => ({ x: badge.cx - badge.radius, y: badge.cy - badge.radius, width: 2 * badge.radius, height: 2 * badge.radius }))), ...drawn];
+      if (composed && extents.length) {
+        const box = composed.box, x = Math.min(box.x, ...extents.map(extent => extent.x)), y = Math.min(box.y, ...extents.map(extent => extent.y));
+        composed.box = roundBox({ x, y, width: Math.max(box.x + box.width, ...extents.map(extent => extent.x + extent.width)) - x, height: Math.max(box.y + box.height, ...extents.map(extent => extent.y + extent.height)) - y });
+      }
+    }
+    return result;
+  };
+  // LH-07: a flow: the list's entries in a row of chips, in reading order (from the right in a right-to-left deck), with an arrow
+  // between each two. The chips share the region's width when the widest entry fits every chip, else each hugs its entry; the entries
+  // keep the list's size, so a flow that does not fit on one line at it is not drawn and the list stays as it was. The row is centered
+  // on the list's middle. Each entry is a list column (ComposedItem.listColumns) centered in its chip.
+  const stepFlow = (item: ComposedItem, region: string, lineWidth: number): ComposedSteps | undefined => {
+    const values = item.value as ListValue[], fit = item.text as ListFit, size = fit.fontSize, area = templateRegions.find(entry => entry.name === region)?.box ?? item.box;
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
+    const single = (index: number, box: LayoutBox): ListFit => {
+      const own = fitList([values[index]!], box, size, size, listOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+      return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${index}.description` })) };
+    };
+    const measured = values.map((_, index) => single(index, { x: 0, y: 0, width: 1e5, height: 1e5 }).listEntries[0]!);
+    if (!fit.listEntries.length || measured.some(entry => entry.text.richLines.length !== 1)) return undefined;
+    const widths = measured.map(entry => entry.text.richLines[0]!.width), lineHeight = Math.max(...measured.map(entry => entry.text.height));
+    const padX = .9 * size, padY = .6 * size, slot = 2.4 * size, count = values.length, room = area.width - slot * (count - 1);
+    const equal = count * (Math.max(...widths) + 2 * padX) <= room;
+    if (!equal && widths.reduce((sum, width) => sum + width + 2 * padX, 0) > room) return undefined;
+    const chipWidths = widths.map(width => equal ? room / count : width + 2 * padX), chipHeight = lineHeight + 2 * padY;
+    const middle = fit.listEntries[0]!.textBox.y + fit.height / 2, y = middle - chipHeight / 2;
+    const total = chipWidths.reduce((sum, width) => sum + width, 0) + slot * (count - 1);
+    let start = area.x + (area.width - total) / 2;
+    const chips: NonNullable<ComposedSteps['chips']> = [], columns: ComposedListColumn[] = [];
+    for (let index = 0; index < count; index++) {
+      const width = chipWidths[index]!, x = rtl ? area.x + area.width - (start - area.x) - width : start;
+      start += width + slot;
+      const box = { x: x + (width - widths[index]!) / 2 - 1, y: y + padY, width: widths[index]! + 2, height: lineHeight };
+      const text = single(index, box);
+      if (text.overflow || text.listEntries[0]!.text.richLines.length !== 1) return undefined;
+      chips.push({ path: text.listEntries[0]!.textPath!, box: { x, y, width, height: chipHeight }, radius: CARD_RADIUS * scale });
+      columns.push({ box, start: index, end: index + 1, text });
+    }
+    // Arrows point in reading order, from one chip's end edge to the next chip's start edge, half an em clear of both and .6 em tall.
+    const arrows = chips.slice(1).map((chip, index) => {
+      const previous = chips[index]!, left = rtl ? chip.box.x + chip.box.width : previous.box.x + previous.box.width, right = rtl ? previous.box.x : chip.box.x, tall = .6 * size;
+      return { box: { x: left + .5 * size, y: y + (chipHeight - tall) / 2, width: Math.max(scale, right - left - size), height: tall }, direction: rtl ? 'left' as const : 'right' as const };
+    });
+    item.listColumns = columns;
+    item.text = mergeListColumns(columns);
+    item.box = { x: Math.min(...chips.map(chip => chip.box.x)), y, width: total, height: chipHeight };
+    return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
+  };
+  const steps = useTemplate ? stepSequences() : [];
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
@@ -6617,7 +6820,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = bodyStarts.get(index);
     return start !== undefined && item.text.fontSize >= snapFontSizeDown(start) - FONT_GRID_EPSILON;
   });
-  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(explanation?{explanation}:{}) };
   if (atRequest) AT_REQUEST.add(composed);
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
