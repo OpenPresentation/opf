@@ -13,6 +13,8 @@ export interface SlideManagerOptions {
   setSlideIndex: (index: number) => void;
   /** The thumbnail of one slide as an HTML string (usually the renderer's SVG). Cache it: it is called for every card on every render. */
   renderThumbnail?: (presentation: unknown, index: number) => string;
+  /** LH-99: how many pages the export draws the slide on; a slide on two or more is drawn as a stack with its page count. */
+  pagesOf?: (presentation: unknown, index: number) => number;
   /** Traced SVG preview of the selected layout using the current slide's content. */
   renderLayoutPreview?: (presentation: unknown, slideIndex: number, choice: { id: string; label: string; record?: Record<string, any> }) => string;
   /** `"navigator"` (a vertical list, the default) or `"sorter"` (a grid with arrow keys in both directions). */

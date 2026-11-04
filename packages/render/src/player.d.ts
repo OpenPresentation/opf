@@ -11,8 +11,12 @@ export declare class DeckError extends Error {
   constructor(code: string, message: string, options?: { cause?: unknown; source?: string; status?: number; contentType?: string });
 }
 
-/** The slide that is showing, in the sequence that plays (hidden slides are not counted). `notes` is plain text. */
-export interface PlayerSlideChange { slide: number; total: number; index: number; id?: string; title: string; notes: string; section?: string }
+/**
+ * The slide that is showing, in the sequence that plays (hidden slides are not counted). `notes` is plain text. LH-99: `page` (from 1)
+ * and `pages` say which page of a slide the export continues is showing; the pages are steps after their slide, and `slide` and
+ * `index` keep naming the source slide. Every step fires the event, a page step included.
+ */
+export interface PlayerSlideChange { slide: number; total: number; index: number; page: number; pages: number; id?: string; title: string; notes: string; section?: string }
 
 export type BlankMode = "none" | "black" | "white";
 
@@ -23,6 +27,13 @@ export interface PresentOptions {
   renderOptions?: Partial<ToSvgOptions>;
   /** 1-based slide to start on, in the sequence that plays. Default 1. */
   startSlide?: number;
+  /** LH-99: the 1-based page of `startSlide` to start on, for a slide the export continues. Default 1. */
+  startPage?: number;
+  /**
+   * LH-99: show an overfull slide as the pages the export continues it on (`continueOverfull`, LH-90), as steps after the slide.
+   * Default true; `false` draws every slide as written.
+   */
+  continuation?: boolean;
   /** Play hidden slides too. Default false. */
   includeHidden?: boolean;
   /** Ask for full screen (needs a user gesture). Default true. */
@@ -44,18 +55,25 @@ export interface PresentOptions {
   store?: unknown;
 }
 
-/** A running slideshow. Events: `slidechange` (PlayerSlideChange), `blank` ({ mode }), `presenterview` ({ open }), `close` ({ slide, index }). */
+/** A running slideshow. Events: `slidechange` (PlayerSlideChange), `blank` ({ mode }), `presenterview` ({ open }), `close` ({ slide, index, page }). */
 export declare class PlayerSession extends EventTarget {
   /** The 1-based number of the showing slide. */
   readonly slide: number;
   readonly total: number;
+  /** LH-99: the 1-based page of the showing slide, and how many pages it draws on (2 or more for a slide the export continues). */
+  readonly page: number;
+  readonly pages: number;
   readonly blankMode: BlankMode;
   readonly closed: boolean;
   readonly presenterViewOpen: boolean;
+  /** The next step: the next page of a continued slide, else the next slide. */
   next(): boolean;
+  /** The previous step: the previous page, else the last page of the slide before. */
   previous(): boolean;
   first(): boolean;
+  /** The last page of the last slide. */
   last(): boolean;
+  /** The source slide with this 1-based number, on its first page. */
   goto(number: number): boolean;
   blank(mode?: BlankMode): boolean;
   toggleFullscreen(): void;
@@ -67,7 +85,7 @@ export declare class PlayerSession extends EventTarget {
   addEventListener(type: "slidechange", listener: (event: CustomEvent<PlayerSlideChange>) => void, options?: boolean | AddEventListenerOptions): void;
   addEventListener(type: "blank", listener: (event: CustomEvent<{ mode: BlankMode }>) => void, options?: boolean | AddEventListenerOptions): void;
   addEventListener(type: "presenterview", listener: (event: CustomEvent<{ open: boolean }>) => void, options?: boolean | AddEventListenerOptions): void;
-  addEventListener(type: "close", listener: (event: CustomEvent<{ slide: number; index?: number }>) => void, options?: boolean | AddEventListenerOptions): void;
+  addEventListener(type: "close", listener: (event: CustomEvent<{ slide: number; index?: number; page?: number }>) => void, options?: boolean | AddEventListenerOptions): void;
   addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 }
 

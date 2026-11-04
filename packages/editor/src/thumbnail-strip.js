@@ -14,12 +14,15 @@ import { normalizeIcons, resolveIcon } from "./icons.js";
 import { addSlide, duplicateSlides, moveSlidesBy, removeSlides, setHidden, slideTitle } from "./slides.js";
 import { groupLayoutChoices } from "./layout-templates.js";
 import { createThumbnailCache } from "./thumbnail-cache.js";
+import { clearContinuations, continuationOf, pageCount } from "./continuation.js";
 
 const DEFAULT_LABELS = {
   navigation: "Slides",
   untitled: "Untitled",
   hidden: "hidden",
   unavailable: "Preview unavailable",
+  /** LH-99: the page count of a slide the export continues on further pages. */
+  pages: "{count} pages",
   add: "Add slide",
   layouts: "Layouts",
   slideActions: "Slide actions",
@@ -52,7 +55,9 @@ const pad = (value, count) => String(value).padStart(Math.max(2, String(count).l
  * `catalogs`; the thumbnails always draw with `text: "system"` and `trace: false`), `slideIndex`, `onSelect(index)` (the user chose a slide),
  * `density` (`"comfortable"` or `"touch"`), `size` (thumbnail width in pixels; default 128, or 104 for touch), `orientation` (`"horizontal"`,
  * the default, or `"vertical"`), `labels` (`navigation`, `untitled`, `hidden`, `unavailable`), `cache` (a thumbnail cache to share; default:
- * its own), `lazy` (default true), `autoRefresh` (default true: follow the editor's changes on its own) and `onError(error)`.
+ * its own), `lazy` (default true), `autoRefresh` (default true: follow the editor's changes on its own), `continuation` (default true: LH-99,
+ * a slide the export continues on further pages (LH-90) is drawn as a stack of pages with its page count; its index does not change) and
+ * `onError(error)`.
  *
  * Slide management (CE-29, off by default): `actions` (true adds the "+" button and the thumbnail context menu), `layoutOptions(presentation)`
  * (layout choices `{ id, label, record? }` for a layout menu behind "+"; without it, or when it returns none, "+" adds a slide directly after
@@ -133,10 +138,13 @@ export function createThumbnailStrip(container, options = {}) {
     titleNode.className = "opf-thumbs-title";
     const note = doc.createElement("span");
     note.className = "opf-thumbs-note";
-    label.append(indexNode, " ", titleNode, note);
+    const pages = doc.createElement("span");
+    pages.className = "opf-thumbs-pages";
+    pages.hidden = true;
+    label.append(indexNode, " ", titleNode, note, pages);
     button.append(frame, label);
     li.append(button);
-    return { li, button, frame, indexNode, titleNode, note, index, html: undefined };
+    return { li, button, frame, indexNode, titleNode, note, pages, index, html: undefined };
   }
 
   /** Grow or shrink to `count` slots, and write each slot's index, title and state. Cheap: no rendering. */
@@ -205,6 +213,21 @@ export function createThumbnailStrip(container, options = {}) {
     const snapshot = deck;
     cache.prepare(snapshot, indices);
     for (const index of indices) setThumbnail(items[index], cache.html(snapshot, index));
+    paintPages(snapshot);
+  }
+  /**
+   * LH-99: a slide the export continues on further pages is drawn as a stack with its page count: the thumbnail is its first page as
+   * written (the slide being edited), and the slot keeps its index, so selection and numbering address source slides. Measured with
+   * the fonts the thumbnails draw with, after they loaded.
+   */
+  function paintPages(snapshot) {
+    const continuation = options.continuation === false ? null : continuationOf(snapshot, { fonts: options.fonts, catalogs: resolveOptions().catalogs, date: options.renderOptions?.date });
+    items.forEach((item, index) => {
+      const count = pageCount(continuation, index);
+      if (count > 1) item.li.dataset.pages = String(count); else delete item.li.dataset.pages;
+      item.pages.hidden = count < 2;
+      item.pages.textContent = count > 1 ? fill(labels.pages, { count }) : "";
+    });
   }
   /** Gate on the fonts the document needs (the canvas gate), then draw. Unchanged slides come from the cache; nothing else is rendered. */
   function paintThumbnails() {
@@ -216,7 +239,7 @@ export function createThumbnailStrip(container, options = {}) {
         isCurrent: () => !disposed && token === renderToken,
         loading: () => { loaded = true; markFrames("loading"); },
         // Faces that loaded after thumbnails were drawn change how text measures: forget them, as the playground does.
-        ready: () => { if (loaded) cache.clear(); draw(); },
+        ready: () => { if (loaded) { cache.clear(); clearContinuations(); } draw(); },
         failed: (error) => { markFrames("error"); options.onError?.(error); },
       });
     } catch (error) {

@@ -350,6 +350,10 @@
           "command": "node test/thumbnail-strip-actions-browser.mjs"
         },
         {
+          "id": "browser:host-continuation",
+          "command": "node test/host-continuation-browser.mjs"
+        },
+        {
           "id": "browser:playground-header",
           "command": "node test/playground-header-browser.mjs"
         },

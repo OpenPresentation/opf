@@ -11,6 +11,8 @@ export interface ThumbnailStripLabels {
   hidden?: string;
   /** Shown in place of a thumbnail the renderer could not draw. Default: "Preview unavailable". */
   unavailable?: string;
+  /** LH-99: the page count of a slide the export continues; `{count}` is the number. Default: "{count} pages". */
+  pages?: string;
   /** The accessible name and tooltip of the "+" button (with `actions`). Default: "Add slide". */
   add?: string;
   /** The accessible name of the layout menu behind "+". Default: "Layouts". */
@@ -75,6 +77,8 @@ export interface ThumbnailStripOptions {
   lazy?: boolean;
   /** False to stop following the editor on its own; call `refresh()` yourself. Default true. */
   autoRefresh?: boolean;
+  /** LH-99: draw a slide the export continues on further pages as a stack with its page count (it keeps its index). Default true. */
+  continuation?: boolean;
   /** The document's faces could not be loaded, so no thumbnail was drawn. */
   onError?: (error: unknown) => void;
   /**
