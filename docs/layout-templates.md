@@ -143,6 +143,11 @@ rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's draw
 both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
+Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
+size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the
+longer, and no line but the last ending in a one-letter word or an article. A title that already wraps keeps the breaks its
+role size balanced (LH-148). Nothing is set smaller than without the growth.
+
 #### Placing the whole group
 
 A single-message slide (a statement, a closing, a quotation) reads best when the title and what belongs to it sit together

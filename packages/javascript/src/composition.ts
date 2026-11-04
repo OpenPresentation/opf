@@ -3990,9 +3990,10 @@ function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposi
 }
 // LH-129: the text a composition draws, by item path and part (headings by field): its size, its line count, and the height the text
 // covers (the union of every text's extent, joined where texts sit side by side). Pictures, charts and other drawings do not count.
-// LH-148: `breaks`, the words of each line of a title or subtitle, so growTemplate can tell where a grown heading breaks.
-function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; breaks: Map<string, string>; covered: number; top: number; bottom: number } {
-  const sizes = new Map<string, number>(), lines = new Map<string, number>(), breaks = new Map<string, string>(), extents: [number, number][] = [];
+// LH-148: `breaks`, the words of each line of a title or subtitle, so growTemplate can tell where a grown heading breaks. LH-130:
+// `even`, whether a title's lines read as one balanced block (evenLines).
+function textExtent(result: SlideComposition): { sizes: Map<string, number>; lines: Map<string, number>; breaks: Map<string, string>; even: Map<string, boolean>; covered: number; top: number; bottom: number } {
+  const sizes = new Map<string, number>(), lines = new Map<string, number>(), breaks = new Map<string, string>(), even = new Map<string, boolean>(), extents: [number, number][] = [];
   const lineCount = (fit: TextFit | RichTextFit) => 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
   const lineWords = (fit: TextFit | RichTextFit) => ('richLines' in fit ? (fit as RichTextFit).richLines.map(line => line.fragments.map(fragment => fragment.kind === 'tab' ? ' ' : fragment.text).join('')) : fit.lines).map(line => line.trim().replace(/\s+/gu, ' ')).join('\n');
   const textHeight = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -4008,12 +4009,24 @@ function textExtent(result: SlideComposition): { sizes: Map<string, number>; lin
       sizes.set(key, Math.min(sizes.get(key) ?? Infinity, item.text.fontSize));
       lines.set(key, (lines.get(key) ?? 0) + lineCount(item.text));
       if (item.field === 'title' || item.field === 'subtitle') breaks.set(key, lineWords(item.text));
+      if (item.field === 'title') even.set(key, evenLines(item.text, lineWords(item.text).split('\n')));
       extents.push([item.box.y, item.box.y + Math.min(item.box.height, textHeight(item.text))]);
     }
   }
   let covered = 0, reach = -Infinity;
   for (const [from, to] of extents.sort((a, b) => a[0] - b[0])) { if (to > reach) { covered += to - Math.max(from, reach); reach = to; } }
-  return { sizes, lines, breaks, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
+  return { sizes, lines, breaks, even, covered, top: Math.min(...extents.map(entry => entry[0])), bottom: reach };
+}
+/** LH-130: the shortest line of a display title that wraps is at least this share of its longest (Claude Design's two-line covers). */
+const EVEN_LINE_SHARE = .5;
+/** LH-130: a one-letter word ("A", "à", "y") or an English article, which no line of a display title but the last ends with. */
+const DANGLING_WORD = /(?:^|\s)(?:\p{L}|an|the)$/iu;
+// LH-130: whether a title reads as one balanced block: its shortest line at least EVEN_LINE_SHARE of its longest (measured widths where
+// the fit has them, characters otherwise) and no line but the last ending in a dangling word ("A smaller pilot. A").
+function evenLines(fit: TextFit | RichTextFit, words: readonly string[]): boolean {
+  const measured = 'richLines' in fit ? (fit as RichTextFit).richLines.map(line => line.width) : ((fit as Partial<SourceTextFit>).sourceLines?.map(line => line.width) ?? fit.placement?.lines.map(line => line.width));
+  const widths = measured && measured.length === words.length ? measured : words.map(line => line.length);
+  return Math.min(...widths) >= EVEN_LINE_SHARE * Math.max(...widths) && words.slice(0, -1).every(line => !DANGLING_WORD.test(line));
 }
 /**
  * The guarded composition (guardedCore), then LH-39's figure on one line: the rules it kept plus `metric-figure`, taken when a figure
@@ -4040,7 +4053,7 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
  * closing, a slide with no body and no layout record) grows its title, subtitle and tag the same number of steps (HEADING_STEPS), each up to its display size
  * (HEADING_DISPLAY_SIZES); a title over a primary block (a quote's, a statement's) keeps its size, so it never outshouts the message.
  * The largest step is kept at which nothing overflows, every text is at least as large as at the step before and one is larger, no
- * heading takes more lines than at its role size, the slide reads as well under the guard (composeVariant, readsAsWell, shrinks), and
+ * heading takes more lines than at its role size (a display title may take two balanced lines, LH-130), the slide reads as well under the guard (composeVariant, readsAsWell, shrinks), and
  * the text covers at most LONE_TARGET of the content box (as LH-48 grows a body). The region structure is the record's: the stack
  * or the centered title area places the larger text as it placed the smaller.
  */
@@ -4068,12 +4081,20 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) break;
     const text = textExtent(grown);
     const kept = [...bestText.sizes].every(([key, size]) => (text.sizes.get(key) ?? 0) >= size - FONT_GRID_EPSILON), larger = [...text.sizes].some(([key, size]) => size > (bestText.sizes.get(key) ?? Infinity) + FONT_GRID_EPSILON);
-    const wraps = [...start.lines].some(([key, count]) => key.endsWith(':title') || key.endsWith(':subtitle') || key.endsWith(':tag') ? (text.lines.get(key) ?? 0) > count : false);
+    // No heading takes more lines than at its role size, except LH-130's display title: a title that is the slide's message and fits one
+    // line at its role size may grow onto a second line, as Claude Design sets a long cover title in two lines at display size, when the
+    // two lines read as one balanced block (evenLines; WI-4's balancer chose the break).
+    const wraps = [...start.lines].some(([key, count]) => {
+      if (!(key.endsWith(':title') || key.endsWith(':subtitle') || key.endsWith(':tag'))) return false;
+      const now = text.lines.get(key) ?? 0;
+      return now > count && !(message && key.endsWith(':title') && count === 1 && now === 2 && text.even.get(key) === true);
+    });
     // LH-148: a wrapped title or subtitle keeps the lines WI-4 balanced at its role size. Line widths grow in proportion with the size, so
     // the balancer picks the same breaks at a larger size unless its best line no longer fits the width ("A smaller pilot. / A clearer
     // decision." would turn into "A smaller pilot. A / clearer decision."): that step is not kept, and the heading stays at the largest
     // step that keeps its breaks.
-    const rebroken = [...start.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
+    // A title that LH-130 let take a second line keeps that break at the steps above it in the same way (bestText, not start).
+    const rebroken = [...bestText.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
     if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
     best = grown; bestText = text;
   }

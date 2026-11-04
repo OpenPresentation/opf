@@ -64,3 +64,16 @@ test('LH-148: a grown title keeps the lines WI-4 balanced at its role size, at t
   assert.deepEqual(lines(field(grown, 'title')), lines(field(kept, 'title')), 'the grown title keeps its balanced break');
   assert.ok(field(grown, 'title').text.fontSize >= field(kept, 'title').text.fontSize);
 });
+
+test('a display title that would wrap at a larger step grows onto two balanced lines, never smaller than on one line', () => {
+  const slide = { tag: 'Part 4', title: 'Where the money goes. Why it pays back.', subtitle: 'Budget, payback and the two scenarios we model' };
+  const grown = composeSlide(slide, { layout: layouts.section }), kept = composeSlide(slide, { layout: layouts.section, fill: false });
+  const title = field(grown, 'title');
+  assert.equal(lines(field(kept, 'title')).length, 1);
+  assert.ok(title.text.fontSize > field(kept, 'title').text.fontSize);
+  assert.deepEqual(lines(title), ['Where the money goes.', 'Why it pays back.'], 'two lines, broken at the sentence');
+  assert.ok(field(grown, 'subtitle').text.fontSize >= field(kept, 'subtitle').text.fontSize);
+  // A title on the slide beside a body keeps its lines: the growth is only for headings that are the slide's whole message.
+  const withBody = composeSlide({ ...slide, blocks: [{ text: 'A note below the grid.' }] }, { layout: layouts.section });
+  assert.equal(lines(field(withBody, 'title')).length, lines(field(composeSlide({ ...slide, blocks: [{ text: 'A note below the grid.' }] }, { layout: layouts.section, fill: false }), 'title')).length);
+});
