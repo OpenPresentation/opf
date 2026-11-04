@@ -2383,6 +2383,12 @@
           "$ref": "#/$defs/ImagePlacement",
           "description": "Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide."
         },
+        "portrait": {
+          "type": "string",
+          "enum": ["avatar", "side", "top"],
+          "description": "Image payloads only: how a person's picture is drawn in a team. A person is a group of a picture followed by a name (a list of one entry, whose description holds the role and a line, or a short text); a slide whose body is only people is a team. 'top' draws each picture across the top of its card at the card's width, 'side' beside the text at 40% of the card's width (on the logical start side), 'avatar' as the small picture over the name. Without it the engine chooses: 'top' for 2 to 4 people, 'side' for 5 or 6, the avatar for more or when a card is too narrow. The first person's value applies to the whole team, so the cards stay equal. A 'top' or 'side' picture covers its frame around `focus` (the upper third when none is given) in a rounded frame unless `shape` says otherwise; names, roles and lines keep their size, and a frame flatter than 4:3 falls back to the avatar. Ignored on a picture that is not a person's.",
+          "examples": ["top", "side", "avatar"]
+        },
         "video": {
           "$ref": "#/$defs/Asset",
           "description": "Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to an http(s) source, with no embedded media. Native playback is out of scope (docs/programs/release-readiness).",
@@ -2752,8 +2758,14 @@
         },
         "photo": {
           "$ref": "#/$defs/Asset",
-          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
+          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck), or as a tall portrait beside the quote (see `portrait`). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
           "examples": ["./assets/priya-raman.jpg", {"src": "asset:priya-raman", "alt": "Priya Raman"}]
+        },
+        "portrait": {
+          "type": "string",
+          "enum": ["avatar", "side"],
+          "description": "How the `photo` is drawn. 'side' draws it as a tall picture at the start of the quote (about a quarter of its width, rounded, cropped around the upper third), the quote text beside it and centered against it; 'avatar' as the circle beside the attribution. Without it the engine draws 'side' when the quote is at least 640 px wide and every part of the quote keeps the size it has beside the avatar (the picture takes a narrower share where the text needs the room), and the avatar otherwise (several quotes side by side, a quote beside other blocks). Needs `photo`.",
+          "examples": ["side", "avatar"]
         },
         "source": {
           "type": "string",

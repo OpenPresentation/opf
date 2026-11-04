@@ -70,7 +70,7 @@ export type DimensionSwitchValue =
   | string[] /* audiences: catalog references */
   | { platform: string; handle: string }
   | { header?: unknown; footer?: unknown }
-  | Record<string, unknown> /* image-treatments: fit, focus, aspectRatio, shape, cornerRadius, border, opacity, recolor, overlay, placement (null removes) */;
+  | Record<string, unknown> /* image-treatments: fit, focus, aspectRatio, shape, cornerRadius, border, opacity, recolor, overlay, placement, portrait (null removes) */;
 
 export interface PreparedDimensionSwitch {
   dimension: SwitchDimension;

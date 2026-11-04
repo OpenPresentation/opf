@@ -63,10 +63,25 @@ The string shorthand `"asset:hero"` (or any source starting with `asset:`, `http
 | `recolor` | `"grayscale"`, or `{ dark, light }` for duotone. Luminance uses Rec. 601 weights on sRGB. | `a:grayscl` / `a:duotone` | `feColorMatrix` in sRGB |
 | `overlay` | A scrim in the frame's shape, or an edge band on a rectangle frame. | one `p:sp` directly above the picture | `path` with `fill-opacity` |
 | `placement` | `{ edge, size, inset }`: bleed the block to one slide edge (see below). | frame geometry | frame geometry |
+| `portrait` | A person's picture in a team (LH-132): `top` across the top of the card, `side` beside the text, `avatar` the small picture over the name. See [Team portraits](#team-portraits). | frame geometry | frame geometry |
 
 Colors accept the usual `ColorRef` forms: hex, scheme slot or role, or `var:<id>`. Eight-digit hex alpha is kept as native `a:alpha` and SVG opacity. Alt text comes from the image's asset.
 
 `composeSlide` reports every image item's picture as `ComposedItem.image`: the `region` (the cell, or the placement band), the frame `box`, `fit`, `focus`, the `shape` with its DrawingML preset and SVG outline, `border`, `opacity`, `recolor`, `overlay` and `placement`. Both engines draw exactly that. The paint order is the same in both: the picture with its recolor and opacity, clipped to the shape, then the line, then the overlay.
+
+### Team portraits
+
+A person is a group of a picture followed by a name: a list of one entry whose `description` holds the role and a line (`"Chief executive\nFounded the company in 2016."`), or a short text. A slide whose body is only people is a team, and core draws each person as one card with a portrait (LH-132):
+
+- **2 to 4 people** in one row, each picture across the top of its card at the card's inner width (Claude Design's leadership slide). A card too wide for that (two people) draws the picture beside the text.
+- **5 or 6 people** in a grid (3 + 2, 3 + 3, the short row at the same card width), each picture beside the text at 40% of the card's inner width, on the logical start side (the right in a right-to-left deck).
+- **More people**, or a card too narrow for a portrait (under 160 px across the top, a picture under 72 px or a text column under 150 px beside it), keep the avatar: the picture over the name, as before.
+
+The text comes first: the team's names, roles and lines take the largest size of the type scale at which the tallest of them fits under a square portrait (down to 21 px, then under a 4:3 one) or in the card's height beside it, and the portrait takes the room left, at most 4:5 across the top or 0.7 beside the text, never flatter than 4:3 (then the avatar). Every card reserves the team's tallest text, so the cards are equal and the portraits align; each card holds its portrait and text and sits in the middle of its cell. The automatic choice is a guarded rule (`portraits`): a slide keeps it only when no name, role or line is smaller than with the avatars.
+
+The picture keeps its `fit` and `focus`; without them it covers its frame around the upper third (`{x: 0.5, y: 0.3}`, where a face is), so it never distorts. A `circle` (or unshaped) picture is drawn in a frame rounded as a card is (8 px); another `shape` is kept. The engines draw core's frame: the preview clips the picture to it, PowerPoint writes a native picture with `a:srcRect` and the `roundRect` preset, so a raster portrait is not re-encoded.
+
+`portrait` on a person's picture overrides the choice: `top`, `side` or `avatar`. The first person's value in reading order applies to the whole team, so the cards stay equal; an authored `top` that does not fit gives way to `side`, and either gives way to the avatar where the card has no room. A quote's `portrait` does the same for its `photo` ([content payloads](content-payloads.md#quote)).
 
 ### Placement
 

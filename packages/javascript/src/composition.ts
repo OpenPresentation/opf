@@ -884,7 +884,7 @@ const BACKGROUND_FITS = ['cover', 'contain', 'stretch', 'tile'] as const;
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
 const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 /** Image block keys a composed image item reports in its payload, beside `type` and `image`. */
-const IMAGE_OPTION_KEYS = ['fit', 'focus', 'aspectRatio', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'placement'] as const;
+const IMAGE_OPTION_KEYS = ['fit', 'focus', 'aspectRatio', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'placement', 'portrait'] as const;
 const imagePayload = (host: Record<string, any>): Record<string, unknown> => {
   const payload: Record<string, unknown> = { type: host.type ?? 'image', image: host.image };
   for (const key of IMAGE_OPTION_KEYS) if (host[key] !== undefined) payload[key] = host[key];
@@ -1603,7 +1603,7 @@ function fitAtSizes<T extends {overflow:boolean}>(layout:(size:number)=>T,reques
 /** Photo diameter as a multiple of the footer font size, and the gap beside it as a multiple of that size (FA-12). */
 const PHOTO_RATIO = 3, PHOTO_GAP = .75;
 /** `text` is a string or TextRun[] (FA-10); attribution, role and source stay plain strings. */
-export interface QuoteContent { text: string | readonly (string | RichTextRun)[]; attribution?: string; role?: string; photo?: unknown; source?: string }
+export interface QuoteContent { text: string | readonly (string | RichTextRun)[]; attribution?: string; role?: string; photo?: unknown; source?: string; /** LH-132: how the photo is drawn; composeSlide decides when absent. */ portrait?: 'avatar' | 'side' }
 /** Source and displayed-text ranges are half-open UTF-16 offsets. Added punctuation has no source range. */
 export interface QuoteTextSource {
   path: string;
@@ -1645,10 +1645,12 @@ export interface QuotePhoto {
   path: string;
   /** Asset value (string or Asset object) that engines resolve like any other image; crop to cover the frame. */
   value: unknown;
-  /** Square frame, in reference pixels. */
+  /** Square frame, in reference pixels (LH-132: a tall one for a portrait beside the quote). */
   box: LayoutBox;
-  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as an image block's shape 'circle'. */
+  /** Circle mask: the `ellipse` DrawingML preset and the same outline as an SVG path, as an image block's shape 'circle'. LH-132: a portrait beside the quote is a rounded rectangle (`roundRect`). */
   shape: ImageShape;
+  /** LH-132: the point a portrait beside the quote keeps in view as it crops to cover its frame (the upper third); absent, a centered crop. */
+  focus?: ImageFocus;
 }
 export interface QuoteLayout {
   /** Measured vertical content envelope at the allocated width, including the photo. */
@@ -1762,6 +1764,14 @@ export interface QuoteBodyOptions extends QuoteLayoutOptions {
    * Composition sets it for a short quote under or over data.
    */
   pull?: boolean;
+  /**
+   * LH-132: `side` draws the photo as a tall picture at the start of the quote (QUOTE_PORTRAIT_SHARE of its width) with the text beside
+   * it, centered against it, instead of the avatar beside the attribution. Composition sets it for a wide quote or the quote's `portrait`;
+   * a box too small for the picture keeps the avatar.
+   */
+  portrait?: 'side';
+  /** LH-132: the share of the quote's width the portrait beside it takes (); QUOTE_PORTRAIT_SHARE when absent. */
+  portraitShare?: number;
 }
 /** LH-78: a quote beside other blocks starts at the lead size and fits in this many lines. */
 const QUOTE_BESIDE_LINES = 4;
@@ -1811,6 +1821,26 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     throw new RangeError('Quote dimensions, scale and minimum font size must be finite and positive.');
   }
   if (options.overflow !== undefined && !['warn','error'].includes(options.overflow)) throw new RangeError('Invalid quote overflow policy.');
+  // LH-132: a portrait beside the quote. The picture takes QUOTE_PORTRAIT_SHARE of the width at the start edge, at most
+  // PORTRAIT_TALLEST.side tall for its width and never taller than the box (a box that leaves it flatter than PORTRAIT_WIDEST narrows it);
+  // the quote without its photo is laid out in the rest, the shorter of the two is centered against the taller, and both in the box. A picture under
+  // PORTRAIT_MIN.side wide, or a text column under PORTRAIT_MIN.text, keeps the avatar.
+  if (options.portrait === 'side' && photoValue !== undefined) {
+    const between = QUOTE_PORTRAIT_GAP * scale;
+    let width = box.width * (options.portraitShare ?? QUOTE_PORTRAIT_SHARE);
+    const height = Math.min(box.height, width / PORTRAIT_TALLEST.side);
+    if (height * PORTRAIT_WIDEST < width) width = height * PORTRAIT_WIDEST;
+    const textWidth = box.width - width - between;
+    if (width >= PORTRAIT_MIN.side * scale && textWidth >= PORTRAIT_MIN.text * scale) {
+      const rtlSide = options.direction === 'rtl', {portrait: _side, portraitShare: _share, ...rest} = options;
+      const text = layoutQuote({...(quote as QuoteContent), photo: undefined}, {x: rtlSide ? box.x : box.x + width + between, y: box.y, width: textWidth, height: box.height}, rest);
+      const textHeight = text.bounds.height, content = Math.max(height, textHeight), top = box.y + Math.max(0, (box.height - content) / 2), shift = top - box.y + (content - textHeight) / 2;
+      if (shift > .01) for (const part of text.parts) { part.box = {...part.box, y: part.box.y + shift}; if (part.fit) part.fit = translateTextFit(part.fit, shift); }
+      const frame = {x: rtlSide ? box.x + box.width - width : box.x, y: top + (content - height) / 2, width, height};
+      const photo: QuotePhoto = {path: `${options.path ?? 'quote'}.photo`, value: photoValue, box: frame, shape: imageShape('rounded', frame, CARD_RADIUS * scale / Math.min(width, height)), focus: portraitFocus()};
+      return {...text, bounds: {x: box.x, y: top, width: box.width, height: content}, photo};
+    }
+  }
   const path = options.path ?? 'quote';
   const diagnostics: QuoteLayoutDiagnostic[] = [], parts: QuoteTextPart[] = [];
   const report = (reason: QuoteLayoutDiagnostic['reason'], diagnosticPath: string, roles: QuoteTextPart['role'][], message: string) =>
@@ -2168,6 +2198,37 @@ export const TIER_VALUE_SIZES = { few: { start: 96, max: 128 }, many: { start: 8
 export const TIER_MAX = 5;
 /** LH-136: a set of pillars drawn as display words has at most PILLAR_MAX of them, each title a word of at most PILLAR_WORD_MAX characters. */
 export const PILLAR_MAX = 5, PILLAR_WORD_MAX = 14;
+/**
+ * LH-132: how a person's picture is drawn (the image option and the quote field `portrait`): `avatar`, the small circle (a team's picture
+ * over the name, a quote's beside the attribution); `side`, a tall picture beside the text; `top`, the picture across the top of the card.
+ */
+export const PORTRAIT_MODES = ['avatar', 'side', 'top'] as const;
+export type PortraitMode = typeof PORTRAIT_MODES[number];
+/**
+ * LH-132: a team of 2 to PORTRAIT_TOP_MAX people draws each portrait across the top of its card at the card's width, in one row (Claude
+ * Design n22); up to PORTRAIT_SIDE_MAX, beside the text at PORTRAIT_SIDE_SHARE of the card's inner width (n23); more keep the avatar.
+ */
+export const PORTRAIT_TOP_MAX = 4, PORTRAIT_SIDE_MAX = 6, PORTRAIT_SIDE_SHARE = .4;
+/**
+ * LH-132: a portrait's frame is at most this tall for its width (width / height: 4:5 across a card's top, 0.7 beside the text, Claude
+ * Design's 146 x 200) and at least this wide (4:3): a frame flatter than that crops a face to a strip, so the person keeps the avatar.
+ */
+export const PORTRAIT_TALLEST = { top: .8, side: .7 } as const, PORTRAIT_WIDEST = 4 / 3;
+/**
+ * LH-132, in reference pixels: the narrowest card a portrait is drawn across the top of, the narrowest portrait beside the text and the
+ * narrowest text beside it, and the gap between a portrait and its text.
+ */
+export const PORTRAIT_MIN = { topCard: 160, side: 72, text: 150 } as const, PORTRAIT_GAP = 16;
+/** LH-132: a team's texts keep at least this size (reference px; Claude Design sets a name at 20) before a top portrait gives up its square. */
+export const PORTRAIT_TEXT_SIZE = 21;
+/**
+ * LH-132: a quote with a photo draws it as a tall picture at the start of the quote (Claude Design n24) when the quote is at least
+ * QUOTE_PORTRAIT_MIN_WIDTH wide: QUOTE_PORTRAIT_SHARE of its width, at most PORTRAIT_TALLEST.side tall for that width and never taller
+ * than the quote, QUOTE_PORTRAIT_GAP from the text, which is centered against it. A narrower quote (three side by side) keeps the avatar.
+ */
+export const QUOTE_PORTRAIT_SHARE = .26, QUOTE_PORTRAIT_STEP = .02, QUOTE_PORTRAIT_GAP = 40, QUOTE_PORTRAIT_MIN_WIDTH = 640;
+/** LH-132: a portrait the author gave no focus keeps the upper third in view, where a face is (LH-84's PORTRAIT_FOCUS_Y). */
+const portraitFocus = (): ImageFocus => ({ x: 0.5, y: PORTRAIT_FOCUS_Y });
 
 /**
  * Measure every metric field before accepting geometry. Short single-line values and units can
@@ -4031,6 +4092,19 @@ const CENTER = Symbol('opf.center');
 /** LH-129: composeSlide composes a slide whose headings are its message again with them this many type-scale steps larger (growTemplate). */
 const HEADING_STEPS = Symbol('opf.headingSteps');
 /**
+ * LH-132: composeSlide composes a slide with this flag to draw every quote's photo as the avatar unless the author chose the portrait: the
+ * growth passes (growTemplate, growBody) choose their step with the avatar, so a portrait beside the quote never costs it a step, and then
+ * draw the portrait at that step where no block reads smaller (withPortraits).
+ */
+const AVATAR_QUOTES = Symbol('opf.avatarQuotes');
+/** LH-132: whether a composition draws a quote's photo as a portrait beside it (QuoteLayout.photo.focus). */
+const portraitQuotes = (composed: SlideComposition): boolean => composed.items.some(item => item.quoteLayout?.photo?.focus !== undefined);
+/** LH-132: the grown slide (`grown`, composed with AVATAR_QUOTES) with its quotes' portraits again, at the same step (`extra`), where that adds no finding and sets no block smaller. */
+function withPortraits(input: unknown, options: ComposeSlideOptions, grown: SlideComposition, extra: Record<symbol, unknown>, before: TrackQuality, floor: number): SlideComposition {
+  const portrait = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
+  return portrait && overflowCount(portrait) <= overflowCount(grown) && !shrinks(portrait, grown, options) ? portrait : grown;
+}
+/**
  * LH-129: compositions whose headings are the message: they stand free (centered in a sized title area, or in a stacked record) and no
  * primary or secondary region holds a block (a cover, a section, a closing), or the slide has no body and no layout record (a cover by
  * the record rule), so growTemplate may grow them.
@@ -4112,17 +4186,17 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * (`pair-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`), whose badges take height the steps' text
  * might need, with LH-134's numerals of a few takeaways and an agenda's numbered rows (`numerals`), LH-149's half steps of the type scale
  * for fitted body text (`half-steps`), LH-135's pricing tiers as one card each (`tier-cards`), LH-136's one-word pillar titles at display
- * size over an accent rule (`pillar-words`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's
+ * size over an accent rule (`pillar-words`), LH-132's team portraits and a quote's portrait beside it (`portraits`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's
  * delta pill (`delta-pill`) and check-mark tiles (`check-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'portraits';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'portraits'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /** LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them. */
 const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'check-tiles'];
@@ -4192,7 +4266,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
   const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
-  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
+  const avatar = portraitQuotes(result) ? { [AVATAR_QUOTES]: true } : {};
+  const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...avatar, ...extra } as ComposeSlideOptions, before, floor);
   let best = result, steps = 0;
   for (let next = 1; next <= 3; next++) {
     const grown = attempt({ [GROW]: next }), fill = grown && bodyFill(grown);
@@ -4201,8 +4276,9 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   }
   // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
   const centered = result.items.some(item => item.quoteLayout?.rule) ? undefined : attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
-  if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) best = centered;
-  return best === result ? undefined : best;
+  let centeredBest = false;
+  if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) { best = centered; centeredBest = true; }
+  return best === result ? undefined : portraitQuotes(result) ? withPortraits(input, options, best, { [GROW]: steps, ...(centeredBest ? { [CENTER]: true } : {}) }, before, floor) : best;
 }
 /**
  * Compose a validated Slide. Layout resolution remains the caller's responsibility.
@@ -4449,11 +4525,12 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
   const start = textExtent(result), frameBottom = result.contentBox.y + result.contentBox.height;
   const frameTop = result.regions ? result.contentBox.y : Math.min(result.contentBox.y, (result.composition.padding ?? .08) * Math.min(result.width, result.height)), height = frameBottom - frameTop;
   if (height <= 0 || start.covered >= LONE_TARGET * height) return undefined;
-  let best = result, bestText = start;
+  let best = result, bestText = start, bestSteps = 0;
+  const avatar = portraitQuotes(result) ? { [AVATAR_QUOTES]: true } : {}, grownBy = (steps: number) => ({ ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) });
   const arrangement = (composed: SlideComposition) => (composed.regions ?? []).map(region => `${region.name}:${region.arrangement ?? '-'}:${region.content.join()}`).join(';');
   const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card')).map(item => item.text!.fontSize));
   for (let steps = 1; steps <= 3; steps++) {
-    const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
+    const grown = composeVariant(input, { ...options, ...avatar, ...grownBy(steps) } as ComposeSlideOptions, before, floor);
     if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
     // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays.
     if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape) break;
@@ -4476,9 +4553,9 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     // A title that LH-130 let take a second line keeps that break at the steps above it in the same way (bestText, not start).
     const rebroken = [...bestText.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
     if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
-    best = grown; bestText = text;
+    best = grown; bestText = text; bestSteps = steps;
   }
-  return best === result ? undefined : best;
+  return best === result ? undefined : portraitQuotes(result) ? withPortraits(input, options, best, grownBy(bestSteps), before, floor) : best;
 }
 /**
  * The slide after its guarded composition (`result`): a message set in the middle of the slide grows (LH-129, growTemplate); an
@@ -5503,6 +5580,40 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const node of pending) pillarWords.add(node.path);
     fire('pillar-words');
   }
+  // LH-132: a team. A body whose every block is a person, a group of a picture followed by a name (a list of one entry, whose description
+  // holds the role and a line, or a short text), draws each person as one card with a portrait instead of the avatar over the name: 2 to
+  // PORTRAIT_TOP_MAX people across the top of their cards in one row, up to PORTRAIT_SIDE_MAX beside the text in a grid, while a card is
+  // wide enough for it (PORTRAIT_MIN); more people, or too little room, keep the avatar. The automatic choice is the guarded rule
+  // `portraits` (no name, role or line smaller than with the avatar); a person's `portrait` (the image option) overrides it for the
+  // whole team, the first one in reading order, so the cards stay equal. `personParts`: each person's picture and text, by group path.
+  const personParts = new Map<string, { image: Pending; text: Pending }>();
+  let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false;
+  {
+    const personOf = (node: Pending): { image: Pending; text: Pending } | undefined => {
+      const kids = node.children, own = record(node.composition);
+      if (!kids || kids.length !== 2 || node.eyebrow || node.emphasis !== undefined || node.cardCell || (own.mode !== undefined && own.mode !== 'column' && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
+      const [image, text] = kids as [Pending, Pending], entries = Array.isArray(text.value) ? text.value : undefined, entry = entries?.length === 1 ? record(entries[0]) : undefined;
+      if (image.field !== 'image' || image.children || image.caption !== undefined || record(image.host).placement !== undefined || text.children || text.caption !== undefined || text.payload.numbering !== undefined) return undefined;
+      const named = text.field === 'text' ? typeof text.value === 'string' && text.value.trim() !== '' : (text.field === 'items' || text.field === 'bullets') && entry !== undefined && typeof entry.text === 'string' && entry.text.trim() !== '' && (entry.level ?? 0) === 0;
+      return named ? { image, text } : undefined;
+    };
+    const people = pending.map(personOf);
+    if (pending.length && people.every(Boolean)) {
+      const authored = people.map(person => record(person!.image.host).portrait).find((mode): mode is PortraitMode => (PORTRAIT_MODES as readonly unknown[]).includes(mode));
+      // The automatic choice: a card of the content box's row (top) or grid (side) wide enough for its portrait and its text.
+      const cardInner = (columns: number) => (contentBox.width - gap * (columns - 1)) / columns - (hasCards ? 2 * CARD_INSET * scale : 0);
+      const sideFits = (columns: number) => cardInner(columns) * PORTRAIT_SIDE_SHARE >= PORTRAIT_MIN.side * scale && cardInner(columns) * (1 - PORTRAIT_SIDE_SHARE) - PORTRAIT_GAP * scale >= PORTRAIT_MIN.text * scale;
+      const landscape = contentBox.width >= contentBox.height, count = pending.length;
+      const automatic = count < 2 || !ruleOn('portraits') ? undefined : count <= PORTRAIT_TOP_MAX && cardInner(count) >= PORTRAIT_MIN.topCard * scale ? 'top' as const
+        : count <= PORTRAIT_SIDE_MAX && sideFits(gridFlowShape(count, landscape).columns) ? 'side' as const : undefined;
+      const mode = authored ?? automatic;
+      if (mode !== undefined && mode !== 'avatar') {
+        portraitMode = mode;
+        portraitAuthored = authored !== undefined;
+        pending.forEach((node, index) => personParts.set(node.path, people[index]!));
+      }
+    }
+  }
   // LH-06: the one block or group drawn on the emphasis surface: the first `emphasis: true` in reading order. Any other is drawn plain,
   // and reported: a slide has one emphasis.
   const emphasisPaths: string[] = [];
@@ -5610,11 +5721,38 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const grownOptions = (node: Pending): { growth?: number } => { const growth = growthOf.get(node); return growth !== undefined && growth > 1 ? { growth } : {}; };
   // LH-78: a quote beside other blocks starts at the lead size and fits in QUOTE_BESIDE_LINES lines (besideQuote); `bodySize` (px) refits
   // one at the size its sibling quotes share.
-  const measureQuote = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, bodySize?: number) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
-    fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,floorFallback,
-    ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),...grownOptions(node),
-    ...(bodySize !== undefined ? {bodySize:bodySize / scale} : besideQuote(node) && ruleOn('quote-beside') ? {bodySize:LEAD_NOMINAL_SIZE,bodyLines:QUOTE_BESIDE_LINES} : {}),
-  });
+  const measureQuote = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, bodySize?: number): QuoteLayout => {
+    const lay = (share?: number) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
+      fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,floorFallback,
+      ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),...grownOptions(node),
+      ...(bodySize !== undefined ? {bodySize:bodySize / scale} : besideQuote(node) && ruleOn('quote-beside') ? {bodySize:LEAD_NOMINAL_SIZE,bodyLines:QUOTE_BESIDE_LINES} : {}),
+      ...(share !== undefined ? {portrait:'side' as const,portraitShare:share} : {}),
+    });
+    const portrait = quotePortrait(node, box);
+    if (portrait !== 'automatic') return lay(portrait === 'side' ? QUOTE_PORTRAIT_SHARE : undefined);
+    // The automatic portrait takes room the quote's text does not need: the widest share, from QUOTE_PORTRAIT_SHARE down by
+    // QUOTE_PORTRAIT_STEP, at which every part keeps the size it has beside the avatar (the body may take more lines in the empty height)
+    // and nothing new is found. Where none is (a long quote that fills its box), the quote keeps the avatar.
+    const avatar = lay(), size = (layout: QuoteLayout, role: string) => layout.parts.find(part => part.role === role)?.fit;
+    for (let share = QUOTE_PORTRAIT_SHARE; share > 1e-6 && box.width * share >= PORTRAIT_MIN.side * scale; share -= QUOTE_PORTRAIT_STEP) {
+      const side = lay(share);
+      if (!side.photo?.focus) break;
+      if (side.diagnostics.length > avatar.diagnostics.length || avatar.parts.some(part => (size(side, part.role)?.fontSize ?? 0) < (part.fit?.fontSize ?? 0) - 1e-9)) continue;
+      fire('portraits');
+      return side;
+    }
+    return avatar;
+  };
+  // LH-132: a quote's photo is a portrait beside it when the author asks (`portrait: "side"`), or automatically (the guarded rule `portraits`) when the quote is at least QUOTE_PORTRAIT_MIN_WIDTH wide and is not a quote
+  // beside other blocks (LH-78's lead). `avatar` keeps the circle beside the attribution. While a lone quote chooses its growth (fillLone)
+  // it is measured with the avatar (`avatarQuotes`), so the portrait never changes the size the quote grows to, only where it is drawn.
+  const avatarQuotes = new WeakSet<Pending>();
+  const quotePortrait = (node: Pending, box: LayoutBox): 'side' | 'automatic' | undefined => {
+    const value = record(node.value);
+    if (value.photo === undefined || value.portrait === 'avatar') return undefined;
+    if (value.portrait === 'side') return 'side';
+    return value.portrait !== undefined || avatarQuotes.has(node) || (options as Record<symbol, unknown>)[AVATAR_QUOTES] === true || !ruleOn('portraits') || besideQuote(node) || box.width < QUOTE_PORTRAIT_MIN_WIDTH * scale ? undefined : 'automatic';
+  };
   // LH-101: the lone code panels fillLone gave their whole cell; their lines sit in the middle of it (layoutCode's `fill`).
   const fullPanels = new WeakSet<Pending>();
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, hug = false) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
@@ -6106,6 +6244,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     // LH-44: the arrangement tableArrangement chose records its decision above, and its flow here.
     const decided = spannedContainer;
+    // LH-132: a team's portrait cards in the automatic grid: one row across the top (up to PORTRAIT_TOP_MAX), the grid flow otherwise.
+    const team = !hasRegions && count === nodes.length && settings.columns === undefined && !settings.weights?.length && nodes.every(node => personParts.has(node.path));
+    if (team) cols = portraitMode === 'top' && count <= PORTRAIT_TOP_MAX ? count : gridFlowShape(count, area.width >= area.height).columns;
     spannedContainer = false;
     if (paragraphs) cols = paragraphs.shape.columns; else if (lead) cols = 2;
     if (recorded && !decided) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
@@ -6116,7 +6257,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // `stretch`), so two pictures and a text draw a row of pictures over a full-width text, not a 2 x 2 grid with an empty cell. A grid
     // of pictures and videos only keeps one cell width, as LH-47 keeps a gallery's.
     if (!paragraphs && !lead && mode === 'auto' && !hasRegions && count === nodes.length && cols > 1 && count % cols !== 0 && !settings.weights?.length && ruleOn('short-row')
-      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video'))) {
+      && !nodes.every(node => !node.children && (node.field === 'image' || node.field === 'video')) && !team) {
       const first = count - count % cols, short = count - first, cell = (area.width - grid.gap * (short - 1)) / short;
       for (let k = 0; k < short; k++) grid.boxes[first + k] = { ...grid.boxes[first + k]!, x: area.x + k * (cell + grid.gap), width: cell };
       fire('short-row');
@@ -6269,6 +6410,61 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     caption.box = { ...caption.box, y: target };
     caption.fit = translateTextFit(caption.fit, dy);
   };
+  // LH-132: one person of a team (personParts) as one card. The portrait goes across the top of the card at its inner width (`top`), or
+  // beside the text at the start edge at PORTRAIT_SIDE_SHARE of the width (`side`), each text centered against it. The text comes first:
+  // the team's texts take the largest size of the type scale at which the tallest of them fits under a square portrait (top; down to
+  // PORTRAIT_TEXT_SIZE, and under a 4:3 one below that) or in the card's height (side), and the portrait grows into the room left, up to
+  // PORTRAIT_TALLEST for its width, so it takes empty room, never the text's. Every person reserves that tallest text, so the cards are
+  // equal and their portraits align; the card holds the portrait and the text and is centered in its cell. A card too wide for a top
+  // portrait (two people in a row) draws it beside the text. The picture keeps its authored fit and focus (cover from the upper third when
+  // none is given) in a frame rounded as a card is, unless the author shaped it other than a circle. Returns false, and the person keeps
+  // the avatar, when the portrait would be flatter than PORTRAIT_WIDEST or narrower than PORTRAIT_MIN, or the text narrower than
+  // PORTRAIT_MIN or too tall for the card at the floor.
+  const portraitHosts = new Map<string, Record<string, unknown>>(), teamText = new Map<string, { size: number; need: number } | undefined>();
+  const placePerson = (node: Pending, person: { image: Pending; text: Pending }, box: LayoutBox, settings: Composition, cards: boolean, frame?: LayoutBox): boolean => {
+    const own = inheritedSettings(settings, { ...node.composition, mode: 'column' });
+    const drop = cards && frame ? gap * CARD_FILL_SPACE : 0, cell = acceptedBox(frame ? { ...frame, y: frame.y + drop, height: Math.max(scale, frame.height - drop) } : box);
+    const inner = cards ? payloadBox(cell, true) : cell, between = PORTRAIT_GAP * scale, floorPx = own.minFontSize ?? 16, floor = snapFontSizeUp(floorPx * scale);
+    const plan = (mode: Exclude<PortraitMode, 'avatar'>) => {
+      const side = mode === 'side', pictureWidth = side ? inner.width * PORTRAIT_SIDE_SHARE : inner.width, textWidth = side ? inner.width - pictureWidth - between : inner.width;
+      if (pictureWidth < PORTRAIT_MIN.side * scale || textWidth < PORTRAIT_MIN.text * scale) return undefined;
+      const needs = (text: Pending, size: number) => naturalHeight(text, textWidth, false, undefined, own, false, size) + 2 * rasterPadding + scale;
+      const key = `${mode}:${round(textWidth)}:${round(inner.height)}`;
+      if (!teamText.has(key)) {
+        const team = [...personParts.values()].map(entry => entry.text), sizes: number[] = [];
+        for (let size = proseMeasure(person.text, textWidth).size; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
+        const need = new Map(sizes.map(size => [size, Math.max(...team.map(text => needs(text, size)))]));
+        const fits = (room: number, least = floor) => sizes.find(size => size >= least - 1e-9 && need.get(size)! <= room + .01);
+        const size = side ? fits(inner.height) : fits(inner.height - between - pictureWidth, PORTRAIT_TEXT_SIZE * scale) ?? fits(inner.height - between - pictureWidth / PORTRAIT_WIDEST);
+        teamText.set(key, size === undefined ? undefined : { size, need: need.get(size)! });
+      }
+      const text = teamText.get(key);
+      if (!text) return undefined;
+      const pictureHeight = Math.min(side ? inner.height : inner.height - between - text.need, pictureWidth / PORTRAIT_TALLEST[mode]);
+      return pictureHeight * PORTRAIT_WIDEST < pictureWidth - .5 ? undefined : { side, pictureWidth, pictureHeight, textWidth, text, ownNeed: side ? Math.min(text.need, needs(person.text, text.size)) : text.need };
+    };
+    // An authored mode is kept where it fits (top gives way to side); the automatic top portrait gives way to the side one where the side
+    // one sets the text larger.
+    const wanted = plan(portraitMode!), beside = portraitMode === 'top' && (!wanted || !portraitAuthored) ? plan('side') : undefined;
+    const chosen = wanted && !(beside && !portraitAuthored && beside.text.size > wanted.text.size + 1e-9) ? wanted : beside;
+    if (!chosen) return false;
+    const { side, pictureWidth, pictureHeight, textWidth, text, ownNeed } = chosen;
+    const content = side ? Math.max(pictureHeight, text.need) : pictureHeight + between + text.need;
+    const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, content + insetTop + insetBottom);
+    const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
+    const picture = side ? { x: rtl ? inner.x + inner.width - pictureWidth : inner.x, y: start + (content - pictureHeight) / 2, width: pictureWidth, height: pictureHeight } : { x: inner.x, y: start, width: inner.width, height: pictureHeight };
+    const words = side ? { x: rtl ? inner.x : inner.x + pictureWidth + between, y: start + (content - ownNeed) / 2, width: textWidth, height: ownNeed } : { x: inner.x, y: start + pictureHeight + between, width: inner.width, height: text.need };
+    const host = record(person.image.host), shape = host.shape === undefined || host.shape === 'circle' ? 'rounded' : host.shape, first = items.length;
+    portraitHosts.set(person.image.path, { ...host, shape, fit: host.fit ?? 'cover', focus: host.focus ?? portraitFocus(), ...(shape === 'rounded' && host.cornerRadius === undefined ? { cornerRadius: CARD_RADIUS * scale / Math.min(picture.width, picture.height) } : {}) });
+    if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
+    const wasTier = insideTier;
+    insideTier = true;
+    try { placeNode(person.image, roundBox(picture), own, false); placeNode(person.text, words, own, false, undefined, undefined, 'top'); }
+    finally { insideTier = wasTier; }
+    if (cards) for (const item of items.slice(first)) item.frameBox = card;
+    fire('portraits');
+    return true;
+  };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     // LH-06: the block or group with the slide's emphasis is drawn on its surface, a card in its cell; nothing drawn on the surface takes
     // a card of its own. A group's children are arranged inside the card's inset.
@@ -6279,6 +6475,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const room = pairRoom?.get(node.path) ?? (node.children ? undefined : pairRoom?.get(node.path.slice(0, node.path.lastIndexOf('.'))));
     if (room) { const trim = (area: LayoutBox): LayoutBox => ({ ...area, x: room.side === 'left' ? area.x + room.width : area.x, width: Math.max(scale, area.width - room.width) }); box = trim(box); if (frame) frame = trim(frame); }
     if (node.children) {
+      const person = personParts.get(node.path);
+      if (person && !insideEmphasis && placePerson(node, person, box, settings, cards, frame)) return;
       // LH-135: a pricing tier is one card of its cell (the cell's top edge one half gap down, as every filled card's is): its children are
       // placed in the card's insets with no card of their own, from the top, and share the card's frame (one card under the first of them).
       // LH-131 with LH-135: the featured tier ("most popular") or an authored emphasis is the emphasis surface over that same card, so the
@@ -6396,7 +6594,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > box.width * CHART_MAX_ASPECT_RATIO) box = roundBox({ ...box, height: box.width * CHART_MAX_ASPECT_RATIO });
-    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
+    const image = node.field === 'image' ? composeImage(portraitHosts.get(node.path) ?? node.host ?? {}, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
@@ -6650,7 +6848,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const scaleAbove = (size: number, floorPx: number): number => {
     for (let power = 0; ; power++) { const step = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** power) * scale); if (step > size + 1e-9) return step; }
   };
+  // LH-132: a lone quote whose photo may be drawn beside it grows as it would with the avatar (avatarQuotes); when the photo is then drawn
+  // beside it, it takes its whole cell, and its layout centers the photo and the text in it.
   const fillLone = (node: Pending, cell: LayoutBox, settings: Composition, cards: boolean): LayoutBox | undefined => {
+    if (!node.fills || node.field !== 'quote' || quotePortrait(node, payloadBox(cell, cards)) === undefined) return fillLoneBlock(node, cell, settings, cards);
+    let lone: LayoutBox | undefined;
+    avatarQuotes.add(node);
+    try { lone = fillLoneBlock(node, cell, settings, cards); } finally { avatarQuotes.delete(node); }
+    return measureQuote(node, payloadBox(cell, cards), settings).photo?.focus ? cell : lone;
+  };
+  const fillLoneBlock = (node: Pending, cell: LayoutBox, settings: Composition, cards: boolean): LayoutBox | undefined => {
     // Decided once: the block is then placed in the cell this returns.
     if (!node.fills || options.fill === false) return undefined;
     node.fills = false;
@@ -7231,6 +7438,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (region.name === longTextRegion) return 'column';
       // LH-135: pricing tiers are compared side by side, in one row of equal cards.
       if (units.length > 1 && units.every(unit => tierGroups.has(unit.path))) return 'row';
+      // LH-132: a team's portrait cards: up to PORTRAIT_TOP_MAX across the top in one row, otherwise a grid.
+      if (units.length && units.every(unit => personParts.has(unit.path))) return portraitMode === 'top' && units.length <= PORTRAIT_TOP_MAX ? 'row' : 'grid';
       if (direction !== undefined && region.flow !== 'none') return direction === 'horizontal' ? 'row' : 'column';
       const flow = region.flow === 'none' && units.length > 1 ? 'auto' : region.flow;
       if (flow === 'none' || flow === 'column') return 'column';
@@ -7262,7 +7471,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     // LH-47: the cells of a short last row stretch to the full width, except in a grid of pictures and videos, whose cells keep
     // one size (one aspect) and centre.
-    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video'));
+    // LH-132: a team's short last row keeps its cards at one width, so every portrait has one size.
+    const stretchesLastRow = (units: Pending[]) => !units.every(unit => !unit.children && (unit.field === 'image' || unit.field === 'video')) && !units.every(unit => personParts.has(unit.path));
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
     // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
     const MOVED_SHARE = .3;

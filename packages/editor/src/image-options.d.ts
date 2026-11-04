@@ -3,7 +3,9 @@ import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js
 export declare const IMAGE_FITS: readonly ["cover", "contain", "stretch", "auto"];
 export declare const IMAGE_SHAPES: readonly ["rectangle", "rounded", "circle", "hexagon"];
 export declare const IMAGE_EDGES: readonly ["left", "right", "top", "bottom"];
-export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"];
+/** LH-132: how a person's picture is drawn in a team. */
+export declare const IMAGE_PORTRAITS: readonly ["avatar", "side", "top"];
+export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"];
 
 export interface ImageFocus { x: number; y: number }
 /** One overlay, shared by image backgrounds and image blocks: the whole picture, or a band along `edge` (`size` 0.05 to 1). */
@@ -21,6 +23,8 @@ export interface ImageTreatments {
   recolor?: "grayscale" | { dark: string; light: string } | null;
   overlay?: ImageOverlay | null;
   placement?: ImagePlacement | null;
+  /** LH-132: a person's picture in a team: the avatar, beside the text or across the top of the card (the first person's applies to the team). */
+  portrait?: (typeof IMAGE_PORTRAITS)[number] | null;
 }
 export interface ImageTreatmentState extends Omit<ImageTreatments, "fit" | "focus"> {
   path: string;
