@@ -3158,6 +3158,7 @@ export interface ListFitOptions extends RichTextOptions {
    * apart, the first baselines aligned); otherwise each description sits under its label, as in a stacked list. Ignored for fewer than 2 entries.
    */
   rows?:boolean;
+  /**
    * LH-07: draw each entry's number in a step badge (`ListEntryLayout.badge`) instead of a marker: a circle STEP_LIST_BADGE times the
    * list size across in the marker column, its numeral STEP_BADGE_NUMERAL of that and never under the floor, centered on the
    * entry's first line; entries are at least STEP_BADGE_GAP of a badge apart, so the connector between them shows. Needs

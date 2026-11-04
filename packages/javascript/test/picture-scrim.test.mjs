@@ -49,7 +49,10 @@ test('the form follows where the text sits: a gradient from the bottom, the top 
   const top = composed(deck([{ title: 'What we heard', text: 'Shorter waits at the pier.', design: picture() }])).result.backgroundImage.scrims?.[0];
   assert.deepEqual([top.edge, top.box.y, top.stops[0].opacity, top.stops.at(-1).opacity], ['top', 0, top.opacity, 0]);
   // A centered cover title: a band across the text that fades out above and below.
-  const band = composed(deck([{ title: 'Part two', design: { ...picture(), titleAlignment: 'center' } }])).result.backgroundImage.scrims?.[0];
+  // Wave 5: LH-129 grows a cover title to its 75 px display size, which stays a band (below); the band's proportions are pinned at the
+  // 54 px role size (fill: false), where its fade is longer than the solid part.
+  assert.equal(composed(deck([{ title: 'Part two', design: { ...picture(), titleAlignment: 'center' } }])).result.backgroundImage.scrims?.[0].form, 'band');
+  const band = composed(deck([{ title: 'Part two', design: { ...picture(), titleAlignment: 'center' } }]), 0, { fill: false }).result.backgroundImage.scrims?.[0];
   assert.equal(band.form, 'band');
   assert.equal(band.edge, undefined);
   assert.deepEqual([band.stops[0].opacity, band.stops.at(-1).opacity], [0, 0]);
@@ -63,7 +66,10 @@ test('the form follows where the text sits: a gradient from the bottom, the top 
   const low = scrimGeometry({ x: 400, y: 420, width: 480, height: 80 }, 1280, 720, 24, 30);
   assert.deepEqual([low.form, low.edge], ['gradient', 'bottom']);
   // A left-aligned cover title and subtitle in the left half: a gradient across from the left edge.
-  const side = composed(deck([{ title: 'Shipping, rebuilt', subtitle: 'The plan', design: picture() }])).result.backgroundImage.scrims?.[0];
+  // Wave 5: at LH-129's grown sizes this cover's title spans more than the left half, so it takes a band across it; at its role sizes
+  // (fill: false) the title and subtitle are a column in the left half.
+  assert.equal(composed(deck([{ title: 'Shipping, rebuilt', subtitle: 'The plan', design: picture() }])).result.backgroundImage.scrims?.[0].form, 'band');
+  const side = composed(deck([{ title: 'Shipping, rebuilt', subtitle: 'The plan', design: picture() }]), 0, { fill: false }).result.backgroundImage.scrims?.[0];
   assert.deepEqual([side.edge, side.axis, side.box.x, side.box.height], ['left', 'horizontal', 0, 720]);
 });
 
