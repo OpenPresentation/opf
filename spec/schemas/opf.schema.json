@@ -1635,12 +1635,19 @@
             { "$ref": "#/$defs/Overlay" },
             { "const": false, "description": "No overlay and no automatic scrim: the picture shows as it is behind the text." }
           ]
+        },
+        "textPlacement": {
+          "type": "string",
+          "enum": ["top-start", "top-center", "middle-start", "middle-center", "bottom-start", "bottom-center", "panel"],
+          "description": "Where a cover's or section's heading group goes on this picture: the top, middle or bottom of its area, start-aligned or centered, or 'panel' (a start-side column on the background color; needs no overlay key). Absent: core picks the calmest place when the host measured the picture (SlideComposition.pictureText).",
+          "examples": ["top-start", "panel"]
         }
       },
       "examples": [
         { "type": "image", "src": "asset:cover-photo" },
         { "type": "image", "src": "./images/harbour.jpg", "alt": "Container ships at dawn", "focus": { "x": 0.5, "y": 0.7 }, "overlay": { "color": "dark1", "opacity": 0.4 } },
-        { "type": "image", "src": "asset:texture", "overlay": false }
+        { "type": "image", "src": "asset:texture", "overlay": false },
+        { "type": "image", "src": "asset:city-night", "tone": "dark", "textPlacement": "top-start" }
       ]
     },
     "ImageFocus": {

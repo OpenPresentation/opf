@@ -24,9 +24,12 @@ export interface ComposedScrim {
   color: string;
   /** Opacity under the text, 0 to 1 in hundredths: the lowest at which the text reads at `target` over every possible pixel. */
   opacity: number;
-  /** `gradient`: solid from `edge` to past the text, then fading out; `band`: solid across the text, fading out on both sides. */
-  form: 'gradient' | 'band';
-  /** The slide edge a gradient starts from (physical, so already mirrored in a right-to-left deck). Absent for a band. */
+  /**
+   * `gradient`: solid from `edge` to past the text, then fading out; `band`: solid across the text, fading out on both sides; `panel`
+   * (LH-158): a solid column at `edge`, the full slide height, that the heading group sits on (SlideComposition.pictureText).
+   */
+  form: 'gradient' | 'band' | 'panel';
+  /** The slide edge a gradient or panel starts from (physical, so already mirrored in a right-to-left deck). Absent for a band. */
   edge?: ScrimEdge;
   /** The rectangle drawn: the full slide width (top, bottom and band) or height (left and right), clipped to the slide. */
   box: ScrimBox;
@@ -51,7 +54,21 @@ export interface ComposedScrim {
  * `values` is each cell's darkest pixel (or its only value) and `high`, when present, its lightest, so a cell of fine black and white
  * detail keeps both (luminanceGrid writes both).
  */
-export interface PictureLuminance { columns: number; rows: number; values: ArrayLike<number>; high?: ArrayLike<number> }
+export interface PictureLuminance {
+  columns: number; rows: number; values: ArrayLike<number>; high?: ArrayLike<number>;
+  /**
+   * LH-158: a host's per-cell weight of how busy the picture is (0 calm to 1 as busy as the full range of gray), for detail the darkest
+   * and lightest pixel of a cell miss (texture, edges); text placed on the picture (SlideComposition.pictureText) avoids busy cells.
+   */
+  busy?: PictureWeights;
+  /**
+   * LH-158: a host's per-cell weight of how much the picture's subject is there (0 background to 1 a face or the subject), from any
+   * saliency or vision model; text placed on the picture avoids salient cells.
+   */
+  salient?: PictureWeights;
+}
+/** LH-158: a grid of weights over the whole picture, `columns` × `rows` cells in row order, each 0 to 1; its own resolution, sampled by region. */
+export interface PictureWeights { columns: number; rows: number; values: ArrayLike<number> }
 
 /** The contrast a scrim keeps under text over a picture: 4.5:1, WCAG's normal-text minimum, for every size. */
 export const SCRIM_TARGET_CONTRAST = 4.5;
@@ -170,6 +187,25 @@ export function sampledGrays(grid: PictureLuminance | undefined, region: { left:
     low = Math.min(low, value); high = Math.max(high, top);
   }
   return [Math.floor(grayOfLuminance(low)), Math.ceil(grayOfLuminance(high))];
+}
+
+/**
+ * LH-158: the largest weight of a host's weight grid (`busy`, `salient`) over a region given as fractions (0 to 1) of the picture; 0
+ * when the grid is absent, undefined when it is unusable (then it is ignored).
+ */
+export function sampledWeight(grid: PictureWeights | undefined, region: { left: number; top: number; right: number; bottom: number }): number | undefined {
+  if (!grid) return 0;
+  if (!Number.isInteger(grid.columns) || !Number.isInteger(grid.rows) || grid.columns < 1 || grid.rows < 1 || grid.values?.length !== grid.columns * grid.rows) return undefined;
+  const c0 = Math.max(0, Math.floor(region.left * grid.columns)), c1 = Math.min(grid.columns - 1, Math.ceil(region.right * grid.columns) - 1);
+  const r0 = Math.max(0, Math.floor(region.top * grid.rows)), r1 = Math.min(grid.rows - 1, Math.ceil(region.bottom * grid.rows) - 1);
+  if (c1 < c0 || r1 < r0) return 0;
+  let most = 0;
+  for (let row = r0; row <= r1; row++) for (let column = c0; column <= c1; column++) {
+    const value = Number(grid.values[row * grid.columns + column]);
+    if (!Number.isFinite(value)) return undefined;
+    most = Math.max(most, Math.min(1, Math.max(0, value)));
+  }
+  return most;
 }
 
 /**

@@ -42,8 +42,10 @@ export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logo
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {colorContrast,layoutVariantApplies,resolveColorRoles} from './color.js';
-import {pictureScrims,sampledGrays,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
-export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
+import {pictureScrims,SCRIM_MARGIN,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance,type ScrimBox,type ScrimEdge} from './picture-scrim.js';
+export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,sampledWeight,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type PictureWeights,type ScrimEdge} from './picture-scrim.js';
+import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextPlacement} from './picture-text.js';
+export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -651,6 +653,8 @@ export interface ComposedBackgroundImage {
   scrims?: ComposedScrim[];
   /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
   picture?: ImageFitPlacement;
+  /** LH-158: the background's `textPlacement`, when the author picked where a heading group goes on the picture (SlideComposition.pictureText). */
+  textPlacement?: PictureTextPlacement;
 }
 /**
  * The deck logo drawn on a cover or section slide, at the top-left of the free area and above the
@@ -780,6 +784,12 @@ export interface SlideComposition {
    * is under 4.5:1 on the slide's backdrop. Absent otherwise.
    */
   titleRule?: { path: string; box: LayoutBox };
+  /**
+   * LH-158: where the heading group of a sized title area (a cover, a section) sits on a picture background, with every candidate
+   * placement and its score on the host's measured grid (`pictureLuminance`), so an editor or host can offer the others. Present when
+   * the picture was measured or the background names a `textPlacement`; absent otherwise (the group then sits as wave 6 put it).
+   */
+  pictureText?: PictureText;
   /**
    * LH-80, LH-49: automatic composition gave the slide's one picture (`picture`) or one chart (`chart`) a full-height track of its own
    * at `edge` (physical), `size` of the slide's width (left, right) or height (top, bottom); `path` is the block's. A picture's track
@@ -988,7 +998,7 @@ export function fitImage(frame: LayoutBox, requested: ImageFitOption, aspect: nu
 }
 
 /** The background a value describes when it is an image: the object form, or an image-source string (a cover image). */
-export function imageBackground(value: unknown): { src: string; alt?: string; fit: BackgroundImageFit; focus: ImageFocus; opacity?: number; recolor?: unknown; overlay?: unknown } | undefined {
+export function imageBackground(value: unknown): { src: string; alt?: string; fit: BackgroundImageFit; focus: ImageFocus; opacity?: number; recolor?: unknown; overlay?: unknown; textPlacement?: PictureTextPlacement } | undefined {
   if (typeof value === 'string') return IMAGE_SOURCE.test(value) ? { src: value, fit: 'cover', focus: { x: 0.5, y: 0.5 } } : undefined;
   const background = record(value);
   if (background.type !== 'image' || typeof background.src !== 'string' || !background.src) return undefined;
@@ -997,6 +1007,7 @@ export function imageBackground(value: unknown): { src: string; alt?: string; fi
     src: background.src, ...(typeof background.alt === 'string' ? { alt: background.alt } : {}),
     fit: (BACKGROUND_FITS as readonly unknown[]).includes(background.fit) ? background.fit : 'cover', focus: imageFocus(background.focus),
     ...(opacity !== undefined ? { opacity } : {}), ...(background.recolor !== undefined ? { recolor: background.recolor } : {}), ...(background.overlay !== undefined ? { overlay: background.overlay } : {}),
+    ...((PICTURE_TEXT_PLACEMENTS as readonly unknown[]).includes(background.textPlacement) ? { textPlacement: background.textPlacement as PictureTextPlacement } : {}),
   };
 }
 
@@ -1109,6 +1120,8 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
 }
 
 /** The effective background (slide, deck, theme) when it is a picture; it fills the canvas and moves nothing. A layout variant hides a scheme-based background of the deck and the theme (LH-01), never a picture (LH-103). */
+/** LH-158: the picture backgrounds whose authored record has an `overlay` key. */
+const OVERLAY_KEYED = new WeakSet<ComposedBackgroundImage>();
 function resolveBackgroundImage(slide: Record<string, any>, presentation: unknown, themeBackground: unknown, layout: unknown, width: number, height: number, path: string, mirrorSide: (side: string) => string, diagnostics: LayoutDiagnostic[]): ComposedBackgroundImage | undefined {
   const own = record(slide.design), deck = record(record(presentation).design);
   if (layoutVariantApplies(own, layout, deck, themeBackground)) return undefined;
@@ -1123,6 +1136,9 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
   if (recolor) result.recolor = recolor;
   const overlay = composeOverlay(background.overlay, box, imageShape('rectangle', box), `${at}.overlay`, mirrorSide, diagnostics);
   if (overlay) result.overlay = overlay;
+  // LH-158: an `overlay` key (an overlay of the author's, or `false`) leaves no automatic scrim and no panel to place text with.
+  if (background.overlay !== undefined) OVERLAY_KEYED.add(result);
+  if (background.textPlacement) result.textPlacement = background.textPlacement;
   const aspect = background.fit === 'tile' ? undefined : intrinsicImageAspect(background.src, record(presentation).assets);
   if (aspect) {
     // LH-84: a portrait picture the author gave no focus keeps its heads (defaultImageFocus).
@@ -1718,11 +1734,6 @@ export const HEADING_DISPLAY_SIZES = { title: 75, subtitle: 37, tag: EYEBROW_TAG
  * draws the tag instead.
  */
 export const TITLE_RULE_SIZE = { width: 80, height: 5 } as const;
-/**
- * Wave 6 review: the widest range of grays (0 to 255, through the author's overlay) a measured picture may show under a heading group
- * that its layout anchors low over a picture background for it to stay low; a wider band is busy and the group is centered.
- */
-export const CALM_PICTURE_SPREAD = 48;
 /**
  * LH-129: `size` (canvas px) grown by `steps` steps of the type scale (the floor `floorPx` times (28/16)^(1/4) to a power, as LH-17's
  * scale), each step the scale's next size above the last, stopping before a step above `display`.
@@ -4264,7 +4275,10 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
   // does not stretch the body's scrim over the whole picture.
   const body: LayoutBox[] = [], header: LayoutBox[] = [], footer: LayoutBox[] = [];
   let accent = false, muted = false, line = 0;
+  // LH-158: the heading group on its panel reads on the panel's solid background color, so it needs no scrim of its own.
+  const panel = result.pictureText?.panel, onPanel = (box: LayoutBox) => !!panel && box.x >= panel.box.x - .5 && box.x + box.width <= panel.box.x + panel.box.width + .5;
   for (const item of result.items) {
+    if (onPanel(item.box)) continue;
     if (item.caption) body.push(item.caption.box);
     if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
     if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table', 'diagram'].includes(item.field)) continue;
@@ -4282,6 +4296,11 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
     ...(background.opacity !== undefined ? { opacity: background.opacity } : {}), ...(background.picture ? { picture: background.picture.image } : {}),
     ...(luminance ? { luminance } : {}), scale: Math.min(result.width, result.height) / 720, ...(line ? { line } : {}),
   });
+  // The panel is drawn first, as an opaque scrim in the slide background color: the same native rectangle in both engines.
+  if (panel) {
+    const color = roles.background.slice(0, 7).toUpperCase(), reached = colorContrast(roles.text, color) ?? 21;
+    scrims.unshift({ path: `${background.path}.textPlacement`, color, opacity: 1, form: 'panel', edge: panel.edge, box: panel.box, axis: 'horizontal', stops: [{ position: 0, opacity: 1 }, { position: 1, opacity: 1 }], text: panel.box, contrast: Math.round(reached * 100) / 100, target: SCRIM_TARGET_CONTRAST, basis: 'worst-case' });
+  }
   if (scrims.length) result.backgroundImage = { ...background, scrims };
   return result;
 }
@@ -4437,6 +4456,11 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
  * the text covers at most LONE_TARGET of the content box (as LH-48 grows a body). The region structure is the record's: the stack
  * or the centered title area places the larger text as it placed the smaller.
  */
+/** LH-158: how a slide's heading group reads on its picture: on the panel, on the bare picture, or not (on the scrim, or under the author's overlay). */
+const pictureReading = (composed: SlideComposition): string => {
+  const placed = composed.pictureText;
+  return !placed ? '' : placed.panel ? 'panel' : placed.candidates.find(candidate => candidate.placement === placed.placement)?.reads ? 'reads' : placed.source;
+};
 function growTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || overflowCount(result) > 0) return undefined;
   const stacked = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined, message = HEADING_MESSAGES.has(result);
@@ -4455,8 +4479,10 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
   for (let steps = 1; steps <= 3; steps++) {
     const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
     if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
-    // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays.
-    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape) break;
+    // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays;
+    // LH-158: so does how a heading group on a picture reads (on the bare picture, on the scrim or on the panel): a larger group may move to
+    // another place that reads, but not from reading to a scrim or off its panel.
+    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape || pictureReading(grown) !== pictureReading(result)) break;
     // Paragraphs and lists that shared one size keep one size (LH-43): a long one that fits only a step lower holds the others there.
     if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) break;
     const text = textExtent(grown);
@@ -4920,9 +4946,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // whose layout has no 'subtitle' region of its own), so it follows titleAlignment too: one alignment axis for the group.
   // Only a slide's own design.contentAlignment keeps them apart. Set once the template is known.
   let subtitleInGroup = true;
+  // LH-158: while a heading group is composed at another alignment on a picture (placeHeadings), the group's fields take it.
+  let headingAlignment: 'left' | 'center' | 'right' | undefined;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || ((field === 'tag' || (subtitleInGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
-      ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
+    headingAlignment && (field === 'title' || field === 'tag' || (subtitleInGroup && field === 'subtitle')) ? headingAlignment : ((field === 'title' || ((field === 'tag' || (subtitleInGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
+      ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left'));
   // LH-50: the paths of the text blocks drawn as the eyebrow of the text after them (eyebrowLabel), each with whether it is set in
   // capitals (eyebrowCaps). Filled when the body's blocks are grouped, before any of them is fitted.
   const eyebrowLabels = new Map<string, boolean>();
@@ -5036,6 +5064,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // of the group's height (groupHeight), and the template moves it with the group.
   const groupRules = new WeakMap<ComposedItem[], LayoutBox>();
   let titleRule: SlideComposition['titleRule'];
+  let pictureText: PictureText | undefined;
   const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split', rule = false): ComposedItem[] => {
     const list: ComposedItem[] = [];
     let top = y;
@@ -7427,44 +7456,106 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const bottom = near(cell.y + cell.height, frame.y + frame.height) ? area.bottom : cell.y + cell.height;
       return { x: left, y: top, width: right - left, height: bottom - top };
     };
-    // Wave 6 review (LH-130 with LH-02 and LH-145): a cover's or section's heading group anchored low over a picture background lies over
-    // the picture's lower part, often its busiest (lit windows, a field of panels), where a centered group sat in the calm sky. It stays
-    // low only when the host measured the picture (`pictureLuminance`) and the band under its text is calm: the grays there, through the
-    // author's overlay, span at most CALM_PICTURE_SPREAD levels and the text color reads SCRIM_TARGET_CONTRAST over every one of them with
-    // no scrim. Otherwise, and without a measurement (an estimated run), the group is centered as before LH-130, keeping its start
-    // alignment, rule and eyebrow. Plain and variant backgrounds keep the low anchor. `list` is the group at the top of its area and
-    // `room` how far the low anchor moves it down.
-    const calmUnder = (list: ComposedItem[], room: number): boolean => {
-      const background = backgroundImage, texts = list.filter(item => item.text);
-      const grid = background && !background.recolor ? options.pictureLuminance?.(background.src) : undefined;
-      if (!background || !grid || !texts.length || (background.opacity !== undefined && background.opacity < 1)) return false;
-      const picture = background.picture?.image ?? { x: 0, y: 0, width, height };
-      if (!(picture.width > 0 && picture.height > 0)) return false;
-      const left = Math.min(...texts.map(item => item.box.x)), right = Math.max(...texts.map(item => item.box.x + item.box.width));
-      const top = Math.min(...texts.map(item => item.box.y)) + room, bottom = Math.max(...texts.map(item => item.box.y + item.box.height)) + room;
-      const grays = sampledGrays(grid, { left: (left - picture.x) / picture.width, top: (top - picture.y) / picture.height, right: (right - picture.x) / picture.width, bottom: (bottom - picture.y) / picture.height });
-      if (!grays) return false;
-      // The author's overlay (a literal color) lies over the picture: each gray is seen through it.
-      const overlay = background.overlay, tint = typeof overlay?.color === 'string' && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(overlay.color) ? overlay.color : undefined;
-      const alpha = tint && overlay ? Math.max(0, Math.min(1, overlay.opacity * (tint.length === 9 ? Number.parseInt(tint.slice(7), 16) / 255 : 1))) : 0;
-      const seen = (gray: number): string => `#${[1, 3, 5].map(at => Math.round(gray * (1 - alpha) + (tint ? Number.parseInt(tint.slice(at, at + 2), 16) : 0) * alpha).toString(16).padStart(2, '0')).join('')}`;
-      const text = (options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' })).text;
-      const spread = Math.abs(grays[1] - grays[0]) * (1 - alpha);
-      if (spread > CALM_PICTURE_SPREAD) return false;
-      for (let gray = grays[0]; gray <= grays[1]; gray++) if ((colorContrast(text, seen(gray)) ?? 0) < SCRIM_TARGET_CONTRAST) return false;
-      return true;
+    // LH-158 (wave 6's calm-band rule widened): a heading group in a sized area (a cover's, a section's) over a picture background goes
+    // where the picture lets it read. Its candidates are the top, middle and bottom of the area, each at the layout's side alignment or
+    // centered (the title area only), across the area or, for a title area across the slide, in a narrower column (PICTURE_TEXT_COLUMNS)
+    // where the group keeps its sizes; and, for such a title area holding the slide's only text, a panel: the group in a
+    // start-side column of PICTURE_PANEL_SHARES of the slide width on the slide's background color, the picture bleeding on the rest, taken
+    // only where the group keeps its sizes. Each is scored on the host's measured grid (`pictureLuminance`, with its `busy` and `salient`
+    // weights) under the group's ink and the scrim's margin around it, seen through the author's overlay (picture-text.ts: scorePictureText, choosePictureText): the
+    // layout's own placement when it reads, else the best that reads, else the one the automatic scrim carries with the least opacity,
+    // else the panel. The background's `textPlacement` picks one outright; an `overlay` key leaves no scrim and no panel. Without a
+    // measurement a low group is centered, as wave 6 did (an estimated run cannot know the picture).
+    const onPicture = (name: 'title' | 'subtitle', fields: string[], cell: LayoutBox, authored: RegionAnchor): { list: ComposedItem[]; anchor: RegionAnchor; cell: LayoutBox } => {
+      const background = backgroundImage!, own = alignmentFor(fields.includes('title') ? 'title' : fields[0]!), titled = name === 'title' && fields.includes('title');
+      const preferred: PictureTextAlignment = own === 'center' ? 'center' : 'start', side = own === 'center' ? 'left' : own, left = !flip;
+      // A trial composition of the group leaves no trace: its alignment and its off-scale flag (LH-129) are restored.
+      type Variant = { alignment: PictureTextAlignment; cell: LayoutBox; list: ComposedItem[]; offScale: boolean };
+      const trial = (alignment: PictureTextAlignment, x: number, areaWidth: number): Variant => {
+        const before = headingOffScale, kept = headingAlignment;
+        headingOffScale = false; headingAlignment = alignment === preferred ? undefined : alignment === 'center' ? 'center' : side;
+        try { const list = headingItemsAt(fields, x, cell.y, areaWidth); return { alignment, cell: { ...cell, x, width: areaWidth }, list, offScale: headingOffScale }; } finally { headingOffScale = before; headingAlignment = kept; }
+      };
+      // A narrower column is a variant only where the group keeps every size it has across the area and still fits its height.
+      const keepsSizes = (narrow: ComposedItem[], across: ComposedItem[]) => narrow.length === across.length && groupHeight(narrow) <= cell.height + .01
+        && narrow.every((item, index) => (item.text?.fontSize ?? 0) >= (across[index]!.text?.fontSize ?? 0) - FONT_GRID_EPSILON);
+      const wide = titled && cell.width >= .75 * frame.width;
+      const variants: Variant[] = [];
+      for (const alignment of titled ? [preferred, preferred === 'center' ? 'start' as const : 'center' as const] : [preferred]) {
+        const across = trial(alignment, cell.x, cell.width);
+        variants.push(across);
+        if (wide) for (const share of PICTURE_TEXT_COLUMNS) {
+          const columnWidth = share * width - 2 * padding;
+          if (columnWidth <= 0 || columnWidth >= cell.width - 1) continue;
+          const narrow = trial(alignment, alignment === 'center' ? cell.x + (cell.width - columnWidth) / 2 : left ? cell.x : cell.x + cell.width - columnWidth, columnWidth);
+          if (keepsSizes(narrow.list, across.list)) variants.push(narrow);
+        }
+      }
+      const full = variants[0]!, keyed = OVERLAY_KEYED.has(background), explicit = titled ? background.textPlacement : undefined;
+      const grid = !background.recolor && !(background.opacity !== undefined && background.opacity < 1) ? options.pictureLuminance?.(background.src) : undefined;
+      // The panel stands on the physical start side (mirrored in a right-to-left deck): the group start-aligned in its text column.
+      let panel: Variant & { box: LayoutBox; edge: ScrimEdge } | undefined;
+      if (wide && !keyed && (grid || explicit === 'panel') && headingsAlone()) for (const share of PICTURE_PANEL_SHARES) {
+        const column = share * width, textWidth = column - 2 * padding;
+        if (textWidth <= 0) break;
+        const placed = trial('start', left ? cell.x : cell.x + cell.width - textWidth, textWidth);
+        if (keepsSizes(placed.list, full.list)) { panel = { ...placed, box: { x: left ? 0 : width - column, y: 0, width: column, height }, edge: left ? 'left' : 'right' }; break; }
+      }
+      const factor = { top: 0, middle: .5, bottom: 1 } as const, anchors: PictureTextAnchor[] = ['top', 'middle', 'bottom'];
+      const roomOf = (list: ComposedItem[]) => Math.max(0, cell.height - groupHeight(list));
+      let candidates: PictureTextCandidate[] | undefined;
+      const roles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+      const hex = (value: unknown) => typeof value === 'string' && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value) ? value.slice(0, 7) : undefined;
+      const picture = background.picture?.image ?? { x: 0, y: 0, width, height }, text = hex(roles.text), base = hex(roles.background);
+      if (grid && text && base && picture.width > 0 && picture.height > 0) {
+        // The author's overlay (a literal color) lies over the picture: each gray is seen through it.
+        const overlay = background.overlay, tint = hex(overlay?.color), raw = typeof overlay?.color === 'string' ? overlay.color : '';
+        const alpha = tint && overlay ? Math.max(0, Math.min(1, overlay.opacity * (raw.length === 9 ? Number.parseInt(raw.slice(7), 16) / 255 : 1))) : 0;
+        const inkOf = (list: ComposedItem[], shift: number): ScrimBox => {
+          // textInkBox reads the alignment as physical; a right-to-left paragraph's start is its right edge, so its ink is mirrored in the box.
+          const boxes = list.filter(item => item.text).map(item => {
+            const ink = textInkBox(item, options.textMeasurement), side = physicalAlignment(item.alignment, paragraphDirection(annotationText(item.value), deckDirection));
+            const x = side === item.alignment || side === 'center' ? ink.x : item.box.x + item.box.width - (ink.x - item.box.x) - ink.width;
+            return { ...ink, x, y: ink.y + shift };
+          });
+          const x = Math.min(...boxes.map(box => box.x)), y = Math.min(...boxes.map(box => box.y));
+          return { x, y, width: Math.max(...boxes.map(box => box.x + box.width)) - x, height: Math.max(...boxes.map(box => box.y + box.height)) - y };
+        };
+        const places = variants.flatMap(({ alignment, cell: area, list }) => list.some(item => item.text) ? anchors.map(anchor => ({ anchor, alignment, measure: area.width, box: inkOf(list, roomOf(list) * factor[anchor]) })) : []);
+        if (places.length) candidates = scorePictureText({ grid, picture, text, ...(keyed ? {} : { scrim: base }), ...(tint ? { overlay: { color: tint, alpha } } : {}), places, margin: SCRIM_MARGIN * scale, ...(panel ? { panel: { box: panel.box, measure: panel.cell.width } } : {}) });
+      }
+      const order = [...new Set<PictureTextAnchor>([authored, 'middle', ...anchors])];
+      let choice: { placement: PictureTextPlacement; anchor: PictureTextAnchor; alignment: PictureTextAlignment; scrim: boolean; measure?: number } | undefined;
+      if (explicit && (explicit !== 'panel' || panel)) {
+        const [anchor, alignment] = explicit === 'panel' ? [authored, 'start' as const] : explicit.split('-') as [PictureTextAnchor, PictureTextAlignment];
+        const scored = candidates?.find(candidate => candidate.placement === explicit);
+        choice = { placement: explicit, anchor, alignment, scrim: !keyed && explicit !== 'panel' && !!scored && !scored.reads && (scored.scrim ?? 0) > 0, ...(scored ? { measure: scored.measure } : {}) };
+      } else if (candidates) {
+        const pick = choosePictureText(candidates, { anchor: authored, alignment: preferred }, order);
+        if (pick) choice = pick.candidate.placement === 'panel' ? { placement: 'panel', anchor: authored, alignment: 'start', scrim: false } : { placement: pick.candidate.placement, anchor: pick.candidate.anchor, alignment: pick.candidate.alignment, scrim: pick.scrim, measure: pick.candidate.measure };
+      }
+      const drawn = choice?.placement === 'panel' ? panel : choice && (variants.find(variant => variant.alignment === choice.alignment && choice.measure !== undefined && Math.abs(variant.cell.width - choice.measure) < .01) ?? variants.find(variant => variant.alignment === choice.alignment));
+      if (!choice || !drawn) {
+        if (full.offScale) headingOffScale = true;
+        return { list: full.list, anchor: authored === 'bottom' ? 'middle' : authored, cell };
+      }
+      if (drawn.offScale) headingOffScale = true;
+      if (titled) pictureText = {
+        placement: choice.placement, anchor: choice.anchor, alignment: choice.alignment, source: explicit === choice.placement ? 'authored' : 'measured',
+        ...(choice.scrim ? { scrim: true as const } : {}), ...(panel && choice.placement === 'panel' ? { panel: { box: roundBox(panel.box), edge: panel.edge } } : {}), candidates: candidates ?? [],
+      };
+      return { list: drawn.list, anchor: choice.anchor, cell: drawn.cell };
     };
     // Headings: centered vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
     // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
     const placeHeadings =(name: 'title' | 'subtitle', fields: string[]) => {
       const rect = rects.get(name), original = ownRects.get(name);
       if (!rect) { if (original) headingAreas.push({ name, box: roundBox(physical(logical(original))), collapsed: true }); return; }
-      const cell = physical(logical(rect));
-      const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
       const sized = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto'), authored = plan.headingAnchors?.[name] ?? 'middle';
+      // LH-158: over a picture background the group goes where the picture lets it read (onPicture).
+      const area = physical(logical(rect)), placed = sized && backgroundImage ? onPicture(name, fields, area, authored) : undefined;
+      const cell = placed?.cell ?? area, list = placed?.list ?? headingItemsAt(fields, cell.x, cell.y, cell.width), anchor = placed?.anchor ?? authored;
       const room = Math.max(0, cell.height - groupHeight(list));
-      // Wave 6 review: a group anchored low over a picture background stays low only where the picture is calm under it (calmUnder).
-      const anchor = sized && authored === 'bottom' && backgroundImage && !calmUnder(list, room) ? 'middle' : authored;
       const shift = sized ? room * (anchor === 'bottom' ? 1 : anchor === 'middle' ? .5 : 0) : 0;
       // LH-129: a title that stands free (in a sized area, or in a stack) over no primary or secondary block is the slide's message.
       if (name === 'title' && list.some(item => item.field === 'title') && (sized || plan.stack !== undefined) && headingsAlone()) headingMessage = true;
@@ -8385,7 +8476,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   if (surface && pairArrow) surface = { ...surface, arrow: pairArrow };
-  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(pictureText&&useTemplate?{pictureText}:{}), ...(explanation?{explanation}:{}) };
   if (pairNeed) {
     const roomy = composeLayout(input, { ...options, [PAIR_ROOM]: pairNeed } as ComposeSlideOptions);
     if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;
