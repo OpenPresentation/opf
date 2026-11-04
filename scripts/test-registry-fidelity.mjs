@@ -53,10 +53,22 @@ const suites=[
  ['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs',...(styled?['styled-table.mjs']:[]),...(quoteFooter?['quote-footer.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs']:[]),...(acceptedLayout?['accepted-text.mjs','shared-metric.mjs','timeline.mjs']:[])]],
  ['opf-pptx',['dependency-boundary.mjs',...(styled?['styled-table.mjs','styled-table-import.mjs']:[]),...(nativeContent?['content-layout.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs','code-provenance.mjs']:[]),...(acceptedLayout?['plain-whitespace.mjs','accepted-text.mjs','content-cards.mjs','shared-timeline.mjs','font-variants.mjs']:[])]],
 ];
+// A pinned test that was itself wrong runs as corrected by the named later commit; the dist stays the installed one. Only a test bug
+// belongs here (never a dist regression); an entry is dead once a version built after its commit is `latest`.
+const CORRECTED_TESTS={
+ // 0.32.0 compared a grown metric's SVG font size (written to three decimals, 138.667) exactly with its fit size (138.666...). #1027.
+ 'opf-render@0.32.0':{'shared-metric.mjs':'9ba94b53df17df7a7e8eae496045ec7fb46e73e3'},
+};
 for(const [repo,tests] of suites){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
- const archive=archiveRegistryFidelity({checkout:root,ref,repo,directory,prefix:SET.find(item=>item.key===repo).directory});
+ const prefix=SET.find(item=>item.key===repo).directory;
+ const archive=archiveRegistryFidelity({checkout:root,ref,repo,directory,prefix});
+ const version=plan.packages.find(item=>item.name==='@openpresentation/'+repo).version;
+ for(const [test,fix] of Object.entries(CORRECTED_TESTS[repo+'@'+version]??{})){
+  await writeFile(path.join(directory,'test',test),execFileSync('git',['show',`${fix}:${prefix.replace(/\/+$/,'')}/test/${test}`],{cwd:root}));
+  console.log(`Registry fidelity: ${repo}@${version} test/${test} runs as corrected by ${fix.slice(0,12)}.`);
+ }
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
  const shipped=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  // Newer PPTX smoke fixtures reference the shipped, hash-verified vendor code.
