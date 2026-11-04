@@ -225,7 +225,7 @@ export function layoutPlaceholders(template) {
     }
     if (area.name === 'subtitle') { result.push({name: 'Subtitle', type: 'subTitle', idx: SUBTITLE_IDX, anchor: 't', ...emu(area.box)}); continue; }
     const region = regions.get(area.name);
-    if (region) result.push({name: region.name, type: region.name === template.nativeBodyRegion ? 'body' : placeholderType(region), idx: indexes[region.name],
+    if (region) result.push({name: region.name, type: region.name === template.nativeBodyRegion ? 'body' : placeholderType(region), idx: indexes[region.name], list: region.accepts[0] === 'list',
       ...(region.name === template.nativeBodyRegion ? {anchor: {top: 't', middle: 'ctr', bottom: 'b'}[region.anchor]} : {}), ...emu(area.box)});
   }
   // The placeholder's default type is the role size: `fill: false`, since a lone one-word sample would grow (LH-48).
@@ -251,11 +251,15 @@ export function layoutPlaceholders(template) {
 const PROMPTS = {title: 'Click to edit Master title style', ctrTitle: 'Click to edit Master title style', subTitle: 'Click to edit Master subtitle style', body: 'Click to edit Master text styles', obj: 'Click to edit Master text styles'};
 function placeholderShape(placeholder, id, {textColor} = {}) {
   const style = placeholder.style;
+  // LH-140: the master's body style bullets every level, so a subtitle, and a body or content placeholder whose region does not lead with a list, say no bullet
+  // (and no hanging indent) in their list style; a region that leads with a list keeps the master's bullets. An automatic grid's body (no region) is left as it was.
+  const plain = placeholder.type === 'subTitle' || (placeholder.list === false && (placeholder.type === 'body' || placeholder.type === 'obj'));
   const align = {left: 'l', center: 'ctr', right: 'r'}[style?.alignment] ?? 'l';
   // Each copy inherits its own master's chosen heading/body fonts (including script-profile variants).
   const fontRole = placeholder.type === 'title' || placeholder.type === 'ctrTitle' ? 'mj' : 'mn';
   const defaults = style ? `<a:defRPr sz="${Math.round(style.fontSize * 75)}"${Number(style.fontWeight) >= 600 ? ' b="1"' : ''}>${textColor ? `<a:solidFill><a:schemeClr val="${textColor}"/></a:solidFill>` : ''}<a:latin typeface="${fontRole === 'mj' ? '+mj-lt' : '+mn-lt'}"/><a:ea typeface="+${fontRole}-ea"/><a:cs typeface="+${fontRole}-cs"/></a:defRPr>` : '';
-  const listStyle = defaults ? `<a:lstStyle>${Array.from({length: 9}, (_, level) => `<a:lvl${level + 1}pPr algn="${align}">${defaults}</a:lvl${level + 1}pPr>`).join('')}</a:lstStyle>` : '<a:lstStyle/>';
+  const level = number => `<a:lvl${number}pPr${plain ? ' marL="0" indent="0"' : ''}${defaults ? ` algn="${align}"` : ''}>${plain ? '<a:buNone/>' : ''}${defaults}</a:lvl${number}pPr>`;
+  const listStyle = defaults || plain ? `<a:lstStyle>${Array.from({length: 9}, (_, index) => level(index + 1)).join('')}</a:lstStyle>` : '<a:lstStyle/>';
   const typeAttribute = placeholder.type === 'obj' ? '' : ` type="${placeholder.type}"`;
   const idx = placeholder.idx !== undefined ? ` idx="${placeholder.idx}"` : '';
   const prompt = PROMPTS[placeholder.type];

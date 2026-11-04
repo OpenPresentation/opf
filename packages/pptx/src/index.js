@@ -2259,15 +2259,44 @@ function pptxColor(value) {
   return /^(?:tx[12]|bg[12]|accent[1-6])$/.test(value) ? value : normalizeHex(value);
 }
 
-// Deck-level theme background for the slide master, so slides added in
-// PowerPoint match. The vendored layout already uses bg1, so only a theme
-// background on another slot (dark themes, light2, accents) changes the master.
+// Deck-level background for the slide master, so slides added in PowerPoint match. The vendored layout already uses bg1, so a theme
+// background on another slot (dark themes, light2, accents) changes the master, and so does a fixed background (LH-139): a hex color, a
+// gradient or a pattern is the same native fill the slides write (a slide's own background still overrides it), and a picture is a picture
+// fill of the media a slide of the deck embeds (`image`, completed at packaging by masterPictureBackground). The layouts then inherit the
+// master's background; a layout variant (LH-01) writes its own bg1 background after this pass and stays per layout.
 function masterBackground(context) {
-  const deck = {...context, schemeOverride: false};
-  const value = schemeBackgroundValue(deck.backgroundDefinition, deck);
-  const fill = schemeBackgroundFill(deck.backgroundDefinition, deck);
-  if (!value || value === 'bg1' || !fill || fill.includes('<a:alpha')) return null;
-  return {fill, text: defaultTextSchemeValues(deck).text ?? normalizeHex(context.colors.text)};
+  const deck = {...context, schemeOverride: false}, definition = deck.backgroundDefinition;
+  const text = defaultTextSchemeValues(deck).text ?? normalizeHex(context.colors.text);
+  if (definition?.type === 'image') return {fill: undefined, image: true, text};
+  const value = schemeBackgroundValue(definition, deck);
+  if (value === 'bg1' || definition === undefined) return null;
+  if (value) {
+    const fill = schemeBackgroundFill(definition, deck);
+    return !fill || fill.includes('<a:alpha') ? null : {fill, text};
+  }
+  const fill = nativeBackgroundFill(definition, {width: context.dimensions.widthInches, height: context.dimensions.heightInches}, deck.colors.background, deck.colors.text,
+    (reference, hex) => schemeColorValue(reference, hex, deck), reference => resolveBackgroundColorRef(reference, deck.colorScheme, deck.variables));
+  return fill ? {fill, text} : null;
+}
+
+// LH-139: the picture fill of the master for a deck whose background is a picture (masterBackground `image`). It reuses the media the first slide
+// that draws the deck's picture embeds (its native background fill, or the full-slide picture of one with alt text), related to the master too,
+// with the same fit, focus, opacity and recolor. A deck whose picture no slide drew (it could not be read) keeps the master as it was.
+function masterPictureBackground(entries, context, imageMetadata) {
+  const wanted = context.masterBackground, picture = context.masterPicture;
+  if (!wanted?.image) return;
+  context.masterBackground = null;
+  const master = 'ppt/slideMasters/slideMaster1.xml', rels = 'ppt/slideMasters/_rels/slideMaster1.xml.rels';
+  if (!picture || !entries[master] || !entries[rels]) return;
+  const xml = decodeText(entries[picture.part]);
+  const shape = picture.name ? xml.match(/<p:pic>[\s\S]*?<\/p:pic>/g)?.find(pic => pic.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] === picture.name) : xml.match(/<p:bg>[\s\S]*?<\/p:bg>/)?.[0];
+  const embed = shape?.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
+  const target = embed && parseRelationships(entries, picture.part).get(embed)?.path, metadata = target && imageMetadata.get(target);
+  if (!metadata) return;
+  const relsXml = decodeText(entries[rels]);
+  const id = `rId${Math.max(0, ...[...relsXml.matchAll(/\bId="rId(\d+)"/g)].map(match => Number(match[1]))) + 1}`;
+  entries[rels] = encodeText(relsXml.replace('</Relationships>', `<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../${target.slice('ppt/'.length)}"/></Relationships>`));
+  context.masterBackground = {fill: nativeImageBackgroundFill(id, metadata, {...picture.fit, fitImage}), text: wanted.text};
 }
 
 // The theme part carries the deck-level scheme (slide overrides stay literal)
@@ -2434,7 +2463,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
-  addSteps(slide, geometry.steps, slideContext, context.stepTags);
+  addSteps(slide, geometry.steps, slideContext, context.stepTags, geometry.direction === 'rtl');
   for (const [itemIndex, item] of geometry.items.entries()) {
     // RR-81: the lone picture, chart or table of a `none` region binds to that region's placeholder on the slide layout. A captioned
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
@@ -2919,6 +2948,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     if (!name) { useFallbackBackground(slide, presentation, background, slideIndex, slideContext, context, options); return; }
     owner = name;
     overlayName = imageOverlayName(name);
+    recordMasterPicture(context, background, part, effects, box, name);
   } else {
     // An SVG background is its PNG raster at the slide's size: a slide background picture fill carries no SVG.
     const outcome = { box, cover: background.fit === 'cover' };
@@ -2934,6 +2964,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       fit: background.fit, focus: background.focus, opacity: background.opacity ?? 1, recolor: effects.recolor, path: background.path,
       width: box.w * 96, height: box.h * 96, report: options.onDiagnostic
     } });
+    recordMasterPicture(context, background, part, effects, box);
   }
   // LH-02: core's automatic scrims under the text (no overlay of the author's): each one native rectangle in the slide background color (bg1 of the
   // slide's variant once scheme colors are written), whose fill packaging turns into a linear gradient with alpha stops (attachScrims)
@@ -2945,6 +2976,13 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     if (scrim.stops.some(stop => stop.opacity !== scrim.opacity)) (context.scrims[`ppt/slides/slide${slideIndex + 1}.xml`] ??= new Map()).set(name, scrim);
   });
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
+}
+
+// LH-139: the first slide that draws the deck's own picture background (not a slide's) is the media the slide master's picture fill reuses.
+function recordMasterPicture(context, background, part, effects, box, shapeName) {
+  if (context.masterPicture || !context.masterBackground?.image || /^slides\./.test(background.path ?? '')) return;
+  context.masterPicture = {part, name: shapeName,
+    fit: {fit: background.fit, focus: background.focus, opacity: background.opacity ?? 1, recolor: effects.recolor, width: box.w * 96, height: box.h * 96}};
 }
 
 // LH-02: a gradient scrim's solid fill becomes a linear gradient along core's axis (90 degrees down a vertical scrim, 0 across a
@@ -4827,6 +4865,7 @@ async function normalizePptxZip(raw, context) {
   });
   // A picture repeated across slides embeds once (after fitting, which needs each slide's own relationship).
   dedupeMedia(entries, imageMetadata, resolveRelationshipTarget);
+  masterPictureBackground(entries, context, imageMetadata);
   // The media keys of the logo-reference pictures, now that the package holds its final media (src/furniture-provenance.js).
   stampFurnitureImageKeys(entries, context.furnitureManifests, context.furnitureImages, parseRelationships);
   // Charts and notes follow the language and fonts of the slide they belong to.
