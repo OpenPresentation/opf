@@ -489,6 +489,26 @@ export function continueOverfull(input: unknown, options: PresentationPagination
 }
 
 /**
+ * LH-99: the pages of every source slide in a `continueOverfull` result, for hosts that draw slide by slide (the player, `<opf-deck>`,
+ * the editor). `pages[i]` lists the output indices that draw source slide `i`, in order: one for a slide kept as written, two or more
+ * for a continued one. A host keeps addressing source slides (numbers, links, selection, `goto`) and steps through a slide's pages
+ * as sub-steps, so a continuation never shifts a source index.
+ */
+export function continuationPages(result: Pick<ContinuationResult, 'continued'>, slideCount: number): number[][] {
+  if (!Number.isInteger(slideCount) || slideCount < 0) throw new RangeError('slideCount must be a whole number of source slides.');
+  const bySource = new Map(result.continued.map(entry=>[entry.sourceSlideIndex,entry.slideIndices]));
+  const pages: number[][] = [];
+  // A kept slide moves down by the pages the continued slides before it added.
+  let output = 0;
+  for (let index = 0; index < slideCount; index++) {
+    const indices = bySource.get(index) ?? [output];
+    pages.push([...indices]);
+    output = indices.at(-1)! + 1;
+  }
+  return pages;
+}
+
+/**
  * The deck loop `paginate` and `continueOverfull` share: each slide is resolved in its context (references, final slide number,
  * the deck's slide count) and passed to `split`, whose pages replace it; `undefined` keeps the slide as it is. `paginate` passes
  * `paginateSlide` itself.

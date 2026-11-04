@@ -3,7 +3,7 @@
 // shows the renderer's own SVG; windows of one deck follow each other over a BroadcastChannel (same origin). Hidden
 // slides are skipped. No transitions or builds (deferred, opf#250) and no rich notes (opf#251): notes are plain text.
 import {
-  DeckError, createCursor, createDeckStore, createSync, createTimer, deckChannelName, formatDuration, localIsoDate, newSurfaceId,
+  DeckError, counterText, createCursor, createDeckStore, createSync, createTimer, deckChannelName, formatDuration, localIsoDate, newSurfaceId,
   parseDeckDocument, plainText, presentableIndexes, prepareSlideSvg, sanitizeSvgTree, slideLabel, stateWins, svgDimensions,
 } from "./deck-runtime.js";
 import { loadPreviewFonts } from "./preview-fonts.js";
@@ -157,7 +157,8 @@ class Surface {
     this.digitTimer = undefined;
   }
 
-  state() { return { index: this.cursor.index, blank: this.blank, rev: this.rev }; }
+  // LH-99: the page of a slide the export continues travels with the slide, so every window shows the same step.
+  state() { return { index: this.cursor.index, page: this.cursor.page, blank: this.blank, rev: this.rev }; }
 
   /** Say hello: the other windows of the show answer with where it is, and this window takes the first answer. */
   join() { this.joining = true; this.sync.hello(); }
@@ -172,8 +173,8 @@ class Surface {
   }
 
   /** Move to a state. `broadcast` is false for a state that came from another window. */
-  apply({ index, blank }, { broadcast = true } = {}) {
-    const moved = index !== undefined ? this.cursor.gotoIndex(index) : false;
+  apply({ index, page, blank }, { broadcast = true } = {}) {
+    const moved = index !== undefined ? this.cursor.gotoIndex(index, page ?? 0) : false;
     const blankChanged = blank !== undefined && blank !== this.blank;
     if (blankChanged) this.blank = blank;
     if (!moved && !blankChanged) return false;
@@ -189,16 +190,19 @@ class Surface {
     return true;
   }
 
-  navigate(position) {
+  /** A slide by its sequence position, on its first page (or `page`). */
+  navigate(position, page = 0) {
     const sequence = this.cursor.sequence;
     const target = Math.min(Math.max(position, 0), sequence.length - 1);
-    if (target === this.cursor.position) return false;
-    return this.apply({ index: sequence[target] });
+    if (target === this.cursor.position && page === this.cursor.page) return false;
+    return this.apply({ index: sequence[target], page });
   }
-  next() { return this.navigate(this.cursor.position + 1); }
-  previous() { return this.navigate(this.cursor.position - 1); }
+  /** One step: the next or previous page of a continued slide (LH-99), else the next or previous slide. */
+  step(delta) { const target = this.cursor.peek(delta); return target ? this.apply({ index: target.index, page: target.page }) : false; }
+  next() { return this.step(1); }
+  previous() { return this.step(-1); }
   first() { return this.navigate(0); }
-  last() { return this.navigate(this.cursor.total - 1); }
+  last() { const position = this.cursor.total - 1; return this.navigate(position, this.store.pages(this.cursor.sequence[position]) - 1); }
   goto(number) { return this.navigate(number - 1); }
   setBlank(mode) { return this.apply({ blank: this.blank === mode ? "none" : mode }); }
 
@@ -283,24 +287,24 @@ function mountAudience({ doc, win, container, session }) {
       const { cursor, store } = surface;
       const info = store.info(cursor.index);
       let svg;
-      try { svg = store.svg(cursor.index); } catch (error) { view.failed(error.message); return; }
+      try { svg = store.svg(cursor.index, cursor.page); } catch (error) { view.failed(error.message); return; }
       parts.message.hidden = true;
       const { width, height } = drawInto(parts.slide, svg, doc);
       parts.frame.style.setProperty("--ratio", `${width} / ${height}`);
       parts.frame.style.setProperty("--ratio-n", String(width / height));
-      const label = slideLabel(info, cursor.number, cursor.total);
+      const label = slideLabel(info, cursor.number, cursor.total, cursor.page + 1, cursor.pages);
       parts.slide.setAttribute("aria-label", label);
-      parts.counterText.textContent = `${cursor.number} / ${cursor.total}`;
-      parts.prev.setAttribute("aria-disabled", String(cursor.number <= 1));
-      parts.next.setAttribute("aria-disabled", String(cursor.number >= cursor.total));
+      parts.counterText.textContent = counterText(cursor.number, cursor.total, cursor.page + 1, cursor.pages);
+      parts.prev.setAttribute("aria-disabled", String(cursor.atStart));
+      parts.next.setAttribute("aria-disabled", String(cursor.atEnd));
       parts.blank.hidden = surface.blank === "none";
       parts.blank.className = `blank ${surface.blank === "white" ? "white" : "black"}`;
       // Announce a new slide, and a blank screen; not the first draw.
       if (view.drawn) parts.live.textContent = surface.blank !== "none" ? `${surface.blank === "white" ? "White" : "Black"} screen` : label;
       view.drawn = true;
       this.renderDigits(surface);
-      const next = cursor.sequence[cursor.position + 1];
-      if (next !== undefined) win.setTimeout(() => { try { store.svg(next); } catch { /* shown (and reported) when reached */ } }, 0);
+      const next = cursor.peek(1);
+      if (next) win.setTimeout(() => { try { store.svg(next.index, next.page); } catch { /* shown (and reported) when reached */ } }, 0);
     },
     renderDigits(surface) {
       parts.goto.hidden = !surface.digits;
@@ -430,25 +434,27 @@ function mountPresenter({ doc, win, name, session, now, duration, parent, target
       const { cursor, store } = surface;
       const info = store.info(cursor.index);
       let svg;
-      try { svg = store.svg(cursor.index); } catch (error) { parts.currentSlide.textContent = error.message; return; }
+      try { svg = store.svg(cursor.index, cursor.page); } catch (error) { parts.currentSlide.textContent = error.message; return; }
       const { width, height } = drawInto(parts.currentSlide, svg, doc);
       parts.root.style.setProperty("--ratio", `${width} / ${height}`);
-      parts.currentSlide.setAttribute("aria-label", slideLabel(info, cursor.number, cursor.total));
-      parts.position.textContent = `Slide ${cursor.number} of ${cursor.total}`;
+      const label = slideLabel(info, cursor.number, cursor.total, cursor.page + 1, cursor.pages);
+      parts.currentSlide.setAttribute("aria-label", label);
+      parts.position.textContent = `Slide ${cursor.number} of ${cursor.total}${cursor.pages > 1 ? `, page ${cursor.page + 1} of ${cursor.pages}` : ""}`;
       parts.section.textContent = info.section ? `Section: ${info.section}` : "";
-      const nextIndex = cursor.sequence[cursor.position + 1];
-      parts.end.hidden = nextIndex !== undefined;
-      if (nextIndex !== undefined) { try { drawInto(parts.nextSlide, store.svg(nextIndex), doc, { aria: "hidden" }); } catch { parts.nextSlide.replaceChildren(); } }
+      // The next step: the next page of a continued slide (LH-99), else the next slide.
+      const next = cursor.peek(1);
+      parts.end.hidden = next !== undefined;
+      if (next) { try { drawInto(parts.nextSlide, store.svg(next.index, next.page), doc, { aria: "hidden" }); } catch { parts.nextSlide.replaceChildren(); } }
       else parts.nextSlide.replaceChildren();
       // Plain text only: notes are never parsed as markup.
       parts.notes.textContent = info.notes || "No notes for this slide.";
       parts.notes.style.color = info.notes ? "" : "#aab2bd";
       parts.notes.scrollTop = 0;
-      parts.prev.setAttribute("aria-disabled", String(cursor.number <= 1));
-      parts.next.setAttribute("aria-disabled", String(cursor.number >= cursor.total));
+      parts.prev.setAttribute("aria-disabled", String(cursor.atStart));
+      parts.next.setAttribute("aria-disabled", String(cursor.atEnd));
       parts.black.setAttribute("aria-pressed", String(surface.blank === "black"));
       parts.white.setAttribute("aria-pressed", String(surface.blank === "white"));
-      if (view.drawn) parts.live.textContent = slideLabel(info, cursor.number, cursor.total);
+      if (view.drawn) parts.live.textContent = label;
       view.drawn = true;
       this.renderDigits(surface);
       view.tick();
@@ -514,6 +520,9 @@ export class PlayerSession extends EventTarget {
   /** The 1-based number of the showing slide, in the sequence that plays (hidden slides are not counted). */
   get slide() { return this.primary?.cursor.number ?? 0; }
   get total() { return this.primary?.cursor.total ?? 0; }
+  /** LH-99: the 1-based page of the showing slide, and how many pages it draws on (2 or more for a slide the export continues). */
+  get page() { return this.primary ? this.primary.cursor.page + 1 : 0; }
+  get pages() { return this.primary?.cursor.pages ?? 0; }
   /** `"none"`, `"black"` or `"white"`. */
   get blankMode() { return this.primary?.blank ?? "none"; }
   /** Whether the speaker view window is open. */
@@ -532,7 +541,7 @@ export class PlayerSession extends EventTarget {
     if (this.closed || surface !== this.primary) return;
     if (moved) {
       const info = surface.store.info(surface.cursor.index);
-      this.dispatchEvent(new CustomEvent("slidechange", { detail: { slide: surface.cursor.number, total: surface.cursor.total, index: info.index, id: info.id, title: info.title, notes: info.notes, section: info.section } }));
+      this.dispatchEvent(new CustomEvent("slidechange", { detail: { slide: surface.cursor.number, total: surface.cursor.total, index: info.index, page: surface.cursor.page + 1, pages: surface.cursor.pages, id: info.id, title: info.title, notes: info.notes, section: info.section } }));
     }
     if (blankChanged) this.dispatchEvent(new CustomEvent("blank", { detail: { mode: surface.blank } }));
   }
@@ -571,7 +580,10 @@ export class PlayerSession extends EventTarget {
     const doc = win.document;
     doc.open(); doc.write('<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>'); doc.close();
     const view = mountPresenter({ doc, win, name: this.name, session: this, now: this.now, duration: this.duration, parent: this.doc, target: doc.body, styleTarget: doc.head, setTitle: true });
-    const surface = new Surface({ role: "presenter", doc, win, store: this.primary.store, cursor: createCursor(this.primary.cursor.sequence, this.primary.cursor.position), session: this, view, channelName: this.channelName });
+    const store = this.primary.store;
+    const cursor = createCursor(this.primary.cursor.sequence, this.primary.cursor.position, { pagesOf: (index) => store.pages(index) });
+    cursor.set(this.primary.cursor.position, this.primary.cursor.page);
+    const surface = new Surface({ role: "presenter", doc, win, store, cursor, session: this, view, channelName: this.channelName });
     view.surface = surface;
     surface.blank = this.primary.blank;
     this.surfaces.add(surface);
@@ -601,7 +613,7 @@ export class PlayerSession extends EventTarget {
   /** End the slideshow: leave full screen, close the speaker view, give focus back. Fires `close`. Safe to call twice. */
   close() {
     if (this.closed) return;
-    const slide = this.slide, index = this.primary?.cursor.index;
+    const slide = this.slide, index = this.primary?.cursor.index, page = this.page;
     this.closePresenterView();
     this.closed = true;
     this.doc.removeEventListener("fullscreenchange", this.onFullscreen);
@@ -611,7 +623,7 @@ export class PlayerSession extends EventTarget {
     this.surfaces.clear();
     this.abort?.abort();
     if (this.doc.fullscreenElement && this.enteredFullscreen) this.doc.exitFullscreen?.()?.catch?.(() => {});
-    this.dispatchEvent(new CustomEvent("close", { detail: { slide, index } }));
+    this.dispatchEvent(new CustomEvent("close", { detail: { slide, index, page } }));
   }
 }
 
@@ -676,16 +688,19 @@ export async function present(source, options = {}) {
     let fonts = options.fonts;
     if (typeof fonts === "string") { try { fonts = await loadPreviewFonts(fonts, { signal: abort.signal }); } catch { fonts = undefined; } }
     const date = options.renderOptions?.date ?? localIsoDate();
-    store = options.store ?? createDeckStore({ document: deck, fonts, renderOptions: options.renderOptions ?? {}, date });
+    const continuation = options.continuation !== false;
+    store = options.store ?? createDeckStore({ document: deck, fonts, renderOptions: options.renderOptions ?? {}, date, continuation });
     try { await store.ready(abort.signal); } catch (error) {
       if (!fonts || options.store) throw error;
-      store = createDeckStore({ document: deck, renderOptions: options.renderOptions ?? {}, date });
+      store = createDeckStore({ document: deck, renderOptions: options.renderOptions ?? {}, date, continuation });
     }
     abort.signal.throwIfAborted?.();
     session.name = plainText(deck.name) || "Presentation";
     session.duration = Number(deck.duration);
     session.channelName = options.channel === false ? "" : (options.channel ?? deckChannelName(deck));
-    const cursor = createCursor(sequence, Number.isInteger(options.startSlide) ? options.startSlide - 1 : 0);
+    const drawn = store;
+    const cursor = createCursor(sequence, Number.isInteger(options.startSlide) ? options.startSlide - 1 : 0, { pagesOf: (index) => drawn.pages(index) });
+    if (Number.isInteger(options.startPage)) cursor.set(cursor.position, options.startPage - 1);
     if (!view) {
       // The speaker view in this window (a second tab or window of the host page): its own shadow root over the page.
       const host = doc.createElement("div");

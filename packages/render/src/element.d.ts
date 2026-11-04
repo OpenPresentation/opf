@@ -28,7 +28,7 @@ export interface OpfDeckEventMap {
 
 /**
  * `<opf-deck src="deck.opf.json" fonts="/opf-fonts/">`: an embedded OPF deck. Attributes: `src`, `slide` (1-based), `fonts`,
- * `thumbnails`, `controls="none"`, `present`, `include-hidden`, `label`, `keyboard="off"`. It draws the renderer's own SVG.
+ * `thumbnails`, `controls="none"`, `present`, `include-hidden`, `label`, `keyboard="off"`, `continuation="off"`. It draws the renderer's own SVG.
  */
 export interface OpfDeckElement extends HTMLElement {
   src: string;
@@ -37,6 +37,14 @@ export interface OpfDeckElement extends HTMLElement {
   /** The 1-based number of the showing slide in the sequence that plays; set it to navigate. */
   slide: number;
   readonly total: number;
+  /**
+   * LH-99: the 1-based page of the showing slide, and how many pages it draws on. A slide the export continues (LH-90) draws on two
+   * or more pages, shown as steps after it (`next`, `previous`, the arrow keys); `slide`, `goto` and the counter keep numbering source slides.
+   */
+  readonly page: number;
+  readonly pages: number;
+  /** LH-99: show an overfull slide as its continuation pages. Default true; false sets `continuation="off"`. */
+  continuation: boolean;
   /**
    * The fonts the deck draws with: the URL of the self-hosted font root (the `fonts` attribute), or a browser fonts handle the page
    * already has (`loadFonts` from `/fonts-browser`), which wins over the attribute. The getter returns the handle when one is set, else the
@@ -82,6 +90,8 @@ export interface ToHtmlOptions {
   attributes?: Record<string, string | boolean | undefined>;
   /** Put the document in an `application/opf+json` script child so the element upgrades without a request. */
   embed?: boolean;
+  /** LH-99: draw a slide the export continues as its pages, one figure each (default true). */
+  continuation?: boolean;
   /** Today's date (ISO) for `date: true` furniture. */
   date?: string;
   renderOptions?: Partial<ToSvgOptions>;

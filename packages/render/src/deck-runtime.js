@@ -3,6 +3,7 @@
 // there is no second layout engine) behind a face-level font gate, and synchronizes windows over a BroadcastChannel.
 // Nothing here fetches anything but the font files the host's font root serves.
 import { resolveSlideVariables } from "@openpresentation/opf";
+import { continuationPages, continueOverfull } from "@openpresentation/opf/pagination";
 import { toSvg } from "./svg.js";
 
 /** Error raised for a deck that cannot be read, rendered or loaded. */
@@ -66,9 +67,17 @@ export function slideInfo(document, index) {
   };
 }
 
-/** "Slide 3 of 8: Revenue grew" (the accessible name of a slide). */
-export function slideLabel(info, position, total) {
-  return `Slide ${position} of ${total}${info.hasTitle ? `: ${info.title}` : ""}`;
+/**
+ * "Slide 3 of 8: Revenue grew" (the accessible name of a slide). LH-99: a slide that continues on further pages adds the page,
+ * "Slide 3 of 8, page 2 of 2: Revenue grew" (`page` counts from 1).
+ */
+export function slideLabel(info, position, total, page = 1, pages = 1) {
+  return `Slide ${position} of ${total}${pages > 1 ? `, page ${page} of ${pages}` : ""}${info.hasTitle ? `: ${info.title}` : ""}`;
+}
+
+/** LH-99: the counter text, "3 / 8", or "3 / 8 · 2/2" on the second page of a slide that continues on two. */
+export function counterText(position, total, page = 1, pages = 1) {
+  return `${position} / ${total}${pages > 1 ? ` · ${page}/${pages}` : ""}`;
 }
 
 /** Whole numbers only: "3", " 3 " and 3 are slide 3; "", "3.5", "x" and 0 are not slide numbers. */
@@ -78,34 +87,68 @@ export function parseSlideNumber(value) {
   return Number.parseInt(value, 10);
 }
 
-/** A position in a sequence of slides. Positions are 0-based here; the public `slide` number is position + 1. */
-export function createCursor(sequence, position = 0) {
+/**
+ * A position in a sequence of slides. Positions are 0-based here; the public `slide` number is position + 1.
+ *
+ * LH-99: `pagesOf(index)` (default: one page each) is how many pages the slide at a document index draws on (a slide the export
+ * continues draws on two or more). The pages are sub-steps of their slide: `next` and `previous` step through them, while the
+ * position, the slide number, `goto` and `gotoIndex` keep addressing source slides, and moving to another slide starts on its
+ * first page (`previous` from a slide's first page goes to the last page of the slide before, as reading backwards does).
+ */
+export function createCursor(sequence, position = 0, { pagesOf } = {}) {
   let list = sequence.slice();
-  let at = 0;
+  let at = 0, page = 0;
   const clamp = (value) => (list.length ? Math.min(Math.max(Math.trunc(value), 0), list.length - 1) : 0);
+  const count = (position) => { const value = list.length && pagesOf ? Math.trunc(Number(pagesOf(list[position]))) : 1; return value >= 1 ? value : 1; };
+  const clampPage = (value, position) => Math.min(Math.max(Math.trunc(Number(value) || 0), 0), count(position) - 1);
   at = clamp(position);
+  const move = (nextAt, nextPage = 0) => {
+    const before = [at, page];
+    at = clamp(nextAt);
+    page = clampPage(nextPage, at);
+    return at !== before[0] || page !== before[1];
+  };
   return {
     get total() { return list.length; },
     get position() { return at; },
     get number() { return list.length ? at + 1 : 0; },
     get index() { return list.length ? list[at] : -1; },
     get sequence() { return list.slice(); },
-    set(next) { const before = at; at = clamp(next); return at !== before; },
-    /** Go to the 1-based slide number (clamped to the sequence). */
+    /** The 0-based page of the showing slide, and how many pages it draws on. */
+    get page() { return page; },
+    get pages() { return count(at); },
+    /** Whether no step comes before or after this one. */
+    get atStart() { return at === 0 && page === 0; },
+    get atEnd() { return !list.length || (at === list.length - 1 && page === count(at) - 1); },
+    /** The slide at a sequence position, on its first page (or the given one). */
+    set(next, nextPage = 0) { return move(next, nextPage); },
+    /** The `{ position, index, page }` one step away (+1 or -1), or undefined past either end. Moves nothing. */
+    peek(step) {
+      if (!list.length) return undefined;
+      if (step > 0) {
+        if (page + 1 < count(at)) return { position: at, index: list[at], page: page + 1 };
+        return at + 1 < list.length ? { position: at + 1, index: list[at + 1], page: 0 } : undefined;
+      }
+      if (page > 0) return { position: at, index: list[at], page: page - 1 };
+      return at > 0 ? { position: at - 1, index: list[at - 1], page: count(at - 1) - 1 } : undefined;
+    },
+    /** Go to the 1-based slide number (clamped to the sequence), on its first page. */
     goto(number) { return this.set(number - 1); },
-    next() { return this.set(at + 1); },
-    previous() { return this.set(at - 1); },
+    next() { const target = this.peek(1); return target ? move(target.position, target.page) : false; },
+    previous() { const target = this.peek(-1); return target ? move(target.position, target.page) : false; },
     first() { return this.set(0); },
-    last() { return this.set(list.length - 1); },
-    /** Go to the slide at a document index, or the nearest one after it that plays. */
-    gotoIndex(index) {
+    /** The last step: the last page of the last slide. */
+    last() { return this.set(list.length - 1, list.length ? count(list.length - 1) - 1 : 0); },
+    /** Go to the slide at a document index, or the nearest one after it that plays, on the given page (default the first). */
+    gotoIndex(index, nextPage = 0) {
       const found = list.findIndex((candidate) => candidate >= index);
-      return this.set(found === -1 ? list.length - 1 : found);
+      return move(found === -1 ? list.length - 1 : found, nextPage);
     },
     reset(nextSequence, keepIndex) {
       list = nextSequence.slice();
       const found = keepIndex === undefined ? -1 : list.findIndex((candidate) => candidate >= keepIndex);
       at = clamp(found === -1 ? (keepIndex === undefined ? at : list.length - 1) : found);
+      page = clampPage(page, at);
     },
   };
 }
@@ -210,11 +253,30 @@ export function createFontGate(fonts) {
  *
  * `fonts` is a browser fonts handle (or nothing: layout then uses estimated widths and the visitor's system sans-serif).
  */
-export function createDeckStore({ document, fonts, renderOptions = {}, date } = {}) {
+export function createDeckStore({ document, fonts, renderOptions = {}, date, continuation = true } = {}) {
   const deck = parseDeckDocument(document);
   const gate = fonts ? createFontGate(fonts) : undefined;
   const cache = new Map();
   const diagnostics = [];
+  // LH-99: the export's continuation (`continueOverfull`, LH-90), computed once with the measurement the slides draw with. Undefined
+  // until asked; null when no slide continues (or `continuation` is false), so such a deck draws exactly as before.
+  let plan;
+  const continued = () => {
+    if (plan !== undefined) return plan;
+    plan = null;
+    if (continuation === false) return plan;
+    try {
+      // The catalogs the renderer draws with, and no others: core's Node entry would register the gallery for `catalogs: undefined`.
+      const result = continueOverfull(deck, {
+        catalogs: renderOptions.catalogs ?? [],
+        ...(fonts?.textMeasurement ? { fonts: { textMeasurement: fonts.textMeasurement } } : {}),
+        ...((renderOptions.date ?? date) !== undefined ? { date: renderOptions.date ?? date } : {}),
+        ...(renderOptions.strictReferences === true ? { strictReferences: true } : {}),
+      });
+      if (result.continued.length) plan = { presentation: result.presentation, continued: result.continued, pages: continuationPages(result, deck.slides.length) };
+    } catch { /* a deck the split cannot read draws as written; drawing it reports why */ }
+    return plan;
+  };
   const options = () => ({
     ...renderOptions,
     // Inline slides use the page's own faces (the registry added them to the document), so only the measurement is passed: nothing is embedded.
@@ -232,12 +294,26 @@ export function createDeckStore({ document, fonts, renderOptions = {}, date } = 
       ready ??= gate.ensure(deck, { signal, renderOptions: renderOptions }).catch((error) => { ready = undefined; throw error; });
       return ready;
     },
-    /** The renderer's SVG for the slide at a document index (after `ready()`). Rendered once. */
-    svg(index) {
-      let svg = cache.get(index);
+    /**
+     * LH-99: how many pages the slide at a document index draws on (after `ready()`): 1, or 2 and more for a slide the export
+     * continues (LH-90). The pages are sub-steps of their source slide; no source index shifts.
+     */
+    pages(index) { return continued()?.pages[index]?.length ?? 1; },
+    /** LH-99: the slides the export continues (`continueOverfull`'s `continued`, output indices of the whole continued deck). */
+    get continued() { return continued()?.continued ?? []; },
+    /**
+     * The renderer's SVG for the slide at a document index (after `ready()`), on its 0-based `page`. Rendered once. A continued
+     * deck draws every slide from the export's deck, so each page, and its slide number, is the page the PDF and the PPTX draw.
+     */
+    svg(index, page = 0) {
+      const split = continued();
+      const pages = split?.pages[index];
+      const at = pages ? Math.min(Math.max(Math.trunc(Number(page) || 0), 0), pages.length - 1) : 0;
+      const key = `${index}:${at}`;
+      let svg = cache.get(key);
       if (svg === undefined) {
         try {
-          svg = toSvg(deck, index + 1, { ...options(), validate: !validated });
+          svg = split && pages ? toSvg(split.presentation, pages[at] + 1, { ...options(), validate: !validated }) : toSvg(deck, index + 1, { ...options(), validate: !validated });
         } catch (cause) {
           if (cause instanceof DeckError) throw cause;
           // A document the schema rejects says where: the first finding's path and message.
@@ -246,13 +322,13 @@ export function createDeckStore({ document, fonts, renderOptions = {}, date } = 
           throw new DeckError(cause?.code === "invalid-opf" ? "invalid-document" : "render-failed", `${cause?.message ?? "The slide could not be drawn."}${where}`, { cause });
         }
         validated = true;
-        cache.set(index, svg);
+        cache.set(key, svg);
       }
       return svg;
     },
     info(index) { return slideInfo(deck, index); },
-    /** Forget every drawn slide (after the fonts or options change). */
-    invalidate() { cache.clear(); },
+    /** Forget every drawn slide and the continuation (after the fonts or options change). */
+    invalidate() { cache.clear(); plan = undefined; },
   };
   return store;
 }
@@ -286,18 +362,19 @@ export function stateWins(remote, local) {
 
 /**
  * A BroadcastChannel carrying the one thing windows share: which slide is showing and whether the screen is blanked.
- * Messages are `{ v, type: "state" | "hello", from, rev, index, blank, reply? }`. A window ignores its own messages and keeps
+ * Messages are `{ v, type: "state" | "hello", from, rev, index, page, blank, reply? }`. A window ignores its own messages and keeps
  * a state only when it wins (`stateWins`); a new window says hello and the others answer with their state (`reply`), which
  * the newcomer takes. Malformed or foreign messages are ignored. Without BroadcastChannel it does nothing (`active` is false).
  */
 export function createSync({ name, id, onState, BroadcastChannelImpl = globalThis.BroadcastChannel, getState }) {
   if (typeof BroadcastChannelImpl !== "function" || !name) return { active: false, post() {}, hello() {}, close() {} };
   const channel = new BroadcastChannelImpl(name);
-  const send = (state, reply) => channel.postMessage({ v: SYNC_VERSION, type: "state", from: id, rev: state.rev, index: state.index, blank: state.blank, ...(reply ? { reply: true } : {}) });
+  // LH-99: `page` (0-based) is the page of a slide the export continues; a message without one (an older window) means the first.
+  const send = (state, reply) => channel.postMessage({ v: SYNC_VERSION, type: "state", from: id, rev: state.rev, index: state.index, page: state.page ?? 0, blank: state.blank, ...(reply ? { reply: true } : {}) });
   channel.onmessage = (event) => {
     const message = event.data;
     if (!isObject(message) || message.v !== SYNC_VERSION || message.from === id) return;
-    if (message.type === "state" && Number.isInteger(message.index) && Number.isInteger(message.rev) && ["none", "black", "white"].includes(message.blank)) onState({ index: message.index, blank: message.blank, rev: message.rev, from: String(message.from), reply: message.reply === true });
+    if (message.type === "state" && Number.isInteger(message.index) && Number.isInteger(message.rev) && ["none", "black", "white"].includes(message.blank)) onState({ index: message.index, page: Number.isInteger(message.page) && message.page >= 0 ? message.page : 0, blank: message.blank, rev: message.rev, from: String(message.from), reply: message.reply === true });
     else if (message.type === "hello") { const state = getState?.(); if (state) send(state, true); }
   };
   return {

@@ -145,7 +145,7 @@ export type { SlideContext, SlideContextDiagnostic, SlideContextOptions } from '
 export { stats, localAssetSources } from './stats.js';
 export type { PresentationStats, StatsOptions, SlideStats, StatsSlideRef, ReferenceFact, SlideSizeFact, HeaderFooterFact, TableFact, DatasetFact } from './stats.js';
 
-export { paginate, paginateSlide, continueOverfull, blockUnits, OPFPaginationError } from './pagination.js';
+export { paginate, paginateSlide, continueOverfull, continuationPages, blockUnits, OPFPaginationError } from './pagination.js';
 export type { PresentationPaginationOptions, PresentationPaginationResult, PaginationOptions, PaginationResult, PaginatedPage, PaginationMapping, ContinuationResult, ContinuedSlide } from './pagination.js';
 
 // The verbs of the CLI, at the root so `import * as opf` shows them: each also has its own subpath.
