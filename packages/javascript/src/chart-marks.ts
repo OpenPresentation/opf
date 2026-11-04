@@ -23,7 +23,7 @@ import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis}
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import {valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
 
@@ -182,9 +182,8 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   const total = shown.reduce((sum, entry) => sum + entry.value, 0);
   if (!(total > 0) || !Number.isFinite(total)) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, scale, geometry.minFontSize);
-  const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' ? data.formats[1] : undefined;
   const bold = new Set(options.focus?.categories ?? []);
-  const entries = shown.map(({row, value}) => ({row, name: label(data.rows[row]![0]), value: valueLabel(value, format), bold: bold.has(row)}));
+  const entries = shown.map(({row, value}) => ({row, name: label(data.rows[row]![0]), value: columnValueLabel(data, 1, value, geometry.language), bold: bold.has(row)}));
   const width = (text: string, heavy: boolean) => geometry.measure(text, fontPx, heavy ? 700 : 400);
   const swatch = Math.round(fontPx * 0.75 * 100) / 100, gap = fontPx * 0.5;
   const needed = swatch + gap + Math.max(...entries.map(entry => width(entry.name, entry.bold))) + 2 * fontPx + Math.max(...entries.map(entry => width(entry.value, entry.bold)));
@@ -271,6 +270,24 @@ export interface ChartLayerStack {
    * align to a table's rows instead (LH-115, `restackForRows`): that plot is the table's, so no names row stands above it.
    */
   legend?: ChartLayerHeader;
+  /**
+   * LH-142: false on a horizontal stacked bar chart whose every segment carries its value: the value axis, its tick labels and gridlines are
+   * dropped (labels or an axis, not both), as a small chart drops them (LH-03). The plot is laid out without the tick row (`horizontalStackPlot`).
+   */
+  valueAxis?: false;
+}
+
+/** LH-142: true when every segment with a value (not null, not zero) has its value drawn inside it, and at least one has. "values" is ChartLayerStack.values. */
+function labeledEverySegment(data: ResolvedChartData, values: readonly (readonly boolean[])[]): boolean {
+  if (!data.ok) return false;
+  let any = false;
+  for (let j = 0; j < data.columns.length - 1; j++) for (let i = 0; i < data.rows.length; i++) {
+    const value = chartNumber(data.rows[i]![j + 1]);
+    if (value === null || value === 0) continue;
+    if (!values[j]?.[i]) return false;
+    any = true;
+  }
+  return any;
 }
 
 /** True for a stacked column, bar or area chart of two to six series without `dataLabels` or `legend`. */
@@ -343,8 +360,7 @@ function stackMarks(chart: Record<string, unknown>, data: ResolvedChartData, axi
   const values = shape.series.map((entry, j) => entry.values.map((value, i) => {
     const point = shape.stacks[j]![i];
     if (percent || value === null || !point || value === 0) return false;
-    const format = typeof data.formats[j + 1] === 'string' && data.formats[j + 1] !== '' ? data.formats[j + 1] : undefined;
-    const text = valueLabel(value, format), wide = geometry.measure(text, fontPx) + fontPx * 0.25;
+    const text = columnValueLabel(data, j + 1, value, geometry.language), wide = geometry.measure(text, fontPx) + fontPx * 0.25;
     if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= shape.band / 1.5;
     // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
     if (shape.kind === 'area' && (i === 0 || i === last)) {
@@ -406,8 +422,9 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * break), the plot ending a text size before the chart's padding, the value tick labels under it (a formatted axis keeps its end labels
  * inside the chart); below the header row. With `namesRow` a row of one text line for the series names (`placeBarNames`) lies between the
  * header and the plot, which then starts under it; a side legend takes its width off the plot's end. The preview draws its plot here and the PPTX export pins it (the plot area's inner layout).
+ * LH-142: `hidden` (no value axis) leaves no tick row under the plot and no end tick labels inside the chart.
  */
-function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false): ChartPlotInset | undefined {
   if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
@@ -418,14 +435,14 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const side = namesRow || header?.legend ? 0 : Math.min(box.width * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
   let x = box.x + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
-  if (format !== undefined && !typeOf(chart).startsWith('100pct')) {
+  if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
     const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
     const lastHalf = width(tickLabel(endTick, false, format)) / 2, right = box.x + box.width - pad;
     const nextX = Math.max(x, box.x + pad + first);
     plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;
   }
   const below = box.y + (header?.height ?? 0);
-  const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - pad - lineHeight;
+  const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - pad - (hidden ? 0 : lineHeight);
   if (!(bottom - top > 1)) return undefined;
   return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
 }
@@ -472,19 +489,23 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
   const edge = !horizontal && STACKED[typeOf(chart)] === 'area' && data.rows.length >= 2;
   const {header: _header, ...rest} = layer ?? {};
   let result: {layer: ChartLayer; valueAxis: ChartValueAxis} | undefined;
-  if (horizontal) {
-    // With names: the caption alone above a row of names and the plot; without: the header legend and the plot under it.
+  // With names: the caption alone above a row of names and the plot; without: the header legend and the plot under it. LH-142: "hidden"
+  // lays the plot out without a value axis.
+  const horizontalResult = (hidden: boolean): typeof result => {
     for (const withNames of [true, false]) {
       const head = withNames ? header(false) : layer?.header;
       const valueAxis = axisFor(head?.height ?? 0);
-      const plot = valueAxis ? horizontalStackPlot(chart, data, valueAxis, box, head, withNames, plotGeometry) : undefined;
+      const plot = valueAxis ? horizontalStackPlot(chart, data, valueAxis, box, head, withNames, plotGeometry, hidden) : undefined;
       if (!valueAxis || !plot) continue;
       const base: ChartLayer = {...rest, ...(head ? {header: head} : {}), plot};
       const entries = withNames ? placeBarNames(chart, data, valueAxis, box, plot, {...plotGeometry, bold}, focus) : undefined;
       if (withNames && !entries) continue;
-      result = {layer: {...base, stack: {values: [], ...(entries ? {names: {gutter: 0, swatch, entries, above: true}, ...(layer?.header ? {legend: layer.header} : {})} : {})}}, valueAxis};
-      break;
+      return {layer: {...base, stack: {values: [], ...(hidden ? {valueAxis: false as const} : {}), ...(entries ? {names: {gutter: 0, swatch, entries, above: true}, ...(layer?.header ? {legend: layer.header} : {})} : {})}}, valueAxis};
     }
+    return undefined;
+  };
+  if (horizontal) {
+    result = horizontalResult(false);
   } else {
     // With names: the caption alone above the plot, and a gutter for the widest name past the last column.
     const named = (() => {
@@ -508,6 +529,17 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
   const marks = stackMarks(chart, data, result.valueAxis, plotOf(box, result.layer.plot!), {...plotGeometry, box}, edge);
   if (!marks) return undefined;
   result.layer.stack = {...result.layer.stack!, values: marks.values, ...(marks.ends.length ? {ends: marks.ends} : {})};
+  // LH-142: a horizontal stacked bar chart whose every segment carries its value drops its value axis and gridlines (labels or an axis, not
+  // both), unless the chart titles its value axis (a title keeps the axis, as for a small chart). The plot grows by the tick row, so the
+  // segments are measured again against it, and the axis stays when one no longer holds its value.
+  if (horizontal && !typeOf(chart).startsWith('100pct') && !(record(chart.axisTitles) && nonBlank(chart.axisTitles.value) !== undefined) && labeledEverySegment(data, marks.values)) {
+    const dropped = horizontalResult(true);
+    const again = dropped && stackMarks(chart, data, dropped.valueAxis, plotOf(box, dropped.layer.plot!), {...plotGeometry, box});
+    if (dropped && again && labeledEverySegment(data, again.values)) {
+      dropped.layer.stack = {...dropped.layer.stack!, values: again.values};
+      return dropped;
+    }
+  }
   return result;
 }
 

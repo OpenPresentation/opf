@@ -2,6 +2,7 @@ import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {chartTextSize,chartValueAxis,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
 import {chartHeader,chartLayer,type ChartLayer} from './chart-layer.js';
+import {groupNumber,NUMBER_GROUPING_MIN} from './number-grouping.js';
 import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
@@ -2061,7 +2062,8 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
     const sourceValue=metric[role];
     if (sourceValue===undefined) continue;
-    const text=String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
+    // LH-141: a number as the value prints it groups its thousands by the deck language (`language`); a string is the author's own text.
+    const text=role==='value'&&typeof sourceValue==='number'&&Math.abs(sourceValue)>=NUMBER_GROUPING_MIN?groupNumber(sourceValue,options.language):String(sourceValue),path=scalar?sourcePath:`${sourcePath}.${role}`;
     // WI-1: the value asks for its role size (76 px) whatever the box; the box only limits it, and fitValue fits it down on overflow.
     // LH-68: a tile's value asks for METRIC_TILE_VALUE_SHARE of the tile, between its role size and twice it. LH-48: a lone metric grows.
     const valueSize=options.tile?Math.min(152,Math.max(76,box.height*METRIC_TILE_VALUE_SHARE/scale)):76;
@@ -5048,6 +5050,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),
       figure:ruleOn('metric-figure'),
+      ...(deckLanguage()!==undefined?{language:deckLanguage()}:{}),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
@@ -7397,11 +7400,12 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
 export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_MAX_OVERSHOOT,CHART_LABELED_ZERO_SHARE,chartValueAxis,shareSiblingChartAxes,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
+export {groupNumber,groupsThousands,groupsAxisTicks,NUMBER_GROUPING_MIN,GROUPED_LABEL_CODE} from './number-grouping.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 export {restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
 export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
-export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND} from './chart-layer.js';
+export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND,CHART_HEADER_LEGEND_ROWS,chartValueAxisHidden} from './chart-layer.js';
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
 export {chartEndLabels,chartSliceLabels,endLabelText,placeEndLabels,refreshEndLabels,CHART_SLICE_LABEL_MIN_RADIUS} from './chart-direct-labels.js';
 export {chartCategoriesInTime,isTimeFieldTitle,monthOf} from './chart-time-order.js';

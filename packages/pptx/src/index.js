@@ -9,7 +9,7 @@ import {PICTURE_SCALE, defaultSlideRasterizer, pictureDeck} from './picture-slid
 import {giveNotesMastersOwnThemes, giveSlidesScriptMasters} from './master-themes.js';
 import {legacyVendorOutput} from './vendor-compat.js';
 import {readChartCategoryHeading,writeChartCategoryHeading,writeChartWorkbookFormats,repairChartWorkbookRanges} from './chart-workbook.js';
-import {applyChartNumberFormats,chartNumber,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
+import {applyChartNumberFormats,chartNumber,groupsThousands,excelCode,formattedColumns,inlineChartData,inlineTableData,isDatasetRef,numericRanges,resolveChartData} from './chart-data.js';
 import {attachDataProvenance,chartDataRecord,chartEvidence,readDataTag,readDatasetsTag,restoreChartData,restoreTableData,tableDataRecord,tableCellEvidence,tableEnvironmentEvidence} from './data-provenance.js';
 import {CHARTEX_FALLBACK,resolveChartType,chartTypeFromNative,applyChartConstruct,comboFromNative,NATIVE_CHART_ELEMENTS} from './chart-types.js';
 import {attachChartexParts,chartFromChartex,CHARTEX_GRAPHIC_DATA_URI} from './chartex.js';
@@ -59,7 +59,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, groupsAxisTicks, GROUPED_LABEL_CODE, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -3159,8 +3159,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // The value axis shows the first plotted series' format (General when it has none), as the preview does.
   // A combo chart's secondary value axis shows its first series' format (FA-15).
   const secondaryIndex = chartData.combo?.findIndex((entry) => entry.axis === 'secondary') ?? -1;
-  const numberFormats = chartData.formats && {...chartData.formats, axis: chartData.spec.grouping === 'percentStacked' ? undefined : chartData.formats.series[0],
-    ...(secondaryIndex >= 0 ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
+  // LH-141: a value axis with no format whose ticks (core's composed axis) are whole numbers of four digits takes `#,##0`, as the preview groups them.
+  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis);
+  const numberFormats = (chartData.formats ?? (axisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
+    ...(secondaryIndex >= 0 && chartData.formats ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,markLabelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
@@ -4286,7 +4288,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
     // FA-15: core's combo plan (column series, then the primary-axis lines, then the secondary-axis lines), aligned with the series.
     ...(spec.family === 'combo' ? {combo: comboPlanOf(resolvedData, data.columns.length - 1)} : {})};
   // Number formats only when a column has one: a chart without formats carries no `formats` and is written as before.
-  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined ? {...result, formats} : result;
+  // LH-141: `groups` flags the series whose default value labels group their thousands (PowerPoint's own labels take `#,##0`).
+  const withFormats = (result, formats) => formats.series.some((code) => code !== undefined) || formats.x !== undefined || formats.groups?.some(Boolean) ? {...result, formats} : result;
   if (data.columns.length === 1) {
     const heading = data.columns[0];
     // The lone column holds the chart's values. Each cell is read with chartNumber and each non-numeric cell is counted
@@ -4358,6 +4361,8 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   }
   // A scatter chart's first series is its X values (PptxGenJS writes one c:ser per Y series, each with c:xVal).
   const formats = spec.family === 'xy' ? {series: codes.slice(1), x: codes[0]} : {series: codes};
+  const plottedSeries = spec.family === 'xy' ? series.slice(1) : series;
+  formats.groups = formats.series.map((code, index) => code === undefined && groupsThousands(plottedSeries[index].values.map(chartNumber)));
   return withFormats({...mapped, series, hasCategories: true, adaptations, notNumeric}, formats);
 }
 

@@ -17,7 +17,7 @@
 // header legend (chart-options.js `chartOptionsFromClassic`) import as no option, so a deck exported and imported again keeps its
 // authored options only.
 import {schemeColorXml} from './chart-scheme-colors.js';
-import {chartContextColors, chartEmphasisColors, chartOptionSupport, chartOptionTarget, resolveChartData, smallChart} from '@openpresentation/opf/composition';
+import {chartContextColors, chartEmphasisColors, chartOptionSupport, chartOptionTarget, chartValueAxisHidden, resolveChartData, smallChart} from '@openpresentation/opf/composition';
 
 const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 
@@ -30,10 +30,9 @@ const fraction = value => Number(Math.min(1, Math.max(0, value)).toFixed(4));
 export function chartLayerOptions(layer, {region, scale, textSize, labelColor, font, chart, rtl = false}) {
   const options = {}, layout = {};
   if (!layer) return {options, layout};
-  if (layer.small) {
-    // The chart stands on what is under it (LH-105: every chart does; the caller writes no chart area fill).
-    if (layer.small.valueAxis === false) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
-  }
+  // The chart stands on what is under it (LH-105: every chart does; the caller writes no chart area fill). LH-03, LH-142: a small chart, or a
+  // horizontal stacked bar chart whose every segment is labeled, has no value axis or gridlines.
+  if (chartValueAxisHidden(layer)) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
   const header = layer.header;
   // LH-108: a pie with its value list is drawn in core's square (the plot area's inner layout), the list beside it.
   const pie = layer.valueList?.pie;
