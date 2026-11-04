@@ -24,9 +24,10 @@ test('LH-32: an eyebrow is measured as drawn, in capitals with its tracking afte
   assert.equal(eyebrowCaps('Straße'), false);
   assert.equal(eyebrowCaps('2026'), false);
   assert.equal(styledText('Signal', {caps: true}), 'SIGNAL');
-  assert.equal(trackingWidth('Signal', 16, {tracking: EYEBROW_TRACKING}), 6 * 16 * EYEBROW_TRACKING);
+  // Between characters: none after the last one.
+  assert.equal(trackingWidth('Signal', 16, {tracking: EYEBROW_TRACKING}), 5 * 16 * EYEBROW_TRACKING);
   const eyebrow = textWidthMeasurer({...style, caps: true, tracking: EYEBROW_TRACKING});
-  assert.equal(eyebrow('Signal', 16), measureText('SIGNAL', 16) + 6 * 16 * EYEBROW_TRACKING);
+  assert.equal(eyebrow('Signal', 16), measureText('SIGNAL', 16) + 5 * 16 * EYEBROW_TRACKING);
   // A host measurement is asked for the capitals.
   const asked = [];
   const host = textWidthMeasurer({...style, caps: true}, {measure: (text, size) => { asked.push(text); return text.length * size / 2; }});

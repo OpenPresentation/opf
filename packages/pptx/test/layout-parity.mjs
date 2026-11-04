@@ -35,7 +35,8 @@ const alignmentOf = (xml, text) => {
 };
 const previewAnchor = (svg, text) => {
   const escaped = text.replace(/&/g, '&amp;');
-  const match = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(([, , body]) => body.replace(/<[^>]+>/g, '') === escaped);
+  // LH-32: the tag is an eyebrow: the preview draws its capitals, PowerPoint the authored text with cap="all".
+  const match = [...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].find(([, , body]) => [escaped, escaped.toUpperCase()].includes(body.replace(/<[^>]+>/g, '')));
   assert.ok(match, `Preview text is missing: ${text}`);
   return match[1].match(/text-anchor="(\w+)"/)?.[1] ?? 'start';
 };

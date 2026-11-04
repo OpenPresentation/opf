@@ -100,7 +100,7 @@ export interface TextStyle { fontFamily: string; fontWeight: number; italic?: bo
    * PowerPoint draws it with `cap="all"`. Set only where capitals keep the text's UTF-16 length (eyebrowCaps), so offsets hold.
    */
   caps?: boolean;
-  /** LH-32: letter spacing in em, added after every character (SVG `letter-spacing`, PowerPoint `spc`). */
+  /** LH-32: letter spacing in em between characters (SVG `letter-spacing` with none after the last, PowerPoint `spc`). */
   tracking?: number }
 /** LH-32: the letter spacing of an eyebrow (the slide tag, LH-50's label), in em; Claude Design tracks its eyebrows by about 0.08 to 0.12 em. */
 export const EYEBROW_TRACKING = 0.08;
@@ -118,12 +118,15 @@ export function eyebrowCaps(text: string): boolean {
 }
 /** LH-32: what a style draws for `text`: its capitals when the style sets `caps`. */
 export function styledText(text: string, style: Pick<TextStyle, 'caps'>): string { return style.caps ? text.toUpperCase() : text; }
-/** LH-32: the advance a style's tracking adds to `text` at `fontSize`: the tracking after every character. */
+/**
+ * LH-32: the advance a style's tracking adds to `text` at `fontSize`: the tracking between every two characters. None after the last one, so
+ * a centered or right-aligned eyebrow ends on its last letter (the preview draws the last character with no spacing after it).
+ */
 export function trackingWidth(text: string, fontSize: number, style: Pick<TextStyle, 'tracking'>): number {
   if (!style.tracking) return 0;
   let count = 0;
   for (const _ of text) count++;
-  return style.tracking * fontSize * count;
+  return style.tracking * fontSize * Math.max(0, count - 1);
 }
 /** Role families. `accent` is present only when the scheme defines an accent role; the slide tag and quote body use it. */
 export interface FontFamilies { heading: string; body: string; code: string; accent?: string }
@@ -186,7 +189,7 @@ export function textWidthMeasurer(style: TextStyle, measurement?: TextMeasuremen
     if (!Number.isFinite(width) || width < 0) throw new RangeError('Text measurement must return a finite, nonnegative width.');
     return width;
   };
-  // LH-32: an eyebrow is measured as drawn: its capitals, plus its tracking after every character.
+  // LH-32: an eyebrow is measured as drawn: its capitals, plus its tracking between characters.
   if (!style.caps && !style.tracking) return base;
   return (text, size) => base(styledText(text, style), size) + trackingWidth(text, size, style);
 }
@@ -199,8 +202,8 @@ export function measureTextOutline(text: string, fontSize: number, style: TextSt
   if (!bounds || ![bounds.x,bounds.y,bounds.width,bounds.height].every(Number.isFinite) || bounds.width < 0 || bounds.height < 0) {
     throw new RangeError('Text outline measurement must return null or finite bounds with nonnegative dimensions.');
   }
-  // LH-32: tracking moves every glyph after the first by the spacing before it; the ink ends before the last character's spacing.
-  const spread = style.tracking ? Math.max(0, trackingWidth(text, fontSize, style) - style.tracking * fontSize) : 0;
+  // LH-32: tracking moves every glyph after the first by the spacing before it.
+  const spread = trackingWidth(text, fontSize, style);
   return {x:bounds.x,y:bounds.y,width:bounds.width+spread,height:bounds.height};
 }
 export interface TextLineInk { width: number; y: number; baseline: number; height: number; outline: LayoutBox | null }

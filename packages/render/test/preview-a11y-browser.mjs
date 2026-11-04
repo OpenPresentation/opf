@@ -22,7 +22,7 @@ try {
   for (const name of ['A harbour', 'North leads', 'Trend: up']) assert.match(snapshot, new RegExp(`img "${name}"`), `${name} is a named image`);
   assert.doesNotMatch(snapshot, /- img(?!\s+")/, 'no unnamed image: the alt "" picture is out of the tree');
   assert.doesNotMatch(snapshot, /img "Quarterly review"/, 'the slide is not an image');
-  for (const text of ['Draft', 'Quarterly review', 'Sales Q2', 'Body paragraph', 'First point', 'Second point', 'A memorable quote', 'Ada', '42%', 'Growth', 'Col A', 'cell y', 'An inline note', 'Header text', 'Footer text']) assert.ok(snapshot.includes(text), `${text} is in the tree`);
+  for (const text of ['Draft', 'Quarterly review', 'Sales Q2', 'Body paragraph', 'First point', 'Second point', 'A memorable quote', 'Ada', '42%', 'Growth', 'Col A', 'cell y', 'An inline note', 'Header text', 'Footer text']) assert.ok(snapshot.includes(text) || snapshot.includes(text.toUpperCase()), `${text} is in the tree`); // LH-32: the tag (Draft) is an eyebrow in capitals
   assert.ok(snapshot.indexOf('Quarterly review', 20) < snapshot.indexOf('Body paragraph') && snapshot.indexOf('Body paragraph') < snapshot.indexOf('Header text'), 'title, body, then furniture');
   assert.ok(!snapshot.includes('•'), 'the bullet marker is hidden');
 

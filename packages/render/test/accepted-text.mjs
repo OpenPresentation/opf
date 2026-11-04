@@ -31,8 +31,8 @@ for(const outlines of [false,true])for(const {id,deck} of acceptedTextFixtures()
       const x=placed?placed.x+(fragment?fragment.x:placed.width*factor):fragment?item.box.x+(align==='right'?item.box.width-entry.line.width:align==='center'?(item.box.width-entry.line.width)/2:0)+fragment.x:
         item.box.x+(align==='right'?item.box.width:align==='center'?item.box.width/2:0);
       const y=placed?placed.baseline+(fragment?.baselineShift??0):item.box.y+(fragment?entry.line.baseline+fragment.baselineShift:fit.fontSize+entry.index*fit.lineHeight);
-      // LH-32: an eyebrow (the tag) draws the capitals of its accepted text.
-      assert.equal(text,escape(styledText(fragment?.text??entry.text,style)),id);
+      // LH-32: an eyebrow (the tag) draws the capitals of its accepted text, its last character in a tspan with no letter spacing.
+      assert.equal(style.tracking?text.replace(/<tspan letter-spacing="0">([^<]*)<\/tspan>$/,'$1'):text,escape(styledText(fragment?.text??entry.text,style)),id);
       assert.ok(Math.abs(Number(attr('x'))-x)<.001,id);
       assert.ok(Math.abs(Number(attr('y'))-y)<.001,id);
       assert.ok(Math.abs(Number(attr('font-size'))-(fragment?.fontSize??fit.fontSize))<.001,id);

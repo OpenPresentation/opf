@@ -342,6 +342,13 @@ function eyebrowFill(design, item) {
   const backdrop = item.frameBox ? design.roles.neutrals.card.hex : design.backgroundColor ?? design.colors.background;
   return contrastRatio(design.colors.primary, backdrop) < TAG_MIN_CONTRAST ? design.colors.text : design.colors.primary;
 }
+// LH-32: the escaped text of a tracked line with its last character in a tspan of no letter spacing: core spaces an eyebrow's letters
+// between characters (trackingWidth), and a trailing spacing would move a centered or right-aligned line by a rasterizer's own reading.
+function untrackLast(content) {
+  if (typeof content !== "string" || content.includes("<")) return content;
+  const last = /(&#?\w+;|[\s\S])$/u.exec(content);
+  return last && last.index > 0 ? `${content.slice(0, last.index)}<tspan letter-spacing="0">${last[1]}</tspan>` : content;
+}
 const sameBox = (a, b) => !!a && !!b && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 
 const LINK_URL = /^(https?:|mailto:|tel:)/i;
@@ -2122,6 +2129,9 @@ function renderRichLines(value,fit,box,bound,config) {
       if(!asFlow)position.x=stableNumber(originX+fragmentX+gap);
     }
     // LH-32: an eyebrow run (core's style.caps, style.tracking) draws its capitals with core's letter spacing.
+    // LH-32: a tracked run (an eyebrow) keeps its natural advance: its letter spacing is in core's width, and a textLength would leave the
+    // trailing spacing to each rasterizer's own reading.
+    const tracked=fragment.kind!=='tab'&&!!fragment.style.tracking;
     const drawnText=styledText(trail?fragment.text.slice(0,-trail.length):fragment.text,fragment.style),drawnWidth=fragment.width-gap;
     // FA-13: an inline code run falls back to a monospace face, and a run with its own language declares it.
     const runLang=fragment.kind!=='tab'&&fragment.style.lang?(bound.scriptFontsFor?.(fragment.style.lang)?.profile.bcp47??fragment.style.lang):undefined;
@@ -2133,7 +2143,7 @@ function renderRichLines(value,fit,box,bound,config) {
     // RR-34: a citation/footnote marker is generated text (no source range): it is traced as a marker
     // segment without text offsets, so editors never read it as part of the run, and it is not linked.
     const marker=fragment.kind==='marker';
-    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
+    const rendered=tag(asFlow?'tspan':'text',{...(runLang?{lang:runLang,'xml:lang':runLang}:{}),...(config.options.trace?marker?{'data-opf-segment':'marker','data-opf-marker':fragment.text}:{'data-opf-text-start':runOffsets[fragment.runIndex]+fragment.start,'data-opf-text-end':runOffsets[fragment.runIndex]+fragment.end-trail.length,'data-opf-segment':fragment.kind}:{}),...position,'xml:space':'preserve','text-rendering':asFlow?undefined:'geometricPrecision',textLength:fixedAdvance&&!tracked?stableNumber(drawnWidth):undefined,lengthAdjust:fixedAdvance&&!tracked?'spacingAndGlyphs':undefined,'font-family':scripted.family??fontStack(fragment.style.fontFamily,run.code===true?'monospace':bound.design.fontScheme.type),'font-size':stableNumber(adjustedFontSize(fragment.fontSize,scripted.sizeAdjust)),'font-weight':fragment.style.fontWeight,'font-style':fragment.style.italic?'italic':asFlow?'normal':undefined,'letter-spacing':fragment.kind!=='tab'&&fragment.style.tracking?stableNumber(fragment.style.tracking*fragment.fontSize):undefined,'text-decoration':marker?undefined:[run.underline||linked?'underline':'',run.strikethrough?'line-through':''].filter(Boolean).join(' ')||undefined,fill:runFill},content);
     if(linked)return tag('a',{href:run.link,target:'_blank',rel:'noopener noreferrer'},rendered);
     return rendered;
     };
@@ -2229,14 +2239,18 @@ function renderTextBox(text, box, bound, config) {
     }
     // Positioned script runs carry their own x and textLength (FF-19).
     const start=tabs||positioned;
+    // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
+    // differ on whether a trailing spacing counts towards a middle or end anchor.
+    if(style.tracking&&!start)content=untrackLast(content);
     return tag("text", {
     x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
-    // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it.
+    // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
+    // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts towards it).
     "letter-spacing": style.tracking ? stableNumber(style.tracking * size) : undefined,
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
-    textLength:!start&&placed?.width>0?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0?'spacingAndGlyphs':undefined,
+    textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,
     ...traceAttrs(config.options, config.path),
     ...(config.options.trace&&sourceLine?{'data-opf-source-start':sourceOffset+sourceLine.start,'data-opf-source-end':sourceOffset+sourceLine.end,'data-opf-source-next-start':sourceOffset+sourceLine.nextStart,'data-opf-line-boundary':sourceLine.boundary}:{}),
   }, content);
