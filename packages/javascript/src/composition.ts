@@ -41,8 +41,8 @@ export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-import {layoutVariantApplies,resolveColorRoles} from './color.js';
-import {pictureScrims,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
+import {colorContrast,layoutVariantApplies,resolveColorRoles} from './color.js';
+import {pictureScrims,sampledGrays,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
 export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
@@ -1674,6 +1674,11 @@ export const HEADING_DISPLAY_SIZES = { title: 75, subtitle: 37, tag: EYEBROW_TAG
  * draws the tag instead.
  */
 export const TITLE_RULE_SIZE = { width: 80, height: 5 } as const;
+/**
+ * Wave 6 review: the widest range of grays (0 to 255, through the author's overlay) a measured picture may show under a heading group
+ * that its layout anchors low over a picture background for it to stay low; a wider band is busy and the group is centered.
+ */
+export const CALM_PICTURE_SPREAD = 48;
 /**
  * LH-129: `size` (canvas px) grown by `steps` steps of the type scale (the floor `floorPx` times (28/16)^(1/4) to a power, as LH-17's
  * scale), each step the scale's next size above the last, stopping before a step above `display`.
@@ -7356,15 +7361,45 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const bottom = near(cell.y + cell.height, frame.y + frame.height) ? area.bottom : cell.y + cell.height;
       return { x: left, y: top, width: right - left, height: bottom - top };
     };
+    // Wave 6 review (LH-130 with LH-02 and LH-145): a cover's or section's heading group anchored low over a picture background lies over
+    // the picture's lower part, often its busiest (lit windows, a field of panels), where a centered group sat in the calm sky. It stays
+    // low only when the host measured the picture (`pictureLuminance`) and the band under its text is calm: the grays there, through the
+    // author's overlay, span at most CALM_PICTURE_SPREAD levels and the text color reads SCRIM_TARGET_CONTRAST over every one of them with
+    // no scrim. Otherwise, and without a measurement (an estimated run), the group is centered as before LH-130, keeping its start
+    // alignment, rule and eyebrow. Plain and variant backgrounds keep the low anchor. `list` is the group at the top of its area and
+    // `room` how far the low anchor moves it down.
+    const calmUnder = (list: ComposedItem[], room: number): boolean => {
+      const background = backgroundImage, texts = list.filter(item => item.text);
+      const grid = background && !background.recolor ? options.pictureLuminance?.(background.src) : undefined;
+      if (!background || !grid || !texts.length || (background.opacity !== undefined && background.opacity < 1)) return false;
+      const picture = background.picture?.image ?? { x: 0, y: 0, width, height };
+      if (!(picture.width > 0 && picture.height > 0)) return false;
+      const left = Math.min(...texts.map(item => item.box.x)), right = Math.max(...texts.map(item => item.box.x + item.box.width));
+      const top = Math.min(...texts.map(item => item.box.y)) + room, bottom = Math.max(...texts.map(item => item.box.y + item.box.height)) + room;
+      const grays = sampledGrays(grid, { left: (left - picture.x) / picture.width, top: (top - picture.y) / picture.height, right: (right - picture.x) / picture.width, bottom: (bottom - picture.y) / picture.height });
+      if (!grays) return false;
+      // The author's overlay (a literal color) lies over the picture: each gray is seen through it.
+      const overlay = background.overlay, tint = typeof overlay?.color === 'string' && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(overlay.color) ? overlay.color : undefined;
+      const alpha = tint && overlay ? Math.max(0, Math.min(1, overlay.opacity * (tint.length === 9 ? Number.parseInt(tint.slice(7), 16) / 255 : 1))) : 0;
+      const seen = (gray: number): string => `#${[1, 3, 5].map(at => Math.round(gray * (1 - alpha) + (tint ? Number.parseInt(tint.slice(at, at + 2), 16) : 0) * alpha).toString(16).padStart(2, '0')).join('')}`;
+      const text = (options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' })).text;
+      const spread = Math.abs(grays[1] - grays[0]) * (1 - alpha);
+      if (spread > CALM_PICTURE_SPREAD) return false;
+      for (let gray = grays[0]; gray <= grays[1]; gray++) if ((colorContrast(text, seen(gray)) ?? 0) < SCRIM_TARGET_CONTRAST) return false;
+      return true;
+    };
     // Headings: centered vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
     // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
-    const placeHeadings = (name: 'title' | 'subtitle', fields: string[]) => {
+    const placeHeadings =(name: 'title' | 'subtitle', fields: string[]) => {
       const rect = rects.get(name), original = ownRects.get(name);
       if (!rect) { if (original) headingAreas.push({ name, box: roundBox(physical(logical(original))), collapsed: true }); return; }
       const cell = physical(logical(rect));
       const list = headingItemsAt(fields, cell.x, cell.y, cell.width);
-      const sized = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto'), anchor = plan.headingAnchors?.[name] ?? 'middle';
-      const shift = sized ? Math.max(0, (cell.height - groupHeight(list)) * (anchor === 'bottom' ? 1 : anchor === 'middle' ? .5 : 0)) : 0;
+      const sized = !rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(size => size === 'auto'), authored = plan.headingAnchors?.[name] ?? 'middle';
+      const room = Math.max(0, cell.height - groupHeight(list));
+      // Wave 6 review: a group anchored low over a picture background stays low only where the picture is calm under it (calmUnder).
+      const anchor = sized && authored === 'bottom' && backgroundImage && !calmUnder(list, room) ? 'middle' : authored;
+      const shift = sized ? room * (anchor === 'bottom' ? 1 : anchor === 'middle' ? .5 : 0) : 0;
       // LH-129: a title that stands free (in a sized area, or in a stack) over no primary or secondary block is the slide's message.
       if (name === 'title' && list.some(item => item.field === 'title') && (sized || plan.stack !== undefined) && headingsAlone()) headingMessage = true;
       const rule = groupRules.get(list);
