@@ -47,7 +47,7 @@ describe('core in workerd', { skip: !available && 'the workerd package has no bi
 			let invalid = 0;
 			let alternatives = 0;
 			for (const document of documents) {
-				const want = wire(evaluate(opf, document));
+				const want = wire(await evaluate(opf, document));
 				assert.equal(got[document.id]?.error, undefined, `${document.id}: ${got[document.id]?.error}`);
 				assert.deepEqual(got[document.id], want, document.id);
 				if (want.report?.schemaValid === false) invalid++;
@@ -62,7 +62,7 @@ describe('core in workerd', { skip: !available && 'the workerd package has no bi
 		test('serves repeated requests from the same precompiled validators', async () => {
 			const [first] = documents;
 			const again = await post(worker, [first, first, first]);
-			assert.deepEqual(again, { [first.id]: wire(evaluate(opf, first)) });
+			assert.deepEqual(again, { [first.id]: wire(await evaluate(opf, first)) });
 		});
 	});
 

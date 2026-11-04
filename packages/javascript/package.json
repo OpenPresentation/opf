@@ -151,9 +151,9 @@
     },
     "#diagram-engine": {
       "types": "./src/diagram-engine-eager.ts",
-      "workerd": "./dist/diagram-engine-eager.js",
-      "worker": "./dist/diagram-engine-eager.js",
-      "edge-light": "./dist/diagram-engine-eager.js",
+      "workerd": "./dist/diagram-engine-lazy.js",
+      "worker": "./dist/diagram-engine-lazy.js",
+      "edge-light": "./dist/diagram-engine-lazy.js",
       "browser": "./dist/diagram-engine-lazy.js",
       "default": "./dist/diagram-engine-eager.js"
     }
