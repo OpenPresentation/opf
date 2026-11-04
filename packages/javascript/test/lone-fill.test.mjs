@@ -3,7 +3,7 @@
 import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, LONE_DISPLAY_SIZES, LONE_TARGET } from '../dist/composition.js';
+import { composeSlide, LONE_DISPLAY_SIZES, LONE_TARGET, MESSAGE_DISPLAY_SIZE } from '../dist/composition.js';
 
 const { layouts } = gallery;
 const body = (result) => result.items.filter((item) => !['title', 'subtitle', 'tag'].includes(item.field));
@@ -17,8 +17,10 @@ test('a lone short paragraph steps up the type scale, at most to its display siz
   const [item] = body(result), [role] = body(kept);
   assert.deepEqual(findings(result), []);
   assert.equal(role.text.fontSize, 32, 'fill: false keeps the lead size of a lone block of two lines (WI-4)');
-  assert.ok(item.text.fontSize > role.text.fontSize && item.text.fontSize <= LONE_DISPLAY_SIZES.text, `${item.text.fontSize}`);
-  assert.ok([32, 37, 43].includes(item.text.fontSize), 'a step of the type scale');
+  // LH-09: a paragraph of at most 25 words is a short message, which grows on past LONE_DISPLAY_SIZES.text to MESSAGE_DISPLAY_SIZE in the display face.
+  assert.ok(item.text.fontSize > LONE_DISPLAY_SIZES.text && item.text.fontSize <= MESSAGE_DISPLAY_SIZE, `${item.text.fontSize}`);
+  assert.ok([49, 56].includes(item.text.fontSize), 'a step of the type scale');
+  assert.equal(item.textStyle.fontWeight, 700, 'in the display face');
   assert.ok(!item.text.overflow);
   assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 1, 'centered in the body');
   assert.ok(item.box.height <= LONE_TARGET * result.contentBox.height + 4, 'about 60% of the body at most');

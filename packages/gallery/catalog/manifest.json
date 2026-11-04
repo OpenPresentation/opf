@@ -56,10 +56,10 @@
     "layouts": {
       "mode": "mirror",
       "records": 30,
-      "contentSha256": "47adcc12d6c2a30588f38540f19d6321f867f66532d7065b2c68b22ff4055f22",
+      "contentSha256": "7fba4145535048040a59fb2c80ebb82cb68acc5d450c756f45d174188b11a9ae",
       "gallery": {
         "records": 30,
-        "contentSha256": "47adcc12d6c2a30588f38540f19d6321f867f66532d7065b2c68b22ff4055f22"
+        "contentSha256": "7fba4145535048040a59fb2c80ebb82cb68acc5d450c756f45d174188b11a9ae"
       }
     },
     "narratives": {

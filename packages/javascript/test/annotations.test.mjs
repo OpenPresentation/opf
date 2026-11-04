@@ -132,7 +132,8 @@ describe('numbering', () => {
 describe('markers in fits', () => {
   test('a cited run gets a superscript marker fragment after its text with no source range', () => {
     const document = deck();
-    const slide = geometry(document.slides[0], document);
+    // The marker geometry on one line: without fill, since LH-09 draws this short lone text as a display message on balanced lines.
+    const slide = geometry(document.slides[0], document, 0, { fill: false });
     const item = slide.items.find(item => item.field === 'text');
     const found = markers(item);
     assert.deepEqual(found.map(fragment => [fragment.text, fragment.runIndex, fragment.start, fragment.end]), [['1', 0, 17, 17], ['1,2', 2, 1, 1], ['3', 3, 5, 5]]);
