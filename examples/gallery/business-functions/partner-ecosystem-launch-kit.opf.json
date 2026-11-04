@@ -374,13 +374,15 @@
             "Openers and closers"
           ],
           "design": {
-            "titleAlignment": "center",
-            "contentAlignment": "center"
+            "titleAlignment": "left",
+            "contentAlignment": "left"
           },
           "direction": "row",
           "regions": [
             {
-              "name": "title"
+              "name": "title",
+              "anchor": "bottom",
+              "rule": true
             },
             {
               "name": "media",
