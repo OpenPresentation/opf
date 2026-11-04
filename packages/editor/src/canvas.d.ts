@@ -97,6 +97,12 @@ export interface CanvasEditorOptions {
    * edited as written. Default true.
    */
   continuation?: boolean;
+  /**
+   * LH-145: read the pixels of the slide's picture background in the page (decoded once on a canvas, cached) so the automatic scrim under text on a
+   * photo is sized for the photo, and redraw when a measurement arrives. Default true. A `renderOptions.pictureLuminance` of the host wins;
+   * `false` sizes every scrim for any picture, as before.
+   */
+  measurePictures?: boolean;
   /** LH-99: the indicator's text. */
   pageLabels?: { pages?: (count: number) => string; page?: (page: number, count: number) => string; preview?: (page: number, count: number) => string; back?: string };
   /** LH-99: the page count of the showing slide changed, or a page preview opened (`page` from 0) or closed (`page: null`). */

@@ -30,6 +30,8 @@ import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
 import { deckInternals } from "./svg-internals.js";
 
 export const packageName = "@openpresentation/opf-render";
+// LH-145: the picture sampler of the automatic scrim (the canvas decoder; the Node entry replaces it with the sharp one).
+export { measurePictures } from "./measure-pictures.js";
 
 export const releaseLane = Object.freeze({
   githubRepository: "OpenPresentation/opf",

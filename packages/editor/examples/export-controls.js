@@ -6,7 +6,7 @@ import { toPptx } from '@openpresentation/opf-pptx';
 import { fontGate } from '../src/font-gate.js';
 
 export function pptxExporter({ editor, fonts, measurementFor }) {
-  return async (deck, { signal, onProgress }) => {
+  return async (deck, { signal, onProgress, pictureLuminance }) => {
     const diagnostics = [];
     // Text is measured with the loaded faces, so the faces the deck needs load before conversion measures anything.
     const gate = fontGate(fonts);
@@ -21,6 +21,8 @@ export function pptxExporter({ editor, fonts, measurementFor }) {
       // A script-aware measurement for this deck (Japanese under Aptos measures with Noto Sans JP), when the host supplies one.
       fonts: measurementFor ? { textMeasurement: measurementFor(deck) } : fonts,
       strictAssets: true,
+      // LH-145: the preview's picture measurements, so the file draws the same scrim as the preview.
+      ...(pictureLuminance ? { pictureLuminance } : {}),
       onDiagnostic: issue => diagnostics.push(issue),
     });
     return { bytes, warnings: diagnostics };

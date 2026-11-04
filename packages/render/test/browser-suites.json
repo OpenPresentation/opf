@@ -47,6 +47,10 @@
         {
           "id": "browser:font-variants-browser",
           "command": "pnpm run test:font-variants-browser"
+        },
+        {
+          "id": "browser:measure-pictures-browser",
+          "command": "node test/measure-pictures-browser.mjs"
         }
       ]
     },
