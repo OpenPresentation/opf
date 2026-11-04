@@ -44,7 +44,8 @@
       "size": 2,
       "accepts": [
         "image",
-        "video"
+        "video",
+        "diagram"
       ],
       "role": "media",
       "flow": "none",

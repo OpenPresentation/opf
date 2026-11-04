@@ -25,6 +25,7 @@ export const DOC_SLUGS: readonly string[] = [
 	"validate",
 	"finding-schema-reference",
 	"content-payloads",
+	"diagrams",
 	"content-item-design-overrides",
 	"design-resolution",
 	"dynamic-composition",

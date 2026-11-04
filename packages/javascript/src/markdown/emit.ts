@@ -17,7 +17,7 @@ export interface LostPart {
   message: string;
 }
 
-const CONTENT = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"] as const;
+const CONTENT = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"] as const;
 const isContent = (key: string): boolean => (CONTENT as readonly string[]).includes(key);
 const ROWS = "(?:top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+bottom)";
 const COLUMNS = "(?:left|center|right|left\\+center|center\\+right|left\\+center\\+right)";
@@ -147,6 +147,17 @@ function timelineLines(timeline: unknown): string[] | undefined {
   return fenced(info, body);
 }
 
+// A diagram is a ```mermaid fence, longer than any run of backticks in its source, with its alt in the info string. An alt with a
+// backtick would end a backtick fence's info string, so such a diagram is embedded instead.
+function diagramLines(diagram: unknown): string[] | undefined {
+  const value = typeof diagram === "string" ? { source: diagram } : (diagram as Obj);
+  const source = value.source as string, alt = value.alt as string | undefined;
+  if (alt !== undefined && (alt.includes("`") || /[\r\n]/.test(alt))) return undefined;
+  const longest = Math.max(2, ...[...source.matchAll(/`+/g)].map((match) => match[0].length));
+  const fence = "`".repeat(longest + 1);
+  return [`${fence}mermaid${alt === undefined ? "" : ` alt=${JSON.stringify(alt)}`}`, ...source.split("\n"), fence];
+}
+
 function metricLines(metric: unknown): string[] | undefined {
   const value = typeof metric === "object" ? (metric as Obj) : { value: metric };
   const body: string[] = [];
@@ -206,7 +217,7 @@ function nativeLines(key: string, canon: unknown, marker: string): string[] | un
     case "code": {
       const code = typeof canon === "string" ? { source: canon } : (canon as Obj);
       const language = code.language as string | undefined;
-      if (language !== undefined && (!/^[A-Za-z0-9_+#.-]+$/.test(language) || ["chart", "metric", "timeline", "opf-slide", "opf-block"].includes(language))) return undefined;
+      if (language !== undefined && (!/^[A-Za-z0-9_+#.-]+$/.test(language) || ["chart", "metric", "timeline", "mermaid", "opf-slide", "opf-block"].includes(language))) return undefined;
       return fenceCode(code.source as string, language, code.filename as string | undefined);
     }
     case "metric":
@@ -218,6 +229,8 @@ function nativeLines(key: string, canon: unknown, marker: string): string[] | un
       return tableLines(canon as Obj);
     case "timeline":
       return timelineLines(canon);
+    case "diagram":
+      return diagramLines(canon);
     default:
       return undefined;
   }

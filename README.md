@@ -177,6 +177,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/slide-sizes.md`](./docs/slide-sizes.md) | OPF's slide-size presets in inches, points and EMU, how they compare with PowerPoint's presets, and what PPTX export and import do with them. |
 | [`docs/catalog-schema-reference.md`](./docs/catalog-schema-reference.md) | Author-facing reference for every companion catalog schema. |
 | [`docs/content-payloads.md`](./docs/content-payloads.md) | Author-facing notes for slide and region content payloads, including chart and table object shapes. |
+| [`docs/diagrams.md`](./docs/diagrams.md) | Mermaid diagrams as a content kind: when to use one, the supported families, how the deck styles and sizes them, accessibility, export and limits. |
 | [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |

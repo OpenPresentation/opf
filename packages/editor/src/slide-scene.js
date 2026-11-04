@@ -15,7 +15,7 @@ import { boxesAt } from "./studio-kit/overlay.js";
 import { clickTarget } from "./studio-kit/selection.js";
 
 /** The content fields a slide, a promoted region or a block can hold, in the order implicit content becomes blocks. */
-export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"]);
+export const CONTENT_FIELDS = Object.freeze(["text", "items", "bullets", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline"]);
 const HEADINGS = ["tag", "title", "subtitle"];
 const HEADING_LABELS = { tag: "Tag", title: "Title", subtitle: "Subtitle" };
 const MODE_LABELS = { auto: "Group", grid: "Grid", row: "Row", column: "Column" };
@@ -68,6 +68,8 @@ function contentSnippet(kind, content) {
     case "quote": return isObject(content) ? plain(content.text) : plain(content);
     case "code": return isObject(content) ? plain(content.filename) || plain(content.language) || plain(String(content.source ?? "").split("\n")[0]) : "";
     case "timeline": return Array.isArray(content) && content.length ? plain(content[0]?.what ?? content[0]?.when) : "";
+    // A diagram is one object: its alt text, else the first line of its Mermaid source (the diagram type).
+    case "diagram": return isObject(content) ? plain(content.alt) || plain(String(content.source ?? "").split("\n")[0]) : typeof content === "string" ? plain(content.split("\n")[0]) : "";
     case "image":
     case "video": return isObject(content) ? plain(content.alt ?? content.caption) : "";
     default: return "";
@@ -78,7 +80,7 @@ export function describeBlock(block) {
   if (isObject(block) && Array.isArray(block.blocks)) return `${MODE_LABELS[block.composition?.mode ?? "auto"] ?? "Group"} · ${block.blocks.length}`;
   const info = readContent(block);
   if (!info) return "Block";
-  const label = CONTENT_KIND_LABELS[info.kind] ?? info.kind;
+  const label = CONTENT_KIND_LABELS[info.kind] ?? (info.kind === "diagram" ? "Diagram" : info.kind);
   const text = snippet(contentSnippet(info.kind, info.content));
   return text ? `${label}: ${text}` : label;
 }

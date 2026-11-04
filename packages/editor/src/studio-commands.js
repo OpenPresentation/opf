@@ -5,8 +5,8 @@
 import { createCommandRegistry } from "./studio-kit/commands.js";
 
 /** The block kinds Insert offers, in menu order (the layout region kinds, with Group last). */
-export const STUDIO_INSERT_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "group"]);
-export const STUDIO_INSERT_LABELS = Object.freeze({ text: "Text", list: "List", image: "Image", video: "Video", chart: "Chart", table: "Table", code: "Code", metric: "Metric", quote: "Quote", timeline: "Timeline", group: "Group" });
+export const STUDIO_INSERT_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline", "group"]);
+export const STUDIO_INSERT_LABELS = Object.freeze({ text: "Text", list: "List", image: "Image", video: "Video", chart: "Chart", table: "Table", code: "Code", diagram: "Diagram", metric: "Metric", quote: "Quote", timeline: "Timeline", group: "Group" });
 export const STUDIO_INSERT_HINTS = Object.freeze({
   text: "A paragraph of text",
   list: "Bulleted or numbered points",
@@ -15,6 +15,7 @@ export const STUDIO_INSERT_HINTS = Object.freeze({
   chart: "Column, bar, line or pie chart from a small table",
   table: "Rows and columns of values",
   code: "Source code with highlighting",
+  diagram: "A flowchart, sequence or other diagram from Mermaid text",
   metric: "One number with its label",
   quote: "A quotation and its source",
   timeline: "Dated steps in order",

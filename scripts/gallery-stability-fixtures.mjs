@@ -51,6 +51,8 @@ export function sampleBlock(kind, index = 0) {
       return { quote: pick([{ text: "The plan makes the sequence of choices explicit.", attribution: "Program sponsor" }, { text: "We finally see the whole pipeline in one place.", attribution: "Sales lead" }, { text: "Onboarding now takes minutes, not days.", attribution: "Customer" }], index) };
     case "timeline":
       return { timeline: { events: [{ when: "Q1", what: "Baseline" }, { when: "Q2", what: "Pilot" }, { when: "Q3", what: "Launch" }, { when: "Q4", what: "Scale" }] } };
+    case "diagram":
+      return { diagram: pick(["flowchart LR\n  Plan --> Pilot --> Launch", "flowchart LR\n  Brief --> Review --> Build", "flowchart LR\n  Collect --> Analyze --> Report"], index) };
     case "group":
       return { blocks: [sampleBlock("image", index), { text: pick(["Ana Ruiz, Chief Executive", "Sam Lee, Head of Product", "Kai Moreau, Engineering Lead"], index) }] };
     default:

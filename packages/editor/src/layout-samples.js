@@ -28,6 +28,8 @@ export function sampleBlock(kind, index = 0) {
       return { table: { columns: ["Workstream", "Owner", "Status"], rows: [["Compliance", "Program lead", "On track"], ["Reporting", "Analytics", "Watch"], ["Adoption", "Operations", "At risk"]] } };
     case "code":
       return { code: { language: "javascript", source: pick(["const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);", "export function share(part, whole) {\n  return whole ? part / whole : 0;\n}"], index) } };
+    case "diagram":
+      return { diagram: { source: pick(["flowchart LR\n  Plan --> Build --> Ship", "flowchart LR\n  Collect --> Review --> Approve", "flowchart TB\n  Idea --> Pilot --> Launch"], index), alt: "Three steps in order" } };
     case "metric":
       return { metric: pick([{ value: "18%", label: "Net revenue growth", trend: "up" }, { value: "3.1M", label: "Active users", trend: "up" }, { value: "42", label: "Net promoter score", trend: "flat" }], index) };
     case "quote":

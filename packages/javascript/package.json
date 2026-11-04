@@ -148,6 +148,14 @@
       "worker": "./dist/schema-engine-precompiled.js",
       "edge-light": "./dist/schema-engine-precompiled.js",
       "default": "./dist/schema-engine-ajv.js"
+    },
+    "#diagram-engine": {
+      "types": "./src/diagram-engine-eager.ts",
+      "workerd": "./dist/diagram-engine-eager.js",
+      "worker": "./dist/diagram-engine-eager.js",
+      "edge-light": "./dist/diagram-engine-eager.js",
+      "browser": "./dist/diagram-engine-lazy.js",
+      "default": "./dist/diagram-engine-eager.js"
     }
   },
   "files": [
@@ -175,6 +183,7 @@
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "jsonc-parser": "3.3.1",
+    "pele": "1.13.0",
     "yaml": "^2.9.1"
   },
   "devDependencies": {

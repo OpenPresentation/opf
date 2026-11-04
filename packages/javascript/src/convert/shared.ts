@@ -2,7 +2,7 @@
 import { validate } from "../validator.js";
 
 /** Content fields a payload can hold; a block with exactly one of them is a convertible leaf. */
-export const CONTENT_KEYS = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"] as const;
+export const CONTENT_KEYS = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"] as const;
 export type ContentKey = (typeof CONTENT_KEYS)[number];
 /** Slide-only fields: a payload that has any of them is a slide, not a block. */
 export const SLIDE_ONLY_KEYS = ["title", "subtitle", "tag", "layout", "design", "notes", "section", "hidden", "beat"] as const;

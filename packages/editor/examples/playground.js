@@ -73,6 +73,7 @@ const startDeck = {
       {code:{source:'const slide = { title: "Hello" };',language:'javascript'}},
       {timeline:[{when:'Now',what:'Prototype'},{when:'Next',what:'Review'}]}
     ]},
+    {id:'diagram',title:'Draw a process from text',diagram:{source:'flowchart LR\n  Draft --> Review --> Approve --> Publish',alt:'Draft, review, approve, publish'}},
   ],
 };
 // RR-22: autosave to this browser (IndexedDB, with localStorage as the fallback), a restore prompt for a stored copy that differs from the starting

@@ -555,8 +555,8 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "125f023b6f8d277c18e0b68105837306d717017777c25d43a8bfa85131cad661",
-      "bytes": 86979,
+      "sha256": "e1b1d5500bd039517777c616f123a5753a5f13ccda5ad0116b62690cd8af0612",
+      "bytes": 86976,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -586,8 +586,8 @@
       "lhWave5PreviousBytes": 86561
     },
     "histogram-single": {
-      "sha256": "a1f7fa0db027e9d316003587e7efa21411d25c2ad6efa4d7067067a735c26c74",
-      "bytes": 86994,
+      "sha256": "392f524ab8bdae8ca9edb9c2ace5068b03b32ee07d3ef2306d04aadf7429c915",
+      "bytes": 86991,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
@@ -617,8 +617,8 @@
       "lhWave5PreviousBytes": 86576
     },
     "histogram-category": {
-      "sha256": "fbb1fbb0fe09b4b054fa037884e20c855c140fd243ce8d8e7ffce11cb9b56298",
-      "bytes": 86980,
+      "sha256": "5360fa5e4699884a80271149fa14a954727e5fa64b5e192b413404bfa93c418b",
+      "bytes": 86977,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -648,8 +648,8 @@
       "lhWave5PreviousBytes": 86562
     },
     "pareto-multi": {
-      "sha256": "d827edfddc4446c4e86eae74b737c24b783bfcbf370dd888029b1c6eb9f6d417",
-      "bytes": 87175,
+      "sha256": "5422b4af662955558e1ee3fa6027d04913f25ea41e5121d41a16c2d7d80b3b64",
+      "bytes": 87172,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -679,8 +679,8 @@
       "lhWave5PreviousBytes": 86757
     },
     "box-multi": {
-      "sha256": "85a39e043cc91d88a413c9b3a9b33781765a3850a4fc3ecf9527c8026d008a59",
-      "bytes": 87614,
+      "sha256": "cd6a9e7fab48698c81cd5a5297450ecc62651b59ab0bb136fe957e76553078ae",
+      "bytes": 87611,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chart-fallback"
@@ -711,8 +711,8 @@
       "lhWave5PreviousBytes": 87196
     },
     "waterfall-single": {
-      "sha256": "d8df9266127ab5cfb567f69eca49610ae3ca9bb87b8bec0f5f6b574fc13f1925",
-      "bytes": 87421,
+      "sha256": "f6742e145a162571490b3173c4734e3361a3d24549298c1cc2bb971096072f46",
+      "bytes": 87418,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -745,8 +745,8 @@
       "lhWave5PreviousBytes": 87003
     },
     "funnel-category": {
-      "sha256": "efcff0f80359dc7c24f08371e67b6e6ea36405b1d7f08d376cd322be242920e9",
-      "bytes": 86979,
+      "sha256": "392341369bcfa3abd8e9c566e13645103435b61781d386ed22496e69fd8ba239",
+      "bytes": 86976,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -776,8 +776,8 @@
       "lhWave5PreviousBytes": 86561
     },
     "world-category": {
-      "sha256": "270c8c943f1b1564b92c91c5bb5d30d028845eea29ffc197557f8a1805b29d77",
-      "bytes": 85804,
+      "sha256": "624b0d0fbd84a4f1b948b465bf099099a323f33370be22d281e009f338b6de13",
+      "bytes": 85801,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -809,8 +809,8 @@
       "lhWave5PreviousBytes": 85391
     },
     "all-seven": {
-      "sha256": "dc8722f7b68dfe1fc7ff36bf016032de76a6f012d0c544bccb9dca77033199dc",
-      "bytes": 151149,
+      "sha256": "f3e6be239acbc83d48f6f782c7064250ce8c38827ea127b2939c8975cd16f674",
+      "bytes": 151146,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

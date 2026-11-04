@@ -22,7 +22,8 @@
         "list",
         "text",
         "metric",
-        "group"
+        "group",
+        "diagram"
       ],
       "role": "primary",
       "flow": "grid",

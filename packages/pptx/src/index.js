@@ -56,10 +56,11 @@ import {themeSlotColors, schemeColorTable, writeSchemeColors, authoredLiteralCol
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
+import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagrams, tagDiagrams } from './diagram-provenance.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -168,7 +169,8 @@ const ROOT_PAYLOAD_FIELDS = [
   "code",
   "metric",
   "quote",
-  "timeline"
+  "timeline",
+  "diagram"
 ];
 
 const PROMOTED_REGION_KEYS = [
@@ -275,6 +277,8 @@ export async function toPptx(input, options = {}) {
   const authored = parseInput(input);
   const presentation = resolveTemplateInput(authored, options);
   assertValidBoundary(presentation);
+  // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
+  await ensureDiagrams(presentation);
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
   if (options.as === 'images') return pictureSlidesPptx(presentation, options);
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
@@ -323,6 +327,9 @@ export async function toPptx(input, options = {}) {
   context.scrims = {};
   context.svgPictures = new Map();
   context.pictureText = new Map();
+  // Diagrams: every generated diagram picture and placeholder name, and their OPF_DIAGRAM_V1 records (full provenance only).
+  context.diagrams = new Set();
+  context.diagramTags = new Map();
   context.watermarks = new Map();
   context.textWatermarks = new Map();
   context.logos = new Map();
@@ -1076,7 +1083,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     for (const [mediaName, caption] of annotations.captions) {
       const key = keyByName.get(mediaName);
       const entry = key === undefined ? undefined : content.find(item => item.sources.includes(key));
-      if (!entry || !['image', 'chart', 'table', 'video'].includes(inferPayloadKind(entry.payload))) {
+      if (!entry || !['image', 'chart', 'table', 'video', 'diagram'].includes(inferPayloadKind(entry.payload))) {
         options.onDiagnostic?.({code: 'caption-detached', path: `slides.${slideIndex}`, message: `The caption of ${caption.path} no longer has its media shape (${mediaName}); its text is imported as an ordinary text block.`});
         blocks.push({type: 'text', text: caption.value});
         continue;
@@ -1170,11 +1177,17 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     for (const member of item.members) roles.set(`sp:${member}`, 'image');
     items.push({kind: 'image', bounds: shapeBounds(shapes[item.panel]['p:spPr']?.['a:xfrm']), payload: item.payload, sources: item.members.map(member => `sp:${member}`)});
   }
+  // A tagged, unchanged diagram picture (or an intact unavailable-diagram placeholder) is its diagram block again (OPF_DIAGRAM_V1).
+  const diagrams = importDiagrams({pictures: nativeContext.pictures, shapes, paragraphs, relationships, entries, slideIndex,
+    valid: payload => isValidFormat({slides: [{blocks: [payload]}]}), report: diagnostic => options.onDiagnostic?.(diagnostic)});
+  for (const [index, payload] of diagrams.shapes) {
+    items.push({kind: 'diagram', bounds: shapeBounds(shapes[index]['p:spPr']?.['a:xfrm']), payload, sources: [`sp:${index}`]});
+  }
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
-    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
@@ -1218,6 +1231,10 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [index, picture] of nativeContext.pictures.entries()) {
     const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : undefined;
     if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
+    if (diagrams.pictures.has(index)) {
+      items.push({kind: 'diagram', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), visualBounds: visualBounds(picture['p:spPr']?.['a:xfrm']), payload: diagrams.pictures.get(index), sources: [`pic:${index}`]});
+      continue;
+    }
     // A tagged, unchanged image block brings back its own fields (fit, focus, treatment, placement); its crop is theirs.
     const treatment = nativeContext.imageBlocks?.get(index);
     const report = diagnostic => { if (!(treatment && diagnostic.code === 'unsupported-image-crop')) options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`}); };
@@ -2516,6 +2533,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),...eyebrowOptions(item.textStyle, item.text.fontSize),...(item.eyebrow ? {color: pptxColor(eyebrowColor(itemContext))} : {}),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
     } else if (item.field === "image" && item.image) {
       await drawImage(item, itemContext);
+    } else if (item.field === "diagram") {
+      // A diagram is one native SVG picture over its PNG fallback (or the unavailable-diagram placeholder); its caption follows it.
+      const name = await addDiagramItem(slide, item, slideIndex, itemContext, options);
+      if (item.caption) addCaption(slide, item, name, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
@@ -2639,6 +2660,11 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       break;
     case "timeline":
       addTimelinePayload(slide, payload.timeline, timelineLayout, context, options, path);
+      break;
+    case "diagram":
+      // Core draws every diagram item (item.diagram, handled before addPayload); a payload reaching here has no drawing.
+      options.onDiagnostic?.({code: "content-placeholder", path, reason: "diagram-unavailable", message: "The diagram has no drawing; the unavailable-diagram placeholder stands in for it."});
+      addDiagramPlaceholder(slide, region, context, undefined);
       break;
     default:
       options.onDiagnostic?.({code: "content-placeholder", path, reason: "unsupported-payload", message: "This content has no PowerPoint export; a placeholder frame stands in for it."});
@@ -2888,6 +2914,66 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
     return panel;
   }
   if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  return name;
+}
+
+// The palette a diagram is painted in: core's diagramPalette from the slide's resolved design, with the inputs opf-render's
+// slideDiagramPalette uses, so the picture has the preview's colors: the surface it stands on (its card's fill, else the slide
+// background, or the emphasis surface), the slide's text and muted text, the scheme and the variant's accent order, the scheme's
+// dark1 and light1, and the body and code families the slide was composed in.
+function exportDiagramPalette(item, context) {
+  const scheme = context.colorScheme ?? {};
+  const card = item.frameBox ? context.roles?.neutrals?.card?.hex : undefined;
+  return diagramPalette({
+    surface: card ?? context.cardFill ?? `#${normalizeHex(context.colors.background)}`,
+    text: `#${normalizeHex(context.colors.text)}`, mutedText: `#${normalizeHex(context.colors.mutedText)}`, colorScheme: scheme,
+    context: {accents: context.roles?.map?.accents, roles: context.roles, variables: context.variables},
+    dark: scheme.dark1 ?? ENGINE_DEFAULT_COLOR_SCHEME.dark1, light: scheme.light1 ?? ENGINE_DEFAULT_COLOR_SCHEME.light1,
+    fonts: {body: context.fonts.body, code: context.fonts.code ?? context.fonts.body}
+  });
+}
+
+// A diagram item (core ComposedItem.diagram): core's drawing painted by paintDiagram in the slide's palette, sized to the drawn box,
+// as one native SVG picture over its PNG fallback (resolveSvgImage, the SVG picture path images use) with the diagram's alt text as
+// its description. A diagram core could not draw, or one whose fallback could not be rasterized, is the unavailable-diagram
+// placeholder, as the preview draws it. Returns the object name (a caption names its media by it).
+async function addDiagramItem(slide, item, slideIndex, context, options) {
+  const diagram = item.diagram, area = diagram?.box ?? item.box;
+  const box = {x: area.x / 96, y: area.y / 96, w: area.width / 96, h: area.height / 96};
+  // Full provenance: OPF_DIAGRAM_V1 records the authored value, so import gives back the source (src/diagram-provenance.js).
+  const record = context.provenanceMode === 'full' ? {v: 1, slide: `slides.${slideIndex}`, path: item.path, diagram: structuredClone(item.value)} : undefined;
+  if (!diagram?.svg || diagram.issue) {
+    const reason = diagram?.issue?.message;
+    options.onDiagnostic?.({code: "content-placeholder", path: item.path, reason: "diagram-unavailable", message: `The diagram cannot be drawn${reason ? ` (${reason})` : ""}; the unavailable-diagram placeholder stands in for it.`});
+    return addDiagramPlaceholder(slide, box, context, record);
+  }
+  const svg = paintDiagram(diagram, exportDiagramPalette(item, context), {width: area.width, height: area.height});
+  const outcome = {box};
+  // resolveSvgImage reports an SVG it cannot export (no rasterizer for the fallback) as an image; this one is a diagram.
+  const onDiagnostic = options.onDiagnostic && (entry => options.onDiagnostic(entry.code === "unresolved-asset" ? {...entry, message: entry.message.replace(/An SVG image needs/, "A diagram needs").replace(/The image exports as the unavailable-image placeholder\.$/, "The diagram exports as the unavailable-diagram placeholder.")} : entry));
+  const resolved = await resolveSvgImage(encodeText(svg), {...options, onDiagnostic}, item.path, outcome);
+  if (!resolved) return addDiagramPlaceholder(slide, box, context, record);
+  const name = diagramName(1 + [...context.diagrams].filter(entry => /^OPF diagram \d+$/.test(entry)).length);
+  context.diagrams.add(name);
+  context.svgPictures.set(name, outcome.svg);
+  context.pictureText.set(name, {alt: diagram.alt || undefined});
+  if (record) context.diagramTags.set(name, {...record, alt: diagram.alt ?? ""});
+  slide.addImage({...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: diagram.alt ?? ""});
+  return name;
+}
+
+// The unavailable-diagram placeholder, as the preview draws it: an unfilled dashed outline in the border neutral at the drawn box,
+// reading "Diagram unavailable" centered in the muted text color at 20 reference px. One native shape, so it moves as one object.
+function addDiagramPlaceholder(slide, box, context, record) {
+  const name = diagramPlaceholderName(1 + [...context.diagrams].filter(entry => /^OPF diagram placeholder \d+$/.test(entry)).length);
+  context.diagrams.add(name);
+  if (record) context.diagramTags.set(name, {...record, alt: ""});
+  const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
+  slide.addText(DIAGRAM_UNAVAILABLE, {
+    shape: "rect", x: box.x, y: box.y, w: box.w, h: box.h, objectName: name, margin: 0,
+    line: {color: normalizeHex(context.roles?.neutrals?.border?.hex ?? `#${context.colors.border}`), width: scale * .75, dashType: "dash"},
+    fontFace: context.fonts.body, fontSize: 20 * scale * .75, color: context.mutedColor, align: "center", valign: "middle"
+  });
   return name;
 }
 
@@ -4783,6 +4869,13 @@ async function normalizePptxZip(raw, context) {
   // SVG pictures: the media part, its relationship and the asvg:svgBlip extension beside the PNG fallback blip. Fitting then
   // uses the SVG's own proportions (the fallback raster only approximates them at integer pixels).
   const svgSizes = attachSvgPictures(entries, context.svgPictures);
+  // Diagram pictures and placeholders carry OPF_DIAGRAM_V1 in full provenance (src/diagram-provenance.js): the picture's manifest
+  // binds its geometry, blip fill and SVG part, so an edited or replaced picture imports as an ordinary picture.
+  try {
+    tagDiagrams(entries, context.diagramTags, parseRelationships);
+  } catch (error) {
+    throw new OPFPptxError("packaging-failed", `Diagram tags could not be attached: ${errorMessage(error)}`);
+  }
   const imageMetadata = new Map();
   for (const [part, bytes] of Object.entries(entries)) {
     if (!part.startsWith('ppt/media/')) continue;

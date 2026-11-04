@@ -1,0 +1,251 @@
+# Diagrams
+
+A `diagram` is a diagram written as text. You write [Mermaid](https://mermaid.js.org) source, and the engines draw it in the deck's own fonts and colors, so a flowchart, a sequence of messages or a mind map looks like the rest of the slide and not like a pasted screenshot. This guide covers when to use one, how to write it in JSON, YAML and Markdown, what it looks like, how it is sized, and how it exports. The field reference is [Content payloads](content-payloads.md#diagram); the schema definition is `$defs.Diagram` (`opf schema presentation '/$defs/Diagram'`).
+
+## When to use a diagram
+
+Choose the content kind by what the content is, not by how it should look.
+
+| The content is | Use |
+| --- | --- |
+| Steps, a decision flow, systems and how they connect, messages between parties, states and transitions, a hierarchy, an entity model | `diagram` |
+| Numbers plotted on axes or as shares of a whole, where the values should stay editable data | `chart` |
+| Dated or ordered milestones with progress (`done`, `current`, `planned`) | `timeline` (the payload, with its status design) |
+| Parallel entries with details, or a short sequence of one-line steps | a list (`items`) or layout `process` |
+
+A Mermaid `pie` or `timeline` diagram is a quick picture. A `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design, with highlights and status words. Prefer the payload when it fits and the diagram when only a diagram can show the structure.
+
+## Writing one
+
+A string is shorthand for `{ "source": value }`. The object form adds `alt`, the text alternative, and `syntax` (`"mermaid"`, the default and the only value today). A diagram is a root payload, a block, or the content of a layout region that accepts it. It takes a `caption` like an image or a chart.
+
+```json
+{
+  "title": "Every request is reviewed before it ships",
+  "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A"
+}
+```
+
+With an `alt` and a caption:
+
+```json
+{
+  "title": "A rejected brief returns to its author",
+  "diagram": {
+    "source": "flowchart LR\n  A[Brief] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A",
+    "alt": "A brief goes to review. Approved work is built; rejected work returns to the brief."
+  },
+  "caption": "Figure 1. The review loop"
+}
+```
+
+As YAML a block scalar keeps the source readable:
+
+```yaml
+- title: Every request is reviewed before it ships
+  diagram:
+    alt: A request is approved or revised, then built.
+    source: |-
+      flowchart LR
+        A[Request] --> B{Approved?}
+        B -->|yes| C[Build]
+        B -->|no| D[Revise]
+        D --> A
+```
+
+Beside text, give the slide `blocks`; the diagram takes its own cell:
+
+```json
+{
+  "title": "The client talks to one API",
+  "blocks": [
+    { "bullets": ["The client creates a deck with one call", "The API validates it before it answers"] },
+    { "diagram": "sequenceDiagram\n  Client->>API: POST /decks\n  API-->>Client: 201 Created" }
+  ]
+}
+```
+
+### In Markdown
+
+A fenced block whose info word is `mermaid` is a diagram. An optional `alt="..."` after the word is its text alternative. `toMarkdown` writes a diagram back the same way, so the round trip is lossless.
+
+````markdown
+# Every request is reviewed before it ships
+
+```mermaid alt="A request is approved or revised, then built."
+flowchart LR
+  A[Request] --> B{Approved?}
+  B -->|yes| C[Build]
+  B -->|no| D[Revise]
+  D --> A
+```
+````
+
+A source with a blank first or last line, or an `alt` that holds a backtick or a line break, cannot be written as a fence; the writer then uses an `opf-block`, which reads back exactly. See [Markdown and outlines](markdown.md). A runnable deck is [`examples/markdown/diagrams.opf.md`](../examples/markdown/diagrams.opf.md), and the JSON fixture [`examples/technical/diagrams.opf.json`](../examples/technical/diagrams.opf.json) has seven slides.
+
+## Supported Mermaid families
+
+OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 syntax. The first line of the source names the family. All the built-in families are supported; ZenUML is not.
+
+| Family | First line | Shows |
+| --- | --- | --- |
+| Flowchart | `flowchart LR` or `TB` | Steps, decisions and flow |
+| Sequence | `sequenceDiagram` | Messages between participants over time |
+| Class | `classDiagram` | Classes, members and relationships |
+| State | `stateDiagram-v2` | States and transitions |
+| Entity relationship | `erDiagram` | Entities, attributes and cardinalities |
+| Gantt | `gantt` | Tasks on a calendar |
+| Pie | `pie` | Shares of a whole |
+| Quadrant | `quadrantChart` | Points on two axes |
+| Mind map | `mindmap` | A hierarchy of ideas |
+| Timeline | `timeline` | Periods with events, in sections |
+| User journey | `journey` | Tasks with a satisfaction score |
+| XY chart | `xychart` | Bars and lines on axes |
+| Sankey | `sankey` | Flows between nodes |
+| Git graph | `gitGraph` | Commits, branches and merges |
+| C4 | `C4Context` and the other C4 headers | System context, containers, components |
+| Block | `block` | Blocks on a grid |
+| Architecture | `architecture-beta` | Services, groups and connections |
+| Kanban | `kanban` | Columns of cards |
+| Packet | `packet` | Bit fields of a protocol packet |
+| Radar | `radar-beta` | Several measures on radial axes |
+| Treemap | `treemap` | Nested rectangles sized by value |
+| Venn | `venn-beta` | Overlapping sets |
+| Ishikawa | `ishikawa-beta` | Causes of a problem (fishbone) |
+| Requirement | `requirementDiagram` | Requirements and what satisfies them |
+| Wardley map | `wardley-beta` | Components by visibility and evolution |
+| Tree view | `treeView-beta` | A folder-style hierarchy |
+| Event modeling | `eventmodeling` | Commands, events and views along a timeline |
+| Railroad | `railroad-beta` (also `railroad-ebnf-beta`, `railroad-abnf-beta`, `railroad-peg-beta`) | The syntax of a grammar |
+| Cynefin | `cynefin-beta` | Items placed in the Cynefin domains |
+| Use case | `usecase-beta` | Actors, use cases and system boundaries |
+| Swimlane | `swimlane-beta` | A flowchart in lanes |
+| Agent flow | `agentflow-beta` | The steps and tools of an agent workflow |
+
+The six most useful, each as a complete source:
+
+````text
+flowchart LR
+  A[Idea] --> B{Worth testing?}
+  B -->|yes| C[Prototype]
+  B -->|no| D[Park it]
+````
+
+````text
+sequenceDiagram
+  Client->>API: POST /decks
+  API-->>Client: 201 Created
+````
+
+````text
+mindmap
+  root((Strategy))
+    Growth
+    Efficiency
+    People
+````
+
+````text
+timeline
+  title Regional rollout
+  section Pilot
+    2026 Q1 : One operations team
+  section Rollout
+    2026 Q3 : All regions
+````
+
+````text
+stateDiagram-v2
+  [*] --> Queued
+  Queued --> Building
+  Building --> Live: success
+  Building --> Failed: error
+  Failed --> Queued: retry
+````
+
+````text
+journey
+  title Onboarding
+  section Sign up
+    Create an account: 5: New user
+    Verify the email: 3: New user
+  section First week
+    Build a first deck: 4: New user
+````
+
+For the full syntax of each family, read the [Mermaid documentation](https://mermaid.js.org/intro/); pele follows it, but draws with its own layout (see [The engine](#the-engine)).
+
+## How the deck styles a diagram
+
+The deck decides colors and fonts, so a diagram follows the slide it sits on:
+
+- **Node fills** are tints of the first accent of the slide's color scheme, in the slide variant's order, mixed over the surface the diagram sits on. That surface is the card when the block has one (see `emphasis` and cards in [Layout templates](layout-templates.md)), otherwise the slide background.
+- **Outlines and connectors** mix toward the accent and the text color, with enough contrast to read as structure without competing with the labels.
+- **Data series** (pie slices, xychart series, timeline sections, mind map branches and the like) use the same chart series palette as the slide's charts: the color scheme's accents in the variant's order.
+- **Text** keeps 4.5:1 against its fill.
+- **Fonts.** Labels use the font scheme's body font, and code-like labels (class members, for example) its code font.
+- **Dark backgrounds, dark variants and color maps** adapt with no change to the source: `design.variant: "dark1"` on a slide redraws its diagram from the dark surface.
+
+Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click callbacks are ignored. Authored `style`, `classDef` and C4 `UpdateElementStyle` colors are the exception: pele applies them and OPF's painter keeps them, so a shape with an authored color no longer follows the deck's colors, variant or contrast rules. Leave them out and let the deck decide; if one shape must stand out, prefer a different node shape or a label to a color.
+
+## Sizing
+
+Core lays a diagram out for its block with the deck's measured fonts, the same way it fits text:
+
+1. It tries the largest base size from 32 reference pixels down at which the drawing fits the block. A small diagram grows to the size of a list; a large one steps down.
+2. Node labels never go below the readability floor (`minFontSize`, 16 reference pixels by default). The smallest secondary label (an edge label, an axis tick, a score) never goes below 75% of it.
+3. A diagram is centered in its block. A region anchored to the bottom places it there.
+4. Pele lays the diagram out for the width it has, so a smaller size is a new layout, not a shrunken picture: a wide flowchart may turn to run downward.
+
+When the diagram does not fit even at the floor, it is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, with advice. Fix it in the content, not in `minFontSize`:
+
+- give the diagram a slide or a region of its own, or put it beside short text rather than under long text;
+- draw it the other way (`flowchart TB` for `LR`, or the reverse);
+- split it into two diagrams, or shorten the labels.
+
+The overflow check needs composition or rendering with the resolved fonts; `opf validate` alone cannot see it.
+
+### Layouts that accept a diagram
+
+A layout region lists the kinds it `accepts` ([Layout templates](layout-templates.md#regions)); `diagram` is one of them. In the default catalog these regions take a diagram:
+
+| Layout | Region |
+| --- | --- |
+| `charts` | `chart` |
+| `chart` | `chart-beside` |
+| `media`, `image-beside`, `hero` | `image` |
+| `comparison`, `two-column` | `first` and `second` |
+| `three-column` | the three columns |
+| `process` | `steps` |
+| `timeline` | `timeline` |
+
+A block binds to a region by kind, role and reading order ([Binding content to regions](layout-templates.md#binding-content-to-regions)); a slide that pins a diagram to a region that does not accept it gets the warning `opf/region-kind` and the block is bound by kind instead.
+
+## Accessibility
+
+`alt` is the text alternative: say what the diagram shows, not that it is a diagram ("A brief goes to review; approved work is built, rejected work returns to the brief."). Without `alt`, engines derive one from the diagram type and its labels (for example "Flowchart: Request, Approved?, Build, Revise"), up to 400 characters. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the picture's description.
+
+## Exports
+
+| Output | What you get |
+| --- | --- |
+| SVG preview | The diagram as vector shapes and text in the slide's colors and fonts |
+| PNG | The preview rasterized |
+| PDF | Vector; the diagram's labels stay selectable text |
+| PPTX | A native SVG picture with a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, `alt` as the picture's description. `fromPptx` brings it back as a `diagram`. |
+
+The PPTX diagram is a picture, not native PowerPoint shapes and connectors: the nodes are not editable one by one. PowerPoint's own "Convert to Shape" works on the picture and gives editable shapes, but that is PowerPoint's conversion, not an OPF export, and it does not map back to the diagram. To change a diagram, edit its source in OPF and export again. Native editable PPTX shapes are planned; see the [diagram plan](plans/diagrams-svg.md) and the [compatibility matrix](compatibility-matrix.md).
+
+## Errors and limits
+
+- A source that cannot be parsed reports a finding with its position in the source, for example `The diagram cannot be drawn (line 2, column 9): Expecting ...`, and the engines draw a "Diagram unavailable" placeholder in the block instead. Fix the source at that line and column.
+- An empty source, a source over **20,000 characters** or a diagram with more than **500 edges** is refused the same way: a slide holds one readable drawing, not a document.
+- In Markdown, an unknown attribute on the fence is `markdown/diagram-attributes`, and an empty fence is `markdown/diagram-source`.
+
+## The engine
+
+[pele](https://pele.run) 1.13.0 (MIT, no runtime dependencies) is the engine. It is synchronous and does not use the DOM, so the preview, the PDF and the PPTX export need no browser, and the drawing is deterministic for a given source and fonts. Core measures the text with the deck's fonts, so line breaks match the rest of the slide.
+
+Node, Bun, Deno and edge runtimes (Cloudflare Workers, Vercel Edge) load every diagram type with core and draw any diagram at once. A browser bundle loads only pele's core with OPF (about 12 KB gzipped) and each diagram type the first time a deck draws one (13 to 54 KB gzipped each), through the package's `#diagram-engine` import map. The renderer's browser fonts handle loads them in `ensure` (its `pending` lists them as `diagram:<type>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself. A host that draws with `toSvg` directly calls `await ensureDiagrams(presentation)` from `@openpresentation/opf/composition` first (`diagramsPending(presentation)` lists what it would load); until then a diagram draws as a "Loading diagram" placeholder, which is not a finding.
+
+Pele reads Mermaid 12.1 syntax but has its own layout and drawing, so a diagram does not match the pixels of mermaid.js, and an unusual construct may parse in one and not in the other. Write for the OPF drawing: check a diagram in the preview (`opf convert deck.opf.json slide-{n}.png`), not in Mermaid's live editor.

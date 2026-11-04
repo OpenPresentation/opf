@@ -64,6 +64,9 @@ export type {WatermarkTextLayout, WatermarkTextOptions} from './watermark.js';
 export {PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset} from './pattern-fills.js';
 import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
+import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
+export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
+export type {ComposedDiagram,DiagramIssue,DiagramLayoutOptions,DiagramMeasure,DiagramPalette,DiagramPaletteInput,DiagramPayload,DiagramSyntax} from './diagram.js';
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
@@ -296,6 +299,15 @@ export interface ComposedChart {
   /** LH-03, LH-81, LH-92, LH-93: the small-chart treatment, the header row, the ring names and a shared plot box (chart-layer.ts, chart-plot.ts). */
   layer?: ChartLayer;
 }
+/**
+ * A diagram item's drawing: the layout `layoutDiagram` chose for the block and where it is drawn. Engines paint `svg` with
+ * `paintDiagram` in the slide's `diagramPalette` at `box`, which is the drawing's size contained in the item box and placed by its
+ * anchor. An item whose source cannot be drawn has `issue` instead and draws the unavailable-content placeholder.
+ */
+export interface ComposedDiagramItem extends Partial<ComposedDiagram> {
+  box: LayoutBox;
+  issue?: DiagramIssue;
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -333,6 +345,8 @@ export interface ComposedItem {
    * type (combo, scatter, pie and the rest keep the engines' own axis) and for charts whose data does not resolve.
    */
   chart?: ComposedChart;
+  /** The drawing of a diagram item (`field` diagram); absent on every other item. */
+  diagram?: ComposedDiagramItem;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
@@ -812,7 +826,7 @@ export class OPFCompositionError extends Error {
     if (explanation) this.explanation = explanation;
   }
 }
-const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"];
+const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"];
 const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
@@ -976,6 +990,34 @@ function anchoredOffset(spare: number, anchor: RegionAnchor): number {
 function containedBox(cell: LayoutBox, aspect: number, anchor: RegionAnchor): LayoutBox {
   const width = Math.min(cell.width, cell.height * aspect), height = width / aspect;
   return { x: cell.x + (cell.width - width) / 2, y: cell.y + anchoredOffset(cell.height - height, anchor), width, height };
+}
+
+// One diagram measure per host measurement and family pair, so layoutDiagram's cache (keyed by the measure) holds across the many
+// compositions a slide tries.
+const diagramMeasures = new WeakMap<object, Map<string, DiagramMeasure>>();
+const NO_MEASUREMENT = {};
+function diagramMeasure(measurement: TextMeasurement | undefined, body: string, code: string): DiagramMeasure {
+  let byFamilies = diagramMeasures.get(measurement ?? NO_MEASUREMENT);
+  if (!byFamilies) {
+    byFamilies = new Map();
+    diagramMeasures.set(measurement ?? NO_MEASUREMENT, byFamilies);
+  }
+  const key = `${body}\u0000${code}`;
+  let measure = byFamilies.get(key);
+  if (!measure) {
+    const widths = new Map<string, MeasureTextWidth>();
+    measure = (text, size, style) => {
+      const variant = `${style.bold ? 7 : 4}${style.italic ? 'i' : ''}${style.mono ? 'm' : ''}`;
+      let width = widths.get(variant);
+      if (!width) {
+        width = textWidthMeasurer(resolveTextStyle({ fontFamily: style.mono ? code : body, fontWeight: style.bold ? 700 : 400, italic: style.italic }, measurement), measurement);
+        widths.set(variant, width);
+      }
+      return width(text, size);
+    };
+    byFamilies.set(key, measure);
+  }
+  return measure;
 }
 
 /**
@@ -1334,6 +1376,8 @@ const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });
  * (`composition.minFontSize`, 16 px by default) and an explicit run size wins.
  */
 export const PROSE_NOMINAL_SIZE = 28, LIST_NOMINAL_SIZE = 32, LEAD_NOMINAL_SIZE = 32, TABLE_NOMINAL_SIZE = 25;
+/** The largest base size of a diagram's node labels, in reference pixels: a small diagram grows to the size of a list. */
+export const DIAGRAM_NOMINAL_SIZE = 32;
 /** WI-4: a quote body asks for 40 px and fits down (to 28 px and below); a code body asks for 22 px and fits down to the floor. */
 export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
 /**
@@ -3901,7 +3945,7 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
   for (const item of result.items) {
     if (item.caption) body.push(item.caption.box);
     if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
-    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table'].includes(item.field)) continue;
+    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table', 'diagram'].includes(item.field)) continue;
     body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
     if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
     if (item.metricLayout || item.timelineLayout) accent = true;
@@ -5350,7 +5394,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const frame = (aspect: number) => { const box = containedBox(cell, aspect, 'top'); return box.width * box.height; };
     if (node.field === 'image') { const aspect = wholePictureAspect(node); return aspect ? frame(aspect) : cell.width * cell.height; }
     if (node.field === 'video') return frame(VIDEO_ASPECT);
-    if (node.field === 'chart') return frame(SPLIT_CHART_SHAPE);
+    if (node.field === 'chart' || node.field === 'diagram') return frame(SPLIT_CHART_SHAPE);
     if (!MEASURED_FIELDS.has(node.field)) return cell.width * cell.height;
     if (stretch && node.field === 'code') return cell.width * cell.height;
     const open = { x: 0, y: 0, width: Math.max(scale, cell.width), height: 1e6 }, floorSize = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
@@ -5438,7 +5482,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       placeNode(node, { ...cell, y: cell.y + (cell.height - need) / 2, height: need }, settings);
       return;
     }
-    if (node.field === 'image' || node.field === 'video') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
+    if (node.field === 'image' || node.field === 'video' || node.field === 'diagram') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
       const height = modeFor(settings) === 'auto' && inner.height > inner.width * CHART_MAX_ASPECT_RATIO ? inner.width * CHART_MAX_ASPECT_RATIO : inner.height;
       placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
@@ -5562,6 +5606,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   let regionTag: string | undefined, templateCell = false;
   // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
   // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
+  // A diagram is laid out for its box in the body family (the code family for code-like labels) at the largest base size from the prose
+  // size down at which it fits with every label at or above the readability floor, then drawn at that size, centered across and placed
+  // by the anchor down. A source that cannot be drawn reports its issue; a drawing that only fits below the floor overflows.
+  const composeDiagram = (node: Pending, box: LayoutBox, settings: Composition, anchor: RegionAnchor): ComposedDiagramItem => {
+    const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), nominal = Math.max(floor, DIAGRAM_NOMINAL_SIZE * scale);
+    const measure = diagramMeasure(options.textMeasurement, options.fontFamilies?.body ?? 'sans-serif', options.fontFamilies?.code ?? FALLBACK_CODE_FAMILY);
+    try {
+      const laid = layoutDiagram(node.value, { width: box.width, height: box.height, nominal, floor, measure, idPrefix: `opf-${node.path.replace(/[^\w-]+/g, '-')}`, grid: { down: snapFontSizeDown, up: snapFontSizeUp } });
+      const width = laid.width * laid.scale, height = laid.height * laid.scale;
+      if (laid.overflow) diagnostics.push({ code: 'text-overflow', path: node.path, message: 'The diagram does not fit its block at the readability floor, so it is drawn smaller; give it a slide or region of its own, draw it the other way (flowchart LR or TB, direction LR in a state diagram), or split it into smaller diagrams.' });
+      // A diagram is a figure: centered in its block unless the region anchors it to the bottom.
+      return { ...laid, box: roundBox({ x: box.x + (box.width - width) / 2, y: box.y + anchoredOffset(box.height - height, anchor === 'bottom' ? 'bottom' : 'middle'), width, height }) };
+    } catch (error) {
+      const issue: DiagramIssue = (error as { diagramIssue?: DiagramIssue }).diagramIssue ?? { code: 'diagram-syntax', message: error instanceof Error ? error.message : String(error) };
+      const where = issue.line !== undefined ? ` (line ${issue.line}, column ${issue.column})` : '';
+      // A type a browser has not loaded yet is a state of the page, not of the document: the engines draw it as loading.
+      if (issue.code !== 'diagram-unloaded') diagnostics.push({ code: 'unresolved-content', path: node.path, message: `The diagram cannot be drawn${where}: ${issue.message}` });
+      return { box, issue };
+    }
+  };
   // RR-92: the value axis the preview draws and the PPTX export writes (column, bar, line and area charts; see chartValueAxis).
   const composeChart = (node: Pending, box: LayoutBox, settings: Composition): ComposedChart | undefined => {
     const resolved = resolveChartData(node.value, options.presentation, {path: node.path});
@@ -5741,7 +5805,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
-    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
+    const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
+    if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
+    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}), ...(diagram ? {diagram} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
@@ -6197,7 +6263,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const median = others.length % 2 ? others[half]! : (others[half - 1]! + others[half]!) / 2;
       if (lengths[lead]! >= PARAGRAPH_MIN_CHARS && lengths[lead]! >= LEAD_MEDIAN_RATIO * median && lengths[lead]! >= PAIR_LENGTH_RATIO * others.at(-1)!) plan = { lead, share: LEAD_SHARE };
     } else if (units.length === 3) {
-      const figures = units.flatMap((unit, index) => unit.field === 'chart' || unit.field === 'image' ? [index] : []);
+      const figures = units.flatMap((unit, index) => unit.field === 'chart' || unit.field === 'image' || unit.field === 'diagram' ? [index] : []);
       const compact = (unit: Pending) => unit.caption === undefined && (unit.field === 'metric' || ((unit.field === 'text' || unit.field === 'quote') && leadLength(unit) <= COMPACT_CHARS));
       if (figures.length === 1 && units.every((unit, index) => index === figures[0] || compact(unit))) plan = { lead: figures[0]!, share: FIGURE_LEAD_SHARE };
     }

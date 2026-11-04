@@ -199,7 +199,7 @@ export function flatRegions(record) {
 }
 
 // The slide key that holds content of a kind a region accepts.
-const PAYLOAD_KEYS = { text: "text", list: "items", image: "image", video: "video", chart: "chart", table: "table", quote: "quote", code: "code", metric: "metric", timeline: "timeline" };
+const PAYLOAD_KEYS = { text: "text", list: "items", image: "image", video: "video", chart: "chart", table: "table", quote: "quote", code: "code", diagram: "diagram", metric: "metric", timeline: "timeline" };
 
 /**
  * The slide keys a layout's regions call for, in region order: a region named like a slide key (`title`, `items`) calls for that key; any other region

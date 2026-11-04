@@ -22,7 +22,7 @@ Optional top-level fields, grouped:
 
 A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `layout` / `id` / `extensions` plus content in one of three shapes — pick the loosest that says what you mean:
 
-1. **Root payload** — content-kind fields directly on the slide. The kind is inferred from the field: `text`, `items` (list), `bullets`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`. Several kinds at the root are shorthand for `blocks`.
+1. **Root payload** — content-kind fields directly on the slide. The kind is inferred from the field: `text`, `items` (list), `bullets`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `diagram` (Mermaid source). Several kinds at the root are shorthand for `blocks`.
 2. **`blocks`** — an ordered array of payloads when placement should stay engine-inferred. A block is a leaf payload or a **group**: `{ "type": "group", "blocks": [...], "composition": { ... } }`. Groups nest (hard cap 32; stay ≤ 3 in practice) and cannot mix `blocks` with leaf fields.
 3. **Promoted regions** — a 3×3 grid when position matters. Rows `top|middle|bottom`, columns `left|center|right`, spans with `+`, intersections with `:` — `"left"`, `"center+right"`, `"top:left"`, `"middle+bottom:center+right"`. Keys must not overlap; regions cannot mix with a root payload.
 

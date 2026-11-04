@@ -44,7 +44,7 @@ describe('the 30 built-in templates (design section 6)', () => {
     assert.deepEqual(layoutContent(layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
     assert.deepEqual(layoutContent(layouts.section), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
     assert.equal(layoutContent(layouts.gallery).kind, 'image');
-    assert.equal(layoutStructure(layouts['chart-beside']), 'title, chart (none: chart), notes (column: text, list, metric, quote, chart)');
+    assert.equal(layoutStructure(layouts['chart-beside']), 'title, chart (none: chart, diagram), notes (column: text, list, metric, quote, chart)');
   });
 });
 
@@ -120,7 +120,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
     assert.ok(rulesOf(tooDeep).includes('opf/layout-template'));
     const rowAuto = validate(deckWith({ ...base, direction: 'row', regions: [{ name: 'a', size: 'auto' }] }), { only: ['format', 'references'] });
     assert.ok(rulesOf(rowAuto).includes('opf/layout-template'));
-    const kind = validate(deckWith(regionsOf({ name: 'body', accepts: ['diagram'] })), { only: ['format', 'references'] });
+    const kind = validate(deckWith(regionsOf({ name: 'body', accepts: ['smartart'] })), { only: ['format', 'references'] });
     assert.ok(rulesOf(kind).includes('opf/catalog-record'));
     const legacyMode = validate(deckWith({ ...base, composition: { mode: 'row' } }), { only: ['format', 'references'] });
     assert.ok(rulesOf(legacyMode).includes('opf/catalog-record'), 'a template has no composition.mode');
@@ -156,7 +156,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
       ['a', 'primary', 'none', 1, 'collapse', 'top', 1, false],
       ['b', 'primary', 'auto', 6, 'collapse', 'top', 1, false],
     ]);
-    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'group']);
+    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'group']);
     // overflowRegion: the first primary region whose flow is not none.
     assert.equal(template.overflowRegion, 'b');
   });

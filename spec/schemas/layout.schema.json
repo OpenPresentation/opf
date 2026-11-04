@@ -330,6 +330,7 @@
               "metric",
               "quote",
               "timeline",
+              "diagram",
               "group"
             ]
           },

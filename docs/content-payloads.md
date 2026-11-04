@@ -19,6 +19,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `metric` | `metric` | String/number shorthand or `Metric` object with `value`, `label`, `description`, `unit`, `delta`, `trend`, and `sentiment`. |
 | `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
+| `diagram` | `diagram` | Mermaid source string shorthand or `Diagram` object with `source`, `syntax` and `alt`. See [Diagram](#diagram). |
 
 ## Items versus bullets
 
@@ -238,7 +239,7 @@ Core 0.6.0 adds `layoutTable` from `@openpresentation/opf/composition`. It measu
 
 ## Captions
 
-An `image`, `chart`, `table` or `video` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "left" | "center" | "right" }` (defaults `below`, `left`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
+An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a string, `TextRun[]`, or `{ "text", "position": "below" | "above", "align": "left" | "center" | "right" }` (defaults `below`, `left`). It sits beside the payload field on a block or promoted-region payload, or on the slide root when the root holds exactly one of those payloads; anywhere else it is a `caption-unsupported-payload` error.
 
 ```json
 {
@@ -371,6 +372,32 @@ A roadmap with progress states:
   ]
 }
 ```
+
+## Diagram
+
+The [diagrams guide](diagrams.md) covers when to use one, the supported Mermaid families, styling, sizing and export in full; this section is the field reference.
+
+A `diagram` is a diagram written as text: [Mermaid](https://mermaid.js.org) source (Mermaid 12.1 syntax), drawn by the engines in the deck's own fonts and colors. A string is shorthand for `{ "source": value }`; the object form takes `source`, `syntax` (`"mermaid"`, the default and the only one today) and `alt`. It is a root payload, a block or a promoted region, and a region of a layout template that accepts `diagram` takes it. The first line of the source names the diagram type; the built-in families are flowchart, sequence, class, state, ER, gantt, pie, quadrant, mindmap, timeline, journey, xychart, sankey, gitGraph, C4, block, architecture, kanban, packet, radar, treemap, venn, ishikawa, requirement, railroad, wardley, cynefin, treeView, eventmodeling, usecase, swimlane, agentflow and info. ZenUML is not supported. The drawing is done by [pele](https://pele.run) (MIT, no runtime dependencies, synchronous and DOM-free), so the preview, the PDF and the PPTX export need no browser.
+
+```json
+{
+  "title": "Reviews decide what ships",
+  "diagram": {
+    "source": "flowchart LR\n  A[Brief] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A",
+    "alt": "A brief goes to review; approved work is built, rejected work returns to the brief."
+  },
+  "caption": "Figure 1. The review loop"
+}
+```
+
+- **Size.** Core lays the diagram out with the deck's measured fonts at the largest base size from 32 reference pixels down at which it fits its block. Node labels stay at or above the readability floor (`minFontSize`, 16 reference pixels by default) and the smallest secondary label (an edge label, an axis tick, a score) at or above 75% of it. When even that does not fit, the diagram is drawn smaller and a `text-overflow` finding says so, with advice: give the diagram a slide or a region of its own, or write it in the other direction (`flowchart TB` for `LR`). A diagram is centered in its block; a region anchored to the bottom places it there.
+- **Colors and fonts.** The deck decides them. Node fills are tints of the slide variant's first accent over the surface the diagram sits on (the card when the block has one, otherwise the slide background), outlines and connectors mix toward the accent and the text color, and data series (pie slices, xychart series, timeline sections, mindmap branches and the like) use the same chart series palette as the slide's charts, the color scheme's accents in the variant's order. Text keeps 4.5:1 against its fill. Labels use the font scheme's body font, and code-like labels its code font. A dark background, a dark variant or a color map adapts the drawing with no change to the source. Mermaid themes, `themeVariables` and click callbacks are ignored; colors an author writes with `style`, `classDef` or C4 `UpdateElementStyle` are applied and kept, so those shapes no longer follow the deck's colors or variant: leave color to the deck.
+- **Accessibility.** `alt` is the text alternative: say what the diagram shows, not that it is one. Without it, engines derive one from the diagram type and its labels. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the picture's description. A diagram takes a `caption` like an image, chart, table or video.
+- **Errors.** A source that cannot be parsed reports a finding with its position in the source (`The diagram cannot be drawn (line 2, column 9): Expecting ...`) and the engines draw a "Diagram unavailable" placeholder in its block instead. A source over 20,000 characters, or a diagram with more than 500 edges, is refused the same way.
+- **PPTX.** The export writes the diagram as a native SVG picture over a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, and PowerPoint's "Convert to Shape" is available on it. Its `alt` is the picture's description, and `fromPptx` brings the picture back as a diagram. The diagram is not yet exported as native editable PowerPoint shapes. See [Compatibility matrix](compatibility-matrix.md) and the [diagram plan](plans/diagrams-svg.md).
+- **Markdown.** A fenced block whose info word is `mermaid` is a diagram, and ```` ```mermaid alt="What it shows" ```` sets its `alt`; `toMarkdown` writes it back the same way ([Markdown](markdown.md)).
+
+Choose the payload by what the content is: `chart` for numbers plotted on axes, `timeline` for dated or ordered events with a status, `diagram` for structure and flow (steps, systems, relationships, states, hierarchies) that Mermaid can draw. A Mermaid `pie` or `timeline` diagram is a quick picture; a `chart` or `timeline` payload keeps the data editable and gets the engines' chart and timeline design.
 
 ## Regions
 

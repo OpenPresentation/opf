@@ -5,7 +5,7 @@ import {
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
-  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
@@ -1025,6 +1025,8 @@ function renderPayload(item, box, bound, options) {
       return renderQuote(item, box, bound, options);
     case "timeline":
       return renderTimeline(item, box, bound, options);
+    case "diagram":
+      return renderDiagram(item, box, bound, options);
     case "list":
       return renderList(item, box, bound, options);
     default:
@@ -1675,6 +1677,41 @@ function renderTableBorders(defaultEdges, explicitEdges, scale, bound, options) 
       ...traceAttrs(options,path)
     })];
   });
+}
+
+// A diagram is core's drawing (item.diagram, laid out by composition in the deck's measured fonts), painted by core's paintDiagramGroup in
+// the slide's diagram palette: tints of the variant's first accent over the surface it sits on (its card, else the slide background),
+// lines and text from the slide's roles, and the chart series of the same slide, so it reads as part of the deck on a light or a dark
+// slide and matches the PPTX export. It is a picture: role="img" named by its alt (authored, else derived from its labels). A source that
+// cannot be drawn shows the unavailable-content placeholder; composition reported why (unresolved-content).
+export function diagramSurface(item, bound) {
+  return item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background;
+}
+export function slideDiagramPalette(item, bound) {
+  const design = bound.design;
+  return diagramPalette({
+    surface: diagramSurface(item, bound), text: design.colors.text, mutedText: design.colors.mutedText, colorScheme: design.colorScheme,
+    context: { accents: design.roles.map.accents, roles: design.colors, variables: design.variables },
+    dark: design.colorScheme.dark1 ?? ENGINE_DEFAULT_COLOR_SCHEME.dark1, light: design.colorScheme.light1 ?? ENGINE_DEFAULT_COLOR_SCHEME.light1,
+    fonts: { body: design.fonts.body, code: design.fonts.code ?? design.fonts.body },
+  });
+}
+function renderDiagram(item, box, bound, options) {
+  const diagram = item.diagram;
+  if (!diagram || diagram.issue || !diagram.svg) {
+    // In a browser a diagram type loads on demand (core's ensureDiagrams, which the fonts handle's `ensure` calls): until then the
+    // block reads as loading, not as a problem of the document.
+    const loading = diagram?.issue?.code === "diagram-unloaded";
+    const scale = Math.min(bound.geometry.width, bound.geometry.height) / 720, area = diagram?.box ?? box;
+    const label = loading ? "Loading diagram" : "Diagram unavailable";
+    const message = loading ? label : diagram?.issue ? `Diagram unavailable: ${diagram.issue.message}` : "Diagram unavailable";
+    return tag("g", { ...traceAttrs(options, item.path), "data-opf-diagram-status": loading ? "loading" : "unresolved", role: "img", "aria-label": message }, [
+      tag("rect", { x: area.x, y: area.y, width: area.width, height: area.height, fill: "none", stroke: bound.design.roles.neutrals.border.hex, "stroke-width": scale, "stroke-dasharray": `${4 * scale} ${3 * scale}` }),
+      tag("text", { x: area.x + area.width / 2, y: area.y + area.height / 2, "text-anchor": "middle", "dominant-baseline": "middle", "font-family": fontStack(bound.design.fonts.body), "font-size": 20 * scale, fill: bound.design.colors.mutedText }, label),
+    ].join("\n"));
+  }
+  const painted = paintDiagramGroup(diagram, slideDiagramPalette(item, bound), diagram.box);
+  return tag("g", { ...traceAttrs(options, item.path), "data-opf-diagram": diagram.type, role: "img", "aria-label": diagram.alt }, painted);
 }
 
 function renderChart(item, box, bound, options) {

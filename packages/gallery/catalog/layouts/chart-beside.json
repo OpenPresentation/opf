@@ -18,7 +18,8 @@
           "name": "chart",
           "size": 3,
           "accepts": [
-            "chart"
+            "chart",
+            "diagram"
           ],
           "role": "primary",
           "flow": "none"

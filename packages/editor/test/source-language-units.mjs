@@ -62,7 +62,7 @@ assert.equal(tokenAt('{"a":  ', 7, false), null, 'two spaces are not a trigger')
 
 // ---- the list a position gets and its order ------------------------------------------------------------------------------------------------
 const slideKeys = labels('{"slides": [{|}]}');
-assert.deepEqual(slideKeys.slice(0, 20), ['title', 'subtitle', 'layout', 'items', 'text', 'notes', 'image', 'chart', 'table', 'quote', 'code', 'metric', 'timeline', 'blocks', 'design', 'id', 'section', 'tag', 'hidden', 'beat'], 'a slide: the common keys in the curated order');
+assert.deepEqual(slideKeys.slice(0, 20), ['title', 'subtitle', 'layout', 'items', 'text', 'notes', 'image', 'chart', 'table', 'quote', 'code', 'metric', 'timeline', 'diagram', 'blocks', 'design', 'id', 'section', 'tag', 'hidden'], 'a slide: the common keys in the curated order');
 assert.ok(slideKeys.length < 45, `a slide offers ${slideKeys.length} keys, not the 75 of the schema`);
 assert.equal(slideKeys.some((label) => label.includes(':')), false, 'the region keys are hidden');
 assert.ok(labels('{"slides": [{"top+mi|"}]}').some((label) => label.startsWith('top+middle')), 'a typed prefix shows the region keys');

@@ -44,7 +44,7 @@ Everything else in the format is optional and additive.
 
 A slide carries its content in one of three shapes. Pick the loosest shape that says what you mean — engines handle placement.
 
-**1. Root payload** — one content kind directly on the slide. The kind is inferred from the field present (`text`, `items`, `chart`, `table`, `image`, `video`, `code`, `metric`, `quote`, `timeline`); see [`content-payloads.md`](./content-payloads.md) for the full table.
+**1. Root payload** — one content kind directly on the slide. The kind is inferred from the field present (`text`, `items`, `chart`, `table`, `image`, `video`, `code`, `metric`, `quote`, `timeline`, `diagram`); see [`content-payloads.md`](./content-payloads.md) for the full table.
 
 ```json
 {
@@ -352,6 +352,7 @@ Two layers, with a deliberate split:
 - [`schema-reference.md`](./schema-reference.md) — every field of every object in the presentation schema.
 - [`catalog-schema-reference.md`](./catalog-schema-reference.md) — every field of every catalog record schema.
 - [`content-payloads.md`](./content-payloads.md) — payload shapes and inference rules with examples.
+- [`diagrams.md`](./diagrams.md) — Mermaid diagrams: when to use one, supported families, styling, sizing and export.
 - [`design-resolution.md`](./design-resolution.md) — the design precedence algorithm.
 - [`examples.md`](./examples.md) — guide to the example decks under `examples/`.
 

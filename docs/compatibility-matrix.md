@@ -452,7 +452,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Shipped in opf-render 0.12.0 (opf-render#90; the browser download entry `@openpresentation/opf-render/export-browser` ships there too); PDF/UA, PDF/A and viewer coverage beyond pdf.js, PDFium and poppler remain open |
-| General SVG diagrams / Mermaid | [diagrams plan](plans/diagrams-svg.md) | Embedded SVG ≠ native editable primitives |
+| Mermaid `diagram` as native editable PowerPoint shapes; canvas editing of diagram nodes | [diagrams plan](plans/diagrams-svg.md) | Shipped: `diagram` payloads (Mermaid 12.1 via pele) in the SVG, PNG and PDF preview and in PPTX as a native SVG picture with a PNG fallback (`alt` as description, round-trips through `fromPptx`). Not shipped: native editable PPTX shapes and connectors, and editing nodes on the canvas. An embedded SVG picture ≠ native editable primitives |
 | Full visual editor / IME / bidi / repair loop | [developer adoption](plans/developer-adoption-20260915.md) | Schema support ≠ WYSIWYG coverage |
 
 CLI 0.9.2 and earlier do not render or export PPTX; CLI 0.10.0 adds `opf render`, `opf export` and `opf import`

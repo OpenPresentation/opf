@@ -46,7 +46,7 @@ function listText(entries, lines, depth = 0) {
 
 /**
  * The text of one slide, in reading order, one line per heading, paragraph, list entry, table row and so on: the alternative
- * text of the slide's picture. A chart or image contributes its own `alt`.
+ * text of the slide's picture. A chart, image or diagram contributes its own `alt`.
  */
 export function slideText(slide) {
   if (!isObject(slide)) return '';
@@ -73,7 +73,7 @@ export function slideText(slide) {
     const code = payload.code;
     if (typeof code === 'string') lines.push(code);
     else if (isObject(code) && typeof code.text === 'string') lines.push(code.text);
-    for (const field of ['chart', 'image']) {
+    for (const field of ['chart', 'image', 'diagram']) {
       const value = payload[field];
       if (isObject(value) && typeof value.alt === 'string') lines.push(value.alt);
       else if (field === 'image' && typeof payload.alt === 'string') lines.push(payload.alt);

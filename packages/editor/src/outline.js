@@ -17,7 +17,7 @@ import { checkFormat } from "./checks.js";
 
 const clone = (value) => structuredClone(value);
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
-const OTHER_LABELS = { image: "Image", video: "Video", chart: "Chart", table: "Table", code: "Code", metric: "Metric", quote: "Quote", timeline: "Timeline" };
+const OTHER_LABELS = { image: "Image", video: "Video", chart: "Chart", table: "Table", code: "Code", diagram: "Diagram", metric: "Metric", quote: "Quote", timeline: "Timeline" };
 const LIST_KEYS = ["items", "bullets"];
 
 const flatten = (value) => (typeof value === "string" ? value : Array.isArray(value) ? value.map((run) => (typeof run === "string" ? run : (run?.text ?? ""))).join("") : "");
@@ -224,7 +224,7 @@ export function prepareOutlineDemoteSlide(presentation, slideIndex) {
   if (extra.length) throw fail("outline-row-not-supported", `This slide also has ${extra.join(", ")}, which would be lost. Merge it from the slide menu or move that content first.`, { slideIndex, keys: extra });
   if (typeof slide.title !== "string" || slide.title === "" || (slide.text !== undefined && typeof slide.text !== "string")) throw fail("outline-row-not-supported", "Only a slide with a plain title and plain text can join the slide before it.", { slideIndex });
   const previous = slides[slideIndex - 1];
-  const body = ["text", "items", "bullets", "blocks", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"].filter((key) => previous[key] !== undefined);
+  const body = ["text", "items", "bullets", "blocks", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline"].filter((key) => previous[key] !== undefined);
   const listKey = LIST_KEYS.find((key) => Array.isArray(previous[key]));
   if (body.length && !(listKey && body.length === 1) && !(listKey && body.length === 2 && previous.text !== undefined))
     throw fail("outline-row-not-supported", "The slide before this one has content that is not a list, so this slide cannot become a bullet there.", { slideIndex });

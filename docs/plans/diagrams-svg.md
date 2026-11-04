@@ -1,5 +1,17 @@
 # Mermaid diagrams and general SVG support
 
+**Implementation status (2026-11-04).** The `diagram` content type now ships, with [pele](https://pele.run) 1.13.0 (MIT, no runtime dependencies, synchronous and DOM-free) as the Mermaid engine instead of a custom or browser-based one. It parses Mermaid 12.1 syntax for every built-in family (ZenUML is not supported), and core lays the drawing out with the deck's measured fonts and draws it in the deck's own colors, so the preview, PDF and PPTX agree. Against the milestones below:
+
+| Milestone | Status |
+| --- | --- |
+| Contracts and corpus | Done for the `diagram` payload: the `Diagram` schema (`source`, `syntax: "mermaid"`, `alt`), the `diagram` region kind and narrative beat type, captions, Markdown (a ```` ```mermaid ```` fence), located parse findings and limits (20,000 characters, 500 edges). Documented in [Content payloads](../content-payloads.md#diagram) |
+| Local preview | Done: SVG, PNG and PDF from core's composition, offline and repeatable. General SVG assets shipped separately as `image` payloads (RR-10) |
+| Exports | PPTX picture export done: a native SVG picture with a PNG fallback, `alt` as its description, round-tripping through `fromPptx`. **Not done:** editable native PowerPoint shapes and connectors (the picture offers "Convert to Shape" in PowerPoint's UI, which is PowerPoint's own conversion, not OPF's) |
+| Human editing | **Not done:** canvas editing of nodes, labels and connectors with source synchronization. The source is edited as text (editor support for the payload is in progress) |
+| Broader coverage and adoption | Mermaid family coverage is pele's. The compatibility matrix and public workflows are not yet verified in native PowerPoint |
+
+The sections below are the original plan and requirements; where they say a payload or Mermaid support is not published, this note supersedes them. The open items above remain planned work.
+
 Status: accepted product requirement on September 10, 2026. The content-type decision is `diagram` for Mermaid/semantic diagrams and the existing `image` type for general SVG assets; detailed schema/API design, implementation and verification remain open. This extends the [ecosystem objective](ecosystem-objective-2026-09-09.md), [editor coverage plan](spec-editor-coverage.md) and [vector PDF roadmap](pdf-export.md). No Mermaid payload or general SVG import API is published by this plan.
 
 Priority: implement Mermaid/diagram and general SVG support **after the font reliability work is accepted**. Planning and this inventory can be recorded now; do not divert implementation effort from the active font/layout fixes or their verification/release gates. Resolve and document the outstanding font measurement, placement, browser/raster and native PowerPoint findings before starting this feature work. The [font roadmap](font-roadmap.md) remains the prerequisite; no passing diagram screenshot can substitute for that acceptance.

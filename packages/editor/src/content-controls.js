@@ -352,7 +352,7 @@ export function createContentControls(ctx) {
     const slide = editor.presentation.slides?.[slideIndex];
     if (!slide) return 0;
     if (Array.isArray(slide.blocks)) return slide.blocks.length;
-    return ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline"].filter((key) => slide[key] !== undefined).length;
+    return ["text", "items", "bullets", "image", "video", "chart", "table", "code", "diagram", "metric", "quote", "timeline"].filter((key) => slide[key] !== undefined).length;
   }
 
   return {

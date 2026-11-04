@@ -46,8 +46,8 @@ export interface BindRegionsOptions {
   slideIndex?: number;
 }
 
-const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline'] as const;
-const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', timeline: 'timeline' };
+const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'] as const;
+const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', timeline: 'timeline', diagram: 'diagram' };
 const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'];
 /** The promoted-region keys of a slide (`left`, `top:left`, `middle+bottom:center+right`, ...). */
 export const PROMOTED_REGION_KEY = /^(top|middle|bottom)(\+(top|middle|bottom))*(:(left|center|right)(\+(left|center|right))*)?$|^(left|center|right)(\+(left|center|right))*$/;

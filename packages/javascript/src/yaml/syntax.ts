@@ -583,7 +583,7 @@ export interface AnalyzeYamlOptions {
   rootKind?: "mapping" | "any";
 }
 
-const SLIDE_KEYS = new Set(["title", "subtitle", "items", "text", "layout", "blocks", "image", "chart", "table", "quote", "code", "metric", "timeline", "notes"]);
+const SLIDE_KEYS = new Set(["title", "subtitle", "items", "text", "layout", "blocks", "image", "chart", "table", "quote", "code", "metric", "timeline", "diagram", "notes"]);
 
 /**
  * The syntax problems of a YAML text, one per root cause, in position order: the `yaml` library's errors in plain words (a tab for indentation, a quote

@@ -1,5 +1,5 @@
 // Deck-wide find and replace (RR-25): the headless model. `collectSearchFields` lists every piece of text in a
-// document (titles, subtitles, tags, text and its runs, list items, quotes, metrics, timelines, table cells, chart
+// document (titles, subtitles, tags, text and its runs, list items, quotes, metrics, timelines, diagram source, table cells, chart
 // labels, image alt text, header and footer text, speaker notes); `findMatches` searches them; `planReplace`,
 // `replaceMatch` and `replaceAll` build and apply the replacement as one undoable session change.
 //
@@ -76,6 +76,11 @@ function payloadFields(fields, state, base, payload, prefix = "") {
   itemFields(fields, state, at("bullets"), payload.bullets, `${prefix}Bullet`);
   if (typeof payload.code === "string") field(fields, state, at("code"), payload.code, `${prefix}Code`, "code");
   else if (isObject(payload.code)) field(fields, state, at("code", "source"), payload.code.source, `${prefix}Code`, "code");
+  if (typeof payload.diagram === "string") field(fields, state, at("diagram"), payload.diagram, `${prefix}Diagram`, "diagram");
+  else if (isObject(payload.diagram)) {
+    field(fields, state, at("diagram", "source"), payload.diagram.source, `${prefix}Diagram`, "diagram");
+    field(fields, state, at("diagram", "alt"), payload.diagram.alt, `${prefix}Diagram alt text`, "alt");
+  }
   if (typeof payload.metric === "string") field(fields, state, at("metric"), payload.metric, `${prefix}Metric`);
   else if (isObject(payload.metric)) {
     for (const key of ["value", "label", "unit", "delta"]) {

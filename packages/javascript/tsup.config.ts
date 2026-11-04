@@ -36,10 +36,14 @@ const entry = {
   "schema-engine-precompiled": "src/schema-engine-precompiled.ts",
   // CE-01: `import "@openpresentation/opf/precompiled"` installs the precompiled engine where the conditions did not choose it.
   precompiled: "src/precompiled.ts",
+  // The two diagram engines `#diagram-engine` chooses between by export condition: every type registered at load (Node and edge
+  // runtimes), or pele's core with each type loaded on demand (browsers).
+  "diagram-engine-eager": "src/diagram-engine-eager.ts",
+  "diagram-engine-lazy": "src/diagram-engine-lazy.ts",
 };
 
 // One type surface (RR-70): dist/index.d.ts declares both builds of the root, so the browser build ships no declarations.
-const { browser: _browser, "schema-engine-ajv": _ajv, "schema-engine-precompiled": _precompiled, ...typed } = entry;
+const { browser: _browser, "schema-engine-ajv": _ajv, "schema-engine-precompiled": _precompiled, "diagram-engine-eager": _eager, "diagram-engine-lazy": _lazy, ...typed } = entry;
 
 export default defineConfig({
   entry,
@@ -52,7 +56,7 @@ export default defineConfig({
   target: "es2022",
   platform: "neutral",
   // Only the Node build and the CLI engine import node: builtins; scripts/check-browser-safe.mjs proves the others never do.
-  external: [/^node:/, /^#schema-engine$/],
+  external: [/^node:/, /^#schema-engine$/, /^#diagram-engine$/],
   // CE-01: the precompiled validators are CommonJS that require two helpers of ajv and ajv-formats. Bundle them, so the
   // edge build has no `require` and no dependency left to resolve.
   noExternal: [/^ajv\/dist\/runtime\//, /^ajv-formats\/dist\/formats$/],

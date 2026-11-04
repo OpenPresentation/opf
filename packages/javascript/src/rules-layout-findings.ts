@@ -250,7 +250,7 @@ const tightSpacing: ValidationRule = {
 // ------------------------------------------------------------------ layout-monotony
 
 /** A slide with body content: anything besides the title, subtitle and tag. */
-const hasBody = (slide: RuleSlide): boolean => slide.payloads.some((payload) => ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'blocks'].some((field) => {
+const hasBody = (slide: RuleSlide): boolean => slide.payloads.some((payload) => ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'blocks'].some((field) => {
 	const value = payload.node[field];
 	return value !== undefined && value !== null && !(Array.isArray(value) && value.length === 0) && !(typeof value === 'string' && value.trim() === '');
 }));

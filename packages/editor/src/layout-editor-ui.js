@@ -13,7 +13,7 @@ export const LAYOUT_PREFIX = "opf-lx";
 export const createDom = (doc) => createKitDom(doc, { prefix: LAYOUT_PREFIX });
 
 /** The Lucide icon for a content kind, shown in the wireframe and on the chips. */
-export const KIND_ICONS = { text: "AlignLeft", list: "List", image: "Image", video: "Play", chart: "ChartColumn", table: "Table", code: "Code", metric: "Hash", quote: "Quote", timeline: "GitCommitHorizontal", group: "Group" };
+export const KIND_ICONS = { text: "AlignLeft", list: "List", image: "Image", video: "Play", chart: "ChartColumn", table: "Table", code: "Code", diagram: "Workflow", metric: "Hash", quote: "Quote", timeline: "GitCommitHorizontal", group: "Group" };
 
 /** `[` and `]` by character or by physical key, so a layout where they need AltGr still has the shortcut elsewhere. */
 export const bracket = (event) => (event.key === "[" || event.code === "BracketLeft" ? -1 : event.key === "]" || event.code === "BracketRight" ? 1 : 0);

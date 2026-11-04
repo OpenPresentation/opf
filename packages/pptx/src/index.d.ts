@@ -44,8 +44,12 @@ export interface NativeBodyFallbackDiagnostic {
 }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "dataset-unknown" | "no-rows" | "no-columns" | "single-column-not-numeric" }
-/** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
-export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" }
+/**
+ * Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame.
+ * `reason: "diagram-unavailable"`: a diagram whose source cannot be drawn (core reports why with `unresolved-content`) exports the preview's
+ * unavailable-diagram placeholder, the dashed shape `OPF diagram placeholder N` that reads "Diagram unavailable".
+ */
+export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" | "diagram-unavailable" }
 /**
  * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
  * `reason: "unresolved-source"`: no embedded bytes, declared asset or host resolution was available (remote URLs are never fetched).
@@ -58,6 +62,8 @@ export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; pat
  * `strictAssets` throws `missing-asset` (`details.reason: "resolver-failed"`) for such a resolver failure, `unsupported-image-dimensions` for an unreadable raster, `invalid-svg-image` for the SVG content reasons above (and `svg-unreadable`), `svg-rasterizer-unavailable` for a
  * missing rasterizer, `svg-render-failed` for a failed one and `missing-asset` for an unreadable local file instead.
  * Every picture path reports this (image blocks and region images, quote photos, background pictures, watermarks, logos, header/footer images, picture bullets), once per picture.
+ * A diagram (a native SVG picture painted from core's drawing) reports `"svg-rasterizer-unavailable"` or `"svg-render-failed"` at its path when its PNG fallback
+ * cannot be drawn, and exports the unavailable-diagram placeholder.
  */
 export interface UnresolvedAssetDiagnostic { code: "unresolved-asset"; path: string; message: string; reason?: "unresolved-source" | "unsupported-format" | "svg-malformed" | "svg-no-size" | "svg-too-large" | "svg-unsafe" | "svg-rasterizer-unavailable" | "svg-render-failed" | "svg-unreadable" | "file-unreadable" | "resolver-failed" }
 /** An SVG picture had scripts, `foreignObject`, event handlers, references outside the file, `@import` rules or a DOCTYPE; they were removed from the embedded SVG (on import too). Nothing in an SVG is run or fetched. */

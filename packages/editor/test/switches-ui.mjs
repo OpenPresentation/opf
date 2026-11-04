@@ -38,7 +38,7 @@ assert.equal(listSwitchOptions({}, "languages", { vocabularies: catalogDisplay }
   assert.equal(options.filter((option) => option.id === "georgia").length, 1, "no duplicates");
   assert.ok(options.some((option) => option.id === "team:caller" && option.source === "pkg:caller"), "a named group's registered records use name:id");
   assert.equal(options.length, Object.keys(defaultCatalog.fontSchemes).length + 2);
-  assert.deepEqual(listSwitchOptions({}, "blocks").map((option) => option.id), ["text", "list", "chart", "table", "metric", "quote", "code", "timeline", "group", "image", "video"]);
+  assert.deepEqual(listSwitchOptions({}, "blocks").map((option) => option.id), ["text", "list", "chart", "table", "metric", "quote", "code", "diagram", "timeline", "group", "image", "video"]);
   assert.deepEqual(listSwitchOptions({}, "backgrounds"), [], "free-form dimensions have no catalog");
   // RR-41: the slide sizes are the schema's ten presets, each labelled with its size in inches.
   const sizes = listSwitchOptions({}, "slide-sizes");
