@@ -31,7 +31,9 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
     const factor=align==='right'?1:align==='center'?.5:0,edge=factor>0&&!line.segments.some(segment=>segment.kind==='tab');
     assert.equal(attribute(attrs,'data-opf-path'),part.path);assert.equal(attribute(attrs,'data-opf-metric-role'),part.role);
     assert.equal(attribute(attrs,'text-anchor'),edge?(factor===1?'end':'middle'):'start');assert.equal(attribute(attrs,'text-rendering'),'geometricPrecision');
-    assert.equal(Number(attribute(attrs,'font-size')),part.fit.fontSize);assert.equal(Number(attribute(attrs,'font-weight')),part.style.fontWeight);
+    // The SVG writes sizes to three decimals (stableNumber); a grid size such as 138.666... (10,400 grid steps of 1/75 px, a grown
+    // metric value) is written 138.667.
+    assert.ok(Math.abs(Number(attribute(attrs,'font-size'))-part.fit.fontSize)<.001);assert.equal(Number(attribute(attrs,'font-weight')),part.style.fontWeight);
     assert.ok(Math.abs(Number(attribute(attrs,'x'))-(origin.x+(edge?line.width*factor:0)))<.002);assert.ok(Math.abs(Number(attribute(attrs,'y'))-origin.baseline)<.002);
     if(edge)anchored++;
     assert.equal(Number(attribute(attrs,'data-opf-text-start')),line.start);assert.equal(Number(attribute(attrs,'data-opf-text-end')),line.end);assert.equal(Number(attribute(attrs,'data-opf-text-next-start')),line.nextStart);
