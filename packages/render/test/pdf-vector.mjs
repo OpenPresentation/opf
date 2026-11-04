@@ -10,7 +10,7 @@ import { PDFArray, PDFDict, PDFDocument, PDFName, PDFNumber, PDFRawStream, PDFRe
 import {toPdf, toPng, toSvg} from "../dist/index.js";
 import {loadFonts} from "../dist/fonts-node.js";
 import sharp from "sharp";
-import { compareImages, openPdf, pageItems, pageText, pdfiumText, popplerText, qpdfCheck, renderPdfPage } from "./pdf-helpers.mjs";
+import { compareImages, openPdf, pageItems, pageText, pdfiumRtlLine, pdfiumText, popplerText, qpdfCheck, renderPdfPage } from "./pdf-helpers.mjs";
 
 const TINY_PNG = "data:image/png;base64," + (await sharp({ create: { width: 4, height: 4, channels: 3, background: "#e03030" } }).png().toBuffer()).toString("base64");
 const SCHEMA = "https://openpresentation.org/schema/opf/v1";
@@ -163,7 +163,7 @@ for (const { name, deck, expect } of roundTrips) {
       const got = await read(pdf);
       if (got === null) continue; // poppler is optional
       if (reader === "poppler") popplerSeen = true;
-      assert.equal(strip(got), strip(expected), `${name}: ${reader} reads "${got}", expected "${expected}"`);
+      assert.equal(strip(got), strip(reader === "pdfium" && text.startsWith("⁧") ? pdfiumRtlLine(expected) : expected), `${name}: ${reader} reads "${got}", expected "${expected}"`);
     }
   }
   if (!popplerSeen) console.log("pdf-vector: poppler (pdftotext) is not installed; its extraction was not checked.");
