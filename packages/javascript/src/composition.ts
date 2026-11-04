@@ -4005,7 +4005,8 @@ function textExtent(result: SlideComposition): { sizes: Map<string, number>; lin
  */
 function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const plain = guardedCore(input, options), used = KEPT_RULES.get(plain);
-  if (!used) return plain;
+  // Wave 5: the rule changes only a metric's layout, so a slide that composes no metric is not composed again for it.
+  if (!used || !plain.items.some(item => item.metricLayout)) return plain;
   const fired = new Set<GuardedRule>();
   let figured: SlideComposition;
   try { figured = composeArranged(input, { ...options, [RULES]: new Set([...used.rules, 'metric-figure']), [FIRED]: fired, ...used.seeds } as ComposeSlideOptions); } catch (error) { if (error instanceof OPFCompositionError) return plain; throw error; }
@@ -4159,6 +4160,7 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
   const ruled = compose(CORE_RULES, fired);
   // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
   const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
+    if (!current?.items.some(item => item.metricLayout)) return current;
     const collect = new Set<GuardedRule>(), next = compose(new Set([...rules, 'metric-figure']), collect);
     return next && collect.has('metric-figure') && readsAsWellFigure(before, trackQuality(next, options), floor) ? next : current;
   };
@@ -5056,7 +5058,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
   // its badge above its text, in the height it asks for (naturalHeight) and in its cell (placeNode), so the badge never costs a row or
-  // a neighbour its room. A flow list (stepFlows, by path) is drawn as chips once placed.
+  // a neighbor its room. A flow list (stepFlows, by path) is drawn as chips once placed.
   const stepUnits = new WeakSet<Pending>(), stepPaths = new Set<string>(), stepFlows = new Set<string>();
   const stepBand = (size: number) => STEP_BADGE * size * (1 + STEP_BADGE_GAP);
   // LH-68: the metrics of a `metrics: "tile"` region (composeTemplate marks them); placeNode lays each out as a tile of its whole card.

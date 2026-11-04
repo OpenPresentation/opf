@@ -2274,14 +2274,14 @@ function renderTextBox(text, box, bound, config) {
     // Positioned script runs carry their own x and textLength (FF-19).
     const start=tabs||positioned;
     // LH-32: core spaces an eyebrow's letters between characters, so its last character draws with no spacing after it: rasterizers
-    // differ on whether a trailing spacing counts towards a middle or end anchor.
+    // differ on whether a trailing spacing counts toward a middle or end anchor.
     if(style.tracking&&!start)content=untrackLast(content);
     return tag("text", {
     x: stableNumber(tabs?origin:positioned?placed.x:placed?placed.x+placed.width*factor:x), y: stableNumber((placed?.baseline??startY + index * fit.lineHeight) - shift * size),
     "text-anchor": start?'start':anchor, "font-family": family ?? fontStack(style.fontFamily, type),
     "font-size": stableNumber(adjustedFontSize(size,sizeAdjust)), "font-weight": style.fontWeight, "font-style": style.italic ? "italic" : undefined, fill: config.fill,
     // LH-32: an eyebrow (the tag, a label core sets as one) draws its capitals with core's letter spacing, as core measured it, at its
-    // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts towards it).
+    // natural advance (no textLength: rasterizers differ on whether the spacing after the last letter counts toward it).
     "letter-spacing": style.tracking ? stableNumber(style.tracking * size) : undefined,
     'xml:space':'preserve',style:'white-space:pre','text-rendering':config.options.textMeasurement?.measure?'geometricPrecision':undefined,
     textLength:!start&&placed?.width>0&&!style.tracking?stableNumber(placed.width-trimWidth):undefined,lengthAdjust:!start&&placed?.width>0&&!style.tracking?'spacingAndGlyphs':undefined,

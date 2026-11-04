@@ -178,7 +178,7 @@ const contrastRules: ValidationRule[] = [
 								path: sample.path,
 								slide,
 								message: `${sample.label} sits on a background picture. Contrast cannot be guaranteed from the document (against the lightest or darkest possible pixels it is as low as ${worst.ratio.toFixed(1)}:1; ${needed}:1 is needed at this size).`,
-								help: `${slide.composition?.backgroundImage?.overlay ? 'Add' : 'Remove overlay: false so core draws its automatic scrim behind the text, add'} a full-frame overlay to the image background (design.background.overlay: a colour and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.`,
+								help: `${slide.composition?.backgroundImage?.overlay ? 'Add' : 'Remove overlay: false so core draws its automatic scrim behind the text, add'} a full-frame overlay to the image background (design.background.overlay: a color and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.`,
 								measured: { ratio: round(worst.ratio), needed, textColor: sample.color },
 							});
 						}

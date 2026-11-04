@@ -195,7 +195,7 @@ for (const id of chartexIds) {
   // LH-125: a waterfall's series line is its connector line (1 pt, dashed, in the axis line color: PowerPoint draws the connectors with it,
   // native check 2026-11-03) and each of its bars (a data point with its own fill) carries no outline.
   if (id === 'waterfall') assert.ok(new RegExp(`<cx:spPr><a:solidFill>${COLOR}</a:solidFill><a:ln w="12700" cap="flat"><a:solidFill>${COLOR}</a:solidFill><a:prstDash val="dash"/></a:ln></cx:spPr>`).exec(owner[2])?.[1] === classicSeriesColor, `${id}: series colour is the classic first series colour, then the dashed connector line`);
-  else assert.ok(owner[2].includes(`<cx:spPr><a:solidFill>${classicSeriesColor}</a:solidFill>${seriesLine}</cx:spPr>`), `${id}: series colour is the classic first series colour`);
+  else assert.ok(owner[2].includes(`<cx:spPr><a:solidFill>${classicSeriesColor}</a:solidFill>${seriesLine}</cx:spPr>`), `${id}: series color is the classic first series color`);
   const pointFills = [...owner[2].matchAll(new RegExp(`<cx:dataPt idx="(\\d+)"><cx:spPr><a:solidFill>${COLOR}</a:solidFill>${id === 'waterfall' ? '<a:ln><a:noFill/></a:ln>' : ''}</cx:spPr></cx:dataPt>`, 'g'))].map(([, idx, color]) => [Number(idx), color]);
   if (id === 'treemap') {
     assert.equal(pointFills.length, data.rows.length, 'one tile colour per category');

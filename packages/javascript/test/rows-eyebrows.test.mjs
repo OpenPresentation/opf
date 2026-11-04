@@ -7,7 +7,7 @@ import {
 import {validate} from '../dist/index.js';
 
 // LH-08 (ruled rows), LH-32 (the tag as an eyebrow) and LH-50 (a short label over a longer text as its eyebrow).
-const LABELLED = [
+const LABELED = [
   {text: 'Clear scope', description: 'Two teams and one workflow keep the pilot focused.'},
   {text: 'Consistent measures', description: 'Track completion and task time against a baseline.'},
   {text: 'An explicit decision', description: 'Agree the evidence needed before expanding.'},
@@ -100,9 +100,9 @@ test('LH-50: a short label before a longer paragraph is drawn as its eyebrow, in
 });
 
 test('LH-08: a list of short labels with descriptions is drawn as ruled rows, labels beside their descriptions', () => {
-  const list = listOf(composeSlide({title: 'What makes a pilot worth running', items: LABELLED}));
+  const list = listOf(composeSlide({title: 'What makes a pilot worth running', items: LABELED}));
   const {listEntries: entries, rules} = list.text;
-  assert.equal(rules.length, LABELLED.length - 1);
+  assert.equal(rules.length, LABELED.length - 1);
   for (const [index, rule] of rules.entries()) {
     assert.equal(rule.x, list.box.x);
     assert.equal(rule.width, list.box.width);
@@ -123,7 +123,7 @@ test('LH-08: a list of short labels with descriptions is drawn as ruled rows, la
 });
 
 test('LH-08: design.listStyle stack opts out, rows draws any list as ruled rows, numbers stay', () => {
-  const stacked = listOf(composeSlide({title: 'T', items: LABELLED, design: {listStyle: 'stack'}}));
+  const stacked = listOf(composeSlide({title: 'T', items: LABELED, design: {listStyle: 'stack'}}));
   assert.equal(stacked.text.rules, undefined);
   assert.deepEqual(stacked.text.listEntries.map(entry => entry.marker.text), ['•', '•', '•']);
   const plain = listOf(composeSlide({title: 'Agenda', items: ['Define the problem', 'Review the evidence', 'Agree the decision'], design: {listStyle: 'rows'}}));
@@ -140,7 +140,7 @@ test('LH-08: design.listStyle stack opts out, rows draws any list as ruled rows,
 test('LH-08: a nested entry stays under its row, and a narrow list sets descriptions under their labels', () => {
   const fit = fitList([{text: 'Scope', description: 'Two teams.'}, {text: 'Detail', level: 1}, {text: 'Measures', description: 'A baseline.'}], {x: 0, y: 0, width: 600, height: 600}, 24, 16, {style, rows: true});
   assert.equal(fit.rules.length, 1, 'no hairline above a nested entry');
-  const narrow = fitList(LABELLED, {x: 0, y: 0, width: 300, height: 1000}, 24, 16, {style, rows: true});
+  const narrow = fitList(LABELED, {x: 0, y: 0, width: 300, height: 1000}, 24, 16, {style, rows: true});
   for (const entry of narrow.listEntries) {
     assert.equal(entry.descriptionBox.x, entry.textBox.x);
     assert.ok(entry.descriptionBox.y >= entry.textBox.y + entry.text.height);
