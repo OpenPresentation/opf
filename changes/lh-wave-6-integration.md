@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [opf, pptx]
+---
+LH wave 6 integration (output-changing where two wave 6 features meet): every wave 6 composition rule (`half-steps`, `featured-card`, `pair-rows`, `numerals`, `delta-pill`, `check-tiles`, `tier-cards`, `pillar-words`, LH-152's eyebrows of lists and groups, LH-130's heading anchor and rule) runs inside the one size guard of `composeSlide`, and LH-149's half-step discount applies to every comparison of arrangements. A pricing tier that LH-131 features ("most popular") draws the emphasis surface over the same card as the other tiers, so LH-135's tiers stay equal cards. A group headed by a short label (LH-152) is not drawn as a pricing tier, so its label is always drawn, and a group eyebrow on a featured set's cell card sits inside that card. LH-136's accent rule over a display word keeps its own thickness and LH-133's rule over a question cell is `LIST_ACCENT_RULE_WIDTH` thick. A numeric metric `delta` groups its thousands by the deck language, as LH-141 groups the value. In the PPTX export LH-146's en-US run for a Latin numeral in a right-to-left deck also covers LH-134's numerals beside ruled rows.

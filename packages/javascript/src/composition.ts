@@ -7356,7 +7356,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const bottom = near(cell.y + cell.height, frame.y + frame.height) ? area.bottom : cell.y + cell.height;
       return { x: left, y: top, width: right - left, height: bottom - top };
     };
-    // Headings: centred vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
+    // Headings: centered vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
     // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
     const placeHeadings = (name: 'title' | 'subtitle', fields: string[]) => {
       const rect = rects.get(name), original = ownRects.get(name);

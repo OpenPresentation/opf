@@ -49,7 +49,7 @@ for (const trend of ['up', 'down', 'flat']) for (const align of ['left', 'center
   const absent = await slideParts(deckOf(base, design, align)), absentXml = absent.xml;
   const [absentArrow] = shapes(absent).filter(shape => / trend mark$/.test(shape.name));
   const absentBackdrop = backdropOf(toSvg(deckOf(base, design, align), 1, {trace: true}), background);
-  assert.equal(`#${absentArrow.fillColor.hex}`, absentBackdrop === background ? `#${BEFORE[trend][background]}` : metricTrendColor(trend, {background: absentBackdrop, ...(trend === 'flat' && {neutral: `#${MUTED[background]}`})}), `${trend}/${align}: the colour exported without a sentiment`);
+  assert.equal(`#${absentArrow.fillColor.hex}`, absentBackdrop === background ? `#${BEFORE[trend][background]}` : metricTrendColor(trend, {background: absentBackdrop, ...(trend === 'flat' && {neutral: `#${MUTED[background]}`})}), `${trend}/${align}: the color exported without a sentiment`);
   // An explicit sentiment equal to the trend's default is the absent one: the same slide XML.
   assert.equal(await slideXml(deckOf({...base, sentiment: DEFAULT[trend]}, design, align)), absentXml, `${trend}/${align}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {

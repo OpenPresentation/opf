@@ -25,7 +25,7 @@ for (const trend of ['up', 'down', 'flat']) for (const design of designs) {
   const base = arrows(absent);
   assert.equal(base.length, 1, `${trend}: one arrow`);
   const backdrop = backdropOf(absent, background);
-  assert.equal(base[0].fill, backdrop !== background ? metricTrendColor(trend, {background: backdrop, neutral}) : trend === 'flat' ? neutral : BEFORE[trend][background], `${trend} on ${background}: the colour drawn before sentiment existed`);
+  assert.equal(base[0].fill, backdrop !== background ? metricTrendColor(trend, {background: backdrop, neutral}) : trend === 'flat' ? neutral : BEFORE[trend][background], `${trend} on ${background}: the color drawn before sentiment existed`);
   // An explicit sentiment equal to the trend's default is the absent one, byte for byte.
   assert.equal(toSvg(metricDeck({value: 3.1, label: 'Churn', delta: '-0.6 pts', trend, sentiment: DEFAULT[trend]}, design), 1, {trace: true}), absent, `${trend}: the default sentiment changes nothing`);
   for (const sentiment of ['positive', 'negative', 'neutral']) {
