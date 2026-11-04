@@ -41,7 +41,7 @@ export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} f
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {layoutVariantApplies,resolveColorRoles} from './color.js';
 import {pictureScrims,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
-export {pictureScrims,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
+export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -3578,9 +3578,10 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
   // The body and headings, the header and the footer each get a scrim of their own, so header and footer text at the slide's edges
   // does not stretch the body's scrim over the whole picture.
   const body: LayoutBox[] = [], header: LayoutBox[] = [], footer: LayoutBox[] = [];
-  let accent = false, muted = false;
+  let accent = false, muted = false, line = 0;
   for (const item of result.items) {
     if (item.caption) body.push(item.caption.box);
+    if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
     if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table'].includes(item.field)) continue;
     body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
     if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
@@ -3594,7 +3595,7 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
   const scrims = pictureScrims({
     path: background.path, width: result.width, height: result.height, groups: [body, header, footer], texts, color: roles.background, bases: [roles.background, '#FFFFFF'],
     ...(background.opacity !== undefined ? { opacity: background.opacity } : {}), ...(background.picture ? { picture: background.picture.image } : {}),
-    ...(luminance ? { luminance } : {}), scale: Math.min(result.width, result.height) / 720,
+    ...(luminance ? { luminance } : {}), scale: Math.min(result.width, result.height) / 720, ...(line ? { line } : {}),
   });
   if (scrims.length) result.backgroundImage = { ...background, scrims };
   return result;

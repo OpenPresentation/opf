@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { colorContrast, composeSlide, scrimGeometry, scrimOpacity, textInkBox } from '../dist/composition.js';
+import { colorContrast, composeSlide, luminanceGrid, sampledGrays, scrimGeometry, scrimOpacity, textInkBox } from '../dist/composition.js';
 import { resolveSlideContext, validate } from '../dist/index.js';
 
 // LH-02: text on a picture background gets an automatic scrim in the slide background color, at the lowest opacity that keeps the text
@@ -30,7 +30,8 @@ test('a cover over a photo passes 4.5:1 on the worst-case gray ramp with no auth
     // The lowest such opacity: one hundredth less fails somewhere on the ramp.
     assert.ok(worstOverRamp(context.options.roles.text, { ...scrim, opacity: scrim.opacity - 0.01 }) < 4.5, `${tone}: the lowest opacity`);
     for (const item of result.items) assert.ok(inside(textInkBox(item), scrim.text), `${tone}: ${item.field} lies under the solid part`);
-    assert.ok(scrim.stops.every((stop) => stop.opacity === 0 || stop.opacity === scrim.opacity));
+    assert.ok(scrim.stops.every((stop, index) => stop.opacity >= 0 && stop.opacity <= scrim.opacity && (index === 0 || stop.position >= scrim.stops[index - 1].position)), 'stops ascend and never pass the opacity');
+    assert.ok(scrim.stops.some((stop) => stop.opacity === scrim.opacity), 'solid over the text');
   }
 });
 
@@ -53,6 +54,14 @@ test('the form follows where the text sits: a gradient from the bottom, the top 
   assert.equal(band.edge, undefined);
   assert.deepEqual([band.stops[0].opacity, band.stops.at(-1).opacity], [0, 0]);
   assert.equal(band.box.width, 1280);
+  // The band is solid over the text and about half a line around it only, and fades out over at least the text's height, eased.
+  assert.ok(band.text.y > band.box.y + band.text.height - 1 && band.box.y + band.box.height > band.text.y + band.text.height * 2 - 1, 'fades over at least the text height');
+  const rising = band.stops.slice(0, band.stops.findIndex((stop) => stop.opacity === band.opacity) + 1);
+  assert.ok(rising.length >= 5, 'several stops per fade');
+  assert.ok(rising[1].opacity < band.opacity * rising[1].position / rising.at(-1).position, 'the fade starts gently (eased, not linear)');
+  // Centered text below the middle: a gradient rising from the bottom edge instead of a band.
+  const low = scrimGeometry({ x: 400, y: 420, width: 480, height: 80 }, 1280, 720, 24, 30);
+  assert.deepEqual([low.form, low.edge], ['gradient', 'bottom']);
   // A left-aligned cover title and subtitle in the left half: a gradient across from the left edge.
   const side = composed(deck([{ title: 'Shipping, rebuilt', subtitle: 'The plan', design: picture() }])).result.backgroundImage.scrims?.[0];
   assert.deepEqual([side.edge, side.axis, side.box.x, side.box.height], ['left', 'horizontal', 0, 720]);
@@ -131,4 +140,16 @@ test('a right-to-left slide is covered whole', () => {
   const { result } = composed({ ...deck([{ title: 'خطة الميناء', text: 'ثلاثة أطقم وجدول واحد.', design: picture() }]), language: 'ar' });
   assert.equal(result.direction, 'rtl');
   for (const item of result.items) assert.ok(inside(item.box, result.backgroundImage.scrims?.[0].text), item.field);
+});
+
+test('luminanceGrid keeps each cell\'s darkest and lightest pixel, so fine black and white detail still asks for the full scrim', () => {
+  // 4 x 2 pixels, RGBA: the left half a black-and-white checker, the right half dark gray.
+  const pixels = [0, 0, 0, 255, 255, 255, 255, 255, 40, 40, 40, 255, 40, 40, 40, 255, 255, 255, 255, 255, 0, 0, 0, 255, 40, 40, 40, 255, 40, 40, 40, 0];
+  const grid = luminanceGrid(pixels, 4, 2, { columns: 2, rows: 1 });
+  assert.deepEqual([grid.columns, grid.rows], [2, 1]);
+  assert.deepEqual([grid.values[0], grid.high[0]], [0, 1], 'the checker keeps black and white');
+  assert.ok(grid.values[1] > 0.02 && grid.values[1] < 0.03, 'dark gray');
+  assert.equal(grid.high[1], 1, 'a transparent pixel shows the white canvas');
+  assert.deepEqual(sampledGrays(grid, { left: 0, top: 0, right: 0.5, bottom: 1 }), [0, 255]);
+  assert.throws(() => luminanceGrid([0, 0, 0], 2, 2), RangeError);
 });

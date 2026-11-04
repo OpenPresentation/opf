@@ -32,7 +32,7 @@ export interface ComposedScrim {
   box: ScrimBox;
   /** The axis the stops run along: `vertical` from the box's top edge, `horizontal` from its left edge. */
   axis: 'vertical' | 'horizontal';
-  /** Opacity stops along the axis, positions 0 to 1 ascending; every stop is either 0 or `opacity`. */
+  /** Opacity stops along the axis, positions 0 to 1 ascending: `opacity` over the solid part and an eased fade to 0 at each end that is not a slide edge. */
   stops: { position: number; opacity: number }[];
   /** The region the scrim covers at full opacity: its group's text boxes plus a margin, clipped to the slide. */
   text: ScrimBox;
@@ -46,8 +46,12 @@ export interface ComposedScrim {
   grays?: [number, number];
 }
 
-/** A luminance grid of a picture: `values` are WCAG relative luminances (0 to 1), `columns` × `rows` cells in row order over the whole picture. */
-export interface PictureLuminance { columns: number; rows: number; values: ArrayLike<number> }
+/**
+ * A luminance grid of a picture: `columns` × `rows` cells in row order over the whole picture, each a WCAG relative luminance (0 to 1).
+ * `values` is each cell's darkest pixel (or its only value) and `high`, when present, its lightest, so a cell of fine black and white
+ * detail keeps both (luminanceGrid writes both).
+ */
+export interface PictureLuminance { columns: number; rows: number; values: ArrayLike<number>; high?: ArrayLike<number> }
 
 /** The contrast a scrim keeps under text over a picture: 4.5:1, WCAG's normal-text minimum, for every size. */
 export const SCRIM_TARGET_CONTRAST = 4.5;
@@ -106,48 +110,88 @@ const r2 = (value: number) => Math.round(value * 100) / 100;
 /**
  * The form of a scrim over `text` (the union of the text boxes) on a `width` × `height` slide: a gradient from the bottom edge when the
  * text sits in the lower part of the slide, from the top when it sits in the upper part, from the side when it is a column at the
- * left or right; else a band across the text. `margin` pads the text; the scrim fades out over `fade` of the slide past its solid part.
+ * left or right, and from the bottom again when the text sits a little below the middle; else a band across the text. An edge
+ * gradient is solid from its edge to `margin` past the text and fades out over a fifth of the slide. A band is solid over the text
+ * and `halfLine` (about half a line) above and below it only, and fades out over one and a half times the text's height on each
+ * side (at least a quarter of the slide), so it has no visible edge.
  */
-export function scrimGeometry(text: ScrimBox, width: number, height: number, margin: number): Pick<ComposedScrim, 'form' | 'edge' | 'box' | 'axis' | 'text'> & { solid: [number, number] } {
+export function scrimGeometry(text: ScrimBox, width: number, height: number, margin: number, halfLine = margin): Pick<ComposedScrim, 'form' | 'edge' | 'box' | 'axis' | 'text'> & { solid: [number, number] } {
   const padded = { x: Math.max(0, text.x - margin), y: Math.max(0, text.y - margin), right: Math.min(width, text.x + text.width + margin), bottom: Math.min(height, text.y + text.height + margin) };
   const covered: ScrimBox = { x: padded.x, y: padded.y, width: padded.right - padded.x, height: padded.bottom - padded.y };
-  const bottomGap = height - (text.y + text.height), rightGap = width - (text.x + text.width);
-  const vertical = (edge: ScrimEdge | undefined) => {
+  const bottomGap = height - (text.y + text.height), rightGap = width - (text.x + text.width), middle = text.y + text.height / 2;
+  const edgeGradient = (edge: 'top' | 'bottom') => {
     const fade = SCRIM_FADE * height;
     const top = edge === 'top' ? 0 : Math.max(0, padded.y - fade), bottom = edge === 'bottom' ? height : Math.min(height, padded.bottom + fade);
-    return { form: edge ? 'gradient' as const : 'band' as const, ...(edge ? { edge } : {}), axis: 'vertical' as const, box: { x: 0, y: top, width, height: bottom - top }, text: covered, solid: [edge === 'top' ? 0 : padded.y, edge === 'bottom' ? height : padded.bottom] as [number, number] };
+    return { form: 'gradient' as const, edge, axis: 'vertical' as const, box: { x: 0, y: top, width, height: bottom - top }, text: covered, solid: [edge === 'top' ? 0 : padded.y, edge === 'bottom' ? height : padded.bottom] as [number, number] };
   };
-  if (bottomGap <= 0.3 * height && text.y >= 0.35 * height) return vertical('bottom');
-  if (text.y <= 0.3 * height && text.y + text.height <= 0.65 * height) return vertical('top');
+  if (bottomGap <= 0.3 * height && text.y >= 0.35 * height) return edgeGradient('bottom');
+  if (text.y <= 0.3 * height && text.y + text.height <= 0.65 * height) return edgeGradient('top');
   if (text.width <= 0.5 * width && (text.x <= 0.25 * width || rightGap <= 0.25 * width)) {
     const edge: ScrimEdge = text.x <= rightGap ? 'left' : 'right', fade = SCRIM_FADE * width;
     const left = edge === 'left' ? 0 : Math.max(0, padded.x - fade), right = edge === 'right' ? width : Math.min(width, padded.right + fade);
     return { form: 'gradient', edge, axis: 'horizontal', box: { x: left, y: 0, width: right - left, height }, text: covered, solid: [edge === 'left' ? 0 : padded.x, edge === 'right' ? width : padded.right] };
   }
-  return vertical(undefined);
+  // Centered text a little below the middle reads better with a gradient that rises from the bottom edge to it than with a band.
+  if (middle > 0.52 * height) return edgeGradient('bottom');
+  const solid: [number, number] = [Math.max(0, text.y - halfLine), Math.min(height, text.y + text.height + halfLine)];
+  const fade = Math.max(1.5 * text.height, 1.25 * SCRIM_FADE * height), top = Math.max(0, solid[0] - fade), bottom = Math.min(height, solid[1] + fade);
+  return { form: 'band', axis: 'vertical', box: { x: 0, y: top, width, height: bottom - top }, text: { x: padded.x, y: solid[0], width: covered.width, height: solid[1] - solid[0] }, solid };
 }
 
-/** The opacity stops of a scrim along its axis: 0 where it fades out, `opacity` over its solid part. */
+/** Eased fade: smoothstep, so a fade has no visible start or end. */
+const ease = (t: number) => t * t * (3 - 2 * t);
+/** Stops per fade: the linear pieces between them follow the eased curve within about 2% of the opacity. */
+const FADE_STEPS = 6;
+
+/**
+ * The opacity stops of a scrim along its axis: `opacity` over its solid part, and an eased fade (smoothstep, FADE_STEPS pieces) from
+ * there to 0 at each end the scrim does not reach the slide edge at.
+ */
 function scrimStops(box: ScrimBox, axis: 'vertical' | 'horizontal', solid: [number, number], opacity: number): ComposedScrim['stops'] {
   const start = axis === 'vertical' ? box.y : box.x, span = (axis === 'vertical' ? box.height : box.width) || 1;
-  const from = r4((solid[0] - start) / span), to = r4((solid[1] - start) / span);
-  const stops = [...(from > 0 ? [{ position: 0, opacity: 0 }] : []), { position: Math.max(0, from), opacity }, { position: Math.min(1, to), opacity }, ...(to < 1 ? [{ position: 1, opacity: 0 }] : [])];
-  return stops;
+  const from = Math.max(0, (solid[0] - start) / span), to = Math.min(1, (solid[1] - start) / span);
+  const fade = (a: number, b: number) => Array.from({ length: FADE_STEPS + 1 }, (_, k) => ({ position: r4(a + (b - a) * k / FADE_STEPS), opacity: r4(opacity * ease(k / FADE_STEPS)) }));
+  const head = from > 0 ? fade(0, from) : [{ position: 0, opacity }];
+  const tail = to < 1 ? fade(1, to).reverse() : [{ position: 1, opacity }];
+  return [...head, ...tail];
 }
 
 /** Min and max gray of a luminance grid over a region given as fractions (0 to 1) of the picture; undefined when the grid is unusable. */
 export function sampledGrays(grid: PictureLuminance | undefined, region: { left: number; top: number; right: number; bottom: number }): [number, number] | undefined {
   if (!grid || !Number.isInteger(grid.columns) || !Number.isInteger(grid.rows) || grid.columns < 1 || grid.rows < 1 || grid.values?.length !== grid.columns * grid.rows) return undefined;
+  if (grid.high !== undefined && grid.high.length !== grid.values.length) return undefined;
   const c0 = Math.max(0, Math.floor(region.left * grid.columns)), c1 = Math.min(grid.columns - 1, Math.ceil(region.right * grid.columns) - 1);
   const r0 = Math.max(0, Math.floor(region.top * grid.rows)), r1 = Math.min(grid.rows - 1, Math.ceil(region.bottom * grid.rows) - 1);
   if (c1 < c0 || r1 < r0) return undefined;
   let low = Infinity, high = -Infinity;
   for (let row = r0; row <= r1; row++) for (let column = c0; column <= c1; column++) {
-    const value = Number(grid.values[row * grid.columns + column]);
-    if (!Number.isFinite(value)) return undefined;
-    low = Math.min(low, value); high = Math.max(high, value);
+    const value = Number(grid.values[row * grid.columns + column]), top = grid.high ? Number(grid.high[row * grid.columns + column]) : value;
+    if (!Number.isFinite(value) || !Number.isFinite(top)) return undefined;
+    low = Math.min(low, value); high = Math.max(high, top);
   }
   return [Math.floor(grayOfLuminance(low)), Math.ceil(grayOfLuminance(high))];
+}
+
+/**
+ * The luminance grid of decoded pixels, for `ComposeSlideOptions.pictureLuminance`: `pixels` are 8-bit sRGB in row order with `channels`
+ * bytes each (3, or 4 with alpha, which is composited over white, the canvas the contrast rules assume). Each of `columns` × `rows` cells
+ * keeps its darkest and lightest pixel. One helper every host calls, so the preview and the export size the same scrim from the same picture.
+ */
+export function luminanceGrid(pixels: ArrayLike<number>, width: number, height: number, options: { channels?: number; columns?: number; rows?: number } = {}): PictureLuminance {
+  const channels = options.channels ?? 4, columns = Math.max(1, Math.min(width, options.columns ?? 32)), rows = Math.max(1, Math.min(height, options.rows ?? 18));
+  if (!(width > 0 && height > 0) || pixels.length < width * height * channels) throw new RangeError('The pixels do not fill the picture.');
+  const values = new Float32Array(columns * rows).fill(1), high = new Float32Array(columns * rows);
+  for (let y = 0; y < height; y++) {
+    const row = Math.min(rows - 1, Math.floor(y * rows / height));
+    for (let x = 0; x < width; x++) {
+      const at = (y * width + x) * channels, alpha = channels === 4 ? pixels[at + 3]! / 255 : 1;
+      const rgb: Rgb = [0, 1, 2].map(i => Math.round(pixels[at + i]! * alpha + 255 * (1 - alpha))) as Rgb;
+      const cell = row * columns + Math.min(columns - 1, Math.floor(x * columns / width)), luminance = luminanceOf(rgb);
+      if (luminance < values[cell]!) values[cell] = luminance;
+      if (luminance > high[cell]!) high[cell] = luminance;
+    }
+  }
+  return { columns, rows, values, high };
 }
 
 /** Inputs of one picture background's scrims. */
@@ -175,6 +219,8 @@ export interface ScrimInput {
   luminance?: PictureLuminance;
   /** Reference pixels per canvas pixel: min(width, height) / 720. */
   scale: number;
+  /** The tallest line of the text, in canvas pixels: a band is solid half of it above and below the text. */
+  line?: number;
 }
 
 type Geometry = ReturnType<typeof scrimGeometry>;
@@ -186,15 +232,15 @@ const meets = (a: Geometry, b: Geometry) => a.axis === b.axis && a.solid[0] <= b
  * where they meet, all at one opacity. Empty when no text sits on the picture or the picture needs none (opacity 0).
  */
 export function pictureScrims(input: ScrimInput): ComposedScrim[] {
-  const margin = SCRIM_MARGIN * input.scale;
+  const margin = SCRIM_MARGIN * input.scale, halfLine = input.line ? Math.max(input.line / 2, 8 * input.scale) : margin;
   let groups = input.groups.map(group => group.filter(box => box.width > 0 && box.height > 0)).filter(group => group.length).map(group => union(group));
   if (!groups.length || !input.texts.length) return [];
-  let shapes = groups.map(text => scrimGeometry(text, input.width, input.height, margin));
+  let shapes = groups.map(text => scrimGeometry(text, input.width, input.height, margin, halfLine));
   for (let merged = true; merged;) {
     merged = false;
     for (let i = 0; i < shapes.length && !merged; i++) for (let j = i + 1; j < shapes.length && !merged; j++) if (meets(shapes[i]!, shapes[j]!)) {
       groups = [...groups.filter((_, k) => k !== i && k !== j), union([groups[i]!, groups[j]!])];
-      shapes = groups.map(text => scrimGeometry(text, input.width, input.height, margin));
+      shapes = groups.map(text => scrimGeometry(text, input.width, input.height, margin, halfLine));
       merged = true;
     }
   }
