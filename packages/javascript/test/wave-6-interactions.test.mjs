@@ -26,10 +26,9 @@ for (const direction of ['ltr', 'rtl']) {
     const result = composeSlide(tiers(), { layout: layouts['three-column'], direction });
     assert.equal(result.emphasis?.source, 'featured', 'the "most popular" tier is on the surface');
     assert.ok(metrics(result).every((item) => item.metricLayout.eyebrow), 'every tier name is its price\'s eyebrow');
-    const cards = [0, 1, 2].map((index) => {
-      const own = result.items.filter((item) => item.path.startsWith(`slides.0.blocks.${index}.`));
-      return index === 1 ? (assert.ok(own.every((item) => item.emphasis && !item.frameBox), 'the featured tier draws no plain card'), result.emphasis.box) : own[0].frameBox;
-    });
+    const own = (index) => result.items.filter((item) => item.path.startsWith(`slides.0.blocks.${index}.`));
+    assert.ok(own(1).every((item) => item.emphasis && !item.frameBox), 'the featured tier draws no plain card');
+    const cards = [own(0)[0].frameBox, result.emphasis.box, own(2)[0].frameBox];
     assert.ok(cards.every(Boolean), 'each tier has its card');
     for (const card of cards) assert.ok(near(card.y, cards[0].y) && near(card.height, cards[0].height) && near(card.width, cards[0].width), 'one top edge, one height and one width');
     // Each tier's blocks sit inside its card at the same inset.

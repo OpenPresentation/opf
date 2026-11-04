@@ -8082,7 +8082,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const natural = bottom(listOf(rowed.at(-1)!)!) - first, extra = Math.max(0, Math.min((end - start - natural) / (rowed.length - 1), LIST_ROWS_SPREAD * size - Math.max(...gaps)));
       const lead = start + Math.max(0, (end - start - natural - extra * (rowed.length - 1)) / 2) - first;
       if (natural <= end - start + 1e-6 && (lead > 0 || extra > 0)) {
-        rowed.forEach((item, index) => shiftList(item, lead + extra * index));
+        rowed.forEach((item, index) => { shiftList(item, lead + extra * index); });
         const y = Math.min(composed.box.y, rowed[0]!.box.y), last = rowed.at(-1)!;
         composed.box = roundBox({ ...composed.box, y, height: Math.max(composed.box.y + composed.box.height, last.box.y + last.box.height) - y });
       }
