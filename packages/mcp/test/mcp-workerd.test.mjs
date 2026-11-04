@@ -78,6 +78,28 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.ok(bad.structuredContent.findings.some((finding) => finding.severity === "error"));
 	});
 
+	test("checks diagrams as Node does: the Worker loads each diagram type a deck draws before it validates", async () => {
+		// A Worker loads diagram types on demand (the lazy engine); a type nobody loaded would leave its diagrams unchecked.
+		const deck = JSON.stringify({
+			name: "diagrams",
+			language: "en-US",
+			slides: [
+				{ title: "Every request is reviewed", diagram: "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| A" },
+				{ title: "The client calls the API", diagram: "sequenceDiagram\n  Client->>API: POST /decks\n  API-->>Client: 201 Created" },
+				{ title: "A broken one", diagram: "stateDiagram-v2\n  [*] --> " },
+			],
+		});
+		const forms = [{ document: deck }];
+		for (const to of ["yaml", "markdown"]) forms.push({ document: (await local.callTool({ name: "convert", arguments: { document: deck, to } })).structuredContent.text, format: to });
+		for (const args of forms) {
+			const got = await call("tools/call", { name: "validate_deck", arguments: args });
+			const want = await local.callTool({ name: "validate_deck", arguments: args });
+			assert.deepEqual(got.structuredContent, wire(want.structuredContent), args.format ?? "json");
+			const diagramFindings = got.structuredContent.findings.filter((finding) => /diagram cannot be drawn/.test(finding.message));
+			assert.deepEqual(diagramFindings.map((finding) => finding.path), ["/slides/2/diagram"], args.format ?? "json");
+		}
+	});
+
 	test("converts, searches the catalog and the docs, and reads resources", async () => {
 		const deck = readFileSync(path.join(examples, "technical/columns.opf.json"), "utf8");
 		for (const to of ["yaml", "markdown"]) assert.deepEqual((await call("tools/call", { name: "convert", arguments: { document: deck, to } })).structuredContent, wire((await local.callTool({ name: "convert", arguments: { document: deck, to } })).structuredContent));
@@ -112,7 +134,8 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 
 	test("leaves out the examples and the documentation, which are most of the bundle", () => {
 		assert.ok(lean.bytes < bundle.bytes - 7_000_000, `${lean.bytes} bytes against ${bundle.bytes} with the data`);
-		assert.ok(lean.bytes < 7_000_000, `${lean.bytes} bytes`);
+		// About 7.1 MB unminified, 1.1 MB of it the diagram types validate_deck loads to check a deck's diagrams.
+		assert.ok(lean.bytes < 7_500_000, `${lean.bytes} bytes`);
 	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
