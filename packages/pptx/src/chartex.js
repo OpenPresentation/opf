@@ -253,6 +253,9 @@ function waterfallLabels(waterfall, entry, {labelColor, font, textSize, code}) {
   return `<cx:dataLabels pos="outEnd"><cx:numFmt formatCode="${escapeXml(waterfallSignedFormat(code))}" sourceLinked="0"/>${textProperties(labelColor, font, textSize)}<cx:visibility seriesName="0" categoryName="0" value="1"/>${points}</cx:dataLabels>`;
 }
 
+// LH-107: the connector line of a waterfall: 1 pt, dashed (PowerPoint's "dash": 4 line widths on, 3 off, as the preview draws it), in `color`.
+const connectorLine = color => `<a:ln w="12700" cap="flat">${solidFill(color)}<a:prstDash val="dash"/></a:ln>`;
+
 // LH-107: the caption a waterfall without its value axis carries above its plot (core's header caption), bold at the start of the chart.
 function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
   if (!caption) return '';
@@ -275,13 +278,17 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     return `<cx:data id="${index}">${categories}<cx:numDim type="${spec.dimension}"><cx:f>${range(columnLetters(index + 2))}</cx:f><cx:lvl ptCount="${rows}" formatCode="${escapeXml(formats[index] ?? 'General')}">${points}</cx:lvl></cx:numDim></cx:data>`;
   }).join('');
   const text = textProperties(labelColor, font, textSize);
+  // LH-107: a waterfall with core's layer draws its connector lines dashed and gray, in the series line; the bars (each a data point with its own
+  // fill) carry no outline. PowerPoint styles the connectors with the series' line (native check 2026-11-03: its dash and width, and the line's
+  // color when the bars have no outline of their own; the style part's line entries change nothing).
+  const connectors = spec.layoutId === 'waterfall' && waterfall !== undefined;
   const plotted = series.map((entry, index) => {
     const color = palette[index % palette.length];
     const letter = columnLetters(index + 2);
     const pointFills = chartexPointColors(spec.layoutId, entry.values, palette, waterfall)
-      .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}</cx:spPr></cx:dataPt>` : '').join('');
+      .map((pointColor, row) => pointColor ? `<cx:dataPt idx="${row}"><cx:spPr>${solidFill(pointColor)}${connectors ? '<a:ln><a:noFill/></a:ln>' : ''}</cx:spPr></cx:dataPt>` : '').join('');
     // Box whiskers, median lines and mean markers are drawn with the series line; without one PowerPoint used black (native check 2026-09-30).
-    const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : '';
+    const line = spec.layoutId === 'boxWhisker' ? `<a:ln w="9525">${solidFill(labelColor)}</a:ln>` : connectors ? connectorLine(waterfall.connector ?? gridColor) : '';
     const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +

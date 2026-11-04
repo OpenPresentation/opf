@@ -3117,7 +3117,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {}),
     // LH-105: the series names at the line ends and the category names on the slices (src/chart-direct-labels.js).
     ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {}),
-    ...(stackLabels ? {stackValues: layer.stack.values} : {})});
+    ...(stackLabels ? {stackValues: layer.stack.values} : {}),
+    // LH-125: a stacked area runs edge to edge (the value axis crosses on the tick marks).
+    ...(layer?.stack?.edge ? {stackEdge: true} : {})});
   // LH-60: a doughnut of several series (core's nested rings) gets its further rings after PptxGenJS wrote the first.
   if (chartData.type === 'doughnut' && chartData.series.length > 1) context.chartHeadings.get(objectName).rings = chartData.series.map((entry) => ({name: entry.name, values: [...entry.values]}));
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
@@ -3138,7 +3140,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
     // LH-107: core's waterfall roles, signed labels, dropped value axis and caption (src/chartex.js), in the role colors the preview draws.
     const waterfall = chartLayout?.layer?.waterfall;
-    const waterfallInfo = waterfall ? {...waterfall, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
+    const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
     context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
@@ -3204,7 +3206,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // LH-59: a horizontal bar chart lists its categories top to bottom in data order, as the preview draws it: the category axis runs
     // from the top (c:catAx orientation maxMin) and the value axis crosses it at the last category (c:valAx crosses max), so the value
     // labels stay at the bottom.
-    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max' } : {}),
+    // LH-125: its value labels sit next to that axis (the bottom), not 'low' (PptxGenJS's default for a bar chart), which on a reversed category axis is the top.
+    ...(chartData.type === 'bar' && chartData.barDir === 'bar' ? { catAxisOrientation: 'maxMin', catAxisCrossesAt: 'max', valAxisLabelPos: 'nextTo' } : {}),
     ...(percent ? { valAxisLabelFormatCode: '0%' } : {}),
     ...(chartData.spec.markers === undefined ? {} : { lineDataSymbol: chartData.spec.markers ? 'circle' : 'none' }),
     ...(chartData.spec.radarStyle ? { radarStyle: chartData.spec.radarStyle } : {}),
@@ -3218,10 +3221,13 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     return;
   }
   // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
-  const marks = layer && (layer.references || layer.valueList || layer.stack?.names) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
+  const marks = layer && (layer.references || layer.valueList || layer.stack?.names || layer.stack?.ends) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
     paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
       slice: row => (highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length],
-      series: index => (highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length]}} : undefined;
+      series: index => (highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length],
+      // LH-125: the text over a series' fill (an area's end values), and the focused slice's value in a doughnut's hole in its color made legible.
+      onSeries: index => normalizeHex(textColorForFill(`#${(highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length]}`, `#${markLabelColor}`)),
+      hole: row => normalizeHex(chartSeriesLabelColor(panelFill, `#${(highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length]}`))}} : undefined;
   if (marks) addChartMarks(slide, layer, 'under', marks);
   slide.addChart(chartData.type, chartData.series, chartOptionsXml);
   if (marks) addChartMarks(slide, layer, 'over', marks);
@@ -4675,6 +4681,8 @@ async function normalizePptxZip(raw, context) {
       // LH-109: the segment values that do not fit their segments are hidden, point by point.
       const {stackValues}=context.chartHeadings.get(name);
       if(stackValues&&chartOptions?.dataLabels)entries[chartPart]=encodeText(applyStackValueDeletes(decodeText(entries[chartPart]),stackValues));
+      // LH-125: an edge-to-edge stacked area: its categories stand on the tick marks, the first and last on the plot's edges.
+      if(context.chartHeadings.get(name).stackEdge)entries[chartPart]=encodeText(decodeText(entries[chartPart]).replace(/<c:crossBetween val="between"\/>/g,'<c:crossBetween val="midCat"/>'));
       // LH-92: each ring of a nested-ring doughnut names its series on the slice core chose, after the data labels it may join.
       const {ringNames,palette:slicePalette}=context.chartHeadings.get(name);
       if(ringNames)entries[chartPart]=encodeText(applyRingLabels(decodeText(entries[chartPart]),ringNames,{labels:chartOptions?.dataLabels,fills:series=>highlight?.pointFills(series)??Array.from({length:pointCount},(_,row)=>slicePalette[row%slicePalette.length]),labelColor:markLabelColor,size:textSize,font:context.chartFonts.get(name)?.body??'Arial'}));

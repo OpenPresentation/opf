@@ -35,13 +35,13 @@ const VERTICAL: Readonly<Record<string, {key?: 'line'; percent?: boolean}>> = {
 };
 
 // Whitespace that may split a category label; no-break spaces stay inside their word (the preview's rule).
-const BREAKABLE = /[^\S  ﻿]+/u;
+export const BREAKABLE = /[^\S  ﻿]+/u;
 const ELLIPSIS = '…';
 const clean = (value: number): number => { const rounded = Number(value.toPrecision(12)); return Object.is(rounded, -0) ? 0 : rounded; };
 const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
 /** A value axis tick as the preview labels it: a percentage on a 100% chart, else the first series' number format, else General. */
-function tickLabel(value: number, percent: boolean, format: string | undefined): string {
+export function tickLabel(value: number, percent: boolean, format: string | undefined): string {
   if (percent) return `${clean(value * 100)}%`;
   return format === undefined ? String(clean(value)) : formatDataNumber(clean(value), format);
 }
@@ -175,13 +175,22 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
-  const x = rtl ? inner.x + pad + end : inner.x + pad + tickWidth;
-  const plotWidth = Math.max(1, rtl ? right - tickWidth - x : right - x - end);
   const labels = plan.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));
   if (rtl) labels.reverse();
+  // LH-125: a stacked area runs edge to edge (layer.stack.edge): its first and last categories stand on the plot's edges with their labels
+  // centered on them, so the plot keeps half of each label's width beyond its edges (labels[0] is the leftmost).
+  const edge = layer?.stack?.edge === true && labels.length >= 2;
+  const half = (text: string | undefined) => edge ? Math.min(width(text ?? '') / 2, box.width * 0.15) : 0;
+  // The value axis side keeps its tick labels, the other side the end gutter; the plot's edge is that room past the padding.
+  const leftRoom = Math.max(rtl ? end : tickWidth, half(labels[0]) - pad), rightRoom = Math.max(rtl ? tickWidth : end, half(labels.at(-1)) - pad);
+  const x = inner.x + pad + leftRoom;
+  const plotWidth = Math.max(1, right - rightRoom - x);
   const cap = Math.max(lineHeight + fontPx * 1.22, inner.height * 0.4);
-  const reserve = categoryLabelReserve(labels, {x, width: plotWidth}, cap, inner.x + pad, {width, fontPx, lineHeight});
-  const bottom = inner.y + inner.height - pad - reserve;
+  // The labels of an edge-to-edge plot sit on its n points: laid out as the centers of n bands over a plot one band wider.
+  const pointBand = edge ? plotWidth / (labels.length - 1) : 0;
+  const reserve = categoryLabelReserve(labels, edge ? {x: x - pointBand / 2, width: plotWidth + pointBand} : {x, width: plotWidth}, cap, inner.x + pad, {width, fontPx, lineHeight});
+  // An edge-to-edge area's labels sit a fifth of a text size lower, clear of the value axis's zero label under its first point.
+  const bottom = inner.y + inner.height - pad - reserve - (edge ? fontPx * 0.2 : 0);
   if (!(bottom - top > 1)) return undefined;
   return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
 }

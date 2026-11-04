@@ -6,7 +6,7 @@ import {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
 import {alignBarRows,besideEachOther,horizontalBarType,sameKeys,tableRowKeys} from './chart-rows.js';
 import {chartEndLabels,chartSliceLabels,refreshEndLabels} from './chart-direct-labels.js';
 import {chartSlideFocus,slideFocusSources,tableHighlightRows,tableSlideFocus,type FocusSource} from './chart-focus.js';
-import {chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
+import {restackForRows,chartStack,chartTitleReferences,chartValueList,chartWaterfall,placeReferences,refreshChartMarks} from './chart-marks.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
@@ -6682,7 +6682,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
   // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
   // (a deck without a bold body face must not fail on a slide that never draws one).
-  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.references);
+  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
   if (marked.length) {
     const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
     refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
@@ -6715,8 +6715,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const layer = chart.chart.layer, authored = record(chart.value);
       // Each bar beside its key: the middle of the key cell's text (cells set their text at the top of the row).
       const centers = body.map(row => { const key = row.cells.find(cell => cell.column === 0) ?? row.cells[0]!; const fit = key.fit; return key.textBox.y + ('height' in fit ? fit.height : fit.lines.length * fit.lineHeight) / 2; });
-      const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: layer.header?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
-      if (rows) { chart.chart.layer = { ...layer, rows }; break; }
+      const rows = alignBarRows(data, rounded(chart.box), body.map(row => row.box), centers, { scale, minFontSize: chart.composition.minFontSize, header: (layer.stack?.legend ?? layer.header)?.height ?? 0, hiddenAxis: layer.small?.valueAxis === false, labels: Boolean(layer.small?.labels || (authored.dataLabels !== undefined && authored.dataLabels !== false)), measure: chartMeasure });
+      // LH-125: a horizontal stacked bar chart gives up its pinned plot and names row for the table's rows, keeping its legend (restackForRows).
+      if (rows) { chart.chart.layer = restackForRows(chart.value, data, layer, rows, chart.box, chart.chart.valueAxis, plotGeometry(chart)); break; }
     }
   }
   // LH-115: the timeline under its column chart spans the plot, so each event sits under its column; it is listed before the chart when
@@ -6820,8 +6821,8 @@ export {niceScale,maxIntervalsFor,stackCategoryValues,waterfallSteps,CHART_AXIS_
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry,WaterfallStep} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export {chartPlotInset,shareSiblingPlots} from './chart-plot.js';
-export {chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
-export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartLayerValueList,ChartStackName,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
+export {restackForRows,chartWaterfall,waterfallRoles,waterfallLabelText,waterfallSignedFormat,chartValueList,chartStack,placeStackNames,chartTitleReferences,placeReferences,refreshChartMarks,CHART_VALUE_LIST_MAX_ROWS,CHART_VALUE_LIST_SMALL_SLICE} from './chart-marks.js';
+export type {WaterfallRole,ChartLayerWaterfall,ChartValueListRow,ChartValueListHole,ChartLayerValueList,ChartStackName,ChartStackEnd,ChartLayerStack,ChartReferenceLine,ChartReferenceBand,ChartLayerReferences} from './chart-marks.js';
 export type {ChartPlotGeometry,SiblingPlotChart} from './chart-plot.js';
 export {chartLayer,chartHeader,chartHeaderCaption,chartRingLabels,smallChart,chartLayerDataLabels,SMALL_CHART_MAX_SERIES,SMALL_CHART_MAX_POINTS,CHART_HEADER_MAX_LEGEND} from './chart-layer.js';
 export type {ChartLayer,ChartLayerSmall,ChartLayerHeader,ChartLayerRing,ChartPlotInset,ChartHeaderLegendEntry,ChartLayerGeometry,ChartEndLabel,ChartLayerEndLabels,ChartSliceLabel,ChartLayerSlices} from './chart-layer.js';
