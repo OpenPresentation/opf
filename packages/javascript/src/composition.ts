@@ -39,7 +39,9 @@ export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-import {layoutVariantApplies} from './color.js';
+import {layoutVariantApplies,resolveColorRoles} from './color.js';
+import {pictureScrims,type ComposedScrim,type PictureLuminance} from './picture-scrim.js';
+export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type ScrimEdge} from './picture-scrim.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -494,6 +496,13 @@ export interface ComposedBackgroundImage {
   /** Luminance-based recolor of the pixels (Rec. 601 weights on sRGB values), as on an image block. */
   recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
   overlay?: ComposedOverlay;
+  /**
+   * LH-02: the automatic scrims behind the text on this picture (picture-scrim.ts), in paint order, drawn directly above the picture and
+   * beneath furniture and content: one for the body and headings, one for the header and one for the footer, merged where they meet.
+   * Present when text sits on the picture and the background has no `overlay` key: an overlay of the author's replaces them and
+   * `overlay: false` turns them off.
+   */
+  scrims?: ComposedScrim[];
   /** Present when core reads the picture's aspect ratio and the fit is not tile; otherwise call `fitImage` with the host's. */
   picture?: ImageFitPlacement;
 }
@@ -684,6 +693,17 @@ export interface ComposeSlideOptions {
   fill?: boolean;
   /** Return candidate scores and coverage without changing the selected geometry. */
   explain?: boolean;
+  /**
+   * LH-02: the slide's resolved color roles the automatic scrim of a picture background reads (the text colors and the scrim's,
+   * the slide background). `resolveSlideContext` passes them; without them the default scheme's roles for `darkBackground` apply.
+   */
+  roles?: { text: string; textSecondary: string; primary: string; background: string };
+  /**
+   * LH-02: a host that can read a picture's pixels returns its luminance grid (WCAG relative luminance per cell, row order), and the
+   * automatic scrim is then sized for the picture under the text instead of for any picture. Engines that draw the same slide must be
+   * given the same function, or none (then every scrim is sized for the worst case, black to white).
+   */
+  pictureLuminance?: (src: string) => PictureLuminance | undefined;
 }
 export class OPFCompositionError extends Error {
   readonly code = "layout-overflow";
@@ -3524,8 +3544,63 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
-  return settle(input, options, guardedCompose(input, options));
+  return withPictureScrim(input, options, settle(input, options, guardedCompose(input, options)));
 }
+/**
+ * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
+ * contrast rules sample there and the automatic scrim (LH-02) covers it. Quote, metric and timeline items, and items without lines, keep their box.
+ */
+export function textInkBox(item: ComposedItem, measurement: TextMeasurement | undefined): LayoutBox {
+  const fit = item.text;
+  if (!fit || !Array.isArray(fit.lines) || !fit.lines.length || !item.textStyle || item.quoteLayout || item.metricLayout || item.timelineLayout) return item.box;
+  try {
+    const measure = textWidthMeasurer(item.textStyle, measurement);
+    const width = Math.min(item.box.width, Math.max(...fit.lines.map((line) => measure(line, fit.fontSize))));
+    const height = Math.min(item.box.height, fit.lines.length * fit.lineHeight);
+    const x = item.alignment === 'center' ? item.box.x + (item.box.width - width) / 2 : item.alignment === 'right' ? item.box.x + item.box.width - width : item.box.x;
+    return { x, y: item.box.y, width, height };
+  } catch {
+    return item.box;
+  }
+}
+/**
+ * LH-02: the automatic scrims of a picture background (picture-scrim.ts) over the slide's final geometry; they change no box or size. They
+ * cover every item drawn straight on the picture (not a picture, video, code panel or table, which draw on fills of their own, nor an
+ * item on a card or the emphasis surface), every caption and the header and footer text; a right-to-left slide covers whole boxes. The
+ * slide's text color reaches 4.5:1 there, the muted color of header and footer text and of a quote, metric or timeline's footer too,
+ * and the primary color of a metric value or timeline 3:1 (display sizes). An `overlay` key on the background (an overlay of the author's, or `false`) means no scrim.
+ */
+function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  const background = result.backgroundImage;
+  if (!background) return result;
+  const authored = background.path === 'theme' ? options.themeBackground : background.path === 'design.background' ? record(record(options.presentation).design).background : record(record(input).design).background;
+  if (background.overlay || record(authored).overlay !== undefined) return result;
+  // The body and headings, the header and the footer each get a scrim of their own, so header and footer text at the slide's edges
+  // does not stretch the body's scrim over the whole picture.
+  const body: LayoutBox[] = [], header: LayoutBox[] = [], footer: LayoutBox[] = [];
+  let accent = false, muted = false, line = 0;
+  for (const item of result.items) {
+    if (item.caption) body.push(item.caption.box);
+    if (item.text && !item.frameBox && !item.emphasis) line = Math.max(line, item.text.lineHeight);
+    if (item.frameBox || item.emphasis || item.codeLayout || ['image', 'video', 'code', 'table'].includes(item.field)) continue;
+    body.push(result.direction === 'rtl' ? item.box : textInkBox(item, options.textMeasurement));
+    if (item.quoteLayout || item.metricLayout || item.timelineLayout) muted = true;
+    if (item.metricLayout || item.timelineLayout) accent = true;
+  }
+  for (const part of result.furniture?.parts ?? []) if (part.type === 'text') { (part.kind === 'header' ? header : footer).push(part.box); muted = true; }
+  const roles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+  const texts = [{ color: roles.text, target: 4.5 }, ...(muted ? [{ color: roles.textSecondary, target: 4.5 }] : []), ...(accent ? [{ color: roles.primary, target: 3 }] : [])];
+  // A recolored picture's pixels are not the ones measured, so it is bounded by the worst case.
+  const luminance = background.recolor ? undefined : options.pictureLuminance?.(background.src);
+  const scrims = pictureScrims({
+    path: background.path, width: result.width, height: result.height, groups: [body, header, footer], texts, color: roles.background, bases: [roles.background, '#FFFFFF'],
+    ...(background.opacity !== undefined ? { opacity: background.opacity } : {}), ...(background.picture ? { picture: background.picture.image } : {}),
+    ...(luminance ? { luminance } : {}), scale: Math.min(result.width, result.height) / 720, ...(line ? { line } : {}),
+  });
+  if (scrims.length) result.backgroundImage = { ...background, scrims };
+  return result;
+}
+
 /**
  * The wave 3 guard over one arrangement of the slide (`options` may ask for a recomposition): the slide is composed with every guarded
  * rule (GuardedRule), recording which changed something. When none did, that is the result: one composition, as before wave 3. When

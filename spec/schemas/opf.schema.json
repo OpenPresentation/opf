@@ -1625,13 +1625,17 @@
           "description": "Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above."
         },
         "overlay": {
-          "$ref": "#/$defs/Overlay",
-          "description": "Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo."
+          "description": "Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. Without an overlay, core draws an automatic scrim in the slide's background color behind text that sits on the picture, at the lowest opacity that keeps it at 4.5:1 over any picture (a gradient from the edge the text is near, or a band across it). An overlay of the author's replaces the automatic scrim, and false turns it off.",
+          "oneOf": [
+            { "$ref": "#/$defs/Overlay" },
+            { "const": false, "description": "No overlay and no automatic scrim: the picture shows as it is behind the text." }
+          ]
         }
       },
       "examples": [
         { "type": "image", "src": "asset:cover-photo" },
-        { "type": "image", "src": "./images/harbour.jpg", "alt": "Container ships at dawn", "focus": { "x": 0.5, "y": 0.7 }, "overlay": { "color": "dark1", "opacity": 0.4 } }
+        { "type": "image", "src": "./images/harbour.jpg", "alt": "Container ships at dawn", "focus": { "x": 0.5, "y": 0.7 }, "overlay": { "color": "dark1", "opacity": 0.4 } },
+        { "type": "image", "src": "asset:texture", "overlay": false }
       ]
     },
     "ImageFocus": {

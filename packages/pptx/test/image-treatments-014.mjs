@@ -80,7 +80,9 @@ deck.slides.forEach((slide, index) => {
   // core's item order as the preview draws it (the band and the headings never overlap, so the drawing is unchanged).
   // Image blocks are numbered across the deck in 0.15 ("OPF image N"), so names compare by kind.
   const order = [...xml.matchAll(/<p:(sp|pic|graphicFrame)>[\s\S]*?<p:cNvPr\b[^>]*\bname="([^"]*)"/g)].map(m => `${m[1]}:${legacy(m[2], index)}`)
-    .map(entry => entry.replace(/^pic:OPF image \d+$/, slide.id === 'collage-grid' ? 'pic:OPF image' : `pic:OPF slide image slides.${index}`).replace(/^sp:OPF image \d+ overlay$/, `sp:OPF slide image overlay slides.${index}`));
+    .map(entry => entry.replace(/^pic:OPF image \d+$/, slide.id === 'collage-grid' ? 'pic:OPF image' : `pic:OPF slide image slides.${index}`).replace(/^sp:OPF image \d+ overlay$/, `sp:OPF slide image overlay slides.${index}`))
+    // LH-02: core's automatic scrim of a picture background with no overlay is new since 0.14 (picture-scrim.mjs checks it).
+    .filter(entry => !/^sp:OPF background (scrim|tone (dark|light)) /.test(entry));
   const placed = slide.blocks?.some(entry => entry.placement);
   const headingsFirst = list => placed ? [...list.filter(entry => /OPF heading/.test(entry)), ...list.filter(entry => !/OPF heading/.test(entry))] : list;
   const was = expected.order.map(entry => entry.replace(/^pic:OPF image \d+$/, 'pic:OPF image')).filter(entry => !(backgroundSlide && entry.startsWith('pic:')));

@@ -1,5 +1,5 @@
 import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
-import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
+import { type LayoutBox, textInkBox } from './composition.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
@@ -57,32 +57,21 @@ const isLarge = (sizePx: number, bold: boolean) => {
 	return pt >= 18 || (bold && pt >= 14);
 };
 
+const within = (box: LayoutBox, area: LayoutBox) => box.x >= area.x - 0.5 && box.y >= area.y - 0.5 && box.x + box.width <= area.x + area.width + 0.5 && box.y + box.height <= area.y + area.height + 0.5;
+
 function slideBackdrop(context: RuleSlide, box?: { x: number; y: number; width: number; height: number }): BackdropSample {
 	const { design, composition } = context;
 	const image = composition?.backgroundImage;
 	if (image) {
 		// A background picture is unknown pixels; a full-frame overlay bounds the colour underneath. An edge-banded overlay covers only part of the frame.
+		// LH-02: so does one of core's automatic scrims, over the text region it covers at full opacity (and, when the host measured the picture, its grays).
+		const scrim = box ? image.scrims?.find((entry) => within(box, entry.text)) : undefined;
 		const overlay = image.overlay && !image.overlay.edge
 			? { color: resolveTextColor(image.overlay.color, design, '#000000') ?? '#000000', opacity: image.overlay.opacity }
-			: undefined;
-		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay });
+			: scrim ? { color: scrim.color, opacity: scrim.opacity } : undefined;
+		return backdropColors({ kind: 'image', opacity: image.opacity ?? 1, base: '#FFFFFF' }, box, design.dimensions, { overlay, ...(scrim?.grays ? { grays: scrim.grays } : {}) });
 	}
 	return backdropColors(design.backdrop, box, design.dimensions);
-}
-
-/** The part of a text item's box its lines actually cover (alignment respected), so a gradient is sampled under the ink, not the empty box. */
-function inkBox(item: ComposedItem, measurement: TextMeasurement | undefined): LayoutBox {
-	const fit = item.text;
-	if (!fit || !Array.isArray(fit.lines) || !fit.lines.length || !item.textStyle || item.quoteLayout || item.metricLayout || item.timelineLayout) return item.box;
-	try {
-		const measure = textWidthMeasurer(item.textStyle, measurement);
-		const width = Math.min(item.box.width, Math.max(...fit.lines.map((line) => measure(line, fit.fontSize))));
-		const height = Math.min(item.box.height, fit.lines.length * fit.lineHeight);
-		const x = item.alignment === 'center' ? item.box.x + (item.box.width - width) / 2 : item.alignment === 'right' ? item.box.x + item.box.width - width : item.box.x;
-		return { x, y: item.box.y, width, height };
-	} catch {
-		return item.box;
-	}
 }
 
 function collectSamples(context: RuleSlide): TextSample[] {
@@ -101,7 +90,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 		// LH-06: an item on the emphasis surface is drawn in the surface's roles on its fill.
 		const itemDesign = item.emphasis && surfaceDesign ? surfaceDesign : design;
 		if (['chart', 'image', 'video', 'code'].includes(item.field) || item.type === 'chart' || item.type === 'image' || item.type === 'video' || item.type === 'code') continue;
-		const backdrop = item.emphasis && emphasisBackdrop ? emphasisBackdrop : item.frameBox ? surface : slideBackdrop(context, inkBox(item, measurement));
+		const backdrop = item.emphasis && emphasisBackdrop ? emphasisBackdrop : item.frameBox ? surface : slideBackdrop(context, textInkBox(item, measurement));
 		const itemPath = pointerOfDotted(item.path);
 		const heading = item.field === 'title' || item.field === 'subtitle' || item.field === 'tag';
 		const baseSize = (item.text?.fontSize ?? 25 * scale) / scale;
@@ -189,7 +178,7 @@ const contrastRules: ValidationRule[] = [
 								path: sample.path,
 								slide,
 								message: `${sample.label} sits on a background picture. Contrast cannot be guaranteed from the document (against the lightest or darkest possible pixels it is as low as ${worst.ratio.toFixed(1)}:1; ${needed}:1 is needed at this size).`,
-								help: 'Add a full-frame overlay to the image background (design.background.overlay: a colour and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.',
+								help: `${slide.composition?.backgroundImage?.overlay ? 'Add' : 'Remove overlay: false so core draws its automatic scrim behind the text, add'} a full-frame overlay to the image background (design.background.overlay: a colour and an opacity high enough that text passes on any picture), use a solid or gradient background behind text, or place text on a card.`,
 								measured: { ratio: round(worst.ratio), needed, textColor: sample.color },
 							});
 						}
@@ -221,6 +210,18 @@ const contrastRules: ValidationRule[] = [
 						fixes,
 					});
 					if (sample.source === 'default') aggregated.set(key, { diagnostic, extra: 0 });
+				}
+				// LH-02: text on a picture with core's automatic scrim reads at 4.5:1; the note says so, and how to choose otherwise.
+				const scrim = slide.composition?.backgroundImage?.scrims?.[0];
+				if (scrim && !imageReported.done) {
+					const background = slide.composition!.backgroundImage!.path;
+					context.report(onImageRule, {
+						path: /^(slides\.\d+\.)?design\.background$/.test(background) ? pointerOfDotted(background) : `${slide.path}/title`,
+						slide,
+						message: `Text sits on a background picture. Core draws an automatic scrim behind it (the slide background color ${scrim.color} at ${Math.round(scrim.opacity * 100)}%, ${scrim.form === 'band' ? 'a band across the text' : `a gradient from the ${scrim.edge} edge`}), so it reads at ${scrim.target}:1 or better over ${scrim.basis === 'sampled' ? 'the picture under it' : 'any picture'}.`,
+						help: 'Set design.background.overlay to choose your own scrim, or overlay: false to show the picture without one; contrast then depends on the picture.',
+						measured: { ratio: round(scrim.contrast), needed: scrim.target, scrimOpacity: scrim.opacity, textColor: slide.design.colors.text },
+					});
 				}
 				for (const { diagnostic, extra } of aggregated.values())
 					if (extra) {

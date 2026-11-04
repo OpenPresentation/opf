@@ -201,14 +201,14 @@ export const onImageRule = rule(
 	'text-on-image',
 	'accessibility',
 	'info',
-	'Text sits on a background picture whose pixels cannot be measured.',
-	'Contrast over a photograph depends on the photograph. Without a full-frame overlay that guarantees readability for every possible image, the result cannot be certified from the document.',
+	'Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.',
+	'Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.',
 	{
 		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
 		thresholds: ['contrastNormal', 'contrastLarge'],
 		cost: 'composition',
 		approximations:
-			'Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.background overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
+			'Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
 	},
 );
 export const altRule = rule(

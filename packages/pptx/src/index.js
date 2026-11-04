@@ -318,6 +318,8 @@ export async function toPptx(input, options = {}) {
   // every image overlay shape, by object name (src/image-provenance.js).
   context.images = new Map();
   context.imageOverlays = new Map();
+  // LH-02: the gradient scrims of each slide part, by shape name (attachScrims).
+  context.scrims = {};
   context.svgPictures = new Map();
   context.pictureText = new Map();
   context.watermarks = new Map();
@@ -948,13 +950,16 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     images.consumedShapes.delete(images.backgroundOverlayShape);
     options.onDiagnostic?.({code: 'invalid-image-provenance', path: `slides.${slideIndex}.design.background.overlay`, message: 'The tagged OPF background overlay no longer sits on an image background; it was imported as an ordinary shape.'});
   }
-  // RR-96: the tone scrim of a picture background is no content; it restores the background's tone.
+  // RR-96, LH-02: core's automatic scrims of a picture background are no content; under RR-96's name it restores the background's tone.
   let toned = imageBackground;
   if (imageBackground?.type === 'image') {
-    for (const tone of ['dark', 'light']) {
-      const index = nativeContext.shapes.findIndex(shape => shape['p:nvSpPr']?.['p:cNvPr']?.name === toneScrimName(`slides.${slideIndex}`, tone));
-      if (index >= 0) { images.consumedShapes.add(index); toned = {...imageBackground, tone}; }
-    }
+    const opfSlide = `slides.${slideIndex}`;
+    nativeContext.shapes.forEach((shape, index) => {
+      const name = shape['p:nvSpPr']?.['p:cNvPr']?.name;
+      if (typeof name !== 'string') return;
+      if (isScrimName(name, scrimName(opfSlide))) images.consumedShapes.add(index);
+      for (const tone of ['dark', 'light']) if (isScrimName(name, toneScrimName(opfSlide, tone))) { images.consumedShapes.add(index); toned = {...imageBackground, tone}; }
+    });
   }
   if (toned) slide.design = {background: toned};
   // RR-96: a slide's own color map override (accents included) is its variant. An override that is the master's map imports nothing, one that is
@@ -2345,7 +2350,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // Core's resolved options (canvas, layout, families, alignment, content box, darkBackground), with the exporter's own additions:
   // the families after the measurement provider's resolution of the chosen family and the raster padding. Core formats socials
   // handles from its own SOCIAL_PLATFORMS vocabulary.
-  const composeOptions = { ...slideContext.core.options, fontFamilies: slideContext.composeFonts, textRasterPadding:options.textRasterPadding };
+  const composeOptions = { ...slideContext.core.options, fontFamilies: slideContext.composeFonts, textRasterPadding:options.textRasterPadding, ...(typeof options.pictureLuminance === "function" ? {pictureLuminance: options.pictureLuminance} : {}) };
   // Core resolves every shared design key once (slide design, deck design, then the layout record's design): the text alignment of
   // each item (item.alignment), and each image item's own fit and treatment (item.image).
   const geometry = composeSlide(opfSlide, composeOptions);
@@ -2853,8 +2858,12 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   return name;
 }
 
-const TONE_SCRIM_OPACITY = 0.4;
+// LH-02: core's automatic scrims of a picture background (backgroundImage.scrims). They keep RR-96's name on a picture that names its
+// tone, which import reads the tone back from; any other picture's scrims are named for the slide alone. The second and third (the
+// header's and the footer's) add their number. None is content.
 const toneScrimName = (slidePath, tone) => `OPF background tone ${tone} ${slidePath}`;
+const scrimName = slidePath => `OPF background scrim ${slidePath}`;
+const isScrimName = (name, base) => name === base || name === `${base} 2` || name === `${base} 3`;
 
 // An image background (core SlideComposition.backgroundImage). With alt text it is a full-slide picture at the back of
 // the slide over the canvas colour, carrying the alt text as its descr; without alt it is the native slide background
@@ -2893,13 +2902,34 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       width: box.w * 96, height: box.h * 96, report: options.onDiagnostic
     } });
   }
-  // RR-96: a picture background that names its tone (and has no overlay of its own) is a picture the text must read on: the slide background
-  // color of the tone's variant (bg1) covers it at 40%, the preview's scrim (opf-render `data-opf-tone-overlay`).
+  // LH-02: core's automatic scrims under the text (no overlay of the author's): each one native rectangle in the slide background color (bg1 of the
+  // slide's variant once scheme colors are written), whose fill packaging turns into a linear gradient with alpha stops (attachScrims)
+  // unless it is a band of one opacity. It replaces RR-96's 40% scrim of a picture that names its tone, whose name it keeps.
   const tone = isPlainObject(authored) ? authored.tone : undefined;
-  if (!background.overlay && (tone === 'dark' || tone === 'light')) {
-    slide.addShape('rect', { x: box.x, y: box.y, w: box.w, h: box.h, objectName: toneScrimName(slidePath, tone), fill: { color: normalizeHex(slideContext.roles?.background ?? `#${slideContext.colors.background}`), transparency: 100 - TONE_SCRIM_OPACITY * 100 } });
-  }
+  if (!background.overlay) (background.scrims ?? []).forEach((scrim, index) => {
+    const base = tone === 'dark' || tone === 'light' ? toneScrimName(slidePath, tone) : scrimName(slidePath), name = index ? `${base} ${index + 1}` : base;
+    slide.addShape('rect', { x: scrim.box.x / 96, y: scrim.box.y / 96, w: scrim.box.width / 96, h: scrim.box.height / 96, objectName: name, fill: { color: normalizeHex(scrim.color), transparency: Math.round(100 - scrim.opacity * 100) }, line: { type: 'none' } });
+    if (scrim.stops.some(stop => stop.opacity !== scrim.opacity)) (context.scrims[`ppt/slides/slide${slideIndex + 1}.xml`] ??= new Map()).set(name, scrim);
+  });
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
+}
+
+// LH-02: a gradient scrim's solid fill becomes a linear gradient along core's axis (90 degrees down a vertical scrim, 0 across a
+// horizontal one) whose stops carry the scrim color at each stop's alpha, the stops the preview's SVG gradient draws. The color stays as
+// the solid fill wrote it (a scheme color, bg1, once scheme colors are written), so the gradient follows the slide's color map.
+function attachScrims(entries, scrims) {
+  for (const [part, shapes] of Object.entries(scrims)) {
+    if (!entries[part]) continue;
+    const xml = decodeText(entries[part]).replace(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*<\/p:sp>/g, shape => {
+      const scrim = shapes.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+      if (!scrim) return shape;
+      return shape.replace(/<a:solidFill><a:(srgbClr|schemeClr) val="([^"]+)">[\s\S]*?<\/a:\1><\/a:solidFill>/, (_fill, kind, value) => {
+        const stops = scrim.stops.map(stop => `<a:gs pos="${Math.round(stop.position * 100000)}"><a:${kind} val="${value}"><a:alpha val="${Math.round(stop.opacity * 100000)}"/></a:${kind}></a:gs>`).join('');
+        return `<a:gradFill rotWithShape="1"><a:gsLst>${stops}</a:gsLst><a:lin ang="${scrim.axis === 'vertical' ? 5400000 : 0}" scaled="0"/></a:gradFill>`;
+      });
+    });
+    entries[part] = encodeText(xml);
+  }
 }
 
 // RR-97: a background picture that cannot be read leaves the background the slide would have without it: the deck's own
@@ -4591,6 +4621,7 @@ async function normalizePptxZip(raw, context) {
     const match = /^ppt\/slides\/slide(\d+)\.xml$/.exec(path), entry = match && context.slideSchemeColors[Number(match[1]) - 1];
     if (entry) entries[path] = encodeText(writeSchemeColors(decodeText(entries[path]), entry.table, entry.keep));
   }
+  attachScrims(entries, context.scrims);
   attachCodeTags(entries, context.codeTags);
   attachMetricTags(entries,context.metricTags,context.metricDescriptions);
   attachCardTags(entries,context.cardTags);

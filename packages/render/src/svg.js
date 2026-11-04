@@ -608,7 +608,7 @@ function bindSlide(presentation, index, context) {
   // The rule is core's resolveDrawnFontFamilies, which validate and paginate compose with too (WI-1, P24); the renderer decides
   // the two exceptions from the font policy and symbol tables it already holds.
   design.fonts = resolveDrawnFontFamilies(design.fonts, textMeasurement, (named, resolved) => isSymbolEncodedFamily(named) || fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase());
-  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement });
+  const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement, ...(typeof context.options.pictureLuminance === "function" ? { pictureLuminance: context.options.pictureLuminance } : {}) });
   return {
     scriptFonts,
     scriptFontsFor,
@@ -820,17 +820,19 @@ function renderBackgroundImage(background, bound, width, height, options) {
   const id = `opf-s${bound.index + 1}-background`, matrix = imageRecolorMatrix(background.recolor, bound);
   const defs = matrix ? tag("defs", {}, tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix }))) : "";
   const pixels = matrix || background.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: background.opacity === undefined ? undefined : preciseNumber(background.opacity) }, picture) : picture;
-  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : toneOverlay(bound, width, height, options)].filter(Boolean).join("\n");
+  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : (background.scrims ?? []).map((scrim, index) => renderPictureScrim(scrim, index, bound, options)).join("\n")].filter(Boolean).join("\n");
 }
 
-// RR-96: a picture that names its tone (`dark` or `light`) is a picture the text must read on: with no overlay of its own, the slide
-// background colour (bg1 of the tone's variant, so dark text colours get a dark scrim and light ones a light one) covers it at 40%.
-// Core resolves the variant from the tone but exposes no overlay for it, so this scrim is the renderer's own (reported in RR-96).
-const TONE_OVERLAY_OPACITY = 0.4;
-function toneOverlay(bound, width, height, options) {
-  const tone = isPlainObject(bound.design.background) ? bound.design.background.tone : undefined;
-  if (tone !== "dark" && tone !== "light") return "";
-  return tag("rect", { ...HIDDEN, x: 0, y: 0, width, height, fill: bound.design.colors.background, opacity: TONE_OVERLAY_OPACITY, ...(options.trace ? { "data-opf-tone-overlay": tone } : {}) });
+// LH-02: core's automatic scrims under the text on a picture (backgroundImage.scrims) in the slide background color: each a rectangle filled
+// with a linear gradient along its axis whose stops carry the opacity (a band of one opacity is a plain fill), the geometry the PPTX
+// export writes as a native gradient fill. It replaces RR-96's renderer-own 40% scrim on a picture that names its tone.
+function renderPictureScrim(scrim, index, bound, options) {
+  const trace = options.trace ? { "data-opf-scrim": scrim.edge ?? scrim.form } : {};
+  const rect = { ...HIDDEN, x: stableNumber(scrim.box.x), y: stableNumber(scrim.box.y), width: stableNumber(scrim.box.width), height: stableNumber(scrim.box.height) };
+  if (scrim.stops.every(stop => stop.opacity === scrim.opacity)) return tag("rect", { ...rect, fill: scrim.color, "fill-opacity": preciseNumber(scrim.opacity), ...trace });
+  const id = `opf-s${bound.index + 1}-scrim-${index + 1}`, vertical = scrim.axis === "vertical";
+  const stops = scrim.stops.map(stop => tag("stop", { offset: preciseNumber(stop.position), "stop-color": scrim.color, "stop-opacity": preciseNumber(stop.opacity) })).join("");
+  return tag("defs", {}, tag("linearGradient", { id, x1: 0, y1: 0, x2: vertical ? 0 : 1, y2: vertical ? 1 : 0 }, stops)) + tag("rect", { ...rect, fill: `url(#${id})`, ...trace });
 }
 
 // tile: a pattern cell of the picture's intrinsic size, anchored at the canvas origin.

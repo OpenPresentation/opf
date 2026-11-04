@@ -196,7 +196,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 1. **Background.** Design resolves per field: slide design, deck design, theme, engine default. The background is a theme slot or colour (`solid`), the card surface for content on a `contentBox` card, a table cell's fill, a gradient or a pattern. Solid, gradient-stop and pattern colours are read as literal hex colours, as the preview reads them (anything else falls back as it does there). Translucent backgrounds are composited over white.
 2. **Text colour.** Titles, body, lists and tags use the scheme's `dark1`, or `light1` when the background is dark (luminance below 0.179). Furniture and quote attributions use the muted colour, metric values the primary colour, and explicit run and table colours the author's `ColorRef` resolved the same way the renderer resolves it. As the preview does, a gradient background has no single colour and counts as light, so a dark gradient behind default text is reported.
 3. **Gradients.** The gradient is sampled on a 5 by 5 grid over the area the text covers (the lines' measured ink, aligned as the text is), using the preview's gradient geometry, and the worst colour decides. A pattern contributes both of its colours.
-4. **Pictures.** Pixels are never read. A background picture is bounded by a grey ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`). Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed. An overlay limited to an edge band is not counted.
+4. **Pictures.** Pixels are never read. A background picture is bounded by a gray ramp from black to white, composited through the picture opacity and any full-frame overlay of the image background (`design.background.overlay`), or, over the text it covers, core's [automatic scrim](image-treatments.md#automatic-scrim) (bounded by the grays a host measured, when it did). Text passes only if every step passes; otherwise `opf/text-on-image` says the result cannot be guaranteed. With the scrim, `opf/text-on-image` is a note that names it. An overlay limited to an edge band is not counted.
 5. **Ratio and size.** The WCAG 2.x relative-luminance contrast ratio is compared with 4.5:1, or 3:1 for large text: at least 18 pt, or 14 pt and bold. Sizes are the fitted sizes, expressed at the 13.33 by 7.5 in reference slide (96 px per inch). The default body size, 18.75 pt, is large text under WCAG, so default body text passes at 3:1; set `contrastLarge` to 4.5 for a stricter policy.
 
 Approximations: anti-aliasing, text shadows, font weight and the exact glyph coverage are not modelled; chart and code text are not checked (charts pick label colours against their surface; code uses its own panel colours). See each rule below for what it cannot see.
@@ -267,7 +267,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/variable-reference-unknown`](#opfvariable-reference-unknown) | References | warning | structure | A `var:` colour names a variable that is not declared. |
 | [`opf/contract`](#opfcontract) | Policy | error | structure | A field is outside the values a host policy allows. |
 | [`opf/text-contrast`](#opftext-contrast) | Accessibility | warning | composition | Text colour has too little contrast against the background it sits on. |
-| [`opf/text-on-image`](#opftext-on-image) | Accessibility | info | composition | Text sits on a background picture whose pixels cannot be measured. |
+| [`opf/text-on-image`](#opftext-on-image) | Accessibility | info | composition | Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed. |
 | [`opf/missing-alt-text`](#opfmissing-alt-text) | Accessibility | warning | structure | A picture has no alt text and is not marked decorative. |
 | [`opf/poor-alt-text`](#opfpoor-alt-text) | Accessibility | info | structure | Alt text is a file name, a URL, a generic word or very long. |
 | [`opf/missing-slide-title`](#opfmissing-slide-title) | Accessibility | warning | structure | A slide has no title. |
@@ -687,15 +687,15 @@ Default severity: **warning**. Cost: composition. Text colour has too little con
 
 ### `opf/text-on-image`
 
-Default severity: **info**. Cost: composition. Text sits on a background picture whose pixels cannot be measured.
+Default severity: **info**. Cost: composition. Text sits on a background picture: a note when core draws its automatic scrim behind it, otherwise its contrast cannot be guaranteed.
 
-**Why.** Contrast over a photograph depends on the photograph. Without a full-frame overlay that guarantees readability for every possible image, the result cannot be certified from the document.
+**Why.** Contrast over a photograph depends on the photograph. Core draws an automatic scrim behind text on a picture background that has no overlay, at the lowest opacity that keeps it at 4.5:1 over any picture, and this note names it. With an edge-band overlay, or the scrim turned off (overlay: false), only a full-frame overlay that guarantees readability for every possible image certifies the result from the document.
 
 **Basis.** WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA
 
 **Thresholds.** `contrastNormal` (default 4.5), `contrastLarge` (default 3)
 
-**Approximations.** Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.background overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.
+**Approximations.** Core reads picture pixels only through a host that measures them (ComposeSlideOptions.pictureLuminance). Otherwise the picture is bounded by a gray ramp from black to white, composited through the image opacity and a full-frame design.background overlay or the automatic scrim over the text it covers; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.
 
 ### `opf/missing-alt-text`
 
