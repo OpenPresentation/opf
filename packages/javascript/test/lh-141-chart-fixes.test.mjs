@@ -4,7 +4,7 @@
 // makes the same decision).
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { composeSlide, chartHeader, resolveChartData, groupNumber, groupsThousands, layoutMetric, CHART_HEADER_LEGEND_ROWS } from "../dist/composition.js";
+import { composeSlide, chartHeader, resolveChartData, groupNumber, groupsThousands, groupsAxisTicks, layoutMetric, CHART_HEADER_LEGEND_ROWS } from "../dist/composition.js";
 
 const compose = (slide, options = {}) => composeSlide(slide, { width: 1280, height: 720, ...options });
 const chartOf = (slide, options) => compose(slide, options).items.find((item) => item.field === "chart");
@@ -33,6 +33,16 @@ describe("LH-141: thousands grouped by the deck language", () => {
     assert.equal(groupsThousands([120, 999]), false, "three digits stay as they are");
     assert.equal(groupsThousands([1200.5, 3000]), false, "a fraction keeps the General form");
     assert.equal(groupsThousands([]), false);
+  });
+
+  test("a value axis groups its ticks when they are whole numbers of four digits", () => {
+    assert.equal(groupsAxisTicks({ min: 0, max: 8000, majorUnit: 2000 }), true);
+    assert.equal(groupsAxisTicks({ min: 0, max: 800, majorUnit: 200 }), false, "three digits");
+    assert.equal(groupsAxisTicks({ min: 0, max: 2500, majorUnit: 500 }), true);
+    assert.equal(groupsAxisTicks({ min: 0, max: 2, majorUnit: 0.5 }), false, "fractional ticks");
+    assert.equal(groupsAxisTicks({ min: 0, max: 0, majorUnit: 0 }), false);
+    const line = chartOf({ title: "Orders", chart: { type: "line", data: { columns: ["Month", "Orders"], rows: [["Jan", 4120], ["Feb", 6240]] } } });
+    assert.equal(groupsAxisTicks(line.chart.valueAxis), true, "the composed axis of a line chart of thousands");
   });
 
   test("the pie value list and the doughnut hole print grouped values; an author's format and fractions do not", () => {

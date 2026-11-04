@@ -25,7 +25,7 @@ export function groupNumber(value: number, language?: string): string {
 }
 
 /**
- * True when a series' default value labels group their thousands: every value it has is a whole number and one reaches four digits. A
+ * True when a series' default value labels group their thousands: every value it has is a whole number (a safe integer: values past 2^53 are not counts) and one reaches four digits. A
  * series of fractions keeps the General form, which PowerPoint's own label format (`#,##0`, written for a series that groups) could not
  * print as the preview does.
  */
@@ -33,10 +33,21 @@ export function groupsThousands(values: readonly (number | null | undefined)[]):
   let large = false;
   for (const value of values) {
     if (value === null || value === undefined) continue;
-    if (!Number.isFinite(value) || !Number.isInteger(value)) return false;
+    if (!Number.isSafeInteger(value)) return false;
     if (Math.abs(value) >= NUMBER_GROUPING_MIN) large = true;
   }
   return large;
+}
+
+/**
+ * True when a value axis groups the thousands of its tick labels: its own ticks (the minimum and every major unit up to the maximum) are
+ * whole numbers and one reaches four digits (`groupsThousands`). Only an axis with no number format of its own and no share scale asks.
+ */
+export function groupsAxisTicks(axis: {min: number; max: number; majorUnit: number}): boolean {
+  if (!(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return false;
+  const ticks: number[] = [];
+  for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(Number((axis.min + index * axis.majorUnit).toPrecision(12)));
+  return groupsThousands(ticks);
 }
 
 /** The number format code PowerPoint prints a grouping series' labels with, as `groupNumber` does (its separators follow the viewer's region). */

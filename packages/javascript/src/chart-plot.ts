@@ -12,6 +12,7 @@ import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChar
 import {chartDrawPlan} from './chart-fallback.js';
 import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
+import {groupNumber, groupsAxisTicks} from './number-grouping.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 
@@ -40,10 +41,14 @@ const ELLIPSIS = '…';
 const clean = (value: number): number => { const rounded = Number(value.toPrecision(12)); return Object.is(rounded, -0) ? 0 : rounded; };
 const record = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
-/** A value axis tick as the preview labels it: a percentage on a 100% chart, else the first series' number format, else General. */
-export function tickLabel(value: number, percent: boolean, format: string | undefined): string {
+/**
+ * A value axis tick as the preview labels it: a percentage on a 100% chart, else the first series' number format, else General. LH-141:
+ * with `group` (an axis without a format whose ticks are whole numbers of four digits, `groupsAxisTicks`) the tick groups its thousands by the language.
+ */
+export function tickLabel(value: number, percent: boolean, format: string | undefined, group?: {language?: string}): string {
   if (percent) return `${clean(value * 100)}%`;
-  return format === undefined ? String(clean(value)) : formatDataNumber(clean(value), format);
+  if (format === undefined) return group ? groupNumber(clean(value), group.language) : String(clean(value));
+  return formatDataNumber(clean(value), format);
 }
 
 /**
@@ -172,7 +177,7 @@ export function chartPlotInset(chart: unknown, resolved: ResolvedChartData, comp
   const percent = spec.percent === true;
   const ticks: number[] = [];
   for (let index = 0, count = Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9); index <= count; index++) ticks.push(clean(axis.min + index * axis.majorUnit));
-  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format)))) + fontPx * 0.5;
+  const tickWidth = hidden ? fontPx / 2 : Math.max(...ticks.map(tick => width(tickLabel(tick, percent, format, !percent && format === undefined && groupsAxisTicks(axis) ? {language: geometry.language} : undefined)))) + fontPx * 0.5;
   // The end of the plot (the last category: the right, or the left right to left) keeps half a text size, or the end-label gutter.
   const end = Math.max(fontPx / 2, layer?.endLabels?.gutter ?? 0, layer?.stack?.names?.gutter ?? 0);
   const labels = plan.rows.map(row => row[0] === null || row[0] === undefined ? '' : String(row[0]).replace(/[\r\n]+/g, ' '));

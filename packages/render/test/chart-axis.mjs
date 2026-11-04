@@ -52,7 +52,8 @@ for (const [name, values] of ordinary) {
       // LH-81: the header caption is chart text too; it is not a tick label.
       .filter((text) => text !== "Value by category");
     assert.ok(labels.length >= 2, `${label}: value axis has ticks`);
-    const ticks = labels.map(Number);
+    // LH-141: an axis with whole-number ticks of four digits groups them ("10,000").
+    const ticks = labels.map((text) => Number(text.replace(/,/g, "")));
     assert.ok(ticks.every(Number.isFinite), `${label}: numeric tick labels`);
     const grid = grids.filter((g) => horizontal ? g.x1 === g.x2 : g.y1 === g.y2);
     assert.equal(grid.length, ticks.length, `${label}: one gridline per tick label`);

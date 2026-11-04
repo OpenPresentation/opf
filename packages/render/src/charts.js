@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -412,10 +412,14 @@ function clean(value) {
   return Object.is(rounded, -0) ? 0 : rounded;
 }
 
-/** Office General / 0% tick labels; a value axis takes its first plotted series' number format (RR-54). */
-export function formatTick(value, percent = false, format = undefined) {
+/**
+ * Office General / 0% tick labels; a value axis takes its first plotted series' number format (RR-54). LH-141: `group` ({ language }, an axis
+ * with no format whose ticks are whole numbers of four digits, core `groupsAxisTicks`) groups the thousands by the deck language.
+ */
+export function formatTick(value, percent = false, format = undefined, group = undefined) {
   if (percent) return `${clean(value * 100)}%`;
-  return format === undefined ? String(clean(value)) : formatChartValue(value, format);
+  if (format === undefined) return group ? groupNumber(clean(value), group.language) : String(clean(value));
+  return formatChartValue(value, format);
 }
 
 // RR-54: a formatted horizontal axis (horizontal bars, the scatter X axis) can have end tick labels far wider than the margin the layout
@@ -768,6 +772,8 @@ function renderCategoryChart(c, spec) {
   const percent = spec.grouping === "percentStacked";
   const series = c.series();
   const valueFormat = series[0]?.format;
+  // LH-141: an axis with no format and whole-number ticks of four digits groups its thousands, as the data labels do.
+  const tickGroup = !percent && valueFormat === undefined && c.valueAxis && groupsAxisTicks(c.valueAxis) ? { language: typeof c.language === "string" ? c.language : undefined } : undefined;
   const categories = c.rows.map((row) => c.label(row[0]));
   const count = categories.length;
   // Right to left (RR-05): column, line and area charts run their category axis from the right (PowerPoint's reversed categories,
@@ -796,7 +802,7 @@ function renderCategoryChart(c, spec) {
     let x = box.x + pad + categoryWidth + c.pad / 2;
     const bottom = box.y + box.height - pad - (hidden ? 0 : c.lineHeight);
     let width = Math.max(1, right - x - fontPx - labelRoom);
-    const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat)), c.width(formatTick(dataMin, percent, valueFormat)), c.width("100%")) + fontPx;
+    const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat, tickGroup)), c.width(formatTick(dataMin, percent, valueFormat, tickGroup)), c.width("100%")) + fontPx;
     const scaleFor = (w) => categoryScale(c, dataMin, dataMax, w, tickWidth, percent);
     scale = scaleFor(width);
     // RR-54: a formatted value axis keeps its end labels inside the chart.
@@ -828,7 +834,7 @@ function renderCategoryChart(c, spec) {
     } : planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
       const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
-      const tickWidth = hidden ? fontPx / 2 : Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
+      const tickWidth = hidden ? fontPx / 2 : Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat, tickGroup)))) + fontPx * 0.5;
       if (rtl) {
         const x = box.x + pad + fontPx / 2;
         return { scale: fitted, plot: { x, y: top, width: Math.max(1, right - tickWidth - x), height }, tickWidth };
@@ -846,7 +852,7 @@ function renderCategoryChart(c, spec) {
   // Category axis crosses at zero when zero is on the axis (autoZero).
   const crossing = at(Math.min(scale.max, Math.max(scale.min, 0)));
   for (const tick of hidden ? [] : scale.ticks) {
-    const position = at(tick), label = formatTick(tick, percent, valueFormat);
+    const position = at(tick), label = formatTick(tick, percent, valueFormat, tickGroup);
     if (horizontal) {
       gridline(c, position, plot.y, position, plot.y + plot.height);
       const width = c.width(label) + fontPx;

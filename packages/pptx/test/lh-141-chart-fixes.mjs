@@ -33,6 +33,16 @@ const labelFormats = chart => [...chart.matchAll(/<c:dLbls>[\s\S]*?<\/c:dLbls>/g
   check(labelFormats(small).every(code => code === 'General'), `three digits keep General (${labelFormats(small)})`);
 }
 
+// 1b. The value axis takes `#,##0` by the same rule (no format of its own, whole-number ticks of four digits, not a share axis).
+{
+  const axisFormat = chart => /<c:valAx>[\s\S]*?<c:numFmt formatCode="([^"]*)"/.exec(chart)?.[1];
+  const line = (columns, type = 'line') => ({title: 'Orders grew', chart: {type, dataLabels: false, data: {columns, rows: [['Jan', 4120], ['Feb', 5240], ['Mar', 6240]]}}});
+  check(axisFormat((await exported(line(['Month', 'Orders']))).chart) === '#,##0', 'the value axis groups');
+  check(axisFormat((await exported(line(['Month', {name: 'Orders', format: '0'}]))).chart) === '0', 'an axis format the author wrote is kept');
+  check(axisFormat((await exported(line(['Month', 'Orders'], '100pct-stacked-column'))).chart) === '0%', 'a share axis stays percent');
+  check(axisFormat((await exported({title: 'Orders', chart: {type: 'line', dataLabels: false, data: {columns: ['Month', 'Orders'], rows: [['Jan', 41], ['Feb', 62]]}}})).chart) === 'General', 'three digits keep General');
+}
+
 // 2. A line chart with two series groups only the series that does; the value list, hole and metric are grouped text, in the deck language.
 {
   const {chart} = await exported({title: 'Orders grew', chart: {type: 'line', dataLabels: true, data: {columns: ['Month', 'Orders', 'Rate'], rows: [['Jan', 4120, 3.1], ['Feb', 6240, 3.4]]}}});

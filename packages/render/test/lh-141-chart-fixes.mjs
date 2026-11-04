@@ -23,6 +23,19 @@ const check = (condition, message) => { assert.ok(condition, message); checks++;
   check(written.includes('6240') && !written.includes('6,240'), 'a format the author wrote is kept');
 }
 
+// 1b. The value axis groups its ticks by the same rule: no format of its own, whole-number ticks of four digits, not a share axis.
+{
+  const slide = (columns, type = 'line') => ({ title: 'Orders grew', chart: { type, dataLabels: false, data: { columns, rows: [['Jan', 4120], ['Feb', 5240], ['Mar', 6240]] } } });
+  const ticks = (svg) => texts(svg).filter((text) => /^[0-9][0-9,.]*$/.test(text) && Number(text.replace(/[,.]/g, '')) % 2000 === 0 && Number(text.replace(/[,.]/g, '')) >= 2000);
+  const english = ticks(toSvg(deck(slide(['Month', 'Orders'])), 1));
+  check(english.includes('2,000') && english.includes('6,000') && !english.includes('6000'), `English ticks group (${english})`);
+  check(ticks(toSvg(deck(slide(['Month', 'Orders']), 'de'), 1)).includes('6.000'), 'German ticks group');
+  const written = ticks(toSvg(deck(slide(['Month', { name: 'Orders', format: '0' }])), 1));
+  check(written.includes('6000') && !written.includes('6,000'), 'an axis format the author wrote is kept');
+  const share = texts(toSvg(deck(slide(['Month', 'Orders'], '100pct-stacked-column')), 1));
+  check(share.includes('100%'), 'a share axis stays percent');
+}
+
 // 2. The doughnut's value list and hole, and a metric's value.
 {
   const doughnut = (language) => toSvg(deck({ title: 'Two in three tickets are resolved on first contact', chart: { type: 'doughnut', data: { columns: ['Outcome', 'Tickets'],
