@@ -4,7 +4,10 @@ import {toSvg} from '../packages/render/src/svg.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(truth,message)=>{if(!truth)throw new Error(message);checks++;out.textContent+=`PASS ${message}\n`;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-const original={name:'Layout demo',slides:[{title:'Give the main idea room',composition:{mode:'row',weights:[2,1]},blocks:[{composition:{mode:'column'},blocks:[{text:'Recommendation: fund the next milestone.'},{text:'The implementation stays shared across browser preview and PowerPoint export.'}]},{text:'Context, constraints, and the next decision.'}]}]};
+// The nested column holds a one-line and a two-line text. LH-48 (LH waves 3 and 4, #991 and #1000) grows an under-filled body by
+// type-scale steps (to 37 px here), at which "Recommendation: fund the next milestone." wrapped to two lines and both rows were drawn
+// at an equal 50%; the shorter first text stays one line at the grown size.
+const original={name:'Layout demo',slides:[{title:'Give the main idea room',composition:{mode:'row',weights:[2,1]},blocks:[{composition:{mode:'column'},blocks:[{text:'Fund the next milestone.'},{text:'The implementation stays shared across browser preview and PowerPoint export.'}]},{text:'Context, constraints, and the next decision.'}]}]};
 const editor=createEditorSession(original,{rejectInvalid:true});let errors=[],drafts=[],commits=0;
 const canvas=createCanvasEditor(host,{editor,layoutEditing:true,onError:error=>errors.push(error.message),onDraft:value=>drafts.push(value),onCommit:()=>commits++});
 const handle=(path='slides.0',boundary=0)=>[...host.querySelectorAll('[role=separator]')].find(node=>node.dataset.layoutPath===path&&node.dataset.layoutBoundary===String(boundary));

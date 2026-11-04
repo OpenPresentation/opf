@@ -88,6 +88,15 @@ for (const fixture of metricLayoutFixtures()) {
   assert.ok(layout.attempts>=1&&layout.attempts<=48);
   for (const part of layout.parts) {
     assert.equal(part.text,String(part.sources[0].value));assert.ok(part.requestedFontSize>=minFontSize*scale);
+    // LH-53 (LH wave 4, #1000): the trend takes no text line of its own. It is drawn as an arrow square before its host's first line
+    // (the delta, else the label, else the description) or on its own placed line without one; the part then draws no text, and its
+    // source text stays the arrow's text alternative. So its fit has no lines and its box is the arrow's square inside the metric.
+    if (part.role==='trend') {
+      assert.equal(part.visible,false);assert.deepEqual(part.fit.lines,[]);assert.deepEqual(part.fit.sourceLines,[]);assert.deepEqual(part.linePositions,[]);
+      assert.ok(part.box.width>0&&part.box.width===part.box.height,'The trend arrow is a square');
+      if (!overflow) assert.ok(part.box.x>=box.x-.01&&part.box.x+part.box.width<=box.x+box.width+.01&&part.box.y>=box.y-.01&&part.box.y+part.box.height<=box.y+box.height+.01);
+      continue;
+    }
     if (part.fit) {
       assert.ok(part.fit.fontSize>=part.minFontSize);
       assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);
