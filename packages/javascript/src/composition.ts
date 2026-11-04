@@ -13,6 +13,7 @@ import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
+import {featuredCells,type FeaturedCells} from './featured-cards.js';
 import {EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} from './metric-trend.js';
@@ -53,7 +54,7 @@ export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuot
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForRoles, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
-export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
+export {METRIC_TREND_ARROW_GAP, METRIC_TREND_ARROW_SIZE, METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricPillFill, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
@@ -387,20 +388,29 @@ export interface ComposedItem {
  * LH-06: the one contrasting surface of a slide. `path` is the block or group drawn on it (every item under that path carries
  * `emphasis`); `box` the surface, drawn under those items with the fill of core `emphasisSurface` and corner `radius`, in canvas pixels.
  * `shape`: `card` for a block or group's cell, `band` for a full-width band at the foot of the body, `pill` for a capsule around one short
- * text. `source`: `authored` for `emphasis: true`, else the automatic rule that made it (`foot-band`, `pill`).
+ * text. `source`: `authored` for `emphasis: true`, else the automatic rule that made it (`foot-band`, `pill`, and LH-131's `featured` card
+ * of a pair or a set, a `card` like an authored one).
  */
 export interface ComposedEmphasis {
   path: string;
   box: LayoutBox;
   radius: number;
   shape: 'card' | 'band' | 'pill';
-  source: 'authored' | 'foot-band' | 'pill';
+  source: 'authored' | 'foot-band' | 'pill' | 'featured';
+  /**
+   * LH-131: a featured before and after pair of metrics side by side: the arrow from the first card to this one, in the room between them.
+   * Engines draw it as LH-07 draws a flow's arrows: an accent (`primary`) block arrow filling `box` and pointing to `direction`, as
+   * DrawingML's `rightArrow` (`leftArrow`) preset draws it with its default adjustments.
+   */
+  arrow?: { box: LayoutBox; direction: 'left' | 'right' };
 }
 /**
  * LH-07: one drawn sequence of a `sequence` region (layout record): what the engines draw besides its text, in canvas pixels.
  * - `row`: the region's blocks side by side, each under a badge; `connector` runs through the badge centers of the row.
  * - `column`: a list's entries, each beside a badge in the list's marker column; `connector` runs down that column.
  * - `flow`: a short list's entries in `chips` (one per entry; its text is the list column of the same index) with `arrows` between.
+ * - `tiles` (LH-137): a dark slide's short summary list as a grid of `chips` (one per entry, its text the list column of the same
+ *   index), each with a badge at its start whose `check` mark stands in for the bullet; no connector or arrows.
  * Paint order: chips, connector, badges, arrows, then the text. A badge is an accent (`primary`) circle of `radius` around
  * (`cx`, `cy`) with its `label` centered on it in the bold body face at `fontSize`, its baseline at `baseline`, in the scheme
  * color readable on the accent (`readableSchemeColor`); the connector is a `border` colored line `lineWidth` wide; a chip is a card
@@ -410,10 +420,10 @@ export interface ComposedEmphasis {
  * blocks and a flow runs right to left; a list's badges sit on the side each entry's paragraph starts, as its markers would.
  */
 export interface ComposedSteps {
-  form: 'row' | 'column' | 'flow';
-  /** The `sequence` region. */
+  form: 'row' | 'column' | 'flow' | 'tiles';
+  /** The `sequence` region. `tiles` (LH-137): the list's region, or empty on a slide without a layout. */
   region: string;
-  /** `row`: the region's first block; `column` and `flow`: the list's payload path. */
+  /** `row`: the region's first block; `column`, `flow` and `tiles`: the list's payload path. */
   path: string;
   badges: ComposedStepBadge[];
   connector?: { x1: number; y1: number; x2: number; y2: number };
@@ -427,7 +437,24 @@ export interface ComposedSteps {
  * number), so an exporter can keep the list's numbering; absent when the badge numbers a block by its position or the list has no
  * `numbering` of its own (a list of a `steps` region is then counted in arabic).
  */
-export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> } }
+/**
+ * One badge of a sequence (ComposedSteps). LH-137: a badge with `check` draws a check mark in place of its label (which is empty): the
+ * polygon `check` (canvas pixels, checkMarkPoints) filled in the badge's label color.
+ */
+export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> }; check?: [number, number][] }
+/** LH-137: the check-mark tiles of a summary list: the fewest and most entries, and the longest entry in characters. */
+export const CHECK_TILE_MIN = 2, CHECK_TILE_MAX = 6, CHECK_TILE_MAX_CHARACTERS = 90;
+/** LH-137: the most lines an entry may take in a tile of the grid before the tiles become one column of wide tiles. */
+export const CHECK_TILE_MAX_LINES = 2;
+/**
+ * LH-137: a check mark inside a badge of `diameter` centered on (cx, cy): a solid polygon (a short and a long stroke, each about a seventh
+ * of the badge thick) in the inner 56% of the badge, the same points for the preview's path and the PPTX export's custom geometry.
+ */
+export function checkMarkPoints(cx: number, cy: number, diameter: number): [number, number][] {
+  const side = .56 * diameter, left = cx - side / 2, top = cy - side / 2;
+  const unit: [number, number][] = [[0, .52], [.17, .35], [.38, .56], [.83, .11], [1, .28], [.38, .9]];
+  return unit.map(([x, y]) => [Math.round((left + x * side) * 100) / 100, Math.round((top + y * side) * 100) / 100]);
+}
 /** One column of a list laid out in columns (`ComposedItem.listColumns`). */
 export interface ComposedListColumn {
   box: LayoutBox;
@@ -1341,6 +1368,8 @@ export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
  * at least the former 12 px and at most this. 24 px (36 px at 1080) follows the ~40 px card padding of Claude's Slides type.
  */
 export const CARD_INSET = 24;
+/** LH-131: the inset of one card around a featured set's cell in a design with cards: the smallest inset of a block's own card. */
+export const CELL_CARD_INSET = 12;
 /**
  * A card that fills its cell starts this fraction of a gap below the cell's top (12 px at 720), so a row of full-height cards stands
  * clear of the heading above it (1.5 gaps in all, near the 56 px at 1080 of Claude's Slides type).
@@ -1933,6 +1962,12 @@ export interface MetricLayout {
   trendBox?: LayoutBox;
   /** LH-112: the value asked for a display size (`display`), not its role size. */
   display?: true;
+  /**
+   * LH-137: the delta drawn as a pill (`MetricLayoutOptions.deltaPill`): `box` the capsule around the delta's one line and its trend arrow
+   * (`trendBox`), with `radius` half its height; `placement` `beside` the value's line (after it in reading order), or `above` the value.
+   * Engines fill it with core metricPillFill under the delta and color the delta and arrow against that fill.
+   */
+  deltaPill?: { box: LayoutBox; radius: number; placement: 'beside' | 'above' };
   /** At most 48 arrangements; value fitting is bounded by 77 reference-size trials per arrangement. */
   attempts: number;
   parts: MetricTextPart[];
@@ -1974,7 +2009,19 @@ export interface MetricLayoutOptions extends QuoteLayoutOptions {
    * inside the figure at a larger size. Default true; composition passes false for a slide's composition without its guarded rules.
    */
   figure?: boolean;
+  /**
+   * LH-137: draw the delta (and its trend arrow) as a pill: beside the value's line when every field keeps the size it has without the
+   * pill, else above the value when every field keeps it there, else in its place without a pill. A tile (LH-68) and a band (LH-15) keep
+   * their delta in place. The result says where (`MetricLayout.deltaPill`). `above` tries only above (sibling metrics draw one way).
+   */
+  deltaPill?: boolean | 'above';
 }
+/** LH-137: layoutMetric places the delta pill this way (its two trials of `deltaPill`). */
+const PILL_PLACEMENT = Symbol('opf.pillPlacement');
+/** LH-137: a delta pill's inset around its line, as shares of the delta's size: across, and above and below. */
+export const METRIC_PILL_PAD_X = .55, METRIC_PILL_PAD_Y = .2;
+/** LH-137: the middle of a pill beside the value sits this share of the value's size above the value's baseline (the middle of its figures). */
+export const METRIC_PILL_RISE = .36;
 /**
  * LH-17: the largest size of the type scale at or under `size` (canvas px), the scale rising from the floor (reference px) by
  * TYPE_SCALE_RATIO, rounded to whole reference pixels (see composeSlide's scaleSizes).
@@ -2054,6 +2101,15 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
+  // LH-137: a delta pill beside the value where every field keeps its size, else above it, else none (the delta in its place).
+  const pillPlacement=(options as Record<symbol,unknown>)[PILL_PLACEMENT] as 'beside'|'above'|undefined;
+  if (options.deltaPill&&!pillPlacement&&!options.tile&&!options.band&&metric.delta!==undefined&&String(metric.delta).trim()!=='') {
+    const plainOptions={...options,deltaPill:false},plainLayout=layoutMetric(value,box,plainOptions);
+    const sizes=(layout:MetricLayout)=>new Map(layout.parts.filter(part=>part.visible&&part.fit).map(part=>[part.role,part.fit!.fontSize] as const));
+    const before=sizes(plainLayout),keeps=(layout:MetricLayout)=>!layout.overflow&&layout.deltaPill!==undefined&&[...before].every(([role,size])=>(sizes(layout).get(role)??0)>=size-FONT_GRID_EPSILON);
+    for (const placement of options.deltaPill==='above'?['above'] as const:['beside','above'] as const) { const pilled=layoutMetric(value,box,{...plainOptions,[PILL_PLACEMENT]:placement} as MetricLayoutOptions); if (keeps(pilled)) return pilled; }
+    return plainLayout;
+  }
   // LH-15: a band is start-aligned.
   const requestedAlignment=options.band?'left':options.align??'center';
   if (!['left','center','right'].includes(requestedAlignment)) throw new RangeError('Invalid metric alignment.');
@@ -2087,6 +2143,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height,area.x+area.width,area.y+area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
   const occupied=(fit:CodeTextFit)=>fit.placement?.height??fit.lines.length*fit.lineHeight;
   const gap=8*scale,primaryGap=12*scale;
+  // LH-137: the delta drawn in a pill (pillPlacement): above the value as its lead, or beside the value's line (out of the stack).
+  const pillPart=pillPlacement?parts.find(part=>part.role==='delta'&&part.visible):undefined,pillAbove=pillPlacement==='above'?pillPart:undefined,pillBeside=pillPlacement==='beside'?pillPart:undefined;
+  const pillPadY=(size:number)=>size*METRIC_PILL_PAD_Y,pillWidth=(part:MetricTextPart,fit:CodeTextFit)=>naturalWidth(part,fit)+(part===arrowHost?arrowRoom(fit.fontSize):0)+2*fit.fontSize*METRIC_PILL_PAD_X;
   const lineInk=(part:MetricTextPart,fit:CodeTextFit):TextLineInk[]=>fit.sourceLines.map((line,index)=>{
     let outline:LayoutBox|null=null;
     for(const segment of line.segments) {
@@ -2162,7 +2221,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     return attempt(singleLine);
   };
   type Allocation={part:MetricTextPart;box:LayoutBox;fit:CodeTextFit|undefined};
-  type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean};
+  type Candidate={arrangement:MetricLayout['arrangement'];allocations:Allocation[];score:number;overflow:boolean;pillFit?:CodeTextFit};
   let selected:Candidate|undefined,attempts=0;
   const reductions=Math.min(23,Math.ceil(Math.max(0,...metadata.map(part=>(part.requestedFontSize-part.minFontSize)/scale))));
   for (let reduction=0;reduction<=reductions;reduction++) {
@@ -2202,16 +2261,19 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
         continue;
       }
       // LH-68: a tile leads with its label (the eyebrow), each lead part a gap above the next.
-      const lead=options.tile?metadata.filter(part=>part.role==='label'):[];
-      const tail=metadata.filter(part=>(arrangement!=='inline-unit'||part!==unit)&&!lead.includes(part));
+      // LH-137: a pill above the value leads, inset by its padding; a pill beside it leaves the stack and takes room on the value's line.
+      const lead=options.tile?metadata.filter(part=>part.role==='label'):pillAbove?[pillAbove]:[];
+      const tail=metadata.filter(part=>(arrangement!=='inline-unit'||part!==unit)&&!lead.includes(part)&&part!==pillBeside);
       const tailHeight=tail.reduce((sum,part)=>sum+occupied(measured.get(part)!),0)+Math.max(0,tail.length-1)*gap;
-      const leadHeight=lead.reduce((sum,part)=>sum+occupied(measured.get(part)!)+gap,0),top=box.y+leadHeight;
+      const leadPad=(part:MetricTextPart)=>part===pillAbove?pillPadY(measured.get(part)!.fontSize):0;
+      const leadHeight=lead.reduce((sum,part)=>sum+occupied(measured.get(part)!)+gap+2*leadPad(part),0),top=box.y+leadHeight;
       if (!Number.isFinite(tailHeight)||!Number.isFinite(leadHeight)) throw new RangeError('Metric metadata exceeds finite coordinates.');
-      const area={...box,y:top,width:arrangement==='inline-unit'?box.width-unitWidth-gap:box.width,height:box.height-leadHeight-tailHeight-(tail.length?primaryGap:0)};
+      const pillFit=pillBeside?measured.get(pillBeside):undefined,pillRoom=pillBeside&&pillFit?pillWidth(pillBeside,pillFit)+Math.max(gap,METRIC_UNIT_GAP*primary.requestedFontSize):0;
+      const area={...box,y:top,width:Math.max(Number.MIN_VALUE,(arrangement==='inline-unit'?box.width-unitWidth-gap:box.width)-pillRoom),height:box.height-leadHeight-tailHeight-(tail.length?primaryGap:0)};
       const valueFit=fitValue(area,arrangement==='inline-unit'),valueHeight=valueFit?occupied(valueFit):0;
       const allocations:Allocation[]=[];
       let leadY=box.y;
-      for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),area=lineBox(part,box,leadY,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap; }
+      for (const part of lead) { const natural=measured.get(part)!,height=occupied(natural),pad=leadPad(part),area=lineBox(part,box,leadY+pad,height,natural.fontSize); allocations.push({part,box:area,fit:{...natural,overflow:!!natural.placement?.overflow||natural.sourceLines.some(line=>line.width>area.width+.01)}}); leadY+=height+gap+2*pad; }
       let primaryHeight=valueHeight;
       if (arrangement==='inline-unit'&&unit&&unitFit&&valueFit) {
         // LH-127: the unit follows the value line as it is drawn. With a host measurement that is the measured line (its ink, with an
@@ -2260,7 +2322,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
       const overflow=!valueFit||valueFit.overflow||arrangement==='inline-unit'&&valueFit.lines.length!==1||primaryHeight>area.height+.01||allocations.some(({box:area,fit})=>!fit||fit.overflow||!usable(area)||area.y+area.height>box.y+box.height+.01);
       // LH-53: a unit drawn larger than it asked for (METRIC_UNIT_SHARE) is no gain that offsets smaller metadata.
       const score=allocations.reduce((sum,{part,fit})=>sum+Math.max(0,part.requestedFontSize-(fit?.fontSize??minimum))/scale,0);
-      const candidate={arrangement,allocations,score,overflow};
+      const candidate={arrangement,allocations,score,overflow,...(pillFit?{pillFit}:{})};
       // LH-53: a later candidate (more reduced metadata) must score a whole reference pixel better: on a near tie the metadata keeps its
       // size and the value gives way, as when the trend took a line of its own.
       if (!selected||!overflow&&(selected.overflow||score<selected.score-1)||overflow&&selected.overflow) selected=candidate;
@@ -2270,7 +2332,27 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   for (const allocation of selected!.allocations) {allocation.part.box=allocation.box;allocation.part.fit=allocation.fit;}
   const figureLine=!!primary.fit&&FIGURE_FITS.has(primary.fit);
   const alignmentFactor=alignment==='center'?.5:alignment==='right'?1:0;
-  if (selected!.arrangement==='inline-unit'&&unit) {
+  // LH-137: a pill beside the value: the value's line (with an inline unit) and the pill are one line placed by the alignment, the pill
+  // after the value in reading order, its middle METRIC_PILL_RISE of the value's size above the value's baseline. A value on more than
+  // one line takes no pill beside it (the pill is then reported outside its cell, and layoutMetric tries it above).
+  let pillBox:LayoutBox|undefined,pillMisplaced=false;
+  if (pillBeside&&selected!.pillFit&&primary.fit) {
+    const fit=selected!.pillFit,size=fit.fontSize,padX=size*METRIC_PILL_PAD_X,padY=pillPadY(size),textWidth=naturalWidth(pillBeside,fit);
+    const width=pillWidth(pillBeside,fit),height=occupied(fit)+2*padY,inlineUnit=selected!.arrangement==='inline-unit'&&unit?unit:undefined;
+    const ownWidth=Math.min(primary.box.width,naturalWidth(primary,primary.fit)||primary.fit.fontSize);
+    const lineWidth=inlineUnit?inlineUnit.box.x+inlineUnit.box.width-primary.box.x:ownWidth,between=Math.max(gap,METRIC_UNIT_GAP*primary.fit.fontSize);
+    const start=box.x+Math.max(0,box.width-(lineWidth+between+width))*alignmentFactor,valueX=arrowLeft?start:start+width+between,pillX=arrowLeft?start+lineWidth+between:start;
+    const shift=valueX-primary.box.x;
+    if (!inlineUnit) { primary.box={...primary.box,width:ownWidth}; primary.fit=place(primary,primary.fit,ownWidth); }
+    primary.box={...primary.box,x:primary.box.x+shift};
+    if (inlineUnit) inlineUnit.box={...inlineUnit.box,x:inlineUnit.box.x+shift};
+    const baseline=primary.fit.placement?.lines[0]?.baseline??primary.fit.fontSize,top=Math.max(box.y,primary.box.y+baseline-METRIC_PILL_RISE*primary.fit.fontSize-height/2);
+    pillBeside.box={x:pillX+padX+(arrowLeft&&pillBeside===arrowHost?arrowRoom(size):0),y:top+padY,width:textWidth,height:occupied(fit)};
+    pillBeside.fit={...place(pillBeside,fit,textWidth),overflow:false};
+    pillBox={x:pillX,y:top,width,height};
+    pillMisplaced=primary.fit.lines.length!==1||fit.lines.length!==1||pillX<box.x-.01||pillX+width>box.x+box.width+.01;
+  } else if (pillBeside) pillMisplaced=true;
+  if (selected!.arrangement==='inline-unit'&&unit&&!pillBox) {
     const offset=(box.width-(unit.box.x+unit.box.width-box.x))*alignmentFactor;
     primary.box.x+=offset;unit.box.x+=offset;
   }
@@ -2302,6 +2384,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   const report=(reason:MetricLayoutDiagnostic['reason'],part:MetricTextPart,roles:MetricTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
+  // LH-137: a pill above the value wraps the delta's one line and its arrow, inset by its padding.
+  if (pillAbove?.fit&&pillAbove.linePositions.length) {
+    const fit=pillAbove.fit,size=fit.fontSize,padX=size*METRIC_PILL_PAD_X,padY=pillPadY(size),origin=pillAbove.linePositions[0]!,lineWidth=fit.sourceLines[0]?.width??0;
+    const left=Math.min(origin.x,trendBox&&pillAbove===arrowHost?trendBox.x:Infinity)-padX,right=Math.max(origin.x+lineWidth,trendBox&&pillAbove===arrowHost?trendBox.x+trendBox.width:-Infinity)+padX;
+    pillBox={x:left,y:pillAbove.box.y-padY,width:right-left,height:occupied(fit)+2*padY};
+    pillMisplaced=fit.lines.length!==1||left<box.x-.01||right>box.x+box.width+.01;
+  } else if (pillAbove) pillMisplaced=true;
+  if (pillMisplaced&&pillPart) report('part-outside-cell',pillPart,['delta'],'Metric delta pill does not fit beside or above its value; it is drawn without the pill.');
   for (const part of parts.filter(part=>part.visible)) {
     if (!part.fit||!usable(part.box)) report('invalid-part-box',part,[part.role],`Metric ${part.role} has no usable space after metadata; increase the cell or change the arrangement.`);
     else if (part.fit.overflow) report('text-fit',part,[part.role],`Metric ${part.role} exceeds its space at the readability floor; increase the cell or change the arrangement.`);
@@ -2317,14 +2407,14 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  const bottom = Math.max(box.y, trendBottom, ...visible.map(part => part.box.y + occupied(part.fit!)));
+  const bottom = Math.max(box.y, trendBottom, ...visible.map(part => part.box.y + occupied(part.fit!)), pillBox ? pillBox.y + pillBox.height : -Infinity);
   const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
   // LH-40: a field with no room is set at the floor in what its cell leaves; it overflows, and its finding above stands.
   if (options.floorFallback) for (const part of parts) if (part.visible&&!part.fit) {
     const room=floorRoom(part.box,box),floorFit=measure(part,minimum,room.width);
     part.box={...room,height:occupied(floorFit)};part.fit={...floorFit,overflow:true};position(part);
   }
-  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const layout:MetricLayout={bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),...(trendBox?{trendBox}:{}),...(options.display&&!options.tile?{display:true as const}:{}),...(pillBox&&pillPlacement&&!pillMisplaced?{deltaPill:{box:pillBox,radius:pillBox.height/2,placement:pillPlacement}}:{}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
   if (figureLine) FIGURE_LINES.add(layout);
   return layout;
 }
@@ -3670,6 +3760,10 @@ const RECOMPOSE = Symbol('opf.recompose');
 const UNJOINED = Symbol('opf.unjoined');
 /** LH-06: the size (canvas px) the automatic band or pill text starts at, when larger than its own: what the block fitted at without it. */
 const EMPHASIS_SIZE = Symbol('opf.emphasisSize');
+/** LH-131: compose a before and after pair with its cards this much narrower on these sides, to leave its arrow room (by block path). */
+const PAIR_ROOM = Symbol('opf.pairRoom');
+/** LH-131: a before and after pair's arrow, in reference pixels, and its margin from each card as a share of the slide's gap. */
+export const PAIR_ARROW_WIDTH = 40, PAIR_ARROW_HEIGHT = 28, PAIR_ARROW_MARGIN = .75;
 /** LH-06: compose the pill at the foot of the body, where it has room, rather than right after the text it follows. */
 const PILL_AT_FOOT = Symbol('opf.pillAtFoot');
 /** LH-68: each tile metric's fitted sizes as a stack, by item path and role: the floor of its tile's sizes. */
@@ -3762,14 +3856,18 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * whose badges take height the steps' text might need. LH-80 and LH-49's tracks are
  * alternatives composeSlide tries afterwards (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges';
+type GuardedRule = 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'step-badges' | 'delta-pill' | 'check-tiles';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges'];
+const GUARDED_RULES: readonly GuardedRule[] = ['nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'step-badges', 'delta-pill', 'check-tiles'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
+/** LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them. */
+const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'check-tiles'];
+/** LH-131, LH-137: guardedCore composes a slide again with this flag to see it without the drawing rules. */
+const NO_DRAWING = Symbol('opf.noDrawing');
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
 const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure'));
 /** LH-39: the rules (and seeds) a guarded composition was kept with, for the figure trial on top of them. */
@@ -3805,7 +3903,7 @@ function shrinks(next: SlideComposition, base: SlideComposition, options: Compos
 function bodyFill(result: SlideComposition): { fill: number; spare: number } | undefined {
   // LH-06's band or pill and LH-114's pull line keep their own size and place; the blocks above (or below) them are the body that grows.
   if (LEAD_STACKS.has(result)) return undefined;
-  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && result.emphasis?.source !== 'authored') && !item.quoteLayout?.rule);
+  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && result.emphasis !== undefined && result.emphasis.shape !== 'card') && !item.quoteLayout?.rule);
   // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
   if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3832,7 +3930,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
   if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
-  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis?.source !== 'authored') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
+  const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
   let best = result, steps = 0;
@@ -3931,7 +4029,34 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
  * fired is added on its own, in GUARDED_RULES order, and kept when the slide still reads as well as `base`. Readable size wins over the
  * ideal measure, card or arrangement. Throws the strict composition's error when nothing composes.
  */
+/**
+ * LH-131, LH-137: the drawing rules (DRAWING_RULES) only draw, so they never change what the other rules give a slide: a slide that draws a
+ * featured card, a delta pill or check-mark tiles is also composed under the guard without them (NO_DRAWING), and keeps the drawing only
+ * when it reads as well as that (readsAsWell: no block smaller, no more findings); else each drawing rule is tried on its own on top of
+ * the rules that slide kept. Slides that draw none of them are composed once.
+ */
 function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const result = guardedRules(input, options);
+  if ((options as Record<symbol, unknown>)[NO_DRAWING] === true || !(result.emphasis?.source === 'featured' || result.items.some(item => item.metricLayout?.deltaPill) || result.steps?.some(step => step.form === 'tiles'))) return result;
+  const plain = guardedRules(input, { ...options, [NO_DRAWING]: true } as ComposeSlideOptions), used = KEPT_RULES.get(plain);
+  const scale = Math.min(plain.width, plain.height) / 720, floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * scale), before = trackQuality(plain, options);
+  // A slide with a body role at the readability floor is recomposed as the automatic grid when that reads better (LH-83, settle); the
+  // drawing never decides that, so a drawing that lifts the floor is not taken where the slide without it is at the floor.
+  const atFloor = (composed: SlideComposition) => bodyReadability(composed, options).sizes.some(entry => entry.atFloor), plainFloor = atFloor(plain);
+  const keeps = (composed: SlideComposition) => readsAsWell(before, trackQuality(composed, options), floor) && atFloor(composed) === plainFloor;
+  if (keeps(result)) return result;
+  // The slide without the drawing rules keeps its rules without them, so what composes on top of it (LH-39's figure) does not draw either.
+  let best = plain, rules: ReadonlySet<GuardedRule> = new Set([...(used?.rules ?? NO_RULES)].filter(rule => !DRAWING_RULES.includes(rule)));
+  KEPT_RULES.set(plain, { rules, seeds: used?.seeds ?? {} });
+  for (const rule of DRAWING_RULES) {
+    const next = new Set([...rules, rule]);
+    let trial: SlideComposition;
+    try { trial = composeArranged(input, { ...options, [RULES]: next, ...(used?.seeds ?? {}) } as ComposeSlideOptions); } catch (error) { if (error instanceof OPFCompositionError) continue; throw error; }
+    if (keeps(trial)) { best = trial; rules = next; KEPT_RULES.set(trial, { rules: next, seeds: used?.seeds ?? {} }); }
+  }
+  return best;
+}
+function guardedRules(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const fired = new Set<GuardedRule>(), ruled = (rules: ReadonlySet<GuardedRule>, extra: Record<symbol, unknown> = {}) => ({ ...options, [RULES]: rules, ...extra } as ComposeSlideOptions);
   const attempt = (settings: ComposeSlideOptions): SlideComposition | undefined => {
     try { return composeArranged(input, settings); } catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
@@ -3950,7 +4075,7 @@ function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposi
     // LH-68, LH-06: a tile metric starts every role at its stacked size in `base`, and a band or pill text at its block's size there.
     const seeds: Record<symbol, unknown> = {};
     if (fired.has('metric-tiles')) seeds[TILE_FLOORS] = new Map(base.items.filter(item => item.metricLayout).map(item => [item.path, Object.fromEntries(item.metricLayout!.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]))]));
-    const surface = result?.emphasis && result.emphasis.source !== 'authored' ? result.emphasis.path : undefined;
+    const surface = result?.emphasis && result.emphasis.shape !== 'card' ? result.emphasis.path : undefined;
     const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
     if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
     if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(CORE_RULES, seeds));
@@ -4042,7 +4167,7 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
   if (height <= 0 || start.covered >= LONE_TARGET * height) return undefined;
   let best = result, bestText = start;
   const arrangement = (composed: SlideComposition) => (composed.regions ?? []).map(region => `${region.name}:${region.arrangement ?? '-'}:${region.content.join()}`).join(';');
-  const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis?.source !== 'authored')).map(item => item.text!.fontSize));
+  const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card')).map(item => item.text!.fontSize));
   for (let steps = 1; steps <= 3; steps++) {
     const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
     if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
@@ -4099,7 +4224,7 @@ function centerTemplate(input: unknown, options: ComposeSlideOptions, result: Sl
   // LH-114 with LH-102: a body with a pull line is one stack with its data at the top of the body (as growBody leaves it), never centered.
   if (result.items.some(item => item.quoteLayout?.rule)) return undefined;
   const bled = new Set(result.regions.filter(region => region.bleed).map(region => region.name));
-  const bodyOf = (composed: SlideComposition) => composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis?.source !== 'authored'));
+  const bodyOf = (composed: SlideComposition) => composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card'));
   const body = bodyOf(result);
   if (!body.length || !body.every(item => item.region !== undefined && (bled.has(item.region) || CENTERED_FIELDS.has(item.field))) || body.every(item => bled.has(item.region!))) return undefined;
   // A body of one region's one block is LH-48's lone block, which fillLone already grew and set in the middle of the body.
@@ -4444,7 +4569,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'step-badges' && (options as Record<symbol, unknown>)[NO_STEPS] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'step-badges' && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -4833,6 +4958,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const limit = data >= 2 ? EMPHASIS_TAKEAWAY_MAX_CHARACTERS : EMPHASIS_BAND_MAX_CHARACTERS;
     return length <= limit && before.every(long) ? { block: last.index, shape: 'band' } : undefined;
   })();
+  // LH-131: the featured card of a pair or a set (featured-cards.ts, from the blocks' content only: "after" of a before and after, the
+  // solution of a problem and solution, the tier marked recommended or most popular) is drawn on the emphasis surface, a card like an
+  // authored one, and the other cells of the pair or set each on one plain card (`cardCells`), so the set reads as cards with one
+  // featured. Never on a slide with an authored `emphasis: true`, LH-06's band or pill, or legacy region keys, nor when the featured
+  // block sets `emphasis: false`.
+  const featured = ((): FeaturedCells | undefined => {
+    if (!ruleOn('featured-card') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || autoEmphasis || authoredEmphasis(slide.blocks)) return undefined;
+    const found = featuredCells(slide.blocks, index => placedBlocks.has(index) || eyebrowBlocks.has(index) || emptyHost(record(slide.blocks[index])));
+    if (!found || record(slide.blocks[found.featured]).emphasis === false) return undefined;
+    fire('featured-card');
+    return found;
+  })();
+  const featuredPath = featured ? `${path}.blocks.${featured.featured}` : undefined;
+  const cardCells = new Set(featured ? featured.cells.filter(index => index !== featured.featured).map(index => `${path}.blocks.${index}`) : []);
+  const pairRoom = (options as Record<symbol, unknown>)[PAIR_ROOM] as ReadonlyMap<string, { side: 'left' | 'right'; width: number }> | undefined;
   // The band spans the body's width; the pill hugs its one line. Each is drawn at the foot of the body, which ends a gap above it; a
   // surface that would take more than EMPHASIS_BAND_MAX_SHARE of the body is not drawn.
   let autoSurface: { emphasis: ComposedEmphasis; item: ComposedItem } | undefined;
@@ -4910,6 +5050,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
   // LH-06: `emphasis` is the path of the block or group whose `emphasis: true` the node carries.
   type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; measure?: boolean; lone?: boolean; gap?: number; orient?: boolean; emphasis?: string; fills?: boolean;
+    /** LH-131: a cell of a featured pair or set other than the featured one: drawn on one plain card (a group's blocks share it). */
+    cardCell?: boolean;
     /** LH-50: the label drawn as this paragraph's eyebrow. */
     eyebrow?: { path: string; value: unknown } };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
@@ -4917,7 +5059,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
       const settings = record(host.composition) as Composition;
       assertComposition(settings);
-      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true ? { emphasis: basePath } : {}),
+      return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}),
         children: host.blocks.flatMap((block: unknown, index: number) => collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
@@ -4925,7 +5067,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
     return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
-      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true ? { emphasis: basePath } : {}), ...(field === 'text' && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
+      ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...(field === 'text' && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
   // Valid documents choose exactly one of regions, blocks, or root payloads.
@@ -4957,13 +5099,27 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const chosenEmphasis = emphasisPaths[0];
   for (const ignored of emphasisPaths.slice(1)) diagnostics.push({ code: 'emphasis-ignored', path: ignored, message: 'A slide draws one emphasis surface: the first block or group with emphasis: true has it, and this one is drawn without it.' });
   let surface: ComposedEmphasis | undefined = autoSurface?.emphasis, insideEmphasis = false;
+  // LH-131: the plain card of the cell of a featured set being placed (placeNode), which every block of the cell shares.
+  let insideCard: LayoutBox | undefined;
+  // LH-131: a block or group drawn as one card whatever the design's cards: the emphasis surface's, or a cell of a featured set.
+  const cardedNode = (node: Pending): boolean => (node.emphasis !== undefined && node.emphasis === chosenEmphasis) || node.cardCell === true;
+  // LH-131: a featured set's cell (featured or not) in a design with cards is inset as its blocks' own cards were (the smallest card
+  // inset, 12 px), so one card around the cell never leaves a block less room than its own card did; any other carded group, payloadBox's.
+  const featuredCell = (node: Pending): boolean => node.cardCell === true || (featuredPath !== undefined && node.emphasis === featuredPath);
+  const cellCardInset = (node: Pending): number | undefined => hasCards && featuredCell(node) ? CELL_CARD_INSET * scale : undefined;
+  const cellCardPayload = (frame: LayoutBox, node: Pending): LayoutBox => {
+    const pad = cellCardInset(node);
+    if (pad === undefined) return payloadBox(frame, true);
+    const card = acceptedBox(frame);
+    return acceptedBox({ x: card.x + pad, y: card.y + pad, width: Math.max(scale, card.width - 2 * pad), height: Math.max(scale, card.height - 2 * pad) });
+  };
   const groups: ComposedGroup[] = [], flows: ComposedFlow[] = [];
   // WI-1 (N1), LH-43: indexes into `items` of sibling blocks (the cells of a flow or a region, or regions of one role side
   // by side); after composition the text and lists of each set share the smallest size any of them fitted at.
   const peerSets: number[][] = [];
   // LH-43, LH-17: what refitting a placed item needs: a metric is laid out again in its own box from given role sizes, and a text
   // or list refits from a smaller size than the one it started at (its start, by item index).
-  const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes']) => MetricLayout>();
+  const metricRefits = new Map<number, (roleSizes: MetricLayoutOptions['roleSizes'], pill?: 'above') => MetricLayout>();
   // LH-78: a quote is laid out again in its own box with its body at a given size (px), so sibling quotes share one size.
   const quoteRefits = new Map<number, (bodySize: number) => QuoteLayout>();
   // LH-67: the items of the leads of lead plus stack arrangements, which keep their own size.
@@ -5038,7 +5194,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const metricStarts = (node: Pending): boolean => metricDisplay.has(node.path) && (hints.contentAlignment === undefined || hints.sources.contentAlignment === 'layout' || hints.sources.contentAlignment === 'theme') && (ruleOn('metric-start') || ruleOn('metric-display'));
   // The display size grows against the slide's body height (contentBox), so the height a metric needs (naturalHeight) and its placed
   // layout ask for the same value.
-  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false) => {
+  const measureMetric = (node: Pending, box: LayoutBox, settings: Composition, floorFallback = false, roleSizes?: MetricLayoutOptions['roleSizes'], tile = false, pill?: 'above') => {
     const starts = !tile && metricStarts(node), display = !tile && ruleOn('metric-display') ? metricDisplay.get(node.path) : undefined;
     if (starts && alignmentFor('metric') !== 'left') fire('metric-start');
     if (display) fire('metric-display');
@@ -5048,12 +5204,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       align:tile||starts?'left':alignmentFor('metric'),direction:textDirection,...(tile?{tile,...(tileFloors?.get(node.path)?{minimumSizes:tileFloors.get(node.path)}:{})}:{}),
       ...(display?{display:{...display,height:contentBox.height}}:{}),
       figure:ruleOn('metric-figure'),
+      // LH-137: the delta as a pill beside or above the value (the guarded rule `delta-pill`). Not in LH-83's automatic grid at the floor
+      // (RECOMPOSE): the room a pill frees there would decide between the layout and the grid, which the pill, a drawing, never does.
+      ...(ruleOn('delta-pill')&&(options as Record<symbol,unknown>)[RECOMPOSE]!==true?{deltaPill:pill??true}:{}),
     };
     // LH-15: a metric at display size in a cell at least METRIC_BAND_RATIO times as wide as it is tall (as the cell gives it, or as the metric
     // stacks when the cell takes its natural height) is a band: the value at the start and its other fields beside it.
-    const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false}).bounds.height);
+    // LH-137: judged without the delta pill, whose shorter stack would make a band of a metric that is none without it.
+    const band = display !== undefined && starts && box.width >= METRIC_BAND_RATIO * Math.min(box.height, layoutMetric(node.value as string | number | MetricContent, acceptedBox({...box,height:1e6}), {...metricOptions,floorFallback:false,deltaPill:false}).bounds.height);
     const laid = layoutMetric(node.value as string | number | MetricContent, acceptedBox(box), {...metricOptions,...(band?{band}:{})});
     if (FIGURE_LINES.has(laid)) fire('metric-figure');
+    if (laid.deltaPill) fire('delta-pill');
     return laid;
   };
   // LH-07: the blocks of a `sequence` region set side by side under step badges (composeTemplate marks them): each leaves a band for
@@ -5648,13 +5809,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-06: the block or group with the slide's emphasis is drawn on its surface, a card in its cell; nothing drawn on the surface takes
     // a card of its own. A group's children are arranged inside the card's inset.
     const emphasized = !insideEmphasis && node.emphasis !== undefined && node.emphasis === chosenEmphasis;
+    // LH-131: a cell of a featured set (not inside another card) is drawn on one plain card, as the featured one is on the surface.
+    const ownCard = !insideEmphasis && !insideCard && node.cardCell === true;
+    // LH-131: a card of a before and after pair, narrower on its inner side to leave the arrow room (PAIR_ROOM).
+    const room = pairRoom?.get(node.path) ?? (node.children ? undefined : pairRoom?.get(node.path.slice(0, node.path.lastIndexOf('.'))));
+    if (room) { const trim = (area: LayoutBox): LayoutBox => ({ ...area, x: room.side === 'left' ? area.x + room.width : area.x, width: Math.max(scale, area.width - room.width) }); box = trim(box); if (frame) frame = trim(frame); }
     if (node.children) {
-      if (emphasized) surface = { path: node.emphasis!, box: acceptedBox(frame ?? box), radius: CARD_RADIUS * scale, shape: 'card', source: 'authored' };
-      const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized ? payloadBox(frame ?? box, true) : box, own);
+      if (emphasized) surface = { path: node.emphasis!, box: acceptedBox(frame ?? box), radius: CARD_RADIUS * scale, shape: 'card', source: node.emphasis === featuredPath ? 'featured' : 'authored' };
+      const own = inheritedSettings(settings, node.orient ? { ...node.composition, mode: pairMode(box) } : node.composition), inner = inset(emphasized || ownCard ? cellCardPayload(frame ?? box, node) : box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       insideEmphasis ||= emphasized;
+      if (ownCard) insideCard = acceptedBox(frame ?? box);
       try { arrange(node.children, inner, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
-      finally { if (emphasized) insideEmphasis = false; }
+      finally { if (emphasized) insideEmphasis = false; if (ownCard) insideCard = undefined; }
       return;
     }
     // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
@@ -5663,9 +5830,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (lone) { box = lone; frame = undefined; metricReferenceHeight = undefined; contentSized.add(node); }
     const onSurface = emphasized || insideEmphasis;
     if (onSurface) cards = emphasized;
+    // LH-131: a block of a featured set's cell shares the cell's card; a lone block cell has its own.
+    else if (insideCard) cards = false;
+    else if (ownCard) cards = true;
     // LH-78: a quote beside other blocks is drawn on a card, unless the card's inset would make it overflow (below). On the emphasis
     // surface (LH-06) the surface is its card.
-    const quoteCard = !cards && !onSurface && besideQuote(node);
+    const quoteCard = !cards && !onSurface && !insideCard && besideQuote(node);
     if (quoteCard) cards = true;
     // LH-68: a metric in a `metrics: "tile"` region is laid out in its whole card: label, value from the top, the rest at the foot.
     const tile = node.field === 'metric' && metricTiles.has(node);
@@ -5677,7 +5847,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       frame = { ...frame, y: top, height: Math.max(scale, frame.y + frame.height - top) };
       if (box.y < top) box = { ...box, y: top, height: Math.max(scale, box.y + box.height - top) };
     }
-    let frameBox = cards ? acceptedBox(frame ?? box) : undefined;
+    let frameBox = cards ? acceptedBox(frame ?? box) : insideCard;
     let metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
     const cell = box;
     box = payloadBox(box, cards);
@@ -5751,10 +5921,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const own = surface && surface.path === node.emphasis ? surface.box : undefined;
       const right = Math.max(frameBox.x + frameBox.width, own ? own.x + own.width : -Infinity), bottom = Math.max(frameBox.y + frameBox.height, own ? own.y + own.height : -Infinity);
       const x = Math.min(frameBox.x, own?.x ?? Infinity), y = Math.min(frameBox.y, own?.y ?? Infinity);
-      surface = { path: node.emphasis!, box: { x, y, width: right - x, height: bottom - y }, radius: CARD_RADIUS * scale, shape: 'card', source: 'authored' };
+      surface = { path: node.emphasis!, box: { x, y, width: right - x, height: bottom - y }, radius: CARD_RADIUS * scale, shape: 'card', source: node.emphasis === featuredPath ? 'featured' : 'authored' };
     }
     if (brow) eyebrowsOf.set(items[items.length - 1]!, node.eyebrow!);
-    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, roleSizes => measureMetric(node, metricBox, settings, false, roleSizes, tile)); }
+    if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); }
     // LH-67: the lead of a lead plus stack keeps its larger size; it is neither stepped nor shared.
     if (stackLeads.has(node)) leadItems.add(items.length - 1);
     else if (quoteLayout && !quoteLayout.overflow) { const quoteBox = box; quoteRefits.set(items.length - 1, size => measureQuote(node, quoteBox, settings, false, size)); }
@@ -5913,9 +6083,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // `atFloor` (WI-1): the height at the minimum font size instead, which says how far the block can shrink; text and lists
   // are measured there, other payloads scale their need by the minimum over the starting size.
   const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition, atFloor = false, sizeOverride?: number): number => {
-    const pad = cards ? 2 * Math.min(CARD_INSET * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
+    // LH-131: the emphasis surface's block or group and a featured set's cell are drawn on a card whatever the design's cards.
+    if (!cards && cardedNode(node)) cards = true;
+    const cellInset = node.children ? cellCardInset(node) : undefined;
+    const pad = cellInset !== undefined ? 2 * cellInset : cards ? 2 * Math.min(CARD_INSET * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
     // payloadBox's vertical inset, min(inset, height / 10), for a card of `content` plus that inset: content / 8 on each side.
-    const verticalPad = (content: number) => cards ? 2 * Math.min(pad / 2, content / 8) : 0;
+    const verticalPad = (content: number) => cellInset !== undefined ? pad : cards ? 2 * Math.min(pad / 2, content / 8) : 0;
     // LH-44: a synthetic row of blocks (tableArrangement's band) is as tall as its tallest block in its share of the width.
     if (node.children && node.synthetic && node.composition?.mode === 'row') {
       const between = node.gap ?? gap, share = Math.max(scale, (cellWidth - between * (node.children.length - 1)) / node.children.length);
@@ -5933,7 +6106,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         return sum + (row ? between : 0) + Math.max(0, ...members.map(child => naturalHeight(child, share, cards, undefined, naturalSettings, atFloor)));
       }, 0);
     }
-    if (node.children) { const content = node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
+    if (node.children) { const width = cards && cardedNode(node) ? inner : cellWidth, content = node.children.reduce((sum, child) => sum + naturalHeight(child, width, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
@@ -6996,7 +7169,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const item = items[index]!;
           if (item.metricLayout!.parts.every(part => !part.visible || !part.fit || part.fit.fontSize <= sizes[part.role]! + 1e-9)) continue;
           const refit = metricRefits.get(index)!(sizes);
-          if (refit.overflow || refit.parts.some(part => part.visible && (!part.fit || Math.abs(part.fit.fontSize - sizes[part.role]!) > 1e-9))) continue;
+          // LH-137 with LH-53: a metric whose delta pill let it grow takes the shared sizes too, its inline unit (a share of its value's size)
+          // following its value rather than the shared unit, so siblings keep one value size (the drawing guard holds it to the slide without pills).
+          // A value at display size (LH-112) keeps its own, as it does without a pill.
+          const follows = (part: MetricTextPart) => part.role === 'unit' && refit.arrangement === 'inline-unit' && item.metricLayout!.deltaPill !== undefined && !refit.display;
+          if (refit.overflow || refit.parts.some(part => part.visible && !follows(part) && (!part.fit || Math.abs(part.fit.fontSize - sizes[part.role]!) > 1e-9))) continue;
+          item.metricLayout = refit;
+          item.text = refit.parts.find(part => part.role === 'value')?.fit;
+        }
+        // LH-137: sibling metrics draw their delta pills one way: when one has its pill above its value, a sibling with its pill beside
+        // takes it above too, where every field keeps its size (else it keeps the pill beside).
+        if (members.some(index => items[index]!.metricLayout!.deltaPill?.placement === 'above')) for (const index of members) {
+          const item = items[index]!, layout = item.metricLayout!;
+          if (layout.deltaPill?.placement !== 'beside') continue;
+          const own = new Map(layout.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize] as const));
+          const refit = metricRefits.get(index)!(Object.fromEntries(own), 'above');
+          if (refit.overflow || refit.deltaPill?.placement !== 'above' || refit.parts.some(part => part.visible && (!part.fit || part.fit.fontSize < (own.get(part.role) ?? 0) - 1e-9))) continue;
           item.metricLayout = refit;
           item.text = refit.parts.find(part => part.role === 'value')?.fit;
         }
@@ -7297,6 +7485,78 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
   };
   const steps = useTemplate ? stepSequences() : [];
+  // LH-137: a dark slide whose whole body is one short bulleted list (CHECK_TILE_MIN to CHECK_TILE_MAX entries of one level, no
+  // descriptions, each CHECK_TILE_MAX_CHARACTERS or fewer: a summary of decisions or outcomes) draws each entry as a tile of a grid that
+  // fills the body (one row for three or fewer, two columns for four, three for five or six), with a check mark badge at its start (the
+  // right in a right-to-left deck) in place of the bullet, as Claude Design draws a closing list of decisions. The entries keep the
+  // list's size; when one of them does not fit its tile at it, the list stays as it was. Drawn as LH-07 draws a flow (`steps`, form
+  // `tiles`: chips and badges whose `check` is the mark), so both engines draw it with native shapes.
+  const checkTiles = (): ComposedSteps | undefined => {
+    // The slide is set apart on a dark surface of its own (its `design` sets a variant or background, and the slide is dark), as a summary
+    // or closing is; a deck that is dark throughout draws its lists as lists. A design's own list marker (`listBullet`) is the author's
+    // choice of what marks an entry: such a list keeps it.
+    const own = record(slide.design);
+    if (!ruleOn('check-tiles') || options.darkBackground !== true || (own.variant === undefined && own.background === undefined) || listBullet !== undefined || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
+    const body = items.filter(item => !headings.has(item.field));
+    const item = body.length === 1 ? body[0]! : undefined;
+    if (!item || (item.field !== 'bullets' && item.field !== 'items') || item.payload.numbering !== undefined || item.listColumns || item.caption || item.frameBox || stepFlows.has(item.path) || badgeLists.has(item.path) || !item.text || !('listEntries' in item.text)) return undefined;
+    const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
+    const texts = values.map(value => { const object = record(value); return object.description !== undefined || (object.level ?? 0) !== 0 ? undefined : flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim(); });
+    if (values.length < CHECK_TILE_MIN || values.length > CHECK_TILE_MAX || texts.some(text => !text || [...text].length > CHECK_TILE_MAX_CHARACTERS)) return undefined;
+    const fit = item.text as ListFit, size = fit.fontSize, count = values.length;
+    const area = (useTemplate && item.region !== undefined ? templateRegions.find(region => region.name === item.region)?.box : undefined) ?? contentBox;
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
+    // The grid: one row of up to three, two columns of four, three columns of five or six; when an entry would take more than
+    // CHECK_TILE_MAX_LINES there, one column of wide tiles (the fewest lines wins when neither keeps every entry that short).
+    const shapes = [count <= 3 ? count : count === 4 ? 2 : 3, ...(count <= 4 ? [1] : [2])];
+    const tryShape = (columns: number) => {
+      const rows = Math.ceil(count / columns);
+      const tileWidth = (area.width - gap * (columns - 1)) / columns, tileHeight = (area.height - gap * (rows - 1)) / rows;
+      const pad = Math.min(CARD_INSET * scale, tileWidth / 8, tileHeight / 4), diameter = STEP_BADGE * size, between = .6 * size;
+      const textWidth = tileWidth - 2 * pad - diameter - between;
+      if (textWidth < 4 * size || tileHeight < diameter + 2 * pad) return undefined;
+      const chips: NonNullable<ComposedSteps['chips']> = [], badges: ComposedStepBadge[] = [], fits: ComposedListColumn[] = [];
+      let lines = 0;
+      for (let index = 0; index < count; index++) {
+        const row = Math.floor(index / columns), column = index % columns, inRow = Math.min(columns, count - row * columns);
+        // A short last row is centered under the full rows.
+        const offset = (columns - inRow) * (tileWidth + gap) / 2, logicalX = area.x + offset + column * (tileWidth + gap);
+        const x = rtl ? area.x + area.width - (logicalX - area.x) - tileWidth : logicalX, y = area.y + row * (tileHeight + gap);
+        const object = typeof values[index] === 'object' && !Array.isArray(values[index]), textPath = `${item.path}.${index}${object ? '.text' : ''}`;
+        // The entry is fitted alone (as entry 0), so its runs' citation markers are looked up at its own index.
+        const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
+        const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
+        const probe = fitList([values[index]!], { x: 0, y: 0, width: textWidth, height: 1e5 }, size, size, entryOptions);
+        const height = probe.height, textX = rtl ? x + pad : x + pad + diameter + between;
+        const box = { x: textX, y: y + (tileHeight - height) / 2, width: textWidth, height: Math.min(height + scale, tileHeight - 2 * pad) };
+        const own = fitList([values[index]!], box, size, size, entryOptions);
+        if (own.overflow || own.fontSize < size - FONT_GRID_EPSILON || height > tileHeight - 2 * pad) return undefined;
+        lines = Math.max(lines, ...own.listEntries.map(entry => entry.text.richLines.length));
+        const text: ListFit = { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath, descriptionPath: `${item.path}.${index}.description` })) };
+        chips.push({ path: textPath, box: { x, y, width: tileWidth, height: tileHeight }, radius: CARD_RADIUS * scale });
+        fits.push({ box, start: index, end: index + 1, text });
+        const cx = rtl ? x + tileWidth - pad - diameter / 2 : x + pad + diameter / 2, cy = y + tileHeight / 2;
+        badges.push({ path: textPath, cx, cy, radius: diameter / 2, label: '', fontSize: size, baseline: cy + size * .35, check: checkMarkPoints(cx, cy, diameter) });
+      }
+      return { chips, badges, fits, lines, height: rows * tileHeight + gap * (rows - 1) };
+    };
+    let best: NonNullable<ReturnType<typeof tryShape>> | undefined;
+    for (const columns of shapes) {
+      const next = tryShape(columns);
+      if (next && (!best || next.lines < best.lines)) best = next;
+      if (best && best.lines <= CHECK_TILE_MAX_LINES) break;
+    }
+    if (!best) return undefined;
+    const { chips, badges, fits } = best;
+    fire('check-tiles');
+    item.listColumns = fits;
+    item.text = mergeListColumns(fits);
+    item.box = { x: area.x, y: area.y, width: area.width, height: best.height };
+    item.alignment = rtl ? 'right' : 'left';
+    return { form: 'tiles', region: item.region ?? '', path: item.path, badges, chips, lineWidth: 2 * scale };
+  };
+  const tiles = checkTiles();
+  if (tiles) steps.push(tiles);
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
@@ -7371,7 +7631,35 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = bodyStarts.get(index);
     return start !== undefined && item.text.fontSize >= snapFontSizeDown(start) - FONT_GRID_EPSILON;
   });
+  // LH-131: a before and after pair of metrics, its cards side by side, draws an arrow from the first card to the featured one in the
+  // middle of the room between them (PAIR_ARROW_WIDTH by PAIR_ARROW_HEIGHT, PAIR_ARROW_MARGIN of a gap from each card). When the cards
+  // stand closer, the slide is composed again with each card that much narrower on its inner side (PAIR_ROOM), kept only when no block
+  // reads smaller and nothing more overflows; otherwise the pair has no arrow.
+  let pairArrow: ComposedEmphasis['arrow'], pairNeed: Map<string, { side: 'left' | 'right'; width: number }> | undefined;
+  if (featured?.kind === 'before-after' && surface?.source === 'featured' && featuredPath !== undefined) {
+    const siblingPath = `${path}.blocks.${featured.cells.find(index => index !== featured.featured)}`, under = (prefix: string) => (item: ComposedItem) => item.path.startsWith(`${prefix}.`);
+    const card = items.find(item => under(siblingPath)(item) && item.frameBox)?.frameBox, after = surface.box;
+    if (card && items.some(item => under(siblingPath)(item) && item.metricLayout) && items.some(item => under(featuredPath)(item) && item.metricLayout)) {
+      const top = Math.max(card.y, after.y), bottom = Math.min(card.y + card.height, after.y + after.height), rightward = after.x >= card.x + card.width - .5;
+      const separation = rightward ? after.x - (card.x + card.width) : card.x - (after.x + after.width);
+      const arrowWidth = PAIR_ARROW_WIDTH * scale, arrowHeight = PAIR_ARROW_HEIGHT * scale, need = arrowWidth + 2 * PAIR_ARROW_MARGIN * gap;
+      if (bottom - top >= Math.min(card.height, after.height) / 2 && separation >= -.5 && (rightward || after.x + after.width <= card.x + .5)) {
+        if (separation >= need - .5) {
+          const left = rightward ? card.x + card.width : after.x + after.width;
+          pairArrow = { box: roundBox({ x: left + (separation - arrowWidth) / 2, y: (top + bottom - arrowHeight) / 2, width: arrowWidth, height: arrowHeight }), direction: rightward ? 'right' : 'left' };
+        } else if (!pairRoom) {
+          const trim = (need - separation) / 2;
+          pairNeed = new Map([[siblingPath, { side: rightward ? 'right' : 'left', width: trim }], [featuredPath, { side: rightward ? 'left' : 'right', width: trim }]]);
+        }
+      }
+    }
+  }
+  if (surface && pairArrow) surface = { ...surface, arrow: pairArrow };
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(explanation?{explanation}:{}) };
+  if (pairNeed) {
+    const roomy = composeLayout(input, { ...options, [PAIR_ROOM]: pairNeed } as ComposeSlideOptions);
+    if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;
+  }
   if (atRequest) AT_REQUEST.add(composed);
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
@@ -7423,3 +7711,4 @@ export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLab
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';
+export { FEATURED_LABEL_MAX_CHARACTERS, FEATURED_LABEL_MAX_WORDS, FEATURED_MARK_MAX_CHARACTERS, FEATURED_MAX_CELLS, featuredCells, type FeaturedCells, type FeaturedKind } from './featured-cards.js';

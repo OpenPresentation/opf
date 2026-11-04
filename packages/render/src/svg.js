@@ -3,7 +3,7 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
-  metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
@@ -939,7 +939,9 @@ function renderSteps(bound, options) {
     if (step.connector) parts.push(tag('line', {...HIDDEN, ...step.connector, stroke: bound.design.colors.border, 'stroke-width': step.lineWidth, ...(options.trace ? {'data-opf-step-path': step.path} : {})}));
     for (const badge of step.badges) {
       parts.push(tag('circle', {...HIDDEN, cx: badge.cx, cy: badge.cy, r: badge.radius, fill: primary, ...(options.trace ? {'data-opf-step-path': badge.path} : {})}));
-      parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
+      // LH-137: a check-mark badge (a summary list's tile) draws core's check polygon in the numeral's color in place of a numeral.
+      if (badge.check) parts.push(tag('path', {...HIDDEN, d: `M${badge.check.map(([px, py]) => `${stableNumber(px)} ${stableNumber(py)}`).join(' L')} Z`, fill: numeral}));
+      else parts.push(tag('text', {x: stableNumber(badge.cx), y: stableNumber(badge.baseline), 'text-anchor': 'middle', 'font-family': family, 'font-size': stableNumber(badge.fontSize), 'font-weight': 700, fill: numeral, 'aria-hidden': 'true'}, escapeText(badge.label)));
     }
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
@@ -964,7 +966,9 @@ function renderSlideContent(bound, width, height, options) {
   let surfaceDrawn=false,previousFrame;
   return bound.geometry.items.map(item => {
     const itemBound=item.emphasis&&onSurface ? onSurface : bound;
-    const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})) : '';
+    // LH-131: a featured before and after pair's arrow (emphasis.arrow), a primary block arrow as LH-07's flows draw theirs, with the surface.
+    const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})
+      +(emphasis.arrow?tag('path',{...HIDDEN,d:blockArrowPath(emphasis.arrow.box,emphasis.arrow.direction),fill:bound.design.colors.primary,...(options.trace?{'data-opf-emphasis-arrow':emphasis.path}:{})}):'')) : '';
     // Cards come from core's geometry: item.frameBox is the card core allocated in the item's cell (OPF 0.19: a template
     // region's flow cell; core never gives an item of a bled region a card). LH-54: its fill and stroke are core's card neutrals (a filled
     // surface on a dark slide whose scheme surface is the background itself), as the PPTX export draws them.
@@ -1477,7 +1481,10 @@ function renderMetric(item, box, bound, options) {
   // LH-54: a metric in a card is colored against the card fill, not the slide behind it. LH-57: on a dark one, a value whose accent
   // falls under 4.5:1 takes the text color.
   const backdrop=item.frameBox?bound.design.roles.neutrals.card.hex:bound.design.backgroundColor??bound.design.colors.background;
-  const trendMark=metricTrendMark(layout,bound,backdrop);
+  // LH-137: a delta pill (layout.deltaPill) is filled with core metricPillFill under the delta and its arrow, which are colored against it.
+  const pillFill=layout.deltaPill?metricPillFill(backdrop,bound.design.colors.text):undefined;
+  if (layout.deltaPill) { const pill=layout.deltaPill.box; children.push(tag('rect',{...HIDDEN,x:stableNumber(pill.x),y:stableNumber(pill.y),width:stableNumber(pill.width),height:stableNumber(pill.height),rx:stableNumber(layout.deltaPill.radius),fill:pillFill,...(options.trace?{'data-opf-metric-role':'pill'}:{})})); }
+  const trendMark=metricTrendMark(layout,bound,pillFill??backdrop);
   // LH-53: a unit on its value's line is part of the figure and takes the value's color.
   const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'||part.role==='unit'&&layout.arrangement==='inline-unit'?metricValueColor(bound.design.colors.primary,backdrop,bound.design.colors.text):bound.design.colors.text;
   for (const part of layout.parts) {
