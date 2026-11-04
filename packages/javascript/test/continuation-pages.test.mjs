@@ -22,7 +22,9 @@ test('each source slide maps to the output slides that draw it, in order', () =>
   assert.deepEqual(pages, [[0], [1, 2], [3], [4, 5], [6]]);
   // Every output slide is drawn by exactly one source slide, and each page carries its source slide's id (or its continuation id).
   assert.deepEqual(pages.flat(), [0, 1, 2, 3, 4, 5, 6]);
-  pages.forEach((outputs, index) => outputs.forEach((output, page) => assert.equal(result.presentation.slides[output].id, page ? `${deck.slides[index].id}--${page + 1}` : deck.slides[index].id)));
+  for (const [index, outputs] of pages.entries()) {
+    for (const [page, output] of outputs.entries()) assert.equal(result.presentation.slides[output].id, page ? `${deck.slides[index].id}--${page + 1}` : deck.slides[index].id);
+  }
 });
 
 test('a deck that does not continue maps each slide to itself', () => {
