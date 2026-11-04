@@ -182,6 +182,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
 | [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for the one-click release: gate, tag, trusted npm publishing of all seven packages, verification, GitHub release notes, and the site bumps. |
+| [`docs/governance.md`](./docs/governance.md) | Governance (proposed): the steward, how a spec change is proposed and decided, versioning and stability promises, implementation listings, security, the name and logo, and maintainers. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`packages/gallery`](./packages/gallery) (`@openpresentation/gallery`) | The default catalog and layout previews, released with the other packages. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
