@@ -1,4 +1,4 @@
-// Current checkout core API + installed registry renderer/fonts. No source-package alias.
+// Current checkout core (its layoutCode and, through the checkout renderer, its composition) + installed registry renderer/fonts. No source-package alias.
 import assert from 'node:assert/strict';
 import {readFile,writeFile,realpath} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -36,6 +36,8 @@ for (const name of ['@openpresentation/opf','@openpresentation/opf-render']) {
   assert.equal((await packageManifest(name)).manifest.version,plan.packages.find(item=>item.name===name)?.version);
 }
 const {resolvePresentation}=await load('@openpresentation/opf-render','./svg');
+// The checkout's renderer composes with the checkout's core (the workspace link); the installed renderer with the installed core.
+const {resolvePresentation:checkoutResolve}=await import('../packages/render/dist/svg.js');
 const {validate}=await load('@openpresentation/opf','.');
 const valid=value=>validate(value,{only:['format']}).valid;
 const {loadFonts}=await load('@openpresentation/opf-render','./fonts-node');
@@ -61,8 +63,10 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     assert.equal(layout.overflow,overflowing);
     const scale=Math.min(dimensions.width,dimensions.height)/720;
     const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:layout.parts[0].minFontSize/scale,scale};
-    // The current checkout's layoutCode, in the same bounds with the same floor, lays the code out exactly as the published composition did.
-    const again=layoutCode(code,layout.bounds,options);
+    // The current checkout's composition lays the code out exactly as the published one did. Since 0.32.0 (LH wave 6) the composition
+    // also passes a lone panel's growth and `fill` to layoutCode, which a bare layoutCode call in `bounds` would not reproduce.
+    const again=checkoutResolve(deck,{fonts:registry}).slides[0].geometry.items[0].codeLayout;
+    assert.deepEqual(again.bounds,layout.bounds,'the checkout composition gives the code the same panel');
     assert.equal(again.overflow,layout.overflow,'the checkout core agrees on overflow');
     assert.deepEqual(again.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),layout.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),'and on every part, its floor, size and lines');
     for (const [index,part] of again.parts.entries()) for (const key of ['x','y','width','height']) assert.ok(Math.abs(part.box[key]-layout.parts[index].box[key])<1e-6,`and on the ${part.role} box`);
