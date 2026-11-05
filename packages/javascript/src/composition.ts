@@ -3744,7 +3744,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       if(displayed){
         const thickness=fontSize*LIST_DISPLAY_RULE;
         const ruleWidth=options.displayRule==='short'?Math.min(box.width,fontSize*LIST_DISPLAY_SCALE):box.width;
-        accentRules.push({x:options.direction==='rtl'?box.x+box.width-ruleWidth:box.x,y:y+thickness/2,width:ruleWidth,thickness,accent:true});
+        // Wave 7 integration (LH-69 with LH-14): a short rule starts where the word starts, after an icon chip's column (the box's start edge without one).
+        const ruleStart=options.displayRule==='short'?{x,width}:box;
+        accentRules.push({x:options.direction==='rtl'?ruleStart.x+ruleStart.width-ruleWidth:ruleStart.x,y:y+thickness/2,width:ruleWidth,thickness,accent:true});
         y+=thickness+fontSize*LIST_DISPLAY_GAP;textBox.y=y;
         const wordOptions={...options,style:{...style,fontWeight:700}},target=Math.min(fontSize*LIST_DISPLAY_SCALE,options.displayMax??Infinity),least=Math.min(fontSize*LIST_HEADING_SCALE,target);
         const wordAt=(size:number,area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize*LIST_DISPLAY_SCALE,wordOptions,minFontSize)(size);
@@ -5955,10 +5957,15 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // `portraits` (no name, role or line smaller than with the avatar); a person's `portrait` (the image option) overrides it for the
   // whole team, the first one in reading order, so the cards stay equal. `personParts`: each person's picture and text, by group path.
   const personParts = new Map<string, { image: Pending; text: Pending }>();
+  // Wave 7 integration (LH-132 with LH-74): the pictures of a team's people, with the rule or without it. A person's picture is a portrait or an
+  // avatar beside its name, never a picture alone on a card that LH-74 lets fill it: the portraits are judged against the avatar (picturesShrink).
+  const personPictures = new Set<string>();
   let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false, portraitFallback = false;
   {
     const personOf = (node: Pending): { image: Pending; text: Pending } | undefined => {
       const kids = node.children, own = record(node.composition);
+      // Wave 7 integration (LH-132 with LH-14): a person's group icon does not make it less of a person. The portrait marks the person, so a
+      // portrait card draws no chip and the icon is reported (icon-dropped); a team kept on avatars draws its groups' chips as any group does.
       if (!kids || kids.length !== 2 || node.eyebrow || node.emphasis !== undefined || node.cardCell || (own.mode !== undefined && own.mode !== 'column' && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
       const [image, text] = kids as [Pending, Pending], entries = Array.isArray(text.value) ? text.value : undefined, entry = entries?.length === 1 ? record(entries[0]) : undefined;
       if (image.field !== 'image' || image.children || image.caption !== undefined || record(image.host).placement !== undefined || text.children || text.caption !== undefined || text.payload.numbering !== undefined) return undefined;
@@ -5966,6 +5973,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return named ? { image, text } : undefined;
     };
     const people = pending.map(personOf);
+    if (pending.length > 1 && people.every(Boolean)) for (const person of people) personPictures.add(person!.image.path);
     if (pending.length && people.every(Boolean)) {
       const authored = people.map(person => record(person!.image.host).portrait).find((mode): mode is PortraitMode => (PORTRAIT_MODES as readonly unknown[]).includes(mode));
       // The automatic choice: a card of the content box's row (top) or grid (side) wide enough for its portrait and its text.
@@ -6989,7 +6997,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // (contain) keeps the card and its inset around it.
     // LH-132: a team portrait's host is its own (portraitHosts: a rounded frame of its own, cropped around the upper third), never this card.
     let imageHost: Record<string, any> = portraitHosts.get(node.path) ?? node.host ?? {};
-    if (node.field === 'image' && !portraitHosts.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.cornerRadius === undefined && (imageHost.shape === undefined || imageHost.shape === 'rectangle') && !(record(imageHost.border).color !== undefined && record(imageHost.border).width)) {
+    if (node.field === 'image' && !portraitHosts.has(node.path) && !personPictures.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.cornerRadius === undefined && (imageHost.shape === undefined || imageHost.shape === 'rectangle') && !(record(imageHost.border).color !== undefined && record(imageHost.border).width)) {
       const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'rounded', cornerRadius: radius };
       const context = { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
       if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [] }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
