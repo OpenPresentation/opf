@@ -162,7 +162,7 @@ const estimatedOptions = {fonts: estimatedFonts};
   for (const options of [{fonts: prepared}, estimatedOptions]) {
     const svg = toSvg(document, options)[0];
     const elements = [...svg.matchAll(/<(?:text|tspan)\b[^>]*font-family="([^"]*)"[^>]*font-size="([0-9.]+)"[^>]*>/g)].map(match => ({family: match[1], size: Number(match[2])}));
-    const arabic = elements.filter(item => item.family.startsWith('Noto Naskh Arabic')), latin = elements.filter(item => /^(?:Aptos|Intos)(?:,|$)/.test(item.family) && item.size < 50); // not the 54 px title (the lone body grows up to 43 px, LH-48)
+    const arabic = elements.filter(item => item.family.startsWith('Noto Naskh Arabic')), latin = elements.filter(item => /^(?:Aptos|Intos)(?:,|$)/.test(item.family) && Math.abs(item.size - 54) > .5); // not the 54 px title (the lone body grows to display size, LH-48 and LH-09)
     assert.ok(arabic.length >= 2 && latin.length >= 1, 'Arabic fragments and a Latin fragment are drawn');
     for (const item of arabic) near(item.size, adjustedFontSize(latin[0].size, ADJUST), 1e-9, 'Arabic fragment size against the Latin fragment size');
   }
@@ -200,7 +200,7 @@ const estimatedOptions = {fonts: estimatedFonts};
   // A line holding a Latin run moves up 1 - ASCENT[1] em of the composed size; a Latin-only line in the same deck does not move.
   const mixed = {name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Title', text: ['أضاف المنتج ', {text: 'PowerPoint', bold: true}, ' أكثر']}]};
   const mixedControl = {name: 'RR-38', language: 'en-US', design: {fontScheme: 'aptos'}, slides: [{id: 'a', title: 'Title', text: ['x ', {text: 'PowerPoint', bold: true}, ' y']}]};
-  const mixedLine = baselines(toSvg(mixed, estimated)[0]).filter(item => item.size < 50), mixedBase = baselines(toSvg(mixedControl, estimated)[0]).filter(item => item.size < 50); // the body, not the 54 px title (LH-48 grows a lone body up to 43 px)
+  const mixedLine = baselines(toSvg(mixed, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5), mixedBase = baselines(toSvg(mixedControl, estimated)[0]).filter(item => Math.abs(item.size - 54) > .5); // the body, not the 54 px title (LH-48 and LH-09 grow a lone body)
   const latinOnly = baselines(toSvg({name: 'RR-38', language: 'ar', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   const latinControl = baselines(toSvg({name: 'RR-38', language: 'en-US', slides: [{id: 'a', title: 'Quarterly', text: 'Plain Latin text'}]}, estimated)[0]);
   assert.deepEqual(latinOnly.map(item => item.y), latinControl.map(item => item.y), 'Latin-only lines keep core baselines');

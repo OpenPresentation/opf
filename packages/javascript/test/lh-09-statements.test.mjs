@@ -70,25 +70,25 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
     const labeled = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.message }] }, { layout: layouts.statement, direction });
     const body = item(labeled, 'text');
     assert.ok(item(labeled, 'title').box.y < 100, 'a label title is the running head');
-    assert.equal(body.textStyle.fontWeight, 700, 'the short message is drawn in the display face');
+    assert.equal(body.textStyle.fontWeight, 400, "a message stays in the body face, so its author's bold words still stand out");
     assert.ok(body.text.fontSize > LONE_DISPLAY_SIZES.text && body.text.fontSize <= MESSAGE_DISPLAY_SIZE, `at display size (${body.text.fontSize})`);
     assert.ok(lines(body.text) <= MESSAGE_DISPLAY_LINES);
   });
 
   test(`LH-09 (${direction}): a short lone body under a normal title grows to display size; a long one keeps LH-48's size`, () => {
     const short = item(composeSlide({ title: text.label, text: text.message }, { direction }), 'text');
-    assert.equal(short.textStyle.fontWeight, 700);
+    assert.equal(short.textStyle.fontWeight, 400);
     assert.ok(short.text.fontSize > LONE_DISPLAY_SIZES.text, `grown past the lone text's display (${short.text.fontSize})`);
     assert.ok(lines(short.text) <= MESSAGE_DISPLAY_LINES);
     const long = item(composeSlide({ title: text.label, text: text.long }, { direction }), 'text');
     assert.ok(messageWords(text.long) > 25);
-    assert.equal(long.textStyle.fontWeight, 400, 'a paragraph of more than 25 words is no display message');
-    assert.ok(long.text.fontSize <= LONE_DISPLAY_SIZES.text + 1e-6);
+    assert.ok(long.text.fontSize <= LONE_DISPLAY_SIZES.text + 1e-6, 'a paragraph of more than 25 words is no display message');
     // LH-69: a lone text of 4 words or fewer reaches the display title's size.
     const three = item(composeSlide({ title: text.label, text: text.three }, { direction }), 'text');
     assert.equal(three.text.fontSize, HEADING_DISPLAY_SIZES.title);
+    assert.equal(three.textStyle.fontWeight, 400, 'in the body face');
     // With fill off, nothing grows.
-    assert.equal(item(composeSlide({ title: text.label, text: text.message }, { direction, fill: false }), 'text').textStyle.fontWeight, 400);
+    assert.ok(item(composeSlide({ title: text.label, text: text.message }, { direction, fill: false }), 'text').text.fontSize <= LONE_DISPLAY_SIZES.text);
   });
 
   test(`LH-09 (${direction}): the words the author set bold draw in the primary color where it reads, and nothing else is emphasized`, () => {

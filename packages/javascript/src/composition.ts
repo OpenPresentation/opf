@@ -4998,13 +4998,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-50: the paths of the text blocks drawn as the eyebrow of the text after them (eyebrowLabel), each with whether it is set in
   // capitals (eyebrowCaps). Filled when the body's blocks are grouped, before any of them is fitted.
   const eyebrowLabels = new Map<string, boolean>();
-  // LH-09, LH-69: the paths of the lone short texts drawn as a display message (fillLone): in the heading face, bold, their lines balanced.
-  const displayTexts = new Set<string>();
+  // LH-09, LH-69: the paths of the lone short texts drawn as a display message (fillLone) and of placed regions' short texts, their lines
+  // balanced; `displayFaces`: the placed regions' short texts, drawn as tile headings, in the heading face and bold.
+  const displayTexts = new Set<string>(), displayFaces = new Set<string>();
   const tagCaps = eyebrowCaps(annotationText(slide.tag));
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   // LH-32: an eyebrow (the tag, LH-50's label) is bold, and in capitals with EYEBROW_TRACKING where its script has case (eyebrowCaps).
   const styleFor = (field: string, path: string): TextStyle => {
-    const eyebrow = field === 'tag' || eyebrowLabels.has(path), caps = field === 'tag' ? tagCaps : eyebrowLabels.get(path) === true, display = field === 'text' && displayTexts.has(path);
+    const eyebrow = field === 'tag' || eyebrowLabels.has(path), caps = field === 'tag' ? tagCaps : eyebrowLabels.get(path) === true, display = field === 'text' && displayFaces.has(path);
     return resolveTextStyle({
       fontFamily: (field === "title" || display ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : eyebrow ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
       fontWeight: field === "title" || eyebrow || display ? 700 : 400, path, ...(caps ? { caps: true, tracking: EYEBROW_TRACKING } : {}),
@@ -5547,11 +5548,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || eyebrowBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   // LH-69: a placed region (a slide key such as `top:left`) that holds one short text, at most SHORT_TEXT_WORDS words, holds a tile's
-  // heading ("Inputs", "Product", "Teams want fewer exports."): it is drawn as a heading, in the heading face and bold (displayTexts), as
+  // heading ("Inputs", "Product", "Teams want fewer exports."): it is drawn as a heading, in the heading face and bold (displayFaces), as
   // Claude Design heads those tiles (b07 s29, b08 s07, s18, s46). The guarded rule `display-message`: the wider face never sets it smaller.
   if (regions.length && ruleOn('display-message')) for (const key of regions) {
     const units = pending.filter(node => node.path.startsWith(`${path}.${key}.`) || node.path === `${path}.${key}`);
-    if (units.length === 1 && !units[0]!.children && units[0]!.field === 'text' && units[0]!.caption === undefined && messageWords(units[0]!.value) <= SHORT_TEXT_WORDS) { displayTexts.add(units[0]!.path); fire('display-message'); }
+    if (units.length === 1 && !units[0]!.children && units[0]!.field === 'text' && units[0]!.caption === undefined && messageWords(units[0]!.value) <= SHORT_TEXT_WORDS) { displayTexts.add(units[0]!.path); displayFaces.add(units[0]!.path); fire('display-message'); }
   }
   // LH-112: one or two metrics that share the body with one or two blocks of other kinds are drawn at display size (METRIC_DISPLAY_SIZES),
   // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,
@@ -6792,11 +6793,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         chosen = step; best = height; size = step;
       }
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
-      // LH-09, LH-69: a lone text of at most SHORT_MESSAGE_WORDS words (messageWords) is the slide's message: it grows on, in the heading
-      // face and bold with its lines balanced, up to MESSAGE_DISPLAY_SIZE (a text of at most SHORT_TEXT_WORDS words, a label, up to the
-      // display title's size) in at most MESSAGE_DISPLAY_LINES lines, while it fills at most LONE_TARGET of the body, as Claude Design sets a
-      // short message (b09 s36, b07 s25, n28's "14 months"). It is kept only at a step above the size the plain text reached, so the
-      // display face, which is wider, never costs it a step (the guarded rule `display-message`).
+      // LH-09, LH-69: a lone text of at most SHORT_MESSAGE_WORDS words (messageWords) is the slide's message: it grows on with its lines
+      // balanced, up to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines, while it fills at most LONE_TARGET of the body, as Claude
+      // Design sets a short message (b09 s36, b06 s05); a text of at most SHORT_TEXT_WORDS words ("Ship in March") up to the display title's
+      // size. It stays in the body face: the words its author set bold still stand out (displayEmphasis), and a lone short text, which
+      // nearly every minimal deck has, loads no other face. It is kept only at a step above the size the plain text reached, so balanced
+      // lines never cost it a step (the guarded rule `display-message`).
       // A text that cites or carries a footnote is evidence, set as body text: its markers belong to a paragraph, not a display line.
       const cited = Array.isArray(node.value) && node.value.some(run => run && typeof run === 'object' && ((run as { cite?: unknown }).cite !== undefined || (run as { footnote?: unknown }).footnote !== undefined));
       const words = node.field === 'text' && !cited ? messageWords(node.value) : Infinity;

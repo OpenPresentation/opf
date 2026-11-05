@@ -17,10 +17,9 @@ test('a lone short paragraph steps up the type scale, at most to its display siz
   const [item] = body(result), [role] = body(kept);
   assert.deepEqual(findings(result), []);
   assert.equal(role.text.fontSize, 32, 'fill: false keeps the lead size of a lone block of two lines (WI-4)');
-  // LH-09: a paragraph of at most 25 words is a short message, which grows on past LONE_DISPLAY_SIZES.text to MESSAGE_DISPLAY_SIZE in the display face.
+  // LH-09: a paragraph of at most 25 words is a short message, which grows on past LONE_DISPLAY_SIZES.text to MESSAGE_DISPLAY_SIZE.
   assert.ok(item.text.fontSize > LONE_DISPLAY_SIZES.text && item.text.fontSize <= MESSAGE_DISPLAY_SIZE, `${item.text.fontSize}`);
   assert.ok([49, 56].includes(item.text.fontSize), 'a step of the type scale');
-  assert.equal(item.textStyle.fontWeight, 700, 'in the display face');
   assert.ok(!item.text.overflow);
   assert.ok(Math.abs(middle(item.box) - middle(result.contentBox)) < 1, 'centered in the body');
   assert.ok(item.box.height <= LONE_TARGET * result.contentBox.height + 4, 'about 60% of the body at most');
