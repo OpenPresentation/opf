@@ -237,6 +237,23 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   about a third of the width and the chart in a full-height track beside it (the chart track of LH-49, 67% then 60% of the content
   width; a layout slide is recomposed as the automatic grid, `recomposed.kpis`). It is kept when the plot is at least as tall and the
   slide reads as well; a table that would be smaller in the column keeps the layout's arrangement.
+- **A short table beside its note (LH-75).** A slide whose body is one table and one note (a plain text block, before or after the table)
+  that sits one above the other, the table under half the body's height with its cells on one line and the note two lines or more, is
+  composed again with the two side by side: the table first (or second, as authored; the start edge, mirrored right to left), taking 70%,
+  then 65% or 60% of the width, the widest share at which the note's column keeps LH-66's 28-character measure, and the note on one plain
+  card as tall as the row (`frameBox`), its text in the middle of the card, the row in the middle of the body. The type steps up with
+  LH-48's steps (the table's rows with it) while the row covers at most 60% of the body. It is kept when the slide reads as well (no block
+  smaller, no cell wrapping that did not wrap stacked, no new finding or narrow paragraph); a layout slide is recomposed as the automatic
+  grid (`recomposed.table`), and a layout that already sets the note beside the table (`table-beside`), a slide with a third block, an
+  `emphasis`, regions, a `composition` mode, columns or weights of its own, and `recompose: false` keep their arrangement. A wide
+  table that would wrap beside the note stays above it (LH-44).
+- **Compact grids (LH-05).** The rows of an automatic grid of paragraphs and lists (LH-43) used to spread over the body, so six one-line
+  texts stood two thirds of a body apart. When the rows need under 45% of the body (or LH-48 grew them), they hug their text one gap apart
+  and the grid sits in the middle of the body (`compact-grid`); rows that need more keep LH-43's spread. LH-48 then grows a hugging grid
+  further than other bodies: up to eight steps of the type scale and past a list's display size (to 56 px), all cells at one size, while
+  every text that was on one line stays on one line (the width of the cells bounds it: three columns of one-line texts stop at 43 px, two
+  at 56 px) and the body covers at most 60%. The grid never ends smaller than the same body spread over the area; a growth that would end
+  smaller lets texts wrap as they did, and one that still would is the spread body itself.
 - **Value color on dark (LH-57).** On a dark slide or card, a value whose accent falls under 4.5:1 against the surface is drawn in the
   light text color (`metricValueColor(color, background, text)`) instead of a lightened accent, so the number stays the strongest
   element. A unit on its value's line takes the value's color.
