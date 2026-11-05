@@ -93,8 +93,9 @@ for (const [direction, text] of [['ltr', words.en], ['rtl', words.ar]]) {
 
   test(`LH-09 (${direction}): the words the author set bold draw in the primary color where it reads, and nothing else is emphasized`, () => {
     const colors = (result, field) => item(result, field).text.richLines.flatMap((line) => line.fragments.map((fragment) => fragment.run.color));
+    // A title keeps its look: PowerPoint's heading import would read the color as authored.
     const title = composeSlide({ title: text.emphasis, blocks: [{ region: 'message', text: text.support }] }, { layout: layouts.statement, direction, roles: light });
-    assert.deepEqual([...new Set(colors(title, 'title'))].sort(), ['primary', undefined].sort(), 'the bold sentence of the display title');
+    assert.ok(!colors(title, 'title').includes('primary'), 'no color in a title');
     const body = composeSlide({ title: text.label, blocks: [{ region: 'message', text: text.emphasis }] }, { layout: layouts.statement, direction, roles: light });
     assert.ok(colors(body, 'text').includes('primary') && colors(body, 'text').includes(undefined), 'the bold sentence of the display message');
     assert.deepEqual(item(body, 'text').value, text.emphasis, 'the document is unchanged');

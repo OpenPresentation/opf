@@ -5039,12 +5039,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
   const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
-  // LH-09: in a display message (a statement's title, a lone short text) the words the author set bold are its emphasis, drawn in the
-  // primary color, as Claude Design draws n29's second sentence, where the primary reads EMPHASIS_CONTRAST on the slide; the text is
-  // unchanged (the fit's runs carry the color, which both engines draw). Nothing is emphasized that the author did not mark.
+  // LH-09: in a display message (a lone short text) the words the author set bold are its emphasis, drawn in the primary color, as Claude
+  // Design colors n29's second sentence, where the primary reads 4.5:1 on the slide; the text is unchanged (the fit's runs carry the
+  // color, which both engines draw, and a PowerPoint import restores the authored runs). Nothing is emphasized that the author did not
+  // mark. A title keeps its look: PowerPoint's heading import would read the color as authored.
   const slideRoles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
   const emphasisReads = (colorContrast(slideRoles.primary, slideRoles.background) ?? 0) >= SCRIM_TARGET_CONTRAST;
-  const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !emphasisReads || !Array.isArray(value) || !((field === 'text' && displayTexts.has(fitPath)) || (field === 'title' && statement === 'title' && Number((options as Record<symbol, unknown>)[HEADING_STEPS] ?? 0) > 0)) ? value
+  const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !emphasisReads || !Array.isArray(value) || !(field === 'text' && displayTexts.has(fitPath)) ? value
     : value.map(run => run && typeof run === 'object' && (run as { bold?: unknown }).bold === true && ((run as { color?: unknown }).color ?? '') === '' ? { ...run, color: 'primary' } : run);
   const fitPlacedText = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const value=displayEmphasis(field,authored,path);
@@ -5549,10 +5550,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
   // LH-69: a placed region (a slide key such as `top:left`) that holds one short text, at most SHORT_TEXT_WORDS words, holds a tile's
   // heading ("Inputs", "Product", "Teams want fewer exports."): it is drawn as a heading, in the heading face and bold (displayFaces), as
-  // Claude Design heads those tiles (b07 s29, b08 s07, s18, s46). The guarded rule `display-message`: the wider face never sets it smaller.
+  // Claude Design heads those tiles (b07 s29, b08 s07, s18, s46). Only a plain string: rich text keeps the body face, where the runs its
+  // author set bold stay apart from the rest. The guarded rule `display-message`: the wider face never sets it smaller.
   if (regions.length && ruleOn('display-message')) for (const key of regions) {
     const units = pending.filter(node => node.path.startsWith(`${path}.${key}.`) || node.path === `${path}.${key}`);
-    if (units.length === 1 && !units[0]!.children && units[0]!.field === 'text' && units[0]!.caption === undefined && messageWords(units[0]!.value) <= SHORT_TEXT_WORDS) { displayTexts.add(units[0]!.path); displayFaces.add(units[0]!.path); fire('display-message'); }
+    if (units.length === 1 && !units[0]!.children && units[0]!.field === 'text' && units[0]!.caption === undefined && typeof units[0]!.value === 'string' && messageWords(units[0]!.value) <= SHORT_TEXT_WORDS) { displayTexts.add(units[0]!.path); displayFaces.add(units[0]!.path); fire('display-message'); }
   }
   // LH-112: one or two metrics that share the body with one or two blocks of other kinds are drawn at display size (METRIC_DISPLAY_SIZES),
   // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,

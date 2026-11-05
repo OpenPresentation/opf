@@ -510,12 +510,13 @@ Short content steps up instead of sitting small at the top of an empty body, as 
     the message: the record's stack gives way, the title is the running head at the top of the slide (a content slide's title,
     LH-51) and the block fills the body as a lone block (LH-48, LH-101's display metric). With `fill: false` the stack stays.
   - A lone text of at most 25 words (counted in any script; a script written without spaces counts about two characters a word)
-    is a short message wherever it stands alone in the body: after LH-48's growth it grows on, in the heading face and bold with
-    its lines balanced, up to 56 px (`MESSAGE_DISPLAY_SIZE`; a text of at most 4 words up to the display title's 75 px), in at most
-    4 lines (`MESSAGE_DISPLAY_LINES`) and 60% of the body. It is kept only at a step above the size the plain text reached, so the
-    wider face never costs it a step; a text that cites a source or carries a footnote stays body text. The words the author set bold in a display message or in a statement's display title draw
-    in the primary color where the primary reads 4.5:1 on the slide (the fit's runs carry `color: "primary"`, which both engines
-    draw; the document is unchanged). Nothing the author did not mark is emphasized.
+    is a short message wherever it stands alone in the body: after LH-48's growth it grows on in the body face with its lines
+    balanced, up to 56 px (`MESSAGE_DISPLAY_SIZE`; a text of at most 4 words up to the display title's 75 px), in at most
+    4 lines (`MESSAGE_DISPLAY_LINES`) and 60% of the body. It is kept only at a step above the size the plain text reached, so
+    balanced lines never cost it a step; a text that cites a source or carries a footnote stays body text. The words the author set bold in a display message draw in the primary color where the
+    primary reads 4.5:1 on the slide (the fit's runs carry `color: "primary"`, which both engines draw; the document is unchanged,
+    and a PowerPoint import restores the authored runs). Nothing the author did not mark is emphasized, and a title keeps its look
+    (PowerPoint's heading import would read the color as authored).
   - A body that is one list of one entry, a short label (at most 4 words) with its description, draws the label as LH-136's
     display word over a short accent rule at the start edge (`ListFitOptions.displayRule: "short"`), and a placed region (a slide
     key such as `top:left`) holding one text of at most 4 words draws it as a heading, in the heading face and bold.
