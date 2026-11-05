@@ -4166,6 +4166,8 @@ const UNJOINED = Symbol('opf.unjoined');
 const EMPHASIS_SIZE = Symbol('opf.emphasisSize');
 /** LH-131: compose a before and after pair with its cards this much narrower on these sides, to leave its arrow room (by block path). */
 const PAIR_ROOM = Symbol('opf.pairRoom');
+/** LH-155 with LH-158: composeLayout composes a closing's stack again at the anchor its picture-text scores chose, with that choice. */
+const STACK_PLACE = Symbol('opf.stackPlace');
 /** LH-131: a before and after pair's arrow, in reference pixels, and its margin from each card as a share of the slide's gap. */
 export const PAIR_ARROW_WIDTH = 40, PAIR_ARROW_HEIGHT = 28, PAIR_ARROW_MARGIN = .75;
 /** LH-06: compose the pill at the foot of the body, where it has room, rather than right after the text it follows. */
@@ -5435,6 +5437,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const groupRules = new WeakMap<ComposedItem[], LayoutBox>();
   let titleRule: SlideComposition['titleRule'];
   let pictureText: PictureText | undefined;
+  // LH-155 with LH-158: a low stack over a measured picture, placed at the foot and scored after composing (STACK_PLACE).
+  let stackPlace: { room: number; alignment: PictureTextAlignment; input: Omit<PictureTextInput, 'places' | 'panel'>; keyed: boolean; explicit?: PictureTextAnchor } | undefined;
   const headingGroup = (fields: string[], x: number, y: number, areaWidth: number, title?: 'step' | 'split', rule = false): ComposedItem[] => {
     const list: ComposedItem[] = [];
     let top = y;
@@ -8177,21 +8181,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return { list: drawn.list, anchor: choice.anchor, cell: drawn.cell };
     };
     // LH-155 with LH-158: a stack anchored low (the closing: its title, rule and contact lines) is one group over a picture background, and
-    // goes where the picture lets it read by the same scores as a cover's heading group: at the top, middle or foot of the content box, its
-    // band the stack's height across the box. It keeps its alignment and has no panel (the stack holds more than headings); the background's
-    // `textPlacement` picks the anchor outright. Unmeasured, a low stack is centered, as wave 6 centered a low heading group.
+    // goes where the picture lets it read by the same scores as a cover's heading group: at the top, middle or foot of the content box. The
+    // stack is first placed at the foot; its text's ink is then scored there and at the middle and top (stackPlace, after composing), and a
+    // stack that reads better elsewhere is composed again there (STACK_PLACE). It keeps its alignment and has no panel (the stack holds more
+    // than headings); the background's `textPlacement` picks the anchor outright. Unmeasured, a low stack is centered, as wave 6 centered a
+    // low heading group.
     if (plan.stack === 'bottom' && backgroundImage && stackShift > 0) {
       const background = backgroundImage, keyed = OVERLAY_KEYED.has(background), input = pictureInput(background, keyed), room = stackShift;
       const alignment: PictureTextAlignment = alignmentFor('title') === 'center' ? 'center' : 'start', factor = { top: 0, middle: .5, bottom: 1 } as const;
-      const candidates = input && scorePictureText({ ...input, places: (['top', 'middle', 'bottom'] as const).map(anchor => ({ anchor, alignment, measure: frame.width, box: { x: frame.x, y: frame.y + room * factor[anchor], width: frame.width, height: stackUsed } })) });
       const explicit = background.textPlacement && background.textPlacement !== 'panel' ? background.textPlacement.split('-')[0] as PictureTextAnchor : undefined;
-      const pick = explicit ? undefined : candidates && choosePictureText(candidates, { anchor: 'bottom', alignment }, ['bottom', 'middle', 'top']);
-      const anchor = explicit ?? pick?.candidate.anchor ?? 'middle', scored = candidates?.find(candidate => candidate.anchor === anchor);
-      stackShift = room * factor[anchor];
-      if (explicit || pick) pictureText = {
-        placement: `${anchor}-${alignment}`, anchor, alignment, source: explicit && background.textPlacement === `${anchor}-${alignment}` ? 'authored' : 'measured',
-        ...((explicit ? !keyed && !!scored && !scored.reads && (scored.scrim ?? 0) > 0 : pick!.scrim) ? { scrim: true as const } : {}), candidates: candidates ?? [],
-      };
+      const forced = (options as Record<symbol, unknown>)[STACK_PLACE] as { anchor: PictureTextAnchor; pictureText: PictureText } | undefined;
+      if (forced) { stackShift = room * factor[forced.anchor]; pictureText = forced.pictureText; }
+      else if (input) stackPlace = { room, alignment, input, keyed, ...(explicit ? { explicit } : {}) };
+      else {
+        const anchor = explicit ?? 'middle';
+        stackShift = room * factor[anchor];
+        if (explicit) pictureText = { placement: `${anchor}-${alignment}`, anchor, alignment, source: background.textPlacement === `${anchor}-${alignment}` ? 'authored' : 'measured', candidates: [] };
+      }
     }
     // Headings: centered vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
     // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
@@ -9201,6 +9207,27 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   if (surface && pairArrow) surface = { ...surface, arrow: pairArrow };
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(icons.length?{icons}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(pictureText&&useTemplate?{pictureText}:{}), ...(explanation?{explanation}:{}) };
+  // LH-155 with LH-158: the low stack's text ink scored at the foot (where it is), the middle and the top of the content box; a stack that
+  // reads better elsewhere (choosePictureText, the foot first) is composed again there.
+  if (stackPlace) {
+    const { room, alignment, input: sampling, keyed, explicit } = stackPlace, factor = { top: 0, middle: .5, bottom: 1 } as const;
+    const inks = items.filter(item => item.text).map(item => {
+      const ink = textInkBox(item, options.textMeasurement), side = physicalAlignment(item.alignment, paragraphDirection(annotationText(item.value), deckDirection));
+      return { ...ink, x: side === item.alignment || side === 'center' ? ink.x : item.box.x + item.box.width - (ink.x - item.box.x) - ink.width };
+    });
+    const candidates = inks.length ? (() => {
+      const x = Math.min(...inks.map(box => box.x)), y = Math.min(...inks.map(box => box.y)), ink = { x, y, width: Math.max(...inks.map(box => box.x + box.width)) - x, height: Math.max(...inks.map(box => box.y + box.height)) - y };
+      return scorePictureText({ ...sampling, places: (['top', 'middle', 'bottom'] as const).map(anchor => ({ anchor, alignment, measure: contentBox.width, box: { ...ink, y: ink.y - room * (1 - factor[anchor]) } })) });
+    })() : undefined;
+    const pick = explicit || !candidates ? undefined : choosePictureText(candidates, { anchor: 'bottom', alignment }, ['bottom', 'middle', 'top']);
+    const anchor: PictureTextAnchor = explicit ?? pick?.candidate.anchor ?? 'middle', scored = candidates?.find(candidate => candidate.anchor === anchor);
+    const placed: PictureText = {
+      placement: `${anchor}-${alignment}`, anchor, alignment, source: explicit && backgroundImage?.textPlacement === `${anchor}-${alignment}` ? 'authored' : 'measured',
+      ...((explicit || !pick ? !keyed && !!scored && !scored.reads && (scored.scrim ?? 0) > 0 : pick.scrim) ? { scrim: true as const } : {}), candidates: candidates ?? [],
+    };
+    if (anchor !== 'bottom') return composeLayout(input, { ...options, [STACK_PLACE]: { anchor, pictureText: placed } } as ComposeSlideOptions);
+    composed.pictureText = placed;
+  }
   if (pairNeed) {
     const roomy = composeLayout(input, { ...options, [PAIR_ROOM]: pairNeed } as ComposeSlideOptions);
     if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;
