@@ -2209,6 +2209,8 @@ export type PortraitMode = typeof PORTRAIT_MODES[number];
  * Design n22); up to PORTRAIT_SIDE_MAX, beside the text at PORTRAIT_SIDE_SHARE of the card's inner width (n23); more keep the avatar.
  */
 export const PORTRAIT_TOP_MAX = 4, PORTRAIT_SIDE_MAX = 6, PORTRAIT_SIDE_SHARE = .4;
+/** LH-132 review: the shares of the card a side portrait tries, widest first, down to 30%, so a name fits its column on one line. */
+export const PORTRAIT_SIDE_SHARES = [PORTRAIT_SIDE_SHARE, .35, .3] as const;
 /**
  * LH-132: a portrait's frame is at most this tall for its width (width / height: 4:5 across a card's top, 0.7 beside the text, Claude
  * Design's 146 x 200) and at least this wide (4:3): a frame flatter than that crops a face to a strip, so the person keeps the avatar.
@@ -2221,6 +2223,12 @@ export const PORTRAIT_TALLEST = { top: .8, side: .7 } as const, PORTRAIT_WIDEST 
 export const PORTRAIT_MIN = { topCard: 160, side: 72, text: 150 } as const, PORTRAIT_GAP = 16;
 /** LH-132: a team's texts keep at least this size (reference px; Claude Design sets a name at 20) before a top portrait gives up its square. */
 export const PORTRAIT_TEXT_SIZE = 21;
+/**
+ * LH-132 review: a portrait beside the text leaves the text a column; an automatic side portrait is drawn only where that column keeps every
+ * name on one line and reads at least PORTRAIT_SIDE_CHARS characters a line at the size the team's text takes. Otherwise a top portrait is
+ * tried, and the avatar kept.
+ */
+export const PORTRAIT_SIDE_CHARS = 20;
 /**
  * LH-132: a quote with a photo draws it as a tall picture at the start of the quote (Claude Design n24) when the quote is at least
  * QUOTE_PORTRAIT_MIN_WIDTH wide: QUOTE_PORTRAIT_SHARE of its width, at most PORTRAIT_TALLEST.side tall for that width and never taller
@@ -4097,12 +4105,17 @@ const HEADING_STEPS = Symbol('opf.headingSteps');
  * draw the portrait at that step where no block reads smaller (withPortraits).
  */
 const AVATAR_QUOTES = Symbol('opf.avatarQuotes');
+/**
+ * LH-132 review: the guard composes a slide whose portraits it refused again with this flag, which turns the rule off, so the slide goes
+ * through every other step exactly as a slide without a team or a quote photo does (main's composition, not a rule-by-rule variant of it).
+ */
+const NO_PORTRAITS = Symbol('opf.noPortraits');
 /** LH-132: whether a composition draws a quote's photo as a portrait beside it (QuoteLayout.photo.focus). */
 const portraitQuotes = (composed: SlideComposition): boolean => composed.items.some(item => item.quoteLayout?.photo?.focus !== undefined);
 /** LH-132: the grown slide (`grown`, composed with AVATAR_QUOTES) with its quotes' portraits again, at the same step (`extra`), where that adds no finding and sets no block smaller. */
 function withPortraits(input: unknown, options: ComposeSlideOptions, grown: SlideComposition, extra: Record<symbol, unknown>, before: TrackQuality, floor: number): SlideComposition {
   const portrait = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
-  return portrait && overflowCount(portrait) <= overflowCount(grown) && !shrinks(portrait, grown, options) ? portrait : grown;
+  return portrait && overflowCount(portrait) <= overflowCount(grown) && !shrinks(portrait, grown, options) && !picturesShrink(portrait, grown) ? portrait : grown;
 }
 /**
  * LH-129: compositions whose headings are the message: they stand free (centered in a sized title area, or in a stacked record) and no
@@ -4213,6 +4226,11 @@ const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRul
  */
 const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
+/**
+ * LH-132 review: compositions in which an automatic team portrait had no room (placePerson fell back to the avatar inside the portraits'
+ * row or grid). The guard never keeps one: the slide keeps its arrangement without the rule, its avatars on the card tops.
+ */
+const PORTRAIT_FALLBACK = new WeakSet<SlideComposition>();
 /** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
 const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
 /** LH-67 with LH-48: compositions with a lead plus stack, whose hierarchy (a larger lead) LH-48's body growth would flatten. */
@@ -4225,6 +4243,16 @@ const LEAD_STACKS = new WeakSet<SlideComposition>();
 const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Symbol('opf.noRegionMeasure');
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
+/**
+ * LH-132 review: whether any picture of `next` (an image block's frame, a quote's photo) covers less area than the same picture of `base`,
+ * so a portrait never ends smaller than the picture the slide draws without the rule.
+ */
+function picturesShrink(next: SlideComposition, base: SlideComposition): boolean {
+  const areas = (composed: SlideComposition) => new Map(composed.items.flatMap(item => [...(item.image ? [[item.path, item.image.box.width * item.image.box.height] as const] : []), ...(item.quoteLayout?.photo ? [[`${item.path}.photo`, item.quoteLayout.photo.box.width * item.quoteLayout.photo.box.height] as const] : [])]));
+  const before = areas(base);
+  for (const [path, area] of areas(next)) { const was = before.get(path); if (was !== undefined && area < was - 1) return true; }
+  return false;
+}
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
 function shrinks(next: SlideComposition, base: SlideComposition, options: ComposeSlideOptions): boolean {
   const before = bodyReadability(base, options).byPath;
@@ -4415,7 +4443,8 @@ function guardedRules(input: unknown, options: ComposeSlideOptions): SlideCompos
     let base: SlideComposition;
     try { base = composeArranged(input, ruled(NO_RULES)); } catch (error) { if (!(error instanceof OPFCompositionError) || !result) throw error; KEPT_RULES.set(result, { rules: CORE_RULES, seeds: {} }); return result; }
     const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), before = trackQuality(base, options);
-    const readsWell = (next: SlideComposition | undefined): next is SlideComposition => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
+    // LH-132 review: a slide whose portraits fired also keeps every picture at least as large as without the rules (picturesShrink).
+    const readsWell = (next: SlideComposition | undefined): next is SlideComposition => next !== undefined && readsAsWell(before, trackQuality(next, options), floor) && !(fired.has('portraits') && (picturesShrink(next, base) || PORTRAIT_FALLBACK.has(next)));
     // LH-68, LH-06: a tile metric starts every role at its stacked size in `base`, and a band or pill text at its block's size there.
     const seeds: Record<symbol, unknown> = {};
     if (fired.has('metric-tiles')) seeds[TILE_FLOORS] = new Map(base.items.filter(item => item.metricLayout).map(item => [item.path, Object.fromEntries(item.metricLayout!.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]))]));
@@ -4434,6 +4463,7 @@ function guardedRules(input: unknown, options: ComposeSlideOptions): SlideCompos
         if (readsWell(trial)) { kept = rules; result = trial; keptRules = rules; }
       }
     }
+    if (fired.has('portraits') && !keptRules.has('portraits')) return guardedRules(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions);
     KEPT_RULES.set(result!, { rules: keptRules, seeds });
     // LH-114: a pull line's quote is set at the lead size, which the guard does not hold against the card. Another arrangement of the
     // slide (a track, LH-48's growth) is compared with this one, so for that comparison its quote counts at the size it has without the
@@ -4655,7 +4685,12 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
     try { return composeLayout(input, { ...options, [RULES]: rules, ...(collect ? { [FIRED]: collect } : {}) } as ComposeSlideOptions); }
     catch (error) { if (error instanceof OPFCompositionError) return undefined; throw error; }
   };
-  const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor);
+  // LH-132 review: an arrangement whose portraits fired keeps every picture at least as large as without the rules and has no portrait
+  // fallen back to the avatar (as guardedRules).
+  let plain: SlideComposition | undefined | null = null;
+  const unruled = (): SlideComposition | undefined => { if (plain === null) plain = compose(NO_RULES); return plain; };
+  const portraitsRead = (next: SlideComposition) => { if (!fired.has('portraits')) return true; const base = unruled(); return !PORTRAIT_FALLBACK.has(next) && !(base && picturesShrink(next, base)); };
+  const reads = (next: SlideComposition | undefined) => next !== undefined && readsAsWell(before, trackQuality(next, options), floor) && portraitsRead(next);
   const ruled = compose(CORE_RULES, fired);
   // LH-39: the figure on one line is tried on top of the rules this arrangement keeps, as guardedCompose does.
   const figure = (rules: ReadonlySet<GuardedRule>, current: SlideComposition | undefined): SlideComposition | undefined => {
@@ -4665,12 +4700,13 @@ function composeVariant(input: unknown, options: ComposeSlideOptions, before: Tr
   };
   if (!fired.size || reads(ruled)) return figure(CORE_RULES, ruled);
   // As guardedCompose: without the rules, then each rule that fired added on its own while the arrangement still reads as well.
-  let kept: ReadonlySet<GuardedRule> = NO_RULES, best = compose(NO_RULES);
+  let kept: ReadonlySet<GuardedRule> = NO_RULES, best = unruled();
   for (const rule of GUARDED_RULES) {
     if (!fired.has(rule)) continue;
     const rules = new Set([...kept, rule]), trial = compose(rules);
     if (reads(trial)) { kept = rules; best = trial; }
   }
+  if (fired.has('portraits') && !kept.has('portraits')) return composeVariant(input, { ...options, [NO_PORTRAITS]: true } as ComposeSlideOptions, before, floor);
   return figure(kept, best);
 }
 /**
@@ -4971,7 +5007,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)) && !(rule === 'portraits' && (options as Record<symbol, unknown>)[NO_PORTRAITS] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -5587,7 +5623,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // `portraits` (no name, role or line smaller than with the avatar); a person's `portrait` (the image option) overrides it for the
   // whole team, the first one in reading order, so the cards stay equal. `personParts`: each person's picture and text, by group path.
   const personParts = new Map<string, { image: Pending; text: Pending }>();
-  let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false;
+  let portraitMode: Exclude<PortraitMode, 'avatar'> | undefined, portraitAuthored = false, portraitFallback = false;
   {
     const personOf = (node: Pending): { image: Pending; text: Pending } | undefined => {
       const kids = node.children, own = record(node.composition);
@@ -5610,6 +5646,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (mode !== undefined && mode !== 'avatar') {
         portraitMode = mode;
         portraitAuthored = authored !== undefined;
+        if (!portraitAuthored) fire('portraits');
         for (const [index, node] of pending.entries()) personParts.set(node.path, people[index]!);
       }
     }
@@ -6416,7 +6453,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // PORTRAIT_TEXT_SIZE, and under a 4:3 one below that) or in the card's height (side), and the portrait grows into the room left, up to
   // PORTRAIT_TALLEST for its width, so it takes empty room, never the text's. Every person reserves that tallest text, so the cards are
   // equal and their portraits align; the card holds the portrait and the text and is centered in its cell. A card too wide for a top
-  // portrait (two people in a row) draws it beside the text. The picture keeps its authored fit and focus (cover from the upper third when
+  // portrait (two people in a row) draws it beside the text where that column reads well (PORTRAIT_SIDE_CHARS). The picture keeps its authored fit and focus (cover from the upper third when
   // none is given) in a frame rounded as a card is, unless the author shaped it other than a circle. Returns false, and the person keeps
   // the avatar, when the portrait would be flatter than PORTRAIT_WIDEST or narrower than PORTRAIT_MIN, or the text narrower than
   // PORTRAIT_MIN or too tall for the card at the floor.
@@ -6425,8 +6462,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const own = inheritedSettings(settings, { ...node.composition, mode: 'column' });
     const drop = cards && frame ? gap * CARD_FILL_SPACE : 0, cell = acceptedBox(frame ? { ...frame, y: frame.y + drop, height: Math.max(scale, frame.height - drop) } : box);
     const inner = cards ? payloadBox(cell, true) : cell, between = PORTRAIT_GAP * scale, floorPx = own.minFontSize ?? 16, floor = snapFontSizeUp(floorPx * scale);
-    const plan = (mode: Exclude<PortraitMode, 'avatar'>) => {
-      const side = mode === 'side', pictureWidth = side ? inner.width * PORTRAIT_SIDE_SHARE : inner.width, textWidth = side ? inner.width - pictureWidth - between : inner.width;
+    // LH-132 review: a text column beside a portrait keeps every name of the team on one line and holds at least PORTRAIT_SIDE_CHARS
+    // characters a line of the role and line (their average width measured), as LH-77's heading list draws them: the name bold at
+    // LIST_HEADING_SCALE times the list size, the description at the list size. Only an authored `side` is drawn without that.
+    const textWidthOf = (weight: 400 | 700) => textWidthMeasurer(resolveTextStyle({ fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: weight, italic: false, path: node.path }, options.textMeasurement), options.textMeasurement);
+    const nameWidth = textWidthOf(700), lineWidth = textWidthOf(400);
+    const readable = (width: number, size: number) => portraitAuthored && portraitMode === 'side' || [...personParts.values()].every(entry => {
+      const entry0 = entry.text.field === 'text' ? undefined : record((entry.text.value as unknown[])[0]), name = String(entry0 ? entry0.text : entry.text.value).trim();
+      const lines = typeof entry0?.description === 'string' ? entry0.description.replace(/\s+/gu, ' ').trim() : '';
+      return nameWidth(name, entry0 && lines ? size * LIST_HEADING_SCALE : size) <= width + .5 && (!lines || width * lines.length / Math.max(1e-6, lineWidth(lines, size)) >= PORTRAIT_SIDE_CHARS - 1e-6);
+    });
+    const plan = (mode: Exclude<PortraitMode, 'avatar'>, share = PORTRAIT_SIDE_SHARE) => {
+      const side = mode === 'side', pictureWidth = side ? inner.width * share : inner.width, textWidth = side ? inner.width - pictureWidth - between : inner.width;
       if (pictureWidth < PORTRAIT_MIN.side * scale || textWidth < PORTRAIT_MIN.text * scale) return undefined;
       const needs = (text: Pending, size: number) => naturalHeight(text, textWidth, false, undefined, own, false, size) + 2 * rasterPadding + scale;
       const key = `${mode}:${round(textWidth)}:${round(inner.height)}`;
@@ -6434,7 +6481,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         const team = [...personParts.values()].map(entry => entry.text), sizes: number[] = [];
         for (let size = proseMeasure(person.text, textWidth).size; ; size = Math.max(floor, scaleStep(size - .01 * scale, floorPx))) { sizes.push(size); if (size <= floor + 1e-9) break; }
         const need = new Map(sizes.map(size => [size, Math.max(...team.map(text => needs(text, size)))]));
-        const fits = (room: number, least = floor) => sizes.find(size => size >= least - 1e-9 && need.get(size)! <= room + .01);
+        const fits = (room: number, least = floor) => sizes.find(size => size >= least - 1e-9 && need.get(size)! <= room + .01 && (!side || readable(textWidth, size)));
         const size = side ? fits(inner.height) : fits(inner.height - between - pictureWidth, PORTRAIT_TEXT_SIZE * scale) ?? fits(inner.height - between - pictureWidth / PORTRAIT_WIDEST);
         teamText.set(key, size === undefined ? undefined : { size, need: need.get(size)! });
       }
@@ -6445,9 +6492,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     // An authored mode is kept where it fits (top gives way to side); the automatic top portrait gives way to the side one where the side
     // one sets the text larger.
-    const wanted = plan(portraitMode!), beside = portraitMode === 'top' && (!wanted || !portraitAuthored) ? plan('side') : undefined;
+    // A side portrait takes PORTRAIT_SIDE_SHARE of the card, or less (down to PORTRAIT_SIDE_LEAST) where the wider column sets the team's text
+    // larger: the share with the largest text, the widest of equals.
+    const sideways = () => PORTRAIT_SIDE_SHARES.map(share => plan('side', share)).reduce<ReturnType<typeof plan>>((best, next) => next && (!best || next.text.size > best.text.size + 1e-9) ? next : best, undefined);
+    const wanted = portraitMode === 'side' ? sideways() : plan(portraitMode!), beside = portraitMode === 'top' && (!wanted || !portraitAuthored) ? sideways() : undefined;
     const chosen = wanted && !(beside && !portraitAuthored && beside.text.size > wanted.text.size + 1e-9) ? wanted : beside;
-    if (!chosen) return false;
+    if (!chosen) { portraitFallback = true; return false; }
     const { side, pictureWidth, pictureHeight, textWidth, text, ownNeed } = chosen;
     const content = side ? Math.max(pictureHeight, text.need) : pictureHeight + between + text.need;
     const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, content + insetTop + insetBottom);
@@ -8601,6 +8651,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;
   }
   if (atRequest) AT_REQUEST.add(composed);
+  if (portraitFallback) PORTRAIT_FALLBACK.add(composed);
   // LH-149: the paragraphs and lists that shrank onto a half step of the scale, for the comparisons of arrangements (halfStepFloors).
   if (ruleOn('half-steps')) {
     const stepped = new Set<string>();

@@ -2,7 +2,7 @@
 // a testimonial's photo as a tall portrait beside the quote, and the author's `portrait` option, left to right and right to left.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { composeSlide, PORTRAIT_FOCUS_Y, PORTRAIT_SIDE_SHARE } from '../dist/composition.js';
+import { composeSlide, PORTRAIT_FOCUS_Y, PORTRAIT_SIDE_SHARE, PORTRAIT_SIDE_SHARES } from '../dist/composition.js';
 import { layouts } from './support/template-samples.mjs';
 import { check, errorsOf } from './support/validation.mjs';
 
@@ -45,7 +45,10 @@ for (const direction of ['ltr', 'rtl']) {
     for (const [index, image] of pictures(result).entries()) {
       const text = texts(result)[index], card = image.frameBox;
       assert.equal(image.image.shape.kind, 'rounded');
-      assert.ok(Math.abs(image.image.box.width - PORTRAIT_SIDE_SHARE * (card.width - 2 * (image.image.box.x - card.x < card.width / 2 ? image.image.box.x - card.x : card.x + card.width - image.image.box.x - image.image.box.width))) < 2, 'about 40% of the card');
+      const inset = image.image.box.x - card.x < card.width / 2 ? image.image.box.x - card.x : card.x + card.width - image.image.box.x - image.image.box.width;
+      const share = image.image.box.width / (card.width - 2 * inset);
+      assert.ok(share >= PORTRAIT_SIDE_SHARES.at(-1) - 0.01 && share <= PORTRAIT_SIDE_SHARE + 0.01, `30% to 40% of the card: ${share}`);
+      assert.ok(text.text.listEntries[0].textBox.height < 2.2 * text.text.fontSize, 'the name keeps one line');
       if (direction === 'ltr') assert.ok(image.image.box.x + image.image.box.width <= text.box.x + 0.5, 'start side is the left');
       else assert.ok(text.box.x + text.box.width <= image.image.box.x + 0.5, 'start side is the right');
       assert.ok(image.image.box.height > image.image.box.width, 'a tall portrait');
@@ -53,6 +56,19 @@ for (const direction of ['ltr', 'rtl']) {
     for (const [index, item] of texts(avatar).entries()) assert.ok(texts(result)[index].text.fontSize >= item.text.fontSize - 1e-9, item.path);
   });
 }
+
+test('LH-132 review: a team whose portrait would cost text or a readable column keeps main exactly, and no picture shrinks', () => {
+  // Three people in a narrow two-thirds layout: a top portrait would set the text smaller and a side column would split the names.
+  const slide = (portrait) => composeSlide({ title: 'Leads', blocks: names.slice(0, 3).map((entry, index) => person(entry, index === 0 ? portrait : undefined)) }, { layout: layouts.team, width: 960, height: 720 });
+  const automatic = slide(), avatar = slide('avatar');
+  const geometry = (result) => result.items.map((item) => [item.path, item.box, item.frameBox, item.image?.box, item.image?.shape.kind, item.text?.fontSize]);
+  if (pictures(automatic).every((image) => image.image.shape.kind === 'circle')) assert.deepEqual(geometry(automatic), geometry(avatar), 'main exactly');
+  // No portrait is smaller than the avatar the slide draws without the rule.
+  for (const count of [2, 3, 4, 5, 6]) {
+    const drawn = pictures(team(count)), plain = pictures(team(count, 'avatar'));
+    for (const [index, image] of drawn.entries()) assert.ok(image.image.box.width * image.image.box.height >= plain[index].image.box.width * plain[index].image.box.height - 1, `${count} people, ${image.path}`);
+  }
+});
 
 test('LH-132: eight people keep the avatar; the author chooses with portrait', () => {
   for (const image of pictures(team(8))) assert.equal(image.image.shape.kind, 'circle');
