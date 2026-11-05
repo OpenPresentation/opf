@@ -35,7 +35,7 @@ for (const direction of ['ltr', 'rtl']) {
     const xs = images.map((image) => image.frameBox.x);
     assert.deepEqual([...xs].sort((a, b) => (direction === 'rtl' ? b - a : a - b)), xs, 'one row in reading order');
     // The size guard: no name, role or line is smaller than with the avatars.
-    texts(avatar).forEach((item, index) => assert.ok(words[index].text.fontSize >= item.text.fontSize - 1e-9, `${item.path}: ${words[index].text.fontSize} < ${item.text.fontSize}`));
+    for (const [index, item] of texts(avatar).entries()) assert.ok(words[index].text.fontSize >= item.text.fontSize - 1e-9, `${item.path}: ${words[index].text.fontSize} < ${item.text.fontSize}`);
     assert.ok(images[0].image.box.width > pictures(avatar)[0].image.box.width * 1.5, 'the portrait is bigger than the avatar');
   });
 
@@ -50,7 +50,7 @@ for (const direction of ['ltr', 'rtl']) {
       else assert.ok(text.box.x + text.box.width <= image.image.box.x + 0.5, 'start side is the right');
       assert.ok(image.image.box.height > image.image.box.width, 'a tall portrait');
     }
-    texts(avatar).forEach((item, index) => assert.ok(texts(result)[index].text.fontSize >= item.text.fontSize - 1e-9, item.path));
+    for (const [index, item] of texts(avatar).entries()) assert.ok(texts(result)[index].text.fontSize >= item.text.fontSize - 1e-9, item.path);
   });
 }
 

@@ -380,7 +380,7 @@ Default severity: **error**. Cost: structure. A caption is on a payload that can
 
 Default severity: **error**. Cost: structure. An image option is on a payload that is not an image.
 
-**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`) and `placement` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
+**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

@@ -5610,7 +5610,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (mode !== undefined && mode !== 'avatar') {
         portraitMode = mode;
         portraitAuthored = authored !== undefined;
-        pending.forEach((node, index) => personParts.set(node.path, people[index]!));
+        for (const [index, node] of pending.entries()) personParts.set(node.path, people[index]!);
       }
     }
   }
