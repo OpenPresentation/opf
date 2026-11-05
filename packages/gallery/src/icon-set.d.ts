@@ -1,4 +1,4 @@
-// @openpresentation/gallery/icon-sets/<id>: one icon set of the gallery (LH-14), loaded on demand. `gallery.iconSets.<id>()` imports
+// @openpresentation/gallery/icon-sets/<id>: one icon set of the gallery (LH-14), loaded on demand. `galleryIconSets.iconSets.<id>()` imports
 // it; core's ensureIcons calls that for the sets a deck uses. The record is https://openpresentation.org/schema/opf-icon-set/v1
 // without `$schema` and `id`.
 

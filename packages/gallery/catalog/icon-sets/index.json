@@ -2,7 +2,7 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "icon-sets",
   "version": "1",
-  "description": "The icon sets an OPF `icon` names as `<set>:<name>` (LH-14). Each record holds a set's license, copyright, version, source, its one viewBox and style, and every icon as SVG path data with its search tags; written by scripts/build-icon-sets.mjs from the pinned npm packages, never by hand. A host loads a set only when a deck uses it (`gallery.iconSets`).",
+  "description": "The icon sets an OPF `icon` names as `<set>:<name>` (LH-14). Each record holds a set's license, copyright, version, source, its one viewBox and style, and every icon as SVG path data with its search tags; written by scripts/build-icon-sets.mjs from the pinned npm packages, never by hand. A host registers the sets as `galleryIconSets` (`@openpresentation/gallery/icon-sets`) and loads a set only when a deck uses it.",
   "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205",
   "records": [
     {

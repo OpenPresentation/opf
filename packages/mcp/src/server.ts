@@ -39,6 +39,11 @@ export interface OpfMcpSources {
 	skills: Readonly<Record<string, Readonly<Record<string, string>>>>;
 	/** The recent release notes, as text: `opf://docs/whats-new`. Left out when absent. */
 	whatsNew?: string;
+	/**
+	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets` of
+	 * `@openpresentation/gallery/icon-sets` (each set a module loaded on first use). Left out of the lean server, which then names no icon set.
+	 */
+	iconSets?: Catalog;
 }
 
 /** Checks deck text as `opf validate` does and returns the report. The default is edge-safe (layout estimated); `opf mcp` supplies the measured one. */
@@ -266,6 +271,8 @@ To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the 
 /** Build the server. Connect it to a transport (`server.connect(...)`): stdio for `opf mcp`, Streamable HTTP for a hosted one. */
 export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const { sources, version } = options;
+	// LH-14: a deck's icons resolve in the icon sets the server was given, besides the gallery.
+	const checkCatalogs: readonly Catalog[] = sources.iconSets ? [...CATALOGS, sources.iconSets] : CATALOGS;
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
 	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions: INSTRUCTIONS });
@@ -429,7 +436,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		({ document, format, failOn }) =>
 			respond(async () => {
 				const input = inputOf(document, format);
-				const report = await check(input.raw, input.format, { catalogs: CATALOGS });
+				const report = await check(input.raw, input.format, { catalogs: checkCatalogs });
 				const level = failOn ?? "error";
 				const { findings, counts, valid, schemaValid, checks, ...rest } = report;
 				return { ok: !reaches(findings, level), valid, schemaValid, failOn: level, format: input.format, counts, findings, checks, ...(typeof (rest as { hint?: string }).hint === "string" ? { hint: (rest as { hint: string }).hint } : {}), ...(opfVersion ? { opfVersion } : {}) };
@@ -497,7 +504,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 
 	// LH-14: the icon sets of the gallery, each a module of its own, loaded on the first search that needs it.
 	type IconSet = { name: string; license: string; copyright: string; version?: string; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
-	const iconSets = (gallery as unknown as { iconSets: Record<string, () => Promise<IconSet>> }).iconSets;
+	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, () => Promise<IconSet>>;
 	const setNames = Object.keys(iconSets);
 	server.registerTool(
 		"search_icons",
@@ -520,6 +527,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		},
 		({ query, set, limit }) =>
 			respond(async () => {
+				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets of @openpresentation/gallery/icon-sets.", "unknown-id");
 				const ids = set === undefined ? setNames : [set];
 				for (const id of ids) if (!Object.hasOwn(iconSets, id)) throw fail(`Unknown icon set ${id}.${didYouMean(id, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id");
 				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!()] as const));

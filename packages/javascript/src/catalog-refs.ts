@@ -28,7 +28,7 @@ export interface Catalog extends CatalogRecords {
   readonly source: string;
   /**
    * LH-14: the icon sets an `icon` names as `<set>:<name>`, by set id: each the set's record (opf-icon-set/v1 without `$schema`
-   * and `id`), or a function that loads it (the gallery's sets load on first use; `ensureIcons` calls it). See icons.ts.
+   * and `id`), or a function that loads it (`galleryIconSets` of @openpresentation/gallery/icon-sets: each set loads on first use; `ensureIcons` calls it). See icons.ts.
    */
   readonly iconSets?: Readonly<Record<string, Readonly<Record<string, unknown>> | (() => Promise<unknown>)>>;
 }

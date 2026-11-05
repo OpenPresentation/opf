@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { iconPathCommands } from "@openpresentation/opf/composition";
 import { buildIconSets } from "../scripts/build-icon-sets.mjs";
 import { catalogIndexes, gallery } from "../dist/index.js";
+import { galleryIconSets } from "../dist/icon-sets.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (file) => readFileSync(path.join(root, file), "utf8");
@@ -39,13 +40,16 @@ test("each set records its license and copyright, and the notices carry the full
   }
 });
 
-test("the catalog carries no icon data: each set loads on demand, and every icon's path data reads", async () => {
-  assert.deepEqual(Object.keys(gallery.iconSets), ["lucide", "tabler"]);
-  assert.ok(Object.values(gallery.iconSets).every((loader) => typeof loader === "function"));
+test("the catalog carries no icon data: the icon sets are an entry of their own, each set loads on demand, and every icon's path data reads", async () => {
+  assert.equal(gallery.iconSets, undefined, "the catalog names no icon set: a host that does not register galleryIconSets carries none");
+  assert.ok(!read("dist/index.js").includes("import("), "the catalog module imports nothing");
+  assert.equal(galleryIconSets.source, gallery.source);
+  assert.deepEqual(Object.keys(galleryIconSets.iconSets), ["lucide", "tabler"]);
+  assert.ok(Object.values(galleryIconSets.iconSets).every((loader) => typeof loader === "function"));
   assert.ok(read("dist/index.js").length < 400_000, "the catalog module stays small");
   assert.deepEqual(catalogIndexes.iconSets.records.map((entry) => entry.id), ["lucide", "tabler"]);
-  for (const id of Object.keys(gallery.iconSets)) {
-    const set = await gallery.iconSets[id]();
+  for (const id of Object.keys(galleryIconSets.iconSets)) {
+    const set = await galleryIconSets.iconSets[id]();
     assert.equal(set.$schema, undefined);
     let parts = 0;
     for (const [name, icon] of Object.entries(set.icons)) {

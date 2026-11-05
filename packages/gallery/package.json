@@ -39,6 +39,10 @@
       "types": "./dist/previews.d.ts",
       "default": "./dist/previews.js"
     },
+    "./icon-sets": {
+      "types": "./dist/icon-sets.d.ts",
+      "default": "./dist/icon-sets.js"
+    },
     "./icon-sets/*": {
       "types": "./dist/icon-sets/icon-set.d.ts",
       "default": "./dist/icon-sets/*.js"

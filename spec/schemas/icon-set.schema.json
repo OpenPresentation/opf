@@ -3,7 +3,7 @@
   "$id": "https://openpresentation.org/schema/opf-icon-set/v1",
   "$comment": "The v1 in the $id is the pre-1.0 line, not a frozen contract: this schema may change in any 0.x minor release. The release that produced this copy is the version of the @openpresentation/opf package it came from (opf --version; opf schemas lists it next to each id). See docs/schema-versioning.md.",
   "title": "Icon Set",
-  "description": "Schema for icon-set records (LH-14): one set of icons that share a viewBox and a style, each icon as SVG path data. An OPF `icon` names one as `<set>:<name>` (docs/icons.md). @openpresentation/gallery ships Lucide and Tabler outline, generated from their npm packages; a host loads a set only when a deck uses it (`gallery.iconSets`), and a document embeds only the icons it uses under `catalogs.<group>.iconSets.<id>` (a record without `$schema`, `id`, `licenseText` or `tags`).",
+  "description": "Schema for icon-set records (LH-14): one set of icons that share a viewBox and a style, each icon as SVG path data. An OPF `icon` names one as `<set>:<name>` (docs/icons.md). @openpresentation/gallery ships Lucide and Tabler outline, generated from their npm packages; a host registers them as `galleryIconSets` of `@openpresentation/gallery/icon-sets` and loads a set only when a deck uses it, and a document embeds only the icons it uses under `catalogs.<group>.iconSets.<id>` (a record without `$schema`, `id`, `licenseText` or `tags`).",
   "type": "object",
   "required": ["$schema", "id", "name", "license", "copyright", "viewBox", "style", "icons"],
   "additionalProperties": false,

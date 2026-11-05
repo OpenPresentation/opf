@@ -42,8 +42,7 @@ test('an embedded record reports origin document and its group source', () => {
 
 test('the gallery package export shape: content kinds, display kinds and chart-type mappings', () => {
   assert.deepEqual(Object.keys(catalogEntry).sort(), ['CATALOG_SCHEMA', 'GALLERY_SOURCE', 'catalogDisplay', 'catalogIndexes', 'catalogManifest', 'gallery']);
-  // LH-14: iconSets, a loader per icon set (each set loads on first use).
-  assert.deepEqual(Object.keys(gallery).sort(), ['audiences', 'colorSchemes', 'fontSchemes', 'iconSets', 'layouts', 'narratives', 'purposes', 'source', 'themes', 'tones']);
+  assert.deepEqual(Object.keys(gallery).sort(), ['audiences', 'colorSchemes', 'fontSchemes', 'layouts', 'narratives', 'purposes', 'source', 'themes', 'tones']);
   assert.equal(gallery.source, GALLERY_SOURCE);
   assert.deepEqual(Object.keys(catalogDisplay).sort(), ['chartTypes', 'languages', 'socialPlatforms']);
   // Every engine chart type has a display record, and every display record keeps its exporter mappings (opf-pptx).

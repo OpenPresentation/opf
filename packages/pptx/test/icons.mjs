@@ -5,6 +5,7 @@
 import assert from 'node:assert/strict';
 import {strFromU8, unzipSync} from 'fflate';
 import {gallery} from '@openpresentation/gallery';
+import {galleryIconSets} from '@openpresentation/gallery/icon-sets';
 import {fromPptx, toPptx} from '../dist/index.js';
 
 const MULTI = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="5" height="10" fill="#f00"/><rect x="5" width="5" height="10" fill="#00f"/></svg>';
@@ -17,7 +18,7 @@ const deck = {
     {title: 'Partners', blocks: [{icon: 'multi', blocks: [{text: 'Gold'}, {text: 'Co-selling and joint roadmaps.'}]}, {icon: 'lucide:handshake', blocks: [{text: 'Referral'}, {text: 'A share of first-year revenue.'}]}]},
   ],
 };
-const bytes = await toPptx(deck, {catalogs: [gallery]});
+const bytes = await toPptx(deck, {catalogs: [gallery, galleryIconSets]});
 const files = unzipSync(bytes);
 const slide = index => strFromU8(files[`ppt/slides/slide${index}.xml`]);
 const shapes = (xml, role) => [...xml.matchAll(/<p:(sp|pic)>(?:(?!<\/p:\1>)[\s\S])*?name="OPF icon [^"]*"[\s\S]*?<\/p:\1>/g)].map(([shape]) => shape).filter(shape => shape.includes(` ${role}`));

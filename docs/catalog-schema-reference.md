@@ -218,7 +218,7 @@ _No named properties._
 - Schema id: `https://openpresentation.org/schema/opf-icon-set/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `license`, `copyright`, `viewBox`, `style`, `icons`
-- Purpose: Schema for icon-set records (LH-14): one set of icons that share a viewBox and a style, each icon as SVG path data. An OPF `icon` names one as `<set>:<name>` (docs/icons.md). @openpresentation/gallery ships Lucide and Tabler outline, generated from their npm packages; a host loads a set only when a deck uses it (`gallery.iconSets`), and a document embeds only the icons it uses under `catalogs.<group>.iconSets.<id>` (a record without `$schema`, `id`, `licenseText` or `tags`).
+- Purpose: Schema for icon-set records (LH-14): one set of icons that share a viewBox and a style, each icon as SVG path data. An OPF `icon` names one as `<set>:<name>` (docs/icons.md). @openpresentation/gallery ships Lucide and Tabler outline, generated from their npm packages; a host registers them as `galleryIconSets` of `@openpresentation/gallery/icon-sets` and loads a set only when a deck uses it, and a document embeds only the icons it uses under `catalogs.<group>.iconSets.<id>` (a record without...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

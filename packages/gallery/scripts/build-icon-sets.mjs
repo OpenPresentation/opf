@@ -176,7 +176,7 @@ export async function buildIconSets() {
     $schema: "https://openpresentation.org/schema/opf-catalog-index/v1",
     kind: "icon-sets",
     version: "1",
-    description: "The icon sets an OPF `icon` names as `<set>:<name>` (LH-14). Each record holds a set's license, copyright, version, source, its one viewBox and style, and every icon as SVG path data with its search tags; written by scripts/build-icon-sets.mjs from the pinned npm packages, never by hand. A host loads a set only when a deck uses it (`gallery.iconSets`).",
+    description: "The icon sets an OPF `icon` names as `<set>:<name>` (LH-14). Each record holds a set's license, copyright, version, source, its one viewBox and style, and every icon as SVG path data with its search tags; written by scripts/build-icon-sets.mjs from the pinned npm packages, never by hand. A host registers the sets as `galleryIconSets` (`@openpresentation/gallery/icon-sets`) and loads a set only when a deck uses it.",
     // `npm run rehash` writes the hash.
     contentSha256: previous?.contentSha256 ?? "0".repeat(64),
     records: sets.map((set) => ({ id: set.id, name: set.name, summary: set.summary, license: set.license, version: set.version, icons: Object.keys(set.icons).length, file: `${set.id}.json` })),

@@ -4,6 +4,7 @@
 // both inlined by tsup from skills/ and CHANGELOG.md (see tsup.config.ts).
 import { docs } from "@openpresentation/opf/docs";
 import { examples } from "@openpresentation/opf/examples";
+import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
 import type { DocPage, ExamplePage, OpfMcpSources } from "./server.js";
 
 declare const OPF_MCP_SKILLS: Record<string, Record<string, string>>;
@@ -67,5 +68,7 @@ export function defaultSources(): OpfMcpSources {
 		examples: examples.map((example): ExamplePage => ({ slug: example.slug, category: example.category, gallery: example.gallery, file: example.file, deck: example.deck })),
 		skills: OPF_MCP_SKILLS,
 		whatsNew: OPF_MCP_WHATS_NEW,
+		// LH-14: the gallery icon sets; each set is a module of its own, loaded the first time a search or a deck needs it.
+		iconSets: galleryIconSets,
 	};
 }

@@ -83,11 +83,22 @@ nested or numbered entry) gets the same finding.
 
 ## Loading
 
-Core is catalog-free. A host registers sets with its catalogs: the gallery's `gallery.iconSets` holds one loader per set, and each set
-is a module of its own (`@openpresentation/gallery/icon-sets/<id>`), so a deck that draws no icon never loads one. Before synchronous
-code reads a deck, a host awaits `ensureIcons(deck, { catalogs })`: opf-pptx's `toPptx`, the renderer's browser fonts handle
-(`ensure`), core's Node file API (`convert`), the CLI and the MCP do. A Node script that calls `toSvg` directly calls it first.
-`validate` alone checks only the set ids and the sets the document embeds until the sets are loaded.
+Core is catalog-free. A host registers icon sets with its catalogs, as a catalog's `iconSets` (each set its record, or a function that
+loads it). The gallery's sets are an entry of their own, so a host that does not register them (a Worker bundled into one file, say)
+carries none of their data, and `gallery` itself names none:
+
+```js
+import { gallery } from "@openpresentation/gallery";
+import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+const catalogs = [gallery, galleryIconSets];
+await ensureIcons(deck, { catalogs });
+```
+
+`galleryIconSets.iconSets` holds one loader per set, and each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`),
+so a deck that draws no icon loads none. Before synchronous code reads a deck, a host awaits `ensureIcons(deck, { catalogs })`:
+opf-pptx's `toPptx` and the renderer's browser fonts handle (`ensure`) do with the catalogs they are given; core's Node defaults, the
+CLI and the MCP register `galleryIconSets` and load the sets a deck names before they check or draw it. A Node script that calls `toSvg`
+directly calls `ensureIcons` first. `validate` alone checks only the set ids and the sets the document embeds until the sets are loaded.
 
 `embedIcons(deck, { catalogs })` copies the set icons a deck uses (only those, with the set's license and copyright) into
 `catalogs.default.iconSets`, so the deck draws them with no registered catalog. An icon set is a catalog kind

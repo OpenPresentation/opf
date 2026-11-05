@@ -1,4 +1,4 @@
-import { diagramsPending, ensureDiagrams, ensureIcons } from "@openpresentation/opf/composition";
+import { diagramsPending, ensureDiagrams, ensureIcons, iconsPending } from "@openpresentation/opf/composition";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
@@ -335,6 +335,8 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
   // `ensure` loads it first, since the font analysis measures a diagram's labels only once its type is loaded.
   const pending = (presentation, renderOptions) => [
     ...diagramsPending(presentation).map((type) => `diagram:${type}`),
+    // LH-14: an icon set the presentation names that is not loaded yet (a registered loader, such as the gallery's) is pending as `icons:<set>`.
+    ...iconsPending(presentation, { catalogs: renderOptions?.catalogs ?? options.renderOptions?.catalogs }).sets.map((set) => `icons:${set}`),
     ...registry.pendingLazyFonts(presentation, renderOptions).map((face) => face.file),
     ...registry.pendingScripts(presentation, renderOptions),
   ];
@@ -357,7 +359,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
      */
     async ensure(presentation, callOptions = {}) {
       const diagrams = await ensureDiagrams(presentation);
-      await ensureIcons(presentation, { catalogs: renderOptionsFor(callOptions).catalogs });
+      await ensureIcons(presentation, { catalogs: callOptions.catalogs ?? options.renderOptions?.catalogs });
       const lazy = [], scripts = [];
       let uncovered = [];
       for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {

@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
+import { galleryIconSets } from '@openpresentation/gallery/icon-sets';
 import { composeSlide, embedIcons, ensureIcons, iconColors, iconFromSvg, iconPathCommands, iconPathData, parseIconReference, resolveIcon } from '../dist/composition.js';
 import { resolveSlideContext, validate } from '../dist/index.js';
 
@@ -66,15 +67,15 @@ test('resolution: the deck icons, an embedded set, the gallery sets once loaded,
   assert.equal(resolveIcon(deck, 'brand:star').icon.license, 'MIT');
   assert.equal(resolveIcon(deck, 'nope:x').code, 'icon-unknown');
   assert.equal(resolveIcon(deck, 'marc').suggestions[0], 'mark');
-  const loaded = await ensureIcons(deck, { catalogs: [gallery] });
+  const loaded = await ensureIcons(deck, { catalogs: [gallery, galleryIconSets] });
   assert.ok(loaded.sets.includes('tabler'));
-  const rocket = resolveIcon(deck, 'tabler:rocket', { catalogs: [gallery] });
+  const rocket = resolveIcon(deck, 'tabler:rocket', { catalogs: [gallery, galleryIconSets] });
   assert.equal(rocket.ok, true);
   assert.equal(rocket.icon.parts[0].linecap, 'round');
-  await ensureIcons({ slides: [{ items: [{ text: 'a', icon: 'lucide:truck' }] }] }, { catalogs: [gallery] });
-  assert.ok(resolveIcon({}, 'lucide:truk', { catalogs: [gallery] }).suggestions.includes('lucide:truck'));
+  await ensureIcons({ slides: [{ items: [{ text: 'a', icon: 'lucide:truck' }] }] }, { catalogs: [gallery, galleryIconSets] });
+  assert.ok(resolveIcon({}, 'lucide:truk', { catalogs: [gallery, galleryIconSets] }).suggestions.includes('lucide:truck'));
   // embedIcons copies only the icons the deck uses, with the set's license and copyright, into the default group with its source.
-  const embedded = embedIcons({ slides: [{ items: [{ text: 'a', icon: 'lucide:truck' }] }] }, { catalogs: [gallery] }).document;
+  const embedded = embedIcons({ slides: [{ items: [{ text: 'a', icon: 'lucide:truck' }] }] }, { catalogs: [gallery, galleryIconSets] }).document;
   assert.deepEqual(Object.keys(embedded.catalogs.default.iconSets.lucide.icons), ['truck']);
   assert.equal(embedded.catalogs.default.source, gallery.source);
   assert.equal(embedded.catalogs.default.iconSets.lucide.license, 'ISC');
