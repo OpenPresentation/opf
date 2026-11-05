@@ -501,27 +501,13 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
   region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
   at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
-- **Statements and short messages (LH-09, LH-69).** The `statement` record is start-aligned and asks for LH-130's accent rule
-  over its title. A statement with one block says which of the two is its message, as Claude Design does:
-  - When the title is a sentence over a paragraph, the title is the message: it grows to display size (up to 75 px, by LH-129's
-    steps, keeping the breaks LH-148 balanced) under the accent rule, and the paragraph keeps the size the stack gives it below.
-    The paragraph grows first and the title after it, so the title never holds the paragraph to a smaller size.
-  - When the block is a metric, or a text under a title of at most 4 words that only labels it (or under no title), the block is
-    the message: the record's stack gives way, the title is the running head at the top of the slide (a content slide's title,
-    LH-51) and the block fills the body as a lone block (LH-48, LH-101's display metric). With `fill: false` the stack stays.
-  - A lone text of at most 25 words (counted in any script; a script written without spaces counts about two characters a word)
-    is a short message wherever it stands alone in the body: after LH-48's growth it grows on in the body face with its lines
-    balanced, up to 56 px (`MESSAGE_DISPLAY_SIZE`; a text of at most 4 words up to the display title's 75 px), in at most
-    4 lines (`MESSAGE_DISPLAY_LINES`) and 60% of the body. It is kept only at a step above the size the plain text reached, so
-    balanced lines never cost it a step; a text that cites a source or carries a footnote stays body text. The words the author set bold in a display message draw in the primary color where the
-    primary reads 4.5:1 on the slide (the fit's runs carry `color: "primary"`, which both engines draw; the document is unchanged,
-    and a PowerPoint import restores the authored runs). Nothing the author did not mark is emphasized, and a title keeps its look
-    (PowerPoint's heading import would read the color as authored).
-  - A body that is one list of one entry, a short label (at most 4 words) with its description, draws the label as LH-136's
-    display word over a short accent rule at the start edge (`ListFitOptions.displayRule: "short"`), and a placed region (a slide
-    key such as `top:left`) holding one text of at most 4 words draws it as a heading, in the heading face and bold.
-  - These are the guarded rules `statement-message` and `display-message`: no block reads smaller than without them. A cover, a
-    section, a closing and a quote keep LH-129's and LH-130's treatment.
+- **Statements and short messages (LH-09, LH-69).** The `statement` record is start-aligned with LH-130's rule over its title.
+  A sentence title over a paragraph is the message: it grows to display size (75 px), the paragraph keeps its size. A metric, or a
+  text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
+  body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
+  on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  `statement-message` and `display-message`.
 - **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
   tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
   metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price
