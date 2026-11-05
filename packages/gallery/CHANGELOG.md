@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.32.1 (2026-11-05)
+
+No package changes; released with the set.
+
 ## 0.32.0 (2026-11-04)
 
 - Layout regions that hold a figure accept the new `diagram` kind: `charts` of `chart`, `chart` of `chart-beside`, `media` of `image`, `image-beside` and `hero`, `first` and `second` of `comparison` and `two-column`, the three columns of `three-column`, `steps` of `process` and `timeline` of `timeline`. A slide that pins a diagram to one of these regions, or binds one by kind, now places it there instead of reporting `region-kind`; no record draws differently.
