@@ -453,8 +453,9 @@ describe("the bundled sources", () => {
 		}
 		assert.ok(sources.examples.length >= 100);
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
-		// LH-14 added docs/icons.md and three rules to docs/validate.md.
-		assert.ok(bytes < 1_020_000, `${bytes} bytes of documentation`);
+		// LH-14 added docs/icons.md and three rules to docs/validate.md. LH wave 7 together (LH-158's and LH-132's image treatments, LH-09's and
+		// LH-155's layout templates, the portrait key and the icon rules in the references) is 1,027,190 bytes; the lean Worker stays in bounds.
+		assert.ok(bytes < 1_035_000, `${bytes} bytes of documentation`);
 	});
 });
 
