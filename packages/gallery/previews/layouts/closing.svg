@@ -1,8 +1,9 @@
 <svg aria-label="Agree the pilot team and start date" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
 <rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="307.57">Agree the pilot </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="399.07">team and start date</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="476.57">Next step: name the pilot lead and agree the start date.</text></g>
+<rect aria-hidden="true" fill="#FFFFFF" height="5" width="80" x="57.6" y="390.54"/>
+<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="482.54">Agree the pilot </text>
+<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="574.04">team and start date</text></g>
+<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="651.54">Next step: name the pilot lead and agree the start date.</text></g>
 <g/>
 <g><g><g><text fill="#F0F0F0" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>

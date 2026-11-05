@@ -1,7 +1,9 @@
 <svg aria-label="Start small enough to learn quickly" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
 <rect aria-hidden="true" fill="#F0F0F0" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="345.13">Start small enough to learn quickly</text></g>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="418.01">Learn with two teams before expanding the rollout.</text></g>
+<rect aria-hidden="true" fill="#000000" height="5" width="80" x="57.6" y="224.07"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="316.07">Start small enough </text>
+<text fill="#000000" font-family="Aptos Display, sans-serif" font-size="75" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="407.57">to learn quickly</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="37" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="485.07">Learn with two teams before expanding the rollout.</text></g>
 <g/>
 <g><g><g><text fill="#011842" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="687.68">Illustrative example • fictional data</text></g></g></g>
 </svg>
