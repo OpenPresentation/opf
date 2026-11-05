@@ -874,7 +874,46 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
     placed[index] = best.color;
     placedLab[index] = best.lab;
   });
-  return options.soften && opaqueFill ? softenChartPalette(fill, placed as string[], { legible: options.legible, floor: floorOf, lead: leadPair }) : placed as string[];
+  const result = opaqueFill ? separateNeighbors(fill, placed as string[], { legible: options.legible, floor: floorOf }) : placed as string[];
+  return options.soften && opaqueFill ? softenChartPalette(fill, result, { legible: options.legible, floor: floorOf, lead: leadPair }) : result;
+}
+
+/** LH-94: the margin over {@link CHART_SERIES_MIN_LIGHTNESS_STEP} a neighbour is placed at, so a step still reads 11 L* after hex rounding. */
+const NEIGHBOR_STEP_MARGIN = 0.4;
+
+/**
+ * LH-94: every series from the scheme (`legible`) stands at least {@link CHART_SERIES_MIN_LIGHTNESS_STEP} CIE L* from the series before it,
+ * whatever the scheme's own accents were (steel-blue's fifth and sixth accent differ by 0.2 L*, black-and-white's third and fourth by 8): a
+ * series that is closer is moved along the lightness axis (its hue and as much of its chroma as sRGB allows kept) to the nearest lightness
+ * that keeps its contrast floor, the step from both neighbours and, as a cost, a colour difference of at least
+ * {@link CHART_SERIES_MIN_DIFFERENCE} from every other series. In series order, so a move is judged against the neighbour already settled;
+ * an authored colour (not in `legible`) is never moved, so `opf/chart-color-only` still reports the pair an author chose.
+ */
+function separateNeighbors(fill: string, palette: readonly string[], options: { legible?: readonly boolean[]; floor: (index: number) => number }): string[] {
+  const result = [...palette];
+  const labs = result.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
+  const need = CHART_SERIES_MIN_LIGHTNESS_STEP + NEIGHBOR_STEP_MARGIN;
+  for (let index = 1; index < result.length; index++) {
+    const lab = labs[index], before = labs[index - 1];
+    if (options.legible?.[index] !== true || !lab || !before || Math.abs(lab[0] - before[0]) >= CHART_SERIES_MIN_LIGHTNESS_STEP) continue;
+    const after = labs[index + 1];
+    const deficit = (value: number) => Math.max(0, -value - 1e-9);
+    let best: { color: string; lab: Lab; cost: number } | undefined;
+    for (let step = 0; step <= 400; step++) {
+      const color = labWithLightness(step / 4, lab[1], lab[2]), contrast = colorContrast(color, fill);
+      if (contrast === undefined || contrast < options.floor(index)) continue;
+      const candidate = labOf(opaqueChannels(color)!);
+      if (Math.abs(candidate[0] - before[0]) < need) continue;
+      // The nearest lightness wins; falling short of the step from the next series (settled after this one) or of the colour difference
+      // from any other series costs more the further it falls.
+      let cost = Math.abs(candidate[0] - lab[0]);
+      if (after) cost += CHART_SERIES_SHORTFALL_WEIGHT * deficit(Math.abs(candidate[0] - after[0]) - need);
+      labs.forEach((other, at) => { if (other && at !== index && at !== index - 1 && (at < index || options.legible?.[at] !== true)) cost += deficit(labDifference(candidate, other) - CHART_SERIES_MIN_DIFFERENCE); });
+      if (!best || cost < best.cost - 1e-9) best = { color, lab: candidate, cost };
+    }
+    if (best) { result[index] = best.color; labs[index] = best.lab; }
+  }
+  return result;
 }
 
 /** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */

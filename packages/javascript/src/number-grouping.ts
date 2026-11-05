@@ -52,3 +52,22 @@ export function groupsAxisTicks(axis: {min: number; max: number; majorUnit: numb
 
 /** The number format code PowerPoint prints a grouping series' labels with, as `groupNumber` does (its separators follow the viewer's region). */
 export const GROUPED_LABEL_CODE = '#,##0';
+
+/**
+ * LH-153: whether a value axis the engines do not compose (a combo chart's axes, a scatter chart's, the chartex constructs': waterfall,
+ * histogram, pareto, box and whisker) groups its tick labels, decided from its data alone so the preview and PowerPoint (which picks its own
+ * ticks) agree: every value is a whole number, one reaches four digits (`groupsThousands`) and the values span at least `minRange` (default
+ * 100: a nice scale of at most ten intervals then steps by 10 or more, so every tick is a whole number). A `zeroBased` axis (columns, bars,
+ * a waterfall) includes zero in the span. A scatter chart's X axis passes 1000: a column of years (1990 to 2020, or 1900 to 2020) is a
+ * four-digit whole number that must not read "1,990".
+ */
+export function groupsDataRange(values: readonly (number | null | undefined)[], options: {zeroBased?: boolean; minRange?: number} = {}): boolean {
+  if (!groupsThousands(values)) return false;
+  let min = options.zeroBased ? 0 : Infinity, max = options.zeroBased ? 0 : -Infinity;
+  for (const value of values) {
+    if (value === null || value === undefined) continue;
+    if (value < min) min = value;
+    if (value > max) max = value;
+  }
+  return max - min >= (options.minRange ?? 100);
+}

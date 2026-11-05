@@ -61,7 +61,7 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, groupsAxisTicks, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -3277,9 +3277,18 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // A combo chart's secondary value axis shows its first series' format (FA-15).
   const secondaryIndex = chartData.combo?.findIndex((entry) => entry.axis === 'secondary') ?? -1;
   // LH-141: a value axis with no format whose ticks (core's composed axis) are whole numbers of four digits takes `#,##0`, as the preview groups them.
-  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis);
-  const numberFormats = (chartData.formats ?? (axisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
-    ...(secondaryIndex >= 0 && chartData.formats ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
+  // LH-153: the axes core does not compose (a combo chart's two, a scatter chart's X and Y) decide from their data (core `groupsDataRange`, as the preview does); a scatter chart's X axis only over a span of 1000 or more, so years stay years.
+  const numbers = (entry) => entry.values.map(chartNumber);
+  const comboValues = chartData.spec.family === 'combo' && chartData.combo?.length === chartData.series.length ? (axis) => chartData.series.flatMap((entry, index) => chartData.combo[index].axis === axis ? numbers(entry) : []) : undefined;
+  const scatterGroups = chartData.spec.family === 'xy' && chartData.series.length > 1;
+  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && (comboValues ? groupsDataRange(comboValues('primary'), {zeroBased: chartData.combo.some((entry) => entry.role === 'bar')})
+    : scatterGroups ? groupsDataRange(chartData.series.slice(1).flatMap(numbers), {zeroBased: false})
+    : chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis));
+  const secondaryGroups = comboValues && secondaryIndex >= 0 && chartData.formats?.series?.[secondaryIndex] === undefined && groupsDataRange(comboValues('secondary'), {zeroBased: false});
+  const xAxisGroups = scatterGroups && chartData.resolved?.hasX && chartData.formats?.x === undefined && groupsDataRange(numbers(chartData.series[0]), {zeroBased: false, minRange: 1000});
+  const numberFormats = (chartData.formats ?? (axisGroups || secondaryGroups || xAxisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
+    ...(secondaryIndex >= 0 && (chartData.formats || secondaryGroups) ? {secondaryAxis: secondaryGroups ? GROUPED_LABEL_CODE : chartData.formats.series[secondaryIndex]} : {}),
+    ...(xAxisGroups ? {xAxis: GROUPED_LABEL_CODE} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,markLabelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
@@ -3332,7 +3341,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
