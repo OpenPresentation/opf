@@ -107,7 +107,7 @@ const deck = () => ({
   setBackground(editor, spec);
   assert.deepEqual(editor.get("design.background"), spec);
   setBackground(editor, { type: "image", src: "asset:photo", fit: "tile" }, { slideIndex: 1 });
-  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
+  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, textPlacement: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
   const deckState = readBackground(editor.presentation);
   assert.equal(deckState.alt, "Ships at dawn");
   assert.deepEqual(deckState.focus, { x: 0.5, y: 0.7 });

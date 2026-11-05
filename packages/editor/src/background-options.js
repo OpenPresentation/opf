@@ -1,7 +1,7 @@
 // Backgrounds (RR-06, FA-22/FA-23): every background form the schema has, with validation that explains itself.
 // A background is a theme slot, a solid color, a linear gradient, an image or a pattern, at the deck or on one slide. It is
 // the only canvas fill and never moves content. The image form is flat (OPF 0.15): `{ type: "image", src, alt, fit, focus,
-// opacity, recolor, overlay }`; an image source string (`asset:`, `https://`, `data:`, `./`, `../`) is the cover-image shorthand.
+// opacity, recolor, overlay, textPlacement }`; an image source string (`asset:`, `https://`, `data:`, `./`, `../`) is the cover-image shorthand.
 // `setBackground` is one undoable patch through the `backgrounds` switch, so the preview, export and Undo behave like every
 // other dimension.
 import { prepareDimensionSwitch, switchDimension } from "./switches.js";
@@ -11,6 +11,8 @@ import { normalizeFocus, normalizeOverlay, normalizeRecolor } from "./image-opti
 export const BACKGROUND_TYPES = Object.freeze(["theme", "solid", "gradient", "image", "pattern"]);
 export const THEME_BACKGROUND_SLOTS = Object.freeze(["light1", "light2", "dark1", "dark2"]);
 export const IMAGE_BACKGROUND_FITS = Object.freeze(["cover", "contain", "stretch", "tile"]);
+/** LH-158: where a cover's or section's heading group goes on a picture background (the schema's `textPlacement`). */
+export const TEXT_PLACEMENTS = Object.freeze(["top-start", "top-center", "middle-start", "middle-center", "bottom-start", "bottom-center", "panel"]);
 /** Image sources the background string shorthand accepts (the schema's ImageSource). */
 export const IMAGE_SOURCE = /^(?:asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 /** Scheme slots and roles a ColorRef may name (the schema's ColorRef enum), besides hex colors and `var:<id>`. */
@@ -106,7 +108,10 @@ export function normalizeBackground(spec) {
       // LH-02: `false` turns off core's automatic scrim behind text on the picture.
       const overlay = spec.overlay === undefined || spec.overlay === null ? undefined : spec.overlay === false ? false : wrap(() => normalizeOverlay(spec.overlay));
       const recolor = spec.recolor === undefined || spec.recolor === null || spec.recolor === "" ? undefined : wrap(() => normalizeRecolor(spec.recolor));
-      const value = { type: "image", src, ...(alt ? { alt } : {}), ...(fit ? { fit } : {}), ...(focus ? { focus } : {}), ...(opacity === undefined ? {} : { opacity }), ...(recolor ? { recolor } : {}), ...(overlay !== undefined ? { overlay } : {}) };
+      // LH-158: where the heading group goes on the picture; absent, core picks it from the measured picture.
+      const textPlacement = spec.textPlacement === undefined || spec.textPlacement === null || spec.textPlacement === "" ? undefined : spec.textPlacement;
+      if (textPlacement !== undefined && !TEXT_PLACEMENTS.includes(textPlacement)) throw fail("invalid-background", `Text placement is one of ${TEXT_PLACEMENTS.join(", ")}.`, { spec });
+      const value = { type: "image", src, ...(alt ? { alt } : {}), ...(fit ? { fit } : {}), ...(focus ? { focus } : {}), ...(opacity === undefined ? {} : { opacity }), ...(recolor ? { recolor } : {}), ...(overlay !== undefined ? { overlay } : {}), ...(textPlacement ? { textPlacement } : {}) };
       // A cover image with nothing else is the shorthand string.
       return Object.keys(value).length === 2 ? src : value;
     }
@@ -153,7 +158,7 @@ export function readBackground(presentation, { slideIndex } = {}) {
   if (value.type === "theme") return { ...base, slot: value.slot };
   if (value.type === "solid") return { ...base, color: value.color };
   if (value.type === "gradient") return { ...base, angle: value.gradient?.angle, stops: structuredClone(value.gradient?.stops ?? []) };
-  if (value.type === "image") return { ...base, src: value.src, alt: value.alt, fit: value.fit, focus: value.focus && { ...value.focus }, recolor: value.recolor && structuredClone(value.recolor), overlay: value.overlay === false ? false : value.overlay && { ...value.overlay } };
+  if (value.type === "image") return { ...base, src: value.src, alt: value.alt, fit: value.fit, focus: value.focus && { ...value.focus }, recolor: value.recolor && structuredClone(value.recolor), overlay: value.overlay === false ? false : value.overlay && { ...value.overlay }, textPlacement: value.textPlacement };
   if (value.type === "pattern") return { ...base, preset: value.pattern?.preset, foregroundColor: value.pattern?.foregroundColor, backgroundColor: value.pattern?.backgroundColor };
   return base;
 }

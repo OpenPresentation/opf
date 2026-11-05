@@ -143,12 +143,9 @@ rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's draw
 both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
-Over a picture background a `bottom` heading group stays low only where the picture is calm under its text: the host measured
-the picture (`pictureLuminance`, which `measurePictures` returns, LH-145), the grays under the group's text span at most
-`CALM_PICTURE_SPREAD` (48 of 256 levels, seen through the author's overlay) and the text color reads 4.5:1 over every one of them
-without a scrim. Otherwise, and in a run that measured nothing, the group is centered in its area as before LH-130, keeping its
-start alignment, rule and eyebrow: the low part of a photo is often its busiest (lit windows, a field of panels). Plain and
-variant backgrounds keep the low anchor.
+Over a picture background the group goes where the measured picture is calm under its text (LH-158, see
+[text on a picture](image-treatments.md#text-on-a-picture)); in a run that measured nothing, a `bottom` group is centered as
+before LH-130, keeping its start alignment, rule and eyebrow. Plain and variant backgrounds keep the low anchor.
 
 Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
 size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the

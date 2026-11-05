@@ -90,9 +90,9 @@ for (const direction of ['ltr', 'rtl']) {
   });
 }
 
-// Wave 6 review (LH-130 with LH-02 and LH-145): a cover or section anchored low over a picture background stays low only where the
-// measured picture is calm under its text; a busy band, or no measurement, centers the group (main's position) and keeps the start
-// alignment and the rule. A plain background keeps the low anchor.
+// Wave 6 review (LH-130 with LH-02 and LH-145), widened by LH-158: a cover or section anchored low over a picture background stays low
+// only where the measured picture is calm under its text; over a busy lower half it moves to the calm top (LH-158), and without a
+// measurement it is centered (main's position), keeping the start alignment and the rule. A plain background keeps the low anchor.
 const PHOTO = 'data:image/svg+xml;base64,' + Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"><rect width="1600" height="900" fill="#101820"/></svg>').toString('base64');
 const grid = (lower) => {
   const columns = 32, rows = 18, values = new Float32Array(columns * rows), high = new Float32Array(columns * rows);
@@ -110,8 +110,10 @@ for (const direction of ['ltr', 'rtl']) {
       const titleOf = (result) => result.items.find((item) => item.field === 'title');
       const calm = compose({ pictureLuminance: () => grid('calm') }), busy = compose({ pictureLuminance: () => grid('busy') }), estimated = compose({});
       const plain = composeSlide({ title: slide.title, subtitle: slide.subtitle }, { layout: layouts[layout], direction });
-      assert.ok(titleOf(calm).box.y > titleOf(busy).box.y + 50, `${layout}: low over a calm band, centered over a busy one`);
-      assert.equal(titleOf(estimated).box.y, titleOf(busy).box.y, `${layout}: without a measurement the group is centered`);
+      assert.ok(titleOf(calm).box.y > titleOf(estimated).box.y + 50, `${layout}: low over a calm band, centered without a measurement`);
+      assert.ok(titleOf(busy).box.y < titleOf(estimated).box.y - 50, `${layout}: over a busy lower half, at the calm top (LH-158)`);
+      assert.equal(busy.pictureText?.placement, 'top-start', `${layout}: the choice is reported`);
+      assert.equal(estimated.pictureText, undefined, `${layout}: nothing is reported without a measurement`);
       assert.equal(titleOf(calm).box.y, titleOf(plain).box.y, `${layout}: a calm picture keeps the plain background's low anchor`);
       for (const result of [calm, busy, estimated]) assert.equal(titleOf(result).alignment, titleOf(plain).alignment, `${layout}: the start alignment stays`);
       if (layout === 'cover') for (const result of [calm, busy, estimated]) assert.ok(result.titleRule, 'the rule stays');
