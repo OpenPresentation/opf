@@ -827,6 +827,7 @@ _No named properties._
 | `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
 | `overlay` | no | `ref:Overlay` | Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame. |
 | `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
+| `portrait` | no | `enum:avatar \| side \| top` | Image payloads only: how a person's picture is drawn in a team. A person is a group of a picture followed by a name (a list of one entry, whose description holds the role and a line, or a short text); a slide whose bo... |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
@@ -853,7 +854,8 @@ _No named properties._
 | `text` | yes | `oneOf:string / array<ref:TextRun>` | Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks. |
 | `attribution` | no | `string` | Person or organization credited for the quote. Drawn after the quote text, in the muted text color. |
 | `role` | no | `string` | Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'. |
-| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck). Give it alt text (validate's opf/mis... |
+| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck), or as a tall portrait beside the quo... |
+| `portrait` | no | `enum:avatar \| side` | How the `photo` is drawn. 'side' draws it as a tall picture at the start of the quote (about a quarter of its width, rounded, cropped around the upper third), the quote text beside it and centered against it; 'avatar'... |
 | `source` | no | `string` | Optional quote source, citation, or URL. Follows the attribution and role after ' - '. |
 
 

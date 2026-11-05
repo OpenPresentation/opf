@@ -33,6 +33,8 @@ const deck = () => ({
     overlay: { color: "dark1", opacity: 0.4, edge: "bottom", size: 0.25 },
     aspectRatio: 1.5,
     placement: { edge: "right", size: 0.45 },
+    // LH-132: how a person's picture is drawn in a team (it changes nothing on a lone picture).
+    portrait: "side",
   };
   assert.deepEqual(Object.keys(fields).sort(), [...IMAGE_TREATMENT_FIELDS].sort());
   const change = setImageTreatment(editor, "slides.0.blocks.0", fields);

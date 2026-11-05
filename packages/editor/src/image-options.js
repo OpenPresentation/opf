@@ -11,8 +11,10 @@ import { isAuthoringColorRef } from "./color-authoring.js";
 export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch", "auto"]);
 export const IMAGE_SHAPES = Object.freeze(["rectangle", "rounded", "circle", "hexagon"]);
 export const IMAGE_EDGES = Object.freeze(["left", "right", "top", "bottom"]);
+/** LH-132: how a person's picture is drawn in a team: the avatar, beside the text, or across the top of the card. */
+export const IMAGE_PORTRAITS = Object.freeze(["avatar", "side", "top"]);
 /** The fields an image block carries besides its `image`, in schema order. */
-export const IMAGE_TREATMENT_FIELDS = Object.freeze(["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"]);
+export const IMAGE_TREATMENT_FIELDS = Object.freeze(["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const bad = (message, details) => fail("invalid-image-treatment", message, details);
@@ -105,6 +107,9 @@ function normalizeField(key, value) {
       return normalizeOverlay(value);
     case "placement":
       return normalizePlacement(value);
+    case "portrait":
+      if (!IMAGE_PORTRAITS.includes(value)) throw bad(`A person's portrait is one of ${IMAGE_PORTRAITS.join(", ")}.`, { field: key, value });
+      return value;
     default:
       throw bad(`Unknown image treatment: ${key}. Use ${IMAGE_TREATMENT_FIELDS.join(", ")}.`, { field: key });
   }

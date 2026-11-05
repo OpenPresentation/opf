@@ -46,7 +46,7 @@ import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
-import {recordableImageSource, placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, samePictureAspect, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
+import {recordableImageSource, placeImages, pictureFrame, importImages, importImagePlaceholders, isImagePlaceholderGroup, samePictureAspect, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
 import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
@@ -4008,7 +4008,7 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   const objectName = quotePhotoName(group);
   // PowerPoint is not confirmed to apply a non-rectangular mask to an SVG picture, so an SVG photo exports as its PNG raster (as a masked slide image does).
   if (outcome.svg) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
-  context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape });
+  context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape, ...(photo.focus ? { focus: photo.focus } : {}) });
   context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
   const alt = assetAlt(photo.value, presentation);
   context.pictureText.set(objectName, pictureText(alt, photo.value, presentation));
@@ -5324,7 +5324,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
         const dimensions = imageMetadata.get(relationships.get(id)?.path);
         if (!dimensions) throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path: placement.path });
-        const fitted = pictureTransform(dimensions, placement.region, placement.mode);
+        // LH-132: a portrait beside the quote crops around the focus core gave it (the upper third), as the preview does.
+        const fitted = placement.focus ? pictureFrame(dimensions, { box: placement.region, fit: 'cover', focus: placement.focus }, fitImage) : pictureTransform(dimensions, placement.region, placement.mode);
         const emu = value => Math.round(value * EMUS_PER_INCH);
         const transformAttrs = `${fitted.rotation ? ` rot="${fitted.rotation * 60000}"` : ''}${fitted.flipH ? ' flipH="1"' : ''}${fitted.flipV ? ' flipV="1"' : ''}`;
         picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${transformAttrs}><a:off x="${emu(fitted.x)}" y="${emu(fitted.y)}"/><a:ext cx="${emu(fitted.w)}" cy="${emu(fitted.h)}"/></a:xfrm>`);
@@ -5332,8 +5333,10 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
           const attrs = Object.entries(fitted.crop).map(([key, value]) => `${key}="${value}"`).join(' ');
           picture = picture.replace('<a:stretch>', `<a:srcRect ${attrs}/><a:stretch>`);
         }
-        // The circular headshot mask: the core frame's DrawingML preset (ellipse) instead of the rectangle.
-        if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}"><a:avLst/></a:prstGeom>`);
+        // The circular headshot mask: the core frame's DrawingML preset (ellipse) instead of the rectangle; LH-132's portrait beside the
+        // quote is a roundRect with core's corner (its adjust value).
+        const adjust = Object.entries(placement.shape?.adjust ?? {}).map(([name, value]) => `<a:gd name="${name}" fmla="val ${value}"/>`).join('');
+        if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}">${adjust ? `<a:avLst>${adjust}</a:avLst>` : '<a:avLst/>'}</a:prstGeom>`);
         return picture;
       });
       // Native bullets otherwise inherit the first rich run's size, font and

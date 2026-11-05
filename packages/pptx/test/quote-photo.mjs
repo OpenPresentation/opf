@@ -39,6 +39,9 @@ const fixtures=[
  {text:base,attribution:'Priya Raman',role:'Head of Platform, Acme',photo,source:'Interview'},
  {text:base,photo},
  {text:'A long testimonial that wraps across several native lines because the cell is only so wide. '.repeat(3),attribution:'Priya Raman',role:'Head of Platform, Acme '.repeat(2).trim(),photo},
+ // LH-132: an authored portrait round trips with the photo.
+ {text:base,attribution:'Priya Raman',photo,portrait:'side'},
+ {text:base,attribution:'Priya Raman',role:'Head of Platform',photo,portrait:'avatar'},
 ];
 for(const direction of ['ltr','rtl'])for(const quote of fixtures){
   const source={language:direction==='rtl'?'ar':'en',design:{fontScheme:'roboto'},slides:[{title:'Customers',composition:{overflow:'warn'},quote}]},before=structuredClone(source);
@@ -54,8 +57,9 @@ for(const direction of ['ltr','rtl'])for(const quote of fixtures){
   cases++;
 }
 
-// 2. The native picture: ellipse geometry, the alt text as its description, cropped to fill the circle, at the core frame.
-const source={design:{fontScheme:'roboto'},slides:[{title:'Customers',quote:{text:base,attribution:'Priya Raman',role:'Head of Platform, Acme',photo}}]};
+// 2. The native picture: ellipse geometry, the alt text as its description, cropped to fill the circle, at the core frame. (LH-132: a wide
+// quote draws a portrait beside it unless the author keeps the avatar; see 5.)
+const source={design:{fontScheme:'roboto'},slides:[{title:'Customers',quote:{text:base,attribution:'Priya Raman',role:'Head of Platform, Acme',photo,portrait:'avatar'}}]};
 const bytes=await toPptx(source,OPTIONS),entries=unzipSync(bytes),xml=slideXml(entries);
 const [picture]=pictures(xml);
 assert.ok(picture,'one native picture');
@@ -102,4 +106,17 @@ const missingXml=slideXml(unzipSync(missing));
 assert.ok(missingXml.includes('OPF image placeholder'),'an unresolved photo draws the ordinary image placeholder');
 assert.equal(pictures(missingXml).length,0);
 
-console.log(`Quote photo: ${cases} role/photo combinations round trip exactly in both directions; native ellipse picture with alt text, topology-only tags, edits and deleted-picture degradation.`);
+// 5. LH-132: a wide quote's portrait is a native roundRect picture with core's corner (adj), taller than wide, cropped by a:srcRect around
+// the upper third (the 40 x 60 picture in a frame wider than its proportions keeps its top), with the alt text; the quote imports as written.
+const wide={design:{fontScheme:'roboto'},slides:[{title:'Customers',quote:{text:base,attribution:'Priya Raman',role:'Head of Platform, Acme',photo}}]};
+const wideEntries=unzipSync(await toPptx(wide,OPTIONS)),[portrait]=pictures(slideXml(wideEntries));
+assert.match(portrait,/<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val \d+"\/><\/a:avLst><\/a:prstGeom>/);
+assert.match(portrait,/descr="Priya Raman at her desk"/);
+const frame=portrait.match(/<a:ext cx="(\d+)" cy="(\d+)"/);
+assert.ok(Number(frame[2])>Number(frame[1]),'a tall portrait');
+const crop=portrait.match(/<a:srcRect l="(-?\d+)" t="(-?\d+)" r="(-?\d+)" b="(-?\d+)"\/>/);
+assert.ok(crop,'cropped by srcRect');
+assert.ok(Number(crop[2])<Number(crop[4]),'the crop keeps more of the top than the bottom (the upper third)');
+assert.deepEqual((await importBytes(zipSync(wideEntries))).imported.slides[0].quote,wide.slides[0].quote);
+
+console.log(`Quote photo: ${cases} role/photo combinations round trip exactly in both directions; native ellipse picture with alt text, topology-only tags, edits and deleted-picture degradation; a wide quote's roundRect portrait cropped around the upper third.`);

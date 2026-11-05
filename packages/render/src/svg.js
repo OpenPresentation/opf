@@ -1601,7 +1601,8 @@ function renderQuote(item, box, bound, options) {
 }
 
 function renderQuotePhoto(photo, item, bound, options) {
-  const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover' });
+  // LH-132: a portrait beside the quote crops around the focus core gave it (the upper third), as the export does.
+  const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover', ...(photo.focus ? { imageFocus: photo.focus } : {}) });
   // An unresolved source keeps the ordinary placeholder, unmasked, like the export.
   if (isImagePlaceholder(picture)) return picture;
   const id = `opf-s${bound.index + 1}-quote-photo-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}`;

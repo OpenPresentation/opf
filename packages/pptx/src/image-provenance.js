@@ -28,7 +28,7 @@ export const canonical = value => JSON.stringify(value, (_key, item) => item && 
   ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
 
 /** An image block's own fields (everything but its type, asset, id, caption and extensions). */
-export const IMAGE_TREATMENT_KEYS = Object.freeze(['fit', 'focus', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'aspectRatio', 'placement']);
+export const IMAGE_TREATMENT_KEYS = Object.freeze(['fit', 'focus', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'aspectRatio', 'placement', 'portrait']);
 /** An image background's own fields besides its source. */
 export const BACKGROUND_IMAGE_KEYS = Object.freeze(['alt', 'fit', 'focus', 'opacity', 'recolor', 'overlay']);
 

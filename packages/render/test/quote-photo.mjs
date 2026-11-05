@@ -15,7 +15,8 @@ const png=(width,height)=>{
   return Buffer.concat([Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a]),chunk('IHDR',header),chunk('IDAT',deflateSync(raw)),chunk('IEND',Buffer.alloc(0))]);
 };
 const photo={src:`data:image/png;base64,${png(40,60).toString('base64')}`,alt:'Priya Raman at her desk'};
-const quote={text:'We would rather spend a week on capacity than a month on an outage.',attribution:'Priya Raman',role:'Head of Platform, Acme',photo,source:'Interview'};
+// LH-132: a wide quote draws its photo as a portrait beside it; `portrait: 'avatar'` keeps FA-12's circle, which this test covers first.
+const quote={text:'We would rather spend a week on capacity than a month on an outage.',attribution:'Priya Raman',role:'Head of Platform, Acme',photo,source:'Interview',portrait:'avatar'};
 const deck=(value,extra={})=>({design:{fontScheme:'roboto'},...extra,slides:[{title:'Customers',quote:value}]});
 const textMeasurement=fonts.textMeasurement;
 const render=(document,options={})=>{const diagnostics=[];const svg=toSvg(document, 1,{fonts:{textMeasurement},trace:true,onDiagnostic:item=>diagnostics.push(item),...options});return {svg,diagnostics};};
@@ -66,4 +67,15 @@ assert.ok(missing.diagnostics.some(item=>item.code==='unresolved-asset'&&item.pa
 assert.equal(missing.svg.includes('<image'),false);
 assert.equal(missing.svg.includes('clipPath'),false);
 
-console.log('Quote photo: circle clip at the core frame, cover crop, alt text, mirrored in a right-to-left deck, unique clip ids, placeholder for an unresolved source; no photo changes nothing.');
+// LH-132: the portrait beside a wide quote: the picture cropped around core's focus inside core's frame, clipped to core's rounded outline.
+const {portrait:_avatar,...wide}=quote;
+const side=render(deck(wide)),sideLayout=resolvePresentation(deck(wide),{fonts:{textMeasurement}}).slides[0].geometry.items.find(item=>item.field==='quote').quoteLayout;
+assert.deepEqual(side.diagnostics,[]);
+assert.equal(sideLayout.photo.shape.preset,'roundRect');
+assert.ok(sideLayout.photo.focus&&sideLayout.photo.box.height>sideLayout.photo.box.width,'a tall portrait with a focus');
+const viewport=/<svg\b([^>]*overflow="hidden"[^>]*)>\s*<image\b/.exec(side.svg)?.[1];
+assert.ok(viewport,"the picture is placed by core's fit math in a viewport at the frame");
+assert.deepEqual(['x','y','width','height'].map(name=>Number(attr(viewport,name))),[sideLayout.photo.box.x,sideLayout.photo.box.y,sideLayout.photo.box.width,sideLayout.photo.box.height]);
+assert.equal(/<clipPath id="[^"]+"><path d="([^"]+)"\/><\/clipPath>/.exec(side.svg)[1],sideLayout.photo.shape.path,"the clip is core's rounded outline");
+
+console.log('Quote photo: circle clip at the core frame, cover crop, alt text, mirrored in a right-to-left deck, unique clip ids, placeholder for an unresolved source; no photo changes nothing; a wide quote portrait is placed around its focus in its rounded frame.');

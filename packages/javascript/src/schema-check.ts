@@ -147,8 +147,8 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
 
 // RR-34: payload kinds whose blocks may carry a caption.
 const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
-// FA-22: fit, focus, the image treatments and placement belong to image payloads only.
-const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement"] as const;
+// FA-22: fit, focus, the image treatments and placement belong to image payloads only (LH-132: and a person's `portrait`).
+const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
 
 const columnSpans: Record<string, readonly number[]> = {
   left: [0],
