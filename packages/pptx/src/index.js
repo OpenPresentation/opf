@@ -20,6 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
+import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
 import {attachMetricTags,metricManifest,importMetricGroups} from './metric-provenance.js';
@@ -45,7 +46,7 @@ import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
-import {recordableImageSource, placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, samePictureAspect, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
+import {recordableImageSource, placeImages, pictureFrame, importImages, importImagePlaceholders, isImagePlaceholderGroup, samePictureAspect, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
 import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
@@ -61,7 +62,7 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, groupsAxisTicks, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -280,6 +281,8 @@ export async function toPptx(input, options = {}) {
   assertValidBoundary(presentation);
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
+  // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
+  await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
   if (options.as === 'images') return pictureSlidesPptx(presentation, options);
   // `options.fonts` is the fonts handle (the renderer's loadFonts()); the exporter reads its measurement, wrapped so the package names the
@@ -350,6 +353,7 @@ export async function toPptx(input, options = {}) {
   context.chartMarkTags = new Map();
   // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
   context.stepTags = new Map();
+  context.iconTags = new Map();
   // LH-130: the accent rule core sets above a cover's or section's title (src/title-rule.js).
   context.titleRuleTags = new Map();
   context.quoteTags = new Map();
@@ -661,6 +665,8 @@ export async function fromPptx(input, options = {}) {
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
+  // LH-14: each tagged icon's reference goes back on the entry, metric or group it marked (src/icons.js).
+  restoreIcons(imported, new Map(furnitureContexts.flatMap(context => [...(context.iconReferences ?? [])])));
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -1145,6 +1151,9 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
+  // LH-14: an icon's chip, glyph and picture are the drawing of its `icon`, not content; the references go back on the document.
+  const iconShapes=importIconShapes([...shapes,...(nativeContext.pictures??[])],relationships,entries);
+  nativeContext.iconReferences=iconShapes.references;
   // LH-130: a cover's or section's title rule is its layout's drawing, not content.
   const titleRules=importTitleRules(shapes,relationships,entries);
   const quotes=importQuoteGroups(shapes,paragraphs,relationships,entries,diagnostic=>options.onDiagnostic?.({...diagnostic,path:`slides.${slideIndex}.quote`}),nativeContext.pictures,
@@ -1196,6 +1205,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
+    if (iconShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'icon'); continue; }
     if (titleRules.has(shape)) { roles.set(shapeKeys.get(shape), 'title-rule'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
@@ -1235,7 +1245,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   for (const [index, picture] of nativeContext.pictures.entries()) {
-    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : undefined;
+    const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : iconShapes.consumed.has(picture) ? 'icon' : undefined;
     if (pictureRole) { roles.set(`pic:${index}`, pictureRole); continue; }
     if (diagrams.pictures.has(index)) {
       items.push({kind: 'diagram', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), visualBounds: visualBounds(picture['p:spPr']?.['a:xfrm']), payload: diagrams.pictures.get(index), sources: [`pic:${index}`]});
@@ -2607,6 +2617,17 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       if (names.length === 1) context.placeholderBindings.set(names[0], {slide: slideIndex, region: boundRegion.name, object: item.field === 'image' ? 'picture' : item.field});
     }
   }
+  // LH-14: core's icons on their chips, over the cards and surfaces they sit on (src/icons.js). A multicolor icon is an SVG picture with its
+  // PNG fallback, contained in the chip's square at the SVG's own aspect, as an SVG image block is.
+  await addIcons(slide, geometry.icons, slideContext, context.iconTags, async (icon, box, name) => {
+    const aspect = icon.picture.width / icon.picture.height, w = aspect >= 1 ? box.w : box.h * aspect, h = aspect >= 1 ? box.w / aspect : box.h;
+    const area = {x: box.x + (box.w - w) / 2, y: box.y + (box.h - h) / 2, w, h}, outcome = {box: area};
+    const resolved = await resolveSvgImage(encodeText(icon.picture.svg), options, icon.path, outcome);
+    if (!resolved) return false;
+    if (outcome.svg) context.svgPictures.set(name, outcome.svg);
+    slide.addImage({...resolved, objectName: name, ...area, altText: ''});
+    return true;
+  });
   // RR-34: the footnote area core reserved above the footer band (rule plus one tagged text box per listed line).
   addFootnotes(slide, geometry.footnotes, slideIndex, slideContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: `slides.${slideIndex}`}));
   // Core composes furniture above all content and opf-render paints it last, so
@@ -3277,9 +3298,18 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // A combo chart's secondary value axis shows its first series' format (FA-15).
   const secondaryIndex = chartData.combo?.findIndex((entry) => entry.axis === 'secondary') ?? -1;
   // LH-141: a value axis with no format whose ticks (core's composed axis) are whole numbers of four digits takes `#,##0`, as the preview groups them.
-  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis);
-  const numberFormats = (chartData.formats ?? (axisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
-    ...(secondaryIndex >= 0 && chartData.formats ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
+  // LH-153: the axes core does not compose (a combo chart's two, a scatter chart's X and Y) decide from their data (core `groupsDataRange`, as the preview does); a scatter chart's X axis only over a span of 1000 or more, so years stay years.
+  const numbers = (entry) => entry.values.map(chartNumber);
+  const comboValues = chartData.spec.family === 'combo' && chartData.combo?.length === chartData.series.length ? (axis) => chartData.series.flatMap((entry, index) => chartData.combo[index].axis === axis ? numbers(entry) : []) : undefined;
+  const scatterGroups = chartData.spec.family === 'xy' && chartData.series.length > 1;
+  const axisGroups = !chartData.chartex && chartData.spec.grouping !== 'percentStacked' && chartData.formats?.series?.[0] === undefined && (comboValues ? groupsDataRange(comboValues('primary'), {zeroBased: chartData.combo.some((entry) => entry.role === 'bar')})
+    : scatterGroups ? groupsDataRange(chartData.series.slice(1).flatMap(numbers), {zeroBased: false})
+    : chartLayout?.valueAxis && groupsAxisTicks(chartLayout.valueAxis));
+  const secondaryGroups = comboValues && secondaryIndex >= 0 && chartData.formats?.series?.[secondaryIndex] === undefined && groupsDataRange(comboValues('secondary'), {zeroBased: false});
+  const xAxisGroups = scatterGroups && chartData.resolved?.hasX && chartData.formats?.x === undefined && groupsDataRange(numbers(chartData.series[0]), {zeroBased: false, minRange: 1000});
+  const numberFormats = (chartData.formats ?? (axisGroups || secondaryGroups || xAxisGroups ? {series: []} : undefined)) && {...(chartData.formats ?? {series: []}), axis: chartData.spec.grouping === 'percentStacked' ? undefined : axisGroups ? GROUPED_LABEL_CODE : chartData.formats.series[0],
+    ...(secondaryIndex >= 0 && (chartData.formats || secondaryGroups) ? {secondaryAxis: secondaryGroups ? GROUPED_LABEL_CODE : chartData.formats.series[secondaryIndex]} : {}),
+    ...(xAxisGroups ? {xAxis: GROUPED_LABEL_CODE} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
   context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,markLabelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
@@ -3332,7 +3362,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3978,7 +4008,7 @@ async function addQuotePhoto(slide, presentation, photo, group, context, options
   const objectName = quotePhotoName(group);
   // PowerPoint is not confirmed to apply a non-rectangular mask to an SVG picture, so an SVG photo exports as its PNG raster (as a masked slide image does).
   if (outcome.svg) options.onDiagnostic?.({ code: 'export-lossy', feature: 'svg-rasterized', path: photo.path, message: 'An SVG quote photo exports as its PNG raster so the circular mask applies as in the preview; PowerPoint has not been confirmed to apply it to an SVG picture.' });
-  context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape });
+  context.quotePhotos.set(objectName, { region: box, mode: 'crop', path: photo.path, shape: photo.shape, ...(photo.focus ? { focus: photo.focus } : {}) });
   context.quoteTags.set(objectName, { v: 1, role: 'photo', group });
   const alt = assetAlt(photo.value, presentation);
   context.pictureText.set(objectName, pictureText(alt, photo.value, presentation));
@@ -4846,6 +4876,7 @@ async function normalizePptxZip(raw, context) {
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
+  attachIconTags(entries,context.iconTags);
   attachTitleRuleTags(entries,context.titleRuleTags);
   attachQuoteTags(entries,context.quoteTags);
   attachAnnotationTags(entries,context);
@@ -5293,7 +5324,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const id = picture.match(/<a:blip\b[^>]*r:embed="([^"]+)"/)?.[1];
         const dimensions = imageMetadata.get(relationships.get(id)?.path);
         if (!dimensions) throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path: placement.path });
-        const fitted = pictureTransform(dimensions, placement.region, placement.mode);
+        // LH-132: a portrait beside the quote crops around the focus core gave it (the upper third), as the preview does.
+        const fitted = placement.focus ? pictureFrame(dimensions, { box: placement.region, fit: 'cover', focus: placement.focus }, fitImage) : pictureTransform(dimensions, placement.region, placement.mode);
         const emu = value => Math.round(value * EMUS_PER_INCH);
         const transformAttrs = `${fitted.rotation ? ` rot="${fitted.rotation * 60000}"` : ''}${fitted.flipH ? ' flipH="1"' : ''}${fitted.flipV ? ' flipV="1"' : ''}`;
         picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${transformAttrs}><a:off x="${emu(fitted.x)}" y="${emu(fitted.y)}"/><a:ext cx="${emu(fitted.w)}" cy="${emu(fitted.h)}"/></a:xfrm>`);
@@ -5301,8 +5333,10 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
           const attrs = Object.entries(fitted.crop).map(([key, value]) => `${key}="${value}"`).join(' ');
           picture = picture.replace('<a:stretch>', `<a:srcRect ${attrs}/><a:stretch>`);
         }
-        // The circular headshot mask: the core frame's DrawingML preset (ellipse) instead of the rectangle.
-        if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}"><a:avLst/></a:prstGeom>`);
+        // The circular headshot mask: the core frame's DrawingML preset (ellipse) instead of the rectangle; LH-132's portrait beside the
+        // quote is a roundRect with core's corner (its adjust value).
+        const adjust = Object.entries(placement.shape?.adjust ?? {}).map(([name, value]) => `<a:gd name="${name}" fmla="val ${value}"/>`).join('');
+        if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}">${adjust ? `<a:avLst>${adjust}</a:avLst>` : '<a:avLst/>'}</a:prstGeom>`);
         return picture;
       });
       // Native bullets otherwise inherit the first rich run's size, font and

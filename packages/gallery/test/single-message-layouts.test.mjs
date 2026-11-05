@@ -19,8 +19,13 @@ const spanOf = (result) => ({ top: Math.min(...result.items.map((item) => item.b
 const centred = (result) => { const { top, bottom } = spanOf(result), box = result.contentBox; return (top - box.y) - (box.y + box.height - bottom); };
 const SUB = 'Illustrative example';
 
-test('the title-only closing, statement, quote and comparison draw as they did in 0.26.10', () => {
-  for (const id of ['closing', 'statement', 'quote', 'comparison']) {
+// LH-155: the closing is no longer one of them: it takes the cover's treatment (a start-aligned display title at the foot, closing-treatment in core tests).
+// LH-09: the statement is start-aligned under LH-130's accent rule now, so only the quote and the comparison keep their 0.26.10 drawing.
+test('the title-only quote and comparison draw as they did in 0.26.10; the statement is start-aligned under its rule', () => {
+  const statement = compose('statement', { title: 'One message' });
+  assert.equal(field(statement, 'title').alignment, 'left');
+  assert.ok(statement.titleRule, "LH-130's accent rule");
+  for (const id of ['quote', 'comparison']) {
     for (const slide of [{ title: 'One message' }, { title: 'One message', subtitle: SUB }]) {
       const before = compose(OLD[id], slide), after = compose(id, slide);
       assert.deepEqual(after.items.map((item) => [item.field, item.box, item.alignment]), before.items.map((item) => [item.field, item.box, item.alignment]), `${id} ${Object.keys(slide)}`);
@@ -28,13 +33,14 @@ test('the title-only closing, statement, quote and comparison draw as they did i
   }
 });
 
-test('closing and statement place the support within one gap of the heading group, centred as one stack', () => {
+test('closing and statement place the support within one gap of the heading group, as one stack (the statement centered, the closing at the foot)', () => {
   const support = { blocks: [{ text: 'Next step: name the pilot lead and agree the start date.' }] };
   for (const id of ['closing', 'statement']) {
     const result = compose(id, { title: 'Agree the pilot team', subtitle: SUB, ...support });
     const gapBelow = field(result, 'text').box.y - bottomOf(field(result, 'subtitle'));
     assert.ok(gapBelow > 0 && gapBelow <= GAP + 1, `${id}: support ${gapBelow}px below the subtitle`);
-    assert.ok(Math.abs(centred(result)) < 3, `${id}: equal space above and below the group`);
+    if (id === 'closing') assert.ok(Math.abs(spanOf(result).bottom - (result.contentBox.y + result.contentBox.height)) < 3, 'closing: the group stands at the foot of the content box');
+    else assert.ok(Math.abs(centred(result)) < 3, `${id}: equal space above and below the group`);
     assert.equal(result.diagnostics.length, 0, id);
     // Before, the support sat far below the title.
     const before = compose(OLD[id], { title: 'Agree the pilot team', subtitle: SUB, ...support });

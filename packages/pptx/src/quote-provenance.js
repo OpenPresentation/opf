@@ -27,7 +27,8 @@ export const quotePhotoName=group=>`OPF quote photo ${group}`;
 // The manifest rides on the first body line. `footer` lists which fields the footer part joins (core writes the attribution, the role
 // on its own line and the source after " \u2013 ", skipping an absent field) and, from two fields on, where each separator starts, so an
 // unchanged footer splits back exactly. `photo` records that a headshot picture belongs to the quote; `pull` that it is a pull line
-// (LH-114), whose caption opens with the prefix and whose accent rule is a tagged rectangle of the group.
+// (LH-114), whose caption opens with the prefix and whose accent rule is a tagged rectangle of the group; `portrait` the quote's own
+// `portrait` (LH-132), which only the author sets.
 export function quoteManifest(value,layout) {
   const shorthand=typeof value==='string',fields=shorthand?[]:FIELDS.filter(field=>value[field]),pull=!!layout.rule;
   const splits=[];let length=pull&&fields.length?QUOTE_PULL_PREFIX.length:0;
@@ -35,7 +36,7 @@ export function quoteManifest(value,layout) {
     if(index>0){splits.push(length);length+=separatorBefore(field,pull).length;}
     length+=value[field].length;
   }
-  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),...(pull?{pull:true}:{}),
+  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),...(layout.photo&&(value.portrait==='side'||value.portrait==='avatar')?{portrait:value.portrait}:{}),...(pull?{pull:true}:{}),
     // A rich body (FA-10) has richLines instead of sourceLines; both write one native shape per fitted line.
     parts:layout.parts.map(part=>({role:part.role,lines:(part.fit.sourceLines??part.fit.lines).length}))};
 }
@@ -51,6 +52,7 @@ function validateManifest(manifest) {
   if(count>10000)throw Error('Too many quote source lines.');
   if(manifest.photo!==undefined&&(manifest.photo!==true||manifest.shorthand))throw Error('Invalid quote photo.');
   if(manifest.pull!==undefined&&(manifest.pull!==true||manifest.photo))throw Error('Invalid quote pull line.');
+  if(manifest.portrait!==undefined&&(!manifest.photo||!['side','avatar'].includes(manifest.portrait)))throw Error('Invalid quote portrait.');
   const footer=manifest.footer;
   if(roles.length===2){
     if(manifest.shorthand||!footer||!FOOTERS.includes(JSON.stringify(footer.fields)))throw Error('Invalid quote footer fields.');
@@ -129,7 +131,7 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     // The headshot is the current native picture; a deleted or unreadable one is reported, never invented.
     if(manifest.photo){
       const image=photos[0]?readPicture(photos[0].picture)?.payload?.image:undefined;
-      if(image)quote={...quote,photo:image};
+      if(image)quote={...quote,photo:image,...(manifest.portrait?{portrait:manifest.portrait}:{})};
       else local.push({code:'quote-photo-missing',message:"The quote's headshot picture is missing or unreadable; the quote is imported without a photo."});
     }
     if(manifest.shorthand&&Object.keys(quote).length===1)quote=quote.text;

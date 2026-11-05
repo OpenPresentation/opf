@@ -555,6 +555,28 @@ const unusedReference: RuleText = (finding, _context, helpers) => {
   };
 };
 
+// LH-14: an icon that resolves nowhere: the reference as written and the nearest names core suggests.
+const iconUnknown: RuleText = (finding, _context, helpers) => {
+  const value = helpers.valueAt(helpers.segments);
+  if (typeof value !== "string") return undefined;
+  const near = (finding.suggestions ?? []).slice(0, 3).map((entry) => String(entry.value));
+  const set = /^No icon set ([a-z][a-z0-9-]*) /.exec(finding.message)?.[1];
+  return {
+    message: set ? `Icon set ${code(set)} is not embedded or registered, so ${code(value)} is not drawn.` : `${code(value)} is not an icon of its set or of the deck's ${code("icons")}, so it is not drawn.`,
+    next: near.length ? `did you mean ${near.map((name) => code(name)).join(" or ")}?` : `pick a name the set has (search_icons finds them by keyword), add it to the deck's ${code("icons")}, or remove the icon.`,
+  };
+};
+
+const iconInvalid: RuleText = (finding, _context, helpers) => {
+  const value = helpers.valueAt(helpers.segments);
+  if (typeof value !== "string") return undefined;
+  const why = /has (.+?); an icon draws only/.exec(finding.message)?.[1];
+  return {
+    message: why ? `The SVG of ${code(value)} has ${why}, so it is not drawn.` : `${code(value)} cannot be drawn as an icon.`,
+    next: "keep only shapes in its SVG (paths, circles, rectangles, lines, polygons), with no script, link or raster, or remove the icon.",
+  };
+};
+
 const unusedDataset: RuleText = (finding, _context, helpers) => {
   const id = helpers.segments.at(-1) ?? unquote(match(finding.message, /^Dataset ("(?:[^"\\]|\\.)*") is never referenced/)?.[1]);
   if (!id) return undefined;
@@ -644,6 +666,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/catalog-record-not-in-source": catalogRecordNotInSource,
   "opf/unused-reference": unusedReference,
   "opf/unused-dataset": unusedDataset,
+  "opf/icon-unknown": iconUnknown,
+  "opf/icon-invalid": iconInvalid,
   "opf/unknown-beat": unknownBeat,
   "opf/slide-theme-dimensions": slideThemeDimensions,
   "opf/variable-unknown": variableUnknown,

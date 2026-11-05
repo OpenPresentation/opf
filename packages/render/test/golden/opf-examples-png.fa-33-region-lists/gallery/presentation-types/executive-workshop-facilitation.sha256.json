@@ -2,28 +2,28 @@
   "deck": "gallery/presentation-types/executive-workshop-facilitation.opf.json",
   "entries": {
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#0": {
-      "sha256": "cbfb2eee6695cabcefed5280eac67c5885b9bc92e6eeaac774b41aebb7f6447d",
-      "bytes": 7500
+      "sha256": "551ecb1871ee5596ba568db3c56dafe54e39cd6520972446022a4bc3d26692e9",
+      "bytes": 7530
     },
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#1": {
-      "sha256": "af5fa79df35395900090f6114236ccc3f6ddd6c1046ae93cf8624766bbb63fd6",
-      "bytes": 11987
+      "sha256": "aed0b6f573ee7e7241c0fbd34d5eb0f62a4e7b830dba0c1cdf1af7dc59ba0422",
+      "bytes": 11697
     },
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#2": {
-      "sha256": "3800dcd857f4381b7505cf1e616d5d2993f76cd3a824d6773cd677cba43517a5",
-      "bytes": 5080
+      "sha256": "90cd3f832ecb7f19797c795a7cebbcf0553eb44c4f1c0855de7004162d52f08a",
+      "bytes": 4787
     },
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#3": {
-      "sha256": "c28a10a9a40b188820e38e3402b404f3b8cfa5e5b699465915de9d41035e05ff",
-      "bytes": 9234
+      "sha256": "73df7b7d62648eb5145e30337155c6d407da4479ea7b277ae8b1d1176f9ee6c6",
+      "bytes": 9362
     },
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#4": {
-      "sha256": "9678c1ccf5a1e9512bb0c5bc2c26eb828e417ec4efe4754b490e4504cbeb283b",
-      "bytes": 11348
+      "sha256": "1f7ae71726001c3b6757097149d479532d752862fae87ed56e50fb2e0ff75c09",
+      "bytes": 11491
     },
     "gallery/presentation-types/executive-workshop-facilitation.opf.json#5": {
-      "sha256": "33376288e488fe275ab29f3a6cf9a3f953e6d6fced7f7cd140c3e37ec65e4b9d",
-      "bytes": 9477
+      "sha256": "20456afee7b6240c4b73b955ba21fc62ced836868ebaa4bd154ee86f8957a68e",
+      "bytes": 9636
     }
   }
 }

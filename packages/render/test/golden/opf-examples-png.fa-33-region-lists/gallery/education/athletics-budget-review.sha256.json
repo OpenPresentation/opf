@@ -2,44 +2,44 @@
   "deck": "gallery/education/athletics-budget-review.opf.json",
   "entries": {
     "gallery/education/athletics-budget-review.opf.json#0": {
-      "sha256": "40780d3ab2339c93bb9963275319e1d78973ba4e69b1aca0ac2bee599ead6b1b",
-      "bytes": 8336
+      "sha256": "7f32babdf37d21037a08226dedb898ca31765a9fcd26cb3362bd15583ee3342f",
+      "bytes": 8315
     },
     "gallery/education/athletics-budget-review.opf.json#1": {
-      "sha256": "11140c1cad9ed6960cb0eff7574b6b6b407ec6ebbcc6a8683b714057e7a534c1",
-      "bytes": 13825
+      "sha256": "7e2fe891ff18b703eb814e0b696224b164439044c20c3c27ddd3c936cd8810e9",
+      "bytes": 13855
     },
     "gallery/education/athletics-budget-review.opf.json#2": {
-      "sha256": "e9da6a55b11872a0f5299ec49d10ac913a1a328fbe9a86927695e2cbba8eb829",
-      "bytes": 5643
+      "sha256": "d483e5fd38d7d5f738865d19b69248d4dc93c7631a1b30d693774ef1992847f7",
+      "bytes": 5668
     },
     "gallery/education/athletics-budget-review.opf.json#3": {
-      "sha256": "18b8816a6b43f970f8cba073b2914da2d103f44d324dd1970f972b4ac4e248ab",
-      "bytes": 9716
+      "sha256": "5fe94a581515877090a4011ddf2ddcf18cf04686eb708d7c5dc0e58a113f3067",
+      "bytes": 9899
     },
     "gallery/education/athletics-budget-review.opf.json#4": {
-      "sha256": "ea92dfe520c1fe84df3fa1ae6eb9f3fe9072b749affd605046764a534070549b",
-      "bytes": 14834
+      "sha256": "105fbacbe811750136f50d501ca5498d48e244b05a1c72498f4fd6bbe0dda36b",
+      "bytes": 14671
     },
     "gallery/education/athletics-budget-review.opf.json#5": {
-      "sha256": "5c8bfcfac214b14821bcdbbc8f36841925c7ab66bb62261a76df4121869d66ac",
-      "bytes": 18772
+      "sha256": "401bad38e24d8b9c19510f2083b202eef932b83d448353445a1aeee8ae67cbc9",
+      "bytes": 18419
     },
     "gallery/education/athletics-budget-review.opf.json#6": {
-      "sha256": "33453dfddada13ce62d5ad818fdee74e57000c8f0f040f0bc213b2acf097461d",
-      "bytes": 12639
+      "sha256": "e444121c647bedb72a8280dae569725f4bc4c5c05b38691d8b3b3f77cc8fde4a",
+      "bytes": 12494
     },
     "gallery/education/athletics-budget-review.opf.json#7": {
-      "sha256": "ec185de62a680303d8a524efa2f25590fec91080a310c0017004d17d51ed6efa",
-      "bytes": 18792
+      "sha256": "316e1bb5a50cbb68fab9dee521338778a4e2400adba604ae609da01849049bc6",
+      "bytes": 18495
     },
     "gallery/education/athletics-budget-review.opf.json#8": {
-      "sha256": "5b8aaee05e09857b960f4b979a663ff569bbc93115c979c8ca22b60ee712116e",
-      "bytes": 8046
+      "sha256": "3939ad7045d99eb987e88dd471c68a2cf1561041e992429bbce155938d865b34",
+      "bytes": 8169
     },
     "gallery/education/athletics-budget-review.opf.json#9": {
-      "sha256": "81db7b99832d73b36ef3f9a26acecec744cf883c6e033b94bc406fe4d72f4c9c",
-      "bytes": 15298
+      "sha256": "e04c640620369757a2b4e0b2e08cb9d6af4569a5ffd215bd4c3671e70d7c23fd",
+      "bytes": 15247
     }
   }
 }

@@ -1,4 +1,4 @@
-import { diagramsPending, ensureDiagrams } from "@openpresentation/opf/composition";
+import { diagramsPending, ensureDiagrams, ensureIcons, iconsPending } from "@openpresentation/opf/composition";
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
 import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
@@ -335,6 +335,8 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
   // `ensure` loads it first, since the font analysis measures a diagram's labels only once its type is loaded.
   const pending = (presentation, renderOptions) => [
     ...diagramsPending(presentation).map((type) => `diagram:${type}`),
+    // LH-14: an icon set the presentation names that is not loaded yet (a registered loader, such as the gallery's) is pending as `icons:<set>`.
+    ...iconsPending(presentation, { catalogs: renderOptions?.catalogs ?? options.renderOptions?.catalogs }).sets.map((set) => `icons:${set}`),
     ...registry.pendingLazyFonts(presentation, renderOptions).map((face) => face.file),
     ...registry.pendingScripts(presentation, renderOptions),
   ];
@@ -349,7 +351,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /**
-     * Load the diagram types the presentation draws (core loads each on demand in a browser), then the vendored and script faces
+     * Load the diagram types and the icon sets the presentation draws (core loads each on demand: the sets from `catalogs`, LH-14), then the vendored and script faces
      * it draws, each hash-verified, all or nothing, and repeat while loading
      * changes what is needed (a script face can need a vendored one). Cheap when nothing is needed. Besides `signal`, the call
      * takes the `toSvg` options the document resolves with (`catalogs`, ...) over the loader's `renderOptions`. A document that
@@ -357,6 +359,7 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
      */
     async ensure(presentation, callOptions = {}) {
       const diagrams = await ensureDiagrams(presentation);
+      await ensureIcons(presentation, { catalogs: callOptions.catalogs ?? options.renderOptions?.catalogs });
       const lazy = [], scripts = [];
       let uncovered = [];
       for (let round = 0; round < MAX_ENSURE_ROUNDS; round++) {

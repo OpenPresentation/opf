@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "The built-in slide layouts of OPF 0.19: 30 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "47adcc12d6c2a30588f38540f19d6321f867f66532d7065b2c68b22ff4055f22",
+  "contentSha256": "c0755e2501f47cc278d15ec012f2291f205cb1fcd51b494d14d9b5655921b3f8",
   "records": [
     {
       "id": "cover",

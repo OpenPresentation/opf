@@ -51,7 +51,7 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('cite-unknown-reference', 'format', 'error', 'A citation names a reference that does not exist.', 'A cited id with no entry in `references` has nothing to show in the footnote area.', { standard: SCHEMA }),
 	rule('cite-unsupported-location', 'format', 'error', 'A citation or footnote sits where no engine draws it.', '`cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.', { standard: SCHEMA }),
 	rule('caption-unsupported-payload', 'format', 'error', 'A caption is on a payload that cannot carry one.', 'A caption belongs to exactly one image, chart, table or video; a group, text or code block has no place to draw it.', { standard: SCHEMA }),
-	rule('image-option-unsupported-payload', 'format', 'error', 'An image option is on a payload that is not an image.', '`fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`) and `placement` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.', { standard: SCHEMA }),
+	rule('image-option-unsupported-payload', 'format', 'error', 'An image option is on a payload that is not an image.', '`fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.', { standard: SCHEMA }),
 	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honoured.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
 	rule('dataset-unknown', 'format', 'error', 'A chart or table names a dataset that does not exist.', 'The data cannot be drawn without the dataset it refers to.', { standard: SCHEMA }),
@@ -143,6 +143,8 @@ const referenceRules: ValidationRuleInfo[] = [
 	rule('undeclared-catalog', 'format', 'error', 'A reference names a catalog group the document does not declare.', 'The prefix of a `name:id` reference names the group of `catalogs` it resolves in. A prefix with no group can never resolve, whatever the host registers, so it is a format error: engines reject the document at their format check instead of drawing a fallback.', { standard: SCHEMA }),
 	rule('unused-reference', 'references', 'warning', 'A reference is never cited.', 'A listed reference that no run cites is not drawn anywhere.', { standard: SCHEMA }),
 	rule('unused-dataset', 'references', 'warning', 'A dataset is never used.', 'A dataset no chart or table references is not drawn anywhere.', { standard: SCHEMA }),
+	rule('icon-unknown', 'references', 'warning', 'An icon names a set or an icon that does not exist.', 'An `icon` is "<set>:<name>" (a set the document embeds or a registered catalog defines, such as lucide and tabler of the gallery), a name of the `icons` of the deck, or an SVG source. One that resolves nowhere is not drawn: the entry, metric or group keeps its text and has no chip.', { standard: SCHEMA, approximations: 'A set a host registers as a loader is checked once it is loaded (ensureIcons): the CLI, the MCP and the Node file API load the sets a deck names before they validate it; the synchronous validate alone checks only the set ids and the sets the document embeds. Suggestions are the nearest names of the set (or of the icons of the deck).' }),
+	rule('icon-invalid', 'references', 'warning', 'The SVG of an icon cannot be drawn as an icon.', 'The SVG of an icon is read, never run: a script, an event handler, an external reference (an href or url() that is not a fragment) or a raster image makes it unusable, as does SVG text that is not well formed or has no size. It is not drawn.', { standard: SCHEMA }),
 	rule('unknown-beat', 'references', 'warning', 'A slide names a beat its narrative does not define.', '`slides[].beat` links a slide to a step of the narrative plan. A beat id the narrative does not have links to nothing; nothing is drawn from a beat.', { standard: SCHEMA, approximations: 'The narrative resolves like every content reference: the document\'s catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked.' }),
 	rule('slide-theme-dimensions', 'references', 'warning', 'A slide theme sets a slide size that differs from the deck.', 'A PPTX has one slide size. The size a slide-level theme carries is never used: design.dimensions of the deck (or of its theme) wins in every engine, and without them the exporter stops with mixed slide sizes.', { standard: SCHEMA }),
 	rule('variable-unknown', 'references', 'warning', 'A `{{token}}` names a variable that is not declared.', 'An undeclared token is shown literally.', { standard: SCHEMA }),
@@ -379,6 +381,14 @@ export const regionFullRule = rule(
 	'A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.',
 	{ cost: 'composition' },
 );
+export const iconDroppedRule = rule(
+	'icon-dropped',
+	'layout',
+	'warning',
+	'An icon is not drawn.',
+	'An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.',
+	{ cost: 'composition' },
+);
 export const unplacedRule = rule(
 	'layout-unplaced',
 	'layout',
@@ -594,6 +604,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	regionKindRule,
 	regionFullRule,
 	unplacedRule,
+	iconDroppedRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

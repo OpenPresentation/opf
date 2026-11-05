@@ -5,7 +5,7 @@ import {
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
-  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup,
+  codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
 // The renderer is a library: it never imports a catalog. Hosts register theirs (`options.catalogs`, core `Catalog[]`, for
@@ -726,6 +726,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderSteps(bound, options),
     renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
+    renderIcons(bound, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
     renderFootnotes(bound, options, drawHelpers),
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
@@ -951,6 +952,32 @@ function renderSteps(bound, options) {
     for (const arrow of step.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: blockArrowPath(arrow.box, arrow.direction), fill: primary}));
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
+}
+// LH-14: core's icons (geometry.icons) on their chips, over the cards they sit on, as the PPTX export draws them: the chip a circle in
+// core's chip color; a monochrome glyph core's placed path commands in its glyph color, each part filled (nonzero or even-odd), stroked at
+// its width with its caps and joins, or both; a multicolor SVG a picture contained in the chip's square, with no chip, in its own colors.
+// With trace each icon names its path in data-opf-icon (and the entry, metric or group it marks in data-opf-icon-owner), not
+// data-opf-path: it is decoration, so hit-testing still finds each item by its own text.
+function renderIcons(bound, options) {
+  const icons = bound.geometry.icons;
+  if (!icons?.length) return "";
+  return icons.map(icon => {
+    const parts = [], glyph = icon.colors.glyph.hex, n = stableNumber;
+    if (icon.picture) parts.push(tag("image", { ...HIDDEN, x: n(icon.box.x), y: n(icon.box.y), width: n(icon.box.width), height: n(icon.box.height), preserveAspectRatio: "xMidYMid meet", href: svgTextDataUri(icon.picture.svg) }));
+    else {
+      parts.push(tag("circle", { ...HIDDEN, cx: n(icon.chip.cx), cy: n(icon.chip.cy), r: n(icon.chip.radius), fill: icon.colors.chip.hex }));
+      for (const part of icon.parts ?? []) parts.push(tag("path", { ...HIDDEN, d: iconPathData(part.commands), fill: part.fill ? glyph : "none", ...(part.fill && part.evenOdd ? { "fill-rule": "evenodd" } : {}),
+        ...(part.stroke !== undefined ? { stroke: glyph, "stroke-width": n(part.stroke), "stroke-linecap": part.linecap ?? "butt", "stroke-linejoin": part.linejoin ?? "miter" } : {}) }));
+    }
+    return tag("g", options.trace ? { "data-opf-icon": icon.path, "data-opf-icon-owner": icon.owner } : {}, parts.join(""));
+  }).join("\n");
+}
+// An SVG text as a base64 data URI (UTF-8), for an icon drawn as a picture.
+function svgTextDataUri(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
+  return `data:image/svg+xml;base64,${btoa(binary)}`;
 }
 // LH-130: the short accent rule core sets above a cover's or section's title (geometry.titleRule), filled in the tag's color (tagFill), as
 // the PPTX export draws it. With trace it names the title it stands for in data-opf-title-rule, not data-opf-path: it is the layout's
@@ -1574,7 +1601,8 @@ function renderQuote(item, box, bound, options) {
 }
 
 function renderQuotePhoto(photo, item, bound, options) {
-  const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover' });
+  // LH-132: a portrait beside the quote crops around the focus core gave it (the upper third), as the export does.
+  const picture = renderImage({ value: photo.value, path: photo.path }, photo.box, bound, { ...options, imageFit: 'cover', ...(photo.focus ? { imageFocus: photo.focus } : {}) });
   // An unresolved source keeps the ordinary placeholder, unmasked, like the export.
   if (isImagePlaceholder(picture)) return picture;
   const id = `opf-s${bound.index + 1}-quote-photo-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}`;

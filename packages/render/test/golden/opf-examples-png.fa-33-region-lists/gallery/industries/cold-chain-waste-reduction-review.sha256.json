@@ -2,28 +2,28 @@
   "deck": "gallery/industries/cold-chain-waste-reduction-review.opf.json",
   "entries": {
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#0": {
-      "sha256": "b5c8f08323a4912da1c5d9b173685a1566b00f3b795acd64ed4d5aabb9adb541",
-      "bytes": 8302
+      "sha256": "fa2964c63341297b5ff011f26c8455d7d3fe9df7af1df03b6832f91e5aaea5cf",
+      "bytes": 8357
     },
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#1": {
-      "sha256": "d0594994e3faee69898da6ecc837ee2385bf5ace7caccf956429df995061ec68",
-      "bytes": 12272
+      "sha256": "1d16792936f2efd8f3ac401f7b49159baefe88d2f8b8b9dc7b2a7a72ebbb8001",
+      "bytes": 12161
     },
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#2": {
-      "sha256": "a83f892cbd665e073bd560840b56987bdbe438b5932b65c00ba410c33a13af97",
-      "bytes": 6607
+      "sha256": "d927f14daca27fdb3d4fcf8a3e551acd7b3a8791614d91758cb314f9b1b0e3ce",
+      "bytes": 6598
     },
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#3": {
-      "sha256": "6cd3f8834df6fe69c3a7af8d102246aca91bfdcc8a5023a72837d6bfbb0f2ba3",
-      "bytes": 8233
+      "sha256": "b2768465f9d13f84b89291fdf3706b7df835012fc0d62d6ad4d52c11b2c76566",
+      "bytes": 8364
     },
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#4": {
-      "sha256": "a8caafb0af9c390934ae8f5afa45ef53b94aeca0ce745a1655e9ca924061e8f1",
-      "bytes": 12414
+      "sha256": "dd246383ec19075651a217e5827c9f9373dbc0d4aea09dfb1249335407ed8ca1",
+      "bytes": 12163
     },
     "gallery/industries/cold-chain-waste-reduction-review.opf.json#5": {
-      "sha256": "145bd47f7c775f2302c645df5d37a9db3b03d6d1ad714d92fcd8ddf865943f97",
-      "bytes": 9041
+      "sha256": "3fe4c86de2e013ffdcf75de031fb2842dfb72bfee06680b9d4bb518bc0180dad",
+      "bytes": 9097
     }
   }
 }

@@ -39,7 +39,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `$schema` | yes | `const:"https://openpresentation.org/schema/opf-catalog-index/v1"` |  |
-| `kind` | no | `enum:audiences \| chart-types \| color-schemes \| font-schemes \| languages \| layouts \| narratives \| purposes \| social-platforms \| themes \| tones` | Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `packages/gallery/catalog/<kind>` directory name. |
+| `kind` | no | `enum:audiences \| chart-types \| color-schemes \| font-schemes \| icon-sets \| languages \| layouts \| narratives \| purposes \| social-platforms \| themes \| tones` | Catalog kind, as the URL segment of the default catalog (`https://www.pptx.gallery/<kind>`) and the `packages/gallery/catalog/<kind>` directory name. |
 | `version` | yes | `string` | Index format version, as a string. |
 | `description` | yes | `string` | Human-readable description of what this catalog kind holds and how entries are ordered. |
 | `contentSha256` | no | `string` | SHA-256 (lowercase hex) of the canonical JSON of the full records this index lists, in index order, with every top-level `x-*` member removed. Canonical JSON sorts object keys and has no insignificant whitespace. Lets... |
@@ -211,6 +211,34 @@ _No named properties._
 | `description` | no | `string` | Longer prose describing the font scheme and where it shines. |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
+
+## Icon Set
+
+- File: `spec/schemas/icon-set.schema.json`
+- Schema id: `https://openpresentation.org/schema/opf-icon-set/v1`
+- Type: `object`
+- Required fields: `$schema`, `id`, `name`, `license`, `copyright`, `viewBox`, `style`, `icons`
+- Purpose: Schema for icon-set records (LH-14): one set of icons that share a viewBox and a style, each icon as SVG path data. An OPF `icon` names one as `<set>:<name>` (docs/icons.md). @openpresentation/gallery ships Lucide and Tabler outline, generated from their npm packages; a host registers them as `galleryIconSets` of `@openpresentation/gallery/icon-sets` and loads a set only when a deck uses it, and a document embeds only the icons it uses under `catalogs.<group>.iconSets.<id>` (a record without...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `$schema` | yes | `const:"https://openpresentation.org/schema/opf-icon-set/v1"` | Identifies this record as an icon set. |
+| `id` | yes | `string` | The set's id, the part of an icon reference before the colon. `asset` is not a set id: `asset:<id>` is an asset reference. |
+| `name` | yes | `string` | Human-readable set name shown in pickers. |
+| `summary` | no | `string` | One line on what the set looks like. |
+| `version` | no | `string` | The version of the source the icons were taken from, such as the npm package version. |
+| `package` | no | `string` | The npm package the icons were generated from. |
+| `homepage` | no | `string` | Where the set is published. |
+| `license` | yes | `string` | The SPDX license id of the icons. |
+| `copyright` | yes | `string` | The copyright notice the license asks every copy to keep. |
+| `licenseText` | no | `string` | The full license text, as the source package ships it. |
+| `viewBox` | yes | `array<unknown>` | The one viewBox every icon of the set is drawn in: min-x, min-y, width, height. |
+| `style` | yes | `enum:stroke \| fill` | How a string icon draws: `stroke` strokes its path at `strokeWidth` with no fill, `fill` fills it (nonzero rule). |
+| `strokeWidth` | no | `number` | The stroke width in viewBox units (stroke sets). Default 2. |
+| `strokeLinecap` | no | `enum:butt \| round \| square` | The stroke's line caps. Default round. |
+| `strokeLinejoin` | no | `enum:miter \| round \| bevel` | The stroke's line joins. Default round. |
+| `icons` | yes | `object` | The icons by name. A string is the icon's path data, drawn as `style` says; an object separates the parts a stroke set strokes (`stroke`) from those it fills (`fill`). Every icon is one color: the engines draw it in t... |
+| `tags` | no | `object` | Search keywords by icon name, from the source package: what an icon search (the MCP's search_icons, pptx.gallery) matches besides the name. |
 
 ## Language
 

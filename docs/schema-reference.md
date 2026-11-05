@@ -34,6 +34,7 @@ This reference documents the author-facing shape of a complete `*.opf.json` pres
 | `references` | no | `array<ref:Reference>` | Sources that text runs cite with 'cite'. Ids are unique. A cited reference is listed in the footnote area of every slide that cites it, with a marker number assigned per deck in order of first use; a reference no run... |
 | `datasets` | no | `ref:Datasets` | Optional shared data tables, keyed by id. A chart ('chart.data': { "dataset": "<id>" }) or a table ('table': { "dataset": "<id>" }) references one instead of holding its own copy; engines inline the reference before c... |
 | `assets` | no | `ref:Assets` | Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings. |
+| `icons` | no | `ref:Icons` | Optional deck-local icons (LH-14), keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md. |
 | `catalogs` | no | `ref:Catalogs` | The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', ref... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
@@ -572,6 +573,7 @@ _No named properties._
 | `opacity` | no | `number` | Picture opacity from 0 (fully transparent) to 1 (fully opaque); the overlay keeps its own opacity. Default 1. |
 | `recolor` | no | `ref:ImageRecolor` | Grayscale or duotone treatment of the picture's pixels, as on an image block: recolor and opacity apply to the pixels, then the overlay is drawn above. |
 | `overlay` | no | `oneOf:ref:Overlay / const:false` | Scrim over the whole picture or a band along one edge (edge, size), beneath furniture and content, for example to keep a title readable over a busy photo. Without an overlay, core draws an automatic scrim in the slide... |
+| `textPlacement` | no | `enum:top-start \| top-center \| middle-start \| middle-center \| bottom-start \| bottom-center \| panel` | Where a cover's or section's heading group goes on this picture: the top, middle or bottom of its area, start-aligned or centered, or 'panel' (a start-side column on the background color; needs no overlay key). Absent... |
 
 
 ### ImageFocus
@@ -825,6 +827,7 @@ _No named properties._
 | `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
 | `overlay` | no | `ref:Overlay` | Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame. |
 | `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |
+| `portrait` | no | `enum:avatar \| side \| top` | Image payloads only: how a person's picture is drawn in a team. A person is a group of a picture followed by a name (a list of one entry, whose description holds the role and a line, or a short text); a slide whose bo... |
 | `video` | no | `ref:Asset` | Source for a video item. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the same placeholder as native shapes linked to... |
 | `chart` | no | `ref:Chart` | Chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Table payload. Presence of this field infers type 'table'. |
@@ -837,6 +840,7 @@ _No named properties._
 | `blocks` | no | `array<ref:ContentPayload>` | Ordered children of a group. Each child is a leaf or another group. |
 | `composition` | no | `ref:Composition` | Arrangement within this group. Only minFontSize, maxFontSize and overflow inherit from the parent; strict overflow cannot be weakened. |
 | `emphasis` | no | `boolean` | true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on i... |
+| `icon` | no | `ref:IconReference` | Groups only (LH-14): an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: "<set>:<name>" ("lucide:shield-check"), a name from the deck's icons, or an SVG sour... |
 
 
 ### Quote
@@ -850,7 +854,8 @@ _No named properties._
 | `text` | yes | `oneOf:string / array<ref:TextRun>` | Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks. |
 | `attribution` | no | `string` | Person or organization credited for the quote. Drawn after the quote text, in the muted text color. |
 | `role` | no | `string` | Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'. |
-| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck). Give it alt text (validate's opf/mis... |
+| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck), or as a tall portrait beside the quo... |
+| `portrait` | no | `enum:avatar \| side` | How the `photo` is drawn. 'side' draws it as a tall picture at the start of the quote (about a quarter of its width, rounded, cropped around the upper third), the quote text beside it and centered against it; 'avatar'... |
 | `source` | no | `string` | Optional quote source, citation, or URL. Follows the attribution and role after ' - '. |
 
 
@@ -883,6 +888,7 @@ _No named properties._
 | `delta` | no | `oneOf:string / number` | Metric change value. |
 | `trend` | no | `enum:up \| down \| flat` | Metric trend direction. The preview and the PowerPoint export draw it as an arrow that always points the way the trend does (up, down or flat), before the delta on its line (or before the label without a delta), and c... |
 | `sentiment` | no | `enum:positive \| negative \| neutral` | Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide back... |
+| `icon` | no | `ref:IconReference` | An icon drawn on a chip above the metric (LH-14): "<set>:<name>" ("lucide:users"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is... |
 
 
 ### Diagram
@@ -1300,6 +1306,25 @@ _No named properties._
 | `audiences` | no | `ref:CatalogRecords` | Audience records keyed by id, each with the fields of https://openpresentation.org/schema/opf-audience/v1. Referenced from audience. |
 | `purposes` | no | `ref:CatalogRecords` | Purpose records keyed by id, each with the fields of https://openpresentation.org/schema/opf-purpose/v1. Referenced from purpose. |
 | `tones` | no | `ref:CatalogRecords` | Tone records keyed by id, each with the fields of https://openpresentation.org/schema/opf-tone/v1. Referenced from tone. |
+| `iconSets` | no | `ref:CatalogRecords` | Icon-set records keyed by set id (LH-14), each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as "<se... |
+
+
+### IconReference
+
+- Type: `string`
+- Required fields: none
+- Purpose: An icon (LH-14): "<set>:<name>" names an icon of a set ("lucide:truck", "tabler:rocket"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown,...
+
+_No named properties._
+
+
+### Icons
+
+- Type: `object`
+- Required fields: none
+- Purpose: Deck-local icons (LH-14), keyed by name: SVG text ("<svg >") or an SVG source ("asset:<id>", "./icon.svg", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.
+
+_No named properties._
 
 
 ### CatalogSource

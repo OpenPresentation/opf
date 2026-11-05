@@ -2,28 +2,28 @@
   "deck": "gallery/industries/consulting-margin-recovery-plan.opf.json",
   "entries": {
     "gallery/industries/consulting-margin-recovery-plan.opf.json#0": {
-      "sha256": "5820bd947c76649afc5bd3d5837571df44af137bae9c719da6163151af808e34",
-      "bytes": 13499
+      "sha256": "c4bfc9adc63f6a56b61f07992b10779e7548f8058f10eec024164b40381fd8ee",
+      "bytes": 13501
     },
     "gallery/industries/consulting-margin-recovery-plan.opf.json#1": {
-      "sha256": "85f1f7ae7f34b937ed308e31cf1367e1339bda2ff4df3ebb0c6b38a769b7f651",
-      "bytes": 16750
+      "sha256": "799450735222d3c43f35342f86f08c2dfcfe9b783a072c3691fc5253cd6af033",
+      "bytes": 16677
     },
     "gallery/industries/consulting-margin-recovery-plan.opf.json#2": {
-      "sha256": "3f0082f67dcdde31d8b6cfae1b222b7e768044d04ca6ed216c11fdf6c6f7f4c8",
-      "bytes": 9342
+      "sha256": "df972daf4ac368afa6d0ae50f54fd19476b8abf0dc48f508de85f1b778938005",
+      "bytes": 9526
     },
     "gallery/industries/consulting-margin-recovery-plan.opf.json#3": {
-      "sha256": "11cc42d77e4aa2d71bf236648167ea16515b431b349a07b42989f32d23fdca69",
-      "bytes": 10848
+      "sha256": "5d7d436a4da080e3cb9205ab85835d213500a708734d7bc200160ebae2bad3f3",
+      "bytes": 10571
     },
     "gallery/industries/consulting-margin-recovery-plan.opf.json#4": {
-      "sha256": "d1cef75a2dd2291c59347d20b5b2dbecf12a00b778af4924d70827c47118eb14",
-      "bytes": 17966
+      "sha256": "b783113772bb4cbae01639d24b89aca524efcf07f2d7ec1a47fad8839c72f716",
+      "bytes": 17781
     },
     "gallery/industries/consulting-margin-recovery-plan.opf.json#5": {
-      "sha256": "7550fb86d0c5372376cf1646a59d5a5321557018394c534e7ee3ac9bfb29107f",
-      "bytes": 13607
+      "sha256": "3709dfcf71031447e60f31fb754942f94989836efdb5c942063ac5667bc0a74d",
+      "bytes": 13441
     }
   }
 }

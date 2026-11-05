@@ -143,12 +143,16 @@ rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's draw
 both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
-Over a picture background a `bottom` heading group stays low only where the picture is calm under its text: the host measured
-the picture (`pictureLuminance`, which `measurePictures` returns, LH-145), the grays under the group's text span at most
-`CALM_PICTURE_SPREAD` (48 of 256 levels, seen through the author's overlay) and the text color reads 4.5:1 over every one of them
-without a scrim. Otherwise, and in a run that measured nothing, the group is centered in its area as before LH-130, keeping its
-start alignment, rule and eyebrow: the low part of a photo is often its busiest (lit windows, a field of panels). Plain and
-variant backgrounds keep the low anchor.
+Over a picture background the group goes where the measured picture is calm under its text (LH-158, see
+[text on a picture](image-treatments.md#text-on-a-picture)); in a run that measured nothing, a `bottom` group is centered as
+before LH-130, keeping its start alignment, rule and eyebrow. Plain and variant backgrounds keep the low anchor.
+
+LH-155: the gallery `closing` takes the same treatment as a stacked record: its all-`auto` column has `anchor: "bottom"`, so the stack (the title
+under the accent rule, then the contact lines) stands at the foot of the content box at the start edge, as Claude Design sets a closing. The
+rule rides on the title (`rule: true`) and is a guarded rule (`title-rule`): where the stack has no room to spare, so that the rule
+would set the contact lines smaller, the slide has no rule. Over a picture background the low stack is placed by the same scores as a
+heading group (LH-158), as one group (title and contact lines) at the top, middle or foot of the content box, keeping its alignment and
+with no panel; `textPlacement` picks its anchor. In a run that measured nothing the stack is centered, as it was before.
 
 Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
 size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the
@@ -487,7 +491,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
+- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the
@@ -496,11 +500,18 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
   layout record, grows its title and subtitle by one, two or three steps of the type scale, each up to its display size
   (`HEADING_DISPLAY_SIZES`: title 75 px, subtitle 37; the tag is LH-32's eyebrow at its 22 px role size and keeps it); a
-  title over a primary block (a quote's, a statement's) keeps its size. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
+  title over a primary block (a quote's) keeps its size; a statement's title over its paragraph is LH-09's message below. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
   display size, quotes by the scale's ratio on every role (`LONE_DISPLAY_SIZES`). The largest step is kept at which nothing
   overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
   region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
   at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **Statements and short messages (LH-09, LH-69).** The `statement` record is start-aligned with LH-130's rule over its title.
+  A sentence title over a paragraph is the message: it grows to display size (75 px), the paragraph keeps its size. A metric, or a
+  text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
+  body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
+  on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  `statement-message` and `display-message`.
 - **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
   tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
   metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price

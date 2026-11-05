@@ -307,6 +307,15 @@ const regionKind: RuleText = (finding) => {
   };
 };
 
+// LH-14: an icon the slide does not draw.
+const iconDropped: RuleText = (finding) => {
+  const room = /no room for its chip/.test(finding.message);
+  return {
+    message: room ? "An icon is not drawn: its chip would set the slide's text smaller." : "An icon is not drawn: icons mark first-level entries of an unnumbered list, metrics and groups.",
+    next: room ? "shorten the text or give the slide more room, or remove the icon." : "move the icon to an entry, metric or group it can mark, or remove it.",
+  };
+};
+
 const regionFull: RuleText = (finding) => {
   const found = match(finding.message, /^Region '(.+?)' already holds its (\d+) block/);
   if (!found) return undefined;
@@ -613,6 +622,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-unknown": regionUnknown,
   "opf/region-kind": regionKind,
   "opf/region-full": regionFull,
+  "opf/icon-dropped": iconDropped,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,
   "opf/font-outside-scheme": fontOutsideScheme,

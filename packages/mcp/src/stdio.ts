@@ -3,7 +3,7 @@
 // otherwise core's estimate, and the report's hint says so). Stdout carries the protocol and nothing else; diagnostics go to stderr.
 import { createRequire } from "node:module";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import type { ValidateOptions, ValidationReport } from "@openpresentation/opf";
+import { type ValidateOptions, type ValidationReport, ensureIcons } from "@openpresentation/opf";
 import { Reporter, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
 import { type DeckFormat, createOpfServer } from "./index.js";
 
@@ -17,7 +17,10 @@ export interface StdioHost {
 
 /** Deck text checked as `opf validate` checks it: layout measured with the fonts `opf convert` draws with when opf-render is installed. */
 export async function checkDeckText(raw: string, format: DeckFormat, options: ValidateOptions): Promise<ValidationReport> {
-	const measuring = await measuringFonts(readDeckReport(raw, { format, validate: false }).presentation, { reporter: new Reporter(), flags: true });
+	const read = readDeckReport(raw, { format, validate: false }).presentation;
+	// LH-14: the icon sets the deck names load first (the gallery loads each on first use), so an unknown icon name is reported.
+	await ensureIcons(read, { catalogs: options.catalogs });
+	const measuring = await measuringFonts(read, { reporter: new Reporter(), flags: true });
 	try {
 		const { presentation: _deck, format: _format, ...report } = readDeckReport(raw, { format, validate: measuring.fonts ? { ...options, fonts: measuring.fonts } : options });
 		if (measuring.estimated && report.checks.layout === "estimated") {

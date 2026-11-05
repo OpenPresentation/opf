@@ -33,7 +33,8 @@ assert.deepEqual(parts[1].fields, [{type: 'slideNumber', start: 5, end: 6}]);
 
 // An escaped token is the literal text.
 const escaped = toSvg({slides: [{title: 'Escape', text: String.raw`Write \{{slide.number}} to show the slide number`}]}, 1);
-assert.ok(escaped.includes('Write {{slide.number}} to show the slide number'));
+// LH-09: a lone short text is a display message whose balanced lines are separate text elements, so the text is read across them.
+assert.ok(escaped.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').includes('Write {{slide.number}} to show the slide number'));
 
 // A slide without a section draws empty text for {{slide.section}}.
 assert.ok(toSvg({slides: [{title: 'No section {{slide.section}}!'}]}, 1).includes('No section !'));

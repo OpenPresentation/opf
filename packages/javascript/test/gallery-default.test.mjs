@@ -5,14 +5,16 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { CATALOG_SCHEMA as GALLERY_CATALOG_SCHEMA, gallery } from "@openpresentation/gallery";
+import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
 import { CATALOG_SCHEMA, validate } from "../dist/index.js";
 import { defaultCatalogs } from "../dist/node-engine.js";
 
 const galleryManifest = JSON.parse(readFileSync(new URL(import.meta.resolve("@openpresentation/gallery/package.json")), "utf8"));
 
-test("the default catalogs are the gallery package's own object", () => {
-  assert.equal(defaultCatalogs().length, 1);
+test("the default catalogs are the gallery package's own objects: the catalog and its icon sets (LH-14)", () => {
+  assert.equal(defaultCatalogs().length, 2);
   assert.equal(defaultCatalogs()[0], gallery);
+  assert.equal(defaultCatalogs()[1], galleryIconSets);
   assert.ok(Object.isFrozen(defaultCatalogs()));
   const deck = { name: "t", design: { theme: "minimal" }, slides: [{ layout: "two-column", title: "A" }] };
   const unresolved = (report) => report.findings.filter((finding) => finding.ruleId === "opf/unresolved-reference");

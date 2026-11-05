@@ -23,7 +23,8 @@ import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis}
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import {columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
 
@@ -81,10 +82,13 @@ export function waterfallRoles(values: readonly (number | null)[]): (WaterfallRo
   return roles;
 }
 
-/** LH-107: a waterfall bar's default label: a total as its value, a step signed (+9.3, −7.4 with U+2212), in the column's format. */
-export function waterfallLabelText(value: number, format: string | undefined, role: WaterfallRole | null): string {
-  if (role === 'total' || value === 0) return valueLabel(value, format);
-  return `${value > 0 ? '+' : '−'}${valueLabel(Math.abs(value), format)}`;
+/**
+ * LH-107: a waterfall bar's default label: a total as its value, a step signed (+9.3, −7.4 with U+2212), in the column's format. LH-153: with
+ * `group` (the column has no format and groups its thousands, `columnGroups`) a whole number of four digits or more is grouped by the language.
+ */
+export function waterfallLabelText(value: number, format: string | undefined, role: WaterfallRole | null, group?: {language?: string}): string {
+  if (role === 'total' || value === 0) return valueLabel(value, format, group);
+  return `${value > 0 ? '+' : '−'}${valueLabel(Math.abs(value), format, group)}`;
 }
 
 /**
@@ -115,7 +119,8 @@ export function chartWaterfall(chart: unknown, data: ResolvedChartData, geometry
   if (labels && usable(box, scale)) {
     const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
     const band = Math.max(1, box.width - 2 * pad) / data.rows.length;
-    const widest = Math.max(0, ...values.map((value, index) => value === null ? 0 : geometry.measure(waterfallLabelText(value, format, roles[index]!), fontPx, roles[index] === 'total' ? 700 : 400)));
+    const group = columnGroups(data, column) ? {language: geometry.language} : undefined;
+    const widest = Math.max(0, ...values.map((value, index) => value === null ? 0 : geometry.measure(waterfallLabelText(value, format, roles[index]!, group), fontPx, roles[index] === 'total' ? 700 : 400)));
     if (widest + fontPx * 0.25 > band) labels = false;
   }
   const titled = record(chart.axisTitles) && nonBlank(chart.axisTitles.value) !== undefined;
@@ -423,17 +428,22 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * inside the chart); below the header row. With `namesRow` a row of one text line for the series names (`placeBarNames`) lies between the
  * header and the plot, which then starts under it; a side legend takes its width off the plot's end. The preview draws its plot here and the PPTX export pins it (the plot area's inner layout).
  * LH-142: `hidden` (no value axis) leaves no tick row under the plot and no end tick labels inside the chart.
+ * LH-154: an axis title is a band the preview carves off the chart's edge (a value axis title under the tick row, a category axis title at
+ * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
 function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false): ChartPlotInset | undefined {
   if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
   const categories = data.rows.map(row => label(row[0]));
+  const options = resolveChartOptions(chart, chartOptionTarget(typeOf(chart)));
+  const titles = options.active ? options.axisTitles : {category: undefined, value: undefined};
+  const start = titles.category ? lineHeight : 0, titleBand = titles.value ? lineHeight : 0, span = box.width - start;
   const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
-  const gutter = Math.min(Math.max(box.width * 0.3, Math.min(box.width * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
+  const gutter = Math.min(Math.max(span * 0.3, Math.min(span * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
   // A chart whose legend is neither in the header nor replaced by names keeps the side legend (up to 45% of the chart), which the plot leaves room for.
-  const side = namesRow || header?.legend ? 0 : Math.min(box.width * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
-  let x = box.x + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
+  const side = namesRow || header?.legend ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
+  let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
     const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
@@ -442,7 +452,7 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
     plotWidth = Math.max(1, Math.min(x + plotWidth, right - lastHalf) - nextX); x = nextX;
   }
   const below = box.y + (header?.height ?? 0);
-  const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - pad - (hidden ? 0 : lineHeight);
+  const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - titleBand - pad - (hidden ? 0 : lineHeight);
   if (!(bottom - top > 1)) return undefined;
   return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
 }

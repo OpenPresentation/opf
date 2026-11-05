@@ -63,9 +63,10 @@ assert.match(body, /<a:noAutofit\/>/);
 assert.ok(!/normAutofit|spAutoFit|p:tags/.test(body));
 assert.equal((body.match(/<a:p>/g) ?? []).length, 4, 'Hard and blank/trailing paragraphs survive');
 assert.match(body, /<a:defRPr[^>]*><a:solidFill>/, 'Defaults use valid run-property color structure');
-// The composed size: 21 pt (28 px) at the role, grown on the type scale up to 32.25 pt (43 px) for a lone short paragraph (LH-48).
+// The composed size: 21 pt (28 px) at the role, grown on the type scale for a lone short paragraph (LH-48), up to 56.25 pt (75 px) as a
+// display message of four words or fewer (LH-09).
 const endSize = Number(/<a:endParaRPr[^>]*sz="([0-9]+)"/.exec(body)?.[1]);
-assert.ok(endSize >= 2100 && endSize <= 3225, String(endSize));
+assert.ok(endSize >= 2100 && endSize <= 5625, String(endSize));
 assert.match(body, new RegExp(`<a:defRPr sz="${endSize}"`), 'the paragraphs and the defaults share the size');
 assert.match(body, /<a:latin typeface="Roboto"/);
 assert.match(decode(native.entries, layoutPart(native.entries)), /type="tx"/);

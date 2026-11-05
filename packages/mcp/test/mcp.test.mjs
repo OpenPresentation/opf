@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -167,6 +167,22 @@ describe("opf-mcp", () => {
 			assert.equal(got.uri, "opf://catalog/layouts/two-column");
 			const example = (await client.callTool({ name: "get_catalog_record", arguments: { kind: "examples", id: "full-feature-tour" } })).structuredContent;
 			assert.deepEqual(example.record, JSON.parse(cli(["catalog", "examples", "full-feature-tour"]).stdout));
+		});
+
+		test("search_icons finds icons by name and keyword, and validate_deck reports an unknown icon with the nearest names (LH-14)", async () => {
+			const found = (await client.callTool({ name: "search_icons", arguments: { query: "truck" } })).structuredContent;
+			assert.equal(found.icons[0].icon, "lucide:truck");
+			assert.ok(found.icons.some((icon) => icon.set === "tabler"));
+			assert.deepEqual(found.sets.map((set) => [set.id, set.license]), [["lucide", "ISC"], ["tabler", "MIT"]]);
+			const keyword = (await client.callTool({ name: "search_icons", arguments: { query: "delivery", set: "lucide", limit: 5 } })).structuredContent;
+			assert.ok(keyword.returned > 0 && keyword.icons.every((icon) => icon.set === "lucide"));
+			const set = failure(await client.callTool({ name: "search_icons", arguments: { query: "x", set: "lucid" } }));
+			assert.equal(set.code, "unknown-id");
+			const deck = { name: "Icons", language: "en", slides: [{ title: "Why", items: [{ text: "Fast", icon: "lucide:truk" }] }] };
+			const report = (await client.callTool({ name: "validate_deck", arguments: { document: deck } })).structuredContent;
+			const unknown = report.findings.find((finding) => finding.ruleId === "opf/icon-unknown");
+			assert.ok(unknown, JSON.stringify(report.findings));
+			assert.ok(unknown.suggestions.some((entry) => entry.value === "lucide:truck"));
 		});
 
 		test("names a kind or id that does not exist, with a suggestion", async () => {
@@ -437,7 +453,9 @@ describe("the bundled sources", () => {
 		}
 		assert.ok(sources.examples.length >= 100);
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
-		assert.ok(bytes < 1_000_000, `${bytes} bytes of documentation`);
+		// LH-14 added docs/icons.md and three rules to docs/validate.md. LH wave 7 together (LH-158's and LH-132's image treatments, LH-09's and
+		// LH-155's layout templates, the portrait key and the icon rules in the references) is 1,027,190 bytes; the lean Worker stays in bounds.
+		assert.ok(bytes < 1_035_000, `${bytes} bytes of documentation`);
 	});
 });
 

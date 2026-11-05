@@ -59,6 +59,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // align "right" is the column's, so "n/a" is drawn at the right too (it started at the left); the other cells draw as before.
 // LH-105 moved 29 (column, stacked-column, 100pct-stacked-column, bar, stacked-bar, 100pct-stacked-bar, line, line-with-markers, stacked-line, stacked-line-with-markers, area, stacked-area, 100pct-stacked-area, pie, doughnut, scatter, radar, radar-with-markers, filled-radar, treemap, histogram, pareto, box-and-whisker, waterfall, funnel, world, column-no-options, line-string-numbers, histogram-lone-column): no chart draws a panel, the scheme series are softened, line charts name their series at
 // the line ends, a pie names its slices, the value axis has at most six intervals and nominal categories have no last-point emphasis.
+// LH wave 7: LH-94 holds neighboring series 11 L* apart (separateNeighbors), which moves a series color of the pie (was
+// 6e06a71f...), the doughnut (was 379c218a...) and the treemap (was 729597f6...); every other digest is unchanged.
 const REVIEWED_SVG_DIGESTS = {
   'column': '9e0ac4ac35219f397723d0a0',
   'stacked-column': '22c1bb68ee1f45037f081ace',
@@ -73,13 +75,13 @@ const REVIEWED_SVG_DIGESTS = {
   'area': '391947ba99026266aba0363f',
   'stacked-area': 'ee70e43245edd39049546328',
   '100pct-stacked-area': '390a1812bfeac2b5c53de0e1',
-  'pie': '6e06a71f6638738bd7f6027a',
-  'doughnut': '379c218a8fdb06dec452c64e',
+  'pie': '2dd37f8451ec0eb2f9813714',
+  'doughnut': 'f11809c870197d9502bf6e62',
   'scatter': '34cec85e0c78ae9fa4d1459e',
   'radar': '876dbceb52d191c557e36b3c',
   'radar-with-markers': '75e47461799584b0ba652d69',
   'filled-radar': '3f929717f9aaa20fc2a10060',
-  'treemap': '729597f6c737855962a8ef3a',
+  'treemap': 'd73891c0d6e3f31848317ce8',
   'histogram': 'd53e45060a24e75965e468ea',
   'pareto': '4882241d769e6ea7fd8b7606',
   'box-and-whisker': '8a6324792766fc047f85cd59',

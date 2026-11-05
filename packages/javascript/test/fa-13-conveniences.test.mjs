@@ -154,7 +154,8 @@ test('a code run takes the code family; its own fontFamily wins; lang reaches th
 
 test('composeSlide measures an inline code run in the design code font', () => {
   const slide = { title: 'T', text: ['Run ', { text: 'pnpm install', code: true }] };
-  const composed = composeSlide(slide, { width: 1280, height: 720, fontFamilies: { heading: 'Aptos Display', body: 'Aptos', code: 'Consolas' } });
+  // Without fill: LH-09 would draw this short lone text as a display message, in the heading face.
+  const composed = composeSlide(slide, { width: 1280, height: 720, fill: false, fontFamilies: { heading: 'Aptos Display', body: 'Aptos', code: 'Consolas' } });
   const text = composed.items.find((item) => item.field === 'text');
   const fragments = text.text.richLines.flatMap((line) => line.fragments);
   assert.equal(fragments.find((fragment) => fragment.text === 'pnpm install').style.fontFamily, 'Consolas');

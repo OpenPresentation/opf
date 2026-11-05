@@ -259,6 +259,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
 | [`opf/unused-dataset`](#opfunused-dataset) | References | warning | structure | A dataset is never used. |
+| [`opf/icon-unknown`](#opficon-unknown) | References | warning | structure | An icon names a set or an icon that does not exist. |
+| [`opf/icon-invalid`](#opficon-invalid) | References | warning | structure | The SVG of an icon cannot be drawn as an icon. |
 | [`opf/unknown-beat`](#opfunknown-beat) | References | warning | structure | A slide names a beat its narrative does not define. |
 | [`opf/slide-theme-dimensions`](#opfslide-theme-dimensions) | References | warning | structure | A slide theme sets a slide size that differs from the deck. |
 | [`opf/variable-unknown`](#opfvariable-unknown) | References | warning | structure | A `{{token}}` names a variable that is not declared. |
@@ -287,6 +289,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/region-kind`](#opfregion-kind) | Layout | warning | composition | A block is pinned to a region that does not accept its kind. |
 | [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
+| [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
@@ -380,7 +383,7 @@ Default severity: **error**. Cost: structure. A caption is on a payload that can
 
 Default severity: **error**. Cost: structure. An image option is on a payload that is not an image.
 
-**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`) and `placement` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
+**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -602,6 +605,24 @@ Default severity: **warning**. Cost: structure. A reference is never cited.
 Default severity: **warning**. Cost: structure. A dataset is never used.
 
 **Why.** A dataset no chart or table references is not drawn anywhere.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/icon-unknown`
+
+Default severity: **warning**. Cost: structure. An icon names a set or an icon that does not exist.
+
+**Why.** An `icon` is "<set>:<name>" (a set the document embeds or a registered catalog defines, such as lucide and tabler of the gallery), a name of the `icons` of the deck, or an SVG source. One that resolves nowhere is not drawn: the entry, metric or group keeps its text and has no chip.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+**Approximations.** A set a host registers as a loader is checked once it is loaded (ensureIcons): the CLI, the MCP and the Node file API load the sets a deck names before they validate it; the synchronous validate alone checks only the set ids and the sets the document embeds. Suggestions are the nearest names of the set (or of the icons of the deck).
+
+### `opf/icon-invalid`
+
+Default severity: **warning**. Cost: structure. The SVG of an icon cannot be drawn as an icon.
+
+**Why.** The SVG of an icon is read, never run: a script, an event handler, an external reference (an href or url() that is not a fragment) or a raster image makes it unusable, as does SVG text that is not well formed or has no size. It is not drawn.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -865,6 +886,12 @@ Default severity: **warning**. Cost: composition. A block is pinned to a region 
 Default severity: **warning**. Cost: composition. No region of the layout has room for a block.
 
 **Why.** Content is never dropped: a block no region has room for is drawn in the layout's overflow region beyond its max (or below the grid), where it crowds the others. Paginate moves it to a continuation slide with the same layout.
+
+### `opf/icon-dropped`
+
+Default severity: **warning**. Cost: composition. An icon is not drawn.
+
+**Why.** An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.
 
 ### `opf/furniture-wraps`
 

@@ -7,6 +7,7 @@ import { type ExplainDetail, ex } from "./finding-text-explain-util.js";
 const NARRATIVE = { name: "Arc", beats: [{ id: "hook", name: "Hook" }, { id: "proof", name: "Proof" }] };
 const GALLERY_LAYOUT = { name: "Mine", regions: [{ name: "title" }] };
 const DATA = { columns: ["Quarter", "Revenue"], rows: [["Q1", 12]] };
+const ICON_SET = { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } };
 
 export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   "opf/run-color-unrecognized": ex(
@@ -68,6 +69,16 @@ export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     "Cite the reference from a text, bullet or list item, or remove it. Nothing is drawn for a reference nobody cites.",
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: "Up 12%" }] },
     { references: [{ id: "gartner", text: "Gartner, 2026" }], slides: [{ title: "Market", text: [{ text: "Up 12%", cite: "gartner" }] }] },
+  ),
+  "opf/icon-unknown": ex(
+    "Use an icon the set has (search_icons finds names by keyword), add the name to the deck's `icons`, or remove the icon.",
+    { catalogs: { custom: { iconSets: { brand: ICON_SET } } }, slides: [{ title: "Why us", items: [{ text: "Rated first", icon: "brand:stra" }] }] },
+    { catalogs: { custom: { iconSets: { brand: ICON_SET } } }, slides: [{ title: "Why us", items: [{ text: "Rated first", icon: "brand:star" }] }] },
+  ),
+  "opf/icon-invalid": ex(
+    "Keep only shapes in the icon's SVG, with no script, event handler, external reference or raster.",
+    { icons: { mark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><image href="https://example.com/a.png" width="24" height="24"/></svg>' }, slides: [{ title: "Why us", items: [{ text: "Rated first", icon: "mark" }] }] },
+    { icons: { mark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>' }, slides: [{ title: "Why us", items: [{ text: "Rated first", icon: "mark" }] }] },
   ),
   "opf/unused-dataset": ex(
     "Point a chart or table at the dataset with `dataset`, or remove it.",

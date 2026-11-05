@@ -2,28 +2,28 @@
   "deck": "gallery/business-functions/scope-3-reporting-readiness.opf.json",
   "entries": {
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#0": {
-      "sha256": "741e355915cc8f03fe90a2cbe7a7431a276d488107f00742e699e2d0bc511625",
-      "bytes": 7145
+      "sha256": "2065d44ae950a9317d7b54ba1aae37ce35c65baa62d23eebbf75d20593f552ed",
+      "bytes": 7243
     },
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#1": {
-      "sha256": "5b088d6467ed373dc893e89be9d23642a7fc73248274358b029a5e82717da778",
-      "bytes": 10962
+      "sha256": "a0b8ff430262c8ee9ff49ffda53f0840df621a0b09f4b35e37082e60bcdbcd3a",
+      "bytes": 11033
     },
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#2": {
-      "sha256": "2de50c6ac5f30651f505974e89b45956896c39b4f1d0425c5978feb8bb8e28f4",
-      "bytes": 9552
+      "sha256": "d1c815b419ffc22964e21af88c77ae630ea6c5a84ce275d4e00eec5a498b235e",
+      "bytes": 9405
     },
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#3": {
-      "sha256": "1a592deede9a12a6204f737833d6e68609dfbd580f6b53f8e2fda12f925eee2d",
-      "bytes": 8156
+      "sha256": "639a8da96bc60a4a49f0e3322df4c3673f8233eacd3d4064e20d057b5bf4edb4",
+      "bytes": 8273
     },
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#4": {
-      "sha256": "6d76cb26220db5186ad2e5599e098e3e479a5dd90e56e2fa402dc97dbbd0486a",
-      "bytes": 11827
+      "sha256": "bf8ea9116feae712e83eda04720928c40d70e957a33fad68c1e24ffc0b1be79a",
+      "bytes": 11573
     },
     "gallery/business-functions/scope-3-reporting-readiness.opf.json#5": {
-      "sha256": "111e8331fa199bbf477ae79a618a0efcac0a8566cd78376b31085e4a6f8517d9",
-      "bytes": 8563
+      "sha256": "f5a07815babd9d915080545609fb757d9ef438f4638c233163e05da94951d560",
+      "bytes": 8613
     }
   }
 }

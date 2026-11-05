@@ -33,6 +33,8 @@ const deck = () => ({
     overlay: { color: "dark1", opacity: 0.4, edge: "bottom", size: 0.25 },
     aspectRatio: 1.5,
     placement: { edge: "right", size: 0.45 },
+    // LH-132: how a person's picture is drawn in a team (it changes nothing on a lone picture).
+    portrait: "side",
   };
   assert.deepEqual(Object.keys(fields).sort(), [...IMAGE_TREATMENT_FIELDS].sort());
   const change = setImageTreatment(editor, "slides.0.blocks.0", fields);
@@ -107,7 +109,7 @@ const deck = () => ({
   setBackground(editor, spec);
   assert.deepEqual(editor.get("design.background"), spec);
   setBackground(editor, { type: "image", src: "asset:photo", fit: "tile" }, { slideIndex: 1 });
-  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
+  assert.deepEqual(readBackground(editor.presentation, { slideIndex: 1 }), { type: "image", opacity: undefined, src: "asset:photo", alt: undefined, fit: "tile", focus: undefined, recolor: undefined, overlay: undefined, textPlacement: undefined, scope: "slide", value: { type: "image", src: "asset:photo", fit: "tile" } });
   const deckState = readBackground(editor.presentation);
   assert.equal(deckState.alt, "Ships at dawn");
   assert.deepEqual(deckState.focus, { x: 0.5, y: 0.7 });

@@ -2,44 +2,44 @@
   "deck": "gallery/business-functions/strategy-offsite-pre-read.opf.json",
   "entries": {
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#0": {
-      "sha256": "89cc451c673e1dd414468b4e12e93a28665f962147e4523d7d5a9f1927cd4fd2",
-      "bytes": 17745
+      "sha256": "a879432014bc2c8b93fb14b12656abb9429ddb3e5929a3d26beb237dce554ede",
+      "bytes": 17895
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#1": {
-      "sha256": "f5b7dd47a54d3c17814f64aeacc63727a8fe089e56f323cf3f5655b89c35a6fa",
-      "bytes": 25140
+      "sha256": "598775b63f7a2c44f7166fbb68ea04848e1db71f9be8f44b35555657948f455f",
+      "bytes": 24889
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#2": {
-      "sha256": "dc23cc7d5ffcba35386dc1295de91aceb3c61edd4b5d426f3140123a8d81e4c4",
-      "bytes": 9769
+      "sha256": "520aa42000dd581408d8dae4be889180362e921da951f2089ef9f256c9c3d679",
+      "bytes": 9998
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#3": {
-      "sha256": "9d737ddb047d1791826a099c6510bb81a10e3d9102a8a901c9a46bbcfc26f703",
-      "bytes": 17222
+      "sha256": "526b1d4fc2d01a1349421da86a090c6b4dccd1d5475a117261df5515d01bb244",
+      "bytes": 17282
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#4": {
-      "sha256": "ef5edd642cb83fac75b0465de8f88571025b750821bc35bdb5f4a16270098401",
-      "bytes": 23547
+      "sha256": "c54b07178690fb9ab5326eb60f4ca384c56be40d179236ff8a8c900ab5eda877",
+      "bytes": 23850
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#5": {
-      "sha256": "85e061c6f45bbedd1bc3f217c6443260c11862bcf40a98fa942c2e5e3afc57c4",
-      "bytes": 28279
+      "sha256": "114487e06608b820d10116ceef3164cac10b96b3759b0d943f1e9d7c6fb45b4b",
+      "bytes": 28016
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#6": {
-      "sha256": "96b13cd97748ab8257928d12f2ef70369faa055e15ac14f871e10f03d86edd71",
-      "bytes": 21319
+      "sha256": "5eb3ebb5341aca74954d7d5b63b39ce717f29f23da3df18dac48ba5b33bc23e3",
+      "bytes": 21395
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#7": {
-      "sha256": "e7dfb8e0b031e7d9cb55854e978c87704ed2bc57e2020e70ed837da87fa8df62",
-      "bytes": 9273
+      "sha256": "b470bc627cc2cccb6835e7f73ef6a063f64d23c0593a459bfcbf841db4b6cf99",
+      "bytes": 9705
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#8": {
-      "sha256": "cfdcbdc2c76354cd15c6aba28c37c50a77aa1a26d99f388892db6c828c5b66e3",
-      "bytes": 12947
+      "sha256": "1d19d4bc69044bc52729722e53507df374ed08dc55873b50bbd7a5acf369ef51",
+      "bytes": 13223
     },
     "gallery/business-functions/strategy-offsite-pre-read.opf.json#9": {
-      "sha256": "96be18b0d0895513221dd62f320c1ea4dcc94e223ac7b1f178374166ea84dd2b",
-      "bytes": 23582
+      "sha256": "67acc80027e340859b926ece9d391b0d94f078a19f20486322680bb077673bb7",
+      "bytes": 23973
     }
   }
 }

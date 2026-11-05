@@ -2,28 +2,28 @@
   "deck": "gallery/business-functions/defect-escape-reduction-review.opf.json",
   "entries": {
     "gallery/business-functions/defect-escape-reduction-review.opf.json#0": {
-      "sha256": "62f30a8a04a7fdc78f8388e78df7ea1f218c9fc99e32f7e7a52a8e3727cd3a8f",
-      "bytes": 8030
+      "sha256": "2f9c78c876078acdd879da4e7e638868161d5b79aeec79a0b5cb91327fe63762",
+      "bytes": 8084
     },
     "gallery/business-functions/defect-escape-reduction-review.opf.json#1": {
-      "sha256": "68a6f068830e59ca5ea0dd25bb395d8b3a2b2ed4b73d1f32380b72a3a105d25e",
-      "bytes": 12487
+      "sha256": "4843333ba4b7f411832ea2516b22699cbada774431b0753617f3d82032c70ddf",
+      "bytes": 12248
     },
     "gallery/business-functions/defect-escape-reduction-review.opf.json#2": {
-      "sha256": "480b012b20e083b1aa01432913983037c6778bde2ec3020a9d335b5e10632cd7",
-      "bytes": 9895
+      "sha256": "8f3bb7b48a2774ec88d59184fe6d0d97cca35384b6177fdef5f428f5e30e239c",
+      "bytes": 9693
     },
     "gallery/business-functions/defect-escape-reduction-review.opf.json#3": {
-      "sha256": "234b652847a2deff140b4e20c9ea59e32c288b9e59f6ccfb915f154123ec7bc5",
-      "bytes": 9446
+      "sha256": "edc54978ccaf6e46a847fb7e31d8c59a87425f37f80b7a69d62cda96389dd2c8",
+      "bytes": 9586
     },
     "gallery/business-functions/defect-escape-reduction-review.opf.json#4": {
-      "sha256": "561abde9102bf2d18871e70b37c0580ddabf6b321e3a9d95976f041fa8592aaf",
-      "bytes": 11590
+      "sha256": "6db0e068e95fc2899618030318c59e372b7688cbdb9b570a450a77a06adfe144",
+      "bytes": 11838
     },
     "gallery/business-functions/defect-escape-reduction-review.opf.json#5": {
-      "sha256": "56cda4369f9dfd3003e56fa37e90ca201cad77cfecaf18703fe02bafe4dafa1f",
-      "bytes": 9492
+      "sha256": "0548a354b616d114377399e5664d089898ec12f9d15b21619a173ad6d9a4f607",
+      "bytes": 9676
     }
   }
 }

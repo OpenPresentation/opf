@@ -19,7 +19,7 @@ import {CHARTEX_NAMESPACES, chartTypeFromChartex} from './chart-types.js';
 import {chartOptionsFromChartex} from './chart-options.js';
 import {formattedColumns} from './chart-data.js';
 import {insideLabelColor} from './chart-fallback.js';
-import {waterfallSignedFormat, waterfallSteps} from '@openpresentation/opf/composition';
+import {groupsDataRange, GROUPED_LABEL_CODE, waterfallSignedFormat, waterfallSteps} from '@openpresentation/opf/composition';
 
 const NS = Object.freeze({
   a: 'http://schemas.openxmlformats.org/drawingml/2006/main',
@@ -137,8 +137,9 @@ const CX_POSITION = Object.freeze({center: 'ctr', 'inside-end': 'inEnd', 'inside
 
 // RR-35: an explicit dataLabels option writes the selected content, position and separator for every construct that takes it;
 // `dataLabels: false` removes the labels a treemap or funnel carries by default. Without the option the defaults are unchanged.
-// RR-54: a value label of a series with a number format (not a binned construct, whose labels are counts) shows it.
-const labelFormat = (spec, code) => code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+// RR-54: a value label of a series with a number format shows it. A binned construct's labels are counts, which carry no format of the column.
+// LH-153: `code` is the label's code (chartexPartXml's `labelCodes`): the column's format, else `#,##0` for a series that groups its thousands.
+const labelFormat = (spec, code) => code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
 
 function dataLabels(spec, text, options, code, points = '') {
   if (options?.dataLabelsOff) return '';
@@ -152,6 +153,15 @@ function dataLabels(spec, text, options, code, points = '') {
   if (spec.layoutId === 'treemap') return `<cx:dataLabels pos="ctr">${text}<cx:visibility seriesName="0" categoryName="1" value="0"/>${points}</cx:dataLabels>`;
   if (spec.layoutId === 'funnel') return `<cx:dataLabels pos="ctr">${labelFormat(spec, code)}${text}<cx:visibility seriesName="0" categoryName="0" value="1"/>${points}</cx:dataLabels>`;
   return '';
+}
+
+// LH-153: the values a waterfall's axis spans: each step's start and end on the running total (none when the total leaves the finite range).
+function waterfallExtents(values) {
+  try {
+    return waterfallSteps(values.map(value => value === null || value === undefined || !Number.isFinite(value) ? null : value)).flatMap(step => [step.from, step.to]);
+  } catch {
+    return [];
+  }
 }
 
 // LH-59: the rows of a waterfall's plotted column that are totals (none when the running total leaves the finite range).
@@ -196,7 +206,8 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = 
   const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${text}</cx:axis>`;
   if (spec.layoutId === 'funnel') return `${category}<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${text}</cx:axis>`;
   // RR-54: the value axis shows the first series' number format (none when that series has none) (CT_Axis: numFmt follows tickLabels); a binned axis counts.
-  const numberFormat = code === undefined || spec.binning ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
+  // LH-153: `code` is chartexPartXml's `axisCode`: the first series' format, else `#,##0` where the axis groups its thousands (a binned axis counts).
+  const numberFormat = code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
   // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
   const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1"><cx:valScaling/>${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
   const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
@@ -265,9 +276,18 @@ function chartexCaption(caption, {labelColor, font, textSize, rtl}) {
     `<a:p><a:pPr algn="${rtl ? 'r' : 'l'}"><a:defRPr ${props}>${fill}</a:defRPr></a:pPr><a:r><a:rPr lang="en-US" ${props}>${fill}</a:rPr><a:t>${escapeXml(caption)}</a:t></a:r></a:p></cx:rich></cx:tx></cx:title>`;
 }
 
-export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], waterfall, rtl = false}) {
+export function chartexPartXml({spec, series, hasCategories, number, workbookRelId, fill, labelColor, markLabelColor, markLabelBackground, gridColor, font, palette, textSize, options, formats = [], groups = [], waterfall, rtl = false}) {
   // LH-107: core's waterfall layer applies to the native waterfall only.
   if (spec.layoutId !== 'waterfall') waterfall = undefined;
+  // LH-153: the number format of each series' value labels and of the value axis, where the author wrote none: `#,##0` for a series that groups
+  // its thousands (`groups`, core's rule: whole numbers, one of four digits) and for an axis whose plotted values do (core `groupsDataRange`,
+  // decided from the data because PowerPoint picks its own ticks; the preview decides the same way). A histogram or Pareto chart of a lone value
+  // column plots bin counts, which are always whole numbers and carry no format of the column. A binned construct keeps ignoring a column format.
+  const counts = spec.binning === true && !hasCategories;
+  const labelCodes = series.map((_, index) => spec.binning ? (counts || (formats[index] === undefined && groups[index]) ? GROUPED_LABEL_CODE : undefined) : formats[index] ?? (groups[index] ? GROUPED_LABEL_CODE : undefined));
+  const extents = spec.layoutId === 'waterfall' ? waterfallExtents(series[0].values) : series.flatMap(entry => entry.values);
+  const axisCode = spec.binning ? (counts || (formats[0] === undefined && groupsDataRange(extents, {zeroBased: true})) ? GROUPED_LABEL_CODE : undefined)
+    : formats[0] ?? (groupsDataRange(extents, {zeroBased: spec.layoutId !== 'boxWhisker'}) ? GROUPED_LABEL_CODE : undefined);
   const rows = series[0].labels.length;
   const range = (letter) => `Sheet1!$${letter}$2:$${letter}$${rows + 1}`;
   const categories = hasCategories
@@ -292,7 +312,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
     const inside = insideLabels(spec, entry, color, {palette, markLabelColor, markLabelBackground, font, textSize, options});
     return `<cx:series layoutId="${spec.owner ?? spec.layoutId}" uniqueId="${seriesUniqueId(number, index)}">` +
       `<cx:tx><cx:txData><cx:f>Sheet1!$${letter}$1</cx:f><cx:v>${escapeXml(entry.name)}</cx:v></cx:txData></cx:tx>` +
-      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${waterfall?.labels && !options?.dataLabels && !options?.dataLabelsOff ? waterfallLabels(waterfall, entry, {labelColor: markLabelColor ?? labelColor, font, textSize, code: formats[index]}) : dataLabels(spec, inside?.text ?? text, options, formats[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
+      `<cx:spPr>${solidFill(color)}${line}</cx:spPr>${pointFills}${waterfall?.labels && !options?.dataLabels && !options?.dataLabelsOff ? waterfallLabels(waterfall, entry, {labelColor: markLabelColor ?? labelColor, font, textSize, code: labelCodes[index]}) : dataLabels(spec, inside?.text ?? text, options, labelCodes[index], inside?.points)}<cx:dataId val="${index}"/>${layoutProperties(spec, entry, hasCategories)}` +
       (spec.axes ? '<cx:axisId val="0"/><cx:axisId val="1"/>' : '') + '</cx:series>';
   });
   if (spec.owner) {
@@ -308,7 +328,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, formats[0], waterfall?.valueAxis === false)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';

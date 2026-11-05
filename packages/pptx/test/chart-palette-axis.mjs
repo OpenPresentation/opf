@@ -27,8 +27,8 @@ let checked = 0;
   const found = fills(xml);
   assert.equal(found.length, 8);
   // On the light panel the accents with 3:1 contrast keep their colour and are theme colours; accent3 (#27AE60) and accent5 need a darker
-  // shade there, which is sRGB.
-  assert.deepEqual(found.slice(0, 6).map((fill) => (/^accent\d$/.test(fill) ? fill : 'srgb')), ['accent1', 'accent2', 'srgb', 'accent4', 'srgb', 'accent6']);
+  // shade there, which is sRGB. LH-94: accent2 stands 11 L* from accent1 only moved, so it is sRGB too.
+  assert.deepEqual(found.slice(0, 6).map((fill) => (/^accent\d$/.test(fill) ? fill : 'srgb')), ['accent1', 'srgb', 'srgb', 'accent4', 'srgb', 'accent6']);
   for (const fill of found) assert.match(fill, /^(?:accent\d|[0-9A-F]{6})$/);
   assert.ok(!found.includes('2874A6'), 'the cool-horizon palette is gone');
   assert.ok(found.slice(6).every((fill) => /^[0-9A-F]{6}$/.test(fill)), 'tints are sRGB');
