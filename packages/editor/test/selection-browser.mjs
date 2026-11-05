@@ -34,7 +34,8 @@ try {
     const design = {fontScheme: 'roboto', dimensions: {widthInches: dimensions.width / 96, heightInches: dimensions.height / 96}};
     for (const [name, deck] of [
       ['cover', {design, slides: [{title: 'Hi', subtitle: 'Short'}]}],
-      ['content', {design, slides: [{title: 'Hi', text: 'Body text is short.'}]}],
+      // LH-09: a lone short text is a display message whose box hugs its lines, so the body text shares the slide with a list.
+      ['content', {design, slides: [{title: 'Hi', text: 'Body text is short.', items: ['First point', 'Second point']}]}],
     ]) {
       await page.evaluate((args) => mountSelection(args), {deck, faces});
       for (const field of ['title', name === 'cover' ? 'subtitle' : 'text']) {
