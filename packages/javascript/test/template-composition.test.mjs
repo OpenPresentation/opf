@@ -339,7 +339,10 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const placements = [{ edge: 'left', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
-      const kept = { ...record, regions: keepAll(record.regions) };
+      // Wave 7 (LH-09 with LH-155): a record with a primary or secondary region (the statement) is laid out as its filled slides draw it, which
+      // carry no title rule, so this slide without a body is compared without the rule too.
+      const filledRule = record.regions.some((region) => region.role === 'primary' || region.role === 'secondary');
+      const kept = { ...record, regions: keepAll(record.regions).map((region) => (filledRule && region.rule ? (({ rule, ...rest }) => rest)(region) : region)) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       // `fill: false`: the placeholders hold the role sizes; LH-129 grows the headings of a slide whose headings are its message.
       const composed = composeSlide(slide, { layout: kept, presentation, fill: false });
