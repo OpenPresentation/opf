@@ -253,6 +253,8 @@ An `image`, `chart`, `table`, `video` or `diagram` payload takes a `caption`: a 
 
 Core composition reserves the caption band inside the block's region and shrinks the media by its height (`item.caption` carries the band, `item.box` is the media box); the preview and the PPTX export draw that band in the muted text colour at the caption size (0.6 of the body size, never under the readable floor). Captioned blocks are the only ones whose geometry changes. See [footnotes, citations and captions](footnotes-citations-captions.md).
 
+**Name and detail (LH-138).** A picture's caption that is one plain string with a colon and a space after one to six words and a detail after it ("Before: loose boxes, tape and paper") draws the words up to the first colon in bold and the detail in the regular weight, as Claude Design draws a pair of before and after pictures or a gallery of sites. A colon inside a word ("10:30", "https://") never splits, a caption written as `TextRun[]` stays as the author formatted it, and a chart, table, video or diagram caption is not split. The document is unchanged: core composes the caption as runs (`item.caption.text`), and the preview and the PowerPoint export draw them.
+
 ## Code
 
 Code-specific fields are grouped under `code`. A string value is shorthand for `code.source`; use object form when syntax highlighting or a file label matters. In object form, `source` is required. `language` colours the code in the preview and the PowerPoint export (comments, strings, numbers, keywords, names and types, in colours from the deck theme); an unknown language stays plain and the text is never changed. See [dynamic composition](dynamic-composition.md#preview-polish-shared-by-preview-and-export-rr-07) for the supported languages.

@@ -147,6 +147,13 @@ Over a picture background the group goes where the measured picture is calm unde
 [text on a picture](image-treatments.md#text-on-a-picture)); in a run that measured nothing, a `bottom` group is centered as
 before LH-130, keeping its start alignment, rule and eyebrow. Plain and variant backgrounds keep the low anchor.
 
+LH-155: the gallery `closing` takes the same treatment as a stacked record: its all-`auto` column has `anchor: "bottom"`, so the stack (the title
+under the accent rule, then the contact lines) stands at the foot of the content box at the start edge, as Claude Design sets a closing. The
+rule rides on the title (`rule: true`) and is a guarded rule (`title-rule`): where the stack has no room to spare, so that the rule
+would set the contact lines smaller, the slide has no rule. Over a picture background the low stack is placed by the same scores as a
+heading group (LH-158), as one group (title and contact lines) at the top, middle or foot of the content box, keeping its alignment and
+with no panel; `textPlacement` picks its anchor. In a run that measured nothing the stack is centered, as it was before.
+
 Such a title grows to display size by steps of the type scale (LH-129, up to 75 px). A title that fits one line at its role
 size may take a second line on the way (LH-130) when the two lines read as one balanced block: the shorter at least half the
 longer, and no line but the last ending in a one-letter word or an article. A title that already wraps keeps the breaks its
@@ -484,7 +491,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
+- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the

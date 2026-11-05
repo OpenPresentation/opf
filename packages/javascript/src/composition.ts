@@ -44,8 +44,8 @@ export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type T
 import {colorContrast,layoutVariantApplies,resolveColorRoles} from './color.js';
 import {pictureScrims,SCRIM_MARGIN,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance,type ScrimBox,type ScrimEdge} from './picture-scrim.js';
 export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,sampledWeight,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type PictureWeights,type ScrimEdge} from './picture-scrim.js';
-import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextPlacement} from './picture-text.js';
-export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextPlacement} from './picture-text.js';
+import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
+export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -4192,17 +4192,17 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * (`pair-rows`), and LH-07's step badges and flows of a `sequence` region (`step-badges`), whose badges take height the steps' text
  * might need, with LH-134's numerals of a few takeaways and an agenda's numbered rows (`numerals`), LH-149's half steps of the type scale
  * for fitted body text (`half-steps`), LH-135's pricing tiers as one card each (`tier-cards`), LH-136's one-word pillar titles at display
- * size over an accent rule (`pillar-words`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's
+ * size over an accent rule (`pillar-words`), LH-130's accent rule over a title that is the slide's message, held to a body that would lose its size to it (`title-rule`, LH-155), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's
  * delta pill (`delta-pill`) and check-mark tiles (`check-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -4221,7 +4221,7 @@ const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRul
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
  * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
  */
-const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start']);
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'title-rule']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
 /** LH-114: for a composition with a pull line, the size each pulled quote's body has without the guarded rules (trackQuality). */
 const PULL_SIZES = new WeakMap<SlideComposition, Map<string, number>>();
@@ -5145,6 +5145,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (rule && fields.includes('title') && !fields.includes('tag')) {
       const width = TITLE_RULE_SIZE.width * scale, ruleHeight = TITLE_RULE_SIZE.height * scale;
       const side = physicalAlignment(alignmentFor('title'), paragraphDirection(annotationText(slide.title), deckDirection));
+      fire('title-rule');
       groupRules.set(list, { x: side === 'left' ? x : side === 'right' ? x + areaWidth - width : x + (areaWidth - width) / 2, y: top, width, height: ruleHeight });
       top += ruleHeight + gap * 0.5;
     }
@@ -5382,7 +5383,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   for (const entry of placed) {
     const { host, hostPath, region, placement } = entry;
     let frameArea: LayoutBox = placement.inset ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
-    const caption = host.caption !== undefined && entry.block !== undefined ? layoutCaption(host.caption, roundBox(frameArea), `${hostPath}.caption`, annotationOptions) : undefined;
+    const caption = host.caption !== undefined && entry.block !== undefined ? layoutCaption(host.caption, roundBox(frameArea), `${hostPath}.caption`, { ...annotationOptions, nameDetail: true }) : undefined;
     if (caption) { frameArea = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
     const image = composeImage(host, hostPath, region, frameArea, imageContext(placement));
     const type = host.type ?? 'image';
@@ -5827,7 +5828,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return placed;
   };
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
-  const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
+  const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, node.field === 'image' ? { ...annotationOptions, nameDetail: true } : annotationOptions) : undefined;
   // The proportions of a picture an automatic composition shows whole (fit contain, no frame shape of its own) when core can read them.
   const wholePictureAspect = (node: Pending): number | undefined => {
     const host = node.host;
@@ -7371,7 +7372,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-129: no primary or secondary region holds a block and nothing sits below the grid, so the headings are the slide's message.
     // LH-130: only then does the title take the rule its region asks for: a display title's mark, which never costs a body its room.
     const headingsAlone = () => plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length;
-    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && headingsAlone());
+    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && headingsAlone() && ruleOn('title-rule'));
     const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - (groupRules.get(list)?.y ?? list[0]!.box.y) : 0;
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
@@ -7554,7 +7555,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     heights.reduce((y, size, row) => { rowY.push(size > 0 || !heights.slice(0, row).some(above => above > 0) ? y : y - gap); return size > 0 ? y + size + gap : y; }, 0);
     // A column of auto rows with an anchor (`template.stack`): the whole stack, headings included, sits in the leftover height.
     const stackUsed = heights.reduce((sum, size) => sum + size, 0) + gap * Math.max(0, heights.filter(size => size > 0).length - 1);
-    const stackShift = plan.stack === undefined ? 0 : Math.max(0, frame.height - stackUsed) * (plan.stack === 'middle' ? .5 : 1);
+    let stackShift = plan.stack === undefined ? 0 : Math.max(0, frame.height - stackUsed) * (plan.stack === 'middle' ? .5 : 1);
     // LH-48 (growBody, CENTER): a body under the headings whose rows all hug their content (auto rows) sits in the middle of the height
     // the headings leave, instead of at its top with the space below it empty.
     const firstBodyRow = Math.max(0, ...[...rects].filter(([name]) => name === 'title' || name === 'subtitle').map(([, rect]) => rect.row + rect.rowSpan));
@@ -7585,6 +7586,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // layout's own placement when it reads, else the best that reads, else the one the automatic scrim carries with the least opacity,
     // else the panel. The background's `textPlacement` picks one outright; an `overlay` key leaves no scrim and no panel. Without a
     // measurement a low group is centered, as wave 6 did (an estimated run cannot know the picture).
+    // LH-158: what the picture-text scores read (scorePictureText): the host's grid of the background picture, the picture's box, the text
+    // color, the automatic scrim's color (none under an `overlay` key), the author's overlay (a literal color, each gray seen through it) and
+    // the scrim's margin; undefined when the picture is not measured (an estimated run), recolored or faded, or a color is not literal.
+    const pictureInput = (background: ComposedBackgroundImage, keyed: boolean): Omit<PictureTextInput, 'places' | 'panel'> | undefined => {
+      const grid = !background.recolor && !(background.opacity !== undefined && background.opacity < 1) ? options.pictureLuminance?.(background.src) : undefined;
+      const roles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+      const hex = (value: unknown) => typeof value === 'string' && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value) ? value.slice(0, 7) : undefined;
+      const picture = background.picture?.image ?? { x: 0, y: 0, width, height }, text = hex(roles.text), base = hex(roles.background);
+      if (!grid || !text || !base || !(picture.width > 0 && picture.height > 0)) return undefined;
+      const overlay = background.overlay, tint = hex(overlay?.color), raw = typeof overlay?.color === 'string' ? overlay.color : '';
+      const alpha = tint && overlay ? Math.max(0, Math.min(1, overlay.opacity * (raw.length === 9 ? Number.parseInt(raw.slice(7), 16) / 255 : 1))) : 0;
+      return { grid, picture, text, ...(keyed ? {} : { scrim: base }), ...(tint ? { overlay: { color: tint, alpha } } : {}), margin: SCRIM_MARGIN * scale };
+    };
     const onPicture = (name: 'title' | 'subtitle', fields: string[], cell: LayoutBox, authored: RegionAnchor): { list: ComposedItem[]; anchor: RegionAnchor; cell: LayoutBox } => {
       const background = backgroundImage!, own = alignmentFor(fields.includes('title') ? 'title' : fields[0]!), titled = name === 'title' && fields.includes('title');
       const preferred: PictureTextAlignment = own === 'center' ? 'center' : 'start', side = own === 'center' ? 'left' : own, left = !flip;
@@ -7611,10 +7625,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         }
       }
       const full = variants[0]!, keyed = OVERLAY_KEYED.has(background), explicit = titled ? background.textPlacement : undefined;
-      const grid = !background.recolor && !(background.opacity !== undefined && background.opacity < 1) ? options.pictureLuminance?.(background.src) : undefined;
+      const input = pictureInput(background, keyed);
       // The panel stands on the physical start side (mirrored in a right-to-left deck): the group start-aligned in its text column.
       let panel: Variant & { box: LayoutBox; edge: ScrimEdge } | undefined;
-      if (wide && !keyed && (grid || explicit === 'panel') && headingsAlone()) for (const share of PICTURE_PANEL_SHARES) {
+      if (wide && !keyed && (input || explicit === 'panel') && headingsAlone()) for (const share of PICTURE_PANEL_SHARES) {
         const column = share * width, textWidth = column - 2 * padding;
         if (textWidth <= 0) break;
         const placed = trial('start', left ? cell.x : cell.x + cell.width - textWidth, textWidth);
@@ -7623,13 +7637,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const factor = { top: 0, middle: .5, bottom: 1 } as const, anchors: PictureTextAnchor[] = ['top', 'middle', 'bottom'];
       const roomOf = (list: ComposedItem[]) => Math.max(0, cell.height - groupHeight(list));
       let candidates: PictureTextCandidate[] | undefined;
-      const roles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
-      const hex = (value: unknown) => typeof value === 'string' && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value) ? value.slice(0, 7) : undefined;
-      const picture = background.picture?.image ?? { x: 0, y: 0, width, height }, text = hex(roles.text), base = hex(roles.background);
-      if (grid && text && base && picture.width > 0 && picture.height > 0) {
-        // The author's overlay (a literal color) lies over the picture: each gray is seen through it.
-        const overlay = background.overlay, tint = hex(overlay?.color), raw = typeof overlay?.color === 'string' ? overlay.color : '';
-        const alpha = tint && overlay ? Math.max(0, Math.min(1, overlay.opacity * (raw.length === 9 ? Number.parseInt(raw.slice(7), 16) / 255 : 1))) : 0;
+      if (input) {
         const inkOf = (list: ComposedItem[], shift: number): ScrimBox => {
           // textInkBox reads the alignment as physical; a right-to-left paragraph's start is its right edge, so its ink is mirrored in the box.
           const boxes = list.filter(item => item.text).map(item => {
@@ -7641,7 +7649,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           return { x, y, width: Math.max(...boxes.map(box => box.x + box.width)) - x, height: Math.max(...boxes.map(box => box.y + box.height)) - y };
         };
         const places = variants.flatMap(({ alignment, cell: area, list }) => list.some(item => item.text) ? anchors.map(anchor => ({ anchor, alignment, measure: area.width, box: inkOf(list, roomOf(list) * factor[anchor]) })) : []);
-        if (places.length) candidates = scorePictureText({ grid, picture, text, ...(keyed ? {} : { scrim: base }), ...(tint ? { overlay: { color: tint, alpha } } : {}), places, margin: SCRIM_MARGIN * scale, ...(panel ? { panel: { box: panel.box, measure: panel.cell.width } } : {}) });
+        if (places.length) candidates = scorePictureText({ ...input, places, ...(panel ? { panel: { box: panel.box, measure: panel.cell.width } } : {}) });
       }
       const order = [...new Set<PictureTextAnchor>([authored, 'middle', ...anchors])];
       let choice: { placement: PictureTextPlacement; anchor: PictureTextAnchor; alignment: PictureTextAlignment; scrim: boolean; measure?: number } | undefined;
@@ -7665,6 +7673,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       };
       return { list: drawn.list, anchor: choice.anchor, cell: drawn.cell };
     };
+    // LH-155 with LH-158: a stack anchored low (the closing: its title, rule and contact lines) is one group over a picture background, and
+    // goes where the picture lets it read by the same scores as a cover's heading group: at the top, middle or foot of the content box, its
+    // band the stack's height across the box. It keeps its alignment and has no panel (the stack holds more than headings); the background's
+    // `textPlacement` picks the anchor outright. Unmeasured, a low stack is centered, as wave 6 centered a low heading group.
+    if (plan.stack === 'bottom' && backgroundImage && stackShift > 0) {
+      const background = backgroundImage, keyed = OVERLAY_KEYED.has(background), input = pictureInput(background, keyed), room = stackShift;
+      const alignment: PictureTextAlignment = alignmentFor('title') === 'center' ? 'center' : 'start', factor = { top: 0, middle: .5, bottom: 1 } as const;
+      const candidates = input && scorePictureText({ ...input, places: (['top', 'middle', 'bottom'] as const).map(anchor => ({ anchor, alignment, measure: frame.width, box: { x: frame.x, y: frame.y + room * factor[anchor], width: frame.width, height: stackUsed } })) });
+      const explicit = background.textPlacement && background.textPlacement !== 'panel' ? background.textPlacement.split('-')[0] as PictureTextAnchor : undefined;
+      const pick = explicit ? undefined : candidates && choosePictureText(candidates, { anchor: 'bottom', alignment }, ['bottom', 'middle', 'top']);
+      const anchor = explicit ?? pick?.candidate.anchor ?? 'middle', scored = candidates?.find(candidate => candidate.anchor === anchor);
+      stackShift = room * factor[anchor];
+      if (explicit || pick) pictureText = {
+        placement: `${anchor}-${alignment}`, anchor, alignment, source: explicit && background.textPlacement === `${anchor}-${alignment}` ? 'authored' : 'measured',
+        ...((explicit ? !keyed && !!scored && !scored.reads && (scored.scrim ?? 0) > 0 : pick!.scrim) ? { scrim: true as const } : {}), candidates: candidates ?? [],
+      };
+    }
     // Headings: centered vertically in their area unless every row the area spans is auto. LH-130: a heading region's own anchor
     // places the group in a sized area (`bottom` sets a cover's or section's display title low, as Claude Design does).
     const placeHeadings =(name: 'title' | 'subtitle', fields: string[]) => {
