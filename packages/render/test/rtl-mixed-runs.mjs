@@ -21,9 +21,10 @@ const deck = {
     {id: 'list', title: 'قائمة المهام',
       items: ['فتح الملف في PowerPoint 365 والتحقق من الخطوط', 'إطلاق الإصدار v2.0 في الربع الثالث', 'نشر الدليل على https://openpresentation.org', 'التحقق من اتجاه النص (RTL) في كل شريحة']},
     // WI-4: the paragraph's body is 28 px and wraps; the file name sits in a paragraph of its own so its run boundary stays on one line.
-    {id: 'tail', title: 'الملف', text: ['وراجع الملف ', {text: 'report-2026.pptx', bold: true}, ' المرفق.']},
+    // LH-09: a lone text of 25 words or fewer is a display message whose balanced lines may break at the boundary, so both texts run longer.
+    {id: 'tail', title: 'الملف', text: ['وراجع الملف ', {text: 'report-2026.pptx', bold: true}, ' المرفق قبل الاجتماع القادم، ثم أرسل ملاحظاتك إلى فريق المنتج حتى نتمكن من تحديث الخطة ومشاركة النسخة النهائية مع جميع الفرق المعنية في نهاية الأسبوع.']},
     // LH-48: the lone paragraph grows when it fills little of the body, so the link's run boundary also gets a paragraph of its own.
-    {id: 'link', title: 'الموقع', text: ['زر الموقع ', {text: 'https://openpresentation.org/docs', underline: true}, ' للمزيد.']},
+    {id: 'link', title: 'الموقع', text: ['زر الموقع ', {text: 'https://openpresentation.org/docs', underline: true}, ' للمزيد من التفاصيل حول الإصدار الجديد، واقرأ دليل البدء السريع قبل أن تبدأ العمل على العروض التقديمية الخاصة بفريقك في هذا الربع.']},
   ],
 };
 const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, renderOptions: {catalogs}});
