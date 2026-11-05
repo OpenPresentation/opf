@@ -7,15 +7,16 @@
     "Openers and closers"
   ],
   "design": {
-    "titleAlignment": "center",
-    "contentAlignment": "center",
+    "titleAlignment": "left",
+    "contentAlignment": "left",
     "variant": "surface"
   },
   "direction": "column",
   "anchor": "middle",
   "regions": [
     {
-      "name": "title"
+      "name": "title",
+      "rule": true
     },
     {
       "name": "message",

@@ -500,11 +500,18 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   stacked record) over no primary or secondary block, such as `cover`, `section` and `closing` or a slide with no body and no
   layout record, grows its title and subtitle by one, two or three steps of the type scale, each up to its display size
   (`HEADING_DISPLAY_SIZES`: title 75 px, subtitle 37; the tag is LH-32's eyebrow at its 22 px role size and keeps it); a
-  title over a primary block (a quote's, a statement's) keeps its size. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
+  title over a primary block (a quote's) keeps its size; a statement's title over its paragraph is LH-09's message below. A stacked record (`statement`, `quote`, `closing`) grows its body by the same steps: paragraphs and lists up to a list's
   display size, quotes by the scale's ratio on every role (`LONE_DISPLAY_SIZES`). The largest step is kept at which nothing
   overflows, every text is at least as large as at the step before, no heading takes another line or lands off the scale, every
   region keeps its arrangement and blocks, LH-06's band or pill stays, no block reads smaller under the guard, and the text covers
   at most 60% of the content box. The record's stack or centered title area places the larger text as it placed the smaller.
+- **Statements and short messages (LH-09, LH-69).** The `statement` record is start-aligned with LH-130's rule over its title.
+  A sentence title over a paragraph is the message: it grows to display size (75 px), the paragraph keeps its size. A metric, or a
+  text under a title of at most 4 words, is the message: the stack gives way, the title is the running head and the block fills the
+  body (LH-48, LH-101). A lone text of at most 25 words (`messageWords`, any script) grows on to 56 px (75 px at 4 words or fewer)
+  on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
+  label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
+  `statement-message` and `display-message`.
 - **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
   tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
   metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price

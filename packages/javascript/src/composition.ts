@@ -15,7 +15,7 @@ import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
-import {EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
+import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -3448,6 +3448,8 @@ export interface ListFitOptions extends RichTextOptions {
   display?:boolean;
   /** LH-136: the display word is at most this size in canvas pixels, so sibling pillars read at one word size (composition passes the smallest any of them fitted at). */
   displayMax?:number;
+  /** LH-69: the display word's rule is short (LIST_DISPLAY_SCALE em, the display word's own em) at the start edge, as LH-130's title rule, not across the box. */
+  displayRule?:'short';
   /**
    * LH-08: ruled rows (effective `design.listStyle: "rows"`): each first-level entry is a row, a hairline between two rows (`ListFit.rules`)
    * and LIST_ROWS_GAP em between them; no bullet (numbers stay). When every entry has a description and sits at the first level, the labels
@@ -3672,7 +3674,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       let displayText:RichTextFit|undefined;
       if(displayed){
         const thickness=fontSize*LIST_DISPLAY_RULE;
-        accentRules.push({x:box.x,y:y+thickness/2,width:box.width,thickness,accent:true});
+        const ruleWidth=options.displayRule==='short'?Math.min(box.width,fontSize*LIST_DISPLAY_SCALE):box.width;
+        accentRules.push({x:options.direction==='rtl'?box.x+box.width-ruleWidth:box.x,y:y+thickness/2,width:ruleWidth,thickness,accent:true});
         y+=thickness+fontSize*LIST_DISPLAY_GAP;textBox.y=y;
         const wordOptions={...options,style:{...style,fontWeight:700}},target=Math.min(fontSize*LIST_DISPLAY_SCALE,options.displayMax??Infinity),least=Math.min(fontSize*LIST_HEADING_SCALE,target);
         const wordAt=(size:number,area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize*LIST_DISPLAY_SCALE,wordOptions,minFontSize)(size);
@@ -4196,13 +4199,13 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * delta pill (`delta-pill`) and check-mark tiles (`check-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -4273,7 +4276,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   if (!start || start.fill >= LONE_FILL) return undefined;
   // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
-  if (isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined) return undefined;
+  if (stackedTemplate(options, result)) return undefined;
   const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
@@ -4518,6 +4521,61 @@ function guardedCompose(input: unknown, options: ComposeSlideOptions): SlideComp
   KEPT_RULES.set(figured, { rules: new Set([...used.rules, 'metric-figure']), seeds: used.seeds });
   return figured;
 }
+/** LH-09: a message of at most this many words (messageWords) is short: it is drawn at display size. LH-69: a text of at most SHORT_TEXT_WORDS is a lone label. */
+export const SHORT_MESSAGE_WORDS = 25, SHORT_TEXT_WORDS = 4;
+/** LH-09: a short message grows up to this display size; LH-69: a lone short text up to the display title's (HEADING_DISPLAY_SIZES.title). */
+export const MESSAGE_DISPLAY_SIZE = 56;
+/** LH-09: a message drawn at display size takes at most this many balanced lines. */
+export const MESSAGE_DISPLAY_LINES = 4;
+// LH-09: the words of a text in any language: its space-separated words, where a script written without spaces (Han, Kana, Thai, Lao,
+// Khmer, Myanmar) counts about two characters a word.
+const UNSPACED = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}]/gu;
+export function messageWords(value: unknown): number {
+  const text = annotationText(value).trim();
+  if (!text) return 0;
+  const unspaced = text.match(UNSPACED)?.length ?? 0, spaced = text.replace(UNSPACED, ' ').trim();
+  return (spaced ? spaced.split(/\s+/u).length : 0) + Math.ceil(unspaced / 2);
+}
+/**
+ * LH-09: how a stacked record with one primary region (the statement) sets a slide with one block. `title`: the title is the statement
+ * (a sentence over a paragraph, n27, n29), drawn at display size under LH-130's accent rule with the paragraph at its size below.
+ * `body`: the block is the message (a metric, n28, or a text under a title of at most SHORT_TEXT_WORDS words that only labels it), so
+ * the title is the running head at the top of the slide and the block fills the body as a lone block (statementTemplate). Undefined for
+ * any other slide: no body (the headings are the message, LH-129), a quote, several blocks, a subtitle. With no title the block is the message.
+ */
+function statementMessage(slide: Record<string, any>, plan: LayoutTemplate, fill = true): 'title' | 'body' | undefined {
+  if (plan.stack === undefined || plan.subtitle || plan.regions.length !== 1 || plan.regions[0]!.role !== 'primary') return undefined;
+  const title = annotationText(slide.title).trim();
+  if (annotationText(slide.subtitle).trim()) return undefined;
+  const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
+  const payloads: string[] = [];
+  for (const host of [slide, ...(Array.isArray(slide.blocks) ? slide.blocks.map(record) : [])]) {
+    if (host !== slide && !empty(host.blocks)) return undefined;
+    for (const field of fields) if (!empty(host[field])) payloads.push(field);
+  }
+  if (payloads.length !== 1) return undefined;
+  // A slide with no title has only its block to say: the block is the message.
+  const label = !title || messageWords(slide.title) <= SHORT_TEXT_WORDS && !/[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(title);
+  // With fill off nothing grows, so the stack stays as the record sets it.
+  return payloads[0] === 'metric' || (payloads[0] === 'text' && label) ? fill ? 'body' : undefined : payloads[0] === 'text' ? 'title' : undefined;
+}
+/**
+ * LH-09: the template a slide is composed with. A statement whose block is the message (statementMessage `body`) is composed as a
+ * content slide: the stack gives way, the title takes its auto row at the top and the message's row the rest of the body, where the
+ * lone block grows (fillLone), as Claude Design sets n28's runway figure under a small running head.
+ */
+function statementTemplate(plan: LayoutTemplate): LayoutTemplate {
+  const row = plan.areas.find(area => area.name === plan.regions[0]!.name)?.row;
+  if (row === undefined) return plan;
+  const { stack: _stack, ...rest } = plan;
+  return { ...rest, rows: plan.rows.map((size, index) => index === row ? 1 : size) };
+}
+/** LH-09: compositions whose statement record gave way to a content slide (statementTemplate): LH-48 and LH-102 treat them as one. */
+const STATEMENT_BODIES = new WeakSet<SlideComposition>();
+/** LH-09: compositions of a statement whose title is the message over its paragraph (statementMessage `title`, growTemplate). */
+const STATEMENT_TITLES = new WeakSet<SlideComposition>();
+/** Whether `result` was composed from a stacked record (statement, quote, closing) that kept its stack. */
+const stackedTemplate = (options: ComposeSlideOptions, result: SlideComposition): boolean => isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined && !STATEMENT_BODIES.has(result);
 /**
  * LH-129: LH-48's fill for the layout templates that set their message in the middle of the slide. A stacked record (statement, quote,
  * closing) grows its body: its paragraphs and lists one, two or three steps of the type scale larger (GROW, up to a list's display
@@ -4536,7 +4594,7 @@ const pictureReading = (composed: SlideComposition): string => {
 };
 function growTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || overflowCount(result) > 0) return undefined;
-  const stacked = isLayoutTemplate(options.layout) && layoutTemplate(options.layout).stack !== undefined, message = HEADING_MESSAGES.has(result);
+  const stacked = stackedTemplate(options, result), message = HEADING_MESSAGES.has(result);
   if (!stacked && !message) return undefined;
   // A body set at the readability floor is not short content.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
@@ -4549,15 +4607,16 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
   let best = result, bestText = start;
   const arrangement = (composed: SlideComposition) => (composed.regions ?? []).map(region => `${region.name}:${region.arrangement ?? '-'}:${region.content.join()}`).join(';');
   const proseSizes = (composed: SlideComposition) => new Set(composed.items.filter(item => !headings.has(item.field) && (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card')).map(item => item.text!.fontSize));
-  for (let steps = 1; steps <= 3; steps++) {
-    const grown = composeVariant(input, { ...options, ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) } as ComposeSlideOptions, before, floor);
-    if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) break;
+  // One step: true when it is kept.
+  const step = (extra: Record<symbol, number>): boolean => {
+    const grown = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
+    if (!grown || overflowCount(grown) > 0 || HEADINGS_OFF_SCALE.has(grown) || !readsAsWell(before, trackQuality(grown, options), floor) || shrinks(grown, best, options)) return false;
     // The record's structure stays: every region keeps its arrangement and blocks, and an emphasis surface (LH-06's band or pill) stays;
     // LH-158: so does how a heading group on a picture reads (on the bare picture, on the scrim or on the panel): a larger group may move to
     // another place that reads, but not from reading to a scrim or off its panel.
-    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape || pictureReading(grown) !== pictureReading(result)) break;
+    if (arrangement(grown) !== arrangement(result) || grown.emphasis?.path !== result.emphasis?.path || grown.emphasis?.shape !== result.emphasis?.shape || pictureReading(grown) !== pictureReading(result)) return false;
     // Paragraphs and lists that shared one size keep one size (LH-43): a long one that fits only a step lower holds the others there.
-    if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) break;
+    if (proseSizes(result).size <= 1 && proseSizes(grown).size > 1) return false;
     const text = textExtent(grown);
     const kept = [...bestText.sizes].every(([key, size]) => (text.sizes.get(key) ?? 0) >= size - FONT_GRID_EPSILON), larger = [...text.sizes].some(([key, size]) => size > (bestText.sizes.get(key) ?? Infinity) + FONT_GRID_EPSILON);
     // No heading takes more lines than at its role size, except LH-130's display title: a title that is the slide's message and fits one
@@ -4574,9 +4633,18 @@ function growTemplate(input: unknown, options: ComposeSlideOptions, result: Slid
     // step that keeps its breaks.
     // A title that LH-130 let take a second line keeps that break at the steps above it in the same way (bestText, not start).
     const rebroken = [...bestText.breaks].some(([key, words]) => words.includes('\n') && text.breaks.get(key) !== words);
-    if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) break;
+    if (!kept || !larger || wraps || rebroken || text.covered > LONE_TARGET * height || text.top < frameTop - 1 || text.bottom > frameBottom + 1) return false;
     best = grown; bestText = text;
-  }
+    return true;
+  };
+  // LH-09: a statement whose title is the message over its paragraph (statementMessage `title`) grows its body first, as any stacked record
+  // does, and then its title alone at that body step, so a title that stops at an early step (its breaks, LH-148) never holds the body
+  // below the size it reaches on its own.
+  if (STATEMENT_TITLES.has(result)) {
+    let body = 0;
+    for (let steps = 1; steps <= 3 && step({ [GROW]: steps }); steps++) body = steps;
+    for (let steps = 1; steps <= 3 && step({ [GROW]: body, [HEADING_STEPS]: steps }); steps++);
+  } else for (let steps = 1; steps <= 3 && step({ ...(stacked ? { [GROW]: steps } : {}), ...(message ? { [HEADING_STEPS]: steps } : {}) }); steps++);
   return best === result ? undefined : best;
 }
 /**
@@ -4616,7 +4684,7 @@ const CENTERED_FIELDS: ReadonlySet<string> = new Set(['text', 'items', 'bullets'
  * message, and blocks below the grid (a section's notes) are not a body.
  */
 function centerTemplate(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
-  if (options.fill === false || !result.regions || overflowCount(result) > 0 || !isLayoutTemplate(options.layout) || layoutTemplate(options.layout).stack !== undefined) return undefined;
+  if (options.fill === false || !result.regions || overflowCount(result) > 0 || !isLayoutTemplate(options.layout) || stackedTemplate(options, result)) return undefined;
   // LH-114 with LH-102: a body with a pull line is one stack with its data at the top of the body (as growBody leaves it), never centered.
   if (result.items.some(item => item.quoteLayout?.rule)) return undefined;
   const bled = new Set(result.regions.filter(region => region.bleed).map(region => region.name));
@@ -5002,7 +5070,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const rtl = deckDirection === 'rtl', textDirection = rtl ? 'rtl' as const : undefined;
   // OPF 0.19: a template record (areas and regions) composes through its regions; it is checked first, so an invalid
   // template is refused (OPFLayoutTemplateError) as validate reports it (opf/layout-template, opf/layout-region).
-  const template: LayoutTemplate | undefined = !recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
+  const recordTemplate: LayoutTemplate | undefined = !recomposing && isLayoutTemplate(layout) ? layoutTemplate(layout) : undefined;
+  // LH-09: a statement sets its title or its block as the message (statementMessage, the guarded rule `statement-message`).
+  const statement = recordTemplate && ruleOn('statement-message') ? statementMessage(slide, recordTemplate, options.fill !== false) : undefined;
+  if (statement) fire('statement-message');
+  const template = recordTemplate && statement === 'body' ? statementTemplate(recordTemplate) : recordTemplate;
   // One merge for every shared design key: slide design, then deck design (or the host's resolved deck values), then the theme's design, then the layout record's design.
   const hints = resolveDesignHints({ slide, layout, theme: { design: options.themeDesign }, presentation: options.presentation, slideIndex: options.slideIndex, deck: { titleAlignment: options.titleAlignment, contentAlignment: options.contentAlignment, contentBox: options.contentBox } });
   const hasCards = hints.contentBox ?? false;
@@ -5027,14 +5099,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-50: the paths of the text blocks drawn as the eyebrow of the text after them (eyebrowLabel), each with whether it is set in
   // capitals (eyebrowCaps). Filled when the body's blocks are grouped, before any of them is fitted.
   const eyebrowLabels = new Map<string, boolean>();
+  // LH-09, LH-69: the paths of the lone short texts drawn as a display message (fillLone) and of placed regions' short texts, their lines
+  // balanced; `displayFaces`: the placed regions' short texts, drawn as tile headings, in the heading face and bold.
+  const displayTexts = new Set<string>(), displayFaces = new Set<string>();
   const tagCaps = eyebrowCaps(annotationText(slide.tag));
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   // LH-32: an eyebrow (the tag, LH-50's label) is bold, and in capitals with EYEBROW_TRACKING where its script has case (eyebrowCaps).
   const styleFor = (field: string, path: string): TextStyle => {
-    const eyebrow = field === 'tag' || eyebrowLabels.has(path), caps = field === 'tag' ? tagCaps : eyebrowLabels.get(path) === true;
+    const eyebrow = field === 'tag' || eyebrowLabels.has(path), caps = field === 'tag' ? tagCaps : eyebrowLabels.get(path) === true, display = field === 'text' && displayFaces.has(path);
     return resolveTextStyle({
-      fontFamily: (field === "title" ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : eyebrow ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
-      fontWeight: field === "title" || eyebrow ? 700 : 400, path, ...(caps ? { caps: true, tracking: EYEBROW_TRACKING } : {}),
+      fontFamily: (field === "title" || display ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : eyebrow ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
+      fontWeight: field === "title" || eyebrow || display ? 700 : 400, path, ...(caps ? { caps: true, tracking: EYEBROW_TRACKING } : {}),
     }, options.textMeasurement);
   };
   const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
@@ -5065,10 +5140,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const citations = slideCitations(slide, options.slideIndex ?? 0, options.presentation);
   const citationMarker = citations ? (runPath: string) => citations.markers.get(runPath) : undefined;
   const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
-  const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
+  // LH-09: in a display message (a lone short text) the words the author set bold are its emphasis, drawn in the primary color, as Claude
+  // Design colors n29's second sentence, where the primary reads 4.5:1 on the slide; the text is unchanged (the fit's runs carry the
+  // color, which both engines draw, and a PowerPoint import restores the authored runs). Nothing is emphasized that the author did not
+  // mark. A title keeps its look: PowerPoint's heading import would read the color as authored.
+  const slideRoles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+  const emphasisReads = (colorContrast(slideRoles.primary, slideRoles.background) ?? 0) >= SCRIM_TARGET_CONTRAST;
+  const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !emphasisReads || !Array.isArray(value) || !(field === 'text' && displayTexts.has(fitPath)) ? value
+    : value.map(run => run && typeof run === 'object' && (run as { bold?: unknown }).bold === true && ((run as { color?: unknown }).color ?? '') === '' ? { ...run, color: 'primary' } : run);
+  const fitPlacedText = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
+    const value=displayEmphasis(field,authored,path);
     const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
     // WI-4 (P15): a wrapped title or subtitle is balanced (same size, same line count); body text keeps the greedy wrap.
-    const balance=field==='title'||field==='subtitle',textOptions=balance?{...richOptions(style),balance}:richOptions(style);
+    const balance=field==='title'||field==='subtitle'||(field==='text'&&displayTexts.has(path)),textOptions=balance?{...richOptions(style),balance}:richOptions(style);
     if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,textOptions):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection,balance);
     const alignment=explicitAlignment??alignmentFor(field);
     const richLayout=rich?richTextLayouter(value,box,size,textOptions,minimum):undefined;
@@ -5217,6 +5301,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // region asked for steps. Its other lists, and a slide whose badges the guard refused (NO_STEPS), may still be ruled.
   // LH-136: the lists drawn as display words (fitList's `display`), by path (pillarWords is filled once the slide's blocks are collected).
   const pillarWords = new Set<string>(), wordCaps = new Map<string, number>();
+  // LH-69: the display words that are a lone label (their rule is short, at the start edge).
+  const loneLabels = new Set<string>();
   // LH-134: the badge lists whose numbers draw as numerals beside ruled rows instead (composeTemplate): `row` for an agenda whose entries
   // all have descriptions, `display` for a lone numbered list of a few takeaways. LH-133: the one-question blocks of a region drawn as
   // ruled rows (pairRowLabels: the questions of the region, so their answers share one column) and those drawn as a grid under accent rules.
@@ -5232,7 +5318,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     : numeralLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),rows:true,numerals:numeralLists.get(path)!,...pairsOf(value, path)}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
     : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
-    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
+    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{}),...(loneLabels.has(path)?{displayRule:'short' as const}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
@@ -5592,6 +5678,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     ? regionsInReadingOrder.flatMap(key => collect(record(slide[key]), `${path}.${key}`).map(item => ({ ...item, region: regionParts(key) })))
     : Array.isArray(slide.blocks) ? slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || eyebrowBlocks.has(index) || (autoSurface && index === autoEmphasis?.block) || (pullItem && index === pullQuote?.block) ? [] : collect(record(block), `${path}.blocks.${index}`))
     : collect(placedRoot ? { ...slide, image: undefined } : slide, path);
+  // LH-69: a placed region (a slide key such as `top:left`) that holds one short text, at most SHORT_TEXT_WORDS words, holds a tile's
+  // heading ("Inputs", "Product", "Teams want fewer exports."): it is drawn as a heading, in the heading face and bold (displayFaces), as
+  // Claude Design heads those tiles (b07 s29, b08 s07, s18, s46). Only a plain string: rich text keeps the body face, where the runs its
+  // author set bold stay apart from the rest. The guarded rule `display-message`: the wider face never sets it smaller.
+  if (regions.length && ruleOn('display-message')) for (const key of regions) {
+    const units = pending.filter(node => node.path.startsWith(`${path}.${key}.`) || node.path === `${path}.${key}`);
+    if (units.length === 1 && !units[0]!.children && units[0]!.field === 'text' && units[0]!.caption === undefined && typeof units[0]!.value === 'string' && messageWords(units[0]!.value) <= SHORT_TEXT_WORDS) { displayTexts.add(units[0]!.path); displayFaces.add(units[0]!.path); fire('display-message'); }
+  }
   // LH-112: one or two metrics that share the body with one or two blocks of other kinds are drawn at display size (METRIC_DISPLAY_SIZES),
   // start-aligned with their column, as Claude Design draws a figure beside a chart, table, paragraph or picture. A lone metric (LH-48,
   // LH-101) and a grid of metrics alone keep their centered sizes; a scorecard tile keeps LH-68's.
@@ -5633,6 +5727,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const node of pending) pillarWords.add(node.path);
     fire('pillar-words');
   }
+  // LH-69: a body that is one list of one entry, a short label (at most SHORT_TEXT_WORDS words, isLabelText's length) with its
+  // description, is a name and what it says: the name is drawn as a display word over an accent rule (LH-136's drawing), as Claude
+  // Design sets "Sam Lee" over "Product lead" (b07 s25) and "Consistent measures" over its line (b07 s23). The guarded rule
+  // `display-message`; the word steps down to the one line its box holds, never under the heading size it had (LIST_HEADING_SCALE).
+  const loneLabel = (node: Pending): boolean => {
+    const entries = node.value, entry = Array.isArray(entries) && entries.length === 1 ? record(entries[0]) : undefined, text = annotationText(entry?.text).trim();
+    return !node.children && node.caption === undefined && (node.field === 'items' || node.field === 'bullets') && node.payload.numbering === undefined && entry !== undefined && entry.description !== undefined && (entry.level ?? 0) === 0
+      && text !== '' && messageWords(entry.text) <= SHORT_TEXT_WORDS && [...text].length <= EYEBROW_LABEL_CHARS && !/[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(text);
+  };
+  if (ruleOn('display-message') && options.fill !== false && pending.length === 1 && loneLabel(pending[0]!) && alignmentFor(pending[0]!.field) !== 'center') { pillarWords.add(pending[0]!.path); loneLabels.add(pending[0]!.path); fire('display-message'); }
   // LH-06: the one block or group drawn on the emphasis surface: the first `emphasis: true` in reading order. Any other is drawn plain,
   // and reported: a slide has one emphasis.
   const emphasisPaths: string[] = [];
@@ -6839,6 +6943,32 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         chosen = step; best = height; size = step;
       }
       if (chosen === undefined) proseGrowth.delete(node); else { proseGrowth.set(node, chosen); loneGrowth = true; }
+      // LH-09, LH-69: a lone text of at most SHORT_MESSAGE_WORDS words (messageWords) is the slide's message: it grows on with its lines
+      // balanced, up to MESSAGE_DISPLAY_SIZE in at most MESSAGE_DISPLAY_LINES lines, while it fills at most LONE_TARGET of the body, as Claude
+      // Design sets a short message (b09 s36, b06 s05); a text of at most SHORT_TEXT_WORDS words ("Ship in March") up to the display title's
+      // size. It stays in the body face: the words its author set bold still stand out (displayEmphasis), and a lone short text, which
+      // nearly every minimal deck has, loads no other face. It is kept only at a step above the size the plain text reached, so balanced
+      // lines never cost it a step (the guarded rule `display-message`).
+      // A text that cites or carries a footnote is evidence, set as body text: its markers belong to a paragraph, not a display line.
+      const cited = Array.isArray(node.value) && node.value.some(run => run && typeof run === 'object' && ((run as { cite?: unknown }).cite !== undefined || (run as { footnote?: unknown }).footnote !== undefined));
+      const words = node.field === 'text' && !cited ? messageWords(node.value) : Infinity;
+      if (words <= SHORT_MESSAGE_WORDS && ruleOn('display-message')) {
+        const reached = chosen ?? start, cap = (words <= SHORT_TEXT_WORDS ? HEADING_DISPLAY_SIZES.title : MESSAGE_DISPLAY_SIZE) * scale, plain = { growth: proseGrowth.get(node), best };
+        displayTexts.add(node.path);
+        let shown: number | undefined;
+        for (let size = reached; ; ) {
+          const step = scaleAbove(size, settings.minFontSize ?? 16);
+          if (step > cap + 1e-9 || step > capOf(settings) + FONT_GRID_EPSILON) break;
+          proseGrowth.set(node, step);
+          const height = need(), measure = proseMeasure(node, inner.width);
+          const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { ...inner, width: measure.width }, step, floor, node.path, node.payload.numbering);
+          const lines = 'richLines' in fit ? (fit as RichTextFit).richLines.length : fit.lines.length;
+          if (height > LONE_TARGET * inner.height || fit.overflow || fit.fontSize < step - 1e-9 || lines > MESSAGE_DISPLAY_LINES) break;
+          shown = step; best = height; size = step;
+        }
+        if (shown === undefined) { displayTexts.delete(node.path); if (plain.growth === undefined) proseGrowth.delete(node); else proseGrowth.set(node, plain.growth); best = plain.best; }
+        else { proseGrowth.set(node, shown); loneGrowth = true; fire('display-message'); }
+      }
       if (badgeLists.has(node.path)) best = need();
     } else {
       let chosen: number | undefined;
@@ -7372,7 +7502,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-129: no primary or secondary region holds a block and nothing sits below the grid, so the headings are the slide's message.
     // LH-130: only then does the title take the rule its region asks for: a display title's mark, which never costs a body its room.
     const headingsAlone = () => plan.regions.every(region => (region.role !== 'primary' && region.role !== 'secondary') || !unitsOf(region.name).length) && !belowUnits.length;
-    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && headingsAlone() && ruleOn('title-rule'));
+    const headingItemsAt = (fields: string[], x: number, y: number, areaWidth: number): ComposedItem[] => headingGroup(fields, x, y, areaWidth, fields.includes('title') ? titleMode : undefined, plan.titleRule === true && (headingsAlone() || statement === 'title') && ruleOn('title-rule'));
     const groupHeight = (list: ComposedItem[]) => list.length ? list.at(-1)!.box.y + list.at(-1)!.box.height - (groupRules.get(list)?.y ?? list[0]!.box.y) : 0;
     // The arrangement of a region's blocks: design.contentDirection makes every flowing region one row or one column;
     // otherwise the region's flow (`auto` is a grid unless a block is long; `none` with extra blocks flows as `auto`).
@@ -7702,7 +7832,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const room = Math.max(0, cell.height - groupHeight(list));
       const shift = sized ? room * (anchor === 'bottom' ? 1 : anchor === 'middle' ? .5 : 0) : 0;
       // LH-129: a title that stands free (in a sized area, or in a stack) over no primary or secondary block is the slide's message.
-      if (name === 'title' && list.some(item => item.field === 'title') && (sized || plan.stack !== undefined) && headingsAlone()) headingMessage = true;
+      if (name === 'title' && list.some(item => item.field === 'title') && (sized || plan.stack !== undefined) && (headingsAlone() || statement === 'title')) headingMessage = true;
       const rule = groupRules.get(list);
       if (rule) titleRule = { path: `${path}.title`, box: roundBox({ ...rule, y: rule.y + shift }) };
       for (const item of list) {
@@ -8696,6 +8826,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);
+  if (template !== recordTemplate) STATEMENT_BODIES.add(composed);
+  if (statement === 'title') STATEMENT_TITLES.add(composed);
   if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
   return composed;
 }

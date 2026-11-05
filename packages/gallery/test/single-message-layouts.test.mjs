@@ -20,8 +20,12 @@ const centred = (result) => { const { top, bottom } = spanOf(result), box = resu
 const SUB = 'Illustrative example';
 
 // LH-155: the closing is no longer one of them: it takes the cover's treatment (a start-aligned display title at the foot, closing-treatment in core tests).
-test('the title-only statement, quote and comparison draw as they did in 0.26.10', () => {
-  for (const id of ['statement', 'quote', 'comparison']) {
+// LH-09: the statement is start-aligned under LH-130's accent rule now, so only the quote and the comparison keep their 0.26.10 drawing.
+test('the title-only quote and comparison draw as they did in 0.26.10; the statement is start-aligned under its rule', () => {
+  const statement = compose('statement', { title: 'One message' });
+  assert.equal(field(statement, 'title').alignment, 'left');
+  assert.ok(statement.titleRule, "LH-130's accent rule");
+  for (const id of ['quote', 'comparison']) {
     for (const slide of [{ title: 'One message' }, { title: 'One message', subtitle: SUB }]) {
       const before = compose(OLD[id], slide), after = compose(id, slide);
       assert.deepEqual(after.items.map((item) => [item.field, item.box, item.alignment]), before.items.map((item) => [item.field, item.box, item.alignment]), `${id} ${Object.keys(slide)}`);
