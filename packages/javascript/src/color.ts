@@ -878,16 +878,16 @@ export function chartPaletteForFill(fill: string, palette: readonly string[], op
   return options.soften && opaqueFill ? softenChartPalette(fill, result, { legible: options.legible, floor: floorOf, lead: leadPair }) : result;
 }
 
-/** LH-94: the margin over {@link CHART_SERIES_MIN_LIGHTNESS_STEP} a neighbour is placed at, so a step still reads 11 L* after hex rounding. */
+/** LH-94: the margin over {@link CHART_SERIES_MIN_LIGHTNESS_STEP} a neighbor is placed at, so a step still reads 11 L* after hex rounding. */
 const NEIGHBOR_STEP_MARGIN = 0.4;
 
 /**
  * LH-94: every series from the scheme (`legible`) stands at least {@link CHART_SERIES_MIN_LIGHTNESS_STEP} CIE L* from the series before it,
  * whatever the scheme's own accents were (steel-blue's fifth and sixth accent differ by 0.2 L*, black-and-white's third and fourth by 8): a
  * series that is closer is moved along the lightness axis (its hue and as much of its chroma as sRGB allows kept) to the nearest lightness
- * that keeps its contrast floor, the step from both neighbours and, as a cost, a colour difference of at least
- * {@link CHART_SERIES_MIN_DIFFERENCE} from every other series. In series order, so a move is judged against the neighbour already settled;
- * an authored colour (not in `legible`) is never moved, so `opf/chart-color-only` still reports the pair an author chose.
+ * that keeps its contrast floor, the step from both neighbors and, as a cost, a color difference of at least
+ * {@link CHART_SERIES_MIN_DIFFERENCE} from every other series. In series order, so a move is judged against the neighbor already settled;
+ * an authored color (not in `legible`) is never moved, so `opf/chart-color-only` still reports the pair an author chose.
  */
 function separateNeighbors(fill: string, palette: readonly string[], options: { legible?: readonly boolean[]; floor: (index: number) => number }): string[] {
   const result = [...palette];
@@ -904,7 +904,7 @@ function separateNeighbors(fill: string, palette: readonly string[], options: { 
       if (contrast === undefined || contrast < options.floor(index)) continue;
       const candidate = labOf(opaqueChannels(color)!);
       if (Math.abs(candidate[0] - before[0]) < need) continue;
-      // The nearest lightness wins; falling short of the step from the next series (settled after this one) or of the colour difference
+      // The nearest lightness wins; falling short of the step from the next series (settled after this one) or of the color difference
       // from any other series costs more the further it falls.
       let cost = Math.abs(candidate[0] - lab[0]);
       if (after) cost += CHART_SERIES_SHORTFALL_WEIGHT * deficit(Math.abs(candidate[0] - after[0]) - need);

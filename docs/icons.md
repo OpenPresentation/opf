@@ -20,7 +20,7 @@ author gave one. OPF never invents an icon.
 | --- | --- |
 | `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. |
 | `metric.icon` | On a chip above the metric, at its alignment (centered, or at the start of a start-aligned metric). |
-| `icon` on a group (a block with `blocks`) | On a chip at the top start edge of the group, above its heading (its eyebrow), inside a group drawn on a card. |
+| `icon` on a group (a block with `blocks`) | On a chip at the top start edge of the group, above its heading (its eyebrow), inside a group drawn on a card. A person drawn as a portrait card (LH-132) draws no chip; the icon is reported `icon-dropped`. |
 
 A list with icons is never drawn with step badges, numerals or check-mark tiles: its chips take the marker column those draw in. An
 agenda's list with icons (n05) draws its chips instead of numbered badges. `bullets` entries and nested entries take no icon.
