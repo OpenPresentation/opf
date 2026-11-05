@@ -29,7 +29,9 @@ describe("catalog export shapes (@openpresentation/gallery, RR-78)", () => {
     for (const name of ["catalogs", "catalogEntries", "catalogIndexes", "audiences", "tones", "themes", "layouts", "chartTypes", "narratives", "socialPlatforms", "languages", "colorSchemes", "fontSchemes", "layoutPreviews"])
       assert.equal(root[name], undefined, name);
     assert.equal(gallery.source, "https://www.pptx.gallery");
-    assert.deepEqual(Object.keys(gallery).filter((key) => key !== "source").sort(), [...catalogKinds].sort());
+    // LH-14: iconSets holds a loader per icon set, never the icons themselves.
+    assert.deepEqual(Object.keys(gallery).filter((key) => key !== "source" && key !== "iconSets").sort(), [...catalogKinds].sort());
+    assert.ok(Object.values(gallery.iconSets).every((loader) => typeof loader === "function"));
     for (const kind of catalogKinds) assert.ok(Object.keys(gallery[kind]).length > 0, kind);
     assert.deepEqual(Object.keys(catalogDisplay).sort(), ["chartTypes", "languages", "socialPlatforms"]);
     assert.equal(catalogIndexes.audiences.records.length, audiences.length);
