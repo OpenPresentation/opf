@@ -2,28 +2,28 @@
   "deck": "gallery/industries/satellite-maintenance-readiness-review.opf.json",
   "entries": {
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#0": {
-      "sha256": "64cbd89754fecfb0392fba2349cb178e48f5dc2419f2f89511e7d8b263bb5299",
-      "bytes": 19662
+      "sha256": "4317a1ac2e35a8ce46d56cf2886299339b608381afe707668eea74cbfcffe533",
+      "bytes": 19731
     },
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#1": {
-      "sha256": "ff3b3bf8568ce7cd908174941a5b261b56b964f58de230cf9e2c748bb190e63b",
-      "bytes": 25278
+      "sha256": "33876947b55d22d2b31d02f0e85ddd85ffcb32bf6fe67abe1bba7995e8881080",
+      "bytes": 24919
     },
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#2": {
-      "sha256": "21b11810aa812da3e2587ebb808a6d504dd020990469feea709001c4bb2e9179",
-      "bytes": 16594
+      "sha256": "81649f141ffcd152513d1a844d350a8ee201118e4553fc30ceff75629fc537b4",
+      "bytes": 16709
     },
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#3": {
-      "sha256": "5ad2ca2593033921082e7cf759fdc1a9f6aa544c082561c7de82765bcd13d851",
-      "bytes": 16946
+      "sha256": "724d42e098f07136d1da71088f7feeae49d40967d60fd353f03b767550f2146c",
+      "bytes": 17020
     },
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#4": {
-      "sha256": "5472bc22cf460e3932e82259fee247a8cb78b1a11e8ab5f8c999aad3fdc7f133",
-      "bytes": 23650
+      "sha256": "e6e9084de1bb3a087638e01f07e1d88b9c78457384dbf436ecf3a05cf4118620",
+      "bytes": 23968
     },
     "gallery/industries/satellite-maintenance-readiness-review.opf.json#5": {
-      "sha256": "475a5447cbfacfce7f3308c7369cd2f3121a77d8108397bfb4ece9521e646d7b",
-      "bytes": 21602
+      "sha256": "c020187f1a98180b4a027fb5eb843cbe57fad0d84690b7e3a2326d89c217127a",
+      "bytes": 21511
     }
   }
 }

@@ -2,44 +2,44 @@
   "deck": "gallery/design-and-media/video-demo-sales-narrative.opf.json",
   "entries": {
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#0": {
-      "sha256": "386db3bbb0b4c0de27d5105ab3638b9588c2c5dc5365a02abe9158cca6e2d785",
-      "bytes": 6051
+      "sha256": "76eff7c9659dc08a27c1515daf0710331608606fe6fa80421d38b09d9a3efa34",
+      "bytes": 6149
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#1": {
-      "sha256": "beecbf581fcfff8a450554727e8618893f712d38f97b99ab204df6b041227028",
-      "bytes": 11789
+      "sha256": "d246ba12c4c7eeb0071476a0eef4b36ed59e728061b127e2e06c128f1793e17f",
+      "bytes": 11572
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#2": {
-      "sha256": "c24413be878241008fea6ad5e29b51a794c364908551110458a2a44521d3bc27",
-      "bytes": 9907
+      "sha256": "06142e447284ed2eaca53b5a9da7b05cc50b65ed2fb902c0e0ee2507f88734a7",
+      "bytes": 9757
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#3": {
-      "sha256": "3e44346d421615165574579d00044681eaf154817cf0f2c55d542283f60be2a9",
-      "bytes": 9082
+      "sha256": "d54946ed25de02c43e5b051f032d32b1f544a535e99e5fd320357261b4b62a21",
+      "bytes": 9189
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#4": {
-      "sha256": "0a6d503a46b9431e3f72d096afb98fe1a857437a13de65ccb2550de1ef820bca",
-      "bytes": 11153
+      "sha256": "26d88dfeaed7f7a3199d583e999cbd05ed964a8b0a5fcd3069f7ae210cb2ea56",
+      "bytes": 11390
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#5": {
-      "sha256": "8bab091c8e492d175246017102d34956dee142b0578599e4b5ddd6572f1a7d52",
-      "bytes": 16758
+      "sha256": "c7161d2ad72a062d58dfccab1db6ace22202a9b7d598db31d0728f571b996d40",
+      "bytes": 16635
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#6": {
-      "sha256": "83ba17376264a9d579e1bf6791920444bf6f2d1041bddae17cbb68690fcbb0b1",
-      "bytes": 9702
+      "sha256": "7e6c760bbec8e8a88285db2de1543ab710b8bf521d797a588b61cc6ee47ec542",
+      "bytes": 9205
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#7": {
-      "sha256": "7c8ef64ab68244b3751db45c657ae581fbb17b48948dc6acfdde4f4be620bd9d",
-      "bytes": 20699
+      "sha256": "9ddafec0a9225c276acbe2eabe88bca3eb769c9a14eb4d719b674d4ca1d3abea",
+      "bytes": 19094
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#8": {
-      "sha256": "a86c9e68992213ab7cff7aa5c8e69ffe318970e0a59ebcd1f1f9bab500e3d1c5",
-      "bytes": 6018
+      "sha256": "5a2d90af868fc0b45333c4b07db9224a43f418a62af95a041394038adda381f0",
+      "bytes": 6242
     },
     "gallery/design-and-media/video-demo-sales-narrative.opf.json#9": {
-      "sha256": "61cebf904eeab97150a2aa94fa979c97ed63deff74b5ce375e6f4f53e8660498",
-      "bytes": 11818
+      "sha256": "855416a73704ae7371155795cfb8db1a2acdf6cb686b63c34c954b39b097e1e2",
+      "bytes": 11970
     }
   }
 }

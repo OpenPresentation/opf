@@ -2,28 +2,28 @@
   "deck": "gallery/presentation-types/developer-conference-talk.opf.json",
   "entries": {
     "gallery/presentation-types/developer-conference-talk.opf.json#0": {
-      "sha256": "aa87a263f658df40ba960df06149b8a68ed125835d872c3da6d9367576b3eb23",
-      "bytes": 7535
+      "sha256": "dba50958c08722feb232b88183829ef68c1aaae2a658362fa233c16d2226976e",
+      "bytes": 7503
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#1": {
-      "sha256": "0d80f1556a23cab5c9a91beb3a582a996f37442dd20d717cc93227d8e1281bee",
-      "bytes": 13869
+      "sha256": "2df2724448b6f97503370ebee1226e83325594798eb19e5c15c6a3499bd16b08",
+      "bytes": 13769
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#2": {
-      "sha256": "27333690eb484d438f64f0273c890b4377e85f4fb23426b3cde1e7b4155b5475",
-      "bytes": 6563
+      "sha256": "03a4d0779735f40958bd45458186cf643257990e2b0fc9b62a646e8e32fbc529",
+      "bytes": 6564
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#3": {
-      "sha256": "9b6885ca1c1c607777846fcb953bdad04a57d9911a1237344f0486c5cf9c0bf3",
-      "bytes": 10320
+      "sha256": "5aec6c86863fdb167ae456675edd518d3a7f7a8fd16ccbe08e539f79bb81b288",
+      "bytes": 10293
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#4": {
-      "sha256": "2f3bb37c31b3d2b1aee707a9d8252a91e3c5e7dc30d1b9aaebd6185dd8c2c588",
-      "bytes": 13938
+      "sha256": "5ff5e78b73163057157550478cd913e89abca7349276c705f725958509093495",
+      "bytes": 13885
     },
     "gallery/presentation-types/developer-conference-talk.opf.json#5": {
-      "sha256": "ed93cf6b56f096c2af9ecd28743c8998c83cc1b896fcbced1a837e996dc672a0",
-      "bytes": 12253
+      "sha256": "0925825bdcb1718ae5a7c8313aeddcc4292dc452327ae94c9aa11da9422348ab",
+      "bytes": 11941
     }
   }
 }

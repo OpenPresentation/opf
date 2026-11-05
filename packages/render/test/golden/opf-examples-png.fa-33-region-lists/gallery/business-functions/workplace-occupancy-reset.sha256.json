@@ -2,28 +2,28 @@
   "deck": "gallery/business-functions/workplace-occupancy-reset.opf.json",
   "entries": {
     "gallery/business-functions/workplace-occupancy-reset.opf.json#0": {
-      "sha256": "17e699fac29d29d51b28f26f314ef949aaffd2f20a29772a3e1b568d097c44ed",
-      "bytes": 7049
+      "sha256": "96529b9d268478d488e792d1b03f69e5fcd92a7bfd60d0f81d11ac7a002ec03f",
+      "bytes": 7122
     },
     "gallery/business-functions/workplace-occupancy-reset.opf.json#1": {
-      "sha256": "b9d3eccd523008cd146fc76ccca98e31acdeb5a4c3a83207b9595c816f61693c",
-      "bytes": 12741
+      "sha256": "98c0d5d409d7cda1192a4e2543c6f1ab1b9ee13e57cfadd572d4d5675d26ce63",
+      "bytes": 14382
     },
     "gallery/business-functions/workplace-occupancy-reset.opf.json#2": {
-      "sha256": "90a9b52f286616c1e9e686b11eabc389d85dc70bc394bc074d8ae0d974168e6c",
-      "bytes": 9281
+      "sha256": "e67e9cf5131ab6cb79aaf92c1a3b8f5f776264b6656687d68371dd8acf52f2c5",
+      "bytes": 9224
     },
     "gallery/business-functions/workplace-occupancy-reset.opf.json#3": {
-      "sha256": "b3e4723cf27e41303807041afe492cc1995a3554eef342748ceebeabc213c76d",
-      "bytes": 9994
+      "sha256": "27a4b99b856face390d4c3d94b2f6243bfe4b24c0208b6a97ef7e0087f2fd839",
+      "bytes": 10031
     },
     "gallery/business-functions/workplace-occupancy-reset.opf.json#4": {
-      "sha256": "37dc8599043ecdc1f21c0d912cdb9ec212fe896661489b4a547f7329c5e7af75",
-      "bytes": 11952
+      "sha256": "ddd6b0b265754b4abacdba8fc8062c98c0588cef3f7d7afbba805ac925386b94",
+      "bytes": 12094
     },
     "gallery/business-functions/workplace-occupancy-reset.opf.json#5": {
-      "sha256": "d5d0904e32042217f3cc30ae63f0d7d87ea48c8633545561544e7324082d1b37",
-      "bytes": 10071
+      "sha256": "7c8e4f8c2a4e21ecef2da303c093f2f1a28c34da661bac2f23addb069cfc5f24",
+      "bytes": 9987
     }
   }
 }

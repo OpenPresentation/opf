@@ -2,44 +2,44 @@
   "deck": "gallery/business-functions/demand-generation-campaign-brief.opf.json",
   "entries": {
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#0": {
-      "sha256": "00f62a3134540885b9cfaab4545f619a37029c32b22297ef9c88171a6d49a7fd",
-      "bytes": 8071
+      "sha256": "e6219252dcaab97a0261875418625c008d6a251cab82a339034f7224ebcf1980",
+      "bytes": 8121
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#1": {
-      "sha256": "7be874b9197dedfc176d163b4855e57b649aa32213cc98e36798adf1b865e937",
-      "bytes": 11837
+      "sha256": "197581aec48d000db9f243ad20b8e4f6c8069ceca659f34496c15c0bdda99da2",
+      "bytes": 11782
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#2": {
-      "sha256": "8b5d5283fda5caede57f7312be8a7fc206a2360e9d4455f9e0d495f41b074c26",
-      "bytes": 5279
+      "sha256": "2f5f82c939c7a19bb25541160fafac5feeaa98a5afa83a8ad80b5131d1ad2cf0",
+      "bytes": 5233
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#3": {
-      "sha256": "e6734c6e7ae8f54ec59860a5d681bc1f74e729ade7babf18830f1b4f52a50b27",
-      "bytes": 8135
+      "sha256": "16978c5a354ed2b28e86db4f52dc60a2d32dbcbd1107587cf08e57315a7dac51",
+      "bytes": 8282
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#4": {
-      "sha256": "37720b75151a33b93652925c239d46642ac30697a4f9cfeff3aa6d6d22ee7aad",
-      "bytes": 12272
+      "sha256": "c66f78e753ebf434d597933c0961bc9b46a8286ad94a67481cf288c64aa08feb",
+      "bytes": 12049
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#5": {
-      "sha256": "f0cf50361c491824c6667f150cfcc4cadbf12b422b86efb4f1126769b3a9f763",
-      "bytes": 15695
+      "sha256": "600a8fcb05a5d9113568e3750acd83d5c13a0de85b22c6f1a55364790e9dc4aa",
+      "bytes": 15482
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#6": {
-      "sha256": "2863628c0173708b4a3c59c0643f98ed1d726b4e295022b071cacee5f611a5f9",
-      "bytes": 13701
+      "sha256": "6e3d53bf3334cf5454d335e82b0cc373c36b8cae7f78c6d5d78c8db32a2f82c8",
+      "bytes": 13573
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#7": {
-      "sha256": "5f82d5eceda1f244a0956f1cf13aae648e75eb0db997534764401429efa72103",
-      "bytes": 15348
+      "sha256": "d5daef547568335cb15acc298f0941d0ea14b497ffc6d51b5be906d22d0c6006",
+      "bytes": 15058
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#8": {
-      "sha256": "92be45584240339bd7f9018b092aca5a27a301cf6b4952404ccb714deb5788b4",
-      "bytes": 6605
+      "sha256": "15989f5abcc8fb33d6a76e762c2f29066bd796298cc671c05fc711cfb8b22f2a",
+      "bytes": 6801
     },
     "gallery/business-functions/demand-generation-campaign-brief.opf.json#9": {
-      "sha256": "987f30e080999ed1cb1dfec2d1db15345c09e6f994f3b7a788c01d151a6168a6",
-      "bytes": 12823
+      "sha256": "54b1e601804cde73b6f7ad0698d4d230a07473a8e3fe7ce60e92356ba4dcde0f",
+      "bytes": 12877
     }
   }
 }
