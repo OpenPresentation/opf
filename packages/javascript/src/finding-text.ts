@@ -71,6 +71,7 @@ export const PATTERN_PHRASES: Readonly<Record<string, PatternPhrase>> = Object.f
   "^\\d{4}-\\d{2}-\\d{2}$": { what: "a date written year-month-day, like `2026-10-24`", next: "write the date as YYYY-MM-DD." },
   "^(?:https?://|mailto:|tel:)\\S+$": { what: "a web, email or phone address (`https://…`, `mailto:…` or `tel:…`)", next: "start with https://, mailto: or tel:, and leave out spaces." },
   "^(https?://|mailto:|tel:)\\S+$": { what: "a web, email or phone address (`https://…`, `mailto:…` or `tel:…`)", next: "start with https://, mailto: or tel:, and leave out spaces." },
+  "^(?:[a-z][a-z0-9-]*:[a-z0-9][a-z0-9-]*|[a-z][a-z0-9-]*|(?:asset:|https://|data:|\\./|\\.\\./)\\S+)$": { what: "an icon like `lucide:truck` (a set and a name), the name of one of the deck's `icons`, or an SVG source (`asset:`, `https://`, `data:`, `./`)", next: "write the set and the icon name, such as lucide:truck (search_icons finds names), or the name of one of the deck's icons." },
   "^(asset:|https://|data:|\\./|\\.\\./)": { what: "a source that starts with `asset:`, `https://`, `data:`, `./` or `../`", next: "register the file under `assets` and write `asset:` and its id, or give an https:// address." },
   "^(?:https://[^\\s]+|pkg:[^\\s]+)$": { what: "an `https://` address or a `pkg:` reference", next: "write an address that starts with https:// or pkg:, without spaces." },
   "^(?:[A-Za-z]{2,3}|[iIxX])(?:-[A-Za-z0-9]{1,8})*$": { what: LANGUAGE, next: "write a language and, if needed, a region: `en-US`, `pt-BR`, `de`." },

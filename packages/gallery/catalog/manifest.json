@@ -44,6 +44,15 @@
         "contentSha256": "7d19dc9155e05e6037a5888e7cced933c3f275b6cb86f51157eaae7ba1dd8e5e"
       }
     },
+    "icon-sets": {
+      "mode": "mirror",
+      "records": 2,
+      "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205",
+      "gallery": {
+        "records": 2,
+        "contentSha256": "fa9ad0987a0c10d60235c26855cea4758703079cf0f927012105d381b6f9b205"
+      }
+    },
     "languages": {
       "mode": "mirror",
       "records": 93,

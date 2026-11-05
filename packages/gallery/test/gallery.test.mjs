@@ -29,7 +29,7 @@ test("the package is published from OpenPresentation/opf (packages/gallery) with
   assert.equal(manifest.dependencies, undefined, "the gallery has no runtime dependency (core depends on it, never the reverse)");
   assert.equal(manifest.peerDependencies, undefined);
   assert.equal(manifest.opf.catalogSchema, CATALOG_SCHEMA);
-  assert.deepEqual(Object.keys(manifest.exports), [".", "./previews", "./package.json"]);
+  assert.deepEqual(Object.keys(manifest.exports), [".", "./previews", "./icon-sets", "./icon-sets/*", "./package.json"]);
 });
 
 test("gallery has the shape core registers: source and the eight content kinds, nothing else", () => {

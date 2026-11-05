@@ -218,6 +218,11 @@ export interface ToPptxOptions {
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
   /**
+   * LH-14: reads an icon's SVG file (an `asset:` reference, a relative path or an HTTPS URL the deck's icons name) for `ensureIcons`;
+   * without it only inline SVG, data URIs and the registered icon sets draw. The exporter never reads or fetches a file by itself.
+   */
+  readIconSource?: (source: string) => Promise<string | Uint8Array | undefined>;
+  /**
    * Draws the PNG fallback of an SVG picture (the raster older viewers show; PowerPoint 2016 and Microsoft 365 draw the SVG itself). It receives the
    * sanitized SVG text and the pixel size to draw (the SVG's own aspect, about 192 dpi of the displayed size) and returns PNG bytes with a transparent
    * background. It must be deterministic for the export to be. Default in Node: opf-render's `toPng` (resvg with the bundled fonts), loaded only when an

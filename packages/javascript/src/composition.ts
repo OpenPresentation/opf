@@ -67,6 +67,8 @@ export {PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitma
 import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
+import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
+export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
 export type {ComposedDiagram,DiagramIssue,DiagramLayoutOptions,DiagramMeasure,DiagramPalette,DiagramPaletteInput,DiagramPayload,DiagramSyntax} from './diagram.js';
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
@@ -88,8 +90,9 @@ export interface LayoutDiagnostic {
   /**
    * OPF 0.19 adds the content-binding codes of template layouts: `region-unknown`, `region-kind` and `region-full` for an
    * ignored `region` pin, and `layout-unplaced` for a block no region had room for (drawn anyway; `paginate` moves it).
+   * LH-14: `icon-dropped` for an icon the slide has no room for without setting text smaller: the text stays, the chip is not drawn.
    */
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped";
   path: string;
   message: string;
   /**
@@ -465,6 +468,37 @@ export interface ComposedSteps {
 export interface ComposedStepBadge { path: string; cx: number; cy: number; radius: number; label: string; fontSize: number; baseline: number; list?: { path: string; index: number; number: Pick<ListNumber, 'value' | 'style' | 'suffix'> }; check?: [number, number][];
   /** LH-134: a numeral beside a ruled row: the line box of its text, drawn without a circle. */
   numeral?: LayoutBox }
+/**
+ * LH-14: one icon the slide draws (`SlideComposition.icons`), on a chip as Claude Design draws one: a circle of `radius` around
+ * (`cx`, `cy`) in `colors.chip`, and the glyph in `box` (ICON_GLYPH of the chip's diameter, centered on it). A monochrome icon is
+ * `parts`, path commands already placed in canvas pixels (each filled, stroked at `stroke` canvas pixels with its caps and joins, or
+ * both) in `colors.glyph`; a multicolor SVG is `picture`, drawn contained in `box` with its own colors. `path` is the `icon` field's
+ * path, `owner` the list entry, metric or group it marks. Paint order: after the cards and surfaces, before the text.
+ */
+export interface ComposedIcon {
+  path: string;
+  owner: string;
+  reference: string;
+  chip: { cx: number; cy: number; radius: number };
+  box: LayoutBox;
+  parts?: IconPart[];
+  picture?: { svg: string; width: number; height: number };
+  colors: { chip: IconPaint; glyph: IconPaint };
+}
+/**
+ * LH-14: an icon's chip is this many times the size of the text it accompanies across (a list entry's size, the first paragraph of a
+ * group, a metric's label role): STEP_BADGE, so an icon list keeps a step list's column. Its glyph is ICON_GLYPH of the chip.
+ */
+export const ICON_CHIP = 1.75, ICON_GLYPH = .55;
+/**
+ * LH-14: the compact chip, one line of the text it accompanies (1.22 em), which never makes an entry, a metric's band or a group's band
+ * taller than a line: what a slide draws when the full chips (the guarded rule `icon-chips`) would set a block smaller.
+ */
+export const ICON_CHIP_COMPACT = 1.22;
+/** LH-14: the space between a chip of a metric or a group and the text under it, as a share of the chip's diameter. */
+export const ICON_CHIP_GAP = .3;
+/** LH-14: the text size a metric's chip is sized for, in reference pixels (about its label's): a 42 px chip at 1280 x 720. */
+export const METRIC_ICON_TEXT = 24;
 /** LH-137: the check-mark tiles of a summary list: the fewest and most entries, and the longest entry in characters. */
 export const CHECK_TILE_MIN = 2, CHECK_TILE_MAX = 6, CHECK_TILE_MAX_CHARACTERS = 90;
 /** LH-137: the most lines an entry may take in a tile of the grid before the tiles become one column of wide tiles. */
@@ -773,6 +807,8 @@ export interface SlideComposition {
   emphasis?: ComposedEmphasis;
   /** LH-07: the step badges, connectors and flows of the slide's `sequence` regions, in reading order; absent when none draws. */
   steps?: ComposedSteps[];
+  /** LH-14: the icons the slide draws on chips (list entries, metrics, groups), in reading order; absent when none draws. */
+  icons?: ComposedIcon[];
   /**
    * LH-130: the short accent rule above the title that the layout's `title` region asks for (`rule: true`) on a slide with a title and
    * no tag: `box` in canvas pixels (TITLE_RULE_SIZE), at the title's start edge (its alignment, mirrored for a right-to-left title),
@@ -790,7 +826,7 @@ export interface SlideComposition {
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
-  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown; mirror?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown };
+  presentation?: { language?: unknown; design?: { header?: unknown; footer?: unknown; background?: unknown; imageFit?: unknown; logo?: unknown; contentDirection?: unknown; chartPrimary?: unknown; listBullet?: unknown; titleAlignment?: unknown; contentAlignment?: unknown; contentBox?: unknown; mirror?: unknown }; organization?: unknown; speaker?: unknown; slides?: unknown; catalogs?: unknown; references?: unknown; datasets?: unknown; icons?: unknown; assets?: unknown };
   /**
    * OPF 0.19: the resolved theme record's `design` (titleAlignment, contentAlignment, contentBox, contentDirection,
    * imageFit, listBullet). It ranks below the deck's design and above the layout record's. `resolveSlideContext` passes it.
@@ -3305,6 +3341,11 @@ export interface ListEntryLayout {
    */
   badge?:{cx:number;cy:number;diameter:number;label:string;fontSize:number;numeral?:LayoutBox};
   /**
+   * LH-14: the entry's icon chip (`ListFitOptions.icons`): a circle of `diameter` centered at (`cx`, `cy`) in the marker column, centered
+   * on the first line's capitals, in place of the bullet. Composition draws the entry's `icon` in it (SlideComposition.icons).
+   */
+  icon?:{cx:number;cy:number;diameter:number};
+  /**
    * LH-133: the entry's label is a term (a ruled row of a glossary, `ListFitOptions.pairs: "term"`): it draws in the accent, the tag's color
    * on its backdrop (the text color where the primary reads under 4.5:1).
    */
@@ -3411,6 +3452,14 @@ export interface ListFitOptions extends RichTextOptions {
    */
   badges?:boolean;
   /**
+   * LH-14: the entries that carry an `icon` draw it on a chip ICON_CHIP times the list size across in the marker column, in place of the
+   * bullet (`ListEntryLayout.icon`), centered on the entry's first line; every entry keeps that column, so the texts start at one edge.
+   * Needs one level and no numbering; ignored otherwise. A ruled list (`rows`) sets the chips at the start of its labels.
+   */
+  icons?:boolean;
+  /** LH-14: the chip's size in em of the list size: ICON_CHIP (the default) or ICON_CHIP_COMPACT. */
+  iconScale?:number;
+  /**
    * LH-133: the entries of a ruled list (`rows`) pair a question (`question`) or a term (`term`) with its answer or definition. A question's
    * column is LIST_ROWS_LABEL_SHARE of the width, the question wrapping in it (at most LIST_QUESTION_LINES lines, else the answer goes under
    * it); a term draws in the accent (`ListEntryLayout.accent`) in the column of the widest term, as any label does.
@@ -3481,6 +3530,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
   const badged=options.badges===true&&numbers!==undefined&&source.every(item=>item.level===0);
+  // LH-14: entries drawn beside icon chips (unnumbered, one level, at least one icon).
+  const hasIcon=(index:number)=>{const value=input[index];return typeof value==='object'&&!Array.isArray(value)&&value!==null&&(value as {icon?:unknown}).icon!==undefined;};
+  const iconed=options.icons===true&&!numbers&&!badged&&source.every(item=>item.level===0)&&source.some(item=>hasIcon(item.index));
   // A native auto-number takes the weight and slant of the paragraph's first run.
   const markerStyleFor=(item:typeof source[number]):TextStyle=>{
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
@@ -3500,7 +3552,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const numeralSize=numerals==='display'?fontSize*(described?LIST_NUMERAL_SCALE:STEP_BADGE):fontSize,numeralStyle:TextStyle={...options.style,path:undefined,fontWeight:700,italic:false};
     const numeralColumn=numerals?Math.max(...numeralLabels.map(label=>textWidthMeasurer(resolveTextStyle(numeralStyle,options.textMeasurement),options.textMeasurement)(label,numeralSize))):0;
     // Only numbers keep a hanging indent: a row needs no bullet. A nested level steps in by 1.1 em under its row.
-    const indent=numerals?numeralColumn+fontSize*LIST_NUMERAL_GAP:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):0,nest=fontSize*1.1;
+    // LH-14: an icon list's chips take a column of their own, a chip and half an em, at the start of every row.
+    const chip=iconed?fontSize*(options.iconScale??ICON_CHIP):0;
+    const indent=numerals?numeralColumn+fontSize*LIST_NUMERAL_GAP:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):iconed?chip+fontSize*.5:0,nest=fontSize*1.1;
     const labelStyle=(item:typeof source[number]|undefined):TextStyle=>({...options.style,path:item?.textPath,...(described?{fontWeight:700}:{})});
     const labelAt=(item:typeof source[number],area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize,{...options,style:labelStyle(item)},minFontSize)(fontSize);
     const siblingAt=(label:ListText,area:LayoutBox)=>richTextLayouter(typeof label==='string'?[label]:label,area,requestedSize,{...options,style:labelStyle(undefined)},minFontSize)(fontSize);
@@ -3516,7 +3570,8 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }else{
         const widest=Math.max(...source.map(item=>Math.max(0,...labelAt(item,wide).richLines.map(line=>line.width))),...(options.rowLabels??[]).map(label=>Math.max(0,...siblingAt(label,wide).richLines.map(line=>line.width))));
         const need=indent+widest*1.001+1;
-        if(need<=LIST_ROWS_LABEL_SHARE*box.width)column=need;
+        // LH-14: an icon list's chip column does not count against the labels' share: the share bounds the labels' text.
+        if(need<=LIST_ROWS_LABEL_SHARE*box.width+(iconed?indent:0))column=need;
       }
     }
     const between=fontSize,side=column>0;
@@ -3543,6 +3598,15 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
         if(side)descriptionBox.y+=Math.max(0,(text.richLines[0]?.baseline??fontSize)-(description.richLines[0]?.baseline??fontSize*ratio));
         descriptionBox.height=description.height;bottom=Math.max(bottom,descriptionBox.y+description.height);
       }
+      // LH-14: the chip is centered on the label's capitals (0.35 em above its first baseline); a row whose first line is shorter than the
+      // chip starts lower by the difference, so the chip stays inside the row.
+      let iconChip:ListEntryLayout['icon'];
+      if(iconed){
+        const center=(text.richLines[0]?.baseline??fontSize)-fontSize*.35,pad=Math.max(0,chip/2-center);
+        if(pad){textBox.y+=pad;if(descriptionBox)descriptionBox.y+=pad;bottom+=pad;}
+        if(hasIcon(item.index))iconChip={cx:rtl?(side?box.x+box.width:box.x+box.width-offset)-chip/2:box.x+offset+chip/2,cy:textBox.y+center,diameter:chip};
+        bottom=Math.max(bottom,textBox.y+center+chip/2);
+      }
       lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));
       if(description){lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));}
       overflow||=text.overflow||!!description?.overflow;
@@ -3559,7 +3623,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       const none=!number||badge!==undefined;
       const marker={text:number&&!badge?number.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset):box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})};
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(badge?{badge}:{}),...(options.pairs==='term'&&described?{accent:true as const}:{}),...(item.direction?{direction:item.direction}:{})});
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(badge?{badge}:{}),...(iconChip?{icon:iconChip}:{}),...(options.pairs==='term'&&described?{accent:true as const}:{}),...(item.direction?{direction:item.direction}:{})});
       y=bottom;
     }
     const height=y-box.y;
@@ -3580,14 +3644,15 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
     // LH-77: the one described entry of a heading list draws without a marker or an indent, bold and a step up over its description.
-    const diameter=badged?fontSize*STEP_BADGE:0;
-    const none=((options.bullet==='none'||heading)&&!numbers)||badged;
+    // LH-14: an icon list's chips take the badge column (ICON_CHIP is STEP_BADGE), every entry drawn without a bullet.
+    const chipped=badged||iconed,diameter=badged?fontSize*STEP_BADGE:iconed?fontSize*(options.iconScale??ICON_CHIP):0;
+    const none=((options.bullet==='none'||heading)&&!numbers)||chipped;
     // LH-07: a badge column is the badge and half an em before the text.
-    const hanging=badged?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
+    const hanging=chipped?diameter+fontSize*.5:numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
       const rtl=item.direction==='rtl';
       // No marker: no hanging indent either; a nested level still steps in by one marker width.
-      const indent=none&&!badged?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      const indent=none&&!chipped?0:hanging,offset=heading?0:Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
@@ -3612,7 +3677,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
       // badge starts lower by the difference, so the badge stays inside the entry.
-      const center=badged?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=badged?Math.max(0,diameter/2-center):0;
+      const center=chipped?(text.richLines[0]?.baseline??fontSize)-fontSize*.35:0,pad=chipped?Math.max(0,diameter/2-center):0;
       if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
@@ -3623,13 +3688,14 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      if(badged)y=Math.max(y,textBox.y+center+diameter/2);
+      if(chipped)y=Math.max(y,textBox.y+center+diameter/2);
       const marker={text:number&&!badged?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number),fontSize}:undefined;
-      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),
+      const icon=iconed&&hasIcon(item.index)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
+      entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),...(icon?{icon}:{}),
         ...(item.direction?{direction:item.direction}:{}),
         ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
-      if(item.index<source.length-1)y+=badged?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
+      if(item.index<source.length-1)y+=chipped?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
     return {listEntries:entries,lines,fontSize,lineHeight:fontSize*1.22,height,overflow:overflow||height>box.height+.01,...(accentRules.length?{rules:accentRules}:{}),...(options.direction==='rtl'?{directions}:{})};
@@ -4119,16 +4185,20 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * delta pill (`delta-pill`) and check-mark tiles (`check-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
-/** LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them. */
-const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'check-tiles'];
+/**
+ * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
+ * LH-14: an author's icons too: they are drawing, never worth a text size, so a slide keeps its chips only when every block reads as well:
+ * `icons` draws them on compact chips (ICON_CHIP_COMPACT, a line high), `icon-chips` on full ones (ICON_CHIP) where the slide has room.
+ */
+const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'check-tiles', 'icons', 'icon-chips'];
 /** LH-131, LH-137: guardedCore composes a slide again with this flag to see it without the drawing rules. */
 const NO_DRAWING = Symbol('opf.noDrawing');
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose). */
@@ -4308,7 +4378,7 @@ function withPictureScrim(input: unknown, options: ComposeSlideOptions, result: 
  */
 function guardedCore(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const result = guardedRules(input, options);
-  if ((options as Record<symbol, unknown>)[NO_DRAWING] === true || !(result.emphasis?.source === 'featured' || result.items.some(item => item.metricLayout?.deltaPill) || result.steps?.some(step => step.form === 'tiles'))) return result;
+  if ((options as Record<symbol, unknown>)[NO_DRAWING] === true || !(result.emphasis?.source === 'featured' || result.items.some(item => item.metricLayout?.deltaPill) || result.steps?.some(step => step.form === 'tiles') || result.icons?.length)) return result;
   const plain = guardedRules(input, { ...options, [NO_DRAWING]: true } as ComposeSlideOptions), used = KEPT_RULES.get(plain);
   const scale = Math.min(plain.width, plain.height) / 720, floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * scale), before = trackQuality(plain, options);
   // A slide with a body role at the readability floor is recomposed as the automatic grid when that reads better (LH-83, settle); the
@@ -5079,6 +5149,31 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
     return list;
   };
+  // LH-14: each `icon` of the slide resolved once (the document's own icons and embedded sets, then the sets ensureIcons loaded). With the
+  // guarded rule `icons` off (the guard found a block that reads smaller with them) nothing resolves, so no chip is drawn or measured.
+  const iconCache = new Map<string, ResolvedIcon | undefined>();
+  const iconFor = (value: unknown): ResolvedIcon | undefined => {
+    if (value === undefined || !ruleOn('icons') || !parseIconReference(value)) return undefined;
+    const key = String(value);
+    if (!iconCache.has(key)) { const found = resolveIcon(options.presentation ?? {}, value); iconCache.set(key, found.ok ? found.icon : undefined); }
+    return iconCache.get(key);
+  };
+  // LH-14: a list draws icon chips when it is unnumbered, of one level, and one of its entries has an icon that resolves. Such a list is
+  // never a badge list, flow or check-mark tiles: its chips take the marker column those draw in.
+  const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.every(entry => (record(entry).level ?? 0) === 0) && value.some(entry => iconFor(record(entry).icon) !== undefined);
+  // LH-14: the chip of a metric (ICON_CHIP, or ICON_CHIP_COMPACT without `icon-chips`, times METRIC_ICON_TEXT reference pixels) and of a group (that times the starting size of its
+  // first paragraph or list, as its eyebrow is sized), and the band each takes above its content: the chip and ICON_CHIP_GAP of it.
+  const chipScale = ruleOn('icon-chips') ? ICON_CHIP : ICON_CHIP_COMPACT;
+  const metricChip = (node: Pending) => node.field === 'metric' && iconFor(record(node.value).icon) ? chipScale * METRIC_ICON_TEXT * scale : 0;
+  const groupChip = (node: Pending, width: number): number => {
+    if (!node.children || !iconFor(record(node.payload).icon)) return 0;
+    const proseOf = (nodes: readonly Pending[]): Pending | undefined => { for (const child of nodes) { const found = child.children ? proseOf(child.children) : child.field === 'text' || child.field === 'items' || child.field === 'bullets' ? child : undefined; if (found) return found; } return undefined; };
+    const prose = proseOf(node.children);
+    return chipScale * (prose ? proseMeasure(prose, width).size : PROSE_NOMINAL_SIZE * scale);
+  };
+  // LH-14: the metrics and groups whose chips are drawn over their placed items at the end; `carded`, a group on one card of its own (its
+  // chip inside the card).
+  const pendingIcons: { path: string; owner: string; icon: ResolvedIcon; members: ComposedItem[]; diameter: number; carded?: true; metric?: true }[] = [];
   // LH-07: the lists of a `sequence` region (composeTemplate marks them by path). A badge list draws its entries beside step badges,
   // numbered in arabic when the payload has no numbering (from its badgeStarts entry: an agenda's unnumbered lists count on); a step
   // heading is a one-entry numbered list whose number its block's badge draws, so it fits as a heading list (LH-77) without the number.
@@ -5098,7 +5193,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-133: spreadLists are the lone ruled lists that fill their body (fillLone), their rows spread over it (ListFitOptions.spread).
   const numeralLists = new Map<string, 'display' | 'row'>(), pairRowLabels = new Map<string, ListText[]>(), pairGrid = new Set<string>(), spreadLists = new Set<string>();
   const listOptionsFor = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => {
-    const own = listOptionsOf(field, path, numbering, value);
+    const listed = listOptionsOf(field, path, numbering, value);
+    // LH-14: an icon list (never a badge list, a step heading or numerals) draws its icons on chips in the marker column.
+    const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
   };
   const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
@@ -6305,13 +6402,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
       // LH-152: a group's eyebrow takes a band at the top of the group; its children are arranged under it, and it is drawn over them
       // at the end (placeEyebrows), at the size its band was reserved for.
+      // LH-14: a group's icon takes a band at the top of the group, above its eyebrow; its chip is placed over the group's items at the end.
+      const chipOfGroup = groupChip(node, inner.width), iconBand = chipOfGroup * (1 + ICON_CHIP_GAP), top = iconBand ? { ...inner, y: inner.y + iconBand, height: Math.max(scale, inner.height - iconBand) } : inner;
       const brow = node.eyebrow ? groupEyebrow(node, inner.width) : undefined, first = items.length;
-      const under = brow ? { ...inner, y: inner.y + brow.band, height: Math.max(scale, inner.height - brow.band) } : inner;
+      const under = brow ? { ...top, y: top.y + brow.band, height: Math.max(scale, top.height - brow.band) } : top;
       insideEmphasis ||= emphasized;
       if (ownCard) insideCard = acceptedBox(frame ?? box);
       try { arrange(node.children, under, own, 0, node.gap ?? groupGap(own, box), node.path, !node.synthetic); }
       finally { if (emphasized) insideEmphasis = false; if (ownCard) insideCard = undefined; }
       if (brow && items.length > first) groupEyebrows.push({ members: items.slice(first), eyebrow: node.eyebrow!, size: brow.size, band: brow.band, ...(emphasized || ownCard ? { carded: true } : {}) });
+      if (chipOfGroup && items.length > first) pendingIcons.push({ path: `${node.path}.icon`, owner: node.path, icon: iconFor(record(node.payload).icon)!, members: items.slice(first), diameter: chipOfGroup, ...(emphasized || ownCard ? { carded: true as const } : {}) });
       return;
     }
     // LH-48: a lone block that fills too little of its cell grows and moves to the cell's middle, its card hugging it.
@@ -6349,6 +6449,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (brow) box = { ...box, y: box.y + brow, height: Math.max(scale, box.height - brow) };
     // LH-07: a step's badge band, at its starting size, above its text.
     if (stepUnits.has(node)) { const band = stepBand(proseMeasure(node, box.width).size); box = { ...box, y: box.y + band, height: Math.max(scale, box.height - band) }; }
+    // LH-14: a metric's icon takes a band at the top of its box, its chip and ICON_CHIP_GAP of it; the chip is placed over the metric's
+    // final parts at the end (placeIcons).
+    const chipOfMetric = metricChip(node);
+    if (chipOfMetric) { const band = chipOfMetric * (1 + ICON_CHIP_GAP); box = { ...box, y: box.y + band, height: Math.max(scale, box.height - band) }; if (metricHeight !== undefined) metricHeight = Math.max(scale, metricHeight - band); }
     const textValue = contentText(node.field, node.value);
     const measureInternal = (floorFallback = false) => [
       node.field === 'quote' ? measureQuote(node,box,settings,floorFallback) : undefined,
@@ -6426,6 +6530,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       surface = { path: node.emphasis!, box: { x, y, width: right - x, height: bottom - y }, radius: CARD_RADIUS * scale, shape: 'card', source: node.emphasis === featuredPath ? 'featured' : 'authored' };
     }
     if (brow) eyebrowsOf.set(items[items.length - 1]!, node.eyebrow!);
+    if (chipOfMetric) pendingIcons.push({ path: `${node.path}.icon`, owner: node.path, icon: iconFor(record(node.value).icon)!, members: [items[items.length - 1]!], diameter: chipOfMetric, metric: true });
     if (metricLayout && !metricLayout.overflow) { const metricBox = {...box,height:metricHeight ?? box.height}; metricRefits.set(items.length - 1, (roleSizes, pill) => measureMetric(node, metricBox, settings, false, roleSizes, tile, pill)); }
     if (timelineLayout) { const timelineBox = box; timelineRefits.set(items.length - 1, offset => measureTimeline(node, timelineBox, settings, 'placed', offset)); }
     // LH-67: the lead of a lead plus stack keeps its larger size; it is neither stepped nor shared.
@@ -6617,7 +6722,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }, 0);
     }
     // LH-152: a group's eyebrow band above its children.
-    if (node.children) { const width = cards && cardedNode(node) ? inner : cellWidth, content = node.children.reduce((sum, child) => sum + naturalHeight(child, width, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + (node.eyebrow ? groupEyebrow(node, inner).band : 0); return content + verticalPad(content); }
+    if (node.children) { const width = cards && cardedNode(node) ? inner : cellWidth, content = node.children.reduce((sum, child) => sum + naturalHeight(child, width, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + (node.eyebrow ? groupEyebrow(node, inner).band : 0) + groupChip(node, inner) * (1 + ICON_CHIP_GAP); return content + verticalPad(content); }
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number, eyebrowNeed = 0;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
@@ -6648,7 +6753,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !tierMetricPaths.has(node.path) && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
-    const body = content + (node.caption !== undefined ? 32 * scale : 0) + eyebrowNeed;
+    // LH-14: a metric's chip band above it.
+    const body = content + (node.caption !== undefined ? 32 * scale : 0) + eyebrowNeed + metricChip(node) * (1 + ICON_CHIP_GAP);
     return body + verticalPad(body);
   };
   // LH-48: the one block of a slide body (fills: the only root block, or a template's only block) that fills under LONE_FILL of its cell's
@@ -7017,7 +7123,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const leaf = (unit: Pending) => !unit.children && unit.caption === undefined, isList = (unit: Pending) => unit.field === 'items' || unit.field === 'bullets';
     const entries = (unit: Pending): unknown[] => Array.isArray(unit.value) ? unit.value : [];
     const flat = (unit: Pending) => entries(unit).every(entry => (record(entry).level ?? 0) === 0), numbered = (unit: Pending) => unit.payload.numbering !== undefined;
-    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2;
+    // LH-14: an icon list keeps its chips: it is no badge list or flow.
+    const badgeList = (unit: Pending) => leaf(unit) && isList(unit) && flat(unit) && entries(unit).length >= 2 && !(unit.field === 'items' && iconList(unit.value, unit.payload.numbering));
     if (sequence === 'numbered') {
       // The count runs over the whole agenda: when one of its lists cannot take badges (a lone entry, nested entries), the unnumbered
       // ones keep their markers rather than number a part of it.
@@ -7045,7 +7152,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       fire('step-badges');
       return;
     }
-    if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit)))) return;
+    if (units.length < 2 || !units.every(unit => leaf(unit) && (unit.field === 'text' || isList(unit))) || units.some(unit => unit.field === 'items' && iconList(unit.value, unit.payload.numbering))) return;
     for (const unit of units) { stepUnits.add(unit); stepPaths.add(unit.path); if (isList(unit) && numbered(unit) && entries(unit).length === 1) stepHeadings.add(unit.path); }
     fire('step-badges');
   };
@@ -8177,7 +8284,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const fit = item.text as ListFit, down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
     item.box = down(item.box);
     item.text = { ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, textBox: down(entry.textBox), ...(entry.descriptionBox ? { descriptionBox: down(entry.descriptionBox) } : {}), marker: down(entry.marker),
-      ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}) })),
+      ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}),
+      ...(entry.icon ? { icon: { ...entry.icon, cy: entry.icon.cy + dy } } : {}) })),
       ...(fit.rules ? { rules: fit.rules.map(down) } : {}) };
   };
   const pairRules = (): void => {
@@ -8232,7 +8340,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!ruleOn('check-tiles') || options.darkBackground !== true || (own.variant === undefined && own.background === undefined) || listBullet !== undefined || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field));
     const item = body.length === 1 ? body[0]! : undefined;
-    if (!item || (item.field !== 'bullets' && item.field !== 'items') || item.payload.numbering !== undefined || item.listColumns || item.caption || item.frameBox || stepFlows.has(item.path) || badgeLists.has(item.path) || !item.text || !('listEntries' in item.text)) return undefined;
+    if (!item || (item.field !== 'bullets' && item.field !== 'items') || item.payload.numbering !== undefined || item.listColumns || item.caption || item.frameBox || stepFlows.has(item.path) || badgeLists.has(item.path) || !item.text || !('listEntries' in item.text) || (item.field === 'items' && iconList(item.value, undefined))) return undefined;
     const values = Array.isArray(item.value) ? item.value as ListValue[] : [];
     const texts = values.map(value => { const object = record(value); return object.description !== undefined || (object.level ?? 0) !== 0 ? undefined : flatten(typeof value === 'object' && !Array.isArray(value) ? object.text : value).trim(); });
     if (values.length < CHECK_TILE_MIN || values.length > CHECK_TILE_MAX || texts.some(text => !text || [...text].length > CHECK_TILE_MAX_CHARACTERS)) return undefined;
@@ -8316,6 +8424,57 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     items.splice(at, 0, { path: eyebrow.path, field: 'text', type: 'text', value: eyebrow.value, payload: { type: 'text', text: eyebrow.value }, box, text: fit, textStyle: styleFor('text', eyebrow.path), composition: lead.composition, alignment,
       eyebrow: true, ...(lead.region !== undefined ? { region: lead.region } : {}), ...(carded && lead.frameBox ? { frameBox: lead.frameBox } : {}), ...(carded && lead.emphasis ? { emphasis: true as const } : {}) });
   }
+  // LH-14: the icons, over the items' final boxes. A list entry's chip is the one fitList placed in its marker column; a metric's sits
+  // above its visible parts, by the metric's alignment (centered, or at the start of a start-aligned metric); a group's sits at the start
+  // edge (the right in a right-to-left deck) above its items' span and its eyebrow band, inside a group drawn on one card of its own. The
+  // chip is a light tint of the primary with the glyph in the primary; on a dark slide or the emphasis surface the inverse (iconColors).
+  const icons: ComposedIcon[] = [];
+  const iconRoles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+  const slideDark = options.darkBackground === true;
+  const addIcon = (path: string, owner: string, icon: ResolvedIcon, cx: number, cy: number, diameter: number, onSurface: boolean) => {
+    const side = icon.picture ? diameter : diameter * ICON_GLYPH, box = roundBox({ x: cx - side / 2, y: cy - side / 2, width: side, height: side }), unit = side / ICON_VIEWBOX;
+    icons.push({ path, owner, reference: icon.reference, chip: { cx: round(cx), cy: round(cy), radius: round(diameter / 2) }, box,
+      ...(icon.parts ? { parts: icon.parts.map(part => ({ ...part, commands: placeIconCommands(part.commands, box), ...(part.stroke !== undefined ? { stroke: round(part.stroke * unit) } : {}) })) } : {}),
+      ...(icon.picture ? { picture: icon.picture } : {}), colors: iconColors(iconRoles, onSurface ? !slideDark : slideDark) });
+  };
+  for (const item of items) {
+    const fit = item.text as ListFit | undefined;
+    if ((item.field !== 'items') || !fit || !('listEntries' in fit)) continue;
+    const values = Array.isArray(item.value) ? item.value : [];
+    for (const entry of fit.listEntries) {
+      if (!entry.icon) continue;
+      const icon = iconFor(record(values[entry.index]).icon);
+      if (icon) addIcon(`${item.path}.${entry.index}.icon`, `${item.path}.${entry.index}`, icon, entry.icon.cx, entry.icon.cy, entry.icon.diameter, item.emphasis === true);
+    }
+  }
+  for (const pending of pendingIcons) {
+    const placed = pending.members.filter(item => items.includes(item));
+    if (!placed.length) continue;
+    const r = pending.diameter / 2, lift = pending.diameter * ICON_CHIP_GAP;
+    if (pending.metric) {
+      const item = placed[0]!, parts = (item.metricLayout?.parts ?? []).filter(part => part.visible && part.fit), area = parts.length ? parts.map(part => part.box) : [item.box];
+      const left = Math.min(...area.map(box => box.x)), right = Math.max(...area.map(box => box.x + box.width)), top = Math.min(...area.map(box => box.y));
+      const align = item.metricLayout?.alignment ?? item.alignment ?? 'center';
+      const cx = align === 'left' ? left + r : align === 'right' ? right - r : (left + right) / 2;
+      addIcon(pending.path, pending.owner, pending.icon, cx, top - lift - r, pending.diameter, item.emphasis === true);
+      continue;
+    }
+    // The group's items and the eyebrows drawn over them (its own, LH-152, and its paragraphs', LH-50), which sit in the bands above them.
+    const under = items.filter(item => placed.includes(item) || (item.eyebrow && item.path.startsWith(`${pending.owner}.`)));
+    const outer = under.map(item => pending.carded ? item.box : item.frameBox ?? item.box);
+    const left = Math.min(...outer.map(box => box.x)), right = Math.max(...outer.map(box => box.x + box.width)), top = Math.min(...outer.map(box => box.y));
+    addIcon(pending.path, pending.owner, pending.icon, rtl ? right - r : left + r, top - lift - r, pending.diameter, placed.some(item => item.emphasis === true));
+  }
+  // Every icon of the slide that resolves and is not drawn: the guard turned the chips off (no room without setting text smaller), or it
+  // marks something icons do not draw on (a nested or numbered entry). The text stays; the finding says why the chip is missing.
+  const iconDiagnostics: LayoutDiagnostic[] = [], drawnIcons = new Set(icons.map(icon => icon.path));
+  for (const found of documentIcons(slide)) {
+    const at = path + found.path.slice('slide'.length), value = found.value;
+    if (drawnIcons.has(at) || !resolveIcon(options.presentation ?? {}, value).ok) continue;
+    iconDiagnostics.push({ code: 'icon-dropped', path: at, message: ruleOn('icons')
+      ? 'The icon is not drawn: icons draw on the first-level entries of an unnumbered list, on metrics and on groups, and this one marks none of them here.'
+      : 'The icon is not drawn: the slide has no room for its chip without setting text smaller. The text keeps its size.' });
+  }
   // Notices that never fail a strict composition: the drawn number is still the one PowerPoint draws.
   const numberingDiagnostics: LayoutDiagnostic[] = [];
   for (const item of items) {
@@ -8359,7 +8518,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     unmeasuredPayloads:items.filter(item=>!headings.has(item.field)&&!item.quoteLayout&&!item.codeLayout&&!item.metricLayout&&!item.timelineLayout&&!['text','items','bullets','table'].includes(item.field)).map(item=>item.path),
   } : undefined;
   if (failures.length) throw new OPFCompositionError(failures, explanation);
-  diagnostics.push(...imageDiagnostics, ...numberingDiagnostics);
+  diagnostics.push(...imageDiagnostics, ...numberingDiagnostics, ...iconDiagnostics);
   // Wave 3: every body block fitted at the size it asked for (a paragraph or list at its starting size, each visible part of a quote, code
   // panel, metric or timeline at its role size), so no arrangement of the same requests could set one larger (composeSlide's guard).
   // LH-50: an eyebrow, inserted before its paragraph at the end, is set at its role size; the others keep the index they were placed at.
@@ -8400,7 +8559,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   if (surface && pairArrow) surface = { ...surface, arrow: pairArrow };
-  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(explanation?{explanation}:{}) };
+  const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}), ...(icons.length?{icons}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(explanation?{explanation}:{}) };
   if (pairNeed) {
     const roomy = composeLayout(input, { ...options, [PAIR_ROOM]: pairNeed } as ComposeSlideOptions);
     if (roomy.emphasis?.arrow && overflowCount(roomy) <= overflowCount(composed) && !shrinks(roomy, composed, options)) return roomy;

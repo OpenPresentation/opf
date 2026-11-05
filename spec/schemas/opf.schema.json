@@ -206,6 +206,10 @@
       "$ref": "#/$defs/Assets",
       "description": "Optional reusable asset registry for images, data files, videos, documents, fonts, and other resources referenced elsewhere in the deck via 'asset:<id>' strings."
     },
+    "icons": {
+      "$ref": "#/$defs/Icons",
+      "description": "Optional deck-local icons (LH-14), keyed by name: an author's or an LLM's own SVG, written once and named by any `icon` of the deck. See docs/icons.md."
+    },
     "catalogs": {
       "$ref": "#/$defs/Catalogs",
       "description": "The catalog records this document embeds, grouped by the catalog they came from: 'default' (the catalog bare ids come from), 'custom' (records the document defines itself) and any number of named catalogs ('acme', referenced as 'acme:<id>'). A saved document embeds every record it references, so it renders the same with no catalog registered. See Catalogs."
@@ -2500,6 +2504,10 @@
           "type": "boolean",
           "description": "true draws this block or group on the slide's emphasis surface: a contrasting card in its cell (a dark card on a light slide, an accent card on a dark one), from the deck's own scheme slots, with every text color on it at 4.5:1 or more against its fill. A slide has one emphasis surface: the first block or group with emphasis: true in reading order takes it, and any other is drawn without it (composition diagnostic emphasis-ignored). Without any, a slide's short last text block (60 characters or fewer) after longer blocks is drawn as a band at the foot of the body, and one of 30 or fewer after a lone long text as a pill right under that text; neither is drawn where it would cost another block its fitted size. Without any either, the second card of a before-and-after or problem-and-solution pair, or the one tier of a set marked recommended or most popular, takes the surface and the other cards of the pair or set are drawn on plain cards (read from the blocks' labels and short texts, never from ids). false keeps a block out of those automatic rules.",
           "examples": [true, false]
+        },
+        "icon": {
+          "$ref": "#/$defs/IconReference",
+          "description": "Groups only (LH-14): an icon drawn on a chip at the top of the group, before its heading, as a card of features or topics draws one: \"<set>:<name>\" (\"lucide:shield-check\"), a name from the deck's icons, or an SVG source. A list entry and a metric take their own `icon`. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
         }
       },
       "allOf": [
@@ -2843,6 +2851,10 @@
           "type": "string",
           "enum": ["positive", "negative", "neutral"],
           "description": "Whether the change is good news. Positive draws the trend arrow and the trend and delta text in green, negative in red and neutral in the neutral text colour, each kept at 4.5:1 contrast or more against the slide background. When absent the colour follows the trend: up is positive, down is negative and flat is neutral. Set it when the direction is not the verdict, for example positive on a falling churn, cost or latency trend. The arrow always keeps the direction of `trend`. Only the trend arrow and the trend and delta text take the colour, so sentiment has no visible effect on a metric without a trend."
+        },
+        "icon": {
+          "$ref": "#/$defs/IconReference",
+          "description": "An icon drawn on a chip above the metric (LH-14): \"<set>:<name>\" (\"lucide:users\"), a name from the deck's icons, or an SVG source. Decoration only: when the slide has no room for it without setting text smaller, it is not drawn (finding opf/icon-dropped). See docs/icons.md."
         }
       }
     },
@@ -2985,6 +2997,10 @@
               "type": "integer",
               "minimum": 0,
               "description": "Zero-based nesting level for the list item."
+            },
+            "icon": {
+              "$ref": "#/$defs/IconReference",
+              "description": "An icon drawn on a chip at the start of the entry, in place of its bullet (LH-14): \"<set>:<name>\" (\"lucide:truck\"), a name from the deck's icons, or an SVG source. Drawn on first-level entries of an unnumbered list. Decoration only: when the slide has no room for the chips without setting text smaller, they are not drawn (finding opf/icon-dropped). See docs/icons.md."
             },
             "start": {
               "type": "integer",
@@ -3985,8 +4001,25 @@
         "tones": {
           "$ref": "#/$defs/CatalogRecords",
           "description": "Tone records keyed by id, each with the fields of https://openpresentation.org/schema/opf-tone/v1. Referenced from tone."
+        },
+        "iconSets": {
+          "$ref": "#/$defs/CatalogRecords",
+          "description": "Icon-set records keyed by set id (LH-14), each with the fields of https://openpresentation.org/schema/opf-icon-set/v1, holding only the icons the document uses (no licenseText or tags). Referenced from an icon as \"<set>:<name>\"."
         }
       }
+    },
+    "IconReference": {
+      "type": "string",
+      "pattern": "^(?:[a-z][a-z0-9-]*:[a-z0-9][a-z0-9-]*|[a-z][a-z0-9-]*|(?:asset:|https://|data:|\\./|\\.\\./)\\S+)$",
+      "description": "An icon (LH-14): \"<set>:<name>\" names an icon of a set (\"lucide:truck\", \"tabler:rocket\"; the gallery bundles Lucide and Tabler outline), a bare name names one of the deck's `icons`, and an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data:image/svg+xml URI) names an SVG file, as pictures accept. A one-color icon draws in the accent and exports as a native, theme-colored PowerPoint shape; a multicolor SVG draws as a picture with its own colors. Unknown names are opf/icon-unknown, unusable SVG opf/icon-invalid.",
+      "examples": ["lucide:truck", "tabler:rocket", "brand-mark", "asset:partner-logo"]
+    },
+    "Icons": {
+      "type": "object",
+      "description": "Deck-local icons (LH-14), keyed by name: SVG text (\"<svg …>\") or an SVG source (\"asset:<id>\", \"./icon.svg\", an HTTPS URL or a data URI). An `icon` names one by its bare name. The SVG is read, never run: a script, an event handler, an external reference or a raster makes it opf/icon-invalid. One paint (or currentColor) makes it a recolorable glyph; several make it a picture with its own colors.",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": { "type": "string", "minLength": 1 },
+      "examples": [{ "brand-mark": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\"><path d=\"M4 12l5 5L20 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg>" }]
     },
     "CatalogSource": {
       "type": "string",

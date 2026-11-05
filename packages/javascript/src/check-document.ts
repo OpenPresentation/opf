@@ -25,6 +25,7 @@ import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
 import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
 import { splitPointer } from './rule-content.js';
+import { documentIcons, iconIssue } from './icons.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
@@ -434,6 +435,12 @@ function embeddedRecordFindings(document: unknown, options: CatalogOptions, find
 	if (!object(document) || !object(document.catalogs)) return invalid;
 	for (const [group, value] of Object.entries(document.catalogs)) {
 		if (!object(value)) continue;
+		// LH-14: an embedded icon set is checked against its companion schema, as a content record is.
+		for (const [id, record] of Object.entries(object(value.iconSets) ? value.iconSets : {})) {
+			if (object(record) && (Object.hasOwn(record, '$schema') || Object.hasOwn(record, 'id'))) continue;
+			const validation = validateAgainstSchema(object(record) ? { $schema: schemas.iconSet.$id, id, ...record } : record, 'iconSets');
+			for (const issue of validation.errors) findings.push(issueFinding(issue, 'opf/catalog-record', 'iconSet', pointer(['catalogs', group, 'iconSets', id]), 'document'));
+		}
 		for (const kind of catalogKinds)
 			for (const [id, record] of Object.entries(object(value[kind]) ? value[kind] : {})) {
 				const path = pointer(['catalogs', group, kind, id]);
@@ -826,6 +833,25 @@ export function referenceFindings(document: unknown, engine: SchemaCheckResult, 
 				lookup: ['opf', 'schema', 'presentation', '/$defs/Dataset'],
 			}),
 		);
+	// LH-14: an icon that resolves nowhere (a set or name not found, with the nearest names) and an SVG that cannot be an icon. A registered
+	// set the host has not loaded yet (ensureIcons) is not checked: the CLI, the MCP and the Node file API load the sets first.
+	for (const { path, value } of documentIcons(document)) {
+		const issue = iconIssue(document, value, catalogs);
+		if (!issue) continue;
+		const unknown = issue.code === 'icon-unknown';
+		findings.push(
+			finding(unknown ? 'opf/icon-unknown' : 'opf/icon-invalid', {
+				path: pointerPath(path.split('.')),
+				message: issue.message,
+				help: unknown
+					? `${issue.suggestions?.length ? `Did you mean ${issue.suggestions.slice(0, 3).map((name) => `'${name}'`).join(', ')}? ` : ''}Use an icon the set has (the MCP's search_icons finds names by keyword), add the name to the deck's icons, or remove the icon. Nothing else changes: the text is drawn without the chip.`
+					: 'Give the icon SVG text with only shapes (path, circle, rect, line, polyline, polygon and groups), no script, event handler, external reference or raster, or remove the icon.',
+				definition: `${schemas.presentation.$id}#/$defs/IconReference`,
+				lookup: ['opf', 'schema', 'presentation', '/$defs/IconReference'],
+				...(issue.suggestions?.length ? { suggestions: issue.suggestions.map((value) => ({ value, label: value, origin: 'registered' as const, definition: `${schemas.presentation.$id}#/$defs/IconReference` })) } : {}),
+			}),
+		);
+	}
 	return findings;
 }
 

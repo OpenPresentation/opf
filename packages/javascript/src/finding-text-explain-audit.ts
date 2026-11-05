@@ -113,6 +113,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { layouts: { roadmap: ROADMAP } } }, slides: [{ layout: "roadmap", blocks: [{ region: "timeline", text: "Note" }] }] },
     { catalogs: { custom: { layouts: { roadmap: ROADMAP } } }, slides: [{ layout: "roadmap", blocks: [{ region: "notes", text: "Note" }] }] },
   ),
+  "opf/icon-dropped": ex(
+    "Put the icon on an entry, metric or group it can mark (a first-level entry of an unnumbered list), or give the slide room for its chips.",
+    { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }], numbering: "arabic" }] },
+    { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }] }] },
+  ),
   "opf/region-full": ex(
     "Pin the block to another region with room, or remove `region` so it is placed by its kind.",
     { catalogs: { custom: { layouts: { roadmap: ROADMAP } } }, slides: [{ layout: "roadmap", blocks: [{ region: "timeline", ...TIMELINE }, { region: "timeline", ...TIMELINE }] }] },

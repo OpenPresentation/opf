@@ -7,7 +7,7 @@ import "@openpresentation/opf/precompiled";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GetPromptResult, ReadResourceResult, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import { catalogDisplay, gallery } from "@openpresentation/gallery";
-import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, schemaEntries, stringify, validate } from "@openpresentation/opf";
+import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, ensureIcons, schemaEntries, stringify, validate } from "@openpresentation/opf";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { getAtPointer } from "@openpresentation/opf/patch";
 import { fromYaml } from "@openpresentation/opf/yaml";
@@ -39,6 +39,11 @@ export interface OpfMcpSources {
 	skills: Readonly<Record<string, Readonly<Record<string, string>>>>;
 	/** The recent release notes, as text: `opf://docs/whats-new`. Left out when absent. */
 	whatsNew?: string;
+	/**
+	 * LH-14: the icon sets `search_icons` searches and `validate_deck` checks icon names in: `galleryIconSets` of
+	 * `@openpresentation/gallery/icon-sets` (each set a module loaded on first use). Left out of the lean server, which then names no icon set.
+	 */
+	iconSets?: Catalog;
 }
 
 /** Checks deck text as `opf validate` does and returns the report. The default is edge-safe (layout estimated); `opf mcp` supplies the measured one. */
@@ -124,12 +129,17 @@ async function readReport(raw: string, format: DeckFormat, options: ValidateOpti
 		} catch {
 			// validate reports the syntax error
 		}
-		if (deck !== undefined) await ensureDiagrams(deck);
+		if (deck !== undefined) {
+			await ensureDiagrams(deck);
+			// LH-14: the gallery icon sets load on first use; the ones the deck names load before the check, so unknown names are reported.
+			await ensureIcons(deck, { catalogs: options.catalogs ?? CATALOGS });
+		}
 		return validate(raw, options);
 	}
 	// A YAML or Markdown deck's diagrams are known once it is read, so it is read again only when that loaded a diagram type.
 	const first = readText(raw, format, options);
-	return (await ensureDiagrams(first.presentation)).length > 0 ? readText(raw, format, options).report : first.report;
+	const loaded = (await ensureDiagrams(first.presentation)).length + (await ensureIcons(first.presentation, { catalogs: options.catalogs ?? CATALOGS })).sets.length;
+	return loaded > 0 ? readText(raw, format, options).report : first.report;
 }
 
 /** The form of the text a tool was given: the `format` argument; else JSON for an object or text that starts with `{` or `[`. */
@@ -261,6 +271,8 @@ To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the 
 /** Build the server. Connect it to a transport (`server.connect(...)`): stdio for `opf mcp`, Streamable HTTP for a hosted one. */
 export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 	const { sources, version } = options;
+	// LH-14: a deck's icons resolve in the icon sets the server was given, besides the gallery.
+	const checkCatalogs: readonly Catalog[] = sources.iconSets ? [...CATALOGS, sources.iconSets] : CATALOGS;
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
 	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions: INSTRUCTIONS });
@@ -424,7 +436,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		({ document, format, failOn }) =>
 			respond(async () => {
 				const input = inputOf(document, format);
-				const report = await check(input.raw, input.format, { catalogs: CATALOGS });
+				const report = await check(input.raw, input.format, { catalogs: checkCatalogs });
 				const level = failOn ?? "error";
 				const { findings, counts, valid, schemaValid, checks, ...rest } = report;
 				return { ok: !reaches(findings, level), valid, schemaValid, failOn: level, format: input.format, counts, findings, checks, ...(typeof (rest as { hint?: string }).hint === "string" ? { hint: (rest as { hint: string }).hint } : {}), ...(opfVersion ? { opfVersion } : {}) };
@@ -487,6 +499,58 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				const found = recordsOf(kind);
 				if (!Object.hasOwn(found.records, id)) throw fail(`Unknown ${found.kind} id: ${id}.${didYouMean(id, Object.keys(found.records))} Run search_catalog.`, "unknown-id");
 				return { kind: kebab(found.kind), id, uri: URI.record(kebab(found.kind), id), record: { id, ...found.records[id] } };
+			}),
+	);
+
+	// LH-14: the icon sets of the gallery, each a module of its own, loaded on the first search that needs it.
+	type IconSet = { name: string; license: string; copyright: string; version?: string; icons: Record<string, unknown>; tags?: Record<string, readonly string[]> };
+	const iconSets = (sources.iconSets?.iconSets ?? {}) as Record<string, () => Promise<IconSet>>;
+	const setNames = Object.keys(iconSets);
+	server.registerTool(
+		"search_icons",
+		{
+			title: "Search the icon sets",
+			description: `Find icons for an \`icon\` field (a list entry, a metric or a group) in the gallery's icon sets: ${setNames.join(", ")} (Lucide is the default). Matches the icon name and the source package's keywords (every word must match; a name match ranks first). Each result's \`icon\` is the value to write, such as "lucide:truck". Never invent a name: an unknown one is the finding opf/icon-unknown. A deck can also define its own SVG once in its top-level \`icons\` map and name it by its bare key.`,
+			inputSchema: {
+				query: z.string().describe('Words to match, such as "delivery truck" or "security".'),
+				set: z.string().optional().describe(`Only this set: ${setNames.join(" or ")}.`),
+				limit: z.number().int().min(1).max(100).optional().describe("At most this many icons. Default 20."),
+			},
+			outputSchema: {
+				query: z.string(),
+				total: z.number(),
+				returned: z.number(),
+				icons: z.array(z.object({ icon: z.string(), set: z.string(), name: z.string(), tags: z.array(z.string()) })),
+				sets: z.array(z.object({ id: z.string(), name: z.string(), license: z.string(), copyright: z.string(), version: z.string().optional(), icons: z.number() })),
+			},
+			annotations: { ...READ_ONLY, title: "Search the icon sets" },
+		},
+		({ query, set, limit }) =>
+			respond(async () => {
+				if (!setNames.length) throw fail("This server bundles no icon sets (the lean @openpresentation/mcp/server): pass sources.iconSets, galleryIconSets of @openpresentation/gallery/icon-sets.", "unknown-id");
+				const ids = set === undefined ? setNames : [set];
+				for (const id of ids) if (!Object.hasOwn(iconSets, id)) throw fail(`Unknown icon set ${id}.${didYouMean(id, setNames)} Sets: ${setNames.join(", ")}.`, "unknown-id");
+				const loaded = await Promise.all(ids.map(async (id) => [id, await iconSets[id]!()] as const));
+				const words = query.toLowerCase().split(/[\s,]+/).filter(Boolean);
+				const found: { score: number; icon: { icon: string; set: string; name: string; tags: string[] } }[] = [];
+				for (const [id, record] of loaded)
+					for (const name of Object.keys(record.icons)) {
+						const tags = [...(record.tags?.[name] ?? [])];
+						const hay = [name, ...tags].join(" ").toLowerCase();
+						if (!words.every((word) => hay.includes(word))) continue;
+						// A whole name first, then a word of the name, then part of it, then a keyword; the default set breaks ties.
+						const score = words.reduce((sum, word) => sum + (name === word ? 8 : name.split("-").includes(word) ? 4 : name.includes(word) ? 2 : 1), 0) - name.length / 100 + (id === "lucide" ? 0.5 : 0);
+						found.push({ score, icon: { icon: `${id}:${name}`, set: id, name, tags } });
+					}
+				found.sort((a, b) => b.score - a.score || a.icon.icon.localeCompare(b.icon.icon));
+				const max = limit ?? 20;
+				return {
+					query,
+					total: found.length,
+					returned: Math.min(max, found.length),
+					icons: found.slice(0, max).map((item) => item.icon),
+					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length })),
+				};
 			}),
 	);
 

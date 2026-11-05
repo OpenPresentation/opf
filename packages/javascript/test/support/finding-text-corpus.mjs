@@ -6,6 +6,8 @@ import { gallery } from '@openpresentation/gallery';
 import { validate } from '../../dist/index.js';
 
 const deck = (slides, extra = {}) => ({ name: 'Fixture', language: 'en-US', ...extra, slides });
+// LH-14: an embedded icon set, so the icon rules run without loading a registered set.
+const iconSet = { name: 'Brand', license: 'MIT', copyright: 'Copyright (c) 2026 Example', viewBox: [0, 0, 24, 24], style: 'stroke', icons: { star: 'M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z' } };
 const white = { background: { type: 'solid', color: '#FFFFFF' } };
 const chartData = { columns: ['Q', 'V'], rows: [['Q1', 1]] };
 const roadmap = { name: 'Roadmap split', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'timeline', accepts: ['timeline'], max: 1 }, { name: 'notes', accepts: ['text', 'list'], flow: 'column' }] }] };
@@ -106,6 +108,9 @@ export const CASES = [
 	{ name: 'min-font-size-composed', rule: 'opf/min-font-size', input: deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]) },
 	{ name: 'region-unknown', rule: 'opf/region-unknown', input: deck([{ layout: 'r', blocks: [{ region: 'timelin', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'region-kind', rule: 'opf/region-kind', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', text: 'b' }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
+	{ name: 'icon-unknown', rule: 'opf/icon-unknown', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:stra' }] }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
+	{ name: 'icon-invalid', rule: 'opf/icon-invalid', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'mark' }] }], { icons: { mark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><script>alert(1)</script></svg>' } }) },
+	{ name: 'icon-dropped', rule: 'opf/icon-dropped', input: deck([{ title: 'T', items: [{ text: 'a', icon: 'brand:star' }, { text: 'b' }], numbering: 'arabic' }], { catalogs: { custom: { iconSets: { brand: iconSet } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Team', composition: { mode: 'row' }, blocks: [person(1), person(2)] }]) },
