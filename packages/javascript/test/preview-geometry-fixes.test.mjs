@@ -53,8 +53,8 @@ test('furniture images and logos align like the zone text: left edge, centered, 
   // The text of the same zone still spans the full zone box, so its left and right edges are the images' edges.
   const right = layout.parts.find(part => part.type === 'text' && part.zone === 'right');
   near(right.box.x + right.box.width, images.find(part => part.zone === 'right').box.x + images.find(part => part.zone === 'right').box.width, 'right edges meet');
-  // Vertical placement is unchanged: the header band starts at 2.5% of the height.
-  near(images.find(part => part.kind === 'header').box.y, 720 * 0.025, 'header image top');
+  // LH-38: the header band starts half a content margin (28.8 px at the default padding) from the top edge.
+  near(images.find(part => part.kind === 'header').box.y, 720 * 0.04, 'header image top');
   assert.deepEqual(layout.parts.map(part => part.alignment), layout.parts.map(part => part.zone));
   // A logo reference draws the organization's asset and keeps the reference it came from.
   const logo = images.find(part => part.kind === 'footer');

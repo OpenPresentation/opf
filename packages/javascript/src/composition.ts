@@ -1264,6 +1264,9 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
   const primaryIndex=organizations.findIndex(item=>record(item).role==='primary'),organizationIndex=primaryIndex>=0?primaryIndex:organizations.findIndex(Boolean);
   const organization=record(organizations[organizationIndex]),organizationRoot=Array.isArray(options.presentation?.organization)?`organization.${organizationIndex}`:'organization';
   const fontFamily=options.fontFamilies?.body??'sans-serif';let headerBottom=0,footerTop=height,configured=false;
+  // LH-38: the header and the footer sit half a content margin from the slide edge (28.8 px at the default 8% padding of a 720 px short edge), nearer
+  // the edge than the content so they read as chrome, and the same distance at the top and the bottom; zones stay on the content inset sideways.
+  const edge=Math.min((settings.padding??.08)*Math.min(width,height),width*.25)/2;
   const error=(path:string,message:string,code:LayoutDiagnostic['code']='text-overflow')=>diagnostics.push({code,path,message});
   for(const kind of ['header','footer'] as const){
     const local=record(slide.design)[kind]!==undefined,value=local?record(slide.design)[kind]:options.presentation?.design?.[kind];
@@ -1399,12 +1402,12 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     }
     const tallest=Math.max(0,...zones.flat().map(part=>part.box.y+part.box.height));
     if(!tallest)continue;
-    const top=kind==='header'?height*.025:Math.max(height*.025,height-height*.04-tallest);
+    const top=kind==='header'?edge:Math.max(edge,height-edge-tallest);
     if(kind==='header')headerBottom=top+tallest;else footerTop=top;
     for(const zone of zones)for(const part of zone){
       part.box.y+=top;
       if(part.type==='text'&&part.fit.placement)for(const line of part.fit.placement.lines){line.y+=top;line.baseline+=top;if(line.outline)line.outline.y+=top;}
-      if(part.box.y+part.box.height>height-height*.04+.01)error(part.path,'Repeated header/footer content extends beyond the usable slide height. Change its content or design before pagination.');
+      if(part.box.y+part.box.height>height-edge+.01)error(part.path,'Repeated header/footer content extends beyond the usable slide height. Change its content or design before pagination.');
       parts.push(part);
     }
   }
@@ -6396,7 +6399,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
     else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > box.width * CHART_MAX_ASPECT_RATIO) box = roundBox({ ...box, height: box.width * CHART_MAX_ASPECT_RATIO });
-    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
+    // LH-74: a picture alone on a card (no caption, no frame, shape or line of its own) that covers its frame fills the card to its edges,
+    // clipped to the card's radius, with no inset and no stroke: the picture is the card, so none is drawn under it. A picture shown whole
+    // (contain) keeps the card and its inset around it.
+    let imageHost: Record<string, any> = node.host ?? {};
+    if (node.field === 'image' && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.cornerRadius === undefined && (imageHost.shape === undefined || imageHost.shape === 'rectangle') && !(record(imageHost.border).color !== undefined && record(imageHost.border).width)) {
+      const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'rounded', cornerRadius: radius };
+      const context = { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
+      if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [] }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
+    }
+    const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
@@ -7795,10 +7807,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           const item = items[index]!;
           if (item.metricLayout!.parts.every(part => !part.visible || !part.fit || part.fit.fontSize <= sizes[part.role]! + 1e-9)) continue;
           const refit = metricRefits.get(index)!(sizes);
-          // LH-137 with LH-53: a metric whose delta pill let it grow takes the shared sizes too, its inline unit (a share of its value's size)
-          // following its value rather than the shared unit, so siblings keep one value size (the drawing guard holds it to the slide without pills).
+          // LH-137 with LH-53, LH-157: a metric with an inline unit takes the shared sizes too, its unit (a share of its value's size) following
+          // its value rather than the shared unit, so siblings keep one value size (a pill that let it grow is held to the slide by the drawing guard).
           // A value at display size (LH-112) keeps its own, as it does without a pill.
-          const follows = (part: MetricTextPart) => part.role === 'unit' && refit.arrangement === 'inline-unit' && item.metricLayout!.deltaPill !== undefined && !refit.display;
+          const follows = (part: MetricTextPart) => part.role === 'unit' && refit.arrangement === 'inline-unit' && !refit.display;
           if (refit.overflow || refit.parts.some(part => part.visible && !follows(part) && (!part.fit || Math.abs(part.fit.fontSize - sizes[part.role]!) > 1e-9))) continue;
           item.metricLayout = refit;
           item.text = refit.parts.find(part => part.role === 'value')?.fit;
@@ -8120,7 +8132,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const values = item.value as ListValue[], fit = item.text as ListFit, size = fit.fontSize, area = templateRegions.find(entry => entry.name === region)?.box ?? item.box;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
     const single = (index: number, box: LayoutBox): ListFit => {
-      const own = fitList([values[index]!], box, size, size, listOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+      // The entry is fitted alone (as entry 0), so its runs' citation markers are looked up at its own index.
+      const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
+      const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
+      const own = fitList([values[index]!], box, size, size, entryOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
       return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${index}.description` })) };
     };
     const measured = values.map((_, index) => single(index, { x: 0, y: 0, width: 1e5, height: 1e5 }).listEntries[0]!);

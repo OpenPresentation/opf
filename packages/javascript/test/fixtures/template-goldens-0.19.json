@@ -3252,109 +3252,109 @@
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 81.6,183.5,1116.8,454.9"
+  "item blocks.0.image people 57.6,159.5,1164.8,502.9"
  ],
  "team 2 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 81.6,183.5,522.4,454.9",
-  "item blocks.1.image people 676,183.5,522.4,454.9"
+  "item blocks.0.image people 57.6,159.5,570.4,502.9",
+  "item blocks.1.image people 652,159.5,570.4,502.9"
  ],
  "team 3 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 80.9,182.7,325.7,456.4",
-  "item blocks.1.image people 477.1,182.7,325.7,456.4",
-  "item blocks.2.image people 873.4,182.7,325.7,456.4"
+  "item blocks.0.image people 57.6,159.5,372.3,502.9",
+  "item blocks.1.image people 453.9,159.5,372.3,502.9",
+  "item blocks.2.image people 850.1,159.5,372.3,502.9"
  ],
  "team 4 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 4",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 72.2,174.1,541.2,204.3",
-  "item blocks.1.image people 666.6,174.1,541.2,204.3",
-  "item blocks.2.image people 72.2,443.5,541.2,204.3",
-  "item blocks.3.image people 666.6,443.5,541.2,204.3"
+  "item blocks.0.image people 57.6,159.5,570.4,233.5",
+  "item blocks.1.image people 652,159.5,570.4,233.5",
+  "item blocks.2.image people 57.6,428.9,570.4,233.5",
+  "item blocks.3.image people 652,428.9,570.4,233.5"
  ],
  "team 5 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 5",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 72.2,174.1,343.1,204.3",
-  "item blocks.1.image people 468.5,174.1,343.1,204.3",
-  "item blocks.2.image people 864.7,174.1,343.1,204.3",
-  "item blocks.3.image people 270.3,443.5,343.1,204.3",
-  "item blocks.4.image people 666.6,443.5,343.1,204.3"
+  "item blocks.0.image people 57.6,159.5,372.3,233.5",
+  "item blocks.1.image people 453.9,159.5,372.3,233.5",
+  "item blocks.2.image people 850.1,159.5,372.3,233.5",
+  "item blocks.3.image people 255.7,428.9,372.3,233.5",
+  "item blocks.4.image people 652,428.9,372.3,233.5"
  ],
  "team 6 short": [
   "area title 57.6,57.6,1164.8,65.9",
   "region people 57.6,147.5,1164.8,514.9 grid 6",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.image people 72.2,174.1,343.1,204.3",
-  "item blocks.1.image people 468.5,174.1,343.1,204.3",
-  "item blocks.2.image people 864.7,174.1,343.1,204.3",
-  "item blocks.3.image people 72.2,443.5,343.1,204.3",
-  "item blocks.4.image people 468.5,443.5,343.1,204.3",
-  "item blocks.5.image people 864.7,443.5,343.1,204.3"
+  "item blocks.0.image people 57.6,159.5,372.3,233.5",
+  "item blocks.1.image people 453.9,159.5,372.3,233.5",
+  "item blocks.2.image people 850.1,159.5,372.3,233.5",
+  "item blocks.3.image people 57.6,428.9,372.3,233.5",
+  "item blocks.4.image people 453.9,428.9,372.3,233.5",
+  "item blocks.5.image people 850.1,428.9,372.3,233.5"
  ],
  "team 1 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 81.6,229.6,1116.8,408.8"
+  "item blocks.0.image people 57.6,205.6,1164.8,456.8"
  ],
  "team 2 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 81.6,229.6,522.4,408.8",
-  "item blocks.1.image people 676,229.6,522.4,408.8"
+  "item blocks.0.image people 57.6,205.6,570.4,456.8",
+  "item blocks.1.image people 652,205.6,570.4,456.8"
  ],
  "team 3 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 3",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 80.9,228.9,325.7,410.2",
-  "item blocks.1.image people 477.1,228.9,325.7,410.2",
-  "item blocks.2.image people 873.4,228.9,325.7,410.2"
+  "item blocks.0.image people 57.6,205.6,372.3,456.8",
+  "item blocks.1.image people 453.9,205.6,372.3,456.8",
+  "item blocks.2.image people 850.1,205.6,372.3,456.8"
  ],
  "team 4 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 4",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 70.7,218.8,544.1,184.1",
-  "item blocks.1.image people 665.1,218.8,544.1,184.1",
-  "item blocks.2.image people 70.7,465.2,544.1,184.1",
-  "item blocks.3.image people 665.1,465.2,544.1,184.1"
+  "item blocks.0.image people 57.6,205.6,570.4,210.4",
+  "item blocks.1.image people 652,205.6,570.4,210.4",
+  "item blocks.2.image people 57.6,452,570.4,210.4",
+  "item blocks.3.image people 652,452,570.4,210.4"
  ],
  "team 5 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 5",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 70.7,218.8,346,184.1",
-  "item blocks.1.image people 467,218.8,346,184.1",
-  "item blocks.2.image people 863.3,218.8,346,184.1",
-  "item blocks.3.image people 268.9,465.2,346,184.1",
-  "item blocks.4.image people 665.1,465.2,346,184.1"
+  "item blocks.0.image people 57.6,205.6,372.3,210.4",
+  "item blocks.1.image people 453.9,205.6,372.3,210.4",
+  "item blocks.2.image people 850.1,205.6,372.3,210.4",
+  "item blocks.3.image people 255.7,452,372.3,210.4",
+  "item blocks.4.image people 652,452,372.3,210.4"
  ],
  "team 6 long": [
   "area title 57.6,57.6,1164.8,112",
   "region people 57.6,193.6,1164.8,468.8 grid 6",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.image people 70.7,218.8,346,184.1",
-  "item blocks.1.image people 467,218.8,346,184.1",
-  "item blocks.2.image people 863.3,218.8,346,184.1",
-  "item blocks.3.image people 70.7,465.2,346,184.1",
-  "item blocks.4.image people 467,465.2,346,184.1",
-  "item blocks.5.image people 863.3,465.2,346,184.1"
+  "item blocks.0.image people 57.6,205.6,372.3,210.4",
+  "item blocks.1.image people 453.9,205.6,372.3,210.4",
+  "item blocks.2.image people 850.1,205.6,372.3,210.4",
+  "item blocks.3.image people 57.6,452,372.3,210.4",
+  "item blocks.4.image people 453.9,452,372.3,210.4",
+  "item blocks.5.image people 850.1,452,372.3,210.4"
  ],
  "logos 1 short": [
   "area title 57.6,57.6,1164.8,65.9",
