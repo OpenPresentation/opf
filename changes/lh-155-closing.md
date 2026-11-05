@@ -1,0 +1,6 @@
+---
+type: changed
+packages: [opf, render, pptx, gallery]
+drawing: ["layouts:closing"]
+---
+LH-155, LH-138 (caption half): the gallery `closing` takes the cover's treatment, as Claude Design draws a closing: its stack (the display title, then the contact lines) is start-aligned and anchored at the foot of the slide (`anchor: "bottom"` on the record) under the accent rule (`rule: true` on its `title` region), where it was centered. A stack anchored low over a picture background stays low only where the measured picture is calm under it (the calm-picture rule of covers and sections, now read for the whole stack) and is centered over a busy or unmeasured one, as before. The title rule is a guarded rule (`title-rule`): where the slide has no room to spare, so that the rule would set the contact lines smaller, the slide has no rule, which the size guard requires and a cover or section (no body) never meets. LH-138: a picture's caption that is one plain string with a colon and a space after one to six words and a detail after it ("Before: loose boxes, tape and paper") draws the words up to the first colon in bold, the detail in the regular weight, in the preview and the PowerPoint export; `TextRun[]` captions, colons inside words and chart, table, video and diagram captions stay as written. Contact icons and a one-row contact line are not part of this change.

@@ -143,6 +143,12 @@ rectangle tagged `OPF_TITLE_RULE_V1`, which import consumes as the layout's draw
 both, with `titleAlignment` and `contentAlignment` `left` (start), so a display title sits low at the start edge as Claude
 Design sets it, with the section's tag ("Part 1") as its eyebrow.
 
+LH-155: the gallery `closing` takes the same treatment as a stacked record: its all-`auto` column has `anchor: "bottom"`, so the stack (the title
+under the accent rule, then the contact lines) stands at the foot of the content box at the start edge, as Claude Design sets a closing. The
+rule rides on the title (`rule: true`) and is a guarded rule (`title-rule`): where the stack has no room to spare, so that the rule
+would set the contact lines smaller, the slide has no rule. A stack anchored low over a picture background follows the calm-picture rule
+above as one group (title and contact lines): over a busy or unmeasured picture the stack is centered, as it was before.
+
 Over a picture background a `bottom` heading group stays low only where the picture is calm under its text: the host measured
 the picture (`pictureLuminance`, which `measurePictures` returns, LH-145), the grays under the group's text span at most
 `CALM_PICTURE_SPREAD` (48 of 256 levels, seen through the author's overlay) and the text color reads 4.5:1 over every one of them
@@ -487,7 +493,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   middle of the space under the headings: rows that hug
   their content move down, regions take the height their blocks need in the middle of their cells, and cards hug their
   text (LH-64's hug, whatever it fills of a card).
-- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which center their message and grow by
+- **Never grown by these two rules.** A stacked record (`statement`, `quote`, `closing`, which place their message as one stack, a closing at the foot (LH-155), and grow by
   LH-129's rule below), blocks below
   the grid (a section's notes), a body with a picture, chart, video or timeline beside its text, a captioned block, a
   list in columns, an overflowing composition, and `composeSlide(slide, { fill: false })`, for hosts and tests of the

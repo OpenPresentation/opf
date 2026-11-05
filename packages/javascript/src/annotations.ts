@@ -220,6 +220,8 @@ export function slideCitations(slide: unknown, slideIndex: number, presentation?
 /** Fits a string or TextRun[] into a box at a requested size (composeSlide supplies its placed fitter). */
 export type AnnotationFitter = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, path: string, alignment: CaptionAlignment) => TextFit | RichTextFit;
 export interface AnnotationLayoutOptions {
+  /** LH-138: a caption that reads "Name: detail" draws its name in bold (a picture's caption; see `splitCaptionName`). */
+  nameDetail?: boolean;
   scale: number;
   minFontSize: number;
   fit: AnnotationFitter;
@@ -247,10 +249,27 @@ export interface ComposedCaption {
 
 const fitHeight = (fit: TextFit | RichTextFit): number => Math.max(fit.placement?.height ?? 0, 'richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight);
 
+/** LH-138: the most words a caption's bold name takes ("Before:", "Reno fulfillment center:"); a longer lead-in is a sentence, not a name. */
+export const CAPTION_NAME_WORDS = 6;
+/**
+ * LH-138: a caption that is one plain string with a colon followed by a space, one to `CAPTION_NAME_WORDS` words before it and a detail after it, splits at
+ * the first colon into a bold name and its detail ("Before: loose boxes" becomes **Before:** loose boxes), as Claude Design draws a picture's caption.
+ * A colon inside a word ("10:30", "https://") never splits, and runs, which an author formats, stay as written.
+ */
+export function splitCaptionName(text: RichText): RichText {
+  if (typeof text !== 'string') return text;
+  const match = /^([^:\n]+:)[ \t]+(\S[\s\S]*)$/.exec(text.trim());
+  if (!match) return text;
+  const name = match[1]!;
+  if (!name.slice(0, -1).trim() || name.slice(0, -1).trim().split(/\s+/).length > CAPTION_NAME_WORDS) return text;
+  return [{ text: name, bold: true }, ` ${match[2]!}`];
+}
+
 /** Reserve a caption band in `box` (the payload box) and return the band and the media box. */
 export function layoutCaption(value: unknown, box: LayoutBox, path: string, options: AnnotationLayoutOptions): ComposedCaption | undefined {
-  const settings = captionSettings(value);
-  if (!settings) return undefined;
+  const plain = captionSettings(value);
+  if (!plain) return undefined;
+  const settings = options.nameDetail ? { ...plain, text: splitCaptionName(plain.text) } : plain;
   const fontSize = Math.max(options.minFontSize, CAPTION_FONT_RATIO * 25 * options.scale), gap = fontSize * 0.4;
   const maxHeight = Math.max(fontSize * 1.22, box.height * CAPTION_MAX_RATIO);
   const diagnostics: LayoutDiagnostic[] = [];
