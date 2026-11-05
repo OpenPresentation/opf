@@ -4151,6 +4151,13 @@ const LEAD_STACKS = new WeakSet<SlideComposition>();
  * readable size outranks the measure.
  */
 const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Symbol('opf.noRegionMeasure');
+/**
+ * LH-05: the compositions whose grid of short texts hugs (`compact-grid`). growBody grows such a body further than other bodies: up to
+ * COMPACT_GRID_STEPS steps, past a list's display size (GRID_GROW lifts the cap to COMPACT_GRID_DISPLAY), while every text keeps the line
+ * count it has and nothing overflows, since a hugging grid fills little however large its one-line texts get.
+ */
+const COMPACT_GRIDS = new WeakSet<SlideComposition>(), GRID_GROW = Symbol('opf.gridGrow'), NO_COMPACT_GRID = Symbol('opf.noCompactGrid');
+const COMPACT_GRID_STEPS = 8, COMPACT_GRID_DISPLAY = 56;
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
 /** Wave 3: whether any block of `next` reads smaller than the same block of `base`. */
@@ -4195,16 +4202,34 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
   const smallest = (composed: SlideComposition) => Math.min(...composed.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && composed.emphasis !== undefined && composed.emphasis.shape !== 'card') && !item.quoteLayout?.rule).map(item => item.text!.fontSize));
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
   const attempt = (extra: Record<symbol, unknown>) => composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor);
-  let best = result, steps = 0;
-  for (let next = 1; next <= 3; next++) {
-    const grown = attempt({ [GROW]: next }), fill = grown && bodyFill(grown);
-    if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options)) break;
-    best = grown; steps = next;
-  }
   // LH-114: a body with a pull line is one stack with it at the top of the body, so it grows but is not centered.
-  const centered = result.items.some(item => item.quoteLayout?.rule) ? undefined : attempt({ [GROW]: steps, [CENTER]: true }), fill = centered && bodyFill(centered);
-  if (centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options)) best = centered;
-  return best === result ? undefined : best;
+  const pulled = result.items.some(item => item.quoteLayout?.rule);
+  // One climb of LH-48's steps from `from` with `extra` options, then the centered body: the largest step that adds no finding, sets every
+  // block larger and fills at most LONE_TARGET, and passes `accept`.
+  const climb = (from: SlideComposition, extra: Record<symbol, unknown>, limit: number, accept: (grown: SlideComposition) => boolean): SlideComposition => {
+    let best = from, steps = 0;
+    for (let next = 1; next <= limit; next++) {
+      const grown = attempt({ [GROW]: next, ...extra }), fill = grown && bodyFill(grown);
+      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown)) break;
+      best = grown; steps = next;
+    }
+    const centered = pulled ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered);
+    return centered && fill && overflowCount(centered) === 0 && !shrinks(centered, best, options) ? centered : best;
+  };
+  if (!COMPACT_GRIDS.has(result)) { const grown = climb(result, {}, 3, () => true); return grown === result ? undefined : grown; }
+  // LH-05: a hugging grid of short texts grows further than other bodies: past a list's display size, up to COMPACT_GRID_STEPS steps, while
+  // every text that was on one line spread over the area (LH-43, what the slide had before) stays on one line. The grid never ends smaller
+  // than that spread body: a growth that would end smaller lets the texts wrap more, and one that still ends smaller is the spread body itself.
+  const lines = (item: ComposedItem) => item.text ? 'richLines' in item.text ? (item.text as RichTextFit).richLines.length : item.text.lines.length : 0;
+  const spread = attempt({ [NO_COMPACT_GRID]: true }), plain = spread ? climb(spread, { [NO_COMPACT_GRID]: true }, 3, () => true) : undefined, reference = plain ?? result;
+  // The lines each text had spread over the area: a text on one line stays on one line, one that wrapped may wrap as it did.
+  const keepsLines = (grown: SlideComposition) => grown.items.every(item => { const was = reference.items.find(entry => entry.path === item.path); return !was || lines(item) <= lines(was); });
+  const floorSize = plain ? smallest(plain) : smallest(result);
+  for (const accept of [keepsLines, () => true]) {
+    const grown = climb(result, { [GRID_GROW]: true }, COMPACT_GRID_STEPS, accept);
+    if (smallest(grown) >= floorSize - FONT_GRID_EPSILON) return grown === result ? undefined : grown;
+  }
+  return plain && plain !== result ? plain : undefined;
 }
 /**
  * Compose a validated Slide. Layout resolution remains the caller's responsibility.
@@ -4959,8 +4984,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
-  let regionMeasured = false;
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'compact-grid' && (options as Record<symbol, unknown>)[NO_COMPACT_GRID] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  let regionMeasured = false, compactGrid = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
   const scale = Math.min(width, height) / 720;
@@ -6617,7 +6642,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const base = baseProseMeasure(node, cellWidth);
     if (!bodySteps || node.children || proseGrowth.has(node) || (node.field !== 'text' && node.field !== 'items' && node.field !== 'bullets')) return base;
     // Siblings stop a step under a lone message's display size, so a body of several blocks never reads louder than one statement.
-    const display = LONE_DISPLAY_SIZES.list * scale;
+    const display = ((options as Record<symbol, unknown>)[GRID_GROW] === true ? COMPACT_GRID_DISPLAY : LONE_DISPLAY_SIZES.list) * scale;
     let size = base.size;
     for (let step = 0; step < bodySteps; step++) { const next = scaleAbove(size, composition.minFontSize ?? 16); if (next > display + 1e-9) break; size = next; }
     if (size === base.size || node.field !== 'text' || !(node.auto || node.measure)) return { size, width: base.width };
@@ -6859,7 +6884,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // one gap apart and sit in the middle of the area, as growBody's centered body does; spread over the area they left a row of one-line
     // texts at the top and the next two thirds of a body away. Rows that need more keep LH-43's spread, which only trims their slack.
     const hug = compact && ruleOn('compact-grid') && rows > 1 && total <= space + 1e-6 && (bodySteps > 0 || (options as Record<symbol, unknown>)[CENTER] === true || total + between * (rows - 1) < COMPACT_GRID_FILL * area.height);
-    if (hug) { fire('compact-grid'); for (const unit of units) contentSized.add(unit); }
+    if (hug) { fire('compact-grid'); compactGrid = true; for (const unit of units) contentSized.add(unit); }
     const heights = total > space + 1e-6 ? needs.map(need => need * space / total) : spread && !hug ? needs.map(need => need + spare * need / total) : needs;
     const rowY: number[] = [], shift = spread && !hug ? 0 : anchor === 'middle' || hug ? spare / 2 : anchor === 'bottom' ? spare : 0;
     heights.reduce((y, height) => { rowY.push(y); return y + height + between; }, area.y + shift);
@@ -8498,6 +8523,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
+  if (compactGrid) COMPACT_GRIDS.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);
   if (headingOffScale) HEADINGS_OFF_SCALE.add(composed);
   return composed;

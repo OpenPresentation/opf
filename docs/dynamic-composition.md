@@ -248,8 +248,11 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   table that would wrap beside the note stays above it (LH-44).
 - **Compact grids (LH-05).** The rows of an automatic grid of paragraphs and lists (LH-43) used to spread over the body, so six one-line
   texts stood two thirds of a body apart. When the rows need under 45% of the body (or LH-48 grew them), they hug their text one gap apart
-  and the grid sits in the middle of the body (`compact-grid`); rows that need more keep LH-43's spread. Sizes are unchanged and LH-48
-  still grows the text.
+  and the grid sits in the middle of the body (`compact-grid`); rows that need more keep LH-43's spread. LH-48 then grows a hugging grid
+  further than other bodies: up to eight steps of the type scale and past a list's display size (to 56 px), all cells at one size, while
+  every text that was on one line stays on one line (the width of the cells bounds it: three columns of one-line texts stop at 43 px, two
+  at 56 px) and the body covers at most 60%. The grid never ends smaller than the same body spread over the area; a growth that would end
+  smaller lets texts wrap as they did, and one that still would is the spread body itself.
 - **Value color on dark (LH-57).** On a dark slide or card, a value whose accent falls under 4.5:1 against the surface is drawn in the
   light text color (`metricValueColor(color, background, text)`) instead of a lightened accent, so the number stays the strongest
   element. A unit on its value's line takes the value's color.

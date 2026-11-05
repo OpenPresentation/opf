@@ -102,6 +102,20 @@ describe('LH-05: the rows of a grid of short texts hug', () => {
     });
   }
 
+  test('a hugging grid grows past a list display size while every one-line text stays on one line, and never ends smaller than unhugged', () => {
+    const result = composeSlide({ title: 'Why teams switch', blocks: texts(4) }, {});
+    const cells = result.items.filter((item) => item.field === 'text'), scale = result.height / 720;
+    assert.ok(cells.every((item) => item.text.fontSize > 37 * scale + 1e-6), 'past the 37 px list display size');
+    assert.ok(cells.every((item) => item.text.lines.length === 1), 'one line each');
+    assert.equal(new Set(cells.map((item) => item.text.fontSize)).size, 1, 'one size');
+    const fixed = composeSlide({ title: 'Why teams switch', blocks: texts(4) }, { fill: false });
+    assert.ok(Math.min(...cells.map((item) => item.text.fontSize)) >= Math.min(...fixed.items.filter((item) => item.field === 'text').map((item) => item.text.fontSize)));
+    // A grid whose longest text would wrap at the next step stops there: no split word, no finding.
+    const wide = composeSlide({ title: 'Why teams switch', blocks: texts(6) }, {});
+    assert.deepEqual(findings(wide), []);
+    assert.ok(wide.items.filter((item) => item.field === 'text').every((item) => item.text.lines.length === 1));
+  });
+
   test('longer texts keep the rows spread over the body, and sizes never fall', () => {
     const long = Array.from({ length: 6 }, (_, index) => ({ text: note.slice(0, 120 + 12 * index) }));
     const result = composeSlide({ title: 'Why teams switch', blocks: long }, {});
