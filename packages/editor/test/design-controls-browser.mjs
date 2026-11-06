@@ -523,7 +523,9 @@ try {
   await step('image block fit', () => field(selection, 'Fit').selectOption('contain'), current => current.slides[4].blocks[0].fit === 'contain', { preview: true });
   // The first block's picture already takes a track at the left edge (LH-80), so the authored band goes to the right.
   await step('image block placement', () => field(selection, 'Bleed to an edge').selectOption('right'), current => current.slides[4].blocks[0].placement?.edge === 'right', { preview: true });
-  await step('image block shape', () => field(selection, 'Shape').selectOption('circle'), current => current.slides[4].blocks[0].shape === 'circle', { preview: true });
+  await step('image block shape', () => field(selection, 'Shape').selectOption('ellipse'), current => current.slides[4].blocks[0].shape === 'ellipse', { preview: true });
+  // SH-02: a picture's line is its stroke (renamed from border, no alias).
+  await step('image block stroke', async () => { const input = field(selection, 'Stroke color'); await input.fill('accent1'); await input.press('Enter'); }, current => current.slides[4].blocks[0].stroke?.color === 'accent1' && current.slides[4].blocks[0].border === undefined, { preview: true });
   mark('an image block sets its fit, shape and placement');
   await step('image to background', () => imageUse.selectOption('background'), current => current.slides[4].design?.background?.type === 'image' && current.slides[4].design.background.alt === 'A pixel' && current.slides[4].blocks.length === 1, { preview: true });
   // The change moved the selection to the slide, so select the image block again.
