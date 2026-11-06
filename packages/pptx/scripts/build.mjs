@@ -80,3 +80,6 @@ await copyFile(new URL('src/safe-typefaces.js', root), new URL('safe-typefaces.j
 await copyFile(new URL('src/picture-slides.js', root), new URL('picture-slides.js', dist));
 await copyFile(new URL('src/script-fonts.js', root), new URL('script-fonts.js', dist));
 await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js', dist));
+
+// SH-03: the shape effects (a:effectLst), kept on their own line so other work on the list above does not collide.
+await copyFile(new URL('src/effects.js', root), new URL('effects.js', dist));

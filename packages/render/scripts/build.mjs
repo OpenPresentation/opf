@@ -18,3 +18,6 @@ for (const name of ["converters.js","png.js","png.d.ts","pdf.js","pdf.d.ts"]) aw
 
 // LH-145: measurePictures, the picture sampler of the automatic scrim (edge-safe core, and the Node decoder).
 for (const name of ["measure-pictures.js","measure-pictures-node.js"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));
+
+// SH-03: the shape effects (SVG filters), kept on their own line so other work on the lists above does not collide.
+for (const name of ["effects.js"]) await copyFile(new URL(`src/${name}`,root),new URL(name,dist));
