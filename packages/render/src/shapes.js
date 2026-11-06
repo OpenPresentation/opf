@@ -291,3 +291,17 @@ export function renderShapeBlock(item, helpers) {
   const content = shape.link ? helpers.tag("a", { href: shape.link }, body) : body;
   return helpers.tag("g", { ...accessible, ...helpers.trace }, content);
 }
+
+/**
+ * SH-04: a connector of the slide's overlay (core ComposedConnector): its route (`paths[0]`, core's evaluation of PowerPoint's connector
+ * preset in its frame) stroked with the shape stroke drawing, so dash, compound lines, the sketch and the arrowheads (`stroke.start` at
+ * `from`, `stroke.end` at `to`) are drawn as on a shape's open path. A hidden connector draws nothing.
+ */
+export function renderConnector(connector, helpers) {
+  const path = connector.paths?.[0];
+  if (!path || connector.hidden || !connector.stroke) return "";
+  const id = `${helpers.idPrefix}-connector-${connector.path.replace(/[^A-Za-z0-9]+/g, "-")}`;
+  const stroke = strokeElements(connector.stroke, connector.stroke.sketched?.lines[0] ?? path.d, `${id}-line`, { box: connector.bounds, closed: false, ends: path.ends, helpers });
+  const accessible = connector.decorative ? HIDDEN : connector.alt !== undefined ? { role: "img", "aria-label": connector.alt } : HIDDEN;
+  return helpers.tag("g", { ...accessible, ...helpers.trace }, (stroke.defs ? helpers.tag("defs", {}, stroke.defs) : "") + stroke.elements);
+}
