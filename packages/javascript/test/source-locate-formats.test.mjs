@@ -300,8 +300,11 @@ function leaves(value, at = []) {
   return [at];
 }
 
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 describe("every example deck", () => {
-  const sample = examples.filter((_, index) => index % 3 === 0);
+  const sample = examples.filter((example) => sampled(example.file, 3));
   test("in YAML, every leaf is located and pathAt reads the same path back", () => {
     let checked = 0;
     for (const { slug, deck } of sample) {
