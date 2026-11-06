@@ -105,6 +105,10 @@ directly calls `ensureIcons` first. `validate` alone checks only the set ids and
 (`spec/schemas/icon-set.schema.json`); the gallery's records are generated from the pinned npm packages by
 `packages/gallery/scripts/build-icon-sets.mjs`, and their licenses are in the package's `THIRD-PARTY-NOTICES.md`.
 
+## Editing icons
+
+The editor (`@openpresentation/opf-editor`) sets, changes and removes an `icon` on a list entry, a metric and a group, each as one undoable patch: `setIcon`, `removeIcon` and `setSvgIcon` of `@openpresentation/opf-editor/icon-options`, and an icon picker in the Content panel (`@openpresentation/opf-editor/icon-picker`). The picker searches the sets the host registered (the editor bundles none), lists the deck's own icons, and takes a pasted SVG, which it stores in the deck's `icons` under a name and references by that name; an SVG that cannot be an icon is refused with the `opf/icon-invalid` message. Removing the last use of a deck icon also removes it from `icons`.
+
 ## Findings
 
 | Rule | When |
