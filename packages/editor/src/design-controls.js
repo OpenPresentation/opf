@@ -45,6 +45,7 @@ import {
 import { ACCENT_SLOTS } from "./color-slots.js";
 import { readDesignVariant, setDesignVariant, variantSwatches } from "./design-variants.js";
 import { createContentControls, iconNode, shortReason } from "./content-controls.js";
+import { createIconPicker } from "./icon-picker.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
@@ -1238,6 +1239,15 @@ export function createDesignControls(container, options = {}) {
       onChange: (value) => run(() => setMetricTrend(editor, dynamic.blockPath, value === "" ? null : value), value === "" ? "Trend removed." : `Trend set to ${value}.`),
     });
     trend.setOptions(METRIC_TRENDS.map((value) => ({ value, label: titleCase(value) })));
+    // LH-166: the icon of the selected list entry, metric or group: pick from the registered sets, or paste an SVG into the deck's icons.
+    const iconHost = h("div", { class: "opf-dc-icon", "data-role": "selection-icon" });
+    const iconPicker = createIconPicker(iconHost, {
+      editor,
+      getSelectedPath: getSelected,
+      catalogs: options.catalogs,
+      onChange: (change) => options.onChange?.(change),
+      onStatus: (message, info) => (info.error ? complain(message) : say(message)),
+    });
     const chartType = selectField("chart-type", "Chart type", {
       help: "Types this data supports",
       onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
@@ -1251,8 +1261,8 @@ export function createDesignControls(container, options = {}) {
       clipboard.writeText(path).then(() => say(`Copied ${path}.`), () => complain("Could not copy the path."));
     });
     const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
-    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
-    dynamic.selection = { details, convert, replace, chartType, trend, pathChip, advanced };
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, trend.wrap, iconHost, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
+    dynamic.selection = { details, convert, replace, chartType, trend, iconPicker, pathChip, advanced };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
@@ -1496,6 +1506,7 @@ export function createDesignControls(container, options = {}) {
       const metricTrend = content?.kind === "metric" ? readMetricTrend(document_, blockPath) : undefined;
       ui.trend.wrap.hidden = !metricTrend;
       if (metricTrend) ui.trend.set(metricTrend.trend ?? "");
+      ui.iconPicker.refresh();
       if (content) {
         const targets = blockConversionTargets(document_, blockPath);
         // Every type is listed; one this content cannot become is disabled, with the reason as its tooltip and accessible description.
@@ -1619,6 +1630,7 @@ export function createDesignControls(container, options = {}) {
       invalidateUpload();
       root.removeEventListener("input", invalidateUpload, true);
       root.removeEventListener("change", invalidateUpload, true);
+      dynamic.selection?.iconPicker.destroy();
       unsubscribe();
       root.remove();
     },

@@ -1,7 +1,7 @@
 import type { Catalog, CatalogKind, CatalogRecordChange, EmbeddedRecord, UnresolvedReferenceDiagnostic, ValidationReport } from "@openpresentation/opf";
 import type { CatalogOption, EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
-/** One catalog list: the session's registration first, then each host list; the first catalog with a `source` wins. Throws `invalid-catalogs` for an entry without a source. */
+/** One catalog list: the session's registration first, then each host list; the first catalog with a `source` wins, and a later one with the same source is dropped unless it registers `iconSets` (`galleryIconSets` shares the gallery's source) or is the same object. Throws `invalid-catalogs` for an entry without a source. */
 export declare function mergeCatalogs(...lists: (readonly Catalog[] | Catalog | undefined | null)[]): readonly Catalog[];
 /** The catalogs for one operation: `editor.catalogs`, then `options.catalogs`. */
 export declare function catalogsFor(editor: EditorSession | undefined, options?: { catalogs?: readonly Catalog[] }): readonly Catalog[];

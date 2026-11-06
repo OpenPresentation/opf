@@ -15,6 +15,8 @@ import { createOpfEditor, layoutOptionsFor } from '../src/workspace.js';
 // FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog owned and
 // published by pptx.gallery and hands the session's one list to every render, check, embed and export.
 import { catalogDisplay, gallery as defaultCatalog } from '@openpresentation/gallery';
+// LH-166: the icon sets (Lucide, Tabler) are the host's to register; the editor library bundles none. This page bundles them (build-playground.mjs does not split).
+import { galleryIconSets } from '@openpresentation/gallery/icon-sets';
 import { whenFontsReady } from '../src/font-gate.js';
 import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
 import { toSvg } from '@openpresentation/opf-render/svg';
@@ -43,7 +45,7 @@ const fontRegistry = fonts.registry;
 // FF-41: nothing renders or measures a document before this gate has loaded the faces it needs. The editor library (src/workspace.js) runs the one
 // "ensure fonts, then update" path for the parts it mounts: initial load, Source Apply and the gallery handoff, import, undo and redo, font and
 // language switches, slide navigation, thumbnails, previews and export. The source dialog below uses whenFontsReady(fonts, ...) itself.
-const catalogs = [defaultCatalog];
+const catalogs = [defaultCatalog, galleryIconSets];
 const renderOptions = () => ({ catalogs: editor.catalogs });
 const pendingFonts = deck => { try { return fonts.pending(deck, renderOptions()); } catch { return []; } };
 // The session's composeSlide and paginateSlide take the handle's plain measurement, and that one is strict: they get the same per-document,

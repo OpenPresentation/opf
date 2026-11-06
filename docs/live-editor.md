@@ -126,6 +126,7 @@ In a browser, `toSvg` returns SVG strings and `toPptx` returns bytes; pass the s
 | Table headers and string/number cells | Inline editing; numeric cells keep their numeric type. |
 | Lists, charts, metrics, quotes, code, timelines, rich text payloads | Select the object and edit its existing scalar fields in a floating form; valid drafts render immediately. A timeline event's `status` (`done`, `current`, `planned`) is a menu, not free text. |
 | Images | Edit source/alt fields; replace with a local PNG/JPEG/GIF/WebP file up to 20 MB. External sources still require a host image resolver. |
+| Icons | Select a list entry, a metric or a group (in the Studio, a selected group block) and open **Choose icon…** in its Content panel: search the registered icon sets by name and keyword (all sets or one), pick the deck's own icons, or paste an SVG (stored in the deck's `icons` under a name, refused with the validator's message when it cannot be an icon), or **Remove**. Each choice is one undoable change. A host registers the sets (`galleryIconSets` of `@openpresentation/gallery/icon-sets`); the editor bundles none. |
 | Collections | Add or remove the last item, subject to OPF schema validation. Empty structured collections may need authoring through source. |
 | Dynamic layout | Text edits recompose the slide through shared geometry; row/column/grid controls remain in the demo inspector. |
 | Undo and cancellation | Blur or Ctrl/Cmd+Enter commits plain text; Escape cancels; property forms have Apply/Cancel. |
