@@ -251,3 +251,21 @@ test('the new findings are in the registry with their plain-words text', () => {
   assert.equal(anchor.category, 'format');
   assert.equal(end.severity, 'error');
 });
+
+test('pagination: fraction shapes on every page, an at shape on its block page, a connector only where both ends are', async () => {
+  const { paginate } = await import('../dist/index.js');
+  const para = (count) => Array.from({ length: count }, (_, index) => `Sentence number ${index + 1} explains one more detail of the plan in plain words.`).join(' ');
+  const result = paginate({ name: 'P', language: 'en-US', slides: [{ title: 'Long', blocks: [{ id: 'first', text: para(14) }, { id: 'second', text: para(14) }, { id: 'third', text: para(4) }], shapes: [
+    { id: 'stamp', shape: 'rect', text: 'Draft', x: 0.8, y: 0.02, width: 0.15, height: 0.06 },
+    { id: 'pin', shape: 'ellipse', at: { block: 'third', edge: 'top' } },
+    { connector: { from: 'first', to: 'second' } },
+    { connector: { from: 'stamp', to: 'pin' } },
+  ] }] });
+  const slides = result.presentation.slides;
+  assert.equal(slides.length, 3);
+  // Ids take their page's id, and the references follow them.
+  assert.deepEqual(slides.map((slide) => slide.shapes.map((entry) => entry.id ?? `${entry.connector.from}>${entry.connector.to}`)), [['stamp'], ['stamp--2'], ['stamp--3', 'pin', 'stamp--3>pin']]);
+  assert.deepEqual(result.pages.map((page) => (page.diagnostics ?? []).map((entry) => [entry.code, entry.path])), [[['connector-split', 'slides.0.shapes.2']], [], []]);
+  // Every page validates: no reference names a block of another page.
+  assert.equal(validate(result.presentation).findings.filter((finding) => finding.severity === 'error').length, 0);
+});
