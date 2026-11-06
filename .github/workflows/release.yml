@@ -102,8 +102,11 @@ jobs:
       previous: ${{ steps.prepare.outputs.previous }}
       bump: ${{ steps.prepare.outputs.bump }}
     steps:
+      # check:breaking reads the release tags, so the history is fetched without file contents.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
+          filter: blob:none
           persist-credentials: false
 
       - uses: ./.github/actions/setup-workspace
@@ -127,6 +130,9 @@ jobs:
           node scripts/check-versions.mjs
           node scripts/changelog-fragments.mjs check
           pnpm install --frozen-lockfile --lockfile-only
+          # The fragments are consumed now, so a schema removal or a removed export that a fragment acknowledged on its pull
+          # request needs the version itself to be a breaking bump (a minor on the 0.x line): a patch release fails here.
+          node scripts/check-breaking-changes.mjs
 
       - name: Make the release patch
         env:
