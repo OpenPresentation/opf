@@ -50,6 +50,8 @@ export function shapesPending(input: unknown): string[] {
     if (Array.isArray(value)) return value.some((item) => needs(item, depth + 1));
     const node = value as Rec;
     if (node.image === undefined && !Array.isArray(node.blocks) && (typeof node.shape === 'string' || node.path !== undefined || node.type === 'shape')) return true;
+    // SH-04: a connector's route is a connector preset evaluated by the engine, and its ends' sites come from the geometry.
+    if (node.connector !== undefined) return true;
     if (node.image !== undefined && typeof node.shape === 'string' && !BUILT_IN.has(node.shape)) return true;
     // A sketched line (stroke.sketch, on a picture too) is computed by the engine.
     if (node.image !== undefined && typeof record(node.stroke).sketch === 'string') return true;
@@ -565,7 +567,7 @@ function pathIn(path: ShapePath, box: Box): ComposedShapePath {
 }
 
 /** The two ends of an open path and the outward direction at each (from the nearest distinct control point), moved by dx, dy. */
-function pathEnds(commands: ShapePath['commands'], dx: number, dy: number): { start: ShapeEnd; end: ShapeEnd } | undefined {
+export function pathEnds(commands: ShapePath['commands'], dx: number, dy: number): { start: ShapeEnd; end: ShapeEnd } | undefined {
   const points: [number, number][] = [];
   for (const command of commands) {
     if (command[0] === 'Z') return undefined;

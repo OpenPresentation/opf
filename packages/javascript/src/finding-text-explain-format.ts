@@ -68,6 +68,16 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing", hidden: true }] },
     { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
   ),
+  "opf/shape-anchor-missing": ex(
+    "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "phot", edge: "top" } }] },
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top" } }] },
+  ),
+  "opf/connector-end-missing": ex(
+    "Name a block or an overlay shape of the slide in `from` and `to` (give it an `id`).",
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "shipping", route: "elbow" } }] },
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "ship", route: "elbow" } }] },
+  ),
   "opf/image-placement-invalid": ex(
     "Use `placement` on a top-level block of the slide, with one placed image per slide edge.",
     { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "left" } }] },

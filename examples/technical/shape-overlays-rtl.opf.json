@@ -1,0 +1,65 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shape overlays, right to left",
+  "description": "Technical fixture for overlay shapes and connectors in a right-to-left deck (SH-04): x counts from the right edge, at start is the right side of a block, and connectors run between the mirrored blocks.",
+  "language": {
+    "bcp47": "ar",
+    "name": "Arabic",
+    "direction": "rtl",
+    "script": "Arab",
+    "fontScheme": "noto-sans-arabic"
+  },
+  "slides": [
+    {
+      "title": "من اليمين إلى اليسار",
+      "blocks": [
+        {
+          "id": "first",
+          "shape": "roundRect",
+          "text": "أولا"
+        },
+        {
+          "id": "second",
+          "shape": "roundRect",
+          "text": "ثانيا"
+        }
+      ],
+      "shapes": [
+        {
+          "shape": "wedgeRectCallout",
+          "text": "جديد",
+          "x": 0.06,
+          "y": 0.8,
+          "width": 0.18,
+          "height": 0.1,
+          "style": "subtle"
+        },
+        {
+          "shape": "ellipse",
+          "text": "1",
+          "at": {
+            "block": "first",
+            "edge": "start",
+            "offset": -24,
+            "width": 56,
+            "height": 56
+          },
+          "style": "intense"
+        },
+        {
+          "connector": {
+            "from": "first",
+            "to": "second",
+            "route": "elbow"
+          },
+          "stroke": {
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
