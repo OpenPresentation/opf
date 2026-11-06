@@ -145,11 +145,11 @@ const {bytes, entries, diagnostics} = await exportDeck(embedded);
 assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.code)), [], 'No layout or region diagnostics.');
 {
   const layouts = layoutParts(entries);
-  assert.equal(layouts.length, 31, 'The master layout and one slide layout per template.');
+  assert.equal(layouts.length, 33, 'The master layout and one slide layout per template.');
   assert.equal(layoutTag(entries, layouts[0]), undefined, 'The master\'s own layout stays untagged (automatic slides and 0.18 records).');
   const master = 'ppt/slideMasters/slideMaster1.xml', masterXml = text(entries, master);
   const listed = [...masterXml.matchAll(/<p:sldLayoutId id="(\d+)" r:id="([^"]+)"\/>/g)];
-  assert.equal(listed.length, 31);
+  assert.equal(listed.length, 33);
   const ids = [...text(entries, 'ppt/presentation.xml').matchAll(/<p:sldMasterId id="(\d+)"/g), ...listed].map(match => Number(match[1]));
   assert.equal(new Set(ids).size, ids.length, 'Master and layout ids are unique.');
   assert.ok(listed.every(match => Number(match[1]) >= 2147483648), 'Layout ids are in the reserved range.');
@@ -466,7 +466,7 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   assert.match(text(parts, 'ppt/slides/slide3.xml'), /<p:ph type="title"\/>/);
   // Registering v2 templates exposes the templates and OPF auto on automatic slides. This is the intentional 0.19 contract.
   const registered = await exportDeck(deck, {catalogs: [gallery2, defaultCatalog]});
-  assert.equal(layoutParts(registered.entries).length, 32);
+  assert.equal(layoutParts(registered.entries).length, 34);
   assert.equal(layoutTag(registered.entries, layoutOf(registered.entries, 3)).id, 'auto');
   checked++;
 }

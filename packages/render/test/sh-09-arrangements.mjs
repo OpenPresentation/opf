@@ -23,7 +23,7 @@ const primary = resolved.slides[0].design.colors.primary, background = resolved.
     assert.equal((/ d="M([^"]+) Z"/.exec(level)[1].split(' L')).length, 4, 'a trapezoid (the apex a triangle with a point top)');
   }
   // The entries: centered (text-anchor middle), no bullet, drawn after the levels.
-  for (const word of ['Vision', 'Goals', 'Programs', 'Teams']) assert.match(svg, new RegExp(`<text[^>]*text-anchor="middle"[^>]*>${word}<`), word);
+  for (const word of ['Vision', 'Goals', 'Programs', 'Teams']) assert.match(svg, new RegExp(`<text[^>]*text-anchor="middle"[^>]*>(?:<tspan[^>]*>)?${word}<`), word);
   assert.ok(svg.indexOf('data-opf-arrangement="pyramid"') < svg.indexOf('>Vision<'), 'the levels are under the text');
   assert.doesNotMatch(svg, />•</, 'no bullet');
 }
@@ -31,7 +31,8 @@ const primary = resolved.slides[0].design.colors.primary, background = resolved.
   const svg = toSvg(deck, 2, {catalogs, trace: true});
   assert.match(svg, /data-opf-arrangement="matrix"/);
   assert.match(svg, new RegExp(`<path [^>]*fill="${applyColorTransform(primary, {lumMod: 20000, lumOff: 80000})}"`, 'i'), 'the diamond, the primary lightened 80%');
-  const quadrants = [...svg.matchAll(/<rect [^>]*rx="[^"]+"[^>]*fill="([^"]+)"[^>]*>/g)].filter(match => match[1].toLowerCase() === primary.toLowerCase());
+  const quadrants = [...svg.matchAll(/<rect [^>]*data-opf-arrangement-path[^>]*>|<rect [^>]*>/g)].map(match => match[0])
+    .filter(rect => / rx="[^"]+"/.test(rect) && rect.toLowerCase().includes(`fill="${primary.toLowerCase()}"`));
   assert.equal(quadrants.length, 4, 'four quadrants, one of them empty');
 }
 console.log('SH-09 arrangements passed: pyramid levels and matrix quadrants with the diamond, in the primary with background outlines, under centered entries.');

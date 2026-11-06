@@ -39,6 +39,7 @@ export const DOC_SLUGS: readonly string[] = [
 	"image-treatments",
 	"shapes",
 	"shape-effects",
+	"smartart",
 	"icons",
 	"chart-options",
 	"chart-table-data",

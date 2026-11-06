@@ -159,7 +159,7 @@ export function attachArrangementTags(entries, tags, smartArtTags) {
 const modelId = (number, role, index = 0) => `{${String(number).padStart(8, '0')}-${String(role).padStart(4, '0')}-4${String(index).padStart(3, '0')}-8000-000000000000}`;
 const ROLE = Object.freeze({doc: 1, node: 2, parent: 3, sibling: 4, connection: 5, shape: 6});
 const srgb = '<a:scrgbClr r="0" g="0" b="0"/>';
-const schemeXml = color => `<a:schemeClr val="${color.slot}">${color.lumMod !== undefined ? `<a:lumMod val="${color.lumMod}"/><a:lumOff val="${color.lumOff}"/>` : ''}</a:schemeClr>`;
+const schemeXml = color => color.lumMod !== undefined ? `<a:schemeClr val="${color.slot}"><a:lumMod val="${color.lumMod}"/><a:lumOff val="${color.lumOff}"/></a:schemeClr>` : `<a:schemeClr val="${color.slot}"/>`;
 
 /** The `a:pPr` and `a:r` elements of one node: core's size, the entry's runs with their typeface, weight, slant and language. */
 function nodeParagraph(record, index) {
@@ -170,7 +170,8 @@ function nodeParagraph(record, index) {
     const style = fragments.find(fragment => fragment.runIndex === runIndex)?.style ?? entry?.marker?.style;
     const font = style ? fontOf(style) : {};
     const bold = run.bold ?? font.bold, italic = run.italic ?? font.italic;
-    const face = font.fontFace ? `<a:latin typeface="${escapeXml(font.fontFace)}"/><a:ea typeface="${escapeXml(font.fontFace)}"/><a:cs typeface="${escapeXml(font.fontFace)}"/>` : '';
+    // The Latin face only: East Asian and complex-script text takes the theme's script fonts, as the exporter's text boxes do (FF-07).
+    const face = font.fontFace ? `<a:latin typeface="${escapeXml(font.fontFace)}"/>` : '';
     // LH-11: the spaces core's line breaker never breaks at are no-break spaces, as the native body writes them.
     const text = bindNoBreak(run.text);
     return `<a:r><a:rPr lang="${escapeXml(run.lang ?? lang)}" sz="${size}"${bold ? ' b="1"' : ''}${italic ? ' i="1"' : ''}${run.underline ? ' u="sng"' : ''}${run.strikethrough ? ' strike="sngStrike"' : ''} dirty="0">${face}</a:rPr><a:t>${escapeXml(text)}</a:t></a:r>`;

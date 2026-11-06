@@ -319,6 +319,10 @@ A family is written as shapes once PowerPoint's drawing of it has passed the com
 
 On import an unchanged group is its diagram again (the Mermaid source and `alt`), and none of its members become overlay shapes or connectors. An edited group (a member moved, resized, retyped, added or removed) imports as its shapes, [as PowerPoint's shapes do](#a-deck-powerpoint-wrote): the nodes as overlay shapes with their presets, fills, lines and text, the glued edges as connectors between them; `invalid-diagram-provenance` reports that the source is not reconstructed. See [native shapes in PowerPoint](diagrams.md#native-shapes-in-powerpoint) for the comparison and the families.
 
+## Pyramids and matrices
+
+The `pyramid` and `matrix` layouts (a region's `arrangement`) draw a list as PowerPoint's Basic Pyramid or Basic Matrix, and the PPTX export writes them as live SmartArt where PowerPoint lays the SmartArt out exactly as the preview draws it, otherwise as native shapes (`trapezoid`, `roundRect`, `diamond`) under the measured lines (`smartArt: "live" | "shapes"`, CLI `--smart-art`). See [Pyramids, matrices and live SmartArt](smartart.md) for the geometry, the domain PowerPoint was compared on and what PowerPoint does when a node is edited.
+
 ## Validation
 
 | Finding | When |

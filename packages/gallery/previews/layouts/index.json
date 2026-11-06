@@ -84,6 +84,16 @@
       "bytes": 3694
     },
     {
+      "id": "pyramid",
+      "file": "pyramid.svg",
+      "bytes": 2681
+    },
+    {
+      "id": "matrix",
+      "file": "matrix.svg",
+      "bytes": 4122
+    },
+    {
       "id": "metrics",
       "file": "metrics.svg",
       "bytes": 3885

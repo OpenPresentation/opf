@@ -82,7 +82,7 @@ const live = await exported(deck);
 // 4. Without provenance (and so as a PowerPoint-authored SmartArt reads): the data model's nodes, on the default catalog's layout.
 {
   const bare = await exported(deck, {provenance: false});
-  assert.doesNotMatch(bare.text('ppt/slides/slide1.xml'), /<p:custDataLst>/);
+  assert.doesNotMatch(/<p:graphicFrame>[\s\S]*?<\/p:graphicFrame>/.exec(bare.text('ppt/slides/slide1.xml'))[0], /<p:custDataLst>/, 'no OPF_SMARTART_V1 tag');
   const back = await fromPptx(bare.bytes);
   assert.deepEqual(back.slides.map(slide => [String(slide.layout).replace(/^default:/, ''), slide.items ?? slide.blocks?.[0]?.items]), [['pyramid', pyramid], ['matrix', matrix]]);
 }

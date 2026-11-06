@@ -81,6 +81,8 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `process` | Steps in order, in one row. |
 | `timeline` | Dated events or a roadmap along one axis, with optional notes. |
 | `faq` | Questions with their answers. |
+| `pyramid` | Levels that build on each other, as a pyramid, the first at the top. |
+| `matrix` | Up to four parts of a whole, as the quadrants of a square beside the title. |
 | **Numbers** | |
 | `metrics` | One to six headline numbers, with an optional note. |
 | `scorecard` | Metrics with commentary or status, as cards. |

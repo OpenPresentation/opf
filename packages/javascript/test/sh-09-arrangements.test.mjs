@@ -96,7 +96,7 @@ test('a matrix draws four quadrants for up to four entries, and keeps the list o
   // Five entries, a nested entry, a description or numbering: the list stays a list.
   for (const items of [['A', 'B', 'C', 'D', 'E'], ['A', { text: 'B', level: 1 }], [{ text: 'A', description: 'more' }, 'B']])
     assert.equal(compose({ layout: 'matrix', title: 'T', items }).arrangements, undefined, JSON.stringify(items));
-  assert.equal(compose({ layout: 'pyramid', title: 'T', items: { items: ['A', 'B'], numbering: 'decimal' } }).arrangements, undefined);
+  assert.equal(compose({ layout: 'pyramid', title: 'T', items: ['A', 'B'], numbering: 'arabic' }).arrangements, undefined, 'numbering');
   assert.equal(composeSlide({ layout: 'list', title: 'T', items: ['A', 'B'] }, { layout: gallery.layouts.list }).arrangements, undefined, 'no arrangement region');
 });
 
