@@ -145,8 +145,8 @@ const near = (actual, expected, label, tolerance = 0.01) => assert.ok(Math.abs(a
   checked++;
 }
 
-// ---- 6. The export: a family in DIAGRAM_SHAPE_FAMILIES is one named group with its alt text, its shapes and OPF_DIAGRAM_V1; the default
-// stays the picture; a family that has not passed, and a drawing with no native form, stay pictures and say why.
+// ---- 6. The export: by default a family in DIAGRAM_SHAPE_FAMILIES is one named group with its alt text, its shapes and OPF_DIAGRAM_V1;
+// diagrams: "picture" opts out; a family that has not passed, and a drawing with no native form, stay pictures and say why.
 const FLOW = {source: 'flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A', alt: 'A request is approved or revised.'};
 const deck = {name: 'Native diagrams', slides: [{title: 'Review', diagram: FLOW}, {diagram: 'info'}, {diagram: 'flowchart LR\n  A[שלום] --> B[עולם]'}]};
 assert.equal(DIAGRAM_SHAPE_FAMILIES.length, 32);
@@ -154,7 +154,7 @@ for (const family of ['flowchart', 'sequence', 'class', 'state', 'er', 'gantt', 
 assert.ok(!DIAGRAM_SHAPE_FAMILIES.includes('info'));
 await assert.rejects(toPptx(deck, {...FIXED, diagrams: 'native'}), error => error.code === 'invalid-diagrams-option');
 const diagnostics = [];
-const bytes = await toPptx(deck, {...FIXED, diagrams: 'shapes', onDiagnostic: entry => diagnostics.push(entry)});
+const bytes = await toPptx(deck, {...FIXED, onDiagnostic: entry => diagnostics.push(entry)});
 const entries = unzipSync(bytes);
 {
   const xml = strFromU8(entries['ppt/slides/slide1.xml']);
@@ -170,9 +170,12 @@ const entries = unzipSync(bytes);
   assert.equal(new Set(ids).size, ids.length, 'every shape id on the slide is unique');
   const tag = Object.entries(entries).find(([path, value]) => /^ppt\/tags\/opfDiagram\d+\.xml$/.test(path) && strFromU8(value).includes('OPF_DIAGRAM_V1'));
   assert.ok(tag, 'OPF_DIAGRAM_V1');
-  // The picture path is unchanged by default.
-  const picture = strFromU8(unzipSync(await toPptx({slides: [{diagram: FLOW}]}, FIXED))['ppt/slides/slide1.xml']);
+  // Shapes are the default (the export above passes no option); diagrams: "picture" writes the picture as before, with no finding.
+  const pictureReports = [];
+  const picture = strFromU8(unzipSync(await toPptx({slides: [{diagram: FLOW}]}, {...FIXED, diagrams: 'picture', onDiagnostic: entry => pictureReports.push(entry)}))['ppt/slides/slide1.xml']);
   assert.match(picture, /<p:pic>[\s\S]*name="OPF diagram 1"/);
+  assert.ok(!/<p:grpSp>/.test(picture));
+  assert.deepEqual(pictureReports.filter(entry => entry.code === 'diagram-shapes-unavailable'), []);
   const unavailable = diagnostics.filter(entry => entry.code === 'diagram-shapes-unavailable');
   assert.deepEqual(unavailable.map(entry => [entry.path, entry.family]), [['slides.1.diagram', 'info'], ['slides.2.diagram', 'flowchart']]);
   assert.match(unavailable[0].message, /not passed the comparison with the preview/);

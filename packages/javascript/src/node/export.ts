@@ -61,8 +61,8 @@ export interface ExportOptions {
 	/** `pptx`: native charts (`native`), pictures (`picture`) or opf-pptx's choice (`auto`, the default). */
 	charts?: "auto" | "native" | "picture";
 	/**
-	 * `pptx`: diagrams as one native SVG picture each (`picture`, the default), or as native shapes and connectors (`shapes`) for the
-	 * diagram families that passed their comparison with the preview in PowerPoint (core DIAGRAM_SHAPE_FAMILIES); the others stay pictures.
+	 * `pptx`: diagrams as native shapes, text and connectors (`shapes`, the default) for the diagram families that passed their comparison
+	 * with the preview in PowerPoint (core DIAGRAM_SHAPE_FAMILIES), the others staying pictures; or every diagram as one SVG picture (`picture`).
 	 */
 	diagrams?: "picture" | "shapes";
 	/** `pptx`: what the file records about where media came from. */

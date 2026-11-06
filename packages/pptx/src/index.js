@@ -288,7 +288,7 @@ export async function toPptx(input, options = {}) {
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
   // SH-02: and the preset geometry when the deck has shapes (a no-op in Node); SH-07: and when it writes its diagrams as shapes.
-  await ensureShapes(presentation, {diagrams: options.diagrams === 'shapes'});
+  await ensureShapes(presentation, {diagrams: (options.diagrams ?? 'shapes') === 'shapes'});
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
@@ -343,7 +343,7 @@ export async function toPptx(input, options = {}) {
   context.diagrams = new Set();
   context.diagramTags = new Map();
   // SH-07: `diagrams: "shapes"`: each diagram group's children (src/diagram-shapes.js), by the name of the shape that stands in for it.
-  context.diagramMode = options.diagrams ?? 'picture';
+  context.diagramMode = options.diagrams ?? 'shapes';
   context.diagramGroups = new Map();
   context.watermarks = new Map();
   context.textWatermarks = new Map();

@@ -60,9 +60,10 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   further slides between whole blocks (slide-continued, report continued)
                    --keep-slides                  draw every slide as written, also one that overflows
   pptx             --charts <auto|native|picture>  --images <compatible|preserve>  --provenance <full|references-only|none>
-                   --diagrams <picture|shapes>    picture (the default): each diagram one SVG picture. shapes: native shapes
-                                                  and connectors for the diagram families that passed their comparison with
-                                                  the preview in PowerPoint; the others stay pictures (diagram-shapes-unavailable)
+                   --diagrams <shapes|picture>    shapes (the default): native shapes, text and connectors for the diagram
+                                                  families that passed their comparison with the preview in PowerPoint; the
+                                                  others stay pictures (diagram-shapes-unavailable). picture: each diagram one
+                                                  SVG picture
                    --body-text <measured|native>  measured (the default): every wrapped line is its own text box, laid out as the
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote

@@ -153,7 +153,7 @@ A flag applies only when its format is involved; anywhere else it is a usage err
 | png, raster pdf, pptx `--as images` | `--scale 0.1-8` (1 draws the 1280 x 720 reference slide at 1280 x 720 pixels; the pictures of `--as images` default to 2) |
 | pdf | `--raster` (each page a picture instead of selectable vector text) |
 | svg | `--text fonts\|system\|paths` (embed the faces the slide uses, none, or draw glyph outlines) |
-| pptx | `--charts auto\|native\|picture`, `--diagrams picture\|shapes`, `--images compatible\|preserve`, `--provenance full\|references-only\|none`, `--body-text measured\|native`, `--slide-numbers static\|live`, `--typefaces selected\|safe`, `--as native\|images` |
+| pptx | `--charts auto\|native\|picture`, `--diagrams shapes\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none`, `--body-text measured\|native`, `--slide-numbers static\|live`, `--typefaces selected\|safe`, `--as native\|images` |
 
 A `.pptx` input is imported, checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer).
 Per-slide images and the PDF skip slides marked `hidden: true` unless `--include-hidden`; slides named with `--slides` are always
