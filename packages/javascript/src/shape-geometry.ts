@@ -175,18 +175,25 @@ const roundUnit = (value: number) => Math.round(value * 1e9) / 1e9;
 
 /**
  * The DrawingML `a:avLst` values for OPF adjust values: integers, in 1/100000 for fractions and 60000ths of a degree for
- * angles (`{ adj1: 0.25 }` on `rightArrow` is `{ adj1: 25000 }`). Names the preset does not have are left out.
+ * angles (`{ adj1: 0.25 }` on `rightArrow` is `{ adj1: 25000 }`), in the preset's avLst order. When any value is
+ * given, every avLst value is written, the others at their defaults, as PowerPoint writes them: PowerPoint refuses to open a
+ * file whose avLst names a hexagon's or star's `adj` without its `hf`/`vf` factors. No value (or none the preset has)
+ * gives `{}`, an empty avLst: the preset's defaults.
  */
 export function adjustToDrawingML(name: string, adjust: ShapeAdjustValues | undefined): Record<string, number> {
   const shape = rawShape(name);
   const out: Record<string, number> = {};
   if (!adjust) return out;
-  for (const [guide] of shape.avLst ?? []) {
+  const defaults = builtInGuides(0, 0);
+  let given = false;
+  for (const [guide, formula] of shape.avLst ?? []) {
     const value = adjust[guide];
-    if (typeof value !== "number" || !Number.isFinite(value)) continue;
-    out[guide] = Math.round(value * (adjustUnit(name, guide) === "degrees" ? DEGREE : FRACTION));
+    if (typeof value === "number" && Number.isFinite(value)) {
+      out[guide] = Math.round(value * (adjustUnit(name, guide) === "degrees" ? DEGREE : FRACTION));
+      given = true;
+    } else out[guide] = Math.round(evaluate(formula, defaults));
   }
-  return out;
+  return given ? out : {};
 }
 
 /** OPF adjust values for DrawingML `a:avLst` values (the inverse of `adjustToDrawingML`). */
@@ -206,16 +213,16 @@ type Values = Map<string, number>;
 
 const RADIANS_PER_UNIT = Math.PI / (180 * DEGREE);
 
-/** The built-in guides of a w by h shape (ECMA-376 Part 1, 20.1.9.11; `cd3`, used once by curvedLeftArrow, is 120°). */
+/** The built-in guides of a w by h shape (ECMA-376 Part 1, 20.1.9.11). */
 function builtInGuides(w: number, h: number): Values {
   const ss = Math.min(w, h);
   const ls = Math.max(w, h);
   const values: [string, number][] = [
     ["w", w], ["h", h], ["l", 0], ["t", 0], ["r", w], ["b", h], ["hc", w / 2], ["vc", h / 2], ["ss", ss], ["ls", ls],
     ["wd2", w / 2], ["wd3", w / 3], ["wd4", w / 4], ["wd5", w / 5], ["wd6", w / 6], ["wd8", w / 8], ["wd10", w / 10], ["wd12", w / 12], ["wd32", w / 32],
-    ["hd2", h / 2], ["hd3", h / 3], ["hd4", h / 4], ["hd5", h / 5], ["hd6", h / 6], ["hd8", h / 8], ["hd10", h / 10], ["hd12", h / 12], ["hd32", h / 32],
+    ["hd2", h / 2], ["hd3", h / 3], ["hd4", h / 4], ["hd5", h / 5], ["hd6", h / 6], ["hd8", h / 8], ["hd10", h / 10],
     ["ssd2", ss / 2], ["ssd4", ss / 4], ["ssd6", ss / 6], ["ssd8", ss / 8], ["ssd16", ss / 16], ["ssd32", ss / 32],
-    ["cd2", 10800000], ["cd3", 7200000], ["cd4", 5400000], ["cd8", 2700000], ["3cd4", 16200000], ["3cd8", 8100000], ["5cd8", 13500000], ["7cd8", 18900000],
+    ["cd2", 10800000], ["cd4", 5400000], ["cd8", 2700000], ["3cd4", 16200000], ["3cd8", 8100000], ["5cd8", 13500000], ["7cd8", 18900000],
   ];
   return new Map(values);
 }
