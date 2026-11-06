@@ -574,7 +574,13 @@ export function createCanvasEditor(container, options = {}) {
       rootRect = root.getBoundingClientRect();
     const viewBox = svg.viewBox.baseVal,
       scale = svgRect.width / viewBox.width;
-    const font = win.getComputedStyle(text),
+    const allText = target.querySelectorAll("text");
+    // LH-181: a string drawn as runs (LH-63's run-in heading: its first line or "Label:" bold) draws one `text` per run of each line and
+    // none for a blank line. The textarea spans every traced line (data-opf-rich-lines) and takes the body's face (the last run; the
+    // heading is always the first), so the browser's own word and line hit-testing (a double click, a click on any line) matches the
+    // drawn text instead of falling through to the slide below a short textarea.
+    const richLines = target.hasAttribute("data-opf-rich-text") ? JSON.parse(target.getAttribute("data-opf-rich-lines") ?? "[]") : [];
+    const font = win.getComputedStyle(richLines.length && allText.length ? allText[allText.length - 1] : text),
       fontSize = parseFloat(font.fontSize),
       geometry = resolvePresentation(
         active.draft ?? editor.presentation,
@@ -589,11 +595,15 @@ export function createCanvasEditor(container, options = {}) {
     const timelinePart=geometry.items.find(item=>item.timelineLayout?.parts.some(part=>part.path===active.path))?.timelineLayout?.parts.find(part=>part.path===active.path);
     const furniturePart=geometry.furniture?.parts.find(part=>part.type==='text'&&part.path===active.path);
     const internalPart=metricPart??timelinePart??furniturePart;
-    const allText = target.querySelectorAll("text");
     const lineHeight = internalPart?.fit?.lineHeight ?? (
-      allText.length > 1
+      richLines.length > 1 ? richLines[1].y - richLines[0].y
+      : richLines.length ? richLines[0].height
+      : allText.length > 1
         ? Number(allText[1].getAttribute("y")) - Number(text.getAttribute("y"))
         : fontSize * 1.22);
+    const lineCount = richLines.length || allText.length;
+    // The traced lines' whole extent, paragraph spacing included, so the textarea reaches the last drawn line.
+    const richExtent = richLines.length ? richLines.at(-1).y + richLines.at(-1).height - richLines[0].y : 0;
     const canvas = doc.createElement("canvas"),
       ctx = canvas.getContext("2d");
     ctx.font = `${font.fontStyle} ${font.fontWeight} ${fontSize}px ${font.fontFamily}`;
@@ -619,7 +629,7 @@ export function createCanvasEditor(container, options = {}) {
       caretColor: font.fill,
       textAlign: furniturePart?.alignment ?? timelinePart?.alignment ?? metricLayout?.alignment ?? (anchor === "middle" ? "center" : anchor === "end" ? "right" : "left"),
       width: `${width * scale}px`,
-      height: `${Math.max(lineHeight, allText.length * lineHeight) * scale + 2}px`,
+      height: `${Math.max(lineHeight, lineCount * lineHeight, richExtent) * scale + 2}px`,
       minHeight: "0",
       letterSpacing: font.letterSpacing,
     });
