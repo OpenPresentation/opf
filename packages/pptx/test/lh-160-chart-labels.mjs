@@ -4,6 +4,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {composeSlide, histogramBins, scottBinCount} from '@openpresentation/opf/composition';
+import {gallery} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
 
 const decoder = new TextDecoder();
@@ -50,17 +51,25 @@ const categoryFormat = (xml) => /<cx:axis id="0">[\s\S]*?<cx:tickLabels\/>(?:<cx
   check(/<cx:binCount val="\d+"\/>/.test(pareto) && categoryFormat(pareto) !== undefined, 'a binned Pareto chart takes the same bin count and edge format');
 }
 
-// 3. A pie's last slice: the preview's color, written as an sRGB literal.
+// 3. A pie's last slice: the preview's color as an sRGB literal, or every data point bordered 2 px (1.5 pt) in the surface color.
 {
-  const slices = async (count) => {
-    const data = {columns: ['Segment', 'Revenue'], rows: Array.from({length: count}, (_, index) => [`S${index + 1}`, 50 - index * 4])};
-    const xml = (await exported({type: 'pie', data})).chart;
-    return [...xml.matchAll(/<c:dPt>[\s\S]*?<\/c:dPt>/g)].map((point) => /<a:(?:srgbClr|schemeClr) val="([^"]+)"/.exec(point[0])?.[1]);
+  const pie = async (scheme, count) => {
+    const data = {columns: ['Segment', 'Revenue'], rows: Array.from({length: count}, (_, index) => [`S${index + 1}`, 50 - index * 3])};
+    const entries = unzipSync(await toPptx({language: 'en', design: {colorScheme: scheme, variant: 'light1'}, slides: [{title: 'Chart', chart: {type: 'pie', data}}]}, {catalogs: [gallery]}));
+    const xml = decoder.decode(entries['ppt/charts/chart1.xml']);
+    return [...xml.matchAll(/<c:dPt>[\s\S]*?<\/c:dPt>/g)].map((point) => ({color: /<c:spPr><a:solidFill><a:(?:srgbClr|schemeClr) val="([^"]+)"/.exec(point[0])?.[1], line: /<a:ln w="(\d+)"[^>]*><a:solidFill><a:(?:srgbClr|schemeClr) val="([^"]+)"/.exec(point[0])}));
   };
-  const four = await slices(4), five = await slices(5);
-  check(four.length === 4 && five.length === 5, `a point per slice (${four.length}, ${five.length})`);
-  check(four.slice(0, 3).join() === five.slice(0, 3).join(), 'the slices before the last keep their colors');
-  check(four[3] !== five[3] && /^[0-9A-F]{6}$/.test(four[3]), `the last of four is a moved sRGB literal (${four[3]} vs ${five[3]})`);
+  let bordered = 0, moved = 0;
+  for (const scheme of ['forest-green', 'boost', 'golden-yellow', 'corporate-blue', 'deep-purple']) for (const count of [3, 4, 5, 6, 7, 8]) {
+    const slices = await pie(scheme, count), longer = await pie(scheme, count + 1);
+    check(slices.length === count, `a point per slice (${scheme}, ${count})`);
+    check(slices.slice(0, count - 1).every((slice, index) => slice.color === longer[index].color), `only the last slice differs (${scheme}, ${count})`);
+    const widths = new Set(slices.map((slice) => slice.line?.[1]));
+    check(widths.size === 1, 'every point has the same border width');
+    if (slices[0].line?.[1] === '19050') { bordered++; check(slices.every((slice) => slice.line[2] === 'FFFFFF' || slice.line[2] === 'bg1'), 'the border is the surface color (bg1)'); }
+    if (slices[count - 1].color !== longer[count - 1].color) { moved++; check(/^[0-9A-F]{6}$/.test(slices[count - 1].color), 'a moved slice is an sRGB literal'); }
+  }
+  check(bordered > 0 && moved > 0, `both ways of separating the wrap pair occur (${bordered} bordered, ${moved} moved)`);
 }
 
 console.log(`lh-160-chart-labels pptx: ${checks} checks`);

@@ -44,17 +44,26 @@ const binLabels = (svg) => entries(svg).map((entry) => entry.body).filter((text)
   check(kept.length > 5, `a few wide bars keep their counts (${kept.length})`);
 }
 
-// 3. A pie's last slice is moved off the first (its color is the slice palette's, not the series color) on a scheme where they read alike.
+// 3. A pie's last slice is moved off the first (by at most 20 L*), or every slice gets a 2 px surface-colored border; the rest keep the palette.
 {
-  const fills = (count) => {
-    const data = { columns: ['Segment', 'Revenue'], rows: Array.from({ length: count }, (_, index) => [`S${index + 1}`, 50 - index * 4]) };
-    const svg = toSvg({ language: 'en', design: { colorScheme: 'forest-green', variant: 'light1' }, slides: [{ title: 'Pie', chart: { type: 'pie', data } }] }, 1);
-    return [...svg.matchAll(/<path\b[^>]*\bfill="(#[0-9A-Fa-f]{6})"/g)].map((match, index) => [index, match[1]]);
+  const pie = (scheme, count) => {
+    const data = { columns: ['Segment', 'Revenue'], rows: Array.from({ length: count }, (_, index) => [`S${index + 1}`, 50 - index * 3]) };
+    const svg = toSvg({ language: 'en', design: { colorScheme: scheme, variant: 'light1' }, slides: [{ title: 'Pie', chart: { type: 'pie', data } }] }, 1);
+    return [...svg.matchAll(/<path\b[^>]*\bfill="(#[0-9A-Fa-f]{6})" stroke="(#[0-9A-Fa-f]{6})" stroke-width="([\d.]+)"/g)].map((match) => ({ fill: match[1], stroke: match[2], width: Number(match[3]) }));
   };
-  const four = fills(4), five = fills(5);
-  check(four.length === 4 && five.length === 5, `a path per slice (${four.length}, ${five.length})`);
-  check(four.slice(0, 3).every(([index, fill], at) => fill === five[at][1] && index === at), 'every slice but the last keeps the palette color');
-  check(four[3][1] !== five[3][1], `the fourth slice differs as the last of four (${four[3][1]}) and as a middle slice of five (${five[3][1]})`);
+  let bordered = 0, moved = 0;
+  for (const scheme of ['forest-green', 'boost', 'golden-yellow', 'corporate-blue', 'deep-purple']) for (const count of [3, 4, 5, 6, 7, 8]) {
+    const slices = pie(scheme, count), longer = pie(scheme, count + 1);
+    check(slices.length === count, `a path per slice (${scheme}, ${count})`);
+    const widths = new Set(slices.map((slice) => slice.width));
+    check(widths.size === 1, 'every slice has the same border width');
+    const wide = slices[0].width > 1.5;
+    if (wide) { bordered++; check(slices.every((slice) => slice.stroke === slices[0].stroke) && slices[0].stroke.toUpperCase() === '#FFFFFF', `the border is the surface color (${slices[0].stroke})`); check(Math.abs(slices[0].width - 2) < 0.01, `2 px at the 720-px reference (${slices[0].width})`); }
+    // Every slice but the last keeps the color it has in a longer pie of the same scheme.
+    check(slices.slice(0, count - 1).every((slice, index) => slice.fill === longer[index].fill) || count + 1 > 12, `only the last slice differs (${scheme}, ${count})`);
+    if (slices[count - 1].fill !== longer[count - 1].fill) moved++;
+  }
+  check(bordered > 0 && moved > 0, `both ways of separating the wrap pair occur (${bordered} bordered, ${moved} moved)`);
 }
 
 console.log(`lh-160-chart-labels render: ${checks} checks`);

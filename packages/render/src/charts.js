@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartSlicePalette, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -373,8 +373,11 @@ const neutrals = bound.design.roles.neutrals;
       }));
     }
   };
-  // LH-161: a pie's or doughnut's slices: the series colors, the last slice moved off the first when they would read as one tone.
-  c.sliceColors = chartSlicePalette(surface, c.colors, rows.length, { legible: chartSchemeSeries(item.value?.colors, bound.design.colorScheme, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }) });
+  // LH-161: a pie's or doughnut's slices: the series colors, the last slice moved off the first (at most 20 L*) when they would read as one tone,
+  // else every slice bordered in the surface color.
+  const slicePlan = chartSlicePlan(surface, c.colors, rows.length, { legible: chartSchemeSeries(item.value?.colors, bound.design.colorScheme, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }) });
+  c.sliceColors = slicePlan.colors;
+  c.sliceBordered = slicePlan.bordered;
   return c;
 }
 
@@ -1203,7 +1206,8 @@ function renderCircularChart(c, spec) {
     c.text("No positive chart values", area, c.path);
     return;
   }
-  const border = { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
+  // LH-161: a bordered pie separates its slices (the last from the first) by a surface-colored line.
+  const border = c.sliceBordered ? { stroke: c.surface, "stroke-width": CHART_SLICE_SEPARATOR_PX * c.u } : { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
   const thickness = (r - hole) / rings.length;
   rings.forEach((ring, j) => {
     const inner = hole + j * thickness, outer = inner + thickness;

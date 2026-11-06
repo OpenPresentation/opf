@@ -2,7 +2,7 @@
 // LH-161: a pie's or doughnut's last slice stands 11 L* from the first, so `opf/chart-color-only` finds no wrap pair on any gallery scheme.
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { chartHistogram, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, chartSlicePalette, composeSlide, histogramBins, histogramEdgeDecimals, histogramEdgeFormat, resolveChartData, scottBinCount, CHART_SERIES_MIN_LIGHTNESS_STEP, HISTOGRAM_MIN_BINS } from "../dist/composition.js";
+import { chartHistogram, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, chartSlicePlan, CHART_SLICE_MAX_SHIFT, composeSlide, histogramBins, histogramEdgeDecimals, histogramEdgeFormat, resolveChartData, scottBinCount, CHART_SERIES_MIN_LIGHTNESS_STEP, HISTOGRAM_MIN_BINS } from "../dist/composition.js";
 import { validate } from "../dist/index.js";
 import { colorSchemes } from "./support/catalog.mjs";
 
@@ -86,7 +86,7 @@ describe("LH-160: a histogram draws the bins it can label", () => {
   });
 });
 
-describe("LH-161: a pie's last slice stands 11 L* from its first", () => {
+describe("LH-161: a pie's last slice stands 11 L* from its first, or a border separates them", () => {
   const lin = (c) => { const n = c / 255; return n <= 0.04045 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4; };
   const lightness = (hex) => {
     const n = Number.parseInt(hex.slice(1, 7), 16), y = 0.2126729 * lin(n >> 16) + 0.7151522 * lin((n >> 8) & 255) + 0.072175 * lin(n & 255);
@@ -94,33 +94,38 @@ describe("LH-161: a pie's last slice stands 11 L* from its first", () => {
   };
   const surfaces = (scheme) => [scheme.light1, scheme.dark1, "#FFFFFF", "#011842"];
 
-  test("chartSlicePalette clears the wrap pair for every slice count on every gallery scheme and surface", () => {
+  test("chartSlicePlan: every slice count on every gallery scheme and surface is recolored by at most 20 L* or bordered, never both", () => {
+    let recolored = 0, bordered = 0, kept = 0, maxShift = 0;
     for (const scheme of colorSchemes) for (const surface of surfaces(scheme)) {
       const palette = chartSeriesPalette(scheme), legible = chartSchemeSeries(undefined, scheme);
       const placed = chartPaletteForFill(surface, palette, { legible, soften: true });
       for (let count = 3; count <= placed.length; count++) {
-        const slices = chartSlicePalette(surface, placed, count, { legible });
-        const wrap = Math.abs(lightness(slices[0]) - lightness(slices[count - 1]));
-        assert.ok(wrap >= CHART_SERIES_MIN_LIGHTNESS_STEP - 1e-9, `${scheme.id} on ${surface}, ${count} slices: first and last are ${wrap.toFixed(2)} L* apart`);
-        for (let index = 1; index < count; index++) assert.ok(Math.abs(lightness(slices[index]) - lightness(slices[index - 1])) >= CHART_SERIES_MIN_LIGHTNESS_STEP - 1e-9, `${scheme.id} on ${surface}, ${count} slices: slices ${index}/${index + 1}`);
-        // Only the last slice moves; every other color is the palette's.
-        slices.forEach((color, index) => { if (index !== count - 1) assert.equal(color, placed[index]); });
+        const { colors, bordered: border } = chartSlicePlan(surface, placed, count, { legible });
+        const wrap = Math.abs(lightness(colors[0]) - lightness(colors[count - 1])), shift = Math.abs(lightness(colors[count - 1]) - lightness(placed[count - 1]));
+        colors.forEach((color, index) => { if (index !== count - 1) assert.equal(color, placed[index]); });
+        assert.ok(shift <= CHART_SLICE_MAX_SHIFT + 0.5, `${scheme.id} on ${surface}, ${count} slices: moved ${shift.toFixed(1)} L*`);
+        maxShift = Math.max(maxShift, shift);
+        if (border) { bordered++; assert.equal(colors[count - 1], placed[count - 1], "a bordered pie keeps its palette color"); assert.ok(wrap < CHART_SERIES_MIN_LIGHTNESS_STEP); }
+        else { assert.ok(wrap >= CHART_SERIES_MIN_LIGHTNESS_STEP - 1e-9, `${scheme.id} on ${surface}, ${count} slices: ${wrap.toFixed(2)} L* apart`); if (shift > 0) recolored++; else kept++; }
+        for (let index = 1; index < count; index++) assert.ok(Math.abs(lightness(colors[index]) - lightness(colors[index - 1])) >= CHART_SERIES_MIN_LIGHTNESS_STEP - 1e-9);
       }
     }
+    assert.ok(recolored > 0 && bordered > 0 && kept > 0, `recolored ${recolored}, bordered ${bordered}, unchanged ${kept}, max shift ${maxShift.toFixed(1)}`);
   });
 
   test("a color already clear of the first, an authored color, fewer than three slices and a repeating palette stay as they are", () => {
-    const placed = chartPaletteForFill("#FFFFFF", chartSeriesPalette({}), { legible: chartSchemeSeries(undefined, {}), soften: true });
     const legible = chartSchemeSeries(undefined, {});
-    assert.deepEqual(chartSlicePalette("#FFFFFF", placed, 2, { legible }), placed);
-    assert.deepEqual(chartSlicePalette("#FFFFFF", placed, 13, { legible }), placed);
+    const placed = chartPaletteForFill("#FFFFFF", chartSeriesPalette({}), { legible, soften: true });
+    assert.deepEqual(chartSlicePlan("#FFFFFF", placed, 2, { legible }), { colors: placed, bordered: false });
+    assert.deepEqual(chartSlicePlan("#FFFFFF", placed, 13, { legible }), { colors: placed, bordered: false });
     const close = ["#2874A6", "#B9770E", "#2975A7"];
-    assert.deepEqual(chartSlicePalette("#FFFFFF", close, 3, { legible: [true, true, false] }), close, "an authored last slice is never moved");
-    assert.notEqual(chartSlicePalette("#FFFFFF", close, 3, { legible: [true, true, true] })[2], close[2], "a scheme slice that reads as the first is");
-    assert.deepEqual(chartSlicePalette("#FFFFFF", close, 3), close, "a host palette (no legible list) is untouched");
+    assert.deepEqual(chartSlicePlan("#FFFFFF", close, 3, { legible: [true, true, false] }), { colors: close, bordered: false }, "an authored last slice is never moved or bordered");
+    assert.deepEqual(chartSlicePlan("#FFFFFF", close, 3), { colors: close, bordered: false }, "a host palette (no legible list) is untouched");
+    const moved = chartSlicePlan("#FFFFFF", close, 3, { legible: [true, true, true] });
+    assert.ok(moved.bordered === false && moved.colors[2] !== close[2] || moved.bordered === true, "a scheme slice that reads as the first is recolored or bordered");
   });
 
-  test("opf/chart-color-only finds no wrap pair on a pie of any size in any gallery scheme", () => {
+  test("opf/chart-color-only finds no wrap pair on a pie of any size in any gallery scheme (a bordered pair passes)", () => {
     for (const scheme of colorSchemes) for (const count of [3, 4, 5, 6, 7, 8, 10, 12]) {
       const rows = Array.from({ length: count }, (_, index) => [`Slice ${index + 1}`, 100 - index * 5]);
       for (const type of ["pie", "doughnut"]) {

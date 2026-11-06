@@ -62,7 +62,7 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePalette, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -3334,9 +3334,10 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const legibleSeries = chartSchemeSeries(chart.colors, context.colorScheme, colorContext);
   const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries, soften: true});
   const strongPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries}).map(color=>normalizeHex(color));
-  // LH-161: a pie's or doughnut's last slice is moved off the first when they would read as one tone (core chartSlicePalette), as the preview draws it;
-  // a moved color is an sRGB literal, never the scheme accent it came from.
-  const slicePalette = circular ? chartSlicePalette(panelFill, adjustedPalette, chartData.pointCount, {legible: legibleSeries}) : adjustedPalette;
+  // LH-161: a pie's or doughnut's last slice is moved off the first (at most 20 L*) when they would read as one tone, else every slice gets a
+  // surface-colored border (core chartSlicePlan), as the preview draws it; a moved color is an sRGB literal, never the scheme accent it came from.
+  const slicePlan = circular ? chartSlicePlan(panelFill, adjustedPalette, chartData.pointCount, {legible: legibleSeries}) : undefined;
+  const slicePalette = slicePlan?.colors ?? adjustedPalette;
   const palette = slicePalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, strongPalette.map(hex => `#${hex}`), (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents,
     chartSoftColors(panelFill, preferredPalette, {legible: legibleSeries}));
@@ -3410,7 +3411,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     dataLabelColor: markLabelColor,
     dataLabelFontSize: textSize / 100,
     showValue: false,
-    ...(circular ? {dataBorder: {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
+    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
     valGridLine: { color: gridColor, size: 1 },
     // LH-105: no tick marks: the gridlines carry the value scale and the category labels name their bands (Few: few gridlines and ticks).
     catAxisMajorTickMark: 'none',
