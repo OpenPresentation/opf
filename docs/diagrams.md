@@ -211,15 +211,7 @@ The same slide, with the same source, in four designs from the default catalog:
 ```json
 {
   "title": "Every request is reviewed before it ships",
-  "diagram": "flowchart LR
-  A[Request] --> B{Approved?}
-  B -->|yes| C[Build]
-  B -->|no| D[Revise]
-  D --> A
-  C --> E[Test]
-  E --> F{Passes?}
-  F -->|yes| G[Release]
-  F -->|no| C"
+  "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Test]\n  E --> F{Passes?}\n  F -->|yes| G[Release]\n  F -->|no| C"
 }
 ```
 
