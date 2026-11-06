@@ -36,7 +36,7 @@ export function quoteManifest(value,layout) {
     if(index>0){splits.push(length);length+=separatorBefore(field,pull).length;}
     length+=value[field].length;
   }
-  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),...(layout.photo&&(value.portrait==='side'||value.portrait==='avatar')?{portrait:value.portrait}:{}),...(pull?{pull:true}:{}),
+  return {shorthand,...(fields.length?{footer:{fields,...(fields.length>1?{splits}:{})}}:{}),...(layout.photo?{photo:true}:{}),...(layout.photo&&(value.portrait==='side'||value.portrait==='avatar')?{portrait:value.portrait}:{}),...(pull?{pull:true}:{}),...(layout.mark?{mark:true}:{}),
     // A rich body (FA-10) has richLines instead of sourceLines; both write one native shape per fitted line.
     parts:layout.parts.map(part=>({role:part.role,lines:(part.fit.sourceLines??part.fit.lines).length}))};
 }
@@ -52,6 +52,7 @@ function validateManifest(manifest) {
   if(count>10000)throw Error('Too many quote source lines.');
   if(manifest.photo!==undefined&&(manifest.photo!==true||manifest.shorthand))throw Error('Invalid quote photo.');
   if(manifest.pull!==undefined&&(manifest.pull!==true||manifest.photo))throw Error('Invalid quote pull line.');
+  if(manifest.mark!==undefined&&(manifest.mark!==true||manifest.pull))throw Error('Invalid quote mark.');
   if(manifest.portrait!==undefined&&(!manifest.photo||!['side','avatar'].includes(manifest.portrait)))throw Error('Invalid quote portrait.');
   const footer=manifest.footer;
   if(roles.length===2){
@@ -104,12 +105,14 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     }catch{report({code:'invalid-quote-provenance',message:'Invalid quote tags; ordinary import retains current native text.'});}
   }
   for(const members of groups.values())try{
-    const group=members.filter(item=>!item.picture&&item.data.role!=='rule'),photos=members.filter(item=>item.picture),rules=members.filter(item=>!item.picture&&item.data.role==='rule');
+    const group=members.filter(item=>!item.picture&&item.data.role!=='rule'&&item.data.role!=='mark'),photos=members.filter(item=>item.picture),rules=members.filter(item=>!item.picture&&item.data.role==='rule'),markers=members.filter(item=>!item.picture&&item.data.role==='mark');
     const anchors=group.filter(item=>item.data.anchor!==undefined);if(anchors.length!==1)throw Error('Missing or duplicated quote anchor.');
     const anchor=anchors[0],manifest=anchor.data.anchor,count=validateManifest(manifest);
     if(anchor.data.role!=='text'||anchor.data.part!==0||anchor.data.line!==0||group.length!==count||new Set(group.map(item=>item.shape)).size!==count)throw Error('Incomplete or duplicated quote lines.');
     // LH-114: a pull line's accent rule is one rectangle with no text.
     if(rules.length>(manifest.pull?1:0)||rules.some(item=>item.ambiguous||item.shape['p:spPr']?.['a:prstGeom']?.prst!=='rect'||(paragraphs[item.index]??[]).some(paragraph=>paragraph.text||paragraph.bullet)))throw Error('Invalid quote rule.');
+    // LH-78: a quote card's decorative mark is one text box holding the glyph the preview drew; it is decoration, so it never joins the quote's text.
+    if(markers.length>(manifest.mark?1:0)||markers.some(item=>item.ambiguous))throw Error('Invalid quote mark.');
     if(photos.length>(manifest.photo?1:0)||photos.some(item=>item.ambiguous||item.data.role!=='photo'||item.picture['p:nvPicPr']?.['p:cNvPr']?.name!==quotePhotoName(anchor.data.group)))throw Error('Invalid quote photo identity.');
     const ordered=manifest.parts.map(part=>Array(part.lines));
     for(const item of group){
@@ -136,9 +139,9 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     }
     if(manifest.shorthand&&Object.keys(quote).length===1)quote=quote.text;
     if(!isValidFormat({slides:[{quote}]}))throw Error('Current native text does not form a valid quote.');
-    for(const item of [...group,...rules])consumed.add(item.shape);
+    for(const item of [...group,...rules,...markers])consumed.add(item.shape);
     for(const item of photos)consumedPictures.add(item.picture);
-    items.push({shapes:[...group,...rules].map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});
+    items.push({shapes:[...group,...rules,...markers].map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});
     for(const diagnostic of local)report(diagnostic);
     if(!groupUnchanged(group,paragraphs))report({code:'quote-import-reflow',message:'Quote text, attribution, role, source and photo were recovered from the current native text and picture. Native formatting, positions and font theme are not reconstructed; review the reflowed quote.'});
   }catch(error){report({code:'invalid-quote-provenance',message:`${error.message} Ordinary import retains current native text without restoring old source words.`});}

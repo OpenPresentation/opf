@@ -64,7 +64,7 @@ function planOne(item, geometry, automatic, reject) {
     }
     values = item.value.map(entry => entry && !Array.isArray(entry) && typeof entry === 'object' ? entry.text : entry);
     if (values.some(value => /[\r\n]/.test(ownText(value)))) { reject('unsupported-list'); return undefined; }
-  } else values = [item.value];
+  } else values = [item.runs ?? item.value]; // LH-63: a run-in heading's bold first words are runs
   if (values.some(value => !richSupported(value))) {
     reject(values.some(value => Array.isArray(value) && value.some(run => run?.cite !== undefined || run?.footnote !== undefined)) ? 'annotated-text' : 'unsupported-text');
     return undefined;

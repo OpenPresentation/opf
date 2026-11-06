@@ -66,8 +66,8 @@ export type {CodeHighlightBand, CodeHighlightColors, CodeHighlightEntry, CodeHig
 export {layoutWatermark} from './watermark.js';
 export type {WatermarkTextLayout, WatermarkTextOptions} from './watermark.js';
 export {PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitmap, patternRuns, resolvePatternPreset} from './pattern-fills.js';
-import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
-export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
+import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,runInHeading,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
+export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,RUN_IN_HEADING_CHARS,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,runInHeading,slideCitations,walkCitationRuns} from './annotations.js';
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
@@ -327,6 +327,11 @@ export interface ComposedItem {
   /** Optional visible card allocation; box and all accepted internals occupy its padded interior. */
   frameBox?: LayoutBox;
   text?: TextFit | RichTextFit | ListFit | CodeTextFit;
+  /**
+   * LH-63: the runs a plain `text` block draws when its first line is a run-in heading (`runInHeading`): the same characters as `value`, the heading
+   * bold. Engines draw and export these runs (`text` is their rich fit); absent, the block draws `value`.
+   */
+  runs?: RichText;
   textStyle?: TextStyle;
   /** Complete accepted quote internals; consumers must reuse these fits and styles. */
   quoteLayout?: QuoteLayout;
@@ -1720,8 +1725,23 @@ export interface QuoteLayout {
    * color by both engines. Absent for every other quote.
    */
   rule?: LayoutBox;
+  /**
+   * LH-78: the decorative quotation mark at the start edge of the top of a quote on a card (`markQuote`), drawn in the deck's primary color (against the
+   * card, as a metric's value is) by both engines, in the card's padding above the quote's text: it takes no room from the quote.
+   */
+  mark?: QuoteMark;
   diagnostics: QuoteLayoutDiagnostic[];
   overflow: boolean;
+}
+/** LH-78: a quote's decorative mark: one glyph, fitted like any quote part (its box, fit and style are the engines' to draw). */
+export interface QuoteMark {
+  /** `<quote path>.mark`: generated, with no source field. */
+  path: string;
+  text: string;
+  box: LayoutBox;
+  fit: TextFit;
+  style: TextStyle;
+  requestedStyle: TextStyle;
 }
 export interface QuoteLayoutOptions {
   /** Canvas short edge divided by 720. Insets retain the current 18 reference-pixel contract. */
@@ -2058,6 +2078,32 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
   }
   return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),...(rule?{rule}:{}),diagnostics,overflow:diagnostics.length>0};
 }
+
+/**
+ * LH-78: a quote on a card draws a decorative quotation mark at the start edge of the card's top, in the primary color (QuoteLayout.mark), as
+ * Claude Design draws one over each quote card: the language's opening mark (a low one, which sits at the baseline, is drawn as the high English
+ * mark instead), bold, at most `QUOTE_MARK.sizes[0]` times the body's size. It is drawn in the card's own padding above the quote's text, its ink centered
+ * between the card's top edge and the text's top (`card` is the card's box), at the largest of `QUOTE_MARK.sizes` whose ink fills at most
+ * `QUOTE_MARK.fill` of that padding. Nothing moves and no size changes: the quote's text, footer and photo stay where they were. A card with
+ * less padding than that, a quote that overflows, a pull line and a photo beside the quote draw no mark.
+ */
+export const QUOTE_MARK = { sizes: [1.5, 1.25, 1], ink: { top: 0.22, bottom: 0.58 }, fill: 0.7 } as const;
+export function markQuote(layout: QuoteLayout, card: LayoutBox, options: {scale?: number; fontFamilies?: Partial<FontFamilies>; textMeasurement?: TextMeasurement; direction?: TextDirection; language?: string; path?: string} = {}): QuoteLayout {
+  const body = layout.parts.find(part => part.role === 'body'), bodySize = body?.fit?.fontSize;
+  if (!body || bodySize === undefined || layout.overflow || layout.rule || layout.mark || layout.photo?.focus || layout.parts.some(part => !part.fit)) return layout;
+  const padding = body.box.y - card.y, inkHeight = QUOTE_MARK.ink.bottom - QUOTE_MARK.ink.top;
+  const size = QUOTE_MARK.sizes.map(factor => bodySize * factor).find(candidate => inkHeight * candidate <= QUOTE_MARK.fill * padding);
+  if (size === undefined) return layout;
+  const open = quoteMarksFor(options.language).open, text = open === '„' || open === '‚' ? '“' : open;
+  const markPath = `${options.path ?? 'quote'}.mark`, requestedStyle: TextStyle = {fontFamily: body.requestedStyle.fontFamily, fontWeight: 700, italic: false, path: markPath};
+  const style = resolveTextStyle({...requestedStyle}, options.textMeasurement);
+  // The line box starts so that the ink (QUOTE_MARK.ink of the size, from the line's top) is centered in the padding.
+  const box = {x: body.box.x, y: card.y + (padding - inkHeight * size) / 2 - QUOTE_MARK.ink.top * size, width: body.box.width, height: size * 1.3};
+  const fit = fitText(text, box, size, size, textWidthMeasurer(style, options.textMeasurement), options.direction);
+  if (fit.overflow || !usableBox(box)) return layout;
+  return {...layout, mark: {path: markPath, text, box, fit, style, requestedStyle}};
+}
+const usableBox = (box: LayoutBox): boolean => [box.x, box.y, box.width, box.height].every(Number.isFinite) && box.width > 0 && box.height > 0;
 
 export interface MetricContent {
   value: string | number;
@@ -4294,13 +4340,13 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * check-mark tiles (`check-tiles`), LH-14's icons (`icons`, `icon-chips`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'run-in';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'run-in'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -5537,8 +5583,18 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
     : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{}),...(loneLabels.has(path)?{displayRule:'short' as const}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
+  // LH-63: a plain text that opens with a short line the author broke (or a short "Label:"), drawn as a bold run-in heading over its body
+  // (runInHeading). The runs hold the text's every character, so only the weight of the first words differs; the authored value is unchanged.
+  const runIns = new Map<string, RichText | undefined>();
+  const runInOf = (value: unknown): RichText | undefined => {
+    if (typeof value !== 'string' || !ruleOn('run-in')) return undefined;
+    if (!runIns.has(value)) runIns.set(value, runInHeading(value));
+    const runs = runIns.get(value);
+    if (runs) fire('run-in');
+    return runs;
+  };
   const fitContent =(field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown,alignment?:'left'|'center'|'right') => field === 'text'
-    ? fitPlacedText(field,value,text,box,size,minimum,path,alignment)
+    ? fitPlacedText(field,runInOf(value) ?? value,text,box,size,minimum,path,alignment)
     : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,listOptionsFor(field,path,numbering,value))
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
@@ -7013,7 +7069,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (caption && diagram && !diagram.issue) settleCaption(caption, diagram.box, anchor);
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}), ...(diagram ? {diagram} : {}),
       ...(frameBox && !emphasized ? {frameBox} : {}),
-      text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
+      text, ...(node.field === 'text' && text && 'richLines' in text && runInOf(node.value) ? {runs: runInOf(node.value)!} : {}), textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: tile || (metricLayout && metricStarts(node)) ? 'left' : alignment, ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}), ...(onSurface ? {emphasis: true as const} : {}), ...(tile ? {metricTile: true as const} : {}), ...(node.field === 'table' && growthOf.has(node) ? {tableGrowth: growthOf.get(node)!} : {}) });
     // LH-06: an emphasized leaf's card is the surface (a block with several payload fields: around all of them).
@@ -8466,6 +8522,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-78: a card the slide does not otherwise draw hugs its quote (the inset above it repeated below its lowest part), so a tall cell
   // draws no empty card.
   const hugQuoteCards = (): void => {
+    // LH-78: every quote card of the slide draws its mark (markQuote) or none does: the cards of a row read alike. The mark is drawn
+    // in the card's padding, so no card takes a size from its quote.
+    const carded = [...quoteHugs].filter(index => items[index]!.quoteLayout && items[index]!.frameBox && !items[index]!.quoteLayout!.overflow);
+    const marked = carded.map(index => markQuote(items[index]!.quoteLayout!, items[index]!.frameBox!, { scale, fontFamilies: options.fontFamilies, textMeasurement: options.textMeasurement, direction: textDirection, ...(deckLanguage() !== undefined ? { language: deckLanguage()! } : {}), path: items[index]!.path }));
+    if (carded.length && marked.every(layout => layout.mark)) carded.forEach((index, at) => { const item = items[index]!; item.quoteLayout = marked[at]!; item.text = marked[at]!.parts.find(part => part.role === 'body')?.fit ?? item.text; });
     for (const index of quoteHugs) {
       const item = items[index]!, layout = item.quoteLayout, frame = item.frameBox;
       if (!layout || !frame || layout.overflow) continue;
