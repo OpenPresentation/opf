@@ -27,4 +27,4 @@ item's state edits its row and appends a log line in the same PR.
 - 2026-11-05: SH-01 done ([opf#1043](https://github.com/OpenPresentation/opf/pull/1043)): the preset geometry engine and its PowerPoint comparison deck.
 - 2026-11-05: SH-03 done ([opf#1045](https://github.com/OpenPresentation/opf/pull/1045)): the six effects in both engines, measured against PowerPoint.
 - 2026-11-06: SH-02 done ([opf#1050](https://github.com/OpenPresentation/opf/pull/1050)): shape blocks, fills, strokes, styles, lighter and darker colors, masks for every preset, the lazy engine.
-- 2026-11-06: phase 1 integrated with the layout harvest's wave 8 (opf#INTEGRATION): SH-03's effects drawn on SH-02's shape blocks in both engines, `examples/technical/shape-effects.opf.json`, the lazy engines documented once.
+- 2026-11-06: phase 1 integrated with the layout harvest's wave 8 ([opf#1055](https://github.com/OpenPresentation/opf/pull/1055)): SH-03's effects drawn on SH-02's shape blocks in both engines, `examples/technical/shape-effects.opf.json`, the lazy engines documented once.
