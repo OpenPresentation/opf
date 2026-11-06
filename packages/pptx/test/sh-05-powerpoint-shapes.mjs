@@ -74,7 +74,8 @@ for (const shape of autoshapes.shapes) assert.ok(shape.style === undefined && sh
   assert.deepEqual([a.id, b.id, c.id, d.id], ['box-a', 'box-b', 'oval-c', 'diamond-d']);
   assert.deepEqual(straight.connector, { from: 'box-a', to: 'box-b', fromSite: 3, toSite: 1 });
   assert.deepEqual(straight.stroke, { color: 'accent1', width: 3, end: { type: 'triangle' } });
-  assert.deepEqual(curved.connector, { from: 'box-b', to: 'oval-c', route: 'curved', fromSite: 3, toSite: 1 });
+  // PowerPoint routed this one as curvedConnector4 (a loop, with adj1 and adj2): beyond OPF's three-segment connector, so it stays a shape that draws as it was.
+  assert.deepEqual([curved.shape, curved.adjust, curved.flip], ['curvedConnector4', { adj1: 0.43613, adj2: 2.05061 }, 'vertical']);
   assert.deepEqual(elbow.connector, { from: 'box-a', to: 'diamond-d', route: 'elbow', fromSite: 2, toSite: 1 });
   assert.equal(elbow.stroke.dash, 'dash');
   assert.deepEqual([free.shape, free.stroke.end], ['straightConnector1', { type: 'diamond' }]);
@@ -141,13 +142,16 @@ for (const shape of autoshapes.shapes) assert.ok(shape.style === undefined && sh
     assert.equal(back.slides[0].shapes.length, 1, `${property}: the shape imports`);
     assert.equal(back.slides[0].shapes[0].text, 'Hi');
   }
-  // A shape PowerPoint drew behind the title covers it once it is an overlay: reported.
+  // A shape PowerPoint drew behind the title is an overlay in the back layer.
   {
     const behind = zipSync(edit(xml => xml.replace('</p:grpSpPr>', '</p:grpSpPr><p:sp><p:nvSpPr><p:cNvPr id="90" name="Rectangle 9"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="500000" y="2900000"/><a:ext cx="6000000" cy="1000000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="FFCC00"/></a:solidFill></p:spPr></p:sp>')));
     const reported = [];
     const back = await fromPptx(behind, { onDiagnostic: item => reported.push(item) });
     assert.equal(back.slides[0].shapes.length, 2);
-    assert.deepEqual(reported.filter(item => item.code === 'shape-covers-content').map(item => item.shape), ['Rectangle 9']);
+    // Behind the title and over nothing else: the back layer expresses it, so nothing is reported.
+    assert.deepEqual(reported.filter(item => item.code === 'shape-covers-content'), []);
+    assert.equal(back.slides[0].shapes.find(shape => shape.fill === '#FFCC00').layer, 'back');
+    assert.equal(back.slides[0].shapes.find(shape => shape.text === 'Hi').layer, undefined);
   }
   // A shape across the whole slide is a background, not an overlay.
   const full = zipSync(edit(inShape(shape => shape.replace(/<a:off x="\d+" y="\d+"\/><a:ext cx="\d+" cy="\d+"\/>/, '<a:off x="0" y="0"/><a:ext cx="12192000" cy="6858000"/>'))));

@@ -113,9 +113,11 @@ export function overlayRecord(slide) {
     if (!object(entry)) return;
     const row = {};
     if (typeof entry.id === 'string' && entry.id.length <= MAX_ID) row.id = entry.id;
+    if (entry.layer === 'back') row.layer = 'back';
+    if (object(entry.connector) && object(entry.adjust) && Object.values(entry.adjust).every(Number.isFinite)) row.adjust = clone(entry.adjust);
     if (object(entry.at) && typeof entry.at.block === 'string' && entry.at.block.length <= MAX_ID) row.at = clone(entry.at);
-    // A connector's sites are the pair that face each other unless it names them: which of the two it named.
-    if (object(entry.connector) && (entry.connector.fromSite === undefined || entry.connector.toSite === undefined)) row.sites = [entry.connector.fromSite === undefined ? 0 : 1, entry.connector.toSite === undefined ? 0 : 1];
+    // A connector's sites are the pair that face each other unless it names them: which of the two it named (a row for every connector also says its route is the export's own, not PowerPoint's).
+    if (object(entry.connector)) row.sites = [entry.connector.fromSite === undefined ? 0 : 1, entry.connector.toSite === undefined ? 0 : 1];
     if (Object.keys(row).length) rows.push([index, row]);
   });
   return rows.length && rows.length <= MAX_OVERLAYS ? rows : undefined;
@@ -128,7 +130,9 @@ export function validateOverlayRecord(value) {
   for (const row of value) {
     if (!Array.isArray(row) || row.length !== 2 || !Number.isSafeInteger(row[0]) || row[0] <= previous || !object(row[1]) || !Object.keys(row[1]).length) throw Error('Invalid overlay record row.');
     previous = row[0];
-    const {id, at, sites, ...rest} = row[1];
+    const {id, at, sites, layer, adjust, ...rest} = row[1];
+    if (adjust !== undefined && (!object(adjust) || !Object.values(adjust).every(Number.isFinite))) throw Error('Invalid overlay adjust.');
+    if (layer !== undefined && layer !== 'back') throw Error('Invalid overlay layer.');
     if (sites !== undefined && (!Array.isArray(sites) || sites.length !== 2 || !sites.every(site => site === 0 || site === 1))) throw Error('Invalid overlay connector sites.');
     if (Object.keys(rest).length || (id !== undefined && (typeof id !== 'string' || !id || id.length > MAX_ID))) throw Error('Invalid overlay record entry.');
     if (at !== undefined && (!object(at) || typeof at.block !== 'string' || !at.block || at.block.length > MAX_ID || !['top', 'bottom', 'start', 'end', 'center'].includes(at.edge)
@@ -212,6 +216,7 @@ export function assembleOverlayShapes(imported, contexts, restored, records = []
       const row = overlay.index !== undefined ? rows.get(overlay.index) : undefined;
       const entry = overlay.entry;
       if (overlay.id !== undefined) entry.id = overlay.id;
+      if (row?.layer === 'back') entry.layer = 'back';
       // An anchor returns only where the block it names is there: the native frame is where composition put the shape.
       if (row?.at !== undefined && taken.has(row.at.block)) { delete entry.x; delete entry.y; delete entry.width; delete entry.height; entry.at = clone(row.at); }
       entries.push({z: overlay.z, entry});
@@ -219,10 +224,13 @@ export function assembleOverlayShapes(imported, contexts, restored, records = []
     for (const connector of state.connectors) {
       const {read, free} = connector;
       const from = read.from && endOf(read.from.id), to = read.to && endOf(read.to.id);
-      if (from && to && read.route && from !== to) {
+      // OPF's connector draws the presets with up to three segments; a longer route PowerPoint drew (curvedConnector4, bentConnector5 and the like) stays a shape with its preset and adjust values, which draws it as it was.
+      if (from && to && read.route && from !== to && !/Connector[45]$/.test(read.preset)) {
         const {stroke, alt, decorative, hidden} = read.shape.fields;
         const row = connector.index !== undefined ? rows.get(connector.index) : undefined;
-        entries.push({z: connector.z, entry: {...(connector.id !== undefined ? {id: connector.id} : {}), connector: {from, to, ...(read.route !== 'straight' ? {route: read.route} : {}),
+        // The route PowerPoint drew is kept as `adjust`; the export's own connector recomputes the same route, so it states none.
+        const kept = read.adjust !== undefined && !(connector.index !== undefined && records[index]);
+        entries.push({z: connector.z, entry: {...(connector.id !== undefined ? {id: connector.id} : {}), ...(row?.adjust ? {adjust: row.adjust} : kept ? {adjust: read.adjust} : {}), connector: {from, to, ...(read.route !== 'straight' ? {route: read.route} : {}),
           ...(row?.sites?.[0] === 0 ? {} : {fromSite: read.from.site}), ...(row?.sites?.[1] === 0 ? {} : {toSite: read.to.site})},
           ...(stroke !== undefined ? {stroke} : {}), ...(alt !== undefined ? {alt} : {}), ...(decorative ? {decorative} : {}), ...(hidden ? {hidden} : {})}});
       } else entries.push({z: connector.z, entry: connector.id !== undefined ? {id: connector.id, ...free} : free});

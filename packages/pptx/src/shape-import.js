@@ -573,7 +573,10 @@ export function readConnector(drawn, context) {
   const cNvCxnSpPr = props['p:nvCxnSpPr']?.['p:cNvCxnSpPr'] ?? {};
   const end = node => object(node) && number(node.id) !== undefined ? {id: number(node.id), site: number(node.idx) ?? 0} : undefined;
   const route = /^bentConnector/.test(preset) ? 'elbow' : /^curvedConnector/.test(preset) ? 'curved' : /^(line|lineInv|straightConnector1)$/.test(preset) ? 'straight' : undefined;
-  return {route, preset, from: end(cNvCxnSpPr['a:stCxn']), to: end(cNvCxnSpPr['a:endCxn']), shape};
+  // The route PowerPoint drew: adj1 of a three-segment preset (where the middle segment runs), kept as the connector's `adjust`.
+  const guide = array(props['p:spPr']?.['a:prstGeom']?.['a:avLst']?.['a:gd']).find(item => item?.name === 'adj1');
+  const adj1 = /^(?:bent|curved)Connector3$/.test(preset) ? number(/^val\s+(-?\d+)$/.exec(String(guide?.fmla ?? ''))?.[1]) : undefined;
+  return {route, preset, from: end(cNvCxnSpPr['a:stCxn']), to: end(cNvCxnSpPr['a:endCxn']), shape, ...(adj1 !== undefined ? {adjust: {adj1: round(adj1 / 100000, 5)}} : {})};
 }
 
 // ---------------------------------------------------------------------------
@@ -738,19 +741,24 @@ export function nativeShapeNames(shapes, pictures) {
 }
 
 /**
- * An overlay shape is drawn over the composed slide, so a shape PowerPoint drew behind a text box or a picture covers it once imported. Report each
- * opaque overlay shape that lies below content in the slide's z order and overlaps it (`content`: the drawn entries that are text, pictures or
- * frames, with `name`).
+ * Settle the layer of each overlay shape PowerPoint wrote (`content`: the drawn entries that are text, pictures or frames, with `name`). A shape
+ * that lies below content in the slide's z order and overlaps it is in the `back` layer (behind the content, over the background); one that
+ * lies over content, or over nothing, is in front. A shape between two pieces of content that both overlap it (over one, under the other)
+ * cannot be either: it is placed in front and reported as `shape-covers-content` when it is opaque. A shape the export wrote takes its layer
+ * from the stored record instead.
  */
-export function reportCoveredContent(content, context) {
+export function settleLayers(content, context) {
   for (const overlay of context.state.overlays) {
-    if (!overlay.opaque || overlay.index !== undefined) continue;
+    if (overlay.index !== undefined) continue;
     const frame = overlay.frame;
-    const covered = content.find(item => item.z > overlay.z && item.frame && item.frame.cx > 0 && item.frame.cy > 0 && (() => {
+    const overlaps = item => {
+      if (!item.frame || !(item.frame.cx > 0) || !(item.frame.cy > 0)) return false;
       const width = Math.min(frame.x + frame.cx, item.frame.x + item.frame.cx) - Math.max(frame.x, item.frame.x);
       const height = Math.min(frame.y + frame.cy, item.frame.y + item.frame.cy) - Math.max(frame.y, item.frame.y);
       return width > 0 && height > 0 && (width * height) / (item.frame.cx * item.frame.cy) > 0.25;
-    })());
-    if (covered) context.report({code: 'shape-covers-content', path: `slides.${context.slideIndex}`, shape: overlay.name, covers: covered.name, message: `The native shape ${JSON.stringify(overlay.name)} is drawn behind ${JSON.stringify(covered.name)}, but an overlay shape is always drawn over the content, so it now covers it. OPF has no layer behind the content; set a slide background or a card instead.`});
+    };
+    const over = content.filter(item => item.z > overlay.z && overlaps(item)), under = content.some(item => item.z < overlay.z && overlaps(item));
+    if (over.length && !under) overlay.entry.layer = 'back';
+    else if (over.length && overlay.opaque) context.report({code: 'shape-covers-content', path: `slides.${context.slideIndex}`, shape: overlay.name, covers: over[0].name, message: `The native shape ${JSON.stringify(overlay.name)} is drawn between pieces of content, behind ${JSON.stringify(over[0].name)} and over another; an overlay shape is either behind all content or over all of it, so it was placed over it and now covers ${JSON.stringify(over[0].name)}.`});
   }
 }

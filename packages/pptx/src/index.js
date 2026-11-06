@@ -36,7 +36,7 @@ import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeli
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
-import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, reportCoveredContent, shapeRole, shapeText} from './shape-import.js';
+import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
@@ -1279,8 +1279,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   importNativeConnectors(drawnAll, shapeContext);
-  // SH-05: an overlay shape imported from behind a text box or a picture now covers it.
-  reportCoveredContent(drawnAll.flatMap(entry => {
+  // SH-05: an overlay shape PowerPoint drew behind a text box or a picture is in the back layer.
+  settleLayers(drawnAll.flatMap(entry => {
     if (entry.tag === 'p:pic' || entry.tag === 'p:graphicFrame') return [{z: entry.z, frame: entry.frame, name: entry.tag === 'p:pic' ? 'picture' : 'table or chart'}];
     const index = entry.tag === 'p:sp' ? entry.index : undefined;
     return index !== undefined && (paragraphs[index] ?? []).some(paragraph => paragraph.text) && shapeRole(entry, {hasText: true}) === 'text' ? [{z: entry.z, frame: entry.frame, name: String(entry.props?.['p:nvSpPr']?.['p:cNvPr']?.name ?? 'text')}] : [];

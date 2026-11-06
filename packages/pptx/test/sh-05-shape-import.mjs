@@ -12,6 +12,7 @@ import { normalizeEffects } from '../dist/effects.js';
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 const example = async name => JSON.parse((await readFile(new URL(`../../../examples/technical/${name}.opf.json`, import.meta.url), 'utf8')).replaceAll('./assets/cover.png', PNG));
 
+// (A connector's line in the slide's text color is `text` or, on a dark slide, `light1`: the same color.)
 // Numbers to a hundredth, so the EMU rounding of a frame is not a difference.
 const settle = value => Array.isArray(value) ? value.map(settle) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).map(([key, item]) => [key, settle(item)]))
   : typeof value === 'number' ? Math.round(value * 100) / 100 : typeof value === 'string' && /^M[ \d]/.test(value) ? value.replace(/-?\d+\.?\d*/g, number => String(Math.round(Number(number)))) : value;
@@ -24,8 +25,8 @@ const drawn = deck => deck.slides.map((slide, index) => {
   return settle({
     shapes: composed.items.filter(item => item.shape && !item.path.includes('.shapes.')).map(shape),
     overlay: (composed.overlayShapes ?? []).map(entry => entry.kind === 'connector'
-      ? { kind: 'connector', path: entry.path, route: entry.route, preset: entry.preset, from: [entry.from.ref, entry.from.site], to: [entry.to.ref, entry.to.site], box: entry.box, stroke: entry.stroke }
-      : { kind: 'shape', ...shape(entry) }),
+      ? { kind: 'connector', path: entry.path, route: entry.route, preset: entry.preset, from: [entry.from.ref, entry.from.site], to: [entry.to.ref, entry.to.site], box: entry.box, stroke: entry.stroke && { ...entry.stroke, color: entry.stroke.color === 'light1' ? 'text' : entry.stroke.color } }
+      : { kind: 'shape', layer: entry.layer, ...shape(entry) }),
   });
 });
 const roundTrip = async (deck, diagnostics = []) => {
@@ -95,6 +96,21 @@ for (const name of ['shapes', 'shape-effects', 'shape-overlays', 'shape-overlays
   assert.deepEqual(curved.stroke, { dash: 'dash' });
   assert.equal(curved.alt, 'Badge to ship');
   assert.deepEqual(imported.slides[0].blocks.map(block => block.id), ['plan', 'ship']);
+}
+
+// 4. Without the stored record a connector keeps the route its native preset draws (adj1) as `adjust`; with it, the export's own route recomputes.
+{
+  const deck = { name: 'Route', slides: [{ title: 'Flow', shapes: [
+    { id: 'a', shape: 'rect', x: 0.1, y: 0.3, width: 0.15, height: 0.1 },
+    { id: 'b', shape: 'rect', x: 0.7, y: 0.6, width: 0.15, height: 0.1 },
+    { connector: { from: 'a', to: 'b', route: 'elbow', fromSite: 3, toSite: 1 }, adjust: { adj1: 0.3 } },
+  ] }] };
+  const plain = await fromPptx(await toPptx(deck, { provenance: false }));
+  const connector = plain.slides[0].shapes.find(entry => entry.connector);
+  assert.equal(connector.connector.route, 'elbow');
+  assert.ok(Math.abs(connector.adjust.adj1 - 0.3) < 0.001, 'the route is kept');
+  const stored = await fromPptx(await toPptx(deck));
+  assert.deepEqual(stored.slides[0].shapes.find(entry => entry.connector).adjust, { adj1: 0.3 }, 'an authored adjust is a stated value');
 }
 
 console.log('sh-05 shape import: ok');
