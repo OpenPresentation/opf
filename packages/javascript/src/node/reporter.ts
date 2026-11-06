@@ -52,6 +52,7 @@ const HELP: Record<string, string> = {
 	"export-lossy": "The PowerPoint file draws this with its nearest native form (see feature and the message). Change the content if the difference matters, or export with --as images for an exact picture.",
 	"typeface-not-office-safe": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
 	"typeface-replaced": "Drop --typefaces safe to keep the selected families in the file.",
+	"diagram-shapes-unavailable": "The diagram stays one picture in PowerPoint (see the message). It looks the same; to edit it, change its source in OPF and export again.",
 	"duplicate-font-face": "A --fonts face repeats a bundled family, weight and style; remove it or rename the family.",
 };
 

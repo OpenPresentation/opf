@@ -238,9 +238,10 @@ describe("drawing, through stub peers", () => {
   test("pdf, pptx and zip outputs, and their flags reach the engines", async () => {
     await stub(["convert", "deck.opf.json", "raster.pdf", "--raster"]);
     assert.equal((await callsOf("toPdf"))[0].args[1].raster, true);
-    const pptx = await stub(["convert", "deck.opf.json", "deck.pptx", "--charts", "picture", "--images", "preserve"]);
+    const pptx = await stub(["convert", "deck.opf.json", "deck.pptx", "--charts", "picture", "--images", "preserve", "--diagrams", "shapes"]);
     assert.equal(pptx.report.outputs[0].mediaType, "application/vnd.openxmlformats-officedocument.presentationml.presentation");
     assert.equal((await callsOf("toPptx"))[0].args[0].chartex, "fallback");
+    assert.equal((await callsOf("toPptx"))[0].args[0].diagrams, "shapes");
     const zip = await stub(["convert", "deck.opf.json", "slides.zip", "--to", "svg"]);
     assert.deepEqual(zip.report.outputs[0].entries, ["slides-1.svg", "slides-2.svg"]);
     assert.equal(zip.report.outputs[0].mediaType, "application/zip");
@@ -267,9 +268,10 @@ describe("drawing, through stub peers", () => {
     const messages = [
       [["deck.opf.json", "x.pdf", "--text", "paths"], /--text applies to svg output/],
       [["deck.opf.json", "x.svg", "--raster"], /--raster applies to pdf output/],
-      [["deck.opf.json", "x.svg", "--charts", "native"], /--charts, --provenance, --images, --body-text, --slide-numbers, --typefaces and --as apply to pptx output/],
+      [["deck.opf.json", "x.svg", "--charts", "native"], /--charts, --diagrams, --provenance, --images, --body-text, --slide-numbers, --typefaces and --as apply to pptx output/],
       [["deck.opf.json", "x.pptx", "--images", "jpeg"], /--images must be one of: compatible, preserve/],
       [["deck.opf.json", "x.pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],
+      [["deck.opf.json", "x.pptx", "--diagrams", "native"], /--diagrams must be one of: picture, shapes/],
       [["deck.opf.json", "x.svg", "--text", "outline"], /text must be one of: fonts, system, paths/],
       [["deck.opf.json", "x.svg", "--scale", "2"], /--scale applies to png output/],
     ];
