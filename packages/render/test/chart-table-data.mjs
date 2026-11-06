@@ -61,6 +61,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // the line ends, a pie names its slices, the value axis has at most six intervals and nominal categories have no last-point emphasis.
 // LH wave 7: LH-94 holds neighboring series 11 L* apart (separateNeighbors), which moves a series color of the pie (was
 // 6e06a71f...), the doughnut (was 379c218a...) and the treemap (was 729597f6...); every other digest is unchanged.
+// LH wave 8: LH-160 draws a lone value column's histogram with only the bins its plot can label one beside another, which moves
+// histogram-lone-column (was 7c2a1efe...); every other digest is unchanged.
 const REVIEWED_SVG_DIGESTS = {
   'column': '9e0ac4ac35219f397723d0a0',
   'stacked-column': '22c1bb68ee1f45037f081ace',
@@ -91,7 +93,7 @@ const REVIEWED_SVG_DIGESTS = {
   'sketch': '412f5a537d5291557428c038',
   'column-no-options': 'c74a507b8909ef64e0e44353',
   'line-string-numbers': '892f93f3d8fc81ad13662b4a',
-  'histogram-lone-column': '7c2a1efedb26d08e1fce33d1',
+  'histogram-lone-column': 'e605e1ca2ab256e6940e7ed9',
   'table-styled': '8685c7ee57a5e3143c31d132',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
