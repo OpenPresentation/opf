@@ -3,7 +3,7 @@
 // Every rule reads text lengths, block kinds and measured sizes, never a slide id, and works right to left.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { RUN_IN_HEADING_CHARS, QUOTE_MARK, composeSlide, markQuote, layoutQuote, runInHeading } from '../dist/composition.js';
+import { RUN_IN_HEADING_CHARS, QUOTE_MARK, QUOTE_MARKS, composeSlide, markQuote, layoutQuote, quoteMarksFor, runInHeading } from '../dist/composition.js';
 
 const findings = (result) => result.diagnostics.filter((entry) => ['text-overflow', 'small-cell', 'layout-unplaced'].includes(entry.code));
 const flat = (runs) => runs.map((run) => (typeof run === 'string' ? run : run.text)).join('');
@@ -109,6 +109,32 @@ test('LH-78: a quote on a card draws a decorative mark in the card padding, over
     assert.equal(markQuote(layout, item.frameBox, {}), layout);
     assert.deepEqual(findings(result), []);
   }
+});
+
+// The glyph stands for the quote's own opening mark: the body is drawn without it (the closing mark stays), whatever the language's marks are.
+for (const [language, words] of [['en', 'The rollout took six weeks.'], ['ar', 'تم الإطلاق في ستة أسابيع.'], ['de', 'Der Start dauerte sechs Wochen.'], ['fr', 'Le déploiement a pris six semaines.'], ['ja', '展開には六週間かかりました。'], ['sv', 'Utrullningen tog sex veckor.']]) {
+  test(`LH-78 (${language}): the card's mark replaces the quote's own opening mark, in the drawing only`, () => {
+    const slide = { title: 'Signal trend', blocks: [chart, { quote: { text: words, attribution: 'A. Writer' } }] };
+    const result = composeSlide(slide, { presentation: { language, slides: [slide] }, slideIndex: 0 });
+    const item = result.items.find((entry) => entry.quoteLayout), layout = item.quoteLayout, marks = quoteMarksFor(language);
+    assert.ok(item.frameBox && layout.mark, `${language}: a card with a mark`);
+    const body = layout.parts.find((part) => part.role === 'body');
+    assert.equal(layout.mark.hidden, marks.open);
+    assert.equal(body.text, words + marks.close, 'the closing mark stays, the opening mark is not drawn');
+    assert.equal(item.value.quote?.text ?? item.value.text, words, 'the document text is unchanged');
+    assert.equal(body.sources[0].outputStart, 0, 'the source offsets follow the text that is drawn');
+    assert.equal(body.fit.lines.join('').replace(/\s/g, ''), body.text.replace(/\s/g, ''));
+    const bare = layoutQuote(words, { x: 0, y: 0, width: 600, height: 400 }, { language });
+    assert.equal(bare.parts[0].text, marks.open + words + marks.close, 'without a card the quote keeps both marks');
+  });
+}
+test('LH-78: a quote whose text does not begin with its opening mark hides nothing', () => {
+  const layout = layoutQuote('A short quote.', { x: 0, y: 0, width: 400, height: 300 });
+  const stripped = { ...layout, parts: layout.parts.map((part) => (part.role === 'body' ? { ...part, text: part.text.slice(1) } : part)) };
+  const marked = markQuote(stripped, { x: 0, y: -60, width: 400, height: 360 });
+  assert.ok(marked.mark && marked.mark.hidden === undefined);
+  assert.equal(marked.parts.find((part) => part.role === 'body').text, stripped.parts.find((part) => part.role === 'body').text);
+  assert.ok(Object.keys(QUOTE_MARKS).length > 20);
 });
 
 test('LH-78: no mark for a quote alone, a pull line or a card with no padding for it', () => {

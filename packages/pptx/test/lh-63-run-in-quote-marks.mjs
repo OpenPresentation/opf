@@ -15,6 +15,7 @@ const chart={chart:{type:'column',data:{columns:['Quarter','Pilot','Baseline'],r
 const quotes={en:{text:'The rollout took six weeks, not six months, and every store manager was using it by the second Monday.',attribution:'Sofia Brandt',role:'Head of procurement'},
   ar:{text:'تم الإطلاق في ستة أسابيع وليس ستة أشهر، وكان كل مدير متجر يستخدمه بحلول الاثنين الثاني.',attribution:'سلمى الحداد',role:'رئيسة المشتريات'}};
 
+let checkedMarks=0;
 for(const measured of [false,true])for(const language of ['en','ar']){
   // The quote card: a chart and a quote.
   const quote=quotes[language],deck={language,design:{fontScheme:'roboto'},slides:[{title:'Signal trend',blocks:[chart,{quote}]}]};
@@ -26,11 +27,28 @@ for(const measured of [false,true])for(const language of ['en','ar']){
   assert.ok(mark,`${language}: the mark is a native text box holding the glyph`);
   assert.ok(Math.abs(Number(mark['p:spPr']['a:xfrm']['a:off'].y)-emu(layout.mark.box.y/96))<=emu(layout.mark.box.height/96),'near where core placed it');
   assert.ok(runsOf(mark).length&&runsOf(mark).every(run=>run['a:rPr'].b==='1'),'bold');
+  // The mark stands for the quote's own opening mark: the first body line does not begin with it, and the closing mark is written.
+  const body=layout.parts.find(part=>part.role==='body'),lines=shapes.filter(shape=>/^OPF quote \d+ part 0 line \d+$/.test(nameOf(shape))).map(shape=>runsOf(shape).map(run=>run['a:t']).join(''));
+  assert.equal(layout.mark.hidden,language==='ar'?'«':'“');
+  assert.ok(lines[0].length&&!lines[0].startsWith(layout.mark.hidden)&&lines.at(-1).endsWith(language==='ar'?'»':'”'),`${language}: ${JSON.stringify(lines)}`);
+  assert.equal(lines.join('').replace(/\s/g,''),body.text.replace(/\s/g,''));
   const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
   const found=imported.slides[0].blocks.map(block=>block.quote).filter(Boolean);
   assert.deepEqual(found,[quote],`${language}: the quote imports back without its mark`);
   assert.ok(!diagnostics.some(d=>d.code==='invalid-quote-provenance'),JSON.stringify(diagnostics));
 }
+
+// Every language's opening mark: the quote card imports back as the authored string, whatever its marks (low, guillemets, corner, right-only).
+for(const [language,text] of [['de','Der Start dauerte sechs Wochen, nicht sechs Monate.'],['fr','Le déploiement a pris six semaines, pas six mois.'],['ja','展開には六週間かかりました。'],['sv','Utrullningen tog sex veckor, inte sex månader.'],['pl','Wdrożenie trwało sześć tygodni.'],['xx','The rollout took six weeks.']]){
+  const quote={text,attribution:'A. Writer'},deck={language,design:{fontScheme:'roboto'},slides:[{title:'Signal trend',blocks:[chart,{quote}]}]};
+  const item=resolvePresentation(deck,{}).slides[0].geometry.items.find(entry=>entry.quoteLayout);
+  if(!item.quoteLayout.mark)continue;
+  const diagnostics=[],imported=await fromPptx(await toPptx(deck,{}),{onDiagnostic:d=>diagnostics.push(d)});
+  assert.deepEqual(imported.slides[0].blocks.map(block=>block.quote).filter(Boolean),[quote],`${language}: the quote imports back as authored`);
+  assert.ok(!diagnostics.some(d=>d.code==='invalid-quote-provenance'),JSON.stringify(diagnostics));
+  checkedMarks++;
+}
+assert.ok(checkedMarks>=4,'cards with marks were checked');
 
 // A run-in heading: the preview's runs are the native text's runs, the heading bold; the document's text is unchanged.
 for(const options of [{},{fonts:await loadFonts()}]){

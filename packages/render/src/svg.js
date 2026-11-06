@@ -1588,7 +1588,7 @@ function renderQuote(item, box, bound, options) {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
     // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
-    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
+    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:layout.mark?.hidden?0:-1,options});
     return renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
       fill,

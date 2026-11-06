@@ -34,6 +34,9 @@ for (const language of ['en-US', 'ar']) {
   assert.equal(glyph[0]['font-weight'], '700');
   assert.equal(Number(glyph[0]['font-size']), Number(mark.fit.fontSize.toFixed(3)), `${language}: at the size core fitted`);
   assert.ok([bound[0].design.colors.primary, bound[0].design.colors.text].map((hex) => hex.toUpperCase()).includes(glyph[0].fill.toUpperCase()), `${language}: the primary color, or the text color where the primary reads under 4.5:1 on the card`);
+  // The glyph stands for the quote's own opening mark: the body line that opened with it is drawn without it, the closing mark stays.
+  const bodyLines = [...svgs[0].matchAll(/<text\b([^>]*data-opf-path="slides\.0\.blocks\.1\.quote\.text"[^>]*)>([^<]*)<\/text>/g)].map(([, , text]) => plain(text));
+  assert.ok(bodyLines.length >= 1 && mark.hidden && !bodyLines[0].startsWith(mark.hidden) && bodyLines.at(-1).trimEnd().endsWith(language === 'ar' ? '»' : '”'), `${language}: ${JSON.stringify(bodyLines)}`);
   // The heading line of a text is a bold run (a tspan), its body regular: core's runs, drawn. (The last of two texts is LH-06's band, which draws as written.)
   const headings = bound[1].geometry.items.filter((item) => item.field === 'text' && item.runs).map((item) => item.runs[0].text);
   assert.ok(headings.length >= 1 && headings.every((text, index) => text === texts[language][index].split('\n')[0]), `${language}: core's runs`);

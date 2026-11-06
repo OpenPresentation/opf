@@ -1742,6 +1742,8 @@ export interface QuoteMark {
   fit: TextFit;
   style: TextStyle;
   requestedStyle: TextStyle;
+  /** The quote's own opening mark that is not drawn because this mark stands for it (the body text starts after it); absent when the body kept its own. */
+  hidden?: string;
 }
 export interface QuoteLayoutOptions {
   /** Canvas short edge divided by 720. Insets retain the current 18 reference-pixel contract. */
@@ -2088,7 +2090,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
  * less padding than that, a quote that overflows, a pull line and a photo beside the quote draw no mark.
  */
 export const QUOTE_MARK = { sizes: [1.5, 1.25, 1], ink: { top: 0.22, bottom: 0.58 }, fill: 0.7 } as const;
-export function markQuote(layout: QuoteLayout, card: LayoutBox, options: {scale?: number; fontFamilies?: Partial<FontFamilies>; textMeasurement?: TextMeasurement; direction?: TextDirection; language?: string; path?: string} = {}): QuoteLayout {
+export function markQuote(layout: QuoteLayout, card: LayoutBox, options: {scale?: number; fontFamilies?: Partial<FontFamilies>; textMeasurement?: TextMeasurement; direction?: TextDirection; language?: string; path?: string; citationMarker?: (runPath: string) => string | undefined} = {}): QuoteLayout {
   const body = layout.parts.find(part => part.role === 'body'), bodySize = body?.fit?.fontSize;
   if (!body || bodySize === undefined || layout.overflow || layout.rule || layout.mark || layout.photo?.focus || layout.parts.some(part => !part.fit)) return layout;
   const padding = body.box.y - card.y, inkHeight = QUOTE_MARK.ink.bottom - QUOTE_MARK.ink.top;
@@ -2101,7 +2103,21 @@ export function markQuote(layout: QuoteLayout, card: LayoutBox, options: {scale?
   const box = {x: body.box.x, y: card.y + (padding - inkHeight * size) / 2 - QUOTE_MARK.ink.top * size, width: body.box.width, height: size * 1.3};
   const fit = fitText(text, box, size, size, textWidthMeasurer(style, options.textMeasurement), options.direction);
   if (fit.overflow || !usableBox(box)) return layout;
-  return {...layout, mark: {path: markPath, text, box, fit, style, requestedStyle}};
+  // The mark stands for the quote's own opening mark: that mark is not drawn (the document text is unchanged; the closing mark stays). The body is
+  // fitted again without it at its size, in room it already had: a body with fewer characters never wraps to more lines. A quote whose text does not
+  // begin with its opening mark hides nothing.
+  const shown = body.text.startsWith(open) ? body.text.slice(open.length) : undefined;
+  if (shown === undefined) return {...layout, mark: {path: markPath, text, box, fit, style, requestedStyle}};
+  const room = {...body.box, height: Math.max(body.box.height, 1) * 2 + bodySize * 4};
+  const runs = body.runs ? body.runs.map((run, index) => index ? run : typeof run === 'string' ? run.slice(open.length) : {...run, text: run.text.slice(open.length)}) : undefined;
+  const refit = runs
+    ? fitRichText(runs, room, bodySize, bodySize, {style: body.style, textMeasurement: options.textMeasurement, ...(options.citationMarker ? {citationMarker: options.citationMarker} : {}), ...(options.direction ? {direction: options.direction} : {})})
+    : fitText(shown, room, bodySize, bodySize, textWidthMeasurer(body.style, options.textMeasurement), options.direction);
+  const count = (value: TextFit | RichTextFit) => 'richLines' in value ? (value as RichTextFit).richLines.length : value.lines.length;
+  if (refit.overflow || Math.abs(refit.fontSize - bodySize) > 1e-9 || count(refit) > count(body.fit!)) return layout;
+  const sources = body.sources.map(source => ({...source, outputStart: Math.max(0, source.outputStart - open.length), outputEnd: Math.max(0, source.outputEnd - open.length)}));
+  const parts = layout.parts.map(part => part === body ? {...part, text: shown, sources, fit: refit, ...(runs ? {runs} : {})} : part);
+  return {...layout, parts, mark: {path: markPath, text, box, fit, style, requestedStyle, hidden: open}};
 }
 const usableBox = (box: LayoutBox): boolean => [box.x, box.y, box.width, box.height].every(Number.isFinite) && box.width > 0 && box.height > 0;
 
@@ -8525,7 +8541,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-78: every quote card of the slide draws its mark (markQuote) or none does: the cards of a row read alike. The mark is drawn
     // in the card's padding, so no card takes a size from its quote.
     const carded = [...quoteHugs].filter(index => items[index]!.quoteLayout && items[index]!.frameBox && !items[index]!.quoteLayout!.overflow);
-    const marked = carded.map(index => markQuote(items[index]!.quoteLayout!, items[index]!.frameBox!, { scale, fontFamilies: options.fontFamilies, textMeasurement: options.textMeasurement, direction: textDirection, ...(deckLanguage() !== undefined ? { language: deckLanguage()! } : {}), path: items[index]!.path }));
+    const marked = carded.map(index => markQuote(items[index]!.quoteLayout!, items[index]!.frameBox!, { scale, fontFamilies: options.fontFamilies, textMeasurement: options.textMeasurement, direction: textDirection, ...(deckLanguage() !== undefined ? { language: deckLanguage()! } : {}), path: items[index]!.path, ...(citationMarker ? { citationMarker } : {}) }));
     if (carded.length && marked.every(layout => layout.mark)) carded.forEach((index, at) => { const item = items[index]!; item.quoteLayout = marked[at]!; item.text = marked[at]!.parts.find(part => part.role === 'body')?.fit ?? item.text; });
     for (const index of quoteHugs) {
       const item = items[index]!, layout = item.quoteLayout, frame = item.frameBox;
