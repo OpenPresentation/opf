@@ -248,14 +248,13 @@ for (const id of chartexIds) {
 }
 
 // ---------------------------------------------------------------------------
-// Catalog agreement: the layoutIds follow the core catalog's Open XML mapping (element, extension, Aspose ChartType), in the table and in the part.
+// Catalog agreement: the layoutIds follow the core catalog's Open XML mapping (element, extension), in the table and in the part.
 const layoutByElement = {treemapChart: 'treemap', histogramChart: 'clusteredColumn', boxWhiskerChart: 'boxWhisker', waterfallChart: 'waterfall', funnelChart: 'funnel', mapChart: 'regionMap'};
 const extensionRecords = chartTypeRecords.filter((record) => !record.deprecation && record.mappings?.openxml?.composition === 'extension');
 assert.deepEqual(extensionRecords.map((record) => record.id).sort(), [...chartexIds].sort(), 'the chartex family is exactly the catalog extension records');
 for (const record of extensionRecords) {
   const spec = CHART_TYPES[record.id];
   const openxml = record.mappings.openxml;
-  assert.equal(spec.aspose, record.mappings.renderers['aspose-slides'].chartType, `${record.id}: Aspose.Slides ChartType`);
   const plotted = spec.owner ?? spec.layoutId;
   assert.equal(plotted, layoutByElement[openxml.element], `${record.id}: plotted layoutId follows ${openxml.element}`);
   if (openxml.extension) assert.equal(`cx:${spec.layoutId}`, openxml.extension, `${record.id}: the catalog extension is the owned series layout`);

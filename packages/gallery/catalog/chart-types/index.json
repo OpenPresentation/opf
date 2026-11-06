@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "chart-types",
   "version": "1",
-  "description": "Catalog of chart types available in the pptx.gallery catalog, reduced to the chart types Aspose.Slides officially supports (one record per Aspose.Slides ChartType), plus the column-and-line combo. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
-  "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
+  "description": "Catalog of chart types available in the pptx.gallery catalog, reduced to the chart types OPF supports natively in its preview and PPTX export, plus the column-and-line combo. Each entry is a lightweight summary; full chart-type records live in the per-id JSON files alongside this index.",
+  "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
   "records": [
     {
       "id": "100pct-stacked-area",

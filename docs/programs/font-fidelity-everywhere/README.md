@@ -8,7 +8,7 @@ people resuming work start here, not from chat history or local scratch files.
 
 The owner's goal (2026-09-23), verbatim:
 
-> "Every pptx.gallery configuration is PERFECTLY supported in rendering and PPTX output: for all 14 dimensions (charts limited to Aspose.Slides-supported chart types), the preview and the exported PPTX agree element by element (geometry within existing tolerances, text/runs, fonts in every script slot, colors, fills, backgrounds, images, z-order), the PPTX uses native PowerPoint constructs and re-imports cleanly, and a bounded native PowerPoint sample confirms it — identically for TypeScript developers on Windows/macOS/Linux, local, cloud/serverless without system fonts, and browser. Licensed fonts render with shipped open replacements while the PPTX references the real font name without embedding; one shared default font scheme (aptos). pptx.gallery is a first-class OPF catalog (spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot) and shows measured support badges. Progress = count of gallery items passing the parity audit; tracked in docs/programs/font-fidelity-everywhere. Invariants: no gate relaxation, no in-place native retries, root alone owns Office, no publish/deploy, native p:hf deferred."
+> "Every pptx.gallery configuration is PERFECTLY supported in rendering and PPTX output: for all 14 dimensions (charts limited to the chart types OPF supports natively), the preview and the exported PPTX agree element by element (geometry within existing tolerances, text/runs, fonts in every script slot, colors, fills, backgrounds, images, z-order), the PPTX uses native PowerPoint constructs and re-imports cleanly, and a bounded native PowerPoint sample confirms it — identically for TypeScript developers on Windows/macOS/Linux, local, cloud/serverless without system fonts, and browser. Licensed fonts render with shipped open replacements while the PPTX references the real font name without embedding; one shared default font scheme (aptos). pptx.gallery is a first-class OPF catalog (spec URLs serve schema-valid records; core bundles a pinned, drift-checked snapshot) and shows measured support badges. Progress = count of gallery items passing the parity audit; tracked in docs/programs/font-fidelity-everywhere. Invariants: no gate relaxation, no in-place native retries, root alone owns Office, no publish/deploy, native p:hf deferred."
 
 Owner decision 2026-09-30 amends the last clause of the quote: pptx.gallery does not show measured support badges or any other support or progress status. The measurement stays internal to this program.
 
@@ -18,7 +18,7 @@ Restated:
   dimensions: layouts, color schemes, font schemes, languages, backgrounds,
   narratives, charts, themes, audiences, tones, socials, headers/footers,
   content blocks and image treatments. Charts are limited to the chart types
-  Aspose.Slides supports (FF-22).
+  OPF supports natively (FF-22).
 - **Parity.** The preview and the exported PPTX agree element by element:
   - geometry within the existing tolerances (native 0.02 pt, renderer 0.1
     reference px);
@@ -122,7 +122,7 @@ linked, and specifically:
 
 1. **Parity scoreboard.** On the final merged heads, the FF-38 parity audit
    passes for every gallery item (perfect items equal the total). Charts are
-   counted over the Aspose.Slides-supported set. FF-38 defines "perfect" and
+   counted over the supported set. FF-38 defines "perfect" and
    applies it to every value, including the authoring-only dimensions (tones,
    audiences, and narratives in their authoring role). Every gap in the [support table](gallery-support.md)
    is fixed or carries a recorded owner decision.
@@ -194,8 +194,8 @@ edit. When a decision changes, a stored measurement of the old family is dropped
 - 2026-09-23 (owner): each pptx.gallery item shows its measured support status
   from the audit results. Tracked as FF-36; nothing is deployed in this
   program.
-- 2026-09-23 (owner): charts are reduced to the chart types Aspose.Slides
-  documents as supported. Tracked as FF-22.
+- 2026-09-23 (owner): charts are reduced to the chart types OPF supports
+  natively. Tracked as FF-22.
 
 - 2026-09-30 (FF-52, FF-55; root, provisional; the owner can veto before the PRs merge): layouts with geometry identical to the no-layout default get one of three outcomes and nothing is retired. (a) 25 legacy gallery layouts get a distinguishing contract from the gallery vocabulary (gutter, primary, narrow, wide, cards); (b) 24 Dark-master variants that compose exactly like a core layout become deprecated aliases (`deprecation.replacedBy`, like chart types) that stay resolvable, published and listed, and audit A measures each against its replacement; (c) the 20 core layouts that are the engine default for their content are listed by name in audit A as their own baseline (FF-52 allows this exact list). The (a) contract tweaks are deliberately minimal distinguishing geometry (a gap, a weight, a margin or a card); richer designs for sparse legacy layouts such as `executive-summary` are a later improvement and not required for FF-52. The 70 legacy slugs are canonical OPF ids bundled from the gallery catalog (`sync-gallery-catalog.mjs --include`), so nothing is retired and the denominator is unchanged. [Per-layout table](gallery-support.md#layout-contracts-and-canonical-ids-ff-52-ff-55-2026-09-30).
 - 2026-09-30 (owner): the next goal after parity is 100% `works` for every

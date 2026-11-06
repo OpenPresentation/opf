@@ -7,11 +7,6 @@
       "element": "areaChart",
       "grouping": "percentStacked",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "PercentsStackedArea"
-      }
     }
   },
   "group": "Area",

@@ -147,8 +147,8 @@ function slug(value) {
     .replace(/^-+|-+$/g, "");
 }
 
-// Deprecated catalog records (e.g. chart types outside the Aspose.Slides-
-// supported set) stay resolvable but are never picked for new examples.
+// Deprecated catalog records (e.g. chart types outside the supported
+// set) stay resolvable but are never picked for new examples.
 async function loadCatalogIds(kind) {
   const entries = await readdir(path.join(catalogRoot, kind), { withFileTypes: true });
   const names = entries

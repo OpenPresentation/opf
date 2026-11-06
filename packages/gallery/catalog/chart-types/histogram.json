@@ -7,11 +7,6 @@
       "element": "histogramChart",
       "composition": "extension",
       "notes": "Office extension chart; exact extension markup is renderer-specific."
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Histogram"
-      }
     }
   },
   "group": "Histogram",

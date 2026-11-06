@@ -6,11 +6,6 @@
     "openxml": {
       "element": "pieChart",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Pie"
-      }
     }
   },
   "group": "Pie",
