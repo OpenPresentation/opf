@@ -3520,6 +3520,12 @@ export interface ListFitOptions extends RichTextOptions {
   /** LH-69: the display word's rule is short (LIST_DISPLAY_SCALE em, the display word's own em) at the start edge, as LH-130's title rule, not across the box. */
   displayRule?:'short';
   /**
+   * LH-169: the display heading is the figure of a metric row (`display`): its description, the figure's label, is set at this many times
+   * the list size (the size the list drew its descriptions at) rather than at the list size, and the figure may step down to the list size
+   * (not LIST_HEADING_SCALE of it) to stay on one line: bold, in the accent and over its rule, it still reads above its label.
+   */
+  labelScale?:number;
+  /**
    * LH-08: ruled rows (effective `design.listStyle: "rows"`): each first-level entry is a row, a hairline between two rows (`ListFit.rules`)
    * and LIST_ROWS_GAP em between them; no bullet (numbers stay). When every entry has a description and sits at the first level, the labels
    * are bold and, when the widest fits LIST_ROWS_LABEL_SHARE of the width on one line, sit in a column beside their descriptions (one em
@@ -3739,7 +3745,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
       // LH-136: a display heading under an accent rule across the box: the word at LIST_DISPLAY_SCALE times the list size, stepped down to one line.
-      const displayed=heading&&options.display===true;
+      const displayed=heading&&options.display===true,labelRatio=displayed&&options.labelScale!==undefined?options.labelScale:1;
       let displayText:RichTextFit|undefined;
       if(displayed){
         const thickness=fontSize*LIST_DISPLAY_RULE;
@@ -3748,13 +3754,13 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
         const ruleStart=options.displayRule==='short'?{x,width}:box;
         accentRules.push({x:options.direction==='rtl'?ruleStart.x+ruleStart.width-ruleWidth:ruleStart.x,y:y+thickness/2,width:ruleWidth,thickness,accent:true});
         y+=thickness+fontSize*LIST_DISPLAY_GAP;textBox.y=y;
-        const wordOptions={...options,style:{...style,fontWeight:700}},target=Math.min(fontSize*LIST_DISPLAY_SCALE,options.displayMax??Infinity),least=Math.min(fontSize*LIST_HEADING_SCALE,target);
+        const wordOptions={...options,style:{...style,fontWeight:700}},target=Math.min(fontSize*LIST_DISPLAY_SCALE,options.displayMax??Infinity),least=Math.min(fontSize*(displayed&&options.labelScale!==undefined?1:LIST_HEADING_SCALE),target);
         const wordAt=(size:number,area:LayoutBox)=>richTextLayouter(item.runs,area,requestedSize*LIST_DISPLAY_SCALE,wordOptions,minFontSize)(size);
         const natural=Math.max(...wordAt(target,{...textBox,width:1e6}).richLines.map(line=>line.width));
         let size=natural>width?Math.max(least,target*width/natural):target;
         displayText=wordAt(size,textBox);
         // The word gives way to the description: it takes at most the height the box leaves over the description at the list size.
-        const room=box.height-(y-box.y)-fontSize*.35-(item.descriptionRuns===undefined?0:richTextLayouter(item.descriptionRuns,{x,y:0,width,height:1e6},requestedSize,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize).height);
+        const room=box.height-(y-box.y)-fontSize*.35-(item.descriptionRuns===undefined?0:richTextLayouter(item.descriptionRuns,{x,y:0,width,height:1e6},requestedSize*labelRatio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*labelRatio).height);
         for(let step=0;step<48&&(displayText.richLines.length>1||displayText.height>room)&&size>least+1e-6;step++){size=Math.max(least,size*.96);displayText=wordAt(size,textBox);}
       }
       const text=displayText??(heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
@@ -3766,7 +3772,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       if(pad){textBox.y+=pad;y+=pad;}
       let description:RichTextFit|undefined,descriptionBox:LayoutBox|undefined;
       if(item.descriptionRuns!==undefined){
-        const ratio=heading?1:.82;
+        const ratio=heading?labelRatio:.82;
         y+=fontSize*(displayed?.35:heading?.25:.12);descriptionBox={x,y,width,height:box.height};
         description=richTextLayouter(item.descriptionRuns,descriptionBox,requestedSize*ratio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*ratio);
         descriptionBox.height=description.height;lines.push(...description.lines);if(options.direction==='rtl')directions.push(...(description.directions??[]));y+=description.height;
@@ -4178,6 +4184,35 @@ const TILE_FLOORS = Symbol('opf.tileFloors');
 export const EMPHASIS_BAND_MAX_CHARACTERS = 60, EMPHASIS_PILL_MAX_CHARACTERS = 30;
 /** LH-06 (widened): a last text of up to this many characters is a foot band when it follows two or more charts or tables (a takeaway). */
 export const EMPHASIS_TAKEAWAY_MAX_CHARACTERS = 120;
+/**
+ * LH-170: a closing note (a `verdict` region's text, or the paragraph after a row of figures) is a foot band when it sets in at most this
+ * many lines across the band at its size.
+ */
+export const EMPHASIS_NOTE_LINES = 3;
+/** LH-170: the layout regions whose one text is the slide's verdict (the comparison layout's `verdict`). */
+const VERDICT_REGIONS: ReadonlySet<string> = new Set(['verdict']);
+/** LH-169: a list of FIGURE_ROW_MIN to FIGURE_ROW_MAX entries that each lead with a figure of at most FIGURE_WORDS words is a metric row. */
+export const FIGURE_ROW_MIN = 2, FIGURE_ROW_MAX = 4, FIGURE_WORDS = 4;
+// LH-169: a figure leads with a number, after an optional sign or comparison and an optional currency symbol ("62 minutes a day",
+// "1 in 6 reports", "$3.2M", "+12%", "~40 ms", "٦٢ دقيقة"). Not a step number ("1. Kickoff", "2) Build"), a clock time ("9:00
+// Welcome"), a year ("2019 launch", "2024–2026") or a day of a month ("12 May"): those are steps, an agenda and dates, not measures.
+const FIGURE_LEAD = /^[+\-−~≈<>≤≥]?\s?[$€£¥₹₩]?\s?\p{Nd}/u;
+const NOT_FIGURE = /^(?:\p{Nd}+[.)](?:\s|$)|\p{Nd}{1,2}:\p{Nd}{2}|(?:1[5-9]|20|21)\d{2}(?:$|\s|[-–—/])|\p{Nd}{1,2}(?:st|nd|rd|th)?\s+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?(?:$|\s))/iu;
+/** LH-169: whether a list entry's text is a short figure: a number with its unit or comparison, FIGURE_WORDS words or fewer, on one line, not a sentence. */
+export function figureText(value: unknown): boolean {
+  const text = annotationText(value).trim();
+  return text !== '' && !/[\r\n\p{Zl}\p{Zp}]/u.test(text) && FIGURE_LEAD.test(text) && !NOT_FIGURE.test(text) && messageWords(text) <= FIGURE_WORDS && !/[.!?:;。؟۔]$/u.test(text);
+}
+/**
+ * LH-169: whether a list payload is a row of figures: FIGURE_ROW_MIN to FIGURE_ROW_MAX first-level entries, every one a figure (figureText)
+ * with a description (its label). A list where only some entries lead with a figure, or whose entries have no descriptions, is a list.
+ */
+export function figureList(value: unknown): boolean {
+  return Array.isArray(value) && value.length >= FIGURE_ROW_MIN && value.length <= FIGURE_ROW_MAX && value.every(entry => {
+    const object = record(entry);
+    return (object.level ?? 0) === 0 && figureText(object.text) && annotationText(object.description).trim() !== '';
+  });
+}
 /** LH-114: the longest quote (its text, without the marks) drawn as a pull line, in characters. */
 export const QUOTE_PULL_MAX_CHARACTERS = 140;
 /** LH-48: composeSlide composes an under-filled body again with its paragraphs and lists this many type-scale steps larger (growBody). */
@@ -4290,17 +4325,18 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * LH-09's statement that sets its title or its block as the message (`statement-message`) and its short message at display size
  * (`display-message`, with LH-69's lone label), LH-05's compact grid (`compact-grid`: the rows of a grid of short texts hug and center
  * instead of spreading over the body), LH-75's table beside its note (`table-note`, an arrangement composeSlide tries, tableNote), LH-132's
- * team portraits and a quote's portrait beside it (`portraits`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
+ * team portraits and a quote's portrait beside it (`portraits`), LH-170's closing note on the emphasis band (`note-band`: a verdict, or the
+ * paragraph after a row of figures), LH-169's figure-led list drawn as a metric row (`figure-row`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
  * check-mark tiles (`check-tiles`), LH-14's icons (`icons`, `icon-chips`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'note-band' | 'figure-row';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'note-band', 'figure-row'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -4343,8 +4379,14 @@ const REGION_MEASURED = new WeakSet<SlideComposition>(), NO_REGION_MEASURE = Sym
  */
 const COMPACT_GRIDS = new WeakSet<SlideComposition>(), GRID_GROW = Symbol('opf.gridGrow'), NO_COMPACT_GRID = Symbol('opf.noCompactGrid');
 const COMPACT_GRID_STEPS = 8, COMPACT_GRID_DISPLAY = 56;
+/** LH-169: the composed lists drawn as a row of figures (figureRows). */
+const FIGURE_ROW_ITEMS = new WeakSet<ComposedItem>();
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
+/** LH-170: composeSlide composes a slide again with this flag to see it without the closing note's band (the rule `note-band` off). */
+const NO_NOTE_BAND = Symbol('opf.noNoteBand');
+/** LH-170: the compositions that draw a closing note on the band (`note-band`). */
+const NOTE_BANDS = new WeakSet<SlideComposition>();
 /**
  * LH-132 review: whether any picture of `next` (an image block's frame, a quote's photo) covers less area than the same picture of `base`,
  * so a portrait never ends smaller than the picture the slide draws without the rule.
@@ -4369,7 +4411,8 @@ function bodyFill(result: SlideComposition): { fill: number; spare: number } | u
   if (LEAD_STACKS.has(result)) return undefined;
   const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && result.emphasis !== undefined && result.emphasis.shape !== 'card') && !item.quoteLayout?.rule);
   // A template slide's body is its regions: blocks below the grid (a section's notes) are not a body that should grow.
-  if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && !item.listColumns && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
+  // LH-169: a row of figures is a list in columns that grows as its list would (figureRows draws it at the size the list has).
+  if (body.length < 2 || !body.every(item => (item.field === 'text' || item.field === 'items' || item.field === 'bullets') && item.text && (!item.listColumns || FIGURE_ROW_ITEMS.has(item)) && !item.caption && (!result.regions || item.region !== undefined))) return undefined;
   const height = (fit: TextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
   const top = Math.min(...body.map(item => item.box.y)), bottom = Math.max(...body.map(item => item.box.y + height(item.text!)));
   const above = result.items.filter(item => headings.has(item.field) && item.box.y + item.box.height <= top + 1e-6);
@@ -4443,22 +4486,38 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
-  const result = settle(input, options, guardedCompose(input, options));
+  const result = settled(input, options);
   if (!result.steps) return withPictureScrim(input, options, result);
   // LH-07: step badges are drawing and never worth a size. Their band changes how much of the body a slide fills, and so whether LH-48
   // grows it, so the guard alone, which holds each arrangement to the slide's own composition, cannot see a block that the whole slide
   // without badges would have grown: the slide is settled again without them and keeps the badges only when every block reads as well.
-  const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
+  const plainOptions = { ...options, [NO_STEPS]: true } as ComposeSlideOptions, plain = settled(input, plainOptions);
   const floor = snapFontSizeUp((plain.composition.minFontSize ?? 16) * Math.min(plain.width, plain.height) / 720);
   // LH-144: a cap (composition.maxFontSize, a paginated page) sets both at the same size, so it decides on the slide without the cap, as
   // the first page decided: a page does not gain or lose its badges because the cap evened the sizes out.
   const own = record(record(input).composition);
   if (own.maxFontSize !== undefined) {
     const { maxFontSize: _cap, ...rest } = own, free = { ...record(input), composition: rest };
-    const freeResult = settle(free, options, guardedCompose(free, options)), freePlain = settle(free, plainOptions, guardedCompose(free, plainOptions));
+    const freeResult = settled(free, options), freePlain = settled(free, plainOptions);
     return withPictureScrim(input, options, freeResult.steps && readsAsWell(trackQuality(freePlain, options), trackQuality(freeResult, options), floor) ? result : plain);
   }
   return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
+}
+/**
+ * The guarded composition, settled. LH-170: a closing note on the band (`note-band`) keeps out of LH-48's growth, which may grow the same
+ * note in its region on the slide without the band, so the band is held to that slide: its text is set at the size the note has there
+ * (EMPHASIS_SIZE), and the band is kept only when, at that size, no block reads smaller than on the slide without it.
+ */
+function settled(input: unknown, options: ComposeSlideOptions): SlideComposition {
+  const result = settle(input, options, guardedCompose(input, options));
+  if (!NOTE_BANDS.has(result) || (options as Record<symbol, unknown>)[NO_NOTE_BAND] === true) return result;
+  const plainOptions = { ...options, [NO_NOTE_BAND]: true } as ComposeSlideOptions, plain = settle(input, plainOptions, guardedCompose(input, plainOptions));
+  const notePath = `${result.emphasis!.path}.text`, sizeOf = (composed: SlideComposition) => composed.items.find(item => item.path === notePath)?.text?.fontSize ?? 0;
+  const plainNote = sizeOf(plain), holds = (composed: SlideComposition) => NOTE_BANDS.has(composed) && sizeOf(composed) >= plainNote - FONT_GRID_EPSILON && !shrinks(composed, plain, options);
+  if (holds(result)) return result;
+  if (sizeOf(result) >= plainNote - FONT_GRID_EPSILON) return plain;
+  const sized = { ...options, [EMPHASIS_SIZE]: plainNote } as ComposeSlideOptions, larger = settle(input, sized, guardedCompose(input, sized));
+  return holds(larger) ? larger : plain;
 }
 /**
  * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
@@ -4583,7 +4642,7 @@ function guardedRules(input: unknown, options: ComposeSlideOptions): SlideCompos
     if (fired.has('metric-tiles')) seeds[TILE_FLOORS] = new Map(base.items.filter(item => item.metricLayout).map(item => [item.path, Object.fromEntries(item.metricLayout!.parts.filter(part => part.visible && part.fit).map(part => [part.role, part.fit!.fontSize]))]));
     const surface = result?.emphasis && result.emphasis.shape !== 'card' ? result.emphasis.path : undefined;
     const bandSize = surface !== undefined ? base.items.find(item => item.path === `${surface}.text`)?.text?.fontSize : undefined;
-    if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = bandSize;
+    if (bandSize !== undefined) seeds[EMPHASIS_SIZE] = Math.max(bandSize, Number((options as Record<symbol, unknown>)[EMPHASIS_SIZE] ?? 0));
     if (Object.getOwnPropertySymbols(seeds).length) result = attempt(ruled(CORE_RULES, seeds));
     let keptRules: ReadonlySet<GuardedRule> = CORE_RULES;
     if (!readsWell(result)) {
@@ -5276,7 +5335,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'compact-grid' && (options as Record<symbol, unknown>)[NO_COMPACT_GRID] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)) && !(rule === 'portraits' && (options as Record<symbol, unknown>)[NO_PORTRAITS] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'compact-grid' && (options as Record<symbol, unknown>)[NO_COMPACT_GRID] === true) && !((rule === 'step-badges' || rule === 'numerals') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)) && !(rule === 'portraits' && (options as Record<symbol, unknown>)[NO_PORTRAITS] === true) && !(rule === 'note-band' && (options as Record<symbol, unknown>)[NO_NOTE_BAND] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false, compactGrid = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -5492,6 +5551,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-14: a list draws icon chips when it is unnumbered, of one level, and one of its entries has an icon that resolves. Such a list is
   // never a badge list, flow or check-mark tiles: its chips take the marker column those draw in.
   const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.every(entry => (record(entry).level ?? 0) === 0) && value.some(entry => iconFor(record(entry).icon) !== undefined);
+  // LH-169: a list block drawn as a row of figures (figureRows): a figure list (figureList) with no numbering, columns, caption, icons or
+  // list style of the author's, on a slide that is not a layout's master.
+  const figureRowOf = (field: string, value: unknown, payload: Record<string, unknown>, caption: unknown): boolean => ruleOn('figure-row') && (field === 'items' || field === 'bullets') && hints.listStyle === undefined && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true
+    && payload.numbering === undefined && payload.columns === undefined && caption === undefined && figureList(value) && !iconList(value, undefined);
   // LH-14: the chip of a metric (ICON_CHIP, or ICON_CHIP_COMPACT without `icon-chips`, times METRIC_ICON_TEXT reference pixels) and of a group (that times the starting size of its
   // first paragraph or list, as its eyebrow is sized), and the band each takes above its content: the chip and ICON_CHIP_GAP of it.
   const chipScale = ruleOn('icon-chips') ? ICON_CHIP : ICON_CHIP_COMPACT;
@@ -5752,15 +5815,41 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (eyebrowHosts.size) fire('eyebrow');
   }
   const authoredEmphasis = (blocks: unknown, depth = 0): boolean => depth <= MAX_COMPOSITION_DEPTH && Array.isArray(blocks) && blocks.some(block => record(block).emphasis === true || authoredEmphasis(record(block).blocks, depth + 1));
-  const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number } | undefined => {
-    if (!ruleOn('emphasis-band') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
+  // LH-170: a lone short note that closes the body is the foot band too (`note-band`), at the size it had (EMPHASIS_SIZE) whatever its
+  // length, when it sets in at most EMPHASIS_NOTE_LINES lines across the band: the one text a layout binds to its verdict region
+  // (VERDICT_REGIONS: "Recommendation: ...", n18), or the last block when every block before it is a figure, two or more in all (metrics,
+  // LH-169's figure lists or groups of metrics: a row of figures and what they mean, n15, b04 s44), under them or beside them in a layout.
+  // The same exclusions as LH-06's (an authored emphasis or arrangement, `emphasis: false`, a caption, anything but text, an eyebrow).
+  const closingNote = (flowed: { block: unknown; index: number }[], last: { block: unknown; index: number }): boolean => {
+    const host = record(last.block);
+    // One surface a slide: a featured pair or set (LH-131: n17's "after" card) keeps its card, and the note stays text under it.
+    if (ruleOn('featured-card')) { const found = featuredCells(slide.blocks, index => placedBlocks.has(index) || eyebrowBlocks.has(index) || emptyHost(record(slide.blocks[index]))); if (found && record(slide.blocks[found.featured]).emphasis !== false) return false; }
+    if (host.emphasis === false || host.caption !== undefined || Array.isArray(host.blocks) || fields.some(field => field !== 'text' && host[field] !== undefined) || !contentText('text', host.text)?.trim()) return false;
+    const metricOnly = (block: unknown, depth = 0): number => {
+      const value = record(block);
+      if (Array.isArray(value.blocks)) { const counts = value.blocks.map((child: unknown) => depth < MAX_COMPOSITION_DEPTH ? metricOnly(child, depth + 1) : 0); return value.blocks.length && counts.every((count: number) => count > 0) ? counts.reduce((sum: number, count: number) => sum + count, 0) : 0; }
+      if (value.caption !== undefined) return 0;
+      if (value.metric !== undefined && fields.every(field => field === 'metric' || value[field] === undefined)) return 1;
+      const list = value.items ?? value.bullets;
+      return value.numbering === undefined && value.columns === undefined && fields.every(field => field === 'items' || field === 'bullets' || value[field] === undefined) && figureList(list) ? (list as unknown[]).length : 0;
+    };
+    const figures = flowed.slice(0, -1).map(entry => metricOnly(entry.block));
+    if (figures.every(count => count > 0) && figures.reduce((sum, count) => sum + count, 0) >= 2) return true;
+    if (!template || !template.regions.some(region => VERDICT_REGIONS.has(region.name))) return false;
+    const bound = bindRegions(slide, layout, { slideIndex: options.slideIndex ?? 0 }).regions.find(region => VERDICT_REGIONS.has(region.name) && region.blocks.length);
+    return bound?.blocks.length === 1 && bound.blocks[0]!.block === last.index;
+  };
+  const autoEmphasis = ((): { block: number; shape: 'band' | 'pill'; follows?: number; note?: true } | undefined => {
+    if (!(ruleOn('emphasis-band') || ruleOn('note-band')) || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || regions.length || !Array.isArray(slide.blocks) || authoredEmphasis(slide.blocks)) return undefined;
     const own = record(slide.composition);
     if ((own.mode !== undefined && own.mode !== 'auto') || own.weights !== undefined || own.columns !== undefined) return undefined;
     const flowed = slide.blocks.flatMap((block: unknown, index: number) => placedBlocks.has(index) || emptyHost(record(block)) || eyebrowBlocks.has(index) ? [] : [{ block, index }]);
-    const last = flowed[flowed.length - 1], text = flowed.length >= 2 && last ? plainText(last.block) : undefined;
-    if (text === undefined || !last) return undefined;
+    const last = flowed[flowed.length - 1];
     // LH-50: a paragraph with an eyebrow keeps it: it is placed as a block of the body, never as the band or pill.
-    if (eyebrowOf.has(path + '.blocks.' + last.index)) return undefined;
+    if (flowed.length < 2 || !last || eyebrowOf.has(path + '.blocks.' + last.index)) return undefined;
+    const note = (): { block: number; shape: 'band'; note: true } | undefined => ruleOn('note-band') && closingNote(flowed, last) ? { block: last.index, shape: 'band', note: true } : undefined;
+    const text = ruleOn('emphasis-band') ? plainText(last.block) : undefined;
+    if (text === undefined) return note();
     const length = [...text].length, before = flowed.slice(0, -1).map((entry: { block: unknown }) => plainText(entry.block));
     const long = (other: string | undefined) => other === undefined || [...other].length > EMPHASIS_BAND_MAX_CHARACTERS;
     if (before.length === 1 && before[0] !== undefined && long(before[0]) && length <= EMPHASIS_PILL_MAX_CHARACTERS) return { block: last.index, shape: 'pill', follows: flowed[0]!.index };
@@ -5770,7 +5859,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let data = 0;
     for (let index = flowed.length - 2; index >= 0 && isData(flowed[index]!); index--) data++;
     const limit = data >= 2 ? EMPHASIS_TAKEAWAY_MAX_CHARACTERS : EMPHASIS_BAND_MAX_CHARACTERS;
-    return length <= limit && before.every(long) ? { block: last.index, shape: 'band' } : undefined;
+    return length <= limit && before.every(long) ? { block: last.index, shape: 'band' } : note();
   })();
   // LH-131: the featured card of a pair or a set (featured-cards.ts, from the blocks' content only: "after" of a before and after, the
   // solution of a problem and solution, the tier marked recommended or most popular) is drawn on the emphasis surface, a card like an
@@ -5789,9 +5878,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const pairRoom = (options as Record<symbol, unknown>)[PAIR_ROOM] as ReadonlyMap<string, { side: 'left' | 'right'; width: number }> | undefined;
   // The band spans the body's width; the pill hugs its one line. Each is drawn at the foot of the body, which ends a gap above it; a
   // surface that would take more than EMPHASIS_BAND_MAX_SHARE of the body is not drawn.
-  let autoSurface: { emphasis: ComposedEmphasis; item: ComposedItem } | undefined;
+  let autoSurface: { emphasis: ComposedEmphasis; item: ComposedItem } | undefined, noteBand = false;
   if (autoEmphasis) {
-    fire('emphasis-band');
+    if (!autoEmphasis.note) fire('emphasis-band');
     const blockPath = `${path}.blocks.${autoEmphasis.block}`, textPath = `${blockPath}.text`, value = record(slide.blocks[autoEmphasis.block]).text;
     const text = contentText('text', value)!, pill = autoEmphasis.shape === 'pill';
     const left = area.left + padding, width = area.right - area.left - padding * 2, size = Math.max((pill ? EMPHASIS_PILL_SIZE : PROSE_NOMINAL_SIZE) * scale, Number((options as Record<symbol, unknown>)[EMPHASIS_SIZE] ?? 0));
@@ -5802,7 +5891,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const measured = fitPlacedText('text', value, text, { x: x + padX, y: 0, width: inner, height: Math.max(scale, bodyBottom - y) }, size, minSize, textPath, pill ? 'center' : undefined);
     const textHeight = 'richLines' in measured ? (measured as RichTextFit).height : measured.placement?.height ?? measured.lines.length * measured.lineHeight;
     const height = round(textHeight + 2 * padY), top = round(bodyBottom - height);
-    if (height <= EMPHASIS_BAND_MAX_SHARE * (bodyBottom - y)) {
+    const lines = 'richLines' in measured ? (measured as RichTextFit).richLines.length : measured.lines.length;
+    if (height <= EMPHASIS_BAND_MAX_SHARE * (bodyBottom - y) && !(autoEmphasis.note && (lines > EMPHASIS_NOTE_LINES || measured.overflow))) {
+      if (autoEmphasis.note) { fire('note-band'); noteBand = true; }
       const box = { x: x + padX, y: top + padY, width: inner, height: round(textHeight) };
       const fit = fitPlacedText('text', value, text, box, size, minSize, textPath, pill ? 'center' : undefined);
       autoSurface = {
@@ -8306,7 +8397,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       templateCell = true;
       try {
         // LH-136: a region of pillars drawn as display words has no cards.
-        const cards = hasCards && !region.bleed && !(units.length > 0 && units.every(unit => pillarWords.has(unit.path)));
+        // LH-169: a row of figures is drawn as Claude Design draws a metric row, on no card (its accent rules head the figures).
+        const cards = hasCards && !region.bleed && !(units.length > 0 && units.every(unit => pillarWords.has(unit.path) || (!unit.children && figureRowOf(unit.field, unit.value, unit.payload, unit.caption))));
         if (region.name === overridden) {
           arrange(units, cell, { ...settings, mode: (slideComposition.mode as Composition['mode']) ?? 'auto' }, 0, gap, path, true);
           return 'composition';
@@ -9049,6 +9141,55 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   };
   const tiles = checkTiles();
   if (tiles) steps.push(tiles);
+  // LH-169: a figure-led list (figureRowOf: 2 to FIGURE_ROW_MAX entries, each a short figure with its label) is a row of metrics, as
+  // Claude Design draws "62 minutes a day / 1 in 6 reports / 9 days" (n15): one column per entry across the list's box, in reading order
+  // (from the right in a right-to-left deck), each the figure bold in the accent at display size (LH-136's display heading, at most the
+  // metric value size, METRIC_ROLE_VALUE_SIZE) over an accent rule, its label under it at the size the list drew its descriptions
+  // at (fitList `labelScale`). The figures share one size, the smallest any of them fits on one line at (LH-157); a figure that would split
+  // even at the list size (LH-39) or a label that overflows its column keeps the list as it was. The row is drawn at the size the list has
+  // after the guard and LH-48's growth, so no text is smaller than the list would draw it. It starts where the list starts, level with
+  // the blocks beside it, or sits in the middle of the body when it is the slide's one body block. Both engines draw it as they draw a list in columns (`listColumns`, native text in
+  // PowerPoint), the figures as LH-133's accent entries.
+  const figureRows = (): void => {
+    const body = items.filter(item => !headings.has(item.field) && !item.eyebrow && !(item.emphasis && surface && surface.shape !== 'card'));
+    for (const item of items) {
+      if (!figureRowOf(item.field, item.value, item.payload, item.caption) || item.listColumns || stepFlows.has(item.path) || badgeLists.has(item.path) || stepPaths.has(item.path) || pillarWords.has(item.path) || numeralLists.has(item.path) || termLists.has(item.path) || pairRowLabels.has(item.path) || pairGrid.has(item.path) || !item.text || !('listEntries' in item.text)) continue;
+      const values = item.value as ListValue[], size = item.text.fontSize, count = values.length, box = item.box;
+      const width = (box.width - gap * (count - 1)) / count;
+      if (width < 4 * size) continue;
+      const labels = item.text.listEntries.flatMap(entry => entry.description ? [entry.description.fontSize] : []);
+      const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), heading: true, display: true, labelScale: Math.min(1, (labels.length ? Math.min(...labels) : size * .82) / size) };
+      const column = (index: number, cap: number, area: LayoutBox): ListFit => {
+        // The entry is fitted alone (as entry 0), so its runs' citation markers are looked up at its own index.
+        const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker, object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+        const entryOptions: ListFitOptions = { ...listOptions, displayMax: cap, ...(marker ? { citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : {}) };
+        const own = fitList([values[index]!], area, size, size, entryOptions);
+        return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${item.path}.${index}.description`, accent: true as const })) };
+      };
+      const split = (fits: ListFit[]) => fits.some(own => own.overflow || own.fontSize < size - FONT_GRID_EPSILON || own.listEntries.length !== 1 || own.listEntries[0]!.text.richLines.length !== 1);
+      const probe = (cap: number) => values.map((_, index) => column(index, cap, { x: 0, y: 0, width, height: box.height }));
+      const first = probe(METRIC_ROLE_VALUE_SIZE * scale);
+      if (split(first)) continue;
+      const shared = Math.min(...first.map(own => own.listEntries[0]!.text.fontSize)), fits = probe(shared);
+      if (split(fits)) continue;
+      const height = Math.max(...fits.map(own => own.height));
+      const lone = body.length === 1 && body[0] === item, region = useTemplate && item.region !== undefined ? templateRegions.find(entry => entry.name === item.region)?.box : undefined;
+      const under = Math.max(contentBox.y, ...items.filter(other => headings.has(other.field)).map(other => other.box.y + other.box.height + gap));
+      const area = lone ? region ?? { ...contentBox, y: under, height: contentBox.y + contentBox.height - under } : undefined;
+      const top = area ? area.y + Math.max(0, (area.height - height) / 2) : box.y;
+      const columns: ComposedListColumn[] = values.map((_, index) => {
+        const x = rtl ? box.x + box.width - (index + 1) * width - index * gap : box.x + index * (width + gap), text = column(index, shared, { x, y: top, width, height: box.height });
+        return { box: { x, y: top, width, height: text.height }, start: index, end: index + 1, text };
+      });
+      item.listColumns = columns;
+      item.text = mergeListColumns(columns);
+      item.box = { x: box.x, y: top, width: box.width, height };
+      item.alignment = rtl ? 'right' : 'left';
+      FIGURE_ROW_ITEMS.add(item);
+      fire('figure-row');
+    }
+  };
+  figureRows();
   if (listBullet?.value === 'image' && !bulletImage && items.some(item => (item.field === 'items' || item.field === 'bullets') && item.payload.numbering === undefined)) {
     diagnostics.push({ code: 'unresolved-content', path: listBullet.path, message: 'Picture bullets (listBullet: image) need an organization logo (the primary organization, or the one design.logo names); the marker glyph is drawn instead.' });
   }
@@ -9253,6 +9394,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (leadItems.size) LEAD_STACKS.add(composed);
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (compactGrid) COMPACT_GRIDS.add(composed);
+  if (noteBand && surface?.source === 'foot-band') NOTE_BANDS.add(composed);
   if (headingMessage) HEADING_MESSAGES.add(composed);
   if (template !== recordTemplate) STATEMENT_BODIES.add(composed);
   if (statement === 'title') STATEMENT_TITLES.add(composed);

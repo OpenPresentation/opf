@@ -521,6 +521,17 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   reach their 76 px role size read at one size; each tier's details keep the size they fit at. The guard holds every block to the
   size it had as two cards, so a price too wide for the narrower card (a four-tier row with "$1,200/mo") keeps them. A group with
   `emphasis: true` keeps LH-06's surface and the other tiers are cards. The group's `composition` is read as a column.
+- **Rows of figures (LH-169).** A list of 2 to 4 first-level entries that each lead with a short figure (`figureText`: a number with
+  its unit or comparison, after an optional sign and currency symbol, at most 4 words: "62 minutes a day", "1 in 6 reports", "$3.2M",
+  "٦٢ دقيقة يوميًا"; not a step number, a clock time, a year or a day of a month) and carry a description (`figureList`) draws as a row
+  of metrics, as Claude Design draws narrative n15: one column per entry across the list's box, in reading order (from the right in a
+  right-to-left deck), each the figure bold in the accent at display size (at most the metric value size, 76 px) over an accent rule,
+  its description as the label under it at the size the list draws its descriptions. The figures share one size, the smallest any of
+  them fits on one line at, never under the list size; a figure that would split there, or a label that overflows its column, keeps the
+  list. A list where only some entries lead with a figure, figures without descriptions, a numbered list, a list with icons, columns, a
+  caption or the author's `listStyle` stay lists. The row is drawn at the size the list has after the guard and LH-48's growth, so its
+  labels never read smaller than the list's descriptions; a region that holds only such a list has no card. It is a list in columns
+  (`listColumns`, each entry `accent` and `heading`), which both engines draw natively. The guarded rule `figure-row`.
 - **Pillars with one-word titles (LH-136).** A slide whose body is 2 to 5 lists of one entry each, a single word (at most 14
   characters) with its description, draws each as the word at display size (2.3 times the description's size, stepped down to one
   line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
