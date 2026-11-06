@@ -1,0 +1,29 @@
+{
+  "deck": "technical/shape-overlays.opf.json",
+  "entries": {
+    "technical/shape-overlays.opf.json#0": {
+      "sha256": "aa10df6420b0a2d2fbeb57cb62e5f71d18be2a537abc275eb226a8ad5aa1928c",
+      "bytes": 9029
+    },
+    "technical/shape-overlays.opf.json#1": {
+      "sha256": "01da4d8df8cb4a6d887559204fd83b45919bd3faee75e0f56a3c6e90c837241e",
+      "bytes": 9956
+    },
+    "technical/shape-overlays.opf.json#2": {
+      "sha256": "e1675a523f54caa640d67f4d95ba95cff8cccebadb489161b02f7c133e7d11ad",
+      "bytes": 9483
+    },
+    "technical/shape-overlays.opf.json#3": {
+      "sha256": "6e353ab0bd238c9454b5965807d6b65e831759ea5348c6295ad7a66ed59ab571",
+      "bytes": 6299
+    },
+    "technical/shape-overlays.opf.json#4": {
+      "sha256": "632e1e31564e1d5c749b5e9bd0d6bdf9c7e554668a3b22718f073bdc380571b1",
+      "bytes": 7042
+    },
+    "technical/shape-overlays.opf.json#5": {
+      "sha256": "3a5b585bb2d9a9aa52f5e9f6c66ea0554e49f7658bd515e2a453406eefdde455",
+      "bytes": 7370
+    }
+  }
+}
