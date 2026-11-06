@@ -61,7 +61,8 @@ export function groupUnchanged(items, paragraphs) {
   });
 }
 
-export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, descriptions, signed = false} = {}) {
+// `groups` (SH-07): a record may also name a p:grpSp (a diagram written as shapes); its tag goes on the group's own p:nvPr.
+export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, groups = false, descriptions, signed = false} = {}) {
   if (!records.size) return;
   let count = 0;
   const seen = new Set(), types = [];
@@ -69,7 +70,7 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
     const relPath = path.replace('/slides/','/slides/_rels/') + '.rels';
     let rels = dec.decode(entries[relPath]);
     const ids = new Set([...rels.matchAll(/\bId="([^"]+)"/g)].map(match=>match[1]));
-    const pattern = pictures ? /<p:(sp|pic)>[\s\S]*?<\/p:\1>/g : /<p:sp>[\s\S]*?<\/p:sp>/g;
+    const pattern = groups ? /<p:(grpSp|sp|pic)>[\s\S]*?<\/p:\1>/g : pictures ? /<p:(sp|pic)>[\s\S]*?<\/p:\1>/g : /<p:sp>[\s\S]*?<\/p:sp>/g;
     const xml = dec.decode(entries[path]).replace(pattern, shape=>{
       const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1];
       if (!records.has(name)) return shape;

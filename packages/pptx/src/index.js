@@ -59,11 +59,12 @@ import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColo
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
-import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagrams, tagDiagrams } from './diagram-provenance.js';
+import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
+import { diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -265,6 +266,9 @@ export async function toPptx(input, options = {}) {
   if (options.typefaces !== undefined && !['selected', 'safe'].includes(options.typefaces)) {
     throw new OPFPptxError('invalid-typefaces-option', "typefaces must be 'selected' or 'safe'.", {path: 'options.typefaces'});
   }
+  if (options.diagrams !== undefined && !['picture', 'shapes'].includes(options.diagrams)) {
+    throw new OPFPptxError('invalid-diagrams-option', "diagrams must be 'picture' or 'shapes'.", {path: 'options.diagrams'});
+  }
   if (options.as !== undefined && !['native', 'images'].includes(options.as)) {
     throw new OPFPptxError('invalid-as-option', "as must be 'native' or 'images'.", {path: 'options.as'});
   }
@@ -282,8 +286,8 @@ export async function toPptx(input, options = {}) {
   assertValidBoundary(presentation);
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
-  // SH-02: and the preset geometry when the deck has shapes (a no-op in Node).
-  await ensureShapes(presentation);
+  // SH-02: and the preset geometry when the deck has shapes (a no-op in Node); SH-07: and when it writes its diagrams as shapes.
+  await ensureShapes(presentation, {diagrams: options.diagrams === 'shapes'});
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
@@ -337,6 +341,9 @@ export async function toPptx(input, options = {}) {
   // Diagrams: every generated diagram picture and placeholder name, and their OPF_DIAGRAM_V1 records (full provenance only).
   context.diagrams = new Set();
   context.diagramTags = new Map();
+  // SH-07: `diagrams: "shapes"`: each diagram group's children (src/diagram-shapes.js), by the name of the shape that stands in for it.
+  context.diagramMode = options.diagrams ?? 'picture';
+  context.diagramGroups = new Map();
   context.watermarks = new Map();
   context.textWatermarks = new Map();
   context.logos = new Map();
@@ -1135,7 +1142,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const items = [];
   const shapes = nativeContext.shapes;
   // opf-pptx#221: an exported image placeholder group (identity transform) is not a reflow risk.
-  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
+  // SH-07: a diagram written as shapes is one group named for the diagram; when its tag is intact it is the diagram again (below).
+  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group) && !/^OPF diagram \d+$/.test(String(group?.['p:nvGrpSpPr']?.['p:cNvPr']?.name ?? '')))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
   // FF-45: OMML equations (a14:m math zones) have no OPF model. Their fallback text is imported as plain text; the equation
   // layout (fractions, radicals, limits, matrices) is lost, and that loss is diagnosed per shape instead of passing silently.
@@ -1211,11 +1219,19 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [index, payload] of diagrams.shapes) {
     items.push({kind: 'diagram', bounds: shapeBounds(shapes[index]['p:spPr']?.['a:xfrm']), payload, sources: [`sp:${index}`]});
   }
+  // SH-07: an intact diagram group (diagrams: "shapes") is its diagram block again; its member shapes are its drawing, not content.
+  const diagramMembers = new Set();
+  for (const {group, payload} of importDiagramGroups({groups: asArray(tree?.['p:grpSp']), relationships, entries, slideIndex,
+    valid: candidate => isValidFormat({slides: [{blocks: [candidate]}]}), report: diagnostic => options.onDiagnostic?.(diagnostic)})) {
+    const members = nativeTextShapes(group);
+    for (const member of members) { diagramMembers.add(member); roles.set(shapeKeys.get(member), 'diagram'); }
+    items.push({kind: 'diagram', bounds: shapeBounds(group['p:grpSpPr']?.['a:xfrm']), payload, sources: sourcesOf(members)});
+  }
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
-    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
@@ -3116,6 +3132,11 @@ async function addDiagramItem(slide, item, slideIndex, context, options) {
     options.onDiagnostic?.({code: "content-placeholder", path: item.path, reason: "diagram-unavailable", message: `The diagram cannot be drawn${reason ? ` (${reason})` : ""}; the unavailable-diagram placeholder stands in for it.`});
     return addDiagramPlaceholder(slide, box, context, record);
   }
+  // SH-07: with `diagrams: "shapes"` a diagram of a family that passed its PowerPoint comparison is native shapes and connectors.
+  if (context.diagramMode === 'shapes') {
+    const name = addDiagramShapes(slide, item, slideIndex, context, options, record);
+    if (name) return name;
+  }
   const svg = paintDiagram(diagram, exportDiagramPalette(item, context), {width: area.width, height: area.height});
   const outcome = {box};
   // resolveSvgImage reports an SVG it cannot export (no rasterizer for the fallback) as an image; this one is a diagram.
@@ -3128,6 +3149,40 @@ async function addDiagramItem(slide, item, slideIndex, context, options) {
   context.pictureText.set(name, {alt: diagram.alt || undefined});
   if (record) context.diagramTags.set(name, {...record, alt: diagram.alt ?? ""});
   slide.addImage({...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: diagram.alt ?? ""});
+  return name;
+}
+
+// SH-07: a diagram as one group of native shapes (src/diagram-shapes.js), built from the drawing the preview shows (paintDiagram in the
+// slide's palette, pele's classes kept). Only a family in core's DIAGRAM_SHAPE_FAMILIES (each passed its comparison of PowerPoint's drawing
+// with the preview) is written so, and only when every part of its drawing has a native form; otherwise the diagram stays the picture
+// and reports diagram-shapes-unavailable (info). A rectangle stands in for the group until the slide part is written (writeDiagramGroups).
+// Returns the group's name, or undefined for the picture.
+function addDiagramShapes(slide, item, slideIndex, context, options, record) {
+  const diagram = item.diagram, area = diagram.box ?? item.box;
+  const family = diagram.type;
+  const unavailable = reason => {
+    options.onDiagnostic?.({code: 'diagram-shapes-unavailable', path: item.path, family, message: `The ${family} diagram exports as a picture: ${reason}.`});
+    return undefined;
+  };
+  if (!DIAGRAM_SHAPE_FAMILIES.includes(family)) return unavailable('its native shapes have not passed the comparison with the preview in PowerPoint yet');
+  const svg = paintDiagram(diagram, exportDiagramPalette(item, context), {width: area.width, height: area.height}, {classes: true});
+  const name = diagramName(1 + [...context.diagrams].filter(entry => /^OPF diagram \d+$/.test(entry)).length);
+  const measurers = new Map();
+  const styleOf = (family, bold, italic) => resolveTextStyle({fontFamily: family, fontWeight: bold ? 700 : 400, italic, path: item.path}, options.textMeasurement);
+  const converted = diagramShapes(svg, {
+    box: area, name, alt: diagram.alt ?? '', lang: context.deckLang,
+    measure: (text, size, style) => {
+      const key = `${style.family}|${style.bold}|${style.italic}`;
+      if (!measurers.has(key)) measurers.set(key, textWidthMeasurer(styleOf(style.family, style.bold, style.italic), options.textMeasurement));
+      return measurers.get(key)(text, size);
+    },
+    font: (family, bold, italic) => nativeFontOptions(styleOf(family, bold, italic)),
+  });
+  if (converted.unsupported) return unavailable(`its drawing uses ${converted.unsupported}, which has no native form`);
+  context.diagrams.add(name);
+  context.diagramGroups.set(name, {...converted, box: area, alt: diagram.alt ?? ''});
+  if (record) context.diagramTags.set(name, {...record, alt: diagram.alt ?? '', shapes: true});
+  slide.addShape('rect', {x: area.x / 96, y: area.y / 96, w: area.width / 96, h: area.height / 96, objectName: name});
   return name;
 }
 
@@ -5209,6 +5264,12 @@ async function normalizePptxZip(raw, context) {
   }
   // SVG pictures: the media part, its relationship and the asvg:svgBlip extension beside the PNG fallback blip. Fitting then
   // uses the SVG's own proportions (the fallback raster only approximates them at integer pixels).
+  // SH-07: each diagram written as shapes replaces the rectangle that stood in for it (before the diagram tags are attached).
+  if (context.diagramGroups.size) for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const xml = decodeText(bytes), next = writeDiagramGroups(xml, context.diagramGroups);
+    if (next !== xml) entries[part] = encodeText(next);
+  }
   const svgSizes = attachSvgPictures(entries, context.svgPictures);
   // Diagram pictures and placeholders carry OPF_DIAGRAM_V1 in full provenance (src/diagram-provenance.js): the picture's manifest
   // binds its geometry, blip fill and SVG part, so an edited or replaced picture imports as an ordinary picture.

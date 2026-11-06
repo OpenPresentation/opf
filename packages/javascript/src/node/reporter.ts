@@ -28,6 +28,7 @@ const INFO = new Set([
 	"script-font-unavailable",
 	"media-provenance-omitted",
 	"picture-not-measured",
+	"diagram-shapes-unavailable",
 ]);
 
 const HELP: Record<string, string> = {
