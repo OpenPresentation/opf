@@ -7,11 +7,11 @@ import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
 import { isAuthoringColorRef } from "./color-authoring.js";
-import { PRESET_SHAPES } from "@openpresentation/opf/shape-geometry";
+import { SHAPE_PRESETS } from "@openpresentation/opf/composition";
 
 export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch", "auto"]);
 /** SH-02: a frame's mask is any of the 187 DrawingML presets (rect, roundRect, ellipse, hexagon, chevron, ...). */
-export const IMAGE_SHAPES = PRESET_SHAPES;
+export const IMAGE_SHAPES = SHAPE_PRESETS;
 export const IMAGE_EDGES = Object.freeze(["left", "right", "top", "bottom"]);
 /** LH-132: how a person's picture is drawn in a team: the avatar, beside the text, or across the top of the card. */
 export const IMAGE_PORTRAITS = Object.freeze(["avatar", "side", "top"]);

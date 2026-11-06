@@ -110,7 +110,7 @@ test('recolor applies to the background picture as on an image block: grayscale 
 
 test('an overlay covers the whole picture, or a band along one edge', () => {
   const whole = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: 'dark1', opacity: 0.4 } } } }).backgroundImage.overlay;
-  assert.deepEqual(whole, { path: 'slides.0.design.background.overlay', color: 'dark1', opacity: 0.4, box: canvas, shape: { kind: 'rect', preset: 'rect', adjust: {}, path: 'M0 0 L1280 0 L1280 720 L0 720 Z' } });
+  assert.deepEqual(whole, { path: 'slides.0.design.background.overlay', color: 'dark1', opacity: 0.4, box: canvas, shape: { kind: 'rect', preset: 'rect', adjust: {}, path: 'M0 0H1280V720H0Z' } });
   const band = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.75, edge: 'bottom', size: 0.25 } } } }).backgroundImage.overlay;
   assert.equal(band.edge, 'bottom');
   assert.deepEqual(band.box, { x: 0, y: 540, width: 1280, height: 180 });

@@ -51,24 +51,28 @@ test('aspect ratio and circle shape the frame inside the region', () => {
   assert.equal(circle.shape.preset, 'ellipse');
 });
 
-test('shape outlines are the evaluated DrawingML presets (SH-01), any of the 187', () => {
+test('shape outlines follow the DrawingML preset formulas: the four built-in masks, and every other preset from SH-01', () => {
   const box = { x: 10, y: 20, width: 300, height: 200 };
-  assert.deepEqual(imageShape('rect', box), { kind: 'rect', preset: 'rect', adjust: {}, path: 'M 10 20 L 310 20 L 310 220 L 10 220 Z' });
-  // roundRect: radius = min(w,h) * adj (0.16667 by default), circular arcs; the block's adjust is written as DrawingML's avLst.
+  assert.deepEqual(imageShape('rect', box), { kind: 'rect', preset: 'rect', adjust: {}, path: 'M10 20H310V220H10Z' });
+  // roundRect: radius = min(w,h) * adj / 100000, circular arcs.
   const rounded = imageShape('roundRect', box);
-  assert.deepEqual(rounded.adjust, {});
-  assert.match(rounded.path, /^M 10 53\.33\d* A 33\.33\d* 33\.33\d* 0 0 1 43\.33\d* 20 /);
+  assert.deepEqual(rounded.adjust, { adj: 16667 });
+  assert.equal(rounded.path, 'M10 53.334A33.334 33.334 0 0 1 43.334 20H276.666A33.334 33.334 0 0 1 310 53.334V186.666A33.334 33.334 0 0 1 276.666 220H43.334A33.334 33.334 0 0 1 10 186.666Z');
   assert.deepEqual(imageShape('roundRect', box, { adj: 0.25 }).adjust, { adj: 25000 });
-  assert.match(imageShape('ellipse', { x: 0, y: 0, width: 100, height: 100 }).path, /^M0 50 A50 50 0 0 1 50 0 /);
-  // hexagon (adj 0.25, vf 1.1547): x1 = ss*adj, dy1 = h/2 * vf * sin 60.
+  assert.equal(imageShape('roundRect', box, { adj: 0 }).path, 'M10 20H310V220H10Z');
+  assert.equal(imageShape('ellipse', { x: 0, y: 0, width: 100, height: 100 }).path, 'M0 50A50 50 0 1 1 100 50A50 50 0 1 1 0 50Z');
+  // hexagon (adj 25000, vf 115470): x1 = ss*adj/100000, dy1 = h/2 * vf/100000 * sin 60.
   const hexagon = imageShape('hexagon', { x: 0, y: 0, width: 100, height: 100 });
+  assert.deepEqual(hexagon.adjust, { adj: 25000, vf: 115470 });
   const points = [...hexagon.path.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((match) => [Number(match[1]), Number(match[2])]);
   const dy1 = 50 * 1.1547 * Math.sin(Math.PI / 3);
   for (const [actual, expected] of points.map((point, index) => [point, [[0, 50], [25, 50 - dy1], [75, 50 - dy1], [100, 50], [75, 50 + dy1], [25, 50 + dy1]][index]])) {
-    assert.ok(Math.abs(actual[0] - expected[0]) < 1e-3 && Math.abs(actual[1] - expected[1]) < 1e-3, `hexagon point ${actual} vs ${expected}`);
+    near(actual[0], expected[0], 'hexagon x'); near(actual[1], expected[1], 'hexagon y');
   }
-  // Every preset is a mask.
-  assert.equal(imageShape('chevron', box).preset, 'chevron');
+  // SH-02: every other preset is a mask, its outline SH-01's evaluated geometry.
+  const chevron = imageShape('chevron', box);
+  assert.equal(chevron.preset, 'chevron');
+  assert.match(chevron.path, /^M 10 20 L /);
 });
 
 test('border, opacity, recolor and overlay are normalized for both engines', () => {

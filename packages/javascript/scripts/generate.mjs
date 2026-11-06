@@ -228,6 +228,9 @@ async function generatePresetGeometry() {
     "",
   ];
   await fs.writeFile(path.join(generatedRoot, "preset-geometry.ts"), lines.join("\n"));
+  // SH-02: the preset names alone, which composition and validation read without loading the geometry (#shape-engine).
+  const names = [generatedHeader("spec/reference/preset-geometry.json"), `export const PRESET_NAMES: readonly string[] = Object.freeze(${JSON.stringify(Object.keys(table.shapes))});`, ""];
+  await fs.writeFile(path.join(generatedRoot, "preset-names.ts"), names.join("\n"));
 }
 
 async function generateFontPolicy() {
