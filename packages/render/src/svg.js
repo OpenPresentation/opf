@@ -2,7 +2,7 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
@@ -24,6 +24,7 @@ import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
+import { renderShapeBlock, strokeElements } from "./shapes.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
@@ -889,13 +890,32 @@ function renderImageBlock(item, bound, options) {
   let pixels = matrix || image.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
   if (masked) pixels = tag("g", { "clip-path": `url(#${id}-clip)` }, pixels);
   const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
-  if (image.border) {
-    const paint = imagePaint(image.border.color, bound, bound.design.colors.border);
-    children.push(tag("path", { ...HIDDEN, d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
+  // SH-02: the picture's stroke (renamed from border) takes every stroke property, along the frame's preset outline.
+  if (image.stroke) {
+    const stroke = strokeElements(image.stroke, shape?.path ?? rectanglePath(image.box), `${id}-stroke`, { box: image.box, closed: true, helpers: shapeHelpers(item, bound, options) });
+    if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
+    children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
+}
+
+// SH-02: what the shape drawing (src/shapes.js) needs from the renderer: its tag writer, the slide's colors and ColorRef resolution, and
+// the text drawing of a composed item (a shape's text, fitted by core, drawn at the box it was fitted for).
+function shapeHelpers(item, bound, options) {
+  const colors = bound.design.colors;
+  return {
+    tag, idPrefix: `opf-s${bound.index + 1}`, trace: traceAttrs(options, item.path),
+    colors: { primary: colors.primary, background: bound.design.backgroundColor ?? colors.background, text: colors.text, border: colors.border },
+    resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback),
+    report: diagnostic => reportDiagnostic({ ...diagnostic, path: item.path }, options),
+    drawText: (shapeItem, area, fill) => {
+      const value = shapeItem.shape.textDirection === "stacked" ? stackedText(shapeItem.payload.text) : shapeItem.payload.text;
+      const config = { path: `${shapeItem.path.replace(/\.(shape|path)$/, "")}.text`, align: "center", fit: shapeItem.text, textStyle: shapeItem.textStyle, fill, fontSize: 25, fontFamily: bound.design.fonts.body, fontWeight: shapeItem.shape.textBold ? 700 : 400, diagnosticsHandled: true, options };
+      return Array.isArray(value) ? renderRichTextBox(value, area, bound, config) : renderTextBox(flattenText(value), area, bound, config);
+    },
+  };
 }
 
 // One overlay (shared by image backgrounds and image blocks): its outline filled with the colour, the colour's alpha times the
@@ -1065,6 +1085,8 @@ function renderPayload(item, box, bound, options) {
       return altText(renderTable(item, box, bound, options), item.value?.alt, "group");
     case "image":
       return renderImageBlock(item, bound, options);
+    case "shape":
+      return renderShapeBlock(item, shapeHelpers(item, bound, options));
     case "video":
       return renderMedia(item, box, bound, options);
     case "code":
