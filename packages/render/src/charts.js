@@ -97,7 +97,7 @@ function markColor(c, j, i) {
   return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
-/** The colour of the pie or doughnut slice of row `i`. LH-161: core's slice palette, which moves a last slice that reads as the first off it. */
+/** The color of the pie or doughnut slice of row `i`. LH-161: core's slice palette, which moves a last slice that reads as the first off it. */
 function sliceColor(c, i) {
   return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.sliceMuted?.[i] ?? c.highlight.muted) : c.sliceColors[i % c.sliceColors.length];
 }
