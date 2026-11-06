@@ -24,6 +24,7 @@ import { pptxExporter } from './export-controls.js';
 import { createDesignControls } from '../src/design-controls.js';
 import { createShapeMenu } from '../src/shape-picker.js';
 import { insertShape, shapeLabel } from '../src/shape-options.js';
+import { insertOverlayShape } from '../src/shape-overlays.js';
 import { createDataGrid } from '../src/data-grid.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
@@ -243,7 +244,7 @@ ed.on('view', ({ view }) => {
   for (const name of ['slide', 'sorter', 'outline', 'layouts']) element(`view-${name}`).setAttribute('aria-pressed', String(name === view));
   document.querySelector('.editing-shell').dataset.view = view;
   document.querySelector('.canvas-column').dataset.view = view;
-  for (const id of ['insert-content', 'insert-shape', 'arrange', 'zoom']) element(id).disabled = view !== 'slide';
+  for (const id of ['insert-content', 'insert-shape', 'connect-shapes', 'connector-route', 'arrange', 'zoom']) element(id).disabled = view !== 'slide';
 });
 
 function act(callback) {
@@ -315,12 +316,34 @@ element('redo').onclick = () => act(() => ed.redo());
 element('font').onchange = () => act(() => editor.set(editor.get('design.fontScheme') && typeof editor.get('design.fontScheme') === 'object' ? 'design.fontScheme.id' : 'design.fontScheme', element('font').value));
 element('insert-content').onclick = () => ed.canvas?.openInsertMenu();
 // SH-06: "Insert shape" opens the shape gallery (search by name or common word); the pick is added to the slide as one undoable change and selected.
-const shapeMenu = createShapeMenu(element('insert-shape'), { label: 'Insert a shape', onPick: name => act(() => {
-  const change = insertShape(editor, { slideIndex: ed.slideIndex, shape: name });
-  status(`${shapeLabel(name)} inserted`);
-  queueMicrotask(() => ed.canvas?.reveal(`${change.path}.shape`));
+// "On the slide" places it as an overlay (free x, y, width and height over the layout), "In the layout" as a block that composition places.
+const shapeMenu = createShapeMenu(element('insert-shape'), { label: 'Insert a shape', placements: true, onPick: (name, entry, { placement }) => act(() => {
+  if (placement === 'overlay') {
+    const { width, height } = editor.composeSlide(ed.slideIndex, layoutFor(editor.presentation, ed.slideIndex));
+    const change = insertOverlayShape(editor, { slideIndex: ed.slideIndex, shape: name, size: { width, height } });
+    status(`${shapeLabel(name)} added on the slide`);
+    queueMicrotask(() => ed.canvas?.reveal(change.path));
+  } else {
+    const change = insertShape(editor, { slideIndex: ed.slideIndex, shape: name });
+    status(`${shapeLabel(name)} inserted`);
+    queueMicrotask(() => ed.canvas?.reveal(`${change.path}.shape`));
+  }
 }) });
 void shapeMenu;
+// SH-06 part B: Connect picks two blocks or shapes on the slide (click the start, then the end; Esc cancels) and joins them with a connector, an arrow by default.
+let connecting;
+element('connect-shapes').onclick = () => {
+  if (connecting) { connecting.cancel(); return; }
+  const canvas = ed.canvas;
+  if (!canvas) return;
+  element('connect-shapes').setAttribute('aria-pressed', 'true');
+  connecting = canvas.connect({ route: element('connector-route').value, stroke: { end: { type: 'triangle' } }, onStatus: message => status(message) });
+  connecting.done.then(change => {
+    connecting = undefined;
+    element('connect-shapes').setAttribute('aria-pressed', 'false');
+    if (change) queueMicrotask(() => canvas.reveal(change.path));
+  });
+};
 element('arrange').onclick = () => {
   const canvas = ed.canvas;
   if (canvas?.setLayoutEditing(!canvas.layoutEditing)) {

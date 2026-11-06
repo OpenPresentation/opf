@@ -48,6 +48,7 @@ import { createContentControls, iconNode, shortReason } from "./content-controls
 import { createIconPicker } from "./icon-picker.js";
 import { createShapeControls } from "./shape-controls.js";
 import { readShape, shapeBlockPathForSelection } from "./shape-options.js";
+import { readOverlay } from "./shape-overlays.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readEffectiveImageFit, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { METRIC_TRENDS, readMetricTrend, setMetricTrend } from "./content-actions.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
@@ -1274,7 +1275,7 @@ export function createDesignControls(container, options = {}) {
 
   if (built.shape) {
     const { body, details } = built.shape;
-    dynamic.shape = { details, controls: createShapeControls({ editor, doc, h, nextId, selectField, textField, numberField, checkField, button, run, say, complain, geometryFor, body }) };
+    dynamic.shape = { details, controls: createShapeControls({ editor, doc, h, nextId, reselect, selectField, textField, numberField, checkField, button, run, say, complain, geometryFor, body }) };
   }
 
   // --- selected image (FA-22): fit, focus, treatments and placement of one image block -----------------------------
@@ -1502,10 +1503,12 @@ export function createDesignControls(container, options = {}) {
     const selected = getSelected();
     const document_ = editor.presentation;
     // SH-06: a shape block is its own kind (it has no content to convert, though it carries text), and its section follows it.
-    const shapePath = selected ? shapeBlockPathForSelection(document_, selected) : undefined;
+    // An overlay shape or connector of the slide's `shapes` is no block: it has no arrange toolbar, and its own section places, stacks and deletes it.
+    const overlay = selected ? readOverlay(document_, selected) : undefined;
+    const shapePath = selected && !overlay ? shapeBlockPathForSelection(document_, selected) : undefined;
     const shaped = shapePath ? readShape(document_, shapePath) : undefined;
-    const blockPath = shapePath ?? (selected ? blockPathForSelection(document_, selected) : undefined);
-    const content = shaped ? { path: shaped.path.split("."), explicit: shaped.explicit, owner: shaped.block, key: "shape", kind: "shape", content: shaped.block } : blockPath ? readBlockContent(document_, blockPath) : undefined;
+    const blockPath = overlay ? undefined : (shapePath ?? (selected ? blockPathForSelection(document_, selected) : undefined));
+    const content = overlay ? undefined : shaped ? { path: shaped.path.split("."), explicit: shaped.explicit, owner: shaped.block, key: "shape", kind: "shape", content: shaped.block } : blockPath ? readBlockContent(document_, blockPath) : undefined;
     dynamic.blockPath = blockPath;
     // A selected group has no content of its own, but it can be arranged (grouped with the next block, ungrouped).
     const groupPath = !blockPath && selected && isGroupBlock(document_, selected) ? selected : undefined;
@@ -1547,8 +1550,8 @@ export function createDesignControls(container, options = {}) {
     }
     const shapeUi = dynamic.shape;
     if (shapeUi) {
-      shapeUi.details.hidden = !shaped;
-      if (shaped) shapeUi.controls.load(shaped.path);
+      shapeUi.details.hidden = !shaped && !overlay;
+      if (shaped || overlay) shapeUi.controls.load(overlay ? overlay.path : shaped.path);
     }
     const imageUi = dynamic.image;
     if (imageUi) {

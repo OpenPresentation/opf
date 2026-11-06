@@ -26,7 +26,12 @@ export interface ShapePicker {
 export declare function createShapePicker(container: Element, options?: ShapePickerOptions): ShapePicker;
 
 export interface ShapeMenuOptions {
-  onPick?: (name: string, entry: ShapeCatalogEntry | undefined) => void;
+  /** `placement` is `block` or `overlay` (with `placements: true`, the person's choice; else `placement`'s default `block`). */
+  onPick?: (name: string, entry: ShapeCatalogEntry | undefined, info: { placement: "block" | "overlay" }) => void;
+  /** Offer "In the layout" (a block) or "On the slide" (an overlay shape you place and size) under the gallery. */
+  placements?: boolean;
+  /** The initial choice (default `block`). */
+  placement?: "block" | "overlay";
   selected?: string;
   /** The popover's accessible name (default "Shapes"). */
   label?: string;

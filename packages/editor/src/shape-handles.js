@@ -59,7 +59,9 @@ export function createShapeHandles(root, options) {
   function selectedItem(geometry) {
     if (!selected || !geometry) return undefined;
     const block = blockOf(selected);
-    return geometry.items?.find((item) => item.field === "shape" && item.shape?.preset && item.shape.paths?.length && blockOf(item.path) === block);
+    // A shape block's item, or an overlay shape of the slide's `shapes` (SH-04): both are composed shapes.
+    const shapes = [...(geometry.items ?? []), ...(geometry.overlayShapes ?? []).filter((entry) => entry.kind === "shape")];
+    return shapes.find((item) => item.field === "shape" && item.shape?.preset && item.shape.paths?.length && blockOf(item.path) === block);
   }
 
   function release(edit) {

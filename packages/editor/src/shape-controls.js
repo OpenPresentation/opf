@@ -10,9 +10,10 @@ import { COLOR_NAMES, PATTERN_PRESETS } from "./background-options.js";
 import { createShapePicker, shapeThumbnailNode } from "./shape-picker.js";
 import { loadShapeEngine, shapeEngine } from "./shape-engine.js";
 import { readShape, readShapeAdjust, setShapeAdjust, setShapePreset, setShapeProperties, shapeLabel } from "./shape-options.js";
+import { CONNECTOR_ROUTES, detachOverlay, listConnectionEnds, moveOverlayLayer, readOverlay, removeOverlay, setConnector, setOverlayFrame, slideIsRtl } from "./shape-overlays.js";
 
 // The groups open when the section does; the rest open on a click.
-const OPEN = new Set(["shape-preset-group", "shape-fill-group", "shape-line-group", "shape-text-group"]);
+const OPEN = new Set(["shape-preset-group", "shape-fill-group", "shape-line-group", "shape-text-group", "shape-placement-group", "shape-stack-group", "shape-connector-group"]);
 const DASHES = ["solid", "dot", "dash", "longDash", "dashDot", "longDashDot", "longDashDotDot", "sysDot", "sysDash", "sysDashDot", "sysDashDotDot"];
 const ARROWS = ["triangle", "stealth", "diamond", "oval", "arrow"];
 const SIZES = ["small", "medium", "large"];
@@ -30,7 +31,7 @@ const DEFAULT_GRADIENT = () => ({ type: "linear", angle: 90, stops: [{ color: "a
  * `body`, the element to build into. `load(path)` fills the controls from the shape block at `path`.
  */
 export function createShapeControls(ctx) {
-  const { editor, doc, h, selectField, textField, numberField, checkField, button, run, geometryFor, body } = ctx;
+  const { editor, doc, h, selectField, textField, numberField, checkField, button, run, geometryFor, body, reselect } = ctx;
   let path;
   let adjustSignature = "";
   let destroyed = false;
@@ -380,7 +381,73 @@ export function createShapeControls(ctx) {
   const link = textField("shape-link", "Link", { placeholder: "https://…", help: "An http(s) URL, mailto: or tel: opened when the shape is clicked in a slide show", onCommit: (value) => commit({ link: value }, value.trim() === "" ? "Link removed." : "Link set.") });
   const accessGroup = group("Alt text and link", "shape-access-group", alt.wrap, decorative.wrap, hidden.wrap, link.wrap);
 
-  root.append(shapeGroup, fillGroup, lineGroup, h("div", { class: "opf-sc-style" }, style.wrap), effectsGroup, positionGroup, textGroup, accessGroup);
+  // --- an overlay shape: where it is, what is over it (Part B) -----------------------------------------------------------------------------
+  const place = (change, done) => run(() => setOverlayFrame(editor, path, change), done);
+  const percent = (key, label, help) => numberField(`shape-frame-${key}`, label, { min: 0, max: 100, step: 1, help, onCommit: (value) => { if (value !== null) place({ [key]: Math.round(value * 100) / 10000 }, `${label} changed.`); } });
+  const frameX = percent("x", "X", "Percent of the slide from its start edge (the left, in a left-to-right deck)");
+  const frameY = percent("y", "Y", "Percent of the slide from its top");
+  const frameWidth = percent("width", "Width", "Percent of the slide's width");
+  const frameHeight = percent("height", "Height", "Percent of the slide's height");
+  const anchorInfo = h("p", { class: "opf-dc-hint", "data-role": "shape-anchor-info" });
+  const anchorOffset = numberField("shape-anchor-offset", "Offset", { min: -720, max: 720, step: 1, help: "Reference pixels from the block's edge (negative overlaps it)", onCommit: (value) => { if (value !== null) place({ offset: value }, "Offset changed."); } });
+  const anchorWidth = numberField("shape-anchor-width", "Anchored width", { min: 0.001, max: 1280, step: 1, help: "A fraction of the block's width up to 1, else reference pixels", onCommit: (value) => { if (value !== null) place({ width: value }, "Width changed."); } });
+  const anchorHeight = numberField("shape-anchor-height", "Anchored height", { min: 0.001, max: 1280, step: 1, help: "A fraction of the block's height up to 1, else reference pixels", onCommit: (value) => { if (value !== null) place({ height: value }, "Height changed."); } });
+  const free = button("Free from block", () => {
+    const geometry = geometryFor?.(path);
+    const entry = geometry?.overlayShapes?.find((candidate) => candidate.kind === "shape" && candidate.path === path);
+    if (!entry) return ctx.complain("This shape is not drawn right now, so its place cannot be read.");
+    const box = entry.shape.box;
+    const rtl = slideIsRtl(editor.presentation, Number(path.split(".")[1]));
+    run(() => detachOverlay(editor, path, { x: rtl ? (geometry.width - box.x - box.width) / geometry.width : box.x / geometry.width, y: box.y / geometry.height, width: box.width / geometry.width, height: box.height / geometry.height }), "The shape no longer follows its block.");
+  }, { quiet: true, title: "Keep the shape where it is, with its own x, y, width and height" });
+  free.dataset.role = "shape-free";
+  const fractionBox = h("div", { class: "opf-sc-row", "data-role": "shape-frame-fields" }, frameX.wrap, frameY.wrap, frameWidth.wrap, frameHeight.wrap);
+  const anchorBox = h("div", { "data-role": "shape-anchor-fields" }, anchorInfo, anchorOffset.wrap, anchorWidth.wrap, anchorHeight.wrap, free);
+  const placementGroup = group("Place on the slide", "shape-placement-group", fractionBox, anchorBox);
+
+  const layer = (label, where, role) => {
+    const control = button(label, () => run(() => { const change = moveOverlayLayer(editor, path, where); if (change.changed) reselect?.(change.path); return change; }, `${label}.`), { quiet: true });
+    control.dataset.role = role;
+    return control;
+  };
+  const layerButtons = [layer("Bring to front", "front", "overlay-front"), layer("Bring forward", "forward", "overlay-forward"), layer("Send backward", "backward", "overlay-backward"), layer("Send to back", "back", "overlay-back")];
+  const remove = button("Delete", () => {
+    const slideIndex = path.split(".")[1];
+    run(() => removeOverlay(editor, path), "Deleted.");
+    reselect?.(`slides.${slideIndex}.title`);
+  }, { quiet: true, title: "Delete this overlay (and the connectors that end on it)" });
+  remove.dataset.role = "overlay-remove";
+  const stackGroup = group("Stacking", "shape-stack-group", h("div", { class: "opf-sc-row", "data-role": "overlay-layers" }, ...layerButtons), remove);
+
+  // --- a connector: its route and ends -------------------------------------------------------------------------------------------------------
+  const connectorChange = (change, done) => run(() => setConnector(editor, path, change), done);
+  const route = selectField("shape-connector-route", "Connector route", { help: "Straight, elbow (right angles) or curved", onChange: (value) => connectorChange({ route: value }, `Route: ${value}.`) });
+  route.setOptions(CONNECTOR_ROUTES.map((value) => ({ value, label: cap(value) })));
+  const endField = (key, label) => selectField(`shape-connector-${key}`, label, { help: "A block or an overlay shape of this slide. One without an id gets one.", onChange: (value) => { if (value) connectorChange({ [key]: value }, `${label} changed.`); } });
+  const fromEnd = endField("from", "Connector start");
+  const toEnd = endField("to", "Connector end");
+  const siteField = (key, label) => numberField(`shape-connector-${key}`, label, { min: 0, step: 1, placeholder: "automatic", help: "The connection site of the shape the connector leaves from, by number (the shape's own sites, from 0). Clear to choose the facing sites.", onCommit: (value) => connectorChange({ [key]: value }, value === null ? `${label} is automatic.` : `${label} set.`) });
+  const fromSite = siteField("fromSite", "Start site");
+  const toSite = siteField("toSite", "End site");
+  const connectorGroup = group("Connector", "shape-connector-group", route.wrap, fromEnd.wrap, toEnd.wrap, h("div", { class: "opf-sc-row" }, fromSite.wrap, toSite.wrap));
+
+  const shapeOnly = [shapeGroup, fillGroup, effectsGroup, positionGroup, textGroup];
+  const styleWrap = h("div", { class: "opf-sc-style" }, style.wrap);
+  root.append(connectorGroup, placementGroup, shapeGroup, fillGroup, lineGroup, styleWrap, effectsGroup, positionGroup, textGroup, accessGroup, stackGroup);
+
+  /** Show the groups that belong to what is selected: a block's shape, an overlay shape (placed and stacked) or an overlay connector. */
+  function applyKind(kind) {
+    const connector = kind === "connector";
+    const overlay = kind === "overlay" || connector;
+    for (const part of [...shapeOnly, styleWrap]) part.hidden = connector;
+    connectorGroup.hidden = !connector;
+    placementGroup.hidden = kind !== "overlay";
+    stackGroup.hidden = !overlay;
+    aspect.wrap.hidden = overlay;
+    link.wrap.hidden = connector;
+    decorative.wrap.hidden = false;
+  }
+
   syncFill();
   syncStroke();
   syncEffects();
@@ -421,22 +488,63 @@ export function createShapeControls(ctx) {
   }
 
   /** Fill the controls from the shape block at `blockPath` (a selection in it works). */
+  /** The connector's route, ends and sites. */
+  function loadConnector(overlay) {
+    const connector = overlay.entry.connector;
+    route.set(connector.route ?? "straight");
+    const ends = listConnectionEnds(editor.presentation, overlay.slideIndex);
+    const options = ends.map((end) => ({ value: end.path, label: `${end.label}${end.id ? ` (${end.id})` : " (no id yet)"}`, id: end.id }));
+    for (const [field, id] of [[fromEnd, connector.from], [toEnd, connector.to]]) {
+      field.setOptions(options.map(({ value, label }) => ({ value, label })));
+      field.set(options.find((option) => option.id === id)?.value ?? "", options.some((option) => option.id === id) ? "" : `${id} is missing`);
+    }
+    fromSite.set(show(connector.fromSite));
+    toSite.set(show(connector.toSite));
+  }
+
+  /** The overlay shape's place: fractions of the slide, or its anchor. */
+  function loadPlacement(overlay) {
+    const entry = overlay.entry;
+    const anchored = overlay.placement === "at";
+    fractionBox.hidden = anchored;
+    anchorBox.hidden = !anchored;
+    if (anchored) {
+      anchorInfo.textContent = `Attached to ${entry.at.block}, ${entry.at.edge}. It follows the block when composition moves it.`;
+      anchorOffset.set(show(entry.at.offset ?? 0));
+      anchorWidth.set(show(entry.at.width));
+      anchorHeight.set(show(entry.at.height));
+      return;
+    }
+    const percentOf = (value) => (typeof value === "number" ? String(Math.round(value * 10000) / 100) : "");
+    frameX.set(percentOf(entry.x));
+    frameY.set(percentOf(entry.y));
+    frameWidth.set(percentOf(entry.width));
+    frameHeight.set(percentOf(entry.height));
+  }
+
   function load(blockPath) {
     if (destroyed) return;
-    const found = readShape(editor.presentation, blockPath);
-    if (!found) return;
-    path = found.path;
-    const block = found.block;
-    // The preset and its thumbnail (once the geometry has loaded).
-    presetValue.textContent = found.preset ? `${shapeLabel(found.preset)} (${found.preset})` : "Custom outline";
-    change.disabled = found.custom;
-    const engine = shapeEngine();
-    if (engine && found.preset) preview.replaceChildren(shapeThumbnailNode(doc, engine, found.preset, 30));
-    else {
-      preview.replaceChildren();
-      if (!engine) loadShapeEngine().then(() => { if (!destroyed && path === found.path) load(path); }, () => {});
+    const overlay = readOverlay(editor.presentation, blockPath);
+    const connector = overlay?.kind === "connector";
+    const found = connector ? undefined : readShape(editor.presentation, blockPath);
+    if (!found && !connector) return;
+    path = connector ? overlay.path : found.path;
+    applyKind(connector ? "connector" : overlay ? "overlay" : "block");
+    const block = connector ? overlay.entry : found.block;
+    if (overlay) loadPlacement(overlay);
+    if (connector) loadConnector(overlay);
+    if (found) {
+      // The preset and its thumbnail (once the geometry has loaded).
+      presetValue.textContent = found.preset ? `${shapeLabel(found.preset)} (${found.preset})` : "Custom outline";
+      change.disabled = found.custom;
+      const engine = shapeEngine();
+      if (engine && found.preset) preview.replaceChildren(shapeThumbnailNode(doc, engine, found.preset, 30));
+      else {
+        preview.replaceChildren();
+        if (!engine) loadShapeEngine().then(() => { if (!destroyed && path === found.path) load(path); }, () => {});
+      }
+      drawAdjust(found);
     }
-    drawAdjust(found);
     aspect.set(show(block.aspectRatio));
     resetAdjust.disabled = !isObject(block.adjust);
     // Fill.
@@ -487,8 +595,8 @@ export function createShapeControls(ctx) {
     blur.set(show(block.blur));
     rotate.set(show(block.rotate));
     flip.set(block.flip ?? "");
-    text.input.disabled = !found.explicit;
-    text.input.title = found.explicit ? "" : "This shape sits directly in its slide or region; add it as a block of the slide to give it text.";
+    text.input.disabled = !found?.explicit;
+    text.input.title = found?.explicit ? "" : "This shape sits directly in its slide or region; add it as a block of the slide to give it text.";
     text.set(typeof block.text === "string" ? block.text : Array.isArray(block.text) ? block.text.map((run) => (typeof run === "string" ? run : (run?.text ?? ""))).join("") : "");
     // Rich text (runs) cannot be edited as plain text without losing its formatting: it is edited on the slide.
     if (Array.isArray(block.text)) {

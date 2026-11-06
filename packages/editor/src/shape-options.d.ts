@@ -10,6 +10,8 @@ export declare const SHAPE_PROPERTY_KEYS: readonly [
   "shape", "adjust", "aspectRatio", "fill", "opacity", "stroke", "style", "shadow", "innerShadow", "glow", "softEdge", "reflection", "blur",
   "rotate", "flip", "text", "anchor", "padding", "textDirection", "alt", "decorative", "hidden", "link",
 ];
+/** The keys an overlay connector shares with a shape: its line and accessibility keys. */
+export declare const CONNECTOR_PROPERTY_KEYS: readonly ["stroke", "alt", "decorative", "hidden"];
 export type ShapePropertyKey = (typeof SHAPE_PROPERTY_KEYS)[number];
 
 /** The presets matching `query` (DrawingML name, Aspose name, common words), best first; an empty query lists the gallery in order. */
@@ -26,6 +28,8 @@ export interface ShapeBlockState {
   path: string;
   /** False for a slide or region that holds the shape inline. */
   explicit: boolean;
+  /** True for an overlay shape of the slide's `shapes`. */
+  overlay: boolean;
   /** The DrawingML preset (undefined for a custom `path`). */
   preset?: string;
   custom: boolean;

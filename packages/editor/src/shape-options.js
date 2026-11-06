@@ -15,6 +15,9 @@ import { loadShapeEngine, shapeEngine } from "./shape-engine.js";
 export { SHAPE_CATALOG, SHAPE_CATEGORIES, loadShapeEngine, shapeEngine };
 
 const INDEX = /^(0|[1-9][0-9]*)$/;
+/** The keys an overlay connector shares with a shape (PartB: a connector has its own line, accessibility keys and `connector`, nothing else). */
+export const CONNECTOR_PROPERTY_KEYS = Object.freeze(["stroke", "alt", "decorative", "hidden"]);
+const CONNECTOR_PATH = /^slides\.(0|[1-9][0-9]*)\.shapes\.(0|[1-9][0-9]*)$/;
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const bad = (message, details) => fail("invalid-shape", message, details);
 
@@ -84,15 +87,17 @@ export function shapeBlockPathForSelection(presentation, selectedPath) {
     const at = parts.slice(0, length);
     const value = getValueAtPath(presentation, at);
     if (!isObject(value) || !isShapeBlock(value)) continue;
-    const explicit = at.at(-2) === "blocks" && INDEX.test(at.at(-1) ?? "");
+    // A block of the slide, or an overlay shape of its `shapes` (SH-04): both are shape blocks to the editor.
+    const explicit = (at.at(-2) === "blocks" || at.at(-2) === "shapes") && INDEX.test(at.at(-1) ?? "");
     if (explicit || parts[length] === "shape" || parts[length] === "path") return at.join(".");
   }
   return undefined;
 }
 
 /**
- * The shape block at `path` (a selection inside it works): `{ path, explicit, preset, custom, block }`. `preset` is the DrawingML name (undefined for a
- * custom `path`), `custom` is true for an outline of the author's own, `explicit` is false for a slide or region that holds the shape inline.
+ * The shape block at `path` (a selection inside it works): `{ path, explicit, overlay, preset, custom, block }`. `preset` is the DrawingML name (undefined for a
+ * custom `path`), `custom` is true for an outline of the author's own, `explicit` is false for a slide or region that holds the shape inline, `overlay` is
+ * true for an overlay shape of the slide's `shapes` (placed by `x`, `y`, `width`, `height` or by `at`).
  * Undefined when the path is no shape block.
  */
 export function readShape(presentation, path) {
@@ -102,17 +107,32 @@ export function readShape(presentation, path) {
   const block = getValueAtPath(presentation, parts);
   return {
     path: found,
-    explicit: parts.at(-2) === "blocks" && INDEX.test(parts.at(-1) ?? ""),
+    explicit: (parts.at(-2) === "blocks" || parts.at(-2) === "shapes") && INDEX.test(parts.at(-1) ?? ""),
+    overlay: parts.at(-2) === "shapes",
     preset: typeof block.shape === "string" ? block.shape : undefined,
     custom: block.shape === undefined && block.path !== undefined,
     block: structuredClone(block),
   };
 }
 
-function requireShape(presentation, path) {
+function requireShape(presentation, path, fields) {
   const found = readShape(presentation, path);
-  if (!found) throw fail("not-a-shape-block", "Choose a shape block: these settings edit a shape.", { path });
-  return found;
+  if (found) return found;
+  // An overlay connector takes its line and accessibility keys through the same command.
+  let parts;
+  try {
+    parts = splitOpfPath(path);
+  } catch {
+    parts = [];
+  }
+  const connectorPath = parts.slice(0, 4).join(".");
+  const entry = CONNECTOR_PATH.test(connectorPath) ? getValueAtPath(presentation, parts.slice(0, 4)) : undefined;
+  if (isObject(entry) && isObject(entry.connector)) {
+    const refused = Object.keys(fields ?? {}).filter((key) => !CONNECTOR_PROPERTY_KEYS.includes(key) && fields[key] !== undefined);
+    if (refused.length) throw fail("not-a-shape-block", `A connector has ${CONNECTOR_PROPERTY_KEYS.join(", ")} and its route and ends (setConnector); ${refused.join(", ")} belong to a shape.`, { path, keys: refused });
+    return { path: connectorPath, explicit: true, overlay: true, preset: undefined, custom: false, block: structuredClone(entry), connector: true };
+  }
+  throw fail("not-a-shape-block", "Choose a shape block: these settings edit a shape.", { path });
 }
 
 // --- normalizing values --------------------------------------------------------------------------------------------------------------
@@ -224,7 +244,7 @@ function adjustAfterPreset(block, preset) {
 /** The patches that set (a value) or remove (`null`) keys of the shape block at `path`. */
 export function shapePropertyPatches(presentation, path, fields, options = {}) {
   if (!isObject(fields)) throw bad("Pass the shape settings to change, for example { fill: \"accent2\" }.", { fields });
-  const found = requireShape(presentation, path);
+  const found = requireShape(presentation, path, fields);
   const parts = splitOpfPath(found.path);
   const block = found.block;
   const patches = [];
@@ -266,7 +286,7 @@ export function shapePropertyPatches(presentation, path, fields, options = {}) {
 
 /** Compute the patch for `setShapeProperties` without touching a session: `{ presentation, patches, changed, path }`. */
 export function prepareShapeProperties(presentation, path, fields, options = {}) {
-  const found = requireShape(presentation, path);
+  const found = requireShape(presentation, path, fields);
   const before = checkFormat(presentation);
   const patches = shapePropertyPatches(presentation, found.path, fields, options);
   const next = checkedDocument(presentation, patches, before);

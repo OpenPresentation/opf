@@ -118,6 +118,13 @@ export interface CanvasEditor {
   readonly layoutEditing: boolean;
   /** True while the crop layer is open. */
   readonly cropping: boolean;
+  /** True while the canvas is picking the two ends of a connector. */
+  readonly connecting: boolean;
+  /**
+   * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved; `stroke` the line
+   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when cancelled).
+   */
+  connect(options?: { route?: "straight" | "elbow" | "curved"; stroke?: Record<string, unknown>; onStatus?: (message: string, info: { error: boolean }) => void }): { cancel(): void; done: Promise<unknown> };
   /**
    * Open the crop layer for the picture at `path` (an image block or a slide's `image`); `tool: "focus"`
    * starts with the focal point. Apply writes one undoable change (see `@openpresentation/opf-editor/image-crop`). Resolves to whether it opened.

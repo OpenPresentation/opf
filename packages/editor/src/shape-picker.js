@@ -181,9 +181,10 @@ export function createShapePicker(container, options = {}) {
 }
 
 /**
- * A button's popover with the picker in it: `createShapeMenu(button, { onPick, selected })` opens under the button on a click, closes on Escape, on a press
+ * A button's popover with the picker in it: `createShapeMenu(button, { onPick, selected, placements })` opens under the button on a click, closes on Escape, on a press
  * outside it and after a pick, and returns focus to the button. `open()`, `close()`, `toggle()` and `isOpen` drive it from outside; `setSelected(name)` marks the
- * preset in use. The panel is `position: fixed` under the button, so it is not clipped by a toolbar.
+ * preset in use. With `placements: true` the panel has a choice under the gallery, "In the layout" (a block composition places) or "On the slide" (an overlay shape you place
+ * and size), remembered between picks, and `onPick(name, entry, { placement })` hears `block` or `overlay`. The panel is `position: fixed` under the button, so it is not clipped by a toolbar.
  */
 export function createShapeMenu(button, options = {}) {
   if (!button?.ownerDocument) throw new TypeError("createShapeMenu needs the button that opens it.");
@@ -197,6 +198,29 @@ export function createShapeMenu(button, options = {}) {
   panel.hidden = true;
   doc.body.append(panel);
   let picker;
+  let placement = options.placement ?? "block";
+  let choice;
+  if (options.placements) {
+    const name = `opf-sm-place-${++instances}`;
+    const radio = (value, label) => {
+      const input = doc.createElement("input");
+      input.type = "radio";
+      input.name = name;
+      input.value = value;
+      input.checked = value === placement;
+      input.addEventListener("change", () => (placement = value));
+      const text = doc.createElement("label");
+      text.className = "opf-sm-choice";
+      text.append(input, doc.createTextNode(` ${label}`));
+      return text;
+    };
+    choice = doc.createElement("fieldset");
+    choice.className = "opf-sm-place";
+    choice.setAttribute("data-role", "shape-placement");
+    const legend = doc.createElement("legend");
+    legend.textContent = "Place the shape";
+    choice.append(legend, radio("block", "In the layout"), radio("overlay", "On the slide"));
+  }
   let open = false;
   const place = () => {
     const box = button.getBoundingClientRect();
@@ -218,9 +242,10 @@ export function createShapeMenu(button, options = {}) {
         idPrefix: "opf-sm",
         onPick: (name, entry) => {
           api.close();
-          options.onPick?.(name, entry);
+          options.onPick?.(name, entry, { placement });
         },
       });
+      if (choice) panel.append(choice);
       picker.reset();
       panel.hidden = false;
       button.setAttribute("aria-expanded", "true");

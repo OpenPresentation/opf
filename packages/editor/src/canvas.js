@@ -25,6 +25,7 @@ import { textInputOffsetAtPoint } from "./text-pointer.js";
 import { createRichTextToolbar } from "./rich-text-toolbar.js";
 import { createImageCropper } from "./image-cropper.js";
 import { createShapeHandles } from "./shape-handles.js";
+import { createOverlayTools } from "./overlay-tools.js";
 import { FONTS_PENDING, fontGate, fontsPendingError, whenFontsReady } from "./font-gate.js";
 import { checkFormat, firstErrorMessage } from "./checks.js";
 import { createCanvasPages } from "./canvas-pages.js";
@@ -198,6 +199,16 @@ export function createCanvasEditor(container, options = {}) {
     onCommit: value => options.onCommit?.(value),
     onCancel: value => { clearNotice(); options.onCancel?.(value); },
   });
+  // SH-06 part B: move and resize an overlay shape, and draw a connector between two blocks or overlays.
+  const overlayTools = options.shapeTools === false ? null : createOverlayTools(root, {
+    editor, render: renderFor, beforeEdit: commit,
+    isTextEditing: () => active?.kind === "text" || active?.kind === "rich-text",
+    select: path => choose(path),
+    clearError: clearNotice, onError: report,
+    onDraft: value => options.onDraft?.(value),
+    onCommit: value => options.onCommit?.(value),
+    onCancel: value => { clearNotice(); options.onCancel?.(value); },
+  });
   const blockControls = createBlockControls(root, {
     editor, render: renderFor, beforeEdit: () => {if(!commit())return false;richToolbar.hide();return true;}, enabled: () => layoutHandles.enabled,
     isEditing: () => !!active || !!layoutHandles.editingPath, slideIndex: () => slideIndex,
@@ -226,6 +237,7 @@ export function createCanvasEditor(container, options = {}) {
     selectedPath = path;
     imageCropper?.sync(path);
     shapeHandles?.sync(path);
+    overlayTools?.sync(path);
     for (const node of targets())
       node.toggleAttribute(
         "data-canvas-selected",
@@ -261,6 +273,7 @@ export function createCanvasEditor(container, options = {}) {
     const size = preview.firstElementChild?.getBoundingClientRect?.().height || 0;
     layoutHandles.hide();
     shapeHandles?.hide();
+    overlayTools?.hide();
     blockControls.hide();
     richToolbar.hide();
     const box = doc.createElement("div");
@@ -497,6 +510,7 @@ export function createCanvasEditor(container, options = {}) {
       for (const node of svg.querySelectorAll("[tabindex]")) node.setAttribute("tabindex", "-1");
     layoutHandles.update(presentation, geometry);
     shapeHandles?.update(presentation, geometry);
+    overlayTools?.update(presentation, geometry);
     blockControls.update(presentation, geometry);
     imageCropper?.update();
     if (active?.kind === "text") positionInput();
@@ -755,6 +769,8 @@ export function createCanvasEditor(container, options = {}) {
       text = target?.querySelector("text");
     // SH-06: a shape's outline is selected, not edited as text: its adjust handles show on it and the shape section of the design controls edits it.
     if (/\.shape$/.test(path) && typeof value === "string") return;
+    // An overlay shape or connector of the slide's `shapes` is selected the same way: its tools are the frame and the Selected shape section.
+    if (/\.shapes\.\d+$/.test(path) && value && typeof value === "object") return;
     if (
       (typeof value === "string" || typeof value === "number") &&
       text &&
@@ -1127,6 +1143,7 @@ export function createCanvasEditor(container, options = {}) {
     selectedPath = null;
     imageCropper?.sync(null);
     shapeHandles?.sync(null);
+    overlayTools?.sync(null);
     pages?.close();
     renderFor();
     return true;
@@ -1202,6 +1219,7 @@ export function createCanvasEditor(container, options = {}) {
     richToolbar.destroy();
     layoutHandles.destroy();
     shapeHandles?.destroy();
+    overlayTools?.destroy();
     blockControls.destroy();
     if (frame) win.cancelAnimationFrame(frame);
     root.remove();
@@ -1222,6 +1240,18 @@ export function createCanvasEditor(container, options = {}) {
     get layoutEditing() { return layoutHandles.enabled; },
     /** True while the crop layer is open. */
     get cropping() { return !!imageCropper?.isOpen; },
+    /** True while the canvas is picking the two ends of a connector. */
+    get connecting() { return !!overlayTools?.connecting; },
+    /**
+     * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved;
+     * `stroke` the line (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. Returns `{ cancel(), done }`, `done` resolving with the change (or null).
+     */
+    connect(connectOptions) {
+      if (!overlayTools) return { cancel() {}, done: Promise.resolve(null) };
+      if (!commit()) return { cancel() {}, done: Promise.resolve(null) };
+      richToolbar.hide();
+      return overlayTools.connect(connectOptions);
+    },
     /** Open the crop layer for the picture at `path` (an image block or a slide's `image`). `tool: "focus"` starts with the focal point. */
     cropImage(path, cropOptions) {
       if (!imageCropper) return Promise.resolve(false);
@@ -1285,6 +1315,7 @@ export function createCanvasEditor(container, options = {}) {
       richToolbar.destroy();
       layoutHandles.destroy();
       shapeHandles?.destroy();
+      overlayTools?.destroy();
       blockControls.destroy();
       pages?.destroy();
       pictures?.dispose();

@@ -122,6 +122,27 @@
   display: none;
 }
 
+.opf-sm-place {
+  margin: 10px 0 0;
+  padding: 6px 8px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+}
+
+.opf-sm-place > legend {
+  padding: 0 4px;
+  font-size: 11.5px;
+  color: var(--opf-ui-muted-fg);
+}
+
+.opf-sm-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 12px;
+  font-size: 12px;
+}
+
 /* The shape section of the design controls */
 
 .opf-shape-controls [hidden] {

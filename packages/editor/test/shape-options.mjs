@@ -16,7 +16,7 @@ const fails = (action, code) => assert.throws(action, (error) => error.code === 
   assert.equal(shapeBlockPathForSelection(doc, "slides.1.blocks.0"), "slides.1.blocks.0");
   assert.equal(shapeBlockPathForSelection(doc, "slides.1.blocks.1.text"), undefined, "a text block is not a shape");
   assert.equal(shapeBlockPathForSelection(doc, "slides.1.title"), undefined);
-  assert.deepEqual(readShape(doc, "slides.1.blocks.0.shape"), { path: "slides.1.blocks.0", explicit: true, preset: "rightArrow", custom: false, block: { shape: "rightArrow", text: "Go" } });
+  assert.deepEqual(readShape(doc, "slides.1.blocks.0.shape"), { path: "slides.1.blocks.0", explicit: true, overlay: false, preset: "rightArrow", custom: false, block: { shape: "rightArrow", text: "Go" } });
   assert.equal(readShape(doc, "slides.1.blocks.1"), undefined);
 }
 
