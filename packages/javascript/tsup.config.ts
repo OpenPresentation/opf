@@ -13,6 +13,7 @@ const entry = {
   convert: "src/convert.ts",
   "font-policy": "src/font-policy.ts",
   "symbol-font-encodings": "src/symbol-font-encodings.ts",
+  "shape-geometry": "src/shape-geometry.ts",
   data: "src/data.ts",
   pagination: "src/pagination.ts",
   composition: "src/composition.ts",

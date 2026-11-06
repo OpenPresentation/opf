@@ -219,6 +219,17 @@ async function generateSymbolFontEncodings() {
   await fs.writeFile(path.join(generatedRoot, "symbol-font-encodings.ts"), lines.join("\n"));
 }
 
+async function generatePresetGeometry() {
+  // SH-01: the 187 DrawingML preset shapes are reference data for the shape geometry engine (src/shape-geometry.ts).
+  const table = await readJson(path.join(specRoot, "reference", "preset-geometry.json"));
+  const lines = [
+    generatedHeader("spec/reference/preset-geometry.json"),
+    `export const presetGeometrySource: unknown = ${JSON.stringify({ shapes: table.shapes })};`,
+    "",
+  ];
+  await fs.writeFile(path.join(generatedRoot, "preset-geometry.ts"), lines.join("\n"));
+}
+
 async function generateFontPolicy() {
   // FF-31: the authoritative font policy table is reference data, not a catalog.
   const policy = await readJson(path.join(specRoot, "reference", "font-policy.json"));
@@ -253,6 +264,7 @@ await fs.mkdir(generatedRoot, { recursive: true });
 await generateEngineData();
 await generateFontPolicy();
 await generateSymbolFontEncodings();
+await generatePresetGeometry();
 await generateSchemas();
 await generateSpecFiles();
 await generateTypes();
