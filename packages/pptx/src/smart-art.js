@@ -63,8 +63,8 @@ const decoder = new TextDecoder(), encoder = new TextEncoder();
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const RTL = /[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
 const CJK = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
-// The scripts the PowerPoint comparison covered: Latin, Greek and Cyrillic, Han and Kana, Hangul, Arabic and Hebrew.
-const COVERED = /^[\p{Script=Latin}\p{Script=Greek}\p{Script=Cyrillic}\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Common}\p{Script=Inherited}]*$/u;
+// The script the PowerPoint comparison passed: Latin (with the common punctuation, digits and marks).
+const COVERED = /^[\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]*$/u;
 // The run properties a SmartArt node carries as written (others, such as links, citations, code or a run size, keep the shapes).
 const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'lang']);
 
@@ -83,8 +83,8 @@ export function smartArtReason(arrangement, values, rtl) {
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
   const text = values.map(plain).join('');
-  const script = !COVERED.test(text) ? 'other' : CJK.test(text) ? 'cjk' : undefined;
-  return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl,
+  const script = COVERED.test(text) ? undefined : CJK.test(text) ? 'cjk' : 'other';
+  return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || RTL.test(text),
     nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {})});
 }
 

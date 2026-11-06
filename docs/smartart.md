@@ -62,25 +62,70 @@ Both look the same as the preview: the shapes are exact, and the text is where O
 ### What PowerPoint does on edit
 
 PowerPoint lays a SmartArt out again from its data model whenever it opens or changes it; it never shows the cached drawing. A
-SmartArt OPF wrote opens as live SmartArt: the Text Pane lists the entries, Change Layout switches it to any other SmartArt layout, and
-Change Colors and the quick styles apply. When a node's text is edited, PowerPoint keeps OPF's explicit size for every node (it does not
-shrink the text to fit), keeps the node rectangles, and wraps the text in the node with its own line breaker. A node added in the Text
-Pane takes PowerPoint's default size.
+SmartArt OPF wrote opens as live SmartArt (COM: `HasSmartArt`, the layout, one node per entry in `AllNodes`), and Change Layout
+switches it to another SmartArt layout. When a node's text is edited, PowerPoint keeps OPF's explicit size for every node (it does not
+shrink the text to fit), keeps the node rectangles, and wraps the text in the node with its own line breaker.
 
 ### The domain
 
 The PPTX export writes live SmartArt only for the instances the PowerPoint comparison passed (core `SMART_ART_DOMAIN`,
 `smartArtUnavailable`):
 
-DOMAIN_TABLE
+| | Pyramid | Matrix |
+| --- | --- | --- |
+| Entries | 1 to 5 (6 to 8 levels never fitted the list's role size in the compared frames) | 1 to 4 |
+| Frame proportions (width over height) | 1.1 to 2.3 (the 16:9, 4:3 and 1:1 slides gave 2.26, 1.64 and 1.17) | 0.8 to 1.2 (16:9 and 4:3 gave 1.13 and 0.83; the 1:1 slide's 0.58 is outside) |
+| Lines | at most 2 for an entry and 6 for all of them, each break holding when the width changes by 4% (core fits every entry at both widths) | the same |
+| Text | Latin script, left to right; runs bold, italic, underlined or struck through only (no links, citations, code or sizes of their own); no line breaks or tabs | the same |
+
+Everything else (Arabic, Hebrew and Japanese text, longer or tighter entries, other proportions) is written as native shapes, which look
+the same as the live SmartArt; the finding names the first reason.
 
 ### The gate
 
-GATE_TEXT
+The domain comes from a PowerPoint sweep through COM (PowerPoint for Microsoft 365 on Windows 11, read-only, visible and minimized, quit
+after each batch): a pyramid of 1 to 8 entries and a matrix of 1 to 4, with short, medium and long entries, on 16:9, 4:3 and 1:1 slides,
+and an Arabic and a Japanese deck of each, 112 decks. The Latin decks use Source Sans 3, which OPF bundles and the comparison machine has
+installed, so the preview and PowerPoint draw one font. Each deck was exported twice, live (`smartArt: "live"`) and as native shapes
+(`"shapes"`), and both files were drawn by PowerPoint at the canvas's pixel size. An instance passes when:
+
+1. PowerPoint opens it as live SmartArt of the right layout with every entry as a node;
+2. every node rectangle PowerPoint lays out (`GroupItems`) is within 0.1 pt of core's;
+3. every node's font size in PowerPoint equals OPF's;
+4. the shapes show no visible difference from the preview (no 16 px block of the shapes' area outside the text whose mean differs by more
+   than 24/255);
+5. PowerPoint draws the live SmartArt as it draws OPF's native export of the same slide, within SH-07's native gate (mean absolute
+   difference at most 1 at a quarter size and 2 at full size, at most 0.5% of blocks visibly different, the text's ink within 1.5 px).
+
+Of the 112 decks, 67 draw their list as a list (an entry does not fit its node at the list's role size; most pyramids of 5 or more levels
+and of long entries), 7 were outside the first domain and wrote native shapes, and 38 were live. In all 38 PowerPoint laid every node out
+where core does (largest difference 0.000 pt) at core's size, with no visible difference in the shapes. 33 passed every check; the five that
+did not are the two Arabic decks (their text 6 px from where the native export draws it), the Japanese matrix (10 px) and two four-quadrant
+matrices whose entries wrap (mean differences 1.1 and 1.22), which is why the domain leaves out right-to-left and Chinese or Japanese text,
+entries of more than two lines and more than six lines in all.
+
+The text of a live SmartArt sits where OPF's native export puts any text, within a pixel. Both sit higher in PowerPoint than in the preview,
+by about 0.15 em in Source Sans 3 and 0.07 em in Aptos (4 to 7 px at the 24 to 36 pt of these nodes): OPF's text model sets every
+baseline one em below its line's top, and PowerPoint at a height that depends on the face. That difference is the same for every OPF text
+box and is not SmartArt's; at the sizes of SH-07's diagram labels it is under the 1.5 px gate, at these sizes it is not, so the gate
+compares the SmartArt with the native export, and the preview offset is recorded in the gate table. The evidence (the gate table, the
+preview | PowerPoint | native export sheets and the COM records) is in the SH-09 build folder of the shapes program.
 
 ### The layout relationship
 
-LAYOUT_TEXT
+The SH-09 spike found that PowerPoint resolves its built-in layout from the data model's `loTypeId` only when the package has no layout
+part; a stub layout part with the built-in `uniqueId` is not resolved. The frame's `dgm:relIds` still names four relationships, and
+there are three ways to point `r:lo` at nothing. All three open as live SmartArt in PowerPoint with the layout resolved, a node edit and
+Change Layout working (the build checked each on a pyramid and a matrix):
+
+| Form | What a validator sees | Chosen |
+| --- | --- | --- |
+| `r:lo=""` | the attribute the schema requires is present (`ST_RelationshipId` is a string), and an empty id can name no relationship (relationship ids are non-empty) | yes |
+| `r:lo="rId99"`, no such relationship | a reference to a relationship the part does not have: a broken package reference | no |
+| no `r:lo` attribute | the schema's required attribute is missing | no |
+
+The empty id is the only form that is both schema-valid and names nothing that is missing. The Open XML SDK validator and LibreOffice were
+not installed on the comparison machine, so neither was run.
 
 ## Import
 

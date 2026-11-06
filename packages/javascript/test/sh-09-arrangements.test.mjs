@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
 import { layoutTemplate } from '../dist/composition.js';
 import {
-  ARRANGEMENT_MAX, ARRANGEMENT_TEXT_MARGIN, LIST_NOMINAL_SIZE, SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, colorContrast, composeSlide, matrixNodes, matrixSquare,
+  ARRANGEMENT_MAX, ARRANGEMENT_TEXT_MARGIN, LIST_NOMINAL_SIZE, SMART_ART_DOMAIN, SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, colorContrast, composeSlide, matrixNodes, matrixSquare,
   nodeWidthAt, pyramidFrame, pyramidNodes, smartArtUnavailable,
 } from '../dist/composition.js';
 
@@ -118,8 +118,17 @@ test('the paint: nodes in the primary outlined in the background, text readable 
 test('the SmartArt domain names why an instance stays native shapes', () => {
   const candidate = (extra = {}) => ({ kind: 'pyramid', count: 4, frame: { x: 0, y: 0, width: 1000, height: 500 }, rtl: false, nodes: Array.from({ length: 4 }, () => ({ lines: 1, stable: true })), ...extra });
   assert.equal(smartArtUnavailable(candidate()), undefined);
-  assert.match(smartArtUnavailable(candidate({ count: 9 })), /outside the tested 1 to 8/);
-  assert.match(smartArtUnavailable(candidate({ frame: { x: 0, y: 0, width: 1500, height: 500 } })), /proportions/);
+  // The domain the PowerPoint sweep passed (docs/smartart.md): up to 5 levels or 4 quadrants, the compared proportions, Latin text, at
+  // most 2 lines an entry and 6 in all, and line breaks that hold.
+  assert.deepEqual(SMART_ART_DOMAIN.count, { pyramid: 5, matrix: 4 });
+  assert.match(smartArtUnavailable(candidate({ count: 6 })), /outside the compared 1 to 5/);
+  assert.match(smartArtUnavailable(candidate({ frame: { x: 0, y: 0, width: 1500, height: 500 } })), /proportions \(3\.00 : 1\)/);
+  assert.equal(smartArtUnavailable(candidate({ kind: 'matrix', frame: { x: 0, y: 0, width: 600, height: 560 } })), undefined);
+  assert.match(smartArtUnavailable(candidate({ kind: 'matrix', frame: { x: 0, y: 0, width: 360, height: 600 } })), /proportions/);
   assert.match(smartArtUnavailable(candidate({ nodes: [{ lines: 1, stable: true }, { lines: 1, stable: false }] })), /entry 2 wraps too close/);
+  assert.match(smartArtUnavailable(candidate({ nodes: [{ lines: 3, stable: true }] })), /entry 1 wraps to 3 lines/);
+  assert.match(smartArtUnavailable(candidate({ nodes: Array.from({ length: 4 }, () => ({ lines: 2, stable: true })) })), /8 lines in all/);
+  assert.match(smartArtUnavailable(candidate({ rtl: true })), /right-to-left/);
+  assert.match(smartArtUnavailable(candidate({ script: 'cjk' })), /Japanese/);
   assert.match(smartArtUnavailable(candidate({ script: 'other' })), /script/);
 });

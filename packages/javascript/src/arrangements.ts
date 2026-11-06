@@ -143,17 +143,19 @@ export function arrangementPaint(primary: string, background: string, text: stri
 }
 
 /**
- * SH-09's safe domain for live SmartArt, from the PowerPoint COM sweep (docs/smartart.md): the instances of an arrangement whose every
- * node rectangle PowerPoint lays out within 0.1 pt of the preview, at the same font size, and whose pixels match the preview within the
- * native gate. An instance outside it is exported as native shapes (`smartArt: "shapes"`) with the reason.
+ * SH-09's safe domain for live SmartArt, from the PowerPoint COM sweep (docs/smartart.md): the instances of an arrangement for which
+ * PowerPoint laid out every node within 0.1 pt of core's rectangle, at core's font size, with no visible difference in the shapes, and drew
+ * the SmartArt as it draws OPF's native export of the same slide (SH-07's thresholds). An instance outside it is exported as native shapes
+ * (`smartArt: "shapes"`) with the reason.
  */
 export const SMART_ART_DOMAIN = Object.freeze({
-  /** Entries: a pyramid of 1 to 8 levels, a matrix of 1 to 4 quadrants. */
-  count: ARRANGEMENT_MAX,
-  /** The frame's width over its height. */
-  aspect: Object.freeze({ min: .75, max: 2.5 }),
-  /** The most lines an entry may wrap to in its node. */
-  lines: 3,
+  /** Entries: a pyramid of 1 to 5 levels (6 to 8 never fitted the list's role size in the compared frames), a matrix of 1 to 4 quadrants. */
+  count: Object.freeze({ pyramid: 5, matrix: 4 }) as Readonly<Record<Arrangement, number>>,
+  /** The frame's width over its height, per arrangement: the range the 16:9, 4:3 and 1:1 slides gave, with a small margin. */
+  aspect: Object.freeze({ pyramid: Object.freeze({ min: 1.1, max: 2.3 }), matrix: Object.freeze({ min: .8, max: 1.2 }) }) as Readonly<Record<Arrangement, { min: number; max: number }>>,
+  /** The most lines one entry may wrap to in its node, and in all its entries (a line drawn by PowerPoint's wrap can sit up to 1 px from core's). */
+  lines: 2,
+  totalLines: 6,
   /**
    * The room a line break keeps: an entry's breaks must be the same when its text rectangle is this share narrower or wider (composeSlide
    * fits it at both), so PowerPoint, which measures its own fonts, breaks the same lines.
@@ -168,9 +170,9 @@ export interface SmartArtCandidate {
   frame: Box;
   /** Per entry: the lines it wraps to, and whether its breaks hold within SMART_ART_DOMAIN.slack of its width. */
   nodes: { lines: number; stable: boolean }[];
-  /** A right-to-left deck. */
+  /** A right-to-left deck or entry. */
   rtl: boolean;
-  /** Text PowerPoint breaks between characters (Chinese, Japanese), or in a script the comparison did not cover. */
+  /** Text in a script other than Latin (the comparison found Japanese text placed several pixels off in PowerPoint's SmartArt). */
   script?: 'cjk' | 'other';
 }
 
@@ -179,14 +181,18 @@ export interface SmartArtCandidate {
  * falls back to native shapes, for the export's `pptx/smartart-unavailable` finding.
  */
 export function smartArtUnavailable(candidate: SmartArtCandidate): string | undefined {
-  const { kind, count, frame, nodes } = candidate;
-  if (count < 1 || count > SMART_ART_DOMAIN.count[kind]) return `a ${kind} of ${count} entries is outside the tested 1 to ${SMART_ART_DOMAIN.count[kind]}`;
-  const aspect = frame.width / frame.height;
-  if (!(aspect >= SMART_ART_DOMAIN.aspect.min - 1e-6 && aspect <= SMART_ART_DOMAIN.aspect.max + 1e-6)) return `its frame's proportions (${aspect.toFixed(2)} : 1) are outside the tested ${SMART_ART_DOMAIN.aspect.min} to ${SMART_ART_DOMAIN.aspect.max}`;
+  const { kind, count, frame, nodes } = candidate, domain = SMART_ART_DOMAIN;
+  if (count < 1 || count > domain.count[kind]) return `a ${kind} of ${count} entries is outside the compared 1 to ${domain.count[kind]}`;
+  const aspect = frame.width / frame.height, range = domain.aspect[kind];
+  if (!(aspect >= range.min - 1e-6 && aspect <= range.max + 1e-6)) return `its frame's proportions (${aspect.toFixed(2)} : 1) are outside the compared ${range.min} to ${range.max}`;
+  if (candidate.rtl) return "right-to-left text sits off center in PowerPoint's SmartArt";
+  if (candidate.script === 'cjk') return "Chinese and Japanese text sits several pixels off in PowerPoint's SmartArt";
   if (candidate.script === 'other') return 'its text uses a script the PowerPoint comparison did not cover';
   for (const [index, node] of nodes.entries()) {
-    if (node.lines > SMART_ART_DOMAIN.lines) return `entry ${index + 1} wraps to ${node.lines} lines (at most ${SMART_ART_DOMAIN.lines} were compared)`;
+    if (node.lines > domain.lines) return `entry ${index + 1} wraps to ${node.lines} lines (at most ${domain.lines} were compared)`;
     if (!node.stable) return `entry ${index + 1} wraps too close to its node's width for PowerPoint to break the same lines`;
   }
+  const total = nodes.reduce((sum, node) => sum + node.lines, 0);
+  if (total > domain.totalLines) return `its entries wrap to ${total} lines in all (at most ${domain.totalLines} matched PowerPoint)`;
   return undefined;
 }

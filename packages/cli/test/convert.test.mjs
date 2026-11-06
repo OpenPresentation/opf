@@ -268,7 +268,7 @@ describe("drawing, through stub peers", () => {
     const messages = [
       [["deck.opf.json", "x.pdf", "--text", "paths"], /--text applies to svg output/],
       [["deck.opf.json", "x.svg", "--raster"], /--raster applies to pdf output/],
-      [["deck.opf.json", "x.svg", "--charts", "native"], /--charts, --diagrams, --provenance, --images, --body-text, --slide-numbers, --typefaces and --as apply to pptx output/],
+      [["deck.opf.json", "x.svg", "--charts", "native"], /--charts, --diagrams, --provenance, --images, --body-text, --smart-art, --slide-numbers, --typefaces and --as apply to pptx output/],
       [["deck.opf.json", "x.pptx", "--images", "jpeg"], /--images must be one of: compatible, preserve/],
       [["deck.opf.json", "x.pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],
       [["deck.opf.json", "x.pptx", "--diagrams", "native"], /--diagrams must be one of: picture, shapes/],
