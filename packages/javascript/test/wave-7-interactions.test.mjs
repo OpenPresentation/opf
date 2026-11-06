@@ -80,7 +80,9 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.equal(new Set(cells.map((cell) => cell.text.fontSize)).size, 1, 'one size across the grid');
     assert.ok(cells[0].text.fontSize < grown.text.fontSize + 1e-6, 'no sibling reads louder than a lone message');
     const rows = [...new Set(cells.map((cell) => Math.round(cell.box.y)))].sort((a, b) => a - b);
-    assert.ok(rows.length === 2 && rows[1] - (rows[0] + cells[0].box.height) < 0.5 * grid.contentBox.height, 'the rows hug');
+    // LH-162: where tiles read as well (here the Arabic grid), they replace the hugging rows, one tile per text.
+    if (grid.steps?.some((step) => step.form === 'tiles')) assert.equal(grid.steps.find((step) => step.form === 'tiles').chips.length, cells.length, 'one tile per text');
+    else assert.ok(rows.length === 2 && rows[1] - (rows[0] + cells[0].box.height) < 0.5 * grid.contentBox.height, 'the rows hug');
   });
 
   test(`LH-132 with LH-74 and LH-14 (${direction}): a team's pictures are portraits, and its group icons never cost the text`, () => {

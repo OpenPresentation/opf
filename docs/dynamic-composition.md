@@ -112,10 +112,14 @@ LH-133's questions as ruled rows (`pair-rows`, see [Questions and terms](#questi
 of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-134's numerals (`numerals`, see
 [Numerals, badges or rows](#numerals-badges-or-rows-lh-134)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)), LH-131's featured card
 of a pair or a set (`featured-card`, see [Emphasis surface](#emphasis-surface-lh-06)), LH-137's delta pill (`delta-pill`) and LH-137's
-check-mark tiles of a dark summary list (`check-tiles`), LH-170's closing note on the band (`note-band`, see [Emphasis surface](#emphasis-surface-lh-06)) and LH-169's
-figure-led list as a row of figures (`figure-row`, see [Layout templates](layout-templates.md)). Those three only draw, so a slide that draws one of them is also composed under the guard without them and keeps the drawing only when no block reads smaller there, nothing more is found and a body role at the readability floor stays at it (the drawing never decides LH-83's recomposition); otherwise each is tried alone on top of the rules that slide kept. LH-39's figure on one line
+check-mark tiles of a dark summary list (`check-tiles`), LH-14's icon chips (`icons`, `icon-chips`), LH-170's closing note on the band (`note-band`, see [Emphasis surface](#emphasis-surface-lh-06)) and LH-169's
+figure-led list as a row of figures (`figure-row`, see [Layout templates](layout-templates.md)). Those only draw, so a slide that draws one of them is also composed under the guard without them and keeps the drawing only when no block reads smaller there, nothing more is found and a body role at the readability floor stays at it (the drawing never decides LH-83's recomposition); otherwise each is tried alone on top of the rules that slide kept. LH-39's figure on one line
 (`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
-the next smaller type-scale step (a slide that composes no metric is not composed again for it).
+the next smaller type-scale step (a slide that composes no metric is not composed again for it). LH-165's icon cards and LH-162's text
+tiles (`icon-cards`, `text-tiles`) are tried before it the same way, on top of the rules the guard kept: they rearrange the whole body,
+so they are never part of the first composition, where a failure would take every rule that did not fire off the slide. A layout's
+lone list with icons also tries its cards across the whole body as the automatic grid (`recomposed.cards`), kept when its text reads at
+least as large as the layout's.
 An eyebrow is set at its own role size (0.6 of its paragraph's, from 20 to 24 px), like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
 so the guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
 keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the
@@ -255,6 +259,15 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   every text that was on one line stays on one line (the width of the cells bounds it: three columns of one-line texts stop at 43 px, two
   at 56 px) and the body covers at most 60%. The grid never ends smaller than the same body spread over the area; a growth that would end
   smaller lets texts wrap as they did, and one that still would is the spread body itself.
+- **Text tiles (LH-162).** 4 to 8 paragraphs of at most 90 characters that are the whole body of an automatic slide (blocks at its root)
+  draw as tiles: one card each in the theme's card surface, in the grid of LH-165's icon cards (two to four a row, balanced, the short
+  last row centered; see [Icons](icons.md#icon-cards-lh-165)), each text beside a small dot in the accent at the start of its first line
+  and in the middle of its tile, on at most two lines. The texts start at the size they share and grow by steps of the type scale up to
+  LH-05's 56 px while the tiles hold them without a split word and they cover at most 60% of the body; the grid is the one where they are
+  largest, then on the fewest lines. Tiles (`text-tiles`) and icon cards (`icon-cards`) are tried on top of the rules the guard kept and
+  kept only when no block reads smaller than without them, and than the settled slide without them (whose compact grid LH-48 may have
+  grown further): with estimated text widths a compact grid of six texts reaches 43 px in three columns where tiles of two lines cannot,
+  so it stays the compact grid.
 - **Value color on dark (LH-57).** On a dark slide or card, a value whose accent falls under 4.5:1 against the surface is drawn in the
   light text color (`metricValueColor(color, background, text)`) instead of a lightened accent, so the number stays the strongest
   element. A unit on its value's line takes the value's color.
