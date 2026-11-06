@@ -6,8 +6,7 @@
     "bcp47": "ar",
     "name": "Arabic",
     "direction": "rtl",
-    "script": "Arab",
-    "fontScheme": "noto-sans-arabic"
+    "script": "Arab"
   },
   "slides": [
     {
