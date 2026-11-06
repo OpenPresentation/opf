@@ -157,6 +157,27 @@ const shapeLinkHidden: RuleText = () => ({
   next: "remove `hidden`, or remove the `link`.",
 });
 
+const shapeAnchorMissing: RuleText = (finding) => {
+  const { id, known } = params(finding);
+  if (typeof id !== "string") return undefined;
+  const ids = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  return {
+    message: `${code(`at.block: "${id}"`)} names no block on this slide, so the shape is not drawn.${ids.length ? ` Block ids on this slide: ${plainList(ids)}.` : " No block on this slide has an id."}`,
+    next: chooseNext(id, ids, `give the block the shape belongs to ${code(`id: "${id}"`)}`),
+  };
+};
+
+const connectorEndMissing: RuleText = (finding) => {
+  const { id, side, known } = params(finding);
+  if (typeof id !== "string" || (side !== "from" && side !== "to")) return undefined;
+  const ids = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  if (/names a connector/.test(finding.message)) return { message: `The connector's ${code(side)} names the connector ${code(id)}; a connector joins blocks and overlay shapes.`, next: `name a block or an overlay shape in ${code(side)}.` };
+  return {
+    message: `The connector's ${code(`${side}: "${id}"`)} names no block or overlay shape on this slide, so the connector is not drawn.${ids.length ? ` Ids on this slide: ${plainList(ids)}.` : " Nothing on this slide has an id."}`,
+    next: chooseNext(id, ids, `give the block or shape it should join ${code(`id: "${id}"`)}`),
+  };
+};
+
 const imagePlacementInvalid: RuleText = (finding) => {
   const { edge, blocks } = params(finding);
   if (typeof edge === "string" && Array.isArray(blocks) && blocks.length === 2) {
@@ -682,6 +703,8 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/shape-adjust-unknown": shapeAdjustUnknown,
   "opf/shape-adjust-range": shapeAdjustRange,
   "opf/shape-link-hidden": shapeLinkHidden,
+  "opf/shape-anchor-missing": shapeAnchorMissing,
+  "opf/connector-end-missing": connectorEndMissing,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
   "opf/dataset-unknown": datasetUnknown,
   "opf/dataset-field-unknown": datasetFieldUnknown,

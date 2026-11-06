@@ -55,6 +55,7 @@ import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
+import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
@@ -438,6 +439,8 @@ export async function toPptx(input, options = {}) {
   // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
   context.shapeBlocks = new Map();
   context.shapeSchemeColors = new Map();
+  // SH-04: the native connectors of the slides' overlays, by object name (src/connectors.js), written into the finished slide parts.
+  context.connectors = new Map();
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
@@ -2515,6 +2518,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, geometry.surface !== undefined);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
+  // SH-04: the back layer of the overlay, after the background, watermark and logo and before every content shape, as the preview draws it.
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'back');
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
@@ -2653,6 +2658,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
   await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
+  // SH-04: the slide's overlay (core geometry.overlayShapes) over everything else, in array order, as the preview draws it.
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'front');
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -3038,6 +3045,44 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
     ...(lineHeight ? {lineSpacing: Math.round(lineHeight * 100) / 100} : {}), fit: 'none'});
   deck.shapeBlocks.set(name, {...shapeBlockRecord(shape, paint, palette), ...(shape.link ? {link: shape.link} : {})});
   return name;
+}
+
+// SH-04: one layer of the slide's overlay. An overlay shape is a shape block item (core ComposedOverlayShape), written as one: `OPF shape slides.N.shapes.I`.
+// A connector (core ComposedConnector) is a placeholder line named `OPF connector slides.N.shapes.I` that writeConnectors replaces by its
+// p:cxnSp in the finished slide part, glued to the native shapes at its ends (src/connectors.js).
+function addOverlayShapes(slide, geometry, slideIndex, context, deck, layer) {
+  // The back layer (overlay shapes with layer back) goes before the content shapes in the shape tree; the front layer and every connector after.
+  for (const entry of (geometry.overlayShapes ?? []).filter(entry => (entry.kind === 'shape' && entry.layer === 'back' ? 'back' : 'front') === layer)) {
+    if (entry.kind === 'shape') { addShapeItem(slide, entry, slideIndex, context, deck); continue; }
+    if (!entry.paths?.length) continue;
+    const name = connectorName(entry.path), paint = shapePaint(context), palette = shapePalette(context);
+    const table = deck.slideSchemeColors?.[slideIndex]?.table;
+    if (table) {
+      const own = deck.shapeSchemeColors.get(slideIndex) ?? new Map(), view = new Map([...table, ...own]);
+      addTransformedColors(view, reference => exportColor(reference, context, '000000'), entry.stroke);
+      for (const [hex, value] of view) if (!table.has(hex)) own.set(hex, value);
+      deck.shapeSchemeColors.set(slideIndex, own);
+    }
+    deck.connectors.set(name, connectorRecord(entry, paint, palette, {from: connectorGlue(entry.from, geometry, slideIndex, deck), to: connectorGlue(entry.to, geometry, slideIndex, deck)}));
+    slide.addShape('line', {x: entry.box.x / 96, y: entry.box.y / 96, w: entry.box.width / 96, h: entry.box.height / 96, objectName: name, line: {color: '000000', width: 1}});
+  }
+}
+
+// SH-04: the native shape a connector end glues to (its object name and core's site index): an overlay shape or shape block, a block's
+// picture, or the card of a block drawn on one; a group, or a block drawn as several native shapes (a text's line boxes), glues to none.
+function connectorGlue(end, geometry, slideIndex, deck) {
+  if (end.target === 'shape') return {name: `OPF shape ${end.ref}`, site: end.site};
+  if (end.target !== 'block') return undefined;
+  const block = end.ref.slice(0, end.ref.lastIndexOf('.')), items = geometry.items.filter(item => item.path.startsWith(`${block}.`) && !item.path.slice(block.length + 1).startsWith('blocks.'));
+  const item = items.length === 1 ? items[0] : undefined;
+  if (!item) return undefined;
+  if (item.shape) return {name: `OPF shape ${item.path}`, site: end.site};
+  if (item.frameBox) return {name: `OPF card ${item.path}`, site: end.site};
+  if (item.image) {
+    const name = [...deck.images].find(([, record]) => record.slide === `slides.${slideIndex}` && record.path === item.path)?.[0];
+    return name === undefined ? undefined : {name, site: end.site};
+  }
+  return undefined;
 }
 
 // An overlay (core ComposedOverlay) as one native shape directly above its picture: the frame's shape, or an edge band.
@@ -5568,6 +5613,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       });
       // SH-02: shape blocks take core's geometry, fill, line, style and text body (src/shape-blocks.js).
       xml=writeShapeBlocks(xml,context.shapeBlocks);
+      // SH-04: connectors as native p:cxnSp glued to the shapes at their ends (src/connectors.js).
+      xml=writeConnectors(xml,context.connectors);
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{
