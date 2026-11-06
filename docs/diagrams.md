@@ -26,6 +26,10 @@ A string is shorthand for `{ "source": value }`. The object form adds `alt`, the
 }
 ```
 
+The slide this draws, in the engine's default design:
+
+![The slide drawn from the example: the title above a flowchart in which a request goes to an Approved? decision, yes leads to Build and no leads to Revise, which loops back to the request.](images/diagrams/review-loop.svg)
+
 With an `alt` and a caption:
 
 ```json
@@ -38,6 +42,8 @@ With an `alt` and a caption:
   "caption": "Figure 1. The review loop"
 }
 ```
+
+![The slide drawn from the example: a brief goes to an Approved? decision, yes leads to Build and no returns to the brief, with the caption Figure 1. The review loop under the diagram.](images/diagrams/review-loop-caption.svg)
 
 As YAML a block scalar keeps the source readable:
 
@@ -64,6 +70,8 @@ Beside text, give the slide `blocks`; the diagram takes its own cell:
   ]
 }
 ```
+
+![The slide drawn from the example: two bullets on the left and, on the right, a sequence diagram in which the client sends POST /decks to the API and the API answers 201 Created.](images/diagrams/beside-text.svg)
 
 ### In Markdown
 
@@ -122,7 +130,7 @@ OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 synt
 | Swimlane | `swimlane-beta` | A flowchart in lanes |
 | Agent flow | `agentflow-beta` | The steps and tools of an agent workflow |
 
-The six most useful, each as a complete source:
+The six most useful, each as a complete source and the slide it draws in the default design:
 
 ````text
 flowchart LR
@@ -131,11 +139,15 @@ flowchart LR
   B -->|no| D[Park it]
 ````
 
+![A flowchart: an idea goes to a Worth testing? decision; yes leads to Prototype and no to Park it.](images/diagrams/family-flowchart.svg)
+
 ````text
 sequenceDiagram
   Client->>API: POST /decks
   API-->>Client: 201 Created
 ````
+
+![A sequence diagram: the client sends POST /decks to the API, and the API answers 201 Created.](images/diagrams/family-sequence.svg)
 
 ````text
 mindmap
@@ -144,6 +156,8 @@ mindmap
     Efficiency
     People
 ````
+
+![A mind map: Strategy in a circle at the center with the branches Growth, Efficiency and People.](images/diagrams/family-mindmap.svg)
 
 ````text
 timeline
@@ -154,6 +168,8 @@ timeline
     2026 Q3 : All regions
 ````
 
+![A timeline titled Regional rollout: the Pilot section in 2026 Q1 with one operations team, and the Rollout section in 2026 Q3 with all regions.](images/diagrams/family-timeline.svg)
+
 ````text
 stateDiagram-v2
   [*] --> Queued
@@ -162,6 +178,8 @@ stateDiagram-v2
   Building --> Failed: error
   Failed --> Queued: retry
 ````
+
+![A state diagram: Queued goes to Building, which goes to Live on success or Failed on error, and Failed returns to Queued on retry.](images/diagrams/family-state.svg)
 
 ````text
 journey
@@ -172,6 +190,8 @@ journey
   section First week
     Build a first deck: 4: New user
 ````
+
+![A user journey titled Onboarding: creating an account scores 5, verifying the email 3 and building a first deck 4.](images/diagrams/family-journey.svg)
 
 For the full syntax of each family, read the [Mermaid documentation](https://mermaid.js.org/intro/); pele follows it, but draws with its own layout (see [The engine](#the-engine)).
 
@@ -185,6 +205,23 @@ The deck decides colors and fonts, so a diagram follows the slide it sits on:
 - **Text** keeps 4.5:1 against its fill.
 - **Fonts.** Labels use the font scheme's body font, and code-like labels (class members, for example) its code font.
 - **Dark backgrounds, dark variants and color maps** adapt with no change to the source: `design.variant: "dark1"` on a slide redraws its diagram from the dark surface.
+
+The same slide, with the same source, in four designs from the default catalog:
+
+```json
+{
+  "title": "Every request is reviewed before it ships",
+  "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Test]\n  E --> F{Passes?}\n  F -->|yes| G[Release]\n  F -->|no| C"
+}
+```
+
+| `classic`, `forest-green`, `aptos` | `bold`, `deep-purple`, `montserrat` |
+| --- | --- |
+| ![The flowchart on a white slide with pale green nodes.](images/diagrams/style-classic.svg) | ![The flowchart on a white slide with pale purple nodes and the Montserrat font.](images/diagrams/style-bold.svg) |
+| **`minimal`, `burnt-orange`, `georgia`** | **`classic`, `steel-blue`, `open-sans`, slide `design.variant: "dark1"`** |
+| ![The flowchart on a dark brown slide with orange-brown nodes and a serif font.](images/diagrams/style-minimal.svg) | ![The flowchart on a black slide with dark nodes, light labels and the Open Sans font.](images/diagrams/style-dark.svg) |
+
+Every image in this guide is the renderer's own SVG output for the source above it, drawn by `scripts/build-diagram-doc-images.mjs` (`pnpm check:diagram-doc-images` keeps them current).
 
 Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click callbacks are ignored. Authored `style`, `classDef` and C4 `UpdateElementStyle` colors are the exception: pele applies them and OPF's painter keeps them, so a shape with an authored color no longer follows the deck's colors, variant or contrast rules. Leave them out and let the deck decide; if one shape must stand out, prefer a different node shape or a label to a color.
 
