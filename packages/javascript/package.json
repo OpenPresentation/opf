@@ -96,6 +96,10 @@
       "types": "./dist/symbol-font-encodings.d.ts",
       "import": "./dist/symbol-font-encodings.js"
     },
+    "./shape-geometry": {
+      "types": "./dist/shape-geometry.d.ts",
+      "import": "./dist/shape-geometry.js"
+    },
     "./deck": {
       "types": "./dist/deck.d.ts",
       "import": "./dist/deck.js"
