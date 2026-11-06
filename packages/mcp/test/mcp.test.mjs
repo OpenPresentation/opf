@@ -456,8 +456,9 @@ describe("the bundled sources", () => {
 		// LH-14 added docs/icons.md and three rules to docs/validate.md. LH wave 7 together (LH-158's and LH-132's image treatments, LH-09's and
 		// LH-155's layout templates, the portrait key and the icon rules in the references) is 1,027,190 bytes; the lean Worker stays in bounds.
 		// SH-02 added docs/shapes.md (the property map and the 187 presets) and the shape vocabulary of the schema reference: 1,077,362 bytes;
-		// with PowerPoint's gradient and sketch behavior and the lazy shape engine documented, about 1,093,000.
-		assert.ok(bytes < 1_100_000, `${bytes} bytes of documentation`);
+		// with PowerPoint's gradient and sketch behavior and the lazy shape engine documented, about 1,093,000. Wave 8 and shapes phase 1 together
+		// (SH-03's docs/shape-effects.md, LH-165's, LH-169's, LH-164's and LH-63's rules, the engines that load on demand) are 1,112,956 bytes.
+		assert.ok(bytes < 1_125_000, `${bytes} bytes of documentation`);
 	});
 });
 
