@@ -213,9 +213,9 @@ test("a stale tracker, an unused rule and an unknown RR link fail the build", ()
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
-  dir = scratchCopy((o) => ({ ...o, rules: o.rules.map((r) => (r.link === "RR-17" ? { ...r, link: "RR-98" } : r)) }));
+  dir = scratchCopy((o) => ({ ...o, rules: o.rules.map((r) => (r.link === "RR-17" ? { ...r, link: "RR-998" } : r)) }));
   try {
-    assert.throws(() => checkTracker({ root: dir }), /unknown burndown item RR-98/);
+    assert.throws(() => checkTracker({ root: dir }), /unknown burndown item RR-998/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
