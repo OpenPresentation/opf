@@ -133,7 +133,8 @@ await ensureIcons(deck, { catalogs });
 so a deck that draws no icon loads none. Before synchronous code reads a deck, a host awaits `ensureIcons(deck, { catalogs })`:
 opf-pptx's `toPptx` and the renderer's browser fonts handle (`ensure`) do with the catalogs they are given; core's Node defaults, the
 CLI and the MCP register `galleryIconSets` and load the sets a deck names before they check or draw it. A Node script that calls `toSvg`
-directly calls `ensureIcons` first. `validate` alone checks only the set ids and the sets the document embeds until the sets are loaded.
+directly calls `ensureIcons` first; diagrams and shapes load the same way, and one preload covers all three (see
+[Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand)). `validate` alone checks only the set ids and the sets the document embeds until the sets are loaded.
 
 `embedIcons(deck, { catalogs })` copies the set icons a deck uses (only those, with the set's license and copyright) into
 `catalogs.default.iconSets`, so the deck draws them with no registered catalog. An icon set is a catalog kind
