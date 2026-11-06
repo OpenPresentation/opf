@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "keep-slides", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -33,7 +33,7 @@ export const spec: CommandSpec = {
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
 	positional: [2, 2],
-	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
+	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "smart-art", "slide-numbers", "typefaces", "as", "date", "asset-dir"],
 	repeated: ["fonts"],
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "keep-slides", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
@@ -64,6 +64,9 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote
                                                   re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
+                   --smart-art <live|shapes>      a pyramid or matrix layout: live (the default) writes live SmartArt where
+                                                  PowerPoint draws it as the preview does, else native shapes (smartart-
+                                                  unavailable says why); shapes writes native shapes always
                    --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": live (the default)
                                                   keeps the slide-number field, so PowerPoint renumbers it, but Keynote shows it
                                                   as the digit alone; static writes the number as fixed text, so Keynote shows
@@ -155,6 +158,7 @@ export async function run(args: string[], host: Host): Promise<void> {
 	oneOf("--provenance", options.provenance, ["full", "references-only", "none"] as const);
 	oneOf("--images", options.images, ["compatible", "preserve"] as const);
 	oneOf("--body-text", options["body-text"], ["measured", "native"] as const);
+	oneOf("--smart-art", options["smart-art"], ["live", "shapes"] as const);
 	oneOf("--slide-numbers", options["slide-numbers"], ["static", "live"] as const);
 	oneOf("--typefaces", options.typefaces, ["selected", "safe"] as const);
 	oneOf("--as", options.as, ["native", "images"] as const);
@@ -311,6 +315,7 @@ async function exportDeck(
 			provenance: text("provenance"),
 			images: text("images"),
 			bodyText: text("body-text"),
+			smartArt: text("smart-art"),
 			slideNumbers: text("slide-numbers"),
 			typefaces: text("typefaces"),
 			as: text("as"),

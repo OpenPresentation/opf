@@ -56,6 +56,11 @@ export interface LayoutRegion {
    * list draws its entries beside badges, numbered or not (an unnumbered one is counted as drawing only). Absent: the region's content draws as any other.
    */
   sequence?: 'steps' | 'numbered';
+  /**
+   * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
+   * (four quadrants in a square, at most four entries). Absent: the list draws as a list.
+   */
+  arrangement?: 'pyramid' | 'matrix';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -153,6 +158,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
+    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

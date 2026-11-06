@@ -130,6 +130,12 @@ export interface ToPptxOptions {
    * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied (Keynote 15.1.1 was checked for Title/Body controls and reflow, PowerPoint was not).
    */
   bodyText?: "measured" | "native";
+  /**
+   * SH-09: how a pyramid or matrix (a layout region's `arrangement`) is written. "live" (the default) writes live SmartArt (Basic
+   * Pyramid, Basic Matrix) where PowerPoint lays it out exactly as the preview draws it, and native shapes with an info
+   * `smartart-unavailable` diagnostic (its `reason`) where it would not; "shapes" writes native shapes always.
+   */
+  smartArt?: "live" | "shapes";
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
   /**

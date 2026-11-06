@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "matrix",
+  "name": "Matrix",
+  "summary": "Up to four parts of a whole, as the quadrants of a square beside the title.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "row",
+  "regions": [
+    {
+      "name": "title",
+      "size": 2
+    },
+    {
+      "name": "quadrants",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "matrix",
+      "size": 3
+    }
+  ],
+  "description": "Show up to four parts that together make a whole, or four cases of two choices, as a 2 x 2 matrix. Write one short list entry per quadrant, in the order top left, top right, bottom left, bottom right.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/matrix.svg"
+  }
+}

@@ -5,6 +5,7 @@ import {
   resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
+  arrangementPaint, colorContrast,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
@@ -731,6 +732,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
     renderSteps(bound, options),
+    renderArrangements(bound, options),
     renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
     renderIcons(bound, options),
@@ -981,6 +983,29 @@ function renderSteps(bound, options) {
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
 }
+// SH-09: core's pyramids and matrices (geometry.arrangements), under the text of their entries, as the PPTX export draws them (live
+// SmartArt or native shapes): the matrix's diamond in the primary lightened 80%, then every node (an empty quadrant too) in the primary with
+// a centered outline in the background color, core's lineWidth wide. A pyramid level is its trapezoid's polygon (the apex a triangle), a
+// quadrant a rounded square of core's corner radius (DrawingML roundRect's circular corners). With trace each shape names the entry it
+// holds in data-opf-arrangement-path, not data-opf-path: it is the layout's drawing.
+function renderArrangements(bound, options) {
+  const arrangements = bound.geometry.arrangements;
+  if (!arrangements?.length) return '';
+  const roles = bound.design.roles, paint = arrangementPaint(bound.design.colors.primary, roles.background, roles.text, colorContrast, applyColorTransform), n = stableNumber;
+  return arrangements.map(arrangement => {
+    const parts = [], stroke = {stroke: paint.line.hex, 'stroke-width': n(arrangement.lineWidth), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8};
+    if (arrangement.background) {
+      const {x, y, width, height} = arrangement.background;
+      parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
+    }
+    for (const node of arrangement.nodes) {
+      const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill: paint.fill.hex, ...stroke, ...trace}));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill: paint.fill.hex, ...stroke, ...trace}));
+    }
+    return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-region': arrangement.region} : {}, parts.join(''));
+  }).join('\n');
+}
 // LH-14: core's icons (geometry.icons) on their chips, over the cards they sit on, as the PPTX export draws them: the chip a circle in
 // core's chip color; a monochrome glyph core's placed path commands in its glyph color, each part filled (nonzero or even-odd), stroked at
 // its width with its caps and joins, or both; a multicolor SVG a picture contained in the chip's square, with no chip, in its own colors.
@@ -1032,8 +1057,11 @@ function renderSlideContent(bound, width, height, options) {
   const emphasis=bound.geometry.emphasis;
   const onSurface=emphasis ? emphasisBound(bound, emphasisSurface(bound.design.colorScheme, bound.design.roles)) : undefined;
   let surfaceDrawn=false,previousFrame;
+  // SH-09: the entries of a pyramid or matrix (geometry.arrangements) are drawn on its nodes, in the color arrangementPaint reads on the primary.
+  const arranged=new Set((bound.geometry.arrangements??[]).map(arrangement=>arrangement.path));
+  const onNodes=arranged.size ? {...bound,design:{...bound.design,colors:{...bound.design.colors,text:arrangementPaint(bound.design.colors.primary,bound.design.roles.background,bound.design.roles.text,colorContrast,applyColorTransform).text.hex}}} : undefined;
   return bound.geometry.items.map(item => {
-    const itemBound=item.emphasis&&onSurface ? onSurface : bound;
+    const itemBound=item.emphasis&&onSurface ? onSurface : arranged.has(item.path) ? onNodes : bound;
     // LH-131: a featured before and after pair's arrow (emphasis.arrow), a primary block arrow as LH-07's flows draw theirs, with the surface.
     const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})
       +(emphasis.arrow?tag('path',{...HIDDEN,d:blockArrowPath(emphasis.arrow.box,emphasis.arrow.direction),fill:bound.design.colors.primary,...(options.trace?{'data-opf-emphasis-arrow':emphasis.path}:{})}):'')) : '';
@@ -1156,12 +1184,14 @@ function listEntriesSvg(item, fit, bound, options) {
   const children=[];
   // design.listBullet=image: core attaches the icon logo as item.bulletImage and its box (entry.bulletBox: 0.65 em, as PowerPoint draws a:buBlip). An icon that cannot be drawn keeps the glyph marker.
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
+  const arranged=bound.geometry.arrangements?.some(arrangement=>arrangement.path===item.path)===true;
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
     else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
-    const config={path:entry.textPath,align:'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
+    // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
+    const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
   }

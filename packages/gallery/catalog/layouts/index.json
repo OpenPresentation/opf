@@ -2,8 +2,8 @@
   "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
   "kind": "layouts",
   "version": "1",
-  "description": "The built-in slide layouts of OPF 0.19: 30 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "3088d279507293180760a1b2149d2a256eb8111376624ac11e553a008f36b755",
+  "description": "The built-in slide layouts of OPF 0.19: 32 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "43ba1aa1ff5f4454cf9a31874bf482309cf0a885680a64de613af46be65a14df",
   "records": [
     {
       "id": "cover",
@@ -116,6 +116,20 @@
       "summary": "Questions with their answers.",
       "group": "Groups of items",
       "file": "faq.json"
+    },
+    {
+      "id": "pyramid",
+      "name": "Pyramid",
+      "summary": "Levels that build on each other, as a pyramid, the first at the top.",
+      "group": "Groups of items",
+      "file": "pyramid.json"
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "summary": "Up to four parts of a whole, as the quadrants of a square beside the title.",
+      "group": "Groups of items",
+      "file": "matrix.json"
     },
     {
       "id": "metrics",

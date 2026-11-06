@@ -417,6 +417,14 @@
           ],
           "description": "The region lists the steps of a sequence (LH-07). 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its number and draws as a heading over its description) on one connector line through the badge centers; a lone list's entries are the steps, each beside its badge on a connector down the badge column; a lone list of 3 to 6 entries of one or two words is a flow of chips joined by arrows. 'numbered' (an agenda, ordered by nature): every list of two or more entries of one level draws its entries beside badges, numbered or not; an unnumbered list is counted in arabic, continuing from the region's previous unnumbered list, as drawing only (the document keeps no numbering). Steps keep the text size they have without the badges: a slide whose blocks would get smaller draws them as before. Absent: the region's content draws as any other."
         },
+        "arrangement": {
+          "type": "string",
+          "enum": [
+            "pyramid",
+            "matrix"
+          ],
+          "description": "SH-09: the region draws its lone list as a diagram, PowerPoint's Basic Pyramid or Basic Matrix geometry, which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it (docs/smartart.md). 'pyramid': 1 to 8 entries as stacked levels, the first at the apex, each level H/n tall and W·i/n wide in a frame at most 2.5 times as wide as tall. 'matrix': 1 to 4 entries as the quadrants of a square (top left, top right, bottom left, bottom right) over a diamond; an empty quadrant is still drawn. Every node is filled in the primary color with a 1.5 pt outline in the background color, the matrix's diamond is the primary lightened 80%, and the text of every node is centered at one size, the list's own size or larger (up to 1.5 times), never smaller. A list with nested entries, descriptions, icons or numbering, more entries than the arrangement holds, or text that does not fit its nodes at the list's own size draws as a list. Absent: the region's content draws as any other."
+        },
         "anchor": {
           "type": "string",
           "enum": [

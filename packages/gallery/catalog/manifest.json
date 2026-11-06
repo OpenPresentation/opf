@@ -64,11 +64,11 @@
     },
     "layouts": {
       "mode": "mirror",
-      "records": 30,
-      "contentSha256": "3088d279507293180760a1b2149d2a256eb8111376624ac11e553a008f36b755",
+      "records": 32,
+      "contentSha256": "43ba1aa1ff5f4454cf9a31874bf482309cf0a885680a64de613af46be65a14df",
       "gallery": {
-        "records": 30,
-        "contentSha256": "3088d279507293180760a1b2149d2a256eb8111376624ac11e553a008f36b755"
+        "records": 32,
+        "contentSha256": "43ba1aa1ff5f4454cf9a31874bf482309cf0a885680a64de613af46be65a14df"
       }
     },
     "narratives": {

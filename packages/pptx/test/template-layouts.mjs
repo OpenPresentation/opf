@@ -19,7 +19,7 @@ const ordered = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '',
 const FIXED = {seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-10-10'};
 // The 29 built-in layouts of the default Gallery catalog.
 const templates = defaultCatalog.layouts;
-assert.equal(Object.keys(templates).length, 30);
+assert.equal(Object.keys(templates).length, 32);
 // A registered catalog of the 29, as gallery 2.0.0 will be: bare ids resolve to it first.
 const gallery2 = Object.freeze({source: 'pkg:@openpresentation/gallery@2', layouts: templates});
 const png = async name => `data:image/png;base64,${Buffer.from(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url))).toString('base64')}`;
@@ -471,4 +471,4 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   checked++;
 }
 
-console.log(`Template layouts passed (${checked}): 30 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
+console.log(`Template layouts passed (${checked}): 32 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
