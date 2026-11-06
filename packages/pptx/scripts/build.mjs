@@ -45,6 +45,8 @@ await copyFile(new URL('src/step-badges.js', root), new URL('step-badges.js', di
 await copyFile(new URL('src/icons.js', root), new URL('icons.js', dist));
 await copyFile(new URL('src/title-rule.js', root), new URL('title-rule.js', dist));
 await copyFile(new URL('src/shape-blocks.js', root), new URL('shape-blocks.js', dist));
+await copyFile(new URL('src/shape-import.js', root), new URL('shape-import.js', dist));
+await copyFile(new URL('src/shape-restore.js', root), new URL('shape-restore.js', dist));
 await copyFile(new URL('src/connectors.js', root), new URL('connectors.js', dist));
 await copyFile(new URL('src/chart-scheme-colors.js', root), new URL('chart-scheme-colors.js', dist));
 await copyFile(new URL('src/chart-order.js', root), new URL('chart-order.js', dist));

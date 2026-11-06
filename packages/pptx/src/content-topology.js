@@ -259,7 +259,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
   let nodes = 0;
   const fail = reason => { throw new TopologyError(reason); };
   const leafBox = path => {
-    for (const field of ROOT_PAYLOAD_FIELDS) {
+    // SH-05: a shape block's one item is its `shape` or its custom `path` (its text is inside it).
+    for (const field of [...ROOT_PAYLOAD_FIELDS, 'shape', 'path']) {
       const box = boxes.get(`${path}.${field}`);
       if (box) return [box.x, box.y, box.width, box.height].map(round1);
     }
