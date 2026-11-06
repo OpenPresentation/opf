@@ -187,7 +187,7 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 }
 
 /** The options of an export output. A deck output takes none of them. */
-const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as", "date", "fonts", "assetDir"] as const;
+const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "diagrams", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as", "date", "fonts", "assetDir"] as const;
 const given = (value: unknown) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0);
 
 /** Which option applies to which format (`opf convert`'s rule), with each option named as the command's flag when `flags` is set. */
@@ -206,8 +206,8 @@ function checkApplicable(source: Source, target: Target, options: ConvertOptions
 	}
 	const format = target.format;
 	if (given(options.raster) && format !== "pdf") throw invalid(`${name("raster")} applies to pdf output.`);
-	const pptxOnly = (["charts", "provenance", "images", "bodyText", "slideNumbers", "typefaces"] as const).filter((key) => options[key] !== undefined);
-	if ((pptxOnly.length || options.as !== undefined) && format !== "pptx") throw invalid(`${names("charts", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as")} apply to pptx output.`);
+	const pptxOnly = (["charts", "diagrams", "provenance", "images", "bodyText", "slideNumbers", "typefaces"] as const).filter((key) => options[key] !== undefined);
+	if ((pptxOnly.length || options.as !== undefined) && format !== "pptx") throw invalid(`${names("charts", "diagrams", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as")} apply to pptx output.`);
 	// LH-20: a pictures-only PPTX has no text, fonts, charts or source records.
 	if (options.as === "images" && pptxOnly.length) throw invalid(`${names(...pptxOnly)} ${pptxOnly.length === 1 ? "does" : "do"} not apply to ${flags ? "--as images" : 'as: "images"'}, where each slide is one picture.`);
 	if (options.scale !== undefined && format !== "png" && format !== "pdf" && !(format === "pptx" && options.as === "images")) throw invalid(`${name("scale")} applies to png output (and raster pdf, and pptx ${flags ? "--as images" : 'with as: "images"'}).`);

@@ -45,6 +45,9 @@ await copyFile(new URL('src/step-badges.js', root), new URL('step-badges.js', di
 await copyFile(new URL('src/icons.js', root), new URL('icons.js', dist));
 await copyFile(new URL('src/title-rule.js', root), new URL('title-rule.js', dist));
 await copyFile(new URL('src/shape-blocks.js', root), new URL('shape-blocks.js', dist));
+await copyFile(new URL('src/shape-import.js', root), new URL('shape-import.js', dist));
+await copyFile(new URL('src/shape-restore.js', root), new URL('shape-restore.js', dist));
+await copyFile(new URL('src/connectors.js', root), new URL('connectors.js', dist));
 await copyFile(new URL('src/chart-scheme-colors.js', root), new URL('chart-scheme-colors.js', dist));
 await copyFile(new URL('src/chart-order.js', root), new URL('chart-order.js', dist));
 await copyFile(new URL('src/chart-fallback.js', root), new URL('chart-fallback.js', dist));
@@ -57,6 +60,7 @@ await copyFile(new URL('src/watermark-provenance.js', root), new URL('watermark-
 await copyFile(new URL('src/logo-provenance.js', root), new URL('logo-provenance.js', dist));
 await copyFile(new URL('src/svg-image.js', root), new URL('svg-image.js', dist));
 await copyFile(new URL('src/diagram-provenance.js', root), new URL('diagram-provenance.js', dist));
+await copyFile(new URL('src/diagram-shapes.js', root), new URL('diagram-shapes.js', dist));
 await copyFile(new URL('src/master-themes.js', root), new URL('master-themes.js', dist));
 await copyFile(new URL('src/vendor-compat.js', root), new URL('vendor-compat.js', dist));
 for (const name of ['image-fallback-node.js', 'image-fallback-browser.js']) {

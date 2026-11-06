@@ -2455,6 +2455,244 @@
         }
       }
     },
+    "OverlayShape": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'.",
+          "examples": ["badge-new", "callout-1"]
+        },
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'."
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Top edge as a fraction of the slide height, from the top edge."
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Width as a fraction of the slide width."
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Height as a fraction of the slide height."
+        },
+        "at": {
+          "$ref": "#/$defs/OverlayAnchor"
+        },
+        "layer": {
+          "type": "string",
+          "enum": ["front", "back"],
+          "description": "Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture (a panel or band behind a block). Array order stacks the shapes within each layer. Connectors are always in front."
+        },
+        "connector": {
+          "$ref": "#/$defs/Connector",
+          "description": "Makes the entry a connector: what it joins and how it runs."
+        },
+        "shape": {
+          "$ref": "#/$defs/ShapePreset",
+          "description": "The preset geometry, as on a shape block. Default rect."
+        },
+        "path": {
+          "$ref": "#/$defs/ShapePath",
+          "description": "Custom geometry instead of a preset (a:custGeom), as on a shape block."
+        },
+        "adjust": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+          "additionalProperties": { "type": "number" },
+          "description": "The preset's adjust handles (a:avLst) in OPF units, as on a shape block. On a connector, the adjust values of its connector preset (adj1 of an elbow or a curve between sites on one axis, a fraction of the frame's width), which replace the automatic route's, so a route made in PowerPoint is kept exactly.",
+          "examples": [{ "adj": 0.25 }]
+        },
+        "fill": {
+          "$ref": "#/$defs/ShapeFill",
+          "description": "'none', a ColorRef, { gradient } or { pattern }. Default the style's fill."
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "The fill's opacity (a:alpha). Default 1."
+        },
+        "stroke": {
+          "$ref": "#/$defs/Stroke",
+          "description": "A shape's line along its outline (default the style's line), or a connector's line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'; default a 2-pixel line in the slide's text color with no arrowheads)."
+        },
+        "style": {
+          "type": "string",
+          "enum": ["none", "subtle", "moderate", "intense"],
+          "description": "The theme shape style, as on a shape block. Default moderate."
+        },
+        "shadow": {
+          "$ref": "#/$defs/Shadow",
+          "description": "Outer shadow."
+        },
+        "innerShadow": {
+          "$ref": "#/$defs/InnerShadow",
+          "description": "Inner shadow."
+        },
+        "glow": {
+          "$ref": "#/$defs/Glow",
+          "description": "Glow."
+        },
+        "softEdge": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Soft edges (a:softEdge), radius in reference pixels at a 720-pixel short edge."
+        },
+        "reflection": {
+          "$ref": "#/$defs/Reflection",
+          "description": "Reflection."
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge."
+        },
+        "rotate": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360,
+          "description": "Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Its connection sites turn with it."
+        },
+        "flip": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "both"],
+          "description": "Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored."
+        },
+        "text": {
+          "$ref": "#/$defs/ContentPayload/properties/text",
+          "description": "Text inside the shape's text rectangle (a string or TextRun[]), fitted by OPF's measured fonts from the body size down to the readability floor and never below it."
+        },
+        "anchor": {
+          "type": "string",
+          "enum": ["top", "middle", "bottom"],
+          "description": "Vertical placement of the text in the text rectangle (a:bodyPr anchor). Default middle."
+        },
+        "padding": {
+          "$ref": "#/$defs/ShapePadding",
+          "description": "Text insets inside the text rectangle."
+        },
+        "textDirection": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "vertical270", "stacked"],
+          "description": "Text direction (a:bodyPr vert). Default horizontal."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alternative text (p:cNvPr descr). Without it the shape's text is what is read."
+        },
+        "decorative": {
+          "type": "boolean",
+          "description": "Mark the shape decorative (a16:decorative): screen readers skip it."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Keep the shape in the file but do not draw it (p:cNvPr hidden). A link on a hidden shape is a validation finding (opf/shape-link-hidden)."
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^(https?://|mailto:|tel:)\\S+$",
+          "description": "URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
+          "examples": ["https://acme.com/pricing"]
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips."
+        }
+      },
+      "examples": [
+        { "shape": "wedgeRectCallout", "text": "New this quarter", "x": 0.62, "y": 0.12, "width": 0.25, "height": 0.12, "style": "subtle" },
+        { "id": "badge", "shape": "ellipse", "text": "3", "at": { "block": "team-photo", "edge": "top", "offset": -12 } },
+        { "connector": { "from": "plan", "to": "build", "route": "elbow" }, "stroke": { "width": 2, "end": { "type": "triangle" } } }
+      ]
+    },
+    "OverlayAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["block", "edge"],
+      "description": "Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.",
+      "properties": {
+        "block": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of a block on this slide (a content payload or a group, at any depth)."
+        },
+        "edge": {
+          "type": "string",
+          "enum": ["top", "bottom", "start", "end", "center"],
+          "description": "The edge of the block the shape sits outside of, or its center."
+        },
+        "offset": {
+          "type": "number",
+          "minimum": -720,
+          "maximum": 720,
+          "description": "The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'."
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1280,
+          "description": "The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side."
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1280,
+          "description": "The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width."
+        }
+      },
+      "examples": [{ "block": "team-photo", "edge": "top", "offset": 8 }, { "block": "revenue-chart", "edge": "end", "width": 160, "height": 64 }]
+    },
+    "Connector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "description": "What a connector joins and how it runs. Each end attaches to a connection site of its shape: a preset's own sites (turned and flipped with the shape), or the four edge midpoints of a block that is not a shape (DrawingML's rect: 0 top, 1 left, 2 bottom, 3 right). Without 'fromSite' and 'toSite' core chooses the pair of sites that face each other with the shortest route.",
+      "properties": {
+        "from": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of the block or overlay shape on this slide the connector starts at. An id that is not on the slide is a finding (opf/connector-end-missing) and the connector is not drawn."
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of the block or overlay shape on this slide the connector ends at."
+        },
+        "route": {
+          "type": "string",
+          "enum": ["straight", "elbow", "curved"],
+          "description": "straight is one segment (straightConnector1); elbow runs horizontally and vertically (bentConnector3, bentConnector2 between perpendicular sites); curved is PowerPoint's curved connector (curvedConnector3, curvedConnector2 between perpendicular sites). Default straight."
+        },
+        "fromSite": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The connection site index at 'from' (DrawingML's cxn idx), instead of the automatic choice. An index the shape does not have is a validation error."
+        },
+        "toSite": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The connection site index at 'to', instead of the automatic choice."
+        }
+      },
+      "examples": [{ "from": "plan", "to": "build", "route": "elbow" }, { "from": "a", "to": "b", "fromSite": 3, "toSite": 1 }]
+    },
     "Slide": {
       "type": "object",
       "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.",
@@ -2600,6 +2838,15 @@
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
           "description": "Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks."
+        },
+        "shapes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/OverlayShape" },
+          "description": "SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overlay shapes; any other entry is an overlay shape placed by x, y, width and height (fractions of the slide) or at (against a block). See docs/shapes.md.",
+          "examples": [[
+            { "id": "note", "shape": "wedgeRectCallout", "text": "Launch", "x": 0.7, "y": 0.1, "width": 0.2, "height": 0.1 },
+            { "connector": { "from": "plan", "to": "ship", "route": "elbow" }, "stroke": { "end": { "type": "triangle" } } }
+          ]]
         },
         "design": {
           "$ref": "#/$defs/SlideDesign",

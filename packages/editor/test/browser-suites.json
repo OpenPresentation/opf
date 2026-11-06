@@ -125,6 +125,14 @@
         {
           "id": "playground:icon-picker-browser",
           "command": "node test/icon-picker-browser.mjs"
+        },
+        {
+          "id": "playground:shape-editing-browser",
+          "command": "node test/shape-editing-browser.mjs"
+        },
+        {
+          "id": "playground:shape-overlays-browser",
+          "command": "node test/shape-overlays-browser.mjs"
         }
       ]
     },

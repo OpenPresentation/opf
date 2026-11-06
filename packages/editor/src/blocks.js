@@ -141,7 +141,7 @@ export function prepareBlockRemove(presentation,path) {
 }
 
 /** Small, schema-valid starting points. Media requires an explicit source. */
-export function createContentBlock(kind,{source}={}) {
+export function createContentBlock(kind,{source,shape}={}) {
   const presets={
     text:{text:'Add your text'},
     list:{items:['First point','Second point']},
@@ -154,6 +154,8 @@ export function createContentBlock(kind,{source}={}) {
     timeline:{timeline:[{when:'Now',what:'First milestone'},{when:'Next',what:'Second milestone'}]},
     group:{composition:{mode:'column'},blocks:[{text:'First point'},{text:'Second point'}]}
   };
+  // SH-06: a shape block with the preset chosen (a rectangle without one); text and styling are set afterwards.
+  if(kind==='shape')return {shape:typeof shape==='string'&&shape?shape:'rect'};
   if(kind==='image'||kind==='video'){
     if(typeof source!=='string'||!source.trim())throw new TypeError('Choose a media file or enter its source.');
     return {[kind]:source};

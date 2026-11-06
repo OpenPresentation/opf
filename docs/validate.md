@@ -237,6 +237,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
 | [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
 | [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
+| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape is attached to a block that is not on the slide. |
+| [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
@@ -422,6 +424,22 @@ Default severity: **warning**. Cost: structure. An adjust value is outside the r
 Default severity: **warning**. Cost: structure. A hidden shape carries a link.
 
 **Why.** A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-anchor-missing`
+
+Default severity: **error**. Cost: structure. An overlay shape is attached to a block that is not on the slide.
+
+**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/connector-end-missing`
+
+Default severity: **error**. Cost: structure. A connector end names no block or overlay shape on the slide.
+
+**Why.** A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
