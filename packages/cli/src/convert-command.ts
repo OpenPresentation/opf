@@ -64,10 +64,10 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote
                                                   re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
-                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": static (the default)
-                                                  writes the number as fixed text, so Keynote shows the words too; live keeps the
-                                                  slide-number field, which Keynote shows as the digit alone. A bare
-                                                  {{slide.number}} stays a live field either way
+                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": live (the default)
+                                                  keeps the slide-number field, so PowerPoint renumbers it, but Keynote shows it
+                                                  as the digit alone; static writes the number as fixed text, so Keynote shows
+                                                  the words too. A bare {{slide.number}} stays a live field either way
                    --typefaces <selected|safe>    selected (the default): the families the deck chose; a viewer without one
                                                   substitutes another font (typeface-not-office-safe names them). safe: write
                                                   each Latin text family as Arial, Georgia, Courier New or Times New Roman,

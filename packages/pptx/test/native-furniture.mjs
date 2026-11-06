@@ -116,7 +116,8 @@ for (const measured of [false, true]) {
   const layout = text(entries, 'ppt/slideLayouts/slideLayout1.xml');
   assert.deepEqual(shapesOf(layout).map(phOf), ['type="dt" sz="half" idx="10"', 'type="ftr" sz="quarter" idx="11"', 'type="sldNum" sz="quarter" idx="12"']);
   assert.match(layout, /<\/p:clrMapOvr><p:hf sldNum="1" hdr="0" ftr="1" dt="1"\/><\/p:sldLayout>/);
-  assert.match(layout, /<a:fld [^>]*type="datetimeFigureOut">/);
+  // RR-102: the layout date is a field of the deck's date pattern (M/d/yyyy here), so a date turned on in the dialog is OPF's date.
+  assert.match(layout, /<a:fld [^>]*type="datetime1">/);
   assert.match(layout, /<a:fld [^>]*type="slidenum"><a:rPr lang="en-US"\/><a:t>‹#›<\/a:t>/);
   // Master: the same three (idx 2, 3, 4), at the first slide's boxes with its text style as the default, and the flags before txStyles.
   const master = text(entries, 'ppt/slideMasters/slideMaster1.xml');
@@ -124,13 +125,22 @@ for (const measured of [false, true]) {
   assert.match(master, /<\/p:sldLayoutIdLst><p:hf sldNum="1" hdr="0" ftr="1" dt="1"\/><p:txStyles>/);
   const slidePlaceholders = placeholderShapes(text(entries, slidePath(2)));
   for (const [at, shape] of placeholderShapes(master).entries()) {
-    assert.deepEqual(xfrmOf(shape), xfrmOf(slidePlaceholders[at]), 'The master placeholder sits where the first native footer sits.');
+    // RR-102: where core draws the part in the deck's footer, on one baseline; the slide's own number box follows its digits' ink.
+    const own = xfrmOf(slidePlaceholders[at]), box = xfrmOf(shape);
+    assert.deepEqual({y: box.y, cx: box.cx, cy: box.cy}, {y: own.y, cx: own.cx, cy: own.cy}, 'The master placeholder sits where the first native footer sits.');
+    assert.ok(Math.abs(box.x - own.x) <= 2 * 9525, `The master ${phType(shape)} starts within 2 px of the slide's.`);
     assert.match(shape, new RegExp(`<a:defRPr sz="${slidePlaceholders[at].match(/\bsz="(\d+)"/)[1]}">`));
   }
-  // Notes master: PowerPoint's placeholders stay; the flags say the notes pages carry a page number only.
+  // Notes master (RR-102): PowerPoint's placeholders stay; the page number and the deck footer's text and date are on.
   const notes = text(entries, 'ppt/notesMasters/notesMaster1.xml');
-  assert.match(notes, /<p:clrMap [^>]*\/><p:hf hdr="0" ftr="0" dt="0"\/><p:notesStyle>/);
+  assert.match(notes, /<p:clrMap [^>]*\/><p:hf hdr="0" ftr="1" dt="1"\/><p:notesStyle>/);
   assert.equal(shapesOf(notes).map(phType).join(), 'hdr,dt,sldImg,body,ftr,sldNum');
+  assert.deepEqual(shapesOf(notes).filter(shape => /type="(?:dt|ftr)"/.test(shape)).map(runsOf), ['[datetime1:9/10/2026]', 'Confidential']);
+  for (const path of Object.keys(entries).filter(path => /^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(path))) {
+    const page = shapesOf(text(entries, path)).filter(shape => /type="(?:dt|ftr)"/.test(shape));
+    assert.deepEqual(page.map(phOf), ['type="dt" idx="11"', 'type="ftr" sz="quarter" idx="12"'], 'Every notes page shows the footer text and date.');
+    assert.deepEqual(page.map(runsOf), ['[datetime1:9/10/2026]', 'Confidential']);
+  }
   // The presentation has no header/footer setting of its own (docs/native-header-footer.md): nothing is invented.
   assert.doesNotMatch(text(entries, 'ppt/presentation.xml'), /showSpecialPlsOnTitleSld/);
   // Every part parses, and each slide placeholder has its layout counterpart.
@@ -207,9 +217,27 @@ for (const measured of [false, true]) {
   // The placeholders carry the deck's language like every other part: no stray en-US in the master or layout.
   for (const language of ['en-GB', 'ja-JP']) for (const footer of [undefined, {left: {date: true}, right: {text: '{{slide.number}}'}}]) {
     const {entries} = await exportDeck({language, design: {fontScheme: 'roboto', ...(footer ? {footer} : {})}, slides: [{title: 'A', text: 'Body'}]});
-    const tags = new Set(['ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/slides/slide1.xml'].flatMap(path => [...text(entries, path).matchAll(/\blang="([^"]+)"/g)].map(match => match[1])));
+    // RR-102: except a date field whose pattern (M/d/yyyy) no field of the deck's language shows: it is English (United States).
+    const parts = ['ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/slides/slide1.xml'].map(path => text(entries, path));
+    const dates = parts.flatMap(xml => [...xml.matchAll(/<a:fld [^>]*type="datetime\d+"><a:rPr ([^>]*?)\/?>/g)].map(match => match[1].match(/lang="[^"]*"(?: altLang="[^"]*")?/)[0]));
+    assert.deepEqual(new Set(dates), new Set(footer ? ['lang="en-US" altLang="en-US"'] : []), `${language}: the date fields are en-US`);
+    const tags = new Set(parts.flatMap(xml => [...xml.replace(/<a:fld [^>]*type="datetime\d+">[\s\S]*?<\/a:fld>/g, '').matchAll(/\blang="([^"]+)"/g)].map(match => match[1])));
     assert.deepEqual([...tags], [language === 'ja-JP' ? 'ja-JP' : language], `${language} ${footer ? 'with' : 'without'} a footer`);
   }
+  // RR-102: a pattern the deck's language has a field for is that language's field (Insert > Header & Footer shows its Language).
+  for (const [language, dateFormat, type, lang] of [['en-GB', 'dd/MM/yyyy', 'datetime1', 'en-GB'], ['en-GB', 'd MMMM, yyyy', 'datetime3', 'en-GB'], ['de-DE', 'dd.MM.yyyy', 'datetime1', 'de-DE'],
+    ['ja-JP', 'yyyy年M月d日', 'datetime4', 'ja-JP'], ['de-DE', 'MMMM d, yyyy', 'datetime4', 'en-US" altLang="en-US'], ['ar-SA', 'M/d/yyyy', 'datetime1', 'en-US" altLang="en-US']]) {
+    const {bytes, entries, issues} = await exportDeck({language, design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat}}}, slides: [{title: 'A', text: 'Body'}]});
+    assert.deepEqual(issues.filter(issue => issue.code === 'furniture-date-fixed'), [], `${language} ${dateFormat} is a live field`);
+    for (const path of [slidePath(1), 'ppt/slideMasters/slideMaster1.xml', 'ppt/slideLayouts/slideLayout1.xml', 'ppt/notesMasters/notesMaster1.xml']) {
+      assert.match(text(entries, path), new RegExp(`<a:fld [^>]*type="${type}"><a:rPr lang="${lang}"`), `${language} ${dateFormat} in ${path}`);
+    }
+    const imported = (await read(bytes)).imported;
+    assert.deepEqual(imported.design.footer.left, {date: true, dateFormat}, `${language} ${dateFormat} returns`);
+  }
+  // A pattern no field shows, in the deck's language or en-US, stays fixed text and says so.
+  const fixed = await exportDeck({language: 'en-GB', design: {fontScheme: 'roboto', footer: {left: {date: true, dateFormat: 'MMM d, yyyy'}}}, slides: [{title: 'A', text: 'Body'}]});
+  assert.match(fixed.issues.find(issue => issue.code === 'furniture-date-fixed')?.message ?? '', /not a PowerPoint date field format in en-GB or en-US/);
   // The dialog on such a deck: placeholders it adds have no xfrm and inherit the master's, which names the zones.
   const bare = await exportDeck({design: {fontScheme: 'roboto'}, slides: [{title: 'A', text: 'Body'}, {title: 'B', text: 'Body'}]});
   const ph = (type, idx, sz, body) => '<p:sp><p:nvSpPr><p:cNvPr id="90" name="' + type + '"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="' + type + '" sz="' + sz + '" idx="' + idx + '"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/><a:p>' + body + '</a:p></p:txBody></p:sp>';

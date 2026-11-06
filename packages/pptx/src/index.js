@@ -39,7 +39,7 @@ import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
-import {attachFurnitureFields, furniturePartFields, isBareSlideNumber, lineFields, nativeFieldType} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {liftMasterFurniture} from './master-furniture.js';
 import {gallery} from '@openpresentation/gallery';
@@ -367,12 +367,14 @@ export async function toPptx(input, options = {}) {
   context.furnitureManifests = new Map();
   context.nativeFurniture = new Map();
   context.nativeFurnitureBands = new Map();
+  context.nativeParts = new Map();
   context.footerText = options.footerText ?? 'native';
   // RR-72: each slide's furniture parts and the object names of their shapes, for the slide master and layouts.
   context.furnitureParts = [];
   // RR-81: the 0.19 template each slide uses (its native slide layout) and the objects bound to a region placeholder.
   context.templateSlides = [];
-  context.staticSlideNumbers = options.slideNumberFields !== 'live';
+  // RR-102: 'live' is the default (the Slide number box is checked and PowerPoint renumbers); 'static' is for Keynote targets (RR-91).
+  context.staticSlideNumbers = options.slideNumberFields === 'static';
   context.automaticSlides = [];
   context.placeholderBindings = new Map();
   context.hostDate = options.date;
@@ -414,6 +416,8 @@ export async function toPptx(input, options = {}) {
     report: diagnostic => options.onDiagnostic?.(diagnostic)
   });
   context.scriptFonts = planScriptFonts(presentation, options.onDiagnostic, {catalogs: options.catalogs});
+  // RR-102: the deck language every run is written in (lang); a date field that shows English words says en-US instead.
+  context.deckLang = context.scriptFonts?.lang ?? 'en-US';
   // Slide section labels become PowerPoint's native section list (src/sections.js).
   // A label is an XML attribute: the characters text runs reject are rejected here too.
   context.sections = presentation.slides.map((slide, index) => {
@@ -3859,8 +3863,110 @@ function zoneBands(composeOptions) {
   return zone => (bands ??= new Map((defaultFooterParts(composeOptions) ?? []).map(part => [part.zone, {x: part.box.x, width: part.box.width}]))).get(zone);
 }
 
+// RR-102: where Insert > Header & Footer puts a date, footer text or slide number a slide does not have yet: the slide master's
+// placeholders (the layouts inherit them). Each sits where core draws that part if the author added it to the deck's footer (the
+// deck's own, else the first slide's): a type the footer already has is composed where it is; a missing one is added to the first
+// empty zone in PowerPoint's order for it, else (a date) to the first zone's row that takes it clear of what the slides draw, or
+// one gap after the start zone's words, so turning it on never covers a part.
+// All three share one baseline (the deck's own date, footer text or number, in that order) and take the slide shapes' box from
+// core's line placement; a part in a row is as wide as its words and does not wrap (`noWrap`), and a text in a zone with a picture spans the
+// zone (RR-71). Returns {geometry: Map<'dt'|'ftr'|'sldNum', {x, y, cx, cy, algn, noWrap, sz}> in EMU, present: the deck footer's own
+// native parts by type}, or undefined when core cannot compose it.
+const ADD_ZONES = {dt: ['left', 'center', 'right'], ftr: ['center', 'left', 'right'], sldNum: ['right', 'center', 'left']};
+// The widest digits of the year, for the width of a date placed beside other parts.
+const SAMPLE_DATE = '2026-12-28';
+const EMU_PER_PIXEL = 9525;
+const plainObject = value => value && typeof value === 'object' && !Array.isArray(value) ? value : undefined;
+// The footer a slide added in PowerPoint would have: the deck's, else the first slide's own.
+const deckFooter = presentation => plainObject(presentation?.design?.footer) ?? (Array.isArray(presentation?.slides) ? presentation.slides : []).map(slide => plainObject(slide?.design?.footer)).find(Boolean) ?? {};
+// The date pattern of the deck footer's date (the default when it has none or a literal one).
+const deckDateFormat = footer => Object.values(footer).map(plainObject).find(zone => zone && (zone.date === true || typeof zone.date === 'string') && typeof zone.dateFormat === 'string')?.dateFormat ?? DEFAULT_DATE_FORMAT;
+function masterFooterGeometry(composeOptions, {staticNumbers, dateFormat}) {
+  const presentation = composeOptions?.presentation;
+  if (!presentation) return undefined;
+  const base = deckFooter(presentation);
+  const footer = Object.fromEntries(['left', 'center', 'right'].filter(zone => plainObject(base[zone])).map(zone => [zone, {...base[zone]}]));
+  const filled = item => item !== undefined && (item.image !== undefined || (typeof item.text === 'string' ? item.text.trim() !== '' : item.text !== undefined) || item.socials === true || item.date === true || typeof item.date === 'string');
+  // Text widths matter only beside other parts: a deck without a footer (every part alone in its zone) keeps the host's measurer,
+  // and its call count, out of this.
+  const measurement = Object.keys(footer).length ? composeOptions.textMeasurement : undefined;
+  const compose = value => (composeSlide({design: {footer: value}}, {...composeOptions, textMeasurement: measurement}).furniture?.parts ?? []).filter(part => part.kind === 'footer');
+  const typed = parts => new Map([...nativeFurnitureParts({parts}, {staticNumbers})].map(([index, ph]) => [ph, parts[index]]));
+  try {
+    // The deck footer as drawn (a type it has sits there), then with the missing types added (where they would go).
+    const drawnParts = compose(footer), present = typed(drawnParts);
+    // What a part covers across the slide: its first line's ink (else its words), a picture its box.
+    const span = part => {
+      if (part.type === 'image') return [part.box.x, part.box.x + part.box.width];
+      const placed = part.fit.placement?.lines?.[0];
+      if (placed?.outline) return [placed.outline.x, placed.outline.x + placed.outline.width];
+      if (placed) return [placed.x, placed.x + placed.width];
+      const width = part.fit.sourceLines?.[0]?.width ?? part.box.width, factor = part.alignment === 'right' ? 1 : part.alignment === 'center' ? .5 : 0;
+      const x = part.box.x + (part.box.width - width) * factor;
+      return [x, x + width];
+    };
+    const clear = ([start, end]) => drawnParts.every(other => { const [left, right] = span(other); return end <= left || start >= right; });
+    const dateFields = zone => ({...footer[zone], date: SAMPLE_DATE, dateFormat});
+    const datePart = parts => parts.find(part => part.type === 'text' && part.field === 'date');
+    let dateAt;
+    for (const ph of ['dt', 'ftr', 'sldNum']) {
+      if (present.has(ph)) continue;
+      let zone = ADD_ZONES[ph].find(candidate => !filled(footer[candidate]));
+      if (!zone && ph === 'dt') {
+        // Every zone holds a part: the first zone whose row takes the date without it touching what the slides draw. In a narrow
+        // zone (a 4:3 deck) the row would wrap the text beside it instead: the date then follows the start zone's words, one gap
+        // after their ink, where nothing is drawn.
+        const zones = ADD_ZONES.dt.filter(candidate => footer[candidate]?.date === undefined);
+        // A date that would wrap beside the words is still the date part (one line once it has the room after them).
+        const trials = zones.map(candidate => ({zone: candidate, part: datePart(compose({...footer, [candidate]: dateFields(candidate)}))}));
+        const fits = trials.find(trial => trial.part && trial.part.fit.lines.length === 1 && clear(span(trial.part)));
+        zone = fits?.zone ?? zones[0];
+        const first = trials[0]?.part;
+        if (!fits && first) {
+          const start = drawnParts.filter(part => part.zone === first.zone && part.type === 'text');
+          const width = span(first)[1] - span(first)[0], gap = 12 * Math.min(composeOptions.width ?? 1280, composeOptions.height ?? 720) / 720;
+          const x = first.alignment === 'right' ? Math.min(...start.map(part => span(part)[0])) - gap - width : Math.max(...start.map(part => span(part)[1])) + gap;
+          if (start.length && clear([x, x + width])) dateAt = {x: x - (span(first)[0] - first.box.x), width: first.box.width, algn: first.alignment === 'right' ? 'r' : 'l'};
+        }
+      } else if (!zone) zone = ADD_ZONES[ph].find(candidate => footer[candidate]?.text === undefined);
+      if (!zone) continue;
+      footer[zone] = ph === 'dt' ? dateFields(zone) : {...footer[zone], text: ph === 'ftr' ? 'Footer' : '{{slide.number}}'};
+    }
+    const addedParts = compose(footer), added = typed(addedParts);
+    // The box the slide's shape for the part's first line has (addMeasuredPayloadText): core's placed line when outlines are measured.
+    const area = part => {
+      const placed = part.fit.placement?.lines?.[0];
+      if (!placed) return {x: part.box.x, y: part.box.y, width: part.box.width, height: part.fit.lineHeight};
+      const alignment = placed.alignment ?? part.fit.placement.alignment, factor = alignment === 'right' ? 1 : alignment === 'center' ? .5 : 0;
+      return {x: placed.x + placed.width * factor - part.box.width * factor, y: placed.baseline - part.fit.fontSize, width: part.box.width, height: placed.height};
+    };
+    // One baseline: the deck's own date, footer text or number, in that order (a date added beside the footer text then lines up
+    // with it), else the first added one.
+    const reference = ['dt', 'ftr', 'sldNum'].map(ph => present.get(ph)).find(Boolean) ?? ['dt', 'ftr', 'sldNum'].map(ph => added.get(ph)).find(Boolean);
+    const line = reference && area(reference);
+    const geometry = new Map();
+    for (const ph of ['dt', 'ftr', 'sldNum']) {
+      const own = present.has(ph), part = own ? present.get(ph) : added.get(ph) ?? (ph === 'dt' && dateAt ? datePart(addedParts) : undefined);
+      if (!part) continue;
+      const parts = own ? drawnParts : addedParts, row = parts.filter(other => other.zone === part.zone);
+      let box = area(part), noWrap = row.length > 1;
+      if (noWrap && ph !== 'dt' && row.some(other => other.type === 'image')) {
+        // RR-71: beside a logo the footer text is as wide as its words on the slide; the master placeholder spans the zone.
+        const alone = compose({...footer, [part.zone]: {text: part.text}}).find(other => other.zone === part.zone && other.type === 'text');
+        if (alone) { box = {...box, x: area(alone).x, width: area(alone).width}; noWrap = false; }
+      }
+      if (ph === 'dt' && !own && dateAt) { box = {...box, x: dateAt.x, width: dateAt.width}; noWrap = true; }
+      geometry.set(ph, {x: Math.round(box.x * EMU_PER_PIXEL), y: Math.round((line ?? box).y * EMU_PER_PIXEL), cx: Math.round(box.width * EMU_PER_PIXEL), cy: Math.round((line ?? box).height * EMU_PER_PIXEL),
+        algn: ph === 'dt' && !own && dateAt ? dateAt.algn : {left: 'l', center: 'ctr', right: 'r'}[part.alignment] ?? 'l', noWrap, sz: Math.round(part.fit.fontSize * 75)});
+    }
+    return {geometry, present};
+  } catch {
+    return undefined;
+  }
+}
+
 // The slide and deck as given to toPptx (variables not yet resolved), for the furniture manifest's authored header and footer text.
-const authoredFurniture = (context, slideIndex) => ({presentation: context.authored, slide: context.authored?.slides?.[slideIndex]});
+const authoredFurniture =(context, slideIndex) => ({presentation: context.authored, slide: context.authored?.slides?.[slideIndex]});
 
 async function addFurniture(slide,presentation,source,layout,context,options,slideIndex) {
   // RR-72: every slide is listed, a slide without furniture too (it may need a layout that hides the master's).
@@ -3891,15 +3997,17 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
     }else{
       if(!part.fit?.sourceLines)throw new OPFPptxError('missing-furniture-layout','Repeated text requires accepted source lines from core.',{path:part.path});
       // Slide numbers ({{slide.number}}) and current dates become native PowerPoint fields; {{deck.slideCount}},
-      // {{slide.section}} and fixed dates stay fixed text. A current date whose pattern has no
-      // en-US field type is written as its laid-out text.
+      // {{slide.section}} and fixed dates stay fixed text. A current date whose pattern no PowerPoint
+      // date field shows, in the deck's language or en-US, is written as its laid-out text.
       const fields=[];
       for(const field of furniturePartFields(part)){
-        // RR-91 (slideNumberFields, default 'static'): a number with words around it is fixed text; Keynote drops the words next to a live number.
+        // RR-91: with slideNumberFields 'static' a number with words around it is fixed text; Keynote drops the words next to a live number.
         if(field.type==='slideNumber'&&context.staticSlideNumbers&&!isBareSlideNumber(part))continue;
-        const nativeType=nativeFieldType(field);
-        if(nativeType)fields.push({...field,nativeType});
-        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});
+        const nativeType=nativeFieldType(field,context.deckLang);
+        // RR-102: a date field whose words are English (United States), not the deck's language, says so in its own `lang`.
+        const date=field.type==='date'?nativeDateField(field.format??DEFAULT_DATE_FORMAT,context.deckLang):undefined;
+        if(nativeType)fields.push({...field,nativeType,...(date&&date.lang!==context.deckLang?{lang:date.lang}:{})});
+        else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' is not a PowerPoint date field format in ${context.deckLang==='en-US'?'en-US':`${context.deckLang} or en-US`}; the current date is exported as fixed text that PowerPoint will not update.`});
       }
       const liveFields=fields.length?lineFields(part.text,fields,part.fit.sourceLines,part.fit.lines):undefined;
       for(const field of fields.filter(field => !lineFields(part.text,[field],part.fit.sourceLines,part.fit.lines).some(line => line.length))) {
@@ -3914,6 +4022,8 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       if(natives.has(index)){
         const name=`OPF furniture ${slideIndex} part ${index} line 0`;
         context.nativeFurniture.set(name,natives.get(index));
+        // RR-102: the first slide part of each type, which the notes pages repeat.
+        if(!context.nativeParts.has(natives.get(index)))context.nativeParts.set(natives.get(index),part);
         // RR-71: a part in a row with other parts is as wide as its text; the master's placeholder spans the zone.
         const band=context.zoneBand?.(part.zone);
         if(band&&part.box.width<band.width-.5)context.nativeFurnitureBands.set(name,band);
@@ -4940,8 +5050,20 @@ function writeNativeFurnitureMasters(output, context) {
     const geometry = ph && defaultPlaceholderGeometry(part);
     return geometry ? [[ph, geometry]] : [];
   }));
+  // RR-102: the master placeholders where core draws each part in the deck's footer; a deck whose footer has a current date gives
+  // the master and layout date its field (its pattern and language), so a date turned on in the dialog is OPF's (a deck without
+  // one keeps PowerPoint's datetimeFigureOut); the notes pages repeat the slides' footer text and date.
+  const options = context.defaultFooterOptions, dateFormat = deckDateFormat(deckFooter(options?.presentation));
+  const composed = options ? masterFooterGeometry(options, {staticNumbers: context.staticSlideNumbers, dateFormat}) : undefined;
+  // The notes pages repeat what the slides draw: the first slide footer text and date that are PowerPoint placeholders.
+  const footerPart = context.nativeParts.get('ftr'), datePart = context.nativeParts.get('dt');
+  const liveDate = datePart?.fields?.find(entry => entry.type === 'date');
+  const liveField = liveDate ? nativeDateField(liveDate.format ?? DEFAULT_DATE_FORMAT, context.deckLang) : null;
+  const dateField = liveField ? {type: liveField.type, ownLang: liveField.lang !== context.deckLang} : undefined;
+  const notes = {footer: footerPart?.text, date: datePart && (dateField ? {text: datePart.text, ...dateField} : {text: datePart.text})};
   const info = {used: context.nativePlaceholders.used, first: context.nativePlaceholders.first, names: new Set(context.nativeFurniture.keys()), defaults,
-    slideSize: {width: size ? Number(size[1]) : 12192000, height: size ? Number(size[2]) : 6858000}, dateText: nativeDateText(context.hostDate)};
+    geometry: composed?.geometry, dateField, notes,
+    slideSize: {width: size ? Number(size[1]) : 12192000, height: size ? Number(size[2]) : 6858000}, dateText: nativeDateText(context.hostDate, liveField ? dateFormatOfField(liveField.type, liveField.lang) : undefined)};
   const paths = Object.keys(output);
   try {
     // The placeholders carry the deck's language and direction like every other generated part (partScriptFonts is idempotent).
