@@ -1,8 +1,8 @@
 // Verifies internal consistency of spec/** that no single schema validator can
 // check on its own: catalog index <-> on-disk record parity, catalog record
 // schema <-> embedded opf.schema.json $def parity, preview index <-> on-disk
-// HTML parity, index-file $schema URIs, the Aspose.Slides chart-type
-// reduction (one record per Aspose.Slides ChartType), the default-catalog
+// HTML parity, index-file $schema URIs, the chart-type
+// reduction (one record per supported Open XML construct), the default-catalog
 // snapshot's manifest hashes (packages/gallery/catalog/manifest.json), layout-record design
 // hints against the deck's Design, font-scheme languages against the engine's
 // language vocabulary, and the finding schema (the report format every OPF tool shares).
@@ -322,35 +322,13 @@ async function checkIndexSchemaUris() {
   }
 }
 
-// (f) Chart types are reduced to the chart types Aspose.Slides officially
-// supports (FF-22). Every record names its Aspose.Slides ChartType under
-// mappings.renderers["aspose-slides"].chartType, and the records hold exactly one
-// record per ChartType. A combination
-// record (mappings.openxml.composition "mixed", FA-15 combo) names the ChartType
-// its chart starts from plus the series types it switches to (every
-// "*SeriesType" key), all Aspose.Slides members; it owns no ChartType. Source:
-// https://reference.aspose.com/slides/net/aspose.slides.charts/charttype/
-// (see docs/programs/font-fidelity-everywhere/aspose-chart-types.md).
-const ASPOSE_SLIDES_CHART_TYPES = new Set([
-  "ClusteredColumn", "StackedColumn", "PercentsStackedColumn", "ClusteredColumn3D", "StackedColumn3D",
-  "PercentsStackedColumn3D", "Column3D", "ClusteredCylinder", "StackedCylinder", "PercentsStackedCylinder",
-  "Cylinder3D", "ClusteredCone", "StackedCone", "PercentsStackedCone", "Cone3D", "ClusteredPyramid",
-  "StackedPyramid", "PercentsStackedPyramid", "Pyramid3D", "Line", "StackedLine", "PercentsStackedLine",
-  "LineWithMarkers", "StackedLineWithMarkers", "PercentsStackedLineWithMarkers", "Line3D", "Pie", "Pie3D",
-  "PieOfPie", "ExplodedPie", "ExplodedPie3D", "BarOfPie", "PercentsStackedBar", "ClusteredBar3D",
-  "ClusteredBar", "StackedBar", "StackedBar3D", "PercentsStackedBar3D", "ClusteredHorizontalCylinder",
-  "StackedHorizontalCylinder", "PercentsStackedHorizontalCylinder", "ClusteredHorizontalCone",
-  "StackedHorizontalCone", "PercentsStackedHorizontalCone", "ClusteredHorizontalPyramid",
-  "StackedHorizontalPyramid", "PercentsStackedHorizontalPyramid", "Area", "StackedArea", "PercentsStackedArea",
-  "Area3D", "StackedArea3D", "PercentsStackedArea3D", "ScatterWithMarkers", "ScatterWithSmoothLinesAndMarkers",
-  "ScatterWithSmoothLines", "ScatterWithStraightLinesAndMarkers", "ScatterWithStraightLines", "HighLowClose",
-  "OpenHighLowClose", "VolumeHighLowClose", "VolumeOpenHighLowClose", "Surface3D", "WireframeSurface3D",
-  "Contour", "WireframeContour", "Doughnut", "ExplodedDoughnut", "Bubble", "BubbleWith3D", "Radar",
-  "RadarWithMarkers", "FilledRadar", "Treemap", "Sunburst", "Histogram", "ParetoLine", "BoxAndWhisker",
-  "Waterfall", "Funnel", "Map",
-]);
-
-async function checkChartTypesAsposeSupported() {
+// (f) Chart types are reduced to the chart types OPF supports natively in its
+// preview and PPTX export (FF-22). Every record is listed in index.json, maps to
+// an Open XML chart element (or extension), and no two records map to the same
+// construct; a combination record (mappings.openxml.composition "mixed", FA-15
+// combo) is built from several constructs and owns none.
+// See docs/programs/font-fidelity-everywhere/chart-types.md.
+async function checkChartTypesSupported() {
   const dir = path.join(catalogsRoot, "chart-types");
   const index = await readJson(path.join(dir, "index.json"));
   const indexById = new Map((index.records ?? []).map((record) => [record.id, record]));
@@ -363,33 +341,25 @@ async function checkChartTypesAsposeSupported() {
   let combinations = 0;
   for (const [id, record] of records) {
     const where = `[f] chart-types/${id}.json`;
-    const chartType = record.mappings?.renderers?.["aspose-slides"]?.chartType;
-    if (chartType !== undefined && !ASPOSE_SLIDES_CHART_TYPES.has(chartType)) {
-      fail(`${where}: '${chartType}' is not an Aspose.Slides ChartType member`);
-    }
-    const aspose = record.mappings?.renderers?.["aspose-slides"] ?? {};
-    for (const [key, value] of Object.entries(aspose)) {
-      if (/SeriesType$/.test(key) && !ASPOSE_SLIDES_CHART_TYPES.has(value)) fail(`${where}: ${key} '${value}' is not an Aspose.Slides ChartType member`);
-    }
-    if (chartType === "SeriesOfMixedTypes") {
-      fail(`${where}: SeriesOfMixedTypes is read-only in Aspose.Slides and cannot back a chart type`);
-    }
     if (!indexById.has(id)) fail(`${where}: not listed in index.json`);
-    if (chartType === undefined) {
-      fail(`${where}: every chart type must name an Aspose.Slides ChartType in mappings.renderers["aspose-slides"].chartType`);
+    const openxml = record.mappings?.openxml;
+    if (!openxml?.element) {
+      fail(`${where}: every chart type must name its Open XML chart element in mappings.openxml.element`);
       continue;
     }
-    if (record.mappings?.openxml?.composition === "mixed") {
-      if (!Object.keys(aspose).some((key) => /SeriesType$/.test(key))) fail(`${where}: a mixed composition names the series type it switches to (for example lineSeriesType)`);
+    if (openxml.composition === "mixed") {
+      if (!Array.isArray(openxml.series) || openxml.series.length < 2) fail(`${where}: a mixed composition lists the series constructs it combines in mappings.openxml.series`);
       combinations += 1;
       continue;
     }
-    if (owners.has(chartType)) {
-      fail(`${where}: Aspose.Slides ChartType '${chartType}' is already covered by '${owners.get(chartType)}'; remove one of them`);
+    const { notes: _notes, ...construct } = openxml;
+    const key = JSON.stringify(construct);
+    if (owners.has(key)) {
+      fail(`${where}: Open XML construct is already covered by '${owners.get(key)}'; remove one of them`);
     }
-    owners.set(chartType, id);
+    owners.set(key, id);
   }
-  notes.push(`chart-types: ${owners.size} Aspose.Slides-supported chart types, ${combinations} combination${combinations === 1 ? '' : 's'}`);
+  notes.push(`chart-types: ${owners.size} supported chart types, ${combinations} combination${combinations === 1 ? "" : "s"}`);
 }
 
 // (g) packages/gallery/catalog is a pinned snapshot of the default catalog published by
@@ -514,7 +484,7 @@ async function main() {
   await checkNarrativeRecords();
   await checkPreviewIndex();
   await checkIndexSchemaUris();
-  await checkChartTypesAsposeSupported();
+  await checkChartTypesSupported();
   await checkSnapshotManifest();
   await checkNoDeprecation();
   await checkLayoutDesignHints(opfSchema);

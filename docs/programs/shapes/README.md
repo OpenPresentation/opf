@@ -14,7 +14,7 @@ the never-shrink rule. Phase 2 makes diagrams native shapes and opens shapes to 
 ## Principles
 
 - Preset names are DrawingML's own (ECMA-376 `ST_ShapeType`, 187 presets: `rightArrow`, `chevron`, `wedgeRectCallout`,
-  `flowChartDecision`), as OPF already names pattern presets. Aspose's `ShapeType` names are a mapping table in the docs only.
+  `flowChartDecision`), as OPF already names pattern presets.
 - One geometry definition (`spec/reference/preset-geometry.json`, from Apache POI's presetShapeDefinitions) drives both engines.
 - OPF units: widths in reference pixels at a 720-pixel short edge, fractions 0 to 1, degrees. Never EMU or 60000ths in the format.
 - Colors are `ColorRef`s everywhere, extended with `{ "color": <ColorRef>, "lighten": 0..1 }` and `{ "color": <ColorRef>, "darken": 0..1 }`
@@ -24,7 +24,7 @@ the never-shrink rule. Phase 2 makes diagrams native shapes and opens shapes to 
 
 ## Property map
 
-The owner-approved map of every property (OPF key, DrawingML element, Aspose name) is in [docs/shapes.md](../../shapes.md) and
+The owner-approved map of every property (OPF key, DrawingML element) is in [docs/shapes.md](../../shapes.md) and
 [docs/shape-effects.md](../../shape-effects.md); in short:
 
 | Area | OPF | PowerPoint (DrawingML) |

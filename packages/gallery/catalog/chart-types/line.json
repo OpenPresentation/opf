@@ -6,11 +6,6 @@
     "openxml": {
       "element": "lineChart",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Line"
-      }
     }
   },
   "group": "Line",

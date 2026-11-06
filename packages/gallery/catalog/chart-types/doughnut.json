@@ -6,11 +6,6 @@
     "openxml": {
       "element": "doughnutChart",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Doughnut"
-      }
     }
   },
   "group": "Pie",
