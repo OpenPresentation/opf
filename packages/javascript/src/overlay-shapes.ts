@@ -477,6 +477,8 @@ function overlayBox(host: Rec, context: { width: number; height: number; scale: 
 
 // --- validation -----------------------------------------------------------------------------------------------------
 
+/** The keys of the overlay vocabulary that only an overlay shape takes (a connector takes id, connector, stroke, alt, decorative, hidden and extensions). */
+const SHAPE_ONLY_KEYS: ReadonlySet<string> = new Set(['x', 'y', 'width', 'height', 'at', 'shape', 'path', 'adjust', 'fill', 'opacity', 'style', 'shadow', 'innerShadow', 'glow', 'softEdge', 'reflection', 'blur', 'rotate', 'flip', 'text', 'anchor', 'padding', 'textDirection', 'link']);
 /** A validation issue of a slide's `shapes` (schema-check reports them); `code` absent means an opf/schema error. */
 export interface OverlayIssue { path: string; message: string; code?: 'shape-anchor-missing' | 'connector-end-missing'; params: Record<string, unknown> }
 
@@ -521,6 +523,7 @@ export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[]
     const host = record(entry), at = `${slidePath}/shapes/${index}`;
     if (!Object.keys(host).length) return;
     if (isOverlayConnector(host)) {
+      for (const key of Object.keys(host)) if (SHAPE_ONLY_KEYS.has(key)) issues.push({ path: `${at}/${key}`, message: `${key} does not apply to a connector; a connector takes only id, connector, stroke, alt, decorative, hidden and extensions`, params: { field: key } });
       const connector = record(host.connector);
       for (const side of ['from', 'to'] as const) {
         const id = connector[side];

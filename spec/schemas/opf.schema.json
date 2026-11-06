@@ -2458,7 +2458,7 @@
     "OverlayShape": {
       "type": "object",
       "additionalProperties": false,
-      "description": "SH-04: a shape drawn over the composed slide (an entry of slide 'shapes'), above the content and the furniture, later entries on top. It never moves content. It has the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block, so it follows the block wherever composition puts it). PPTX export writes a native p:sp.",
+      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
       "properties": {
         "id": {
           "type": "string",
@@ -2493,6 +2493,10 @@
         "at": {
           "$ref": "#/$defs/OverlayAnchor"
         },
+        "connector": {
+          "$ref": "#/$defs/Connector",
+          "description": "Makes the entry a connector: what it joins and how it runs."
+        },
         "shape": {
           "$ref": "#/$defs/ShapePreset",
           "description": "The preset geometry, as on a shape block. Default rect."
@@ -2520,7 +2524,7 @@
         },
         "stroke": {
           "$ref": "#/$defs/Stroke",
-          "description": "The line along the outline. Default the style's line."
+          "description": "A shape's line along its outline (default the style's line), or a connector's line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'; default a 2-pixel line in the slide's text color with no arrowheads)."
         },
         "style": {
           "type": "string",
@@ -2567,12 +2571,8 @@
           "description": "Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored."
         },
         "text": {
-          "oneOf": [
-            { "type": "string" },
-            { "type": "array", "items": { "$ref": "#/$defs/TextRun" } }
-          ],
-          "description": "Text inside the shape's text rectangle, fitted by OPF's measured fonts from the body size down to the readability floor and never below it.",
-          "examples": ["New", ["Up ", { "text": "42%", "bold": true }]]
+          "$ref": "#/$defs/ContentPayload/properties/text",
+          "description": "Text inside the shape's text rectangle (a string or TextRun[]), fitted by OPF's measured fonts from the body size down to the readability floor and never below it."
         },
         "anchor": {
           "type": "string",
@@ -2613,7 +2613,8 @@
       },
       "examples": [
         { "shape": "wedgeRectCallout", "text": "New this quarter", "x": 0.62, "y": 0.12, "width": 0.25, "height": 0.12, "style": "subtle" },
-        { "id": "badge", "shape": "ellipse", "text": "3", "at": { "block": "team-photo", "edge": "top", "offset": -12 } }
+        { "id": "badge", "shape": "ellipse", "text": "3", "at": { "block": "team-photo", "edge": "top", "offset": -12 } },
+        { "connector": { "from": "plan", "to": "build", "route": "elbow" }, "stroke": { "width": 2, "end": { "type": "triangle" } } }
       ]
     },
     "OverlayAnchor": {
@@ -2652,45 +2653,6 @@
         }
       },
       "examples": [{ "block": "team-photo", "edge": "top", "offset": 8 }, { "block": "revenue-chart", "edge": "end", "width": 160, "height": 64 }]
-    },
-    "OverlayConnector": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["connector"],
-      "description": "SH-04: a connector line between two blocks or overlay shapes (an entry of slide 'shapes'), drawn over the composed slide in array order. Core computes its route once, as PowerPoint's own connector presets with their adjust values, and both engines draw that route. PPTX export writes a native p:cxnSp glued to the shapes at its ends (a:stCxn, a:endCxn), so it follows them when they are moved in PowerPoint.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Optional stable identifier, unique among slide, payload and overlay ids in the document."
-        },
-        "connector": {
-          "$ref": "#/$defs/Connector"
-        },
-        "stroke": {
-          "$ref": "#/$defs/Stroke",
-          "description": "The line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'). Default a 2-pixel line in the slide's text color with no arrowheads."
-        },
-        "alt": {
-          "type": "string",
-          "description": "Alternative text (p:cNvPr descr)."
-        },
-        "decorative": {
-          "type": "boolean",
-          "description": "Mark the connector decorative (a16:decorative): screen readers skip it."
-        },
-        "hidden": {
-          "type": "boolean",
-          "description": "Keep the connector in the file but do not draw it (p:cNvPr hidden)."
-        },
-        "extensions": {
-          "type": "object",
-          "description": "Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips."
-        }
-      },
-      "examples": [
-        { "connector": { "from": "plan", "to": "build", "route": "elbow" }, "stroke": { "width": 2, "end": { "type": "triangle" } } }
-      ]
     },
     "Connector": {
       "type": "object",
@@ -2874,12 +2836,7 @@
         },
         "shapes": {
           "type": "array",
-          "items": {
-            "anyOf": [
-              { "$ref": "#/$defs/OverlayConnector" },
-              { "$ref": "#/$defs/OverlayShape" }
-            ]
-          },
+          "items": { "$ref": "#/$defs/OverlayShape" },
           "description": "SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overlay shapes; any other entry is an overlay shape placed by x, y, width and height (fractions of the slide) or at (against a block). See docs/shapes.md.",
           "examples": [[
             { "id": "note", "shape": "wedgeRectCallout", "text": "Launch", "x": 0.7, "y": 0.1, "width": 0.2, "height": 0.1 },

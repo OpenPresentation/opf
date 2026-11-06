@@ -83,13 +83,7 @@ function analyze(engine: SchemaEngine, rootId: string, union: ErrorObject): Anal
 		const level = depth(error.instancePath) - base;
 		return (level === 0 && (error.keyword === "type" || isUnion(error))) || (level === 1 && error.keyword === "const");
 	};
-	const fits = reduced.filter((result) => result.errors.length && !result.errors.some(mismatch));
-	// SH-04: of two object forms, the one that rejects more of the value's own properties as unknown is not the one the value was written
-	// for when the other rejects only some of them (a slide's overlay shape with a typo is reported against the shape form, not the
-	// connector form that knows none of its keys).
-	const unknown = (result: (typeof reduced)[number]) => new Set(result.errors.filter((error) => depth(error.instancePath) === base && error.keyword === "additionalProperties").map((error) => String(error.params.additionalProperty)));
-	const subset = (small: Set<string>, large: Set<string>) => small.size < large.size && [...small].every((name) => large.has(name));
-	const matched = fits.filter((result) => !fits.some((other) => other !== result && subset(unknown(other), unknown(result))));
+	const matched = reduced.filter((result) => result.errors.length && !result.errors.some(mismatch));
 	const reach = (errors: ErrorObject[]) => Math.min(...errors.map((error) => depth(error.instancePath)));
 	const ranked = [...matched].sort((a, b) => reach(b.errors) - reach(a.errors));
 	const summary = (list: typeof reduced) => list.map((result) => `${result.label}: ${describe(result.errors, base)}`);
