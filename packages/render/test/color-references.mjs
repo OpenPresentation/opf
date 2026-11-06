@@ -32,6 +32,7 @@ assert.match(variableRuns, /fill="#0F172A"/);
 const authoredHex = toSvg({
   design: { theme: 'classic', colorScheme: 'cool-horizon' },
   slides: [{
+    subtitle: 'Toolbar',
     text: [{ text: 'Toolbar', color: '#2563eb' }],
   }],
 }, 1);

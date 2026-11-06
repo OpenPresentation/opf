@@ -32,8 +32,8 @@ const cases = [
 ];
 const rich = cases.flatMap(([name, style], index) => [...(index ? [' '] : []), {text:name, ...style}]);
 const shapes = [
-  ['body-root', {text:rich}],
-  ['body-block', {blocks:[{text:rich}]}],
+  ['body-root', {subtitle:'Body', text:rich}],
+  ['body-block', {subtitle:'Body', blocks:[{text:rich}]}],
   ['body-region', {center:{text:rich}}],
   ['list-body', {items:[{text:rich}]}],
   ['list-description', {items:[{text:'List body', description:rich}]}],

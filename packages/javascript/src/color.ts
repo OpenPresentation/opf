@@ -230,6 +230,12 @@ export function layoutColorVariant(layout: unknown, deck: LayoutVariantDeck = { 
   return value;
 }
 
+/** LH-164: what a layout record's `design.variant` is: a tone-relative `surface` (the statement, the quote), a `brand`, a variant as written, or undefined when it names none. */
+export function layoutVariantKind(layout: unknown): 'surface' | 'brand' | 'variant' | undefined {
+  const value = layoutVariantValue(layout);
+  return value === undefined ? undefined : value === 'surface' || value === 'brand' ? value : 'variant';
+}
+
 const isSetBackground = (value: unknown): boolean => value !== undefined && value !== null && value !== false;
 /** The image sources a background string shorthand can be (composition's IMAGE_SOURCE). */
 const IMAGE_SOURCE_SHORTHAND = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
@@ -266,10 +272,23 @@ export function deckBackgroundIsFixed(deckDesign: unknown, themeBackground: unkn
  * LH-01: whether a layout's variant decides the slide's background: the layout names one and the slide's own design sets neither a
  * variant nor a background, so the layout hides a scheme-based background of the deck and the theme (the slide is the variant's bg1).
  * LH-103: never over a fixed background of the deck or the theme ({@link deckBackgroundIsFixed}), which the slide keeps.
+ * LH-164: `surface` is a variant the slide's content asks for (a message-only slide's accent surface, messageSurface): it decides the
+ * background under the same conditions, over a layout that names no variant.
  */
-export function layoutVariantApplies(slideDesign: unknown, layout: unknown, deckDesign: unknown = {}, themeBackground: unknown = undefined): boolean {
+export function layoutVariantApplies(slideDesign: unknown, layout: unknown, deckDesign: unknown = {}, themeBackground: unknown = undefined, surface: unknown = undefined): boolean {
   const own = slideDesign && typeof slideDesign === 'object' ? (slideDesign as { variant?: unknown; background?: unknown }) : {};
-  return layoutVariantValue(layout) !== undefined && own.variant === undefined && !isSetBackground(own.background) && !deckBackgroundIsFixed(deckDesign, themeBackground);
+  return (layoutVariantValue(layout) !== undefined || (surface !== undefined && !deckBackgroundIsChosen(deckDesign, themeBackground))) && own.variant === undefined && !isSetBackground(own.background) && !deckBackgroundIsFixed(deckDesign, themeBackground);
+}
+
+/**
+ * LH-164: whether the deck or the theme draws a background the author chose, so a content-asked surface (a message-only slide's accent) leaves
+ * it alone: any background but none and the neutral theme slots (`light1`, `dark2`, `{ type: "theme" }`), which are the deck's plain surface.
+ * A solid slot or role color (`accent2`, `primary`) is a chosen one, though a layout's variant still replaces it (LH-103).
+ */
+export function deckBackgroundIsChosen(deckDesign: unknown, themeBackground: unknown): boolean {
+  const deck = deckDesign && typeof deckDesign === 'object' ? (deckDesign as { background?: unknown }) : {};
+  const chosen = (definition: unknown) => isSetBackground(definition) && !(typeof definition === 'string' && /^(light|dark)[12]$/.test(definition)) && !(definition && typeof definition === 'object' && (definition as { type?: unknown }).type === 'theme');
+  return isSetBackground(deck.background) ? chosen(deck.background) : chosen(themeBackground);
 }
 
 /** LH-01: the contrast tx2 needs on an accent background to stay the family's secondary text; under it tx2 maps to tx1's slot. */

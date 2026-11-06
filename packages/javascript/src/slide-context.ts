@@ -1,7 +1,8 @@
 import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
-import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
+import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts, type MessageSurface } from './composition.js';
 import { layoutVariantApplies, resolveColorRoles, type ColorVariant, type ResolvedColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
+import { resolveMessageSurface } from './message-surface.js';
 import { colorChoice, colorLevels } from './rule-design.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
@@ -62,6 +63,12 @@ export interface SlideContext {
      */
     layoutVariant?: ColorVariant;
     /**
+     * LH-164: set when the slide's whole body is one display message and it takes the accent surface (resolveMessageSurface): `kind` is the LH-09
+     * rule that made the body one message and `variant` the accent variant the slide is drawn on, which `roles` and `layoutVariant` already
+     * follow (as for a layout's variant, the slide's own design and a fixed deck background win, and no two accent surfaces follow each other).
+     */
+    messageSurface?: MessageSurface;
+    /**
      * Where each resolved record came from: `{ kind, reference, id, group, source?, origin }` (origin `document` for an
      * embedded record, `host` for a registered catalog's). A kind is absent when nothing resolved for it (the engine
      * default, or automatic composition for a layout), so engines record provenance without resolving again.
@@ -102,10 +109,19 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   if (options.strictReferences && diagnostics.length) throw new OPFUnresolvedReferenceError(diagnostics);
 
   // RR-96: the roles of this slide, from its variant or background (slide, layout variant, deck, then theme; LH-01); the same record the engines draw with.
-  const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables));
+  // LH-164: a slide whose whole body is one display message takes the accent surface (the variant of its own, where its layout names none).
+  const messageSurface = resolveMessageSurface(presentation, index, slide, layout, {
+    theme, colorScheme, variables: rec(deck.variables),
+    layoutOf: (other) => {
+      if (typeof other.layout !== 'string' || other.layout === 'auto') return undefined;
+      const found = resolveReference(presentation, 'layouts', other.layout, catalogs);
+      return found ? { ...found.record } : undefined;
+    },
+  });
+  const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables), messageSurface?.variant);
   const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
   // LH-01: the layout's variant when it decides the background (the slide sets neither a variant nor a background of its own).
-  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout, deck.design, theme.background) ? (levels[1]!.variant as ColorVariant) : undefined;
+  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout, deck.design, theme.background, messageSurface) ? (levels[1]!.variant as ColorVariant) : undefined;
   const composeOptions: ComposeSlideOptions = {
     ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
     ...(layout ? { layout } : {}),
@@ -115,6 +131,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     slideCount: options.slideCount ?? slides.length,
     fontFamilies: resolveFontFamilies(fontScheme),
     darkBackground: roles.dark,
+    ...(messageSurface ? { messageSurface } : {}),
     // LH-02: the colors the automatic scrim of a picture background is sized for.
     roles: { text: roles.text, textSecondary: roles.textSecondary, primary: roles.primary, background: roles.background },
     ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
@@ -124,5 +141,5 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
   const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number, presentation, darkBackground: composeOptions.darkBackground === true });
-  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), ...(layoutVariant ? { layoutVariant } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
+  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), ...(layoutVariant ? { layoutVariant } : {}), ...(messageSurface ? { messageSurface } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

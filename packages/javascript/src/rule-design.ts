@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, deckBackgroundIsChosen, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -308,12 +308,15 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
  * LH-103: only over a scheme-based background. A fixed background the deck or the theme draws (a hex or `var:` color, a gradient, a
  * pattern, a picture; deckBackgroundIsFixed) beats the layout's variant: the levels are the slide's, the deck's and the theme's, so the
  * slide keeps that background and its tone or luminance decides the text, as on a slide with no layout variant.
+ *
+ * LH-164: `surface` is the accent variant a message-only slide takes (messageSurface); it stands where a layout's variant would, under the
+ * same conditions, and replaces the layout's tone-relative `surface` (the statement's).
  */
-export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}): Rec[] {
-	if (!layoutColorVariant(layout) || deckBackgroundIsFixed(deckDesign, theme.background)) return [slideDesign, deckDesign, theme];
+export function colorLevels(slideDesign: Rec, layout: unknown, deckDesign: Rec, theme: Rec, scheme: Rec, variables: Rec = {}, surface?: ColorVariant): Rec[] {
+	if (!(surface ?? layoutColorVariant(layout)) || deckBackgroundIsFixed(deckDesign, theme.background) || (surface && !layoutColorVariant(layout) && deckBackgroundIsChosen(deckDesign, theme.background))) return [slideDesign, deckDesign, theme];
 	const below = colorChoice([deckDesign, theme], scheme, variables);
 	const deck = resolveColorRoles(scheme, { background: below.background, variant: below.variant });
-	const variant = layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
+	const variant = surface ?? layoutColorVariant(layout, { background: deck.map.bg1, dark: deck.dark })!;
 	const accents = variant.accents ?? below.variant?.accents;
 	return [slideDesign, { variant: accents ? { ...variant, accents } : variant }, deckDesign, theme];
 }
@@ -335,7 +338,7 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
-	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables), colorScheme, variables);
+	const choice = colorChoice(colorLevels(own, resolved.layout, deck, theme, colorScheme, variables, resolved.messageSurface?.variant), colorScheme, variables);
 	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
 	const text = roles.text;

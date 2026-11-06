@@ -710,8 +710,12 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
 // slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
 function dropImpliedVariants(imported, options) {
   // LH-01: a slide's implied variant includes its layout's (a section imports its accent clrMapOvr as a variant its layout already gives).
-  const rolesVariant = (design, slide = {}) => {
-    try { return JSON.stringify(coreContext({...imported, design, slides: [slide]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  // LH-164: a message-only slide's accent surface is implied by its content (and by the slide before it), so the slide is resolved inside the imported deck.
+  const rolesVariant = (design, slide = {}, at) => {
+    try {
+      const slides = at === undefined ? [slide] : imported.slides.map((other, index) => index === at ? slide : other);
+      return JSON.stringify(coreContext({...imported, design, slides}, at ?? 0, {...options, textMeasurement: undefined}).resolved.roles?.variant);
+    } catch { return undefined; }
   };
   const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
   if (imported.design?.variant !== undefined) {
@@ -721,10 +725,10 @@ function dropImpliedVariants(imported, options) {
       if (Object.keys(rest).length) imported.design = rest; else delete imported.design;
     }
   }
-  for (const slide of imported.slides) {
+  for (const [index, slide] of imported.slides.entries()) {
     if (slide.design?.variant === undefined) continue;
     const rest = withoutVariant(slide.design);
-    const implied = rolesVariant(imported.design, {...(slide.layout !== undefined ? {layout: slide.layout} : {}), design: rest});
+    const implied = rolesVariant(imported.design, {...slide, design: rest}, index);
     if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
       if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
     }
