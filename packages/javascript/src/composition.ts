@@ -4296,17 +4296,18 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * LH-09's statement that sets its title or its block as the message (`statement-message`) and its short message at display size
  * (`display-message`, with LH-69's lone label), LH-05's compact grid (`compact-grid`: the rows of a grid of short texts hug and center
  * instead of spreading over the body), LH-75's table beside its note (`table-note`, an arrangement composeSlide tries, tableNote), LH-132's
- * team portraits and a quote's portrait beside it (`portraits`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
+ * team portraits and a quote's portrait beside it (`portraits`), LH-18's shared heading track for sibling pillars, questions and cards of a heading over
+ * its description (`heading-tracks`, placement only: it adds space under the shorter headings and never changes a size), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
  * check-mark tiles (`check-tiles`), LH-14's icons (`icons`, `icon-chips`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'heading-tracks';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'heading-tracks'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -4325,7 +4326,7 @@ const KEPT_RULES = new WeakMap<SlideComposition, { rules: ReadonlySet<GuardedRul
  * and the composition has no finding, no word split, no prose under the minimum measure and every block at the size it asked for
  * (AT_REQUEST), the slide without them cannot set a block larger, so the guard keeps it without composing that slide.
  */
-const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['compact-grid', 'nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'title-rule']);
+const PLACEMENT_RULES: ReadonlySet<GuardedRule> = new Set(['compact-grid', 'nested-gaps', 'reading-measure', 'long-text-rows', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'title-rule', 'heading-tracks']);
 const AT_REQUEST = new WeakSet<SlideComposition>();
 /**
  * LH-132 review: compositions in which an automatic team portrait had no room (placePerson fell back to the avatar inside the portraits'
@@ -8684,6 +8685,39 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       item.text = translateTextFit(fit, dy);
     }
   };
+  // LH-18: sibling heading lists (pillars, the cells of a grid of questions, cards of a heading over its description: one entry with a
+  // description each) in one row share their heading track. The row's headings take the height of its tallest (a heading that wraps to
+  // three lines in one pillar leaves two lines of space under a one-line heading beside it), so the descriptions start on one line and
+  // read as one row, as Claude Design's pillars do. Text keeps its size: only the description moves down, by the difference. Siblings
+  // are the lists whose headings start on one line and sit side by side at one heading size and one description size; a row whose
+  // aligned tracks would not fit the room its lists were fitted in stays as it was.
+  const alignHeadingTracks = (): void => {
+    if (!ruleOn('heading-tracks')) return;
+    const entryOf = (item: ComposedItem): ListEntryLayout | undefined => {
+      const fit = item.text;
+      return item.field === 'items' && fit && 'listEntries' in fit && !item.listColumns && !item.caption && (fit as ListFit).listEntries.length === 1 && !(fit as ListFit).rules?.length ? (fit as ListFit).listEntries[0] : undefined;
+    };
+    const heads = items.filter(item => { const entry = entryOf(item); return entry?.heading && entry.description && entry.descriptionBox; }).sort((a, b) => entryOf(a)!.textBox.y - entryOf(b)!.textBox.y);
+    for (let from = 0; from < heads.length;) {
+      let to = from + 1;
+      while (to < heads.length && Math.abs(entryOf(heads[to]!)!.textBox.y - entryOf(heads[from]!)!.textBox.y) <= 1) to++;
+      const row = heads.slice(from, to).sort((a, b) => a.box.x - b.box.x);
+      from = to;
+      const one = (pick: (entry: ListEntryLayout) => number) => Math.max(...row.map(item => pick(entryOf(item)!))) - Math.min(...row.map(item => pick(entryOf(item)!))) <= .5;
+      if (row.length < 2 || !one(entry => entry.text.fontSize) || !one(entry => entry.description!.fontSize) || row.some((item, index) => index && item.box.x < row[index - 1]!.box.x + row[index - 1]!.box.width - 1e-6)) continue;
+      const track = Math.max(...row.map(item => entryOf(item)!.textBox.height)), moves = row.map(item => track - entryOf(item)!.textBox.height);
+      if (!moves.some(move => move > .5)) continue;
+      // The tallest heading's track must leave every list inside the room it was fitted in (its cell; a card's inside, minus its inset).
+      const room = (item: ComposedItem) => Math.max(item.box.y + item.box.height, item.frameBox ? item.frameBox.y + item.frameBox.height - cardInsetOf(item.frameBox.width, true) : -Infinity);
+      if (row.some((item, index) => entryOf(item)!.textBox.y + (item.text as ListFit).height + moves[index]! > room(item) + .01)) continue;
+      row.forEach((item, index) => {
+        const fit = item.text as ListFit, entry = entryOf(item)!, move = moves[index]!;
+        if (move <= .01) return;
+        item.text = { ...fit, height: fit.height + move, listEntries: [{ ...entry, descriptionBox: { ...entry.descriptionBox!, y: entry.descriptionBox!.y + move } }] };
+      });
+      fire('heading-tracks');
+    }
+  };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
@@ -8753,6 +8787,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   shareStartAlignment();
   hugQuoteCards();
   centerCardText();
+  alignHeadingTracks();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
   // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
