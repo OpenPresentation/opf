@@ -233,19 +233,6 @@ When `paginate` splits a slide over pages, a shape placed by fractions is on eve
 
 `composeSlide` returns the overlay as `SlideComposition.overlayShapes`, in draw order: overlay shapes (`kind: "shape"`, a shape block item: `path` `slides.N.shapes.I`, `box`, `shape` (a `ComposedShape`), `text`, `textStyle`, and `attachedTo` for an `at` shape) and connectors (`kind: "connector"`: `route`, `preset`, the frame `box`, `rotate`, `flipH`, `flipV`, `adjust` and `avLst`, `paths` (the route in slide coordinates, one open path with its ends for the arrowheads), `bounds`, `stroke`, and `from` and `to`, each with the `id`, the `ref` it attaches to (a composed item path, a group path or an overlay path), `target`, `site`, `point` and `angle`). `connectorRoute`, `chooseConnectorSites`, `shapeSites` and `rectSites` from `@openpresentation/opf/composition` give the same geometry to a host or an editor.
 
-### Aspose names
-
-| What | OPF | PowerPoint (DrawingML) | Aspose |
-| --- | --- | --- | --- |
-| Overlay shape | an entry of `shapes` | `p:sp` | `IAutoShape` (`ShapeCollection.AddAutoShape`) |
-| Placement | `x`, `y`, `width`, `height` | `a:xfrm a:off a:ext` | `X`, `Y`, `Width`, `Height` |
-| Connector | an entry with `connector` | `p:cxnSp` | `IConnector` (`ShapeCollection.AddConnector`) |
-| Route | `route: straight`, `elbow`, `curved` | `a:prstGeom prst="straightConnector1"`, `bentConnector2`/`3`, `curvedConnector2`/`3` | `ShapeType.StraightConnector1`, `BentConnector2`/`3`, `CurvedConnector2`/`3` |
-| Ends | `connector.from`, `connector.to` | `a:stCxn id`, `a:endCxn id` | `StartShapeConnectedTo`, `EndShapeConnectedTo` |
-| Sites | `fromSite`, `toSite` | `a:stCxn idx`, `a:endCxn idx` | `StartShapeConnectionSiteIndex`, `EndShapeConnectionSiteIndex` |
-| Elbow position | core's `adjust.adj1` | `a:avLst a:gd adj1` | `Adjustments` |
-| Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` | `LineFormat.BeginArrowheadStyle`, `EndArrowheadStyle` |
-
 ## Validation
 
 | Finding | When |
