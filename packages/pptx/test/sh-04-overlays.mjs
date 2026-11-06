@@ -95,3 +95,14 @@ const overlay = (shapes, blocks) => composeSlide(slide(shapes, blocks), { presen
 }
 
 console.log('sh-04 overlays (pptx): ok');
+
+// The back layer is written before the content shapes, the front layer after them; a connector glued to a back shape keeps its glue.
+{
+  const shapes = [{ id: 'panel', layer: 'back', shape: 'rect', x: 0, y: 0.2, width: 1, height: 0.6 }, { connector: { from: 'panel', to: 'ship' } }, { id: 'badge', shape: 'ellipse', x: 0.1, y: 0.1, width: 0.05, height: 0.08 }];
+  const { xml, ids, connectors } = await exported(shapes);
+  const at = (name) => xml.indexOf(`name="${name}"`);
+  assert.ok(at('OPF shape slides.0.shapes.0') < at('OPF shape slides.0.blocks.0.shape'));
+  assert.ok(at('OPF shape slides.0.shapes.2') > at('OPF shape slides.0.blocks.1.shape'));
+  assert.ok(connectors[0].includes(`<a:stCxn id="${ids.get('OPF shape slides.0.shapes.0')}"`));
+  console.log('sh-04 overlay layers (pptx): ok');
+}

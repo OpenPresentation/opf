@@ -2458,7 +2458,7 @@
     "OverlayShape": {
       "type": "object",
       "additionalProperties": false,
-      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
+      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
       "properties": {
         "id": {
           "type": "string",
@@ -2493,6 +2493,11 @@
         "at": {
           "$ref": "#/$defs/OverlayAnchor"
         },
+        "layer": {
+          "type": "string",
+          "enum": ["front", "back"],
+          "description": "Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture (a panel or band behind a block). Array order stacks the shapes within each layer. Connectors are always in front."
+        },
         "connector": {
           "$ref": "#/$defs/Connector",
           "description": "Makes the entry a connector: what it joins and how it runs."
@@ -2509,7 +2514,7 @@
           "type": "object",
           "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
           "additionalProperties": { "type": "number" },
-          "description": "The preset's adjust handles (a:avLst) in OPF units, as on a shape block.",
+          "description": "The preset's adjust handles (a:avLst) in OPF units, as on a shape block. On a connector, the adjust values of its connector preset (adj1 of an elbow or a curve between sites on one axis, a fraction of the frame's width), which replace the automatic route's, so a route made in PowerPoint is kept exactly.",
           "examples": [{ "adj": 0.25 }]
         },
         "fill": {
