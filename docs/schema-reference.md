@@ -851,6 +851,93 @@ _No named properties._
 | `socials` | no | `boolean` | Whether to render the primary organization's social profiles from organization.socials, one line per platform in key order. A handle is formatted through the platform's socialPlatforms record (companyUrlPattern, else... |
 
 
+### OverlayShape
+
+- Type: `object`
+- Required fields: none
+- Purpose: SH-04: a shape drawn over the composed slide (an entry of slide 'shapes'), above the content and the furniture, later entries on top. It never moves content. It has the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block, so it follows the block wherever composition puts it). PPTX export writes a native p:sp.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'. |
+| `x` | no | `number` | Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'. |
+| `y` | no | `number` | Top edge as a fraction of the slide height, from the top edge. |
+| `width` | no | `number` | Width as a fraction of the slide width. |
+| `height` | no | `number` | Height as a fraction of the slide height. |
+| `at` | no | `ref:OverlayAnchor` |  |
+| `shape` | no | `ref:ShapePreset` | The preset geometry, as on a shape block. Default rect. |
+| `path` | no | `ref:ShapePath` | Custom geometry instead of a preset (a:custGeom), as on a shape block. |
+| `adjust` | no | `object` | The preset's adjust handles (a:avLst) in OPF units, as on a shape block. |
+| `fill` | no | `ref:ShapeFill` | 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill. |
+| `opacity` | no | `number` | The fill's opacity (a:alpha). Default 1. |
+| `stroke` | no | `ref:Stroke` | The line along the outline. Default the style's line. |
+| `style` | no | `enum:none \| subtle \| moderate \| intense` | The theme shape style, as on a shape block. Default moderate. |
+| `shadow` | no | `ref:Shadow` | Outer shadow. |
+| `innerShadow` | no | `ref:InnerShadow` | Inner shadow. |
+| `glow` | no | `ref:Glow` | Glow. |
+| `softEdge` | no | `number` | Soft edges (a:softEdge), radius in reference pixels at a 720-pixel short edge. |
+| `reflection` | no | `ref:Reflection` | Reflection. |
+| `blur` | no | `number` | Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. |
+| `rotate` | no | `number` | Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Its connection sites turn with it. |
+| `flip` | no | `enum:horizontal \| vertical \| both` | Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored. |
+| `text` | no | `oneOf:string / array<ref:TextRun>` | Text inside the shape's text rectangle, fitted by OPF's measured fonts from the body size down to the readability floor and never below it. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical placement of the text in the text rectangle (a:bodyPr anchor). Default middle. |
+| `padding` | no | `ref:ShapePadding` | Text insets inside the text rectangle. |
+| `textDirection` | no | `enum:horizontal \| vertical \| vertical270 \| stacked` | Text direction (a:bodyPr vert). Default horizontal. |
+| `alt` | no | `string` | Alternative text (p:cNvPr descr). Without it the shape's text is what is read. |
+| `decorative` | no | `boolean` | Mark the shape decorative (a16:decorative): screen readers skip it. |
+| `hidden` | no | `boolean` | Keep the shape in the file but do not draw it (p:cNvPr hidden). A link on a hidden shape is a validation finding (opf/shape-link-hidden). |
+| `link` | no | `string` | URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
+
+
+### OverlayAnchor
+
+- Type: `object`
+- Required fields: `block`, `edge`
+- Purpose: Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `block` | yes | `string` | The id of a block on this slide (a content payload or a group, at any depth). |
+| `edge` | yes | `enum:top \| bottom \| start \| end \| center` | The edge of the block the shape sits outside of, or its center. |
+| `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
+| `width` | no | `number` | The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side. |
+| `height` | no | `number` | The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width. |
+
+
+### OverlayConnector
+
+- Type: `object`
+- Required fields: `connector`
+- Purpose: SH-04: a connector line between two blocks or overlay shapes (an entry of slide 'shapes'), drawn over the composed slide in array order. Core computes its route once, as PowerPoint's own connector presets with their adjust values, and both engines draw that route. PPTX export writes a native p:cxnSp glued to the shapes at its ends (a:stCxn, a:endCxn), so it follows them when they are moved in PowerPoint.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. |
+| `connector` | yes | `ref:Connector` |  |
+| `stroke` | no | `ref:Stroke` | The line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'). Default a 2-pixel line in the slide's text color with no arrowheads. |
+| `alt` | no | `string` | Alternative text (p:cNvPr descr). |
+| `decorative` | no | `boolean` | Mark the connector decorative (a16:decorative): screen readers skip it. |
+| `hidden` | no | `boolean` | Keep the connector in the file but do not draw it (p:cNvPr hidden). |
+| `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
+
+
+### Connector
+
+- Type: `object`
+- Required fields: `from`, `to`
+- Purpose: What a connector joins and how it runs. Each end attaches to a connection site of its shape: a preset's own sites (turned and flipped with the shape), or the four edge midpoints of a block that is not a shape (DrawingML's rect: 0 top, 1 left, 2 bottom, 3 right). Without 'fromSite' and 'toSite' core chooses the pair of sites that face each other with the shortest route.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `from` | yes | `string` | The id of the block or overlay shape on this slide the connector starts at. An id that is not on the slide is a finding (opf/connector-end-missing) and the connector is not drawn. |
+| `to` | yes | `string` | The id of the block or overlay shape on this slide the connector ends at. |
+| `route` | no | `enum:straight \| elbow \| curved` | straight is one segment (straightConnector1); elbow runs horizontally and vertically (bentConnector3, bentConnector2 between perpendicular sites); curved is PowerPoint's curved connector (curvedConnector3, curvedConne... |
+| `fromSite` | no | `integer` | The connection site index at 'from' (DrawingML's cxn idx), instead of the automatic choice. An index the shape does not have is a validation error. |
+| `toSite` | no | `integer` | The connection site index at 'to', instead of the automatic choice. |
+
+
 ### Slide
 
 - Type: `object`
@@ -881,6 +968,7 @@ _No named properties._
 | `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. Presence of this field infe... |
 | `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
+| `shapes` | no | `array<anyOf:ref:OverlayConnector / ref:OverlayShape>` | SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
