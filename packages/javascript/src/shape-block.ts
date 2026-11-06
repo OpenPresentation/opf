@@ -87,9 +87,75 @@ export const SHAPE_PADDING = { top: 4.8, right: 9.6, bottom: 4.8, left: 9.6 } as
 /** The frame aspect of a preset when the block sets no `aspectRatio`: its natural proportions in PowerPoint's shape gallery. */
 export const SHAPE_DEFAULT_ASPECT = 1.5;
 
+const CIRCLE_SHAPE_GRADIENT_PRESETS: readonly string[] = [
+  'bentArrow', 'bentUpArrow', 'blockArc', 'bracePair', 'chevron', 'circularArrow', 'cloudCallout', 'cornerTabs', 'curvedDownArrow',
+  'curvedLeftArrow', 'curvedRightArrow', 'curvedUpArrow', 'donut', 'doubleWave', 'downArrow', 'downArrowCallout', 'ellipseRibbon',
+  'ellipseRibbon2', 'flowChartDisplay', 'flowChartDocument', 'flowChartMagneticDisk', 'flowChartMultidocument', 'flowChartPunchedTape',
+  'funnel', 'horizontalScroll', 'leftArrow', 'leftArrowCallout', 'leftBrace', 'leftCircularArrow', 'leftRightArrow',
+  'leftRightArrowCallout', 'leftRightCircularArrow', 'leftRightRibbon', 'leftRightUpArrow', 'leftUpArrow', 'lightningBolt', 'mathDivide',
+  'mathNotEqual', 'moon', 'noSmoking', 'notchedRightArrow', 'plaqueTabs', 'quadArrow', 'quadArrowCallout', 'ribbon', 'ribbon2',
+  'rightArrow', 'rightArrowCallout', 'rightBrace', 'smileyFace', 'squareTabs', 'stripedRightArrow', 'sun', 'swooshArrow', 'upArrow',
+  'upArrowCallout', 'upDownArrow', 'upDownArrowCallout', 'uturnArrow', 'verticalScroll', 'wave', 'wedgeEllipseCallout', 'wedgeRectCallout',
+  'wedgeRoundRectCallout',
+];
 const SQUARE = /^(ellipse|triangle|diamond|pentagon|hexagon|heptagon|octagon|decagon|dodecagon|star\d+|pie|pieWedge|blockArc|donut|noSmoking|heart|sun|smileyFace|irregularSeal[12]|gear[69]|plus|math\w+|chart(X|Star|Plus)|flowChart(Connector|SummingJunction|Or|Sort|Collate|Extract|Merge|OfflineStorage|Decision)|cube|frame|chord|arc|(left|leftRight)?[cC]ircularArrow|quadArrow|quadArrowCallout|leftRightUpArrow|cloud|teardrop|actionButton\w+|foldedCorner|bevel|corner|halfFrame|diagStripe|lightningBolt|funnel|(square|corner|plaque)Tabs|rtTriangle|bentUpArrow|leftUpArrow|uturnArrow|bentArrow|moon)$/;
 const WIDE = /^(rightArrow|leftArrow|leftRightArrow|notchedRightArrow|stripedRightArrow|homePlate|chevron|ribbon2?|ellipseRibbon2?|leftRightRibbon|horizontalScroll|wave|doubleWave|flowChartTerminator|flowChartPunchedTape|line|lineInv|straightConnector1|bentConnector[2-5]|curvedConnector[2-5]|leftRightArrowCallout|swooshArrow|curved(Up|Down)Arrow|bracketPair|bracePair)$/;
 const TALL = /^(upArrow|downArrow|upDownArrow|verticalScroll|leftBrace|rightBrace|leftBracket|rightBracket|curved(Right|Left)Arrow|upDownArrowCallout|can)$/;
+/**
+ * The presets whose `shape` path gradient PowerPoint 365 draws as its `circle` gradient, not along the outline (measured: a deck of all
+ * 187 presets with a shape gradient exported by PowerPoint and compared with both drawings; scripts in the SH-02 evidence). A custom path's
+ * shape gradient is a circle too.
+ */
+export const CIRCLE_SHAPE_GRADIENTS: ReadonlySet<string> = new Set<string>(CIRCLE_SHAPE_GRADIENT_PRESETS);
+/**
+ * The presets whose `shape` gradient PowerPoint 365 lays along the outline of all their filled paths together (the action buttons, bevel
+ * and cube: each face or icon part shaded by the whole shape's contours), not along each path's own outline (measured as above).
+ */
+export const UNION_SHAPE_GRADIENTS: ReadonlySet<string> = new Set<string>([
+  'actionButtonBackPrevious', 'actionButtonBeginning', 'actionButtonDocument', 'actionButtonEnd', 'actionButtonForwardNext', 'actionButtonHelp',
+  'actionButtonHome', 'actionButtonInformation', 'actionButtonMovie', 'actionButtonReturn', 'actionButtonSound', 'bevel', 'cube',
+]);
+/** The bounds of points, rounded. */
+function boundsOf(points: [number, number][]): Box | undefined {
+  if (!points.length) return undefined;
+  const xs = points.map(point => point[0]), ys = points.map(point => point[1]);
+  const x = Math.min(...xs), y = Math.min(...ys);
+  return { x: round(x), y: round(y), width: round(Math.max(...xs) - x), height: round(Math.max(...ys) - y) };
+}
+
+/**
+ * A polygon star-shaped about `center` whose scaled copies are a shape gradient's contours for the outline `rings`: the outline itself
+ * when it is one ring that every ray from the center crosses once, otherwise its radial envelope (on each ray, the outline's farthest
+ * point), sampled at every vertex's direction and every half degree. A point's place in the gradient is the least scale of the outline
+ * about the center that still contains it, which is its distance over the envelope's along its ray.
+ */
+function starOutline(rings: [number, number][][], center: [number, number]): [number, number][] {
+  const [cx, cy] = center;
+  const edges: [number, number, number, number][] = [];
+  for (const ring of rings) for (let at = 0; at < ring.length; at++) {
+    const [px, py] = ring[at]!, [qx, qy] = ring[(at + 1) % ring.length]!;
+    if (px !== qx || py !== qy) edges.push([px, py, qx, qy]);
+  }
+  if (rings.length === 1) {
+    const turns = edges.map(([px, py, qx, qy]) => (px - cx) * (qy - py) - (py - cy) * (qx - px));
+    if (turns.every(turn => turn >= -1e-9) || turns.every(turn => turn <= 1e-9)) return rings[0]!;
+  }
+  const angles = new Set<number>();
+  for (const [px, py] of edges) angles.add(Math.atan2(py - cy, px - cx));
+  for (let step = 0; step < 720; step++) angles.add(-Math.PI + step * Math.PI / 360);
+  return [...angles].sort((a, b) => a - b).map(angle => {
+    const dx = Math.cos(angle), dy = Math.sin(angle);
+    let far = 0;
+    for (const [px, py, qx, qy] of edges) {
+      const ex = qx - px, ey = qy - py, denominator = dx * ey - dy * ex;
+      if (Math.abs(denominator) < 1e-12) continue;
+      const t = ((px - cx) * ey - (py - cy) * ex) / denominator, u = ((px - cx) * dy - (py - cy) * dx) / denominator;
+      if (t > far && u >= -1e-9 && u <= 1 + 1e-9) far = t;
+    }
+    return [cx + dx * far, cy + dy * far] as [number, number];
+  });
+}
+
 /** The default frame aspect (width / height) of a preset: 1 for the round and regular shapes, 2 for horizontal arrows and bands, 0.5 for vertical ones, 1.5 otherwise. */
 export function presetAspect(preset: string | undefined): number {
   if (!preset) return 1;
@@ -348,6 +414,12 @@ export interface ComposedShapePath {
   open: boolean;
   /** An open path's two ends in slide coordinates, each with the direction (degrees, clockwise from +x) a line leaves the path there. */
   ends?: { start: ShapeEnd; end: ShapeEnd };
+  /**
+   * For a filled path of a shape whose `shapeGradient` is `outline`: one polygon in slide coordinates, star-shaped about the center of
+   * `gradientBox`, whose copies scaled about that center are the gradient's contours (the path itself when it is star-shaped from the
+   * center, otherwise its radial envelope: along each ray from the center the farthest point of the outline).
+   */
+  gradientOutline?: [number, number][][];
 }
 /** One end of an open path: the point, and the outward direction of the line there in degrees (clockwise from the positive x axis). */
 export interface ShapeEnd { x: number; y: number; angle: number }
@@ -364,6 +436,16 @@ export interface ComposedShape {
   preset?: string;
   /** In a browser or edge runtime before `ensureShapes`: the preset geometry is still loading, so `paths` is empty (engines draw no outline). */
   loading?: true;
+  /**
+   * For a gradient fill: the box the gradient spans, the bounds of the shape's whole outline in slide coordinates (PowerPoint lays a
+   * gradient across the geometry's bounds, which for most presets are the frame and for `arc`, `blockArc` and the like are smaller).
+   */
+  gradientBox?: Box;
+  /**
+   * How a `shape` gradient fill is drawn, as PowerPoint draws it: `outline`, contours that are the outline scaled about the center of
+   * `gradientBox` (each filled path's `gradientOutline`), or `circle`, PowerPoint's circle gradient (some presets and every custom path).
+   */
+  shapeGradient?: 'outline' | 'circle';
   /** The custom outline as authored (`path`), absent for a preset. */
   custom?: CustomPathInput;
   /** The adjust values drawn (valid OPF values), and the same in DrawingML units for `a:avLst`. */
@@ -436,6 +518,22 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
     catch { geometry = engine.presetGeometry('rect', w, h); }
   }
   const paths = geometry.paths.map(path => pathIn(path, box));
+  // A gradient spans the bounds of the shape's filled paths (gradientBox). A shape gradient's contours are an outline scaled about the
+  // center of those bounds: each filled path's own outline, or for UNION_SHAPE_GRADIENTS the outline of all the filled paths together. The
+  // engines fill each path with a fan of triangles from that center to the edges of its gradientOutline. PowerPoint draws some presets'
+  // and every custom path's shape gradient as its circle gradient instead (CIRCLE_SHAPE_GRADIENTS). Both lists were measured on
+  // PowerPoint 365; the engines draw what PowerPoint draws.
+  const fillSpec = record(host.fill ?? {}).gradient;
+  const outlineGradient = record(fillSpec).type === 'shape' && engine ? (!preset || CIRCLE_SHAPE_GRADIENTS.has(preset) ? 'circle' as const : 'outline' as const) : undefined;
+  const flat = fillSpec !== undefined && engine ? geometry.paths.map(path => engine.flattenShapePath(path.commands, 16).map(ring => ring.map(point => [box.x + point.x, box.y + point.y] as [number, number]))) : undefined;
+  const filledRings = flat ? geometry.paths.flatMap((path, index) => path.fill !== 'none' ? flat[index]! : []) : [];
+  const gradientBox = flat ? boundsOf((filledRings.length ? filledRings : flat.flat()).flat()) : undefined;
+  if (outlineGradient === 'outline' && flat && gradientBox) {
+    const center: [number, number] = [gradientBox.x + gradientBox.width / 2, gradientBox.y + gradientBox.height / 2];
+    const star = (rings: [number, number][][]) => [starOutline(rings, center).map(([x, y]) => [round(x), round(y)] as [number, number])];
+    const union = preset && UNION_SHAPE_GRADIENTS.has(preset) ? star(filledRings) : undefined;
+    geometry.paths.forEach((path, index) => { if (path.fill !== 'none') paths[index]!.gradientOutline = union ?? star(flat[index]!); });
+  }
   const textRect = { x: round(box.x + geometry.textRect.x), y: round(box.y + geometry.textRect.y), width: round(geometry.textRect.width), height: round(geometry.textRect.height) };
   const padding = paddingOf(host.padding, scale);
   const inner = { x: textRect.x + padding.left, y: textRect.y + padding.top, width: Math.max(scale, textRect.width - padding.left - padding.right), height: Math.max(scale, textRect.height - padding.top - padding.bottom) };
@@ -453,7 +551,8 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
   const rotate = typeof host.rotate === 'number' && Number.isFinite(host.rotate) && host.rotate % 360 !== 0 ? round(((host.rotate % 360) + 360) % 360) : undefined;
   const flip = host.flip;
   const result: ComposedShape = {
-    region: { ...region }, box, ...(preset ? { preset } : { custom }), adjust, avLst: preset && engine ? engine.adjustToDrawingML(preset, adjust) : {}, ...(engine ? {} : { loading: true as const }), paths, textRect, padding, textBox,
+    region: { ...region }, box, ...(preset ? { preset } : { custom }), adjust, avLst: preset && engine ? engine.adjustToDrawingML(preset, adjust) : {}, ...(engine ? {} : { loading: true as const }), paths,
+    ...(gradientBox ? { gradientBox } : {}), ...(outlineGradient ? { shapeGradient: outlineGradient } : {}), textRect, padding, textBox,
     anchor: pick(host.anchor, ['top', 'middle', 'bottom'] as const, 'middle'), textDirection, style, ...(look.ref ? { styleRef: look.ref } : {}),
     fill, ...(stroke ? { stroke } : {}), textColor: look.text, ...(shapeBackdrop(fill) !== undefined ? { textBackdrop: shapeBackdrop(fill) } : {}), textBold: look.bold,
     ...(rotate !== undefined ? { rotate } : {}), ...(flip === 'horizontal' || flip === 'both' ? { flipH: true } : {}), ...(flip === 'vertical' || flip === 'both' ? { flipV: true } : {}),

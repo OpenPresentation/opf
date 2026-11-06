@@ -65,6 +65,26 @@ assert.equal(shadeColor('#2874A6', 'norm'), '#2874A6');
   assert.match(radial, /<radialGradient/);
   const pattern = svgOf([{ shape: 'rect', fill: { pattern: { preset: 'smGrid', foregroundColor: 'accent1', backgroundColor: 'light1' } } }]);
   assert.match(pattern, /<pattern [^>]*width="8"/);
+  // Any other set of stops mixes straight in sRGB: at 0.5 of a black-to-white gradient that ends at 0.9, #8E8E8E (0.5 / 0.9 of the way).
+  const inner = svgOf([{ shape: 'rect', fill: { gradient: { type: 'linear', angle: 0, stops: [{ color: '#000000', position: 0 }, { color: '#FFFFFF', position: 0.9 }] } } }]);
+  assert.match(inner, /offset="0.5" stop-color="#8E8E8E"/);
+  const twoStops = { stops: [{ color: 'light1', position: 0 }, { color: 'accent1', position: 1 }] };
+  // A rectangle gradient is a fan of linear gradients from the center of the bounds, clipped to the path and drawn without antialiasing.
+  const rectangle = svgOf([{ shape: 'rect', fill: { gradient: { type: 'rectangle', ...twoStops } } }]);
+  assert.match(rectangle, /<clipPath id="[^"]+-fill-0-clip"/);
+  assert.match(rectangle, /shape-rendering="crispEdges"/);
+  assert.equal((rectangle.match(/<linearGradient [^>]*id="[^"]+-fan-\d+"/g) ?? []).length, 4);
+  // A shape gradient follows the outline, centered on the filled paths' bounds: an arc's drawn quarter, not its frame.
+  const arc = item([{ shape: 'arc', fill: { gradient: { type: 'shape', ...twoStops } } }]).shape;
+  assert.equal(arc.shapeGradient, 'outline');
+  assert.ok(Math.abs(arc.gradientBox.width - arc.box.width / 2) < 1 && Math.abs(arc.gradientBox.x - (arc.box.x + arc.box.width / 2)) < 1);
+  assert.ok(arc.paths[0].gradientOutline[0].length > 3);
+  // PowerPoint draws the shape gradient of the arrows (and of a custom path) as its circle gradient.
+  assert.equal(item([{ shape: 'rightArrow', fill: { gradient: { type: 'shape', ...twoStops } } }]).shape.shapeGradient, 'circle');
+  assert.match(svgOf([{ shape: 'rightArrow', fill: { gradient: { type: 'shape', ...twoStops } } }]), /<radialGradient/);
+  // The action buttons, bevel and cube shade every part along the whole outline: each part's contour polygon is the same.
+  const cube = item([{ shape: 'cube', fill: { gradient: { type: 'shape', ...twoStops } } }]).shape;
+  assert.deepEqual(cube.paths[0].gradientOutline, cube.paths[1].gradientOutline);
   const faded = svgOf([{ shape: 'rect', fill: { color: 'accent1', lighten: 0.4 }, opacity: 0.5 }]);
   assert.match(faded, /fill-opacity="0.5"/);
   assert.match(faded, /fill="#6199E1"/);
@@ -90,7 +110,7 @@ assert.equal(shadeColor('#2874A6', 'norm'), '#2874A6');
 {
   const photo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9V3iWggAAAAASUVORK5CYII=';
   const svg = svgOf([{ image: photo, shape: 'hexagon', stroke: { color: 'accent1', width: 3, dash: 'dash' } }]);
-  assert.match(svg, /<clipPath[^>]*><path d="M /);
+  assert.match(svg, /<clipPath[^>]*><path d="M[\d.]+ [\d.]+L/);
   assert.match(svg, /stroke-dasharray="12 9"/);
   assert.match(svg, /stroke="#1F5AA6"/);
 }

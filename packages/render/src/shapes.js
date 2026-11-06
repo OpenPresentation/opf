@@ -48,8 +48,8 @@ export function shadeColor(hex, mode) {
   return `#${mixed.map(value => Math.round(Math.min(1, Math.max(0, value)) * 255).toString(16).padStart(2, "0")).join("").toUpperCase()}`;
 }
 
-// A gradient (core ComposedGradient) in the frame `box`: linear along its angle across the box; radial, rectangle and shape as an
-// ellipse from the center (the preview's approximation of DrawingML's rect and shape paths, which follow the frame and the outline).
+// A gradient (core ComposedGradient) in the frame `box` drawn as an SVG paint: linear along its angle across the box, radial (and a shape
+// gradient PowerPoint draws as its circle gradient) as a circle. Rectangle and outline-following shape gradients are fans (fanElements).
 function gradientDef(gradient, id, box, helpers, mode, alpha = 1) {
   const stop = (offset, t) => {
     const color = sampleStops(gradient.stops, t, helpers);
@@ -57,46 +57,100 @@ function gradientDef(gradient, id, box, helpers, mode, alpha = 1) {
   };
   const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
   if (gradient.type === "linear") {
-    // PowerPoint mixes a gradient's colors in linear light and eases each span between two stops (smoothstep): the preview samples
-    // the gradient so SVG's straight sRGB mixing between samples stays within a level or two of it.
+    // The preview samples the gradient as PowerPoint mixes it (sampleStops) so SVG's straight sRGB mixing between samples stays within
+    // a level or two of it.
     const offsets = [...new Set([...gradient.stops.map(entry => entry.position), ...Array.from({ length: GRADIENT_SAMPLES + 1 }, (_, index) => index / GRADIENT_SAMPLES)])].sort((a, b) => a - b);
     const angle = gradient.angle * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle);
     const half = (Math.abs(box.width * cos) + Math.abs(box.height * sin)) / 2;
     return helpers.tag("linearGradient", { id, gradientUnits: "userSpaceOnUse", x1: number(cx - half * cos), y1: number(cy - half * sin), x2: number(cx + half * cos), y2: number(cy + half * sin) }, offsets.map(offset => stop(offset, offset)).join(""));
   }
-  // PowerPoint's path gradients run from the center to the frame's corners (an ellipse of sqrt(2) times the half width and height),
-  // eased and mixed as a linear one (measured on PowerPoint 365's export of a:path circle).
-  const reach = Math.SQRT2;
+  // PowerPoint's circle gradient (a:path circle) is a true circle from the frame's center through its corners (radius half the diagonal,
+  // whatever the frame's proportions), eased and mixed as a linear one (measured on PowerPoint 365's export).
   const samples = Array.from({ length: GRADIENT_SAMPLES + 1 }, (_, index) => index / GRADIENT_SAMPLES).map(offset => stop(offset, offset)).join("");
-  return helpers.tag("radialGradient", { id, gradientUnits: "userSpaceOnUse", cx: 0, cy: 0, r: 1, gradientTransform: `matrix(${number(box.width / 2 * reach)} 0 0 ${number(box.height / 2 * reach)} ${number(cx)} ${number(cy)})` }, samples);
+  return helpers.tag("radialGradient", { id, gradientUnits: "userSpaceOnUse", cx: number(cx), cy: number(cy), r: number(Math.hypot(box.width, box.height) / 2) }, samples);
 }
 const GRADIENT_SAMPLES = 24;
 const toLinear = value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
 const toSrgb = value => value <= 0.0031308 ? value * 12.92 : 1.055 * value ** (1 / 2.4) - 0.055;
-// The color `t` of the way through gradient stops, as PowerPoint draws it: within the span of two stops eased by smoothstep and mixed
-// in linear light; the alpha mixed the same way.
+// The color `t` of the way through gradient stops, as PowerPoint 365 draws it (measured on linear and rectangle gradients): a gradient of
+// exactly two stops at 0 and 1 is eased by smoothstep and mixed in linear light; any other gradient (more stops, or a stop inside) is
+// mixed straight in sRGB between neighboring stops. The alpha is mixed the same way.
 function sampleStops(stops, t, helpers) {
   const paints = stops.map(entry => ({ position: entry.position, ...paintOf(entry.color, helpers, "#000000") }));
   if (t <= paints[0].position) return paints[0];
   const after = paints.findIndex(entry => entry.position >= t);
   if (after < 0) return paints[paints.length - 1];
-  const a = paints[after - 1], b = paints[after], linear = b.position > a.position ? (t - a.position) / (b.position - a.position) : 1, k = linear * linear * (3 - 2 * linear);
+  const a = paints[after - 1], b = paints[after], linear = b.position > a.position ? (t - a.position) / (b.position - a.position) : 1;
+  const eased = paints.length === 2 && paints[0].position === 0 && paints[1].position === 1;
+  const k = eased ? linear * linear * (3 - 2 * linear) : linear;
+  const space = eased ? [toLinear, toSrgb] : [value => value, value => value];
   const channel = at => {
-    const mixed = toLinear(parseInt(a.color.slice(at, at + 2), 16) / 255) * (1 - k) + toLinear(parseInt(b.color.slice(at, at + 2), 16) / 255) * k;
-    return Math.round(Math.min(1, Math.max(0, toSrgb(mixed))) * 255).toString(16).padStart(2, "0");
+    const mixed = space[0](parseInt(a.color.slice(at, at + 2), 16) / 255) * (1 - k) + space[0](parseInt(b.color.slice(at, at + 2), 16) / 255) * k;
+    return Math.round(Math.min(1, Math.max(0, space[1](mixed))) * 255).toString(16).padStart(2, "0");
   };
   return { color: `#${channel(1)}${channel(3)}${channel(5)}`.toUpperCase(), alpha: a.alpha * (1 - k) + b.alpha * k };
 }
 
 // The SVG paint of a fill (core ComposedFill) for one path's fill mode: { fill, opacity, defs }.
-function fillPaint(fill, mode, id, box, helpers) {
+/**
+ * A fan of triangles from the frame's center to each edge of `outline` (polygons), each filled with a linear gradient from the center
+ * (the first stop) to the edge's line (the last stop): within a triangle the contour lines are parallel to its edge, so together they are
+ * the outline scaled about the center. Each triangle is widened a little so neighbors overlap without a seam (they agree where they meet).
+ */
+function fanElements(gradient, outline, id, box, helpers, mode, alpha) {
+  const cx = box.x + box.width / 2, cy = box.y + box.height / 2, defs = [], shapes = [];
+  let index = 0;
+  for (const ring of outline) {
+    for (let at = 0; at < ring.length; at++) {
+      const [px, py] = ring[at], [qx, qy] = ring[(at + 1) % ring.length];
+      const ex = qx - px, ey = qy - py, length = Math.hypot(ex, ey);
+      if (length < 1e-6) continue;
+      // The foot of the perpendicular from the center to the edge's line: where the last stop is.
+      const k = ((cx - px) * ex + (cy - py) * ey) / (length * length), fx = px + ex * k, fy = py + ey * k;
+      if (Math.hypot(fx - cx, fy - cy) < 1e-6) continue;
+      const gid = `${id}-fan-${index++}`;
+      defs.push(helpers.tag("linearGradient", { id: gid, gradientUnits: "userSpaceOnUse", x1: number(cx), y1: number(cy), x2: number(fx), y2: number(fy) }, sampledStops(gradient, helpers, mode, alpha)));
+      // The triangle is widened by 0.8 px on every side (its apex split in two), so neighbors overlap all the way to the center and leave
+      // no seam however thin they are; past the center the gradient pads with its first stop, the center's own color.
+      const mx = (px + qx) / 2 - cx, my = (py + qy) / 2 - cy, md = Math.hypot(mx, my) || 1, ux = mx / md, uy = my / md;
+      const side = Math.sign(ex * -uy + ey * ux) || 1, nx = -uy * side * 0.8, ny = ux * side * 0.8;
+      const out = (x, y) => { const dx = x - cx, dy = y - cy, d = Math.hypot(dx, dy) || 1; return [x + dx / d * 0.8, y + dy / d * 0.8]; };
+      const [ax, ay] = out(px - nx, py - ny), [bx, by] = out(qx + nx, qy + ny);
+      const points = [[cx - ux * 0.8 - nx, cy - uy * 0.8 - ny], [ax, ay], [bx, by], [cx - ux * 0.8 + nx, cy - uy * 0.8 + ny]];
+      shapes.push(helpers.tag("path", { d: `M${points.map(([x, y]) => `${number(x)} ${number(y)}`).join("L")}Z`, fill: `url(#${gid})` }));
+    }
+  }
+  return { defs: defs.join(""), body: shapes.join("") };
+}
+
+// The stops of a gradient sampled as PowerPoint mixes them (sampleStops), from offset 0 to 1.
+function sampledStops(gradient, helpers, mode, alpha) {
+  const offsets = [...new Set([...gradient.stops.map(entry => entry.position), ...Array.from({ length: GRADIENT_SAMPLES + 1 }, (_, index) => index / GRADIENT_SAMPLES)])].sort((a, b) => a - b);
+  return offsets.map(offset => {
+    const color = sampleStops(gradient.stops, offset, helpers);
+    return helpers.tag("stop", { offset: precise(offset), "stop-color": shadeColor(color.color, mode), "stop-opacity": color.alpha * alpha < 1 ? precise(color.alpha * alpha) : undefined });
+  }).join("");
+}
+
+function fillPaint(fill, mode, id, box, helpers, shape, path) {
   if (!fill || fill.type === "none" || mode === "none") return { fill: "none" };
   const alpha = fill.opacity ?? 1;
   if (fill.type === "solid") {
     const paint = paintOf(fill.color, helpers, helpers.colors.primary);
     return { fill: shadeColor(paint.color, mode), opacity: paint.alpha * alpha };
   }
-  if (fill.type === "gradient") return { fill: `url(#${id})`, defs: gradientDef(fill.gradient, id, box, helpers, mode, alpha) };
+  if (fill.type === "gradient") {
+    // Every gradient spans the bounds of the shape's outline (core gradientBox; the frame for most presets). Rectangle and shape gradients:
+    // their contours are those bounds (rectangle) or the outline (shape) scaled about the bounds' center, so they are drawn exactly as a
+    // fan of triangles from the center, each a linear gradient across it to its edge.
+    const span = shape?.gradientBox ?? box;
+    const outline = fill.gradient.type === "rectangle" ? [[[span.x, span.y], [span.x + span.width, span.y], [span.x + span.width, span.y + span.height], [span.x, span.y + span.height]]]
+      : fill.gradient.type === "shape" && shape?.shapeGradient === "outline" ? path?.gradientOutline : undefined;
+    if (outline) return { fan: fanElements(fill.gradient, outline, id, span, helpers, mode, alpha) };
+    // A shape gradient PowerPoint draws as its circle gradient (shape.shapeGradient circle).
+    const gradient = fill.gradient.type === "shape" ? { ...fill.gradient, type: "radial" } : fill.gradient;
+    return { fill: `url(#${id})`, defs: gradientDef(gradient, id, span, helpers, mode, alpha) };
+  }
   const runs = patternRuns(fill.preset);
   const foreground = shadeColor(paintOf(fill.foreground ?? "accent1", helpers, helpers.colors.primary).color, mode);
   const background = paintOf(fill.background ?? helpers.colors.background, helpers, helpers.colors.background);
@@ -193,10 +247,16 @@ export function renderShapeBlock(item, helpers) {
   const effects = drawEffects(shape, id, helpers);
   if (effects.defs) defs.push(effects.defs);
   shape.paths.forEach((path, index) => {
-    const fill = fillPaint(shape.fill, path.fill, `${id}-fill-${index}`, box, helpers);
+    const fill = fillPaint(shape.fill, path.fill, `${id}-fill-${index}`, box, helpers, shape, path);
     if (fill.defs) defs.push(fill.defs);
     const closed = !path.open;
-    if (fill.fill !== "none") parts.push(helpers.tag("path", { ...HIDDEN, d: path.d, fill: fill.fill, "fill-opacity": fill.opacity !== undefined && fill.opacity < 1 ? precise(fill.opacity) : undefined }));
+    if (fill.fan) {
+      // The fan is clipped (antialiased) to the path it fills; its triangles overlap and are drawn without antialiasing, so the many thin
+      // triangles of a curved outline meet without seams.
+      defs.push(fill.fan.defs, helpers.tag("clipPath", { id: `${id}-fill-${index}-clip` }, helpers.tag("path", { d: path.d })));
+      parts.push(helpers.tag("g", { ...HIDDEN, "clip-path": `url(#${id}-fill-${index}-clip)` }, helpers.tag("g", { "shape-rendering": "crispEdges" }, fill.fan.body)));
+    }
+    if (fill.fill && fill.fill !== "none") parts.push(helpers.tag("path", { ...HIDDEN, d: path.d, fill: fill.fill, "fill-opacity": fill.opacity !== undefined && fill.opacity < 1 ? precise(fill.opacity) : undefined }));
     if (path.stroke && shape.stroke) {
       const stroke = strokeElements(shape.stroke, path.d, `${id}-line-${index}`, { box, closed, ends: path.ends, helpers });
       if (stroke.defs) defs.push(stroke.defs);

@@ -84,7 +84,7 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | Dotted table cell border (`dash: "dot"`) | PowerPoint's square dot, one line width on and one off; the preview leaves two widths between dots | `export-lossy`, `border-dot` |
 | Dashed table cell border (`dash: "dash"`) | PowerPoint's dash, four widths on and three off, as the preview draws it | none (exact) |
 | Shape block (`shape`, `path`) | A native shape: `a:prstGeom` with its adjust values (or `a:custGeom`), `a:ln`, `p:style` and its own text body, never autofit; PowerPoint wraps the text in the same rectangle | none |
-| `rectangle` or `shape` gradient on a shape | PowerPoint's own gradient path; the preview draws an ellipse from the center | none |
+| `rectangle` or `shape` gradient on a shape | PowerPoint's own gradient path; the preview draws the same contours (concentric rectangles, the outline scaled, or PowerPoint's circle for the presets it draws that way) | none |
 | Sketched line (`stroke.sketch`) | PowerPoint's Sketched line; the preview, and PowerPoint before 2021, draw the plain line | none |
 | Double border, shadow, shadow spread on a table cell | OPF has no key for them, so no deck carries one and neither engine draws one | none |
 | SVG image with a duotone recolor or a non-rectangular shape, an SVG background with the tile fit, an SVG quote photo, an SVG picture bullet | Its PNG raster instead of a native SVG picture | `export-lossy`, `svg-rasterized` |

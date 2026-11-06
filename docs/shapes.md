@@ -66,7 +66,15 @@ A name the preset does not have is `opf/shape-adjust-unknown`, and a value outsi
 
 A shape's path may shade its fill: DrawingML presets such as `can`, `cube`, `bevel`, `foldedCorner` and `smileyFace` draw parts of their fill lighter or darker (`lighten`, `lightenLess`, `darken`, `darkenLess`). Both engines draw them, the preview as PowerPoint's 60% and 80% tints and shades of the fill.
 
-The preview draws `rectangle` and `shape` gradients as an ellipse from the center, as it draws `radial`; PowerPoint draws them following the frame or the outline.
+Both engines draw every gradient as PowerPoint 365 does (measured on its export of all 187 presets):
+
+- A gradient spans the bounds of the shape's filled paths: the frame for most presets, the drawn quarter for `arc`, the upper half for `blockArc`.
+- `radial` is a circle from the center of those bounds through their corners, whatever their proportions.
+- `rectangle` is concentric rectangles: the bounds scaled about their center.
+- `shape` follows the outline: its contours are the outline scaled about the center of the bounds (on each ray from the center, the outline's farthest point). Each filled part of a preset follows its own outline, except the action buttons, `bevel` and `cube`, whose parts follow the whole shape's outline. PowerPoint draws the `shape` gradient of 64 presets (the arrows, ribbons, scrolls, braces, waves and the like) and of every custom `path` as its circle gradient instead, and so does the preview.
+- Colors mix as PowerPoint mixes them: a gradient of exactly two stops at 0 and 1 is eased and mixed in linear light; any other set of stops is mixed straight between neighboring stops.
+
+The preview draws a `rectangle` or `shape` gradient as a fan of triangles from the center, each a linear gradient across it to its edge, clipped to the path. Measured against PowerPoint's own picture of the same PPTX, the mean difference per color channel is 2.6 levels of 255 at the median preset and at most 5 for 179 of the 187; the largest are the tiny `cornerTabs` (11) and `star4` (7).
 
 ## Stroke
 
