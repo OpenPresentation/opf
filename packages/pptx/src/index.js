@@ -54,7 +54,8 @@ import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} fr
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
-import {themeSlotColors, schemeColorTable, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
+import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
+import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
@@ -62,9 +63,9 @@ import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagram
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -281,6 +282,8 @@ export async function toPptx(input, options = {}) {
   assertValidBoundary(presentation);
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
+  // SH-02: and the preset geometry when the deck has shapes (a no-op in Node).
+  await ensureShapes(presentation);
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
@@ -432,6 +435,9 @@ export async function toPptx(input, options = {}) {
   const authoredLiterals = authoredLiteralColors(presentation.variables, {...presentation.design, colorScheme: undefined, theme: undefined});
   context.deckSchemeColors = {table: schemeColorTable(context), keep: authoredLiterals};
   context.slideSchemeColors = [];
+  // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
+  context.shapeBlocks = new Map();
+  context.shapeSchemeColors = new Map();
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
@@ -714,8 +720,12 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
 // slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
 function dropImpliedVariants(imported, options) {
   // LH-01: a slide's implied variant includes its layout's (a section imports its accent clrMapOvr as a variant its layout already gives).
-  const rolesVariant = (design, slide = {}) => {
-    try { return JSON.stringify(coreContext({...imported, design, slides: [slide]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  // LH-164: a message-only slide's accent surface is implied by its content (and by the slide before it), so the slide is resolved inside the imported deck.
+  const rolesVariant = (design, slide = {}, at) => {
+    try {
+      const slides = at === undefined ? [slide] : imported.slides.map((other, index) => index === at ? slide : other);
+      return JSON.stringify(coreContext({...imported, design, slides}, at ?? 0, {...options, textMeasurement: undefined}).resolved.roles?.variant);
+    } catch { return undefined; }
   };
   const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
   if (imported.design?.variant !== undefined) {
@@ -725,10 +735,10 @@ function dropImpliedVariants(imported, options) {
       if (Object.keys(rest).length) imported.design = rest; else delete imported.design;
     }
   }
-  for (const slide of imported.slides) {
+  for (const [index, slide] of imported.slides.entries()) {
     if (slide.design?.variant === undefined) continue;
     const rest = withoutVariant(slide.design);
-    const implied = rolesVariant(imported.design, {...(slide.layout !== undefined ? {layout: slide.layout} : {}), design: rest});
+    const implied = rolesVariant(imported.design, {...slide, design: rest}, index);
     if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
       if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
     }
@@ -2502,7 +2512,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     const name = await addImageItem(slide, presentation, item, slideIndex, itemContext, options);
     if (item.caption) addCaption(slide, item, name, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
   };
-  await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options);
+  await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, geometry.surface !== undefined);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
@@ -2590,15 +2600,20 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
       addRichFitLines(slide, item.text, item.box, itemContext, {
-        value: item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
+        value: item.runs ?? item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
         fallback: item.field === 'tag' ? tagColor(itemContext) : item.eyebrow ? eyebrowColor(itemContext) : itemContext.textColor,
         ...(heading ? {
           objectName: index => `OPF heading ${item.path} line ${index}`,
           tag: (name, index, count, boundary) => context.headingTags.set(name, {v: 1, group: item.path, field: item.field, line: index, count, ...boundary, base: richBase(item.text, item.textStyle, item.field === 'tag' ? tagHex(itemContext) : itemContext.colors.text)})
-        } : {})
+        } : {}),
+        // LH-63: a run-in heading's bold run is core's, not the author's: the lines are tagged as plain text (as an unformatted body's are), so an
+        // unchanged export imports back as the authored string.
+        ...(item.runs ? {objectName: index => `OPF text ${item.path} line ${index}`, tag: (name, index, count, boundary) => context.plainTextTags.set(name, {v: 1, group: item.path, line: index, count, ...boundary}), keepEmpty: true} : {})
       });
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),...eyebrowOptions(item.textStyle, item.text.fontSize),...(item.eyebrow ? {color: pptxColor(eyebrowColor(itemContext))} : {}),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
+    } else if (item.field === "shape" && item.shape) {
+      addShapeItem(slide, item, slideIndex, itemContext, context);
     } else if (item.field === "image" && item.image) {
       await drawImage(item, itemContext);
     } else if (item.field === "diagram") {
@@ -2699,7 +2714,9 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const text = defaultTextSchemeValues(slideContext);
   slideContext.textColor = text.text ?? resolved.colors.text;
   slideContext.mutedColor = text.muted ?? resolved.colors.mutedText;
-  baseContext.slideSchemeColors[slideIndex] = {table: schemeColorTable(slideContext), keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined}, geometryFallbackBackground(presentation))};
+  // SH-02: the slide's lighter and darker ColorRefs are written as their base with a:lumMod and a:lumOff.
+  const slideTable = addTransformedColors(schemeColorTable(slideContext), reference => exportColor(reference, slideContext, slideContext.colors?.text), slide, effective.design?.background);
+  baseContext.slideSchemeColors[slideIndex] = {table: slideTable, keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined}, geometryFallbackBackground(presentation))};
   return slideContext;
 }
 
@@ -2940,7 +2957,7 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
 }
 
 // The native effects of an image treatment, resolved in the slide's colour context: core's mask (item.image.shape), the
-// border line, opacity and recolor.
+// stroke (SH-02: every stroke property, src/shape-blocks.js lineXml), opacity and recolor.
 function imageEffects(image, context) {
   const paint = (entry, fallback) => {
     const raw = exportColor(entry, context, fallback).replace(/^#/, '');
@@ -2948,12 +2965,79 @@ function imageEffects(image, context) {
   };
   return {
     shape: image.shape ?? null,
-    border: image.border ? { ...paint(image.border.color, context.colors.border), width: image.border.width } : null,
+    strokeXml: image.stroke ? lineXml(image.stroke, shapePaint(context), shapePalette(context), image.box) : null,
     opacity: image.opacity ?? null,
     recolor: image.recolor?.type === 'grayscale' ? { type: 'grayscale' }
       : image.recolor?.type === 'duotone' ? { type: 'duotone', dark: paint(image.recolor.dark, '000000'), light: paint(image.recolor.light, 'FFFFFF') } : null,
     paint
   };
+}
+
+const sixDigit = value => typeof value === 'string' && /^#?[0-9a-f]{6}$/i.test(value.trim()) ? value.trim().replace(/^#/, '').toUpperCase() : undefined;
+const THEME_SLOT_VALUES = Object.freeze({dark1: 'dk1', light1: 'lt1', dark2: 'dk2', light2: 'lt2'});
+// SH-02: a ColorRef as a shape's or picture line's DrawingML color: its RRGGBB and alpha, and the slide's scheme value where the reference
+// names a slot or role the deck theme holds exactly (schemeColorValue), so it is written as a theme color.
+function shapePaint(context) {
+  return (entry, fallback) => {
+    const raw = exportColor(entry, context, fallback).replace(/^#/, ''), hex = normalizeHex(raw.slice(0, 6), fallback);
+    const alpha = /^[0-9a-f]{8}$/i.test(raw) ? parseInt(raw.slice(6), 16) / 255 : 1;
+    // A slot the slide's color map does not reach (dark1 on a dark variant's slide) is written by its own name (dk1), which PowerPoint
+    // reads from the theme directly, where the deck theme holds exactly that color.
+    const slot = typeof entry === 'string' && !context.schemeOverride ? THEME_SLOT_VALUES[entry.trim()] : undefined;
+    const scheme = typeof entry === 'string' ? schemeColorValue(entry, `#${hex}`, context) ?? (slot && sixDigit(context.themeColors?.[entry.trim()]) === hex && sixDigit(themeSlotColors(context.colorScheme)[entry.trim()]) === hex ? slot : undefined) : undefined;
+    return { hex, alpha, ...(scheme ? {scheme} : {}) };
+  };
+}
+
+// SH-02: the colors a shape's drawing falls back to: the primary (a style's accent1), the slide background and the neutral line.
+function shapePalette(context) {
+  return { primary: normalizeHex(context.roles?.primary ?? context.colors.accent), background: normalizeHex(context.colors.background), border: normalizeHex(context.roles?.neutrals?.border?.hex ?? `#${context.colors.border}`) };
+}
+
+// SH-02: a shape block (core ComposedItem.shape) as one native shape (src/shape-blocks.js): PptxGenJS writes the shape and its runs at
+// core's fitted size, centered, with the text color that reads on the drawn fill; writeShapeBlocks then writes core's geometry, fill,
+// line, style and text body. The style's derived colors (a darker accent line, a lighter fill) are written as theme colors with
+// a:lumMod and a:lumOff, as the authored ones are.
+function addShapeItem(slide, item, slideIndex, context, deck) {
+  const shape = item.shape, name = `OPF shape ${item.path}`, palette = shapePalette(context);
+  const paint = shapePaint(context);
+  // The slide's table is built again with its context, so the shape's derived colors are kept apart and merged when the part is written.
+  const table = deck.slideSchemeColors?.[slideIndex]?.table;
+  if (table) {
+    const own = deck.shapeSchemeColors.get(slideIndex) ?? new Map(), view = new Map([...table, ...own]);
+    addTransformedColors(view, reference => exportColor(reference, context, '000000'), shape.fill, shape.stroke, shape.styleRef, shape.textColor, shape.textBackdrop, shape.effects);
+    for (const [hex, entry] of view) if (!table.has(hex)) own.set(hex, entry);
+    deck.shapeSchemeColors.set(slideIndex, own);
+  }
+  const backdrop = shape.textBackdrop === undefined ? `#${normalizeHex(context.colors.background)}` : `#${paint(shape.textBackdrop, palette.background).hex}`;
+  const preferred = `#${paint(shape.textColor, normalizeHex(context.colors.text)).hex}`, slideText = `#${normalizeHex(context.colors.text)}`, slideBackground = `#${normalizeHex(context.colors.background)}`;
+  const drawn = shapeTextColor(backdrop, preferred, slideText, slideBackground);
+  // The color as a theme color where the reference names one (the style's, else the slide's text or background role).
+  const textHex = nativeColor(drawn === preferred ? shape.textColor : drawn === slideText ? 'text' : 'background', drawn, context);
+  const fit = item.text, size = fit ? fit.fontSize * .75 : 18;
+  const lineHeight = fit ? (fit.richLines?.[0]?.height ?? fit.lineHeight ?? fit.fontSize * 1.22) * .75 : undefined;
+  const value = item.payload?.text, runs = [];
+  const style = item.textStyle ?? {fontFamily: context.fonts.body, fontWeight: 400};
+  const base = {...nativeFontOptions(style), ...(shape.textBold ? {bold: true} : {}), fontSize: size, color: textHex};
+  const push = (text, run = {}) => {
+    const lines = String(text).split(/\r\n|\r|\n/);
+    lines.forEach((line, index) => {
+      const own = {...base, ...(run.bold !== undefined ? {bold: run.bold} : {}), ...(run.italic !== undefined ? {italic: run.italic} : {}), ...(run.underline ? {underline: {style: 'sng'}} : {}), ...(run.strikethrough ? {strike: 'sngStrike'} : {}),
+        ...(run.color !== undefined && run.color !== '' ? {color: exportColor(run.color, context, textHex).slice(0, 6)} : {}), ...(typeof run.link === 'string' ? {hyperlink: {url: run.link}, color: linkColor(run, run.color !== undefined && run.color !== '' ? exportColor(run.color, context, textHex).slice(0, 6) : textHex, context)} : {}),
+        ...(typeof run.fontFamily === 'string' ? {fontFace: run.fontFamily} : {}), ...(typeof run.fontSize === 'number' ? {fontSize: run.fontSize} : {}), ...(run.superscript ? {superscript: true} : {}), ...(run.subscript ? {subscript: true} : {}),
+        ...(index < lines.length - 1 ? {breakLine: true} : {})};
+      // LH-11: a space core's line breaker never breaks at ("16 px") is written as a no-break space, so PowerPoint wraps the shape's text as the preview does.
+      runs.push({text: bindNoBreak(line), options: own});
+    });
+  };
+  if (typeof value === 'string') push(value);
+  else if (Array.isArray(value)) for (const run of value) typeof run === 'string' ? push(run) : push(run?.text ?? '', run ?? {});
+  if (runs.length) assertXmlText(runs.map(run => run.text).join(''), `${item.path}.text`);
+  const box = shape.box;
+  slide.addText(runs.length ? runs : '', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, objectName: name, ...base, align: 'center', valign: 'middle', margin: 0, paraSpaceAfter: 0, paraSpaceBefore: 0,
+    ...(lineHeight ? {lineSpacing: Math.round(lineHeight * 100) / 100} : {}), fit: 'none'});
+  deck.shapeBlocks.set(name, {...shapeBlockRecord(shape, paint, palette), ...(shape.link ? {link: shape.link} : {})});
+  return name;
 }
 
 // An overlay (core ComposedOverlay) as one native shape directly above its picture: the frame's shape, or an edge band.
@@ -2980,7 +3064,7 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   const block = isPlainObject(item.payload) ? item.payload : {};
   const treatment = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => key !== 'overlay' && block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
   const effects = imageEffects(image, context);
-  const treated = Boolean(effects.border || effects.opacity !== null || effects.recolor || image.overlay || (effects.shape && effects.shape.preset !== 'rect'));
+  const treated = Boolean(effects.strokeXml || effects.opacity !== null || effects.recolor || image.overlay || (effects.shape && effects.shape.preset !== 'rect'));
   // RR-94: every image block is tagged (an empty treatment when it has none), so an unchanged picture re-imports without a crop
   // diagnostic, and one authored from a relative path or URL records that source to give it back.
   const source = recordableImageSource(item.value);
@@ -3174,7 +3258,9 @@ const backgroundUnresolved = path => ({code: 'unresolved-asset', path, reason: '
 // (and its overlay) and before all content, the preview's paint order. The
 // slide's own design.watermark replaces the deck's, and false suppresses it.
 // Frame, fit and opacity are written after PptxGenJS embeds the bytes.
-async function addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options) {
+// LH-164: on the accent surface of a message-only slide an image watermark is drawn in the slide's text color (a duotone of one color on the
+// blip, the preview's feColorMatrix), so a mark made for the deck's plain surface still reads there.
+async function addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, onSurface = false) {
   const local = opfSlide.design?.watermark !== undefined;
   const watermark = local ? opfSlide.design.watermark : presentation.design?.watermark;
   if (watermark === undefined || watermark === null || watermark === false) return;
@@ -3195,7 +3281,7 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
     return;
   }
   const opacity = watermarkOpacity(watermark);
-  context.watermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box, opacity, path});
+  context.watermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box, opacity, path, ...(onSurface ? {recolor: normalizeHex(slideContext.colors.text)} : {})});
   // Opacity is an a:alphaModFix on the blip, which PowerPoint applies to an SVG picture (native check 2026-10-01).
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${watermarkName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: watermarkName(), ...box, altText: assetAlt(asset, presentation) ?? 'Watermark'});
@@ -3276,6 +3362,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const authoredOptions = resolveChartOptionsFor(chart);
   reportChartOptionDiagnostics(authoredOptions, path, options.onDiagnostic);
   let chartOptions = chartLayerDataLabels(authoredOptions, layer, chartTargetFor(chart.type)?.kind);
+  // LH-160: a histogram or Pareto chart whose data labels would not fit beside each other draws none (core `layer.histogram`), in the classic fallback too.
+  const histogram = chartLayout?.layer?.histogram;
+  if (histogram?.valueLabels === false) chartOptions = {...chartOptions, dataLabels: undefined};
   // LH-109: a stacked column or area chart labels its segments with their values by default (in the middle of a column; an area point
   // has no position); the values that do not fit are hidden per point after the labels are written (src/chart-marks.js).
   const stackLabels = Boolean(layer?.stack?.values.some(row => row.some(Boolean)) && !chartOptions.dataLabels);
@@ -3335,9 +3424,14 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const legibleSeries = chartSchemeSeries(chart.colors, context.colorScheme, colorContext);
   const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries, soften: true});
   const strongPalette = chartPaletteForFill(panelFill, preferredPalette, {legible: legibleSeries}).map(color=>normalizeHex(color));
-  const palette = adjustedPalette.map(color=>normalizeHex(color));
+  // LH-161: a pie's or doughnut's last slice is moved off the first (at most 20 L*) when they would read as one tone, else every slice gets a
+  // surface-colored border (core chartSlicePlan), as the preview draws it; a moved color is an sRGB literal, never the scheme accent it came from.
+  const slicePlan = circular ? chartSlicePlan(panelFill, adjustedPalette, chartData.pointCount, {legible: legibleSeries}) : undefined;
+  const slicePalette = slicePlan?.colors ?? adjustedPalette;
+  const palette = slicePalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, strongPalette.map(hex => `#${hex}`), (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents,
     chartSoftColors(panelFill, preferredPalette, {legible: legibleSeries}));
+  slicePalette.forEach((color, index) => { if (color !== adjustedPalette[index]) paletteSchemes[index] = undefined; });
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular, ...(layer?.rings ? {ringNames: layer.rings} : {}),
     // LH-105: the series names at the line ends and the category names on the slices (src/chart-direct-labels.js).
     ...(layer?.slices && !chartOptions.dataLabels ? {sliceLabels: layer.slices} : {}),
@@ -3366,7 +3460,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     const waterfall = chartLayout?.layer?.waterfall;
     const waterfallInfo = waterfall ? {...waterfall, connector: axisLineColor, caption: chartLayout.layer.header?.caption?.text, colors: waterfall.colors
       ? Object.fromEntries(Object.entries(chartWaterfallColors(panelFill, `#${strongPalette[0]}`, `#${markLabelColor}`, context.colorScheme?.dark2, {labeled: waterfall.labels})).map(([role, color]) => [role, normalizeHex(color)])) : undefined} : undefined;
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, markLabelColor, markLabelBackground: normalizeHex(`#${context.colors.background}`), gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(histogram ? {histogram} : {}), ...(numberFormats ? {formats: numberFormats.series, groups: numberFormats.groups} : {}), ...(waterfallInfo ? {waterfall: waterfallInfo, rtl: context.direction === 'rtl'} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -3407,7 +3501,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     dataLabelColor: markLabelColor,
     dataLabelFontSize: textSize / 100,
     showValue: false,
-    ...(circular ? {dataBorder: {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
+    ...(circular ? {dataBorder: slicePlan?.bordered ? {color: normalizeHex(panelFill).slice(0, 6), pt: CHART_SLICE_SEPARATOR_PX * 0.75} : {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
     valGridLine: { color: gridColor, size: 1 },
     // LH-105: no tick marks: the gridlines carry the value scale and the category labels name their bands (Few: few gridlines and ticks).
     catAxisMajorTickMark: 'none',
@@ -3626,7 +3720,7 @@ function pixelBox(region) {
 // super/subscript (a citation marker is a baseline run) and http(s)/mailto links. The body's lines stay untagged; a heading or quote
 // body passes `objectName` and `tag`, which name and tag every line with the boundary between wrapped lines (a soft wrap inserts
 // nothing, a hard line break keeps its separator), recovered from the flattened text. `fallback` is the color of runs without one.
-function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag}) {
+function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag, keepEmpty = false}) {
   const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
   const runText = run => typeof run === 'string' ? run : run.text;
   const whole = typeof value === 'string' ? value : value.map(runText).join('');
@@ -3653,7 +3747,8 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
       cursor = end + (newline ? newline[0].length : 0);
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
-    if (runs.length) slide.addText(runs, {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
+    // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
+    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
   }
 }
 
@@ -4094,6 +4189,14 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
     });
   }
   if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  // LH-78: a quote card's decorative mark, one native text box in the primary color (against the card, as a metric's value is) where core placed it,
+  // tagged into the quote's group as decoration (role 'mark') so an unchanged export imports back with the quote.
+  if (layout.mark) {
+    const mark = layout.mark, backdrop = context.cardFill ?? `#${normalizeHex(context.colors.background)}`, textHex = `#${normalizeHex(context.colors.text)}`;
+    const markHex = metricValueColor(`#${normalizeHex(context.colors.accent)}`, backdrop, textHex).toUpperCase();
+    addMeasuredPayloadText(slide, mark.text, mark.box, context, options, {path: mark.path, fit: mark.fit, textStyle: mark.style, diagnosticsHandled: true, color: markHex === textHex.toUpperCase() ? context.textColor : markHex.slice(1), quote: {group, part: layout.parts.length}});
+    context.quoteTags.set(`OPF quote ${group} part ${layout.parts.length} line 0`, {v: 1, role: 'mark', group});
+  }
   // LH-114: a pull line's accent rule, a native rectangle in the primary color where core placed it (as the preview draws it), tagged
   // into the quote's group so an unchanged export imports back with the quote.
   if (layout.rule) {
@@ -5135,6 +5238,8 @@ async function normalizePptxZip(raw, context) {
     }
     imageMetadata.set(part, metadata);
   }
+  // SH-02: a shape block's click link (a:hlinkClick in its p:cNvPr, with its slide's external hyperlink relationship).
+  linkShapeBlocks(entries, context.shapeBlocks, {decode: decodeText, encode: encodeText});
   // Image pictures need the embedded dimensions (core's fitImage crops and pads them); document provenance (FF-32)
   // later records the placed frames as slide geometry evidence.
   try {
@@ -5461,6 +5566,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         if (placement.shape) picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, `<a:prstGeom prst="${placement.shape.preset}">${adjust ? `<a:avLst>${adjust}</a:avLst>` : '<a:avLst/>'}</a:prstGeom>`);
         return picture;
       });
+      // SH-02: shape blocks take core's geometry, fill, line, style and text body (src/shape-blocks.js).
+      xml=writeShapeBlocks(xml,context.shapeBlocks);
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{
@@ -5500,8 +5607,10 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     // RR-96: literal colors that are scheme colors become schemeClr (with lumMod/lumOff for the derived neutrals).
     if (/^ppt\/(?:slides\/slide|charts\/chart(?:Ex)?|charts\/style)\d+\.xml$/.test(path)) {
-      const entry = context.slideSchemeColors[context.partSlides.get(path) ?? context.styleSlides.get(path)];
-      if (entry) xml = writeSchemeColors(xml, entry.table, entry.keep);
+      const index = context.partSlides.get(path) ?? context.styleSlides.get(path), entry = context.slideSchemeColors[index];
+      // SH-02: with the derived colors of the slide's shape styles (addShapeItem).
+      const shapeColors = context.shapeSchemeColors.get(index);
+      if (entry) xml = writeSchemeColors(xml, shapeColors?.size ? new Map([...entry.table, ...[...shapeColors].filter(([hex]) => !entry.table.has(hex))]) : entry.table, entry.keep);
     } else if (/^ppt\/(?:slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/.test(path)) xml = writeSchemeColors(xml, context.deckSchemeColors.table, context.deckSchemeColors.keep);
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);

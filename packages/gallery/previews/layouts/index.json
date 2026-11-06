@@ -31,7 +31,7 @@
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 1266
+      "bytes": 1499
     },
     {
       "id": "text",
@@ -61,17 +61,17 @@
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 5890
+      "bytes": 5887
     },
     {
       "id": "comparison",
       "file": "comparison.svg",
-      "bytes": 2805
+      "bytes": 4006
     },
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 6163
+      "bytes": 6166
     },
     {
       "id": "timeline",
@@ -86,7 +86,7 @@
     {
       "id": "metrics",
       "file": "metrics.svg",
-      "bytes": 3786
+      "bytes": 3885
     },
     {
       "id": "scorecard",

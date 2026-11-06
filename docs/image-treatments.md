@@ -47,7 +47,7 @@ The string shorthand `"asset:hero"` (or any source starting with `asset:`, `http
 ## Image blocks
 
 ```json
-{ "image": { "src": "asset:hero", "alt": "Harbour" }, "fit": "cover", "focus": { "x": 0.3, "y": 0.5 }, "shape": "rounded", "border": { "color": "accent5", "width": 1 } }
+{ "image": { "src": "asset:hero", "alt": "Harbour" }, "fit": "cover", "focus": { "x": 0.3, "y": 0.5 }, "shape": "roundRect", "stroke": { "color": "accent5", "width": 1 } }
 ```
 
 `Slide.image` is source shorthand for one image block, with the effective `design.imageFit`: it takes no fit, focus, treatment or placement keys of its own (the schema rejects them on the slide). To treat or place a picture, write an image block in `blocks`. Every property below is optional, valid only on an image payload, and additive.
@@ -56,19 +56,19 @@ The string shorthand `"asset:hero"` (or any source starting with `asset:`, `http
 |---|---|---|---|
 | `fit` | `cover` fills the frame and crops around `focus`. `contain` shows the whole picture. `stretch` scales it to the frame. `auto` (LH-104) covers when the crop keeps at least 85% of the picture's width or height (at most 7.5% off each edge; the proportions read from the file with its EXIF orientation applied, against the frame) and contains otherwise; an SVG, or a picture whose size core cannot read from the document (an https URL, a relative path), is always contained. In an automatic picture track (LH-80), a frame the engine chose to crop into, `auto` covers. Core decides it, so both engines draw the same fit, and `ComposedItem.image.fit` is the fit it took, with `autoFit: true`. Default: the effective `design.imageFit` (the slide's, the deck's, then the layout's), else `cover` in a layout and `contain` on a slide with no layout. A contained picture has a frame of its own proportions at the region's anchor (top by default). | `a:srcRect`: positive insets crop, negative insets pad | the shared placement (`fitImage`) |
 | `focus` | `{ x, y }`: the point a `cover` crop keeps in view. | `a:srcRect` | the same placement |
-| `aspectRatio` | The largest centered frame with this width/height ratio (`circle` uses 1). | frame geometry | frame geometry |
-| `shape` | `rectangle`, `rounded`, `circle` or `hexagon`. | `a:prstGeom` `rect` / `roundRect` / `ellipse` / `hexagon` with core's guide values | `clipPath` with core's outline of the same preset formula |
-| `cornerRadius` | Radius of a `rounded` frame as a share of the shorter side. Default 0.16667. | `roundRect` `adj` | circular arcs with the same radius |
-| `border` | `{ color, width }`. The line is centered on the outline, and its width is in reference pixels. | `a:ln` with `solidFill`, `algn="ctr"` and a miter join | `stroke` on the same outline, miter join |
+| `aspectRatio` | The largest centered frame with this width/height ratio (`ellipse` uses 1). | frame geometry | frame geometry |
+| `shape` | Any of the 187 DrawingML presets ([shapes](shapes.md#presets)): `rect` (the default), `roundRect`, `ellipse`, `hexagon`, `chevron`, `star5` and the rest. 0.33 renamed `rectangle`, `rounded` and `circle` to `rect`, `roundRect` and `ellipse`. | `a:prstGeom` with the block's adjust values | `clipPath` with core's evaluated outline of the same preset (SH-01) |
+| `adjust` | The preset's adjust values ([shapes](shapes.md#adjust-values)): a `roundRect` frame's corner is `{ "adj": 0.05 }`, a share of the shorter side (default 0.16667). Replaces `cornerRadius` (0.33). | `a:avLst` | the evaluated outline |
+| `stroke` | The line along the outline, renamed from `border` in 0.33: `{ color, width }` plus every stroke property of a shape ([stroke](shapes.md#stroke)): dash, cap, join, compound, alignment. Width in reference pixels (default 2); without a color the slide's neutral line. A picture's line is centered with a miter join unless it says otherwise. | `a:ln` | `stroke` on the same outline |
 | `opacity` | Opacity of the picture's pixels only. | `a:alphaModFix` | `opacity` on the image only |
 | `recolor` | `"grayscale"`, or `{ dark, light }` for duotone. Luminance uses Rec. 601 weights on sRGB. | `a:grayscl` / `a:duotone` | `feColorMatrix` in sRGB |
 | `overlay` | A scrim in the frame's shape, or an edge band on a rectangle frame. | one `p:sp` directly above the picture | `path` with `fill-opacity` |
 | `placement` | `{ edge, size, inset }`: bleed the block to one slide edge (see below). | frame geometry | frame geometry |
 | `portrait` | A person's picture in a team (LH-132): `top` across the top of the card, `side` beside the text, `avatar` the small picture over the name. See [Team portraits](#team-portraits). | frame geometry | frame geometry |
 
-Colors accept the usual `ColorRef` forms: hex, scheme slot or role, or `var:<id>`. Eight-digit hex alpha is kept as native `a:alpha` and SVG opacity. Alt text comes from the image's asset.
+Colors accept the usual `ColorRef` forms: hex, scheme slot or role, `var:<id>`, or a lighter or darker color (`{ "color": "accent1", "lighten": 0.4 }`, [shapes](shapes.md#lighter-and-darker-colors)). Eight-digit hex alpha is kept as native `a:alpha` and SVG opacity. Alt text comes from the image's asset.
 
-`composeSlide` reports every image item's picture as `ComposedItem.image`: the `region` (the cell, or the placement band), the frame `box`, `fit`, `focus`, the `shape` with its DrawingML preset and SVG outline, `border`, `opacity`, `recolor`, `overlay` and `placement`. Both engines draw exactly that. The paint order is the same in both: the picture with its recolor and opacity, clipped to the shape, then the line, then the overlay.
+`composeSlide` reports every image item's picture as `ComposedItem.image`: the `region` (the cell, or the placement band), the frame `box`, `fit`, `focus`, the `shape` with its DrawingML preset and SVG outline, `stroke`, `opacity`, `recolor`, `overlay` and `placement`. Both engines draw exactly that. The paint order is the same in both: the picture with its recolor and opacity, clipped to the shape, then the line, then the overlay.
 
 ### Team portraits
 
@@ -81,7 +81,7 @@ A person is a group of a picture followed by a name: a list of one entry whose `
 
 The text comes first: the team's names, roles and lines take the largest size of the type scale at which the tallest of them fits under a square portrait (down to 21 px, then under a 4:3 one) or in the card's height beside it, and the portrait takes the room left, at most 4:5 across the top or 0.7 beside the text, never flatter than 4:3 (then the avatar). Every card reserves the team's tallest text, so the cards are equal and the portraits align; each card holds its portrait and text and sits in the middle of its cell. The automatic choice is a guarded rule (`portraits`): a slide keeps it only when no name, role or line is smaller than with the avatars, no picture covers less area than the picture the slide draws without the rule, and every person of the team has a portrait. Otherwise the slide is composed again with the rule off, so it is exactly the slide without it.
 
-The picture keeps its `fit` and `focus`; without them it covers its frame around the upper third (`{x: 0.5, y: 0.3}`, where a face is), so it never distorts. A `circle` (or unshaped) picture is drawn in a frame rounded as a card is (8 px); another `shape` is kept. The engines draw core's frame: the preview clips the picture to it, PowerPoint writes a native picture with `a:srcRect` and the `roundRect` preset, so a raster portrait is not re-encoded.
+The picture keeps its `fit` and `focus`; without them it covers its frame around the upper third (`{x: 0.5, y: 0.3}`, where a face is), so it never distorts. An `ellipse` (or unshaped) picture is drawn in a frame rounded as a card is (8 px); another `shape` is kept. The engines draw core's frame: the preview clips the picture to it, PowerPoint writes a native picture with `a:srcRect` and the `roundRect` preset, so a raster portrait is not re-encoded.
 
 `portrait` on a person's picture overrides the choice: `top`, `side` or `avatar`. The first person's value in reading order applies to the whole team, so the cards stay equal; an authored `top` that does not fit gives way to `side`, and either gives way to the avatar where the card has no room. A quote's `portrait` does the same for its `photo` ([content payloads](content-payloads.md#quote)).
 
@@ -127,14 +127,14 @@ A cover's or section's heading group over a picture (LH-158) may sit at the top,
 | text-overlay | background with `overlay: {color: dark1, opacity: 0.55}` | supported | Heading color still follows the theme background. Use a dark theme or background for light text over photos. |
 | side-by-side | image block, `placement: {edge: left, size: 0.46}` | supported | |
 | caption-overlay | image block, `overlay: {color: dark1, opacity: 0.75, edge: bottom, size: 0.25}` | supported | Square corners. An edge band cannot follow a rounded mask as one native shape. The gallery's card sits inside the slide padding, which a background cannot do, so the picture is content below the headings. Without the inset it is a background with the same edge-band overlay. |
-| masked-shape | image block, `shape: hexagon, aspectRatio: 1.1547, placement: {edge: right, inset: true}` | supported | Masks are limited to the four presets. Arbitrary polygon and custom-geometry masks are not in the vocabulary. |
-| circular-crop | image block, `shape: circle, placement: {edge: left, size: 0.4, inset: true}` | supported | The gallery's small shadow is not drawn (see shadows). |
-| rounded-card | image block, `shape: rounded, cornerRadius: 0.05, border: {color: accent5, width: 1}` | supported, without shadow | The optional card shadow is unsupported (see shadows). |
+| masked-shape | image block, `shape: hexagon, aspectRatio: 1.1547, placement: {edge: right, inset: true}` | supported | Any of the 187 presets is a mask (0.33). A custom-geometry mask is not in the vocabulary. |
+| circular-crop | image block, `shape: ellipse, placement: {edge: left, size: 0.4, inset: true}` | supported | The gallery's small shadow is not drawn (see shadows). |
+| rounded-card | image block, `shape: roundRect, adjust: {adj: 0.05}, stroke: {color: accent5, width: 1}` | supported, without shadow | The optional card shadow is unsupported (see shadows). |
 | duotone | background with `recolor: {dark: accent1, light: light1}` | supported | Native raster parity of PowerPoint's luminance weights is unverified (see fidelity). |
 | background-blur | background with `overlay: {color: light1, opacity: 0.4}`, plus `contentBox: true` | **unsupported: blur** | Blur is not expressible. The mapping keeps the light scrim and the sharp card, without the blur. |
 | image-strip | image block, `placement: {edge: bottom, size: 0.3}` | partial | A placed block is one picture. A strip of several images is content: image blocks in a row composition. |
 | collage-grid | 4 image blocks, `composition: {mode: grid, columns: 2}`, `imageFit: cover` | supported via content blocks | A collage is content composition, not a single-image treatment. |
-| device-frame | image block, `aspectRatio: 0.5, shape: rounded, cornerRadius: 0.12, border: {color: dark1, width: 12}, placement: {edge: right, inset: true}` | partial | The bezel is a thick line on a rounded portrait frame. Device artwork (notch, buttons, device-specific screens) is not expressible. |
+| device-frame | image block, `aspectRatio: 0.5, shape: roundRect, adjust: {adj: 0.12}, stroke: {color: dark1, width: 12}, placement: {edge: right, inset: true}` | partial | The bezel is a thick line on a rounded portrait frame. Device artwork (notch, buttons, device-specific screens) is not expressible. |
 | cutout-subject | image block, `fit: contain, placement: {edge: right}`, with a transparent PNG | partial | **Background removal is unsupported.** PowerPoint's Remove Background produces an edited bitmap, not a declarative effect. Supply a pre-cut transparent PNG, and both engines keep its alpha. The grounding shadow is unsupported (see shadows). |
 | watermark | image block, `fit: contain, opacity: 0.1, recolor: grayscale` | supported | `design.watermark` remains a separate, preview-only feature. |
 | cinematic-crop | image block, `aspectRatio: 2.39`, with `design.background: dark1` | supported | |

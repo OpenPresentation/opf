@@ -58,8 +58,33 @@ function resolveVariable(variables: Record<string, unknown>, id: string, fallbac
   return fallback;
 }
 
-/** Resolve a ColorRef or TextRun.color string to a literal hex color. */
-export function resolveColorRef(reference: string, options: ResolveColorRefOptions): string {
+/**
+ * SH-02: the lighter or darker form of a ColorRef, `{ color, lighten }` or `{ color, darken }` (opf.schema.json ColorTransform), as the
+ * DrawingML luminance transform PowerPoint's theme tints and shades use: `lighten` L is lumMod (1 - L) and lumOff L, `darken` D is
+ * lumMod (1 - D), both in thousandths of a percent. Undefined for anything else (a string ColorRef, or an object that is neither).
+ */
+export function colorTransform(reference: unknown): { color: unknown; lumMod: number; lumOff: number } | undefined {
+  if (reference === null || typeof reference !== 'object' || Array.isArray(reference)) return undefined;
+  const { color, lighten, darken } = reference as { color?: unknown; lighten?: unknown; darken?: unknown };
+  const share = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : undefined;
+  const light = share(lighten), dark = share(darken);
+  if (color === undefined || (light === undefined) === (dark === undefined)) return undefined;
+  return light !== undefined ? { color, lumMod: Math.round((1 - light) * 100000), lumOff: Math.round(light * 100000) } : { color, lumMod: Math.round((1 - dark!) * 100000), lumOff: 0 };
+}
+
+/** SH-02: `hex` (#RGB, #RRGGBB or #RRGGBBAA) with a ColorRef's lighter or darker transform applied; an alpha byte is kept. */
+export function applyColorTransform(hex: string, transform: { lumMod: number; lumOff: number }): string {
+  const literal = normalizeHexColor(hex);
+  if (!literal) return hex;
+  const alpha = /^#[0-9a-f]{8}$/i.test(hex.trim()) ? hex.trim().slice(7).toUpperCase() : '';
+  return applyLuminance(literal, transform.lumMod, transform.lumOff) + alpha;
+}
+
+/** Resolve a ColorRef (or a TextRun.color string) to a literal hex color; the lighter or darker object form resolves its base and applies its transform. */
+export function resolveColorRef(reference: unknown, options: ResolveColorRefOptions): string {
+  const transform = colorTransform(reference);
+  if (transform) return applyColorTransform(resolveColorRef(transform.color, options), transform);
+  if (typeof reference !== 'string') return options.fallback;
   const { colorScheme, roles, variables = {}, fallback } = options;
   const literal = normalizeHexColor(reference);
   if (literal) return literal;
@@ -230,6 +255,12 @@ export function layoutColorVariant(layout: unknown, deck: LayoutVariantDeck = { 
   return value;
 }
 
+/** LH-164: what a layout record's `design.variant` is: a tone-relative `surface` (the statement, the quote), a `brand`, a variant as written, or undefined when it names none. */
+export function layoutVariantKind(layout: unknown): 'surface' | 'brand' | 'variant' | undefined {
+  const value = layoutVariantValue(layout);
+  return value === undefined ? undefined : value === 'surface' || value === 'brand' ? value : 'variant';
+}
+
 const isSetBackground = (value: unknown): boolean => value !== undefined && value !== null && value !== false;
 /** The image sources a background string shorthand can be (composition's IMAGE_SOURCE). */
 const IMAGE_SOURCE_SHORTHAND = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
@@ -266,10 +297,23 @@ export function deckBackgroundIsFixed(deckDesign: unknown, themeBackground: unkn
  * LH-01: whether a layout's variant decides the slide's background: the layout names one and the slide's own design sets neither a
  * variant nor a background, so the layout hides a scheme-based background of the deck and the theme (the slide is the variant's bg1).
  * LH-103: never over a fixed background of the deck or the theme ({@link deckBackgroundIsFixed}), which the slide keeps.
+ * LH-164: `surface` is a variant the slide's content asks for (a message-only slide's accent surface, messageSurface): it decides the
+ * background under the same conditions, over a layout that names no variant.
  */
-export function layoutVariantApplies(slideDesign: unknown, layout: unknown, deckDesign: unknown = {}, themeBackground: unknown = undefined): boolean {
+export function layoutVariantApplies(slideDesign: unknown, layout: unknown, deckDesign: unknown = {}, themeBackground: unknown = undefined, surface: unknown = undefined): boolean {
   const own = slideDesign && typeof slideDesign === 'object' ? (slideDesign as { variant?: unknown; background?: unknown }) : {};
-  return layoutVariantValue(layout) !== undefined && own.variant === undefined && !isSetBackground(own.background) && !deckBackgroundIsFixed(deckDesign, themeBackground);
+  return (layoutVariantValue(layout) !== undefined || (surface !== undefined && !deckBackgroundIsChosen(deckDesign, themeBackground))) && own.variant === undefined && !isSetBackground(own.background) && !deckBackgroundIsFixed(deckDesign, themeBackground);
+}
+
+/**
+ * LH-164: whether the deck or the theme draws a background the author chose, so a content-asked surface (a message-only slide's accent) leaves
+ * it alone: any background but none and the neutral theme slots (`light1`, `dark2`, `{ type: "theme" }`), which are the deck's plain surface.
+ * A solid slot or role color (`accent2`, `primary`) is a chosen one, though a layout's variant still replaces it (LH-103).
+ */
+export function deckBackgroundIsChosen(deckDesign: unknown, themeBackground: unknown): boolean {
+  const deck = deckDesign && typeof deckDesign === 'object' ? (deckDesign as { background?: unknown }) : {};
+  const chosen = (definition: unknown) => isSetBackground(definition) && !(typeof definition === 'string' && /^(light|dark)[12]$/.test(definition)) && !(definition && typeof definition === 'object' && (definition as { type?: unknown }).type === 'theme');
+  return isSetBackground(deck.background) ? chosen(deck.background) : chosen(themeBackground);
 }
 
 /** LH-01: the contrast tx2 needs on an accent background to stay the family's secondary text; under it tx2 maps to tx1's slot. */
@@ -372,6 +416,8 @@ export const NEUTRAL_SHARES = { border: .2, gridline: .15, axisLine: .25, chartT
 export const CARD_SURFACE_MIX = 0.07;
 /** LH-54: the contrast a mixed dark card reaches against the background, stepping the mix up from {@link CARD_SURFACE_MIX} (Claude Design's #0B2A5C on #011842 is 1.25:1). */
 export const CARD_SURFACE_MIN_CONTRAST = 1.25;
+/** Wave 8: the contrast the slide's text keeps on a mixed card (WCAG AA for body text); the mix towards the text stops before it falls under it. */
+export const CARD_TEXT_MIN_CONTRAST = 4.5;
 /** LH-54: the share of the text colour mixed into a mixed dark card for its 1 px stroke (about 12% white over the card). */
 export const CARD_BORDER_MIX = 0.12;
 /** LH-79: a light variant's tx1 at or below this relative luminance (about #1A1A1A) is near-black, and the code panel takes tx2 instead. */
@@ -552,10 +598,19 @@ function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2
   let card: SchemeColor = { slot: 'bg2', hex: colors.surface }, cardBorder = border;
   const backChannels = opaqueChannels(back), frontChannels = opaqueChannels(front);
   if (dark && !colors.surfaceAuthored && surface && backChannels && frontChannels && (colorContrast(surface, back) ?? 0) < SURFACE_ALT_MIN_CONTRAST) {
+    // Wave 8: the mix stops where the slide's text would read under CARD_TEXT_MIN_CONTRAST on the card (an accent slide, whose white text reads
+    // about 5:1, reaches 1.25:1 only at a card where it reads 4:1), so text on a card (LH-165's icon cards, LH-162's tiles) reads 4.5:1 where the
+    // slide's own text does; the card's border still sets it off.
     let fill = mixChannels(backChannels, frontChannels, CARD_SURFACE_MIX);
+    for (let amount = CARD_SURFACE_MIX; (colorContrast(front, fill) ?? 0) < CARD_TEXT_MIN_CONTRAST && amount > 0; ) {
+      amount = Math.max(0, amount - .005);
+      fill = mixChannels(backChannels, frontChannels, amount);
+    }
     for (let amount = CARD_SURFACE_MIX; (colorContrast(fill, back) ?? Infinity) < CARD_SURFACE_MIN_CONTRAST && amount < .5; ) {
       amount = Math.min(.5, amount + .005);
-      fill = mixChannels(backChannels, frontChannels, amount);
+      const next = mixChannels(backChannels, frontChannels, amount);
+      if ((colorContrast(front, next) ?? 0) < CARD_TEXT_MIN_CONTRAST) break;
+      fill = next;
     }
     card = { slot: 'bg1', hex: fill };
     cardBorder = { slot: 'tx1', hex: mixChannels(opaqueChannels(fill)!, frontChannels, CARD_BORDER_MIX) };
@@ -916,6 +971,49 @@ function separateNeighbors(fill: string, palette: readonly string[], options: { 
   return result;
 }
 
+/** LH-161: the most a pie's last slice moves along the lightness axis to clear the first: further and it stops belonging to the palette. */
+export const CHART_SLICE_MAX_SHIFT = 20;
+/** LH-161: the width of the surface-colored border that separates a pie's wrap pair when no color within {@link CHART_SLICE_MAX_SHIFT} does, in pixels at the 720-px reference. */
+export const CHART_SLICE_SEPARATOR_PX = 2;
+
+/** LH-161: the slices of a pie or doughnut: their colors, and whether the chart separates every slice with a surface-colored border. */
+export interface ChartSlicePlan { colors: string[]; bordered: boolean }
+
+/**
+ * LH-161: the colors of a pie or doughnut of `count` slices, from `palette` (the colors a chart draws, {@link chartPaletteForFill} with
+ * its softening). A circle has one more neighbor pair than a row of series: the last slice sits beside the first. When the last slice
+ * (palette color `count - 1`, a color from the scheme: `options.legible`) is closer than {@link CHART_SERIES_MIN_LIGHTNESS_STEP} CIE L*
+ * to the first, it alone moves, along the lightness axis (its hue and as much chroma as sRGB allows kept) by at most
+ * {@link CHART_SLICE_MAX_SHIFT} L*, to the nearest lightness that keeps its contrast floor against `fill` and the step from both its
+ * neighbors (a color difference under {@link CHART_SERIES_MIN_DIFFERENCE} from any other slice costs more the further it falls). Where no
+ * such lightness exists the palette color stays and `bordered` is true: the engines draw a {@link CHART_SLICE_SEPARATOR_PX} border in
+ * the surface color on every slice of the chart, which separates the pair by shape (`opf/chart-color-only` accepts it). Every other color
+ * stays, so a pie of any count draws the palette except possibly its last slice. An authored color is never moved or bordered (the rule
+ * reports the pair an author chose), and fewer than three slices, or more than the palette holds (the colors repeat), change nothing.
+ */
+export function chartSlicePlan(fill: string, palette: readonly string[], count: number, options: { legible?: readonly boolean[] } = {}): ChartSlicePlan {
+  const result = [...palette], last = count - 1, none = { colors: result, bordered: false };
+  if (!Number.isInteger(count) || count < 3 || count > palette.length || options.legible?.[last] !== true || colorContrast(fill, fill) === undefined) return none;
+  const labs = result.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
+  const lab = labs[last], first = labs[0], before = labs[last - 1];
+  if (!lab || !first || !before || Math.abs(lab[0] - first[0]) >= CHART_SERIES_MIN_LIGHTNESS_STEP) return none;
+  const floor = isDarkColor(fill) ? CHART_DARK_SERIES_MIN_CONTRAST : 3, need = CHART_SERIES_MIN_LIGHTNESS_STEP + NEIGHBOR_STEP_MARGIN;
+  const deficit = (value: number) => Math.max(0, -value - 1e-9);
+  let best: { color: string; cost: number } | undefined;
+  for (let step = 0; step <= 400; step++) {
+    const color = labWithLightness(step / 4, lab[1], lab[2]), contrast = colorContrast(color, fill);
+    if (contrast === undefined || contrast < floor) continue;
+    const candidate = labOf(opaqueChannels(color)!);
+    if (Math.abs(candidate[0] - lab[0]) > CHART_SLICE_MAX_SHIFT || Math.abs(candidate[0] - first[0]) < need || Math.abs(candidate[0] - before[0]) < need) continue;
+    let cost = Math.abs(candidate[0] - lab[0]);
+    labs.slice(0, count - 1).forEach(other => { if (other) cost += deficit(labDifference(candidate, other) - CHART_SERIES_MIN_DIFFERENCE); });
+    if (!best || cost < best.cost - 1e-9) best = { color, cost };
+  }
+  if (!best) return { colors: result, bordered: true };
+  result[last] = best.color;
+  return { colors: result, bordered: false };
+}
+
 /** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */
 export const CHART_SERIES_SOFT_MIX = 0.25;
 
@@ -1065,6 +1163,9 @@ export interface ChartColorContext {
 export function resolveChartColors(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): (string | undefined)[] {
   if (!Array.isArray(colors)) return [];
   return colors.map(entry => {
+    // SH-02: the lighter or darker form of a ColorRef resolves its base and applies its transform.
+    const transform = colorTransform(entry);
+    if (transform) { const base = resolveChartColors([transform.color], colorScheme, context)[0]; return base === undefined ? undefined : normalizeHexColor(applyColorTransform(base, transform)); }
     if (typeof entry !== 'string') return undefined;
     const resolved = resolveColorRef(entry.trim(), { colorScheme, roles: context.roles, variables: context.variables, fallback: '' });
     return normalizeHexColor(resolved);

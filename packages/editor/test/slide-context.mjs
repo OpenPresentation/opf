@@ -20,7 +20,9 @@ const recorder = () => {
   const families = new Set();
   return { families, fonts: { textMeasurement: { measure: (text, size, style) => (families.add(style.fontFamily), text.length * size * 0.5) } } };
 };
-const slide = { id: "s", title: "Title", text: "Body copy" };
+// A subtitle keeps the sample an ordinary slide: a lone short text is LH-164's one-message slide (wave 8), whose surface core decides by
+// composing it and the slide before it, which would measure the previous slide's families too.
+const slide = { id: "s", title: "Title", subtitle: "Subtitle", text: "Body copy" };
 const familiesOf = (presentation, options = {}, index = 0, catalogs = gallery) => {
   const { families, fonts } = recorder();
   createEditorSession(presentation, { catalogs }).composeSlide(index, { fonts, ...options });

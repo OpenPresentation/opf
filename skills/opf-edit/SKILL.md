@@ -42,6 +42,8 @@ Group related changes in one validated transaction and preserve undo/redo. Valid
 
 The main canvas uses shared SVG rendering and supports inline text/table edits and structured property forms. The schema inspector exposes optional fields and structured variants beyond the existing payload. These are different levels of interaction; structured field coverage does not establish complete WYSIWYG fidelity for rich text, every chart, video playback, or branding conventions.
 
+To give a list entry, metric or group an `icon` (or change or remove it), use the editor's `setIcon`, `removeIcon` and `setSvgIcon` (`@openpresentation/opf-editor/icon-options`) rather than hand-writing patches: each is one undoable step, a pasted SVG goes into the deck's `icons` map under a name, a refused SVG carries the `opf/icon-invalid` message, and `searchIcons` finds names in the icon sets the host registered (see [editor APIs](references/editor.md)). In a file edit, find a name with the MCP's `search_icons` and never invent one.
+
 Commit or cancel an active canvas draft before navigation or imports. Keep a single authoritative editor session. Dispose of mounted canvases, inspectors, subscriptions, and owned font faces on unmount. Host applications own persistence and collaboration; these primitives do not save work to a server automatically.
 
 For copy/import, prefer the transfer APIs over concatenating JSON arrays. Preview the prepared result, validate, and apply one undoable change. Inserting slides and replacing a full presentation have different metadata semantics; choose deliberately according to the request.

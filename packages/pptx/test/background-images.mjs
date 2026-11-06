@@ -131,7 +131,7 @@ for (const provenance of [false, 'full']) {
     slides: [
       {title: 'Shipping, rebuilt', design: {background: {type: 'image', src: wide, alt: 'Container ships at dawn', focus: {x: 0.5, y: 0.7}, overlay: {color: 'dark1', opacity: 0.4}}}},
       {title: 'Where we ship', blocks: [
-        {type: 'image', image: {src: square, alt: 'Shipping routes'}, fit: 'contain', shape: 'rounded', cornerRadius: 0.1, border: {color: 'accent1', width: 2}, overlay: {color: '#000000', opacity: 0.2}, placement: {edge: 'right', size: 0.45}},
+        {type: 'image', image: {src: square, alt: 'Shipping routes'}, fit: 'contain', shape: 'roundRect', adjust: { adj: 0.1 }, stroke: {color: 'accent1', width: 2}, overlay: {color: '#000000', opacity: 0.2}, placement: {edge: 'right', size: 0.45}},
         {type: 'text', text: 'Twelve ports, three continents'}]}
     ]
   };

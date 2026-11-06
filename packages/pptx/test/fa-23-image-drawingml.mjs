@@ -87,9 +87,9 @@ function packageWith(shapes) {
   };
 }
 const shape = {kind: 'rounded', preset: 'roundRect', adjust: {adj: 12000}, path: ''};
-const treatment = {fit: 'cover', focus: {x: .2, y: .5}, shape: 'rounded', cornerRadius: .12, border: {color: 'dark1', width: 4}, opacity: .8, recolor: {dark: 'accent1', light: 'light1'}, placement: {edge: 'right', size: .45}};
+const treatment = {fit: 'cover', focus: {x: .2, y: .5}, shape: 'roundRect', adjust: { adj: .12 }, stroke: {color: 'dark1', width: 4}, opacity: .8, recolor: {dark: 'accent1', light: 'light1'}, placement: {edge: 'right', size: .45}};
 const images = new Map([['OPF image 1', {slide: 'slides.0', role: 'block', path: 'slides.0.blocks.0', box: {x: 7, y: 0, w: 6, h: 7.5}, fit: 'cover', focus: {x: .2, y: .5}, shrink: false,
-  effects: {shape, border: {hex: '101820', alpha: 1, width: 4}, opacity: .8, recolor: {type: 'duotone', dark: {hex: '1F5AA6', alpha: 1}, light: {hex: 'F4F1EA', alpha: 1}}}, treatment}],
+  effects: {shape, strokeXml: '<a:ln w="38100" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:srgbClr val="101820"></a:srgbClr></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln>', opacity: .8, recolor: {type: 'duotone', dark: {hex: '1F5AA6', alpha: 1}, light: {hex: 'F4F1EA', alpha: 1}}}, treatment}],
   [backgroundImageName('slides.0'), {slide: 'slides.0', role: 'background', path: 'slides.0.design.background', box: {x: 0, y: 0, w: 13.333333, h: 7.5}, fit: 'tile', focus: {x: .5, y: .5}, shrink: false, effects: null, treatment: {alt: 'Harbour', fit: 'tile'}}]]);
 const overlays = new Map([[imageOverlayName('OPF image 1'), {slide: 'slides.0', owner: 'OPF image 1', box: {x: 672, y: 0, width: 576, height: 720}, shape, hex: '000000', alpha: 1, opacity: .3, overlay: {color: 'dark1', opacity: .3}}],
   [backgroundOverlayName('slides.0'), {slide: 'slides.0', owner: 'background', box: {x: 0, y: 540, width: 1280, height: 180}, shape: {kind: 'rectangle', preset: 'rect', adjust: {}, path: ''}, hex: '101820', alpha: .5, opacity: .75, overlay: {color: '#10182080', opacity: .75, edge: 'bottom', size: .25}}]]);
@@ -99,7 +99,7 @@ const xml = decode(entries['ppt/slides/slide1.xml']);
 {
   const block = /<p:pic><p:nvPicPr><p:cNvPr id="4"[\s\S]*?<\/p:pic>/.exec(xml)[0];
   assert.match(block, /<a:blip r:embed="rId2"><a:duotone><a:srgbClr val="1F5AA6"><\/a:srgbClr><a:srgbClr val="F4F1EA"><\/a:srgbClr><\/a:duotone><a:alphaModFix amt="80000"\/><\/a:blip>/, 'recolor then alpha on the blip');
-  assert.match(block, /<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val 12000"\/><\/a:avLst><\/a:prstGeom><a:ln w="38100" algn="ctr"><a:solidFill><a:srgbClr val="101820"><\/a:srgbClr><\/a:solidFill><a:miter lim="800000"\/><\/a:ln>/, 'mask, then a centered mitered line');
+  assert.match(block, /<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val 12000"\/><\/a:avLst><\/a:prstGeom><a:ln w="38100" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:srgbClr val="101820"><\/a:srgbClr><\/a:solidFill><a:prstDash val="solid"\/><a:miter lim="800000"\/><\/a:ln>/, 'mask, then a centered mitered line');
   // A 2:1 picture in a 6 x 7.5 in frame: cover keeps 0.4 of its width; the focus at 0.2 pins the crop to the left edge.
   assert.match(block, /<a:srcRect l="0" t="0" r="60000" b="0"\/><a:stretch>/);
   assert.match(block, /<a:off x="6400800" y="0"\/><a:ext cx="5486400" cy="6858000"\/>/);

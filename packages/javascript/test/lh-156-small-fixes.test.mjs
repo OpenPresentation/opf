@@ -87,14 +87,14 @@ describe('LH-74: a picture alone on a card fills the card', () => {
       assert.equal(item.image.fit, 'cover');
       assert.equal(item.frameBox, undefined, 'no card is drawn under the picture');
       assert.deepEqual(item.image.box, item.image.region);
-      assert.equal(item.image.shape.kind, 'rounded');
+      assert.equal(item.image.shape.kind, 'roundRect');
       const side = Math.min(item.box.width, item.box.height), radius = side * item.image.shape.adjust.adj / 100000;
       assert.ok(Math.abs(radius - CARD_RADIUS) < .01, `radius ${radius}`);
-      assert.equal(item.image.border, undefined);
+      assert.equal(item.image.stroke, undefined);
     }
   });
   test('a picture with a frame of its own, or shown whole, keeps the card and its inset', () => {
-    for (const extra of [{ shape: 'circle' }, { cornerRadius: .1 }, { aspectRatio: 1 }, { border: { color: 'primary', width: 2 } }, { fit: 'contain' }]) {
+    for (const extra of [{ shape: 'ellipse' }, { adjust: { adj: .1 } }, { aspectRatio: 1 }, { stroke: { color: 'primary', width: 2 } }, { fit: 'contain' }]) {
       const items = compose(gallerySlide(extra)).items.filter((item) => item.field === 'image');
       for (const item of items) assert.ok(item.frameBox !== undefined && item.box.width < item.frameBox.width - 1, `${JSON.stringify(extra)} keeps its card inset`);
     }

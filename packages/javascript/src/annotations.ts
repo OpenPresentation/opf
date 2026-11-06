@@ -265,6 +265,30 @@ export function splitCaptionName(text: RichText): RichText {
   return [{ text: name, bold: true }, ` ${match[2]!}`];
 }
 
+/** LH-63: the longest first line, in characters, of a text that draws as a run-in heading over its body ("Option A: focused pilot"). */
+export const RUN_IN_HEADING_CHARS = 40;
+const RUN_IN_SENTENCE_END = /[.!?…;,。！？]$/u, RUN_IN_LIST_MARK = /^(?:[-•*–—·▪◦]|\d+[.)])\s/u;
+/**
+ * LH-63: a plain text whose first line is `RUN_IN_HEADING_CHARS` characters or fewer and ends where the author broke the line, with a body after it that is
+ * longer than the line, draws that line as a bold run-in heading over its body ("Option A: focused pilot" over its two sentences); a line that ends a sentence
+ * or opens a list entry is body text, not a heading. A text with no such line whose first line opens with a short label ("Recommendation: establish the
+ * evidence ...") draws the label in bold, as a picture's caption does (`splitCaptionName`). The runs keep every character of the text, so the words,
+ * line breaks and spaces are the author's; any other text is undefined (drawn as written), and runs the author formatted are never passed here.
+ */
+export function runInHeading(text: string): RichText | undefined {
+  if (!text || RUN_IN_LIST_MARK.test(text.trimStart())) return undefined;
+  const lineEnd = /\r\n|[\r\n\u2028\u2029]/.exec(text);
+  if (lineEnd) {
+    const first = text.slice(0, lineEnd.index), heading = first.trim(), body = text.slice(lineEnd.index + lineEnd[0].length).trim();
+    if (heading && body && [...heading].length <= RUN_IN_HEADING_CHARS && !RUN_IN_SENTENCE_END.test(heading) && [...body].length > [...heading].length) return [{ text: first, bold: true }, text.slice(first.length)];
+  }
+  const label = /^(\s*[^:\r\n\u2028\u2029]+:)([ \t]+\S[\s\S]*)$/u.exec(text);
+  if (!label) return undefined;
+  const name = label[1]!.trim().slice(0, -1).trim();
+  if (!name || [...name].length >= RUN_IN_HEADING_CHARS || name.split(/\s+/u).length > CAPTION_NAME_WORDS) return undefined;
+  return [{ text: label[1]!, bold: true }, label[2]!];
+}
+
 /** Reserve a caption band in `box` (the payload box) and return the band and the media box. */
 export function layoutCaption(value: unknown, box: LayoutBox, path: string, options: AnnotationLayoutOptions): ComposedCaption | undefined {
   const plain = captionSettings(value);

@@ -110,7 +110,7 @@ test('recolor applies to the background picture as on an image block: grayscale 
 
 test('an overlay covers the whole picture, or a band along one edge', () => {
   const whole = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: 'dark1', opacity: 0.4 } } } }).backgroundImage.overlay;
-  assert.deepEqual(whole, { path: 'slides.0.design.background.overlay', color: 'dark1', opacity: 0.4, box: canvas, shape: { kind: 'rectangle', preset: 'rect', adjust: {}, path: 'M0 0H1280V720H0Z' } });
+  assert.deepEqual(whole, { path: 'slides.0.design.background.overlay', color: 'dark1', opacity: 0.4, box: canvas, shape: { kind: 'rect', preset: 'rect', adjust: {}, path: 'M0 0H1280V720H0Z' } });
   const band = composeSlide({ title: 'T', design: { background: { type: 'image', src: wide, overlay: { color: '#000000', opacity: 0.75, edge: 'bottom', size: 0.25 } } } }).backgroundImage.overlay;
   assert.equal(band.edge, 'bottom');
   assert.deepEqual(band.box, { x: 0, y: 540, width: 1280, height: 180 });
@@ -146,7 +146,7 @@ test('the flat image background validates; the 0.14 image wrapper and unknown ke
     { type: 'image', src: 'asset:hero', focus: { x: 0.5 } },
     { type: 'image', src: 'asset:hero', overlay: { color: 'dark1' } },
     { type: 'image', src: 'asset:hero', recolor: 'sepia' },
-    { type: 'image', src: 'asset:hero', shape: 'circle' },
+    { type: 'image', src: 'asset:hero', shape: 'ellipse' },
   ]) assert.equal(check(deck({ title: 'T' }, { background: bad })).valid, false, JSON.stringify(bad));
 });
 

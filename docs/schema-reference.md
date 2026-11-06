@@ -330,11 +330,24 @@ _No named properties._
 
 ### ColorRef
 
-- Type: `anyOf:ref:HexColor / enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | hyperlink | followedHyperlink | primary | secondary | accent | background | surface | surfaceAlt | text | textSecondary / string`
+- Type: `anyOf:ref:HexColor / enum:accent1 | accent2 | accent3 | accent4 | accent5 | accent6 | dark1 | dark2 | light1 | light2 | hyperlink | followedHyperlink | primary | secondary | accent | background | surface | surfaceAlt | text | textSecondary / string / ref:ColorTransform`
 - Required fields: none
-- Purpose: A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms: - Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'. - Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary',...
+- Purpose: A color value or reference, enforced on shape fills and strokes, image strokes, styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Four forms: - Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'. - Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an...
 
 _No named properties._
+
+
+### ColorTransform
+
+- Type: `oneOf:schema / schema`
+- Required fields: `color`
+- Purpose: A ColorRef made lighter or darker (SH-02), as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | yes | `ref:ColorRef` | The base color: any ColorRef. |
+| `lighten` | no | `number` | Share of the way to white, 0 to 1. 0.4 is PowerPoint's "Lighter 40%". |
+| `darken` | no | `number` | Share of the way to black, 0 to 1. 0.25 is PowerPoint's "Darker 25%". |
 
 
 ### Variables
@@ -615,16 +628,141 @@ _No named properties._
 | `inset` | no | `boolean` | Draw the frame inside the slide padding on every side of the band, like a card, instead of edge to edge. Default false. |
 
 
-### ImageBorder
+### Stroke
+
+- Type: `anyOf:const:"none" / object`
+- Required fields: none
+- Purpose: A line along an outline (SH-02): a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.
+
+_No named properties._
+
+
+### Arrowhead
 
 - Type: `object`
-- Required fields: `color`, `width`
-- Purpose: Solid line along the image frame's shape, centered on the outline with a miter join, like a native picture line. A thick dark border on a rounded portrait frame gives a device bezel.
+- Required fields: none
+- Purpose: An arrowhead at one end of an open path or a line preset (DrawingML a:headEnd at the start, a:tailEnd at the end). Closed outlines have no ends, so arrowheads draw only on open paths such as arc, line or a custom path that is not closed.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `color` | yes | `ref:ColorRef` | Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
-| `width` | yes | `number` | Line width in reference pixels at a 720-pixel short edge. 0 removes the line. |
+| `type` | no | `enum:none \| triangle \| stealth \| diamond \| oval \| arrow` | Arrowhead kind, DrawingML's ST_LineEndType. Default 'triangle' when the object is given. |
+| `width` | no | `enum:small \| medium \| large` | Arrowhead width relative to the stroke width (2, 3 or 5 stroke widths). Default medium. |
+| `length` | no | `enum:small \| medium \| large` | Arrowhead length relative to the stroke width (2, 3 or 5 stroke widths). Default medium. |
+
+
+### Gradient
+
+- Type: `object`
+- Required fields: `stops`
+- Purpose: A gradient fill (SH-02): the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | no | `enum:linear \| radial \| rectangle \| shape` | linear runs along 'angle'; radial spreads from the center as a circle, rectangle as a rectangle and shape along the shape's own outline (a:path circle, rect, shape). Default linear. |
+| `angle` | no | `number` | Linear gradients only: angle in degrees (0 = left to right, 90 = top to bottom). Default 90. |
+| `stops` | yes | `array<object>` | Ordered color stops; at least two. A radial, rectangle or shape gradient runs from the center (position 0) to the outline (position 1). |
+
+
+### Pattern
+
+- Type: `object`
+- Required fields: `preset`
+- Purpose: A two-color pattern fill (the background pattern object), DrawingML a:pattFill.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `preset` | yes | `string` | DrawingML pattern preset (ECMA-376 ST_PresetPatternVal), for example pct5, ltHorz, wdUpDiag, smGrid or dotDmnd. |
+| `foregroundColor` | no | `ref:ColorRef` | Pattern color. Default the shape style's fill color. |
+| `backgroundColor` | no | `ref:ColorRef` | Color behind the pattern. Default the slide background. |
+
+
+### ShapeFill
+
+- Type: `anyOf:const:"none" / ref:ColorRef / object / object`
+- Required fields: none
+- Purpose: A shape block's fill (SH-02): 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).
+- Conditional requirement: `gradient` or `pattern`
+
+_No named properties._
+
+
+### ShapePreset
+
+- Type: `enum:line | lineInv | triangle | rtTriangle | rect | diamond | parallelogram | trapezoid | nonIsoscelesTrapezoid | pentagon | hexagon | heptagon | octagon | decagon | dodecagon | star4 | star5 | star6 | star7 | star8 | star10 | star12 | star16 | star24 | star32 | roundRect | round1Rect | round2SameRect | round2DiagRect | snipRoundRect | snip1Rect | snip2SameRect | snip2DiagRect | plaque | ellipse | teardrop | homePlate | chevron | pieWedge | pie | blockArc | donut | noSmoking | rightArrow | leftArrow | upArrow | downArrow | stripedRightArrow | notchedRightArrow | bentUpArrow | leftRightArrow | upDownArrow | leftUpArrow | leftRightUpArrow | quadArrow | leftArrowCallout | rightArrowCallout | upArrowCallout | downArrowCallout | leftRightArrowCallout | upDownArrowCallout | quadArrowCallout | bentArrow | uturnArrow | circularArrow | leftCircularArrow | leftRightCircularArrow | curvedRightArrow | curvedLeftArrow | curvedUpArrow | curvedDownArrow | swooshArrow | cube | can | lightningBolt | heart | sun | moon | smileyFace | irregularSeal1 | irregularSeal2 | foldedCorner | bevel | frame | halfFrame | corner | diagStripe | chord | arc | leftBracket | rightBracket | leftBrace | rightBrace | bracketPair | bracePair | straightConnector1 | bentConnector2 | bentConnector3 | bentConnector4 | bentConnector5 | curvedConnector2 | curvedConnector3 | curvedConnector4 | curvedConnector5 | callout1 | callout2 | callout3 | accentCallout1 | accentCallout2 | accentCallout3 | borderCallout1 | borderCallout2 | borderCallout3 | accentBorderCallout1 | accentBorderCallout2 | accentBorderCallout3 | wedgeRectCallout | wedgeRoundRectCallout | wedgeEllipseCallout | cloudCallout | cloud | ribbon | ribbon2 | ellipseRibbon | ellipseRibbon2 | leftRightRibbon | verticalScroll | horizontalScroll | wave | doubleWave | plus | flowChartProcess | flowChartDecision | flowChartInputOutput | flowChartPredefinedProcess | flowChartInternalStorage | flowChartDocument | flowChartMultidocument | flowChartTerminator | flowChartPreparation | flowChartManualInput | flowChartManualOperation | flowChartConnector | flowChartPunchedCard | flowChartPunchedTape | flowChartSummingJunction | flowChartOr | flowChartCollate | flowChartSort | flowChartExtract | flowChartMerge | flowChartOfflineStorage | flowChartOnlineStorage | flowChartMagneticTape | flowChartMagneticDisk | flowChartMagneticDrum | flowChartDisplay | flowChartDelay | flowChartAlternateProcess | flowChartOffpageConnector | actionButtonBlank | actionButtonHome | actionButtonHelp | actionButtonInformation | actionButtonForwardNext | actionButtonBackPrevious | actionButtonEnd | actionButtonBeginning | actionButtonReturn | actionButtonDocument | actionButtonSound | actionButtonMovie | gear6 | gear9 | funnel | mathPlus | mathMinus | mathMultiply | mathDivide | mathEqual | mathNotEqual | cornerTabs | squareTabs | plaqueTabs | chartX | chartStar | chartPlus`
+- Required fields: none
+- Purpose: A DrawingML preset geometry (ECMA-376 ST_ShapeType, all 187), with PowerPoint's own names: rect, roundRect, ellipse, triangle, rightArrow, chevron, wedgeRectCallout, flowChartDecision and the rest. docs/shapes.md maps them to Aspose ShapeType names.
+
+_No named properties._
+
+
+### ShapePath
+
+- Type: `anyOf:string / object`
+- Required fields: none
+- Purpose: Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).
+- Conditional requirement: `d` and `viewBox`
+
+_No named properties._
+
+
+### ShapePadding
+
+- Type: `anyOf:number / ref:TableCellPadding`
+- Required fields: none
+- Purpose: Text insets inside the shape's text rectangle (a:bodyPr lIns, tIns, rIns, bIns), in reference pixels at a 720-pixel short edge: one number for every side or { top, right, bottom, left }. Default 9.6 left and right, 4.8 top and bottom, PowerPoint's 0.1 and 0.05 inch.
+
+_No named properties._
+
+
+### Shadow
+
+- Type: `anyOf:enum:soft | hard | perspective / object`
+- Required fields: none
+- Purpose: Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }. SH-03 draws it in both engines.
+
+_No named properties._
+
+
+### InnerShadow
+
+- Type: `object`
+- Required fields: none
+- Purpose: Inner shadow (a:innerShdw). SH-03 draws it in both engines.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | no | `ref:ColorRef` | Shadow color. Default black. |
+| `opacity` | no | `number` | Shadow opacity. |
+| `blur` | no | `number` | Blur radius in reference pixels at a 720-pixel short edge. |
+| `distance` | no | `number` | Offset in reference pixels at a 720-pixel short edge. |
+| `angle` | no | `number` | Direction of the offset in degrees (0 = right, 90 = down). |
+
+
+### Glow
+
+- Type: `object`
+- Required fields: none
+- Purpose: Glow around the outline (a:glow). SH-03 draws it in both engines.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `color` | no | `ref:ColorRef` | Glow color. Default accent. |
+| `opacity` | no | `number` | Glow opacity. |
+| `radius` | no | `number` | Glow size in reference pixels at a 720-pixel short edge. |
+
+
+### Reflection
+
+- Type: `object`
+- Required fields: none
+- Purpose: Reflection below the shape (a:reflection). SH-03 draws it in both engines.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `opacity` | no | `number` | Opacity where the reflection starts. |
+| `size` | no | `number` | Share of the shape's height reflected. |
+| `distance` | no | `number` | Gap between the shape and its reflection in reference pixels at a 720-pixel short edge. |
+| `blur` | no | `number` | Blur radius in reference pixels at a 720-pixel short edge. |
 
 
 ### ImageRecolor
@@ -801,7 +939,7 @@ _No named properties._
 
 ### ContentPayload
 
-- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
+- Type: `allOf:schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema + schema`
 - Required fields: none
 - Purpose: A content leaf or recursively composed group. A group contains blocks and optional composition; it cannot mix blocks with leaf payload fields. Groups may nest up to 32 levels.
 
@@ -810,7 +948,7 @@ _No named properties._
 | `id` | no | `string` | Optional stable identifier for this payload, unique among slide and payload ids in the document. Use when another system needs to address the payload across edits patch-style agent edits, comments, review state, or ge... |
 | `extensions` | no | `object` | Custom data passthrough for agent workflows at payload scope; ignored by the engine but preserved across read/write round-trips. |
 | `region` | no | `string` | Pin a root block (slides.N.blocks.I) to a region of the slide's template layout by name (OPF 0.19). The block goes to that region when the region exists, accepts the block's kind and has room; otherwise the pin is ign... |
-| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| group` | Optional content kind. When omitted, engines infer the kind from the fields present. |
+| `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram \| shape \| group` | Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block. |
 | `text` | no | `oneOf:string / array<ref:TextRun>` | Text payload. Use a string for plain text or TextRun[] for inline rich text. TextRun items may be plain strings or formatted run objects. |
 | `items` | no | `array<ref:ListItem>` | Structured list payload (type 'list'). Each item is either a plain string, a TextRun[] rich text sequence, or a ListItem object with optional `description`. List nesting uses item.level rather than nested content payl... |
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
@@ -820,10 +958,28 @@ _No named properties._
 | `fit` | no | `enum:cover \| contain \| stretch \| auto` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
 | `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
-| `shape` | no | `enum:rectangle \| rounded \| circle \| hexagon` | Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'. |
-| `cornerRadius` | no | `number` | Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default. |
-| `border` | no | `ref:ImageBorder` | Image payloads only. Line along the frame's shape. |
-| `opacity` | no | `number` | Image payloads only. Picture opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1. |
+| `shape` | no | `ref:ShapePreset` | The preset geometry. Without 'image' it makes the block a shape block (SH-02): the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block... |
+| `stroke` | no | `ref:Stroke` | Shape and image blocks. The line along the outline: a shape's outline or the picture frame's shape (renamed from the picture key 'border' in 0.33, no alias). Without it a shape takes its style's line; a picture has none. |
+| `path` | no | `ref:ShapePath` | Shape blocks only. Custom geometry instead of a preset (a:custGeom): SVG path data in a 0 to 1 box, or { d, viewBox }. A block with 'path' is a shape block. |
+| `fill` | no | `ref:ShapeFill` | Shape blocks only. 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill. |
+| `style` | no | `enum:none \| subtle \| moderate \| intense` | Shape blocks only. The theme shape style, as PowerPoint's shape styles (p:style with a:lnRef, a:fillRef, a:effectRef and a:fontRef): subtle is a light tint of accent1 with an accent1 line and dark text, moderate (the... |
+| `rotate` | no | `number` | Shape blocks only. Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Composition keeps the unrotated box; the rotated outline may reach past it. |
+| `flip` | no | `enum:horizontal \| vertical \| both` | Shape blocks only. Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Shape blocks only. Vertical placement of the text in the text rectangle (a:bodyPr anchor t, ctr, b). Default middle. |
+| `padding` | no | `ref:ShapePadding` | Shape blocks only. Text insets inside the text rectangle. |
+| `textDirection` | no | `enum:horizontal \| vertical \| vertical270 \| stacked` | Shape blocks only. Text direction (a:bodyPr vert horz, vert, vert270, wordArtVert): vertical turns the text 90 degrees clockwise, vertical270 270, stacked stacks the letters top to bottom. Default horizontal. |
+| `alt` | no | `string` | Shape blocks only. Alternative text for screen readers (p:cNvPr descr). Without it a shape's text is what is read. |
+| `decorative` | no | `boolean` | Shape blocks only. Mark the shape decorative (a16:decorative): screen readers skip it and the accessibility checker does not ask for alt text. |
+| `hidden` | no | `boolean` | Shape blocks only. Keep the shape in the file but do not draw it (p:cNvPr hidden). Composition still gives it its room. A link on a hidden shape cannot be clicked and is a validation finding (opf/shape-link-hidden). |
+| `link` | no | `string` | Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number. |
+| `shadow` | no | `ref:Shadow` | Shape blocks only. Outer shadow. |
+| `innerShadow` | no | `ref:InnerShadow` | Shape blocks only. Inner shadow. |
+| `glow` | no | `ref:Glow` | Shape blocks only. Glow. |
+| `softEdge` | no | `number` | Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines. |
+| `reflection` | no | `ref:Reflection` | Shape blocks only. Reflection. |
+| `blur` | no | `number` | Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines. |
+| `adjust` | no | `object` | Shape and image blocks. The preset's adjust handles (a:avLst), named as DrawingML's guides (adj, adj1, adj2 ... and hexagon's vf): fractions of the shape's shorter side or of its size as the preset defines them, degre... |
+| `opacity` | no | `number` | Image and shape blocks. On an image: the picture's opacity, exported as a native alphaModFix; the stroke and overlay keep their own. On a shape: the fill's opacity (a:alpha on the fill color, multiplied with an eight-... |
 | `recolor` | no | `ref:ImageRecolor` | Image payloads only. Grayscale or duotone treatment of the picture's pixels. |
 | `overlay` | no | `ref:Overlay` | Image payloads only. Scrim over the picture in the frame's shape, or a band along one edge of a rectangle frame. |
 | `placement` | no | `ref:ImagePlacement` | Image payloads only, and only on a top-level block (slides.N.blocks.I), at most one per edge. Bleeds the image to one slide edge; the headings and the other blocks compose in the rest of the slide. |

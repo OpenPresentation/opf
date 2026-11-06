@@ -53,6 +53,8 @@ export function sampleBlock(kind, index = 0) {
       return { timeline: { events: [{ when: "Q1", what: "Baseline" }, { when: "Q2", what: "Pilot" }, { when: "Q3", what: "Launch" }, { when: "Q4", what: "Scale" }] } };
     case "diagram":
       return { diagram: pick(["flowchart LR\n  Plan --> Pilot --> Launch", "flowchart LR\n  Brief --> Review --> Build", "flowchart LR\n  Collect --> Analyze --> Report"], index) };
+    case "shape":
+      return { shape: pick(["roundRect", "chevron", "ellipse"], index), text: pick(["Plan", "Build", "Launch"], index) };
     case "group":
       return { blocks: [sampleBlock("image", index), { text: pick(["Ana Ruiz, Chief Executive", "Sam Lee, Head of Product", "Kai Moreau, Engineering Lead"], index) }] };
     default:

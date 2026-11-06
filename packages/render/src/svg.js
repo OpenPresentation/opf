@@ -2,7 +2,7 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
@@ -24,6 +24,7 @@ import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
+import { renderShapeBlock, strokeElements } from "./shapes.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
@@ -264,6 +265,12 @@ function resolveColorRef(value, bound, fallback) {
 // partial one for the background, before the text-dependent roles exist.
 function resolveColorRefIn(value, design, fallback) {
   if (value == null || value === "") return fallback;
+  // SH-02: { color, lighten } or { color, darken } resolves its base, then applies core's transform (an alpha byte is kept).
+  const transform = colorTransform(value);
+  if (transform) {
+    const base = resolveColorRefIn(transform.color, design, fallback);
+    return typeof base === "string" ? applyColorTransform(base, transform) : base;
+  }
   if (typeof value !== "string") return fallback;
   const trimmed = value.trim();
   // Core normalizeHexColor uppercases literals and strips #RRGGBBAA alpha.
@@ -876,20 +883,41 @@ function renderImageBlock(item, bound, options) {
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
   if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
-  const masked = shape && shape.preset !== "rect";
-  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: shape.path })));
+  // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
+  const sketched = image.stroke?.sketched?.fills[0];
+  const masked = sketched || (shape && shape.preset !== "rect");
+  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: sketched ?? shape.path })));
   const matrix = imageRecolorMatrix(image.recolor, bound);
   if (matrix) defs.push(tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix })));
   let pixels = matrix || image.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
   if (masked) pixels = tag("g", { "clip-path": `url(#${id}-clip)` }, pixels);
   const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
-  if (image.border) {
-    const paint = imagePaint(image.border.color, bound, bound.design.colors.border);
-    children.push(tag("path", { ...HIDDEN, d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
+  // SH-02: the picture's stroke (renamed from border) takes every stroke property, along the frame's preset outline.
+  if (image.stroke) {
+    const stroke = strokeElements(image.stroke, image.stroke.sketched?.lines[0] ?? shape?.path ?? rectanglePath(image.box), `${id}-stroke`, { box: image.box, closed: true, helpers: shapeHelpers(item, bound, options) });
+    if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
+    children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
+}
+
+// SH-02: what the shape drawing (src/shapes.js) needs from the renderer: its tag writer, the slide's colors and ColorRef resolution, and
+// the text drawing of a composed item (a shape's text, fitted by core, drawn at the box it was fitted for).
+function shapeHelpers(item, bound, options) {
+  const colors = bound.design.colors;
+  return {
+    tag, idPrefix: `opf-s${bound.index + 1}`, trace: traceAttrs(options, item.path),
+    colors: { primary: colors.primary, background: bound.design.backgroundColor ?? colors.background, text: colors.text, border: colors.border },
+    resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback),
+    report: diagnostic => reportDiagnostic({ ...diagnostic, path: item.path }, options),
+    drawText: (shapeItem, area, fill) => {
+      const value = shapeItem.shape.textDirection === "stacked" ? stackedText(shapeItem.payload.text) : shapeItem.payload.text;
+      const config = { path: `${shapeItem.path.replace(/\.(shape|path)$/, "")}.text`, align: "center", fit: shapeItem.text, textStyle: shapeItem.textStyle, fill, fontSize: 25, fontFamily: bound.design.fonts.body, fontWeight: shapeItem.shape.textBold ? 700 : 400, diagnosticsHandled: true, options };
+      return Array.isArray(value) ? renderRichTextBox(value, area, bound, config) : renderTextBox(flattenText(value), area, bound, config);
+    },
+  };
 }
 
 // One overlay (shared by image backgrounds and image blocks): its outline filled with the colour, the colour's alpha times the
@@ -1059,6 +1087,8 @@ function renderPayload(item, box, bound, options) {
       return altText(renderTable(item, box, bound, options), item.value?.alt, "group");
     case "image":
       return renderImageBlock(item, bound, options);
+    case "shape":
+      return renderShapeBlock(item, shapeHelpers(item, bound, options));
     case "video":
       return renderMedia(item, box, bound, options);
     case "code":
@@ -1079,7 +1109,9 @@ function renderPayload(item, box, bound, options) {
 }
 
 function renderTextPayload(item, box, bound, options) {
-  return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
+  // LH-63: a text whose first line is a run-in heading draws core's runs (item.runs: the same characters, the heading bold).
+  const value = item.runs ?? item.value;
+  return (Array.isArray(value) ? renderRichTextBox : renderTextBox)(Array.isArray(value) ? value : flattenText(value), box, bound, {
     path: item.path,
     // Core resolves one alignment per composed item for every engine, from the slide's design, the deck's design
     // and the layout record's design (SlideComposition.design).
@@ -1586,7 +1618,7 @@ function renderQuote(item, box, bound, options) {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
     // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
-    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
+    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:layout.mark?.hidden?0:-1,options});
     return renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
       fill,
@@ -1595,6 +1627,14 @@ function renderQuote(item, box, bound, options) {
   });
   // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
   if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
+  // LH-78: a quote card's decorative mark, in the primary color against the card (as a metric's value is); core places it in the room above the text.
+  if (layout.mark) {
+    const backdrop = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background, mark = layout.mark;
+    children.push(tag('g', options.trace ? {'data-opf-quote-mark': 'true'} : {}, renderTextBox(mark.text, mark.box, bound, {
+      path: item.path, fit: mark.fit, textStyle: mark.style, fontFamily: mark.requestedStyle.fontFamily,
+      fill: metricValueColor(bound.design.colors.primary, backdrop, bound.design.colors.text), diagnosticsHandled: true, options,
+    })));
+  }
   // LH-114: a pull line's accent rule, in the primary color (core places it; the PPTX export draws the same rectangle).
   if (layout.rule) children.unshift(tag('rect', {...HIDDEN, x: stableNumber(layout.rule.x), y: stableNumber(layout.rule.y), width: stableNumber(layout.rule.width), height: stableNumber(layout.rule.height), fill: bound.design.colors.primary, ...(options.trace ? {'data-opf-quote-rule': 'true'} : {})}));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
@@ -1915,7 +1955,12 @@ function renderBranding(bound,presentation,width,height,options) {
     }
   } else if(design.watermark){
     // The group keeps its bare opacity attribute (opf-pptx's watermark parity test reads it); the picture itself is hidden.
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true})));
+    const mark=renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true});
+    // LH-164: on the accent surface of a message-only slide the mark is drawn in the slide's text color (the export's one-color duotone), so a mark made for the plain surface still reads.
+    const matrix=bound.geometry?.surface&&!isImagePlaceholder(mark)?imageRecolorMatrix({type:'duotone',dark:bound.design.colors.text,light:bound.design.colors.text},bound):undefined, filterId=`opf-s${bound.index+1}-watermark-recolor`;
+    // The filter and the opacity sit on one group: the vector PDF rasterizes a filtered group on its own, without its ancestors' opacity.
+    const watermarkOpacity=typeof design.watermark==='object'?design.watermark.opacity??.08:.08;
+    pieces.push(matrix?tag('g',{opacity:watermarkOpacity,filter:`url(#${filterId})`},tag('defs',{},tag('filter',{id:filterId,'color-interpolation-filters':'sRGB'},tag('feColorMatrix',{type:'matrix',values:matrix})))+mark):tag('g',{opacity:watermarkOpacity},mark));
   }
   // Cover and section slides: the logo core composed (the primary organization's full logo, or the design.logo override, in the
   // variant for this slide's background) at the top-left of the free area, anchored left. RR-71: the picture is named by its

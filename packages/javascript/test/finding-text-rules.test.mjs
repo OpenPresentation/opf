@@ -25,6 +25,10 @@ const GOLDEN = {
   "cite-unsupported-location": ["`cite` and `footnote` are drawn only in titles, text, bullets, list items and quotes, not in table cells.", "move the cited run into a text block, or remove the citation here."],
   "caption-unsupported-payload": ["A `caption` belongs to one image, chart, table or video; this block is text.", "put the `caption` on the image, chart, table or video it describes, or remove it."],
   "image-option-unsupported-payload": ["`fit` only applies to pictures; this block is a chart.", "remove `fit`, or move it onto an image."],
+  "shape-option-unsupported-payload": ["`fill` only applies to shapes; this block is text.", "remove `fill`, or make the block a shape with `shape` (a preset such as roundRect) or `path`."],
+  "shape-adjust-unknown": ["roundRect has no adjust value `adj1`; it has `adj`.", "use `adj`, or remove `adj1`."],
+  "shape-adjust-range": ["`adjust.adj` of roundRect is 0.8, outside 0 to 0.5, so the preset's default is drawn.", "set it between 0 to 0.5."],
+  "shape-link-hidden": ["This shape is hidden, so its `link` can never be clicked.", "remove `hidden`, or remove the `link`."],
   "image-placement-invalid": ["Blocks 1 and 2 are both placed on the left edge, and a slide edge takes one placed image.", "move one of them to another edge, or remove its `placement`."],
   "dataset-unknown": ["`dataset: \"sale\"` does not exist. Datasets in this deck: sales.", "did you mean `sales`? Or add `datasets.sale`."],
   "dataset-field-unknown": ["`regon` is not a column of `sales`. Columns: region, revenue.", "did you mean `region`?"],
@@ -97,11 +101,11 @@ const firstOf = (name) => {
 	return { finding: hand.finding, document: hand.document };
 };
 
-test('every case of the corpus triggers its rule, and every one of the 89 rules has a case', () => {
+test('every case of the corpus triggers its rule, and every one of the 93 rules has a case', () => {
 	for (const testCase of CASES) assert.ok(casesFindings(testCase).length > 0, `${testCase.name} does not trigger ${testCase.rule}`);
 	const covered = new Set(describeAll().map((entry) => entry.rule));
 	assert.deepEqual(RULE_IDS.filter((id) => !covered.has(id)), []);
-	assert.equal(RULE_IDS.length, 89);
+	assert.equal(RULE_IDS.length, 93);
 });
 
 test('the text tables have an entry for every rule of the registry and none for a rule that does not exist', () => {

@@ -44,6 +44,7 @@ await copyFile(new URL('src/chart-marks.js', root), new URL('chart-marks.js', di
 await copyFile(new URL('src/step-badges.js', root), new URL('step-badges.js', dist));
 await copyFile(new URL('src/icons.js', root), new URL('icons.js', dist));
 await copyFile(new URL('src/title-rule.js', root), new URL('title-rule.js', dist));
+await copyFile(new URL('src/shape-blocks.js', root), new URL('shape-blocks.js', dist));
 await copyFile(new URL('src/chart-scheme-colors.js', root), new URL('chart-scheme-colors.js', dist));
 await copyFile(new URL('src/chart-order.js', root), new URL('chart-order.js', dist));
 await copyFile(new URL('src/chart-fallback.js', root), new URL('chart-fallback.js', dist));
@@ -80,3 +81,6 @@ await copyFile(new URL('src/safe-typefaces.js', root), new URL('safe-typefaces.j
 await copyFile(new URL('src/picture-slides.js', root), new URL('picture-slides.js', dist));
 await copyFile(new URL('src/script-fonts.js', root), new URL('script-fonts.js', dist));
 await copyFile(new URL('src/numbered-list.js', root), new URL('numbered-list.js', dist));
+
+// SH-03: the shape effects (a:effectLst), kept on their own line so other work on the list above does not collide.
+await copyFile(new URL('src/effects.js', root), new URL('effects.js', dist));

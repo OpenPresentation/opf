@@ -353,7 +353,8 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     }
     // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
-    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
+    // LH-170: `emphasis: false` keeps the verdict in its region (it would be the foot band), whose placeholder this compares.
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict, emphasis: false }], design: {contentBox: true} }, { layout: layouts.comparison, fill: false });
     const verdictItem = filled.items.find((item) => item.region === 'verdict');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');
