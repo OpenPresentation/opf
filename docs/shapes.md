@@ -15,6 +15,8 @@ A shape block draws one of PowerPoint's 187 preset shapes, or an outline of your
 
 The full reference deck is [`examples/technical/shapes.opf.json`](../examples/technical/shapes.opf.json): one slide per group of properties.
 
+This page covers [shape blocks](#a-shape-block) and their properties, [overlay shapes and connectors](#overlay-shapes-and-connectors) drawn over a composed slide, [importing shapes](#importing-shapes-from-powerpoint) from PowerPoint, [editing shapes](#editing-shapes) in the editor, and [native diagrams](#native-diagrams), Mermaid diagrams written as PowerPoint shapes; then validation, loading in browsers, the preset geometry and the property map.
+
 ## A shape block
 
 A block with `shape` and no `image`, or with a custom `path`, is a shape block (`type: "shape"`). It composes like any other block: automatic composition and layout regions give it a cell, and the shape takes the largest frame of its own proportions centered in that cell (the region's anchor places it vertically). The proportions are the block's `aspectRatio`, else the preset's: 1:1 for the round and regular shapes (`ellipse`, `star5`, `hexagon`, `heart`, the flowchart connectors), 2:1 for horizontal arrows and bands (`rightArrow`, `chevron`, `ribbon`, `wave`), 1:2 for vertical ones (`upArrow`, `can`, `leftBrace`) and 3:2 otherwise (`rect`, `roundRect`, the callouts and most flowchart shapes). A layout region that takes pictures (`image`) also takes shapes; a region can name `shape` in `accepts` too.
@@ -138,16 +140,6 @@ Shapes stack in the order the blocks compose (`ZOrderPosition` is the shape tree
 | `link` | An http(s), `mailto:` or `tel:` URL opened when the shape is clicked in a slide show. A link on a hidden shape is `opf/shape-link-hidden`. | `a:hlinkClick` |
 
 The shape's name in PowerPoint is `OPF shape <path>`, from the block's place in the deck.
-
-## Editing shapes
-
-The editor edits shape blocks in the playground, the workspace and the Studio (`@openpresentation/opf-editor`; every edit is one validated, undoable change through the session, so Undo, Redo and proposals work as for any other edit):
-
-- **Shape picker.** **Insert shape** in the playground (and **Add content > Shape**) opens PowerPoint's gallery: Lines, Rectangles, Basic Shapes, Block Arrows, Equation Shapes, Flowchart, Stars and Banners, Callouts and Action Buttons, a tile drawn from each preset's own geometry. The search takes the DrawingML name (`rightArrow`) and common words (`arrow`, `callout`, `star`, `flowchart`, `speech bubble`, `cylinder`); every word must match and Enter picks the first match. **Change shape…** in the Selected shape section changes a block's preset and keeps the adjust values the new preset also has. The groups and the search are `@openpresentation/opf/shape-catalog`; the MCP's `search_shapes` serves the same search with each preset's adjust values and a drawing.
-- **Adjust handles.** A selected preset shape shows its yellow handles on the slide, where `presetGeometry(...).handles` puts them (turned and mirrored with the shape). Dragging one writes `adjust` as fractions and degrees (four and two places), pinned to the handle's range, as one undo step; Escape cancels a drag; the arrow keys nudge a focused handle (Shift for more). The Adjust fields in the section take the same values by typing. A few presets report a handle range that leaves their own default out (`star24`, `star32`, `mathDivide`'s `adj2`, `leftRightRibbon`'s `adj2`, as PowerPoint's definitions do); the editor widens that range to hold the default.
-- **Every property.** The Selected shape section edits `fill` (none, color, gradient with type, angle and stops, pattern) and `opacity`, `stroke` (color or gradient, width, dash as a preset or a custom array, cap, join, miter limit, compound, alignment, start and end arrowheads, sketch), `style`, the six effects with the shadow presets, `rotate` and `flip`, `text`, `anchor`, `padding` and `textDirection`, and `alt`, `decorative`, `hidden` and `link`. Every color is a ColorRef with PowerPoint's Lighter and Darker tints (`{ color, lighten|darken }`).
-- **Overlay shapes and connectors.** **Insert shape** offers the gallery's pick **In the layout** (a block composition places) or **On the slide** (an overlay: `slide.shapes`, free `x`, `y`, `width` and `height`). A selected overlay shape shows a frame: drag its outline or the grip above it to move it, a handle to resize it (fractions of the slide, kept on the slide, four places), arrow keys on the frame to move it (Shift resizes), Escape to cancel; **Place on the slide** takes the same numbers in percent. A shape attached to a block (`at`) keeps its anchor: dragging changes the `offset` from the block's edge, resizing `at.width` and `at.height` in reference pixels, and **Free from block** turns it into fractions. **Stacking** (Bring to front, Bring forward, Send backward, Send to back) is the array order; **Delete** removes a shape and the connectors that end on it. **Connect** (the playground's toolbar, or `canvas.connect({ route, stroke })`) picks two blocks or overlay shapes on the slide (click the start, then the end; Esc cancels) and adds a connector on top, straight, elbow or curved, an arrow by default; an end with no `id` gets one in the same undo step. A selected connector's section has its route, start and end (a block or an overlay shape), connection sites and its line with arrowheads. Every one of these is one undoable change.
-- **From code.** `@openpresentation/opf-editor/shape-overlays`: `insertOverlayShape`, `setOverlayFrame`, `detachOverlay`, `moveOverlayLayer`, `removeOverlay`, `connectShapes`, `setConnector`, `listConnectionEnds`, `readOverlay` (each with a `prepare...` form). `@openpresentation/opf-editor/shape-options`: `insertShape`, `setShapePreset`, `setShapeAdjust` and `setShapeProperties` (each with a `prepare...` form), `searchShapes`, `shapeGroups`, `readShape`; `@openpresentation/opf-editor/shape-picker`: `createShapePicker`, `createShapeMenu`. See the [editor README](../packages/editor/README.md).
 
 ## Effects
 
@@ -303,6 +295,29 @@ A shape PowerPoint drew behind a text box, a picture, a table or a chart (below 
 
 Approximations that are not reported: a theme style that is a gradient (`fillRef` index 2 or 3) imports as the solid color of its reference, and a rotated shape inside a group that scales its axes unevenly is scaled on the slide's axes.
 
+## Editing shapes
+
+The editor edits shape blocks in the playground, the workspace and the Studio (`@openpresentation/opf-editor`; every edit is one validated, undoable change through the session, so Undo, Redo and proposals work as for any other edit):
+
+- **Shape picker.** **Insert shape** in the playground (and **Add content > Shape**) opens PowerPoint's gallery: Lines, Rectangles, Basic Shapes, Block Arrows, Equation Shapes, Flowchart, Stars and Banners, Callouts and Action Buttons, a tile drawn from each preset's own geometry. The search takes the DrawingML name (`rightArrow`) and common words (`arrow`, `callout`, `star`, `flowchart`, `speech bubble`, `cylinder`); every word must match and Enter picks the first match. **Change shape…** in the Selected shape section changes a block's preset and keeps the adjust values the new preset also has. The groups and the search are `@openpresentation/opf/shape-catalog`; the MCP's `search_shapes` serves the same search with each preset's adjust values and a drawing.
+- **Adjust handles.** A selected preset shape shows its yellow handles on the slide, where `presetGeometry(...).handles` puts them (turned and mirrored with the shape). Dragging one writes `adjust` as fractions and degrees (four and two places), pinned to the handle's range, as one undo step; Escape cancels a drag; the arrow keys nudge a focused handle (Shift for more). The Adjust fields in the section take the same values by typing. A few presets report a handle range that leaves their own default out (`star24`, `star32`, `mathDivide`'s `adj2`, `leftRightRibbon`'s `adj2`, as PowerPoint's definitions do); the editor widens that range to hold the default.
+- **Every property.** The Selected shape section edits `fill` (none, color, gradient with type, angle and stops, pattern) and `opacity`, `stroke` (color or gradient, width, dash as a preset or a custom array, cap, join, miter limit, compound, alignment, start and end arrowheads, sketch), `style`, the six effects with the shadow presets, `rotate` and `flip`, `text`, `anchor`, `padding` and `textDirection`, and `alt`, `decorative`, `hidden` and `link`. Every color is a ColorRef with PowerPoint's Lighter and Darker tints (`{ color, lighten|darken }`).
+- **Overlay shapes and connectors.** **Insert shape** offers the gallery's pick **In the layout** (a block composition places) or **On the slide** (an overlay: `slide.shapes`, free `x`, `y`, `width` and `height`). A selected overlay shape shows a frame: drag its outline or the grip above it to move it, a handle to resize it (fractions of the slide, kept on the slide, four places), arrow keys on the frame to move it (Shift resizes), Escape to cancel; **Place on the slide** takes the same numbers in percent. A shape attached to a block (`at`) keeps its anchor: dragging changes the `offset` from the block's edge, resizing `at.width` and `at.height` in reference pixels, and **Free from block** turns it into fractions. **Stacking** (Bring to front, Bring forward, Send backward, Send to back) is the array order; **Delete** removes a shape and the connectors that end on it. **Connect** (the playground's toolbar, or `canvas.connect({ route, stroke })`) picks two blocks or overlay shapes on the slide (click the start, then the end; Esc cancels) and adds a connector on top, straight, elbow or curved, an arrow by default; an end with no `id` gets one in the same undo step. A selected connector's section has its route, start and end (a block or an overlay shape), connection sites and its line with arrowheads. Every one of these is one undoable change.
+- **From code.** `@openpresentation/opf-editor/shape-overlays`: `insertOverlayShape`, `setOverlayFrame`, `detachOverlay`, `moveOverlayLayer`, `removeOverlay`, `connectShapes`, `setConnector`, `listConnectionEnds`, `readOverlay` (each with a `prepare...` form). `@openpresentation/opf-editor/shape-options`: `insertShape`, `setShapePreset`, `setShapeAdjust` and `setShapeProperties` (each with a `prepare...` form), `searchShapes`, `shapeGroups`, `readShape`; `@openpresentation/opf-editor/shape-picker`: `createShapePicker`, `createShapeMenu`. See the [editor README](../packages/editor/README.md).
+
+## Native diagrams
+
+A [diagram](diagrams.md) (Mermaid source in a `diagram` block) is drawn with the same shapes in PowerPoint. The PPTX export writes it as native shapes, connectors and text by default (`diagrams: "shapes"`; `"picture"` writes one SVG picture, `--diagrams picture` in the CLI), built from the diagram engine's own laid-out drawing, the geometry the preview draws:
+
+- a node whose outline is a preset is that preset (`rect`, `roundRect`, `ellipse`, `diamond`, `hexagon` and the others, checked against the [preset geometry](#preset-geometry)); any other outline is a custom geometry of its exact path, with the four connection sites of a rectangle;
+- a straight edge without arrowheads is a connector glued to the connection sites of the nodes it touches, written as an [overlay connector](#connectors) is (one `p:cxnSp` with `a:stCxn` and `a:endCxn` on the native shape ids and the sites' indexes), so it follows a node moved in PowerPoint; every other edge is one shape of custom geometry holding its line and its arrowheads, because PowerPoint opens no connector of custom geometry and its line ends are shorter than the diagram's arrowheads;
+- labels are real text at the preview's size and baseline;
+- everything is one group named `OPF diagram N`, with the diagram's `alt` as its description.
+
+A family is written as shapes once PowerPoint's drawing of it has passed the comparison with the preview (all 32 families have; the list is core's `DIAGRAM_SHAPE_FAMILIES`). A diagram whose family is not in the list, or whose drawing needs what PowerPoint has no native form for (a clip path, a mask, a filter, an embedded image, text on a path, right-to-left text), stays a picture and is reported as `pptx/diagram-shapes-unavailable`.
+
+On import an unchanged group is its diagram again (the Mermaid source and `alt`), and none of its members become overlay shapes or connectors. An edited group (a member moved, resized, retyped, added or removed) imports as its shapes, [as PowerPoint's shapes do](#a-deck-powerpoint-wrote): the nodes as overlay shapes with their presets, fills, lines and text, the glued edges as connectors between them; `invalid-diagram-provenance` reports that the source is not reconstructed. See [native shapes in PowerPoint](diagrams.md#native-shapes-in-powerpoint) for the comparison and the families.
+
 ## Validation
 
 | Finding | When |
@@ -319,7 +334,7 @@ Approximations that are not reported: a theme style that is a gradient (`fillRef
 
 ## Loading in browsers and edge runtimes
 
-Node, Bun and Deno load the preset geometry (about 35 KB gzipped, with the sketched line) with core and draw any shape at once. A browser bundle or an edge Worker loads it the first time a deck has a shape block, a custom `path`, a picture masked by a preset other than the four built-in masks (`rect`, `roundRect`, `ellipse`, `hexagon`) or a sketched picture line, through the package's `#shape-engine` import map, as diagrams load (`#diagram-engine`); a deck without them does not carry it. The renderer's browser fonts handle loads it in `ensure` (its `pending` lists `shapes`), and `toPptx` loads it itself. A host that composes with `composeSlide` or `toSvg` directly calls `await ensureShapes(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `shapesPending(presentation)` lists what it would load. Diagrams and icon sets load the same way, and one preload covers all three: see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand). Until then a shape draws its frame and text with no outline, a mask beyond the built-in four draws as a rectangle and a sketched picture line as the plain line.
+Node, Bun and Deno load the preset geometry (about 35 KB gzipped, with the sketched line) with core and draw any shape at once. A browser bundle or an edge Worker loads it the first time a deck has a shape block, an overlay shape or connector, a custom `path`, a picture masked by a preset other than the four built-in masks (`rect`, `roundRect`, `ellipse`, `hexagon`) or a sketched picture line, through the package's `#shape-engine` import map, as diagrams load (`#diagram-engine`); a deck without them does not carry it. The renderer's browser fonts handle loads it in `ensure` (its `pending` lists `shapes`), and `toPptx` loads it itself. A host that composes with `composeSlide` or `toSvg` directly calls `await ensureShapes(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `shapesPending(presentation)` lists what it would load. A PPTX export with native diagrams (the default) also needs it for a deck with a diagram, which `ensureShapes(presentation, { diagrams: true })` covers; `toPptx` calls it so. Diagrams and icon sets load the same way, and one preload covers all three: see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand). Until then a shape draws its frame and text with no outline, a mask beyond the built-in four draws as a rectangle and a sketched picture line as the plain line.
 
 ## Preset geometry
 
@@ -462,8 +477,9 @@ OPF names and the DrawingML that PowerPoint reads and writes.
 | Blur | `blur` | `a:blur` |
 | Rotation | `rotate` | `a:xfrm rot` |
 | Flip | `flip` | `flipH`, `flipV` |
-| Overlay placement | slide-level `shapes: [...]` placed by fractions or attached to a block (SH-04) | `a:xfrm a:off a:ext` |
-| Stacking | array order | shape tree order |
+| Overlay placement | slide-level `shapes: [...]` placed by `x`, `y`, `width`, `height` (fractions) or `at` a block | `a:xfrm a:off a:ext` |
+| Overlay layer | `layer`: front (default) or back | shape tree order: after the background, watermark and logo, or after everything |
+| Stacking | array order (within a layer) | shape tree order |
 | Text | `text` | `p:txBody` |
 | Vertical anchor | `anchor` | `a:bodyPr anchor` |
 | Margins | `padding` | `lIns`, `tIns`, `rIns`, `bIns` |
@@ -473,8 +489,10 @@ OPF names and the DrawingML that PowerPoint reads and writes.
 | Name | from the block's path | `p:cNvPr name` |
 | Hidden | `hidden: true` | `p:cNvPr hidden` |
 | Click link | `link` | `a:hlinkClick` |
-| Connector | `connector: { from, to, route, stroke }` among slide-level `shapes` (SH-04) | `p:cxnSp`, `a:stCxn`, `a:endCxn` |
-| Connection site | the nearest facing site; `fromSite`/`toSite` to override (SH-04) | `idx` |
+| Connector | `connector: { from, to, route }` with `stroke`, among slide-level `shapes` | `p:cxnSp`, `a:stCxn`, `a:endCxn` |
+| Connection site | the nearest facing site; `fromSite`/`toSite` to override | `idx` |
+| Connector middle | `adjust: { adj1 }` on an elbow or curved connector | `a:avLst` of `bentConnector3`, `curvedConnector3` |
+| Native diagram | a `diagram` block, exported with `diagrams: "shapes"` (the default) | one `p:grpSp` of `p:sp` and `p:cxnSp` |
 
 ### Excluded on purpose
 

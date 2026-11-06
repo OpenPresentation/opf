@@ -274,7 +274,7 @@ A block binds to a region by kind, role and reading order ([Binding content to r
 
 ### Native shapes in PowerPoint
 
-The PPTX export writes each diagram as editable PowerPoint shapes that look like the preview (`diagrams: "shapes"`, the default). To get one SVG picture per diagram instead, as releases before SH-07 did, opt out:
+The PPTX export writes each diagram as editable PowerPoint shapes that look like the preview (`diagrams: "shapes"`, the default). To get one SVG picture per diagram instead, as earlier releases did, opt out:
 
 ```js
 const bytes = await toPptx(deck, { diagrams: "picture" });

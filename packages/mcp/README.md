@@ -3,7 +3,7 @@
 The MCP server for OPF (Open Presentation Format). An agent or editor that speaks the [Model Context Protocol](https://modelcontextprotocol.io)
 learns the format and checks decks through it, without shelling out and parsing text: documentation, schemas, the default catalog,
 example decks and the six agent skills as resources, a `start_here` tool that gives a path for a goal, and `validate_deck`,
-`get_schema`, `search_catalog`, `get_catalog_record`, `convert`, `search_docs` and `list_examples` as tools. It keeps no state, reads
+`get_schema`, `search_catalog`, `get_catalog_record`, `search_icons`, `search_shapes`, `convert`, `search_docs` and `list_examples` as tools. It keeps no state, reads
 no file, fetches nothing, and needs no API key. Node 22 or later.
 
 ```sh
