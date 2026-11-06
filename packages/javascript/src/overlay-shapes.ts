@@ -46,6 +46,14 @@ export type OverlayEdge = typeof OVERLAY_EDGES[number];
 
 /** Whether a `shapes` entry is a connector (it has `connector`); every other entry is an overlay shape. */
 export const isOverlayConnector = (entry: unknown): boolean => record(entry).connector !== undefined;
+/**
+ * The preset whose adjust values a connector's `adjust` names: `bentConnector3` for an elbow, `curvedConnector3` for a curve (their
+ * `adj1`; the two-segment presets between perpendicular sites have none), `straightConnector1` (none) for a straight line.
+ */
+export function connectorAdjustPreset(entry: unknown): 'straightConnector1' | 'bentConnector3' | 'curvedConnector3' {
+  const route = record(record(entry).connector).route;
+  return route === 'elbow' ? 'bentConnector3' : route === 'curved' ? 'curvedConnector3' : 'straightConnector1';
+}
 /** Whether a slide has overlay shapes or connectors to compose. */
 export const hasOverlayShapes = (slide: unknown): boolean => Array.isArray(record(slide).shapes) && (record(slide).shapes as unknown[]).some(entry => entry !== null && typeof entry === 'object');
 
@@ -178,8 +186,10 @@ const onAxis = (angle: number) => Math.abs(angle / 90 - Math.round(angle / 90)) 
  *   when both face the same way, CONNECTOR_STANDOFF past the farther one (adj1 beyond 0 to 1, a U); between perpendicular sites
  *   `bentConnector2`, an L through the corner. The sites' directions are taken to the nearest axis.
  * - curved: the same as `curvedConnector3` and `curvedConnector2`: the curve through the elbow's middle line, tangent to the sites' axes.
+ *
+ * `own` is the connector's authored `adjust` (OPF units): its `adj1` replaces the automatic middle of a three-segment route.
  */
-export function connectorRoute(route: ConnectorRoute, from: ConnectionSite, to: ConnectionSite, scale = 1): ConnectorRouteGeometry | undefined {
+export function connectorRoute(route: ConnectorRoute, from: ConnectionSite, to: ConnectionSite, scale = 1, own?: Record<string, number>): ConnectorRouteGeometry | undefined {
   const engine = shapeGeometry();
   if (!engine) return undefined;
   const start: Point = { x: from.x, y: from.y };
@@ -216,7 +226,9 @@ export function connectorRoute(route: ConnectorRoute, from: ConnectionSite, to: 
   const width = frame.box.width, height = frame.box.height;
   const adjust: Record<string, number> = {}, avLst: Record<string, number> = {};
   if (middle) {
-    avLst.adj1 = Math.round(slideToFrame(frame, middle).x / Math.max(width, 1e-9) * 100000);
+    // The author's adj1 (a route kept from PowerPoint) replaces the automatic middle.
+    const authored = own && typeof own.adj1 === 'number' && Number.isFinite(own.adj1) ? own.adj1 : undefined;
+    avLst.adj1 = Math.round((authored ?? slideToFrame(frame, middle).x / Math.max(width, 1e-9)) * 100000);
     adjust.adj1 = avLst.adj1 / 100000;
   }
   // The preset's own path (SH-01) at the frame's size with the rounded value the export writes, mapped through the frame: one geometry.
@@ -278,7 +290,12 @@ export interface ComposedOverlayShape extends ComposedItem {
   id?: string;
   /** For a shape placed by `at`: the block it follows (its id, the composed path of what it attaches to) and the physical edge. */
   attachedTo?: { id: string; ref: string; edge: 'top' | 'bottom' | 'left' | 'right' | 'center' };
+  /** `front` (the default): over the slide, after its content and furniture; `back`: behind it, after the background and watermark, before the content. */
+  layer: OverlayLayer;
 }
+/** The layers of overlay shapes (`layer`). Connectors are always in front. */
+export const OVERLAY_LAYERS = ['front', 'back'] as const;
+export type OverlayLayer = typeof OVERLAY_LAYERS[number];
 
 /** One end of a connector. */
 export interface ConnectorEnd {
@@ -399,7 +416,7 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     const shape = composeShape(host, placed.box, { scale, aspect: 0 });
     const item: ComposedOverlayShape = {
       kind: 'shape', index, ...(nonEmpty(host.id) ? { id: host.id } : {}), path, field: 'shape', type: 'shape', value: host.text, payload: host, box: { ...shape.box }, shape,
-      ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}),
+      ...context.item(host, shape, path), alignment: 'center', ...(placed.attachedTo ? { attachedTo: placed.attachedTo } : {}), layer: host.layer === 'back' ? 'back' : 'front',
     };
     shapes.set(index, item);
     if (nonEmpty(host.id) && !shapeIds.has(host.id)) shapeIds.set(host.id, index);
@@ -423,7 +440,8 @@ export function composeOverlayShapes(slide: unknown, composition: SlideCompositi
     if (!fromSites?.length || !toSites?.length) return;
     const chosen = chooseConnectorSites(route, fromSites, toSites, { fromSite: connector.fromSite, toSite: connector.toSite, scale, same: from.ref === to.ref });
     if (!chosen) return;
-    const { geometry } = chosen, frame = geometry.frame;
+    // An authored adjust keeps the route PowerPoint drew (SH-05 imports it): the sites stay the chosen ones, the middle is the author's.
+    const own = record(host.adjust), geometry = Object.keys(own).length ? connectorRoute(route, fromSites[chosen.from]!, toSites[chosen.to]!, scale, own) ?? chosen.geometry : chosen.geometry, frame = geometry.frame;
     const paths: ComposedShapePath[] = [{ d: geometry.d, fill: 'none', stroke: true, open: true, ...(geometry.ends ? { ends: geometry.ends } : {}) }];
     const stroke = composeStroke(host.stroke, scale, { color: CONNECTOR_STROKE_COLOR, width: CONNECTOR_STROKE_WIDTH, join: 'round' });
     sketchStroke(stroke, paths, geometry.bounds, scale);
@@ -477,8 +495,8 @@ function overlayBox(host: Rec, context: { width: number; height: number; scale: 
 
 // --- validation -----------------------------------------------------------------------------------------------------
 
-/** The keys of the overlay vocabulary that only an overlay shape takes (a connector takes id, connector, stroke, alt, decorative, hidden and extensions). */
-const SHAPE_ONLY_KEYS: ReadonlySet<string> = new Set(['x', 'y', 'width', 'height', 'at', 'shape', 'path', 'adjust', 'fill', 'opacity', 'style', 'shadow', 'innerShadow', 'glow', 'softEdge', 'reflection', 'blur', 'rotate', 'flip', 'text', 'anchor', 'padding', 'textDirection', 'link']);
+/** The keys of the overlay vocabulary that only an overlay shape takes (a connector takes id, connector, adjust, stroke, alt, decorative, hidden and extensions). */
+const SHAPE_ONLY_KEYS: ReadonlySet<string> = new Set(['x', 'y', 'width', 'height', 'at', 'layer', 'shape', 'path', 'fill', 'opacity', 'style', 'shadow', 'innerShadow', 'glow', 'softEdge', 'reflection', 'blur', 'rotate', 'flip', 'text', 'anchor', 'padding', 'textDirection', 'link']);
 /** A validation issue of a slide's `shapes` (schema-check reports them); `code` absent means an opf/schema error. */
 export interface OverlayIssue { path: string; message: string; code?: 'shape-anchor-missing' | 'connector-end-missing'; params: Record<string, unknown> }
 
@@ -523,7 +541,7 @@ export function overlayIssues(slide: unknown, slidePath: string): OverlayIssue[]
     const host = record(entry), at = `${slidePath}/shapes/${index}`;
     if (!Object.keys(host).length) return;
     if (isOverlayConnector(host)) {
-      for (const key of Object.keys(host)) if (SHAPE_ONLY_KEYS.has(key)) issues.push({ path: `${at}/${key}`, message: `${key} does not apply to a connector; a connector takes only id, connector, stroke, alt, decorative, hidden and extensions`, params: { field: key } });
+      for (const key of Object.keys(host)) if (SHAPE_ONLY_KEYS.has(key)) issues.push({ path: `${at}/${key}`, message: `${key} does not apply to a connector; a connector takes only id, connector, adjust, stroke, alt, decorative, hidden and extensions`, params: { field: key } });
       const connector = record(host.connector);
       for (const side of ['from', 'to'] as const) {
         const id = connector[side];

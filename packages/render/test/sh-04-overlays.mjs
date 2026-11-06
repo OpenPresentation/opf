@@ -69,3 +69,13 @@ const geometry = (shapes) => composeSlide(slide(shapes), { presentation: deck(sh
 }
 
 console.log('sh-04 overlays: ok');
+
+// The back layer is drawn behind the content (before the first block), the front layer and the connectors after it.
+{
+  const shapes = [{ id: 'panel', layer: 'back', shape: 'rect', x: 0, y: 0.2, width: 1, height: 0.6 }, { id: 'badge', shape: 'ellipse', x: 0.1, y: 0.1, width: 0.05, height: 0.08 }];
+  const svg = svgOf(shapes, { trace: true });
+  const at = (path) => svg.indexOf(`data-opf-path="${path}"`);
+  assert.ok(at('slides.0.shapes.0') > 0 && at('slides.0.shapes.0') < at('slides.0.blocks.0.shape'), 'the back layer is under the blocks');
+  assert.ok(at('slides.0.shapes.1') > at('slides.0.blocks.1.shape'), 'the front layer is over them');
+  console.log('sh-04 overlay layers: ok');
+}

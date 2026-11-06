@@ -2518,6 +2518,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, geometry.surface !== undefined);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
+  // SH-04: the back layer of the overlay, after the background, watermark and logo and before every content shape, as the preview draws it.
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'back');
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
@@ -2657,7 +2659,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // every content item, and an overlapping footer stays visible over content.
   await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
   // SH-04: the slide's overlay (core geometry.overlayShapes) over everything else, in array order, as the preview draws it.
-  addOverlayShapes(slide, geometry, slideIndex, slideContext, context);
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'front');
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -3045,11 +3047,12 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
   return name;
 }
 
-// SH-04: the slide's overlay. An overlay shape is a shape block item (core ComposedOverlayShape), written as one: `OPF shape slides.N.shapes.I`.
+// SH-04: one layer of the slide's overlay. An overlay shape is a shape block item (core ComposedOverlayShape), written as one: `OPF shape slides.N.shapes.I`.
 // A connector (core ComposedConnector) is a placeholder line named `OPF connector slides.N.shapes.I` that writeConnectors replaces by its
 // p:cxnSp in the finished slide part, glued to the native shapes at its ends (src/connectors.js).
-function addOverlayShapes(slide, geometry, slideIndex, context, deck) {
-  for (const entry of geometry.overlayShapes ?? []) {
+function addOverlayShapes(slide, geometry, slideIndex, context, deck, layer) {
+  // The back layer (overlay shapes with layer back) goes before the content shapes in the shape tree; the front layer and every connector after.
+  for (const entry of (geometry.overlayShapes ?? []).filter(entry => (entry.kind === 'shape' && entry.layer === 'back' ? 'back' : 'front') === layer)) {
     if (entry.kind === 'shape') { addShapeItem(slide, entry, slideIndex, context, deck); continue; }
     if (!entry.paths?.length) continue;
     const name = connectorName(entry.path), paint = shapePaint(context), palette = shapePalette(context);

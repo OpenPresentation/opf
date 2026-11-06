@@ -135,8 +135,9 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 	test("leaves out the examples and the documentation, which are most of the bundle", () => {
 		assert.ok(lean.bytes < bundle.bytes - 7_000_000, `${lean.bytes} bytes against ${bundle.bytes} with the data`);
 		// About 7.1 MB unminified, 1.1 MB of it the diagram types validate_deck loads to check a deck's diagrams. SH-02: composition evaluates
-		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes. SH-06: the shape catalog and search_shapes add 23 KB, and the engine's own growth since: 7,902,733 bytes.
-		assert.ok(lean.bytes < 7_950_000, `${lean.bytes} bytes`);
+		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes.
+		// SH-04: overlay shapes and connectors (their composition, routing and validation, and the overlay form of the schema): 7,974,844 bytes. SH-06 (the shape catalog and search_shapes) adds about 23 KB.
+		assert.ok(lean.bytes < 8_050_000, `${lean.bytes} bytes`);
 	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {

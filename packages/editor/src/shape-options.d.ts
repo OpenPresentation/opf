@@ -8,10 +8,10 @@ export { loadShapeEngine, shapeEngine } from "./shape-engine.js";
 /** The keys of a shape block this module edits. */
 export declare const SHAPE_PROPERTY_KEYS: readonly [
   "shape", "adjust", "aspectRatio", "fill", "opacity", "stroke", "style", "shadow", "innerShadow", "glow", "softEdge", "reflection", "blur",
-  "rotate", "flip", "text", "anchor", "padding", "textDirection", "alt", "decorative", "hidden", "link",
+  "rotate", "flip", "text", "anchor", "padding", "textDirection", "alt", "decorative", "hidden", "link", "layer",
 ];
 /** The keys an overlay connector shares with a shape: its line and accessibility keys. */
-export declare const CONNECTOR_PROPERTY_KEYS: readonly ["stroke", "alt", "decorative", "hidden"];
+export declare const CONNECTOR_PROPERTY_KEYS: readonly ["stroke", "alt", "decorative", "hidden", "adjust"];
 export type ShapePropertyKey = (typeof SHAPE_PROPERTY_KEYS)[number];
 
 /** The presets matching `query` (DrawingML name, Aspose name, common words), best first; an empty query lists the gallery in order. */

@@ -16,7 +16,7 @@ export { SHAPE_CATALOG, SHAPE_CATEGORIES, loadShapeEngine, shapeEngine };
 
 const INDEX = /^(0|[1-9][0-9]*)$/;
 /** The keys an overlay connector shares with a shape (PartB: a connector has its own line, accessibility keys and `connector`, nothing else). */
-export const CONNECTOR_PROPERTY_KEYS = Object.freeze(["stroke", "alt", "decorative", "hidden"]);
+export const CONNECTOR_PROPERTY_KEYS = Object.freeze(["stroke", "alt", "decorative", "hidden", "adjust"]);
 const CONNECTOR_PATH = /^slides\.(0|[1-9][0-9]*)\.shapes\.(0|[1-9][0-9]*)$/;
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const bad = (message, details) => fail("invalid-shape", message, details);
@@ -24,7 +24,7 @@ const bad = (message, details) => fail("invalid-shape", message, details);
 /** The keys of a shape block this module edits: the preset and its adjust values, the fill, the line, the theme style, the effects, the transform, the text and the accessibility keys. */
 export const SHAPE_PROPERTY_KEYS = Object.freeze([
   "shape", "adjust", "aspectRatio", "fill", "opacity", "stroke", "style", "shadow", "innerShadow", "glow", "softEdge", "reflection", "blur",
-  "rotate", "flip", "text", "anchor", "padding", "textDirection", "alt", "decorative", "hidden", "link",
+  "rotate", "flip", "text", "anchor", "padding", "textDirection", "alt", "decorative", "hidden", "link", "layer",
 ]);
 
 // --- the catalog ------------------------------------------------------------------------------------------------------------------
@@ -172,6 +172,9 @@ function normalize(key, value) {
     }
     case "flip":
       return value === "" ? null : value;
+    case "layer":
+      // SH-04: front is the default, so it is not written.
+      return value === "front" || value === "" ? null : value;
     case "softEdge":
     case "blur": {
       const radius = Number(value);

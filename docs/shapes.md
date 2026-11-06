@@ -159,7 +159,7 @@ An image block's line is `stroke` (renamed from `border` in 0.33, with no alias)
 
 ## Overlay shapes and connectors
 
-A slide's `shapes` array is drawn over the composed slide: above the content, the furniture and everything else, in array order (later entries on top). It never moves content: composition places the slide first and the overlay on the result. Use it for what sits on top of a layout: a callout pointing at a figure, a badge on a picture, a stamp in a corner, and connector lines between blocks.
+A slide's `shapes` array is drawn over the composed slide: above the content, the furniture and everything else, in array order (later entries on top); an overlay shape with `layer: "back"` is drawn behind the content instead (see [layers](#layers)). It never moves content: composition places the slide first and the overlay on the result. Use it for what sits on top of a layout: a callout pointing at a figure, a badge on a picture, a stamp in a corner, and connector lines between blocks.
 
 ```json
 {
@@ -189,7 +189,18 @@ An entry without `connector` is an overlay shape. It has the whole [shape block]
 
 A picture's box is its frame; a block on a card is its card. A shape with both placements or none is an `opf/schema` error, and one whose `at.block` is not on the slide is `opf/shape-anchor-missing`; neither is drawn.
 
-The PPTX export writes an overlay shape as a shape block, a native `p:sp` named `OPF shape slides.N.shapes.I`, after every other shape of the slide.
+The PPTX export writes an overlay shape as a shape block, a native `p:sp` named `OPF shape slides.N.shapes.I`.
+
+### Layers
+
+`layer` puts an overlay shape in front of the slide (the default) or behind it:
+
+| `layer` | Drawn | PowerPoint |
+| --- | --- | --- |
+| `front` | Over the slide: after its content and furniture. | After every other shape of the slide in the shape tree. |
+| `back` | Behind the slide: above the background, the watermark and the deck logo, below the content and the furniture (a panel or a band behind a block). | After the background, watermark and logo and before the content shapes in the shape tree. |
+
+Array order stacks the shapes within each layer. Connectors are always in front, also when an end is a back-layer shape: the connector is glued to it and drawn over the content between them. Mark a back panel `decorative` when it carries no meaning.
 
 ### Connectors
 
@@ -201,6 +212,7 @@ An entry with `connector` is a connector line between two blocks or overlay shap
 | `connector.route` | `straight` (default), `elbow` or `curved`. |
 | `connector.fromSite`, `connector.toSite` | The connection site index at each end, instead of the automatic choice. An index the shape does not have is an `opf/schema` error. |
 | `stroke` | The line, with every [stroke](#stroke) property: color, width, dash, compound, sketch and arrowheads (`start` at `from`, `end` at `to`). Default a 2-pixel line in the slide's text color with no arrowheads. |
+| `adjust` | The connector preset's adjust values in OPF units: `adj1` of an elbow or a curve between sites on one axis (`bentConnector3`, `curvedConnector3`), the middle line as a fraction of the frame's width (0.5 halfway; below 0 or above 1 runs past a site). It replaces the automatic middle, so a route drawn in PowerPoint is kept exactly; the sites are still chosen as below. The two-segment routes and a straight line have none. A name the route's preset does not have is `opf/shape-adjust-unknown`. |
 | `alt`, `decorative`, `hidden`, `id` | As on a shape. A connector takes no other key. |
 
 **Connection sites.** Each end attaches to a connection site of its shape: a preset's own sites (`presetGeometry(...).connectionSites`, turned and flipped with the shape; a picture masked by a preset has its mask's) or, for every other block, the four edge midpoints of its box, numbered as DrawingML numbers a rectangle's: 0 top, 1 left, 2 bottom, 3 right. Without `fromSite` and `toSite` core chooses the pair of sites that face each other (opposite directions) whose route leaves each site outward and is shortest; then any route that leaves both outward; then the shortest. An elbow or curve considers only the sites along an axis (directions of 0, 90, 180 or 270 degrees) when the shape has some.

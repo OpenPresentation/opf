@@ -403,7 +403,10 @@ export function createShapeControls(ctx) {
   free.dataset.role = "shape-free";
   const fractionBox = h("div", { class: "opf-sc-row", "data-role": "shape-frame-fields" }, frameX.wrap, frameY.wrap, frameWidth.wrap, frameHeight.wrap);
   const anchorBox = h("div", { "data-role": "shape-anchor-fields" }, anchorInfo, anchorOffset.wrap, anchorWidth.wrap, anchorHeight.wrap, free);
-  const placementGroup = group("Place on the slide", "shape-placement-group", fractionBox, anchorBox);
+  const layerField = selectField("shape-layer", "Layer", { empty: "In front of the content", help: "Behind the content (above the background) or in front of it", onChange: (value) => place2({ layer: value === "" ? null : value }, "Layer changed.") });
+  layerField.setOptions([{ value: "back", label: "Behind the content" }]);
+  const place2 = (fields, done) => run(() => setShapeProperties(editor, path, fields), done);
+  const placementGroup = group("Place on the slide", "shape-placement-group", fractionBox, anchorBox, layerField.wrap);
 
   const layer = (label, where, role) => {
     const control = button(label, () => run(() => { const change = moveOverlayLayer(editor, path, where); if (change.changed) reselect?.(change.path); return change; }, `${label}.`), { quiet: true });
@@ -505,6 +508,7 @@ export function createShapeControls(ctx) {
   /** The overlay shape's place: fractions of the slide, or its anchor. */
   function loadPlacement(overlay) {
     const entry = overlay.entry;
+    layerField.set(entry.layer ?? "");
     const anchored = overlay.placement === "at";
     fractionBox.hidden = anchored;
     anchorBox.hidden = !anchored;
