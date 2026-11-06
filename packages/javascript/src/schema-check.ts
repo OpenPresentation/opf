@@ -10,7 +10,7 @@ import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
 import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
-import { isOverlayConnector, overlayIssues } from "./overlay-shapes.js";
+import { connectorAdjustPreset, isOverlayConnector, overlayIssues } from "./overlay-shapes.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
@@ -564,7 +564,8 @@ function presentationSemanticIssues(value: unknown): ValidationIssue[] {
           else documentIds.set(entry.id, "payload");
         }
         // SH-02's checks of a shape: adjust names and ranges, and a link on a hidden shape.
-        if (!isOverlayConnector(entry)) for (const issue of shapeIssues(entry, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
+        const checked = isOverlayConnector(entry) ? (isRecord(entry.adjust) ? { shape: connectorAdjustPreset(entry), adjust: entry.adjust } : undefined) : entry;
+        if (checked) for (const issue of shapeIssues(checked, (...keys) => keys.reduce((at, key) => pathFor(at, key), entryPath))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
       });
       for (const issue of overlayIssues(slide, slidePath)) issues.push(semanticIssue(issue.path, issue.message, { ...(issue.code ? { code: issue.code } : {}), ...issue.params }));
       issues.push(...validateSlideRegions(slide, slidePath));

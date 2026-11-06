@@ -336,7 +336,8 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
       const page = pageConnectors.findIndex(entry => entry.starts.includes(index));
       if (page < 0) return;
       const connector = isRecord(entry.connector) ? entry.connector : {};
-      (pages[page]!.diagnostics ??= []).push({code:'connector-split',path:`${sourceBase}.shapes.${index}`,message:`The connector from '${String(connector.from)}' to '${String(connector.to)}' is not drawn: its ends landed on different pages. Keep both of them on one page, or join shapes of one page.`});
+      const target = pages[page]!;
+      target.diagnostics = [...(target.diagnostics ?? []), {code:'connector-split',path:`${sourceBase}.shapes.${index}`,message:`The connector from '${String(connector.from)}' to '${String(connector.to)}' is not drawn: its ends landed on different pages. Keep both of them on one page, or join shapes of one page.`}];
     });
   };
 
