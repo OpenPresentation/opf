@@ -242,7 +242,7 @@ repositories (opf `03a55ae`, opf-render `aa7e898`, opf-pptx `ca34da7`,
 pptx-gallery `23f9216`). Two things changed against the look-alike row, and a third was checked.
 
 - **Value set: 900 to 850.** pptx-gallery#40 (FF-22) reduced the charts from 76
-  to the 26 Aspose.Slides-supported types, so the 900 values are now 850 (793
+  to the 26 supported types, so the 900 values are now 850 (793
   presence-audited values, 26 charts and 31 `withAssets` variants). The
   50 removed charts were all mismatches and passed geometry, zOrder, slideSize,
   typefaces, reimport, theme and mapping (15 passed text, 9 passed fills), so
@@ -1257,13 +1257,13 @@ resolves in core.
 
 ## Charts
 
-26 gallery chart objects, reduced under FF-22 to the chart types Aspose.Slides
-supports:
+26 gallery chart objects, reduced under FF-22 to the chart types OPF
+supports natively:
 
 - **Core half, merged.** [opf#121](https://github.com/OpenPresentation/opf/pull/121) (`13ab00b`) keeps 26 non-deprecated chart-type
-  records, one per supported Aspose.Slides `ChartType`. It deprecates the other 50 with a
+  records, one per supported chart construct. It deprecates the other 50 with a
   named replacement rather than deleting them. See
-  [aspose-chart-types.md](aspose-chart-types.md).
+  [chart-types.md](chart-types.md).
 - **Gallery half, merged.** pptx-gallery#40 (`23f9216`) reduces
   `data/charts.json` from 76 to the same 26 types; `b2238ac` (pptx-gallery#63) gives the snippets category-major data.
 - **Engines.** opf-render 0.11.3 previews the 19 classic constructs natively

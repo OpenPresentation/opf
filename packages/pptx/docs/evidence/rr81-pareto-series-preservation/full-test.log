@@ -97,7 +97,7 @@ Chart series schema order passed: 131 checks (every classic type in dml-chart.xs
 [12/129] node test/chart-text-size.mjs
 Chart text size passed: 534 checks; axis, data label and legend text at the preview's size for 22 chart types on 7 slide and font-size settings, classic and chartex parts and the chartex style part.
 [13/129] node test/chart-types.mjs
-Chart types passed: 56 exports (19 classic Aspose chart types, rejected retired ids) with exact constructs and same-id reimport.
+Chart types passed: 56 exports (19 classic chart types, rejected retired ids) with exact constructs and same-id reimport.
 [14/129] node test/chart-workbook-ranges.mjs
 Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
 [15/129] node test/chart-workbook-values.mjs

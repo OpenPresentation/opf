@@ -1,5 +1,5 @@
 // FF-22: every classic chart type the core catalog keeps exports the exact
-// native construct for its Aspose.Slides ChartType and imports back to the
+// native construct and imports back to the
 // same id; any other id is rejected (chart.type is a schema enum).
 import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
@@ -113,7 +113,6 @@ const nativeElement = {bar: 'barChart', line: 'lineChart', area: 'areaChart', pi
 for (const record of keptRecords) {
   const spec = CHART_TYPES[record.id];
   const openxml = record.mappings.openxml;
-  assert.equal(spec.aspose, record.mappings.renderers['aspose-slides'].chartType, `${record.id}: Aspose.Slides ChartType`);
   assert.equal(spec.family === 'chartex', openxml.composition === 'extension', `${record.id}: chartex family is the catalog's extension composition`);
   if (spec.family === 'chartex') continue;
   if (spec.family === 'combo') {
@@ -209,4 +208,4 @@ for (const type of classic) {
   assert.deepEqual(diagnostics, [], `${type}: no adaptation`);
 }
 
-console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic Aspose chart types, rejected retired ids) with exact constructs and same-id reimport.`);
+console.log(`Chart types passed: ${checked} exports (${Object.keys(expected).length} classic chart types, rejected retired ids) with exact constructs and same-id reimport.`);

@@ -25,8 +25,8 @@ item's state edits its row and appends a log line in the same PR.
   geometry, and a feature whose PowerPoint drawing has not been compared with the preview is not written natively.
 - **PowerPoint export order (owner, confirmed 2026-11-06).** A diagram is written as (1) live SmartArt where OPF's engine draws that
   layout exactly as PowerPoint does and it passed the comparison, else (2) native shapes and text, else (3) an SVG picture.
-- **No Aspose names (owner).** No Aspose name appears anywhere in OPF: code, docs, catalogs, tests or changelogs (RR-103 removed the
-  earlier ones).
+- **No names of a commercial PowerPoint library (owner).** OPF names shapes, properties and chart types only by DrawingML and its own
+  vocabulary, in code, docs, catalogs, tests and changelogs; RR-103 (opf#1061) removed the earlier ones and `git grep` finds none.
 - **SH-07 decisions (vetoable, accepted 2026-11-06).** (1) Only straight edges without arrowheads are glued connectors
   (`straightConnector1` with `a:stCxn`/`a:endCxn`): PowerPoint refuses a connector of custom geometry and its largest line end is about
   20% shorter than pele's arrowhead, so every other edge is one shape of custom geometry with its arrowheads. (2) The finding is

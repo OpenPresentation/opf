@@ -128,7 +128,7 @@ Every ColorRef (fills, strokes, gradient stops, pattern colors, overlays, recolo
 | `rotate` | Degrees clockwise about the frame's center. Composition keeps the unrotated frame; a rotated outline may reach past its cell. | `a:xfrm rot` |
 | `flip` | `horizontal`, `vertical` or `both`: mirrors the geometry. The text is not mirrored; a vertical flip turns it upside down, as in PowerPoint. | `flipH`, `flipV` |
 
-Shapes stack in the order the blocks compose (`ZOrderPosition` is the shape tree order); [overlay shapes and connectors](#overlay-shapes-and-connectors) stack over everything, in the order of the slide's `shapes`.
+Shapes stack in the order the blocks compose (the shape tree order in PowerPoint); [overlay shapes and connectors](#overlay-shapes-and-connectors) stack over everything, in the order of the slide's `shapes`.
 
 ## Accessibility and links
 
