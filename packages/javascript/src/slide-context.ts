@@ -140,7 +140,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
       slideCount: options.slideCount ?? slides.length,
       fontFamilies: resolveFontFamilies(fontScheme),
       darkBackground: roles.dark,
-      ...(surface ? { messageSurface: surface, resolveRunColor: (reference: string) => resolveColorRef(reference, { colorScheme, roles, variables: rec(deck.variables), fallback: '' }) || undefined } : {}),
+      ...(surface ? { messageSurface: surface, resolveRunColor: (reference: unknown) => resolveColorRef(reference, { colorScheme, roles, variables: rec(deck.variables), fallback: '' }) || undefined } : {}),
       // LH-02: the colors the automatic scrim of a picture background is sized for.
       roles: { text: roles.text, textSecondary: roles.textSecondary, primary: roles.primary, background: roles.background },
       ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),

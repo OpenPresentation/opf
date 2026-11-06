@@ -43,7 +43,7 @@ export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logo
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
-import {colorContrast,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
+import {applyColorTransform,colorContrast,colorTransform,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
 import {pictureScrims,SCRIM_MARGIN,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance,type ScrimBox,type ScrimEdge} from './picture-scrim.js';
 export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,sampledWeight,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type PictureWeights,type ScrimEdge} from './picture-scrim.js';
 import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
@@ -696,7 +696,7 @@ export interface ComposedImage {
   shape: ImageShape;
   /** SH-02: the line along the shape outline (`stroke`, renamed from `border`); width in reference pixels, already scaled to the canvas. */
   stroke?: ComposedStroke;
-  /** Picture opacity below 1; the border and overlay are not affected. */
+  /** Picture opacity below 1; the stroke and overlay are not affected. */
   opacity?: number;
   /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
   recolor?: { type: 'grayscale' } | { type: 'duotone'; dark: unknown; light: unknown };
@@ -915,10 +915,11 @@ export interface ComposeSlideOptions {
    */
   messageSurface?: MessageSurface;
   /**
-   * LH-164: resolves a run color the author wrote (a hex, a role, a scheme slot, `var:`) to the hex the engines draw, for the slide's roles and
-   * variables; `resolveSlideContext` passes it with `messageSurface`, so a color that does not read on the surface can be drawn in one that does.
+   * LH-164: resolves a run color the author wrote (a hex, a role, a scheme slot, `var:`, or SH-02's lighter or darker `{ color, lighten|darken }`)
+   * to the hex the engines draw, for the slide's roles and variables; `resolveSlideContext` passes it with `messageSurface`, so a color that does
+   * not read on the surface can be drawn in one that does.
    */
-  resolveRunColor?: (reference: string) => string | undefined;
+  resolveRunColor?: (reference: unknown) => string | undefined;
   /**
    * The resolved theme's `background`, the lowest level of the background chain (the slide's design.background, then
    * the deck's, then this). Only an image background produces geometry (`SlideComposition.backgroundImage`).
@@ -4779,7 +4780,9 @@ function withCards(input: unknown, options: ComposeSlideOptions, result: SlideCo
   const groups = Array.isArray(blocks) && blocks.length >= ICON_CARD_MIN && blocks.length <= ICON_CARD_MAX && blocks.every(block => iconed(block) && Array.isArray(record(block).blocks));
   const paragraphs = !result.regions && body.length >= TEXT_TILE_MIN && body.length <= TEXT_TILE_MAX && body.every(item => item.field === 'text');
   if (!list && !groups && !paragraphs) return result;
-  const used = KEPT_RULES.get(result) ?? { rules: CORE_RULES, seeds: {} }, rules = new Set([...used.rules, ...CARD_RULES]);
+  // Icon cards draw the icons the slide kept off (`icons`, when the guard kept a rule set without it, as for a figure list drawn as LH-169's
+  // row, whose columns have no place for a chip): the cards are kept only when they read as well as the slide without them (better).
+  const used = KEPT_RULES.get(result) ?? { rules: CORE_RULES, seeds: {} }, rules = new Set<GuardedRule>([...used.rules, ...CARD_RULES, ...(list || groups ? ['icons' as const] : [])]);
   const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
   const atFloor = (composed: SlideComposition) => bodyReadability(composed, options).sizes.some(entry => entry.atFloor);
   const better = (next: SlideComposition | undefined, than: SlideComposition): next is SlideComposition => next !== undefined && CARD_GRIDS.has(next) && readsAsWell(trackQuality(than, options), trackQuality(next, options), floor) && atFloor(next) === atFloor(than);
@@ -5674,8 +5677,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const onMessageSurface = options.messageSurface !== undefined, surfaceBackground = legibleHex(slideRoles.background);
   const surfaceRun = (run: unknown): unknown => {
     const color = run && typeof run === 'object' ? (run as { color?: unknown }).color : undefined;
-    // Any ColorRef the author used (a role, a scheme slot, a variable) is resolved by the slide context; without it a hex and the primary are.
-    const drawn = typeof color === 'string' && options.resolveRunColor ? legibleHex(options.resolveRunColor(color)) : color === 'primary' ? legibleHex(slideRoles.primary) : legibleHex(color);
+    // Any ColorRef the author used (a role, a scheme slot, a variable, a lighter or darker color) is resolved by the slide context; without it a
+    // hex, the primary and a lighter or darker form of either are.
+    const own = colorTransform(color), base = own ? own.color : color;
+    const plain = base === 'primary' ? legibleHex(slideRoles.primary) : legibleHex(base);
+    const drawn = color !== undefined && color !== '' && options.resolveRunColor ? legibleHex(options.resolveRunColor(color)) : own && plain ? legibleHex(applyColorTransform(plain, own)) : plain;
     if (!onMessageSurface || !surfaceBackground || !drawn || (colorContrast(drawn, surfaceBackground) ?? 0) >= SCRIM_TARGET_CONTRAST) return run;
     return { ...(run as object), color: legible(drawn, surfaceBackground, SCRIM_TARGET_CONTRAST) };
   };
@@ -5812,10 +5818,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-14: a list draws icon chips when it is unnumbered, of one level, and one of its entries has an icon that resolves. Such a list is
   // never a badge list, flow or check-mark tiles: its chips take the marker column those draw in.
   const iconList = (value: unknown, numbering: unknown): boolean => numbering === undefined && Array.isArray(value) && value.every(entry => (record(entry).level ?? 0) === 0) && value.some(entry => iconFor(record(entry).icon) !== undefined);
-  // LH-169: a list block drawn as a row of figures (figureRows): a figure list (figureList) with no numbering, columns, caption, icons or
-  // list style of the author's, on a slide that is not a layout's master.
+  // LH-169: a list block drawn as a row of figures (figureRows): a figure list (figureList) with no numbering, columns, caption or list style
+  // of the author's, on a slide that is not a layout's master. Wave 8: a figure list whose entries carry icons is a row of figures only where
+  // LH-165's icon cards are off (the slide's first composition, CORE_RULES); withCards then tries the cards on top, which keep the icons, and
+  // keeps them only when no text reads smaller than in the row (readsAsWell): of the two, the one whose text is larger wins, the cards on a tie.
   const figureRowOf = (field: string, value: unknown, payload: Record<string, unknown>, caption: unknown): boolean => ruleOn('figure-row') && (field === 'items' || field === 'bullets') && hints.listStyle === undefined && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true
-    && payload.numbering === undefined && payload.columns === undefined && caption === undefined && figureList(value) && !iconList(value, undefined);
+    && payload.numbering === undefined && payload.columns === undefined && caption === undefined && figureList(value) && !(ruleOn('icon-cards') && iconList(value, undefined));
   // LH-14: the chip of a metric (ICON_CHIP, or ICON_CHIP_COMPACT without `icon-chips`, times METRIC_ICON_TEXT reference pixels) and of a group (that times the starting size of its
   // first paragraph or list, as its eyebrow is sized), and the band each takes above its content: the chip and ICON_CHIP_GAP of it.
   const chipScale = ruleOn('icon-chips') ? ICON_CHIP : ICON_CHIP_COMPACT;
@@ -6176,17 +6184,20 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const side = alignmentFor('text'), atEnd = rtl ? side === 'left' : side === 'right';
     const inner = pill ? Math.min(width - 2 * padX, widthFor('text', textPath)(text, size) * 1.04 + 2 * rasterPadding + 2 * scale) : width - 2 * padX;
     const outer = inner + 2 * padX, x = round(pill ? side === 'center' ? left + (width - outer) / 2 : atEnd ? left + width - outer : left : left);
-    const measured = fitPlacedText('text', value, text, { x: x + padX, y: 0, width: inner, height: Math.max(scale, bodyBottom - y) }, size, minSize, textPath, pill ? 'center' : undefined);
+    // Wave 8, LH-63 with LH-170: a band's text that opens with a short "Label:" (n18's "Recommendation: ...") or a short line of its own draws
+    // that label bold inside the band, as Claude Design draws it (runInOf, under the guarded `run-in`); a pill's one short line stays as written.
+    const bandRuns = pill ? undefined : runInOf(value), drawn = bandRuns ?? value;
+    const measured = fitPlacedText('text', drawn, text, { x: x + padX, y: 0, width: inner, height: Math.max(scale, bodyBottom - y) }, size, minSize, textPath, pill ? 'center' : undefined);
     const textHeight = 'richLines' in measured ? (measured as RichTextFit).height : measured.placement?.height ?? measured.lines.length * measured.lineHeight;
     const height = round(textHeight + 2 * padY), top = round(bodyBottom - height);
     const lines = 'richLines' in measured ? (measured as RichTextFit).richLines.length : measured.lines.length;
     if (height <= EMPHASIS_BAND_MAX_SHARE * (bodyBottom - y) && !(autoEmphasis.note && (lines > EMPHASIS_NOTE_LINES || measured.overflow))) {
       if (autoEmphasis.note) { fire('note-band'); noteBand = true; }
       const box = { x: x + padX, y: top + padY, width: inner, height: round(textHeight) };
-      const fit = fitPlacedText('text', value, text, box, size, minSize, textPath, pill ? 'center' : undefined);
+      const fit = fitPlacedText('text', drawn, text, box, size, minSize, textPath, pill ? 'center' : undefined);
       autoSurface = {
         emphasis: { path: blockPath, box: { x, y: top, width: round(outer), height }, radius: pill ? height / 2 : CARD_RADIUS * scale, shape: pill ? 'pill' : 'band', source: pill ? 'pill' : 'foot-band' },
-        item: { path: textPath, field: 'text', type: 'text', value, payload: { type: 'text', text: value }, box, text: fit, textStyle: styleFor('text', textPath), composition, alignment: pill ? 'center' : side, emphasis: true },
+        item: { path: textPath, field: 'text', type: 'text', value, payload: { type: 'text', text: value }, box, text: fit, ...(bandRuns && 'richLines' in fit ? { runs: bandRuns } : {}), textStyle: styleFor('text', textPath), composition, alignment: pill ? 'center' : side, emphasis: true },
       };
       if (!pill || (options as Record<symbol, unknown>)[PILL_AT_FOOT] === true) bodyBottom = top - gap;
     }
@@ -9600,6 +9611,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // sits in the middle of its card. When no grid holds the list at its size, it stays the list it was; the guard (DRAWING_RULES, and
   // composeSlide without steps) keeps the cards only when no text of the slide is smaller than without them.
   const cardLists = new Set<string>();
+  // Wave 8, LH-18 with LH-165: the cards of a row share their label track, as sibling pillars do (alignHeadingTracks): every card of the row
+  // reserves the height of its tallest label, so the descriptions start on one line and the row reads as one. Text keeps its size; a row
+  // whose shared track would not fit its cards keeps its own labels' heights. Placement only, under `heading-tracks`.
+  const sharedLabelTracks = <Card extends { labelHeight: number; height: number; inner: LayoutBox }>(laid: Card[], columns: number, again: (index: number, track: number) => Card | undefined): Card[] => {
+    if (!ruleOn('heading-tracks')) return laid;
+    let moved = false;
+    const tracked = laid.map((card, index) => {
+      const row = Math.floor(index / columns), track = Math.max(...laid.slice(row * columns, (row + 1) * columns).map(other => other.labelHeight));
+      if (track - card.labelHeight <= .5) return card;
+      const next = again(index, track);
+      if (!next || next.height > next.inner.height + 1e-6) return card;
+      moved = true;
+      return next;
+    });
+    if (moved) fire('heading-tracks');
+    return tracked;
+  };
   const iconCards = (): ComposedSteps | undefined => {
     if (!ruleOn('icon-cards') || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field) && !item.eyebrow);
@@ -9624,7 +9652,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const start = (item.text as ListFit).fontSize, area = cardArea(item), count = values.length;
     // Where a card's chip stands: `top`, above the label, the text across the card; `beside`, in a column before the label and its
     // description; `inline`, before the label, the description under both across the card (a short label in a narrow card).
-    const lay = (index: number, cell: LayoutBox, size: number, placement: 'top' | 'beside' | 'inline') => {
+    // `track`: the label height the card reserves (LH-18's shared heading track: the tallest label of its row), so a row's descriptions start on one line.
+    const lay = (index: number, cell: LayoutBox, size: number, placement: 'top' | 'beside' | 'inline', track = 0) => {
       const { object, label, description } = entries[index]!, inner = cardInner(cell), chip = ICON_CHIP * size, numeral = numeralOf(index), top = placement === 'top';
       const numeralLine = numeral !== undefined ? richTextLayouter([numeral], { x: 0, y: 0, width: 1e6, height: 1e6 }, size, { ...base, style: numeralStyle }, 0)(size).richLines[0] : undefined, numeralWidth = numeralLine?.width ?? 0;
       // The label's column: across the card under the chip, or after the chip (and before a numeral at the top end).
@@ -9641,7 +9670,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         textBox.height = text.height;
         let descriptionBox: LayoutBox | undefined, descriptionFit: RichTextFit | undefined;
         if (object.description !== undefined) {
-          descriptionBox = { ...below, y: (placement === 'inline' ? Math.max(y + text.height, y + center + chip / 2) : y + text.height) + .25 * size, height: inner.height };
+          const labelHeight = Math.max(text.height, track);
+          descriptionBox = { ...below, y: (placement === 'inline' ? Math.max(y + labelHeight, y + center + chip / 2) : y + labelHeight) + .25 * size, height: inner.height };
           descriptionFit = richTextLayouter(runs(object.description), descriptionBox, small, { ...base, style: { ...style, path: descriptionPath } }, small)(small);
           descriptionBox.height = descriptionFit.height;
         }
@@ -9669,7 +9699,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         }
         return { column: { box: inner, start: index, end: index + 1, text }, ...(badge ? { badge } : {}) };
       };
-      return { height, lines, labelLines, labelWords, bad, inner, place };
+      return { height, lines, labelLines, labelWords, labelHeight: probe.text.height, bad, inner, place };
     };
     let best: { size: number; lines: number; columns: number; placement: 'top' | 'beside' | 'inline' } | undefined;
     for (const columns of cardGridColumns(count)) {
@@ -9691,7 +9721,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
     }
     if (!best) return undefined;
-    const chosen = best, cells = cardGridCells(count, chosen.columns, area), laid = cells.map((cell, index) => lay(index, cell, chosen.size, chosen.placement)!);
+    const chosen = best, cells = cardGridCells(count, chosen.columns, area), laid = sharedLabelTracks(cells.map((cell, index) => lay(index, cell, chosen.size, chosen.placement)!), chosen.columns, (index, track) => lay(index, cells[index]!, chosen.size, chosen.placement, track));
     const offset = (laid[0]!.inner.height - Math.max(...laid.map(card => card.height))) / 2;
     const chips: NonNullable<ComposedSteps['chips']> = [], badges: ComposedStepBadge[] = [], fits: ComposedListColumn[] = [];
     laid.forEach((card, index) => {
@@ -9790,7 +9820,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const group of groups) boldLabels.add(group!.labelPath);
     const heightOf = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
     const firstBaseline = (fit: TextFit | RichTextFit, top: number, size: number) => ('richLines' in fit ? (fit as RichTextFit).richLines[0]?.baseline : fit.placement?.lines[0]?.baseline) ?? top + .8 * size;
-    const lay = (index: number, cell: LayoutBox, size: number, placement: 'top' | 'beside' | 'inline') => {
+    const lay = (index: number, cell: LayoutBox, size: number, placement: 'top' | 'beside' | 'inline', track = 0) => {
       const group = groups[index]!, inner = cardInner(cell), chip = ICON_CHIP * size, top = placement === 'top', indent = top ? 0 : chip + .5 * size, width = inner.width - indent;
       if (width < 4 * size) return undefined;
       const x = rtl ? inner.x : inner.x + indent, below = placement === 'inline' ? { x: inner.x, width: inner.width } : { x, width };
@@ -9798,7 +9828,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const fitDescription = (y: number) => group.descriptionItem ? fitPlacedText('text', group.descriptionItem.value, group.description!, { ...below, y, height: inner.height }, size, size, group.descriptionItem.path, alignment) : undefined;
       const center = firstBaseline(fitLabel(0), 0, size) - .35 * size;
       const at = (y: number) => {
-        const label = fitLabel(y), labelHeight = heightOf(label), next = (placement === 'inline' ? Math.max(y + labelHeight, y + center + chip / 2) : y + labelHeight) + .25 * size, description = fitDescription(next);
+        const label = fitLabel(y), labelHeight = heightOf(label), reserved = Math.max(labelHeight, track), next = (placement === 'inline' ? Math.max(y + reserved, y + center + chip / 2) : y + reserved) + .25 * size, description = fitDescription(next);
         return { label, labelHeight, description, next, bottom: description ? next + heightOf(description) : y + labelHeight };
       };
       const probe = at(0), lift = top ? chip * (1 + ICON_CHIP_GAP) : Math.max(0, chip / 2 - center);
@@ -9812,7 +9842,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         return { labelBox, label: fitPlacedText('text', group.labelValue, group.label, { ...labelBox, height: labelBox.height + scale }, size, size, group.labelPath, alignment),
           descriptionBox, description: descriptionBox ? fitDescription(descriptionBox.y) : undefined, cx, cy };
       };
-      return { height, lines, labelLines, labelWords, bad, inner, place };
+      return { height, lines, labelLines, labelWords, labelHeight: probe.labelHeight, bad, inner, place };
     };
     let best: { size: number; lines: number; columns: number; placement: 'top' | 'beside' | 'inline' } | undefined;
     for (const columns of cardGridColumns(count)) {
@@ -9834,7 +9864,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
     }
     if (!best) { for (const group of groups) boldLabels.delete(group!.labelPath); return undefined; }
-    const chosen = best, cells = cardGridCells(count, chosen.columns, area), laid = cells.map((cell, index) => lay(index, cell, chosen.size, chosen.placement)!);
+    const chosen = best, cells = cardGridCells(count, chosen.columns, area), laid = sharedLabelTracks(cells.map((cell, index) => lay(index, cell, chosen.size, chosen.placement)!), chosen.columns, (index, track) => lay(index, cells[index]!, chosen.size, chosen.placement, track));
     const offset = (laid[0]!.inner.height - Math.max(...laid.map(card => card.height))) / 2, chipSize = ICON_CHIP * chosen.size;
     laid.forEach((card, index) => {
       const group = groups[index]!, placed = card.place(card.inner.y + offset), owner = group.descriptionItem ?? group.labelItem!;
