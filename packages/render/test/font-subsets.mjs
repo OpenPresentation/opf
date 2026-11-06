@@ -81,9 +81,12 @@ assert.equal(faces.length, cutFaces.length, `the PDF embeds the ${cutFaces.lengt
   }
 }
 
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 // Size over a set of core example decks.
 let before = 0, after = 0, slides = 0;
-for (const { deck: example } of examples.filter((_, index) => index % 10 === 0)) {
+for (const { deck: example } of examples.filter((example) => sampled(example.file, 10))) {
   const a = toSvg(example, { fonts, subsetFonts: false }), b = toSvg(example, { fonts });
   for (const [index, svg] of b.entries()) { before += a[index].length; after += svg.length; slides++; }
 }

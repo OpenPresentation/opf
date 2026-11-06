@@ -268,8 +268,11 @@ function walk(value, at, visit) {
   if (Array.isArray(value)) value.forEach((item, index) => walk(item, [...at, index], visit));
   else if (value !== null && typeof value === 'object') for (const [key, item] of Object.entries(value)) { visit([...at, key], item); walk(item, [...at, key], visit); }
 }
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 let compared = 0;
-for (const { slug, deck } of examples.filter((_, index) => index % 4 === 0)) {
+for (const { slug, deck } of examples.filter((example) => sampled(example.file, 4))) {
   const yaml = toYaml(deck).yaml;
   walk(deck, [], (path, value) => {
     const keyRange = locate(yaml, 'yaml', path, { part: 'key' });

@@ -7,8 +7,35 @@ import { examples } from '@openpresentation/opf/examples';
 import { loadFonts } from '../dist/fonts-node.js';
 import { toSvg } from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the examples name gallery records)
 
+// A fixed set of decks (every 6th of the corpus when it was chosen), so adding an example never changes which decks are checked.
+const sampledDecks = new Set([
+  'gallery/business-functions/compliance-readiness-review.opf.json',
+  'gallery/business-functions/engineering-capacity-planning.opf.json',
+  'gallery/business-functions/model-governance-review.opf.json',
+  'gallery/business-functions/revenue-forecast-inspection.opf.json',
+  'gallery/business-functions/workplace-occupancy-reset.opf.json',
+  'gallery/education/advising-retention-review.opf.json',
+  'gallery/education/district-literacy-acceleration-plan.opf.json',
+  'gallery/education/stem-lab-funding-proposal.opf.json',
+  'gallery/government/grant-equity-review.opf.json',
+  'gallery/government/tax-portal-modernization.opf.json',
+  'gallery/industries/airline-disruption-recovery-review.opf.json',
+  'gallery/industries/cold-chain-waste-reduction-review.opf.json',
+  'gallery/industries/grid-resilience-capital-plan.opf.json',
+  'gallery/industries/rural-broadband-expansion-proposal.opf.json',
+  'gallery/industries/water-stewardship-grower-brief.opf.json',
+  'gallery/presentation-types/customer-qbr-renewal-deck.opf.json',
+  'gallery/presentation-types/policy-briefing-for-advisors.opf.json',
+  'technical/catalog-overrides.opf.json',
+  'technical/columns.opf.json',
+  'technical/grid-spans.opf.json',
+  'technical/metrics-quotes-timeline.opf.json',
+  'technical/rows-chart.opf.json',
+]);
+const sampled = (file) => sampledDecks.has(file.replace(/^examples\//, ''));
+
 const fonts = await loadFonts({ pack: 'office', substitutionPolicy: 'visual', scripts: 'all', embedScriptFonts: true });
-const decks = examples.filter((example, index) => index % 6 === 0 || /arabic|japanese|hindi|chinese|korean|thai|hebrew|rtl|cjk/i.test(example.file));
+const decks = examples.filter((example) => sampled(example.file) || /arabic|japanese|hindi|chinese|korean|thai|hebrew|rtl|cjk/i.test(example.file));
 const browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
 let slides = 0, faces = 0;
 try {

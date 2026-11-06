@@ -96,9 +96,12 @@ export function cliSample(decks) {
   return [...new Set([decks.find((deck) => !deck.endsWith('.json')), decks[0]].filter(Boolean))];
 }
 
+// Sampled by file name, not position, so adding an example never changes which existing decks are checked.
+const sampled = (name, every) => ([...name].reduce((hash, character) => Math.imul(hash ^ character.charCodeAt(0), 16777619), 2166136261) >>> 0) % every === 0;
+
 /** The decks whose preview is also rasterized to PNG in-process: every 26th deck and the first Markdown or YAML deck. */
 export function pngSample(decks) {
-  return [...new Set([decks.find((deck) => !deck.endsWith('.json')), ...decks.filter((_, index) => index % 26 === 0)].filter(Boolean))];
+  return [...new Set([decks.find((deck) => !deck.endsWith('.json')), ...decks.filter((deck) => sampled(path.basename(deck), 26))].filter(Boolean))];
 }
 
 /** Run `tasks` ({deck, format}) on `jobs` worker threads. Resolves to the tasks that failed, with their reason. */

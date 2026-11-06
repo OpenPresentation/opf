@@ -91,8 +91,24 @@ assert.match(emojiPaths, /<text [^>]*font-family="Noto Color Emoji, sans-serif"[
 assert.deepEqual(readable(emojiPaths), ['Launch ', ' day', 'Plain text only'], 'the outlined parts of the title and the body are readable; the emoji is text already');
 assert.deepEqual(diagnostics.filter((diagnostic) => diagnostic.code === 'text-as-paths-fallback').map((diagnostic) => [diagnostic.reason, diagnostic.fontFamily]), [['colour-font', 'noto color emoji']]);
 
+// A fixed set of decks (every 12th of the corpus when it was chosen), so adding an example never changes which decks are checked.
+const sampledDecks = new Set([
+  'gallery/business-functions/compliance-readiness-review.opf.json',
+  'gallery/business-functions/model-governance-review.opf.json',
+  'gallery/business-functions/workplace-occupancy-reset.opf.json',
+  'gallery/education/district-literacy-acceleration-plan.opf.json',
+  'gallery/government/grant-equity-review.opf.json',
+  'gallery/industries/airline-disruption-recovery-review.opf.json',
+  'gallery/industries/grid-resilience-capital-plan.opf.json',
+  'gallery/industries/water-stewardship-grower-brief.opf.json',
+  'gallery/presentation-types/policy-briefing-for-advisors.opf.json',
+  'technical/columns.opf.json',
+  'technical/metrics-quotes-timeline.opf.json',
+]);
+const sampled = (file) => sampledDecks.has(file.replace(/^examples\//, ''));
+
 // resvg draws the outlined SVG like the <text> SVG: core example decks, every slide.
-const decks = examples.filter((example, index) => index % 12 === 0 || example.file.endsWith('table-cell-types.opf.json'));
+const decks = examples.filter((example) => sampled(example.file) || example.file.endsWith('table-cell-types.opf.json'));
 let slides = 0, worst = 0, worstKey = '';
 for (const { file, deck } of decks) {
   const asText = toSvg(deck, { fonts }), asPaths = toSvg(deck, { fonts, text: "paths" });
