@@ -115,7 +115,9 @@ describe('the precompiled schema engine', () => {
 		assert.ok(source.length > 500_000, 'the chunk holds the validators');
 		assert.doesNotMatch(source, /\bnew Function\b|\beval\s*\(|\bFunction\s*\(|\b__require\(/);
 		// The chunk is minified, and holds no copy of the schemas (they are the shared `schemas` chunk).
-		assert.ok(source.length < 1_800_000, `the precompiled chunk is ${source.length} bytes; it should be minified`);
+		// SH-04 raised the bound from 1.8 MB: the overlay form of slide shapes adds about 38 KB (Ajv inlines its small referenced definitions);
+		// with all of shapes phase 2 the chunk is 1,806,916 bytes (main 1,768,114).
+		assert.ok(source.length < 1_900_000, `the precompiled chunk is ${source.length} bytes; it should be minified`);
 		assert.ok(!source.includes('Open-source JSON format for describing PowerPoint'), 'the chunk embeds a copy of the presentation schema');
 	});
 });

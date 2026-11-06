@@ -60,6 +60,11 @@ export interface ExportOptions {
 	text?: ExportText;
 	/** `pptx`: native charts (`native`), pictures (`picture`) or opf-pptx's choice (`auto`, the default). */
 	charts?: "auto" | "native" | "picture";
+	/**
+	 * `pptx`: diagrams as native shapes, text and connectors (`shapes`, the default) for the diagram families that passed their comparison
+	 * with the preview in PowerPoint (core DIAGRAM_SHAPE_FAMILIES), the others staying pictures; or every diagram as one SVG picture (`picture`).
+	 */
+	diagrams?: "picture" | "shapes";
 	/** `pptx`: what the file records about where media came from. */
 	provenance?: "full" | "references-only" | "none";
 	/** `pptx`: keep images as they are (`preserve`) or convert them for older PowerPoint (`compatible`). */
@@ -239,6 +244,7 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	if (options.raster !== undefined && typeof options.raster !== "boolean") throw invalid("raster must be true or false.");
 	if (options.paginate !== undefined && typeof options.paginate !== "boolean" && options.paginate !== "blocks") throw invalid('paginate must be true, false or "blocks".');
 	const charts = oneOf("charts", options.charts, ["auto", "native", "picture"] as const);
+	const diagrams = oneOf("diagrams", options.diagrams, ["picture", "shapes"] as const);
 	const provenance = oneOf("provenance", options.provenance, ["full", "references-only", "none"] as const);
 	const images = oneOf("images", options.images, ["compatible", "preserve"] as const);
 	const bodyText = oneOf("bodyText", options.bodyText, ["measured", "native"] as const);
@@ -248,9 +254,9 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const typefaces = oneOf("typefaces", options.typefaces, ["selected", "safe"] as const);
 	const as = oneOf("as", options.as, ["native", "images"] as const);
 	if (options.raster && format !== "pdf") throw invalid("raster applies to format pdf.");
-	if ((charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, provenance, images, bodyText, smartArt, slideNumbers, typefaces and as apply to format pptx.");
+	if ((charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined || as !== undefined) && format !== "pptx") throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces and as apply to format pptx.");
 	// A pictures-only PPTX has no text, fonts, charts or source records: the options that shape them do not apply.
-	if (as === "images" && (charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, provenance, images, bodyText, smartArt, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
+	if (as === "images" && (charts !== undefined || diagrams !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || smartArt !== undefined || slideNumbers !== undefined || typefaces !== undefined)) throw invalid("charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers and typefaces do not apply to as: \"images\", where each slide is one picture.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf" && !(format === "pptx" && as === "images")) throw invalid("scale applies to format png (and raster pdf, and pptx with as: \"images\").");
 	if (options.includeHidden && format === "pptx") throw invalid("includeHidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
@@ -417,6 +423,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(pictureLuminance ? { pictureLuminance } : {}),
 				// opf-pptx still names its option `chartex` and its picture choice `fallback`.
 				...(options.charts ? { chartex: options.charts === "picture" ? "fallback" : options.charts } : {}),
+				...(options.diagrams ? { diagrams: options.diagrams } : {}),
 				...(options.provenance ? { provenance: options.provenance === "none" ? false : options.provenance } : {}),
 				...(options.images ? { imageFormat: options.images } : {}),
 				...(options.bodyText ? { bodyText: options.bodyText } : {}),

@@ -37,8 +37,10 @@ import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeli
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
+import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, settleLayers, shapeRole, shapeText} from './shape-import.js';
+import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -56,15 +58,17 @@ import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
 import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
+import {connectorName, connectorRecord, writeConnectors} from './connectors.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
-import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagrams, tagDiagrams } from './diagram-provenance.js';
+import { DIAGRAM_UNAVAILABLE, diagramName, diagramPlaceholderName, importDiagramGroups, importDiagrams, tagDiagrams } from './diagram-provenance.js';
+import { diagramShapes, writeDiagramGroups } from './diagram-shapes.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
+  catalogRecords, clrMapAttributes, DIAGRAM_SHAPE_FAMILIES, diagramPalette, ensureDiagrams, ensureIcons, ensureShapes, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
@@ -266,6 +270,9 @@ export async function toPptx(input, options = {}) {
   if (options.typefaces !== undefined && !['selected', 'safe'].includes(options.typefaces)) {
     throw new OPFPptxError('invalid-typefaces-option', "typefaces must be 'selected' or 'safe'.", {path: 'options.typefaces'});
   }
+  if (options.diagrams !== undefined && !['picture', 'shapes'].includes(options.diagrams)) {
+    throw new OPFPptxError('invalid-diagrams-option', "diagrams must be 'picture' or 'shapes'.", {path: 'options.diagrams'});
+  }
   if (options.as !== undefined && !['native', 'images'].includes(options.as)) {
     throw new OPFPptxError('invalid-as-option', "as must be 'native' or 'images'.", {path: 'options.as'});
   }
@@ -283,8 +290,8 @@ export async function toPptx(input, options = {}) {
   assertValidBoundary(presentation);
   // In a browser core loads each diagram type on demand: load the deck's before anything composes it (a no-op in Node).
   await ensureDiagrams(presentation);
-  // SH-02: and the preset geometry when the deck has shapes (a no-op in Node).
-  await ensureShapes(presentation);
+  // SH-02: and the preset geometry when the deck has shapes (a no-op in Node); SH-07: and when it writes its diagrams as shapes.
+  await ensureShapes(presentation, {diagrams: (options.diagrams ?? 'shapes') === 'shapes'});
   // LH-14: and the icon sets it names (the gallery loads each set on first use) and the SVG files of its icons, when the host reads files.
   await ensureIcons(presentation, {catalogs: options.catalogs, ...(options.readIconSource ? {readSource: options.readIconSource} : {})});
   // LH-20: a pictures-only PPTX is the picture deck of the drawn slides, exported like any deck (src/picture-slides.js).
@@ -338,6 +345,9 @@ export async function toPptx(input, options = {}) {
   // Diagrams: every generated diagram picture and placeholder name, and their OPF_DIAGRAM_V1 records (full provenance only).
   context.diagrams = new Set();
   context.diagramTags = new Map();
+  // SH-07: `diagrams: "shapes"`: each diagram group's children (src/diagram-shapes.js), by the name of the shape that stands in for it.
+  context.diagramMode = options.diagrams ?? 'shapes';
+  context.diagramGroups = new Map();
   context.watermarks = new Map();
   context.textWatermarks = new Map();
   context.logos = new Map();
@@ -448,6 +458,8 @@ export async function toPptx(input, options = {}) {
   // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
   context.shapeBlocks = new Map();
   context.shapeSchemeColors = new Map();
+  // SH-04: the native connectors of the slides' overlays, by object name (src/connectors.js), written into the finished slide parts.
+  context.connectors = new Map();
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
@@ -610,6 +622,8 @@ export async function fromPptx(input, options = {}) {
   // them, so the document carries them before document provenance validates the restored document.
   const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
   const mediaRegistry = Object.create(null);
+  // SH-05: shape readers are synchronous; the preset geometry they read (SH-01) loads here, when a slide has a shape other than a rectangle.
+  if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path])))) await loadShapeGeometry();
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
@@ -683,7 +697,10 @@ export async function fromPptx(input, options = {}) {
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
+  // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
+  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
+  settleShapes(imported, furnitureContexts, options);
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
@@ -715,8 +732,13 @@ export async function fromPptx(input, options = {}) {
 function applyRunColors(imported, slideProvenance, restoredGroups, report, options) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
   const info = slideProvenance.map((entry, index) => entry.structure === "untagged" ? undefined : {record: entry.record, structure: entry.structure === "match", content: restoredContent.has(index)});
+  restoreRunColors(imported.slides, info, colorResolver(imported, options), report);
+}
+
+// The color a ColorRef is in a slide of the imported document ('#RRGGBB', or undefined), through the document's own color resolution.
+function colorResolver(imported, options) {
   const contexts = new Map();
-  const resolve = (slide, name) => {
+  return (slide, name) => {
     try {
       const key = slide.design ?? imported.design ?? null;
       if (!contexts.has(key)) contexts.set(key, resolvePresentationContext(slide.design ? {...imported, design: {...imported.design, ...slide.design}} : imported, options));
@@ -725,7 +747,21 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
       return undefined;
     }
   };
-  restoreRunColors(imported.slides, info, resolve, report);
+}
+
+// SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
+function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance) {
+  const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
+  // The stored ids and anchors of the overlay count while the slide's native structure is as it was exported (an edited slide keeps what PowerPoint now shows).
+  const paths = imported.slides.map(() => null);
+  for (const group of restoredGroups) if (group.applied && group.contentPaths?.paths) paths[group.contentPaths.slide] = group.contentPaths.paths;
+  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths);
+}
+
+// SH-05: what only the theme style gave a shape (its fill, line, shadow and text color) is not the shape's own.
+function settleShapes(imported, furnitureContexts, options) {
+  const fallback = colorResolver(imported, options);
+  restoreShapes(imported, (slide, index) => furnitureContexts[index]?.shapeImport?.resolve ?? (name => fallback(slide, name)));
 }
 
 // RR-96: the variant a color map imports as is dropped where the document's own design already gives that map: core picks light1 or dark1 from the
@@ -1147,7 +1183,6 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const items = [];
   const shapes = nativeContext.shapes;
   // opf-pptx#221: an exported image placeholder group (identity transform) is not a reflow risk.
-  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const paragraphs = nativeContext.paragraphs;
   // FF-45: OMML equations (a14:m math zones) have no OPF model. Their fallback text is imported as plain text; the equation
   // layout (fractions, radicals, limits, matrices) is lost, and that loss is diagnosed per shape instead of passing silently.
@@ -1225,11 +1260,26 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   for (const [index, payload] of diagrams.shapes) {
     items.push({kind: 'diagram', bounds: shapeBounds(shapes[index]['p:spPr']?.['a:xfrm']), payload, sources: [`sp:${index}`]});
   }
+  // SH-05: the drawn shapes in z order, with their frames on the slide (groups flattened); shapes and connectors the importer keeps as OPF shapes.
+  const drawnAll = readDrawnShapes(decodeText(entries[slidePath]));
+  const drawnShapes = new Map(drawnAll.filter(entry => entry.tag === 'p:sp').map(entry => [entry.index, entry]));
+  const slideTheme = readSlideTheme(slidePath, {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]});
+  const shapeContext = {width: nativeContext.slideWidth, height: nativeContext.slideHeight, scale: Math.min(nativeContext.slideWidth, nativeContext.slideHeight) / 9525 / 720, rtl: options.rtlDeck === true,
+    mapping: slideTheme.mapping, format: slideTheme.format, relationships, report: diagnostic => options.onDiagnostic?.(diagnostic), slideIndex, state: nativeContext.shapeImport = {overlays: [], connectors: [], resolve: nativeColorResolver(slideTheme), ...nativeShapeNames(shapes, nativeContext.pictures ?? [])}};
+  // SH-07: an intact diagram group (diagrams: "shapes") is its diagram block again; its member shapes are its drawing, not content.
+  const diagramMembers = new Set(), intactDiagramGroups = new Set();
+  for (const {group, payload} of importDiagramGroups({groups: asArray(tree?.['p:grpSp']), relationships, entries, slideIndex,
+    valid: candidate => isValidFormat({slides: [{blocks: [candidate]}]}), report: diagnostic => options.onDiagnostic?.(diagnostic)})) {
+    intactDiagramGroups.add(group);
+    const members = nativeTextShapes(group);
+    for (const member of members) { diagramMembers.add(member); roles.set(shapeKeys.get(member), 'diagram'); }
+    items.push({kind: 'diagram', bounds: shapeBounds(group['p:grpSpPr']?.['a:xfrm']), payload, sources: sourcesOf(members)});
+  }
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
     if (role) roles.set(shapeKeys.get(shape), role);
-    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index)) continue;
+    if (furniture.text.has(index) || nativeContext.imageShapes?.has(index) || nativeContext.watermarkShapes?.has(index) || nativeContext.logoPlaceholderShapes?.has(index) || placeholders.consumed.has(index) || diagrams.shapes.has(index) || diagramMembers.has(shape)) continue;
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
@@ -1240,6 +1290,15 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     // RR-81: a placeholder with no text (no runs, or only empty paragraphs) is PowerPoint's prompt ("Click to add text" on a slide
     // added from a layout), not content. A picture, chart or table in a placeholder is a p:pic or p:graphicFrame, read below.
     if (shape['p:nvSpPr']?.['p:nvPr']?.['p:ph'] !== undefined && !(paragraphs[index] ?? []).some(paragraph => paragraph.text)) { roles.set(shapeKeys.get(shape), 'prompt'); continue; }
+    // SH-05: a shape that draws something (or that the exporter wrote as a shape block or overlay) is an OPF shape, not text.
+    const drawnShape = drawnShapes.get(index);
+    const shapeKind = drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
+    if (shapeKind !== 'text') {
+      const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index))});
+      roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
+      if (imported) items.push({...imported, sources: [`sp:${index}`]});
+      continue;
+    }
     const ordinaryBody = Object.hasOwn(shape, 'p:txBody') && !shape['p:nvSpPr']?.['p:nvPr']?.['p:custDataLst']?.['p:tags'];
     const item = importShape(shape, dimensions, paragraphs[index], ordinaryBody || furniture.taggedText.has(index) || media.captionShapes.has(shape));
     if (item && ordinaryBody) item.readNativeBody = () => readBody(index);
@@ -1250,6 +1309,23 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push({...item, sources: [`sp:${index}`]});
   }
 
+  // SH-07 with SH-05: the glued edges of an intact diagram group are the diagram's drawing, not overlay connectors.
+  const intactDiagramIndexes = new Set([...intactDiagramGroups].map(group => asArray(tree?.['p:grpSp']).indexOf(group)));
+  const drawnOutsideDiagrams = drawnAll.filter(entry => entry.group === undefined || !intactDiagramIndexes.has(entry.group));
+  importNativeConnectors(drawnOutsideDiagrams, shapeContext);
+  // SH-05: an overlay shape PowerPoint drew behind a text box or a picture is in the back layer.
+  settleLayers(drawnOutsideDiagrams.flatMap(entry => {
+    if (entry.tag === 'p:pic' || entry.tag === 'p:graphicFrame') return [{z: entry.z, frame: entry.frame, name: entry.tag === 'p:pic' ? 'picture' : 'table or chart'}];
+    const index = entry.tag === 'p:sp' ? entry.index : undefined;
+    return index !== undefined && (paragraphs[index] ?? []).some(paragraph => paragraph.text) && shapeRole(entry, {hasText: true}) === 'text' ? [{z: entry.z, frame: entry.frame, name: String(entry.props?.['p:nvSpPr']?.['p:cNvPr']?.name ?? 'text')}] : [];
+  }), shapeContext);
+  // opf-pptx#221, SH-05: an exported image placeholder group (identity transform) is not a reflow risk, and nor is a group of shapes and connectors, which are
+  // imported with their transforms applied; grouped text and pictures keep their untransformed bounds.
+  const groupAtRisk = group => !['p:sp', 'p:cxnSp', 'p:pic', 'p:graphicFrame', 'p:grpSp'].some(tag => asArray(group?.[tag]).length) || ['p:pic', 'p:graphicFrame'].some(tag => asArray(group?.[tag]).length) || asArray(group?.['p:sp']).some(member => {
+    const index = shapes.indexOf(member), drawnMember = drawnShapes.get(index);
+    return !drawnMember || shapeRole(drawnMember, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) === 'text';
+  }) || asArray(group?.['p:grpSp']).some(groupAtRisk);
+  if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group) && !intactDiagramGroups.has(group) && groupAtRisk(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const frames = asArray(tree?.["p:graphicFrame"]);
   // RR-35: what a chart's axis titles, legend and data labels cannot express in OPF is reported on the chart's path.
   const chartReport = label => diagnostic => options.onDiagnostic?.({code: 'chart-option-adapted', ...diagnostic, path: `slides.${slideIndex}.${label}.${diagnostic.option}`});
@@ -2528,6 +2604,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
   const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
+  recordOverlays(context.documentProvenance, authoredSlide, slideIndex);
   // Paint order, as in the preview (FA-22 contract): canvas colour, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);
@@ -2539,6 +2616,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, geometry.surface !== undefined);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
+  // SH-04: the back layer of the overlay, after the background, watermark and logo and before every content shape, as the preview draws it.
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'back');
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
@@ -2688,6 +2767,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // spTree order (PowerPoint's z-order) matches: header/footer parts come after
   // every content item, and an overlapping footer stays visible over content.
   await addFurniture(slide,presentation,authoredSlide,geometry.furniture,slideContext,options,slideIndex);
+  // SH-04: the slide's overlay (core geometry.overlayShapes) over everything else, in array order, as the preview draws it.
+  addOverlayShapes(slide, geometry, slideIndex, slideContext, context, 'front');
 
   if (opfSlide.notes) {
     const notes = String(opfSlide.notes);
@@ -3078,6 +3159,44 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
   return name;
 }
 
+// SH-04: one layer of the slide's overlay. An overlay shape is a shape block item (core ComposedOverlayShape), written as one: `OPF shape slides.N.shapes.I`.
+// A connector (core ComposedConnector) is a placeholder line named `OPF connector slides.N.shapes.I` that writeConnectors replaces by its
+// p:cxnSp in the finished slide part, glued to the native shapes at its ends (src/connectors.js).
+function addOverlayShapes(slide, geometry, slideIndex, context, deck, layer) {
+  // The back layer (overlay shapes with layer back) goes before the content shapes in the shape tree; the front layer and every connector after.
+  for (const entry of (geometry.overlayShapes ?? []).filter(entry => (entry.kind === 'shape' && entry.layer === 'back' ? 'back' : 'front') === layer)) {
+    if (entry.kind === 'shape') { addShapeItem(slide, entry, slideIndex, context, deck); continue; }
+    if (!entry.paths?.length) continue;
+    const name = connectorName(entry.path), paint = shapePaint(context), palette = shapePalette(context);
+    const table = deck.slideSchemeColors?.[slideIndex]?.table;
+    if (table) {
+      const own = deck.shapeSchemeColors.get(slideIndex) ?? new Map(), view = new Map([...table, ...own]);
+      addTransformedColors(view, reference => exportColor(reference, context, '000000'), entry.stroke);
+      for (const [hex, value] of view) if (!table.has(hex)) own.set(hex, value);
+      deck.shapeSchemeColors.set(slideIndex, own);
+    }
+    deck.connectors.set(name, connectorRecord(entry, paint, palette, {from: connectorGlue(entry.from, geometry, slideIndex, deck), to: connectorGlue(entry.to, geometry, slideIndex, deck)}));
+    slide.addShape('line', {x: entry.box.x / 96, y: entry.box.y / 96, w: entry.box.width / 96, h: entry.box.height / 96, objectName: name, line: {color: '000000', width: 1}});
+  }
+}
+
+// SH-04: the native shape a connector end glues to (its object name and core's site index): an overlay shape or shape block, a block's
+// picture, or the card of a block drawn on one; a group, or a block drawn as several native shapes (a text's line boxes), glues to none.
+function connectorGlue(end, geometry, slideIndex, deck) {
+  if (end.target === 'shape') return {name: `OPF shape ${end.ref}`, site: end.site};
+  if (end.target !== 'block') return undefined;
+  const block = end.ref.slice(0, end.ref.lastIndexOf('.')), items = geometry.items.filter(item => item.path.startsWith(`${block}.`) && !item.path.slice(block.length + 1).startsWith('blocks.'));
+  const item = items.length === 1 ? items[0] : undefined;
+  if (!item) return undefined;
+  if (item.shape) return {name: `OPF shape ${item.path}`, site: end.site};
+  if (item.frameBox) return {name: `OPF card ${item.path}`, site: end.site};
+  if (item.image) {
+    const name = [...deck.images].find(([, record]) => record.slide === `slides.${slideIndex}` && record.path === item.path)?.[0];
+    return name === undefined ? undefined : {name, site: end.site};
+  }
+  return undefined;
+}
+
 // An overlay (core ComposedOverlay) as one native shape directly above its picture: the frame's shape, or an edge band.
 function addImageOverlay(slide, overlay, authored, name, owner, context, effects) {
   const {hex, alpha} = effects.paint(overlay.color, context.colors.text);
@@ -3154,6 +3273,11 @@ async function addDiagramItem(slide, item, slideIndex, context, options) {
     options.onDiagnostic?.({code: "content-placeholder", path: item.path, reason: "diagram-unavailable", message: `The diagram cannot be drawn${reason ? ` (${reason})` : ""}; the unavailable-diagram placeholder stands in for it.`});
     return addDiagramPlaceholder(slide, box, context, record);
   }
+  // SH-07: with `diagrams: "shapes"` a diagram of a family that passed its PowerPoint comparison is native shapes and connectors.
+  if (context.diagramMode === 'shapes') {
+    const name = addDiagramShapes(slide, item, slideIndex, context, options, record);
+    if (name) return name;
+  }
   const svg = paintDiagram(diagram, exportDiagramPalette(item, context), {width: area.width, height: area.height});
   const outcome = {box};
   // resolveSvgImage reports an SVG it cannot export (no rasterizer for the fallback) as an image; this one is a diagram.
@@ -3166,6 +3290,40 @@ async function addDiagramItem(slide, item, slideIndex, context, options) {
   context.pictureText.set(name, {alt: diagram.alt || undefined});
   if (record) context.diagramTags.set(name, {...record, alt: diagram.alt ?? ""});
   slide.addImage({...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: diagram.alt ?? ""});
+  return name;
+}
+
+// SH-07: a diagram as one group of native shapes (src/diagram-shapes.js), built from the drawing the preview shows (paintDiagram in the
+// slide's palette, pele's classes kept). Only a family in core's DIAGRAM_SHAPE_FAMILIES (each passed its comparison of PowerPoint's drawing
+// with the preview) is written so, and only when every part of its drawing has a native form; otherwise the diagram stays the picture
+// and reports diagram-shapes-unavailable (info). A rectangle stands in for the group until the slide part is written (writeDiagramGroups).
+// Returns the group's name, or undefined for the picture.
+function addDiagramShapes(slide, item, slideIndex, context, options, record) {
+  const diagram = item.diagram, area = diagram.box ?? item.box;
+  const family = diagram.type;
+  const unavailable = reason => {
+    options.onDiagnostic?.({code: 'diagram-shapes-unavailable', path: item.path, family, message: `The ${family} diagram exports as a picture: ${reason}.`});
+    return undefined;
+  };
+  if (!DIAGRAM_SHAPE_FAMILIES.includes(family)) return unavailable('its native shapes have not passed the comparison with the preview in PowerPoint yet');
+  const svg = paintDiagram(diagram, exportDiagramPalette(item, context), {width: area.width, height: area.height}, {classes: true});
+  const name = diagramName(1 + [...context.diagrams].filter(entry => /^OPF diagram \d+$/.test(entry)).length);
+  const measurers = new Map();
+  const styleOf = (family, bold, italic) => resolveTextStyle({fontFamily: family, fontWeight: bold ? 700 : 400, italic, path: item.path}, options.textMeasurement);
+  const converted = diagramShapes(svg, {
+    box: area, name, alt: diagram.alt ?? '', lang: context.deckLang,
+    measure: (text, size, style) => {
+      const key = `${style.family}|${style.bold}|${style.italic}`;
+      if (!measurers.has(key)) measurers.set(key, textWidthMeasurer(styleOf(style.family, style.bold, style.italic), options.textMeasurement));
+      return measurers.get(key)(text, size);
+    },
+    font: (family, bold, italic) => nativeFontOptions(styleOf(family, bold, italic)),
+  });
+  if (converted.unsupported) return unavailable(`its drawing uses ${converted.unsupported}, which has no native form`);
+  context.diagrams.add(name);
+  context.diagramGroups.set(name, {...converted, box: area, alt: diagram.alt ?? ''});
+  if (record) context.diagramTags.set(name, {...record, alt: diagram.alt ?? '', shapes: true});
+  slide.addShape('rect', {x: area.x / 96, y: area.y / 96, w: area.width / 96, h: area.height / 96, objectName: name});
   return name;
 }
 
@@ -5251,6 +5409,12 @@ async function normalizePptxZip(raw, context) {
   }
   // SVG pictures: the media part, its relationship and the asvg:svgBlip extension beside the PNG fallback blip. Fitting then
   // uses the SVG's own proportions (the fallback raster only approximates them at integer pixels).
+  // SH-07: each diagram written as shapes replaces the rectangle that stood in for it (before the diagram tags are attached).
+  if (context.diagramGroups.size) for (const [part, bytes] of Object.entries(entries)) {
+    if (!/^ppt\/slides\/slide\d+\.xml$/.test(part)) continue;
+    const xml = decodeText(bytes), next = writeDiagramGroups(xml, context.diagramGroups);
+    if (next !== xml) entries[part] = encodeText(next);
+  }
   const svgSizes = attachSvgPictures(entries, context.svgPictures);
   // Diagram pictures and placeholders carry OPF_DIAGRAM_V1 in full provenance (src/diagram-provenance.js): the picture's manifest
   // binds its geometry, blip fill and SVG part, so an edited or replaced picture imports as an ordinary picture.
@@ -5610,6 +5774,8 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       });
       // SH-02: shape blocks take core's geometry, fill, line, style and text body (src/shape-blocks.js).
       xml=writeShapeBlocks(xml,context.shapeBlocks);
+      // SH-04: connectors as native p:cxnSp glued to the shapes at their ends (src/connectors.js).
+      xml=writeConnectors(xml,context.connectors);
       // Native bullets otherwise inherit the first rich run's size, font and
       // color, which can differ from the measured list marker.
       xml=xml.replace(/<p:sp>([\s\S]*?)<\/p:sp>/g,(shape)=>{

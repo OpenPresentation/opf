@@ -170,7 +170,7 @@ the PNG or SVG slides; with an output path a `.zip` name makes the archive inste
 **Options** are the flags of `opf convert` in camel case: `slides` (`3`, `"1,3-5"` or `[1, 3]`, read by `parseSlideSelection`), `includeHidden`, `paginate`, `scale`
 (0.1 to 8, PNG and raster PDF), `raster` (`true` draws a PDF as a picture per page; vector text is the default), `text` (an SVG
 carries `"fonts"`, the default, which embeds the faces the slide uses; `"system"`, none, for a page that has the fonts; or
-`"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `provenance` and `images`
+`"paths"`, glyph outlines, so the file needs no font), `charts` (`"auto"`, `"native"` or `"picture"`), `diagrams` (`"shapes"`, the default, or `"picture"`), `provenance` and `images`
 (`"compatible"` or `"preserve"`) for PPTX, `date` (`YYYY-MM-DD` for date fields; nothing reads a clock), `catalogs` (the default
 catalog when omitted), `fonts` (a prepared `loadFonts()` handle of `@openpresentation/opf-render/fonts-node`, or a folder or a list
 of folders of `.ttf`/`.otf` files), `assetDir`, plus `signals` (a `.pptx` input: also return the importer's per-shape

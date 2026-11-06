@@ -28,6 +28,10 @@ Consult the installed schema for optional fields and constraints. This guide sel
   B -->|no| A"}` (Mermaid source; the object form `{"source":"...","alt":"..."}` adds a text alternative) |
 | Nested group | `{"composition":{"mode":"column"},"blocks":[{"text":"One"},{"text":"Two"}]}` |
 
+## Overlay shapes and connectors
+
+A slide's `shapes` draws over the composed slide without moving it: a callout, badge or stamp (any shape block vocabulary: `shape`, `text`, `fill`, `style` ...) placed by `x`, `y`, `width`, `height` (fractions of the slide) or `at` a block (`{ "block": "<id>", "edge": "top" | "bottom" | "start" | "end" | "center", "offset": 8 }`), and connectors (`{ "connector": { "from": "<id>", "to": "<id>", "route": "straight" | "elbow" | "curved" }, "stroke": { "end": { "type": "triangle" } } }`) between blocks and overlay shapes named by `id`. Give every block a connector or `at` names an `id`. Keep overlays few and purposeful (a callout that points at the figure it explains, a badge that marks something new); a structure of many boxes and arrows is a `diagram`. Write `alt` for a connector that carries meaning ("Review sends the work back to planning"); mark a purely visual one `decorative`.
+
 ## Diagrams
 
 A `diagram` is Mermaid source (version 12.1 syntax) that the engines parse, lay out with the deck's measured fonts and draw in the deck's colors. Pick the payload by what the content is: a `chart` for numbers on axes, a `timeline` for dated or ordered events (with `status`), a `diagram` for structure and flow. A string is shorthand for `{"source": ...}`; the object form takes `alt` (and `syntax`, which is `mermaid`, the only value). The first line of the source names the family: `flowchart`, `sequenceDiagram`, `classDiagram`, `stateDiagram-v2`, `erDiagram`, `gantt`, `pie`, `quadrantChart`, `mindmap`, `timeline`, `journey`, `xychart`, `sankey`, `gitGraph`, `C4Context`, `block`, `architecture-beta`, `kanban`, `packet`, `radar-beta`, `treemap`, `venn-beta`, `ishikawa`, `requirementDiagram` and the other built-in families; ZenUML is not supported.

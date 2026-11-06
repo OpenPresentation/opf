@@ -152,13 +152,14 @@ function fillPaint(fill, mode, id, box, helpers, shape, path) {
     const gradient = fill.gradient.type === "shape" ? { ...fill.gradient, type: "radial" } : fill.gradient;
     return { fill: `url(#${id})`, defs: gradientDef(gradient, id, span, helpers, mode, alpha) };
   }
+  // PowerPoint tiles a pattern from the slide's top-left corner, not the shape's (measured on a PowerPoint-drawn rectangle: the tile phase matches to the pixel).
   const runs = patternRuns(fill.preset);
   const foreground = shadeColor(paintOf(fill.foreground ?? "accent1", helpers, helpers.colors.primary).color, mode);
   const background = paintOf(fill.background ?? helpers.colors.background, helpers, helpers.colors.background);
   if (!runs) helpers.report?.({ code: "unsupported-pattern", message: `Pattern ${fill.preset} is not implemented by the SVG preview.` });
   const cell = helpers.tag("rect", { width: 8, height: 8, fill: shadeColor(background.color, mode), "fill-opacity": background.alpha < 1 ? precise(background.alpha) : undefined })
     + (runs ? helpers.tag("path", { d: runs.map(run => `M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(""), fill: foreground, "shape-rendering": "crispEdges" }) : "");
-  return { fill: `url(#${id})`, opacity: alpha, defs: helpers.tag("pattern", { id, x: number(box.x), y: number(box.y), width: 8, height: 8, patternUnits: "userSpaceOnUse" }, cell) };
+  return { fill: `url(#${id})`, opacity: alpha, defs: helpers.tag("pattern", { id, x: 0, y: 0, width: 8, height: 8, patternUnits: "userSpaceOnUse" }, cell) };
 }
 
 // An arrowhead at one end (core ShapeEnd), as a polygon in the line's color; `cover` is the part of the line the head hides.
@@ -290,4 +291,18 @@ export function renderShapeBlock(item, helpers) {
   const body = (defs.length ? helpers.tag("defs", {}, defs.join("")) : "") + effects.wrap(outline, text);
   const content = shape.link ? helpers.tag("a", { href: shape.link }, body) : body;
   return helpers.tag("g", { ...accessible, ...helpers.trace }, content);
+}
+
+/**
+ * SH-04: a connector of the slide's overlay (core ComposedConnector): its route (`paths[0]`, core's evaluation of PowerPoint's connector
+ * preset in its frame) stroked with the shape stroke drawing, so dash, compound lines, the sketch and the arrowheads (`stroke.start` at
+ * `from`, `stroke.end` at `to`) are drawn as on a shape's open path. A hidden connector draws nothing.
+ */
+export function renderConnector(connector, helpers) {
+  const path = connector.paths?.[0];
+  if (!path || connector.hidden || !connector.stroke) return "";
+  const id = `${helpers.idPrefix}-connector-${connector.path.replace(/[^A-Za-z0-9]+/g, "-")}`;
+  const stroke = strokeElements(connector.stroke, connector.stroke.sketched?.lines[0] ?? path.d, `${id}-line`, { box: connector.bounds, closed: false, ends: path.ends, helpers });
+  const accessible = connector.decorative ? HIDDEN : connector.alt !== undefined ? { role: "img", "aria-label": connector.alt } : HIDDEN;
+  return helpers.tag("g", { ...accessible, ...helpers.trace }, (stroke.defs ? helpers.tag("defs", {}, stroke.defs) : "") + stroke.elements);
 }

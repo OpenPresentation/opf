@@ -28,6 +28,7 @@ const INFO = new Set([
 	"script-font-unavailable",
 	"media-provenance-omitted",
 	"picture-not-measured",
+	"diagram-shapes-unavailable",
 	"smartart-unavailable",
 ]);
 
@@ -52,8 +53,12 @@ const HELP: Record<string, string> = {
 	"export-lossy": "The PowerPoint file draws this with its nearest native form (see feature and the message). Change the content if the difference matters, or export with --as images for an exact picture.",
 	"typeface-not-office-safe": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
 	"typeface-replaced": "Drop --typefaces safe to keep the selected families in the file.",
+	"diagram-shapes-unavailable": "The diagram stays one picture in PowerPoint (see the message). It looks the same; to edit it, change its source in OPF and export again.",
 	"smartart-unavailable": "The pyramid or matrix is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt.",
 	"duplicate-font-face": "A --fonts face repeats a bundled family, weight and style; remove it or rename the family.",
+	"shape-property-dropped": "OPF has no form for this property of a PowerPoint shape (3-D, preset shadows, autofit and the others in docs/shapes.md); it was dropped and the shape imported. Set it again in the PowerPoint file if it matters.",
+	"shape-covers-content": "An overlay shape is always drawn over the content, and OPF has no layer behind it: give the content a card, or the slide a background, instead of a shape behind it.",
+	"shape-not-imported": "A filled shape across the whole slide is a background, and an overlay shape is drawn over the content; set the slide's background in OPF instead.",
 };
 
 /** A finding of the shared format, with the library's details (font family, package, ...) alongside. */
