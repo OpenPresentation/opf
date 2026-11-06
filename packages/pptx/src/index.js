@@ -36,10 +36,10 @@ import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeli
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
-import {SHAPE_OVERLAY_PREFIXES, importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, readDrawnShapes, shapeRole, shapeText} from './shape-import.js';
+import {importNativeShape, importNativeConnectors, loadShapeGeometry, nativeColorResolver, nativeShapeNames, readDrawnShapes, reportCoveredContent, shapeRole, shapeText} from './shape-import.js';
 import {assembleOverlayShapes, restoreShapes} from './shape-restore.js';
 import {joinWrappedText} from './content-topology.js';
-import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
+import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, recordOverlays, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
 import {DEFAULT_DATE_FORMAT, attachFurnitureFields, dateFormatOfField, furniturePartFields, isBareSlideNumber, lineFields, nativeDateField, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
@@ -678,8 +678,10 @@ export async function fromPptx(input, options = {}) {
   // from the stored record and the footnote boxes (an edited note keeps its edited text).
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
+  // The overlay joins its slide before the run colors, so the text of its shapes is settled with the rest.
+  applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
-  applyShapes(imported, furnitureContexts, restoredGroups, options);
+  settleShapes(imported, furnitureContexts, options);
   restoreSlotFills(imported, slideProvenance, options);
   dropImpliedVariants(imported, options);
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
@@ -728,10 +730,17 @@ function colorResolver(imported, options) {
   };
 }
 
-// SH-05: the overlay shapes and connectors of each slide join it (in the order they were drawn), and what only the theme style gave a shape is not its own.
-function applyShapes(imported, furnitureContexts, restoredGroups, options) {
+// SH-05: the overlay shapes and connectors of each slide join it, in the order they were drawn.
+function applyShapes(imported, furnitureContexts, restoredGroups, slideProvenance) {
   const restoredContent = new Set(restoredGroups.filter(group => group.applied && group.contentPaths).map(group => group.contentPaths.slide));
-  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)));
+  // The stored ids and anchors of the overlay count while the slide's native structure is as it was exported (an edited slide keeps what PowerPoint now shows).
+  const paths = imported.slides.map(() => null);
+  for (const group of restoredGroups) if (group.applied && group.contentPaths?.paths) paths[group.contentPaths.slide] = group.contentPaths.paths;
+  assembleOverlayShapes(imported, furnitureContexts, imported.slides.map((_, index) => restoredContent.has(index)), slideProvenance.map(entry => entry.structure === 'match' ? entry.record?.overlays : undefined), paths);
+}
+
+// SH-05: what only the theme style gave a shape (its fill, line, shadow and text color) is not the shape's own.
+function settleShapes(imported, furnitureContexts, options) {
   const fallback = colorResolver(imported, options);
   restoreShapes(imported, (slide, index) => furnitureContexts[index]?.shapeImport?.resolve ?? (name => fallback(slide, name)));
 }
@@ -1235,7 +1244,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   const drawnShapes = new Map(drawnAll.filter(entry => entry.tag === 'p:sp').map(entry => [entry.index, entry]));
   const slideTheme = readSlideTheme(slidePath, {part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]});
   const shapeContext = {width: nativeContext.slideWidth, height: nativeContext.slideHeight, scale: Math.min(nativeContext.slideWidth, nativeContext.slideHeight) / 9525 / 720, rtl: options.rtlDeck === true,
-    mapping: slideTheme.mapping, format: slideTheme.format, relationships, report: diagnostic => options.onDiagnostic?.(diagnostic), slideIndex, state: nativeContext.shapeImport = {overlays: [], connectors: [], blockNames: new Map(), resolve: nativeColorResolver(slideTheme)}};
+    mapping: slideTheme.mapping, format: slideTheme.format, relationships, report: diagnostic => options.onDiagnostic?.(diagnostic), slideIndex, state: nativeContext.shapeImport = {overlays: [], connectors: [], resolve: nativeColorResolver(slideTheme), ...nativeShapeNames(shapes, nativeContext.pictures ?? [])}};
   for (const [index,shape] of shapes.entries()) {
     const role = furniture.text.has(index) ? 'furniture' : nativeContext.imageShapes?.has(index) ? 'image-overlay' : nativeContext.watermarkShapes?.has(index) ? 'watermark' : nativeContext.logoPlaceholderShapes?.has(index) ? 'logo' : cards.has(shape) ? 'card-frame'
       : code.consumed.has(shape) ? 'code' : metric.consumed.has(shape) ? 'metric' : media.consumed.has(shape) ? 'media' : timelines.consumed.has(shape) ? 'timeline' : quotes.consumed.has(shape) ? 'quote' : undefined;
@@ -1252,7 +1261,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (shape['p:nvSpPr']?.['p:nvPr']?.['p:ph'] !== undefined && !(paragraphs[index] ?? []).some(paragraph => paragraph.text)) { roles.set(shapeKeys.get(shape), 'prompt'); continue; }
     // SH-05: a shape that draws something (or that the exporter wrote as a shape block or overlay) is an OPF shape, not text.
     const drawnShape = drawnShapes.get(index);
-    const shapeKind = drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text), overlayPrefixes: SHAPE_OVERLAY_PREFIXES}) : 'text';
+    const shapeKind = drawnShape ? shapeRole(drawnShape, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) : 'text';
     if (shapeKind !== 'text') {
       const imported = importNativeShape(drawnShape, shapeKind, {...shapeContext, text: shapeText(readBody(index))});
       roles.set(shapeKeys.get(shape), shapeKind === 'block' ? 'shape' : 'overlay');
@@ -1270,11 +1279,17 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   }
 
   importNativeConnectors(drawnAll, shapeContext);
+  // SH-05: an overlay shape imported from behind a text box or a picture now covers it.
+  reportCoveredContent(drawnAll.flatMap(entry => {
+    if (entry.tag === 'p:pic' || entry.tag === 'p:graphicFrame') return [{z: entry.z, frame: entry.frame, name: entry.tag === 'p:pic' ? 'picture' : 'table or chart'}];
+    const index = entry.tag === 'p:sp' ? entry.index : undefined;
+    return index !== undefined && (paragraphs[index] ?? []).some(paragraph => paragraph.text) && shapeRole(entry, {hasText: true}) === 'text' ? [{z: entry.z, frame: entry.frame, name: String(entry.props?.['p:nvSpPr']?.['p:cNvPr']?.name ?? 'text')}] : [];
+  }), shapeContext);
   // opf-pptx#221, SH-05: an exported image placeholder group (identity transform) is not a reflow risk, and nor is a group of shapes and connectors, which are
   // imported with their transforms applied; grouped text and pictures keep their untransformed bounds.
-  const groupAtRisk = group => ['p:pic', 'p:graphicFrame'].some(tag => asArray(group?.[tag]).length) || asArray(group?.['p:sp']).some(member => {
+  const groupAtRisk = group => !['p:sp', 'p:cxnSp', 'p:pic', 'p:graphicFrame', 'p:grpSp'].some(tag => asArray(group?.[tag]).length) || ['p:pic', 'p:graphicFrame'].some(tag => asArray(group?.[tag]).length) || asArray(group?.['p:sp']).some(member => {
     const index = shapes.indexOf(member), drawnMember = drawnShapes.get(index);
-    return !drawnMember || shapeRole(drawnMember, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text), overlayPrefixes: SHAPE_OVERLAY_PREFIXES}) === 'text';
+    return !drawnMember || shapeRole(drawnMember, {hasText: (paragraphs[index] ?? []).some(paragraph => paragraph.text)}) === 'text';
   }) || asArray(group?.['p:grpSp']).some(groupAtRisk);
   if (asArray(tree?.['p:grpSp']).some(group => !isImagePlaceholderGroup(group) && groupAtRisk(group))) options.onDiagnostic?.({code:'grouped-text-reflow',path:`slides.${slideIndex}`,message:'Grouped native text and pictures are retained, but group transforms and unsupported group members are not reconstructed; review the reflowed OPF.'});
   const frames = asArray(tree?.["p:graphicFrame"]);
@@ -2546,6 +2561,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
   const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
   recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
+  recordOverlays(context.documentProvenance, authoredSlide, slideIndex);
   // Paint order, as in the preview (FA-22 contract): canvas colour, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);

@@ -234,6 +234,66 @@ When `paginate` splits a slide over pages, a shape placed by fractions is on eve
 | Elbow position | core's `adjust.adj1` | `a:avLst a:gd adj1` | `Adjustments` |
 | Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` | `LineFormat.BeginArrowheadStyle`, `EndArrowheadStyle` |
 
+## Importing shapes from PowerPoint
+
+`fromPptx` (and `opf convert deck.pptx deck.opf.json`) reads native shapes as OPF shapes. Two kinds of file arrive: a deck this export wrote, whose shapes come back as the OPF they were, and a deck PowerPoint wrote, whose shapes become overlay shapes and connectors.
+
+### A deck the export wrote
+
+The native name says what a shape was: `OPF shape slides.N.blocks.I.shape` is a shape block and `OPF shape slides.N.shapes.I` an overlay shape (I is its entry in `slide.shapes`); `OPF connector slides.N.shapes.I` is a connector. Every property the export writes is read back from the DrawingML, so a shape block returns with its preset and `adjust`, its `path`, `fill`, `opacity`, `stroke`, `style`, effects, `rotate`, `flip`, text, `anchor`, `padding`, `textDirection`, `alt`, `decorative`, `hidden` and `link`; a lighter or darker theme color returns as `{ color, lighten }` or `{ color, darken }`; a picture's `stroke` returns with the picture. The slide's stored record (`OPF_SLIDE_V1`) puts the block back in its place and adds what no native shape can carry, while the slide is as it was exported:
+
+- the block ids and the content structure (as for every block);
+- an overlay entry's `id` (a connector names its ends by it) and its `at` anchor against a block (the native shape holds only the frame composition gave it);
+- which of a connector's `fromSite` and `toSite` the author wrote (the pair that faces each other is chosen when neither is).
+
+A slide edited in PowerPoint keeps what PowerPoint now shows: fractions for an overlay shape, and the sites it names. A value the theme style gives (an explicit `fill: "accent1"` on the default style) comes back absent, since the export writes it out and PowerPoint cannot tell it from a choice; the shape draws the same. Likewise a rotation of -20 comes back as 340, and a custom `path` comes back as path data in the 0 to 1 box (the outline is the same).
+
+### A deck PowerPoint wrote
+
+- A free-positioned shape that draws something (a fill, a line or an effect, or any shape that is not a plain rectangle) with preset or custom geometry becomes an **overlay shape**: `x`, `y`, `width` and `height` are fractions of the slide (from the right edge in a right-to-left deck, as everywhere in OPF), with the preset and its `adjust`, a custom `a:custGeom` as `path`, and every property in the table below. Its z order is the array order.
+- A shape PowerPoint added with its default style (`p:style` with a theme line and fill) is OPF's default style, `moderate`, with nothing else stated. Another `p:style` is read as the fill and line its references give, with `style: "none"`.
+- A **connector** (`p:cxnSp`) whose two ends are connected to shapes OPF knows is a `connector` between their ids, with its route from the preset (`straightConnector1` straight, `bentConnector2` to `5` elbow, `curvedConnector2` to `5` curved) and its sites from `a:stCxn` and `a:endCxn`. A shape that is a connector's end gets an `id` made from its name (`box-a` for "Box A") where it has none. A connector with a free end is a line shape: the preset (`straightConnector1`, `bentConnector3` and so on) in its frame, with its arrowheads.
+- Shapes inside a **group** are flattened with the group's scale, flips and rotation applied.
+- A text box, a placeholder, and a rectangle with text that draws no fill, line or effect keep the text import (`text` blocks), as before.
+- A filled shape across the whole slide is a background, not an overlay (an overlay is drawn over the content): it is not imported and is reported as `shape-not-imported`.
+
+| DrawingML | OPF |
+| --- | --- |
+| `a:prstGeom prst` and `a:avLst` | `shape` and `adjust` (fractions and degrees, the values equal to the preset's defaults left out) |
+| `a:custGeom` (points, guides, `a:arcTo`) | `path`, in the 0 to 1 box (arcs become cubic Béziers) |
+| `a:noFill`, `a:solidFill`, `a:gradFill`, `a:pattFill` | `fill: "none"`, a ColorRef, `{ gradient }`, `{ pattern }`; a uniform transparency is `opacity` |
+| `a:schemeClr` (through the color map), `a:srgbClr`, `a:lumMod` and `a:lumOff` | a scheme slot name, a hex color, `{ color, lighten }` or `{ color, darken }` |
+| `a:ln` (`w`, `cap`, `cmpd`, `algn`, dashes, joins, `a:headEnd`, `a:tailEnd`, the sketch) | `stroke` (`"none"` for `a:noFill`) |
+| `p:style` (`lnRef`, `fillRef`, `effectRef`) | `style` |
+| `a:effectLst` (`a:outerShdw`, `a:innerShdw`, `a:glow`, `a:softEdge`, `a:reflection`, `a:blur`) | `shadow` (a preset name where it equals one), `innerShadow`, `glow`, `softEdge`, `reflection`, `blur`, in reference pixels |
+| `a:xfrm` (`rot`, `flipH`, `flipV`) | `rotate`, `flip` |
+| `a:bodyPr` (`anchor`, insets, `vert`) and the runs | `anchor`, `padding`, `textDirection`, `text` (emphasis, links and run colors; sizes and faces are the composition's) |
+| `p:cNvPr` (`descr`, the decorative extension, `hidden`, `a:hlinkClick`) | `alt`, `decorative`, `hidden`, `link` |
+
+### What is dropped
+
+Each of these is reported as a finding and dropped; the shape itself imports. The library's diagnostic is `shape-property-dropped` (`import/shape-property-dropped` in an `opf convert` report) with `property` naming it, and `shape` the native shape's name.
+
+| `property` | Native source | Why |
+| --- | --- | --- |
+| `3-D format` | `a:scene3d`, `a:sp3d` | The preview cannot match PowerPoint's 3-D. |
+| `preset shadow` | `a:prstShdw` | The `shadow` presets cover it. |
+| `fill overlay` | `a:fillOverlay` | Not in the format. |
+| `text wrapping`, `text columns`, `autofit` | `wrap="none"`, `numCol` above 1, `a:spAutoFit`, `a:normAutofit` | OPF fits text itself and never writes autofit. |
+| `alternative text title` | `p:cNvPr title` | `alt` is the one text alternative. |
+| `hover link` | `a:hlinkHover` | Only the click link. |
+| `locks` | `a:spLocks`, `a:cxnSpLocks` | Editing state, not content. |
+| `black-and-white mode` | `bwMode` other than `auto` | Not in the format. |
+| `custom data` | `p:custDataLst` | Not in the format. |
+| `picture fill`, `group fill`, `pattern line`, `effect graph`, `click action`, `geometry <name>` | `a:blipFill` on a shape, `a:grpFill`, `a:pattFill` on a line, `a:effectDag`, a link that is not an http, mailto or tel URL, a preset OPF does not have | No OPF form. |
+| `gradient fill`, `pattern fill`, `gradient focus`, `line transparency`, `shadow scale`, `custom geometry`, `custom path fill or stroke mode`, `arrowhead <type>` | a gradient or pattern with fewer than two stops or an unknown preset, a gradient focus off the center, a transparent line whose color is a theme color, a shadow scaled unevenly, an unreadable outline, a custom path with fill modes or hidden strokes, an arrowhead OPF does not have | The nearest OPF form is used where there is one. |
+| `color transform <name>` | a color transform other than alpha, `lumMod` and `lumOff` | Its effect is not applied. |
+| `position outside the slide` | a frame past the slide's edge | `x`, `y`, `width` and `height` are fractions 0 to 1: the shape is placed at the edge. |
+
+An overlay shape is always drawn over the content, and OPF has no layer behind it. A shape PowerPoint drew behind a text box, a picture, a table or a chart therefore covers it once imported: an opaque shape that lies below such content in the slide's z order and overlaps it is reported as `shape-covers-content` (`import/shape-covers-content`), naming both. Give the content a card, or the slide a background, instead.
+
+Approximations that are not reported: a theme style that is a gradient (`fillRef` index 2 or 3) imports as the solid color of its reference, and a rotated shape inside a group that scales its axes unevenly is scaled on the slide's axes.
+
 ## Validation
 
 | Finding | When |

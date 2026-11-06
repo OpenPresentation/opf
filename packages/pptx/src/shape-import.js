@@ -18,7 +18,17 @@ import {colorTransforms, presetPatterns, readBackgroundColor} from './background
 import {SHADOW_PRESETS} from './effects.js';
 import {readFrameAlt} from './frame-alt.js';
 
-export const SHAPE_NAME_PREFIX = 'OPF shape ';
+// The exporter names a shape block `OPF shape slides.N.blocks.I.shape` and an overlay shape `OPF shape slides.N.shapes.I` (I is its entry in
+// `slide.shapes`), and a connector `OPF connector slides.N.shapes.I`: the name says which each is.
+const EXPORTED_SHAPE = /^OPF shape (slides\.\d+\.(.+))$/;
+const EXPORTED_CONNECTOR = /^OPF connector slides\.\d+\.shapes\.(\d+)$/;
+/** What an exported shape's name says: `{kind: 'block', path}` or `{kind: 'overlay', index}`; undefined for any other name. */
+export function exportedShape(name) {
+  const match = EXPORTED_SHAPE.exec(String(name));
+  if (!match) return undefined;
+  const overlay = /^shapes\.(\d+)$/.exec(match[2]);
+  return overlay ? {kind: 'overlay', index: Number(overlay[1])} : {kind: 'block', path: match[1]};
+}
 const EMU_PER_PX = 9525;
 const orderedParser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true, parseAttributeValue: false, parseTagValue: false, trimValues: false});
 
@@ -370,7 +380,7 @@ function readStroke(ln, context, drop, scale) {
     if (!object(end) || !end.type || end.type === 'none') continue;
     if (!['triangle', 'stealth', 'diamond', 'oval', 'arrow'].includes(end.type)) { drop(`arrowhead ${end.type}`); continue; }
     const head = {type: end.type, ...(SIZES[end.w] && SIZES[end.w] !== 'medium' ? {width: SIZES[end.w]} : {}), ...(SIZES[end.len] && SIZES[end.len] !== 'medium' ? {length: SIZES[end.len]} : {})};
-    stroke[key] = head.type === 'triangle' && Object.keys(head).length === 1 ? {} : head;
+    stroke[key] = head;
   }
   for (const ext of array(ln['a:extLst']?.['a:ext'])) {
     const props = ext?.['ask:lineSketchStyleProps'];
@@ -547,7 +557,7 @@ export function readShape(drawn, context) {
   const locks = nv['p:cNvSpPr']?.['a:spLocks'] ?? nv['p:cNvCxnSpPr']?.['a:cxnSpLocks'];
   if (object(locks) && Object.keys(locks).length) drop('locks');
   if (spPr.bwMode && spPr.bwMode !== 'auto') drop('black-and-white mode');
-  if (nv['p:nvPr']?.['p:custDataLst']) drop('custom data');
+  if (object(nv['p:nvPr']?.['p:custDataLst'])) drop('custom data');
   return {fields, dropped, style};
 }
 
@@ -586,14 +596,14 @@ export function drawsLook(props) {
  * shape PowerPoint wrote that draws something), or `text` (a text box, a placeholder, an OPF object another reader owns, or a shape that
  * draws nothing: today's text import).
  */
-export function shapeRole(drawn, {hasText, overlayPrefixes = []} = {}) {
+export function shapeRole(drawn, {hasText} = {}) {
   const props = drawn.props ?? {};
   const nv = props['p:nvSpPr'] ?? {};
   const name = String(nv['p:cNvPr']?.name ?? '');
   if (nv['p:nvPr']?.['p:ph'] !== undefined || !drawn.frame) return 'text';
-  if (name.startsWith(SHAPE_NAME_PREFIX)) return 'block';
-  if (overlayPrefixes.some(prefix => name.startsWith(prefix))) return 'overlay';
-  if (name.startsWith('OPF ') || nv['p:nvPr']?.['p:custDataLst']) return 'text';
+  const exported = exportedShape(name);
+  if (exported) return exported.kind;
+  if (name.startsWith('OPF ') || object(nv['p:nvPr']?.['p:custDataLst']?.['p:tags'])) return 'text';
   const look = drawsLook(props);
   const spPr = props['p:spPr'] ?? {};
   const rectangle = !object(spPr['a:custGeom']) && (spPr['a:prstGeom']?.prst ?? 'rect') === 'rect';
@@ -620,8 +630,6 @@ export function shapeText(paragraphs) {
 // ---------------------------------------------------------------------------
 // Into the slide
 
-/** Names of the native shapes the exporter writes for overlay shapes; the others are PowerPoint's. */
-export const SHAPE_OVERLAY_PREFIXES = ['OPF overlay '];
 const EMU_PER_INCH = 914400;
 
 const reportDropped = (dropped, name, slideIndex, report) => {
@@ -653,9 +661,8 @@ export function importNativeShape(entry, role, context) {
   if (role === 'block') {
     const aspect = frame.cx / frame.cy, expected = presetAspect(fields.shape);
     const payload = {type: 'shape', ...fields};
-    if (frame.cy > 0 && !fields.path && Math.abs(aspect / expected - 1) > 0.01) payload.aspectRatio = round(aspect, 3);
-    else if (frame.cy > 0 && fields.path && Math.abs(aspect / expected - 1) > 0.01) payload.aspectRatio = round(aspect, 3);
-    context.state.blockNames.set(nativeId, name);
+    // The frame composition gave the block has the preset's proportions unless the block set its own (`aspectRatio`).
+    if (frame.cy > 0 && Math.abs(aspect / expected - 1) > 0.01) payload.aspectRatio = round(aspect, 3);
     return {kind: 'shape', bounds: {x: frame.x / EMU_PER_INCH, y: frame.y / EMU_PER_INCH, w: frame.cx / EMU_PER_INCH, h: frame.cy / EMU_PER_INCH}, payload};
   }
   // A filled shape across the whole slide is a background; an overlay is drawn over the content, so it would hide the slide.
@@ -664,7 +671,9 @@ export function importNativeShape(entry, role, context) {
     return undefined;
   }
   const shape = {...placement(frame, context, context.report, name, context.slideIndex), ...fields};
-  context.state.overlays.push({z: entry.z, nativeId, name, entry: shape});
+  // Whether it hides what is under it: an opaque fill (its own, or its style's).
+  const opaque = fields.fill !== 'none' && (fields.fill !== undefined || (fields.style ?? 'moderate') !== 'none') && (fields.opacity ?? 1) > 0.5;
+  context.state.overlays.push({z: entry.z, nativeId, name, entry: shape, index: exportedShape(name)?.index, frame, opaque});
   return undefined;
 }
 
@@ -677,7 +686,7 @@ export function importNativeConnectors(drawn, context) {
     const read = readConnector(entry, context);
     reportDropped(read.shape.dropped, name, context.slideIndex, context.report);
     const free = {...placement(entry.frame, context, context.report, name, context.slideIndex), ...read.shape.fields};
-    context.state.connectors.push({z: entry.z, nativeId: number(cNvPr.id), name, read, free});
+    context.state.connectors.push({z: entry.z, nativeId: number(cNvPr.id), name, read, free, index: Number(EXPORTED_CONNECTOR.exec(name)?.[1] ?? NaN)});
   }
 }
 
@@ -708,4 +717,40 @@ export function nativeColorResolver({colors, mapping}) {
     return base ? applyColorTransform(base, transform) : undefined;
   };
   return resolve;
+}
+
+/**
+ * The native id of every shape and picture of a slide (the parsed `p:sp` and `p:pic` nodes, in nativeTextShapes and nativePictures order) by
+ * its object name and by the importer's own key (`sp:N`, `pic:N`): what a connector's a:stCxn and a:endCxn name.
+ */
+export function nativeShapeNames(shapes, pictures) {
+  const names = new Map(), keys = new Map();
+  const add = (node, key) => {
+    const properties = node?.['p:nvSpPr']?.['p:cNvPr'] ?? node?.['p:nvPicPr']?.['p:cNvPr'];
+    const id = number(properties?.id);
+    if (id === undefined) return;
+    names.set(id, String(properties.name ?? ''));
+    keys.set(id, key);
+  };
+  shapes.forEach((node, index) => add(node, `sp:${index}`));
+  pictures.forEach((node, index) => add(node, `pic:${index}`));
+  return {names, keys};
+}
+
+/**
+ * An overlay shape is drawn over the composed slide, so a shape PowerPoint drew behind a text box or a picture covers it once imported. Report each
+ * opaque overlay shape that lies below content in the slide's z order and overlaps it (`content`: the drawn entries that are text, pictures or
+ * frames, with `name`).
+ */
+export function reportCoveredContent(content, context) {
+  for (const overlay of context.state.overlays) {
+    if (!overlay.opaque || overlay.index !== undefined) continue;
+    const frame = overlay.frame;
+    const covered = content.find(item => item.z > overlay.z && item.frame && item.frame.cx > 0 && item.frame.cy > 0 && (() => {
+      const width = Math.min(frame.x + frame.cx, item.frame.x + item.frame.cx) - Math.max(frame.x, item.frame.x);
+      const height = Math.min(frame.y + frame.cy, item.frame.y + item.frame.cy) - Math.max(frame.y, item.frame.y);
+      return width > 0 && height > 0 && (width * height) / (item.frame.cx * item.frame.cy) > 0.25;
+    })());
+    if (covered) context.report({code: 'shape-covers-content', path: `slides.${context.slideIndex}`, shape: overlay.name, covers: covered.name, message: `The native shape ${JSON.stringify(overlay.name)} is drawn behind ${JSON.stringify(covered.name)}, but an overlay shape is always drawn over the content, so it now covers it. OPF has no layer behind the content; set a slide background or a card instead.`});
+  }
 }
