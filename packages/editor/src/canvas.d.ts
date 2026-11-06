@@ -65,6 +65,8 @@ export interface CanvasEditorOptions {
   targets?: "interactive" | "passive";
   /** CE-20: what Escape does in an inline text field: "cancel" (default) drops the draft, "commit" keeps it and leaves. */
   escape?: "cancel" | "commit";
+  /** SH-06: the yellow adjust handles on a selected preset shape (default true); each drag is one undoable change. */
+  shapeTools?: boolean;
   /** Picture tools (default true): a selected picture shows a "Crop picture" button that opens the crop and focal point layer. */
   imageTools?: boolean;
   /** Optional empty host for property forms; defaults to a floating canvas panel. */
@@ -116,6 +118,13 @@ export interface CanvasEditor {
   readonly layoutEditing: boolean;
   /** True while the crop layer is open. */
   readonly cropping: boolean;
+  /** True while the canvas is picking the two ends of a connector. */
+  readonly connecting: boolean;
+  /**
+   * SH-06: draw a connector between two blocks or overlay shapes: click the start, then the end (Esc cancels). `route` is straight (default), elbow or curved; `stroke` the line
+   * (`{ end: { type: "triangle" } }`); `onStatus(message)` hears the prompts. `done` resolves with the change (or null when cancelled).
+   */
+  connect(options?: { route?: "straight" | "elbow" | "curved"; stroke?: Record<string, unknown>; onStatus?: (message: string, info: { error: boolean }) => void }): { cancel(): void; done: Promise<unknown> };
   /**
    * Open the crop layer for the picture at `path` (an image block or a slide's `image`); `tool: "focus"`
    * starts with the focal point. Apply writes one undoable change (see `@openpresentation/opf-editor/image-crop`). Resolves to whether it opened.

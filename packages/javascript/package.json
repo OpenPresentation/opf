@@ -100,6 +100,10 @@
       "types": "./dist/shape-geometry.d.ts",
       "import": "./dist/shape-geometry.js"
     },
+    "./shape-catalog": {
+      "types": "./dist/shape-catalog.d.ts",
+      "import": "./dist/shape-catalog.js"
+    },
     "./deck": {
       "types": "./dist/deck.d.ts",
       "import": "./dist/deck.js"

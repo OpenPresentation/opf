@@ -14,6 +14,7 @@ const entry = {
   "font-policy": "src/font-policy.ts",
   "symbol-font-encodings": "src/symbol-font-encodings.ts",
   "shape-geometry": "src/shape-geometry.ts",
+  "shape-catalog": "src/shape-catalog.ts",
   data: "src/data.ts",
   pagination: "src/pagination.ts",
   composition: "src/composition.ts",

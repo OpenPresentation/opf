@@ -22,6 +22,9 @@ import * as browserFonts from '@openpresentation/opf-render/fonts-browser';
 import { toSvg } from '@openpresentation/opf-render/svg';
 import { pptxExporter } from './export-controls.js';
 import { createDesignControls } from '../src/design-controls.js';
+import { createShapeMenu } from '../src/shape-picker.js';
+import { insertShape, shapeLabel } from '../src/shape-options.js';
+import { insertOverlayShape } from '../src/shape-overlays.js';
 import { createDataGrid } from '../src/data-grid.js';
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from '../src/exact-source.js';
 
@@ -178,7 +181,7 @@ ed.on('review-open', () => showPanel('review', true));
 // A host page (or a test) that wants the live editor and fonts handle passes `OPF_EDITOR_HOST.onReady`.
 globalThis.OPF_EDITOR_HOST?.onReady?.({ editor: ed, session: editor, fonts });
 const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getGeometry: index => editor.composeSlide(index, layoutFor(editor.presentation, index)), getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'variant', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
-const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getGeometry: index => editor.composeSlide(index, layoutFor(editor.presentation, index)), getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
+const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getGeometry: index => editor.composeSlide(index, layoutFor(editor.presentation, index)), getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'shape', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
 // RR-24: "Edit data" opens the data grid for the selected chart or table over the bottom of the canvas (it never moves the slide), so edits show in the preview at once.
 let dataGridOpen = false, dataGrid;
 const syncDataGrid = () => {
@@ -241,7 +244,7 @@ ed.on('view', ({ view }) => {
   for (const name of ['slide', 'sorter', 'outline', 'layouts']) element(`view-${name}`).setAttribute('aria-pressed', String(name === view));
   document.querySelector('.editing-shell').dataset.view = view;
   document.querySelector('.canvas-column').dataset.view = view;
-  for (const id of ['insert-content', 'arrange', 'zoom']) element(id).disabled = view !== 'slide';
+  for (const id of ['insert-content', 'insert-shape', 'connect-shapes', 'connector-route', 'arrange', 'zoom']) element(id).disabled = view !== 'slide';
 });
 
 function act(callback) {
@@ -312,6 +315,35 @@ element('redo').onclick = () => act(() => ed.redo());
 // Keep an object-form font scheme's overrides (the accent font) when only the base scheme changes.
 element('font').onchange = () => act(() => editor.set(editor.get('design.fontScheme') && typeof editor.get('design.fontScheme') === 'object' ? 'design.fontScheme.id' : 'design.fontScheme', element('font').value));
 element('insert-content').onclick = () => ed.canvas?.openInsertMenu();
+// SH-06: "Insert shape" opens the shape gallery (search by name or common word); the pick is added to the slide as one undoable change and selected.
+// "On the slide" places it as an overlay (free x, y, width and height over the layout), "In the layout" as a block that composition places.
+const shapeMenu = createShapeMenu(element('insert-shape'), { label: 'Insert a shape', placements: true, onPick: (name, entry, { placement }) => act(() => {
+  if (placement === 'overlay') {
+    const { width, height } = editor.composeSlide(ed.slideIndex, layoutFor(editor.presentation, ed.slideIndex));
+    const change = insertOverlayShape(editor, { slideIndex: ed.slideIndex, shape: name, size: { width, height } });
+    status(`${shapeLabel(name)} added on the slide`);
+    queueMicrotask(() => ed.canvas?.reveal(change.path));
+  } else {
+    const change = insertShape(editor, { slideIndex: ed.slideIndex, shape: name });
+    status(`${shapeLabel(name)} inserted`);
+    queueMicrotask(() => ed.canvas?.reveal(`${change.path}.shape`));
+  }
+}) });
+void shapeMenu;
+// SH-06 part B: Connect picks two blocks or shapes on the slide (click the start, then the end; Esc cancels) and joins them with a connector, an arrow by default.
+let connecting;
+element('connect-shapes').onclick = () => {
+  if (connecting) { connecting.cancel(); return; }
+  const canvas = ed.canvas;
+  if (!canvas) return;
+  element('connect-shapes').setAttribute('aria-pressed', 'true');
+  connecting = canvas.connect({ route: element('connector-route').value, stroke: { end: { type: 'triangle' } }, onStatus: message => status(message) });
+  connecting.done.then(change => {
+    connecting = undefined;
+    element('connect-shapes').setAttribute('aria-pressed', 'false');
+    if (change) queueMicrotask(() => canvas.reveal(change.path));
+  });
+};
 element('arrange').onclick = () => {
   const canvas = ed.canvas;
   if (canvas?.setLayoutEditing(!canvas.layoutEditing)) {
