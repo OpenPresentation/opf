@@ -1,4 +1,4 @@
-import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
+import { CHART_SERIES_MIN_LIGHTNESS_STEP, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette, chartSlicePlan, colorContrast, emphasisSurface, normalizeHexColor, resolveChartColors } from './color.js';
 import { type LayoutBox, textInkBox } from './composition.js';
 import { metricValueColor } from './metric-trend.js';
 import type { ResolvedDesign } from './rule-design.js';
@@ -484,6 +484,8 @@ const chartColorContext = (design: ResolvedDesign) => ({
 
 const chartSkip = /(histogram|box|pareto|waterfall|world|map)/;
 const perCategory = /(pie|doughnut|treemap|funnel)/;
+// LH-161: only a circle has a last slice beside the first.
+const circular = /(pie|doughnut)/;
 
 const chartRules: ValidationRule[] = [
 	{
@@ -506,7 +508,11 @@ const chartRules: ValidationRule[] = [
 					const paletteContext = chartColorContext(slide.design);
 					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legible: context.chartPalette === undefined ? chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) : undefined, soften: context.chartPalette === undefined });
 					if (!palette.length) continue;
-					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
+					// LH-161: a pie's or doughnut's last slice is moved off the first (at most 20 L*) when they would read as one tone, else every slice gets a
+					// surface-colored border, which separates the pair by shape (core chartSlicePlan), as the engines draw it.
+					const slicePlan = circular.test(type) && context.chartPalette === undefined ? chartSlicePlan(surface, palette, count, { legible: chartSchemeSeries(chart.colors, slide.design.colorScheme, paletteContext) }) : undefined;
+					const drawn = slicePlan?.colors ?? palette;
+					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => drawn[i % drawn.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
 					for (let a = 0; a < used.length; a++)
 						for (let b = a + 1; b < used.length; b++) {
@@ -516,9 +522,9 @@ const chartRules: ValidationRule[] = [
 								if (difference < worst.difference) worst = { model, difference };
 							}
 							if (worst.difference < context.thresholds.minSeriesColorDifference) pairs.push({ a, b, ...worst });
-							// LH-35: neighbouring series (and neighbouring slices, the last beside the first) also differ in lightness, the cue that
+							// LH-35: neighbouring series (and a pie's neighbouring slices, the last beside the first) also differ in lightness, the cue that
 							// survives without hue: under the engines' own step (CHART_SERIES_MIN_LIGHTNESS_STEP, 11 L*) they read as one tone.
-							else if (b === a + 1 || (slices && a === 0 && b === used.length - 1 && used.length > 2)) {
+							else if (b === a + 1 || (circular.test(type) && !slicePlan?.bordered && a === 0 && b === used.length - 1 && used.length > 2)) {
 								const lightness = lightnessDifference(used[a]!, used[b]!);
 								if (lightness < CHART_SERIES_MIN_LIGHTNESS_STEP) pairs.push({ a, b, model: 'lightness', difference: lightness });
 							}

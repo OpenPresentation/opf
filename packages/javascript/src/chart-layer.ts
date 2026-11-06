@@ -22,6 +22,7 @@ import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
 import type {ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
+import type {ChartLayerHistogram} from './chart-histogram.js';
 
 /** A small chart has at most this many series (LH-03). */
 export const SMALL_CHART_MAX_SERIES = 2;
@@ -117,6 +118,8 @@ export interface ChartLayer {
   stack?: ChartLayerStack;
   /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
   references?: ChartLayerReferences;
+  /** LH-160: a histogram's bin count and edge decimals, and whether its data labels fit (chart-histogram.ts). */
+  histogram?: ChartLayerHistogram;
 }
 
 /** LH-105: one series name at the end of its line. Lengths are slide pixels. */

@@ -941,6 +941,49 @@ function separateNeighbors(fill: string, palette: readonly string[], options: { 
   return result;
 }
 
+/** LH-161: the most a pie's last slice moves along the lightness axis to clear the first: further and it stops belonging to the palette. */
+export const CHART_SLICE_MAX_SHIFT = 20;
+/** LH-161: the width of the surface-colored border that separates a pie's wrap pair when no color within {@link CHART_SLICE_MAX_SHIFT} does, in pixels at the 720-px reference. */
+export const CHART_SLICE_SEPARATOR_PX = 2;
+
+/** LH-161: the slices of a pie or doughnut: their colors, and whether the chart separates every slice with a surface-colored border. */
+export interface ChartSlicePlan { colors: string[]; bordered: boolean }
+
+/**
+ * LH-161: the colors of a pie or doughnut of `count` slices, from `palette` (the colors a chart draws, {@link chartPaletteForFill} with
+ * its softening). A circle has one more neighbor pair than a row of series: the last slice sits beside the first. When the last slice
+ * (palette color `count - 1`, a color from the scheme: `options.legible`) is closer than {@link CHART_SERIES_MIN_LIGHTNESS_STEP} CIE L*
+ * to the first, it alone moves, along the lightness axis (its hue and as much chroma as sRGB allows kept) by at most
+ * {@link CHART_SLICE_MAX_SHIFT} L*, to the nearest lightness that keeps its contrast floor against `fill` and the step from both its
+ * neighbors (a color difference under {@link CHART_SERIES_MIN_DIFFERENCE} from any other slice costs more the further it falls). Where no
+ * such lightness exists the palette color stays and `bordered` is true: the engines draw a {@link CHART_SLICE_SEPARATOR_PX} border in
+ * the surface color on every slice of the chart, which separates the pair by shape (`opf/chart-color-only` accepts it). Every other color
+ * stays, so a pie of any count draws the palette except possibly its last slice. An authored color is never moved or bordered (the rule
+ * reports the pair an author chose), and fewer than three slices, or more than the palette holds (the colors repeat), change nothing.
+ */
+export function chartSlicePlan(fill: string, palette: readonly string[], count: number, options: { legible?: readonly boolean[] } = {}): ChartSlicePlan {
+  const result = [...palette], last = count - 1, none = { colors: result, bordered: false };
+  if (!Number.isInteger(count) || count < 3 || count > palette.length || options.legible?.[last] !== true || colorContrast(fill, fill) === undefined) return none;
+  const labs = result.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
+  const lab = labs[last], first = labs[0], before = labs[last - 1];
+  if (!lab || !first || !before || Math.abs(lab[0] - first[0]) >= CHART_SERIES_MIN_LIGHTNESS_STEP) return none;
+  const floor = isDarkColor(fill) ? CHART_DARK_SERIES_MIN_CONTRAST : 3, need = CHART_SERIES_MIN_LIGHTNESS_STEP + NEIGHBOR_STEP_MARGIN;
+  const deficit = (value: number) => Math.max(0, -value - 1e-9);
+  let best: { color: string; cost: number } | undefined;
+  for (let step = 0; step <= 400; step++) {
+    const color = labWithLightness(step / 4, lab[1], lab[2]), contrast = colorContrast(color, fill);
+    if (contrast === undefined || contrast < floor) continue;
+    const candidate = labOf(opaqueChannels(color)!);
+    if (Math.abs(candidate[0] - lab[0]) > CHART_SLICE_MAX_SHIFT || Math.abs(candidate[0] - first[0]) < need || Math.abs(candidate[0] - before[0]) < need) continue;
+    let cost = Math.abs(candidate[0] - lab[0]);
+    labs.slice(0, count - 1).forEach(other => { if (other) cost += deficit(labDifference(candidate, other) - CHART_SERIES_MIN_DIFFERENCE); });
+    if (!best || cost < best.cost - 1e-9) best = { color, cost };
+  }
+  if (!best) return { colors: result, bordered: true };
+  result[last] = best.color;
+  return { colors: result, bordered: false };
+}
+
 /** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */
 export const CHART_SERIES_SOFT_MIX = 0.25;
 
