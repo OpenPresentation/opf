@@ -100,7 +100,7 @@
         {
           "image": "asset:hero",
           "fit": "cover",
-          "shape": "circle",
+          "shape": "ellipse",
           "placement": {
             "edge": "left",
             "size": 0.4,
@@ -117,9 +117,9 @@
         {
           "image": "asset:hero",
           "fit": "cover",
-          "shape": "rounded",
-          "cornerRadius": 0.05,
-          "border": {
+          "shape": "roundRect",
+          "adjust": { "adj": 0.05 },
+          "stroke": {
             "color": "accent5",
             "width": 1
           }
@@ -206,9 +206,9 @@
           "image": "asset:hero",
           "fit": "cover",
           "aspectRatio": 0.5,
-          "shape": "rounded",
-          "cornerRadius": 0.12,
-          "border": {
+          "shape": "roundRect",
+          "adjust": { "adj": 0.12 },
+          "stroke": {
             "color": "dark1",
             "width": 12
           },

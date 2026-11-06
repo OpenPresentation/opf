@@ -56,7 +56,7 @@ test('LH-80: an authored fit, frame, placement, layout, weights or a second pict
   const blocks = (image) => [{ image: svg(1600, 1000), ...image }, { text: paragraph }];
   assert.equal(composeSlide({ title: 'T', blocks: blocks({ fit: 'contain' }) }).track, undefined);
   assert.equal(composeSlide({ title: 'T', design: { imageFit: 'contain' }, blocks: blocks({}) }).track, undefined);
-  assert.equal(composeSlide({ title: 'T', blocks: blocks({ shape: 'circle' }) }).track, undefined);
+  assert.equal(composeSlide({ title: 'T', blocks: blocks({ shape: 'ellipse' }) }).track, undefined);
   assert.equal(composeSlide({ title: 'T', blocks: blocks({ placement: { edge: 'right', size: 0.3 } }) }).track, undefined);
   assert.equal(composeSlide({ title: 'T', composition: { mode: 'row', weights: [1, 1] }, blocks: blocks({}) }).track, undefined);
   assert.equal(composeSlide({ title: 'T', blocks: [...blocks({}), { image: svg(1600, 1000) }] }).track, undefined);

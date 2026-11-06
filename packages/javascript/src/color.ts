@@ -58,8 +58,33 @@ function resolveVariable(variables: Record<string, unknown>, id: string, fallbac
   return fallback;
 }
 
-/** Resolve a ColorRef or TextRun.color string to a literal hex color. */
-export function resolveColorRef(reference: string, options: ResolveColorRefOptions): string {
+/**
+ * SH-02: the lighter or darker form of a ColorRef, `{ color, lighten }` or `{ color, darken }` (opf.schema.json ColorTransform), as the
+ * DrawingML luminance transform PowerPoint's theme tints and shades use: `lighten` L is lumMod (1 - L) and lumOff L, `darken` D is
+ * lumMod (1 - D), both in thousandths of a percent. Undefined for anything else (a string ColorRef, or an object that is neither).
+ */
+export function colorTransform(reference: unknown): { color: unknown; lumMod: number; lumOff: number } | undefined {
+  if (reference === null || typeof reference !== 'object' || Array.isArray(reference)) return undefined;
+  const { color, lighten, darken } = reference as { color?: unknown; lighten?: unknown; darken?: unknown };
+  const share = (value: unknown) => typeof value === 'number' && Number.isFinite(value) ? Math.min(1, Math.max(0, value)) : undefined;
+  const light = share(lighten), dark = share(darken);
+  if (color === undefined || (light === undefined) === (dark === undefined)) return undefined;
+  return light !== undefined ? { color, lumMod: Math.round((1 - light) * 100000), lumOff: Math.round(light * 100000) } : { color, lumMod: Math.round((1 - dark!) * 100000), lumOff: 0 };
+}
+
+/** SH-02: `hex` (#RGB, #RRGGBB or #RRGGBBAA) with a ColorRef's lighter or darker transform applied; an alpha byte is kept. */
+export function applyColorTransform(hex: string, transform: { lumMod: number; lumOff: number }): string {
+  const literal = normalizeHexColor(hex);
+  if (!literal) return hex;
+  const alpha = /^#[0-9a-f]{8}$/i.test(hex.trim()) ? hex.trim().slice(7).toUpperCase() : '';
+  return applyLuminance(literal, transform.lumMod, transform.lumOff) + alpha;
+}
+
+/** Resolve a ColorRef (or a TextRun.color string) to a literal hex color; the lighter or darker object form resolves its base and applies its transform. */
+export function resolveColorRef(reference: unknown, options: ResolveColorRefOptions): string {
+  const transform = colorTransform(reference);
+  if (transform) return applyColorTransform(resolveColorRef(transform.color, options), transform);
+  if (typeof reference !== 'string') return options.fallback;
   const { colorScheme, roles, variables = {}, fallback } = options;
   const literal = normalizeHexColor(reference);
   if (literal) return literal;
@@ -1065,6 +1090,9 @@ export interface ChartColorContext {
 export function resolveChartColors(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): (string | undefined)[] {
   if (!Array.isArray(colors)) return [];
   return colors.map(entry => {
+    // SH-02: the lighter or darker form of a ColorRef resolves its base and applies its transform.
+    const transform = colorTransform(entry);
+    if (transform) { const base = resolveChartColors([transform.color], colorScheme, context)[0]; return base === undefined ? undefined : normalizeHexColor(applyColorTransform(base, transform)); }
     if (typeof entry !== 'string') return undefined;
     const resolved = resolveColorRef(entry.trim(), { colorScheme, roles: context.roles, variables: context.variables, fallback: '' });
     return normalizeHexColor(resolved);

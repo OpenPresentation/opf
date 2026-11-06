@@ -1279,17 +1279,19 @@ export function createDesignControls(container, options = {}) {
     const focusX = numberField("img-focus-x", "Focus X", { min: 0, max: 1, step: 0.05, help: "0 left to 1 right; the point a cover fit keeps in view", onCommit: focusCommit });
     const focusY = numberField("img-focus-y", "Focus Y", { min: 0, max: 1, step: 0.05, help: "0 top to 1 bottom", onCommit: focusCommit });
     const shape = selectField("img-shape", "Shape", { empty: "Rectangle", onChange: (value) => treat({ shape: value === "" ? null : value }, "Image shape changed.") });
-    shape.setOptions(IMAGE_SHAPES.filter((value) => value !== "rectangle").map((value) => ({ value, label: titleCase(value) })));
-    const radius = numberField("img-radius", "Corner radius", { min: 0, max: 0.5, step: 0.02, help: "Share of the shorter side", onCommit: (value) => treat({ cornerRadius: value }, "Corner radius changed.") });
+    shape.setOptions(IMAGE_SHAPES.filter((value) => value !== "rect").map((value) => ({ value, label: value })));
+    // SH-02: a roundRect frame's corner is its adjust value adj (a share of the shorter side).
+    const radius = numberField("img-radius", "Corner radius", { min: 0, max: 0.5, step: 0.02, help: "Share of the shorter side", onCommit: (value) => treat({ adjust: value === null ? null : { adj: value } }, "Corner radius changed.") });
     const aspect = numberField("img-aspect", "Aspect ratio", { min: 0.1, max: 10, step: 0.01, placeholder: "width / height", help: "1.78 for 16:9, 1 for a square. Clear to fill the region.", onCommit: (value) => treat({ aspectRatio: value }, "Frame aspect ratio changed.") });
     const opacity = numberField("img-opacity", "Opacity", { min: 0, max: 1, step: 0.05, onCommit: (value) => treat({ opacity: value }, "Image opacity changed.") });
+    // SH-02: the picture's line is its stroke (renamed from border).
     const borderCommit = () => {
       const ref = borderColor.input.value.trim();
-      treat({ border: ref ? { color: ref, width: borderWidth.input.value === "" ? 2 : Number(borderWidth.input.value) } : null }, ref ? "Border changed." : "Border removed.");
+      treat({ stroke: ref ? { color: ref, width: borderWidth.input.value === "" ? 2 : Number(borderWidth.input.value) } : null }, ref ? "Stroke changed." : "Stroke removed.");
     };
-    const borderColor = textField("img-border-color", "Border color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear to remove", onCommit: borderCommit });
+    const borderColor = textField("img-border-color", "Stroke color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear to remove", onCommit: borderCommit });
     borderColor.setList(COLOR_NAMES);
-    const borderWidth = numberField("img-border-width", "Border width", { min: 0, max: 64, step: 1, onCommit: borderCommit });
+    const borderWidth = numberField("img-border-width", "Stroke width", { min: 0, max: 64, step: 1, onCommit: borderCommit });
     const recolorCommit = () => {
       const kind = recolor.select.value;
       if (kind === "duotone" && (!duoDark.input.value.trim() || !duoLight.input.value.trim())) return say("Enter the dark and light duotone colors to apply it.");
@@ -1329,13 +1331,13 @@ export function createDesignControls(container, options = {}) {
         fit.set(current.fit ?? "");
         focusX.set(current.focus ? String(current.focus.x) : "");
         focusY.set(current.focus ? String(current.focus.y) : "");
-        shape.set(current.shape && current.shape !== "rectangle" ? current.shape : "");
-        radius.set(current.cornerRadius === undefined ? "" : String(current.cornerRadius));
-        radius.wrap.hidden = current.shape !== "rounded";
+        shape.set(current.shape && current.shape !== "rect" ? current.shape : "");
+        radius.set(current.adjust?.adj === undefined ? "" : String(current.adjust.adj));
+        radius.wrap.hidden = current.shape !== "roundRect";
         aspect.set(current.aspectRatio === undefined ? "" : String(current.aspectRatio));
         opacity.set(current.opacity === undefined ? "" : String(current.opacity));
-        borderColor.set(current.border?.color ?? "");
-        borderWidth.set(current.border?.width === undefined ? "" : String(current.border.width));
+        borderColor.set(typeof current.stroke?.color === "string" ? current.stroke.color : "");
+        borderWidth.set(current.stroke?.width === undefined ? "" : String(current.stroke.width));
         const duotone = current.recolor && typeof current.recolor === "object";
         recolor.set(current.recolor === "grayscale" ? "grayscale" : duotone ? "duotone" : "");
         duoDark.set(duotone ? current.recolor.dark : "");

@@ -100,6 +100,8 @@ export type {
 export type { TextStyle, FontFamilies, TextMeasurement, MeasureTextWidth, Fonts, LayoutDiagnostic, ComposeSlideOptions } from "./composition.js";
 // Browsers and edge runtimes load each diagram type on demand: a host that validates or draws diagrams there awaits ensureDiagrams first.
 export { diagramsPending, ensureDiagrams } from "./diagram.js";
+// SH-02: and the preset geometry the first time a deck has a shape block or a picture mask beyond rect, roundRect, ellipse and hexagon.
+export { ensureShapes, shapesPending } from "./shape-block.js";
 // LH-14: a host registers icon sets as loaders (the gallery's sets load on first use): it awaits ensureIcons before validating or drawing.
 export { embedIcons, ensureIcons, iconsPending, parseIconReference, resolveIcon, nearIconNames, type IconOptions, type IconReference, type IconResolution, type IconSetRecord, type ResolvedIcon } from "./icons.js";
 

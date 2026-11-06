@@ -1,7 +1,7 @@
 // Export ColorRef through published core resolveColorRef(). Keep 8-digit hex
 // alpha locally: normalizeHexColor() strips the AA byte, which PptxGenJS needs.
 
-import { resolveColorRef as resolveCoreColorRef } from "@openpresentation/opf/composition";
+import { resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform } from "@openpresentation/opf/composition";
 
 const UNRESOLVED = "";
 
@@ -69,6 +69,13 @@ function coreOptions(ctx, fallback = UNRESOLVED) {
  */
 export function resolveColorRefValue(entry, ctx) {
   if (entry === undefined || entry === null || entry === "") return undefined;
+  // SH-02: the lighter or darker form resolves its base, then core's transform (an alpha byte is kept). The finished part writes it as
+  // the base scheme color with a:lumMod and a:lumOff where the base is one (transformedColors in theme-colors.js).
+  const transform = colorTransform(entry);
+  if (transform) {
+    const base = resolveColorRefValue(transform.color, ctx);
+    return base === undefined ? undefined : applyColorTransform(base, transform);
+  }
   if (typeof entry !== "string") return undefined;
   const trimmed = entry.trim();
   const literal = literalExportHex(trimmed);

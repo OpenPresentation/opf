@@ -193,7 +193,7 @@ export interface PromoteImageOptions {
 
 /** Image block keys a background keeps (FA-22): the rest of the treatment vocabulary has no place on a background. */
 const BACKGROUND_KEYS = ["fit", "focus", "opacity", "overlay"] as const;
-const TREATMENT_KEYS = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
+const TREATMENT_KEYS = ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
 
 function imageBlock(payload: Json): { asset: Obj; treatments: Obj } {
   if (!isRecord(payload)) throw refuse("Choose an image block.");

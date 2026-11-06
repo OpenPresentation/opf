@@ -79,6 +79,19 @@ export const diagramEnginePlugin = () => ({
   },
 });
 
+/**
+ * SH-02: an esbuild plugin that resolves `#shape-engine` as a browser bundler does: to the lazy engine, whose dynamic import of SH-01's
+ * preset geometry and sketched line (src/shape-engine-module.ts) stays external, a chunk a page loads only when a deck has a shape
+ * (src/shape-engine-lazy.ts).
+ */
+export const shapeEnginePlugin = () => ({
+  name: 'shape-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#shape-engine$/ }, () => ({ path: path.join(packageRoot, 'src', 'shape-engine-lazy.ts') }));
+    build.onResolve({ filter: /^\.\/shape-engine-module\.js$/ }, (args) => args.kind === 'dynamic-import' && /shape-engine-lazy\.ts$/.test(args.importer) ? { path: args.path, external: true } : undefined);
+  },
+});
+
 /** The tsup entries of the core package, as { name: source }. */
 export function tsupEntries(text) {
   const block = /entry\s*[:=]\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
@@ -108,7 +121,7 @@ export async function measure(only) {
       write: false,
       metafile: true,
       logLevel: 'silent',
-      plugins: [schemaEnginePlugin(), diagramEnginePlugin()],
+      plugins: [schemaEnginePlugin(), diagramEnginePlugin(), shapeEnginePlugin()],
     });
     const code = result.outputFiles[0].contents;
     const output = Object.values(result.metafile.outputs)[0];

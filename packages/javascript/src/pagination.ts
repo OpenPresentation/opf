@@ -1,3 +1,4 @@
+import {isShapeBlock} from "./shape-block.js";
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
@@ -309,6 +310,9 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
         } else if (root && isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) {
           const child = visit(value,childPath,outputPath);
           if (child) { result[key] = child; hasContent = true; }
+        } else if (key === 'text' && isShapeBlock(node)) {
+          // SH-02: a shape's text goes with its shape (the leaf is the shape item, `<block>.shape` or `<block>.path`).
+          if (portions.has(`${path}.shape`) || portions.has(`${path}.path`)) result[key] = clone(value);
         } else if (!contentFields.has(key)) result[key] = clone(value);
       }
       return root || hasContent ? result : undefined;

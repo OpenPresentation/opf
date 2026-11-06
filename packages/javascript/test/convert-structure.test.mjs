@@ -166,7 +166,7 @@ describe("images between content and design", () => {
     assert.deepEqual(background.loss, ["image title"]);
     assert.ok(valid(background.slide));
     // A background keeps the block's fit, focus, opacity and overlay; other treatments are reported.
-    const treated = promoteImage({ blocks: [{ image: "a.png", fit: "contain", focus: { x: 0.2, y: 0.3 }, opacity: 0.5, overlay: { color: "dark1", opacity: 0.4 }, shape: "circle", placement: { edge: "left" } }, { text: "x" }] }, ["blocks", 0], "background");
+    const treated = promoteImage({ blocks: [{ image: "a.png", fit: "contain", focus: { x: 0.2, y: 0.3 }, opacity: 0.5, overlay: { color: "dark1", opacity: 0.4 }, shape: "ellipse", placement: { edge: "left" } }, { text: "x" }] }, ["blocks", 0], "background");
     assert.deepEqual(treated.slide.design.background, { type: "image", src: "a.png", fit: "contain", focus: { x: 0.2, y: 0.3 }, opacity: 0.5, overlay: { color: "dark1", opacity: 0.4 } });
     assert.deepEqual(treated.loss, ["image shape, placement"]);
     const watermark = promoteImage({ blocks: [{ image: "w.png" }, { text: "x" }] }, ["blocks", 0], "watermark", { opacity: 0.2 });

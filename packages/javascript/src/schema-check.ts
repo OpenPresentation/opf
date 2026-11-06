@@ -9,6 +9,7 @@ import { chartDrawDiagnostics } from "./chart-fallback.js";
 import { MAX_COMPOSITION_DEPTH, resolveCanvasDimensions } from "./composition.js";
 import { layoutTemplateIssues } from "./layout-template.js";
 import { annotationIssues } from "./annotation-validation.js";
+import { isShapeBlock, shapeIssues, SHAPE_BLOCK_KEYS } from "./shape-block.js";
 import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
@@ -75,6 +76,8 @@ const rootPayloadFields = [
   "metric",
   "quote",
   "timeline",
+  "shape",
+  "path",
   "blocks",
 ] as const;
 
@@ -89,7 +92,8 @@ type ContentKind =
   | "metric"
   | "quote"
   | "timeline"
-  | "diagram";
+  | "diagram"
+  | "shape";
 
 interface ContentKindSpec {
   fields: readonly string[];
@@ -108,7 +112,8 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     required: ["items"],
   },
   image: {
-    fields: ["image"],
+    // SH-02: an image block's `shape` is its frame's mask.
+    fields: ["image", "shape"],
     required: ["image"],
   },
   chart: {
@@ -143,12 +148,21 @@ const contentKindSpecs: Record<ContentKind, ContentKindSpec> = {
     fields: ["diagram"],
     required: ["diagram"],
   },
+  // SH-02: a preset (`shape` without `image`) or a custom `path`, with its `text` inside.
+  shape: {
+    fields: ["shape", "path", "text"],
+    required: [],
+    requireAny: ["shape", "path"],
+  },
 };
 
 // RR-34: payload kinds whose blocks may carry a caption.
 const captionableKinds = new Set<ContentKind>(["image", "chart", "table", "video", "diagram"]);
 // FA-22: fit, focus, the image treatments and placement belong to image payloads only (LH-132: and a person's `portrait`).
-const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
+const imageOptionFields = ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"] as const;
+// SH-02: the image options a shape block also takes, and the keys only a shape block takes.
+const shapeImageFields = new Set<string>(["aspectRatio", "shape", "adjust", "stroke", "opacity"]);
+const shapeOptionFields = SHAPE_BLOCK_KEYS.filter((field) => field !== "path");
 
 const columnSpans: Record<string, readonly number[]> = {
   left: [0],
@@ -240,8 +254,11 @@ function isContentKind(value: unknown): value is ContentKind {
 
 function inferredKinds(value: Record<string, unknown>): ContentKind[] {
   const kinds: ContentKind[] = [];
+  // SH-02: a shape block holds its own text; bullets beside it are a text payload of their own.
+  const shape = isShapeBlock(value);
 
-  if (presentFields(value, contentKindSpecs.text.fields).length > 0) kinds.push("text");
+  if (shape) kinds.push("shape");
+  if (presentFields(value, shape ? ["bullets"] : contentKindSpecs.text.fields).length > 0) kinds.push("text");
   if (hasOwn(value, "items")) kinds.push("list");
   if (hasOwn(value, "image")) kinds.push("image");
   if (hasOwn(value, "video")) kinds.push("video");
@@ -280,8 +297,13 @@ function validateContentPayload(
   // RR-34: a caption belongs to exactly one image, chart, table or video payload of this host.
   const captionIssue = (reason: string, params: Record<string, unknown> = {}) => semanticIssue(pathFor(path, "caption"), `caption is only valid on an image, chart, table or video payload; ${reason}`, { code: "caption-unsupported-payload", ...params });
   // FA-22: image options on anything but an image payload, and a placement anywhere but a top-level block.
-  const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
-    for (const field of imageOptionFields) if (hasOwn(value, field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
+  const imageOptionIssues = (reason: string, params: Record<string, unknown> = {}, except: ReadonlySet<string> = new Set()) => {
+    for (const field of imageOptionFields) if (hasOwn(value, field) && !except.has(field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on an image payload; ${reason}`, { code: "image-option-unsupported-payload", field, ...params }));
+  };
+  // SH-02: shape options on anything but a shape block.
+  const shapeOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
+    // A slide's own `hidden` hides the slide.
+    for (const field of shapeOptionFields) if (hasOwn(value, field) && !(field === "hidden" && options.slideRoot)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on a shape block; ${reason}`, { code: "shape-option-unsupported-payload", field, ...params }));
   };
   if (hasOwn(value, "placement") && !options.topLevel && !hasBlocks && explicitType !== "group" && inferredKinds(value).includes("image")) {
     issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group or a promoted region cannot bleed to a slide edge", { code: "image-placement-invalid" }));
@@ -289,8 +311,10 @@ function validateContentPayload(
   if (hasBlocks || explicitType === "group") {
     if (hasOwn(value, "caption")) issues.push(captionIssue("a group cannot carry one"));
     imageOptionIssues("a group cannot carry them");
+    shapeOptionIssues("a group cannot carry them");
     if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
-    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
+    // SH-02: a group's `shape` is reported as an image option (image-option-unsupported-payload).
+    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type" && field !== "shape");
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
     if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {
@@ -344,7 +368,11 @@ function validateContentPayload(
   }
   const spec = contentKindSpecs[resolvedKind];
   if (hasOwn(value, "caption") && !captionableKinds.has(resolvedKind)) issues.push(captionIssue(`this payload is '${resolvedKind}'`, { type: resolvedKind }));
-  if (resolvedKind !== "image") imageOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind });
+  if (resolvedKind !== "image") imageOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind }, resolvedKind === "shape" ? shapeImageFields : undefined);
+  if (resolvedKind !== "shape") shapeOptionIssues(`this payload is '${resolvedKind}'`, { type: resolvedKind });
+  // SH-02: adjust names and ranges of the preset (an image's mask too), and a link on a hidden shape.
+  if (resolvedKind === "shape" || resolvedKind === "image")
+    for (const issue of shapeIssues(value, (...keys) => keys.reduce((at, key) => pathFor(at, key), path))) issues.push(semanticIssue(issue.path, issue.message, { code: issue.code, ...issue.params }));
   const allowedFields = new Set<string>([
     "type",
     ...spec.fields,
@@ -728,6 +756,8 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   const issues: ValidationIssue[] = [];
 
   const colorRef = (entry: unknown, path: string): void => {
+    // SH-02: the lighter or darker form names its base in its color key.
+    if (isRecord(entry) && entry.color !== undefined) { colorRef(entry.color, pathFor(path, "color")); return; }
     if (typeof entry !== "string" || !entry.startsWith("var:")) return;
     const id = entry.slice("var:".length);
     // A reference the schema rejects already reports an error; advising the
@@ -738,6 +768,7 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   // Run colors are open strings: warn on anything that is none of the
   // documented forms, since renderers will fall back to the theme color.
   const runColor = (entry: unknown, path: string): void => {
+    if (isRecord(entry)) { colorRef(entry, path); return; }
     if (typeof entry !== "string") return;
     if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
     if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {

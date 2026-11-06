@@ -1,11 +1,11 @@
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
 export declare const IMAGE_FITS: readonly ["cover", "contain", "stretch", "auto"];
-export declare const IMAGE_SHAPES: readonly ["rectangle", "rounded", "circle", "hexagon"];
+export declare const IMAGE_SHAPES: readonly string[];
 export declare const IMAGE_EDGES: readonly ["left", "right", "top", "bottom"];
 /** LH-132: how a person's picture is drawn in a team. */
 export declare const IMAGE_PORTRAITS: readonly ["avatar", "side", "top"];
-export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"];
+export declare const IMAGE_TREATMENT_FIELDS: readonly ["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"];
 
 export interface ImageFocus { x: number; y: number }
 /** One overlay, shared by image backgrounds and image blocks: the whole picture, or a band along `edge` (`size` 0.05 to 1). */
@@ -17,8 +17,8 @@ export interface ImageTreatments {
   focus?: ImageFocus | null;
   aspectRatio?: number | null;
   shape?: (typeof IMAGE_SHAPES)[number] | null;
-  cornerRadius?: number | null;
-  border?: { color: string; width: number } | null;
+  adjust?: Record<string, number> | null;
+  stroke?: "none" | { color?: string | { color: string; lighten?: number; darken?: number }; width?: number; [key: string]: unknown } | null;
   opacity?: number | null;
   recolor?: "grayscale" | { dark: string; light: string } | null;
   overlay?: ImageOverlay | null;

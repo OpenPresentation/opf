@@ -1,0 +1,445 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shapes",
+  "description": "Technical fixture for shape blocks (SH-02): presets and adjust values, custom paths, every fill and stroke property, theme styles, lighter and darker colors, text inside a shape, rotation and flip, accessibility and links, and picture strokes and masks.",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Presets and adjust values",
+      "blocks": [
+        {
+          "text": "rect",
+          "shape": "rect"
+        },
+        {
+          "text": "roundRect",
+          "shape": "roundRect",
+          "adjust": {
+            "adj": 0.3
+          }
+        },
+        {
+          "text": "ellipse",
+          "shape": "ellipse"
+        },
+        {
+          "text": "chevron",
+          "shape": "chevron",
+          "adjust": {
+            "adj": 0.35
+          }
+        },
+        {
+          "text": "rightArrow",
+          "shape": "rightArrow",
+          "adjust": {
+            "adj1": 0.6,
+            "adj2": 0.4
+          }
+        },
+        {
+          "text": "star5",
+          "shape": "star5"
+        },
+        {
+          "text": "Callout",
+          "shape": "wedgeRectCallout"
+        },
+        {
+          "text": "Decide?",
+          "shape": "flowChartDecision"
+        }
+      ]
+    },
+    {
+      "title": "Custom outlines and shaded paths",
+      "blocks": [
+        {
+          "text": "path",
+          "path": "M0 0 L1 0 L0.5 1 Z",
+          "fill": "accent3"
+        },
+        {
+          "path": {
+            "d": "M12 2 L15 9 L22 9 L16.5 13.5 L18.5 21 L12 16.5 L5.5 21 L7.5 13.5 L2 9 L9 9 Z",
+            "viewBox": "0 0 24 24"
+          },
+          "fill": "accent2",
+          "alt": "A star drawn on a 24 by 24 grid"
+        },
+        {
+          "text": "can",
+          "shape": "can"
+        },
+        {
+          "text": "cube",
+          "shape": "cube"
+        }
+      ]
+    },
+    {
+      "title": "Fills",
+      "blocks": [
+        {
+          "text": "none",
+          "shape": "roundRect",
+          "stroke": {
+            "color": "accent1",
+            "width": 2
+          },
+          "fill": "none"
+        },
+        {
+          "text": "solid",
+          "shape": "roundRect",
+          "fill": "accent2"
+        },
+        {
+          "text": "hex alpha",
+          "shape": "roundRect",
+          "fill": "#0F4C8180"
+        },
+        {
+          "text": "opacity",
+          "shape": "roundRect",
+          "fill": "accent1",
+          "opacity": 0.5
+        },
+        {
+          "text": "linear",
+          "shape": "roundRect",
+          "fill": {
+            "gradient": {
+              "type": "linear",
+              "angle": 90,
+              "stops": [
+                {
+                  "color": "accent1",
+                  "position": 0
+                },
+                {
+                  "color": {
+                    "color": "accent1",
+                    "darken": 0.5
+                  },
+                  "position": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "radial",
+          "shape": "ellipse",
+          "fill": {
+            "gradient": {
+              "type": "radial",
+              "stops": [
+                {
+                  "color": "light1",
+                  "position": 0
+                },
+                {
+                  "color": "accent2",
+                  "position": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "pattern",
+          "shape": "roundRect",
+          "fill": {
+            "pattern": {
+              "preset": "ltUpDiag",
+              "foregroundColor": "accent1",
+              "backgroundColor": "light1"
+            }
+          }
+        },
+        {
+          "text": "Lighter 60%",
+          "shape": "roundRect",
+          "fill": {
+            "color": "accent1",
+            "lighten": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "title": "Strokes",
+      "blocks": [
+        {
+          "text": "dash",
+          "shape": "rect",
+          "stroke": {
+            "color": "accent1",
+            "width": 3,
+            "dash": "dash"
+          },
+          "style": "none"
+        },
+        {
+          "text": "[4, 2] round",
+          "shape": "rect",
+          "stroke": {
+            "color": "accent1",
+            "width": 3,
+            "dash": [
+              4,
+              2
+            ],
+            "cap": "round"
+          },
+          "style": "none"
+        },
+        {
+          "text": "double",
+          "shape": "rect",
+          "stroke": {
+            "color": "accent2",
+            "width": 12,
+            "compound": "double"
+          },
+          "style": "none"
+        },
+        {
+          "text": "thickThin inside",
+          "shape": "rect",
+          "stroke": {
+            "color": "accent2",
+            "width": 12,
+            "compound": "thickThin",
+            "align": "inside"
+          },
+          "style": "none"
+        },
+        {
+          "text": "miter",
+          "shape": "triangle",
+          "stroke": {
+            "color": "text",
+            "width": 10,
+            "join": "miter",
+            "miterLimit": 4
+          },
+          "style": "none"
+        },
+        {
+          "text": "bevel",
+          "shape": "triangle",
+          "stroke": {
+            "color": "text",
+            "width": 10,
+            "join": "bevel"
+          },
+          "style": "none"
+        },
+        {
+          "shape": "arc",
+          "stroke": {
+            "color": "accent1",
+            "width": 4,
+            "start": {
+              "type": "oval",
+              "width": "small",
+              "length": "small"
+            },
+            "end": {
+              "type": "triangle",
+              "width": "large",
+              "length": "large"
+            }
+          },
+          "fill": "none"
+        },
+        {
+          "text": "gradient, sketch",
+          "shape": "rect",
+          "stroke": {
+            "gradient": {
+              "type": "linear",
+              "angle": 0,
+              "stops": [
+                {
+                  "color": "accent1",
+                  "position": 0
+                },
+                {
+                  "color": "accent3",
+                  "position": 1
+                }
+              ]
+            },
+            "width": 6,
+            "sketch": "freehand"
+          },
+          "style": "none"
+        }
+      ]
+    },
+    {
+      "title": "Theme styles",
+      "blocks": [
+        {
+          "text": "none",
+          "shape": "roundRect",
+          "style": "none"
+        },
+        {
+          "text": "subtle",
+          "shape": "roundRect",
+          "style": "subtle"
+        },
+        {
+          "text": "moderate",
+          "shape": "roundRect",
+          "style": "moderate"
+        },
+        {
+          "text": "intense",
+          "shape": "roundRect",
+          "style": "intense"
+        }
+      ]
+    },
+    {
+      "title": "Text inside a shape",
+      "blocks": [
+        {
+          "text": "Anchored at the top with 16 px insets",
+          "shape": "rect",
+          "anchor": "top",
+          "padding": 16
+        },
+        {
+          "text": [
+            {
+              "text": "Bottom, ",
+              "bold": true
+            },
+            {
+              "text": "with rich runs",
+              "italic": true,
+              "color": {
+                "color": "light1",
+                "darken": 0.1
+              }
+            }
+          ],
+          "shape": "rect",
+          "anchor": "bottom",
+          "padding": {
+            "top": 4,
+            "right": 24,
+            "bottom": 12,
+            "left": 24
+          }
+        },
+        {
+          "text": "Vertical",
+          "aspectRatio": 0.6,
+          "shape": "rect",
+          "textDirection": "vertical"
+        },
+        {
+          "text": "OPF",
+          "aspectRatio": 0.6,
+          "shape": "rect",
+          "textDirection": "stacked"
+        }
+      ]
+    },
+    {
+      "title": "Rotation, flip, accessibility and links",
+      "blocks": [
+        {
+          "text": "rotate -20",
+          "shape": "rightArrow",
+          "rotate": -20
+        },
+        {
+          "text": "flip",
+          "shape": "rtTriangle",
+          "flip": "horizontal"
+        },
+        {
+          "text": "both",
+          "shape": "teardrop",
+          "flip": "both"
+        },
+        {
+          "text": "Linked",
+          "shape": "roundRect",
+          "alt": "Visit openpresentation.org",
+          "link": "https://openpresentation.org"
+        },
+        {
+          "shape": "ellipse",
+          "fill": "accent4",
+          "decorative": true
+        },
+        {
+          "shape": "ellipse",
+          "fill": "accent5",
+          "hidden": true
+        }
+      ]
+    },
+    {
+      "title": "Picture strokes and masks",
+      "blocks": [
+        {
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          },
+          "shape": "roundRect",
+          "stroke": {
+            "color": "accent1",
+            "width": 4
+          },
+          "adjust": {
+            "adj": 0.1
+          }
+        },
+        {
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          },
+          "shape": "ellipse",
+          "stroke": {
+            "color": "dark1",
+            "width": 6,
+            "compound": "double"
+          }
+        },
+        {
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          },
+          "shape": "hexagon",
+          "stroke": {
+            "color": {
+              "color": "accent2",
+              "darken": 0.25
+            },
+            "width": 3,
+            "dash": "sysDash"
+          }
+        },
+        {
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          },
+          "shape": "star5"
+        }
+      ]
+    }
+  ]
+}

@@ -113,7 +113,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 					if (Array.isArray(cell.value))
 						cell.value.forEach((run: unknown, index: number) => {
 							const colorRef = rec(run).color;
-							if (typeof colorRef !== 'string') return;
+							if (colorRef == null || colorRef === '') return;
 							const color = resolveTextColor(colorRef, itemDesign, itemDesign.colors.text);
 							if (color) samples.push({ path: `${cellPath}/${index}/color`, color, sizePx: rec(run).fontSize ? Number(rec(run).fontSize) / PX_TO_PT : 15, bold: Boolean(rec(run).bold) || cell.header, backdrop: cellBackdrop, source: 'override', colorPath: `${cellPath}/${index}/color`, label: 'Table cell text' });
 						});
@@ -147,7 +147,7 @@ function collectSamples(context: RuleSlide): TextSample[] {
 			const relative = splitPointer(owner.path).slice(1);
 			const base = pointer(...splitPointer(itemPath), ...relative);
 			for (const run of runsOf({ ...owner, path: base })) {
-				if (typeof run.style.color !== 'string') continue;
+				if (run.style.color == null || run.style.color === '') continue;
 				const color = resolveTextColor(run.style.color, itemDesign, itemDesign.colors.text);
 				if (!color) continue;
 				const size = typeof run.style.fontSize === 'number' ? run.style.fontSize / PX_TO_PT : baseSize;

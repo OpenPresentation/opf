@@ -203,13 +203,13 @@ export const cases = [
   {
     dimension: "image-treatments",
     // OPF 0.15: the treatments of one image block (FA-22).
-    value: { fit: "contain", shape: "rounded" },
+    value: { fit: "contain", shape: "roundRect" },
     options: { path: "slides.2.blocks.2" },
     slide: 2,
     preview: "svg",
     patches: [
       { op: "add", path: "/slides/2/blocks/2/fit", value: "contain" },
-      { op: "add", path: "/slides/2/blocks/2/shape", value: "rounded" },
+      { op: "add", path: "/slides/2/blocks/2/shape", value: "roundRect" },
     ],
   },
   {

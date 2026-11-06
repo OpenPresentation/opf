@@ -7,7 +7,7 @@ import "@openpresentation/opf/precompiled";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { GetPromptResult, ReadResourceResult, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import { catalogDisplay, gallery } from "@openpresentation/gallery";
-import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, ensureIcons, schemaEntries, stringify, validate } from "@openpresentation/opf";
+import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, ensureIcons, ensureShapes, schemaEntries, stringify, validate } from "@openpresentation/opf";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { getAtPointer } from "@openpresentation/opf/patch";
 import { fromYaml } from "@openpresentation/opf/yaml";
@@ -131,6 +131,7 @@ async function readReport(raw: string, format: DeckFormat, options: ValidateOpti
 		}
 		if (deck !== undefined) {
 			await ensureDiagrams(deck);
+			await ensureShapes(deck);
 			// LH-14: the gallery icon sets load on first use; the ones the deck names load before the check, so unknown names are reported.
 			await ensureIcons(deck, { catalogs: options.catalogs ?? CATALOGS });
 		}
@@ -138,7 +139,7 @@ async function readReport(raw: string, format: DeckFormat, options: ValidateOpti
 	}
 	// A YAML or Markdown deck's diagrams are known once it is read, so it is read again only when that loaded a diagram type.
 	const first = readText(raw, format, options);
-	const loaded = (await ensureDiagrams(first.presentation)).length + (await ensureIcons(first.presentation, { catalogs: options.catalogs ?? CATALOGS })).sets.length;
+	const loaded = (await ensureDiagrams(first.presentation)).length + (await ensureShapes(first.presentation)).length + (await ensureIcons(first.presentation, { catalogs: options.catalogs ?? CATALOGS })).sets.length;
 	return loaded > 0 ? readText(raw, format, options).report : first.report;
 }
 

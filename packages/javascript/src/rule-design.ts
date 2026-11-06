@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, applyColorTransform, colorTransform, deckBackgroundIsFixed, defaultSlideBackground, layoutColorVariant, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -209,6 +209,9 @@ function backdropOf(definition: unknown, scheme: Rec, text: string, variables: R
  * background itself (so the background, surface and text roles resolve through the scheme alone, as in the preview).
  */
 function backgroundColorRef(value: unknown, scheme: Rec, variables: Rec, fallback: string): string {
+	// SH-02: the lighter or darker form resolves its base the same way.
+	const transform = colorTransform(value);
+	if (transform) return applyColorTransform(backgroundColorRef(transform.color, scheme, variables, fallback), transform);
 	if (typeof value !== 'string') return fallback;
 	const literal = normalizeHexColor(value);
 	if (literal) return literal;
@@ -377,6 +380,8 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 
 /** A text/background colour in a content run: the author's ColorRef resolved the way the preview resolves it. */
 export function resolveTextColor(reference: unknown, design: ResolvedDesign, fallback: string): string | undefined {
+	const transform = colorTransform(reference);
+	if (transform) { const base = resolveTextColor(transform.color, design, fallback); return base === undefined ? undefined : applyColorTransform(base, transform); }
 	if (typeof reference !== 'string' || !reference.trim()) return undefined;
 	const literal = normalizeHexColor(reference);
 	if (literal) return literal;
