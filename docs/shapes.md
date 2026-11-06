@@ -231,7 +231,7 @@ When `paginate` splits a slide over pages, a shape placed by fractions is on eve
 
 ### In core
 
-`composeSlide` returns the overlay as `SlideComposition.overlayShapes`, in draw order: overlay shapes (`kind: "shape"`, a shape block item: `path` `slides.N.shapes.I`, `box`, `shape` (a `ComposedShape`), `text`, `textStyle`, and `attachedTo` for an `at` shape) and connectors (`kind: "connector"`: `route`, `preset`, the frame `box`, `rotate`, `flipH`, `flipV`, `adjust` and `avLst`, `paths` (the route in slide coordinates, one open path with its ends for the arrowheads), `bounds`, `stroke`, and `from` and `to`, each with the `id`, the `ref` it attaches to (a composed item path, a group path or an overlay path), `target`, `site`, `point` and `angle`). `connectorRoute`, `chooseConnectorSites`, `shapeSites` and `rectSites` from `@openpresentation/opf/composition` give the same geometry to a host or an editor.
+`composeSlide` returns the overlay as `SlideComposition.overlayShapes`, in draw order: overlay shapes (`kind: "shape"`, a shape block item: `path` `slides.N.shapes.I`, `box`, `shape` (a `ComposedShape`), `text`, `textStyle`, `layer`, and `attachedTo` for an `at` shape) and connectors (`kind: "connector"`: `route`, `preset`, the frame `box`, `rotate`, `flipH`, `flipV`, `adjust` and `avLst`, `paths` (the route in slide coordinates, one open path with its ends for the arrowheads), `bounds`, `stroke`, and `from` and `to`, each with the `id`, the `ref` it attaches to (a composed item path, a group path or an overlay path), `target`, `site`, `point` and `angle`). `connectorRoute`, `chooseConnectorSites`, `shapeSites` and `rectSites` from `@openpresentation/opf/composition` give the same geometry to a host or an editor.
 
 ## Validation
 
