@@ -105,6 +105,23 @@ export function writeBaseline(directory, manifest) {
 }
 
 // Decks (manifest `deck` paths) whose entries differ between two manifests, plus the slide keys that differ.
+// The golden gate compares the slides of every deck the baseline records. A deck the baseline does not record yet is new
+// (reported, not a failure, so adding an example needs no baseline change) and a recorded deck that left the corpus is
+// removed (reported too). A recorded deck that gained, lost or changed a slide is a change. The corpus size and digest are
+// not compared: they moved with every added example and caught nothing the slide hashes miss.
+export function compareCorpus(expected, next) {
+  const recorded = new Set(Object.keys(expected.entries).map(deckOfKey));
+  const present = new Set(Object.keys(next.entries).map(deckOfKey));
+  const newDecks = [...present].filter((deck) => !recorded.has(deck)).sort(compare);
+  const removedDecks = [...recorded].filter((deck) => !present.has(deck)).sort(compare);
+  const keys = [...new Set([...Object.keys(expected.entries), ...Object.keys(next.entries)])].sort(compare);
+  const changedSlides = keys.filter((key) => {
+    const deck = deckOfKey(key);
+    return recorded.has(deck) && present.has(deck) && JSON.stringify(expected.entries[key]) !== JSON.stringify(next.entries[key]);
+  });
+  return { changedSlides, changedDecks: [...new Set(changedSlides.map(deckOfKey))].sort(compare), newDecks, removedDecks };
+}
+
 export function diffManifests(expected, next) {
   const keys = [...new Set([...Object.keys(expected.entries), ...Object.keys(next.entries)])];
   const changedSlides = keys.filter(key => JSON.stringify(expected.entries[key]) !== JSON.stringify(next.entries[key]));

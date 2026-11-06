@@ -220,22 +220,7 @@ async function findingReference() {
   return { file: "finding-schema-reference.md", content: `${lines.join("\n").trimEnd()}\n` };
 }
 
-async function countExampleDecks() {
-  const examplesRoot = path.join(repoRoot, "examples");
-  let count = 0;
-  async function walk(dir) {
-    for (const entry of await readdir(dir, { withFileTypes: true })) {
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory()) await walk(full);
-      else if (entry.isFile() && entry.name.endsWith(".opf.json")) count += 1;
-    }
-  }
-  await walk(examplesRoot);
-  return count;
-}
-
 async function examplesGuide() {
-  const deckCount = await countExampleDecks();
   const lines = [
     "# OPF Examples Guide",
     "",
@@ -243,8 +228,8 @@ async function examplesGuide() {
     "",
     "- `examples/technical/` contains compact fixtures that isolate one or two schema behaviors.",
     "- `examples/gallery/` contains scenario-oriented decks that show OPF working across industries, functions, education, government, international, presentation-type, and design/media use cases.",
-    `- The representative deck for [the published-package quickstart](quickstart.md) lives at [\`docs/quickstart/developer-quickstart.opf.json\`](quickstart/developer-quickstart.opf.json), outside the catalog, so \`@openpresentation/opf/examples\` stays at the published example count (currently ${deckCount} decks); the renderer golden corpus tracks that catalog on its own release cadence.`,
-    "- The runnable first deck lives at [`docs/first-deck/`](first-deck/README.md), also outside the catalog (a deck under `examples/` would change the examples corpus that the renderer golden covers): six slides (bullets, a metric, a chart, a styled table, a local image) and a README that goes from install to validate, PNG, PPTX and opening the file in PowerPoint or Keynote, with the known limits.",
+    `- The representative deck for [the published-package quickstart](quickstart.md) lives at [\`docs/quickstart/developer-quickstart.opf.json\`](quickstart/developer-quickstart.opf.json), outside the catalog, so it does not ship in \`@openpresentation/opf/examples\`.`,
+    "- The runnable first deck lives at [`docs/first-deck/`](first-deck/README.md), also outside the catalog: six slides (bullets, a metric, a chart, a styled table, a local image) and a README that goes from install to validate, PNG, PPTX and opening the file in PowerPoint or Keynote, with the known limits.",
     "- `examples/markdown/` holds decks written in the [Markdown dialect](markdown.md) (`.opf.md`, not `.opf.json`, so they are outside the catalog count): `quarterly-review.opf.md` is a Markdown deck that every command reads (`opf validate examples/markdown/quarterly-review.opf.md`); it uses every block kind and is canonical, and `diagrams.opf.md` shows the `mermaid` fence (a diagram, with and without an `alt`). `outline.md` is a plain outline, not a deck (a plain `.md` file is never taken for one), read with `opf convert outline.md deck.opf.json` (a plain `.md` input is OPF Markdown, and an outline with no `---` is cut at its headings). The tests convert, validate, compose and round trip them.",
     "- The examples root is kept as an organizing directory rather than a home for standalone OPF files.",
     "",
@@ -278,6 +263,16 @@ async function examplesGuide() {
     "- Dense documents with their own records in `catalogs.custom`, promoted region keys, `blocks`, media assets, code payloads, header/footer configuration, organization logo shapes, watermarks, and extensions.",
     "- Mixed content payloads across text, bullets, lists, image, video, chart, table, code, metric, quote, timeline, and diagram slides.",
     "- Catalog references across narratives, layouts, themes, color schemes, font schemes, audiences, purposes and tones, every record embedded under `catalogs.default` or `catalogs.custom`, so each deck validates and renders with no catalog registered; chart types, languages and social platforms as engine vocabularies.",
+    "",
+    "## Adding an example",
+    "",
+    "Put the deck under `examples/` (a gallery deck in the matching `examples/gallery/<folder>/`, a fixture in `examples/technical/`) as an `.opf.json` file, then:",
+    "",
+    "1. `node packages/cli/dist/index.js format -i <file>` and `node packages/cli/dist/index.js validate <file> --fail-on warning`.",
+    "2. Rebuild core (`pnpm build`): the `@openpresentation/opf/examples` export and `opf create --example <slug>` pick the deck up from the folder; there is no list to edit.",
+    "3. `pnpm check:changed`, and a changelog fragment in `changes/`.",
+    "",
+    "No test counts the examples and no baseline has to change. The renderer's golden check reports a deck it has no hashes for as new and compares every recorded slide as before; run the golden workflow (`.github/workflows/golden.yml`, `workflow_dispatch` on your branch) when you want the new deck's slides recorded, then review them in its artifact. A gallery deck must not set `design.contentAlignment` (LH-88). `examples/gallery/README.md` is generated by `scripts/generate-example-suite.mjs`, and this page by `scripts/generate-schema-docs.mjs`; edit the generators, not the files.",
     "",
     "## Validation",
     "",
