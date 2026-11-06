@@ -1832,7 +1832,7 @@
             "join": {
               "type": "string",
               "enum": ["miter", "round", "bevel"],
-              "description": "Line join (a:miter, a:round, a:bevel). Default miter on a picture, round on a shape."
+              "description": "Line join (a:miter, a:round, a:bevel). Default miter, PowerPoint's default line join."
             },
             "miterLimit": {
               "type": "number",

@@ -265,7 +265,7 @@ const roundTrip = async slide => {
   assert.equal(contentTopology({title: 'T'}, [], 0), undefined);
   assert.equal(contentTopology({title: 'T', blocks: []}, [], 0), undefined);
   const reasons = [];
-  assert.equal(contentTopology({title: 'T', blocks: [{type: 'shape'}]}, [], 0, reason => reasons.push(reason)), undefined);
+  assert.equal(contentTopology({title: 'T', blocks: [{type: 'hologram'}]}, [], 0, reason => reasons.push(reason)), undefined);
   assert.match(reasons[0], /no known content payload/);
   assert.throws(() => validateTopology({form: 'regions', regions: {__proto__: {}, 'left': {t: 'leaf', k: 'text'}, 'up:down': {t: 'leaf', k: 'text'}}}), /Unknown region key/);
   assert.throws(() => validateTopology({form: 'blocks', blocks: [{t: 'leaf', k: 'text', comp: {}}]}), /no composition/);

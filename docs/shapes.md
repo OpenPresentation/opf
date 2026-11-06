@@ -79,7 +79,7 @@ The preview draws `rectangle` and `shape` gradients as an ellipse from the cente
 | `width` | Reference pixels, 0 to 64; 0 removes the line. Default 4/3 (1 point) on a shape, 2 on a picture. | `w` |
 | `dash` | `solid`, `dot`, `dash`, `longDash`, `dashDot`, `longDashDot`, `longDashDotDot`, `sysDot`, `sysDash`, `sysDashDot`, `sysDashDotDot`, or an array of dash and gap lengths in line widths (`[4, 2]`). | `a:prstDash` (`lgDash` for `longDash`), `a:custDash` |
 | `cap` | `flat` (default), `round`, `square`. | `cap` |
-| `join` | `miter`, `round`, `bevel`; `miterLimit` (default 8). Default round on a shape, miter on a picture. | `a:miter lim`, `a:round`, `a:bevel` |
+| `join` | `miter` (default, as PowerPoint's default line), `round`, `bevel`; `miterLimit` (default 8). | `a:miter lim`, `a:round`, `a:bevel` |
 | `compound` | `single`, `double`, `thickThin`, `thinThick`, `triple`. | `cmpd` |
 | `align` | `center` (default) or `inside` (closed outlines only, as in PowerPoint). | `algn` |
 | `start`, `end` | Arrowheads on an open path: `{ type, width, length }`, `type` `triangle` (default), `stealth`, `diamond`, `oval` or `arrow`, sizes `small`, `medium` (default), `large`. | `a:headEnd`, `a:tailEnd` |

@@ -10,7 +10,7 @@
 // lines, inside alignment and arrowheads) for a shape's paths and for a picture's outline; sketch is PowerPoint's own randomized line
 // and is drawn plain.
 
-import { colorTransform, applyColorTransform, patternRuns, textColorForFill } from "@openpresentation/opf/composition";
+import { patternRuns, textColorForFill } from "@openpresentation/opf/composition";
 
 const HIDDEN = Object.freeze({ "aria-hidden": "true" });
 const number = value => (Number.isInteger(value) ? String(value) : Number(value).toFixed(3).replace(/\.?0+$/, ""));
@@ -215,10 +215,9 @@ export function renderShapeBlock(item, helpers) {
     const textTurn = [turn, shape.flipV ? `rotate(180 ${number(cx)} ${number(cy)})` : "", shape.textDirection === "vertical" ? `rotate(90 ${number(tx)} ${number(ty)})` : shape.textDirection === "vertical270" ? `rotate(-90 ${number(tx)} ${number(ty)})` : ""].filter(Boolean).join(" ");
     text = textTurn ? helpers.tag("g", { transform: textTurn }, drawn) : drawn;
   }
-  const accessible = shape.decorative || (shape.alt === undefined && !item.text) ? HIDDEN : { role: "img", "aria-label": shape.alt ?? undefined };
+  // A decorative shape is hidden from assistive technology; alt text names the shape; otherwise its text is what is read.
+  const accessible = shape.decorative ? HIDDEN : shape.alt !== undefined ? { role: "img", "aria-label": shape.alt } : {};
   const body = (defs.length ? helpers.tag("defs", {}, defs.join("")) : "") + outline + text;
   const content = shape.link ? helpers.tag("a", { href: shape.link }, body) : body;
-  return helpers.tag("g", { ...(shape.alt !== undefined && !shape.decorative ? accessible : shape.decorative ? HIDDEN : {}), ...helpers.trace }, content);
+  return helpers.tag("g", { ...accessible, ...helpers.trace }, content);
 }
-
-export { colorTransform, applyColorTransform };

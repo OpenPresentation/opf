@@ -64,7 +64,7 @@ const deck = () => ({
   // The image-treatments switch takes the same fields for one block.
   const switched = switchDimension(editor, "image-treatments", { shape: "ellipse" }, { path: "slides.0.blocks.0" });
   assert.equal(switched.scope, "block");
-  assert.equal(editor.get("slides.0.blocks.0.shape"), "circle");
+  assert.equal(editor.get("slides.0.blocks.0.shape"), "ellipse");
 }
 
 // --- placement rules: top-level blocks only, one per edge -----------------------------------------------------------
@@ -82,7 +82,7 @@ const deck = () => ({
     [{ placement: { edge: "middle" } }, /edge/],
     [{ placement: { edge: "left", size: 0.95 } }, /0\.1 to 0\.9/],
     [{ overlay: { color: "dark1" } }, /opacity/],
-    [{ stroke: { color: "nope", width: 2 } }, /border color/i],
+    [{ stroke: { color: "nope", width: 2 } }, /stroke color/i],
     [{ slideImage: "x" }, /Unknown image treatment/],
   ])
     assert.throws(() => prepareImageTreatment(deck(), "slides.0.blocks.0", fields), message);

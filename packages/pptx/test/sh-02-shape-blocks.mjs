@@ -30,7 +30,7 @@ const emu = px => Math.round(px * 9525);
   assert.ok(shape.includes(`<a:off x="${emu(item.shape.box.x)}" y="${emu(item.shape.box.y)}"/><a:ext cx="${emu(item.shape.box.width)}" cy="${emu(item.shape.box.height)}"/>`));
   assert.match(shape, /<a:prstGeom prst="roundRect"><a:avLst><a:gd name="adj" fmla="val 30000"\/><\/a:avLst><\/a:prstGeom>/);
   assert.match(shape, /<a:solidFill><a:schemeClr val="accent1"\/?>(<\/a:schemeClr>)?<\/a:solidFill>/);
-  assert.match(shape, /<a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="accent1"><a:lumMod val="50000"\/><\/a:schemeClr><\/a:solidFill><a:prstDash val="solid"\/><a:round\/><\/a:ln>/);
+  assert.match(shape, /<a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="accent1"><a:lumMod val="50000"\/><\/a:schemeClr><\/a:solidFill><a:prstDash val="solid"\/><a:miter lim="800000"\/><\/a:ln>/);
   assert.match(shape, /<a:effectLst\/>/);
   assert.match(shape, /<p:style><a:lnRef idx="2">[\s\S]*<a:fillRef idx="1">[\s\S]*<a:effectRef idx="0">[\s\S]*<a:fontRef idx="minor">/);
   assert.match(shape, /<a:bodyPr [^>]*vert="horz" wrap="square" lIns="91440" tIns="45720" rIns="91440" bIns="45720"[^>]*anchor="ctr"[^>]*><a:prstTxWarp prst="textNoShape"><a:avLst\/><\/a:prstTxWarp><a:noAutofit\/><\/a:bodyPr>/);

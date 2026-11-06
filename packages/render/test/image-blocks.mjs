@@ -92,7 +92,7 @@ checked++;
 }
 
 // Masks use exactly the core outline in a clipPath around the picture; rectangles need none.
-for (const shape of ['rounded', 'circle', 'hexagon']) {
+for (const shape of ['roundRect', 'ellipse', 'hexagon', 'star5']) {
   const deck = deckWith({ shape });
   const item = imageOf(deck), svg = toSvg(deck, 1);
   const id = `opf-s1-image-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}-clip`;

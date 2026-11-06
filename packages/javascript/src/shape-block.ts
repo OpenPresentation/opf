@@ -356,7 +356,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
   const look = shapeStyleLook(style);
   const opacity = finite(host.opacity, 0, 1);
   const fill = composeFill(host.fill ?? look.fill, opacity) ?? composeFill(look.fill, opacity) ?? { type: 'none' as const };
-  const stroke = composeStroke(host.stroke, scale, look.stroke ? { ...look.stroke, join: 'round' } : host.stroke !== undefined ? { color: style === 'none' ? 'text' : { color: 'accent1', darken: 0.5 }, width: SHAPE_STROKE_WIDTH, join: 'round' } : undefined);
+  const stroke = composeStroke(host.stroke, scale, look.stroke ? { ...look.stroke, join: 'miter' } : host.stroke !== undefined ? { color: style === 'none' ? 'text' : { color: 'accent1', darken: 0.5 }, width: SHAPE_STROKE_WIDTH, join: 'miter' } : undefined);
   const effects: NonNullable<ComposedShape['effects']> = {};
   if (look.shadow && host.shadow === undefined) effects.shadow = look.shadow;
   for (const key of SHAPE_EFFECT_KEYS) if (host[key] !== undefined) effects[key] = host[key];
