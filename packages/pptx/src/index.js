@@ -2702,9 +2702,11 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries && liveArrangements.has(item.path)) {
       // SH-09: the entries are the live SmartArt's nodes.
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries && arranged.has(item.path)) {
-      // SH-09: a pyramid's or matrix's entries on its native nodes: centered, in the color core reads on the primary.
-      const text = exportPaint(itemContext).text.hex.slice(1);
-      await addMeasuredList(slide,item.text,{...itemContext,colors:{...itemContext.colors,text},textColor:text},item.path,item.bulletImage,presentation,slideIndex,options,false,'center');
+      // SH-09: a pyramid's or matrix's entries on its native shapes, as core placed them.
+      // On its node in the color that reads on the primary, centered; beside a level or on a card in the slide's text color, at the start edge.
+      const arrangement = geometry.arrangements.find(entry => entry.path === item.path), text = exportPaint(itemContext).text.hex.slice(1);
+      const lineContext = arrangement.text === 'node' ? {...itemContext,colors:{...itemContext.colors,text},textColor:text} : itemContext;
+      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined);
       if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);

@@ -8,7 +8,7 @@ import {resolvePresentation, toSvg} from '../src/svg.js';
 
 const catalogs = [gallery];
 const deck = {design: {colorScheme: {id: 'test', name: 'Test', dark1: '#111111', light1: '#FFFFFF', dark2: '#333333', light2: '#EEEEEE', accent1: '#1F6FB2', accent2: '#C0504D', accent3: '#9BBB59', accent4: '#8064A2', accent5: '#4BACC6', accent6: '#F79646', hyperlink: '#0563C1', followedHyperlink: '#954F72'}},
-  slides: [{layout: 'pyramid', title: 'Our strategy', items: ['Vision', 'Goals', 'Programs', 'Teams']}, {layout: 'matrix', title: 'Four markets', items: ['North', 'South', 'East']}]};
+  slides: [{layout: 'pyramid', title: 'Our strategy', items: ['Vision', 'Goals', 'Programs', 'Teams']}, {layout: 'matrix', title: 'Four markets', items: ['North', 'South', 'East', 'West']}, {layout: 'matrix', title: 'Three markets', items: ['North', 'South', 'East']}]};
 const resolved = resolvePresentation(deck, {catalogs});
 const primary = resolved.slides[0].design.colors.primary, background = resolved.slides[0].design.roles.background;
 
@@ -33,6 +33,15 @@ const primary = resolved.slides[0].design.colors.primary, background = resolved.
   assert.match(svg, new RegExp(`<path [^>]*fill="${applyColorTransform(primary, {lumMod: 20000, lumOff: 80000})}"`, 'i'), 'the diamond, the primary lightened 80%');
   const quadrants = [...svg.matchAll(/<rect [^>]*data-opf-arrangement-path[^>]*>|<rect [^>]*>/g)].map(match => match[0])
     .filter(rect => / rx="[^"]+"/.test(rect) && rect.toLowerCase().includes(`fill="${primary.toLowerCase()}"`));
-  assert.equal(quadrants.length, 4, 'four quadrants, one of them empty');
+  assert.equal(quadrants.length, 4, 'four quadrants');
+}
+{
+  // A matrix of three entries: a grid of cards in the card neutral, no diamond, no empty quadrant.
+  const svg = toSvg(deck, 3, {catalogs, trace: true});
+  assert.match(svg, /data-opf-arrangement="matrix" data-opf-arrangement-design="cards"/);
+  const card = resolved.slides[2].design.roles.neutrals.card.hex.toLowerCase();
+  const cards = [...svg.matchAll(/<rect [^>]*data-opf-arrangement-path[^>]*>/g)].map(match => match[0]);
+  assert.equal(cards.length, 3);
+  for (const rect of cards) assert.ok(rect.toLowerCase().includes(`fill="${card}"`), rect);
 }
 console.log('SH-09 arrangements passed: pyramid levels and matrix quadrants with the diamond, in the primary with background outlines, under centered entries.');

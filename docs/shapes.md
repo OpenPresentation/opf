@@ -321,7 +321,7 @@ On import an unchanged group is its diagram again (the Mermaid source and `alt`)
 
 ## Pyramids and matrices
 
-The `pyramid` and `matrix` layouts (a region's `arrangement`) draw a list as PowerPoint's Basic Pyramid or Basic Matrix, and the PPTX export writes them as live SmartArt where PowerPoint lays the SmartArt out exactly as the preview draws it, otherwise as native shapes (`trapezoid`, `roundRect`, `diamond`) under the measured lines (`smartArt: "live" | "shapes"`, CLI `--smart-art`). See [Pyramids, matrices and live SmartArt](smartart.md) for the geometry, the domain PowerPoint was compared on and what PowerPoint does when a node is edited.
+The `pyramid` and `matrix` layouts (a region's `arrangement`) draw a list as PowerPoint's Basic Pyramid or Basic Matrix, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries, and the PPTX export writes PowerPoint's design as live SmartArt where PowerPoint lays the SmartArt out exactly as the preview draws it, otherwise as native shapes (`trapezoid`, `roundRect`, `diamond`) under the measured lines (`smartArt: "live" | "shapes"`, CLI `--smart-art`). See [Pyramids, matrices and live SmartArt](smartart.md) for the geometry, the domain PowerPoint was compared on and what PowerPoint does when a node is edited.
 
 ## Validation
 

@@ -30,6 +30,7 @@ const INFO = new Set([
 	"picture-not-measured",
 	"diagram-shapes-unavailable",
 	"smartart-unavailable",
+	"arrangement-adapted",
 ]);
 
 const HELP: Record<string, string> = {

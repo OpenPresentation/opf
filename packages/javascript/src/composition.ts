@@ -49,8 +49,8 @@ export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,samp
 import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
-import {ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,SMART_ART_DOMAIN,type Arrangement,type ArrangementNode} from './arrangements.js';
-export {ARRANGEMENTS,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,type Arrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
+import {ARRANGEMENT_CARDS_MAX,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,CARD_TEXT_MARGIN,cardNodes,MATRIX_ENTRIES,matrixNodes,matrixQuadrants,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,pyramidSteps,SMART_ART_DOMAIN,smartArtScript,smartArtUnavailable,type Arrangement,type ArrangementNode} from './arrangements.js';
+export {ARRANGEMENTS,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,type Arrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
 export {BUILT_IN_MASKS, composeShape, ensureShapes, isPresetShape, isShapeBlock, presetAspect, presetMask, shapeIssues, shapesPending, shapeTextColor, stackedText, SHAPE_PRESETS, shapeStyleLook, translatePathData, DEFAULT_SHAPE_STYLE, PICTURE_STROKE_WIDTH, SHAPE_BLOCK_KEYS, SHAPE_EFFECT_KEYS, SHAPE_PADDING, SHAPE_STROKE_WIDTH, SHAPE_STYLES} from './shape-block.js';
@@ -103,8 +103,10 @@ export interface LayoutDiagnostic {
    * OPF 0.19 adds the content-binding codes of template layouts: `region-unknown`, `region-kind` and `region-full` for an
    * ignored `region` pin, and `layout-unplaced` for a block no region had room for (drawn anyway; `paginate` moves it).
    * LH-14: `icon-dropped` for an icon the slide has no room for without setting text smaller: the text stays, the chip is not drawn.
+   * SH-09: `arrangement-adapted` for a pyramid or matrix drawn another way: a matrix of other than four entries as cards, or a list the
+   * arrangement's designs cannot hold at the list's size (or of a shape it does not draw) as a list.
    */
-  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped";
+  code: "text-overflow" | "small-cell" | "unresolved-content" | "unsupported-image-treatment" | "numbering-adapted" | "region-unknown" | "region-kind" | "region-full" | "layout-unplaced" | "emphasis-ignored" | "icon-dropped" | "arrangement-adapted";
   path: string;
   message: string;
   /**
@@ -485,6 +487,20 @@ export interface ComposedSteps {
  */
 export interface ComposedArrangement {
   kind: Arrangement;
+  /**
+   * `smartart`: PowerPoint's Basic Pyramid or Basic Matrix geometry (the PPTX export may write it as live SmartArt); `opf`: OPF's own design
+   * of the arrangement (a stepped pyramid with the entries beside it, or four quadrants filling the region); `cards`: a matrix of other
+   * than four entries, as a grid of cards. Only `smartart` has a `background` diamond (a matrix).
+   */
+  design: 'smartart' | 'opf' | 'cards';
+  /** OPF's design (`opf`): why PowerPoint's design was not drawn (its entries do not fit at the list's size, or the SmartArt domain's reason). */
+  instead?: string;
+  /** The entries' alignment in their text rectangles: centered on their nodes, or at the start edge (beside a level, in a card). */
+  align: 'center' | 'start';
+  /** The nodes' paint: the primary with a background-colored outline (arrangementPaint), or the card neutral with its border (a card grid). */
+  paint: 'primary' | 'card';
+  /** The entries' text color: the color that reads on the primary (`node`), or the slide's text color (`slide`: beside a level, on a card). */
+  text: 'node' | 'slide';
   region: string;
   /** The list's payload path. */
   path: string;
@@ -9448,18 +9464,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.box = { x: Math.min(...chips.map(chip => chip.box.x)), y, width: total, height: chipHeight };
     return { form: 'flow', region, path: item.path, badges: [], chips, arrows, lineWidth };
   };
-  // SH-09: an `arrangement` region's lone list of one level (no descriptions, no numbering, no icons, at most ARRANGEMENT_MAX entries)
-  // as a pyramid or a matrix in the region's cell (arrangements.ts). Every entry is fitted alone in its node's text rectangle, less the
-  // text margin, at one size for all: the largest from ARRANGEMENT_GROWTH times the list's role size (or the list's size, when larger)
-  // down to the list's role size (or its fitted size, when smaller) at which every entry fits its rectangle without breaking a word and
-  // the ink of every line stays inside its node's outline. The arrangement fills the region, so the LH-48 growth a lone list takes in a
-  // roomy region is not the size it keeps; it never draws below the list's role size. When even that does not fit, the list stays as it
-  // was. Each entry is a list column, centered in its rectangle.
+  // SH-09: an `arrangement` region's lone list of one level (no descriptions, no numbering, no icons) as a pyramid or a matrix in the
+  // region's cell (arrangements.ts). Every entry is fitted alone in its node's text rectangle, less the text margin, at one size for all:
+  // the largest from ARRANGEMENT_GROWTH times the list's role size (or the list's size, when larger) down to the list's role size (or its
+  // fitted size, when smaller) at which every entry fits without breaking a word and, in a shape that holds its text, with the ink of every
+  // line inside the outline. The arrangement fills the region, so the LH-48 growth a lone list takes in a roomy region is not the size it
+  // keeps; it never draws below that floor. The designs are tried in order:
+  // - `smartart`: PowerPoint's own geometry (Basic Pyramid, Basic Matrix of exactly four entries), centered text, which the PPTX export can
+  //   write as live SmartArt;
+  // - `opf`: OPF's own design of the same arrangement where PowerPoint's does not hold the entries at the floor: a stepped pyramid with
+  //   each entry beside its level (start-aligned), or four quadrants filling the region (centered);
+  // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
+  // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
+  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number };
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
-    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize;
+    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
-    const frame = kind === 'pyramid' ? pyramidFrame(area) : area;
-    const nodes = kind === 'pyramid' ? pyramidNodes(frame, values.length) : matrixNodes(frame);
     const single = (index: number, box: LayoutBox, size: number): ListFit => {
       const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
       const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
@@ -9476,18 +9496,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const before = [...last.text].at(-1) ?? '', after = [...first.text][0] ?? '';
       return word.test(before) && word.test(after) && !everywhere.test(before) && !everywhere.test(after);
     });
-    const place = (size: number) => {
-      const margin = ARRANGEMENT_TEXT_MARGIN[kind] * size, columns: ComposedListColumn[] = [], lines: number[] = [], stable: boolean[] = [];
-      for (let index = 0; index < values.length; index++) {
-        const node = nodes[index]!, inner = { x: node.textBox.x + margin, y: node.textBox.y + margin, width: node.textBox.width - 2 * margin, height: node.textBox.height - 2 * margin };
+    const place = (design: ArrangementDesign, size: number) => {
+      const margin = design.margin * size, columns: ComposedListColumn[] = [], lines: number[] = [], stable: boolean[] = [];
+      for (let index = 0; index < count; index++) {
+        const node = design.nodes[index]!, inner = { x: node.textBox.x + margin, y: node.textBox.y + margin, width: node.textBox.width - 2 * margin, height: node.textBox.height - 2 * margin };
         if (inner.width <= 0 || inner.height <= 0) return undefined;
         const probe = single(index, { ...inner, height: 1e5 }, size), entry = probe.listEntries[0];
         if (!entry || probe.overflow || entry.text.height > inner.height + 1e-6) return undefined;
         const box = { x: inner.x, y: inner.y + (inner.height - entry.text.height) / 2, width: inner.width, height: entry.text.height };
         const text = single(index, box, size), placed = text.listEntries[0];
         if (!placed || text.overflow || cutsWord(placed)) return undefined;
-        // A line is centered without the space it broke at (PowerPoint's wrap drops it): the space is left out of its last fragment and width.
-        placed.text.richLines = placed.text.richLines.map(line => {
+        // A centered line is centered without the space it broke at (PowerPoint's wrap drops it): the space is left out of its last
+        // fragment and width.
+        if (design.align === 'center') placed.text.richLines = placed.text.richLines.map(line => {
           const last = line.fragments.at(-1), trail = last && last.kind === undefined ? /\s+$/u.exec(last.text)?.[0] : undefined;
           if (!trail || trail.length === last!.text.length) return line;
           // A space that hangs (RR-17) is already out of the line's width; the fragments still hold it.
@@ -9495,45 +9516,86 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
           return { ...line, width: Math.max(0, Math.min(line.width, drawn - cut)), fragments: [...line.fragments.slice(0, -1), { ...last!, text: last!.text.slice(0, -trail.length), end: last!.end - trail.length, width: Math.max(0, last!.width - cut) }] };
         });
         // The ink of every line (cap height over the baseline to the descenders) stays inside the node's outline, inset by the margin: a
-        // pyramid level narrows toward its top, a quadrant at its corners.
-        for (const line of placed.text.richLines) {
+        // pyramid level narrows toward its top, a quadrant at its corners. Text beside its level has no outline to keep to.
+        if (!node.beside) for (const line of placed.text.richLines) {
           const baseline = placed.textBox.y + line.baseline, room = Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)) - 2 * margin;
           if (line.width > room + 1e-6) return undefined;
         }
-        const own = breaks(placed), widths = [1 - SMART_ART_DOMAIN.slack, 1 + SMART_ART_DOMAIN.slack].map(share => breaks(single(index, { ...inner, width: inner.width * share, height: 1e5 }, size).listEntries[0]));
+        const own = breaks(placed), widths = design.design !== 'smartart' ? [] : [1 - SMART_ART_DOMAIN.slack, 1 + SMART_ART_DOMAIN.slack].map(share => breaks(single(index, { ...inner, width: inner.width * share, height: 1e5 }, size).listEntries[0]));
         lines.push(placed.text.richLines.length); stable.push(widths.every(other => other === own));
         columns.push({ box, start: index, end: index + 1, text });
       }
       return { columns, margin, lines, stable };
     };
     const role = LIST_NOMINAL_SIZE * scale, floor = Math.min(base, role), step = 4 / 3 * scale, top = Math.max(base, snapFontSizeDown(role * ARRANGEMENT_GROWTH));
-    // The largest size that fits and whose line breaks all hold (PowerPoint breaks them alike); else the largest that fits.
-    let placed: ReturnType<typeof place>, size = floor, fallback: { placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined;
-    for (let candidate = top; ; candidate = snapFontSizeDown(candidate - step)) {
-      const at = Math.max(candidate, floor), attempt = place(at);
-      if (attempt && attempt.stable.every(Boolean)) { placed = attempt; size = at; break; }
-      if (attempt && !fallback) fallback = { placed: attempt, size: at };
-      if (at <= floor + 1e-6) break;
+    // The largest size at which a design holds every entry; for the SmartArt design one whose line breaks all hold (PowerPoint breaks them
+    // alike) when there is one.
+    const sized = (design: ArrangementDesign) => {
+      let fallback: { placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined;
+      for (let candidate = top; ; candidate = snapFontSizeDown(candidate - step)) {
+        const at = Math.max(candidate, floor), attempt = place(design, at);
+        if (attempt && (design.design !== 'smartart' || attempt.stable.every(Boolean))) return { placed: attempt, size: at };
+        if (attempt && !fallback) fallback = { placed: attempt, size: at };
+        if (at <= floor + 1e-6) return fallback;
+      }
+    };
+    const primaryLine = ARRANGEMENT_LINE_POINTS / .75 * scale, radius = CARD_RADIUS * scale;
+    const designs: ArrangementDesign[] = [];
+    if (kind === 'pyramid') {
+      const frame = pyramidFrame(area);
+      designs.push({ design: 'smartart', frame, nodes: pyramidNodes(frame, count), margin: ARRANGEMENT_TEXT_MARGIN.pyramid, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
+      designs.push({ design: 'opf', frame: area, nodes: pyramidSteps(area, count, gap / 2, radius), margin: 0, align: 'start', paint: 'primary', text: 'slide', lineWidth: primaryLine });
+    } else if (count === MATRIX_ENTRIES) {
+      designs.push({ design: 'smartart', frame: area, nodes: matrixNodes(area), margin: ARRANGEMENT_TEXT_MARGIN.matrix, align: 'center', paint: 'primary', text: 'node', background: matrixSquare(area), lineWidth: primaryLine });
+      designs.push({ design: 'opf', frame: area, nodes: matrixQuadrants(area, gap), margin: ARRANGEMENT_TEXT_MARGIN.matrix, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
+    } else {
+      // The grid's shape is the one whose cards hold the entries at the largest size: one column of wide cards in a narrow region, a balanced
+      // grid (cardGridColumns) in a wide one.
+      const columns = [...new Set([1, ...(count > 1 ? cardGridColumns(count) : []), Math.min(count, 2)])].filter(column => column <= count);
+      for (const column of columns) designs.push({ design: 'cards', frame: area, nodes: cardNodes(area, count, column, gap, radius), margin: CARD_TEXT_MARGIN, align: 'start', paint: 'card', text: 'slide', lineWidth: scale });
+      diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `A matrix needs four entries; its ${count} ${count === 1 ? 'entry is' : 'entries are'} drawn as ${count === 1 ? 'a card' : 'a grid of cards'}.` });
     }
-    if (!placed && fallback) ({ placed, size } = fallback);
-    if (!placed) return undefined;
+    // PowerPoint's design only where the PPTX export can write it as live SmartArt (SMART_ART_DOMAIN); outside it OPF's own design, and
+    // PowerPoint's geometry again (as native shapes) when OPF's does not hold the entries either. Of the card grids, the largest text.
+    const script = smartArtScript(values.map(value => flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? record(value).text : value)));
+    let chosen: { design: ArrangementDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined, outside: typeof chosen, skipped: string | undefined;
+    for (const design of designs) {
+      const result = sized(design);
+      if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's Basic ${kind === 'pyramid' ? 'Pyramid' : 'Matrix'} at the list's size`; continue; }
+      const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
+        nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })) });
+      if (unavailable !== undefined) { outside ??= { design, ...result }; skipped = unavailable; continue; }
+      if (design.design === 'cards' && chosen && chosen.size >= result.size) continue;
+      chosen = { design, ...result };
+      if (design.design !== 'cards') break;
+    }
+    if (!chosen && outside) { chosen = outside; skipped = undefined; }
+    if (!chosen) {
+      diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The ${kind}'s entries do not fit its ${kind === 'pyramid' ? 'levels' : 'quadrants'} at the list's size, so they are drawn as a list.` });
+      return undefined;
+    }
+    const { design, placed, size } = chosen;
     item.listColumns = placed.columns;
     item.text = mergeListColumns(placed.columns);
-    item.alignment = 'center';
-    item.box = { ...frame };
+    item.alignment = design.align === 'center' ? 'center' : rtl ? 'right' : 'left';
+    item.box = { ...design.frame };
     const textPaths = placed.columns.map(column => column.text.listEntries[0]!.textPath!);
-    return { kind, region: item.region ?? '', path: item.path, frame: { ...frame }, ...(kind === 'matrix' ? { background: matrixSquare(frame) } : {}),
-      nodes: nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), fontSize: size, textMargin: placed.margin,
-      lineWidth: ARRANGEMENT_LINE_POINTS / .75 * scale, smartArt: { lines: placed.lines, stable: placed.stable } };
+    return { kind, design: design.design, region: item.region ?? '', path: item.path, frame: { ...design.frame }, ...(design.background ? { background: design.background } : {}),
+      nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), fontSize: size, textMargin: placed.margin,
+      align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, smartArt: { lines: placed.lines, stable: placed.stable }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
   };
   const arrangedLists = (): ComposedArrangement[] => {
     const result: ComposedArrangement[] = [];
     for (const region of template!.regions) {
       if (!region.arrangement) continue;
       const members = items.filter(item => item.region === region.name && !headings.has(item.field)), item = members.length === 1 ? members[0]! : undefined;
-      if (!item || (item.field !== 'items' && item.field !== 'bullets') || item.listColumns || item.caption || item.frameBox || item.payload.numbering !== undefined || !item.text || !('listEntries' in item.text) || item.text.overflow) continue;
+      if (!item || (item.field !== 'items' && item.field !== 'bullets') || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text)) continue;
       const values = Array.isArray(item.value) ? item.value as unknown[] : [];
-      if (!values.length || values.length > ARRANGEMENT_MAX[region.arrangement] || values.some(value => { const entry = record(value); return (entry.level ?? 0) !== 0 || entry.description !== undefined || entry.icon !== undefined; })) continue;
+      if (!values.length) continue;
+      const reason = item.payload.numbering !== undefined ? 'a numbered list' : values.some(value => (record(value).level ?? 0) !== 0) ? 'nested entries'
+        : values.some(value => record(value).description !== undefined) ? 'descriptions' : values.some(value => record(value).icon !== undefined) ? 'icons'
+          : region.arrangement === 'pyramid' && values.length > ARRANGEMENT_MAX.pyramid ? `more than ${ARRANGEMENT_MAX.pyramid} levels` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
+      if (reason) { diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `A ${region.arrangement} draws a list of one level of short entries; this list has ${reason}, so it is drawn as a list.` }); continue; }
       const area = templateRegions.find(entry => entry.name === region.name)?.box ?? item.box;
       const arranged = arrangedList(item, region.arrangement, area);
       if (arranged) result.push(arranged);

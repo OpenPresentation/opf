@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "The built-in slide layouts of OPF 0.19: 32 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "43ba1aa1ff5f4454cf9a31874bf482309cf0a885680a64de613af46be65a14df",
+  "contentSha256": "4a936aa096161ba16b2deb4c923c32e4c8b56cc9356349a4b78473a56f31a664",
   "records": [
     {
       "id": "cover",
@@ -127,7 +127,7 @@
     {
       "id": "matrix",
       "name": "Matrix",
-      "summary": "Up to four parts of a whole, as the quadrants of a square beside the title.",
+      "summary": "Four parts of a whole, as the quadrants of a square beside the title.",
       "group": "Groups of items",
       "file": "matrix.json"
     },

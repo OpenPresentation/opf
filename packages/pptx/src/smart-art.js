@@ -25,7 +25,7 @@
 // text of every node as written. On import an unchanged tagged SmartArt is that list again; an edited one (a node's text changed, a
 // node added or removed) imports its data model's nodes, as any PowerPoint pyramid1 or matrix3 does: the points in `cxn` order, their
 // text and run properties, as a list in the `pyramid` or `matrix` layout. Import never stores a layout part.
-import {SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 
@@ -62,9 +62,6 @@ const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&am
 const decoder = new TextDecoder(), encoder = new TextEncoder();
 const array = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
 const RTL = /[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u;
-const CJK = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
-// The script the PowerPoint comparison passed: Latin (with the common punctuation, digits and marks).
-const COVERED = /^[\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]*$/u;
 // The run properties a SmartArt node carries as written (others, such as links, citations, code or a run size, keep the shapes).
 const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'lang']);
 
@@ -72,6 +69,7 @@ const runsOf = value => {
   const text = value && typeof value === 'object' && !Array.isArray(value) ? value.text : value;
   return typeof text === 'string' ? [{text}] : Array.isArray(text) ? text.map(run => typeof run === 'string' ? {text: run} : run) : [];
 };
+const hex6 = value => String(value).replace(/^#/, '').slice(0, 6).toUpperCase();
 const plain = value => runsOf(value).map(run => run?.text ?? '').join('');
 
 /**
@@ -82,9 +80,8 @@ export function smartArtReason(arrangement, values, rtl) {
   if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
     return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
-  const text = values.map(plain).join('');
-  const script = COVERED.test(text) ? undefined : CJK.test(text) ? 'cjk' : 'other';
-  return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || RTL.test(text),
+  const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
+  return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || rightToLeft,
     nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {})});
 }
 
@@ -106,8 +103,10 @@ export function addArrangements(slide, arrangements, {context, mode = 'live', it
   const paint = exportPaint(context), inches = value => value / 96, box = area => ({x: inches(area.x), y: inches(area.y), w: inches(area.width), h: inches(area.height)});
   for (const arrangement of arrangements) {
     const item = items.find(entry => entry.path === arrangement.path), values = Array.isArray(item?.value) ? item.value : [];
-    const reason = mode === 'live' ? smartArtReason(arrangement, values, context.direction === 'rtl') : undefined;
-    if (mode === 'live' && reason === undefined) {
+    // Only PowerPoint's own design can be live SmartArt; OPF's design and a card grid are always native shapes.
+    const design = arrangement.design ?? 'smartart';
+    const reason = mode !== 'live' || design === 'cards' ? undefined : design === 'opf' ? `${arrangement.instead ?? `its entries do not fit PowerPoint's Basic ${arrangement.kind === 'pyramid' ? 'Pyramid' : 'Matrix'}`}, so OPF's own ${arrangement.kind} is drawn` : smartArtReason(arrangement, values, context.direction === 'rtl');
+    if (mode === 'live' && design === 'smartart' && reason === undefined) {
       const objectName = smartArtName(arrangement.path);
       // A placeholder at the frame: attachSmartArt makes it the SmartArt frame once the package is written.
       slide.addShape('rect', {...box(arrangement.frame), fill: {color: paint.fill.hex.slice(1)}, line: {type: 'none'}, objectName});
@@ -116,10 +115,12 @@ export function addArrangements(slide, arrangements, {context, mode = 'live', it
       live.add(arrangement.path);
       continue;
     }
-    if (mode === 'live') report?.({code: 'smartart-unavailable', path: arrangement.path, reason,
+    if (reason !== undefined) report?.({code: 'smartart-unavailable', path: arrangement.path, reason,
       message: `The ${arrangement.kind} is exported as native shapes, not live SmartArt: ${reason}.`});
     const name = role => `OPF arrangement ${arrangement.path} ${role}`, tag = (objectName, role, extra = {}) => tags.set(objectName, {v: 1, path: arrangement.path, kind: arrangement.kind, role, ...extra});
-    const line = {color: paint.line.hex.slice(1), width: arrangement.lineWidth * .75};
+    // A card grid in the card neutral with its border, as every OPF card; the other designs in the primary with the background's outline.
+    const card = arrangement.paint === 'card', fill = card ? hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface) : paint.fill.hex.slice(1);
+    const line = {color: card ? hex6(context.roles?.neutrals?.cardBorder?.hex ?? context.colors.border) : paint.line.hex.slice(1), width: arrangement.lineWidth * .75};
     if (arrangement.background) {
       const objectName = name('background');
       slide.addShape('diamond', {...box(arrangement.background), fill: {color: paint.background.hex.slice(1)}, line: {type: 'none'}, objectName});
@@ -127,7 +128,7 @@ export function addArrangements(slide, arrangements, {context, mode = 'live', it
     }
     for (const node of arrangement.nodes) {
       const objectName = name(`node ${node.index}`);
-      slide.addShape(node.preset === 'trapezoid' ? 'trapezoid' : 'roundRect', {...box(node.box), fill: {color: paint.fill.hex.slice(1)}, line, objectName,
+      slide.addShape(node.preset === 'trapezoid' ? 'trapezoid' : 'roundRect', {...box(node.box), fill: {color: fill}, line, objectName,
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
     }

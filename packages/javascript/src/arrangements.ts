@@ -23,8 +23,12 @@
 /** The arrangements a region can ask for. */
 export const ARRANGEMENTS = ['pyramid', 'matrix'] as const;
 export type Arrangement = typeof ARRANGEMENTS[number];
-/** The most entries each arrangement draws; a list with more (or with nested entries, or descriptions) stays a list. */
+/** The most entries each arrangement draws as its own shapes: a pyramid's levels, a matrix's quadrants (other counts draw cards). */
 export const ARRANGEMENT_MAX: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: 8, matrix: 4 });
+/** A matrix draws its quadrants for exactly this many entries; other counts draw a grid of cards (at most ARRANGEMENT_CARDS_MAX). */
+export const MATRIX_ENTRIES = 4, ARRANGEMENT_CARDS_MAX = 8;
+/** A card's text inset, as a share of the font size. */
+export const CARD_TEXT_MARGIN = .6;
 /** PowerPoint's SmartArt layout each arrangement matches (the `loTypeId` of a live SmartArt export). */
 export const SMART_ART_LAYOUTS: Readonly<Record<Arrangement, string>> = Object.freeze({
   pyramid: 'urn:microsoft.com/office/officeart/2005/8/layout/pyramid1',
@@ -64,8 +68,10 @@ export interface ArrangementNode {
   points?: [number, number][];
   /** A rounded rectangle's corner radius. */
   radius?: number;
-  /** PowerPoint's text rectangle for the node (before the text margin). */
+  /** The rectangle the node's text is set in (before the text margin): PowerPoint's in the SmartArt design. */
   textBox: Box;
+  /** OPF's pyramid: the text sits beside its level, outside the shape, so the shape's outline does not bound it. */
+  beside?: true;
 }
 
 const round = (value: number) => Math.round(value * 1000) / 1000;
@@ -106,6 +112,49 @@ export function matrixNodes(frame: Box): ArrangementNode[] {
     const x = square.x + inset + (index % 2) * (size + gap), y = square.y + inset + Math.floor(index / 2) * (size + gap);
     return { index, box: roundBox({ x, y, width: size, height: size }), preset: 'roundRect' as const, adjust: ROUND_RECT_ADJUST, radius: round(radius),
       textBox: roundBox({ x: x + text, y: y + text, width: size - 2 * text, height: size - 2 * text }) };
+  });
+}
+
+/** A rounded rectangle node of `box` with corner `radius`, its text in the rectangle's own text rectangle (DrawingML roundRect). */
+function roundNode(index: number, box: Box, radius: number): ArrangementNode {
+  const r = Math.min(radius, Math.min(box.width, box.height) / 2), inset = ROUND_RECT_TEXT_INSET * r;
+  return { index, box: roundBox(box), preset: 'roundRect', adjust: Math.round(r / Math.min(box.width, box.height) * 100000), radius: round(r),
+    textBox: roundBox({ x: box.x + inset, y: box.y + inset, width: box.width - 2 * inset, height: box.height - 2 * inset }) };
+}
+
+/** OPF's pyramid, at its start: the share of the area's width the steps take, at most this many times its height. */
+export const PYRAMID_STEPS_SHARE = .4, PYRAMID_STEPS_ASPECT = 1.6;
+/**
+ * OPF's own pyramid design, drawn where PowerPoint's does not hold the entries at the list's size: the levels as a stepped pyramid of
+ * rounded bars at the start of `area` (level i of n is i/n of the steps' width, centered on one axis, `gap` apart), and each entry's
+ * text beside its level, in one column across the rest of the area, vertically centered on its level.
+ */
+export function pyramidSteps(area: Box, count: number, gap: number, radius: number): ArrangementNode[] {
+  const n = Math.max(1, Math.floor(count)), width = Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
+  const height = (area.height - (n - 1) * gap) / n, axis = area.x + width / 2, column = area.x + width + 2 * gap;
+  return Array.from({ length: n }, (_, index) => {
+    const w = width * (index + 1) / n, y = area.y + index * (height + gap);
+    return { ...roundNode(index, { x: axis - w / 2, y, width: w, height }, radius), textBox: roundBox({ x: column, y, width: area.x + area.width - column, height }), beside: true as const };
+  });
+}
+
+/** OPF's own matrix design: four rounded quadrants filling `area` two by two, `gap` apart (rectangular where the area is). */
+export function matrixQuadrants(area: Box, gap: number): ArrangementNode[] {
+  const width = (area.width - gap) / 2, height = (area.height - gap) / 2;
+  return [0, 1, 2, 3].map(index => roundNode(index, { x: area.x + (index % 2) * (width + gap), y: area.y + Math.floor(index / 2) * (height + gap), width, height },
+    Math.min(width, height) * ROUND_RECT_ADJUST / 100000));
+}
+
+/**
+ * The grid of cards a matrix of other than four entries draws: `columns` cards a row (core cardGridColumns), every row full but the
+ * last, whose cards keep the others' width and are centered; the cards fill `area`, `gap` apart, with corner `radius`.
+ */
+export function cardNodes(area: Box, count: number, columns: number, gap: number, radius: number): ArrangementNode[] {
+  const rows = Math.ceil(count / columns), width = (area.width - (columns - 1) * gap) / columns, height = (area.height - (rows - 1) * gap) / rows;
+  return Array.from({ length: count }, (_, index) => {
+    const row = Math.floor(index / columns), inRow = row === rows - 1 ? count - row * columns : columns, column = index - row * columns;
+    const start = area.x + (area.width - (inRow * width + (inRow - 1) * gap)) / 2;
+    return roundNode(index, { x: start + column * (width + gap), y: area.y + row * (height + gap), width, height }, radius);
   });
 }
 
@@ -162,6 +211,17 @@ export const SMART_ART_DOMAIN = Object.freeze({
    */
   slack: .04,
 });
+
+/**
+ * The writing of an arrangement's entries, as the domain reads it: right to left (Arabic, Hebrew and the other right-to-left scripts),
+ * Chinese or Japanese (`cjk`), another script than Latin (`other`), or Latin (no `script`).
+ */
+export function smartArtScript(texts: readonly string[]): { rtl: boolean; script?: 'cjk' | 'other' } {
+  const text = texts.join('');
+  const rtl = /[\p{Script=Arabic}\p{Script=Hebrew}\p{Script=Syriac}\p{Script=Thaana}\p{Script=Nko}]/u.test(text);
+  if (/^[\p{Script=Latin}\p{Script=Common}\p{Script=Inherited}]*$/u.test(text)) return { rtl };
+  return { rtl, script: /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(text) ? 'cjk' : 'other' };
+}
 
 /** The facts of one composed arrangement the domain is checked on (ComposedArrangement.smartArt, the frame and the text). */
 export interface SmartArtCandidate {

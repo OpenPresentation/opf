@@ -997,17 +997,19 @@ function renderArrangements(bound, options) {
   if (!arrangements?.length) return '';
   const roles = bound.design.roles, paint = arrangementPaint(bound.design.colors.primary, roles.background, roles.text, colorContrast, applyColorTransform), n = stableNumber;
   return arrangements.map(arrangement => {
-    const parts = [], stroke = {stroke: paint.line.hex, 'stroke-width': n(arrangement.lineWidth), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8};
+    // A card grid (a matrix of other than four entries) is drawn in the card neutral with its border, as every OPF card.
+    const card = arrangement.paint === 'card', fill = card ? roles.neutrals.card.hex : paint.fill.hex;
+    const parts = [], stroke = {stroke: card ? roles.neutrals.cardBorder.hex : paint.line.hex, 'stroke-width': n(arrangement.lineWidth), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8};
     if (arrangement.background) {
       const {x, y, width, height} = arrangement.background;
       parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
     }
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
-      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill: paint.fill.hex, ...stroke, ...trace}));
-      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill: paint.fill.hex, ...stroke, ...trace}));
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
     }
-    return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-region': arrangement.region} : {}, parts.join(''));
+    return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-arrangement-design': arrangement.design, 'data-opf-region': arrangement.region} : {}, parts.join(''));
   }).join('\n');
 }
 // LH-14: core's icons (geometry.icons) on their chips, over the cards they sit on, as the PPTX export draws them: the chip a circle in
@@ -1071,7 +1073,8 @@ function renderSlideContent(bound, width, height, options) {
   const onSurface=emphasis ? emphasisBound(bound, emphasisSurface(bound.design.colorScheme, bound.design.roles)) : undefined;
   let surfaceDrawn=false,previousFrame;
   // SH-09: the entries of a pyramid or matrix (geometry.arrangements) are drawn on its nodes, in the color arrangementPaint reads on the primary.
-  const arranged=new Set((bound.geometry.arrangements??[]).map(arrangement=>arrangement.path));
+  // Only entries drawn on their nodes take the color that reads on the primary; beside a level or on a card they keep the slide's.
+  const arranged=new Set((bound.geometry.arrangements??[]).filter(arrangement=>arrangement.text==='node').map(arrangement=>arrangement.path));
   const onNodes=arranged.size ? {...bound,design:{...bound.design,colors:{...bound.design.colors,text:arrangementPaint(bound.design.colors.primary,bound.design.roles.background,bound.design.roles.text,colorContrast,applyColorTransform).text.hex}}} : undefined;
   return bound.geometry.items.map(item => {
     const itemBound=item.emphasis&&onSurface ? onSurface : arranged.has(item.path) ? onNodes : bound;
@@ -1197,7 +1200,7 @@ function listEntriesSvg(item, fit, bound, options) {
   const children=[];
   // design.listBullet=image: core attaches the icon logo as item.bulletImage and its box (entry.bulletBox: 0.65 em, as PowerPoint draws a:buBlip). An icon that cannot be drawn keeps the glyph marker.
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
-  const arranged=bound.geometry.arrangements?.some(arrangement=>arrangement.path===item.path)===true;
+  const arranged=bound.geometry.arrangements?.find(arrangement=>arrangement.path===item.path)?.align==='center';
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}

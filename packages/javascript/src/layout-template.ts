@@ -58,7 +58,7 @@ export interface LayoutRegion {
   sequence?: 'steps' | 'numbered';
   /**
    * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
-   * (four quadrants in a square, at most four entries). Absent: the list draws as a list.
+   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). Absent: a list.
    */
   arrangement?: 'pyramid' | 'matrix';
   anchor: RegionAnchor;
