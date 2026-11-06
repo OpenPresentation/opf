@@ -3356,12 +3356,6 @@
                 },
                 {
                   "required": ["diagram"]
-                },
-                {
-                  "required": ["shape"]
-                },
-                {
-                  "required": ["path"]
                 }
               ]
             }

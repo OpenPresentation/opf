@@ -55,7 +55,7 @@ test('a photo is a circle three footer font sizes wide at the start edge, beside
   assert.equal(photo.value,'priya.jpg');
   assert.equal(photo.box.width,photo.box.height);
   assert.equal(photo.box.width,3*footer.fit.fontSize);
-  assert.equal(photo.shape.kind,'circle');
+  assert.equal(photo.shape.kind,'ellipse');
   assert.equal(photo.shape.preset,'ellipse');
   assert.match(photo.shape.path,/^M/);
   // Start edge of the inset area; the footer text takes the rest of the width.

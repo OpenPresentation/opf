@@ -302,7 +302,8 @@ function validateContentPayload(
   };
   // SH-02: shape options on anything but a shape block.
   const shapeOptionIssues = (reason: string, params: Record<string, unknown> = {}) => {
-    for (const field of shapeOptionFields) if (hasOwn(value, field)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on a shape block; ${reason}`, { code: "shape-option-unsupported-payload", field, ...params }));
+    // A slide's own `hidden` hides the slide.
+    for (const field of shapeOptionFields) if (hasOwn(value, field) && !(field === "hidden" && options.slideRoot)) issues.push(semanticIssue(pathFor(path, field), `${field} is only valid on a shape block; ${reason}`, { code: "shape-option-unsupported-payload", field, ...params }));
   };
   if (hasOwn(value, "placement") && !options.topLevel && !hasBlocks && explicitType !== "group" && inferredKinds(value).includes("image")) {
     issues.push(semanticIssue(pathFor(path, "placement"), "placement is only valid on a top-level block (slides.N.blocks.I); a block inside a group or a promoted region cannot bleed to a slide edge", { code: "image-placement-invalid" }));
@@ -312,7 +313,8 @@ function validateContentPayload(
     imageOptionIssues("a group cannot carry them");
     shapeOptionIssues("a group cannot carry them");
     if (explicitType !== undefined && explicitType !== "group") issues.push(semanticIssue(path, "a group must use type 'group' or omit type"));
-    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type");
+    // SH-02: a group's `shape` is reported as an image option (image-option-unsupported-payload).
+    const incompatible = payloadFields.filter(field => field !== "blocks" && field !== "type" && field !== "shape");
     if (incompatible.length) issues.push(semanticIssue(path, "blocks cannot be mixed with leaf payload fields", { fields: incompatible }));
     if (!Array.isArray(value.blocks) || (value.blocks.length === 0 && !options.slideRoot)) issues.push(semanticIssue(pathFor(path, "blocks"), "a group requires at least one block"));
     if (Array.isArray(value.blocks)) value.blocks.forEach((block, index) => {

@@ -156,7 +156,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
       ['a', 'primary', 'none', 1, 'collapse', 'top', 1, false],
       ['b', 'primary', 'auto', 6, 'collapse', 'top', 1, false],
     ]);
-    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'group']);
+    assert.deepEqual(template.regions[1].accepts, ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group']);
     // overflowRegion: the first primary region whose flow is not none.
     assert.equal(template.overflowRegion, 'b');
   });

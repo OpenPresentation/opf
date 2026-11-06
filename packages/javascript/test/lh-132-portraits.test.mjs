@@ -24,7 +24,7 @@ for (const direction of ['ltr', 'rtl']) {
     for (const [index, image] of images.entries()) {
       const card = image.frameBox, text = words[index];
       assert.ok(card && sameBox(card, text.frameBox), 'the picture and the text share one card');
-      assert.equal(image.image.shape.kind, 'rounded');
+      assert.equal(image.image.shape.kind, 'roundRect');
       assert.equal(image.image.fit, 'cover');
       assert.deepEqual(image.image.focus, { x: 0.5, y: PORTRAIT_FOCUS_Y });
       assert.ok(image.image.box.height >= image.image.box.width * 0.75 - 0.5, 'never flatter than 4:3');
@@ -44,7 +44,7 @@ for (const direction of ['ltr', 'rtl']) {
     assert.deepEqual(findings(result), []);
     for (const [index, image] of pictures(result).entries()) {
       const text = texts(result)[index], card = image.frameBox;
-      assert.equal(image.image.shape.kind, 'rounded');
+      assert.equal(image.image.shape.kind, 'roundRect');
       const inset = image.image.box.x - card.x < card.width / 2 ? image.image.box.x - card.x : card.x + card.width - image.image.box.x - image.image.box.width;
       const share = image.image.box.width / (card.width - 2 * inset);
       assert.ok(share >= PORTRAIT_SIDE_SHARES.at(-1) - 0.01 && share <= PORTRAIT_SIDE_SHARE + 0.01, `30% to 40% of the card: ${share}`);
@@ -71,16 +71,16 @@ test('LH-132 review: a team whose portrait would cost text or a readable column 
 });
 
 test('LH-132: eight people keep the avatar; the author chooses with portrait', () => {
-  for (const image of pictures(team(8))) assert.equal(image.image.shape.kind, 'circle');
-  for (const image of pictures(team(3, 'avatar'))) assert.equal(image.image.shape.kind, 'circle');
+  for (const image of pictures(team(8))) assert.equal(image.image.shape.kind, 'ellipse');
+  for (const image of pictures(team(3, 'avatar'))) assert.equal(image.image.shape.kind, 'ellipse');
   const side = team(4, 'side');
   for (const [index, image] of pictures(side).entries()) {
-    assert.equal(image.image.shape.kind, 'rounded');
+    assert.equal(image.image.shape.kind, 'roundRect');
     assert.ok(image.image.box.x + image.image.box.width <= texts(side)[index].box.x + 0.5, 'portrait: side puts it beside the text');
   }
   // An authored focus and shape win.
   const own = composeSlide({ title: 'The team', blocks: names.slice(0, 4).map((entry, index) => index ? person(entry) : { ...person(entry), blocks: [{ image: { src: face, alt: 'A' }, shape: 'rect', focus: { x: 0.2, y: 0.1 } }, person(entry).blocks[1]] }) }, { layout: layouts.team });
-  assert.equal(pictures(own)[0].image.shape.kind, 'rectangle');
+  assert.equal(pictures(own)[0].image.shape.kind, 'rect');
   assert.deepEqual(pictures(own)[0].image.focus, { x: 0.2, y: 0.1 });
 });
 

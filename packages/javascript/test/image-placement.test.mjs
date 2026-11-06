@@ -50,7 +50,7 @@ test('inset frames the image inside the slide padding of its band; treatments ap
   assert.equal(image.box.width, (720 - 2 * padding) * 0.5);
   assert.equal(image.box.x + image.box.width / 2, 960);
   assert.equal(image.shape.preset, 'roundRect');
-  assert.equal(image.border.width, 12);
+  assert.equal(image.stroke.width, 12);
 });
 
 test('bands are taken in block order; a second block on a used edge flows as content', () => {

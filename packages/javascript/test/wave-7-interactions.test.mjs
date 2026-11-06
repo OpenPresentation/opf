@@ -87,11 +87,11 @@ for (const [language, text] of Object.entries(TEXT)) {
     const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse' }, { items: [{ text: name, description: text.role }] }] });
     const team = (extra, first) => compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.map((name, index) => index === 0 && first ? first(name) : person(name, index, extra)) }, language));
     const portraits = team({});
-    assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'rounded'), 'portraits on the person cards');
+    assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect'), 'portraits on the person cards');
     // An authored rectangle keeps its shape and focus: LH-74 does not make it fill a card.
     const own = team({}, (name) => ({ ...person(name, 0), blocks: [{ image: { src: face, alt: name }, shape: 'rect', focus: { x: 0.2, y: 0.1 } }, person(name, 0).blocks[1]] }));
     const first = own.items.find((item) => item.image);
-    assert.equal(first.image.shape.kind, 'rectangle');
+    assert.equal(first.image.shape.kind, 'rect');
     assert.deepEqual(first.image.focus, { x: 0.2, y: 0.1 });
     // Group icons on people: the portraits stay, the chips are reported, no text is smaller than without the icons.
     const iconned = team({ icon: 'brand:star' });
@@ -100,7 +100,7 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.equal(iconned.diagnostics.filter((entry) => entry.code === 'icon-dropped').length, text.names.length);
     // LH-74 still fills a card with a lone picture that is no person.
     const pictures = compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.slice(0, 3).map((name) => ({ region: 'people', image: { src: face, alt: name }, fit: 'cover' })) }, language));
-    assert.ok(pictures.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'rounded' && !item.frameBox));
+    assert.ok(pictures.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect' && !item.frameBox));
   });
 
   test(`LH-69 with LH-14 (${direction}): a lone label with an icon keeps its display word, the rule starts at the word`, () => {

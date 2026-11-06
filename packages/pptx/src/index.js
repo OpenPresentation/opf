@@ -431,6 +431,7 @@ export async function toPptx(input, options = {}) {
   context.slideSchemeColors = [];
   // SH-02: the native parts of each shape block, by object name (src/shape-blocks.js), written into the finished slide parts.
   context.shapeBlocks = new Map();
+  context.shapeSchemeColors = new Map();
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
@@ -2974,8 +2975,14 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
     const raw = exportColor(entry, context, fallback).replace(/^#/, '');
     return { hex: normalizeHex(raw.slice(0, 6), fallback), alpha: /^[0-9a-f]{8}$/i.test(raw) ? parseInt(raw.slice(6), 16) / 255 : 1 };
   };
+  // The slide's table is built again with its context, so the shape's derived colors are kept apart and merged when the part is written.
   const table = deck.slideSchemeColors?.[slideIndex]?.table;
-  if (table) addTransformedColors(table, reference => exportColor(reference, context, '000000'), shape.fill, shape.stroke, shape.styleRef, shape.textColor, shape.textBackdrop);
+  if (table) {
+    const own = deck.shapeSchemeColors.get(slideIndex) ?? new Map(), view = new Map([...table, ...own]);
+    addTransformedColors(view, reference => exportColor(reference, context, '000000'), shape.fill, shape.stroke, shape.styleRef, shape.textColor, shape.textBackdrop);
+    for (const [hex, entry] of view) if (!table.has(hex)) own.set(hex, entry);
+    deck.shapeSchemeColors.set(slideIndex, own);
+  }
   const backdrop = shape.textBackdrop === undefined ? `#${normalizeHex(context.colors.background)}` : `#${paint(shape.textBackdrop, palette.background).hex}`;
   const textHex = normalizeHex(textColorForFill(backdrop, `#${paint(shape.textColor, normalizeHex(context.colors.text)).hex}`));
   const fit = item.text, size = fit ? fit.fontSize * .75 : 18;
@@ -5433,8 +5440,10 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     // RR-96: literal colors that are scheme colors become schemeClr (with lumMod/lumOff for the derived neutrals).
     if (/^ppt\/(?:slides\/slide|charts\/chart(?:Ex)?|charts\/style)\d+\.xml$/.test(path)) {
-      const entry = context.slideSchemeColors[context.partSlides.get(path) ?? context.styleSlides.get(path)];
-      if (entry) xml = writeSchemeColors(xml, entry.table, entry.keep);
+      const index = context.partSlides.get(path) ?? context.styleSlides.get(path), entry = context.slideSchemeColors[index];
+      // SH-02: with the derived colors of the slide's shape styles (addShapeItem).
+      const shapeColors = context.shapeSchemeColors.get(index);
+      if (entry) xml = writeSchemeColors(xml, shapeColors?.size ? new Map([...entry.table, ...[...shapeColors].filter(([hex]) => !entry.table.has(hex))]) : entry.table, entry.keep);
     } else if (/^ppt\/(?:slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/.test(path)) xml = writeSchemeColors(xml, context.deckSchemeColors.table, context.deckSchemeColors.keep);
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);

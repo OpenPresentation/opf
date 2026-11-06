@@ -68,6 +68,8 @@ export const PATTERN_PHRASES: Readonly<Record<string, PatternPhrase>> = Object.f
   "^[a-zA-Z0-9_-]+$": { what: "an id of letters, digits, hyphens and underscores, like `hero_1`", next: "remove spaces and other punctuation." },
   "^var:[a-z][a-z0-9-]*$": { what: "a variable reference like `var:brand`", next: "write `var:` and the id of a variable under `variables`." },
   "^var:organization(\\.[A-Za-z0-9_-]+)?\\.logo(\\.(full|stacked|icon|wordmark))?$": { what: "an organization logo reference like `var:organization.logo.full`", next: "write `var:organization.logo` and, if you want, `.full`, `.stacked`, `.icon` or `.wordmark`." },
+  "^\\s*-?[0-9.]+([ ,]+-?[0-9.]+){3}\\s*$": { what: "a viewBox of four numbers, `minX minY width height`, like `0 0 24 24`", next: "write four numbers separated by spaces." },
+  "^[a-z][A-Za-z0-9]*$": { what: "an adjust value name like `adj` or `adj1` (a letter, then letters and digits)", next: "use the name of one of the preset's adjust values (docs/shapes.md lists them)." },
   "^\\d{4}-\\d{2}-\\d{2}$": { what: "a date written year-month-day, like `2026-10-24`", next: "write the date as YYYY-MM-DD." },
   "^(?:https?://|mailto:|tel:)\\S+$": { what: "a web, email or phone address (`https://…`, `mailto:…` or `tel:…`)", next: "start with https://, mailto: or tel:, and leave out spaces." },
   "^(https?://|mailto:|tel:)\\S+$": { what: "a web, email or phone address (`https://…`, `mailto:…` or `tel:…`)", next: "start with https://, mailto: or tel:, and leave out spaces." },

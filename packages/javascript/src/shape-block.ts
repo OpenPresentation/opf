@@ -8,7 +8,7 @@
  * The same stroke vocabulary is a picture's line (`stroke` on an image block, renamed from `border`), and the preset masks of
  * image blocks come from the same geometry (`presetMask`).
  */
-import { adjustToDrawingML, customGeometry, isPresetShape, presetAdjustments, presetGeometry, type CustomPathInput, type ShapePath, type ShapePathFill } from './shape-geometry.js';
+import { adjustToDrawingML, customGeometry, isPresetShape, presetAdjustments, presetGeometry, type CustomPathInput, type ShapeGeometry, type ShapePath, type ShapePathFill } from './shape-geometry.js';
 
 interface Box { x: number; y: number; width: number; height: number }
 type Rec = Record<string, any>;
@@ -342,7 +342,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
   box = { x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) };
   const w = Math.max(box.width, 1e-6), h = Math.max(box.height, 1e-6);
   const adjust = preset ? validAdjust(preset, host.adjust, w, h) : {};
-  let geometry;
+  let geometry: ShapeGeometry;
   try { geometry = preset ? presetGeometry(preset, w, h, adjust) : customGeometry(custom!, w, h); }
   catch { geometry = presetGeometry('rect', w, h); }
   const paths = geometry.paths.map(path => pathIn(path, box));
