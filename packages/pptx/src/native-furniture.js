@@ -12,11 +12,12 @@
 // Geometry never moves: a native slide placeholder carries the explicit `a:xfrm`
 // core composed (exactly the box the tagged shape had), so preview, export and the
 // parity harness agree. The master and layout placeholders are the defaults for
-// footers a user adds natively; they sit where the first slide's native part sits,
-// or where core would draw a default footer when no slide has one.
+// footers a user adds natively; they sit where core draws that part in the deck's
+// footer, on one baseline (RR-102, index.js masterFooterGeometry), else where the
+// first slide's native part sits, else where core draws a default footer.
 
 import {XMLParser} from 'fast-xml-parser';
-import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatDate, hasSlideNumberField, isBareSlideNumber, slideNumberTemplate} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, FIELD_LANGUAGE, dateFormatOfField, formatDate, hasSlideNumberField, isBareSlideNumber, slideNumberTemplate} from './furniture-fields.js';
 
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -35,8 +36,9 @@ export const isNativePlaceholderType = value => Object.hasOwn(NATIVE_PLACEHOLDER
 /**
  * The placeholder type a core footer part maps to: a date is `dt`; a zone `text` with a slide-number field
  * (`{{slide.number}}`) is `sldNum`, its words around the field fixed runs; any other zone `text` is `ftr`.
- * With `staticNumbers` (`slideNumberFields: 'static'`, the default, RR-91) a number with words around it is written as fixed text in an
- * ordinary shape, so it has no placeholder: Keynote shows only the number of a slide-number placeholder or field.
+ * With `staticNumbers` (`slideNumberFields: 'static'`, for Keynote targets, RR-91; 'live' is the default since RR-102) a number with
+ * words around it is written as fixed text in an ordinary shape, so it has no placeholder: Keynote shows only the number of a slide-number
+ * placeholder or field.
  */
 export function nativePlaceholderForPart(part, {staticNumbers = false} = {}) {
   if (part.type !== 'text') return undefined;
@@ -142,6 +144,9 @@ function furnitureRunStyle(slideXmls, names) {
 }
 
 function placeholderGeometry(ph, info) {
+  // RR-102: where core would draw the part in the deck's footer, all three on one baseline (index.js masterFooterGeometry).
+  const composed = info.geometry?.get(ph);
+  if (composed) return composed;
   const native = info.first.get(ph);
   if (native) return native;
   const fallback = info.defaults?.get(ph);
@@ -158,9 +163,17 @@ function defRunProperties(style, geometry, extra) {
   return `<a:defRPr sz="${sz}"${extra}>${style?.inner ?? ''}</a:defRPr>`;
 }
 
-function fieldRun(ph, id, text) {
+// The run properties of a date field: the deck language (written en-US, which the deck-language pass rewrites), or English (United
+// States) kept with an altLang when no field of the deck's language shows the deck's date pattern (RR-102).
+const dateRunProperties = field => field?.ownLang ? `<a:rPr lang="${FIELD_LANGUAGE}" altLang="${FIELD_LANGUAGE}"/>` : '<a:rPr lang="en-US"/>';
+
+// RR-102: in a deck whose footer has a current date the master and layout date is that field (`info.dateField`), so a date turned on
+// in Insert > Header & Footer is the date OPF draws; otherwise it is datetimeFigureOut, as in PowerPoint's own masters.
+function fieldRun(ph, id, text, info) {
   if (ph === 'ftr') return '<a:endParaRPr lang="en-US"/>';
-  return `<a:fld id="${id}" type="${ph === 'dt' ? 'datetimeFigureOut' : 'slidenum'}"><a:rPr lang="en-US"/><a:t>${xmlEscape(text)}</a:t></a:fld><a:endParaRPr lang="en-US"/>`;
+  const date = ph === 'dt' ? info?.dateField : undefined;
+  const type = ph === 'dt' ? date?.type ?? 'datetimeFigureOut' : 'slidenum';
+  return `<a:fld id="${id}" type="${type}">${ph === 'dt' ? dateRunProperties(date) : '<a:rPr lang="en-US"/>'}<a:t>${xmlEscape(text)}</a:t></a:fld><a:endParaRPr lang="en-US"/>`;
 }
 
 function masterShape(ph, order, info, style) {
@@ -168,16 +181,17 @@ function masterShape(ph, order, info, style) {
   return `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${properties.name} ${id - 1}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>` +
     `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.masterIdx}"/></p:nvPr></p:nvSpPr>` +
     `<p:spPr><a:xfrm><a:off x="${geometry.x}" y="${geometry.y}"/><a:ext cx="${geometry.cx}" cy="${geometry.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>` +
-    `<p:txBody><a:bodyPr vert="horz" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>` +
+    // A part beside another in its zone's row (a date after the organization name) is as wide as its words and does not wrap.
+    `<p:txBody><a:bodyPr vert="horz"${geometry.noWrap ? ' wrap="none"' : ''} lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="t"/>` +
     `<a:lstStyle><a:lvl1pPr algn="${geometry.algn}">${defRunProperties(style, geometry, '')}</a:lvl1pPr></a:lstStyle>` +
-    `<a:p>${fieldRun(ph, guid('0001', order + 1), ph === 'dt' ? info.dateText : '‹#›')}</a:p></p:txBody></p:sp>`;
+    `<a:p>${fieldRun(ph, guid('0001', order + 1), ph === 'dt' ? info.dateText : '‹#›', info)}</a:p></p:txBody></p:sp>`;
 }
 
 function layoutShape(ph, order, info) {
   const properties = NATIVE_PLACEHOLDERS[ph], id = order + 2;
   return `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="${properties.name} ${id - 1}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>` +
     `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.idx}"/></p:nvPr></p:nvSpPr><p:spPr/>` +
-    `<p:txBody><a:bodyPr/><a:lstStyle/><a:p>${fieldRun(ph, guid('0002', order + 1), ph === 'dt' ? info.dateText : '‹#›')}</a:p></p:txBody></p:sp>`;
+    `<p:txBody><a:bodyPr/><a:lstStyle/><a:p>${fieldRun(ph, guid('0002', order + 1), ph === 'dt' ? info.dateText : '‹#›', info)}</a:p></p:txBody></p:sp>`;
 }
 
 const flag = value => value ? '1' : '0';
@@ -197,8 +211,9 @@ function insertPlaceholders(xml, shapes, part) {
  * - Slide master and layouts: `dt`, `ftr` and `sldNum` placeholders and a
  *   `p:hf` whose flags say which the deck uses (`hdr` is 0: slides have no
  *   header placeholder).
- * - Notes master: PowerPoint's own placeholders stay; `p:hf` records that the
- *   notes pages carry a page number only, as the generated notes slides do.
+ * - Notes master and notes pages (RR-102, Insert > Header & Footer > Notes and Handouts): the page number, as PowerPoint's
+ *   default; the footer text and date the slides show as placeholders (`info.notes`, the first of each), on the notes master and as Footer
+ *   and Date placeholders on every notes page; never a header (OPF has none for notes).
  */
 export function writeNativeMasters(paths, read, write, info) {
   const slideXmls = paths.filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0])).map(path => dec.decode(read(path)));
@@ -218,22 +233,51 @@ export function writeNativeMasters(paths, read, write, info) {
     xml = /<p:hf\b[^>]*\/>/.test(xml) ? xml.replace(/<p:hf\b[^>]*\/>/, flags) : xml.replace('</p:clrMapOvr>', `</p:clrMapOvr>${flags}`);
     write(path, enc.encode(xml));
   }
+  const notesText = notesParagraphs(info.notes);
   for (const path of paths.filter(path => /^ppt\/notesMasters\/notesMaster\d+\.xml$/.test(path))) {
     let xml = dec.decode(read(path));
-    const notes = '<p:hf hdr="0" ftr="0" dt="0"/>';
+    const notes = `<p:hf hdr="0" ftr="${flag(notesText.ftr)}" dt="${flag(notesText.dt)}"/>`;
     xml = /<p:hf\b[^>]*\/>/.test(xml) ? xml.replace(/<p:hf\b[^>]*\/>/, notes) : xml.replace(/(<p:clrMap\b[^>]*\/>)/, `$1${notes}`);
     if (!xml.includes(notes)) throw new Error('Notes master header/footer flags could not be written.');
+    // The master's own placeholders carry the words, so the dialog shows them.
+    xml = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+      const type = shape.match(/<p:ph\b[^>]*\btype="(dt|ftr)"/)?.[1];
+      return type && notesText[type] ? shape.replace(/<a:p>[\s\S]*<\/a:p>/, () => notesText[type]) : shape;
+    });
     write(path, enc.encode(xml));
+  }
+  if (!notesText.ftr && !notesText.dt) return;
+  for (const path of paths.filter(path => /^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(path))) {
+    const xml = dec.decode(read(path));
+    if (/<p:ph\b[^>]*\btype="(?:dt|ftr)"/.test(xml)) continue;
+    let id = Math.max(1, ...[...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match => Number(match[1])));
+    const page = (type, name, idx) => `<p:sp><p:nvSpPr><p:cNvPr id="${++id}" name="${name} ${id - 1}"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>` +
+      `<p:nvPr><p:ph type="${type}"${type === 'ftr' ? ' sz="quarter"' : ''} idx="${idx}"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/>${notesText[type]}</p:txBody></p:sp>`;
+    const shapes = (notesText.dt ? page('dt', 'Date Placeholder', 11) : '') + (notesText.ftr ? page('ftr', 'Footer Placeholder', 12) : '');
+    const end = xml.indexOf('</p:spTree>');
+    if (end < 0) throw new Error(`${path} has no shape tree.`);
+    write(path, enc.encode(xml.slice(0, end) + shapes + xml.slice(end)));
   }
 }
 
-export const nativeDateText = date => formatDate(date ?? '', DEFAULT_DATE_FORMAT) ?? formatDate('2026-01-01', DEFAULT_DATE_FORMAT);
+// The paragraph of the notes Footer and Date (`notes`: {footer, date: {text, type?, ownLang?}}), absent for a part the deck lacks.
+function notesParagraphs(notes) {
+  const out = {};
+  if (typeof notes?.footer === 'string' && notes.footer) out.ftr = `<a:p><a:r><a:rPr lang="en-US"/><a:t>${xmlEscape(notes.footer)}</a:t></a:r></a:p>`;
+  const date = notes?.date;
+  if (typeof date?.text === 'string' && date.text) out.dt = date.type
+    ? `<a:p><a:fld id="${guid('0003', 1)}" type="${date.type}">${dateRunProperties(date)}<a:t>${xmlEscape(date.text)}</a:t></a:fld><a:endParaRPr lang="en-US"/></a:p>`
+    : `<a:p><a:r><a:rPr lang="en-US"/><a:t>${xmlEscape(date.text)}</a:t></a:r></a:p>`;
+  return out;
+}
+
+/** The cached text of a master date field: the host's date (else 2026-01-01) in `pattern`. */
+export const nativeDateText = (date, pattern = DEFAULT_DATE_FORMAT) => formatDate(date ?? '', pattern) ?? formatDate('2026-01-01', pattern) ?? formatDate('2026-01-01', DEFAULT_DATE_FORMAT);
 
 // ---------------------------------------------------------------------------
 // Import
 // ---------------------------------------------------------------------------
 
-const dateFormatForField = Object.fromEntries(Object.entries(NATIVE_DATE_FIELDS).map(([format, type]) => [type, format]));
 const REL_LAYOUT = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout';
 const REL_MASTER = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster';
 
@@ -327,7 +371,7 @@ export function readNativePlaceholders(context, claimed, relationships, readPart
       fields.push({index, zone, ph, field: properties.field, value: slideNumberTemplate(text, nativeFields), settings: {}});
     } else if (ph === 'dt') {
       if (!text.trim()) continue;
-      const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatForField[nativeFields[0].type] : undefined;
+      const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatOfField(nativeFields[0].type, nativeFields[0].lang) : undefined;
       if (pattern) fields.push({index, zone, ph, field: properties.field, value: true, settings: pattern === DEFAULT_DATE_FORMAT ? {} : {dateFormat: pattern}});
       // A fixed date, or a field with no OPF pattern (a time, the master's datetimeFigureOut), keeps its current words.
       else fields.push({index, zone, ph, field: properties.field, value: text, settings: {}});

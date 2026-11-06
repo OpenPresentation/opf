@@ -20,8 +20,8 @@ speaker) are `{{ }}` variables inside the zone's `text` (FA-31): there are no pe
 | OPF part | PowerPoint object | Notes |
 | --- | --- | --- |
 | `footer.<zone>.text` without a `{{slide.number}}` (the first one, one accepted line) | **Footer placeholder** (`ftr`, layout idx 11) | The dialog's Footer text. |
-| `footer.<zone>.date` (the first one, one line) | **Date placeholder** (`dt`, idx 10) | `date: true` with an en-US pattern is a live `datetime1`-`datetime7` field ("Update automatically"); a fixed or literal date, or a pattern with no field type, is fixed text ("Fixed"). |
-| `footer.<zone>.text` that is only `{{slide.number}}` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | The substituted number is a live `slidenum` field. With words around it (`Page `, ` of 12`) the part is an ordinary tagged shape with the number as fixed text by default ([Slide number with words around it](#slide-number-with-words-around-it-rr-91)); `slideNumberFields: 'live'` keeps the placeholder with a live field and fixed runs. |
+| `footer.<zone>.date` (the first one, one line) | **Date placeholder** (`dt`, idx 10) | `date: true` is a live `datetime1`-`datetime7` field ("Update automatically") when a field of the deck's language, else of English (United States), shows its `dateFormat` ([Dates and languages](#dates-and-languages-rr-102)); a fixed or literal date, or a pattern no field shows, is fixed text ("Fixed"). |
+| `footer.<zone>.text` with `{{slide.number}}` (the first one, one line) | **Slide Number placeholder** (`sldNum`, idx 12) | The substituted number is a live `slidenum` field, and words around it (`Page `, ` of 12`) are fixed runs beside it (the default since RR-102). With `slideNumberFields: 'static'` a number with words around it is an ordinary tagged shape with the number as fixed text ([Slide number with words around it](#slide-number-with-words-around-it-rr-91-rr-102)). |
 | every header part (text, socials, date, image) | ordinary tagged shapes, on the slide master or a layout when repeated (RR-72) | PowerPoint slides have no header placeholder (`hdr` exists on notes and handouts only). A header `{{slide.number}}` is still a live field inside its shape, which stays on each slide. |
 | footer socials, image (a logo reference included) | ordinary tagged shapes, on the slide master or a layout when repeated (RR-72) | No native object. |
 | a second footer text, date or text with a slide number in another zone | ordinary tagged shapes | One placeholder per type per slide; the second keeps its live fields. |
@@ -33,13 +33,20 @@ Each native shape is the same shape the exporter wrote before (same name `OPF fu
 The footer manifest marks such a part with `ph` (`dt`, `ftr` or `sldNum`). A slide whose `design.footer` is `false`
 (or has no such part) has no placeholder of that type, which the dialog shows as unchecked.
 
-## Slide number with words around it (RR-91)
+## Slide number with words around it (RR-91, RR-102)
 
 A footer or header text with words around `{{slide.number}}` (`{{slide.number}} / {{deck.slideCount}}`, `Page {{slide.number}}`)
-exports its number as **fixed text** by default: one run in an ordinary tagged shape (`2 / 6`), no field and no Slide Number
-placeholder (`p:hf sldNum="0"` unless another part is a bare number). That is correct in PowerPoint and Keynote at export time.
+exports its number as a **live slide-number field** by default (`slideNumberFields: 'live'`, since RR-102): the field with the
+words as fixed runs, in the Slide Number placeholder for the first footer one, so Insert > Header & Footer shows Slide number
+checked and PowerPoint renumbers the slides when they move, as in a deck built in PowerPoint. A header number keeps its field
+inside its ordinary shape. `{{deck.slideCount}}` is fixed text in every mode, because PowerPoint has no slide-count field: after
+slides are added or deleted in PowerPoint "of 12" is stale until the deck is exported again. No finding reports it (decision 23).
 
-**Why.** Keynote (Keynote Creator Studio 15.1.1, checked 2026-10-17) has no inline slide-number field: it replaces the whole
+**Keynote targets:** `toPptx(deck, {slideNumberFields: 'static'})` (`opf convert --slide-numbers static`) writes the number as fixed
+text: one run in an ordinary tagged shape (`2 / 6`), no field and no Slide Number placeholder (`p:hf sldNum="0"` unless another part
+is a bare number). That is correct in PowerPoint and Keynote at export time; RR-91 made it the default from 0.22.0 until RR-102.
+
+**Why static exists.** Keynote (Keynote Creator Studio 15.1.1, checked 2026-10-17) has no inline slide-number field: it replaces the whole
 paragraph that holds a `slidenum` field with the number, in the Slide Number placeholder and in an ordinary text box alike, so a
 live `{{slide.number}} / 6` showed only `2`. A literal run before the field (`Page `) or after it is dropped the same way; text in a
 separate paragraph or shape is kept. Moving the part from the placeholder to a plain text box therefore does not help. The total
@@ -48,13 +55,54 @@ is fixed in every mode (PowerPoint has no slide-count field), so `N / total` cou
 **Live number in both apps:** use a bare `{{slide.number}}` (the text is only the number). It keeps its live `slidenum` field in
 the Slide Number placeholder, which both apps show and update.
 
-**PowerPoint-only targets:** `toPptx(deck, {slideNumberFields: 'live'})` keeps the previous output for a number with words: the
-live field with the words as fixed runs in the Slide Number placeholder (the first footer one). Keynote shows only the digit of such
-a footer.
-
-The cost of the default: a fixed number does not follow slides reordered, added or deleted in PowerPoint; re-export from OPF to
-refresh it. The authored `{{slide.number}} / {{deck.slideCount}}` returns on import either way (the furniture manifest stores
+The cost of `static`: a fixed number does not follow slides reordered, added or deleted in PowerPoint, and the dialog shows Slide
+number unchecked; re-export from OPF to refresh it. The cost of the default: Keynote shows only the digit. The authored `{{slide.number}} / {{deck.slideCount}}` returns on import either way (the furniture manifest stores
 the template; a fixed-number export and a live one re-import to the same text).
+
+## Dates and languages (RR-102)
+
+A current date (`date: true`) is a PowerPoint date field, which Insert > Header & Footer shows as Date and time, Update
+automatically, with the field type as the selected format and the field's `lang` as the Language. PowerPoint draws a type
+differently in each language (`datetime1` is `11/6/2026` in English (United States), `06/11/2026` in English (United Kingdom),
+`06.11.2026` in German), while OPF draws `dateFormat` with English month and weekday names whatever the deck's language. So the
+exporter writes the field whose display is OPF's:
+
+1. a field of the deck's language that shows the pattern, with the deck's `lang` (the dialog shows the deck's language);
+2. else an English (United States) field that shows it, with `lang="en-US" altLang="en-US"` on that run (the dialog shows English
+   (United States), the language of the words OPF draws; the altLang keeps the deck-language pass from rewriting it);
+3. else fixed text with `furniture-date-fixed` ("Fixed" in the dialog).
+
+The lists below were read from PowerPoint 16.0.20527 for Windows through COM on 2026-11-06 (a Friday), one text box per field type
+and language. `datetime8`-`datetime13` hold a time, which no OPF pattern expresses. Only patterns OPF can draw are listed: a
+language whose month names are not English keeps its numeric patterns.
+
+| Language | `datetime1`-`datetime7` that OPF can draw |
+| --- | --- |
+| en-US | `M/d/yyyy`, `EEEE, MMMM d, yyyy`, `d MMMM yyyy`, `MMMM d, yyyy`, `d-MMM-yy`, `MMMM yy`, `MMM-yy` |
+| en-GB | `dd/MM/yyyy`, `EEEE, dd MMMM yyyy`, `d MMMM, yyyy`, `dd MMMM yyyy`, `d-MMM-yy`, `MMMM yy`, `MMM-yy` |
+| en-AU | `d/MM/yyyy`, `EEEE, d MMMM yyyy`, `d MMMM, yyyy`, `d MMMM yyyy`, `d-MMM-yy`, `MMMM yy`, `MMM-yy` |
+| en-NZ | `d/MM/yyyy`, `EEEE, d MMMM yyyy`, `d MMMM yyyy` (3 and 4), `d-MMM-yy`, `MMMM yy`, `MMM-yy` |
+| en-CA | `yyyy-MM-dd`, `EEEE, MMMM d, yyyy`, `d MMMM yyyy`, `MMMM d, yyyy`, `yy-MMM-d`, `MMMM yy`, `MMM-yy` |
+| en-IN | `dd-MM-yyyy`, `EEEE, dd MMMM yyyy`, `d MMMM yyyy`, `dd MMMM yyyy`, `d-MMM-yy`, `MMMM yy`, `MMM-yy` |
+| de-DE | 1 `dd.MM.yyyy`, 3 `dd/MM/yy`, 5 `yy-MM-dd` |
+| fr-FR, es-ES, pt-BR, pt-PT | 1 `dd/MM/yyyy`, 3 `dd.MM.yy` |
+| it-IT | 1 `dd/MM/yyyy` |
+| nl-NL | 1 `d-M-yyyy`, 3 `d/M/yy` |
+| ja-JP | 4 `yyyy年M月d日` |
+| zh-CN | 2 `yyyy年M月d日`, 6 `yyyy年M月` |
+| ko-KR | 4 `yyyy년 M월 d일`, 6 `yyyy년 M월` |
+| ar-SA, he-IL, hi-IN | none: their fields default to the Hijri, Hebrew and Saka calendars (the dialog's Calendar type) |
+
+A day shown as `6` or `06` and the year's width are observed; a month was `11`, so its width is read as the day's (the language's
+Windows short and long date patterns agree). OPF's default `M/d/yyyy` is therefore an English (United States) field in every deck
+whose language has no such field, en-GB included. Import reads a field's type in its run's `lang` (en-US when absent): a
+`datetime1` field in a German deck returns as `dateFormat: 'dd.MM.yyyy'`, and a field in a language without a list, or a time, keeps
+its current words as a literal date.
+
+A **fixed date** is "Fixed" with its words, as OPF draws them: a string with `dateFormat` (an ISO date) is formatted, a string without
+one is kept literally, an ISO string included (`2026-11-05`), because that is what the preview draws (core's rule: without
+`dateFormat` a date string is "literal, editable source text"); formatting it only in PowerPoint would make preview and export
+disagree. Add `dateFormat` to have it formatted in both.
 
 ## Literal footer text as a shape
 
@@ -131,18 +179,37 @@ do not change.
 ## Master, layout, notes master, presentation
 
 * **Slide master and layout.** Every deck, with or without a footer, gets on the master Date (idx 2), Footer (idx 3) and
-  Slide Number (idx 4) placeholders and the layout the three layout placeholders (idx 10, 11, 12) the slides point at.
-  They sit where the first slide's native part of that type sits (the whole zone band when that part shares its zone with a logo); a type no slide uses sits where core draws a default
-  footer (date left, text center, number right, composed through `composeSlide`). Their text style (size, theme colour,
-  font) is the first furniture run's, so a footer added through the dialog looks like the exported ones.
+  Slide Number (idx 4) placeholders and the layout the three layout placeholders (idx 10, 11, 12) the slides point at. A slide
+  placeholder Insert > Header & Footer adds has no `a:xfrm` and inherits the master's box, so (RR-102) each master placeholder sits
+  where OPF draws that part if the author adds it to the deck's footer (the deck's `design.footer`, else the first slide's own),
+  composed by core with the first slide's options:
+  * a type the deck's footer has is composed where it is (a footer text beside a logo spans its zone, RR-71);
+  * a missing type is added to the first empty zone in PowerPoint's order for it (date: left, center, right; footer text: center,
+    left, right; number: right, center, left); when every zone holds a part, a date joins the row of the first zone that takes it
+    clear of the words the slides draw, after what is there (`compliance-readiness-review`: after the organization name, not on
+    it), as wide as its words with `wrap="none"`; where no row has the room (a 4:3 deck's narrow zones, where core would wrap the
+    name to fit the date) it follows the start zone's words by one row gap, clear of the center text; a footer text or number goes
+    to the first zone without a text;
+  * all three share one baseline: the deck's own date, footer text or number, in that order (the box the slide shape of that part
+    has, core's placed line), so items turned on together line up, and a date added beside the footer text lines up with it.
+  Their text style (size, theme colour, font) is the first furniture run's, so a footer added through the dialog looks like the
+  exported ones. When core cannot compose the footer the placeholders fall back to the first slide's native boxes, then core's
+  default footer band.
+* **Master and layout date field.** A deck whose footer has a current date gives the master and layout Date its field (type,
+  pattern, language), so a date turned on in the dialog is OPF's date; a deck without one keeps PowerPoint's own
+  `datetimeFigureOut` (the dialog then offers its default list), which keeps every deck without a date byte-identical.
 * **`p:hf`.** Master and layout: `hdr="0"` (slides have no header placeholder) and `sldNum`, `ftr`, `dt` are `1` when at
   least one slide carries that placeholder, else `0`.
-* **Notes master.** OPF has no notes header or footer, so nothing is mapped. PowerPoint's own notes placeholders stay and
-  `<p:hf hdr="0" ftr="0" dt="0"/>` records that the notes pages carry a page number only, as the generated notes slides do
-  (Insert > Header & Footer > Notes and Handouts shows Page number only).
-* **Presentation.** There is no deck-wide header/footer setting in `presentation.xml` other than
-  `showSpecialPlsOnTitleSld` ("Don't show on title slide"). It only affects layouts typed as title layouts and the exporter
-  writes one untyped layout, so it is not written. Hiding a footer on a cover stays the slide-level `design.footer: false`.
+* **Notes and Handouts (RR-102).** OPF has no notes header or footer of its own, so the notes pages show what the deck shows: the
+  page number (PowerPoint's default, on every generated notes page), the footer text and the date the slides show as
+  placeholders (the first slide's of each; a live date as the same field, a fixed one as its words) when they show them, on the notes master's Footer and Date placeholders and as
+  Footer (idx 12) and Date (idx 11) placeholders on every notes page; never a header. `p:hf` on the notes master says which
+  (`hdr="0"`, `ftr` and `dt` `1` when the deck footer has them). Import reads only the notes body, so these never become speaker
+  notes. The handout master is not written: PowerPoint makes one when Handout Master view is opened.
+* **Presentation and "Don't show on title slide".** OPF has no option that hides furniture on covers or title slides: a cover
+  shows the deck's footer unless the slide says `design.footer: false`. So `showSpecialPlsOnTitleSld` is not written: its default
+  shows the placeholders on title layouts (the `cover` template's layout is typed `title`, RR-81), and the dialog's "Don't show
+  on title slide" is unchecked (RR-102 COM read: `SlideMaster.HeadersFooters.DisplayOnTitleSlide` is true on every deck).
 * A deck without a native footer part still gets the placeholders, at core's default footer band, with `p:hf sldNum="0" hdr="0"
   ftr="0" dt="0"`: Insert > Header & Footer works on it, Apply to All creates the placeholders on every slide at the
   master positions, and the import reads them back as the deck's footer. Its text style is the first header furniture run's,
@@ -204,6 +271,12 @@ is read where the slide manifest says it is:
 | Date format changed in the dropdown | `dateFormat` is that pattern while it is a `datetime1`-`datetime7` type |
 | Slide moved | nothing: the fields renumber in PowerPoint |
 | Footer added to a deck that had none | `design.footer` at the placeholder's zone |
+| Date turned on with Apply to All, every zone already holding a part (RR-102) | `design.footer.<zone>.date: true` in the zone of the master date (beside the footer text) |
+| Footer or number turned on on a slide whose footer OPF hid | that slide's own `design.footer` with just those parts |
+| Apply to All changes a deck footer that some slides had changed (RR-102) | the footer most slides now share (two or more) is `design.footer`; the other slides keep their own |
+
+`test/header-footer-dialog.mjs` reads five decks saved by PowerPoint after these edits (per-slide and Apply to All, full
+provenance, `provenance: false` and stripped tags, a date format), `test/fixtures/header-footer-dialog/README.md`.
 
 ## Decisions (vetoable)
 
@@ -219,7 +292,8 @@ is read where the slide manifest says it is:
    were then updated deliberately (see the measurement above).
 6. `p:hf` flags mean "some slide uses it", not "every slide": a deck whose cover hides the footer still has the footer on
    for new slides.
-7. The notes master gets flags only; `showSpecialPlsOnTitleSld` is not written (one untyped layout).
+7. `showSpecialPlsOnTitleSld` is not written: OPF never hides furniture on title slides by itself, so "Don't show on title slide"
+   stays unchecked (RR-102). The notes pages follow decision 26.
 8. Import maps a `datetime` field with no OPF pattern to literal text rather than a wrong `dateFormat`, and never infers
    `{{deck.slideCount}}` or `{{slide.section}}` from a digit or a name.
 9. (FA-31) A footer `text` with a slide number is the whole `sldNum` placeholder, words included (`Page 3 of 12`): the dialog's
@@ -270,10 +344,28 @@ is read where the slide manifest says it is:
     footer the band's top (`footerTop`, the body's lower bound) moves up or the logo crosses into the body gap. Either moves more than the
     multi-part zones (the body of every slide with a logo row), so it is left to a core composition decision.
 
+22. (RR-102) `slideNumberFields: 'live'` is the default: a number with words around it is the Slide Number placeholder with a live
+    field, as PowerPoint builds it, so the dialog shows the truth and PowerPoint renumbers; `'static'` stays for Keynote targets
+    (RR-91's reason). The owner may veto this and restore `'static'`.
+23. (RR-102) `{{deck.slideCount}}` is fixed text with no finding: at export it is right, a finding on every `N / total` deck would
+    be noise, and the README, the schema and this page say that PowerPoint has no slide-count field.
+24. (RR-102) A date field shows what OPF draws: the deck's language when it has a field for the pattern, else English (United States),
+    else fixed text. The alternative, the deck's language for every field, would make PowerPoint draw another date format than the
+    preview (an en-GB deck's `M/d/yyyy` as `06/11/2026`).
+25. (RR-102) An ISO date string without `dateFormat` stays literal ("Fixed" with `2026-11-05`), as the preview draws it.
+26. (RR-102) Notes pages carry the page number and the deck footer's text and date; the header stays off and no handout master is
+    written. A slide whose footer is hidden still has them on its notes page (the dialog's notes settings are deck-wide).
+27. (RR-102) The master placeholders share one baseline, the deck's own date, footer text or number first. In a logo row (RR-72
+    decision 21) the number OPF draws alone sits higher than the text beside the logo; the master follows the text, so a date added
+    beside it lines up, and a footer and number turned on together on a slide without the logo line up with each other.
+
 ## Not covered
 
 PowerPoint opening, editing and re-saving these files is a native check (`scratchpad/rr-11-native/manifest.json`, and for
-RR-72 the decks the furniture session hands to the native pass), not something the unit tests establish. Moving a layout
+RR-72 the decks the furniture session hands to the native pass), not something the unit tests establish. RR-102 read the dialog's
+state through COM (`HeadersFooters` per slide, the master and the notes master) and changed it through the same object model; the
+dialog window itself (its Language and Calendar type dropdowns, Apply versus Apply to All, the preview pane) is a check in
+PowerPoint's UI. Moving a layout
 placeholder in PowerPoint does not move slides that carry their own `a:xfrm`. Handout master and `hdr` text on notes pages are
 not produced. A shape added to a master or layout in PowerPoint (no OPF tag) is not imported.
 
@@ -284,7 +376,9 @@ presentation), geometry parity with core (measured and estimated fonts), the par
 inherited placeholders written the way PowerPoint writes them, older tagged exports, and determinism. `test/slide-variables.mjs`
 covers the `{{slide.number}}`, `{{deck.slideCount}}` and `{{slide.section}}` forms: native field plus fixed words, body tokens as
 fixed text, consecutive numbers on a paginated deck, the tokens through a round trip and third-party footers.
-`test/master-furniture.mjs` (RR-72) covers the master and layout parts: the logo once on the master and not on the slides, per-tone
+`test/header-footer-placeholders.mjs` (RR-102) checks the master placeholders against core's composition of a date added to a full
+footer and to a logo row, the shared baseline and the deck's date field; `test/header-footer-dialog.mjs` imports PowerPoint-saved
+dialog edits. `test/master-furniture.mjs` (RR-72) covers the master and layout parts: the logo once on the master and not on the slides, per-tone
 layouts and a one-slide tone, hidden footers, a slide's own header, content over the logo, live fields, the round trip of
 `var:organization.logo.icon` on every slide, master edits (delete, Change Picture, Hide Background Graphics, damaged tags), an
 older importer's view without `shared`, third-party masters and per-script masters. `test/helpers/master-furniture.mjs` reads the

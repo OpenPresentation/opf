@@ -5,8 +5,8 @@
 
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 
-// PowerPoint's en-US date field types (ECMA-376 ST_TextField "datetime1".."datetime7").
-// Exported runs carry lang="en-US", so these patterns are what PowerPoint displays.
+// PowerPoint's en-US date field types (ECMA-376 ST_TextField "datetime1".."datetime7"): what a field whose run
+// carries lang="en-US" displays. Other languages: LANGUAGE_DATE_FIELDS below.
 export const NATIVE_DATE_FIELDS = Object.freeze({
   'M/d/yyyy': 'datetime1',
   'EEEE, MMMM d, yyyy': 'datetime2',
@@ -18,6 +18,35 @@ export const NATIVE_DATE_FIELDS = Object.freeze({
 });
 export const DEFAULT_DATE_FORMAT = 'M/d/yyyy';
 export const DEFAULT_SLIDE_NUMBER_FORMAT = '{current}';
+
+// RR-102: what PowerPoint shows for `datetime1`..`datetime7` in each language (the field's `lang` picks the list, and Insert >
+// Header & Footer shows it as the Language), read through COM from PowerPoint 16.0.20527 for Windows on 2026-11-06: today was
+// Friday 6 November 2026, so day and year widths and names are observed and a two-digit month is read with the language's
+// day width (Windows' own pattern for the language agrees). Only patterns OPF can draw are listed: OPF's month and weekday
+// names are English, so a language with other names keeps its numeric patterns only. `datetime8`..`datetime13` hold a time,
+// which an OPF dateFormat cannot express. Arabic (Saudi Arabia), Hebrew and Hindi default to the Hijri, Hebrew and Saka
+// calendars, so none of their fields shows OPF's Gregorian date. The first type that shows a pattern wins.
+const ENGLISH_DATE_TAIL = {'d-MMM-yy': 'datetime5', 'MMMM yy': 'datetime6', 'MMM-yy': 'datetime7'};
+const LANGUAGE_DATE_FIELDS = Object.freeze({
+  'en-us': NATIVE_DATE_FIELDS,
+  'en-gb': {'dd/MM/yyyy': 'datetime1', 'EEEE, dd MMMM yyyy': 'datetime2', 'd MMMM, yyyy': 'datetime3', 'dd MMMM yyyy': 'datetime4', ...ENGLISH_DATE_TAIL},
+  'en-au': {'d/MM/yyyy': 'datetime1', 'EEEE, d MMMM yyyy': 'datetime2', 'd MMMM, yyyy': 'datetime3', 'd MMMM yyyy': 'datetime4', ...ENGLISH_DATE_TAIL},
+  'en-nz': {'d/MM/yyyy': 'datetime1', 'EEEE, d MMMM yyyy': 'datetime2', 'd MMMM yyyy': 'datetime3', ...ENGLISH_DATE_TAIL},
+  'en-ca': {'yyyy-MM-dd': 'datetime1', 'EEEE, MMMM d, yyyy': 'datetime2', 'd MMMM yyyy': 'datetime3', 'MMMM d, yyyy': 'datetime4', 'yy-MMM-d': 'datetime5', 'MMMM yy': 'datetime6', 'MMM-yy': 'datetime7'},
+  'en-in': {'dd-MM-yyyy': 'datetime1', 'EEEE, dd MMMM yyyy': 'datetime2', 'd MMMM yyyy': 'datetime3', 'dd MMMM yyyy': 'datetime4', ...ENGLISH_DATE_TAIL},
+  'de-de': {'dd.MM.yyyy': 'datetime1', 'dd/MM/yy': 'datetime3', 'yy-MM-dd': 'datetime5'},
+  'fr-fr': {'dd/MM/yyyy': 'datetime1', 'dd.MM.yy': 'datetime3'},
+  'es-es': {'dd/MM/yyyy': 'datetime1', 'dd.MM.yy': 'datetime3'},
+  'it-it': {'dd/MM/yyyy': 'datetime1'},
+  'nl-nl': {'d-M-yyyy': 'datetime1', 'd/M/yy': 'datetime3'},
+  'pt-br': {'dd/MM/yyyy': 'datetime1', 'dd.MM.yy': 'datetime3'},
+  'pt-pt': {'dd/MM/yyyy': 'datetime1', 'dd.MM.yy': 'datetime3'},
+  'ja-jp': {'yyyy年M月d日': 'datetime4'},
+  'zh-cn': {'yyyy年M月d日': 'datetime2', 'yyyy年M月': 'datetime6'},
+  'ko-kr': {'yyyy년 M월 d일': 'datetime4', 'yyyy년 M월': 'datetime6'},
+});
+/** The language of a date field no deck-language field can show: the language of OPF's English month and weekday names. */
+export const FIELD_LANGUAGE = 'en-US';
 
 const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -167,10 +196,49 @@ export function slideNumberTemplate(text, nativeFields) {
   return out + escapeSlideTokens(text.slice(cursor));
 }
 
-/** Native <a:fld> type for a core field, or null when the value must stay fixed text. */
-export function nativeFieldType(field) {
+// The same pattern spelled two ways (`yyyy年M月` and `yyyy'年'M'月'`) has one key: its tokens, literal text merged.
+function patternKey(pattern) {
+  const list = tokens(pattern);
+  if (!list) return null;
+  let key = '', literal = '';
+  for (const token of list) {
+    if (token.text !== undefined) { literal += token.text; continue; }
+    key += `${JSON.stringify(literal)}${token.letter}${token.width}`;
+    literal = '';
+  }
+  return key + JSON.stringify(literal);
+}
+const dateTable = lang => LANGUAGE_DATE_FIELDS[String(lang ?? FIELD_LANGUAGE).toLowerCase()];
+const typeIn = (table, pattern) => {
+  const key = patternKey(pattern);
+  return key === null ? undefined : Object.entries(table ?? {}).find(([candidate]) => patternKey(candidate) === key)?.[1];
+};
+
+/**
+ * RR-102: the PowerPoint date field that shows `pattern` (an OPF dateFormat): `{type, lang}`, or null when no field does.
+ * The deck's own language wins when one of its fields shows the pattern (Insert > Header & Footer then shows the deck's
+ * language); otherwise an English (United States) field shows it, the language of the words OPF draws. A pattern no field
+ * shows stays fixed text.
+ */
+export function nativeDateField(pattern = DEFAULT_DATE_FORMAT, deckLang = FIELD_LANGUAGE) {
+  const own = typeIn(dateTable(deckLang), pattern);
+  if (own) return {type: own, lang: deckLang};
+  const english = typeIn(NATIVE_DATE_FIELDS, pattern);
+  return english ? {type: english, lang: FIELD_LANGUAGE} : null;
+}
+
+/**
+ * The OPF dateFormat a PowerPoint date field shows: its type read in its language (`lang`, en-US when absent). Undefined for a
+ * time field, `datetimeFigureOut` and a language whose list is not known (its words then import as a literal date).
+ */
+export function dateFormatOfField(type, lang) {
+  return Object.entries(dateTable(lang) ?? {}).find(([, candidate]) => candidate === type)?.[0];
+}
+
+/** Native <a:fld> type for a core field, or null when the value must stay fixed text. A date's language is `deckLang`'s or en-US. */
+export function nativeFieldType(field, deckLang) {
   if (field.type === 'slideNumber') return 'slidenum';
-  if (field.type === 'date') return NATIVE_DATE_FIELDS[field.format ?? DEFAULT_DATE_FORMAT] ?? null;
+  if (field.type === 'date') return nativeDateField(field.format ?? DEFAULT_DATE_FORMAT, deckLang)?.type ?? null;
   return null;
 }
 
@@ -209,7 +277,9 @@ export function attachFurnitureFields(entries, records) {
         if (field.start < cursor) throw new Error('Overlapping furniture fields.');
         literal(record.text.slice(cursor, field.start));
         const id = `{0F0F2700-0000-4000-8000-${(++count).toString(16).toUpperCase().padStart(12, '0')}}`;
-        body += `<a:fld id="${id}" type="${field.nativeType}">${properties}<a:t>${escapeXml(record.text.slice(field.start, field.end))}</a:t></a:fld>`;
+        // RR-102: a date field in another language than the deck's carries it with an altLang, which the deck-language pass keeps.
+        const own = field.lang ? properties.replace(/\slang="[^"]*"/, ` lang="${field.lang}" altLang="${FIELD_LANGUAGE}"`) : properties;
+        body += `<a:fld id="${id}" type="${field.nativeType}">${own}<a:t>${escapeXml(record.text.slice(field.start, field.end))}</a:t></a:fld>`;
         cursor = field.end;
       }
       literal(record.text.slice(cursor));

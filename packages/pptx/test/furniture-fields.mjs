@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {unzipSync, zipSync} from 'fflate';
 import {toPptx, fromPptx} from '../dist/index.js';
-import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType, slideNumberTemplate, escapeSlideTokens, mentionsSlideToken} from '../dist/furniture-fields.js';
+import {dateFormatOfField, formatDate, nativeDateField, parseDate, furniturePartFields, lineFields, nativeFieldType, slideNumberTemplate, escapeSlideTokens, mentionsSlideToken} from '../dist/furniture-fields.js';
 import {validate} from '@openpresentation/opf';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
@@ -125,6 +125,24 @@ assert.equal(mentionsSlideToken('a {{slide.section}}'), true);
 assert.equal(mentionsSlideToken('a {{organization.name}}'), false);
 assert.equal(nativeFieldType({type: 'date', format: 'MMM-yy'}), 'datetime7');
 assert.equal(nativeFieldType({type: 'date', format: 'MMM d, yyyy'}), null);
+// RR-102: a date field in the deck's language when one of its fields shows the pattern, else en-US, else none (PowerPoint 16.0 lists).
+assert.deepEqual(nativeDateField('dd/MM/yyyy', 'en-GB'), {type: 'datetime1', lang: 'en-GB'});
+assert.deepEqual(nativeDateField('M/d/yyyy', 'en-GB'), {type: 'datetime1', lang: 'en-US'}, 'en-GB datetime1 is dd/MM/yyyy: the US pattern needs an en-US field.');
+assert.deepEqual(nativeDateField('d MMMM, yyyy', 'en-AU'), {type: 'datetime3', lang: 'en-AU'});
+assert.deepEqual(nativeDateField('yyyy-MM-dd', 'en-CA'), {type: 'datetime1', lang: 'en-CA'});
+assert.deepEqual(nativeDateField('dd.MM.yyyy', 'de-DE'), {type: 'datetime1', lang: 'de-DE'});
+assert.deepEqual(nativeDateField("yyyy'年'M'月'd'日'", 'ja-JP'), {type: 'datetime4', lang: 'ja-JP'}, 'Quoted and bare literals are one pattern.');
+assert.deepEqual(nativeDateField('yyyy年M月d日', 'ja-JP'), {type: 'datetime4', lang: 'ja-JP'});
+assert.deepEqual(nativeDateField('MMMM d, yyyy', 'de-DE'), {type: 'datetime4', lang: 'en-US'}, 'English month names are an en-US field.');
+assert.deepEqual(nativeDateField('dd/MM/yyyy', 'ar-SA'), null, 'ar-SA fields are Hijri; en-US has no dd/MM/yyyy.');
+assert.deepEqual(nativeDateField('M/d/yyyy', 'ar-SA'), {type: 'datetime1', lang: 'en-US'});
+assert.equal(nativeDateField('MMM d, yyyy', 'en-US'), null);
+assert.equal(nativeFieldType({type: 'date', format: 'dd/MM/yyyy'}, 'en-GB'), 'datetime1');
+assert.equal(dateFormatOfField('datetime1', 'en-GB'), 'dd/MM/yyyy');
+assert.equal(dateFormatOfField('datetime1'), 'M/d/yyyy', 'A field without a language reads as en-US.');
+assert.equal(dateFormatOfField('datetime1', 'EN-us'), 'M/d/yyyy');
+assert.equal(dateFormatOfField('datetime2', 'ar-SA'), undefined, 'A language with no known list keeps its words.');
+assert.equal(dateFormatOfField('datetime8', 'en-US'), undefined, 'A time is not an OPF date pattern.');
 assert.deepEqual(lineFields('Page 12', [{type: 'slideNumber', start: 5, end: 7}], [{start: 0, end: 4}, {start: 5, end: 7}], ['Page', '12']), [[], [{type: 'slideNumber', start: 0, end: 2}]]);
 assert.deepEqual(lineFields('1234', [{type: 'slideNumber', start: 0, end: 4}], [{start: 0, end: 2}, {start: 2, end: 4}], ['12', '34']), [[], []], 'A wrapped number stays fixed text.');
 
