@@ -2596,12 +2596,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
       addRichFitLines(slide, item.text, item.box, itemContext, {
-        value: item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
+        value: item.runs ?? item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
         fallback: item.field === 'tag' ? tagColor(itemContext) : item.eyebrow ? eyebrowColor(itemContext) : itemContext.textColor,
         ...(heading ? {
           objectName: index => `OPF heading ${item.path} line ${index}`,
           tag: (name, index, count, boundary) => context.headingTags.set(name, {v: 1, group: item.path, field: item.field, line: index, count, ...boundary, base: richBase(item.text, item.textStyle, item.field === 'tag' ? tagHex(itemContext) : itemContext.colors.text)})
-        } : {})
+        } : {}),
+        // LH-63: a run-in heading's bold run is core's, not the author's: the lines are tagged as plain text (as an unformatted body's are), so an
+        // unchanged export imports back as the authored string.
+        ...(item.runs ? {objectName: index => `OPF text ${item.path} line ${index}`, tag: (name, index, count, boundary) => context.plainTextTags.set(name, {v: 1, group: item.path, line: index, count, ...boundary}), keepEmpty: true} : {})
       });
     } else if (item.field === "text" && typeof item.value === "string") {
       slide.addText(item.text.lines.join("\n"), {...textBoxOptions(region, itemContext, item.text.fontSize * 0.75),...nativeFontOptions(item.textStyle),...eyebrowOptions(item.textStyle, item.text.fontSize),...(item.eyebrow ? {color: pptxColor(eyebrowColor(itemContext))} : {}),align:physicalAlignment(item.alignment, item.text.directions?.[0])});
@@ -3713,7 +3716,7 @@ function pixelBox(region) {
 // super/subscript (a citation marker is a baseline run) and http(s)/mailto links. The body's lines stay untagged; a heading or quote
 // body passes `objectName` and `tag`, which name and tag every line with the boundary between wrapped lines (a soft wrap inserts
 // nothing, a hard line break keeps its separator), recovered from the flattened text. `fallback` is the color of runs without one.
-function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag}) {
+function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag, keepEmpty = false}) {
   const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
   const runText = run => typeof run === 'string' ? run : run.text;
   const whole = typeof value === 'string' ? value : value.map(runText).join('');
@@ -3740,7 +3743,8 @@ function addRichFitLines(slide, fit, box, context, {value, path, alignment: logi
       cursor = end + (newline ? newline[0].length : 0);
     }
     // LH-12: an untagged body line is still named for its block (`OPF text <path> line N`), never PowerPoint's generic "Text N".
-    if (runs.length) slide.addText(runs, {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
+    // LH-63: a plain-text group has a shape for every line, a blank one included (keepEmpty), as an unformatted body's lines do.
+    if (runs.length || keepEmpty) slide.addText(runs.length ? runs : '', {...textBoxOptions(area, context, fit.fontSize * .75), align: alignment, fit: 'none', wrap: false, lineSpacingMultiple: 1, objectName: name ?? `OPF text ${path} line ${index}`});
   }
 }
 
@@ -4075,6 +4079,14 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
     });
   }
   if (layout.photo) await addQuotePhoto(slide, presentation, layout.photo, group, context, options);
+  // LH-78: a quote card's decorative mark, one native text box in the primary color (against the card, as a metric's value is) where core placed it,
+  // tagged into the quote's group as decoration (role 'mark') so an unchanged export imports back with the quote.
+  if (layout.mark) {
+    const mark = layout.mark, backdrop = context.cardFill ?? `#${normalizeHex(context.colors.background)}`, textHex = `#${normalizeHex(context.colors.text)}`;
+    const markHex = metricValueColor(`#${normalizeHex(context.colors.accent)}`, backdrop, textHex).toUpperCase();
+    addMeasuredPayloadText(slide, mark.text, mark.box, context, options, {path: mark.path, fit: mark.fit, textStyle: mark.style, diagnosticsHandled: true, color: markHex === textHex.toUpperCase() ? context.textColor : markHex.slice(1), quote: {group, part: layout.parts.length}});
+    context.quoteTags.set(`OPF quote ${group} part ${layout.parts.length} line 0`, {v: 1, role: 'mark', group});
+  }
   // LH-114: a pull line's accent rule, a native rectangle in the primary color where core placed it (as the preview draws it), tagged
   // into the quote's group so an unchanged export imports back with the quote.
   if (layout.rule) {

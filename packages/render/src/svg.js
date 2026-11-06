@@ -1109,7 +1109,9 @@ function renderPayload(item, box, bound, options) {
 }
 
 function renderTextPayload(item, box, bound, options) {
-  return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
+  // LH-63: a text whose first line is a run-in heading draws core's runs (item.runs: the same characters, the heading bold).
+  const value = item.runs ?? item.value;
+  return (Array.isArray(value) ? renderRichTextBox : renderTextBox)(Array.isArray(value) ? value : flattenText(value), box, bound, {
     path: item.path,
     // Core resolves one alignment per composed item for every engine, from the slide's design, the deck's design
     // and the layout record's design (SlideComposition.design).
@@ -1616,7 +1618,7 @@ function renderQuote(item, box, bound, options) {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
     // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
-    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
+    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:layout.mark?.hidden?0:-1,options});
     return renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
       fill,
@@ -1625,6 +1627,14 @@ function renderQuote(item, box, bound, options) {
   });
   // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
   if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
+  // LH-78: a quote card's decorative mark, in the primary color against the card (as a metric's value is); core places it in the room above the text.
+  if (layout.mark) {
+    const backdrop = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background, mark = layout.mark;
+    children.push(tag('g', options.trace ? {'data-opf-quote-mark': 'true'} : {}, renderTextBox(mark.text, mark.box, bound, {
+      path: item.path, fit: mark.fit, textStyle: mark.style, fontFamily: mark.requestedStyle.fontFamily,
+      fill: metricValueColor(bound.design.colors.primary, backdrop, bound.design.colors.text), diagnosticsHandled: true, options,
+    })));
+  }
   // LH-114: a pull line's accent rule, in the primary color (core places it; the PPTX export draws the same rectangle).
   if (layout.rule) children.unshift(tag('rect', {...HIDDEN, x: stableNumber(layout.rule.x), y: stableNumber(layout.rule.y), width: stableNumber(layout.rule.width), height: stableNumber(layout.rule.height), fill: bound.design.colors.primary, ...(options.trace ? {'data-opf-quote-rule': 'true'} : {})}));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
