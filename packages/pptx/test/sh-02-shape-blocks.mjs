@@ -65,7 +65,7 @@ const emu = px => Math.round(px * 9525);
 // A space core never breaks at (a figure and its unit) is a no-break space in the shape's text, so PowerPoint wraps as the preview.
 {
   const { shapes } = await exported([{ shape: 'rect', text: 'Anchored at the top with 16 px insets' }]);
-  assert.match(shapes[0], /1600a0px/);
+  assert.match(shapes[0], /16 px/);
 }
 
 {
