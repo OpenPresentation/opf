@@ -240,6 +240,26 @@ try {
 		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
 	});
 
+	await run("fits a frame as narrow as a desktop chat column: the bar wraps, nothing scrolls sideways", async () => {
+		// Claude Desktop's chat column at 125% display scaling frames the view about 860 CSS pixels wide.
+		for (const width of [860, 640, 420]) {
+			await page.evaluate((px) => {
+				document.getElementById("view").style.width = `${px}px`;
+			}, width);
+			await page.waitForTimeout(150);
+			const fit = await page.frame({ url: /\/view$/ }).evaluate(() => {
+				const send = document.getElementById("deck-send").getBoundingClientRect();
+				return { scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth, sendRight: send.right };
+			});
+			assert.ok(fit.scroll <= fit.client, `${width}px: the page is ${fit.scroll}px wide in a ${fit.client}px frame`);
+			assert.ok(fit.sendRight <= fit.client, `${width}px: Send to Claude ends at ${fit.sendRight}px`);
+			if (width === 860) await shoot("narrow-860");
+		}
+		await page.evaluate(() => {
+			document.getElementById("view").style.width = "";
+		});
+	});
+
 	await run("opens a YAML deck in the view named by the arguments, on the slide asked for, in the host's dark theme", async () => {
 		const yaml = "name: From YAML\nlanguage: en-US\nslides:\n  - title: First YAML slide\n  - title: Second YAML slide\n";
 		await open({ document: yaml, format: "yaml", view: "both", slide: 2 }, "dark");

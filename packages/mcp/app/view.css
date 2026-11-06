@@ -35,14 +35,15 @@
 	--deck-radius: var(--border-radius-md, 8px);
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--deck-bg); color: var(--deck-fg); font-family: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif); font-size: 14px; line-height: 1.4; }
+/* The view lays itself out to the frame; its panes scroll inside, the page never does (a host frame is often narrower than it looks). */
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--deck-bg); color: var(--deck-fg); font-family: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif); font-size: 14px; line-height: 1.4; }
 button { font: inherit; color: inherit; }
 button:focus-visible { outline: 2px solid var(--deck-accent); outline-offset: 2px; }
 
 #opf-deck { display: flex; flex-direction: column; height: 600px; max-height: var(--deck-max-height, none); min-height: 360px; }
 :root[data-display="fullscreen"] #opf-deck, :root[data-fixed-height="true"] #opf-deck { height: 100vh; max-height: none; }
 
-.deck-bar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid var(--deck-line); min-width: 0; }
+.deck-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-bottom: 1px solid var(--deck-line); min-width: 0; }
 .deck-title { flex: 0 1 220px; min-width: 0; overflow: hidden; }
 .deck-spacer { flex: 1 1 0; }
 .deck-tabs { display: inline-flex; border: 1px solid var(--deck-line); border-radius: var(--deck-radius); padding: 2px; gap: 2px; flex: none; }
@@ -53,6 +54,8 @@ button:focus-visible { outline: 2px solid var(--deck-accent); outline-offset: 2p
 .deck-button { border: 1px solid var(--deck-line); background: var(--deck-bg); border-radius: var(--deck-radius); padding: 5px 12px; cursor: pointer; white-space: nowrap; flex: none; }
 .deck-primary { background: var(--deck-accent); border-color: var(--deck-accent); color: var(--deck-on-accent-default); font-weight: 600; }
 .deck-button:disabled { opacity: 0.5; cursor: default; }
+.deck-icon { display: inline-flex; align-items: center; justify-content: center; padding: 5px 8px; }
+.deck-icon[data-mode="fullscreen"] svg { transform: rotate(180deg); }
 
 /* Find and replace is the editor's floating card: it sits over the panes, top left, instead of pushing the slide down. */
 .deck-find { position: absolute; top: 8px; left: 8px; width: min(560px, calc(100% - 16px)); z-index: 6; }

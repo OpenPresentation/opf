@@ -211,7 +211,10 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	root.dataset.fixedHeight = String(typeof dimensions?.height === "number");
 	if (typeof dimensions?.maxHeight === "number") shell.style.setProperty("--deck-max-height", `${dimensions.maxHeight}px`);
 	expandButton.hidden = !fullscreenOffered();
-	expandButton.textContent = context.displayMode === "fullscreen" ? "Exit full screen" : "Full screen";
+	const expandLabel = context.displayMode === "fullscreen" ? "Exit full screen" : "Full screen";
+	expandButton.setAttribute("aria-label", expandLabel);
+	expandButton.title = expandLabel;
+	expandButton.dataset.mode = context.displayMode ?? "inline";
 	sendButton.hidden = !app.getHostCapabilities()?.message;
 }
 
