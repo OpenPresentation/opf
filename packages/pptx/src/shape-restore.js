@@ -1,0 +1,160 @@
+// SH-05: what the importer settles about the shapes it read, once the document's own colors can be resolved and the content form is
+// rebuilt: the values that are only the theme style's (the fill, line, shadow and text color a style gives, which the exporter writes out
+// explicitly) go back to absent, and the overlay shapes and connectors are assembled into `slide.shapes` in the order they were drawn.
+import {isShapeBlock, shapeStyleLook, shapeTextColor} from '@openpresentation/opf/composition';
+import {EFFECT_DEFAULTS} from './effects.js';
+import {REGION_KEYS} from './content-topology.js';
+
+const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const REGION_KEY_SET = new Set(REGION_KEYS);
+const isGroup = block => object(block) && (block.type === 'group' || (block.type === undefined && Array.isArray(block.blocks)));
+const hex6 = value => typeof value === 'string' && /^#[0-9a-f]{6}/i.test(value) ? value.slice(0, 7).toUpperCase() : undefined;
+const isColor = value => typeof value === 'string' || (object(value) && value.color !== undefined && value.gradient === undefined && value.pattern === undefined);
+
+/** The shape blocks of a slide, in content order (regions by name, then blocks and groups depth first). */
+function* shapeBlocks(slide) {
+  const walk = function* (block) {
+    if (!object(block)) return;
+    if (isGroup(block)) { for (const child of Array.isArray(block.blocks) ? block.blocks : []) yield* walk(child); return; }
+    if (block.image === undefined && isShapeBlock(block)) yield block;
+  };
+  const regions = Object.keys(slide).filter(key => REGION_KEY_SET.has(key) && object(slide[key])).sort();
+  if (regions.length) { for (const key of regions) yield* walk(slide[key]); return; }
+  if (Array.isArray(slide.blocks)) for (const block of slide.blocks) yield* walk(block);
+}
+
+const near = (a, b, tolerance = 0.01) => typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= tolerance;
+
+// Runs of a shape's text without what composition draws by itself: the text color a reading shape gets, and the intense style's bold.
+function settleText(shape, same, resolve, style, look) {
+  if (shape.text === undefined || !Array.isArray(shape.text)) return;
+  const fill = shape.fill ?? look.fill;
+  const middle = stops => stops[Math.floor((stops.length - 1) / 2)]?.color;
+  const backdrop = fill === 'none' ? undefined : isColor(fill) ? fill : fill?.gradient ? middle(fill.gradient.stops) : fill?.pattern ? fill.pattern.backgroundColor ?? 'background' : undefined;
+  const background = hex6(resolve('background')), text = hex6(resolve('text')), preferred = hex6(resolve(look.text));
+  const under = backdrop === undefined ? background : hex6(resolve(backdrop));
+
+  const expected = under && preferred && text && background ? shapeTextColor(under, preferred, text, background)?.toUpperCase() : undefined;
+  const runs = shape.text.map(run => {
+    if (!object(run)) return run;
+    const next = {...run};
+    if (expected && typeof next.color === 'string' && next.color.length <= 7 && hex6(resolve(next.color)) === expected) delete next.color;
+    if (style === 'intense' && next.bold === true) delete next.bold;
+    return Object.keys(next).length === 1 && typeof next.text === 'string' ? next.text : next;
+  });
+  shape.text = runs.every(run => typeof run === 'string') ? runs.join('') : runs;
+}
+
+/** Remove what a theme style gives from one shape (an overlay shape or a shape block), and its effects' defaults. */
+function settleShape(shape, resolve) {
+  const style = shape.style ?? 'moderate';
+  const look = shapeStyleLook(style);
+  const same = (a, b) => { const x = resolve(a), y = resolve(b); return x !== undefined && y !== undefined && x.toUpperCase() === y.toUpperCase(); };
+  // The fill.
+  if (shape.fill === 'none') { if (look.fill === 'none') delete shape.fill; }
+  else if (isColor(shape.fill) && look.fill !== 'none' && same(shape.fill, look.fill)) delete shape.fill;
+  // The line.
+  const stroke = shape.stroke;
+  if (stroke === 'none') { if (!look.stroke) delete shape.stroke; }
+  else if (object(stroke)) {
+    const color = look.stroke?.color ?? (style === 'none' ? 'text' : {color: 'accent1', darken: 0.5}), width = look.stroke?.width ?? 4 / 3;
+    if (stroke.color !== undefined && !stroke.gradient && same(stroke.color, color)) delete stroke.color;
+    if (near(stroke.width, width, 0.02)) delete stroke.width;
+    if (look.stroke && !Object.keys(stroke).length) delete shape.stroke;
+  }
+  // The effects: the intense style's own soft shadow, and each default value.
+  if (style === 'intense' && shape.shadow === 'soft') delete shape.shadow;
+  for (const key of ['shadow', 'innerShadow', 'glow', 'reflection']) {
+    const value = shape[key], defaults = EFFECT_DEFAULTS[key];
+    if (!object(value) || !defaults) continue;
+    for (const [name, standard] of Object.entries(defaults)) {
+      if (value[name] === undefined) continue;
+      if (name === 'color' ? same(value.color, standard) : near(value[name], standard, 0.01)) delete value[name];
+    }
+    if (key === 'shadow' && value.size === 1) delete value.size;
+  }
+  settleText(shape, same, resolve, style, look);
+}
+
+/** Settle the shape blocks and the overlay shapes of every slide (`slide.shapes` as assembled). `resolveFor(slide)` gives `resolve(ref)`: the color a ColorRef is in the slide. */
+export function restoreShapes(imported, resolveFor) {
+  for (const slide of imported.slides) {
+    const resolve = resolveFor(slide, imported.slides.indexOf(slide));
+    for (const block of shapeBlocks(slide)) settleShape(block, resolve);
+    for (const entry of slide.shapes ?? []) {
+      if (!object(entry)) continue;
+      if (entry.connector) {
+        const stroke = entry.stroke;
+        if (object(stroke)) {
+          const own = resolve(stroke.color), standard = resolve('text');
+          if (stroke.color !== undefined && !stroke.gradient && own !== undefined && standard !== undefined && own.toUpperCase() === standard.toUpperCase()) delete stroke.color;
+          if (near(stroke.width, 2, 0.02)) delete stroke.width;
+          if (!Object.keys(stroke).length) delete entry.stroke;
+        }
+      } else settleShape(entry, resolve);
+    }
+  }
+}
+
+const slug = name => String(name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'shape';
+
+/** The ids a slide's blocks, groups and overlay shapes already use. */
+function usedIds(slide) {
+  const ids = new Set();
+  const walk = block => {
+    if (!object(block)) return;
+    if (typeof block.id === 'string') ids.add(block.id);
+    if (Array.isArray(block.blocks)) block.blocks.forEach(walk);
+  };
+  for (const key of Object.keys(slide)) if (key === 'blocks' || REGION_KEY_SET.has(key)) (Array.isArray(slide[key]) ? slide[key] : [slide[key]]).forEach(walk);
+  for (const entry of slide.shapes ?? []) if (typeof entry?.id === 'string') ids.add(entry.id);
+  return ids;
+}
+
+// The block an exported shape's name (`OPF shape slides.0.blocks.1.shape`) points at in the rebuilt slide.
+function blockAtName(slide, name) {
+  const match = /^OPF shape slides\.\d+\.((?:[A-Za-z0-9+:_-]+\.)*[A-Za-z0-9+:_-]+)$/.exec(name);
+  if (!match) return undefined;
+  let node = slide;
+  for (const segment of match[1].split('.')) {
+    const next = Array.isArray(node) ? node[Number(segment)] : node?.[segment];
+    if (!object(next) && !Array.isArray(next)) break;
+    node = next;
+  }
+  return object(node) && node !== slide && isShapeBlock(node) ? node : undefined;
+}
+
+/**
+ * Put the overlay shapes and connectors a slide's native shapes were into `slide.shapes`, in the order they were drawn. A connector whose
+ * two ends are connected to shapes the importer knows (overlay shapes, or shape blocks of the rebuilt content) is a connector bound to them
+ * by id; a connector with a free end is a line shape. `contexts[i].shapeImport` is the state importNativeShape kept, `restored[i]` whether
+ * the slide's content form was rebuilt from the stored record (the names of exported shape blocks then point at the blocks).
+ */
+export function assembleOverlayShapes(imported, contexts, restored) {
+  imported.slides.forEach((slide, index) => {
+    const state = contexts[index]?.shapeImport;
+    if (!state || (!state.overlays.length && !state.connectors.length)) return;
+    const taken = usedIds(slide);
+    const unique = name => { let id = slug(name), n = 1; while (taken.has(id)) id = `${slug(name)}-${++n}`; taken.add(id); return id; };
+    const overlays = new Map(state.overlays.map(overlay => [overlay.nativeId, overlay]));
+    const endOf = nativeId => {
+      const overlay = overlays.get(nativeId);
+      if (overlay) { overlay.entry.id ??= unique(overlay.name); return overlay.entry.id; }
+      const name = state.blockNames.get(nativeId), block = restored[index] && name ? blockAtName(slide, name) : undefined;
+      if (block) { block.id ??= unique(name.replace(/^OPF shape slides\.\d+\./, '')); return block.id; }
+      return undefined;
+    };
+    const entries = state.overlays.map(overlay => ({z: overlay.z, entry: overlay.entry}));
+    for (const connector of state.connectors) {
+      const {read, free} = connector;
+      const from = read.from && endOf(read.from.id), to = read.to && endOf(read.to.id);
+      if (from && to && read.route && from !== to) {
+        const {stroke, alt, decorative, hidden} = read.shape.fields;
+        entries.push({z: connector.z, entry: {connector: {from, to, ...(read.route !== 'straight' ? {route: read.route} : {}), fromSite: read.from.site, toSite: read.to.site},
+          ...(stroke !== undefined ? {stroke} : {}), ...(alt !== undefined ? {alt} : {}), ...(decorative ? {decorative} : {}), ...(hidden ? {hidden} : {})}});
+      } else entries.push({z: connector.z, entry: free});
+    }
+    entries.sort((a, b) => a.z - b.z);
+    slide.shapes = entries.map(item => item.entry);
+  });
+}
