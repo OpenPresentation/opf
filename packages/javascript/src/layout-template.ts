@@ -10,7 +10,7 @@
  */
 
 /** The content kinds a region can accept: the body content kinds and `group` for a content group. */
-export const REGION_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'group'] as const;
+export const REGION_KINDS = ['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'group'] as const;
 export type RegionKind = typeof REGION_KINDS[number];
 /** Which content a region wants first (content binding, step 2). */
 export const REGION_ROLES = ['primary', 'secondary', 'media', 'supporting'] as const;

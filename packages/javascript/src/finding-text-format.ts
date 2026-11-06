@@ -120,6 +120,43 @@ const imageOptionUnsupportedPayload: RuleText = (finding) => {
   };
 };
 
+const shapeOptionUnsupportedPayload: RuleText = (finding) => {
+  const field = text(params(finding).field) ?? match(finding.message, /^(\w+) is only valid on a shape block/)?.[1];
+  const type = text(params(finding).type) ?? match(finding.message, /; this payload is '(.+?)'/)?.[1];
+  const kind = type ?? (/a group cannot carry them/.test(finding.message) ? "group" : undefined);
+  if (!field) return undefined;
+  return {
+    message: `${code(field)} only applies to shapes; this block is ${kind ? kindPhrase(kind) : "not a shape"}.`,
+    next: `remove ${code(field)}, or make the block a shape with \`shape\` (a preset such as roundRect) or \`path\`.`,
+  };
+};
+
+const shapeAdjustUnknown: RuleText = (finding) => {
+  const { name, shape, known } = params(finding);
+  if (typeof name !== "string") return undefined;
+  const names = Array.isArray(known) ? known.filter((entry): entry is string => typeof entry === "string") : [];
+  if (shape === "path") return { message: `${code(`adjust.${name}`)} has no effect on a custom \`path\`: adjust values belong to presets.`, next: `remove ${code(`adjust.${name}`)}.` };
+  return {
+    message: `${text(shape) ?? "This preset"} has no adjust value ${code(name)}${names.length ? `; it has ${names.map(code).join(", ")}` : "; it has none"}.`,
+    next: names.length ? `use ${names.map(code).join(" or ")}, or remove ${code(name)}.` : `remove ${code(`adjust.${name}`)}.`,
+  };
+};
+
+const shapeAdjustRange: RuleText = (finding) => {
+  const { name, shape, value, min, max, unit } = params(finding);
+  if (typeof name !== "string" || typeof value !== "number") return undefined;
+  const range = `${typeof min === "number" ? min : "no minimum"} to ${typeof max === "number" ? max : "no maximum"}`;
+  return {
+    message: `${code(`adjust.${name}`)} of ${text(shape) ?? "this preset"} is ${value}, outside ${range}${unit === "degrees" ? " degrees" : ""}, so the preset's default is drawn.`,
+    next: `set it between ${range}.`,
+  };
+};
+
+const shapeLinkHidden: RuleText = () => ({
+  message: "This shape is hidden, so its `link` can never be clicked.",
+  next: "remove `hidden`, or remove the `link`.",
+});
+
 const imagePlacementInvalid: RuleText = (finding) => {
   const { edge, blocks } = params(finding);
   if (typeof edge === "string" && Array.isArray(blocks) && blocks.length === 2) {
@@ -641,6 +678,10 @@ export const FORMAT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/caption-unsupported-payload": captionUnsupportedPayload,
   "opf/image-option-unsupported-payload": imageOptionUnsupportedPayload,
   "opf/image-placement-invalid": imagePlacementInvalid,
+  "opf/shape-option-unsupported-payload": shapeOptionUnsupportedPayload,
+  "opf/shape-adjust-unknown": shapeAdjustUnknown,
+  "opf/shape-adjust-range": shapeAdjustRange,
+  "opf/shape-link-hidden": shapeLinkHidden,
   "opf/layout-placeholder-group": layoutPlaceholderGroup,
   "opf/dataset-unknown": datasetUnknown,
   "opf/dataset-field-unknown": datasetFieldUnknown,

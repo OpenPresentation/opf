@@ -69,6 +69,8 @@ export {PATTERN_PRESETS, PATTERN_PRESET_ALIASES, PATTERN_TILE_SIZE, patternBitma
 import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,layoutCaption,layoutFootnotes,slideCitations,type ComposedCaption,type ComposedFootnotes,type RichText} from './annotations.js';
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,slideCitations,walkCitationRuns} from './annotations.js';
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
+import {composeShape,composeStroke,isShapeBlock,presetAspect,presetMask,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
+import {isPresetShape} from './shape-geometry.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -348,6 +350,8 @@ export interface ComposedItem {
   caption?: ComposedCaption;
   /** Picture geometry and treatments of an image item (`field` image); absent on every other item. */
   image?: ComposedImage;
+  /** SH-02: the drawing of a shape block (`field` shape, shape-block.ts ComposedShape); `text` is its text, fitted in `shape.textBox`. Absent on every other item. */
+  shape?: ComposedShape;
   /**
    * RR-92: the value axis of a column, bar, line or area chart (`field` chart), computed from the chart box (`chartValueAxis`). The preview
    * draws it and the PPTX export writes it as `c:min`, `c:max` and `c:majorUnit`, so both show the same axis. Absent for every other chart
@@ -584,11 +588,14 @@ export type BackgroundImageFit = ImageFit | 'tile';
 export type ImageEdge = 'left' | 'right' | 'top' | 'bottom';
 /** A point of a picture as fractions of its width and height from the top-left corner; the default is { x: 0.5, y: 0.5 }. */
 export interface ImageFocus { x: number; y: number }
-/** A frame mask. path follows the ECMA-376 preset formula for preset/adjust exactly, in reference pixels. */
+/**
+ * A frame mask (SH-02: any of the 187 DrawingML presets). `path` is SH-01's evaluated preset outline at the frame, in reference pixels;
+ * `kind` and `preset` are the preset name.
+ */
 export interface ImageShape {
-  kind: 'rectangle' | 'rounded' | 'circle' | 'hexagon';
-  preset: 'rect' | 'roundRect' | 'ellipse' | 'hexagon';
-  /** DrawingML avLst guide values (for example adj and vf), in 1/100000 units. */
+  kind: string;
+  preset: string;
+  /** DrawingML avLst guide values the block set (for example adj), in 1/100000 units or 60000ths of a degree. */
   adjust: Record<string, number>;
   path: string;
 }
@@ -645,8 +652,8 @@ export interface ComposedImage {
   focus: ImageFocus;
   /** Mask on the frame: a DrawingML preset with its guide values, and the same outline as an SVG path. */
   shape: ImageShape;
-  /** Line centered on the shape outline; width in reference pixels, already scaled to the canvas. */
-  border?: { color: unknown; width: number };
+  /** SH-02: the line along the shape outline (`stroke`, renamed from `border`); width in reference pixels, already scaled to the canvas. */
+  stroke?: ComposedStroke;
   /** Picture opacity below 1; the border and overlay are not affected. */
   opacity?: number;
   /** Luminance-based recolor (Rec. 601 weights on sRGB values). */
@@ -915,7 +922,9 @@ export class OPFCompositionError extends Error {
     if (explanation) this.explanation = explanation;
   }
 }
-const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram"];
+// SH-02: `shape` and `path` make a shape block (isShapeBlock); on an image block `shape` is the frame's mask, never a leaf of its own.
+const fields = ["text", "items", "bullets", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "diagram", "shape", "path"];
+const leafFields = (host: Record<string, any>) => fields.filter(field => host[field] !== undefined && field !== 'shape' && field !== 'path');
 const headings = new Set(["title", "subtitle", "tag"]);
 const rows = ["top", "middle", "bottom"];
 const columns = ["left", "center", "right"];
@@ -930,17 +939,27 @@ const BACKGROUND_FITS = ['cover', 'contain', 'stretch', 'tile'] as const;
 /** Image sources the background string shorthand accepts (opf.schema.json ImageSource). */
 const IMAGE_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 /** Image block keys a composed image item reports in its payload, beside `type` and `image`. */
-const IMAGE_OPTION_KEYS = ['fit', 'focus', 'aspectRatio', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'placement', 'portrait'] as const;
+const IMAGE_OPTION_KEYS = ['fit', 'focus', 'aspectRatio', 'shape', 'adjust', 'stroke', 'opacity', 'recolor', 'overlay', 'placement', 'portrait'] as const;
 const imagePayload = (host: Record<string, any>): Record<string, unknown> => {
   const payload: Record<string, unknown> = { type: host.type ?? 'image', image: host.image };
   for (const key of IMAGE_OPTION_KEYS) if (host[key] !== undefined) payload[key] = host[key];
   return payload;
 };
 const assetSource = (value: unknown): unknown => typeof value === 'string' ? value : record(value).src;
+/** SH-02: the payload a composed shape item reports: the block's shape keys and its text. */
+const SHAPE_PAYLOAD_KEYS = ['shape', 'adjust', 'stroke', 'opacity', 'aspectRatio', 'text', ...SHAPE_BLOCK_KEYS] as const;
+const shapePayload = (host: Record<string, any>): Record<string, unknown> => {
+  const payload: Record<string, unknown> = { type: 'shape' };
+  for (const key of SHAPE_PAYLOAD_KEYS) if (host[key] !== undefined) payload[key] = host[key];
+  return payload;
+};
 const finite = (value: unknown, min: number, max: number): number | undefined => typeof value === 'number' && Number.isFinite(value) && value >= min && value <= max ? value : undefined;
 const pathNumber = (value: number) => String(round(value));
-const IMAGE_SHAPES = { rectangle: 'rect', rounded: 'roundRect', circle: 'ellipse', hexagon: 'hexagon' } as const;
 const roundBox = (box: LayoutBox): LayoutBox => ({ x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height) });
+/** SH-02: an image frame's mask: any of the 187 presets, with the block's adjust values (OPF units), from SH-01's geometry (shape-block.ts presetMask). */
+export function imageShape(preset: string, box: LayoutBox, adjust?: Record<string, number>): ImageShape {
+  return presetMask(preset, box, adjust);
+}
 /** A valid focus point the author gave, else undefined. */
 const authoredFocus = (value: unknown): ImageFocus | undefined => {
   const focus = record(value), x = finite(focus.x, 0, 1), y = finite(focus.y, 0, 1);
@@ -964,25 +983,6 @@ export function defaultImageFocus(frame: LayoutBox, fit: ImageFit, aspect: numbe
  * Outline of a DrawingML preset in a box, following the ECMA-376 presetShapeDefinitions formulas:
  * roundRect (adj; ss = min(w,h), radius = ss*adj/100000), ellipse, and hexagon (adj, vf).
  */
-export function imageShape(kind: ImageShape['kind'], box: LayoutBox, cornerRadius = 1 / 6): ImageShape {
-  const { x, y, width: w, height: h } = box, r = x + w, b = y + h, ss = Math.min(w, h), n = pathNumber;
-  const rect = `M${n(x)} ${n(y)}H${n(r)}V${n(b)}H${n(x)}Z`;
-  if (kind === 'rounded') {
-    const adj = Math.round(Math.min(0.5, Math.max(0, cornerRadius)) * 100000), radius = ss * adj / 100000;
-    const path = radius <= 0 ? rect : `M${n(x)} ${n(y + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x + radius)} ${n(y)}H${n(r - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r)} ${n(y + radius)}V${n(b - radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(r - radius)} ${n(b)}H${n(x + radius)}A${n(radius)} ${n(radius)} 0 0 1 ${n(x)} ${n(b - radius)}Z`;
-    return { kind, preset: 'roundRect', adjust: { adj }, path };
-  }
-  if (kind === 'circle') {
-    const cy = y + h / 2;
-    return { kind, preset: 'ellipse', adjust: {}, path: `M${n(x)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(r)} ${n(cy)}A${n(w / 2)} ${n(h / 2)} 0 1 1 ${n(x)} ${n(cy)}Z` };
-  }
-  if (kind === 'hexagon') {
-    const adj = 25000, vf = 115470, a = Math.min(Math.max(adj, 0), 50000 * w / ss);
-    const x1 = ss * a / 100000, x2 = r - x1, vc = y + h / 2, dy1 = h / 2 * vf / 100000 * Math.sin(Math.PI / 3);
-    return { kind, preset: 'hexagon', adjust: { adj, vf }, path: `M${n(x)} ${n(vc)}L${n(x + x1)} ${n(vc - dy1)}L${n(x2)} ${n(vc - dy1)}L${n(r)} ${n(vc)}L${n(x2)} ${n(vc + dy1)}L${n(x + x1)} ${n(vc + dy1)}Z` };
-  }
-  return { kind: 'rectangle', preset: 'rect', adjust: {}, path: rect };
-}
 
 /**
  * LH-104: `fit: "auto"` crops a picture only when the crop is small. A cover crop keeps coverKept of the picture along the dimension it
@@ -1059,8 +1059,8 @@ function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, pat
   const overlay = record(value), opacity = finite(overlay.opacity, 0, 1);
   if (overlay.color === undefined || opacity === undefined) return undefined;
   const edge = (IMAGE_EDGES as readonly unknown[]).includes(overlay.edge) ? mirrorSide(overlay.edge as string) as ImageEdge : undefined;
-  if (edge && shape.kind !== 'rectangle') {
-    diagnostics.push({ code: 'unsupported-image-treatment', path: `${path}.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow a rounded, circular or hexagonal mask as one native shape. Remove edge or use shape rectangle.' });
+  if (edge && shape.preset !== 'rect') {
+    diagnostics.push({ code: 'unsupported-image-treatment', path: `${path}.edge`, message: 'An edge overlay needs a rectangle frame; a band cannot follow another preset mask as one native shape. Remove edge or use shape rect.' });
     return undefined;
   }
   const part = finite(overlay.size, 0.05, 1) ?? 0.3;
@@ -1068,7 +1068,7 @@ function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, pat
     : edge === 'bottom' ? { ...frame, y: round(frame.y + frame.height * (1 - part)), height: round(frame.height * part) }
     : edge === 'left' ? { ...frame, width: round(frame.width * part) }
     : { ...frame, x: round(frame.x + frame.width * (1 - part)), width: round(frame.width * part) };
-  return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rectangle', box) : shape };
+  return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rect', box) : shape };
 }
 
 /** The offset of a block shorter than its cell by `spare`: 0 at the top, half at the middle, all of it at the bottom. */
@@ -1115,14 +1115,14 @@ function diagramMeasure(measurement: TextMeasurement | undefined, body: string, 
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
 function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
-  const kindName: ImageShape['kind'] = Object.hasOwn(IMAGE_SHAPES, host.shape) ? host.shape : 'rectangle';
+  const kindName = isPresetShape(host.shape) ? host.shape : 'rect';
   const { scale } = context;
   const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
   // LH-80 with LH-104: an automatic track is a frame the engine chose to crop the picture into, so `auto` covers it there.
   const decided: ImageFitOption = requested === 'auto' && context.placement?.automatic ? 'cover' : requested;
   const size = intrinsicImageSize(host.image, context.assets), pictureAspect = size ? size.width / size.height : undefined;
   let box: LayoutBox = { ...frameArea };
-  const aspect = kindName === 'circle' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
+  const aspect = kindName === 'ellipse' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
   if (aspect) {
     const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
     box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
@@ -1140,10 +1140,11 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (context.anchor && fit === 'contain' && !aspect && box.height < frameArea.height) box.y = frameArea.y + anchoredOffset(frameArea.height - box.height, context.anchor);
   box = roundBox(box);
   const focus = authoredFocus(host.focus) ?? (pictureAspect ? defaultImageFocus(box, fit, pictureAspect) : imageFocus(undefined));
-  const shape = imageShape(kindName, box, finite(host.cornerRadius, 0, 0.5));
+  const shape = imageShape(kindName, box, record(host.adjust));
   const result: ComposedImage = { region: roundBox(region), box, fit, ...(requested === 'auto' ? { autoFit: true as const } : {}), focus, shape };
-  const border = record(host.border), borderWidth = finite(border.width, 0, 64);
-  if (border.color !== undefined && borderWidth) result.border = { color: border.color, width: round(borderWidth * scale) };
+  // SH-02: the picture's line takes the whole stroke vocabulary; a stroke without a color is the slide's neutral line (engines' border color).
+  const stroke = host.stroke === undefined ? undefined : composeStroke(host.stroke, scale, { width: PICTURE_STROKE_WIDTH, join: 'miter' });
+  if (stroke) result.stroke = stroke;
   const opacity = finite(host.opacity, 0, 1);
   if (opacity !== undefined && opacity < 1) result.opacity = opacity;
   const recolor = composeRecolor(host.recolor);
@@ -1170,7 +1171,7 @@ function resolveBackgroundImage(slide: Record<string, any>, presentation: unknow
   if (background.opacity !== undefined && background.opacity < 1) result.opacity = background.opacity;
   const recolor = composeRecolor(background.recolor);
   if (recolor) result.recolor = recolor;
-  const overlay = composeOverlay(background.overlay, box, imageShape('rectangle', box), `${at}.overlay`, mirrorSide, diagnostics);
+  const overlay = composeOverlay(background.overlay, box, imageShape('rect', box), `${at}.overlay`, mirrorSide, diagnostics);
   if (overlay) result.overlay = overlay;
   // LH-158: an `overlay` key (an overlay of the author's, or `false`) leaves no automatic scrim and no panel to place text with.
   if (background.overlay !== undefined) OVERLAY_KEYED.add(result);
@@ -1887,7 +1888,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
       const textHeight = text.bounds.height, content = Math.max(height, textHeight), top = box.y + Math.max(0, (box.height - content) / 2), shift = top - box.y + (content - textHeight) / 2;
       if (shift > .01) for (const part of text.parts) { part.box = {...part.box, y: part.box.y + shift}; if (part.fit) part.fit = translateTextFit(part.fit, shift); }
       const frame = {x: rtlSide ? box.x + box.width - width : box.x, y: top + (content - height) / 2, width, height};
-      const photo: QuotePhoto = {path: `${options.path ?? 'quote'}.photo`, value: photoValue, box: frame, shape: imageShape('rounded', frame, CARD_RADIUS * scale / Math.min(width, height)), focus: portraitFocus()};
+      const photo: QuotePhoto = {path: `${options.path ?? 'quote'}.photo`, value: photoValue, box: frame, shape: imageShape('roundRect', frame, {adj: Math.min(.5, CARD_RADIUS * scale / Math.min(width, height))}), focus: portraitFocus()};
       return {...text, bounds: {x: box.x, y: top, width: box.width, height: content}, photo};
     }
   }
@@ -2007,7 +2008,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     if (selected) {
       body.box=selected.bodyBox;body.fit=selected.bodyFit;
       if (attribution) {attribution.box=selected.textBox ?? selected.footerBox;attribution.fit=selected.footerFit;}
-      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:imageShape('circle',selected.photoBox)};
+      if (selected.photoBox) photo={path:photoPath,value:photoValue,box:selected.photoBox,shape:imageShape('ellipse',selected.photoBox)};
       photoFits=selected.photoFits;
     }
   }
@@ -2021,7 +2022,7 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     if (Number.isFinite(previousTop)) {
       const shift = footerTop - previousTop;
       if (attribution) { attribution.box.y += shift; attribution.fit = translateTextFit(attribution.fit!, shift); }
-      if (photo) { photo.box.y += shift; photo.shape = imageShape('circle', photo.box); }
+      if (photo) { photo.box.y += shift; photo.shape = imageShape('ellipse', photo.box); }
     }
   }
   if (hasPhoto && !photo) photoFits=false;
@@ -5232,7 +5233,7 @@ function automaticTracks(input: unknown, options: ComposeSlideOptions, base: Sli
   const physical = (edge: ImageEdge): ImageEdge => base.direction === 'rtl' && (edge === 'left' || edge === 'right') ? (edge === 'left' ? 'right' : 'left') : edge;
   if (pictures.length === 1 && !leaf('video').length) {
     const index = pictures[0]!, host = record(blocks[index]), fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : base.design.imageFit;
-    if (fit === 'contain' || fit === 'stretch' || host.aspectRatio !== undefined || (host.shape !== undefined && host.shape !== 'rectangle' && host.shape !== 'rounded')) return base;
+    if (fit === 'contain' || fit === 'stretch' || host.aspectRatio !== undefined || (host.shape !== undefined && host.shape !== 'rect' && host.shape !== 'roundRect')) return base;
     const edge: ImageEdge = landscape ? (index === 0 ? 'left' : 'right') : (index === 0 ? 'top' : 'bottom');
     const aspect = intrinsicImageAspect(host.image, record(options.presentation).assets);
     const kept = (size: number) => { const frame = landscape ? size * base.width / base.height : base.width / (size * base.height); return aspect ? Math.min(frame / aspect, aspect / frame) : 1; };
@@ -5878,11 +5879,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return [{ field: "blocks", type: "group", value: host.blocks, path: basePath, payload: host, composition: settings, ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...(eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
         children: host.blocks.flatMap((block: unknown, index: number) => eyebrowHosts.has(`${basePath}.blocks.${index}`) ? [] : collect(record(block), `${basePath}.blocks.${index}`, depth + 1, [...ancestors, host])) }];
     }
+    // SH-02: a shape block is one leaf, its preset (or custom path) with its text inside.
+    if (isShapeBlock(host)) {
+      const key = host.shape !== undefined || host.path === undefined ? 'shape' : 'path';
+      return [{ field: 'shape', type: 'shape', value: host[key], path: `${basePath}.${key}`, payload: shapePayload(host), host, hostPath: basePath, ...(cardCells.has(basePath) ? { cardCell: true } : {}) }];
+    }
     // RR-34: a caption belongs to the host's one captionable payload (image, chart, table or video).
     const captioned = host.caption !== undefined ? fields.filter(field => host[field] !== undefined && CAPTIONABLE_FIELDS.includes(field)) : [];
     // RR-54: a dataset-backed chart or table is composed from its inline copy (options.presentation holds the datasets).
     const fieldValue = (field: string): unknown => field === 'table' ? inlineTableData(host[field], options.presentation) : field === 'chart' ? inlineChartData(host[field], options.presentation) : host[field];
-    return fields.filter(field => host[field] !== undefined).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
+    return leafFields(host).map(field => ({ field, type: host.type ?? kind(field), value: fieldValue(field), path: `${basePath}.${field}`, payload: field === 'image' ? imagePayload(host) : { type: host.type ?? kind(field), [field]: fieldValue(field), ...(host.numbering !== undefined && (field === 'items' || field === 'bullets') ? { numbering: host.numbering } : {}), ...(host.columns !== undefined && (field === 'items' || field === 'bullets') ? { columns: host.columns } : {}) },
       ...(field === 'image' ? { host, hostPath: basePath } : {}), ...(host.emphasis === true || basePath === featuredPath ? { emphasis: basePath } : {}), ...(cardCells.has(basePath) ? { cardCell: true } : {}), ...((field === 'text' || field === 'items' || field === 'bullets') && eyebrowOf.has(basePath) ? { eyebrow: eyebrowOf.get(basePath)! } : {}),
       ...(captioned.length === 1 && captioned[0] === field ? { caption: host.caption, captionPath: `${basePath}.caption` } : {}) }));
   };
@@ -6222,7 +6228,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // The proportions of a picture an automatic composition shows whole (fit contain, no frame shape of its own) when core can read them.
   const wholePictureAspect = (node: Pending): number | undefined => {
     const host = node.host;
-    if (node.field !== 'image' || !host || !autoComposition() || host.aspectRatio !== undefined || host.shape === 'circle') return undefined;
+    if (node.field !== 'image' || !host || !autoComposition() || host.aspectRatio !== undefined || host.shape === 'ellipse') return undefined;
     const fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : hints.imageFit ?? 'contain';
     return fit === 'contain' ? intrinsicImageAspect(host.image, assets) : undefined;
   };
@@ -6477,6 +6483,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (node.field === 'image') { const aspect = wholePictureAspect(node); return aspect ? frame(aspect) : cell.width * cell.height; }
     if (node.field === 'video') return frame(VIDEO_ASPECT);
     if (node.field === 'chart' || node.field === 'diagram') return frame(SPLIT_CHART_SHAPE);
+    if (node.field === 'shape') return frame(Number(record(node.host).aspectRatio) > 0 ? Number(record(node.host).aspectRatio) : presetAspect(typeof record(node.host).shape === 'string' ? record(node.host).shape : undefined));
     if (!MEASURED_FIELDS.has(node.field)) return cell.width * cell.height;
     if (stretch && node.field === 'code') return cell.width * cell.height;
     const open = { x: 0, y: 0, width: Math.max(scale, cell.width), height: 1e6 }, floorSize = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
@@ -6564,7 +6571,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       placeNode(node, { ...cell, y: cell.y + (cell.height - need) / 2, height: need }, settings);
       return;
     }
-    if (node.field === 'image' || node.field === 'video' || node.field === 'diagram') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
+    if (node.field === 'image' || node.field === 'video' || node.field === 'diagram' || node.field === 'shape') placeNode(node, cell, settings, hasCards, undefined, undefined, 'middle');
     else if (node.field === 'chart') {
       const height = modeFor(settings) === 'auto' && inner.height > inner.width * CHART_MAX_ASPECT_RATIO ? inner.width * CHART_MAX_ASPECT_RATIO : inner.height;
       placeNode(node, { ...inner, y: inner.y + (inner.height - height) / 2, height }, settings, false);
@@ -6850,8 +6857,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
     const picture = side ? { x: rtl ? inner.x + inner.width - pictureWidth : inner.x, y: start + (content - pictureHeight) / 2, width: pictureWidth, height: pictureHeight } : { x: inner.x, y: start, width: inner.width, height: pictureHeight };
     const words = side ? { x: rtl ? inner.x : inner.x + pictureWidth + between, y: start + (content - ownNeed) / 2, width: textWidth, height: ownNeed } : { x: inner.x, y: start + pictureHeight + between, width: inner.width, height: text.need };
-    const host = record(person.image.host), shape = host.shape === undefined || host.shape === 'circle' ? 'rounded' : host.shape, first = items.length;
-    portraitHosts.set(person.image.path, { ...host, shape, fit: host.fit ?? 'cover', focus: host.focus ?? portraitFocus(), ...(shape === 'rounded' && host.cornerRadius === undefined ? { cornerRadius: CARD_RADIUS * scale / Math.min(picture.width, picture.height) } : {}) });
+    const host = record(person.image.host), shape = host.shape === undefined || host.shape === 'ellipse' ? 'roundRect' : host.shape, first = items.length;
+    portraitHosts.set(person.image.path, { ...host, shape, fit: host.fit ?? 'cover', focus: host.focus ?? portraitFocus(), ...(shape === 'roundRect' && record(host.adjust).adj === undefined ? { adjust: { ...record(host.adjust), adj: Math.min(.5, CARD_RADIUS * scale / Math.min(picture.width, picture.height)) } } : {}) });
     if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
     const wasTier = insideTier;
     insideTier = true;
@@ -6860,6 +6867,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (cards) for (const item of items.slice(first)) item.frameBox = card;
     fire('portraits');
     return true;
+  };
+  // SH-02: a shape block in its cell (shape-block.ts composeShape): the frame at the preset's aspect (or the block's aspectRatio), placed by the
+  // region's anchor, and its text fitted in the text rectangle less the insets by the measured fonts, from the body size down to the
+  // readability floor and never below it (a text that does not fit there overflows with a finding).
+  const placeShape = (node: Pending, cell: LayoutBox, settings: Composition, anchor: RegionAnchor): void => {
+    const host = node.host ?? {}, hostPath = node.hostPath ?? node.path, textPath = `${hostPath}.text`;
+    const shape = composeShape(host, roundBox(cell), { scale, anchorY: anchor === 'bottom' ? 'bottom' : anchor === 'top' ? 'top' : 'middle' });
+    const value = host.text;
+    let text: TextFit | RichTextFit | undefined;
+    if (value !== undefined && value !== '' && !(Array.isArray(value) && value.length === 0)) {
+      const drawn = shape.textDirection === 'stacked' ? stackedText(value) : value;
+      const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
+      text = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
+      if (text.overflow) diagnostics.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
+    }
+    items.push({ path: node.path, field: 'shape', type: 'shape', value: node.value, payload: node.payload, box: { ...shape.box }, shape, ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition: settings, alignment: 'center' });
   };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
     // LH-06: the block or group with the slide's emphasis is drawn on its surface, a card in its cell; nothing drawn on the surface takes
@@ -6912,6 +6935,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const lone = node.fills ? fillLone(node, frame ?? box, settings, cards) : undefined;
     // Its cell is as tall as its content, so only its width can make it too small (contentSized).
     if (lone) { box = lone; frame = undefined; metricReferenceHeight = undefined; contentSized.add(node); }
+    // SH-02: a shape block draws its own fill and outline, so it takes no card; its frame sits in the cell, its text in its text rectangle.
+    if (node.field === 'shape') { placeShape(node, box, settings, anchor); return; }
     const onSurface = emphasized || insideEmphasis;
     if (onSurface) cards = emphasized;
     else if (insideTier) cards = false;
@@ -7002,8 +7027,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // (contain) keeps the card and its inset around it.
     // LH-132: a team portrait's host is its own (portraitHosts: a rounded frame of its own, cropped around the upper third), never this card.
     let imageHost: Record<string, any> = portraitHosts.get(node.path) ?? node.host ?? {};
-    if (node.field === 'image' && !portraitHosts.has(node.path) && !personPictures.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.cornerRadius === undefined && (imageHost.shape === undefined || imageHost.shape === 'rectangle') && !(record(imageHost.border).color !== undefined && record(imageHost.border).width)) {
-      const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'rounded', cornerRadius: radius };
+    if (node.field === 'image' && !portraitHosts.has(node.path) && !personPictures.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.adjust === undefined && (imageHost.shape === undefined || imageHost.shape === 'rect') && (imageHost.stroke === undefined || imageHost.stroke === 'none' || record(imageHost.stroke).width === 0)) {
+      const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'roundRect', adjust: { adj: radius } };
       const context = { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
       if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [] }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
     }
@@ -7545,7 +7570,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const median = others.length % 2 ? others[half]! : (others[half - 1]! + others[half]!) / 2;
       if (lengths[lead]! >= PARAGRAPH_MIN_CHARS && lengths[lead]! >= LEAD_MEDIAN_RATIO * median && lengths[lead]! >= PAIR_LENGTH_RATIO * others.at(-1)!) plan = { lead, share: LEAD_SHARE };
     } else if (units.length === 3) {
-      const figures = units.flatMap((unit, index) => unit.field === 'chart' || unit.field === 'image' || unit.field === 'diagram' ? [index] : []);
+      const figures = units.flatMap((unit, index) => unit.field === 'chart' || unit.field === 'image' || unit.field === 'diagram' || unit.field === 'shape' ? [index] : []);
       const compact = (unit: Pending) => unit.caption === undefined && (unit.field === 'metric' || ((unit.field === 'text' || unit.field === 'quote') && leadLength(unit) <= COMPACT_CHARS));
       if (figures.length === 1 && units.every((unit, index) => index === figures[0] || compact(unit))) plan = { lead: figures[0]!, share: FIGURE_LEAD_SHARE };
     }
@@ -9136,7 +9161,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     else if (item.codeLayout) diagnostics.push(...item.codeLayout.diagnostics);
     else if (item.metricLayout) diagnostics.push(...item.metricLayout.diagnostics);
     else if (item.timelineLayout) diagnostics.push(...item.timelineLayout.diagnostics);
-    else if (item.text?.overflow) diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
+    else if (item.text?.overflow && item.field !== 'shape') diagnostics.push({ code: "text-overflow", path: item.path, message: "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide." });
     // LH-45: nothing draws past its cell (its card, when it has one) without a finding. A layout checks its parts against the box it was
     // given, and a metric is given its row's shared height, which can be taller than its own cell: the accepted parts are checked here.
     const internal = item.quoteLayout ?? item.codeLayout ?? item.metricLayout ?? item.timelineLayout;
