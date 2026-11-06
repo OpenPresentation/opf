@@ -158,6 +158,10 @@ An image block's line is `stroke` (renamed from `border` in 0.33, with no alias)
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |
 
+## Loading in browsers and edge runtimes
+
+Node, Bun and Deno load the preset geometry (about 35 KB gzipped, with the sketched line) with core and draw any shape at once. A browser bundle or an edge Worker loads it the first time a deck has a shape block, a custom `path`, a picture masked by a preset other than the four built-in masks (`rect`, `roundRect`, `ellipse`, `hexagon`) or a sketched picture line, through the package's `#shape-engine` import map, as diagrams load (`#diagram-engine`); a deck without them does not carry it. The renderer's browser fonts handle loads it in `ensure` (its `pending` lists `shapes`), and `toPptx` loads it itself. A host that composes with `composeSlide` or `toSvg` directly calls `await ensureShapes(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `shapesPending(presentation)` lists what it would load. Until then a shape draws its frame and text with no outline, a mask beyond the built-in four draws as a rectangle and a sketched picture line as the plain line.
+
 ## Preset geometry
 
 `@openpresentation/opf/shape-geometry` evaluates a preset at a size. It is edge-safe (no Node import) and has no

@@ -3,7 +3,7 @@
 // own that a bundler splits into a chunk, loaded the first time a deck has a shape block or a picture masked by a preset beyond the four
 // built-in masks (rect, roundRect, ellipse, hexagon): `ensureShapes` loads it, as `ensureDiagrams` loads diagram types. A host that
 // never draws a shape does not carry it. Until it is loaded, composition draws such a shape as loading (no outline) and reports nothing.
-import type * as Geometry from './shape-geometry.js';
+import type * as Geometry from './shape-engine-module.js';
 
 let loaded: typeof Geometry | undefined;
 let loading: Promise<typeof Geometry> | undefined;
@@ -13,6 +13,6 @@ export const shapeGeometry = (): typeof Geometry | undefined => loaded;
 
 /** Load the shape geometry once; later calls return the same promise. */
 export function loadShapeGeometry(): Promise<typeof Geometry> {
-  loading ??= import('./shape-geometry.js').then((module) => (loaded = module));
+  loading ??= import('./shape-engine-module.js').then((module) => (loaded = module));
   return loading;
 }

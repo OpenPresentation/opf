@@ -12,7 +12,6 @@ import { colorContrast } from './color.js';
 import type { CustomPathInput, ShapeAdjustment, ShapeGeometry, ShapePath, ShapePathFill } from './shape-geometry.js';
 import { loadShapeGeometry, shapeGeometry } from '#shape-engine';
 import { PRESET_NAMES } from './generated/preset-names.js';
-import { sketchPathData, sketchSeed } from './shape-sketch.js';
 
 /** The 187 DrawingML preset names (ECMA-376 ST_ShapeType), without loading their geometry. */
 export const SHAPE_PRESETS: readonly string[] = PRESET_NAMES;
@@ -52,6 +51,8 @@ export function shapesPending(input: unknown): string[] {
     const node = value as Rec;
     if (node.image === undefined && !Array.isArray(node.blocks) && (typeof node.shape === 'string' || node.path !== undefined || node.type === 'shape')) return true;
     if (node.image !== undefined && typeof node.shape === 'string' && !BUILT_IN.has(node.shape)) return true;
+    // A sketched line (stroke.sketch, on a picture too) is computed by the engine.
+    if (node.image !== undefined && typeof record(node.stroke).sketch === 'string') return true;
     return Object.entries(node).some(([key, item]) => key !== 'extensions' && needs(item, depth + 1));
   };
   return needs(record(input).slides, 0) ? ['shapes'] : [];
@@ -122,39 +123,6 @@ function boundsOf(points: [number, number][]): Box | undefined {
   const xs = points.map(point => point[0]), ys = points.map(point => point[1]);
   const x = Math.min(...xs), y = Math.min(...ys);
   return { x: round(x), y: round(y), width: round(Math.max(...xs) - x), height: round(Math.max(...ys) - y) };
-}
-
-/**
- * A polygon star-shaped about `center` whose scaled copies are a shape gradient's contours for the outline `rings`: the outline itself
- * when it is one ring that every ray from the center crosses once, otherwise its radial envelope (on each ray, the outline's farthest
- * point), sampled at every vertex's direction and every half degree. A point's place in the gradient is the least scale of the outline
- * about the center that still contains it, which is its distance over the envelope's along its ray.
- */
-function starOutline(rings: [number, number][][], center: [number, number]): [number, number][] {
-  const [cx, cy] = center;
-  const edges: [number, number, number, number][] = [];
-  for (const ring of rings) for (let at = 0; at < ring.length; at++) {
-    const [px, py] = ring[at]!, [qx, qy] = ring[(at + 1) % ring.length]!;
-    if (px !== qx || py !== qy) edges.push([px, py, qx, qy]);
-  }
-  if (rings.length === 1) {
-    const turns = edges.map(([px, py, qx, qy]) => (px - cx) * (qy - py) - (py - cy) * (qx - px));
-    if (turns.every(turn => turn >= -1e-9) || turns.every(turn => turn <= 1e-9)) return rings[0]!;
-  }
-  const angles = new Set<number>();
-  for (const [px, py] of edges) angles.add(Math.atan2(py - cy, px - cx));
-  for (let step = 0; step < 720; step++) angles.add(-Math.PI + step * Math.PI / 360);
-  return [...angles].sort((a, b) => a - b).map(angle => {
-    const dx = Math.cos(angle), dy = Math.sin(angle);
-    let far = 0;
-    for (const [px, py, qx, qy] of edges) {
-      const ex = qx - px, ey = qy - py, denominator = dx * ey - dy * ex;
-      if (Math.abs(denominator) < 1e-12) continue;
-      const t = ((px - cx) * ey - (py - cy) * ex) / denominator, u = ((px - cx) * dy - (py - cy) * dx) / denominator;
-      if (t > far && u >= -1e-9 && u <= 1 + 1e-9) far = t;
-    }
-    return [cx + dx * far, cy + dy * far] as [number, number];
-  });
 }
 
 /** The default frame aspect (width / height) of a preset: 1 for the round and regular shapes, 2 for horizontal arrows and bands, 0.5 for vertical ones, 1.5 otherwise. */
@@ -372,7 +340,10 @@ export function composeStroke(value: unknown, scale: number, defaults: { color?:
  * frame `box`. The seed depends only on the style, the frame's size and the outline, so a moved shape keeps its line.
  */
 export function sketchStroke(stroke: ComposedStroke | undefined, paths: { d: string; stroke: boolean }[], box: Box, scale: number): void {
-  if (!stroke?.sketch) return;
+  const engine = shapeGeometry();
+  // In a browser before ensureShapes the sketch is loading with the geometry: the plain line is drawn until then.
+  if (!stroke?.sketch || !engine) return;
+  const { sketchPathData, sketchSeed } = engine;
   const style = stroke.sketch;
   const local = paths.map(path => translatePathData(path.d, -box.x, -box.y)).join('|');
   const seed = sketchSeed(`${style}|${round(box.width)}x${round(box.height)}|${local}`);
@@ -550,7 +521,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
   const gradientBox = flat ? boundsOf((filledRings.length ? filledRings : flat.flat()).flat()) : undefined;
   if (outlineGradient === 'outline' && flat && gradientBox) {
     const center: [number, number] = [gradientBox.x + gradientBox.width / 2, gradientBox.y + gradientBox.height / 2];
-    const star = (rings: [number, number][][]) => [starOutline(rings, center).map(([x, y]) => [round(x), round(y)] as [number, number])];
+    const star = (rings: [number, number][][]) => [engine!.starOutline(rings, center).map(([x, y]) => [round(x), round(y)] as [number, number])];
     const union = preset && UNION_SHAPE_GRADIENTS.has(preset) ? star(filledRings) : undefined;
     geometry.paths.forEach((path, index) => { if (path.fill !== 'none') paths[index]!.gradientOutline = union ?? star(flat[index]!); });
   }

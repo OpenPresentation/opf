@@ -130,8 +130,7 @@ export function sketchPathData(d: string, seed: number, style: SketchStyle, scal
       for (let index = 0; index + 1 < marks.length; index++) sides.push(ordered.slice(marks[index]!, marks[index + 1]! + 1));
     }
     // The first pass: one continuous line through the sides (each side's first point is the previous side's last).
-    const all: Point[] = [];
-    sides.map(side => wobble(side, spec, random, scale, 0)).forEach((side, index) => all.push(...(index ? side.slice(1) : side)));
+    const all: Point[] = sides.map(side => wobble(side, spec, random, scale, 0)).flatMap((side, index) => index ? side.slice(1) : side);
     const smooth = closed && !corners.length;
     outline.push(curveThrough(smooth ? all.slice(0, -1) : all, smooth, number) + (closed ? 'Z' : ''));
     // Scribble's second pass: each side its own stroke, running past its corners.
