@@ -4390,7 +4390,15 @@ function bodyFill(result: SlideComposition): { fill: number; spare: number } | u
 function growBody(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition | undefined {
   if (options.fill === false || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || overflowCount(result) > 0) return undefined;
   const start = bodyFill(result);
-  if (!start || start.fill >= LONE_FILL) return undefined;
+  if (!start) return undefined;
+  // LH-168: a row of steps that already fills LONE_FILL keeps its size and is only centered under the heading (as the same steps in columns
+  // are when they grow), so the badges do not sit against the title with the space left below the text.
+  if (start.fill >= LONE_FILL) {
+    if (!result.steps?.some(entry => entry.form === 'row') || bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
+    const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * Math.min(result.width, result.height) / 720);
+    const centered = composeVariant(input, { ...options, [GROW]: 0, [CENTER]: true } as ComposeSlideOptions, before, floor);
+    return centered && overflowCount(centered) === 0 && !shrinks(centered, result, options) && centered.steps?.some(entry => entry.form === 'row') ? centered : undefined;
+  }
   // A body set at the readability floor is not short content: LH-83 may recompose it (settle), and growing would keep the floor layout.
   if (bodyReadability(result, options).sizes.some(entry => entry.atFloor)) return undefined;
   if (stackedTemplate(options, result)) return undefined;
@@ -4456,9 +4464,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   if (own.maxFontSize !== undefined) {
     const { maxFontSize: _cap, ...rest } = own, free = { ...record(input), composition: rest };
     const freeResult = settle(free, options, guardedCompose(free, options)), freePlain = settle(free, plainOptions, guardedCompose(free, plainOptions));
-    return withPictureScrim(input, options, freeResult.steps && readsAsWell(trackQuality(freePlain, options), trackQuality(freeResult, options), floor) ? result : plain);
+    return withPictureScrim(input, options, freeResult.steps && stepsRead(freePlain, freeResult, options, floor) ? result : plain);
   }
-  return withPictureScrim(input, options, readsAsWell(trackQuality(plain, options), trackQuality(result, options), floor) ? result : plain);
+  return withPictureScrim(input, options, stepsRead(plain, result, options, floor) ? result : plain);
 }
 /**
  * The part of a text item's box its lines cover (alignment respected), so a backdrop is judged under the ink, not the empty box: the
@@ -5148,6 +5156,31 @@ function trackQuality(result: SlideComposition, options: ComposeSlideOptions): T
   const charts = result.items.filter(item => item.field === 'chart' && item.chart), scale = Math.min(result.width, result.height) / 720;
   const shortPlots = charts.length ? charts.filter(item => shortPlot(item, bodyHeight(result), scale, false)).length : 0;
   return { overflows: read.overflows + unplaced, splitWords: read.splitWords, size: read.sizes.length ? Math.min(...read.sizes.map(entry => entry.size), ...[...half].flatMap(([path, size]) => read.byPath.has(path) ? [size] : [])) : Infinity, total: read.sizes.reduce((sum, entry) => sum + entry.size, 0), narrow: narrow.length, measure, blocks, wrappedCells: read.wrappedCells, shortPlots, splitValues: read.splitValues };
+}
+/**
+ * LH-168: trackQuality with every list of entries with descriptions measured by the smallest size it draws. A list's `fontSize` is its base
+ * size: for a plain list the label's, with the description at .82 of it (37 label over 30 description), for a heading list
+ * (LH-77, a step beside its badge) the description's, with the label LIST_HEADING_SCALE above it (40 over 32). Comparing the base sizes
+ * of the two, as every other comparison does, called the second smaller than the first although every line of it is set larger (32 over 30):
+ * the step badges lost on every English slide whose descriptions wrap, and won on short Arabic ones. The size a reader reads is the smallest
+ * one drawn, so the badges' decision (stepsRead) accepts them when either measure reads as well.
+ */
+function drawnQuality(result: SlideComposition, options: ComposeSlideOptions): TrackQuality {
+  const quality = trackQuality(result, options);
+  for (const item of result.items) {
+    const entries = item.text && 'listEntries' in item.text ? (item.text as ListFit).listEntries : undefined;
+    if (!entries?.length || !entries.some(entry => entry.description)) continue;
+    const drawn = Math.min(...entries.flatMap(entry => [entry.text.fontSize, ...(entry.description ? [entry.description.fontSize] : [])]));
+    const was = quality.blocks.get(item.path);
+    if (was === undefined || drawn >= was) continue;
+    quality.blocks.set(item.path, drawn);
+    quality.size = Math.min(quality.size, drawn);
+  }
+  return quality;
+}
+/** LH-168: the badges' decision (composeSlide): the steps read as well as the slide without them by base size (readsAsWell, as before) or by the smallest size drawn (drawnQuality). */
+function stepsRead(plain: SlideComposition, steps: SlideComposition, options: ComposeSlideOptions, floor: number): boolean {
+  return readsAsWell(trackQuality(plain, options), trackQuality(steps, options), floor) || readsAsWell(drawnQuality(plain, options), drawnQuality(steps, options), floor);
 }
 /**
  * Wave 3: `after` reads as well as `before`: no more findings, no more words split (LH-39: nor figures split across lines), no more prose under the minimum measure and none
