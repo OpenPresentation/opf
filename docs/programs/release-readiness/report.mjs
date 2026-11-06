@@ -49,7 +49,8 @@ export function parseBurndown(markdown) {
     const c = cells(line);
     if (c.length !== 6) throw new Error(`burndown: expected 6 columns, got ${c.length}: ${line.slice(0, 80)}`);
     const [id, item, repos, depends, status, evidence] = c;
-    if (!/^RR-\d{2}$/.test(id)) throw new Error(`burndown: bad item id "${id}"`);
+    // RR-102: ids passed RR-99.
+    if (!/^RR-\d{2,3}$/.test(id)) throw new Error(`burndown: bad item id "${id}"`);
     if (seen.has(id)) throw new Error(`burndown: duplicate item ${id}`);
     if (!STATUSES.includes(status)) throw new Error(`burndown: ${id} has unknown status "${status}" (allowed: ${STATUSES.join(', ')})`);
     seen.add(id);
@@ -74,7 +75,7 @@ export function parseNow(markdown) {
     const c = cells(line);
     if (c.length !== 5) throw new Error(`burndown: Now table expects 5 columns, got ${c.length}: ${line.slice(0, 80)}`);
     const [id, owner, working, blocked, next] = c;
-    if (!/^RR-\d{2}$/.test(id)) throw new Error(`burndown: Now table has bad item id "${id}"`);
+    if (!/^RR-\d{2,3}$/.test(id)) throw new Error(`burndown: Now table has bad item id "${id}"`);
     if (seen.has(id)) throw new Error(`burndown: Now table lists ${id} twice`);
     seen.add(id);
     rows.push({ id, owner, working, blocked, next });
