@@ -12,7 +12,7 @@ const fillOf = (svg, label) => {
   assert.ok(found, `${label} run in the SVG`);
   return found[1].toUpperCase();
 };
-const one = (design, run) => toSvg({ design, slides: [{ title: 'T', text: [run] }] }, 1);
+const one = (design, run) => toSvg({ design, slides: [{ title: 'T', subtitle: 'T', text: [run] }] }, 1);
 
 // Role overrides on a light slide: every role ColorRef and the default text.
 const light = { theme: 'classic', colorScheme: { id: 'cool-horizon', surface: '#EEEEDD', text: '#334455', textSecondary: '#556677', background: '#FFF8E7', accent: '#FF00AA' } };

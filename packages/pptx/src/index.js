@@ -716,8 +716,12 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
 // slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
 function dropImpliedVariants(imported, options) {
   // LH-01: a slide's implied variant includes its layout's (a section imports its accent clrMapOvr as a variant its layout already gives).
-  const rolesVariant = (design, slide = {}) => {
-    try { return JSON.stringify(coreContext({...imported, design, slides: [slide]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  // LH-164: a message-only slide's accent surface is implied by its content (and by the slide before it), so the slide is resolved inside the imported deck.
+  const rolesVariant = (design, slide = {}, at) => {
+    try {
+      const slides = at === undefined ? [slide] : imported.slides.map((other, index) => index === at ? slide : other);
+      return JSON.stringify(coreContext({...imported, design, slides}, at ?? 0, {...options, textMeasurement: undefined}).resolved.roles?.variant);
+    } catch { return undefined; }
   };
   const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
   if (imported.design?.variant !== undefined) {
@@ -727,10 +731,10 @@ function dropImpliedVariants(imported, options) {
       if (Object.keys(rest).length) imported.design = rest; else delete imported.design;
     }
   }
-  for (const slide of imported.slides) {
+  for (const [index, slide] of imported.slides.entries()) {
     if (slide.design?.variant === undefined) continue;
     const rest = withoutVariant(slide.design);
-    const implied = rolesVariant(imported.design, {...(slide.layout !== undefined ? {layout: slide.layout} : {}), design: rest});
+    const implied = rolesVariant(imported.design, {...slide, design: rest}, index);
     if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
       if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
     }
@@ -2504,7 +2508,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     const name = await addImageItem(slide, presentation, item, slideIndex, itemContext, options);
     if (item.caption) addCaption(slide, item, name, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
   };
-  await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options);
+  await addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, geometry.surface !== undefined);
   // Cover and section slides: the deck logo core composed at the top-left of the free area, after the watermark and before content.
   if (geometry.logo) await addLogo(slide, presentation, geometry.logo, slideIndex, slideContext, context, options);
   const emphasisContext = geometry.emphasis ? emphasisExportContext(slideContext, emphasisSurface(slideContext.colorScheme, slideContext.roles)) : undefined;
@@ -3247,7 +3251,9 @@ const backgroundUnresolved = path => ({code: 'unresolved-asset', path, reason: '
 // (and its overlay) and before all content, the preview's paint order. The
 // slide's own design.watermark replaces the deck's, and false suppresses it.
 // Frame, fit and opacity are written after PptxGenJS embeds the bytes.
-async function addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options) {
+// LH-164: on the accent surface of a message-only slide an image watermark is drawn in the slide's text color (a duotone of one color on the
+// blip, the preview's feColorMatrix), so a mark made for the deck's plain surface still reads there.
+async function addWatermark(slide, presentation, opfSlide, slideIndex, slideContext, context, options, onSurface = false) {
   const local = opfSlide.design?.watermark !== undefined;
   const watermark = local ? opfSlide.design.watermark : presentation.design?.watermark;
   if (watermark === undefined || watermark === null || watermark === false) return;
@@ -3268,7 +3274,7 @@ async function addWatermark(slide, presentation, opfSlide, slideIndex, slideCont
     return;
   }
   const opacity = watermarkOpacity(watermark);
-  context.watermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box, opacity, path});
+  context.watermarks.set(`ppt/slides/slide${slideIndex + 1}.xml`, {slide: `slides.${slideIndex}`, box, opacity, path, ...(onSurface ? {recolor: normalizeHex(slideContext.colors.text)} : {})});
   // Opacity is an a:alphaModFix on the blip, which PowerPoint applies to an SVG picture (native check 2026-10-01).
   if (outcome.svg) context.svgPictures.set(`ppt/slides/slide${slideIndex + 1}.xml|${watermarkName()}`, outcome.svg);
   slide.addImage({...resolved, objectName: watermarkName(), ...box, altText: assetAlt(asset, presentation) ?? 'Watermark'});

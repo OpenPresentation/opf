@@ -42,7 +42,8 @@ export {LOGO_SHAPES,resolveLogo} from './logos.js';
 export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logos.js';
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
-import {colorContrast,layoutVariantApplies,resolveColorRoles} from './color.js';
+import {legible, luminance as legibleLuminance, normalize as legibleHex} from './legible-color.js';
+import {colorContrast,layoutVariantApplies,resolveColorRoles,type ColorVariant} from './color.js';
 import {pictureScrims,SCRIM_MARGIN,SCRIM_TARGET_CONTRAST,type ComposedScrim,type PictureLuminance,type ScrimBox,type ScrimEdge} from './picture-scrim.js';
 export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,sampledWeight,grayOfLuminance,SCRIM_TARGET_CONTRAST,SCRIM_MARGIN,SCRIM_FADE,type ComposedScrim,type PictureLuminance,type PictureWeights,type ScrimEdge} from './picture-scrim.js';
 import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
@@ -835,6 +836,8 @@ export interface SlideComposition {
    * the picture was measured or the background names a `textPlacement`; absent otherwise (the group then sits as wave 6 put it).
    */
   pictureText?: PictureText;
+  /** LH-164: why the slide is drawn on the accent surface (ComposeSlideOptions.messageSurface), echoed so a host can show the reason; absent on a slide with the deck's own surface. */
+  surface?: MessageSurface;
   /**
    * LH-80, LH-49: automatic composition gave the slide's one picture (`picture`) or one chart (`chart`) a full-height track of its own
    * at `edge` (physical), `size` of the slide's width (left, right) or height (top, bottom); `path` is the block's. A picture's track
@@ -842,6 +845,15 @@ export interface SlideComposition {
    */
   track?: { kind: 'picture' | 'chart'; edge: ImageEdge; size: number; path: string };
   explanation?: CompositionExplanation;
+}
+/**
+ * LH-164: a slide whose whole body is one display message takes the layout's accent surface (messageSurface in message-surface.ts).
+ * `kind` is the LH-09 rule that made the body one message: `statement-message` (a statement record's message) or `display-message` (a
+ * lone short text grown to display size); `variant` is the color variant the slide is drawn on (an accent slot, the deck's accent order).
+ */
+export interface MessageSurface {
+  kind: 'statement-message' | 'display-message';
+  variant: ColorVariant;
 }
 export interface ComposeSlideOptions {
   /** Context for inherited furniture, generated organization names, social profiles, logos, layout hints, references and marker numbering. */
@@ -856,6 +868,17 @@ export interface ComposeSlideOptions {
    * `onDark` value (cover logo, `var:organization.logo.*` in zone images, picture bullets). Core never inspects colors.
    */
   darkBackground?: boolean;
+  /**
+   * LH-164: the accent surface this slide was given because its whole body is one display message (resolveSlideContext's
+   * `resolved.messageSurface`, which also drew `roles` and `darkBackground` for it). Composition draws nothing for it and reports it as
+   * `SlideComposition.surface`, so an editor or host can say why the slide is not on the deck's plain surface.
+   */
+  messageSurface?: MessageSurface;
+  /**
+   * LH-164: resolves a run color the author wrote (a hex, a role, a scheme slot, `var:`) to the hex the engines draw, for the slide's roles and
+   * variables; `resolveSlideContext` passes it with `messageSurface`, so a color that does not read on the surface can be drawn in one that does.
+   */
+  resolveRunColor?: (reference: string) => string | undefined;
   /**
    * The resolved theme's `background`, the lowest level of the background chain (the slide's design.background, then
    * the deck's, then this). Only an image background produces geometry (`SlideComposition.backgroundImage`).
@@ -4506,6 +4529,11 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
  * LH-49); each of those arrangements is guarded the same way and kept only when it reads as well as the guarded composition.
  */
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
+  const result = composeSlideBody(input, options);
+  if (options.messageSurface) result.surface = options.messageSurface;
+  return result;
+}
+function composeSlideBody(input: unknown, options: ComposeSlideOptions): SlideComposition {
   if ((options as Record<symbol, unknown>)[RULES] !== undefined) return composeArranged(input, options);
   const result = settled(input, options);
   if (!result.steps) return withPictureScrim(input, options, result);
@@ -4760,6 +4788,21 @@ export function messageWords(value: unknown): number {
   const unspaced = text.match(UNSPACED)?.length ?? 0, spaced = text.replace(UNSPACED, ' ').trim();
   return (spaced ? spaced.split(/\s+/u).length : 0) + Math.ceil(unspaced / 2);
 }
+/** The payload fields a slide's body holds (its own and its blocks'), or undefined when a block nests more blocks. */
+function bodyPayloads(slide: Record<string, any>): { field: string; host: Record<string, any> }[] | undefined {
+  const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
+  const payloads: { field: string; host: Record<string, any> }[] = [];
+  for (const host of [slide, ...(Array.isArray(slide.blocks) ? slide.blocks.map(record) : [])]) {
+    if (host !== slide && !empty(host.blocks)) return undefined;
+    for (const field of fields) if (!empty(host[field])) payloads.push({ field, host });
+  }
+  return payloads;
+}
+/** LH-164: the one payload a slide's body holds (its field and the block or slide that carries it), or undefined for no body, several payloads or nested blocks. */
+export function lonePayload(slide: Record<string, any>): { field: string; host: Record<string, any> } | undefined {
+  const payloads = bodyPayloads(slide);
+  return payloads?.length === 1 ? payloads[0] : undefined;
+}
 /**
  * LH-09: how a stacked record with one primary region (the statement) sets a slide with one block. `title`: the title is the statement
  * (a sentence over a paragraph, n27, n29), drawn at display size under LH-130's accent rule with the paragraph at its size below.
@@ -4767,17 +4810,13 @@ export function messageWords(value: unknown): number {
  * the title is the running head at the top of the slide and the block fills the body as a lone block (statementTemplate). Undefined for
  * any other slide: no body (the headings are the message, LH-129), a quote, several blocks, a subtitle. With no title the block is the message.
  */
-function statementMessage(slide: Record<string, any>, plan: LayoutTemplate, fill = true): 'title' | 'body' | undefined {
+export function statementMessage(slide: Record<string, any>, plan: LayoutTemplate, fill = true): 'title' | 'body' | undefined {
   if (plan.stack === undefined || plan.subtitle || plan.regions.length !== 1 || plan.regions[0]!.role !== 'primary') return undefined;
   const title = annotationText(slide.title).trim();
   if (annotationText(slide.subtitle).trim()) return undefined;
-  const empty = (value: unknown) => value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0);
-  const payloads: string[] = [];
-  for (const host of [slide, ...(Array.isArray(slide.blocks) ? slide.blocks.map(record) : [])]) {
-    if (host !== slide && !empty(host.blocks)) return undefined;
-    for (const field of fields) if (!empty(host[field])) payloads.push(field);
-  }
-  if (payloads.length !== 1) return undefined;
+  const found = bodyPayloads(slide);
+  if (found?.length !== 1) return undefined;
+  const payloads = found.map(entry => entry.field);
   // A slide with no title has only its block to say: the block is the message.
   const label = !title || messageWords(slide.title) <= SHORT_TEXT_WORDS && !/[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(title);
   // With fill off nothing grows, so the stack stays as the record sets it.
@@ -5465,9 +5504,26 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // color, which both engines draw, and a PowerPoint import restores the authored runs). Nothing is emphasized that the author did not
   // mark. A title keeps its look: PowerPoint's heading import would read the color as authored.
   const slideRoles = options.roles ?? resolveColorRoles({}, { tone: options.darkBackground ? 'dark' : 'light' });
+  // LH-163: where the primary does not read on a dark or accent surface (the accent surface of LH-164 is the primary's own color, a navy slide
+  // dims a mid blue) the emphasis is a lighter tint of the primary that does: its hue and saturation, its lightness raised in 1% steps until it
+  // reads 4.5:1 (legible), as Claude Design draws n29's second sentence in light blue on navy. A light surface keeps its rule (no emphasis color).
   const emphasisReads = (colorContrast(slideRoles.primary, slideRoles.background) ?? 0) >= SCRIM_TARGET_CONTRAST;
-  const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !emphasisReads || !Array.isArray(value) || !(field === 'text' && displayTexts.has(fitPath)) ? value
-    : value.map(run => run && typeof run === 'object' && (run as { bold?: unknown }).bold === true && ((run as { color?: unknown }).color ?? '') === '' ? { ...run, color: 'primary' } : run);
+  const emphasisColor: string | undefined = emphasisReads ? 'primary' : legibleHex(slideRoles.primary) && legibleHex(slideRoles.background) && legibleLuminance(legibleHex(slideRoles.background)!) < .5 ? (() => {
+    const tint = legible(legibleHex(slideRoles.primary)!, legibleHex(slideRoles.background)!, SCRIM_TARGET_CONTRAST);
+    return (colorContrast(tint, slideRoles.background) ?? 0) >= SCRIM_TARGET_CONTRAST && tint.toUpperCase() !== legibleHex(slideRoles.text) ? tint : undefined;
+  })() : undefined;
+  // LH-164: on the accent surface a color the author set for a run of the message (a hex, or the primary, which is the surface itself there)
+  // that does not read 4.5:1 draws in the nearest color that does (legible); the document keeps the authored color.
+  const onMessageSurface = options.messageSurface !== undefined, surfaceBackground = legibleHex(slideRoles.background);
+  const surfaceRun = (run: unknown): unknown => {
+    const color = run && typeof run === 'object' ? (run as { color?: unknown }).color : undefined;
+    // Any ColorRef the author used (a role, a scheme slot, a variable) is resolved by the slide context; without it a hex and the primary are.
+    const drawn = typeof color === 'string' && options.resolveRunColor ? legibleHex(options.resolveRunColor(color)) : color === 'primary' ? legibleHex(slideRoles.primary) : legibleHex(color);
+    if (!onMessageSurface || !surfaceBackground || !drawn || (colorContrast(drawn, surfaceBackground) ?? 0) >= SCRIM_TARGET_CONTRAST) return run;
+    return { ...(run as object), color: legible(drawn, surfaceBackground, SCRIM_TARGET_CONTRAST) };
+  };
+  const displayEmphasis = (field: string, value: unknown, fitPath: string): unknown => !Array.isArray(value) || !(field === 'text' && displayTexts.has(fitPath)) || (emphasisColor === undefined && !onMessageSurface) ? value
+    : value.map(run => run && typeof run === 'object' && (run as { bold?: unknown }).bold === true && ((run as { color?: unknown }).color ?? '') === '' ? (emphasisColor === undefined ? run : { ...run, color: emphasisColor }) : surfaceRun(run));
   const fitPlacedText = (field:string,authored:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const value=displayEmphasis(field,authored,path);
     const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);

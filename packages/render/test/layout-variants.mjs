@@ -18,7 +18,7 @@ const slides = [
   {layout: 'quote', title: 'In their words', quote: {text: 'We can see where help is needed.', source: 'Pilot lead'}},
   {layout: 'closing', title: 'Agree the start date', text: 'Name the pilot lead.'},
   {layout: 'section', title: 'Own variant', design: {variant: 'light1'}},
-  {title: 'Content', text: 'A plain slide.'},
+  {title: 'Content', text: 'A plain slide.', items: ['One', 'Two']},
 ];
 // [deck design, the slots slides 1 to 6 draw on]
 const cases = [

@@ -1,7 +1,8 @@
 import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
-import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
-import { layoutVariantApplies, resolveColorRoles, type ColorVariant, type ResolvedColorRoles } from './color.js';
+import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts, type MessageSurface } from './composition.js';
+import { layoutVariantApplies, resolveColorRef, resolveColorRoles, type ColorVariant, type ResolvedColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
+import { drawsAccentByDesign, messageDisplayed, resolveMessageSurface } from './message-surface.js';
 import { colorChoice, colorLevels } from './rule-design.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
@@ -62,11 +63,32 @@ export interface SlideContext {
      */
     layoutVariant?: ColorVariant;
     /**
+     * LH-164: set when the slide's whole body is one display message and it takes the accent surface (resolveMessageSurface): `kind` is the LH-09
+     * rule that made the body one message and `variant` the accent variant the slide is drawn on, which `roles` and `layoutVariant` already
+     * follow (as for a layout's variant, the slide's own design and a fixed deck background win, and no two accent surfaces follow each other).
+     */
+    messageSurface?: MessageSurface;
+    /**
      * Where each resolved record came from: `{ kind, reference, id, group, source?, origin }` (origin `document` for an
      * embedded record, `host` for a registered catalog's). A kind is absent when nothing resolved for it (the engine
      * default, or automatic composition for a layout), so engines record provenance without resolving again.
      */
     provenance: { layout?: RecordProvenance; theme?: RecordProvenance; colorScheme?: RecordProvenance; fontScheme?: RecordProvenance };
+  };
+}
+
+/**
+ * LH-164: the host's measurement as the check composition uses it: the same widths, without the style paths, so a host that records the
+ * fonts it resolved per path (the renderer's substitution registry) records nothing more for the check than for the slide's own composition.
+ */
+function unpathed(measurement: NonNullable<ComposeSlideOptions['textMeasurement']>): NonNullable<ComposeSlideOptions['textMeasurement']> {
+  const bare = <T extends { path?: string }>(style: T): T => ({ ...style, path: undefined });
+  return {
+    ...measurement,
+    measure: (text, size, style) => measurement.measure(text, size, bare(style)),
+    ...(measurement.resolveStyle ? { resolveStyle: (style) => measurement.resolveStyle!(bare(style)) } : {}),
+    ...(measurement.outlineBounds ? { outlineBounds: (text, size, style) => measurement.outlineBounds!(text, size, bare(style)) } : {}),
+    ...(measurement.forScripts ? { forScripts: (profile) => unpathed(measurement.forScripts!(profile)) } : {}),
   };
 }
 
@@ -102,27 +124,49 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   if (options.strictReferences && diagnostics.length) throw new OPFUnresolvedReferenceError(diagnostics);
 
   // RR-96: the roles of this slide, from its variant or background (slide, layout variant, deck, then theme; LH-01); the same record the engines draw with.
-  const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables));
-  const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
-  // LH-01: the layout's variant when it decides the background (the slide sets neither a variant nor a background of its own).
-  const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout, deck.design, theme.background) ? (levels[1]!.variant as ColorVariant) : undefined;
-  const composeOptions: ComposeSlideOptions = {
-    ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
-    ...(layout ? { layout } : {}),
-    presentation: presentation as ComposeSlideOptions['presentation'],
-    slideIndex: index,
-    slideNumber: options.slideNumber ?? index + 1,
-    slideCount: options.slideCount ?? slides.length,
-    fontFamilies: resolveFontFamilies(fontScheme),
-    darkBackground: roles.dark,
-    // LH-02: the colors the automatic scrim of a picture background is sized for.
-    roles: { text: roles.text, textSecondary: roles.textSecondary, primary: roles.primary, background: roles.background },
-    ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
-    // OPF 0.19: a theme may carry the shared design keys (between the deck's design and the layout record's).
-    ...(theme.design !== undefined && rec(theme.design) === theme.design ? { themeDesign: theme.design } : {}),
-    ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
-    ...(options.date !== undefined ? { date: options.date } : {}),
+  // LH-164: a slide whose whole body is one display message takes the accent surface (the variant of its own, where its layout names none).
+  const candidate = resolveMessageSurface(presentation, slide, layout, { theme, colorScheme, variables: rec(deck.variables), themeChosen: records.provenance.theme !== undefined });
+  const build = (surface: MessageSurface | undefined) => {
+    const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables), surface?.variant);
+    const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
+    // LH-01: the layout's variant when it decides the background (the slide sets neither a variant nor a background of its own).
+    const layoutVariant = levels.length > 3 && layoutVariantApplies(slide.design, layout, deck.design, theme.background, surface) ? (levels[1]!.variant as ColorVariant) : undefined;
+    const composeOptions: ComposeSlideOptions = {
+      ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
+      ...(layout ? { layout } : {}),
+      presentation: presentation as ComposeSlideOptions['presentation'],
+      slideIndex: index,
+      slideNumber: options.slideNumber ?? index + 1,
+      slideCount: options.slideCount ?? slides.length,
+      fontFamilies: resolveFontFamilies(fontScheme),
+      darkBackground: roles.dark,
+      ...(surface ? { messageSurface: surface, resolveRunColor: (reference: string) => resolveColorRef(reference, { colorScheme, roles, variables: rec(deck.variables), fallback: '' }) || undefined } : {}),
+      // LH-02: the colors the automatic scrim of a picture background is sized for.
+      roles: { text: roles.text, textSecondary: roles.textSecondary, primary: roles.primary, background: roles.background },
+      ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
+      // OPF 0.19: a theme may carry the shared design keys (between the deck's design and the layout record's).
+      ...(theme.design !== undefined && rec(theme.design) === theme.design ? { themeDesign: theme.design } : {}),
+      ...(options.fonts?.textMeasurement ? { textMeasurement: options.fonts.textMeasurement } : {}),
+      ...(options.date !== undefined ? { date: options.date } : {}),
+    };
+    return { levels, roles, layoutVariant, composeOptions };
   };
-  const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number, presentation, darkBackground: composeOptions.darkBackground === true });
-  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), ...(layoutVariant ? { layoutVariant } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
+  const variablesOf = (made: { composeOptions: ComposeSlideOptions }) => resolveSlideVariables(slide, { slideNumber: made.composeOptions.slideNumber as number, slideCount: made.composeOptions.slideCount as number, presentation, darkBackground: made.composeOptions.darkBackground === true });
+  // LH-164: the content says the body is one message; the slide is composed once as it is on the plain surface (a candidate is rare) and takes
+  // the accent only when LH-09 really draws the message at display size (a deck whose texts sit on cards, for one, keeps its body text).
+  let messageSurface = candidate, built = build(candidate);
+  if (candidate) {
+    const plain = build(undefined);
+    let displayed = false;
+    try { displayed = messageDisplayed(composeSlide(variablesOf(plain), { ...plain.composeOptions, ...(plain.composeOptions.textMeasurement ? { textMeasurement: unpathed(plain.composeOptions.textMeasurement) } : {}) }), candidate.kind); } catch { displayed = false; }
+    // Never two accent surfaces in a row: judged by whether the slide before really is on one (its own composition decides, recursively).
+    if (displayed && index > 0) {
+      const before = rec(slides[index - 1]), record = (typeof before.layout === 'string' && before.layout !== 'auto' ? resolveReference(presentation, 'layouts', before.layout, catalogs)?.record : undefined) as Rec | undefined;
+      if (drawsAccentByDesign(presentation, before, record, theme) || resolveSlideContext(presentation, index - 1, { ...options, slideNumber: undefined }).resolved.messageSurface !== undefined) displayed = false;
+    }
+    if (!displayed) { messageSurface = undefined; built = plain; }
+  }
+  const { roles, layoutVariant, composeOptions } = built;
+  const resolvedSlide = variablesOf(built);
+  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), ...(layoutVariant ? { layoutVariant } : {}), ...(messageSurface ? { messageSurface } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

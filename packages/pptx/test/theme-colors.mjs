@@ -111,12 +111,12 @@ const deck = {
   design: {theme: 'classic', colorScheme: 'forest-green'},
   variables: {risk: '#B42318'},
   slides: [
-    {title: 'Runs', text: [
+    {title: 'Runs', subtitle: 'Runs', text: [
       {text: 'slot', color: 'accent2'}, ' ', {text: 'role', color: 'primary'}, ' ',
       {text: 'literal', color: '#4A7C59'}, ' ', {text: 'variable', color: 'var:risk'}, ' ',
       {text: 'link', color: 'hyperlink'}, ' ', {text: 'secondary', color: 'textSecondary'},
     ]},
-    {title: 'Override', design: {colorScheme: 'boost'}, text: [{text: 'other', color: 'accent2'}, ' ', {text: 'shared', color: 'dark1'}]},
+    {title: 'Override', subtitle: 'Override', design: {colorScheme: 'boost'}, text: [{text: 'other', color: 'accent2'}, ' ', {text: 'shared', color: 'dark1'}]},
     {title: 'Solid', design: {background: {type: 'solid', color: '#FFFFFF'}}, text: 'Literal background'},
   ],
 };
@@ -152,7 +152,7 @@ assert.match(third, /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><
 assert.equal(runFill(third, 'Solid'), '<a:schemeClr val="tx1"/>', 'default text on a literal background is the text role');
 assert.equal(resolve(runFill(third, 'Solid'), colors), hex(forest.dark1));
 // Even an override slide whose scheme equals the deck scheme stays literal.
-const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
+const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', subtitle: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
 assert.doesNotMatch(sameOverride, /<a:schemeClr/);
 
 // FF-24b: default text pairs only with an opaque light/dark theme background, and

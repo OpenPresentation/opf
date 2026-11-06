@@ -34,7 +34,8 @@ export function watermarkOpacity(value) {
 
 function blipFillIdentity(blipFill) {
   const {['a:blip']: blip, ...rest} = normalizeCrop(blipFill) ?? {};
-  const {['r:embed']: _embed, ...blipRest} = withoutSvgBlip(blip) ?? {};
+  // LH-164: a one-color duotone is the slide surface's recolor (derived on export), not part of the mark's identity.
+  const {['r:embed']: _embed, ['a:duotone']: _duotone, ...blipRest} = withoutSvgBlip(blip) ?? {};
   return {...rest, 'a:blip': blipRest};
 }
 
@@ -62,8 +63,8 @@ export function placeWatermarks(entries, marks, metadataFor, fail) {
       const attributes = `${placed.rotation ? ` rot="${placed.rotation * 60000}"` : ''}${placed.flipH ? ' flipH="1"' : ''}${placed.flipV ? ' flipV="1"' : ''}`;
       picture = picture.replace(/<a:xfrm\b[^>]*>[\s\S]*?<\/a:xfrm>/, `<a:xfrm${attributes}><a:off x="${emu(placed.x)}" y="${emu(placed.y)}"/><a:ext cx="${emu(placed.w)}" cy="${emu(placed.h)}"/></a:xfrm>`);
       picture = picture.replace(/<a:srcRect\b[^>]*\/>/, '');
-      if (mark.opacity < 1) {
-        const effect = `<a:alphaModFix amt="${Math.round(mark.opacity * 100000)}"/>`;
+      if (mark.recolor || mark.opacity < 1) {
+        const effect = `${mark.recolor ? `<a:duotone><a:srgbClr val="${mark.recolor}"/><a:srgbClr val="${mark.recolor}"/></a:duotone>` : ''}${mark.opacity < 1 ? `<a:alphaModFix amt="${Math.round(mark.opacity * 100000)}"/>` : ''}`;
         picture = picture.replace(/<a:blip\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:blip>)/, (_, blipAttributes, inner = '') => `<a:blip${blipAttributes}>${effect}${inner}</a:blip>`);
       }
       const node = parser.parse(picture)['p:pic'];

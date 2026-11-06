@@ -373,6 +373,8 @@ The featured cell is drawn on the emphasis surface (`source: 'featured'`), and e
 
 Composition reports the surface as `result.emphasis` `{ path, box, radius, shape: 'card' | 'band' | 'pill', source: 'authored' | 'foot-band' | 'pill' | 'featured', arrow? }` and marks every item on it `emphasis: true`. Its colors come from core `emphasisSurface(colorScheme, roles)`, which resolves a variant of the deck's own scheme through the layout-variant machinery (LH-01): on a light slide dark2, then dark1, then the accents; on a dark slide the accents in the slide's order, then light1; the first whose text reaches 4.5:1 on its fill and whose fill reaches 3:1 against the slide. Every text role on it under 4.5:1 takes the surface's text color. The preview and the PPTX export draw the surface under the first item on it and color those items with the surface's roles (PPTX: a tagged `OPF card <path>` frame with no line, recognized on import as decoration); `validate` measures their contrast against the surface.
 
+A slide whose whole body is one display message is drawn on the accent surface (LH-164; docs/design-resolution.md, "A message-only slide"). The surface is a color variant the slide context resolves before composition, so `composeSlide` moves nothing for it: it echoes `options.messageSurface` as `result.surface` `{ kind: 'statement-message' | 'display-message', variant }`, the reason an editor can show, as `pictureText` and `recomposed` are. LH-163: in a display message on a dark or accent surface, the author's bold words that the primary does not reach 4.5:1 on draw in a lighter tint of the primary that does.
+
 ## Nested groups
 
 ### Shared content cards

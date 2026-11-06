@@ -43,6 +43,8 @@ for (const treatment of TREATMENTS) {
   const document = treatmentDocument(treatment, picture);
   // LH-02: the 0.14 renders predate core's automatic scrim behind text on a background picture without an overlay, so it is set aside here.
   for (const slide of document.slides) { const background = slide.design?.background; if (background && typeof background === 'object' && background.overlay === undefined) background.overlay = false; }
+  // LH-164: a slide that is one short message takes the accent surface; these documents compare pixels with the 0.14 renders, which have the deck's own surface, stated here as the slide's variant.
+  if (treatment.watermark) for (const slide of document.slides) slide.design = { variant: resolveSlideContext({ ...document, slides: [{ ...slide, subtitle: 'Plain surface' }] }, 0, {}).resolved.roles.variant, ...slide.design };
   const diagnostics = [];
   const svg = toSvg(document, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.deepEqual(diagnostics.filter(entry => entry.code.startsWith('unresolved-')).map(entry => entry.code), [], `${slug}: a self-contained treatment resolves everything`);
