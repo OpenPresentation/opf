@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [opf, editor]
+---
+LH-180: the preview and the PowerPoint export decide LH-164's message surface the same way for an Arabic message (and for runs in a symbol font's private-use codes). The surface is taken only when composition draws the message at display size, and core composed that check with the measurement the host passed: the PPTX exporter passes its script-planned measurement, the preview the bare `loadFonts()` measurement, in which Arabic text in the Latin display face is a missing glyph, so the check failed in the preview alone and the preview kept the plain surface where PowerPoint drew the accent. `resolveSlideContext` now plans a measurement that can plan scripts (`forScripts`) with the slide's script fonts for that check, as the engines compose the slide; a planned measurement is used as it is. Latin slides decide as before. LH-181: in the editor, a double click on a word of a text drawn with a run-in heading (LH-63), or any plain text drawn as runs, selects that word while the text is being edited: the inline textarea spans every drawn line, blank lines included, and takes the body's face instead of the heading's.
