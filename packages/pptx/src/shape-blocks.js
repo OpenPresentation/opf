@@ -148,7 +148,9 @@ function arcXml([x1, y1], rx, ry, large, sweep, [x2, y2], point) {
  */
 export function drawEffects(shape, paint) {
   if (!shape.effects) return '';
-  return effectsXml(shape.effects, ref => { const { hex, alpha } = paint(ref, '000000'); return `#${hex}${alpha < 1 ? Math.round(alpha * 255).toString(16).padStart(2, '0').toUpperCase() : ''}`; }, { scale: shape.effectScale ?? 1 });
+  // A color the slide's theme holds is its scheme color, as the fill's is; a shadow's black (the presets' and the object form's default)
+  // that the theme does not hold is PowerPoint's own preset black, as its Shadow gallery writes it.
+  return effectsXml(shape.effects, ref => { const { hex, alpha, scheme } = paint(ref, '000000'); return alpha >= 1 && scheme ? `<a:schemeClr val="${scheme}"/>` : alpha >= 1 && hex.toUpperCase() === '000000' ? '<a:prstClr val="black"/>' : `#${hex}${alpha < 1 ? Math.round(alpha * 255).toString(16).padStart(2, '0').toUpperCase() : ''}`; }, { scale: shape.effectScale ?? 1 });
 }
 
 /** The p:style of a shape's theme style (core ShapeStyleLook ref); empty for style none. */

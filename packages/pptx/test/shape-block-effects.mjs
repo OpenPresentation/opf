@@ -23,7 +23,7 @@ async function shapes(blocks, dimensions) {
   assert.ok(list, 'the effects sit in p:spPr right after a:ln');
   assert.deepEqual([...list.matchAll(/<a:(blur|glow|innerShdw|outerShdw|reflection|softEdge)\b/g)].map(match => match[1]), ['blur', 'glow', 'innerShdw', 'outerShdw', 'reflection', 'softEdge']);
   assert.match(list, /<a:glow rad="95250"><a:schemeClr val="accent2"><a:lumMod val="60000"\/><a:lumOff val="40000"\/><a:alpha val="60000"\/><\/a:schemeClr><\/a:glow>/);
-  assert.match(list, /<a:outerShdw blurRad="50800" dist="38100" dir="5400000" algn="tl" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="40000"\/><\/a:srgbClr><\/a:outerShdw>/);
+  assert.match(list, /<a:outerShdw blurRad="50800" dist="38100" dir="5400000" algn="tl" rotWithShape="0"><a:prstClr val="black"><a:alpha val="40000"\/><\/a:prstClr><\/a:outerShdw>/, 'the shadow presets\' black is PowerPoint\'s preset black');
   assert.match(list, /<a:softEdge rad="38100"\/>/);
 }
 {
