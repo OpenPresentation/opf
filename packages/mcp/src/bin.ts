@@ -12,10 +12,11 @@ Usage:
   npx -y @openpresentation/mcp       run the server (an MCP client starts it: command npx, args -y @openpresentation/mcp)
   opf-mcp --version
 
-Tools: start_here, validate_deck, get_schema, search_catalog, get_catalog_record, convert, search_docs, list_examples.
+Tools: start_here, validate_deck, get_schema, search_catalog, get_catalog_record, search_icons, convert, search_docs, list_examples,
+show_deck (opens a deck in the OPF viewer in a client that supports MCP Apps, such as Claude), read_font_file (for the viewer).
 Resources: opf://docs/<slug> (opf://docs/index lists them, opf://docs/whats-new), opf://schema/<name>[#<pointer or $defs name>],
 opf://examples/<slug>, opf://catalog/<kind>/<id>, opf://skills/<name>. Prompts: learn_opf, author_deck, fix_validation_findings,
-choose_layout. It keeps no state and reads no file. Claude Code: claude mcp add opf -- npx -y @openpresentation/mcp
+choose_layout. ui://opf/deck is the viewer. It keeps no state and reads no file but the renderer's font files. Claude Code: claude mcp add opf -- npx -y @openpresentation/mcp
 `);
 } else if (arg === "--version" || arg === "-v") {
 	process.stdout.write(`${MCP_VERSION}\n`);

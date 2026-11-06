@@ -224,10 +224,26 @@ jobs:
       # The MCP server's tests spawn it, compare it with the built `opf`, and bundle it for a Worker and run it in workerd (the
       # `workerd` npm package, no Cloudflare account). OPF_REQUIRE_WORKERD makes a missing workerd binary a failure here.
       - name: Test the MCP server (with the workerd lane)
-        if: ${{ matrix.job == 'mcp' }}
+        if: ${{ matrix.job == 'mcp' && matrix.kind == 'tests' }}
         env:
           OPF_REQUIRE_WORKERD: '1'
         run: pnpm --filter @openpresentation/mcp --fail-if-no-match run test
+
+      # The deck view (show_deck's MCP App) in Chromium, framed the way an MCP Apps host frames it: another origin, the sandbox flags
+      # and the restrictive default CSP of SEP-1865. The commands are test/browser-suites.json.
+      - name: MCP browser suite
+        if: ${{ matrix.job == 'mcp' && matrix.kind == 'browser' }}
+        working-directory: packages/mcp
+        run: |
+          pnpm run build
+          node ../../scripts/quarantine.mjs check
+          node ../../scripts/quarantine.mjs run-suite browser
+
+      - name: MCP quarantined tests (non-blocking)
+        if: ${{ always() && matrix.job == 'mcp' && matrix.kind == 'browser' }}
+        continue-on-error: true
+        working-directory: packages/mcp
+        run: node ../../scripts/quarantine.mjs run-deferred
 
       # --- render, pptx and editor: `tests` shards (the package's `test`, or `test:contract` for a dependent) and, for a changed
       # package only, its browser suites ---------------------------------------------------------------------------------------

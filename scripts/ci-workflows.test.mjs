@@ -140,7 +140,8 @@ test('every job and leg kind the scope can emit has a step that runs it, and eve
 
 test('the legs of the browser jobs run in the Playwright image and the others do not', () => {
   const browser = Object.entries(JOB_SHAPE).filter(([, shape]) => shape.browser).map(([id]) => id).sort();
-  assert.deepEqual(browser, ['editor', 'goldens', 'pptx', 'render']);
+  // mcp: the deck view (show_deck's MCP App) runs in Chromium.
+  assert.deepEqual(browser, ['editor', 'goldens', 'mcp', 'pptx', 'render']);
   assert.ok(everything.legs.filter((leg) => leg.browser).every((leg) => browser.includes(leg.job)));
 });
 

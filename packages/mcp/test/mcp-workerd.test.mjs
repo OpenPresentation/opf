@@ -59,7 +59,7 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "show_deck", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);

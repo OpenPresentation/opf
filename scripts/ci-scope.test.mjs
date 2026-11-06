@@ -223,7 +223,8 @@ test('S5 scenarios against the real `pnpm --filter "...[base]"`', { skip: pnpmAv
     }
     // The plan's S5 table, spelled out, so a graph change that keeps both sides equal still has to be deliberate.
     const expected = {
-      'editor-only': ['editor'],
+      // The MCP server bundles the editor into its deck view, so an editor change also tests it.
+      'editor-only': ['editor', 'mcp'],
       'CLI-only': ['cli', 'mcp'],
       renderer: ['render', 'pptx', 'editor', 'cli', 'mcp', 'integration'],
       PPTX: ['pptx', 'editor', 'cli', 'mcp', 'integration'],
@@ -263,7 +264,7 @@ test('root-owned paths: pnpm selects only the root project, so the path map deci
 
 test('tiers: changed packages run full, dependents contract, the rest skip', () => {
   const editor = targetScope(['packages/editor/src/a.js']);
-  assert.deepEqual(tiersOf(editor), { editor: 'full' }, 'an editor-only change does not select integration');
+  assert.deepEqual(tiersOf(editor), { editor: 'full', mcp: 'contract' }, 'an editor-only change selects the MCP server (its deck view bundles the editor), not integration');
   assert.equal(editor.tier, 'leaf');
   assert.equal(editor.jobs.goldens, 'skip');
   assert.equal(editor.jobs['gallery-gates'], 'skip');
@@ -431,7 +432,7 @@ test('a leg carries everything the matrix job needs, and its id is unique', () =
   }
   assert.equal(new Set(all.map((leg) => leg.id)).size, all.length, 'ids are unique');
   assert.equal(new Set(all.map((leg) => leg.name)).size, all.length, 'and so are the check names');
-  assert.deepEqual([...new Set(all.filter((leg) => leg.browser).map((leg) => leg.job))], ['render', 'pptx', 'editor', 'goldens'], 'the Playwright image jobs');
+  assert.deepEqual([...new Set(all.filter((leg) => leg.browser).map((leg) => leg.job))], ['mcp', 'render', 'pptx', 'editor', 'goldens'], 'the Playwright image jobs');
   assert.deepEqual(all.filter((leg) => leg.job === 'core').map((leg) => [leg.buildDeps, leg.buildAlso, leg.reuse]), [['@openpresentation/opf', '@openpresentation/opf-render @openpresentation/opf-pptx', true]]);
 });
 
@@ -439,7 +440,7 @@ test('legs follow the decision: only jobs that run have legs, forced runs have e
   const jobsOf = (decision) => [...new Set(decision.legs.map((leg) => leg.job))];
   const engine = targetScope(['packages/render/src/a.js']);
   assert.deepEqual(jobsOf(engine), ['lint', 'cli', 'mcp', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
-  assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg');
+  assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'mcp', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg (the MCP server bundles the editor)');
   assert.equal(engine.legs.filter((leg) => leg.job === 'render').length, 5);
   assert.equal(engine.legs.filter((leg) => leg.job === 'lint').length, 3, 'lint always has its legs');
   assert.equal(engine.legs.filter((leg) => leg.job === 'pptx').length, 4, 'a dependent runs its contract suite in four shards');

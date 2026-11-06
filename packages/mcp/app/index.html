@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPF deck</title>
+<style>/*OPF_CSS*/</style>
+</head>
+<body>
+<div id="opf-deck" data-view="preview">
+  <header class="deck-bar">
+    <div id="deck-title" class="deck-title"></div>
+    <div class="deck-tabs" role="tablist" aria-label="View">
+      <button type="button" role="tab" id="tab-preview" aria-controls="deck-panes" aria-selected="true">Preview</button>
+      <button type="button" role="tab" id="tab-source" aria-controls="deck-panes" aria-selected="false" tabindex="-1">Source</button>
+      <button type="button" role="tab" id="tab-both" aria-controls="deck-panes" aria-selected="false" tabindex="-1">Both</button>
+    </div>
+    <button type="button" id="deck-checks" class="deck-pill" hidden>Checking…</button>
+    <span class="deck-spacer"></span>
+    <button type="button" id="deck-expand" class="deck-button" hidden>Full screen</button>
+    <button type="button" id="deck-send" class="deck-button deck-primary" hidden disabled>Send to Claude</button>
+  </header>
+  <div id="deck-root" class="deck-root">
+    <div id="deck-panes" class="deck-panes" role="tabpanel">
+      <section id="deck-source" class="deck-source" aria-label="Deck source"></section>
+      <section class="deck-stage-col" aria-label="Slides">
+        <div id="deck-stage" class="deck-stage"><div id="deck-canvas" class="deck-canvas"></div></div>
+        <div class="deck-row"><div id="deck-nav" class="deck-nav"></div><div id="deck-thumbs" class="deck-thumbs"></div></div>
+      </section>
+    </div>
+  </div>
+  <footer class="deck-foot"><span id="deck-notice" class="deck-notice" role="status"></span><span id="deck-status" class="deck-status"></span></footer>
+</div>
+<script type="module">/*OPF_JS*/</script>
+</body>
+</html>

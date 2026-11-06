@@ -3,8 +3,10 @@
 The MCP server for OPF (Open Presentation Format). An agent or editor that speaks the [Model Context Protocol](https://modelcontextprotocol.io)
 learns the format and checks decks through it, without shelling out and parsing text: documentation, schemas, the default catalog,
 example decks and the six agent skills as resources, a `start_here` tool that gives a path for a goal, and `validate_deck`,
-`get_schema`, `search_catalog`, `get_catalog_record`, `convert`, `search_docs` and `list_examples` as tools. It keeps no state, reads
-no file, fetches nothing, and needs no API key. Node 22 or later.
+`get_schema`, `search_catalog`, `get_catalog_record`, `convert`, `search_docs` and `list_examples` as tools. `show_deck` opens a deck
+in the OPF viewer, an MCP App with Preview, Source and Both, inside a client that supports MCP Apps (Claude on the web and desktop);
+the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model. It keeps no state,
+reads no file but the renderer's fonts, fetches nothing, and needs no API key. Node 22 or later.
 
 ```sh
 claude mcp add opf -- npx -y @openpresentation/mcp          # Claude Code
