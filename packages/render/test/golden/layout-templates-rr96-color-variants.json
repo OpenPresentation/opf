@@ -2,7 +2,7 @@
  "version": 1,
  "source": {
   "fixture": "@openpresentation/gallery layouts (see layout-template-fixture.mjs)",
-  "sha256": "4122ab267b7289e5ad32c49ee7d97075e172647ef24ff9227d883c66936776b6",
+  "sha256": "534e8fd1ba1cdc3d2658dc8d4fe9f316efa0764d9c76d2ade4e54f0139e5fd34",
   "templates": 30
  },
  "format": "svg-png-sha256",
