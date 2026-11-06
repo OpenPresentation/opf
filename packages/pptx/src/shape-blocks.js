@@ -3,7 +3,7 @@
 // A shape block (core ComposedItem.shape) is one native p:sp named `OPF shape <path>`: core's frame as a:xfrm (rot, flipH, flipV),
 // the preset as a:prstGeom with its a:avLst (core's adjust values in DrawingML units), or a custom path as a:custGeom; the fill
 // (a:noFill, a:solidFill, a:gradFill with a:lin or a:path, a:pattFill), the line (a:ln with every stroke property), the effects
-// (SH-03's drawEffects; an empty a:effectLst until then, so the theme's effect style adds nothing the preview does not draw) and a
+// (SH-03's a:effectLst through drawEffects; an empty a:effectLst for a shape without effects, so the theme's effect style adds nothing the preview does not draw) and a
 // p:style with the theme references of the shape's style, so PowerPoint shows the style as applied. The text is the shape's own
 // p:txBody: core's fitted size and font, centered, at core's anchor (a:bodyPr anchor), insets (lIns, tIns, rIns, bIns) and direction
 // (vert), wrapped by PowerPoint in the same text rectangle, and never autofit. Alt text is p:cNvPr descr, decorative the adec extension,
@@ -12,6 +12,7 @@
 // PptxGenJS writes the shape with its runs (escaping, languages and run links stay its job); writeShapeBlocks then replaces its
 // p:spPr, a:bodyPr and p:cNvPr in the finished slide part, before RR-96 turns the literal scheme colors into a:schemeClr (with
 // a:lumMod and a:lumOff for the lighter and darker colors, theme-colors.js addTransformedColors).
+import { effectsXml } from './effects.js';
 import { writeFrameAlt } from './frame-alt.js';
 
 const EMU_PER_PX = 9525;
@@ -140,9 +141,14 @@ function arcXml([x1, y1], rx, ry, large, sweep, [x2, y2], point) {
   return xml;
 }
 
-/** SH-03 writes a shape's effects here (a:effectLst). On SH-02's branch it writes none: an empty list keeps the theme's effect style off. */
-export function drawEffects(_shape, _paint) {
-  return '';
+/**
+ * A shape's effects as SH-03's a:effectLst (effectsXml): each color the slide's ColorRef as the fill's is (with its own alpha; a lighter
+ * or darker theme color becomes a:schemeClr with a:lumMod and a:lumOff when the part is written), the lengths at the canvas's scale (core
+ * effectScale). A shape without effects writes an empty a:effectLst, so the theme's effect style adds nothing the preview does not draw.
+ */
+export function drawEffects(shape, paint) {
+  if (!shape.effects) return '';
+  return effectsXml(shape.effects, ref => { const { hex, alpha } = paint(ref, '000000'); return `#${hex}${alpha < 1 ? Math.round(alpha * 255).toString(16).padStart(2, '0').toUpperCase() : ''}`; }, { scale: shape.effectScale ?? 1 });
 }
 
 /** The p:style of a shape's theme style (core ShapeStyleLook ref); empty for style none. */

@@ -3001,7 +3001,7 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
   const table = deck.slideSchemeColors?.[slideIndex]?.table;
   if (table) {
     const own = deck.shapeSchemeColors.get(slideIndex) ?? new Map(), view = new Map([...table, ...own]);
-    addTransformedColors(view, reference => exportColor(reference, context, '000000'), shape.fill, shape.stroke, shape.styleRef, shape.textColor, shape.textBackdrop);
+    addTransformedColors(view, reference => exportColor(reference, context, '000000'), shape.fill, shape.stroke, shape.styleRef, shape.textColor, shape.textBackdrop, shape.effects);
     for (const [hex, entry] of view) if (!table.has(hex)) own.set(hex, entry);
     deck.shapeSchemeColors.set(slideIndex, own);
   }

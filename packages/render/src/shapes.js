@@ -2,7 +2,7 @@
 //
 // A shape block (core ComposedItem.shape) is drawn from core's evaluated geometry (SH-01 presetGeometry, in slide coordinates):
 // each path filled in its DrawingML mode (norm, or the fill shaded by lighten, lightenLess, darken and darkenLess) and stroked where
-// the path takes the line, in order; then the effects (SH-03's drawEffects); then the text, fitted by core in shape.textArea. The
+// the path takes the line, in order; then the text, fitted by core in shape.textArea; then the effects (SH-03's effectsSvg through drawEffects) wrap the outline and the text. The
 // whole drawing turns about the frame's center (rotate) and mirrors (flip); the text turns with it but is not mirrored, and a vertical
 // flip turns it upside down, as PowerPoint draws it. The PPTX export writes the same shape natively (opf-pptx src/shape-blocks.js).
 //
@@ -11,6 +11,7 @@
 // and is drawn plain.
 
 import { patternRuns, shapeTextColor } from "@openpresentation/opf/composition";
+import { effectsSvg } from "./effects.js";
 
 const HIDDEN = Object.freeze({ "aria-hidden": "true" });
 const number = value => (Number.isInteger(value) ? String(value) : Number(value).toFixed(3).replace(/\.?0+$/, ""));
@@ -224,12 +225,18 @@ export function strokeElements(stroke, d, id, { box, closed, ends, helpers, mode
   return { defs: defs.join(""), elements: elements.join("") + heads.map(head => head.shape).join("") };
 }
 
+const NO_EFFECTS = Object.freeze({ defs: "", empty: true, wrap: (geometry = "", text = "") => `${geometry}${text}` });
+
 /**
- * SH-03 draws a shape's effects here (shadow, innerShadow, glow, softEdge, reflection, blur): `under` is drawn before the shape's
- * paths, `over` after them, `filter` is set on the shape's group. On SH-02's branch it draws nothing.
+ * A shape's effects (shadow, innerShadow, glow, softEdge, reflection, blur), SH-03's effectsSvg: its outline is the shape's frame turned
+ * by its rotation, its colors are the slide's ColorRefs resolved as the fill's are (a lighter or darker color included), and its lengths
+ * are reference pixels at the canvas's scale (core effectScale). `defs` goes in the shape's defs; `wrap(geometry, text)` draws the
+ * outline (already turned and mirrored) and the text with the effects: the inner shadow, soft edge, blur and glow on the outline, the
+ * outer shadow and the reflection from both.
  */
-export function drawEffects(_shape, _id, _helpers) {
-  return { defs: "", under: "", over: "", filter: undefined };
+export function drawEffects(shape, id, helpers) {
+  if (!shape.effects) return NO_EFFECTS;
+  return effectsSvg(shape.effects, { ...shape.box, rotate: shape.rotate ?? 0 }, ref => helpers.resolveColorRef(ref, "#000000") ?? "#000000", { id: `${id}-fx`, scale: shape.effectScale ?? 1 });
 }
 
 /** The text color of a shape: the style's preferred color where it reads at 4.5:1 on the backdrop, else the slide's text or background color (core shapeTextColor). */
@@ -269,7 +276,7 @@ export function renderShapeBlock(item, helpers) {
   const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
   const turn = shape.rotate ? `rotate(${number(shape.rotate)} ${number(cx)} ${number(cy)})` : "";
   const mirror = shape.flipH || shape.flipV ? `translate(${number(cx)} ${number(cy)}) scale(${shape.flipH ? -1 : 1} ${shape.flipV ? -1 : 1}) translate(${number(-cx)} ${number(-cy)})` : "";
-  const outline = helpers.tag("g", { transform: [turn, mirror].filter(Boolean).join(" ") || undefined, filter: effects.filter }, effects.under + parts.join("") + effects.over);
+  const outline = helpers.tag("g", { transform: [turn, mirror].filter(Boolean).join(" ") || undefined }, parts.join(""));
   let text = "";
   if (item.text && shape.textArea) {
     const area = shape.textArea, tx = area.x + area.width / 2, ty = shape.textBox.y + shape.textBox.height / 2;
@@ -280,7 +287,7 @@ export function renderShapeBlock(item, helpers) {
   }
   // A decorative shape is hidden from assistive technology; alt text names the shape; otherwise its text is what is read.
   const accessible = shape.decorative ? HIDDEN : shape.alt !== undefined ? { role: "img", "aria-label": shape.alt } : {};
-  const body = (defs.length ? helpers.tag("defs", {}, defs.join("")) : "") + outline + text;
+  const body = (defs.length ? helpers.tag("defs", {}, defs.join("")) : "") + effects.wrap(outline, text);
   const content = shape.link ? helpers.tag("a", { href: shape.link }, body) : body;
   return helpers.tag("g", { ...accessible, ...helpers.trace }, content);
 }

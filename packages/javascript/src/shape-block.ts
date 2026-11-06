@@ -472,6 +472,8 @@ export interface ComposedShape {
   link?: string;
   /** The effects to draw (the author's, and the soft shadow of the intense style): SH-03's drawEffects reads them. */
   effects?: Partial<Record<typeof SHAPE_EFFECT_KEYS[number], unknown>>;
+  /** With `effects`: canvas pixels per reference pixel (min(width, height) / 720), the scale of the effects' lengths in both engines. */
+  effectScale?: number;
 }
 
 const paddingOf = (value: unknown, scale: number) => {
@@ -550,7 +552,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
     ...(rotate !== undefined ? { rotate } : {}), ...(flip === 'horizontal' || flip === 'both' ? { flipH: true } : {}), ...(flip === 'vertical' || flip === 'both' ? { flipV: true } : {}),
     ...(typeof host.alt === 'string' ? { alt: host.alt } : {}), ...(host.decorative === true ? { decorative: true as const } : {}), ...(host.hidden === true ? { hidden: true as const } : {}),
     ...(typeof host.link === 'string' && /^(https?:\/\/|mailto:|tel:)\S+$/.test(host.link) ? { link: host.link } : {}),
-    ...(Object.keys(effects).length ? { effects } : {}),
+    ...(Object.keys(effects).length ? { effects, effectScale: scale } : {}),
   };
   return result;
 }

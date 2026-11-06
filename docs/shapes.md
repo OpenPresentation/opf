@@ -141,7 +141,7 @@ The shape's name in PowerPoint is `OPF shape <path>`, from the block's place in 
 
 ## Effects
 
-`shadow` (a preset `soft`, `hard` or `perspective`, or `{ color, opacity, blur, distance, angle, size }`), `innerShadow`, `glow` (`{ color, opacity, radius }`), `softEdge` (a radius), `reflection` (`{ opacity, size, distance, blur }`) and `blur` (a radius) are part of the format; lengths are reference pixels and angles degrees. SH-03 draws them in both engines (`a:effectLst`). The `intense` style adds the `soft` shadow unless the block sets its own.
+`shadow` (a preset `soft`, `hard` or `perspective`, or `{ color, opacity, blur, distance, angle, size }`), `innerShadow`, `glow` (`{ color, opacity, radius }`), `softEdge` (a radius), `reflection` (`{ opacity, size, distance, blur }`) and `blur` (a radius) are part of the format; lengths are reference pixels and angles degrees. Both engines draw them: the export writes `a:effectLst` in the shape's `p:spPr` right after its line, and the preview draws SVG filters around the outline and its text (the outer shadow and the reflection include the text, as PowerPoint's do). Colors are ColorRefs, `{ color, lighten }` and `{ color, darken }` included; lengths scale with the slide's shorter side. See [shape effects](shape-effects.md) for the defaults, the presets and how each effect is measured against PowerPoint, and `examples/technical/shape-effects.opf.json` for every effect on shape blocks. The `intense` style adds the `soft` shadow unless the block sets its own.
 
 ## Pictures
 
