@@ -123,7 +123,8 @@ test('LH-47 widened: two pictures and a text draw a row of pictures over a full-
 
 test('LH-10: a paragraph in a full-width layout region keeps a reading measure of about 70 characters', () => {
   const verdict = 'Teams above eight people save money on Business once they pass the shared storage limit, and smaller teams stay on Starter.';
-  const slide = { title: 'Plan comparison', blocks: [{ text: 'Starter: five users, 50 GB.' }, { text: 'Business: fifty users, 1 TB.' }, { text: verdict }] };
+  // LH-170: `emphasis: false` keeps the verdict in its region (it would be the foot band), whose measure this test reads.
+  const slide = { title: 'Plan comparison', blocks: [{ text: 'Starter: five users, 50 GB.' }, { text: 'Business: fifty users, 1 TB.' }, { text: verdict, emphasis: false }] };
   const result = composeSlide(slide, { layout: layouts.comparison, fill: false });
   const text = result.items.find((entry) => entry.value === verdict);
   assert.ok(text.box.width <= 70 * 0.5 * text.text.fontSize + 1, `${text.box.width} at ${text.text.fontSize}`);
