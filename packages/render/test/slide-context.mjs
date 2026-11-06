@@ -19,7 +19,9 @@ const recorder = () => {
     fonts: { textMeasurement: { measure: (text, size, style) => { families.add(style.fontFamily); return text.length * size * 0.5; }, resolveStyle: (style) => { families.add(style.fontFamily); return style; } } },
   };
 };
-const slide = { title: 'Quarterly operating review', text: 'Revenue grew in every region.' };
+// A subtitle keeps the slide an ordinary content slide: a lone short text would be LH-164's one-message slide, whose accent surface depends
+// on whether the deck chose its theme (wave 8), and this test is about how references resolve, not about that rule.
+const slide = { title: 'Quarterly operating review', subtitle: 'Second quarter', text: 'Revenue grew in every region.' };
 const deck = (design, extra = {}) => ({ name: 'Context', ...(design ? { design } : {}), ...extra, slides: [slide, { ...slide, id: 'second' }] });
 const diagnosticsOf = (render) => { const list = []; render((item) => list.push(item)); return list; };
 const GALLERY = defaultCatalog.source;

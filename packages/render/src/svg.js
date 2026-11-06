@@ -555,10 +555,10 @@ function catalogOptions(options) {
   return { ...(options.catalogs !== undefined ? { catalogs: options.catalogs } : {}), ...(options.strictReferences === true ? { strictReferences: true } : {}) };
 }
 
-function resolveContext(presentation, index, context) {
+function resolveContext(presentation, index, context, textMeasurement = context.options.textMeasurement) {
   try {
     return resolveSlideContext(presentation, index, {
-      fonts: { textMeasurement: context.options.textMeasurement },
+      fonts: { textMeasurement },
       ...catalogOptions(context.options),
       date: context.options.date
     });
@@ -578,7 +578,13 @@ function bindSlide(presentation, index, context) {
   // registered (`options.catalogs`, passed unchanged); `fonts` carries the measurement the host loaded. A slide with no
   // `layout` composes automatically; one whose reference resolves nowhere does too, with an `unresolved-reference` diagnostic,
   // or the render fails under `strictReferences`.
-  const slideContext = resolveContext(presentation, index, context);
+  // Wave 8: core decides LH-164's message surface by composing the slide (whether its message is drawn at display size), so it measures with
+  // the script fonts the slide is drawn with, as the PPTX export does (its script planner): with the bare host measurement a run whose
+  // script the Latin face lacks (Arabic, a symbol font's private-use codes) fails that composition and the preview kept the plain surface
+  // where the export took the accent. The script fonts come from the design, which the surface does not change.
+  const firstContext = resolveContext(presentation, index, context);
+  const deckScripts = context.options.textMeasurement ? createScriptFonts(scriptProfile(presentation, index, resolveDesign(presentation, firstContext.slide, firstContext), context), context.options.textMeasurement, { glyphFallback: context.options.glyphFallback }) : undefined;
+  const slideContext = deckScripts?.textMeasurement ? resolveContext(presentation, index, context, deckScripts.textMeasurement) : firstContext;
   // FA-31: every string the slide draws (titles, body text, table cells, notes) is the substituted slide: {{slide.number}}, {{slide.section}} and
   // {{deck.slideCount}} hold this slide's number, its section and the deck's slide count, the same values the furniture draws. Core resolved them.
   const slide = slideContext.slide;
