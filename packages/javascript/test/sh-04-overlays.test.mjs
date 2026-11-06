@@ -234,10 +234,11 @@ test('validation: placements, unknown ids, site ranges and duplicate ids', () =>
   assert.deepEqual(findings({ title: 'x', blocks, shapes: [{ connector: { from: 'a', to: 'e', toSite: 7 } }] }), []);
 });
 
-test('validation: a typo is reported against the form it was written for, and SH-02 checks apply to overlay shapes', () => {
+test('validation: one error for a typo, shape keys on a connector, and the SH-02 checks of overlay shapes', () => {
   const report = (shapes) => validate(deck({ title: 'x', blocks: [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }], shapes })).findings.map((finding) => [finding.ruleId, finding.path, finding.severity]);
   assert.deepEqual(report([{ shape: 'ellipse', colour: 'red', x: 0, y: 0, width: 0.1, height: 0.1 }]), [['opf/schema', '/slides/0/shapes/0/colour', 'error']]);
   assert.deepEqual(report([{ connector: { from: 'a', to: 'b', route: 'zigzag' } }]), [['opf/schema', '/slides/0/shapes/0/connector/route', 'error']]);
+  assert.deepEqual(report([{ connector: { from: 'a', to: 'b' }, text: 'x', colur: 1 }]), [['opf/schema', '/slides/0/shapes/0/colur', 'error'], ['opf/schema', '/slides/0/shapes/0/text', 'error']]);
   assert.deepEqual(report([{ shape: 'roundRect', adjust: { adj: 0.9 }, x: 0, y: 0, width: 0.1, height: 0.1, hidden: true, link: 'https://example.com' }]), [
     ['opf/shape-adjust-range', '/slides/0/shapes/0/adjust/adj', 'warning'],
     ['opf/shape-link-hidden', '/slides/0/shapes/0/link', 'warning'],
@@ -250,4 +251,22 @@ test('the new findings are in the registry with their plain-words text', () => {
   assert.equal(anchor.severity, 'error');
   assert.equal(anchor.category, 'format');
   assert.equal(end.severity, 'error');
+});
+
+test('pagination: fraction shapes on every page, an at shape on its block page, a connector only where both ends are', async () => {
+  const { paginate } = await import('../dist/index.js');
+  const para = (count) => Array.from({ length: count }, (_, index) => `Sentence number ${index + 1} explains one more detail of the plan in plain words.`).join(' ');
+  const result = paginate({ name: 'P', language: 'en-US', slides: [{ title: 'Long', blocks: [{ id: 'first', text: para(14) }, { id: 'second', text: para(14) }, { id: 'third', text: para(4) }], shapes: [
+    { id: 'stamp', shape: 'rect', text: 'Draft', x: 0.8, y: 0.02, width: 0.15, height: 0.06 },
+    { id: 'pin', shape: 'ellipse', at: { block: 'third', edge: 'top' } },
+    { connector: { from: 'first', to: 'second' } },
+    { connector: { from: 'stamp', to: 'pin' } },
+  ] }] });
+  const slides = result.presentation.slides;
+  assert.equal(slides.length, 3);
+  // Ids take their page's id, and the references follow them.
+  assert.deepEqual(slides.map((slide) => slide.shapes.map((entry) => entry.id ?? `${entry.connector.from}>${entry.connector.to}`)), [['stamp'], ['stamp--2'], ['stamp--3', 'pin', 'stamp--3>pin']]);
+  assert.deepEqual(result.pages.map((page) => (page.diagnostics ?? []).map((entry) => [entry.code, entry.path])), [[['connector-split', 'slides.0.shapes.2']], [], []]);
+  // Every page validates: no reference names a block of another page.
+  assert.equal(validate(result.presentation).findings.filter((finding) => finding.severity === 'error').length, 0);
 });

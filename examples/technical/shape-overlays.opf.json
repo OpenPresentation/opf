@@ -1,0 +1,318 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Shape overlays",
+  "description": "Technical fixture for overlay shapes and connectors (SH-04): callouts and badges placed by fractions of the slide, shapes attached to blocks with at (a picture included), and straight, elbow and curved connectors between blocks and overlay shapes with arrowheads. shape-overlays-rtl.opf.json is the right-to-left slide.",
+  "language": "en-US",
+  "slides": [
+    {
+      "title": "Callouts and badges",
+      "blocks": [
+        {
+          "id": "revenue",
+          "metric": {
+            "value": "$4.2M",
+            "label": "Quarterly revenue"
+          }
+        },
+        {
+          "id": "summary",
+          "text": "Revenue grew in every region this quarter, led by the new self-serve plan."
+        }
+      ],
+      "shapes": [
+        {
+          "id": "record",
+          "shape": "wedgeRectCallout",
+          "text": "Record quarter",
+          "x": 0.06,
+          "y": 0.26,
+          "width": 0.2,
+          "height": 0.1,
+          "style": "subtle",
+          "adjust": {
+            "adj1": 0.35,
+            "adj2": 0.9
+          }
+        },
+        {
+          "id": "new",
+          "shape": "star12",
+          "text": "New",
+          "x": 0.86,
+          "y": 0.05,
+          "width": 0.1,
+          "height": 0.16,
+          "fill": "accent2",
+          "stroke": "none"
+        },
+        {
+          "shape": "ellipse",
+          "text": "1",
+          "x": 0.9,
+          "y": 0.84,
+          "width": 0.05,
+          "height": 0.09,
+          "style": "intense",
+          "alt": "Page badge 1"
+        }
+      ]
+    },
+    {
+      "title": "Shapes attached to blocks",
+      "blocks": [
+        {
+          "id": "photo",
+          "image": {
+            "src": "./assets/cover.png",
+            "alt": "Abstract cover artwork"
+          }
+        },
+        {
+          "id": "notes",
+          "text": "The badge and the caption follow the picture wherever composition puts it."
+        }
+      ],
+      "shapes": [
+        {
+          "id": "badge",
+          "shape": "ellipse",
+          "text": "4K",
+          "at": {
+            "block": "photo",
+            "edge": "end",
+            "offset": -96,
+            "width": 72,
+            "height": 72
+          },
+          "fill": "accent2",
+          "stroke": {
+            "color": "light1",
+            "width": 3
+          }
+        },
+        {
+          "shape": "roundRect",
+          "text": "Shot on location",
+          "at": {
+            "block": "photo",
+            "edge": "bottom",
+            "offset": -56,
+            "width": 0.4,
+            "height": 40
+          },
+          "style": "subtle"
+        },
+        {
+          "shape": "rightArrow",
+          "at": {
+            "block": "notes",
+            "edge": "start",
+            "offset": 8,
+            "width": 36,
+            "height": 24
+          },
+          "fill": "accent1"
+        },
+        {
+          "id": "sunrise",
+          "shape": "roundRect",
+          "text": "Sunrise",
+          "x": 0.76,
+          "y": 0.22,
+          "width": 0.16,
+          "height": 0.08,
+          "style": "subtle"
+        },
+        {
+          "connector": {
+            "from": "sunrise",
+            "to": "photo",
+            "route": "elbow"
+          },
+          "stroke": {
+            "width": 2,
+            "color": "accent2",
+            "end": {
+              "type": "triangle"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Connectors between blocks",
+      "blocks": [
+        {
+          "id": "plan",
+          "shape": "roundRect",
+          "text": "Plan",
+          "aspectRatio": 1.6
+        },
+        {
+          "id": "build",
+          "shape": "roundRect",
+          "text": "Build",
+          "aspectRatio": 1.6
+        },
+        {
+          "id": "ship",
+          "shape": "ellipse",
+          "text": "Ship",
+          "aspectRatio": 1
+        }
+      ],
+      "shapes": [
+        {
+          "id": "review",
+          "shape": "flowChartDecision",
+          "text": "Review",
+          "x": 0.4,
+          "y": 0.8,
+          "width": 0.2,
+          "height": 0.14,
+          "style": "subtle"
+        },
+        {
+          "connector": {
+            "from": "plan",
+            "to": "build",
+            "route": "straight"
+          },
+          "stroke": {
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "build",
+            "to": "ship",
+            "route": "straight"
+          },
+          "stroke": {
+            "width": 3,
+            "color": "accent1",
+            "end": {
+              "type": "stealth",
+              "length": "large"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "build",
+            "to": "review",
+            "route": "elbow"
+          },
+          "stroke": {
+            "width": 2,
+            "dash": "dash",
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "review",
+            "to": "plan",
+            "route": "curved",
+            "fromSite": 1,
+            "toSite": 2
+          },
+          "stroke": {
+            "width": 2,
+            "color": "accent2",
+            "start": {
+              "type": "oval",
+              "width": "small",
+              "length": "small"
+            },
+            "end": {
+              "type": "arrow"
+            }
+          },
+          "alt": "Review sends the work back to planning"
+        }
+      ],
+      "composition": {
+        "gap": 0.1
+      }
+    },
+    {
+      "title": "Elbow and curved routes",
+      "blocks": [
+        {
+          "id": "source",
+          "shape": "rect",
+          "text": "Source"
+        },
+        {
+          "blocks": [
+            {
+              "id": "upper",
+              "shape": "roundRect",
+              "text": "Upper"
+            },
+            {
+              "id": "lower",
+              "shape": "roundRect",
+              "text": "Lower"
+            }
+          ],
+          "composition": {
+            "mode": "column"
+          }
+        }
+      ],
+      "shapes": [
+        {
+          "connector": {
+            "from": "source",
+            "to": "upper",
+            "route": "elbow"
+          },
+          "stroke": {
+            "width": 2,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "source",
+            "to": "lower",
+            "route": "curved"
+          },
+          "stroke": {
+            "width": 2,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "upper",
+            "to": "lower",
+            "route": "elbow",
+            "fromSite": 3,
+            "toSite": 3
+          },
+          "stroke": {
+            "width": 3,
+            "color": "accent2",
+            "end": {
+              "type": "diamond",
+              "width": "large",
+              "length": "large"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

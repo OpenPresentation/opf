@@ -126,7 +126,7 @@ Every ColorRef (fills, strokes, gradient stops, pattern colors, overlays, recolo
 | `rotate` | Degrees clockwise about the frame's center. Composition keeps the unrotated frame; a rotated outline may reach past its cell. | `a:xfrm rot` |
 | `flip` | `horizontal`, `vertical` or `both`: mirrors the geometry. The text is not mirrored; a vertical flip turns it upside down, as in PowerPoint. | `flipH`, `flipV` |
 
-Shapes stack in the order the blocks compose (`ZOrderPosition` is the shape tree order).
+Shapes stack in the order the blocks compose (`ZOrderPosition` is the shape tree order); [overlay shapes and connectors](#overlay-shapes-and-connectors) stack over everything, in the order of the slide's `shapes`.
 
 ## Accessibility and links
 
@@ -147,6 +147,93 @@ The shape's name in PowerPoint is `OPF shape <path>`, from the block's place in 
 
 An image block's line is `stroke` (renamed from `border` in 0.33, with no alias) and takes every stroke property above. Its `shape` takes every preset (`rectangle`, `rounded` and `circle` became `rect`, `roundRect` and `ellipse`), and `adjust` replaces `cornerRadius`. See [image treatments](image-treatments.md).
 
+## Overlay shapes and connectors
+
+A slide's `shapes` array is drawn over the composed slide: above the content, the furniture and everything else, in array order (later entries on top). It never moves content: composition places the slide first and the overlay on the result. Use it for what sits on top of a layout: a callout pointing at a figure, a badge on a picture, a stamp in a corner, and connector lines between blocks.
+
+```json
+{
+  "title": "How we ship",
+  "blocks": [
+    { "id": "plan", "shape": "roundRect", "text": "Plan" },
+    { "id": "ship", "shape": "roundRect", "text": "Ship" }
+  ],
+  "shapes": [
+    { "shape": "wedgeRectCallout", "text": "New this quarter", "x": 0.68, "y": 0.06, "width": 0.24, "height": 0.12, "style": "subtle" },
+    { "shape": "ellipse", "text": "1", "at": { "block": "plan", "edge": "top", "offset": -24 } },
+    { "connector": { "from": "plan", "to": "ship", "route": "elbow" }, "stroke": { "width": 2, "end": { "type": "triangle" } } }
+  ]
+}
+```
+
+The reference decks are [`examples/technical/shape-overlays.opf.json`](../examples/technical/shape-overlays.opf.json) and its right-to-left slide [`shape-overlays-rtl.opf.json`](../examples/technical/shape-overlays-rtl.opf.json).
+
+### Overlay shapes
+
+An entry without `connector` is an overlay shape. It has the whole [shape block](#a-shape-block) vocabulary: `shape` or `path`, `adjust`, `fill`, `opacity`, `stroke`, `style`, the [effects](#effects), `rotate`, `flip`, `text` with `anchor`, `padding` and `textDirection`, `alt`, `decorative`, `hidden` and `link`, plus an optional `id` (a connector names it). Its text is fitted as a shape block's is, by OPF's measured fonts, never below the readability floor (`opf/text-overflow` at `slides.N.shapes.I.text` otherwise). It has exactly one placement:
+
+| Placement | Meaning |
+| --- | --- |
+| `x`, `y`, `width`, `height` | Fractions 0 to 1 of the slide, from its top-left corner. In a right-to-left deck `x` counts from the right edge, as OPF mirrors start and end. All four go together. |
+| `at: { block, edge, offset, width, height }` | Against the composed box of the block with that `id` (a payload or a group, at any depth), so the shape follows the block wherever composition puts it. `edge` is `top`, `bottom`, `start` or `end` (outside that edge, centered along it; `start` is the left in a left-to-right deck and the right in a right-to-left one) or `center` (on the block's center). `offset` is the gap in reference pixels (negative overlaps the block). `width` and `height` up to 1 are fractions of the block's width and height, above 1 reference pixels; by default the shape has its preset's proportions with its shorter side at 15% of the block's shorter side. |
+
+A picture's box is its frame; a block on a card is its card. A shape with both placements or none is an `opf/schema` error, and one whose `at.block` is not on the slide is `opf/shape-anchor-missing`; neither is drawn.
+
+The PPTX export writes an overlay shape as a shape block, a native `p:sp` named `OPF shape slides.N.shapes.I`, after every other shape of the slide.
+
+### Connectors
+
+An entry with `connector` is a connector line between two blocks or overlay shapes of the slide:
+
+| Key | Meaning |
+| --- | --- |
+| `connector.from`, `connector.to` | The `id` of a block (a payload or a group) or an overlay shape. An id that names nothing on the slide, or names a connector, is `opf/connector-end-missing`, and the connector is not drawn. |
+| `connector.route` | `straight` (default), `elbow` or `curved`. |
+| `connector.fromSite`, `connector.toSite` | The connection site index at each end, instead of the automatic choice. An index the shape does not have is an `opf/schema` error. |
+| `stroke` | The line, with every [stroke](#stroke) property: color, width, dash, compound, sketch and arrowheads (`start` at `from`, `end` at `to`). Default a 2-pixel line in the slide's text color with no arrowheads. |
+| `alt`, `decorative`, `hidden`, `id` | As on a shape. A connector takes no other key. |
+
+**Connection sites.** Each end attaches to a connection site of its shape: a preset's own sites (`presetGeometry(...).connectionSites`, turned and flipped with the shape; a picture masked by a preset has its mask's) or, for every other block, the four edge midpoints of its box, numbered as DrawingML numbers a rectangle's: 0 top, 1 left, 2 bottom, 3 right. Without `fromSite` and `toSite` core chooses the pair of sites that face each other (opposite directions) whose route leaves each site outward and is shortest; then any route that leaves both outward; then the shortest. An elbow or curve considers only the sites along an axis (directions of 0, 90, 180 or 270 degrees) when the shape has some.
+
+**Routes.** Core routes each connector once, as PowerPoint's own connector presets, and both engines draw that route: the preview strokes the preset's path evaluated in the connector's frame, and the PPTX writes the same preset in the same frame, so PowerPoint draws the same line.
+
+| `route` | Sites | Preset | The route |
+| --- | --- | --- | --- |
+| `straight` | any | `straightConnector1` | One segment from site to site. |
+| `elbow` | on one axis (both horizontal or both vertical) | `bentConnector3` | Out of the first site, along the middle line, into the second. Facing sites put the middle halfway (`adj1` 0.5); sites that face the same way run 24 reference pixels past the farther one and back (a U, `adj1` beyond 0 to 1). |
+| `elbow` | perpendicular | `bentConnector2` | An L through the corner. |
+| `curved` | on one axis | `curvedConnector3` | The curve through the elbow's middle line, tangent to both sites' axes. |
+| `curved` | perpendicular | `curvedConnector2` | One curve tangent to both sites' axes. |
+
+The frame is PowerPoint's: the box of the two sites (`a:off`, `a:ext`), flipped for a route that runs left or up, and turned 90 or 270 degrees for one that leaves its first site vertically, as PowerPoint writes its connectors.
+
+**PowerPoint.** The export writes a connector as a native `p:cxnSp` named `OPF connector slides.N.shapes.I`, with `a:prstGeom`, core's `a:avLst` and the line, and glues each end to the native shape it attaches to (`a:stCxn` and `a:endCxn`: the shape's id and the site index). PowerPoint then reads the connector as connected (`ConnectorFormat.BeginConnectedShape`, `EndConnectedShape` and the site indexes, 1-based in its object model) and moves it with a shape that the user moves. An end glues where one native shape is the block: a shape block or overlay shape, a picture, or a block drawn on a card. A text block without a card is drawn as one text box per line, so its end is not glued: the connector still runs to the block's site but stays put when the line boxes move. Give the text a card, or write it as a shape with text, to glue to it.
+
+| PowerPoint and the SH-04 check | Result |
+| --- | --- |
+| Connectors of `shape-overlays.opf.json` and `shape-overlays-rtl.opf.json`, read through PowerPoint's object model (PowerPoint 365) | Every glued end reads as connected to its shape at core's site (1-based), and moving the shape at the end moves the connector with it. |
+
+### Pagination
+
+When `paginate` splits a slide over pages, a shape placed by fractions is on every page (as the headings are), a shape placed `at` a block is on the page its block lands on, and a connector is on the page that holds both of its ends. A connector whose ends land on different pages is on none, and the page of its `from` end reports it in `PaginatedPage.diagnostics` as `connector-split` (with the connector's path). Overlay ids take their page's id (`stamp--2`) like payload ids, and `at.block` and the connector ends follow the ids they name.
+
+### In core
+
+`composeSlide` returns the overlay as `SlideComposition.overlayShapes`, in draw order: overlay shapes (`kind: "shape"`, a shape block item: `path` `slides.N.shapes.I`, `box`, `shape` (a `ComposedShape`), `text`, `textStyle`, and `attachedTo` for an `at` shape) and connectors (`kind: "connector"`: `route`, `preset`, the frame `box`, `rotate`, `flipH`, `flipV`, `adjust` and `avLst`, `paths` (the route in slide coordinates, one open path with its ends for the arrowheads), `bounds`, `stroke`, and `from` and `to`, each with the `id`, the `ref` it attaches to (a composed item path, a group path or an overlay path), `target`, `site`, `point` and `angle`). `connectorRoute`, `chooseConnectorSites`, `shapeSites` and `rectSites` from `@openpresentation/opf/composition` give the same geometry to a host or an editor.
+
+### Aspose names
+
+| What | OPF | PowerPoint (DrawingML) | Aspose |
+| --- | --- | --- | --- |
+| Overlay shape | an entry of `shapes` | `p:sp` | `IAutoShape` (`ShapeCollection.AddAutoShape`) |
+| Placement | `x`, `y`, `width`, `height` | `a:xfrm a:off a:ext` | `X`, `Y`, `Width`, `Height` |
+| Connector | an entry with `connector` | `p:cxnSp` | `IConnector` (`ShapeCollection.AddConnector`) |
+| Route | `route: straight`, `elbow`, `curved` | `a:prstGeom prst="straightConnector1"`, `bentConnector2`/`3`, `curvedConnector2`/`3` | `ShapeType.StraightConnector1`, `BentConnector2`/`3`, `CurvedConnector2`/`3` |
+| Ends | `connector.from`, `connector.to` | `a:stCxn id`, `a:endCxn id` | `StartShapeConnectedTo`, `EndShapeConnectedTo` |
+| Sites | `fromSite`, `toSite` | `a:stCxn idx`, `a:endCxn idx` | `StartShapeConnectionSiteIndex`, `EndShapeConnectionSiteIndex` |
+| Elbow position | core's `adjust.adj1` | `a:avLst a:gd adj1` | `Adjustments` |
+| Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` | `LineFormat.BeginArrowheadStyle`, `EndArrowheadStyle` |
+
 ## Validation
 
 | Finding | When |
@@ -157,6 +244,9 @@ An image block's line is `stroke` (renamed from `border` in 0.33, with no alias)
 | `opf/text-overflow` | The text does not fit inside the shape at the readable minimum size. |
 | `opf/shape-link-hidden` | A hidden shape has a link nobody can click. |
 | `opf/shape-option-unsupported-payload` | A shape-only property (`fill`, `style`, `rotate` and the others) is on a block that is not a shape. |
+| `opf/shape-anchor-missing` | An overlay shape's `at.block` names no block on the slide; the shape is not drawn. |
+| `opf/connector-end-missing` | A connector's `from` or `to` names no block or overlay shape on the slide (or names a connector); the connector is not drawn. |
+| `opf/schema` | An overlay shape has both placements or none, or only some of `x`, `y`, `width` and `height`; a connector has a shape-only key; a `fromSite` or `toSite` is an index the shape does not have. |
 
 ## Loading in browsers and edge runtimes
 

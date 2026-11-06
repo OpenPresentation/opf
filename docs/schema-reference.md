@@ -855,7 +855,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: SH-04: a shape drawn over the composed slide (an entry of slide 'shapes'), above the content and the furniture, later entries on top. It never moves content. It has the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement: 'x', 'y', 'width' and 'height' (fractions of the slide), or 'at' (against a block, so it follows the block wherever composition puts it). PPTX export writes a native p:sp.
+- Purpose: SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint....
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -865,12 +865,13 @@ _No named properties._
 | `width` | no | `number` | Width as a fraction of the slide width. |
 | `height` | no | `number` | Height as a fraction of the slide height. |
 | `at` | no | `ref:OverlayAnchor` |  |
+| `connector` | no | `ref:Connector` | Makes the entry a connector: what it joins and how it runs. |
 | `shape` | no | `ref:ShapePreset` | The preset geometry, as on a shape block. Default rect. |
 | `path` | no | `ref:ShapePath` | Custom geometry instead of a preset (a:custGeom), as on a shape block. |
 | `adjust` | no | `object` | The preset's adjust handles (a:avLst) in OPF units, as on a shape block. |
 | `fill` | no | `ref:ShapeFill` | 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill. |
 | `opacity` | no | `number` | The fill's opacity (a:alpha). Default 1. |
-| `stroke` | no | `ref:Stroke` | The line along the outline. Default the style's line. |
+| `stroke` | no | `ref:Stroke` | A shape's line along its outline (default the style's line), or a connector's line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'; default a 2-pixel line in the slide's text col... |
 | `style` | no | `enum:none \| subtle \| moderate \| intense` | The theme shape style, as on a shape block. Default moderate. |
 | `shadow` | no | `ref:Shadow` | Outer shadow. |
 | `innerShadow` | no | `ref:InnerShadow` | Inner shadow. |
@@ -880,7 +881,7 @@ _No named properties._
 | `blur` | no | `number` | Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. |
 | `rotate` | no | `number` | Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Its connection sites turn with it. |
 | `flip` | no | `enum:horizontal \| vertical \| both` | Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored. |
-| `text` | no | `oneOf:string / array<ref:TextRun>` | Text inside the shape's text rectangle, fitted by OPF's measured fonts from the body size down to the readability floor and never below it. |
+| `text` | no | `ref:text` | Text inside the shape's text rectangle (a string or TextRun[]), fitted by OPF's measured fonts from the body size down to the readability floor and never below it. |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical placement of the text in the text rectangle (a:bodyPr anchor). Default middle. |
 | `padding` | no | `ref:ShapePadding` | Text insets inside the text rectangle. |
 | `textDirection` | no | `enum:horizontal \| vertical \| vertical270 \| stacked` | Text direction (a:bodyPr vert). Default horizontal. |
@@ -904,23 +905,6 @@ _No named properties._
 | `offset` | no | `number` | The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'. |
 | `width` | no | `number` | The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side. |
 | `height` | no | `number` | The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width. |
-
-
-### OverlayConnector
-
-- Type: `object`
-- Required fields: `connector`
-- Purpose: SH-04: a connector line between two blocks or overlay shapes (an entry of slide 'shapes'), drawn over the composed slide in array order. Core computes its route once, as PowerPoint's own connector presets with their adjust values, and both engines draw that route. PPTX export writes a native p:cxnSp glued to the shapes at its ends (a:stCxn, a:endCxn), so it follows them when they are moved in PowerPoint.
-
-| Field | Required | Type | Notes |
-| --- | --- | --- | --- |
-| `id` | no | `string` | Optional stable identifier, unique among slide, payload and overlay ids in the document. |
-| `connector` | yes | `ref:Connector` |  |
-| `stroke` | no | `ref:Stroke` | The line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'). Default a 2-pixel line in the slide's text color with no arrowheads. |
-| `alt` | no | `string` | Alternative text (p:cNvPr descr). |
-| `decorative` | no | `boolean` | Mark the connector decorative (a16:decorative): screen readers skip it. |
-| `hidden` | no | `boolean` | Keep the connector in the file but do not draw it (p:cNvPr hidden). |
-| `extensions` | no | `object` | Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips. |
 
 
 ### Connector
@@ -968,7 +952,7 @@ _No named properties._
 | `diagram` | no | `oneOf:string / ref:Diagram` | Full-slide diagram payload: Mermaid source drawn in the deck's fonts and colors. A string is shorthand for { "source": value }; object form carries the source syntax and a text alternative. Presence of this field infe... |
 | `caption` | no | `ref:Caption` | Caption for the slide's root image, chart, table, video or diagram payload. Valid only when the slide root holds exactly one of those payloads. |
 | `blocks` | no | `array<ref:ContentPayload>` | Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as short... |
-| `shapes` | no | `array<anyOf:ref:OverlayConnector / ref:OverlayShape>` | SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or... |
+| `shapes` | no | `array<ref:OverlayShape>` | SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or... |
 | `design` | no | `ref:SlideDesign` | Slide-level design applied on top of the deck-wide design. |
 | `left` | no | `ref:ContentPayload` |  |
 | `center` | no | `ref:ContentPayload` |  |
