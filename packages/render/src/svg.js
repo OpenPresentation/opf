@@ -1915,7 +1915,12 @@ function renderBranding(bound,presentation,width,height,options) {
     }
   } else if(design.watermark){
     // The group keeps its bare opacity attribute (opf-pptx's watermark parity test reads it); the picture itself is hidden.
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true})));
+    const mark=renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true});
+    // LH-164: on the accent surface of a message-only slide the mark is drawn in the slide's text color (the export's one-color duotone), so a mark made for the plain surface still reads.
+    const matrix=bound.geometry?.surface&&!isImagePlaceholder(mark)?imageRecolorMatrix({type:'duotone',dark:bound.design.colors.text,light:bound.design.colors.text},bound):undefined, filterId=`opf-s${bound.index+1}-watermark-recolor`;
+    // The filter and the opacity sit on one group: the vector PDF rasterizes a filtered group on its own, without its ancestors' opacity.
+    const watermarkOpacity=typeof design.watermark==='object'?design.watermark.opacity??.08:.08;
+    pieces.push(matrix?tag('g',{opacity:watermarkOpacity,filter:`url(#${filterId})`},tag('defs',{},tag('filter',{id:filterId,'color-interpolation-filters':'sRGB'},tag('feColorMatrix',{type:'matrix',values:matrix})))+mark):tag('g',{opacity:watermarkOpacity},mark));
   }
   // Cover and section slides: the logo core composed (the primary organization's full logo, or the design.logo override, in the
   // variant for this slide's background) at the top-left of the free area, anchored left. RR-71: the picture is named by its

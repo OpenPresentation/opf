@@ -64,6 +64,8 @@ const fixtureUrl = new URL("../../../docs/fixtures/color-references.opf.json", i
 const exportDeck = JSON.parse(await readFile(fixtureUrl, "utf8"));
 
 const deck = structuredClone(exportDeck);
+// LH-164: slide 1 is one short message, which takes the accent surface; a longer paragraph keeps the deck's own surface, which is what these color checks are about.
+deck.slides[0].text = [...deck.slides[0].text, ' This closing sentence makes it a paragraph of more than twenty five words, so it is no short message.'];
 const bytes = await toPptx(deck);
 const slideXmls = deck.slides.map((_, index) => new TextDecoder().decode(unzipSync(bytes)[`ppt/slides/slide${index + 1}.xml`]));
 const xml = slideXmls.join("\n");
@@ -112,7 +114,8 @@ assert.equal(bottom, forest.accent1.replace(/^#/, "").toUpperCase().slice(0, 6))
 
 const slideTextDeck = {
   design: { colorScheme: { id: "cool-horizon", dark1: "#000000", light1: "#FFFFFF", accent2: "#ED7D31" } },
-  slides: [{ text: [{ text: "named", color: "accent2" }, { text: "bad", color: "invalid" }] }],
+  // LH-164: more than twenty five words, so the slide keeps the deck's own surface.
+  slides: [{ text: [{ text: "named", color: "accent2" }, { text: "bad", color: "invalid" }, " and then a long closing sentence of plain words so that this paragraph is more than twenty five words in all and no short message"] }],
 };
 const slideTextBytes = await toPptx(slideTextDeck);
 const slideXml = new TextDecoder().decode(unzipSync(slideTextBytes)["ppt/slides/slide1.xml"]);

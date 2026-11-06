@@ -2,7 +2,7 @@ import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolve
 import { composeSlide, resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts, type MessageSurface } from './composition.js';
 import { layoutVariantApplies, resolveColorRef, resolveColorRoles, type ColorVariant, type ResolvedColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
-import { messageDisplayed, resolveMessageSurface } from './message-surface.js';
+import { drawsAccentByDesign, messageDisplayed, resolveMessageSurface } from './message-surface.js';
 import { colorChoice, colorLevels } from './rule-design.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
@@ -78,6 +78,21 @@ export interface SlideContext {
 }
 
 /**
+ * LH-164: the host's measurement as the check composition uses it: the same widths, without the style paths, so a host that records the
+ * fonts it resolved per path (the renderer's substitution registry) records nothing more for the check than for the slide's own composition.
+ */
+function unpathed(measurement: NonNullable<ComposeSlideOptions['textMeasurement']>): NonNullable<ComposeSlideOptions['textMeasurement']> {
+  const bare = <T extends { path?: string }>(style: T): T => ({ ...style, path: undefined });
+  return {
+    ...measurement,
+    measure: (text, size, style) => measurement.measure(text, size, bare(style)),
+    ...(measurement.resolveStyle ? { resolveStyle: (style) => measurement.resolveStyle!(bare(style)) } : {}),
+    ...(measurement.outlineBounds ? { outlineBounds: (text, size, style) => measurement.outlineBounds!(text, size, bare(style)) } : {}),
+    ...(measurement.forScripts ? { forScripts: (profile) => unpathed(measurement.forScripts!(profile)) } : {}),
+  };
+}
+
+/**
  * Resolve slide `index` of `presentation` into the slide and the options `composeSlide` takes: engines compose and draw
  * `composeSlide(context.slide, context.options)`, so the slide-scoped built-ins carry the same number and count as the
  * header and footer. Never throws for an unresolved reference unless `strictReferences` is set: the engine default (or
@@ -110,14 +125,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
 
   // RR-96: the roles of this slide, from its variant or background (slide, layout variant, deck, then theme; LH-01); the same record the engines draw with.
   // LH-164: a slide whose whole body is one display message takes the accent surface (the variant of its own, where its layout names none).
-  const candidate = resolveMessageSurface(presentation, index, slide, layout, {
-    theme, colorScheme, variables: rec(deck.variables),
-    layoutOf: (other) => {
-      if (typeof other.layout !== 'string' || other.layout === 'auto') return undefined;
-      const found = resolveReference(presentation, 'layouts', other.layout, catalogs);
-      return found ? { ...found.record } : undefined;
-    },
-  });
+  const candidate = resolveMessageSurface(presentation, slide, layout, { theme, colorScheme, variables: rec(deck.variables), themeChosen: records.provenance.theme !== undefined });
   const build = (surface: MessageSurface | undefined) => {
     const levels = colorLevels(rec(slide.design), layout, rec(deck.design), theme, colorScheme, rec(deck.variables), surface?.variant);
     const roles = resolveColorRoles(colorScheme, colorChoice(levels, colorScheme, rec(deck.variables)));
@@ -150,7 +158,12 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   if (candidate) {
     const plain = build(undefined);
     let displayed = false;
-    try { displayed = messageDisplayed(composeSlide(variablesOf(plain), plain.composeOptions), candidate.kind); } catch { displayed = false; }
+    try { displayed = messageDisplayed(composeSlide(variablesOf(plain), { ...plain.composeOptions, ...(plain.composeOptions.textMeasurement ? { textMeasurement: unpathed(plain.composeOptions.textMeasurement) } : {}) }), candidate.kind); } catch { displayed = false; }
+    // Never two accent surfaces in a row: judged by whether the slide before really is on one (its own composition decides, recursively).
+    if (displayed && index > 0) {
+      const before = rec(slides[index - 1]), record = (typeof before.layout === 'string' && before.layout !== 'auto' ? resolveReference(presentation, 'layouts', before.layout, catalogs)?.record : undefined) as Rec | undefined;
+      if (drawsAccentByDesign(presentation, before, record, theme) || resolveSlideContext(presentation, index - 1, { ...options, slideNumber: undefined }).resolved.messageSurface !== undefined) displayed = false;
+    }
     if (!displayed) { messageSurface = undefined; built = plain; }
   }
   const { roles, layoutVariant, composeOptions } = built;

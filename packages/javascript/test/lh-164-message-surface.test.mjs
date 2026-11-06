@@ -91,7 +91,19 @@ for (const [direction, text, language] of [['ltr', words.en, 'en-US'], ['rtl', w
     }
     for (const background of [{ type: 'solid', color: 'accent2' }, { type: 'solid', color: 'primary' }]) assert.equal(surface(deckOf([message], { background }, language), 0), undefined, `a chosen scheme color (${JSON.stringify(background)})`);
     // The neutral theme slots are the deck's plain surface: they yield, as they do to a layout's variant (LH-103).
-    for (const background of ['light1', 'dark2', { type: 'theme', slot: 'dark1' }]) assert.equal(surface(deckOf([message], { background }, language), 0)?.kind, 'display-message', JSON.stringify(background));
+    for (const background of ['light1', 'light2', { type: 'theme', slot: 'light1' }]) assert.equal(surface(deckOf([message], { background }, language), 0)?.kind, 'display-message', JSON.stringify(background));
+  });
+
+  test(`LH-164 (${direction}): a deliberately dark deck keeps its background`, () => {
+    for (const design of [{ background: 'dark1' }, { background: 'dark2' }, { background: { type: 'theme', slot: 'dark1' } }, { variant: 'dark1' }, { theme: 'minimal' }]) assert.equal(surface(deckOf([message], design, language), 0), undefined, JSON.stringify(design));
+    // The engine default (no theme, no background) is no choice of the deck's; a light theme and a light deck take it.
+    assert.equal(surface(deckOf([message], undefined, language), 0)?.kind, 'display-message');
+    assert.equal(surface(deckOf([message], { theme: 'classic' }, language), 0)?.kind, 'display-message');
+  });
+
+  test(`LH-164 (${direction}): an accent too bright or too saturated to fill a slide keeps the plain surface`, () => {
+    const verdicts = { 'cool-horizon': true, 'forest-green': true, 'steel-blue': true, luxury: true, 'bold-red': true, 'deep-purple': true, boost: false, 'corporate-blue': false, vibes: false, 'burnt-orange': false, 'golden-yellow': false, 'pastel-red': false, 'slate-gray': false };
+    for (const [colorScheme, takes] of Object.entries(verdicts)) assert.equal(surface(deckOf([message], { background: 'light1', colorScheme }, language), 0) !== undefined, takes, colorScheme);
   });
 
   test(`LH-164 (${direction}): a layout that names its own variant keeps it`, () => {

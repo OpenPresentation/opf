@@ -514,7 +514,7 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   `statement-message` and `display-message`.
   LH-163: where the primary does not read 4.5:1 on a dark or accent surface, a display message's bold words draw in a lighter tint of
   the primary that does (hue and saturation kept, lightness raised), never in a color the author did not mark. LH-164: a slide whose
-  whole body is one such message takes the accent surface (docs/design-resolution.md, "A message-only slide").
+  whole body is one such message takes the accent surface on a light deck, where the accent is calm enough to fill a slide (docs/design-resolution.md, "A message-only slide").
 - **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
   tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
   metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price
