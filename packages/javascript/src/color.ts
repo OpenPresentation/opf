@@ -916,6 +916,39 @@ function separateNeighbors(fill: string, palette: readonly string[], options: { 
   return result;
 }
 
+/**
+ * LH-161: the colors of a pie or doughnut of `count` slices, from `palette` (the colors a chart draws, {@link chartPaletteForFill} with
+ * its softening). A circle has one more neighbor pair than a row of series: the last slice sits beside the first. When the last slice
+ * (palette color `count - 1`, a color from the scheme: `options.legible`) is closer than {@link CHART_SERIES_MIN_LIGHTNESS_STEP} CIE L*
+ * to the first, it alone moves, along the lightness axis (hue and as much chroma as sRGB allows kept), to the nearest lightness that keeps
+ * its contrast floor against `fill` and the step from both its neighbors (the slice before it and the first); a color difference under
+ * {@link CHART_SERIES_MIN_DIFFERENCE} from any other slice costs more the further it falls. Every other color stays, so a pie of any
+ * count draws the palette except possibly its last slice. An authored color is never moved (`opf/chart-color-only` reports the pair an
+ * author chose), and fewer than three slices, or more than the palette holds (the colors repeat), change nothing. Preview, PPTX export and
+ * the `opf/chart-color-only` rule all draw and judge these colors.
+ */
+export function chartSlicePalette(fill: string, palette: readonly string[], count: number, options: { legible?: readonly boolean[] } = {}): string[] {
+  const result = [...palette], last = count - 1;
+  if (!Number.isInteger(count) || count < 3 || count > palette.length || options.legible?.[last] !== true || colorContrast(fill, fill) === undefined) return result;
+  const labs = result.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
+  const lab = labs[last], first = labs[0], before = labs[last - 1];
+  if (!lab || !first || !before || Math.abs(lab[0] - first[0]) >= CHART_SERIES_MIN_LIGHTNESS_STEP) return result;
+  const floor = isDarkColor(fill) ? CHART_DARK_SERIES_MIN_CONTRAST : 3, need = CHART_SERIES_MIN_LIGHTNESS_STEP + NEIGHBOR_STEP_MARGIN;
+  const deficit = (value: number) => Math.max(0, -value - 1e-9);
+  let best: { color: string; cost: number } | undefined;
+  for (let step = 0; step <= 400; step++) {
+    const color = labWithLightness(step / 4, lab[1], lab[2]), contrast = colorContrast(color, fill);
+    if (contrast === undefined || contrast < floor) continue;
+    const candidate = labOf(opaqueChannels(color)!);
+    if (Math.abs(candidate[0] - first[0]) < need || Math.abs(candidate[0] - before[0]) < need) continue;
+    let cost = Math.abs(candidate[0] - lab[0]);
+    labs.slice(0, count - 1).forEach(other => { if (other) cost += deficit(labDifference(candidate, other) - CHART_SERIES_MIN_DIFFERENCE); });
+    if (!best || cost < best.cost - 1e-9) best = { color, cost };
+  }
+  if (best) result[last] = best.color;
+  return result;
+}
+
 /** LH-105: the share of the backdrop mixed into an ordinary series colour from the scheme (Few: soft colours for ordinary data, strong for emphasis). */
 export const CHART_SERIES_SOFT_MIX = 0.25;
 

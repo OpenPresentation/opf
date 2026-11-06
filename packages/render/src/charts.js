@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartDrawPlan, chartBandColor, chartSlicePalette, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -97,9 +97,9 @@ function markColor(c, j, i) {
   return c.highlight ? (c.highlight.series[j] || c.highlight.categories[i] ? c.highlight.accents?.[j] ?? c.highlight.accent : c.highlight.mutedSeries?.[j] ?? c.highlight.muted) : c.colors[j % c.colors.length];
 }
 
-/** The colour of the pie or doughnut slice of row `i`. */
+/** The colour of the pie or doughnut slice of row `i`. LH-161: core's slice palette, which moves a last slice that reads as the first off it. */
 function sliceColor(c, i) {
-  return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.sliceMuted?.[i] ?? c.highlight.muted) : c.colors[i % c.colors.length];
+  return c.highlight ? (c.highlight.categories[i] ? c.highlight.sliceAccents?.[i] ?? c.highlight.accent : c.highlight.sliceMuted?.[i] ?? c.highlight.muted) : c.sliceColors[i % c.sliceColors.length];
 }
 
 const bar = (dir, grouping) => ({ kind: "bar", dir, grouping });
@@ -201,6 +201,7 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   // LH-107 to LH-110 (core chart-marks.ts): a waterfall's roles, a pie's value list, a stacked chart's values and names, the title's
   // reference marks.
   c.waterfall = layer?.waterfall;
+  c.histogram = layer?.histogram;
   c.valueList = layer?.valueList;
   c.stack = layer?.stack;
   if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
@@ -372,6 +373,8 @@ const neutrals = bound.design.roles.neutrals;
       }));
     }
   };
+  // LH-161: a pie's or doughnut's slices: the series colors, the last slice moved off the first when they would read as one tone.
+  c.sliceColors = chartSlicePalette(surface, c.colors, rows.length, { legible: chartSchemeSeries(item.value?.colors, bound.design.colorScheme, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }) });
   return c;
 }
 
@@ -1440,47 +1443,8 @@ export function chartexValues(rows, columns) {
   return { hasCategories, column, values, categories };
 }
 
-// Office's automatic histogram bins: Scott's normal reference rule gives the bin
-// width 3.49 * sd * n^(-1/3) (sample standard deviation) over [min, max]; the
-// exporter writes the same count as cx:binCount.
-export function scottBinCount(values) {
-  const n = values.length;
-  if (n === 0) return 1;
-  let min = Infinity, max = -Infinity, mean = 0;
-  for (const value of values) { if (value < min) min = value; if (value > max) max = value; mean += value / n; }
-  if (!(max > min) || n < 2) return 1;
-  let variance = 0;
-  for (const value of values) variance += (value - mean) * (value - mean) / (n - 1);
-  const width = 3.49 * Math.sqrt(variance) * Math.cbrt(n) ** -1;
-  if (!(width > 0) || !Number.isFinite(width)) return 1;
-  const count = Math.ceil((max - min) / width - 1e-9);
-  return Number.isFinite(count) && count >= 1 ? count : 1;
-}
-
-/**
- * Equal-width bins from the minimum, closed on the right like PowerPoint's
- * ("[min, e1]", then "(e1, e2]"): each value falls in the last bin whose upper
- * edge it does not exceed. Labels carry six significant digits, and more when
- * two bins would read alike.
- */
-export function histogramBins(values) {
-  const finite = values.filter((value) => value !== null && Number.isFinite(value));
-  if (!finite.length) return [];
-  const min = finite.reduce((a, b) => Math.min(a, b)), max = finite.reduce((a, b) => Math.max(a, b));
-  const count = scottBinCount(finite);
-  const edge = (index) => index === 0 ? min : index === count ? max : min / count * (count - index) + max / count * index;
-  const bins = Array.from({ length: count }, (_, index) => ({ low: edge(index), high: edge(index + 1), count: 0 }));
-  for (const value of finite) {
-    let index = 0;
-    while (index + 1 < count && value > bins[index].high) index++;
-    bins[index].count++;
-  }
-  for (let precision = 6; ; precision++) {
-    const format = (value) => String(Number(value.toPrecision(precision)));
-    const labels = bins.map((bin, index) => count === 1 && min === max ? format(min) : `${index === 0 ? "[" : "("}${format(bin.low)}, ${format(bin.high)}]`);
-    if (new Set(labels).size === labels.length || precision === 17) return bins.map((bin, index) => ({ ...bin, label: labels[index] }));
-  }
-}
+// LH-160: the bins (Scott's count, capped so their labels fit) and their edge labels are core's (chart-histogram.ts), shared with the PPTX export.
+export { histogramBins, scottBinCount };
 
 // WI-5: the plot is laid out before its axis is fitted, so the tick-label column is sized from the labels any of the axes the plot could end up with
 // (one to CHART_MAX_INTERVALS intervals) would draw, not from a ten-interval scale that the final, sparser axis may exceed ("100" after "90").
@@ -1528,7 +1492,7 @@ function renderHistogramChart(c, spec) {
   if (hasCategories) {
     bars = values.map((value, i) => ({ value, name: categories[i], path: `${c.path}.data.rows.${i}.${column}`, labelPath: `${c.path}.data.rows.${i}.0` })).filter((bar) => bar.value !== null);
   } else {
-    bars = histogramBins(values).map((bin) => ({ value: bin.count, name: bin.label, path: `${c.path}.data.columns.${column}`, labelPath: c.path }));
+    bars = histogramBins(values, { count: c.histogram?.bins, decimals: c.histogram?.decimals }).map((bin) => ({ value: bin.count, name: bin.label, path: `${c.path}.data.columns.${column}`, labelPath: c.path }));
   }
   if (pareto) bars = bars.slice().sort((a, b) => b.value - a.value);
   const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
@@ -1545,8 +1509,8 @@ function renderHistogramChart(c, spec) {
     const y = at(bar.value);
     c.mark("rect", { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y), fill: c.colors[0] }, bar.path);
   });
-  // RR-35: data labels on the columns (a histogram label is the bin's count).
-  if (c.dataLabels) bars.forEach((bar, i) => {
+  // RR-35: data labels on the columns (a histogram label is the bin's count). LH-160: not where they would not fit beside each other (core).
+  if (c.dataLabels && c.histogram?.valueLabels !== false) bars.forEach((bar, i) => {
     const y = at(bar.value);
     drawBarLabel(c, labelString(c, { category: bar.name, value: bar.value, format, group: labelGroup }), { x: plot.x + i * band + offset, y: Math.min(y, crossing), width, height: Math.abs(crossing - y) }, bar.value >= 0 ? "up" : "down", bar.path, c.colors[0]);
   });
