@@ -10,7 +10,7 @@
 // lines, inside alignment and arrowheads) for a shape's paths and for a picture's outline; sketch is PowerPoint's own randomized line
 // and is drawn plain.
 
-import { patternRuns, textColorForFill } from "@openpresentation/opf/composition";
+import { patternRuns, shapeTextColor } from "@openpresentation/opf/composition";
 
 const HIDDEN = Object.freeze({ "aria-hidden": "true" });
 const number = value => (Number.isInteger(value) ? String(value) : Number(value).toFixed(3).replace(/\.?0+$/, ""));
@@ -178,11 +178,11 @@ export function drawEffects(_shape, _id, _helpers) {
   return { defs: "", under: "", over: "", filter: undefined };
 }
 
-/** The text color of a shape: the style's preferred color where it reads at 4.5:1 on the backdrop (core shapeTextColor), else black or white. */
+/** The text color of a shape: the style's preferred color where it reads at 4.5:1 on the backdrop, else the slide's text or background color (core shapeTextColor). */
 export function shapeTextFill(shape, helpers) {
   const preferred = paintOf(shape.textColor, helpers, helpers.colors.text).color;
-  if (shape.textBackdrop === undefined) return textColorForFill(helpers.colors.background, preferred);
-  return textColorForFill(paintOf(shape.textBackdrop, helpers, helpers.colors.background).color, preferred);
+  const backdrop = shape.textBackdrop === undefined ? paintOf(helpers.colors.background, helpers, "#FFFFFF").color : paintOf(shape.textBackdrop, helpers, helpers.colors.background).color;
+  return shapeTextColor(backdrop, preferred, paintOf(helpers.colors.text, helpers, "#000000").color, paintOf(helpers.colors.background, helpers, "#FFFFFF").color);
 }
 
 /** A shape block (core ComposedItem.shape). `helpers` gives the renderer's tag, colors and text drawing. */

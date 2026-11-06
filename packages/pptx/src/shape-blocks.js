@@ -28,13 +28,14 @@ const SKETCH_URI = '{C807C97D-BFC1-408E-A445-0C87EB9F89A2}';
 const SKETCH_NS = 'http://schemas.microsoft.com/office/drawing/2018/sketchyshapes';
 
 /**
- * A DrawingML color element for a ColorRef: `paint(ref, fallback)` gives `{hex, alpha}` (RRGGBB and 0..1) from the exporter's
- * resolution; `alpha` multiplies in (a fill's opacity). A literal; RR-96 rewrites the scheme colors.
+ * A DrawingML color element for a ColorRef: `paint(ref, fallback)` gives `{hex, alpha, scheme}` (RRGGBB, 0..1 and the slide's scheme
+ * value where the reference names one) from the exporter's resolution; `alpha` multiplies in (a fill's opacity). Otherwise a literal,
+ * which RR-96 rewrites where it is a scheme color.
  */
 export function colorXml(ref, paint, fallback, alpha = 1) {
-  const { hex, alpha: own } = paint(ref, fallback);
-  const value = Math.round(own * alpha * 100000);
-  return `<a:srgbClr val="${hex}">${value < 100000 ? `<a:alpha val="${value}"/>` : ''}</a:srgbClr>`;
+  const { hex, alpha: own, scheme } = paint(ref, fallback);
+  const value = Math.round(own * alpha * 100000), transparency = value < 100000 ? `<a:alpha val="${value}"/>` : '';
+  return scheme ? `<a:schemeClr val="${scheme}">${transparency}</a:schemeClr>` : `<a:srgbClr val="${hex}">${transparency}</a:srgbClr>`;
 }
 
 /** a:gradFill for a core ComposedGradient: a:lin at its angle (unscaled), or a:path circle, rect or shape from the center. */

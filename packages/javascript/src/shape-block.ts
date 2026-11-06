@@ -8,6 +8,7 @@
  * The same stroke vocabulary is a picture's line (`stroke` on an image block, renamed from `border`), and the preset masks of
  * image blocks come from the same geometry (`presetMask`).
  */
+import { colorContrast } from './color.js';
 import { adjustToDrawingML, customGeometry, isPresetShape, presetAdjustments, presetGeometry, type CustomPathInput, type ShapeGeometry, type ShapePath, type ShapePathFill } from './shape-geometry.js';
 
 interface Box { x: number; y: number; width: number; height: number }
@@ -245,8 +246,8 @@ export interface ShapeStyleLook {
 export function shapeStyleLook(style: ShapeStyleName): ShapeStyleLook {
   switch (style) {
     case 'none': return { fill: 'none', text: 'text', bold: false };
-    case 'subtle': return { fill: { color: 'accent1', lighten: 0.8 }, stroke: { color: 'accent1', width: SHAPE_STROKE_WIDTH }, text: 'dark1', bold: false,
-      ref: { line: { idx: 2, color: 'accent1' }, fill: { idx: 1, color: { color: 'accent1', lighten: 0.8 } }, effect: { idx: 0, color: 'accent1' }, font: { idx: 'minor', color: 'dark1' } } };
+    case 'subtle': return { fill: { color: 'accent1', lighten: 0.8 }, stroke: { color: 'accent1', width: SHAPE_STROKE_WIDTH }, text: 'text', bold: false,
+      ref: { line: { idx: 2, color: 'accent1' }, fill: { idx: 1, color: { color: 'accent1', lighten: 0.8 } }, effect: { idx: 0, color: 'accent1' }, font: { idx: 'minor', color: 'text' } } };
     case 'intense': return { fill: { color: 'accent1', darken: 0.25 }, text: 'light1', bold: true, shadow: 'soft',
       ref: { line: { idx: 0, color: 'accent1' }, fill: { idx: 1, color: { color: 'accent1', darken: 0.25 } }, effect: { idx: 2, color: 'accent1' }, font: { idx: 'minor', color: 'light1' } } };
     default: return { fill: 'accent1', stroke: { color: { color: 'accent1', darken: 0.5 }, width: SHAPE_STROKE_WIDTH }, text: 'light1', bold: false,
@@ -405,8 +406,16 @@ export function shapeBackdrop(fill: ComposedFill): unknown {
   return undefined;
 }
 
-/** LH-151 for shapes: the text color an engine draws, given the backdrop and preferred colors it resolved (#RRGGBB): the preferred one when it reads at 4.5:1, else black or white. */
-export { textColorForFill as shapeTextColor } from './color.js';
+/**
+ * LH-151 for shapes: the text color an engine draws on `backdrop` (the resolved fill under the text, #RRGGBB): the style's `preferred`
+ * color when it reads at 4.5:1 (or the contrast cannot be measured), else whichever of the slide's text and background colors (tx1 and
+ * bg1, so the export writes a theme color) reads better.
+ */
+export function shapeTextColor(backdrop: string, preferred: string, text: string, background: string): string {
+  const own = colorContrast(preferred, backdrop);
+  if (own === undefined || own >= 4.5) return preferred;
+  return (colorContrast(text, backdrop) ?? 0) >= (colorContrast(background, backdrop) ?? 0) ? text : background;
+}
 
 /** The text to fit for `stacked` text: each character on its own line, as PowerPoint's stacked (wordArtVert) text draws it. */
 export function stackedText(value: unknown): unknown {

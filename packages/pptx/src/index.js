@@ -65,7 +65,7 @@ import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './i
 import {
   catalogRecords, clrMapAttributes, diagramPalette, ensureDiagrams, ensureIcons, groupsAxisTicks, groupsDataRange, GROUPED_LABEL_CODE, paintDiagram, ENGINE_DEFAULT_COLOR_SCHEME, normalizeColorVariant, chartSchemeSeries, chartPaletteForFill, chartSeriesLabelColor, chartSoftColors, chartSeriesPalette, chartLayerDataLabels, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide, emphasisSurface,
   ENGINE_DEFAULT_FONT_SCHEME, bindNoBreak, unbindNoBreak, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricPillFill, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
+  LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, shapeTextColor, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode, tableHighlightColor, chartWaterfallColors
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -2952,11 +2952,27 @@ function imageEffects(image, context) {
   };
   return {
     shape: image.shape ?? null,
-    strokeXml: image.stroke ? lineXml(image.stroke, paint, shapePalette(context)) : null,
+    strokeXml: image.stroke ? lineXml(image.stroke, shapePaint(context), shapePalette(context)) : null,
     opacity: image.opacity ?? null,
     recolor: image.recolor?.type === 'grayscale' ? { type: 'grayscale' }
       : image.recolor?.type === 'duotone' ? { type: 'duotone', dark: paint(image.recolor.dark, '000000'), light: paint(image.recolor.light, 'FFFFFF') } : null,
     paint
+  };
+}
+
+const sixDigit = value => typeof value === 'string' && /^#?[0-9a-f]{6}$/i.test(value.trim()) ? value.trim().replace(/^#/, '').toUpperCase() : undefined;
+const THEME_SLOT_VALUES = Object.freeze({dark1: 'dk1', light1: 'lt1', dark2: 'dk2', light2: 'lt2'});
+// SH-02: a ColorRef as a shape's or picture line's DrawingML color: its RRGGBB and alpha, and the slide's scheme value where the reference
+// names a slot or role the deck theme holds exactly (schemeColorValue), so it is written as a theme color.
+function shapePaint(context) {
+  return (entry, fallback) => {
+    const raw = exportColor(entry, context, fallback).replace(/^#/, ''), hex = normalizeHex(raw.slice(0, 6), fallback);
+    const alpha = /^[0-9a-f]{8}$/i.test(raw) ? parseInt(raw.slice(6), 16) / 255 : 1;
+    // A slot the slide's color map does not reach (dark1 on a dark variant's slide) is written by its own name (dk1), which PowerPoint
+    // reads from the theme directly, where the deck theme holds exactly that color.
+    const slot = typeof entry === 'string' && !context.schemeOverride ? THEME_SLOT_VALUES[entry.trim()] : undefined;
+    const scheme = typeof entry === 'string' ? schemeColorValue(entry, `#${hex}`, context) ?? (slot && sixDigit(context.themeColors?.[entry.trim()]) === hex && sixDigit(themeSlotColors(context.colorScheme)[entry.trim()]) === hex ? slot : undefined) : undefined;
+    return { hex, alpha, ...(scheme ? {scheme} : {}) };
   };
 }
 
@@ -2971,10 +2987,7 @@ function shapePalette(context) {
 // a:lumMod and a:lumOff, as the authored ones are.
 function addShapeItem(slide, item, slideIndex, context, deck) {
   const shape = item.shape, name = `OPF shape ${item.path}`, palette = shapePalette(context);
-  const paint = (entry, fallback) => {
-    const raw = exportColor(entry, context, fallback).replace(/^#/, '');
-    return { hex: normalizeHex(raw.slice(0, 6), fallback), alpha: /^[0-9a-f]{8}$/i.test(raw) ? parseInt(raw.slice(6), 16) / 255 : 1 };
-  };
+  const paint = shapePaint(context);
   // The slide's table is built again with its context, so the shape's derived colors are kept apart and merged when the part is written.
   const table = deck.slideSchemeColors?.[slideIndex]?.table;
   if (table) {
@@ -2984,7 +2997,10 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
     deck.shapeSchemeColors.set(slideIndex, own);
   }
   const backdrop = shape.textBackdrop === undefined ? `#${normalizeHex(context.colors.background)}` : `#${paint(shape.textBackdrop, palette.background).hex}`;
-  const textHex = normalizeHex(textColorForFill(backdrop, `#${paint(shape.textColor, normalizeHex(context.colors.text)).hex}`));
+  const preferred = `#${paint(shape.textColor, normalizeHex(context.colors.text)).hex}`, slideText = `#${normalizeHex(context.colors.text)}`, slideBackground = `#${normalizeHex(context.colors.background)}`;
+  const drawn = shapeTextColor(backdrop, preferred, slideText, slideBackground);
+  // The color as a theme color where the reference names one (the style's, else the slide's text or background role).
+  const textHex = nativeColor(drawn === preferred ? shape.textColor : drawn === slideText ? 'text' : 'background', drawn, context);
   const fit = item.text, size = fit ? fit.fontSize * .75 : 18;
   const lineHeight = fit ? (fit.richLines?.[0]?.height ?? fit.lineHeight ?? fit.fontSize * 1.22) * .75 : undefined;
   const value = item.payload?.text, runs = [];

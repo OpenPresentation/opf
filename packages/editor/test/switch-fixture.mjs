@@ -209,7 +209,7 @@ export const cases = [
     preview: "svg",
     patches: [
       { op: "add", path: "/slides/2/blocks/2/fit", value: "contain" },
-      { op: "add", path: "/slides/2/blocks/2/shape", value: "rounded" },
+      { op: "add", path: "/slides/2/blocks/2/shape", value: "roundRect" },
     ],
   },
   {

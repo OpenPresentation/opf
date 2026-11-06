@@ -33,7 +33,7 @@ const guides = geometry => Object.fromEntries(array(geometry['a:avLst']?.['a:gd'
 let checked = 0;
 
 // Masks: the picture's preset geometry and guides equal core's normalized shape, at core's frame.
-for (const [shape, extra] of [['rounded', { adjust: { adj: 0.12 } }], ['circle', {}], ['hexagon', {}], ['rectangle', {}]]) {
+for (const [shape, extra] of [['roundRect', { adjust: { adj: 0.12 } }], ['ellipse', {}], ['hexagon', {}], ['rect', {}], ['star5', {}]]) {
   const deck = deckFor({ placement: { edge: 'right', inset: true }, shape, ...extra });
   const geometry = geometryOf(deck);
   const { picture } = await exported(deck);
@@ -51,7 +51,7 @@ for (const [shape, extra] of [['rounded', { adjust: { adj: 0.12 } }], ['circle',
   const deck = deckFor({ placement: { edge: 'left' }, shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const geometry = geometryOf(deck, 1920, 1080);
   const line = (await exported(deck)).picture['p:spPr']['a:ln'];
-  assert.equal(Number(line.w), Math.round(geometry.border.width / 96 * 914400));
+  assert.equal(Number(line.w), Math.round(geometry.stroke.width / 96 * 914400));
   assert.equal(line.algn, 'ctr');
   assert.equal(line['a:solidFill']['a:srgbClr'].val, '101820');
   assert.equal(Number(line['a:solidFill']['a:srgbClr']['a:alpha'].val), Math.round(0x80 / 255 * 100000));
@@ -138,7 +138,7 @@ const full = { placement: { edge: 'right', size: 0.46, inset: true }, aspectRati
   const imported = await fromPptx(zipSync(edited), { onDiagnostic: d => diagnostics.push(d) });
   const block = imported.slides[0].blocks.find(entry => entry.type === 'image');
   assert.equal(block.overlay, undefined);
-  assert.equal(block.shape, 'rounded');
+  assert.equal(block.shape, 'roundRect');
   assert.ok(diagnostics.some(d => d.code === 'invalid-image-provenance'));
   const recolored = { ...entries, [path]: new TextEncoder().encode(xml.replace('<a:alphaModFix amt="80000"/>', '<a:alphaModFix amt="60000"/>')) };
   const plain = await fromPptx(zipSync(recolored), { onDiagnostic: () => {} });
