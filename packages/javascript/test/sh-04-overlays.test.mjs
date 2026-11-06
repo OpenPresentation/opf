@@ -234,10 +234,11 @@ test('validation: placements, unknown ids, site ranges and duplicate ids', () =>
   assert.deepEqual(findings({ title: 'x', blocks, shapes: [{ connector: { from: 'a', to: 'e', toSite: 7 } }] }), []);
 });
 
-test('validation: a typo is reported against the form it was written for, and SH-02 checks apply to overlay shapes', () => {
+test('validation: one error for a typo, shape keys on a connector, and the SH-02 checks of overlay shapes', () => {
   const report = (shapes) => validate(deck({ title: 'x', blocks: [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }], shapes })).findings.map((finding) => [finding.ruleId, finding.path, finding.severity]);
   assert.deepEqual(report([{ shape: 'ellipse', colour: 'red', x: 0, y: 0, width: 0.1, height: 0.1 }]), [['opf/schema', '/slides/0/shapes/0/colour', 'error']]);
   assert.deepEqual(report([{ connector: { from: 'a', to: 'b', route: 'zigzag' } }]), [['opf/schema', '/slides/0/shapes/0/connector/route', 'error']]);
+  assert.deepEqual(report([{ connector: { from: 'a', to: 'b' }, text: 'x', colur: 1 }]), [['opf/schema', '/slides/0/shapes/0/colur', 'error'], ['opf/schema', '/slides/0/shapes/0/text', 'error']]);
   assert.deepEqual(report([{ shape: 'roundRect', adjust: { adj: 0.9 }, x: 0, y: 0, width: 0.1, height: 0.1, hidden: true, link: 'https://example.com' }]), [
     ['opf/shape-adjust-range', '/slides/0/shapes/0/adjust/adj', 'warning'],
     ['opf/shape-link-hidden', '/slides/0/shapes/0/link', 'warning'],
