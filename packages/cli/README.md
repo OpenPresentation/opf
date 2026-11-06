@@ -123,7 +123,7 @@ Inputs: `.json`, `.opf.yaml`/`.yml`, `.opf.md` and a plain `.md`, `.pptx`, or `-
 `.svg` (one file per slide beside the output, `slides/deck.png` giving `slides/deck-1.png`, ... padded to the width of the largest slide number written, `-01` from ten slides; one selected slide is written to the output itself; `{n}` in the output is the slide number, so `slides/slide-{n}.png` always numbers its files, and any other `{key}`, or `{n}` in a single-file output, is a usage error), `.zip` (the slides as PNG, or
 SVG with `--to svg`), or `-` with `--to`. A flag applies only where its format is involved, else it is a usage error: `--split` and
 `--title` for a Markdown input, `--aliases` for YAML, `--signals` for a `.pptx` input, `--schema-comment` for a YAML output,
-`--drop-unsupported` for a Markdown output, and `--slides`, `--include-hidden`, `--scale`, `--raster`, `--text`, `--charts`,
+`--drop-unsupported` for a Markdown output, and `--slides`, `--include-hidden`, `--scale`, `--raster`, `--text`, `--charts`, `--diagrams`,
 `--images`, `--provenance`, `--paginate`, `--date`, `--fonts` and `--asset-dir` for drawn and PowerPoint outputs. `opf convert --help`
 lists which format each belongs to. Removed in 0.18: `render`, `export`, `import`, `from-md`, `to-md`, `from-yaml`, `to-yaml` and
 `create --from`, all `opf convert` now. See [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).

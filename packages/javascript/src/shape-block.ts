@@ -41,9 +41,10 @@ function adjustmentsOf(preset: string, width = 100, height = 100): Record<string
 /**
  * SH-02: what a deck needs loaded before it composes in a browser or an edge runtime: `['shapes']` when it has a shape block or a
  * picture masked by a preset beyond the four built-in masks and the preset geometry is not loaded, else nothing. Node, Bun and Deno
- * load the geometry with core, so this is always empty there.
+ * load the geometry with core, so this is always empty there. With `diagrams` (SH-07: a PPTX export with `diagrams: "shapes"`, which fits
+ * a diagram's node outlines to presets and reads their connection sites), a diagram needs the geometry too.
  */
-export function shapesPending(input: unknown): string[] {
+export function shapesPending(input: unknown, options: { diagrams?: boolean } = {}): string[] {
   if (shapeGeometry()) return [];
   const needs = (value: unknown, depth: number): boolean => {
     if (depth > 64 || value === null || typeof value !== 'object') return false;
@@ -52,6 +53,7 @@ export function shapesPending(input: unknown): string[] {
     if (node.image === undefined && !Array.isArray(node.blocks) && (typeof node.shape === 'string' || node.path !== undefined || node.type === 'shape')) return true;
     // SH-04: a connector's route is a connector preset evaluated by the engine, and its ends' sites come from the geometry.
     if (node.connector !== undefined) return true;
+    if (options.diagrams && node.diagram !== undefined) return true;
     if (node.image !== undefined && typeof node.shape === 'string' && !BUILT_IN.has(node.shape)) return true;
     // A sketched line (stroke.sketch, on a picture too) is computed by the engine.
     if (node.image !== undefined && typeof record(node.stroke).sketch === 'string') return true;
@@ -61,8 +63,8 @@ export function shapesPending(input: unknown): string[] {
 }
 
 /** SH-02: load the preset geometry when the deck needs it (shapesPending); returns what it loaded. Await it before composing in a browser. */
-export async function ensureShapes(input: unknown): Promise<string[]> {
-  const pending = shapesPending(input);
+export async function ensureShapes(input: unknown, options: { diagrams?: boolean } = {}): Promise<string[]> {
+  const pending = shapesPending(input, options);
   if (pending.length) await loadShapeGeometry();
   return pending;
 }

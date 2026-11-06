@@ -41,6 +41,13 @@ export function diagramPayload(value: unknown): DiagramPayload | undefined {
 /** The share of the readability floor the smallest secondary label of a diagram keeps (its node labels keep the whole floor). */
 export const DIAGRAM_SECONDARY_FLOOR = 0.75;
 
+/**
+ * SH-07: the diagram types (pele's names, ComposedDiagram.type) the PPTX export writes as native shapes and connectors with
+ * `diagrams: "shapes"`: each passed its comparison of PowerPoint's drawing with the preview (docs/diagrams.md#exports). Every other type
+ * stays a picture there and reports the info finding `diagram-shapes-unavailable`.
+ */
+export const DIAGRAM_SHAPE_FAMILIES: readonly string[] = Object.freeze(['agentflow', 'architecture', 'block', 'c4', 'class', 'cynefin', 'er', 'eventmodeling', 'flowchart', 'gantt', 'gitGraph', 'ishikawa', 'journey', 'kanban', 'mindmap', 'packet', 'pie', 'quadrantChart', 'radar', 'railroad', 'requirement', 'sankey', 'sequence', 'state', 'swimlane', 'timeline', 'treeView', 'treemap', 'usecase', 'venn', 'wardley', 'xychart']);
+
 /** The diagram's own size limits, below pele's defaults: a slide holds one readable drawing, not a document. */
 export const DIAGRAM_SOURCE_LIMIT = 20000;
 export const DIAGRAM_MAX_EDGES = 500;
@@ -445,10 +452,11 @@ function escapeAttribute(value: string): string {
 /**
  * A composed diagram as a self-contained SVG document in `palette`: every CSS variable and color-mix resolved, styles moved to
  * presentation attributes, classes and ARIA roles removed, sized `width` by `height` (the block's drawn size, in the units the
- * host draws in) over the drawing's own viewBox, with `alt` as its title. Labels stay text in the palette's fonts.
+ * host draws in) over the drawing's own viewBox, with `alt` as its title. Labels stay text in the palette's fonts. With `classes`,
+ * pele's classes stay on the elements (SH-07: the PPTX export tells nodes, edges and labels apart by them); the drawing is the same.
  */
-export function paintDiagram(diagram: Pick<ComposedDiagram, 'svg' | 'width' | 'height' | 'alt'>, palette: DiagramPalette, size: { width: number; height: number }): string {
-  const { body, font } = paintedBody(diagram, palette);
+export function paintDiagram(diagram: Pick<ComposedDiagram, 'svg' | 'width' | 'height' | 'alt'>, palette: DiagramPalette, size: { width: number; height: number }, options: { classes?: boolean } = {}): string {
+  const { body, font } = paintedBody(diagram, palette, options.classes === true);
   const title = diagram.alt ? `<title>${escapeAttribute(diagram.alt)}</title>` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${diagram.width} ${diagram.height}" width="${round(size.width)}" height="${round(size.height)}" font-family="${font}" font-size="${BASE}" fill="${palette.text}">${title}${body}</svg>`;
 }
@@ -466,7 +474,7 @@ export function paintDiagramGroup(diagram: Pick<ComposedDiagram, 'svg' | 'width'
 
 const round = (value: number) => Math.round(value * 100) / 100;
 
-function paintedBody(diagram: Pick<ComposedDiagram, 'svg'>, palette: DiagramPalette): { body: string; font: string } {
+function paintedBody(diagram: Pick<ComposedDiagram, 'svg'>, palette: DiagramPalette, classes = false): { body: string; font: string } {
   const tokens = tokensOf(palette);
   const root = /^<svg\b[^>]*\bstyle="([^"]*)"/.exec(diagram.svg)?.[1] ?? '';
   // pele's private aliases (--_bg, --_fg, ...) are declared on the root and point at the public tokens; resolve them once.
@@ -484,7 +492,7 @@ function paintedBody(diagram: Pick<ComposedDiagram, 'svg'>, palette: DiagramPale
     let style = '';
     for (const [, attribute, raw] of attributes.matchAll(/\s+([\w:-]+)="([^"]*)"/g)) {
       if (attribute === 'style') { style = raw!; continue; }
-      if (DROPPED.has(attribute!)) continue;
+      if (DROPPED.has(attribute!) && !(classes && attribute === 'class')) continue;
       kept.set(attribute!, raw!.includes('var(') || raw!.includes('color-mix(') ? escapeAttribute(substitute(decodeXml(raw!), variables)) : raw!);
     }
     for (const declaration of splitTopLevel(decodeXml(style), ';')) {
