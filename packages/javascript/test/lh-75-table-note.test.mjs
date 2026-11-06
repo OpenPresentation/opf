@@ -82,31 +82,35 @@ describe('LH-75: a short table beside its note', () => {
 });
 
 describe('LH-05: the rows of a grid of short texts hug', () => {
-  const texts = (count) => Array.from({ length: count }, (_, index) => ({ text: ['Faster onboarding', 'Fewer handoffs', 'Shared dashboards', 'Clear ownership', 'Weekly reviews', 'Simple pricing', 'Audit trail', 'Regional hosting'][index] }));
+  const texts = (count) => Array.from({ length: count }, (_, index) => ({ text: ['Faster onboarding', 'Fewer handoffs', 'Shared dashboards', 'Clear ownership', 'Weekly reviews', 'Simple pricing', 'Audit trail', 'Regional hosting', 'Open standards'][index] }));
   const rows = (result) => [...new Set(result.items.filter((item) => item.field === 'text').map((item) => Math.round(item.box.y)))].sort((a, b) => a - b);
 
   for (const direction of ['ltr', 'rtl']) {
-    test(`a 3 x 2 grid of one-line texts keeps its rows one gap apart and sits in the middle of the body (${direction})`, () => {
-      const result = composeSlide({ title: 'Why teams switch', blocks: texts(6) }, { direction });
+    // LH-162: 4 to 8 short texts draw as tiles where those read as well (below); nine stay LH-05's compact grid.
+    test(`a 3 x 3 grid of one-line texts keeps its rows one gap apart and sits in the middle of the body (${direction})`, () => {
+      const result = composeSlide({ title: 'Why teams switch', blocks: texts(9) }, { direction });
       assert.deepEqual(findings(result), []);
-      const [first, second] = rows(result), cells = result.items.filter((item) => item.field === 'text');
+      assert.equal(result.steps, undefined, 'no tiles for nine texts');
+      const ys = rows(result), [first, second] = ys, last = ys.at(-1), cells = result.items.filter((item) => item.field === 'text');
+      assert.equal(ys.length, 3);
       const gap = (1 / 30) * Math.min(result.width, result.height);
       // The cell of the first row is as tall as its text, so the second row starts one gap under it.
       const height = Math.max(...cells.filter((item) => Math.round(item.box.y) === first).map((item) => item.box.height));
       assert.ok(Math.abs(second - first - height - gap) < 2, `${second - first} vs ${height + gap}`);
       // Centered: as much room above the grid as under it.
-      const body = result.contentBox, top = first - body.y, bottom = body.y + body.height - (second + height);
+      const body = result.contentBox, top = first - body.y, bottom = body.y + body.height - (last + height);
       assert.ok(Math.abs(top - bottom) < 4, `${top} vs ${bottom}`);
       // Short text still grows (LH-48): 37 reference px, a list's display size.
       assert.ok(cells.every((item) => item.text.fontSize >= 28 * result.height / 720 - 1e-6));
     });
   }
 
-  test('a hugging grid grows past a list display size while every one-line text stays on one line, and never ends smaller than unhugged', () => {
+  test('a grid of short texts grows past a list display size (LH-162: as tiles) and never ends smaller than unhugged', () => {
     const result = composeSlide({ title: 'Why teams switch', blocks: texts(4) }, {});
     const cells = result.items.filter((item) => item.field === 'text'), scale = result.height / 720;
+    assert.equal(result.steps?.[0]?.form, 'tiles', 'four short texts draw as tiles');
     assert.ok(cells.every((item) => item.text.fontSize > 37 * scale + 1e-6), 'past the 37 px list display size');
-    assert.ok(cells.every((item) => item.text.lines.length === 1), 'one line each');
+    assert.ok(cells.every((item) => item.text.lines.length <= 2), 'at most two lines each');
     assert.equal(new Set(cells.map((item) => item.text.fontSize)).size, 1, 'one size');
     const fixed = composeSlide({ title: 'Why teams switch', blocks: texts(4) }, { fill: false });
     assert.ok(Math.min(...cells.map((item) => item.text.fontSize)) >= Math.min(...fixed.items.filter((item) => item.field === 'text').map((item) => item.text.fontSize)));

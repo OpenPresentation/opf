@@ -18,12 +18,39 @@ author gave one. OPF never invents an icon.
 
 | Field | Drawn |
 | --- | --- |
-| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. |
+| `items[].icon` (a `ListItem` object) | On a chip in the marker column, in place of the bullet, centered on the entry's first line. Every entry of the list keeps the column, so the texts start at one edge. First-level entries of an unnumbered list only. A ruled list (`listStyle: "rows"`) sets the chips at the start of its labels. A short list that is the whole body draws as icon cards (below), numbered or not. |
 | `metric.icon` | On a chip above the metric, at its alignment (centered, or at the start of a start-aligned metric). |
 | `icon` on a group (a block with `blocks`) | On a chip at the top start edge of the group, above its heading (its eyebrow), inside a group drawn on a card. A person drawn as a portrait card (LH-132) draws no chip; the icon is reported `icon-dropped`. |
 
-A list with icons is never drawn with step badges, numerals or check-mark tiles: its chips take the marker column those draw in. An
-agenda's list with icons (n05) draws its chips instead of numbered badges. `bullets` entries and nested entries take no icon.
+A list with icons is never drawn with step badges, numerals or check-mark tiles: its chips take the marker column those draw in.
+`bullets` entries and nested entries take no icon.
+
+### Icon cards (LH-165)
+
+A slide whose whole body is one list of 2 to 8 first-level entries, each with an `icon` that resolves, a label of at most 48
+characters and 7 words and at most a description of 160 characters, draws the list as a grid of equal cards that take the body's
+height (or its layout region's), as Claude Design draws a set of features or an agenda:
+
+- **Grid.** Two to four cards a row, every row full but the last, which is at most one card short and centered under the others
+  (`cardGridColumns`: 4 cards as 2 x 2 or one row, 6 as 3 x 2 or 2 x 3, 8 as 4 x 2, 3 x 3 + 2 or 2 x 4). The cards keep the list's
+  order, row by row from the start edge (the right in a right-to-left deck).
+- **Card.** The theme's card surface and border (the card neutral, as LH-137's check-mark tiles), the chip at the top start, the label
+  bold, the description under it at 0.82 of the label's size (as a ruled row's). The chip stands above the label, beside the label and
+  its description, or beside the label with the description under both across the card, whichever lets the text be largest (then on
+  the fewest lines). The chips on cards are solid in the primary with the glyph in the color that reads on it, on light and dark slides.
+- **Numbers.** A numbered list, or an agenda's list (a `numbered` region such as `agenda-split`'s items), keeps its numbers as
+  numerals in the accent at the top end of each card ("01", "02"); a numbered list's numerals carry the list number, so a PPTX import
+  gives the list its `numbering` back.
+- **Size.** The text starts at the size the list has and grows by steps of the type scale, up to the list's display size, while every
+  card holds its text without a split word and the text covers at most 60% of the body (LH-48's fill). Icon cards never set text
+  smaller: they are tried on top of the rules the guard kept and kept only when no block reads smaller than without them, and the
+  settled slide without them (which LH-48 may grow) is compared too. When no grid holds the list at its size, it stays the list it was.
+
+A set of 2 to 8 groups that is the whole body, each with an `icon` and one short label paragraph, optionally followed by one
+description paragraph, draws the same cards; the label is bold in the card instead of the group's eyebrow, at the description's size.
+A description that would wrap into a column under the minimum measure keeps the groups as they are.
+
+Short paragraphs without icons draw as tiles (LH-162, see [Dynamic composition](dynamic-composition.md)).
 
 ## What an icon names
 
