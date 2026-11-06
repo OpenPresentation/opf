@@ -9,7 +9,10 @@ import type { GetPromptResult, ReadResourceResult, ToolAnnotations } from "@mode
 import { catalogDisplay, gallery } from "@openpresentation/gallery";
 import { type Catalog, type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, catalogDisplayKinds, catalogKinds, ensureDiagrams, ensureIcons, ensureShapes, schemaEntries, stringify, validate } from "@openpresentation/opf";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
+import { presetAspect } from "@openpresentation/opf/composition";
 import { getAtPointer } from "@openpresentation/opf/patch";
+import { SHAPE_CATEGORIES, searchShapeCatalog, shapeThumbnailSvg } from "@openpresentation/opf/shape-catalog";
+import { presetAdjustments, presetGeometry } from "@openpresentation/opf/shape-geometry";
 import { fromYaml } from "@openpresentation/opf/yaml";
 import { z } from "zod";
 import { createSearch, termsOf } from "./search.js";
@@ -551,6 +554,65 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 					returned: Math.min(max, found.length),
 					icons: found.slice(0, max).map((item) => item.icon),
 					sets: loaded.map(([id, record]) => ({ id, name: record.name, license: record.license, copyright: record.copyright, ...(record.version ? { version: record.version } : {}), icons: Object.keys(record.icons).length })),
+				};
+			}),
+	);
+
+	// SH-06: the 187 preset shapes of a shape block, searched by DrawingML name, Aspose name and common words, each with its adjust handles and a small drawing.
+	const shapeGroups = SHAPE_CATEGORIES.map((category) => category.id) as [string, ...string[]];
+	server.registerTool(
+		"search_shapes",
+		{
+			title: "Search the preset shapes",
+			description: `Find the preset for a shape block's \`shape\` (\`{ "shape": "chevron", "text": "Plan" }\`) among the 187 DrawingML presets, grouped as PowerPoint's Insert > Shapes gallery (${shapeGroups.join(", ")}). Matches the DrawingML name (rightArrow), the Aspose ShapeType name (RectangularCallout) and common words (speech bubble, cylinder, cog; every word must match, a name match ranks first); an empty query browses. Each result's \`shape\` is the value to write; \`adjust\` lists its adjust values (the yellow handles in PowerPoint) with their defaults and ranges at a square frame, as fractions of the shape or degrees, to write as \`"adjust": { "adj1": 0.4 }\`; \`svg\` is a small drawing at the default frame (\`aspect\`, width over height). Never guess a preset name: an unknown one is an opf/schema error.`,
+			inputSchema: {
+				query: z.string().optional().describe('Words to match, such as "speech bubble", "arrow", "flowchart decision" or "RectangularCallout". Empty browses the gallery in order.'),
+				category: z.enum(shapeGroups).optional().describe(`Only this gallery group: ${shapeGroups.join(", ")}.`),
+				limit: z.number().int().min(1).max(100).optional().describe("At most this many shapes. Default 12."),
+			},
+			outputSchema: {
+				query: z.string(),
+				total: z.number(),
+				returned: z.number(),
+				shapes: z.array(
+					z.object({
+						shape: z.string(),
+						aspose: z.string(),
+						category: z.string(),
+						categoryTitle: z.string(),
+						aspect: z.number(),
+						adjust: z.array(z.object({ name: z.string(), default: z.number(), min: z.number().nullable(), max: z.number().nullable(), unit: z.enum(["fraction", "degrees"]), handle: z.boolean() })),
+						svg: z.string(),
+					}),
+				),
+				categories: z.array(z.object({ id: z.string(), title: z.string(), shapes: z.number() })),
+			},
+			annotations: { ...READ_ONLY, title: "Search the preset shapes" },
+		},
+		({ query, category, limit }) =>
+			respond(() => {
+				const found = searchShapeCatalog(query ?? "", category ? { category: category as (typeof SHAPE_CATEGORIES)[number]["id"] } : {});
+				const max = limit ?? 12;
+				return {
+					query: query ?? "",
+					total: found.length,
+					returned: Math.min(max, found.length),
+					shapes: found.slice(0, max).map(({ entry }) => {
+						const aspect = presetAspect(entry.name);
+						const width = 96;
+						const height = Math.round(width / aspect);
+						const handled = new Set(presetGeometry(entry.name, 100, 100).handles.flatMap((handle) => [handle.horizontal, handle.vertical, handle.radius, handle.angle].flatMap((axis) => (axis ? [axis.adjust] : []))));
+						return {
+							shape: entry.name,
+							aspose: entry.aspose,
+							category: entry.category,
+							categoryTitle: SHAPE_CATEGORIES.find((item) => item.id === entry.category)!.title,
+							aspect,
+							adjust: Object.entries(presetAdjustments(entry.name, 100, 100)).map(([name, value]) => ({ name, default: value.default, min: value.min, max: value.max, unit: value.unit, handle: handled.has(name) })),
+							svg: shapeThumbnailSvg(presetGeometry(entry.name, width, height), width, height),
+						};
+					}),
+					categories: SHAPE_CATEGORIES.map((item) => ({ id: item.id, title: item.title, shapes: searchShapeCatalog("", { category: item.id }).length })),
 				};
 			}),
 	);

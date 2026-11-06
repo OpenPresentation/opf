@@ -65,6 +65,8 @@ export interface CanvasEditorOptions {
   targets?: "interactive" | "passive";
   /** CE-20: what Escape does in an inline text field: "cancel" (default) drops the draft, "commit" keeps it and leaves. */
   escape?: "cancel" | "commit";
+  /** SH-06: the yellow adjust handles on a selected preset shape (default true); each drag is one undoable change. */
+  shapeTools?: boolean;
   /** Picture tools (default true): a selected picture shows a "Crop picture" button that opens the crop and focal point layer. */
   imageTools?: boolean;
   /** Optional empty host for property forms; defaults to a floating canvas panel. */

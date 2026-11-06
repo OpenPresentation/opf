@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -183,6 +183,38 @@ describe("opf-mcp", () => {
 			const unknown = report.findings.find((finding) => finding.ruleId === "opf/icon-unknown");
 			assert.ok(unknown, JSON.stringify(report.findings));
 			assert.ok(unknown.suggestions.some((entry) => entry.value === "lucide:truck"));
+		});
+
+		test("search_shapes finds presets by DrawingML name, Aspose name and common words, with adjust handles and a drawing (SH-06)", async () => {
+			const shapes = async (arguments_) => (await client.callTool({ name: "search_shapes", arguments: arguments_ })).structuredContent;
+			const arrow = await shapes({ query: "rightArrow" });
+			assert.equal(arrow.shapes[0].shape, "rightArrow");
+			assert.equal(arrow.shapes[0].aspose, "RightArrow");
+			assert.equal(arrow.shapes[0].category, "blockArrows");
+			assert.equal(arrow.shapes[0].categoryTitle, "Block Arrows");
+			assert.equal(arrow.shapes[0].aspect, 2);
+			assert.deepEqual(arrow.shapes[0].adjust, [
+				{ name: "adj1", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+				{ name: "adj2", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+			]);
+			assert.match(arrow.shapes[0].svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 96 48"[^>]*><path d="M0 12 L72 12 L72 0 L96 24/);
+			assert.ok(!/<script|href=/.test(arrow.shapes[0].svg));
+			assert.deepEqual(arrow.categories.map((category) => category.id), ["lines", "rectangles", "basic", "blockArrows", "equations", "flowchart", "starsBanners", "callouts", "actionButtons"]);
+			assert.equal(arrow.categories.reduce((sum, category) => sum + category.shapes, 0), 187);
+			assert.equal((await shapes({ query: "RectangularCallout" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "speech bubble" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "cylinder" })).shapes[0].shape, "can");
+			const star = await shapes({ query: "star", category: "starsBanners", limit: 3 });
+			assert.equal(star.returned, 3);
+			assert.ok(star.total >= 12 && star.shapes.every((shape) => shape.category === "starsBanners"));
+			const browse = await shapes({ category: "equations" });
+			assert.deepEqual(browse.shapes.map((shape) => shape.shape), ["mathPlus", "mathMinus", "mathMultiply", "mathDivide", "mathEqual", "mathNotEqual"]);
+			// The angle handles are degrees, and a value no handle moves is listed without one.
+			const pie = (await shapes({ query: "pie", limit: 1 })).shapes[0];
+			assert.deepEqual(pie.adjust.map((entry) => [entry.name, entry.unit, entry.handle]), [["adj1", "degrees", true], ["adj2", "degrees", true]]);
+			const hexagon = (await shapes({ query: "hexagon", limit: 1 })).shapes[0];
+			assert.deepEqual(hexagon.adjust.map((entry) => [entry.name, entry.handle]), [["adj", true], ["vf", false]]);
+			assert.equal((await shapes({ query: "zzzzzz" })).total, 0);
 		});
 
 		test("names a kind or id that does not exist, with a suggestion", async () => {

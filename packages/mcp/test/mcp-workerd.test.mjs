@@ -59,7 +59,7 @@ describe("the MCP server in workerd", { skip: !available && "the workerd package
 		assert.equal(init.serverInfo.name, "opf");
 		assert.ok(init.capabilities.tools && init.capabilities.resources && init.capabilities.prompts);
 		const tools = (await call("tools/list", {})).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "start_here", "validate_deck"]);
+		assert.deepEqual(tools, ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "start_here", "validate_deck"]);
 		assert.deepEqual(wire(await call("tools/list", {})), wire(await local.listTools()));
 		assert.ok((await call("resources/list", {})).resources.length > 100);
 		assert.deepEqual((await call("prompts/list", {})).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "fix_validation_findings", "learn_opf"]);
@@ -135,8 +135,8 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 	test("leaves out the examples and the documentation, which are most of the bundle", () => {
 		assert.ok(lean.bytes < bundle.bytes - 7_000_000, `${lean.bytes} bytes against ${bundle.bytes} with the data`);
 		// About 7.1 MB unminified, 1.1 MB of it the diagram types validate_deck loads to check a deck's diagrams. SH-02: composition evaluates
-		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes.
-		assert.ok(lean.bytes < 7_900_000, `${lean.bytes} bytes`);
+		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes. SH-06: the shape catalog and search_shapes add 23 KB, and the engine's own growth since: 7,902,733 bytes.
+		assert.ok(lean.bytes < 7_950_000, `${lean.bytes} bytes`);
 	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
