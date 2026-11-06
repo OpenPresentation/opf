@@ -87,7 +87,7 @@ test("statuses, gaps and the addressed flag are consistent", () => {
       assert.ok(gap.detail, `${where}: gap without detail`);
       assert.ok(nextAction(committed, gap), `${where}: gap without next action`);
       if (gap.descoped) assert.match(gap.link, /^https:\/\/github\.com\/.+\/issues\/\d+$/, `${where}: descoped without an issue`);
-      if (gap.addressed && !gap.descoped) assert.ok(/^RR-\d{2}$/.test(gap.link) || /\/pull\/\d+$/.test(gap.link), `${where}: addressed without an RR item or PR`);
+      if (gap.addressed && !gap.descoped) assert.ok(/^RR-\d{2,3}$/.test(gap.link) || /\/pull\/\d+$/.test(gap.link), `${where}: addressed without an RR item or PR`);
     }
     const live = r.gaps.filter((g) => !g.descoped);
     if (r.status === "deprecated") assert.equal(r.gaps.length, 0);
