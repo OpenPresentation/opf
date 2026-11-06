@@ -2954,7 +2954,7 @@ function imageEffects(image, context) {
   };
   return {
     shape: image.shape ?? null,
-    strokeXml: image.stroke ? lineXml(image.stroke, shapePaint(context), shapePalette(context)) : null,
+    strokeXml: image.stroke ? lineXml(image.stroke, shapePaint(context), shapePalette(context), image.box) : null,
     opacity: image.opacity ?? null,
     recolor: image.recolor?.type === 'grayscale' ? { type: 'grayscale' }
       : image.recolor?.type === 'duotone' ? { type: 'duotone', dark: paint(image.recolor.dark, '000000'), light: paint(image.recolor.light, 'FFFFFF') } : null,

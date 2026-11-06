@@ -58,10 +58,13 @@ export function fillXml(fill, paint, context) {
 
 /**
  * a:ln for a core ComposedStroke (shapes and pictures): width, cap, compound and alignment, the solid or gradient line, the preset or
- * custom dash, the join, the arrowheads and the sketch style. `geometry` is the shape's own a:prstGeom or a:custGeom, which the sketch
- * extension repeats. Undefined stroke: no line.
+ * custom dash, the join, the arrowheads and the sketch style. A sketched line (core `stroke.sketched`) is stored as PowerPoint stores
+ * it: the extension's a:custGeom is the sketched outline itself, in the frame `box`, which PowerPoint draws as stored (it does not
+ * compute a sketch when it opens a file), so it draws the preview's line; it fills that geometry too, so it holds every path of the shape
+ * (`paths`, core's; a picture's mask when absent): a stroked path's fill along its sketched outline, the others as they are, then the
+ * sketched lines. Undefined stroke: no line.
  */
-export function lineXml(stroke, paint, context, geometry = '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom>') {
+export function lineXml(stroke, paint, context, box, paths) {
   if (!stroke) return '<a:ln><a:noFill/></a:ln>';
   const fill = stroke.gradient ? gradientXml(stroke.gradient, paint) : `<a:solidFill>${colorXml(stroke.color ?? 'border', paint, context.border)}</a:solidFill>`;
   const dash = Array.isArray(stroke.dash)
@@ -69,16 +72,22 @@ export function lineXml(stroke, paint, context, geometry = '<a:prstGeom prst="re
     : `<a:prstDash val="${PRESET_DASH_VALUES[stroke.dash] ?? 'solid'}"/>`;
   const join = stroke.join === 'round' ? '<a:round/>' : stroke.join === 'bevel' ? '<a:bevel/>' : `<a:miter lim="${Math.round(stroke.miterLimit * 100000)}"/>`;
   const head = (name, value) => value ? `<a:${name} type="${value.type}" w="${HEAD_SIZES[value.width]}" len="${HEAD_SIZES[value.length]}"/>` : '';
-  const sketch = stroke.sketch ? `<a:extLst><a:ext uri="${SKETCH_URI}"><ask:lineSketchStyleProps xmlns:ask="${SKETCH_NS}" sd="${sketchSeed(geometry)}">${geometry}<ask:type><ask:${SKETCH[stroke.sketch]}/></ask:type></ask:lineSketchStyleProps></a:ext></a:extLst>` : '';
+  const sketched = stroke.sketch && stroke.sketched && box ? geometryXml({ box, paths: sketchPaths(stroke.sketched, paths) }) : undefined;
+  const sketch = sketched ? `<a:extLst><a:ext uri="${SKETCH_URI}"><ask:lineSketchStyleProps xmlns:ask="${SKETCH_NS}" sd="${stroke.sketched.seed}">${sketched}<ask:type><ask:${SKETCH[stroke.sketch]}/></ask:type></ask:lineSketchStyleProps></a:ext></a:extLst>` : '';
   return `<a:ln w="${emu(stroke.width)}" cap="${CAPS[stroke.cap] ?? 'flat'}" cmpd="${COMPOUNDS[stroke.compound] ?? 'sng'}" algn="${stroke.align === 'inside' ? 'in' : 'ctr'}">${fill}${dash}${join}${head('headEnd', stroke.start)}${head('tailEnd', stroke.end)}${sketch}</a:ln>`;
 }
+// The paths of a sketch's a:custGeom (geometryXml): each path's fill (along its sketched outline when it has a line), then the lines.
+// A picture (no paths) draws the line of its first path only, so its sketched outline is filled and stroked there, then scribble's second
+// pass follows on its own.
+const sketchPaths = (sketched, paths) => paths ? [
+  ...paths.flatMap((path, index) => path.fill === 'none' ? [] : [{ d: sketched.fills[index] ?? path.d, fill: path.fill, stroke: false }]),
+  ...sketched.lines.flatMap(line => line ? [{ d: line, fill: 'none', stroke: true }] : []),
+] : [{ d: sketched.fills[0], fill: 'norm', stroke: true }, ...(sketched.lines[0].length > sketched.fills[0].length ? [{ d: sketched.lines[0].slice(sketched.fills[0].length), fill: 'none', stroke: true }] : [])];
 // An odd custom dash repeats, as SVG's dasharray does.
 const pairs = values => {
   const list = values.length % 2 ? [...values, ...values] : values;
   return list.flatMap((value, index) => index % 2 ? [] : [[value, list[index + 1]]]);
 };
-// PowerPoint seeds the sketch's randomness; a fixed seed from the geometry keeps the file stable.
-const sketchSeed = text => { let hash = 2166136261; for (const char of text) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619) >>> 0; return hash % 2147483647; };
 
 /** a:prstGeom with core's DrawingML adjust values, or a:custGeom of a custom path (core's paths, frame-relative, in EMU). */
 export function geometryXml(shape) {
@@ -148,7 +157,7 @@ export function shapeBlockRecord(shape, paint, context) {
   const geometry = geometryXml(shape), box = shape.box;
   const xfrm = `<a:xfrm${shape.rotate ? ` rot="${Math.round(shape.rotate * 60000)}"` : ''}${shape.flipH ? ' flipH="1"' : ''}${shape.flipV ? ' flipV="1"' : ''}><a:off x="${emu(box.x)}" y="${emu(box.y)}"/><a:ext cx="${emu(box.width)}" cy="${emu(box.height)}"/></a:xfrm>`;
   const effects = drawEffects(shape, paint) || '<a:effectLst/>';
-  const spPr = `<p:spPr>${xfrm}${geometry}${fillXml(shape.fill, paint, context)}${lineXml(shape.stroke, paint, context, geometry)}${effects}</p:spPr>`;
+  const spPr = `<p:spPr>${xfrm}${geometry}${fillXml(shape.fill, paint, context)}${lineXml(shape.stroke, paint, context, shape.box, shape.paths)}${effects}</p:spPr>`;
   const insets = shape.textRect && shape.padding ? shape.padding : { left: 0, top: 0, right: 0, bottom: 0 };
   const vert = { horizontal: 'horz', vertical: 'vert', vertical270: 'vert270', stacked: 'wordArtVert' }[shape.textDirection] ?? 'horz';
   const anchor = { top: 't', middle: 'ctr', bottom: 'b' }[shape.anchor] ?? 'ctr';

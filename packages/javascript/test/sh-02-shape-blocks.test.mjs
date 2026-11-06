@@ -75,7 +75,14 @@ test('fills and strokes take every form of the vocabulary', () => {
   assert.deepEqual(gradient.shape.fill.gradient.stops.map((stop) => stop.position), [0, 1]);
   assert.equal(gradient.shape.fill.opacity, 0.5);
   assert.deepEqual(pattern.shape.fill, { type: 'pattern', preset: 'ltUpDiag', foreground: 'accent1' });
-  assert.deepEqual(stroked.shape.stroke, { color: 'text', width: 3, dash: [4, 2], cap: 'round', join: 'bevel', miterLimit: 8, compound: 'double', align: 'inside', sketch: 'curved' });
+  const { sketched, ...strokeRest } = stroked.shape.stroke;
+  assert.deepEqual(strokeRest, { color: 'text', width: 3, dash: [4, 2], cap: 'round', join: 'bevel', miterLimit: 8, compound: 'double', align: 'inside', sketch: 'curved' });
+  // The sketched outline both engines draw: cubic curves from a seed, the same every time.
+  assert.ok(Number.isInteger(sketched.seed) && sketched.seed >= 0 && sketched.seed < 2147483647);
+  assert.match(sketched.lines[0], /^M[\d.-]+ [\d.-]+C/);
+  assert.match(sketched.fills[0], /Z$/);
+  const again = shapes([{ shape: 'rect' }, { shape: 'rect' }, { shape: 'rect', stroke: { color: 'text', width: 3, dash: [4, 2], cap: 'round', join: 'bevel', compound: 'double', align: 'inside', sketch: 'curved' } }, { shape: 'arc' }]);
+  assert.deepEqual(again[2].shape.stroke.sketched, sketched);
   assert.deepEqual(open.shape.stroke.start, { type: 'oval', width: 'small', length: 'medium' });
   assert.deepEqual(open.shape.stroke.end, { type: 'triangle', width: 'medium', length: 'medium' });
   const line = open.shape.paths.find((path) => path.stroke);

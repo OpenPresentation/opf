@@ -52,7 +52,9 @@ const emu = px => Math.round(px * 9525);
   assert.match(rect, /<a:xfrm rot="1800000" flipH="1" flipV="1">/);
   assert.match(rect, /<a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="accent1"\/?>(<\/a:schemeClr>)?<\/a:gs><a:gs pos="100000"><a:srgbClr val="FFFFFF"><a:alpha val="50196"\/><\/a:srgbClr><\/a:gs><\/a:gsLst><a:lin ang="2700000" scaled="0"\/><\/a:gradFill>/);
   assert.match(rect, /<a:ln w="38100" cap="rnd" cmpd="thickThin" algn="in"><a:solidFill><a:schemeClr val="accent2"\/?>(<\/a:schemeClr>)?<\/a:solidFill><a:prstDash val="lgDashDot"\/><a:miter lim="400000"\/>/);
-  assert.match(rect, /<ask:lineSketchStyleProps xmlns:ask="http:\/\/schemas.microsoft.com\/office\/drawing\/2018\/sketchyshapes" sd="\d+"><a:prstGeom prst="rect"><a:avLst\/><\/a:prstGeom><ask:type><ask:lineSketchFreehand\/><\/ask:type>/);
+  // The sketch extension holds the sketched outline itself (PowerPoint draws it as stored): the fill along it, then the line.
+  assert.match(rect, /<a:ext uri="\{C807C97D-BFC1-408E-A445-0C87EB9F89A2\}"><ask:lineSketchStyleProps xmlns:ask="http:\/\/schemas.microsoft.com\/office\/drawing\/2018\/sketchyshapes" sd="\d+"><a:custGeom>.*<a:path w="\d+" h="\d+" stroke="0"><a:moveTo>.*<a:cubicBezTo>.*<a:path w="\d+" h="\d+" fill="none"><a:moveTo>.*<\/a:custGeom><ask:type><ask:lineSketchFreehand\/><\/ask:type><\/ask:lineSketchStyleProps><\/a:ext>/);
+  assert.match(rect, /<a:prstGeom prst="rect">/);
   assert.match(rect, /vert="vert270"[^>]*lIns="47625" tIns="19050" rIns="28575" bIns="38100"[^>]*anchor="b"/);
   assert.ok(!/<p:style>/.test(rect), 'style none writes no theme references');
   assert.match(arc, /<a:custDash><a:ds d="400000" sp="200000"\/><a:ds d="100000" sp="400000"\/><a:ds d="200000" sp="100000"\/><\/a:custDash>/);

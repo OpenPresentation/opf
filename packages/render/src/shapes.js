@@ -250,15 +250,18 @@ export function renderShapeBlock(item, helpers) {
     const fill = fillPaint(shape.fill, path.fill, `${id}-fill-${index}`, box, helpers, shape, path);
     if (fill.defs) defs.push(fill.defs);
     const closed = !path.open;
+    // A sketched line's path is filled within its sketched outline (core stroke.sketched), as PowerPoint fills it.
+    const area = shape.stroke?.sketched?.fills[index] ?? path.d;
     if (fill.fan) {
       // The fan is clipped (antialiased) to the path it fills; its triangles overlap and are drawn without antialiasing, so the many thin
       // triangles of a curved outline meet without seams.
-      defs.push(fill.fan.defs, helpers.tag("clipPath", { id: `${id}-fill-${index}-clip` }, helpers.tag("path", { d: path.d })));
+      defs.push(fill.fan.defs, helpers.tag("clipPath", { id: `${id}-fill-${index}-clip` }, helpers.tag("path", { d: area })));
       parts.push(helpers.tag("g", { ...HIDDEN, "clip-path": `url(#${id}-fill-${index}-clip)` }, helpers.tag("g", { "shape-rendering": "crispEdges" }, fill.fan.body)));
     }
-    if (fill.fill && fill.fill !== "none") parts.push(helpers.tag("path", { ...HIDDEN, d: path.d, fill: fill.fill, "fill-opacity": fill.opacity !== undefined && fill.opacity < 1 ? precise(fill.opacity) : undefined }));
+    if (fill.fill && fill.fill !== "none") parts.push(helpers.tag("path", { ...HIDDEN, d: area, fill: fill.fill, "fill-opacity": fill.opacity !== undefined && fill.opacity < 1 ? precise(fill.opacity) : undefined }));
     if (path.stroke && shape.stroke) {
-      const stroke = strokeElements(shape.stroke, path.d, `${id}-line-${index}`, { box, closed, ends: path.ends, helpers });
+      // A sketched line (core stroke.sketched) is drawn along its sketched outline, as PowerPoint draws it.
+      const stroke = strokeElements(shape.stroke, shape.stroke.sketched?.lines[index] ?? path.d, `${id}-line-${index}`, { box, closed, ends: path.ends, helpers });
       if (stroke.defs) defs.push(stroke.defs);
       parts.push(stroke.elements);
     }

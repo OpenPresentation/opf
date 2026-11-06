@@ -113,6 +113,19 @@ assert.equal(shadeColor('#2874A6', 'norm'), '#2874A6');
   assert.match(svg, /<clipPath[^>]*><path d="M[\d.]+ [\d.]+L/);
   assert.match(svg, /stroke-dasharray="12 9"/);
   assert.match(svg, /stroke="#1F5AA6"/);
+  // A sketched picture line clips the picture to its sketched outline and strokes the sketched line.
+  const sketched = svgOf([{ image: photo, shape: 'hexagon', stroke: { color: 'accent1', width: 3, sketch: 'scribble' } }]);
+  assert.match(sketched, /<clipPath[^>]*><path d="M[\d.-]+ [\d.-]+C/);
+  assert.match(sketched, /<path [^>]*d="M[\d.-]+ [\d.-]+C[^"]*"[^>]*stroke="#1F5AA6"|<path [^>]*stroke="#1F5AA6"[^>]*d="M[\d.-]+ [\d.-]+C/);
+}
+
+// A sketched shape is filled within, and stroked along, the sketched outline core computed (the one the PPTX stores).
+{
+  const blocks = [{ shape: 'rect', fill: 'accent3', stroke: { color: 'accent1', width: 3, sketch: 'freehand' } }];
+  const { sketched } = item(blocks).shape.stroke;
+  const svg = svgOf(blocks);
+  assert.ok(svg.includes(`d="${sketched.fills[0]}"`));
+  assert.ok(svg.includes(`d="${sketched.lines[0]}"`));
 }
 
 console.log('sh-02 shapes: ok');

@@ -883,8 +883,10 @@ function renderImageBlock(item, bound, options) {
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
   if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
-  const masked = shape && shape.preset !== "rect";
-  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: shape.path })));
+  // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
+  const sketched = image.stroke?.sketched?.fills[0];
+  const masked = sketched || (shape && shape.preset !== "rect");
+  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: sketched ?? shape.path })));
   const matrix = imageRecolorMatrix(image.recolor, bound);
   if (matrix) defs.push(tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix })));
   let pixels = matrix || image.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
@@ -892,7 +894,7 @@ function renderImageBlock(item, bound, options) {
   const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
   // SH-02: the picture's stroke (renamed from border) takes every stroke property, along the frame's preset outline.
   if (image.stroke) {
-    const stroke = strokeElements(image.stroke, shape?.path ?? rectanglePath(image.box), `${id}-stroke`, { box: image.box, closed: true, helpers: shapeHelpers(item, bound, options) });
+    const stroke = strokeElements(image.stroke, image.stroke.sketched?.lines[0] ?? shape?.path ?? rectanglePath(image.box), `${id}-stroke`, { box: image.box, closed: true, helpers: shapeHelpers(item, bound, options) });
     if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
     children.push(stroke.elements);
   }

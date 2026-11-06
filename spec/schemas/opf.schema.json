@@ -1861,7 +1861,7 @@
             "sketch": {
               "type": "string",
               "enum": ["curved", "freehand", "scribble"],
-              "description": "Hand-drawn look (PowerPoint's Sketched line, ask:lineSketchStyleProps): curved, freehand or scribble. PowerPoint versions before 2021 draw the plain line. The preview draws the plain line too: the sketch is PowerPoint's own randomized stroke, which no renderer can match."
+              "description": "Hand-drawn look (PowerPoint's Sketched line, ask:lineSketchStyleProps): curved, freehand or scribble. OPF computes the sketched outline from a seed and both engines draw it: the preview strokes it and the PPTX stores it, which PowerPoint draws as stored, so the two match. A stroked path's fill follows the sketched outline too. PowerPoint versions before 2021 draw the plain line."
             }
           }
         }

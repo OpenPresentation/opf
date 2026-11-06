@@ -12,6 +12,7 @@ import { colorContrast } from './color.js';
 import type { CustomPathInput, ShapeAdjustment, ShapeGeometry, ShapePath, ShapePathFill } from './shape-geometry.js';
 import { loadShapeGeometry, shapeGeometry } from '#shape-engine';
 import { PRESET_NAMES } from './generated/preset-names.js';
+import { sketchPathData, sketchSeed } from './shape-sketch.js';
 
 /** The 187 DrawingML preset names (ECMA-376 ST_ShapeType), without loading their geometry. */
 export const SHAPE_PRESETS: readonly string[] = PRESET_NAMES;
@@ -311,6 +312,12 @@ export interface ComposedStroke {
   start?: ComposedArrowhead;
   end?: ComposedArrowhead;
   sketch?: 'curved' | 'freehand' | 'scribble';
+  /**
+   * With `sketch`: the sketch both engines draw instead of the outline (shape-sketch.ts), with PowerPoint's seed (`sd`). One entry per
+   * outline path (a shape's paths in order; a picture's mask), path data in slide pixels: `lines`, what the line strokes (null for a path
+   * without a line), and `fills`, the sketched outline a stroked path's fill fills (null: the path itself).
+   */
+  sketched?: { seed: number; lines: (string | null)[]; fills: (string | null)[] };
 }
 
 const DASHES = new Set(['solid', 'dot', 'dash', 'longDash', 'dashDot', 'longDashDot', 'longDashDotDot', 'sysDot', 'sysDash', 'sysDashDot', 'sysDashDotDot']);
@@ -358,6 +365,19 @@ export function composeStroke(value: unknown, scale: number, defaults: { color?:
   if (end) result.end = end;
   if (['curved', 'freehand', 'scribble'].includes(stroke.sketch)) result.sketch = stroke.sketch;
   return result;
+}
+
+/**
+ * Adds the sketch of `stroke.sketch` (`stroke.sketched`) for the outline `paths` (slide pixels, each with whether it has a line) of a
+ * frame `box`. The seed depends only on the style, the frame's size and the outline, so a moved shape keeps its line.
+ */
+export function sketchStroke(stroke: ComposedStroke | undefined, paths: { d: string; stroke: boolean }[], box: Box, scale: number): void {
+  if (!stroke?.sketch) return;
+  const style = stroke.sketch;
+  const local = paths.map(path => translatePathData(path.d, -box.x, -box.y)).join('|');
+  const seed = sketchSeed(`${style}|${round(box.width)}x${round(box.height)}|${local}`);
+  const sketches = paths.map((path, index) => path.stroke ? sketchPathData(path.d, seed + index, style, scale) : undefined);
+  stroke.sketched = { seed, lines: paths.map((path, index) => path.stroke ? sketches[index]?.line ?? path.d : null), fills: sketches.map(sketch => sketch?.outline ?? null) };
 }
 
 /** A fill (opf.schema.json ShapeFill) with the block's `opacity`; undefined when `value` is not one. */
@@ -545,6 +565,7 @@ export function composeShape(host: Rec, region: Box, options: { scale: number; a
   const opacity = finite(host.opacity, 0, 1);
   const fill = composeFill(host.fill ?? look.fill, opacity) ?? composeFill(look.fill, opacity) ?? { type: 'none' as const };
   const stroke = composeStroke(host.stroke, scale, look.stroke ? { ...look.stroke, join: 'miter' } : host.stroke !== undefined ? { color: style === 'none' ? 'text' : { color: 'accent1', darken: 0.5 }, width: SHAPE_STROKE_WIDTH, join: 'miter' } : undefined);
+  sketchStroke(stroke, paths, box, scale);
   const effects: NonNullable<ComposedShape['effects']> = {};
   if (look.shadow && host.shadow === undefined) effects.shadow = look.shadow;
   for (const key of SHAPE_EFFECT_KEYS) if (host[key] !== undefined) effects[key] = host[key];
