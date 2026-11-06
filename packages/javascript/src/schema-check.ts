@@ -728,6 +728,8 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   const issues: ValidationIssue[] = [];
 
   const colorRef = (entry: unknown, path: string): void => {
+    // SH-02: the lighter or darker form names its base in its color key.
+    if (isRecord(entry) && entry.color !== undefined) { colorRef(entry.color, pathFor(path, "color")); return; }
     if (typeof entry !== "string" || !entry.startsWith("var:")) return;
     const id = entry.slice("var:".length);
     // A reference the schema rejects already reports an error; advising the
@@ -738,6 +740,7 @@ function variableReferenceWarnings(value: Record<string, unknown>): ValidationIs
   // Run colors are open strings: warn on anything that is none of the
   // documented forms, since renderers will fall back to the theme color.
   const runColor = (entry: unknown, path: string): void => {
+    if (isRecord(entry)) { colorRef(entry, path); return; }
     if (typeof entry !== "string") return;
     if (hexColorPattern.test(entry) || schemeColorNames.has(entry)) return;
     if (entry.startsWith("var:") && variableIdPattern.test(entry.slice("var:".length))) {

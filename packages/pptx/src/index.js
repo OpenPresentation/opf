@@ -54,7 +54,7 @@ import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} fr
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
-import {themeSlotColors, schemeColorTable, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
+import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
@@ -2695,7 +2695,9 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const text = defaultTextSchemeValues(slideContext);
   slideContext.textColor = text.text ?? resolved.colors.text;
   slideContext.mutedColor = text.muted ?? resolved.colors.mutedText;
-  baseContext.slideSchemeColors[slideIndex] = {table: schemeColorTable(slideContext), keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined}, geometryFallbackBackground(presentation))};
+  // SH-02: the slide's lighter and darker ColorRefs are written as their base with a:lumMod and a:lumOff.
+  const slideTable = addTransformedColors(schemeColorTable(slideContext), reference => exportColor(reference, slideContext, slideContext.colors?.text), slide, effective.design?.background);
+  baseContext.slideSchemeColors[slideIndex] = {table: slideTable, keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined}, geometryFallbackBackground(presentation))};
   return slideContext;
 }
 

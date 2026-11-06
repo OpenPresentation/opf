@@ -2,7 +2,7 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
@@ -264,6 +264,12 @@ function resolveColorRef(value, bound, fallback) {
 // partial one for the background, before the text-dependent roles exist.
 function resolveColorRefIn(value, design, fallback) {
   if (value == null || value === "") return fallback;
+  // SH-02: { color, lighten } or { color, darken } resolves its base, then applies core's transform (an alpha byte is kept).
+  const transform = colorTransform(value);
+  if (transform) {
+    const base = resolveColorRefIn(transform.color, design, fallback);
+    return typeof base === "string" ? applyColorTransform(base, transform) : base;
+  }
   if (typeof value !== "string") return fallback;
   const trimmed = value.trim();
   // Core normalizeHexColor uppercases literals and strips #RRGGBBAA alpha.
