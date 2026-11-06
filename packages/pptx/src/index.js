@@ -3015,7 +3015,8 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
         ...(run.color !== undefined && run.color !== '' ? {color: exportColor(run.color, context, textHex).slice(0, 6)} : {}), ...(typeof run.link === 'string' ? {hyperlink: {url: run.link}, color: linkColor(run, run.color !== undefined && run.color !== '' ? exportColor(run.color, context, textHex).slice(0, 6) : textHex, context)} : {}),
         ...(typeof run.fontFamily === 'string' ? {fontFace: run.fontFamily} : {}), ...(typeof run.fontSize === 'number' ? {fontSize: run.fontSize} : {}), ...(run.superscript ? {superscript: true} : {}), ...(run.subscript ? {subscript: true} : {}),
         ...(index < lines.length - 1 ? {breakLine: true} : {})};
-      runs.push({text: line, options: own});
+      // LH-11: a space core's line breaker never breaks at ("16 px") is written as a no-break space, so PowerPoint wraps the shape's text as the preview does.
+      runs.push({text: bindNoBreak(line), options: own});
     });
   };
   if (typeof value === 'string') push(value);

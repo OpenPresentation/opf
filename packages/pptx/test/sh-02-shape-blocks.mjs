@@ -62,6 +62,12 @@ const emu = px => Math.round(px * 9525);
 }
 
 // A custom path is a:custGeom in the frame's own units; a pattern fill is a:pattFill.
+// A space core never breaks at (a figure and its unit) is a no-break space in the shape's text, so PowerPoint wraps as the preview.
+{
+  const { shapes } = await exported([{ shape: 'rect', text: 'Anchored at the top with 16 px insets' }]);
+  assert.match(shapes[0], /1600a0px/);
+}
+
 {
   const { shapes } = await exported([{ path: 'M0 0 L1 0 L0.5 1 Z', fill: { pattern: { preset: 'ltUpDiag', foregroundColor: 'accent1', backgroundColor: 'light1' } } }]);
   const [shape] = shapes;
