@@ -1294,9 +1294,12 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item) items.push({...item, sources: [`sp:${index}`]});
   }
 
-  importNativeConnectors(drawnAll, shapeContext);
+  // SH-07 with SH-05: the glued edges of an intact diagram group are the diagram's drawing, not overlay connectors.
+  const intactDiagramIndexes = new Set([...intactDiagramGroups].map(group => asArray(tree?.['p:grpSp']).indexOf(group)));
+  const drawnOutsideDiagrams = drawnAll.filter(entry => entry.group === undefined || !intactDiagramIndexes.has(entry.group));
+  importNativeConnectors(drawnOutsideDiagrams, shapeContext);
   // SH-05: an overlay shape PowerPoint drew behind a text box or a picture is in the back layer.
-  settleLayers(drawnAll.flatMap(entry => {
+  settleLayers(drawnOutsideDiagrams.flatMap(entry => {
     if (entry.tag === 'p:pic' || entry.tag === 'p:graphicFrame') return [{z: entry.z, frame: entry.frame, name: entry.tag === 'p:pic' ? 'picture' : 'table or chart'}];
     const index = entry.tag === 'p:sp' ? entry.index : undefined;
     return index !== undefined && (paragraphs[index] ?? []).some(paragraph => paragraph.text) && shapeRole(entry, {hasText: true}) === 'text' ? [{z: entry.z, frame: entry.frame, name: String(entry.props?.['p:nvSpPr']?.['p:cNvPr']?.name ?? 'text')}] : [];

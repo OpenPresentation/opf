@@ -101,7 +101,8 @@ export function frameOnSlide(frame, groups) {
 /**
  * The slide's drawn shapes in z order (the shape tree walked in document order, groups flattened with their transforms applied):
  * `p:sp` (`index` is its nativeTextShapes index) and `p:cxnSp` with their parsed properties and their frame on the slide, and
- * `p:pic` and `p:graphicFrame` with their frame only (they take a z slot; the overlay check reads their boxes).
+ * `p:pic` and `p:graphicFrame` with their frame only (they take a z slot; the overlay check reads their boxes). A grouped entry has
+ * `group`, the index of its top-level p:grpSp among the shape tree's (the parsed tree's `p:grpSp` order).
  */
 export function readDrawnShapes(xml) {
   const tree = orderedParser.parse(xml);
@@ -111,27 +112,27 @@ export function readDrawnShapes(xml) {
   const treeKids = kidsOf(spTree);
   const indexes = spIndexes(treeKids);
   const drawn = [];
-  let z = 0;
-  const walk = (nodes, groups) => {
+  let z = 0, topGroups = 0;
+  const walk = (nodes, groups, top) => {
     for (const node of nodes ?? []) {
       const tag = tagOf(node);
       if (tag === 'p:grpSp') {
         const properties = findKid(kidsOf(node), 'p:grpSpPr');
         const group = properties ? xfrmOf(drawingObject([properties])['p:grpSpPr']?.['a:xfrm']) : undefined;
         z++;
-        walk(kidsOf(node), [...groups, group]);
+        walk(kidsOf(node), [...groups, group], groups.length ? top : topGroups++);
       } else if (tag === 'p:sp' || tag === 'p:cxnSp') {
         const props = drawingObject([node])[tag];
         const own = xfrmOf(props?.['p:spPr']?.['a:xfrm']);
-        drawn.push({tag, z: z++, index: tag === 'p:sp' ? indexes.get(node) : undefined, props, grouped: groups.length > 0, frame: own ? frameOnSlide(own, groups) : undefined});
+        drawn.push({tag, z: z++, index: tag === 'p:sp' ? indexes.get(node) : undefined, props, grouped: groups.length > 0, ...(top !== undefined ? {group: top} : {}), frame: own ? frameOnSlide(own, groups) : undefined});
       } else if (tag === 'p:pic' || tag === 'p:graphicFrame') {
         const properties = drawingObject(kidsOf(node).filter(kid => ['p:spPr', 'p:xfrm'].some(name => Object.hasOwn(kid, name))));
         const own = xfrmOf(properties['p:spPr']?.['a:xfrm'] ?? properties['p:xfrm']);
-        drawn.push({tag, z: z++, frame: own ? frameOnSlide(own, groups) : undefined});
+        drawn.push({tag, z: z++, ...(top !== undefined ? {group: top} : {}), frame: own ? frameOnSlide(own, groups) : undefined});
       } else if (tag === 'mc:AlternateContent') z++;
     }
   };
-  walk(treeKids, []);
+  walk(treeKids, [], undefined);
   return drawn;
 }
 
@@ -606,7 +607,10 @@ export function shapeRole(drawn, {hasText} = {}) {
   if (nv['p:nvPr']?.['p:ph'] !== undefined || !drawn.frame) return 'text';
   const exported = exportedShape(name);
   if (exported) return exported.kind;
-  if (name.startsWith('OPF ') || object(nv['p:nvPr']?.['p:custDataLst']?.['p:tags'])) return 'text';
+  // SH-07: the members of a diagram group the export wrote as shapes (`OPF diagram N node A`, `... edge ...`) reach here only when the
+  // group was edited (an intact one is its diagram again): they are drawn shapes like any other, so an edited diagram keeps its drawing.
+  const diagramMember = /^OPF diagram \d+ /.test(name);
+  if ((name.startsWith('OPF ') && !diagramMember) || object(nv['p:nvPr']?.['p:custDataLst']?.['p:tags'])) return 'text';
   const look = drawsLook(props);
   const spPr = props['p:spPr'] ?? {};
   const rectangle = !object(spPr['a:custGeom']) && (spPr['a:prstGeom']?.prst ?? 'rect') === 'rect';

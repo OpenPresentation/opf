@@ -18,6 +18,16 @@ const emu = value => Math.round(value * EMU_PER_PX);
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[char]));
 const unescape = value => value.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 
+/**
+ * One native connector, p:cxnSp: the one writer of SH-04's overlay connectors and SH-07's glued diagram edges. `cNvPr` is its p:cNvPr
+ * element, `start` and `end` the shapes it is glued to (`{ id, site }`: the native shape's p:cNvPr id and core's connection site index,
+ * undefined for an end that is not glued), `xfrm` and `geometry` its frame and preset, `ln` its line and `effects` what follows the line.
+ */
+export function connectorXml({ cNvPr, start, end, xfrm, geometry, ln, effects = '' }) {
+  const glue = (tag, at) => at ? `<a:${tag} id="${at.id}" idx="${at.site}"/>` : '';
+  return `<p:cxnSp><p:nvCxnSpPr>${cNvPr}<p:cNvCxnSpPr>${glue('stCxn', start)}${glue('endCxn', end)}</p:cNvCxnSpPr><p:nvPr/></p:nvCxnSpPr><p:spPr>${xfrm}${geometry}<a:noFill/>${ln}${effects}</p:spPr></p:cxnSp>`;
+}
+
 /** The native name of a connector. */
 export const connectorName = path => `OPF connector ${path}`;
 
@@ -73,10 +83,10 @@ export function writeConnectors(xml, records) {
     const named = shape.match(/<p:cNvPr\b[^>]*?\bid="(\d+)"[^>]*?\bname="([^"]+)"/);
     const record = named && records.get(unescape(named[2]));
     if (!record) return shape;
-    const glue = (tag, end) => { const id = end?.name !== undefined ? ids.get(end.name) : undefined; return id ? `<a:${tag} id="${id}" idx="${end.site}"/>` : ''; };
+    const glued = end => { const id = end?.name !== undefined ? ids.get(end.name) : undefined; return id ? { id, site: end.site } : undefined; };
     let cNvPr = `<p:cNvPr id="${named[1]}" name="${escape(unescape(named[2]))}"${record.hidden ? ' hidden="1"' : ''}/>`;
     if (record.decorative) cNvPr = writeFrameAlt(cNvPr, '');
     else if (record.alt !== undefined && record.alt !== '') cNvPr = writeFrameAlt(cNvPr, record.alt);
-    return `<p:cxnSp><p:nvCxnSpPr>${cNvPr}<p:cNvCxnSpPr>${glue('stCxn', record.from)}${glue('endCxn', record.to)}</p:cNvCxnSpPr><p:nvPr/></p:nvCxnSpPr><p:spPr>${record.xfrm}${record.geometry}<a:noFill/>${record.ln}</p:spPr></p:cxnSp>`;
+    return connectorXml({ cNvPr, start: glued(record.from), end: glued(record.to), xfrm: record.xfrm, geometry: record.geometry, ln: record.ln });
   });
 }

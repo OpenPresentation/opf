@@ -30,6 +30,7 @@
 // placeholders (`{{id:N}}`) the packaging step numbers (writeDiagramGroups).
 
 import { composeShape, presetMask, shapeSites } from '@openpresentation/opf/composition';
+import { connectorXml } from './connectors.js';
 
 const EMU = 9525;
 const emu = value => Math.round(value * EMU);
@@ -762,9 +763,10 @@ function edgeXml(edge, name, nextId, nodes, sites) {
     const [[x1, y1], [x2, y2]] = straight;
     const frame = { x: Math.min(x1, x2), y: Math.min(y1, y2), width: Math.abs(x2 - x1), height: Math.abs(y2 - y1) };
     const binding = straight.map(end => bind(end, nodes, sites));
-    const connection = ['stCxn', 'endCxn'].map((tag, index) => binding[index] ? `<a:${tag} id="${ID(binding[index].node.id)}" idx="${binding[index].site.index}"/>` : '').join('');
-    const spPr = `<p:spPr>${xfrm(frame, { flipH: x2 < x1, flipV: y2 < y1 })}<a:prstGeom prst="straightConnector1"><a:avLst/></a:prstGeom><a:noFill/>${lineXml(main.line)}<a:effectLst/></p:spPr>`;
-    xml.push(`<p:cxnSp><p:nvCxnSpPr><p:cNvPr id="${ID(nextId())}" name="${xmlEscape(name)}"/><p:cNvCxnSpPr>${connection}</p:cNvCxnSpPr><p:nvPr/></p:nvCxnSpPr>${spPr}</p:cxnSp>`);
+    // SH-04's connector writer, so a glued diagram edge is the same p:cxnSp as an overlay connector (core's sites, the native ids).
+    const [start, end] = binding.map(bound => bound && { id: ID(bound.node.id), site: bound.site.index });
+    xml.push(connectorXml({ cNvPr: `<p:cNvPr id="${ID(nextId())}" name="${xmlEscape(name)}"/>`, start, end, xfrm: xfrm(frame, { flipH: x2 < x1, flipV: y2 < y1 }),
+      geometry: '<a:prstGeom prst="straightConnector1"><a:avLst/></a:prstGeom>', ln: lineXml(main.line), effects: '<a:effectLst/>' }));
     return { xml, connectors: 1, bound: binding.filter(Boolean).length };
   }
   const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
