@@ -1,5 +1,5 @@
 import { colorContrast, deckBackgroundIsChosen, layoutColorVariant, layoutVariantApplies, layoutVariantKind, normalizeColorVariant, resolveColorRoles, type ColorVariant } from './color.js';
-import { SHORT_MESSAGE_WORDS, lonePayload, messageWords, statementMessage, type MessageSurface } from './composition.js';
+import { LONE_DISPLAY_SIZES, SHORT_MESSAGE_WORDS, lonePayload, messageWords, statementMessage, type MessageSurface, type SlideComposition } from './composition.js';
 import { isLayoutTemplate, layoutTemplate } from './layout-template.js';
 import { annotationText } from './annotations.js';
 import { colorChoice } from './rule-design.js';
@@ -87,4 +87,17 @@ export function resolveMessageSurface(presentation: unknown, index: number, slid
     previous = accented(before, record) || (!previous && eligible(before, record) !== undefined);
   }
   return previous ? undefined : { kind, variant };
+}
+
+/**
+ * LH-164: whether composition drew the slide's message at display size, as LH-09 sets it: a text above the lone-text display size
+ * (LONE_DISPLAY_SIZES.text), or, for a statement, a text grown to it or a title above the 54 px title role. A deck whose texts sit on
+ * cards keeps its body text, and a slide that is not drawn as a message keeps the plain surface.
+ */
+export function messageDisplayed(result: SlideComposition, kind: MessageSurface['kind']): boolean {
+  const scale = Math.min(result.width, result.height) / 720, size = (field: string) => result.items.find(item => item.field === field)?.text?.fontSize;
+  const text = size('text'), title = size('title');
+  // A statement's message under a label is a lone block grown to the lone display size, however long; a display message is grown past it.
+  if (kind === 'statement-message') return (text !== undefined && text / scale >= LONE_DISPLAY_SIZES.text - 1e-6) || (title !== undefined && title / scale > 54 + 1e-6);
+  return text !== undefined && text / scale > LONE_DISPLAY_SIZES.text + 1e-6;
 }

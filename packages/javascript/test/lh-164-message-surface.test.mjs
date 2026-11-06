@@ -152,3 +152,15 @@ test('LH-164: on the accent surface a color the author set for a run that does n
   const plain = composeSlide(slide, { ...options, messageSurface: undefined, roles: { ...options.roles, background: '#FFFFFF', text: '#000000' } });
   assert.ok(plain.items.find((entry) => entry.field === 'text').text.richLines.some((line) => line.fragments.some((fragment) => fragment.run.color === '#1B49CB')));
 });
+
+test('LH-164: a color named by a role, a scheme slot or a variable that does not read on the surface is drawn in one that does', () => {
+  for (const color of ['accent1', 'secondary', 'accent', 'var:brand']) {
+    const authored = ['Focus on ', { text: 'the named color', bold: true, color }, ' while making the tradeoffs clear.'];
+    const deck = { ...deckOf([{ title: 'Why This Matters', text: authored }]), variables: { brand: '#2874A7' } };
+    const { slide, options } = context(deck, 0);
+    const shown = composeSlide(slide, options).items.find((entry) => entry.field === 'text');
+    const colors = shown.text.richLines.flatMap((line) => line.fragments.map((fragment) => fragment.run.color)).filter((value) => value !== undefined);
+    assert.ok(colors.length && colors.every((value) => colorContrast(options.resolveRunColor(value) ?? value, options.roles.background) >= 4.5), `${color}: ${colors}`);
+    assert.deepEqual(shown.value, authored);
+  }
+});

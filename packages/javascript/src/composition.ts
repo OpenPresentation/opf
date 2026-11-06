@@ -866,6 +866,11 @@ export interface ComposeSlideOptions {
    */
   messageSurface?: MessageSurface;
   /**
+   * LH-164: resolves a run color the author wrote (a hex, a role, a scheme slot, `var:`) to the hex the engines draw, for the slide's roles and
+   * variables; `resolveSlideContext` passes it with `messageSurface`, so a color that does not read on the surface can be drawn in one that does.
+   */
+  resolveRunColor?: (reference: string) => string | undefined;
+  /**
    * The resolved theme's `background`, the lowest level of the background chain (the slide's design.background, then
    * the deck's, then this). Only an image background produces geometry (`SlideComposition.backgroundImage`).
    * `resolveSlideContext` passes it.
@@ -5407,7 +5412,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const onMessageSurface = options.messageSurface !== undefined, surfaceBackground = legibleHex(slideRoles.background);
   const surfaceRun = (run: unknown): unknown => {
     const color = run && typeof run === 'object' ? (run as { color?: unknown }).color : undefined;
-    const drawn = color === 'primary' ? legibleHex(slideRoles.primary) : legibleHex(color);
+    // Any ColorRef the author used (a role, a scheme slot, a variable) is resolved by the slide context; without it a hex and the primary are.
+    const drawn = typeof color === 'string' && options.resolveRunColor ? legibleHex(options.resolveRunColor(color)) : color === 'primary' ? legibleHex(slideRoles.primary) : legibleHex(color);
     if (!onMessageSurface || !surfaceBackground || !drawn || (colorContrast(drawn, surfaceBackground) ?? 0) >= SCRIM_TARGET_CONTRAST) return run;
     return { ...(run as object), color: legible(drawn, surfaceBackground, SCRIM_TARGET_CONTRAST) };
   };
