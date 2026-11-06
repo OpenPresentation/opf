@@ -4,6 +4,7 @@ import { layoutVariantApplies, resolveColorRef, resolveColorRoles, type ColorVar
 import { resolveDesignRecords } from './design-records.js';
 import { drawsAccentByDesign, messageDisplayed, resolveMessageSurface } from './message-surface.js';
 import { colorChoice, colorLevels } from './rule-design.js';
+import { slideScriptMeasurement } from './script-measurement.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
 /**
@@ -154,11 +155,18 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   const variablesOf = (made: { composeOptions: ComposeSlideOptions }) => resolveSlideVariables(slide, { slideNumber: made.composeOptions.slideNumber as number, slideCount: made.composeOptions.slideCount as number, presentation, darkBackground: made.composeOptions.darkBackground === true });
   // LH-164: the content says the body is one message; the slide is composed once as it is on the plain surface (a candidate is rare) and takes
   // the accent only when LH-09 really draws the message at display size (a deck whose texts sit on cards, for one, keeps its body text).
+  // LH-180: that composition measures what the engines draw: a host measurement that plans scripts (`forScripts`, the renderer's loadFonts()
+  // measurement, which the preview passes) is planned with the slide's script fonts, as the renderer composes the slide and as the PPTX
+  // exporter's measurement already is (its own planner, which has no `forScripts`, so it is used as it is). Measured in the one Latin face, an
+  // Arabic message or a symbol font's private-use codes failed this composition in the preview alone, which kept the plain surface where the
+  // export took the accent.
   let messageSurface = candidate, built = build(candidate);
   if (candidate) {
     const plain = build(undefined);
+    const host = plain.composeOptions.textMeasurement;
+    const measurement = host ? unpathed(slideScriptMeasurement(presentation, index, host, { ...catalogs, fontFamilies: resolveFontFamilies(fontScheme), serif: fontScheme.type === 'serif' })) : host;
     let displayed = false;
-    try { displayed = messageDisplayed(composeSlide(variablesOf(plain), { ...plain.composeOptions, ...(plain.composeOptions.textMeasurement ? { textMeasurement: unpathed(plain.composeOptions.textMeasurement) } : {}) }), candidate.kind); } catch { displayed = false; }
+    try { displayed = messageDisplayed(composeSlide(variablesOf(plain), { ...plain.composeOptions, ...(measurement ? { textMeasurement: measurement } : {}) }), candidate.kind); } catch { displayed = false; }
     // Never two accent surfaces in a row: judged by whether the slide before really is on one (its own composition decides, recursively).
     if (displayed && index > 0) {
       const before = rec(slides[index - 1]), record = (typeof before.layout === 'string' && before.layout !== 'auto' ? resolveReference(presentation, 'layouts', before.layout, catalogs)?.record : undefined) as Rec | undefined;
