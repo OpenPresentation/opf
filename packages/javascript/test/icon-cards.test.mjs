@@ -25,6 +25,7 @@ const TEXT = {
     topics: ['Customer feedback themes', 'Support performance', 'Product reliability', 'Priorities for next quarter'],
     long: 'A label that runs on far too long to be the short title of one card in a grid of equal cards',
     texts: ['Tickets close a day sooner.', 'Fewer handoffs between teams.', 'Customers rate replies higher.', 'Agents spend less time searching.'],
+    row: [['Fast setup', 'Live in a day, not a quarter.'], ['Secure by default', 'SSO, audit logs and encryption at rest.'], ['Real support', 'A named specialist for every account.']],
     steps: [['Join', 'Sign up in five minutes.'], ['Learn', 'Six short lessons a week.'], ['Build', 'Ship one small project.'], ['Certify', 'Pass a one-hour review.']],
   },
   ar: {
@@ -33,6 +34,7 @@ const TEXT = {
     topics: ['ملاحظات العملاء', 'أداء الدعم', 'موثوقية المنتج', 'أولويات الربع القادم'],
     long: 'عنوان طويل جدًا لا يصلح أن يكون العنوان القصير لبطاقة واحدة في شبكة من البطاقات المتساوية في الحجم',
     texts: ['تُغلق التذاكر قبل يوم.', 'تسليم أقل بين الفرق.', 'يقيّم العملاء الردود أعلى.', 'وقت أقل في البحث.'],
+    row: [['دليل الترحيب', 'جولة من اثنتي عشرة صفحة في الأسبوع الأول.'], ['مكتبة القوالب', 'أربعون تقريرًا ولوحة جاهزة.'], ['بيانات تجريبية', 'مساحة عمل لتجربة التغييرات بأمان.']],
     steps: [['انضم', 'سجّل في خمس دقائق.'], ['تعلّم', 'ستة دروس قصيرة أسبوعيًا.'], ['ابنِ', 'أنجز مشروعًا صغيرًا.'], ['احصل', 'اجتز مراجعة مدتها ساعة.']],
   },
 };
@@ -74,6 +76,19 @@ for (const [language, text] of Object.entries(TEXT)) {
     if (rtl) assert.ok(first.x > second.x); else assert.ok(first.x < second.x);
   });
 
+  test(`LH-165 (${direction}): a row of cards grows its text past the list display size, label over description at 0.82, one size`, () => {
+    const result = compose({ title: text.title, blocks: [{ items: text.row.map(([label, description]) => ({ text: label, description, icon: 'brand:star' })) }] }, language);
+    const list = body(result)[0], scale = result.height / 720;
+    assert.ok(tiles(result), 'cards');
+    assert.ok(list.text.fontSize > 37 * scale + 1e-6, `past 37 px (${list.text.fontSize / scale})`);
+    for (const column of list.listColumns) {
+      const entry = column.text.listEntries[0];
+      assert.equal(column.text.fontSize, list.text.fontSize, 'one size across the cards');
+      assert.ok(Math.abs(entry.description.richLines[0].fragments[0].fontSize - 0.82 * entry.text.richLines[0].fragments[0].fontSize) < 0.5, 'the description at 0.82 of the label');
+      assert.ok(entry.text.richLines.length <= 2, 'a label never breaks into more than two lines');
+    }
+  });
+
   test(`LH-165 (${direction}): a numbered list and an agenda keep their numbers on the cards; a long label keeps the list`, () => {
     const numbered = compose({ title: text.agenda, blocks: [{ numbering: 'arabic', items: text.topics.map((topic) => ({ text: topic, icon: 'brand:star' })) }] }, language);
     const badges = tiles(numbered).badges;
@@ -84,6 +99,13 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.ok(agendaCards, 'an agenda with icons draws as cards');
     assert.deepEqual(agendaCards.badges.map((badge) => badge.label), ['01', '02', '03', '04'], 'numbered as its badges would number it');
     assert.ok(agendaCards.badges.every((badge) => badge.list === undefined), 'drawing only: the agenda keeps no numbering');
+    // The agenda's cards stand across the body under the heading (recomposed), at least at the size the layout gives the list.
+    assert.equal(agenda.recomposed?.cards, true, 'the cards take the whole body');
+    assert.equal(agenda.regions, undefined);
+    assert.ok(agenda.recomposed.size >= agenda.recomposed.layoutSize - 0.01);
+    const title = agenda.items.find((item) => item.field === 'title');
+    assert.ok(agendaCards.chips.every((chip) => chip.box.y >= title.box.y + title.box.height), 'under the heading');
+    assert.ok(Math.max(...agendaCards.chips.map((chip) => chip.box.x + chip.box.width)) - Math.min(...agendaCards.chips.map((chip) => chip.box.x)) > 0.8 * agenda.contentBox.width, 'across the body');
     const long = compose({ title: text.title, blocks: [{ items: [{ text: text.long, icon: 'brand:star' }, ...text.entries.slice(1).map(([label]) => ({ text: label, icon: 'brand:dot' }))] }] }, language);
     assert.equal(tiles(long), undefined, 'a long label keeps the list');
   });

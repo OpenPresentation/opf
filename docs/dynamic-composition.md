@@ -116,7 +116,9 @@ check-mark tiles of a dark summary list (`check-tiles`), and LH-14's icon chips 
 (`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
 the next smaller type-scale step (a slide that composes no metric is not composed again for it). LH-165's icon cards and LH-162's text
 tiles (`icon-cards`, `text-tiles`) are tried before it the same way, on top of the rules the guard kept: they rearrange the whole body,
-so they are never part of the first composition, where a failure would take every rule that did not fire off the slide.
+so they are never part of the first composition, where a failure would take every rule that did not fire off the slide. A layout's
+lone list with icons also tries its cards across the whole body as the automatic grid (`recomposed.cards`), kept when its text reads at
+least as large as the layout's.
 An eyebrow is set at its own role size (0.6 of its paragraph's, from 20 to 24 px), like the tag, and is not a body size the guard compares. A pull line sets its quote at the lead size on purpose,
 so the guard holds that quote to the slide's smallest body size rather than to the larger size it had on a card (every other block still
 keeps its own size); another arrangement of the slide (a track, LH-48's growth) that draws the quote on a card again is held to the

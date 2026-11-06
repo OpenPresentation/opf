@@ -41,10 +41,18 @@ height (or its layout region's), as Claude Design draws a set of features or an 
 - **Numbers.** A numbered list, or an agenda's list (a `numbered` region such as `agenda-split`'s items), keeps its numbers as
   numerals in the accent at the top end of each card ("01", "02"); a numbered list's numerals carry the list number, so a PPTX import
   gives the list its `numbering` back.
-- **Size.** The text starts at the size the list has and grows by steps of the type scale, up to the list's display size, while every
-  card holds its text without a split word and the text covers at most 60% of the body (LH-48's fill). Icon cards never set text
-  smaller: they are tried on top of the rules the guard kept and kept only when no block reads smaller than without them, and the
-  settled slide without them (which LH-48 may grow) is compared too. When no grid holds the list at its size, it stays the list it was.
+- **Size.** The text starts at the size the list has and grows by steps of the type scale, up to LH-05's 56 px (one size on every
+  card, the description always 0.82 of the label), while every card holds its text without a split word and either the tallest card's
+  text takes at most 80% of its card or the text covers at most 60% of the body (LH-48's fill), so a row of cards fills its cards. A
+  label never takes more lines than it has at the starting size, except that a label of three words or more may take two (a two-word
+  label stays on one line). Icon cards never set text smaller: they are tried on top of the rules the guard kept and kept only when no
+  block reads smaller than without them, and the settled slide without them (which LH-48 may grow) is compared too. When no grid holds
+  the list at its size, it stays the list it was.
+- **Across the body.** A layout's lone list with icons (an agenda's list in its half of an `agenda-split` slide) also tries its cards
+  across the whole body under the heading, the slide composed as the automatic grid (LH-83's recomposition, `recomposed.cards`). That
+  arrangement is kept when its text is at least as large as the layout's (with or without cards; LH-149's half steps count at the step
+  under them), and the agenda keeps its numbers. Narrative n05 draws its four cards as a 2 x 2 grid under the title at the size the
+  agenda had (37 px).
 
 A set of 2 to 8 groups that is the whole body, each with an `icon` and one short label paragraph, optionally followed by one
 description paragraph, draws the same cards; the label is bold in the card instead of the group's eyebrow, at the description's size.

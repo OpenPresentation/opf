@@ -517,6 +517,12 @@ export const ICON_CARD_MIN = 2, ICON_CARD_MAX = 8, ICON_CARD_LABEL_CHARACTERS = 
 /** LH-165: a card's description is this share of its label's size (as a ruled row's, LH-08), never under the floor. */
 export const ICON_CARD_DESCRIPTION = .82;
 /**
+ * LH-165: the share of its card the tallest card's text may take as it grows (LONE_METRIC_TARGET, as a lone metric fills its card), or more
+ * while the grid's text still covers at most LONE_TARGET of the body (LH-48's fill): the text fills its cards instead of floating in them, up
+ * to COMPACT_GRID_DISPLAY.
+ */
+export const ICON_CARD_FILL = .8;
+/**
  * LH-162: text tiles. TEXT_TILE_MIN to TEXT_TILE_MAX paragraphs at the root of an automatic slide, each of at most TEXT_TILE_CHARACTERS on one
  * line of source, set on at most TEXT_TILE_LINES lines in its tile, beside a dot in the accent TEXT_TILE_MARKER of the text size across.
  */
@@ -832,9 +838,10 @@ export interface SlideComposition {
    * LH-49: the same when the layout left a chart's plot shorter than its minimum and the automatic grid draws it taller and reads as
    * well (no block smaller unless the layout overflows): `chart` holds the shortest plot height (chartPlotBox) of the layout's
    * composition and of this one, in reference pixels. LH-61: `kpis` when the layout stacked one or two metrics over a chart and this
-   * composition sets them in a column beside it (kpiColumn), the chart's plot at least as tall.
+   * composition sets them in a column beside it (kpiColumn), the chart's plot at least as tall. LH-165: `cards` when a layout's lone list with
+   * icons draws its icon cards across the body under the heading (withCards), its text at least as large as in the layout.
    */
-  recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number }; kpis?: true; table?: true };
+  recomposed?: { layoutSize: number; size: number; chart?: { layoutPlot: number; plot: number }; kpis?: true; table?: true; cards?: true };
   /** LH-06: the slide's emphasis surface (at most one), when a block or group asks for it or an automatic rule gives one. */
   emphasis?: ComposedEmphasis;
   /** LH-07: the step badges, connectors and flows of the slide's `sequence` regions, in reading order; absent when none draws. */
@@ -4377,6 +4384,11 @@ const COMPACT_GRIDS = new WeakSet<SlideComposition>(), GRID_GROW = Symbol('opf.g
 const COMPACT_GRID_STEPS = 8, COMPACT_GRID_DISPLAY = 56;
 /** LH-165, LH-162: the compositions that draw icon cards or text tiles, whose text grows inside its cards (no LH-48 body growth or centering). */
 const CARD_GRIDS = new WeakSet<SlideComposition>();
+/**
+ * LH-165: an agenda's icon lists and the number each starts from (composeLayout's iconAgendas), by composition, and the option that seeds
+ * them into the slide composed across the body (withCards), which has no `numbered` region to find them in.
+ */
+const ICON_AGENDAS = new WeakMap<SlideComposition, Map<string, number>>(), AGENDA_STARTS = Symbol('opf.agendaStarts');
 /** LH-07: composeSlide composes a slide again with this flag to see it without step badges (the rule `step-badges` off). */
 const NO_STEPS = Symbol('opf.noSteps');
 /**
@@ -4597,14 +4609,28 @@ function withCards(input: unknown, options: ComposeSlideOptions, result: SlideCo
   const paragraphs = !result.regions && body.length >= TEXT_TILE_MIN && body.length <= TEXT_TILE_MAX && body.every(item => item.field === 'text');
   if (!list && !groups && !paragraphs) return result;
   const used = KEPT_RULES.get(result) ?? { rules: CORE_RULES, seeds: {} }, rules = new Set([...used.rules, ...CARD_RULES]);
-  let trial: SlideComposition;
-  try { trial = composeArranged(input, { ...options, [RULES]: rules, ...used.seeds } as ComposeSlideOptions); } catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
-  if (!CARD_GRIDS.has(trial)) return result;
   const scale = Math.min(result.width, result.height) / 720, floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
   const atFloor = (composed: SlideComposition) => bodyReadability(composed, options).sizes.some(entry => entry.atFloor);
-  if (!readsAsWell(trackQuality(result, options), trackQuality(trial, options), floor) || atFloor(trial) !== atFloor(result)) return result;
-  KEPT_RULES.set(trial, { rules, seeds: used.seeds });
-  return trial;
+  const better = (next: SlideComposition | undefined, than: SlideComposition): next is SlideComposition => next !== undefined && CARD_GRIDS.has(next) && readsAsWell(trackQuality(than, options), trackQuality(next, options), floor) && atFloor(next) === atFloor(than);
+  let best = result, trial: SlideComposition | undefined;
+  try { trial = composeArranged(input, { ...options, [RULES]: rules, ...used.seeds } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; }
+  if (better(trial, result)) { KEPT_RULES.set(trial, { rules, seeds: used.seeds }); best = trial; }
+  // A layout's lone list (an agenda's in its half of the slide) may draw its cards across the whole body under the heading instead, as
+  // Claude Design draws n05: the slide composed as the automatic grid (LH-83's recomposition, which draws the cards there) is kept when its
+  // text reads at least as large as the better of the layout with and without cards (readsAsWell, LH-149's half steps counted at the step
+  // under them), and the slide records the recomposition (`recomposed`) as LH-83's does.
+  if (list && result.regions && !(options as Record<symbol, unknown>)[RECOMPOSE]) {
+    let wide: SlideComposition | undefined;
+    const agendas = ICON_AGENDAS.get(trial ?? result) ?? ICON_AGENDAS.get(result);
+    try { wide = guardedCompose(input, { ...options, [RECOMPOSE]: true, ...(agendas ? { [AGENDA_STARTS]: agendas } : {}) } as ComposeSlideOptions); } catch (error) { if (!(error instanceof OPFCompositionError)) throw error; }
+    if (better(wide, best)) {
+      const size = (composed: SlideComposition) => Math.min(...bodyReadability(composed, options).sizes.map(entry => entry.size)) / scale;
+      best = { ...wide, recomposed: { layoutSize: size(result), size: size(wide), cards: true } };
+      CARD_GRIDS.add(best);
+      KEPT_RULES.set(best, KEPT_RULES.get(wide) ?? { rules, seeds: used.seeds });
+    }
+  }
+  return best;
 }
 function guardedDrawing(input: unknown, options: ComposeSlideOptions): SlideComposition {
   const result = guardedRules(input, options);
@@ -5582,7 +5608,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const badgeLists = new Set<string>(), stepHeadings = new Set<string>(), badgeStarts = new Map<string, number>();
   // LH-165: the icon lists of an agenda (a `numbered` region), which draw no badges, and the number each starts from: drawn as icon cards,
   // their cards are numbered as the badges would number them.
-  const iconAgendas = new Map<string, number>();
+  const iconAgendas = new Map<string, number>((options as Record<symbol, unknown>)[AGENDA_STARTS] as Map<string, number> | undefined ?? []);
   const badgeNumbering = (path: string, numbering: unknown): NumberingInput => {
     if (numbering !== undefined) return numbering as NumberingInput;
     const start = badgeStarts.get(path) ?? 1;
@@ -9167,8 +9193,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // under it and the description under that at ICON_CARD_DESCRIPTION of the label's size; or, where that lets the text grow more (wide,
   // short cards), the chip beside the label. The cards keep the list's order; a numbered list, or an agenda's list (iconAgendas), draws
   // each number as a numeral at the top end of its card (LH-134's numeral, which a PPTX import gives back to a numbered list). The text
-  // starts at the size the list has and grows by steps of the type scale (to the list's display size, LONE_DISPLAY_SIZES) while every
-  // card holds its text without a split word and the tallest card's text takes at most LONE_TARGET of its card (LH-48's fill); the grid
+  // starts at the size the list has and grows by steps of the type scale (to LH-05's COMPACT_GRID_DISPLAY) while every card holds its
+  // text without a split word and the tallest card's text takes at most ICON_CARD_FILL of its card or the text covers at most LONE_TARGET
+  // of the body (LH-48's fill), whichever lets it grow further; the grid
   // and the chip's place are those at which it is largest (then with the fewest lines). The tops of the cards' text line up: the tallest
   // sits in the middle of its card. When no grid holds the list at its size, it stays the list it was; the guard (DRAWING_RULES, and
   // composeSlide without steps) keeps the cards only when no text of the slide is smaller than without them.
@@ -9224,7 +9251,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // On top: the chip and ICON_CHIP_GAP of it above the label. Beside it: the chip centered on the label's first line, the text lower by what the chip needs above it.
       const lift = top ? chip * (1 + ICON_CHIP_GAP) : Math.max(0, chip / 2 - center);
       const height = top ? lift + probe.bottom : Math.max(lift + probe.bottom, lift + center + chip / 2);
-      const lines = probe.text.richLines.length + (probe.description?.richLines.length ?? 0);
+      const lines = probe.text.richLines.length + (probe.description?.richLines.length ?? 0), labelLines = probe.text.richLines.length, labelWords = proseWords(label).length;
       const bad = probe.text.overflow || !!probe.description?.overflow || splitsWord(label, probe.text.lines) || (description !== undefined && !!probe.description && splitsWord(description, probe.description.lines));
       const place = (start: number): { column: ComposedListColumn; badge?: ComposedStepBadge } => {
         const placed = at(start + lift), cy = top ? start + chip / 2 : start + lift + center, cx = rtl ? inner.x + inner.width - chip / 2 : inner.x + chip / 2;
@@ -9242,18 +9269,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         }
         return { column: { box: inner, start: index, end: index + 1, text }, ...(badge ? { badge } : {}) };
       };
-      return { height, lines, bad, inner, place };
+      return { height, lines, labelLines, labelWords, bad, inner, place };
     };
     let best: { size: number; lines: number; columns: number; placement: 'top' | 'beside' | 'inline' } | undefined;
     for (const columns of cardGridColumns(count)) {
       const cells = cardGridCells(count, columns, area);
       for (const placement of ['top', 'beside', 'inline'] as const) {
         if (placement === 'inline' && entries.every(entry => entry!.description === undefined)) continue;
-        let kept: { size: number; lines: number } | undefined;
-        for (const size of cardSizes(start, Math.max(start, LONE_DISPLAY_SIZES.list * scale))) {
+        let kept: { size: number; lines: number } | undefined, labelLines: number[] | undefined;
+        for (const size of cardSizes(start, Math.max(start, COMPACT_GRID_DISPLAY * scale))) {
           const laid = cells.map((cell, index) => lay(index, cell, size, placement));
           if (laid.some(card => !card || card.bad || card.height > card.inner.height + 1e-6)) break;
-          if (size > start + 1e-9 && gridFill(laid.map(card => card!.height), columns, area) > LONE_TARGET + 1e-6) break;
+          // Growing never breaks a label onto more lines than it has at the size the list had, but a label of three words or more may take
+          // two (a two-word label stays on one line, so no line holds a lone word of it).
+          if (labelLines && laid.some((card, index) => card!.labelLines > Math.max(labelLines![index]!, card!.labelWords >= 3 ? 2 : 1))) break;
+          labelLines ??= laid.map(card => card!.labelLines);
+          if (size > start + 1e-9 && Math.max(...laid.map(card => card!.height / card!.inner.height)) > ICON_CARD_FILL + 1e-6 && gridFill(laid.map(card => card!.height), columns, area) > LONE_TARGET + 1e-6) break;
           kept = { size, lines: laid.reduce((sum, card) => sum + card!.lines, 0) };
         }
         if (kept && (!best || kept.size > best.size + 1e-9 || (kept.size > best.size - 1e-9 && kept.lines < best.lines))) best = { ...kept, columns, placement };
@@ -9281,8 +9312,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // a grid of short texts, which LH-05's compact grid hugs) draw as tiles, as Claude Design draws a set of lessons or principles: one card
   // each in the same grid as LH-165's icon cards, a dot in the accent (TEXT_TILE_MARKER of the text size) at the start of the text's first
   // line, the text beside it in the middle of its tile on at most TEXT_TILE_LINES lines. The texts start at the size they share and grow
-  // as icon cards do, up to LH-05's compact-grid display size (COMPACT_GRID_DISPLAY), the tallest text taking at most LONE_TARGET of its
-  // tile; the grid is the one where they are largest (then on the fewest lines). Held by the same guard as icon cards.
+  // by steps of the type scale up to LH-05's compact-grid display size (COMPACT_GRID_DISPLAY) while they cover at most LONE_TARGET of the
+  // body (gridFill, LH-48's fill: one line of a short text fills little of its tile); the grid is the one where they are largest (then on
+  // the fewest lines). Held by the same guard as icon cards.
   const textTiles = (): ComposedSteps | undefined => {
     if (!ruleOn('text-tiles') || useTemplate || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field));
@@ -9371,7 +9403,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       };
       const probe = at(0), lift = top ? chip * (1 + ICON_CHIP_GAP) : Math.max(0, chip / 2 - center);
       const height = top ? lift + probe.bottom : Math.max(lift + probe.bottom, lift + center + chip / 2);
-      const lines = probe.label.lines.length + (probe.description?.lines.length ?? 0);
+      const lines = probe.label.lines.length + (probe.description?.lines.length ?? 0), labelLines = probe.label.lines.length, labelWords = proseWords(group.label).length;
       const bad = probe.label.overflow || probe.label.fontSize < size - FONT_GRID_EPSILON || splitsWord(group.label, probe.label.lines) || !!(probe.description && (probe.description.overflow || probe.description.fontSize < size - FONT_GRID_EPSILON || splitsWord(group.description!, probe.description.lines) || underMeasure('text', group.descriptionItem!.value, below.width, size)));
       const place = (begin: number) => {
         const placed = at(begin + lift), cy = top ? begin + chip / 2 : begin + lift + center, cx = rtl ? inner.x + inner.width - chip / 2 : inner.x + chip / 2;
@@ -9380,18 +9412,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         return { labelBox, label: fitPlacedText('text', group.labelValue, group.label, { ...labelBox, height: labelBox.height + scale }, size, size, group.labelPath, alignment),
           descriptionBox, description: descriptionBox ? fitDescription(descriptionBox.y) : undefined, cx, cy };
       };
-      return { height, lines, bad, inner, place };
+      return { height, lines, labelLines, labelWords, bad, inner, place };
     };
     let best: { size: number; lines: number; columns: number; placement: 'top' | 'beside' | 'inline' } | undefined;
     for (const columns of cardGridColumns(count)) {
       const cells = cardGridCells(count, columns, area);
       for (const placement of ['top', 'beside', 'inline'] as const) {
         if (placement === 'inline' && groups.every(group => group!.description === undefined)) continue;
-        let kept: { size: number; lines: number } | undefined;
-        for (const size of cardSizes(start, Math.max(start, LONE_DISPLAY_SIZES.list * scale))) {
+        let kept: { size: number; lines: number } | undefined, labelLines: number[] | undefined;
+        for (const size of cardSizes(start, Math.max(start, COMPACT_GRID_DISPLAY * scale))) {
           const laid = cells.map((cell, index) => lay(index, cell, size, placement));
           if (laid.some(card => !card || card.bad || card.height > card.inner.height + 1e-6)) break;
-          if (size > start + 1e-9 && gridFill(laid.map(card => card!.height), columns, area) > LONE_TARGET + 1e-6) break;
+          // Growing never breaks a label onto more lines than it has at the size the list had, but a label of three words or more may take
+          // two (a two-word label stays on one line, so no line holds a lone word of it).
+          if (labelLines && laid.some((card, index) => card!.labelLines > Math.max(labelLines![index]!, card!.labelWords >= 3 ? 2 : 1))) break;
+          labelLines ??= laid.map(card => card!.labelLines);
+          if (size > start + 1e-9 && Math.max(...laid.map(card => card!.height / card!.inner.height)) > ICON_CARD_FILL + 1e-6 && gridFill(laid.map(card => card!.height), columns, area) > LONE_TARGET + 1e-6) break;
           kept = { size, lines: laid.reduce((sum, card) => sum + card!.lines, 0) };
         }
         if (kept && (!best || kept.size > best.size + 1e-9 || (kept.size > best.size - 1e-9 && kept.lines < best.lines))) best = { ...kept, columns, placement };
@@ -9625,6 +9661,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   if (regionMeasured) REGION_MEASURED.add(composed);
   if (compactGrid) COMPACT_GRIDS.add(composed);
   if (cardGrid) CARD_GRIDS.add(composed);
+  if (iconAgendas.size) ICON_AGENDAS.set(composed, iconAgendas);
   if (headingMessage) HEADING_MESSAGES.add(composed);
   if (template !== recordTemplate) STATEMENT_BODIES.add(composed);
   if (statement === 'title') STATEMENT_TITLES.add(composed);
