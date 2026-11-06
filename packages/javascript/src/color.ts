@@ -416,6 +416,8 @@ export const NEUTRAL_SHARES = { border: .2, gridline: .15, axisLine: .25, chartT
 export const CARD_SURFACE_MIX = 0.07;
 /** LH-54: the contrast a mixed dark card reaches against the background, stepping the mix up from {@link CARD_SURFACE_MIX} (Claude Design's #0B2A5C on #011842 is 1.25:1). */
 export const CARD_SURFACE_MIN_CONTRAST = 1.25;
+/** Wave 8: the contrast the slide's text keeps on a mixed card (WCAG AA for body text); the mix towards the text stops before it falls under it. */
+export const CARD_TEXT_MIN_CONTRAST = 4.5;
 /** LH-54: the share of the text colour mixed into a mixed dark card for its 1 px stroke (about 12% white over the card). */
 export const CARD_BORDER_MIX = 0.12;
 /** LH-79: a light variant's tx1 at or below this relative luminance (about #1A1A1A) is near-black, and the code panel takes tx2 instead. */
@@ -596,10 +598,19 @@ function schemeNeutrals(colors: { bg1: string; bg1Slot: string; tx1: string; bg2
   let card: SchemeColor = { slot: 'bg2', hex: colors.surface }, cardBorder = border;
   const backChannels = opaqueChannels(back), frontChannels = opaqueChannels(front);
   if (dark && !colors.surfaceAuthored && surface && backChannels && frontChannels && (colorContrast(surface, back) ?? 0) < SURFACE_ALT_MIN_CONTRAST) {
+    // Wave 8: the mix stops where the slide's text would read under CARD_TEXT_MIN_CONTRAST on the card (an accent slide, whose white text reads
+    // about 5:1, reaches 1.25:1 only at a card where it reads 4:1), so text on a card (LH-165's icon cards, LH-162's tiles) reads 4.5:1 where the
+    // slide's own text does; the card's border still sets it off.
     let fill = mixChannels(backChannels, frontChannels, CARD_SURFACE_MIX);
+    for (let amount = CARD_SURFACE_MIX; (colorContrast(front, fill) ?? 0) < CARD_TEXT_MIN_CONTRAST && amount > 0; ) {
+      amount = Math.max(0, amount - .005);
+      fill = mixChannels(backChannels, frontChannels, amount);
+    }
     for (let amount = CARD_SURFACE_MIX; (colorContrast(fill, back) ?? Infinity) < CARD_SURFACE_MIN_CONTRAST && amount < .5; ) {
       amount = Math.min(.5, amount + .005);
-      fill = mixChannels(backChannels, frontChannels, amount);
+      const next = mixChannels(backChannels, frontChannels, amount);
+      if ((colorContrast(front, next) ?? 0) < CARD_TEXT_MIN_CONTRAST) break;
+      fill = next;
     }
     card = { slot: 'bg1', hex: fill };
     cardBorder = { slot: 'tx1', hex: mixChannels(opaqueChannels(fill)!, frontChannels, CARD_BORDER_MIX) };
