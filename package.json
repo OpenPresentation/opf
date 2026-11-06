@@ -8,6 +8,7 @@
     "build:packages": "pnpm -r --if-present run build",
     "typecheck": "node scripts/agent-slot.mjs -- pnpm run typecheck:run",
     "typecheck:run": "pnpm --filter @openpresentation/opf typecheck && pnpm --filter @openpresentation/cli typecheck && pnpm --filter @openpresentation/mcp typecheck && pnpm --filter @openpresentation/gallery typecheck && pnpm --filter @openpresentation/opf-render typecheck && pnpm --filter @openpresentation/opf-pptx typecheck && pnpm --filter @openpresentation/opf-editor typecheck",
+    "check:diagram-doc-images": "node scripts/build-diagram-doc-images.mjs --check",
     "check:first-deck": "node --test scripts/check-first-deck.test.mjs",
     "check:skill-glossary": "node --test scripts/check-skill-glossary.test.mjs",
     "check:skill-commands": "node --test scripts/check-skill-commands.test.mjs && node scripts/check-skill-commands.mjs",
