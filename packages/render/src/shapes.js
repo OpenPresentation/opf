@@ -51,35 +51,40 @@ export function shadeColor(hex, mode) {
 // A gradient (core ComposedGradient) in the frame `box`: linear along its angle across the box; radial, rectangle and shape as an
 // ellipse from the center (the preview's approximation of DrawingML's rect and shape paths, which follow the frame and the outline).
 function gradientDef(gradient, id, box, helpers, mode, alpha = 1) {
-  const stops = gradient.stops.map(stop => {
-    const paint = paintOf(stop.color, helpers, "#000000");
-    return helpers.tag("stop", { offset: precise(stop.position), "stop-color": shadeColor(paint.color, mode), "stop-opacity": paint.alpha * alpha < 1 ? precise(paint.alpha * alpha) : undefined });
-  }).join("");
+  const stop = (offset, t) => {
+    const color = sampleStops(gradient.stops, t, helpers);
+    return helpers.tag("stop", { offset: precise(offset), "stop-color": shadeColor(color.color, mode), "stop-opacity": color.alpha * alpha < 1 ? precise(color.alpha * alpha) : undefined });
+  };
   const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
   if (gradient.type === "linear") {
+    // PowerPoint mixes a gradient's colors in linear light and eases each span between two stops (smoothstep): the preview samples
+    // the gradient so SVG's straight sRGB mixing between samples stays within a level or two of it.
+    const offsets = [...new Set([...gradient.stops.map(entry => entry.position), ...Array.from({ length: GRADIENT_SAMPLES + 1 }, (_, index) => index / GRADIENT_SAMPLES)])].sort((a, b) => a - b);
     const angle = gradient.angle * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle);
     const half = (Math.abs(box.width * cos) + Math.abs(box.height * sin)) / 2;
-    return helpers.tag("linearGradient", { id, gradientUnits: "userSpaceOnUse", x1: number(cx - half * cos), y1: number(cy - half * sin), x2: number(cx + half * cos), y2: number(cy + half * sin) }, stops);
+    return helpers.tag("linearGradient", { id, gradientUnits: "userSpaceOnUse", x1: number(cx - half * cos), y1: number(cy - half * sin), x2: number(cx + half * cos), y2: number(cy + half * sin) }, offsets.map(offset => stop(offset, offset)).join(""));
   }
-  // PowerPoint's path gradients run from the center as the square of the distance: at d from the center, a share 0.6 (d / r)^2 of the
-  // way through the stops, r the frame's half width or height (measured on PowerPoint 365's circle path). The preview samples that
-  // curve at RADIAL_SAMPLES stops on an ellipse that reaches the last stop at r / sqrt(0.6), and pads beyond it.
-  const samples = Array.from({ length: RADIAL_SAMPLES + 1 }, (_, index) => index / RADIAL_SAMPLES).map(offset => {
-    const color = sampleStops(gradient.stops, offset * offset, helpers);
-    return helpers.tag("stop", { offset: precise(offset), "stop-color": shadeColor(color.color, mode), "stop-opacity": color.alpha * alpha < 1 ? precise(color.alpha * alpha) : undefined });
-  }).join("");
-  const reach = 1 / Math.sqrt(RADIAL_SHARE);
+  // PowerPoint's path gradients run from the center to the frame's corners (an ellipse of sqrt(2) times the half width and height),
+  // eased and mixed as a linear one (measured on PowerPoint 365's export of a:path circle).
+  const reach = Math.SQRT2;
+  const samples = Array.from({ length: GRADIENT_SAMPLES + 1 }, (_, index) => index / GRADIENT_SAMPLES).map(offset => stop(offset, offset)).join("");
   return helpers.tag("radialGradient", { id, gradientUnits: "userSpaceOnUse", cx: 0, cy: 0, r: 1, gradientTransform: `matrix(${number(box.width / 2 * reach)} 0 0 ${number(box.height / 2 * reach)} ${number(cx)} ${number(cy)})` }, samples);
 }
-const RADIAL_SHARE = 0.6, RADIAL_SAMPLES = 16;
-// The color `t` of the way through gradient stops, interpolated on sRGB values and alpha as SVG does.
+const GRADIENT_SAMPLES = 24;
+const toLinear = value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+const toSrgb = value => value <= 0.0031308 ? value * 12.92 : 1.055 * value ** (1 / 2.4) - 0.055;
+// The color `t` of the way through gradient stops, as PowerPoint draws it: within the span of two stops eased by smoothstep and mixed
+// in linear light; the alpha mixed the same way.
 function sampleStops(stops, t, helpers) {
-  const paints = stops.map(stop => ({ position: stop.position, ...paintOf(stop.color, helpers, "#000000") }));
+  const paints = stops.map(entry => ({ position: entry.position, ...paintOf(entry.color, helpers, "#000000") }));
   if (t <= paints[0].position) return paints[0];
-  const after = paints.findIndex(stop => stop.position >= t);
+  const after = paints.findIndex(entry => entry.position >= t);
   if (after < 0) return paints[paints.length - 1];
-  const a = paints[after - 1], b = paints[after], k = b.position > a.position ? (t - a.position) / (b.position - a.position) : 1;
-  const channel = at => Math.round(parseInt(a.color.slice(at, at + 2), 16) * (1 - k) + parseInt(b.color.slice(at, at + 2), 16) * k).toString(16).padStart(2, "0");
+  const a = paints[after - 1], b = paints[after], linear = b.position > a.position ? (t - a.position) / (b.position - a.position) : 1, k = linear * linear * (3 - 2 * linear);
+  const channel = at => {
+    const mixed = toLinear(parseInt(a.color.slice(at, at + 2), 16) / 255) * (1 - k) + toLinear(parseInt(b.color.slice(at, at + 2), 16) / 255) * k;
+    return Math.round(Math.min(1, Math.max(0, toSrgb(mixed))) * 255).toString(16).padStart(2, "0");
+  };
   return { color: `#${channel(1)}${channel(3)}${channel(5)}`.toUpperCase(), alpha: a.alpha * (1 - k) + b.alpha * k };
 }
 
