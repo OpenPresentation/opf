@@ -132,3 +132,23 @@ test('LH-169: steps, years and figures without labels stay lists', () => {
     assert.equal(result.items.find((entry) => entry.field === 'items' || entry.field === 'bullets').listColumns, undefined, JSON.stringify(blocks).slice(0, 60));
   }
 });
+
+test('LH-170 review: a note that is a peer of the texts above it stays text, even in the verdict region (01 s10, 10 s30)', () => {
+  const should = (name, what) => `${name} should focus the next cycle on ${what} while making the operating tradeoffs clear to its stakeholders.`;
+  // 01 s10: three parallel "<Name> should ..." lines; the layout binds the third to its verdict region.
+  const parallel = compose({ layout: 'comparison', title: 'Recovery review', blocks: [{ text: should('AeroVista Airlines', 'shorten recovery time after weather-driven disruption') }, { text: should('Harbor & Loom Hotels', 'recover weekday occupancy through segmented offers') }, { text: should('Oakbridge Faculty Senate', 'approve a revised data ethics requirement') }] });
+  assert.equal(parallel.emphasis, undefined);
+  assert.equal(item(parallel, 'blocks.2.text').region, 'verdict');
+  // The opening alone makes a peer: a third line much longer than the two above it, opening as they do.
+  const opening = compose({ layout: 'comparison', title: 'Recovery review', blocks: [{ text: 'AeroVista should cut delays this quarter.' }, { text: 'Harbor Hotels should fill weekday rooms.' }, { text: 'Oakbridge Senate should approve the revised data ethics requirement before the spring term and publish it to every faculty.' }] });
+  assert.equal(opening.emphasis, undefined);
+  // The same opening in a script without case: the same first word.
+  const arabic = compose({ layout: 'comparison', title: 'مراجعة التعافي', blocks: [{ text: 'يجب على شركة الطيران تقصير زمن التعافي بعد الاضطرابات الجوية.' }, { text: 'يجب على الفنادق استعادة الإشغال في أيام الأسبوع بعروض مخصصة لكل شريحة.' }, { text: 'يجب على المجلس اعتماد متطلب محدث لأخلاقيات البيانات قبل بدء الدورة التالية من البرنامج.' }] }, 'ar');
+  assert.equal(arabic.emphasis, undefined);
+  // 10 s30: a closing paragraph of about the median length of the two paragraphs above it is one of them.
+  const similar = compose({ layout: 'comparison', title: 'Execution timeline', blocks: [{ text: should('The revenue department', 'reduce filing friction and call center demand') }, { text: 'Image backgrounds use a fixed image fill.' }, { text: 'A shared layout contract gives the editor, preview, and PowerPoint export the same content geometry. The narrative stays in JSON and remains easy to revise.' }] });
+  assert.equal(similar.emphasis, undefined);
+  // 02 s32: labeled options ("Option A: ...", a line break, the details) are not of the note's form; the recommendation is the band.
+  const options = compose({ layout: 'comparison', title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: 'Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.' }, { region: 'second', text: 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.' }, { region: 'verdict', text: 'Recommendation: establish the evidence with Option A before committing to Option B.' }] });
+  assert.equal(options.emphasis?.source, 'foot-band');
+});

@@ -4189,6 +4189,11 @@ export const EMPHASIS_TAKEAWAY_MAX_CHARACTERS = 120;
  * many lines across the band at its size.
  */
 export const EMPHASIS_NOTE_LINES = 3;
+/**
+ * LH-170 review: a closing note whose length is within this share of the median of the texts of its form above it, or that opens as they
+ * do in its first NOTE_PEER_WORDS words, is one of them (a peer), and stays text.
+ */
+export const NOTE_PEER_RATIO = [.6, 1.6] as const, NOTE_PEER_WORDS = 6;
 /** LH-170: the layout regions whose one text is the slide's verdict (the comparison layout's `verdict`). */
 const VERDICT_REGIONS: ReadonlySet<string> = new Set(['verdict']);
 /** LH-169: a list of FIGURE_ROW_MIN to FIGURE_ROW_MAX entries that each lead with a figure of at most FIGURE_WORDS words is a metric row. */
@@ -5833,6 +5838,19 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const list = value.items ?? value.bullets;
       return value.numbering === undefined && value.columns === undefined && fields.every(field => field === 'items' || field === 'bullets' || value[field] === undefined) && figureList(list) ? (list as unknown[]).length : 0;
     };
+    // A note that is a peer of the plain texts above it is one of a set, not the slide's close: banding it would break the parallel and
+    // set one peer apart (01 s10's three "<Name> should focus ..." lines, the third bound to the verdict). Its peers are the texts before
+    // it of the same form (plain text with as many paragraphs), two or more of them; it is one of them when its length is NOTE_PEER_RATIO
+    // of their median, or when it opens as each of them does (the same first lowercase word in its first words, as "should" after a name;
+    // the same first word in a script without case). Even in a `verdict` region it stays text.
+    const paragraphs = (value: string) => value.split(/\n+/u).filter(line => line.trim()).length;
+    const own = contentText('text', host.text)!.trim(), peers = flowed.slice(0, -1).flatMap(entry => { const text = plainText(entry.block) ?? (() => { const other = record(entry.block); return other.region !== undefined && other.emphasis !== false && other.caption === undefined && !Array.isArray(other.blocks) && fields.every(field => field === 'text' || other[field] === undefined) ? contentText('text', other.text)?.trim() : undefined; })(); return text && paragraphs(text) === paragraphs(own) ? [text] : []; });
+    if (peers.length >= 2) {
+      const lengths = peers.map(text => [...text].length).sort((a, b) => a - b), middle = lengths.length / 2, median = lengths.length % 2 ? lengths[Math.floor(middle)]! : (lengths[middle - 1]! + lengths[middle]!) / 2, length = [...own].length;
+      const opening = (text: string) => { const words = text.split(/\s+/u).slice(0, NOTE_PEER_WORDS).map(word => word.replace(/[^\p{L}\p{N}]/gu, '')).filter(Boolean); const cased = words.find(word => /^\p{Ll}/u.test(word)); return cased ?? (words.some(word => /\p{Lu}/u.test(word)) ? undefined : words[0]); };
+      const lead = opening(own);
+      if ((length >= NOTE_PEER_RATIO[0] * median && length <= NOTE_PEER_RATIO[1] * median) || (lead !== undefined && peers.every(text => opening(text) === lead))) return false;
+    }
     const figures = flowed.slice(0, -1).map(entry => metricOnly(entry.block));
     if (figures.every(count => count > 0) && figures.reduce((sum, count) => sum + count, 0) >= 2) return true;
     if (!template || !template.regions.some(region => VERDICT_REGIONS.has(region.name))) return false;
