@@ -35,7 +35,9 @@ const root = document.documentElement;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const shell = $("opf-deck");
 const notice = $("deck-notice");
-const checksPill = $<HTMLButtonElement>("deck-checks");
+const findButton = $<HTMLButtonElement>("deck-find-open");
+const reviewDrawer = $("deck-review");
+const reviewClose = $<HTMLButtonElement>("deck-review-close");
 const sendButton = $<HTMLButtonElement>("deck-send");
 const expandButton = $<HTMLButtonElement>("deck-expand");
 const tabs = VIEWS.map((view) => $<HTMLButtonElement>(`tab-${view}`));
@@ -109,11 +111,6 @@ function runChecks(deck: unknown): void {
 	}
 	counts = { error: 0, warning: 0, info: 0 };
 	for (const finding of findings) counts[finding.severity] += 1;
-	const problems = counts.error + counts.warning;
-	checksPill.dataset.state = counts.error ? "error" : counts.warning ? "warning" : "ok";
-	checksPill.textContent = problems === 0 ? "No problems" : [counts.error && `${counts.error} error${counts.error === 1 ? "" : "s"}`, counts.warning && `${counts.warning} warning${counts.warning === 1 ? "" : "s"}`].filter(Boolean).join(", ");
-	checksPill.title = findings.length ? findings.slice(0, 5).map((finding) => `${finding.severity}: ${finding.message}`).join("\n") : "The deck passes OPF's checks.";
-	checksPill.hidden = false;
 }
 
 const scheduleChecks = (deck: unknown) => {
@@ -218,6 +215,12 @@ function applyContext(update: Partial<McpUiHostContext>): void {
 	sendButton.hidden = !app.getHostCapabilities()?.message;
 }
 
+function setReviewOpen(open: boolean): void {
+	reviewDrawer.hidden = !open;
+	if (open) reviewClose.focus();
+	else (shell.querySelector(".opf-review-pill") as HTMLElement | null)?.focus();
+}
+
 function status(message: string): void {
 	notice.textContent = message;
 	notice.hidden = !message;
@@ -248,8 +251,15 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		catalogs,
 		fit: "contain",
 		theme: { colorScheme: context.theme ?? "auto" },
+		// The editor's own parts, each in the viewer's element: Undo and Redo, the review pill and the Review panel (in a drawer the
+		// pill opens), the Design quick menu (theme, colours, fonts and this slide's layout) and Find and replace (Ctrl/Cmd F).
 		slots: {
 			title: $("deck-title"),
+			history: $("deck-history"),
+			reviewPill: $("deck-review-pill"),
+			review: $("deck-review-panel"),
+			designMenu: $("deck-design"),
+			find: $("deck-find"),
 			source: $("deck-source"),
 			canvas: $("deck-canvas"),
 			slide: $("deck-stage"),
@@ -268,6 +278,8 @@ async function start(args: ShowDeckArguments): Promise<void> {
 		scheduleContext();
 	});
 	editor.on("slide", () => scheduleContext());
+	// The pill opens the Review panel: the editor has no side panel here, so it asks the host page (this view) to show it.
+	editor.on("review-open", () => setReviewOpen(true));
 	await editor.ready;
 	// The source pane calls OPF Markdown "md".
 	if (textForm) editor.setSourceText(args.document as string, { format: format === "markdown" ? "md" : "yaml" });
@@ -291,7 +303,11 @@ for (const [index, tab] of tabs.entries()) {
 		next.click();
 	});
 }
-checksPill.addEventListener("click", () => setView(view === "preview" ? "source" : view, true));
+findButton.addEventListener("click", () => editor?.openFind());
+reviewClose.addEventListener("click", () => setReviewOpen(false));
+reviewDrawer.addEventListener("keydown", (event) => {
+	if (event.key === "Escape") setReviewOpen(false);
+});
 sendButton.addEventListener("click", () => void sendToClaude());
 expandButton.addEventListener("click", () => void setDisplayMode(context.displayMode === "fullscreen" ? "inline" : "fullscreen"));
 

@@ -24,10 +24,16 @@ Pin a version (`@openpresentation/mcp@0.27.0`) to make the setup repeatable. Nod
 | --- | --- |
 | Claude Code | `claude mcp add opf -- npx -y @openpresentation/mcp` (add `--scope project` to write `.mcp.json` for the team) |
 | Cursor | Add the JSON above to `.cursor/mcp.json` in the project, or to `~/.cursor/mcp.json` |
-| Claude Desktop | Add the JSON above to `claude_desktop_config.json` |
+| Claude Desktop | Install the extension (`opf-<version>.mcpb`, below), or add the JSON above to `claude_desktop_config.json` |
 | Any other client | Run `npx -y @openpresentation/mcp` as a stdio server (installed, the binary is `opf-mcp`) |
 
 Check it with the official inspector: `npx @modelcontextprotocol/inspector npx -y @openpresentation/mcp`.
+
+### Claude Desktop extension (`.mcpb`)
+
+The server also comes as an MCP Bundle, a one-file Claude Desktop extension: open `opf-<version>.mcpb` (double-click it, or drag it into Claude Desktop's Settings, Extensions) and Claude Desktop installs and starts it. It needs no Node install, no `npx` and no configuration, and it carries the renderer and its fonts, so the OPF viewer draws decks with the exact faces and validation measures layout with them.
+
+Build it from a checkout: `pnpm --filter "@openpresentation/mcp..." run build`, then `pnpm --filter @openpresentation/mcp run build:mcpb`. It writes `packages/mcp/artifacts/opf-<version>.mcpb` (about 81 MB, every font the renderer draws with); `node scripts/build-mcpb.mjs --no-script-fonts` writes `opf-<version>-lite.mcpb` (about 33 MB) without the script faces (Japanese, Chinese, Korean, Arabic, Devanagari and the other scripts), whose text then draws with fallbacks. `--check` also unpacks the bundle and drives its server the way Claude Desktop starts it. The build packs this checkout's `@openpresentation/opf`, `gallery`, `opf-render` and `mcp`, and installs their third-party dependencies and the renderer's font packages from the npm registry, keeping only the font files the renderer's manifests name. The manifest is `packages/mcp/mcpb/manifest.json`; `test/mcpb-manifest.test.mjs` keeps its tool list in step with the server.
 
 `opf mcp` of the CLI is a convenience: it runs this server when `@openpresentation/mcp` is installed beside the CLI or in the working directory, and otherwise prints `npx -y @openpresentation/mcp` and exits with 2. The CLI itself carries no MCP code.
 
@@ -72,6 +78,7 @@ Skill scripts and agent manifests are not served; the server runs no code from t
 `show_deck` is an [MCP App](https://github.com/modelcontextprotocol/ext-apps) (SEP-1865): in a client that supports MCP Apps, such as Claude on the web and desktop, the deck opens in the conversation with the openpresentation.org playground's three views.
 
 - **Preview** shows the slides, with the slide row to page through them. **Source** shows the deck's text (JSON, YAML or OPF Markdown) in the editor's source pane, checked as you type. **Both** puts them side by side and asks the client for full screen when the conversation is too narrow. The slide itself can be edited in place too.
+- **The editor's own controls**: Undo and Redo, the review pill and the Review panel (it opens in a drawer), the Design menu (theme, colours, fonts and the slide's layout, each one undoable edit) and Find and replace (Ctrl/Cmd F). Export and Present are left out: a sandboxed iframe can neither download a file nor go full screen on its own.
 - **Your edits go back to the model.** A second after the last edit, the viewer sends the whole deck to the model as context (`ui/update-model-context`), so its next answer continues from your version. **Send to Claude** also starts a turn now (`ui/message`). When the model changes the deck, it calls `show_deck` again and a new viewer opens; the earlier one stays as it was.
 - **The checks run in the viewer.** It runs core's validators on every change, with text measured by the fonts the slides draw with, shows the result as a pill (`No problems`, `2 warnings`), and sends the findings to the model with the deck.
 - **It follows the client's look.** The viewer's own controls take the client's light or dark theme and its colours and fonts; the slides keep the deck's theme.

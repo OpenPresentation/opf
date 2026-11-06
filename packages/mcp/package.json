@@ -37,6 +37,7 @@
   "scripts": {
     "build:deps": "pnpm --filter \"@openpresentation/mcp^...\" --fail-if-no-match run build",
     "build": "node ../../scripts/reuse-build.mjs check || (node scripts/build-app.mjs && tsup && node ../../scripts/reuse-build.mjs stamp)",
+    "build:mcpb": "node scripts/build-mcpb.mjs",
     "typecheck": "pnpm run build:deps && node ../../scripts/typecheck.mjs --noEmit && node ../../scripts/typecheck.mjs --noEmit -p app/tsconfig.json",
     "clean": "rm -rf dist",
     "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
@@ -49,6 +50,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@anthropic-ai/mcpb": "2.1.2",
     "@modelcontextprotocol/ext-apps": "1.7.5",
     "@openpresentation/cli": "workspace:*",
     "@openpresentation/opf-editor": "workspace:*",

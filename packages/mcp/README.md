@@ -8,6 +8,8 @@ in the OPF viewer, an MCP App with Preview, Source and Both, inside a client tha
 the viewer renders, checks and edits the deck on the user's machine and sends the user's edits back to the model. It keeps no state,
 reads no file but the renderer's fonts, fetches nothing, and needs no API key. Node 22 or later.
 
+Claude Desktop: install the extension `opf-<version>.mcpb` (`pnpm run build:mcpb` builds it; see the docs), or use the command below.
+
 ```sh
 claude mcp add opf -- npx -y @openpresentation/mcp          # Claude Code
 npx -y @openpresentation/mcp                                  # any MCP client: command npx, args -y @openpresentation/mcp

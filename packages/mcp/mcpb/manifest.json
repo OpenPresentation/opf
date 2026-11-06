@@ -1,0 +1,47 @@
+{
+  "manifest_version": "0.3",
+  "name": "opf",
+  "display_name": "OpenPresentation (OPF)",
+  "version": "0.0.0",
+  "description": "Write, check and show OPF slide decks. Opens decks in the OPF viewer (Preview, Source and Both) right in the conversation, where you can edit them.",
+  "long_description": "The OPF MCP server for Claude Desktop. Claude learns the Open Presentation Format from the bundled docs, schemas, catalog, examples and skills, writes decks, and shows them with show_deck: the OPF viewer opens in the conversation with the slides (Preview), the deck's JSON, YAML or Markdown (Source), or both side by side. You can edit the deck there, with Undo and Redo, Find and replace, the Review panel and the Design menu, and your edits go back to Claude. Everything runs on your computer: the viewer renders and checks the deck locally, and the server reads no files except the renderer's fonts, which ship in this bundle.",
+  "author": {
+    "name": "Open Presentation",
+    "url": "https://www.openpresentation.org"
+  },
+  "homepage": "https://www.openpresentation.org",
+  "documentation": "https://github.com/OpenPresentation/opf/blob/main/docs/mcp.md",
+  "support": "https://github.com/OpenPresentation/opf/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenPresentation/opf"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "node_modules/@openpresentation/mcp/dist/bin.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/node_modules/@openpresentation/mcp/dist/bin.js"],
+      "env": {}
+    }
+  },
+  "tools": [
+    { "name": "show_deck", "description": "Show a deck in the OPF viewer, where the user can see and edit it" },
+    { "name": "start_here", "description": "A guided path into OPF for a goal" },
+    { "name": "validate_deck", "description": "Check a deck as opf validate does" },
+    { "name": "get_schema", "description": "Look up an OPF JSON Schema, or part of one" },
+    { "name": "search_catalog", "description": "Search the default catalog: layouts, themes, colors, fonts and more" },
+    { "name": "get_catalog_record", "description": "Read one catalog record in full" },
+    { "name": "search_icons", "description": "Find icons in the gallery's icon sets" },
+    { "name": "convert", "description": "Convert a deck between JSON, YAML and Markdown" },
+    { "name": "search_docs", "description": "Search the OPF documentation and skills" },
+    { "name": "list_examples", "description": "List the example decks" }
+  ],
+  "keywords": ["presentation", "slides", "deck", "opf", "powerpoint", "viewer", "editor"],
+  "license": "MIT",
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "node": ">=22.0.0" }
+  }
+}

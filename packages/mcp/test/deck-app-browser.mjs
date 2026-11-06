@@ -168,7 +168,8 @@ try {
 		assert.match(text, /Checks in the viewer: \d+ errors, \d+ warnings/);
 		assert.equal(first.structuredContent.edited, false);
 		assert.equal(first.structuredContent.document, undefined, "an unedited deck is not sent back");
-		assert.equal(await view().locator("#deck-checks").isVisible(), true);
+		// The editor's review pill shows the counts of its own review.
+		await view().locator("#deck-review-pill .opf-review-pill").waitFor();
 	});
 
 	await run("switches between Preview, Source and Both", async () => {
@@ -203,6 +204,40 @@ try {
 		await send.click();
 		await page.waitForFunction(() => window.host.messages.length === 1, null, { timeout: 15000 });
 		assert.match((await hostState()).messages[0].content[0].text, /I edited the deck in the OPF viewer/);
+	});
+
+	await run("Undo and Redo, Find, the Review panel and the Design menu are the editor's own", async () => {
+		const title = view().locator("#deck-title input");
+		await view().locator('#deck-history [data-opf-action="undo"]').click();
+		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.name === "Quarterly update", null, { timeout: 15000 });
+		assert.equal(await title.inputValue(), "Quarterly update", "Undo takes the rename back, and the model hears it");
+		await view().locator('#deck-history [data-opf-action="redo"]').click();
+		await page.waitForFunction(() => window.host.context.at(-1)?.structuredContent?.document?.name === "Q3 board update", null, { timeout: 15000 });
+
+		assert.equal(await view().locator("#deck-find").isVisible(), false);
+		await view().locator("#deck-find-open").click();
+		const field = view().locator("#deck-find input").first();
+		await field.waitFor();
+		await field.fill("churn");
+		assert.equal(await view().locator("#deck-find").isVisible(), true);
+		await shoot("find-light");
+		await field.press("Escape");
+		await view().locator("#deck-find").waitFor({ state: "hidden" });
+
+		await view().locator("#deck-review-pill .opf-review-pill").click();
+		await view().locator("#deck-review").waitFor();
+		assert.ok((await view().locator("#deck-review-panel").innerText()).trim().length > 0, "the Review panel lists its checks");
+		await shoot("review-light");
+		await view().locator("#deck-review-close").click();
+		await view().locator("#deck-review").waitFor({ state: "hidden" });
+
+		await view().locator(".opf-design-menu-trigger").click();
+		await view().locator(".opf-design-menu-popover").waitFor();
+		await shoot("design-light");
+		const theme = view().locator('.opf-design-menu-item[data-section="theme"][aria-checked="false"]').first();
+		const chosen = await theme.getAttribute("data-value");
+		await theme.click();
+		await page.waitForFunction((id) => window.host.context.at(-1)?.structuredContent?.document?.design?.theme === id, chosen, { timeout: 15000 });
 	});
 
 	await run("opens a YAML deck in the view named by the arguments, on the slide asked for, in the host's dark theme", async () => {
