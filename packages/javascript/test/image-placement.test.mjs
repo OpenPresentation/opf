@@ -44,7 +44,7 @@ test('each edge takes its band and leaves the rest of the slide to the content',
 });
 
 test('inset frames the image inside the slide padding of its band; treatments apply inside the frame', () => {
-  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'right', inset: true }, { aspectRatio: 0.5, shape: 'rounded', border: { color: 'dark1', width: 12 } })] }).items.find((item) => item.field === 'image').image;
+  const image = composeSlide({ title: 'Heading', blocks: [placed({ edge: 'right', inset: true }, { aspectRatio: 0.5, shape: 'roundRect', stroke: { color: 'dark1', width: 12 } })] }).items.find((item) => item.field === 'image').image;
   assert.deepEqual(image.region, { x: 640, y: 0, width: 640, height: 720 });
   assert.equal(image.box.height, 720 - 2 * padding);
   assert.equal(image.box.width, (720 - 2 * padding) * 0.5);

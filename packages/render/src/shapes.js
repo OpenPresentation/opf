@@ -36,19 +36,20 @@ function paintOf(value, helpers, fallback) {
   return { color: `#${six.toUpperCase()}`, alpha: raw.length === 8 ? parseInt(raw.slice(6), 16) / 255 : 1 };
 }
 
-// DrawingML path fill modes: lighten is a 60% tint, lightenLess 80%, darken a 60% shade, darkenLess 80%, in linear RGB.
+// DrawingML path fill modes as PowerPoint draws them: lighten mixes 40% white into the fill, lightenLess 20%, darken scales it to 60%,
+// darkenLess to 80%, on the sRGB values (measured in PowerPoint 365's export of can, cube and bevel).
 const SHADE = Object.freeze({ lighten: ["tint", 0.6], lightenLess: ["tint", 0.8], darken: ["shade", 0.6], darkenLess: ["shade", 0.8] });
 export function shadeColor(hex, mode) {
   const entry = SHADE[mode];
   if (!entry) return hex;
   const [kind, amount] = entry;
-  const channels = [1, 3, 5].map(at => parseInt(hex.slice(at, at + 2), 16) / 255).map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  const channels = [1, 3, 5].map(at => parseInt(hex.slice(at, at + 2), 16) / 255);
   const mixed = channels.map(value => kind === "shade" ? value * amount : value * amount + (1 - amount));
-  return `#${mixed.map(value => value <= 0.0031308 ? value * 12.92 : 1.055 * value ** (1 / 2.4) - 0.055).map(value => Math.round(Math.min(1, Math.max(0, value)) * 255).toString(16).padStart(2, "0")).join("").toUpperCase()}`;
+  return `#${mixed.map(value => Math.round(Math.min(1, Math.max(0, value)) * 255).toString(16).padStart(2, "0")).join("").toUpperCase()}`;
 }
 
 // A gradient (core ComposedGradient) in the frame `box`: linear along its angle across the box; radial, rectangle and shape as an
-// ellipse from the center through the corners (the preview's approximation of DrawingML's rect and shape paths).
+// ellipse from the center (the preview's approximation of DrawingML's rect and shape paths, which follow the frame and the outline).
 function gradientDef(gradient, id, box, helpers, mode, alpha = 1) {
   const stops = gradient.stops.map(stop => {
     const paint = paintOf(stop.color, helpers, "#000000");
@@ -60,7 +61,26 @@ function gradientDef(gradient, id, box, helpers, mode, alpha = 1) {
     const half = (Math.abs(box.width * cos) + Math.abs(box.height * sin)) / 2;
     return helpers.tag("linearGradient", { id, gradientUnits: "userSpaceOnUse", x1: number(cx - half * cos), y1: number(cy - half * sin), x2: number(cx + half * cos), y2: number(cy + half * sin) }, stops);
   }
-  return helpers.tag("radialGradient", { id, gradientUnits: "userSpaceOnUse", cx: 0, cy: 0, r: 1, gradientTransform: `matrix(${number(box.width / Math.SQRT2)} 0 0 ${number(box.height / Math.SQRT2)} ${number(cx)} ${number(cy)})` }, stops);
+  // PowerPoint's path gradients run from the center as the square of the distance: at d from the center, a share 0.6 (d / r)^2 of the
+  // way through the stops, r the frame's half width or height (measured on PowerPoint 365's circle path). The preview samples that
+  // curve at RADIAL_SAMPLES stops on an ellipse that reaches the last stop at r / sqrt(0.6), and pads beyond it.
+  const samples = Array.from({ length: RADIAL_SAMPLES + 1 }, (_, index) => index / RADIAL_SAMPLES).map(offset => {
+    const color = sampleStops(gradient.stops, offset * offset, helpers);
+    return helpers.tag("stop", { offset: precise(offset), "stop-color": shadeColor(color.color, mode), "stop-opacity": color.alpha * alpha < 1 ? precise(color.alpha * alpha) : undefined });
+  }).join("");
+  const reach = 1 / Math.sqrt(RADIAL_SHARE);
+  return helpers.tag("radialGradient", { id, gradientUnits: "userSpaceOnUse", cx: 0, cy: 0, r: 1, gradientTransform: `matrix(${number(box.width / 2 * reach)} 0 0 ${number(box.height / 2 * reach)} ${number(cx)} ${number(cy)})` }, samples);
+}
+const RADIAL_SHARE = 0.6, RADIAL_SAMPLES = 16;
+// The color `t` of the way through gradient stops, interpolated on sRGB values and alpha as SVG does.
+function sampleStops(stops, t, helpers) {
+  const paints = stops.map(stop => ({ position: stop.position, ...paintOf(stop.color, helpers, "#000000") }));
+  if (t <= paints[0].position) return paints[0];
+  const after = paints.findIndex(stop => stop.position >= t);
+  if (after < 0) return paints[paints.length - 1];
+  const a = paints[after - 1], b = paints[after], k = b.position > a.position ? (t - a.position) / (b.position - a.position) : 1;
+  const channel = at => Math.round(parseInt(a.color.slice(at, at + 2), 16) * (1 - k) + parseInt(b.color.slice(at, at + 2), 16) * k).toString(16).padStart(2, "0");
+  return { color: `#${channel(1)}${channel(3)}${channel(5)}`.toUpperCase(), alpha: a.alpha * (1 - k) + b.alpha * k };
 }
 
 // The SVG paint of a fill (core ComposedFill) for one path's fill mode: { fill, opacity, defs }.

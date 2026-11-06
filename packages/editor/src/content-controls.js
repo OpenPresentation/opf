@@ -52,7 +52,7 @@ const REGION_KEY = /^(?:(?:top|middle|bottom)(?:\+(?:top|middle|bottom))*(?::(?:
 const regionKeysOfSlide = (slide) => Object.keys(slide).filter((key) => REGION_KEY.test(key));
 const DESIGN_IMAGE_LABELS = { background: "background image", watermark: "watermark" };
 // An image block's own framing fields (FA-22) do not stop it being "a block that holds only an image".
-const IMAGE_BLOCK_FIELDS = new Set(["id", "extensions", "type", "fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"]);
+const IMAGE_BLOCK_FIELDS = new Set(["id", "extensions", "type", "fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"]);
 const messageOf = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
 const lossText = (prepared) => (prepared.loss?.length ? `Not carried over: ${prepared.loss.join(", ")}.` : "");
 const SVG = "http://www.w3.org/2000/svg";

@@ -54,7 +54,7 @@ import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} fr
 import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
-import {lineXml, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
+import {lineXml, linkShapeBlocks, shapeBlockRecord, writeShapeBlocks} from './shape-blocks.js';
 import {themeSlotColors, schemeColorTable, addTransformedColors, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
@@ -2998,8 +2998,8 @@ function addShapeItem(slide, item, slideIndex, context, deck) {
   if (runs.length) assertXmlText(runs.map(run => run.text).join(''), `${item.path}.text`);
   const box = shape.box;
   slide.addText(runs.length ? runs : '', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, objectName: name, ...base, align: 'center', valign: 'middle', margin: 0, paraSpaceAfter: 0, paraSpaceBefore: 0,
-    ...(lineHeight ? {lineSpacing: Math.round(lineHeight * 100) / 100} : {}), fit: 'none', ...(shape.link ? {hyperlink: {url: shape.link}} : {})});
-  deck.shapeBlocks.set(name, shapeBlockRecord(shape, paint, palette));
+    ...(lineHeight ? {lineSpacing: Math.round(lineHeight * 100) / 100} : {}), fit: 'none'});
+  deck.shapeBlocks.set(name, {...shapeBlockRecord(shape, paint, palette), ...(shape.link ? {link: shape.link} : {})});
   return name;
 }
 
@@ -5064,6 +5064,8 @@ async function normalizePptxZip(raw, context) {
     }
     imageMetadata.set(part, metadata);
   }
+  // SH-02: a shape block's click link (a:hlinkClick in its p:cNvPr, with its slide's external hyperlink relationship).
+  linkShapeBlocks(entries, context.shapeBlocks, {decode: decodeText, encode: encodeText});
   // Image pictures need the embedded dimensions (core's fitImage crops and pads them); document provenance (FF-32)
   // later records the placed frames as slide geometry evidence.
   try {

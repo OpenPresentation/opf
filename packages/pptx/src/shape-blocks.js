@@ -155,6 +155,36 @@ export function shapeBlockRecord(shape, paint, context) {
   return { spPr, style: styleXml(shape.styleRef, paint, context), bodyPr, alt: shape.alt, decorative: shape.decorative === true, hidden: shape.hidden === true };
 }
 
+const HYPERLINK = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink';
+/**
+ * Give every recorded shape block with a `link` its click link: an external hyperlink relationship in its slide's rels part and
+ * a:hlinkClick in its p:cNvPr (PptxGenJS links a text shape's runs, not the shape). `entries` is the package (part name to bytes).
+ */
+export function linkShapeBlocks(entries, records, {decode, encode}) {
+  const linked = [...(records?.entries() ?? [])].filter(([, record]) => record.link);
+  if (!linked.length) return;
+  const byName = new Map(linked);
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    let xml = decode(entries[part]);
+    if (!linked.some(([name]) => xml.includes(`name="${escape(name)}"`))) continue;
+    const relsPath = part.replace(/^ppt\/slides\//, 'ppt/slides/_rels/') + '.rels';
+    let rels = entries[relsPath] ? decode(entries[relsPath]) : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>';
+    const taken = new Set([...rels.matchAll(/\bId="([^"]+)"/g)].map(match => match[1]));
+    xml = xml.replace(/<p:cNvPr\b([^>]*?\bname="([^"]+)"[^>]*?)(\/?)>/g, (match, attributes, name, close) => {
+      const record = byName.get(name.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'));
+      if (!record) return match;
+      let n = 1, rid;
+      do rid = `rId${n++}`; while (taken.has(rid));
+      taken.add(rid);
+      rels = rels.replace('</Relationships>', `<Relationship Id="${rid}" Type="${HYPERLINK}" Target="${escape(record.link)}" TargetMode="External"/></Relationships>`);
+      const link = `<a:hlinkClick r:id="${rid}"/>`;
+      return close ? `<p:cNvPr${attributes}>${link}</p:cNvPr>` : `<p:cNvPr${attributes}>${link}`;
+    });
+    entries[part] = encode(xml);
+    entries[relsPath] = encode(rels);
+  }
+}
+
 /** Replace the parts PptxGenJS wrote for every recorded shape block (`records`: Map of object name to shapeBlockRecord) in a slide part. */
 export function writeShapeBlocks(xml, records) {
   if (!records?.size) return xml;

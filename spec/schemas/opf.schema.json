@@ -1801,7 +1801,7 @@
               "type": "number",
               "minimum": 0,
               "maximum": 64,
-              "description": "Line width in reference pixels at a 720-pixel short edge. 0 removes the line. Default 1 on a shape, 2 on a picture."
+              "description": "Line width in reference pixels at a 720-pixel short edge. 0 removes the line. Default 4/3 (1 point, PowerPoint's default line) on a shape, 2 on a picture."
             },
             "dash": {
               "anyOf": [
@@ -2096,7 +2096,7 @@
           "description": "SVG path data with its own viewBox, for example an icon outline drawn on a 24 by 24 grid."
         }
       ],
-      "description": "Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path; a subpath that ends without Z is an open path, which takes a line and arrowheads but no fill.",
+      "description": "Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).",
       "examples": [
         "M0 0 L1 0 L0.5 1 Z",
         {
@@ -2117,7 +2117,7 @@
           "$ref": "#/$defs/TableCellPadding"
         }
       ],
-      "description": "Text insets inside the shape's text rectangle (a:bodyPr lIns, tIns, rIns, bIns), in reference pixels at a 720-pixel short edge: one number for every side or { top, right, bottom, left }. Default 10 left and right, 5 top and bottom, PowerPoint's 0.1 and 0.05 inch."
+      "description": "Text insets inside the shape's text rectangle (a:bodyPr lIns, tIns, rIns, bIns), in reference pixels at a 720-pixel short edge: one number for every side or { top, right, bottom, left }. Default 9.6 left and right, 4.8 top and bottom, PowerPoint's 0.1 and 0.05 inch."
     },
     "Shadow": {
       "anyOf": [
@@ -2898,7 +2898,7 @@
         "style": {
           "type": "string",
           "enum": ["none", "subtle", "moderate", "intense"],
-          "description": "Shape blocks only. The theme shape style, as PowerPoint's shape styles (p:style with a:lnRef, a:fillRef, a:effectRef and a:fontRef): subtle is a light tint of accent1 with an accent1 line and dark text, moderate (the default) a solid accent1 fill with a darker line and light text, intense a solid accent1 fill with no line, light bold text and the theme's intense effect. none draws nothing the author did not set. An explicit fill, stroke or effect wins over the style's."
+          "description": "Shape blocks only. The theme shape style, as PowerPoint's shape styles (p:style with a:lnRef, a:fillRef, a:effectRef and a:fontRef): subtle is a light tint of accent1 with an accent1 line and dark text, moderate (the default) a solid accent1 fill with a darker line and light text, intense accent1 25% darker with no line, light bold text and the soft shadow. none draws nothing the author did not set. An explicit fill, stroke or effect wins over the style's."
         },
         "rotate": {
           "type": "number",

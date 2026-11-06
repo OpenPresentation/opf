@@ -26,9 +26,9 @@ test('every image item carries its picture geometry; an untreated block draws in
   // Slide.image is shorthand for one image block, and region payloads carry the same geometry.
   assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'contain');
   assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] } })).image.fit, 'cover', 'a layout keeps the engine default');
-  assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'circle' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
+  assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'ellipse' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
   // The payload reports the block's own options for editors.
-  assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'rounded' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'rounded' });
+  assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'roundRect' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'roundRect' });
 });
 
 test('fit: the block, then design.imageFit of the slide, the deck and the layout, then cover (contain with no layout)', () => {
@@ -46,7 +46,7 @@ test('aspect ratio and circle shape the frame inside the region', () => {
   near(letterbox.box.width / letterbox.box.height, 2.39, 'letterbox ratio');
   near(letterbox.box.x + letterbox.box.width / 2, letterbox.region.x + letterbox.region.width / 2, 'centered');
   near(letterbox.box.y + letterbox.box.height / 2, letterbox.region.y + letterbox.region.height / 2, 'centered');
-  const circle = imageOf(compose({ shape: 'circle', aspectRatio: 3 })).image;
+  const circle = imageOf(compose({ shape: 'ellipse', aspectRatio: 3 })).image;
   assert.equal(circle.box.width, circle.box.height);
   assert.equal(circle.shape.preset, 'ellipse');
 });
@@ -72,15 +72,15 @@ test('shape outlines follow the DrawingML preset formulas', () => {
 });
 
 test('border, opacity, recolor and overlay are normalized for both engines', () => {
-  const image = imageOf(compose({ shape: 'rounded', cornerRadius: 0.1, border: { color: 'dark1', width: 12 }, opacity: 0.4,
+  const image = imageOf(compose({ shape: 'roundRect', adjust: { adj: 0.1 }, stroke: { color: 'dark1', width: 12 }, opacity: 0.4,
     recolor: { dark: 'accent1', light: '#FFFFFF' }, overlay: { color: '#000000', opacity: 0.55 } }, { width: 1920, height: 1080 })).image;
   assert.deepEqual(image.border, { color: 'dark1', width: 18 });
   assert.equal(image.opacity, 0.4);
   assert.deepEqual(image.recolor, { type: 'duotone', dark: 'accent1', light: '#FFFFFF' });
   assert.deepEqual(image.overlay, { path: 'slides.0.blocks.0.overlay', color: '#000000', opacity: 0.55, box: image.box, shape: image.shape });
   assert.deepEqual(imageOf(compose({ recolor: 'grayscale' })).image.recolor, { type: 'grayscale' });
-  assert.equal(imageOf(compose({ opacity: 1, border: { color: 'dark1', width: 0 } })).image.opacity, undefined);
-  assert.equal(imageOf(compose({ border: { color: 'dark1', width: 0 } })).image.border, undefined);
+  assert.equal(imageOf(compose({ opacity: 1, stroke: { color: 'dark1', width: 0 } })).image.opacity, undefined);
+  assert.equal(imageOf(compose({ stroke: { color: 'dark1', width: 0 } })).image.stroke, undefined);
   const caption = imageOf(compose({ overlay: { color: 'dark1', opacity: 0.75, edge: 'bottom', size: 0.25 } })).image;
   assert.equal(caption.overlay.edge, 'bottom');
   near(caption.overlay.box.height, caption.box.height * 0.25, 'band height');
@@ -89,24 +89,24 @@ test('border, opacity, recolor and overlay are normalized for both engines', () 
 });
 
 test('edge overlays on masked frames are reported, not drawn, and never fail strict layout', () => {
-  const result = composeSlide({ title: 'Heading', composition: { overflow: 'error' }, blocks: [{ image: photo, shape: 'circle', overlay: { color: '#000000', opacity: 0.5, edge: 'bottom' } }] });
+  const result = composeSlide({ title: 'Heading', composition: { overflow: 'error' }, blocks: [{ image: photo, shape: 'ellipse', overlay: { color: '#000000', opacity: 0.5, edge: 'bottom' } }] });
   assert.equal(imageOf(result).image.overlay, undefined);
   assert.deepEqual(result.diagnostics.map((d) => [d.code, d.path]), [['unsupported-image-treatment', 'slides.0.blocks.0.overlay.edge']]);
 });
 
 test('the treatment vocabulary validates on image payloads and is refused elsewhere', () => {
-  const block = { type: 'image', image: photo, fit: 'contain', focus: { x: 0.2, y: 0.8 }, aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12, border: { color: 'dark1', width: 12 }, opacity: 0.8,
+  const block = { type: 'image', image: photo, fit: 'contain', focus: { x: 0.2, y: 0.8 }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: { color: 'dark1', width: 12 }, opacity: 0.8,
     recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.2, edge: 'bottom', size: 0.3 }, placement: { edge: 'right', size: 0.4, inset: true } };
   assert.equal(check(deck([{ title: 'Heading', blocks: [block] }])).valid, true);
-  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { border: { color: 'dark1' } }, { placement: { edge: 'middle' } }, { placement: { edge: 'left', size: 0.95 } }])
+  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { stroke: { color: 'dark1' } }, { placement: { edge: 'middle' } }, { placement: { edge: 'left', size: 0.95 } }])
     assert.equal(check(deck([{ title: 'Heading', blocks: [{ image: photo, ...invalid }] }])).valid, false, JSON.stringify(invalid));
   // Image options on a text block or a group: opf/image-option-unsupported-payload at the option.
   const text = check(deck([{ title: 'Heading', blocks: [{ text: 'Body', fit: 'cover' }] }]));
   assert.deepEqual(errorsOf(text).map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/fit']]);
-  const group = check(deck([{ title: 'Heading', blocks: [{ blocks: [{ image: photo }], shape: 'circle' }] }]));
+  const group = check(deck([{ title: 'Heading', blocks: [{ blocks: [{ image: photo }], shape: 'ellipse' }] }]));
   assert.deepEqual(errorsOf(group).map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/shape']]);
   // The root of a slide has no treatment keys: use a block.
-  assert.equal(check(deck([{ title: 'Heading', image: photo, shape: 'circle' }])).valid, false);
+  assert.equal(check(deck([{ title: 'Heading', image: photo, shape: 'ellipse' }])).valid, false);
 });
 
 // The 15 pptx.gallery image treatments (docs/fixtures/image-treatments.opf.json) against core 0.14's frozen picture goldens.

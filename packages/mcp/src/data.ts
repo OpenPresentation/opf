@@ -37,6 +37,7 @@ export const DOC_SLUGS: readonly string[] = [
 	"numbered-lists",
 	"table-text-colors",
 	"image-treatments",
+	"shapes",
 	"icons",
 	"chart-options",
 	"chart-table-data",

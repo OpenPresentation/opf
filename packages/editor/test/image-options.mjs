@@ -25,9 +25,9 @@ const deck = () => ({
   const fields = {
     fit: "contain",
     focus: { x: 0.25, y: 0.75 },
-    shape: "rounded",
-    cornerRadius: 0.1,
-    border: { color: "dark1", width: 4 },
+    shape: "roundRect",
+    adjust: { adj: 0.1 },
+    stroke: { color: "dark1", width: 4 },
     opacity: 0.8,
     recolor: { dark: "dark1", light: "accent1" },
     overlay: { color: "dark1", opacity: 0.4, edge: "bottom", size: 0.25 },
@@ -62,7 +62,7 @@ const deck = () => ({
   // The slide's own image (Slide.image) is not an image block: it takes no framing fields.
   assert.throws(() => setImageTreatment(editor, "slides.1", { fit: "contain" }), (error) => error.code === "not-an-image-block");
   // The image-treatments switch takes the same fields for one block.
-  const switched = switchDimension(editor, "image-treatments", { shape: "circle" }, { path: "slides.0.blocks.0" });
+  const switched = switchDimension(editor, "image-treatments", { shape: "ellipse" }, { path: "slides.0.blocks.0" });
   assert.equal(switched.scope, "block");
   assert.equal(editor.get("slides.0.blocks.0.shape"), "circle");
 }
@@ -82,7 +82,7 @@ const deck = () => ({
     [{ placement: { edge: "middle" } }, /edge/],
     [{ placement: { edge: "left", size: 0.95 } }, /0\.1 to 0\.9/],
     [{ overlay: { color: "dark1" } }, /opacity/],
-    [{ border: { color: "nope", width: 2 } }, /border color/i],
+    [{ stroke: { color: "nope", width: 2 } }, /border color/i],
     [{ slideImage: "x" }, /Unknown image treatment/],
   ])
     assert.throws(() => prepareImageTreatment(deck(), "slides.0.blocks.0", fields), message);

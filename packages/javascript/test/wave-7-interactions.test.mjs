@@ -84,12 +84,12 @@ for (const [language, text] of Object.entries(TEXT)) {
   });
 
   test(`LH-132 with LH-74 and LH-14 (${direction}): a team's pictures are portraits, and its group icons never cost the text`, () => {
-    const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'circle' }, { items: [{ text: name, description: text.role }] }] });
+    const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse' }, { items: [{ text: name, description: text.role }] }] });
     const team = (extra, first) => compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.map((name, index) => index === 0 && first ? first(name) : person(name, index, extra)) }, language));
     const portraits = team({});
     assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'rounded'), 'portraits on the person cards');
     // An authored rectangle keeps its shape and focus: LH-74 does not make it fill a card.
-    const own = team({}, (name) => ({ ...person(name, 0), blocks: [{ image: { src: face, alt: name }, shape: 'rectangle', focus: { x: 0.2, y: 0.1 } }, person(name, 0).blocks[1]] }));
+    const own = team({}, (name) => ({ ...person(name, 0), blocks: [{ image: { src: face, alt: name }, shape: 'rect', focus: { x: 0.2, y: 0.1 } }, person(name, 0).blocks[1]] }));
     const first = own.items.find((item) => item.image);
     assert.equal(first.image.shape.kind, 'rectangle');
     assert.deepEqual(first.image.focus, { x: 0.2, y: 0.1 });

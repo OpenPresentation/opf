@@ -233,6 +233,10 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
 | [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
+| [`opf/shape-option-unsupported-payload`](#opfshape-option-unsupported-payload) | Format | error | structure | A shape option is on a payload that is not a shape block. |
+| [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
+| [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
+| [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
@@ -383,7 +387,41 @@ Default severity: **error**. Cost: structure. A caption is on a payload that can
 
 Default severity: **error**. Cost: structure. An image option is on a payload that is not an image.
 
-**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
+**Why.** `fit`, `focus`, the image treatments (`shape`, `adjust`, `stroke`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to. A shape block takes `shape`, `adjust`, `stroke`, `opacity` and `aspectRatio` too.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-option-unsupported-payload`
+
+Default severity: **error**. Cost: structure. A shape option is on a payload that is not a shape block.
+
+**Why.** `fill`, `style`, `rotate`, `flip`, `anchor`, `padding`, `textDirection`, `alt`, `decorative`, `hidden`, `link` and the effects (`shadow`, `innerShadow`, `glow`, `softEdge`, `reflection`, `blur`) describe how a shape block is drawn; a text, chart or image block, or a group, has no shape for them to apply to.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-adjust-unknown`
+
+Default severity: **warning**. Cost: structure. An adjust value names a guide the preset does not have.
+
+**Why.** Each preset has its own adjust handles (DrawingML's avLst guides: `adj`, `adj1`, `adj2`, ...); a name the preset does not have changes nothing, and a custom `path` has none. The preset's default is drawn.
+
+**Basis.** ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml
+
+### `opf/shape-adjust-range`
+
+Default severity: **warning**. Cost: structure. An adjust value is outside the range of the preset's handle.
+
+**Why.** An adjust value outside the range its handle allows is pinned by the preset's own formulas, so the shape is not drawn as the value says; core draws the preset's default instead and both engines agree.
+
+**Basis.** ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml
+
+**Approximations.** Ranges are checked at a square shape of the default size; a handle whose range depends on the shape's proportions is checked at those proportions when the shape is drawn.
+
+### `opf/shape-link-hidden`
+
+Default severity: **warning**. Cost: structure. A hidden shape carries a link.
+
+**Why.** A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 

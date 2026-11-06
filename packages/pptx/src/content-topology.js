@@ -50,7 +50,7 @@ import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from '
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 
-export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
+export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
 const HORIZONTAL = ['left', 'center', 'right', 'left+center', 'center+right', 'left+center+right'];
 const VERTICAL = ['top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom'];
@@ -223,6 +223,8 @@ export const softWrappedLines = item => {
 
 function blockKind(block) {
   if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) ? block.type : null;
+  // SH-02: a preset with no picture, or a custom path, is a shape block (its text is inside it).
+  if (block.image === undefined && (typeof block.shape === 'string' || block.path !== undefined)) return 'shape';
   for (const field of ROOT_PAYLOAD_FIELDS) if (block[field] !== undefined) return kindOfField(field);
   return null;
 }

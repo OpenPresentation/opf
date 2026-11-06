@@ -1,5 +1,5 @@
 // Image blocks (FA-22/FA-23, OPF 0.15): every content picture is an image block, and its framing lives on the block: fit and
-// focus, the treatments (shape, corner radius, border, opacity, recolor, overlay, aspect ratio) and placement (bleed to one slide
+// focus, the treatments (shape, adjust, stroke, opacity, recolor, overlay, aspect ratio) and placement (bleed to one slide
 // edge, the only thing that moves content aside). Each change is one validated JSON Patch applied as one undoable transaction;
 // the `prepare…` form returns the patch without touching a session. `design.imageFit` (a design option) is the deck or slide
 // default fit.
@@ -7,14 +7,16 @@ import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
 import { checkedDocument, fail, same } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
 import { isAuthoringColorRef } from "./color-authoring.js";
+import { PRESET_SHAPES } from "@openpresentation/opf/shape-geometry";
 
 export const IMAGE_FITS = Object.freeze(["cover", "contain", "stretch", "auto"]);
-export const IMAGE_SHAPES = Object.freeze(["rectangle", "rounded", "circle", "hexagon"]);
+/** SH-02: a frame's mask is any of the 187 DrawingML presets (rect, roundRect, ellipse, hexagon, chevron, ...). */
+export const IMAGE_SHAPES = PRESET_SHAPES;
 export const IMAGE_EDGES = Object.freeze(["left", "right", "top", "bottom"]);
 /** LH-132: how a person's picture is drawn in a team: the avatar, beside the text, or across the top of the card. */
 export const IMAGE_PORTRAITS = Object.freeze(["avatar", "side", "top"]);
 /** The fields an image block carries besides its `image`, in schema order. */
-export const IMAGE_TREATMENT_FIELDS = Object.freeze(["fit", "focus", "aspectRatio", "shape", "cornerRadius", "border", "opacity", "recolor", "overlay", "placement", "portrait"]);
+export const IMAGE_TREATMENT_FIELDS = Object.freeze(["fit", "focus", "aspectRatio", "shape", "adjust", "stroke", "opacity", "recolor", "overlay", "placement", "portrait"]);
 
 const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
 const bad = (message, details) => fail("invalid-image-treatment", message, details);
@@ -85,16 +87,22 @@ function normalizeField(key, value) {
     case "shape":
       if (!IMAGE_SHAPES.includes(value)) throw bad(`Image shape is one of ${IMAGE_SHAPES.join(", ")}.`, { field: key, value });
       return value;
-    case "cornerRadius": {
-      const radius = Number(value);
-      if (!fraction(radius, 0, 0.5)) throw bad("The corner radius is a share of the frame's shorter side from 0 to 0.5.", { field: key, value });
-      return radius;
+    case "adjust": {
+      // SH-02: the preset's adjust values (roundRect's adj is the corner radius, a share of the shorter side from 0 to 0.5).
+      if (!isObject(value) || Object.values(value).some((entry) => typeof entry !== "number" || !Number.isFinite(entry))) throw bad("Adjust values are { name: number }, for example { adj: 0.12 } for a roundRect's corner.", { field: key, value });
+      return { ...value };
     }
-    case "border": {
-      if (!isObject(value)) throw bad("A border is { color, width }.", { field: key, value });
-      const width = Number(value.width);
-      if (!fraction(width, 0, 64)) throw bad("The border width is from 0 to 64 reference pixels.", { field: key, value });
-      return { color: colorRef(value.color, "The border color"), width };
+    case "stroke": {
+      // SH-02: the picture's line (renamed from border): "none", or { color, width, dash, ... }.
+      if (value === "none") return value;
+      if (!isObject(value)) throw bad("A stroke is { color, width } (with an optional dash, cap, join and the rest), or \"none\".", { field: key, value });
+      const out = { ...value };
+      if (value.width !== undefined) {
+        out.width = Number(value.width);
+        if (!fraction(out.width, 0, 64)) throw bad("The stroke width is from 0 to 64 reference pixels.", { field: key, value });
+      }
+      if (value.color !== undefined) out.color = typeof value.color === "string" ? colorRef(value.color, "The stroke color") : value.color;
+      return out;
     }
     case "opacity": {
       const opacity = Number(value);
@@ -140,7 +148,7 @@ function usedEdges(presentation, parts) {
 }
 
 /**
- * The image block's framing as a form shows it: `{ path, fit, focus, aspectRatio, shape, cornerRadius, border, opacity, recolor,
+ * The image block's framing as a form shows it: `{ path, fit, focus, aspectRatio, shape, adjust, stroke, opacity, recolor,
  * overlay, placement, placeable, usedEdges }`. Fields the block does not set are undefined (the effective fit is then
  * `design.imageFit`, else cover).
  */

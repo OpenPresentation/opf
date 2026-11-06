@@ -146,7 +146,7 @@ test('the flat image background validates; the 0.14 image wrapper and unknown ke
     { type: 'image', src: 'asset:hero', focus: { x: 0.5 } },
     { type: 'image', src: 'asset:hero', overlay: { color: 'dark1' } },
     { type: 'image', src: 'asset:hero', recolor: 'sepia' },
-    { type: 'image', src: 'asset:hero', shape: 'circle' },
+    { type: 'image', src: 'asset:hero', shape: 'ellipse' },
   ]) assert.equal(check(deck({ title: 'T' }, { background: bad })).valid, false, JSON.stringify(bad));
 });
 
