@@ -5,8 +5,8 @@ import { describe, test } from "node:test";
 import { PRESET_SHAPES, presetGeometry } from "../dist/shape-geometry.js";
 import { SHAPE_CATALOG, SHAPE_CATEGORIES, searchShapeCatalog, shapeCatalogEntry, shapeThumbnail, shapeThumbnailSvg, shapesInCategory } from "../dist/shape-catalog.js";
 
-// SH-06: the shape catalog groups the 187 presets as PowerPoint's Insert > Shapes gallery does, names the Aspose ShapeType of each and
-// searches by DrawingML name, Aspose name and common words. Its Aspose names are the ones in docs/shapes.md's preset table.
+// SH-06: the shape catalog groups the 187 presets as PowerPoint's Insert > Shapes gallery does, and
+// searches by DrawingML name and common words.
 describe("shape catalog", () => {
   test("lists every preset once, in a gallery group", () => {
     assert.equal(SHAPE_CATALOG.length, 187);
@@ -25,19 +25,12 @@ describe("shape catalog", () => {
     assert.equal(shapeCatalogEntry("nope"), undefined);
   });
 
-  test("its Aspose names are the docs table's", () => {
-    const docs = readFileSync(new URL("../../../docs/shapes.md", import.meta.url), "utf8");
-    const rows = [...docs.matchAll(/^\| `([A-Za-z0-9]+)` \| `([A-Za-z0-9]+)` \| \d:\d \|/gm)].map((match) => [match[1], match[2]]);
-    assert.equal(rows.length, 187);
-    for (const [name, aspose] of rows) assert.equal(shapeCatalogEntry(name)?.aspose, aspose, name);
-  });
-
-  test("searches by DrawingML name, Aspose name and common words", () => {
+  test("searches by DrawingML name and common words", () => {
     const names = (query, options) => searchShapeCatalog(query, options).map((result) => result.entry.name);
     assert.equal(names("rightArrow")[0], "rightArrow");
     assert.equal(names("right arrow")[0], "rightArrow");
-    assert.equal(names("RectangularCallout")[0], "wedgeRectCallout");
-    assert.equal(names("OvalCallout")[0], "wedgeEllipseCallout");
+    assert.equal(names("wedgeEllipseCallout")[0], "wedgeEllipseCallout");
+    assert.equal(names("round rect callout")[0], "wedgeRoundRectCallout");
     assert.equal(names("circle")[0], "ellipse");
     assert.equal(names("speech bubble").slice(0, 3).join(), "wedgeRectCallout,wedgeRoundRectCallout,wedgeEllipseCallout");
     assert.equal(names("cylinder")[0], "can");

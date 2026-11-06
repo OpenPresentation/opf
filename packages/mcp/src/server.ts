@@ -558,15 +558,15 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			}),
 	);
 
-	// SH-06: the 187 preset shapes of a shape block, searched by DrawingML name, Aspose name and common words, each with its adjust handles and a small drawing.
+	// SH-06: the 187 preset shapes of a shape block, searched by DrawingML name and common words, each with its adjust handles and a small drawing.
 	const shapeGroups = SHAPE_CATEGORIES.map((category) => category.id) as [string, ...string[]];
 	server.registerTool(
 		"search_shapes",
 		{
 			title: "Search the preset shapes",
-			description: `Find the preset for a shape block's \`shape\` (\`{ "shape": "chevron", "text": "Plan" }\`) among the 187 DrawingML presets, grouped as PowerPoint's Insert > Shapes gallery (${shapeGroups.join(", ")}). Matches the DrawingML name (rightArrow), the Aspose ShapeType name (RectangularCallout) and common words (speech bubble, cylinder, cog; every word must match, a name match ranks first); an empty query browses. Each result's \`shape\` is the value to write; \`adjust\` lists its adjust values (the yellow handles in PowerPoint) with their defaults and ranges at a square frame, as fractions of the shape or degrees, to write as \`"adjust": { "adj1": 0.4 }\`; \`svg\` is a small drawing at the default frame (\`aspect\`, width over height). Never guess a preset name: an unknown one is an opf/schema error.`,
+			description: `Find the preset for a shape block's \`shape\` (\`{ "shape": "chevron", "text": "Plan" }\`) among the 187 DrawingML presets, grouped as PowerPoint's Insert > Shapes gallery (${shapeGroups.join(", ")}). Matches the DrawingML name (rightArrow) and common words (speech bubble, cylinder, cog; every word must match, a name match ranks first); an empty query browses. Each result's \`shape\` is the value to write; \`adjust\` lists its adjust values (the yellow handles in PowerPoint) with their defaults and ranges at a square frame, as fractions of the shape or degrees, to write as \`"adjust": { "adj1": 0.4 }\`; \`svg\` is a small drawing at the default frame (\`aspect\`, width over height). Never guess a preset name: an unknown one is an opf/schema error.`,
 			inputSchema: {
-				query: z.string().optional().describe('Words to match, such as "speech bubble", "arrow", "flowchart decision" or "RectangularCallout". Empty browses the gallery in order.'),
+				query: z.string().optional().describe('Words to match, such as "speech bubble", "arrow", "flowchart decision" or "wedgeRectCallout". Empty browses the gallery in order.'),
 				category: z.enum(shapeGroups).optional().describe(`Only this gallery group: ${shapeGroups.join(", ")}.`),
 				limit: z.number().int().min(1).max(100).optional().describe("At most this many shapes. Default 12."),
 			},
@@ -577,7 +577,6 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				shapes: z.array(
 					z.object({
 						shape: z.string(),
-						aspose: z.string(),
 						category: z.string(),
 						categoryTitle: z.string(),
 						aspect: z.number(),
@@ -604,7 +603,6 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 						const handled = new Set(presetGeometry(entry.name, 100, 100).handles.flatMap((handle) => [handle.horizontal, handle.vertical, handle.radius, handle.angle].flatMap((axis) => (axis ? [axis.adjust] : []))));
 						return {
 							shape: entry.name,
-							aspose: entry.aspose,
 							category: entry.category,
 							categoryTitle: SHAPE_CATEGORIES.find((item) => item.id === entry.category)!.title,
 							aspect,

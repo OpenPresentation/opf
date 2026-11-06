@@ -14,7 +14,7 @@ export declare const SHAPE_PROPERTY_KEYS: readonly [
 export declare const CONNECTOR_PROPERTY_KEYS: readonly ["stroke", "alt", "decorative", "hidden", "adjust"];
 export type ShapePropertyKey = (typeof SHAPE_PROPERTY_KEYS)[number];
 
-/** The presets matching `query` (DrawingML name, Aspose name, common words), best first; an empty query lists the gallery in order. */
+/** The presets matching `query` (DrawingML name, common words), best first; an empty query lists the gallery in order. */
 export declare function searchShapes(query?: string, options?: ShapeSearchOptions): ShapeCatalogEntry[];
 export interface ShapeGroup { id: ShapeCategoryId; title: string; shapes: ShapeCatalogEntry[] }
 /** PowerPoint's gallery groups with their presets in gallery order. */

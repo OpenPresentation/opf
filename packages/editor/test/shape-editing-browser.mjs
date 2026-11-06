@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-// SH-06 in a real browser, on the built playground (npm run build:playground): the shape picker (search by DrawingML name, Aspose name and common
+// SH-06 in a real browser, on the built playground (npm run build:playground): the shape picker (search by DrawingML name and common
 // words, PowerPoint's nine groups), inserting a shape, the adjust handles on the canvas (drag, keyboard, Escape, range), changing a block's preset and
 // every property in the Selected shape section (fill, line, style, effects, rotate and flip, text, alt text and link). Each is one undoable change: Undo
 // restores the document exactly and Redo returns it. OPF_SHAPE_SHOTS=<dir> also writes screenshots.
@@ -119,7 +119,6 @@ try {
 
   const search = menu.getByLabel('Search shapes', { exact: true });
   const firstOf = async query => { await search.fill(query); await page.waitForFunction(q => document.querySelector('[data-role="shape-search"]').value === q, query); return menu.locator('.opf-sp-tile').first().getAttribute('data-shape'); };
-  assert.equal(await firstOf('RectangularCallout'), 'wedgeRectCallout', 'by Aspose name');
   assert.equal(await firstOf('rightArrow'), 'rightArrow', 'by DrawingML name');
   assert.equal(await firstOf('speech bubble'), 'wedgeRectCallout', 'by common words');
   assert.equal(await firstOf('cylinder'), 'can');
@@ -129,7 +128,7 @@ try {
   assert.ok(await menu.locator('.opf-sp-tile').count() >= 30, 'arrow matches the block arrows');
   await search.fill('zzzzzz');
   assert.equal(await menu.locator('[data-role="shape-count"]').textContent(), 'No shapes match "zzzzzz".');
-  mark('search finds presets by DrawingML name, Aspose name and common words');
+  mark('search finds presets by DrawingML name and common words');
   await search.fill('callout');
   await shot('picker-search');
 

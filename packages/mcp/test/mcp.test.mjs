@@ -185,11 +185,11 @@ describe("opf-mcp", () => {
 			assert.ok(unknown.suggestions.some((entry) => entry.value === "lucide:truck"));
 		});
 
-		test("search_shapes finds presets by DrawingML name, Aspose name and common words, with adjust handles and a drawing (SH-06)", async () => {
+		test("search_shapes finds presets by DrawingML name and common words, with adjust handles and a drawing (SH-06)", async () => {
 			const shapes = async (arguments_) => (await client.callTool({ name: "search_shapes", arguments: arguments_ })).structuredContent;
 			const arrow = await shapes({ query: "rightArrow" });
 			assert.equal(arrow.shapes[0].shape, "rightArrow");
-			assert.equal(arrow.shapes[0].aspose, "RightArrow");
+			assert.deepEqual(Object.keys(arrow.shapes[0]).sort(), ["adjust", "aspect", "category", "categoryTitle", "shape", "svg"]);
 			assert.equal(arrow.shapes[0].category, "blockArrows");
 			assert.equal(arrow.shapes[0].categoryTitle, "Block Arrows");
 			assert.equal(arrow.shapes[0].aspect, 2);
@@ -201,7 +201,7 @@ describe("opf-mcp", () => {
 			assert.ok(!/<script|href=/.test(arrow.shapes[0].svg));
 			assert.deepEqual(arrow.categories.map((category) => category.id), ["lines", "rectangles", "basic", "blockArrows", "equations", "flowchart", "starsBanners", "callouts", "actionButtons"]);
 			assert.equal(arrow.categories.reduce((sum, category) => sum + category.shapes, 0), 187);
-			assert.equal((await shapes({ query: "RectangularCallout" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "wedgeRectCallout" })).shapes[0].shape, "wedgeRectCallout");
 			assert.equal((await shapes({ query: "speech bubble" })).shapes[0].shape, "wedgeRectCallout");
 			assert.equal((await shapes({ query: "cylinder" })).shapes[0].shape, "can");
 			const star = await shapes({ query: "star", category: "starsBanners", limit: 3 });

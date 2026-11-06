@@ -35,7 +35,7 @@ The text is centered. Its color is the style's text color (light on the default 
 
 ## Presets
 
-`shape` takes DrawingML's own preset names (ECMA-376 `ST_ShapeType`), as PowerPoint writes them: `rect`, `roundRect`, `ellipse`, `triangle`, `rightArrow`, `chevron`, `wedgeRectCallout`, `flowChartDecision` and the rest. The [preset table](#preset-table) lists all 187 with their Aspose `ShapeType` names, default frames and adjust values. A name that is not a preset is an `opf/schema` error with the nearest names as fixes.
+`shape` takes DrawingML's own preset names (ECMA-376 `ST_ShapeType`), as PowerPoint writes them: `rect`, `roundRect`, `ellipse`, `triangle`, `rightArrow`, `chevron`, `wedgeRectCallout`, `flowChartDecision` and the rest. The [preset table](#preset-table) lists all 187 with their default frames and adjust values. A name that is not a preset is an `opf/schema` error with the nearest names as fixes.
 
 ### Adjust values
 
@@ -143,7 +143,7 @@ The shape's name in PowerPoint is `OPF shape <path>`, from the block's place in 
 
 The editor edits shape blocks in the playground, the workspace and the Studio (`@openpresentation/opf-editor`; every edit is one validated, undoable change through the session, so Undo, Redo and proposals work as for any other edit):
 
-- **Shape picker.** **Insert shape** in the playground (and **Add content > Shape**) opens PowerPoint's gallery: Lines, Rectangles, Basic Shapes, Block Arrows, Equation Shapes, Flowchart, Stars and Banners, Callouts and Action Buttons, a tile drawn from each preset's own geometry. The search takes the DrawingML name (`rightArrow`), the Aspose name (`RectangularCallout`) and common words (`arrow`, `callout`, `star`, `flowchart`, `speech bubble`, `cylinder`); every word must match and Enter picks the first match. **Change shape…** in the Selected shape section changes a block's preset and keeps the adjust values the new preset also has. The groups, Aspose names and search are `@openpresentation/opf/shape-catalog`; the MCP's `search_shapes` serves the same search with each preset's adjust values and a drawing.
+- **Shape picker.** **Insert shape** in the playground (and **Add content > Shape**) opens PowerPoint's gallery: Lines, Rectangles, Basic Shapes, Block Arrows, Equation Shapes, Flowchart, Stars and Banners, Callouts and Action Buttons, a tile drawn from each preset's own geometry. The search takes the DrawingML name (`rightArrow`) and common words (`arrow`, `callout`, `star`, `flowchart`, `speech bubble`, `cylinder`); every word must match and Enter picks the first match. **Change shape…** in the Selected shape section changes a block's preset and keeps the adjust values the new preset also has. The groups, Aspose names and search are `@openpresentation/opf/shape-catalog`; the MCP's `search_shapes` serves the same search with each preset's adjust values and a drawing.
 - **Adjust handles.** A selected preset shape shows its yellow handles on the slide, where `presetGeometry(...).handles` puts them (turned and mirrored with the shape). Dragging one writes `adjust` as fractions and degrees (four and two places), pinned to the handle's range, as one undo step; Escape cancels a drag; the arrow keys nudge a focused handle (Shift for more). The Adjust fields in the section take the same values by typing. A few presets report a handle range that leaves their own default out (`star24`, `star32`, `mathDivide`'s `adj2`, `leftRightRibbon`'s `adj2`, as PowerPoint's definitions do); the editor widens that range to hold the default.
 - **Every property.** The Selected shape section edits `fill` (none, color, gradient with type, angle and stops, pattern) and `opacity`, `stroke` (color or gradient, width, dash as a preset or a custom array, cap, join, miter limit, compound, alignment, start and end arrowheads, sketch), `style`, the six effects with the shadow presets, `rotate` and `flip`, `text`, `anchor`, `padding` and `textDirection`, and `alt`, `decorative`, `hidden` and `link`. Every color is a ColorRef with PowerPoint's Lighter and Darker tints (`{ color, lighten|darken }`).
 - **Overlay shapes and connectors.** **Insert shape** offers the gallery's pick **In the layout** (a block composition places) or **On the slide** (an overlay: `slide.shapes`, free `x`, `y`, `width` and `height`). A selected overlay shape shows a frame: drag its outline or the grip above it to move it, a handle to resize it (fractions of the slide, kept on the slide, four places), arrow keys on the frame to move it (Shift resizes), Escape to cancel; **Place on the slide** takes the same numbers in percent. A shape attached to a block (`at`) keeps its anchor: dragging changes the `offset` from the block's edge, resizing `at.width` and `at.height` in reference pixels, and **Free from block** turns it into fractions. **Stacking** (Bring to front, Bring forward, Send backward, Send to back) is the array order; **Delete** removes a shape and the connectors that end on it. **Connect** (the playground's toolbar, or `canvas.connect({ route, stroke })`) picks two blocks or overlay shapes on the slide (click the start, then the end; Esc cancels) and adds a connector on top, straight, elbow or curved, an arrow by default; an end with no `id` gets one in the same undo step. A selected connector's section has its route, start and end (a block or an overlay shape), connection sites and its line with arrowheads. Every one of these is one undoable change.
@@ -242,19 +242,6 @@ When `paginate` splits a slide over pages, a shape placed by fractions is on eve
 ### In core
 
 `composeSlide` returns the overlay as `SlideComposition.overlayShapes`, in draw order: overlay shapes (`kind: "shape"`, a shape block item: `path` `slides.N.shapes.I`, `box`, `shape` (a `ComposedShape`), `text`, `textStyle`, and `attachedTo` for an `at` shape) and connectors (`kind: "connector"`: `route`, `preset`, the frame `box`, `rotate`, `flipH`, `flipV`, `adjust` and `avLst`, `paths` (the route in slide coordinates, one open path with its ends for the arrowheads), `bounds`, `stroke`, and `from` and `to`, each with the `id`, the `ref` it attaches to (a composed item path, a group path or an overlay path), `target`, `site`, `point` and `angle`). `connectorRoute`, `chooseConnectorSites`, `shapeSites` and `rectSites` from `@openpresentation/opf/composition` give the same geometry to a host or an editor.
-
-### Aspose names
-
-| What | OPF | PowerPoint (DrawingML) | Aspose |
-| --- | --- | --- | --- |
-| Overlay shape | an entry of `shapes` | `p:sp` | `IAutoShape` (`ShapeCollection.AddAutoShape`) |
-| Placement | `x`, `y`, `width`, `height` | `a:xfrm a:off a:ext` | `X`, `Y`, `Width`, `Height` |
-| Connector | an entry with `connector` | `p:cxnSp` | `IConnector` (`ShapeCollection.AddConnector`) |
-| Route | `route: straight`, `elbow`, `curved` | `a:prstGeom prst="straightConnector1"`, `bentConnector2`/`3`, `curvedConnector2`/`3` | `ShapeType.StraightConnector1`, `BentConnector2`/`3`, `CurvedConnector2`/`3` |
-| Ends | `connector.from`, `connector.to` | `a:stCxn id`, `a:endCxn id` | `StartShapeConnectedTo`, `EndShapeConnectedTo` |
-| Sites | `fromSite`, `toSite` | `a:stCxn idx`, `a:endCxn idx` | `StartShapeConnectionSiteIndex`, `EndShapeConnectionSiteIndex` |
-| Elbow position | core's `adjust.adj1` | `a:avLst a:gd adj1` | `Adjustments` |
-| Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` | `LineFormat.BeginArrowheadStyle`, `EndArrowheadStyle` |
 
 ## Validation
 
@@ -381,53 +368,53 @@ file still has 187 presets and that each erratum still applies.
 
 ## Property map
 
-OPF names, the DrawingML that PowerPoint reads and writes, and Aspose.Slides names (for readers who know that API; OPF does not use them).
+OPF names and the DrawingML that PowerPoint reads and writes.
 
-| What | OPF | PowerPoint (DrawingML) | Aspose |
-| --- | --- | --- | --- |
-| Preset shape | `shape: "chevron"` (a shape block) | `a:prstGeom prst` | `ShapeType` |
-| Adjust handles | `adjust: { "adj1": 0.25 }` (fractions and degrees) | `a:avLst/a:gd` | `Adjustments` |
-| Custom outline | `path` (SVG path data in a 0 to 1 box, or with a viewBox) | `a:custGeom` | `GeometryPath`, `ShapeType.Custom` |
-| No fill | `fill: "none"` | `a:noFill` | `FillType.NoFill` |
-| Solid fill | `fill: <ColorRef>` | `a:solidFill` | `SolidFillColor` |
-| Opacity | `opacity` 0 to 1 (fill), or 8-digit hex | `a:alpha` | color alpha |
-| Gradient | `fill: { gradient: { type, angle, stops } }` | `a:gradFill` (`a:lin`, `a:path`) | `GradientFormat` |
-| Pattern | `fill: { pattern: { preset, foregroundColor, backgroundColor } }` | `a:pattFill` | `PatternFormat` |
-| Picture inside a shape | an image block's `shape` (every preset) | `a:blipFill` in `a:prstGeom` | `PictureFillFormat` |
-| Fill rotates with shape | always on | `rotWithShape="1"` | `RotateWithShape` |
-| Lighter or darker color | `{ color, lighten }` / `{ color, darken }` | `a:lumMod`/`a:lumOff` | color transforms |
-| Stroke | `stroke` (shapes and pictures) | `a:ln` | `LineFormat` |
-| Stroke color | `stroke.color` or `stroke.gradient` | `a:ln/a:solidFill`, `a:ln/a:gradFill` | `LineFormat.FillFormat` |
-| Stroke width | `stroke.width` | `a:ln w` | `Width` |
-| Dash | `stroke.dash` (preset or array) | `a:prstDash`, `a:custDash` | `DashStyle`, `CustomDashPattern` |
-| Cap | `stroke.cap` | `a:ln cap` | `CapStyle` |
-| Join | `stroke.join`, `stroke.miterLimit` | `a:miter lim`, `a:round`, `a:bevel` | `JoinStyle`, `MiterLimit` |
-| Compound | `stroke.compound` | `a:ln cmpd` | `Style` |
-| Alignment | `stroke.align` | `a:ln algn` | `Alignment` |
-| Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` | `BeginArrowhead*`, `EndArrowhead*` |
-| Hand-drawn | `stroke.sketch` | `ask:lineSketchStyleProps` | `SketchFormat` |
-| Theme style | `style` | `p:style` | `ShapeStyle` |
-| Outer shadow | `shadow` | `a:outerShdw` | `OuterShadowEffect` |
-| Inner shadow | `innerShadow` | `a:innerShdw` | `InnerShadowEffect` |
-| Glow | `glow` | `a:glow` | `GlowEffect` |
-| Soft edges | `softEdge` | `a:softEdge` | `SoftEdgeEffect` |
-| Reflection | `reflection` | `a:reflection` | `ReflectionEffect` |
-| Blur | `blur` | `a:blur` | `BlurEffect` |
-| Rotation | `rotate` | `a:xfrm rot` | `Rotation` |
-| Flip | `flip` | `flipH`, `flipV` | `FlipH`, `FlipV` |
-| Overlay placement | slide-level `shapes: [...]` placed by fractions or attached to a block (SH-04) | `a:xfrm a:off a:ext` | `X`, `Y`, `Width`, `Height` |
-| Stacking | array order | shape tree order | `ZOrderPosition` |
-| Text | `text` | `p:txBody` | `TextFrame` |
-| Vertical anchor | `anchor` | `a:bodyPr anchor` | `AnchoringType` |
-| Margins | `padding` | `lIns`, `tIns`, `rIns`, `bIns` | `MarginLeft` and others |
-| Vertical text | `textDirection` | `a:bodyPr vert` | `TextVerticalType` |
-| Alt text | `alt` | `p:cNvPr descr` | `AlternativeText` |
-| Decorative | `decorative: true` | `adec:decorative` | `IsDecorative` |
-| Name | from the block's path | `p:cNvPr name` | `Name` |
-| Hidden | `hidden: true` | `p:cNvPr hidden` | `Hidden` |
-| Click link | `link` | `a:hlinkClick` | `HyperlinkClick` |
-| Connector | `connector: { from, to, route, stroke }` among slide-level `shapes` (SH-04) | `p:cxnSp`, `a:stCxn`, `a:endCxn` | `Connector`, `ConnectorType` |
-| Connection site | the nearest facing site; `fromSite`/`toSite` to override (SH-04) | `idx` | `StartShapeConnectionSiteIndex` |
+| What | OPF | PowerPoint (DrawingML) |
+| --- | --- | --- |
+| Preset shape | `shape: "chevron"` (a shape block) | `a:prstGeom prst` |
+| Adjust handles | `adjust: { "adj1": 0.25 }` (fractions and degrees) | `a:avLst/a:gd` |
+| Custom outline | `path` (SVG path data in a 0 to 1 box, or with a viewBox) | `a:custGeom` |
+| No fill | `fill: "none"` | `a:noFill` |
+| Solid fill | `fill: <ColorRef>` | `a:solidFill` |
+| Opacity | `opacity` 0 to 1 (fill), or 8-digit hex | `a:alpha` |
+| Gradient | `fill: { gradient: { type, angle, stops } }` | `a:gradFill` (`a:lin`, `a:path`) |
+| Pattern | `fill: { pattern: { preset, foregroundColor, backgroundColor } }` | `a:pattFill` |
+| Picture inside a shape | an image block's `shape` (every preset) | `a:blipFill` in `a:prstGeom` |
+| Fill rotates with shape | always on | `rotWithShape="1"` |
+| Lighter or darker color | `{ color, lighten }` / `{ color, darken }` | `a:lumMod`/`a:lumOff` |
+| Stroke | `stroke` (shapes and pictures) | `a:ln` |
+| Stroke color | `stroke.color` or `stroke.gradient` | `a:ln/a:solidFill`, `a:ln/a:gradFill` |
+| Stroke width | `stroke.width` | `a:ln w` |
+| Dash | `stroke.dash` (preset or array) | `a:prstDash`, `a:custDash` |
+| Cap | `stroke.cap` | `a:ln cap` |
+| Join | `stroke.join`, `stroke.miterLimit` | `a:miter lim`, `a:round`, `a:bevel` |
+| Compound | `stroke.compound` | `a:ln cmpd` |
+| Alignment | `stroke.align` | `a:ln algn` |
+| Arrowheads | `stroke.start`, `stroke.end` | `a:headEnd`, `a:tailEnd` |
+| Hand-drawn | `stroke.sketch` | `ask:lineSketchStyleProps` |
+| Theme style | `style` | `p:style` |
+| Outer shadow | `shadow` | `a:outerShdw` |
+| Inner shadow | `innerShadow` | `a:innerShdw` |
+| Glow | `glow` | `a:glow` |
+| Soft edges | `softEdge` | `a:softEdge` |
+| Reflection | `reflection` | `a:reflection` |
+| Blur | `blur` | `a:blur` |
+| Rotation | `rotate` | `a:xfrm rot` |
+| Flip | `flip` | `flipH`, `flipV` |
+| Overlay placement | slide-level `shapes: [...]` placed by fractions or attached to a block (SH-04) | `a:xfrm a:off a:ext` |
+| Stacking | array order | shape tree order |
+| Text | `text` | `p:txBody` |
+| Vertical anchor | `anchor` | `a:bodyPr anchor` |
+| Margins | `padding` | `lIns`, `tIns`, `rIns`, `bIns` |
+| Vertical text | `textDirection` | `a:bodyPr vert` |
+| Alt text | `alt` | `p:cNvPr descr` |
+| Decorative | `decorative: true` | `adec:decorative` |
+| Name | from the block's path | `p:cNvPr name` |
+| Hidden | `hidden: true` | `p:cNvPr hidden` |
+| Click link | `link` | `a:hlinkClick` |
+| Connector | `connector: { from, to, route, stroke }` among slide-level `shapes` (SH-04) | `p:cxnSp`, `a:stCxn`, `a:endCxn` |
+| Connection site | the nearest facing site; `fromSite`/`toSite` to override (SH-04) | `idx` |
 
 ### Excluded on purpose
 
@@ -447,192 +434,192 @@ These DrawingML features are left out of OPF; PPTX import reports them as findin
 
 Default frame is the proportion a shape takes when the block sets no `aspectRatio`. Adjust values are OPF units (fractions, degrees where marked), with their handle's range at a square shape; "any" has no handle limit.
 
-| Preset | Aspose `ShapeType` | Default frame | Adjust values: default (range) |
-|---|---|---|---|
-| `accentBorderCallout1` | `Callout1WithBorderAndAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
-| `accentBorderCallout2` | `Callout2WithBorderAndAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
-| `accentBorderCallout3` | `Callout3WithBorderAndAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
-| `accentCallout1` | `Callout1WithAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
-| `accentCallout2` | `Callout2WithAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
-| `accentCallout3` | `Callout3WithAccent` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
-| `actionButtonBackPrevious` | `BackOrPreviousButton` | 1:1 | none |
-| `actionButtonBeginning` | `BeginningButton` | 1:1 | none |
-| `actionButtonBlank` | `BlankButton` | 1:1 | none |
-| `actionButtonDocument` | `DocumentButton` | 1:1 | none |
-| `actionButtonEnd` | `EndButton` | 1:1 | none |
-| `actionButtonForwardNext` | `ForwardOrNextButton` | 1:1 | none |
-| `actionButtonHelp` | `HelpButton` | 1:1 | none |
-| `actionButtonHome` | `HomeButton` | 1:1 | none |
-| `actionButtonInformation` | `InformationButton` | 1:1 | none |
-| `actionButtonMovie` | `MovieButton` | 1:1 | none |
-| `actionButtonReturn` | `ReturnButton` | 1:1 | none |
-| `actionButtonSound` | `SoundButton` | 1:1 | none |
-| `arc` | `Arc` | 1:1 | `adj1` 270° (0 to 359.99998), `adj2` 0° (0 to 359.99998) |
-| `bentArrow` | `BentArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.4375 (0 to 0.75) |
-| `bentConnector2` | `BentConnector2` | 2:1 | none |
-| `bentConnector3` | `BentConnector3` | 2:1 | `adj1` 0.5 (any) |
-| `bentConnector4` | `BentConnector4` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any) |
-| `bentConnector5` | `BentConnector5` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any), `adj3` 0.5 (any) |
-| `bentUpArrow` | `BentUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5) |
-| `bevel` | `Bevel` | 1:1 | `adj` 0.125 (0 to 0.5) |
-| `blockArc` | `BlockArc` | 1:1 | `adj1` 180° (0 to 359.99998), `adj2` 0° (0 to 359.99998), `adj3` 0.25 (0 to 0.5) |
-| `borderCallout1` | `Callout1WithBorder` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
-| `borderCallout2` | `Callout2WithBorder` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
-| `borderCallout3` | `Callout3WithBorder` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
-| `bracePair` | `BracePair` | 2:1 | `adj` 0.08333 (0 to 0.25) |
-| `bracketPair` | `BracketPair` | 2:1 | `adj` 0.16667 (0 to 0.5) |
-| `callout1` | `Callout1` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
-| `callout2` | `Callout2` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
-| `callout3` | `Callout3` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
-| `can` | `Can` | 1:2 | `adj` 0.25 (0 to 0.5) |
-| `chartPlus` | `ChartPlus` | 1:1 | none |
-| `chartStar` | `ChartStar` | 1:1 | none |
-| `chartX` | `ChartX` | 1:1 | none |
-| `chevron` | `Chevron` | 2:1 | `adj` 0.5 (0 to 1) |
-| `chord` | `Chord` | 1:1 | `adj1` 45° (0 to 359.99998), `adj2` 270° (0 to 359.99998) |
-| `circularArrow` | `CircularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` 19.03865° (0 to 56.44269), `adj3` 340.96135° (0 to 359.99998), `adj4` 180° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
-| `cloud` | `Cloud` | 1:1 | none |
-| `cloudCallout` | `CloudCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
-| `corner` | `Corner` | 1:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `cornerTabs` | `CornerTabs` | 1:1 | none |
-| `cube` | `Cube` | 1:1 | `adj` 0.25 (0 to 1) |
-| `curvedConnector2` | `CurvedConnector2` | 2:1 | none |
-| `curvedConnector3` | `CurvedConnector3` | 2:1 | `adj1` 0.5 (any) |
-| `curvedConnector4` | `CurvedConnector4` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any) |
-| `curvedConnector5` | `CurvedConnector5` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any), `adj3` 0.5 (any) |
-| `curvedDownArrow` | `CurvedDownArrow` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
-| `curvedLeftArrow` | `CurvedLeftArrow` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
-| `curvedRightArrow` | `CurvedRightArrow` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
-| `curvedUpArrow` | `CurvedUpArrow` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
-| `decagon` | `Decagon` | 1:1 | `vf` 1.05146 (any) |
-| `diagStripe` | `DiagonalStripe` | 1:1 | `adj` 0.5 (0 to 1) |
-| `diamond` | `Diamond` | 1:1 | none |
-| `dodecagon` | `Dodecagon` | 1:1 | none |
-| `donut` | `Donut` | 1:1 | `adj` 0.25 (0 to 0.5) |
-| `doubleWave` | `DoubleWave` | 2:1 | `adj1` 0.0625 (0 to 0.125), `adj2` 0 (-0.1 to 0.1) |
-| `downArrow` | `DownArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `downArrowCallout` | `CalloutDownArrow` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
-| `ellipse` | `Ellipse` | 1:1 | none |
-| `ellipseRibbon` | `EllipseRibbon` | 2:1 | `adj1` 0.25 (0 to 1), `adj2` 0.5 (0.25 to 0.75), `adj3` 0.125 (0 to 0.25) |
-| `ellipseRibbon2` | `EllipseRibbon2` | 2:1 | `adj1` 0.25 (0 to 1), `adj2` 0.5 (0.25 to 1), `adj3` 0.125 (0 to 0.25) |
-| `flowChartAlternateProcess` | `FlowChartAlternateProcess` | 3:2 | none |
-| `flowChartCollate` | `FlowChartCollate` | 1:1 | none |
-| `flowChartConnector` | `FlowChartConnector` | 1:1 | none |
-| `flowChartDecision` | `FlowChartDecision` | 1:1 | none |
-| `flowChartDelay` | `FlowChartDelay` | 3:2 | none |
-| `flowChartDisplay` | `FlowChartDisplay` | 3:2 | none |
-| `flowChartDocument` | `FlowChartDocument` | 3:2 | none |
-| `flowChartExtract` | `FlowChartExtract` | 1:1 | none |
-| `flowChartInputOutput` | `FlowChartInputOutput` | 3:2 | none |
-| `flowChartInternalStorage` | `FlowChartInternalStorage` | 3:2 | none |
-| `flowChartMagneticDisk` | `FlowChartMagneticDisk` | 3:2 | none |
-| `flowChartMagneticDrum` | `FlowChartMagneticDrum` | 3:2 | none |
-| `flowChartMagneticTape` | `FlowChartMagneticTape` | 3:2 | none |
-| `flowChartManualInput` | `FlowChartManualInput` | 3:2 | none |
-| `flowChartManualOperation` | `FlowChartManualOperation` | 3:2 | none |
-| `flowChartMerge` | `FlowChartMerge` | 1:1 | none |
-| `flowChartMultidocument` | `FlowChartMultidocument` | 3:2 | none |
-| `flowChartOfflineStorage` | `FlowChartOfflineStorage` | 1:1 | none |
-| `flowChartOffpageConnector` | `FlowChartOffpageConnector` | 3:2 | none |
-| `flowChartOnlineStorage` | `FlowChartOnlineStorage` | 3:2 | none |
-| `flowChartOr` | `FlowChartOr` | 1:1 | none |
-| `flowChartPredefinedProcess` | `FlowChartPredefinedProcess` | 3:2 | none |
-| `flowChartPreparation` | `FlowChartPreparation` | 3:2 | none |
-| `flowChartProcess` | `FlowChartProcess` | 3:2 | none |
-| `flowChartPunchedCard` | `FlowChartPunchedCard` | 3:2 | none |
-| `flowChartPunchedTape` | `FlowChartPunchedTape` | 2:1 | none |
-| `flowChartSort` | `FlowChartSort` | 1:1 | none |
-| `flowChartSummingJunction` | `FlowChartSummingJunction` | 1:1 | none |
-| `flowChartTerminator` | `FlowChartTerminator` | 2:1 | none |
-| `foldedCorner` | `FoldedCorner` | 1:1 | `adj` 0.16667 (0 to 0.5) |
-| `frame` | `Frame` | 1:1 | `adj1` 0.125 (0 to 0.5) |
-| `funnel` | `Funnel` | 1:1 | none |
-| `gear6` | `Gear6` | 1:1 | `adj1` 0.15 (0 to 0.2), `adj2` 0.03526 (0 to 0.05358) |
-| `gear9` | `Gear9` | 1:1 | `adj1` 0.1 (0 to 0.2), `adj2` 0.01763 (0 to 0.02679) |
-| `halfFrame` | `HalfFrame` | 1:1 | `adj1` 0.33333 (0 to 0.66667), `adj2` 0.33333 (0 to 1) |
-| `heart` | `Heart` | 1:1 | none |
-| `heptagon` | `Heptagon` | 1:1 | `hf` 1.02572 (any), `vf` 1.0521 (any) |
-| `hexagon` | `Hexagon` | 1:1 | `adj` 0.25 (0 to 0.5), `vf` 1.1547 (any) |
-| `homePlate` | `HomePlate` | 2:1 | `adj` 0.5 (0 to 1) |
-| `horizontalScroll` | `HorizontalScroll` | 2:1 | `adj` 0.125 (0 to 0.25) |
-| `irregularSeal1` | `IrregularSeal1` | 1:1 | none |
-| `irregularSeal2` | `IrregularSeal2` | 1:1 | none |
-| `leftArrow` | `LeftArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `leftArrowCallout` | `CalloutLeftArrow` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
-| `leftBrace` | `LeftBrace` | 1:2 | `adj1` 0.08333 (0 to 0.25), `adj2` 0.5 (0 to 1) |
-| `leftBracket` | `LeftBracket` | 1:2 | `adj` 0.08333 (0 to 0.5) |
-| `leftCircularArrow` | `LeftCircularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` -19.03865° (-56.44269 to 0), `adj3` 19.03865° (0 to 359.99998), `adj4` 180° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
-| `leftRightArrow` | `LeftRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.5) |
-| `leftRightArrowCallout` | `CalloutLeftRightArrow` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.48123 (0 to 0.5) |
-| `leftRightCircularArrow` | `LeftRightCircularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` 19.03865° (0 to 56.44269), `adj3` 340.96135° (0 to 359.99998), `adj4` 199.03865° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
-| `leftRightRibbon` | `LeftRightRibbon` | 2:1 | `adj1` 0.5 (0 to 0.83333), `adj2` 0.5 (0 to 0.46875), `adj3` 0.16667 (0 to 0.33333) |
-| `leftRightUpArrow` | `LeftRightUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.25) |
-| `leftUpArrow` | `LeftUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5) |
-| `lightningBolt` | `LightningBolt` | 1:1 | none |
-| `line` | `Line` | 2:1 | none |
-| `lineInv` | `LineInverse` | 2:1 | none |
-| `mathDivide` | `MathDivide` | 1:1 | `adj1` 0.2352 (0.01 to 0.36745), `adj2` 0.0588 (0 to 0.0293), `adj3` 0.1176 (0.01 to 0.12493) |
-| `mathEqual` | `MathEqual` | 1:1 | `adj1` 0.2352 (0 to 0.36745), `adj2` 0.1176 (0 to 0.5296) |
-| `mathMinus` | `MathMinus` | 1:1 | `adj1` 0.2352 (0 to 1) |
-| `mathMultiply` | `MathMultiply` | 1:1 | `adj1` 0.2352 (0 to 0.51965) |
-| `mathNotEqual` | `MathNotEqual` | 1:1 | `adj1` 0.2352 (0 to 0.5), `adj2` 110° (70 to 110), `adj3` 0.1176 (0 to 0.5296) |
-| `mathPlus` | `MathPlus` | 1:1 | `adj1` 0.2352 (0 to 0.7349) |
-| `moon` | `Moon` | 1:1 | `adj` 0.5 (0 to 0.875) |
-| `nonIsoscelesTrapezoid` | `NonIsoscelesTrapezoid` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5) |
-| `noSmoking` | `NoSmoking` | 1:1 | `adj` 0.1875 (0 to 0.5) |
-| `notchedRightArrow` | `NotchedRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `octagon` | `Octagon` | 1:1 | `adj` 0.29289 (0 to 0.5) |
-| `parallelogram` | `Parallelogram` | 3:2 | `adj` 0.25 (0 to 1) |
-| `pentagon` | `Pentagon` | 1:1 | `hf` 1.05146 (any), `vf` 1.10557 (any) |
-| `pie` | `Pie` | 1:1 | `adj1` 0° (0 to 359.99998), `adj2` 270° (0 to 359.99998) |
-| `pieWedge` | `PieWedge` | 1:1 | none |
-| `plaque` | `Plaque` | 3:2 | `adj` 0.16667 (0 to 0.5) |
-| `plaqueTabs` | `PlaqueTabs` | 1:1 | none |
-| `plus` | `Plus` | 1:1 | `adj` 0.25 (0 to 0.5) |
-| `quadArrow` | `QuadArrow` | 1:1 | `adj1` 0.225 (0 to 0.45), `adj2` 0.225 (0 to 0.5), `adj3` 0.225 (0 to 0.275) |
-| `quadArrowCallout` | `CalloutQuadArrow` | 1:1 | `adj1` 0.18515 (0 to 0.3703), `adj2` 0.18515 (0 to 0.5), `adj3` 0.18515 (0 to 0.31485), `adj4` 0.48123 (0.18515 to 0.6297) |
-| `rect` | `Rectangle` | 3:2 | none |
-| `ribbon` | `Ribbon` | 2:1 | `adj1` 0.16667 (0 to 0.33333), `adj2` 0.5 (0.25 to 0.75) |
-| `ribbon2` | `Ribbon2` | 2:1 | `adj1` 0.16667 (0 to 0.33333), `adj2` 0.5 (0.25 to 0.75) |
-| `rightArrow` | `RightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `rightArrowCallout` | `CalloutRightArrow` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
-| `rightBrace` | `RightBrace` | 1:2 | `adj1` 0.08333 (0 to 0.25), `adj2` 0.5 (0 to 1) |
-| `rightBracket` | `RightBracket` | 1:2 | `adj` 0.08333 (0 to 0.5) |
-| `round1Rect` | `OneRoundCornerRectangle` | 3:2 | `adj` 0.16667 (0 to 0.5) |
-| `round2DiagRect` | `TwoDiagonalRoundCornerRectangle` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
-| `round2SameRect` | `TwoSamesideRoundCornerRectangle` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
-| `roundRect` | `RoundCornerRectangle` | 3:2 | `adj` 0.16667 (0 to 0.5) |
-| `rtTriangle` | `RightTriangle` | 1:1 | none |
-| `smileyFace` | `SmileyFace` | 1:1 | `adj` 0.04653 (-0.04653 to 0.04653) |
-| `snip1Rect` | `OneSnipCornerRectangle` | 3:2 | `adj` 0.16667 (0 to 0.5) |
-| `snip2DiagRect` | `TwoDiagonalSnipCornerRectangle` | 3:2 | `adj1` 0 (0 to 0.5), `adj2` 0.16667 (0 to 0.5) |
-| `snip2SameRect` | `TwoSamesideSnipCornerRectangle` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
-| `snipRoundRect` | `OneSnipOneRoundCornerRectangle` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0.16667 (0 to 0.5) |
-| `squareTabs` | `SquareTabs` | 1:1 | none |
-| `star10` | `TenPointedStar` | 1:1 | `adj` 0.42533 (0 to 0.5), `hf` 1.05146 (any) |
-| `star12` | `TwelvePointedStar` | 1:1 | `adj` 0.375 (0 to 0.5) |
-| `star16` | `SixteenPointedStar` | 1:1 | `adj` 0.375 (0 to 0.5) |
-| `star24` | `TwentyFourPointedStar` | 1:1 | `adj` 0.375 (0 to 0.0005) |
-| `star32` | `ThirtyTwoPointedStar` | 1:1 | `adj` 0.375 (0 to 0.0005) |
-| `star4` | `FourPointedStar` | 1:1 | `adj` 0.125 (0 to 0.5) |
-| `star5` | `FivePointedStar` | 1:1 | `adj` 0.19098 (0 to 0.5), `hf` 1.05146 (any), `vf` 1.10557 (any) |
-| `star6` | `SixPointedStar` | 1:1 | `adj` 0.28868 (0 to 0.5), `hf` 1.1547 (any) |
-| `star7` | `SevenPointedStar` | 1:1 | `adj` 0.34601 (0 to 0.5), `hf` 1.02572 (any), `vf` 1.0521 (any) |
-| `star8` | `EightPointedStar` | 1:1 | `adj` 0.375 (0 to 0.5) |
-| `straightConnector1` | `StraightConnector1` | 2:1 | none |
-| `stripedRightArrow` | `StripedRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.84375) |
-| `sun` | `Sun` | 1:1 | `adj` 0.25 (0.125 to 0.46875) |
-| `swooshArrow` | `SwooshArrow` | 2:1 | `adj1` 0.25 (0.00001 to 0.75), `adj2` 0.16667 (0 to 0.7) |
-| `teardrop` | `Teardrop` | 1:1 | `adj` 1 (0 to 2) |
-| `trapezoid` | `Trapezoid` | 3:2 | `adj` 0.25 (0 to 0.5) |
-| `triangle` | `Triangle` | 1:1 | `adj` 0.5 (0 to 1) |
-| `upArrowCallout` | `CalloutUpArrow` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
-| `upDownArrow` | `UpDownArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.5) |
-| `upArrow` | `UpArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
-| `upDownArrowCallout` | `CalloutUpDownArrow` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.48123 (0 to 0.5) |
-| `uturnArrow` | `UTurnArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.25), `adj3` 0.25 (0 to 0.75), `adj4` 0.4375 (0 to 0.4375), `adj5` 0.75 (0.5 to 1) |
-| `verticalScroll` | `VerticalScroll` | 1:2 | `adj` 0.125 (0 to 0.25) |
-| `wave` | `Wave` | 2:1 | `adj1` 0.125 (0 to 0.2), `adj2` 0 (-0.1 to 0.1) |
-| `wedgeEllipseCallout` | `OvalCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
-| `wedgeRectCallout` | `RectangularCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
-| `wedgeRoundRectCallout` | `RoundedRectangularCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any), `adj3` 0.16667 (any) |
+| Preset | Default frame | Adjust values: default (range) |
+|---|---|---|
+| `accentBorderCallout1` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
+| `accentBorderCallout2` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
+| `accentBorderCallout3` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
+| `accentCallout1` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
+| `accentCallout2` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
+| `accentCallout3` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
+| `actionButtonBackPrevious` | 1:1 | none |
+| `actionButtonBeginning` | 1:1 | none |
+| `actionButtonBlank` | 1:1 | none |
+| `actionButtonDocument` | 1:1 | none |
+| `actionButtonEnd` | 1:1 | none |
+| `actionButtonForwardNext` | 1:1 | none |
+| `actionButtonHelp` | 1:1 | none |
+| `actionButtonHome` | 1:1 | none |
+| `actionButtonInformation` | 1:1 | none |
+| `actionButtonMovie` | 1:1 | none |
+| `actionButtonReturn` | 1:1 | none |
+| `actionButtonSound` | 1:1 | none |
+| `arc` | 1:1 | `adj1` 270° (0 to 359.99998), `adj2` 0° (0 to 359.99998) |
+| `bentArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.4375 (0 to 0.75) |
+| `bentConnector2` | 2:1 | none |
+| `bentConnector3` | 2:1 | `adj1` 0.5 (any) |
+| `bentConnector4` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any) |
+| `bentConnector5` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any), `adj3` 0.5 (any) |
+| `bentUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5) |
+| `bevel` | 1:1 | `adj` 0.125 (0 to 0.5) |
+| `blockArc` | 1:1 | `adj1` 180° (0 to 359.99998), `adj2` 0° (0 to 359.99998), `adj3` 0.25 (0 to 0.5) |
+| `borderCallout1` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
+| `borderCallout2` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
+| `borderCallout3` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
+| `bracePair` | 2:1 | `adj` 0.08333 (0 to 0.25) |
+| `bracketPair` | 2:1 | `adj` 0.16667 (0 to 0.5) |
+| `callout1` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 1.125 (any), `adj4` -0.38333 (any) |
+| `callout2` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1.125 (any), `adj6` -0.46667 (any) |
+| `callout3` | 3:2 | `adj1` 0.1875 (any), `adj2` -0.08333 (any), `adj3` 0.1875 (any), `adj4` -0.16667 (any), `adj5` 1 (any), `adj6` -0.16667 (any), `adj7` 1.12963 (any), `adj8` -0.08333 (any) |
+| `can` | 1:2 | `adj` 0.25 (0 to 0.5) |
+| `chartPlus` | 1:1 | none |
+| `chartStar` | 1:1 | none |
+| `chartX` | 1:1 | none |
+| `chevron` | 2:1 | `adj` 0.5 (0 to 1) |
+| `chord` | 1:1 | `adj1` 45° (0 to 359.99998), `adj2` 270° (0 to 359.99998) |
+| `circularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` 19.03865° (0 to 56.44269), `adj3` 340.96135° (0 to 359.99998), `adj4` 180° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
+| `cloud` | 1:1 | none |
+| `cloudCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
+| `corner` | 1:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `cornerTabs` | 1:1 | none |
+| `cube` | 1:1 | `adj` 0.25 (0 to 1) |
+| `curvedConnector2` | 2:1 | none |
+| `curvedConnector3` | 2:1 | `adj1` 0.5 (any) |
+| `curvedConnector4` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any) |
+| `curvedConnector5` | 2:1 | `adj1` 0.5 (any), `adj2` 0.5 (any), `adj3` 0.5 (any) |
+| `curvedDownArrow` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
+| `curvedLeftArrow` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
+| `curvedRightArrow` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
+| `curvedUpArrow` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.5 (0 to 0.5), `adj3` 0.25 (0 to 0.91652) |
+| `decagon` | 1:1 | `vf` 1.05146 (any) |
+| `diagStripe` | 1:1 | `adj` 0.5 (0 to 1) |
+| `diamond` | 1:1 | none |
+| `dodecagon` | 1:1 | none |
+| `donut` | 1:1 | `adj` 0.25 (0 to 0.5) |
+| `doubleWave` | 2:1 | `adj1` 0.0625 (0 to 0.125), `adj2` 0 (-0.1 to 0.1) |
+| `downArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `downArrowCallout` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
+| `ellipse` | 1:1 | none |
+| `ellipseRibbon` | 2:1 | `adj1` 0.25 (0 to 1), `adj2` 0.5 (0.25 to 0.75), `adj3` 0.125 (0 to 0.25) |
+| `ellipseRibbon2` | 2:1 | `adj1` 0.25 (0 to 1), `adj2` 0.5 (0.25 to 1), `adj3` 0.125 (0 to 0.25) |
+| `flowChartAlternateProcess` | 3:2 | none |
+| `flowChartCollate` | 1:1 | none |
+| `flowChartConnector` | 1:1 | none |
+| `flowChartDecision` | 1:1 | none |
+| `flowChartDelay` | 3:2 | none |
+| `flowChartDisplay` | 3:2 | none |
+| `flowChartDocument` | 3:2 | none |
+| `flowChartExtract` | 1:1 | none |
+| `flowChartInputOutput` | 3:2 | none |
+| `flowChartInternalStorage` | 3:2 | none |
+| `flowChartMagneticDisk` | 3:2 | none |
+| `flowChartMagneticDrum` | 3:2 | none |
+| `flowChartMagneticTape` | 3:2 | none |
+| `flowChartManualInput` | 3:2 | none |
+| `flowChartManualOperation` | 3:2 | none |
+| `flowChartMerge` | 1:1 | none |
+| `flowChartMultidocument` | 3:2 | none |
+| `flowChartOfflineStorage` | 1:1 | none |
+| `flowChartOffpageConnector` | 3:2 | none |
+| `flowChartOnlineStorage` | 3:2 | none |
+| `flowChartOr` | 1:1 | none |
+| `flowChartPredefinedProcess` | 3:2 | none |
+| `flowChartPreparation` | 3:2 | none |
+| `flowChartProcess` | 3:2 | none |
+| `flowChartPunchedCard` | 3:2 | none |
+| `flowChartPunchedTape` | 2:1 | none |
+| `flowChartSort` | 1:1 | none |
+| `flowChartSummingJunction` | 1:1 | none |
+| `flowChartTerminator` | 2:1 | none |
+| `foldedCorner` | 1:1 | `adj` 0.16667 (0 to 0.5) |
+| `frame` | 1:1 | `adj1` 0.125 (0 to 0.5) |
+| `funnel` | 1:1 | none |
+| `gear6` | 1:1 | `adj1` 0.15 (0 to 0.2), `adj2` 0.03526 (0 to 0.05358) |
+| `gear9` | 1:1 | `adj1` 0.1 (0 to 0.2), `adj2` 0.01763 (0 to 0.02679) |
+| `halfFrame` | 1:1 | `adj1` 0.33333 (0 to 0.66667), `adj2` 0.33333 (0 to 1) |
+| `heart` | 1:1 | none |
+| `heptagon` | 1:1 | `hf` 1.02572 (any), `vf` 1.0521 (any) |
+| `hexagon` | 1:1 | `adj` 0.25 (0 to 0.5), `vf` 1.1547 (any) |
+| `homePlate` | 2:1 | `adj` 0.5 (0 to 1) |
+| `horizontalScroll` | 2:1 | `adj` 0.125 (0 to 0.25) |
+| `irregularSeal1` | 1:1 | none |
+| `irregularSeal2` | 1:1 | none |
+| `leftArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `leftArrowCallout` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
+| `leftBrace` | 1:2 | `adj1` 0.08333 (0 to 0.25), `adj2` 0.5 (0 to 1) |
+| `leftBracket` | 1:2 | `adj` 0.08333 (0 to 0.5) |
+| `leftCircularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` -19.03865° (-56.44269 to 0), `adj3` 19.03865° (0 to 359.99998), `adj4` 180° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
+| `leftRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.5) |
+| `leftRightArrowCallout` | 2:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.48123 (0 to 0.5) |
+| `leftRightCircularArrow` | 1:1 | `adj1` 0.125 (0 to 0.25), `adj2` 19.03865° (0 to 56.44269), `adj3` 340.96135° (0 to 359.99998), `adj4` 199.03865° (0 to 359.99998), `adj5` 0.125 (0 to 0.25) |
+| `leftRightRibbon` | 2:1 | `adj1` 0.5 (0 to 0.83333), `adj2` 0.5 (0 to 0.46875), `adj3` 0.16667 (0 to 0.33333) |
+| `leftRightUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.25) |
+| `leftUpArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5) |
+| `lightningBolt` | 1:1 | none |
+| `line` | 2:1 | none |
+| `lineInv` | 2:1 | none |
+| `mathDivide` | 1:1 | `adj1` 0.2352 (0.01 to 0.36745), `adj2` 0.0588 (0 to 0.0293), `adj3` 0.1176 (0.01 to 0.12493) |
+| `mathEqual` | 1:1 | `adj1` 0.2352 (0 to 0.36745), `adj2` 0.1176 (0 to 0.5296) |
+| `mathMinus` | 1:1 | `adj1` 0.2352 (0 to 1) |
+| `mathMultiply` | 1:1 | `adj1` 0.2352 (0 to 0.51965) |
+| `mathNotEqual` | 1:1 | `adj1` 0.2352 (0 to 0.5), `adj2` 110° (70 to 110), `adj3` 0.1176 (0 to 0.5296) |
+| `mathPlus` | 1:1 | `adj1` 0.2352 (0 to 0.7349) |
+| `moon` | 1:1 | `adj` 0.5 (0 to 0.875) |
+| `nonIsoscelesTrapezoid` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5) |
+| `noSmoking` | 1:1 | `adj` 0.1875 (0 to 0.5) |
+| `notchedRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `octagon` | 1:1 | `adj` 0.29289 (0 to 0.5) |
+| `parallelogram` | 3:2 | `adj` 0.25 (0 to 1) |
+| `pentagon` | 1:1 | `hf` 1.05146 (any), `vf` 1.10557 (any) |
+| `pie` | 1:1 | `adj1` 0° (0 to 359.99998), `adj2` 270° (0 to 359.99998) |
+| `pieWedge` | 1:1 | none |
+| `plaque` | 3:2 | `adj` 0.16667 (0 to 0.5) |
+| `plaqueTabs` | 1:1 | none |
+| `plus` | 1:1 | `adj` 0.25 (0 to 0.5) |
+| `quadArrow` | 1:1 | `adj1` 0.225 (0 to 0.45), `adj2` 0.225 (0 to 0.5), `adj3` 0.225 (0 to 0.275) |
+| `quadArrowCallout` | 1:1 | `adj1` 0.18515 (0 to 0.3703), `adj2` 0.18515 (0 to 0.5), `adj3` 0.18515 (0 to 0.31485), `adj4` 0.48123 (0.18515 to 0.6297) |
+| `rect` | 3:2 | none |
+| `ribbon` | 2:1 | `adj1` 0.16667 (0 to 0.33333), `adj2` 0.5 (0.25 to 0.75) |
+| `ribbon2` | 2:1 | `adj1` 0.16667 (0 to 0.33333), `adj2` 0.5 (0.25 to 0.75) |
+| `rightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `rightArrowCallout` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
+| `rightBrace` | 1:2 | `adj1` 0.08333 (0 to 0.25), `adj2` 0.5 (0 to 1) |
+| `rightBracket` | 1:2 | `adj` 0.08333 (0 to 0.5) |
+| `round1Rect` | 3:2 | `adj` 0.16667 (0 to 0.5) |
+| `round2DiagRect` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
+| `round2SameRect` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
+| `roundRect` | 3:2 | `adj` 0.16667 (0 to 0.5) |
+| `rtTriangle` | 1:1 | none |
+| `smileyFace` | 1:1 | `adj` 0.04653 (-0.04653 to 0.04653) |
+| `snip1Rect` | 3:2 | `adj` 0.16667 (0 to 0.5) |
+| `snip2DiagRect` | 3:2 | `adj1` 0 (0 to 0.5), `adj2` 0.16667 (0 to 0.5) |
+| `snip2SameRect` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0 (0 to 0.5) |
+| `snipRoundRect` | 3:2 | `adj1` 0.16667 (0 to 0.5), `adj2` 0.16667 (0 to 0.5) |
+| `squareTabs` | 1:1 | none |
+| `star10` | 1:1 | `adj` 0.42533 (0 to 0.5), `hf` 1.05146 (any) |
+| `star12` | 1:1 | `adj` 0.375 (0 to 0.5) |
+| `star16` | 1:1 | `adj` 0.375 (0 to 0.5) |
+| `star24` | 1:1 | `adj` 0.375 (0 to 0.0005) |
+| `star32` | 1:1 | `adj` 0.375 (0 to 0.0005) |
+| `star4` | 1:1 | `adj` 0.125 (0 to 0.5) |
+| `star5` | 1:1 | `adj` 0.19098 (0 to 0.5), `hf` 1.05146 (any), `vf` 1.10557 (any) |
+| `star6` | 1:1 | `adj` 0.28868 (0 to 0.5), `hf` 1.1547 (any) |
+| `star7` | 1:1 | `adj` 0.34601 (0 to 0.5), `hf` 1.02572 (any), `vf` 1.0521 (any) |
+| `star8` | 1:1 | `adj` 0.375 (0 to 0.5) |
+| `straightConnector1` | 2:1 | none |
+| `stripedRightArrow` | 2:1 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.84375) |
+| `sun` | 1:1 | `adj` 0.25 (0.125 to 0.46875) |
+| `swooshArrow` | 2:1 | `adj1` 0.25 (0.00001 to 0.75), `adj2` 0.16667 (0 to 0.7) |
+| `teardrop` | 1:1 | `adj` 1 (0 to 2) |
+| `trapezoid` | 3:2 | `adj` 0.25 (0 to 0.5) |
+| `triangle` | 1:1 | `adj` 0.5 (0 to 1) |
+| `upArrowCallout` | 3:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 1), `adj4` 0.64977 (0 to 0.75) |
+| `upDownArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 0.5) |
+| `upArrow` | 1:2 | `adj1` 0.5 (0 to 1), `adj2` 0.5 (0 to 1) |
+| `upDownArrowCallout` | 1:2 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.5), `adj3` 0.25 (0 to 0.5), `adj4` 0.48123 (0 to 0.5) |
+| `uturnArrow` | 1:1 | `adj1` 0.25 (0 to 0.5), `adj2` 0.25 (0 to 0.25), `adj3` 0.25 (0 to 0.75), `adj4` 0.4375 (0 to 0.4375), `adj5` 0.75 (0.5 to 1) |
+| `verticalScroll` | 1:2 | `adj` 0.125 (0 to 0.25) |
+| `wave` | 2:1 | `adj1` 0.125 (0 to 0.2), `adj2` 0 (-0.1 to 0.1) |
+| `wedgeEllipseCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
+| `wedgeRectCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any) |
+| `wedgeRoundRectCallout` | 3:2 | `adj1` -0.20833 (any), `adj2` 0.625 (any), `adj3` 0.16667 (any) |

@@ -1,7 +1,7 @@
 // Shape blocks (SH-06, OPF 0.34): insert a shape, change its preset, drag its adjust handles and edit every property of it (fill, stroke, style,
 // effects, rotation, text, accessibility), each one validated JSON Patch applied as one undoable step through the session (`editor.applyPatch`),
 // so Undo, Redo, proposals and every host subscription work as for any other edit. The `prepare...` form of each returns the patch without
-// touching a session. The catalog (gallery groups, Aspose names, search) is core's `@openpresentation/opf/shape-catalog`; the geometry that pins an
+// touching a session. The catalog (gallery groups, search) is core's `@openpresentation/opf/shape-catalog`; the geometry that pins an
 // adjust value to its handle's range loads on demand (`loadShapeEngine`): until it has loaded a value is only checked as a number and by the
 // validator. Plain JS with no DOM and no Node imports, so it runs in a browser, a Worker or Node.
 import { SHAPE_PRESETS, isShapeBlock, presetAspect } from "@openpresentation/opf/composition";
@@ -29,7 +29,7 @@ export const SHAPE_PROPERTY_KEYS = Object.freeze([
 
 // --- the catalog ------------------------------------------------------------------------------------------------------------------
 
-/** The presets matching `query` (DrawingML name, Aspose name, common words), best first; an empty query lists the gallery in order. `{ category, limit }` narrow it. */
+/** The presets matching `query` (DrawingML name, common words), best first; an empty query lists the gallery in order. `{ category, limit }` narrow it. */
 export function searchShapes(query = "", options = {}) {
   return searchShapeCatalog(query, options).map((result) => result.entry);
 }

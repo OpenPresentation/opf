@@ -22,7 +22,7 @@ export interface ShapePicker {
   reset(): void;
   destroy(): void;
 }
-/** Mount the shape picker: PowerPoint's gallery groups, a search by DrawingML name, Aspose name and common words, and a tile drawn from each preset's geometry. */
+/** Mount the shape picker: PowerPoint's gallery groups, a search by DrawingML name and common words, and a tile drawn from each preset's geometry. */
 export declare function createShapePicker(container: Element, options?: ShapePickerOptions): ShapePicker;
 
 export interface ShapeMenuOptions {

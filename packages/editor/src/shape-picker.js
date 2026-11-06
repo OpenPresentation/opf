@@ -76,7 +76,7 @@ export function createShapePicker(container, options = {}) {
   function tile(name) {
     const entry = shapeCatalogEntry(name);
     const label = shapeLabel(name);
-    const button = h("button", { type: "button", class: "opf-sp-tile", "data-shape": name, "aria-label": label, title: `${label} (${name}${entry && entry.aspose !== label.replaceAll(" ", "") ? `; Aspose ${entry.aspose}` : ""})`, "aria-pressed": name === state.selected ? "true" : "false", tabindex: "-1" });
+    const button = h("button", { type: "button", class: "opf-sp-tile", "data-shape": name, "aria-label": label, title: `${label} (${name})`, "aria-pressed": name === state.selected ? "true" : "false", tabindex: "-1" });
     button.append(shapeThumbnailNode(doc, state.engine, name));
     button.addEventListener("click", () => options.onPick?.(name, entry));
     return button;
