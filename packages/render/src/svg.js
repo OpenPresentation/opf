@@ -730,6 +730,8 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   let content = [
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
+    // SH-04: the back layer of the overlay, above the background and the watermark, below the content and the furniture.
+    renderOverlayShapes(bound, options, "back"),
     renderSteps(bound, options),
     renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
@@ -739,7 +741,7 @@ function renderResolvedSlide(resolved, slideIndex, options) {
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
     renderFurniture(bound, resolved.presentation, width, height, options, "footer"),
     // SH-04: the slide's overlay (geometry.overlayShapes) over everything, in array order.
-    renderOverlayShapes(bound, options)
+    renderOverlayShapes(bound, options, "front")
   ].filter(Boolean);
   // RR-64: text as glyph outlines. The used-face rule below then embeds only the faces of text that stays text.
   let glyphs = "";
@@ -1009,11 +1011,12 @@ function svgTextDataUri(text) {
   for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
   return `data:image/svg+xml;base64,${btoa(binary)}`;
 }
-// SH-04: core's overlay (geometry.overlayShapes), drawn over the content and the furniture in array order, as the PPTX export writes it:
+// SH-04: core's overlay (geometry.overlayShapes) in one of its layers, in array order, as the PPTX export writes it: the front layer (and
+// every connector) over the content and the furniture, the back layer behind the content, over the background and the watermark;
 // an overlay shape with the shape block's drawing (it is a shape block item, its text fitted by core), a connector its route stroked with
 // the shape stroke drawing. With trace each names its entry (slides.N.shapes.I) in data-opf-path, as a block does.
-function renderOverlayShapes(bound, options) {
-  const overlay = bound.geometry.overlayShapes;
+function renderOverlayShapes(bound, options, layer) {
+  const overlay = bound.geometry.overlayShapes?.filter(entry => (entry.kind === "shape" && entry.layer === "back" ? "back" : "front") === layer);
   if (!overlay?.length) return "";
   return overlay.map(entry => entry.kind === "connector" ? renderConnector(entry, shapeHelpers(entry, bound, options)) : renderShapeBlock(entry, shapeHelpers(entry, bound, options))).join("\n");
 }

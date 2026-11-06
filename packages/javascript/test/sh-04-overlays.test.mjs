@@ -270,3 +270,25 @@ test('pagination: fraction shapes on every page, an at shape on its block page, 
   // Every page validates: no reference names a block of another page.
   assert.equal(validate(result.presentation).findings.filter((finding) => finding.severity === 'error').length, 0);
 });
+
+test('layer: an overlay shape is front by default or back; a connector takes no layer', () => {
+  const [front, back] = compose([{ shape: 'rect', x: 0, y: 0, width: 0.1, height: 0.1 }, { shape: 'rect', layer: 'back', x: 0, y: 0, width: 0.1, height: 0.1 }]).overlayShapes;
+  assert.deepEqual([front.layer, back.layer], ['front', 'back']);
+  assert.deepEqual(findings({ title: 'x', blocks: [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }], shapes: [{ connector: { from: 'a', to: 'b' }, layer: 'back' }] }), [['opf/schema', '/slides/0/shapes/0/layer']]);
+});
+
+test('a connector adjust replaces the automatic middle of a three-segment route and is checked against its preset', () => {
+  const route = (adjust) => compose([{ connector: { from: 'plan', to: 'build', route: 'elbow' }, ...(adjust ? { adjust } : {}) }]).overlayShapes[0];
+  const automatic = route(), kept = route({ adj1: 0.25 });
+  assert.equal(automatic.preset, 'bentConnector3');
+  assert.deepEqual(kept.avLst, { adj1: 25000 });
+  assert.deepEqual([kept.from.site, kept.to.site, kept.box], [automatic.from.site, automatic.to.site, automatic.box]);
+  const [start, bend] = points(kept.paths[0].d);
+  assert.ok(near(bend.x - start.x, 0.25 * kept.box.width, 1e-2));
+  const blocks = [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }];
+  assert.deepEqual(findings({ title: 'x', blocks, shapes: [{ connector: { from: 'a', to: 'b', route: 'elbow' }, adjust: { adj1: 1.4 } }] }), []);
+  assert.deepEqual(findings({ title: 'x', blocks, shapes: [{ connector: { from: 'a', to: 'b' }, adjust: { adj1: 0.5 } }, { connector: { from: 'a', to: 'b', route: 'curved' }, adjust: { adj2: 0.5 } }] }), [
+    ['opf/shape-adjust-unknown', '/slides/0/shapes/0/adjust/adj1'],
+    ['opf/shape-adjust-unknown', '/slides/0/shapes/1/adjust/adj2'],
+  ]);
+});

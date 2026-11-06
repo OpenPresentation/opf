@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Shape overlays, right to left",
-  "description": "Technical fixture for overlay shapes and connectors in a right-to-left deck (SH-04): x counts from the right edge, at start is the right side of a block, and connectors run between the mirrored blocks.",
+  "description": "Technical fixture for overlay shapes and connectors in a right-to-left deck (SH-04): x counts from the right edge, at start is the right side of a block, and connectors run between the mirrored blocks. The words are Latin so the deck draws with the base fonts; the direction is the deck language's.",
   "language": {
     "bcp47": "ar",
     "name": "Arabic",
@@ -9,25 +9,47 @@
     "script": "Arab",
     "fontScheme": "noto-sans-arabic"
   },
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "fontSchemes": {
+        "noto-sans-arabic": {
+          "name": "Noto Sans Arabic",
+          "app": "google-slides",
+          "languageFamily": "cs",
+          "languages": [
+            "ar",
+            "ps",
+            "pa-Arab"
+          ],
+          "major": "Noto Naskh Arabic",
+          "minor": "Noto Naskh Arabic",
+          "textSample": "نص عربي أنيق",
+          "type": "sans-serif",
+          "description": "Noto Sans Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+        }
+      }
+    }
+  },
   "slides": [
     {
-      "title": "من اليمين إلى اليسار",
+      "title": "Right to left",
       "blocks": [
         {
           "id": "first",
           "shape": "roundRect",
-          "text": "أولا"
+          "text": "First"
         },
         {
           "id": "second",
           "shape": "roundRect",
-          "text": "ثانيا"
+          "text": "Second"
         }
       ],
       "shapes": [
         {
           "shape": "wedgeRectCallout",
-          "text": "جديد",
+          "text": "New",
           "x": 0.06,
           "y": 0.8,
           "width": 0.18,

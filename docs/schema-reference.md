@@ -855,7 +855,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint....
+- Purpose: SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in P...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -865,10 +865,11 @@ _No named properties._
 | `width` | no | `number` | Width as a fraction of the slide width. |
 | `height` | no | `number` | Height as a fraction of the slide height. |
 | `at` | no | `ref:OverlayAnchor` |  |
+| `layer` | no | `enum:front \| back` | Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture... |
 | `connector` | no | `ref:Connector` | Makes the entry a connector: what it joins and how it runs. |
 | `shape` | no | `ref:ShapePreset` | The preset geometry, as on a shape block. Default rect. |
 | `path` | no | `ref:ShapePath` | Custom geometry instead of a preset (a:custGeom), as on a shape block. |
-| `adjust` | no | `object` | The preset's adjust handles (a:avLst) in OPF units, as on a shape block. |
+| `adjust` | no | `object` | The preset's adjust handles (a:avLst) in OPF units, as on a shape block. On a connector, the adjust values of its connector preset (adj1 of an elbow or a curve between sites on one axis, a fraction of the frame's widt... |
 | `fill` | no | `ref:ShapeFill` | 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill. |
 | `opacity` | no | `number` | The fill's opacity (a:alpha). Default 1. |
 | `stroke` | no | `ref:Stroke` | A shape's line along its outline (default the style's line), or a connector's line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'; default a 2-pixel line in the slide's text col... |
