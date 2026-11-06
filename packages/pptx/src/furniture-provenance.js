@@ -1,7 +1,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag, encodeTextTag, groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
-import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, dateFormatOfField, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
 import {resolveLogo} from '@openpresentation/opf/composition';
 import {mediaKey} from './media-dedupe.js';
@@ -19,7 +19,6 @@ const array = value => value === undefined ? [] : Array.isArray(value) ? value :
 const kinds = ['header', 'footer'], zones = ['left', 'center', 'right'];
 const fields = ['text', 'image', 'socials', 'date'];
 const settings = ['dateFormat'];
-const dateFormatForField = Object.fromEntries(Object.entries(NATIVE_DATE_FIELDS).map(([format, type]) => [type, format]));
 // Platform keys follow the Socials schema's propertyNames pattern exactly, so
 // every key a valid document can carry re-imports (and nothing else does).
 const platformId = new RegExp(schemas.presentation.$defs.Socials.propertyNames.pattern, 'u'), schemes = ['', 'https://'];
@@ -484,7 +483,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
 // Otherwise the current words import as a literal date.
 function importedDate(flag, format, text, nativeFields, zone, marker, ordered, paragraphs, report) {
   if (flag === true) {
-    const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatForField[nativeFields[0].type] : undefined;
+    const pattern = nativeFields.length === 1 && nativeFields[0].text === text ? dateFormatOfField(nativeFields[0].type, nativeFields[0].lang) : undefined;
     if (pattern) {
       if (format.dateFormat !== undefined || pattern !== DEFAULT_DATE_FORMAT) zone.dateFormat = pattern;
       return true;
@@ -568,6 +567,23 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
       // Every slide's inherited definition lost the same native placeholder (the dialog's Apply to All): the deck's footer changed.
       result.design[kind] = candidates[0][kind].value;
       candidates.forEach((slide, index) => delete result.slides[index].design[kind]);
+    }
+  }
+  // RR-102: Insert > Header & Footer changed the footers of a deck that had one (Apply to All of a date, a slide's footer turned on,
+  // one slide's text retyped) so that no deck value is left that every inheriting slide agrees on: the footer most slides now share
+  // (two or more) is the deck's footer again, and every other slide keeps its own.
+  const footers = candidates.map(slide => slide.footer);
+  if (result.design.footer === undefined && footers.some(candidate => candidate?.scope === 'global' || candidate?.derived) &&
+    footers.some(candidate => candidate && candidate.pristine !== true)) {
+    const counts = new Map();
+    for (const candidate of footers) if (candidate && candidate.value !== false) {
+      const found = counts.get(canonical(candidate.value)) ?? {value: candidate.value, count: 0};
+      counts.set(canonical(candidate.value), {...found, count: found.count + 1});
+    }
+    const best = [...counts.entries()].sort((a, b) => b[1].count - a[1].count)[0];
+    if (best && best[1].count >= 2) {
+      result.design.footer = best[1].value;
+      footers.forEach((candidate, index) => { if (candidate && candidate.value !== false && canonical(candidate.value) === best[0]) delete result.slides[index].design.footer; });
     }
   }
   // A deck with no OPF footer provenance (PowerPoint's Header & Footer dialog, another tool): the footer most slides share is the

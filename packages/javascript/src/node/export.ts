@@ -71,9 +71,10 @@ export interface ExportOptions {
 	 */
 	bodyText?: "measured" | "native";
 	/**
-	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `static` (opf-pptx's
-	 * default) writes the number as fixed text, so Keynote shows the words too; `live` keeps the slide-number field, which Keynote
-	 * draws as the digit alone. A text that is only `{{slide.number}}` stays a live field in both.
+	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `live` (opf-pptx's
+	 * default since RR-102) keeps the slide-number field, so PowerPoint's Insert > Header & Footer shows Slide number checked and renumbers
+	 * it, but Keynote draws it as the digit alone; `static` writes the number as fixed text, so Keynote shows the words too. A text that
+	 * is only `{{slide.number}}` stays a live field in both.
 	 */
 	slideNumbers?: "static" | "live";
 	/**

@@ -97,6 +97,11 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
 }
 
 const children = (nodes, name) => array(nodes).flatMap(node=>node[name] === undefined ? [] : [node[name]]);
+// RR-102: the language of a field run (a date field shows its type in that language).
+const fieldLanguage = nodes => {
+  const lang = array(nodes).find(node => node['a:rPr'] !== undefined)?.[':@']?.lang;
+  return typeof lang === 'string' && lang ? {lang} : {};
+};
 const plainText = nodes => array(nodes).map(node=>node['#text'] ?? '').join('');
 export const nativeTextShapes = tree => [...array(tree?.['p:sp']),...array(tree?.['p:grpSp']).flatMap(nativeTextShapes)];
 const orderedShapes = tree => [...children(tree,'p:sp'),...children(tree,'p:grpSp').flatMap(orderedShapes)];
@@ -122,7 +127,7 @@ export function nativeShapeParagraphs(xml, rootElement = 'p:sld') {
     };
     for (const child of paragraph) {
       if (child['a:br'] !== undefined) text += '\n';
-      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join(''), start: text.length});
+      if (child['a:fld'] !== undefined) fields.push({type: String(child[':@']?.type ?? ''), text: children(child['a:fld'],'a:t').map(plainText).join(''), start: text.length, ...fieldLanguage(child['a:fld'])});
       text += readRuns(child);
       if (child['mc:AlternateContent'] !== undefined) {
         // FF-45: an a14:m math zone (an OMML equation, m:oMathPara) has no OPF model. Its mc:Fallback runs (the text PowerPoint
