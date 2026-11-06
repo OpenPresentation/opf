@@ -458,7 +458,8 @@ describe("the bundled sources", () => {
 		// SH-02 added docs/shapes.md (the property map and the 187 presets) and the shape vocabulary of the schema reference: 1,077,362 bytes;
 		// with PowerPoint's gradient and sketch behavior and the lazy shape engine documented, about 1,093,000. Wave 8 and shapes phase 1 together
 		// (SH-03's docs/shape-effects.md, now a served page, LH-165's, LH-169's, LH-164's and LH-63's rules, the engines that load on demand) are 1,120,756 bytes.
-		assert.ok(bytes < 1_125_000, `${bytes} bytes of documentation`);
+		// SH-04's overlay shapes and connectors (docs/shapes.md, the schema reference) and SH-05's import of shapes (docs/shapes.md) bring it to 1,147,155 bytes.
+		assert.ok(bytes < 1_160_000, `${bytes} bytes of documentation`);
 	});
 });
 
