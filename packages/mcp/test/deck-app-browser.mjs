@@ -5,11 +5,15 @@
 // real server (createOpfServer with the stdio font reader) over an in-memory MCP client. Run it after `pnpm run build`:
 //   node test/deck-app-browser.mjs
 // OPF_DECK_APP_SCREENSHOTS=<directory> also saves a screenshot of each view (Preview, Source, Both; light and dark) there.
+// OPF_MCP_URL=<endpoint> drives a server over Streamable HTTP instead, a hosted one such as https://openpresentation.org/mcp or a
+// local Workers preview (http://127.0.0.1:8787/mcp): the same checks, with its own viewer page and fonts. Node's fetch needs
+// NODE_USE_ENV_PROXY=1 behind a proxy.
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { createServer } from "node:http";
 import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { chromium } from "playwright";
 import { createOpfServer } from "../dist/index.js";
@@ -18,11 +22,16 @@ import { installedFontFiles } from "../dist/stdio.js";
 // SEP-1865, "Restrictive Default": what a host must use when the resource declares no ui.csp (the view declares none).
 const VIEW_CSP = "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'self'";
 
-const server = createOpfServer({ version: "0.0.0-test", deckApp: { readFontFile: installedFontFiles() } });
-const [clientSide, serverSide] = InMemoryTransport.createLinkedPair();
-await server.connect(serverSide);
+const remote = process.env.OPF_MCP_URL;
 const client = new Client({ name: "deck-app-browser", version: "1.0.0" });
-await client.connect(clientSide);
+if (remote) await client.connect(new StreamableHTTPClientTransport(new URL(remote)));
+else {
+	const server = createOpfServer({ version: "0.0.0-test", deckApp: { readFontFile: installedFontFiles() } });
+	const [clientSide, serverSide] = InMemoryTransport.createLinkedPair();
+	await server.connect(serverSide);
+	await client.connect(clientSide);
+}
+console.log(`# server: ${remote ?? "in memory"} (${client.getServerVersion()?.name} ${client.getServerVersion()?.version})`);
 
 const resource = (await client.readResource({ uri: "ui://opf/deck" })).contents[0];
 assert.equal(resource.mimeType, "text/html;profile=mcp-app");
