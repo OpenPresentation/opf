@@ -4,6 +4,7 @@
 //   advanced    features outside the baseline (chartex charts, which LibreOffice draws from their fallback pictures): defects are
 //               recorded as known differences and never block.
 //   regression  a retained artifact from an older exporter (opf#925): checked as it is, for diagnosis only.
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -48,4 +49,40 @@ export function selectCases(cases, ids = []) {
   const selected = cases.filter((entry) => wanted.has(entry.id) || wanted.has(entry.group) || [...wanted].some((id) => id.endsWith("*") && entry.id.startsWith(id.slice(0, -1))));
   if (!selected.length) throw new Error(`no case matches ${ids.join(", ")}`);
   return selected;
+}
+
+/** The release qualification manifest (scripts/native-acceptance/qualification), or null in a checkout that does not have it yet. */
+export function qualificationManifest() {
+  const file = path.join(root, "scripts/native-acceptance/qualification/manifest.json");
+  return existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : null;
+}
+
+// Decks whose default export carries live SmartArt or chartex charts: LibreOffice draws their fallback pictures, so they are outside the
+// baseline (a defect there is a known difference).
+const ADVANCED_QUALIFICATION = new Set(["smartart", "smartart-arabic", "smartart-japanese", "chart-type-sampler"]);
+
+/**
+ * The cases of a release qualification build (`node scripts/native-acceptance/qualification/build.mjs --out <dir>`): the very PPTX files
+ * and previews the PowerPoint and Keynote streams open, read from `<dir>/build.json`. One case per deck and variant.
+ */
+export function qualificationCases(buildDir) {
+  const build = JSON.parse(readFileSync(path.join(buildDir, "build.json"), "utf8"));
+  const cases = [];
+  for (const deck of build.decks) {
+    for (const variant of deck.variants) {
+      if (!variant.ok) continue;
+      const suffix = variant.name === "default" ? "" : `~${variant.name}`;
+      const previewDir = path.join(buildDir, "preview", deck.id);
+      const previews = existsSync(previewDir) ? readdirSync(previewDir).filter((name) => /^slide-\d+\.png$/.test(name)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0])).map((name) => path.join(previewDir, name)) : [];
+      cases.push({
+        id: `q-${deck.id}${suffix}`,
+        group: "release qualification corpus",
+        scope: ADVANCED_QUALIFICATION.has(deck.id) && variant.name === "default" ? "advanced" : "baseline",
+        pptx: path.join(buildDir, variant.pptx),
+        previews,
+        qualification: { deck: deck.id, variant: variant.name, sha256: variant.sha256, revision: build.revision },
+      });
+    }
+  }
+  return cases;
 }

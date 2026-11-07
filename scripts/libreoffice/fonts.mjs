@@ -33,8 +33,9 @@ const escapeXml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":
  * A fonts.conf that keeps the system configuration and adds `fontDir` and the aliases. `binding="same"` with a strong match makes the
  * replacement win over fontconfig's generic fallback, as an installed family would.
  */
-export function fontsConf({ fontDir, aliases, cacheDir }) {
-  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<fontconfig>", "  <include ignore_missing=\"yes\">/etc/fonts/fonts.conf</include>"];
+export function fontsConf({ fontDir, aliases, cacheDir, includeSystem = true }) {
+  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<fontconfig>"];
+  if (includeSystem) lines.push('  <include ignore_missing="yes">/etc/fonts/fonts.conf</include>');
   if (fontDir) lines.push(`  <dir>${escapeXml(fontDir)}</dir>`);
   if (cacheDir) lines.push(`  <cachedir>${escapeXml(cacheDir)}</cachedir>`);
   for (const alias of aliases) {
@@ -94,8 +95,21 @@ export function resolveRequested(requested, env, aliases, pdfFontNames = []) {
   return requested.map((family) => {
     const match = fcMatch(family, env);
     const alias = aliases.find((entry) => normal(entry.family) === normal(family));
-    const drawn = pdfFontNames.find((name) => normal(name).startsWith(normal(match.family ?? "~"))) ?? null;
+    // The face LibreOffice drew for this family, when the PDF's font names show it unambiguously (its own fallback can differ from
+    // fontconfig's answer: in the stock image fontconfig answers WenQuanYi Zen Hei for Aptos, LibreOffice draws its bundled Noto Sans).
+    const candidates = pdfFontNames.filter((name) => normal(name).startsWith(normal(match.family ?? "~")));
+    const drawn = candidates.length === 1 ? candidates[0] : candidates.length ? candidates.join(" / ") : null;
     const resolution = normal(match.family) === normal(family) ? "installed" : alias && normal(match.family) === normal(alias.prefer) ? "aliased" : "substituted";
     return { family, resolution, matched: match.family, style: match.style, file: match.file ? path.basename(match.file) : null, sha256: match.sha256, drawn, ...(alias ? { alias: alias.prefer, aliasCompatibility: alias.compatibility } : {}) };
   });
+}
+
+/** `node scripts/libreoffice/fonts.mjs aliases` prints the aliases alone, as a file for ~/.config/fontconfig/conf.d/ (docs/libreoffice.md). */
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  if (process.argv[2] !== "aliases") {
+    console.error("Usage: node scripts/libreoffice/fonts.mjs aliases > ~/.config/fontconfig/conf.d/60-opf-font-policy.conf");
+    process.exit(2);
+  }
+  const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8"));
+  process.stdout.write(fontsConf({ aliases: policyAliases(policy), includeSystem: false }));
 }

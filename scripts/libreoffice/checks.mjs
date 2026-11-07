@@ -39,13 +39,15 @@ export function shapeForRun(run, shapes) {
  * {str, shape, side, by} with `by` the distance past the edge in points (rounded to 0.01).
  */
 export function containment(page, slide, slideSize) {
-  const offSlide = [], outsideBox = [], unattributed = [];
+  const offSlide = [], outsideBox = [], unattributed = [], atEdge = [];
   const round = (value) => Math.round(value * 100) / 100;
   for (const run of page.runs) {
     if (run.rotated) continue;
     const extent = runExtent(run);
     const sides = { left: -extent.left, right: extent.right - slideSize.width, top: -extent.top, bottom: extent.bottom - slideSize.height };
     for (const [side, by] of Object.entries(sides)) if (by > TOLERANCE.slide) offSlide.push({ str: run.str, side, by: round(by) });
+    // LibreOffice's PDF export leaves out the glyphs past the page: a line cut there ends at the slide edge.
+    if (Math.abs(sides.right) <= 1 || Math.abs(sides.left) <= 1) atEdge.push({ str: run.str, side: Math.abs(sides.right) <= 1 ? "right" : "left" });
     const shape = shapeForRun(run, slide.shapes);
     if (!shape) { unattributed.push({ str: run.str, x: round(run.x), baseline: round(run.baseline) }); continue; }
     // A wrapping body grows downward when a viewer breaks lines differently; only a single-line (wrap none) shape and a table cell are
@@ -56,7 +58,7 @@ export function containment(page, slide, slideSize) {
     const below = extent.bottom - (box.y + box.height) - TOLERANCE.verticalEm * run.size;
     if (below > 0 && shape.kind === "text") outsideBox.push({ str: run.str, shape: shape.name || shape.id, kind: shape.kind, wrap: shape.body?.wrap ?? null, side: "bottom", by: round(below) });
   }
-  return { runs: page.runs.length, offSlide, outsideBox, unattributed };
+  return { runs: page.runs.length, offSlide, outsideBox, unattributed, atEdge };
 }
 
 /**
@@ -148,13 +150,15 @@ export function verdict(result) {
     for (const slide of result.perSlide ?? []) {
       // pdf.js leaves out glyphs drawn past the page, so words pushed off the slide look missing: with a slide-edge finding they are
       // reported as clipped, not lost (the round trip shows whether the words themselves survive).
-      const pastEdge = slide.offSlide?.length || Object.entries(slide.inkOutside ?? {}).some(([side, count]) => count > 0 && !slide.bleeds?.includes(side));
+      const pastEdge = slide.offSlide?.length || slide.atEdge?.length || Object.entries(slide.inkOutside ?? {}).some(([side, count]) => count > 0 && !slide.bleeds?.includes(side));
       if (slide.missing?.length) defects.push({ check: pastEdge ? "clipped" : "content", slide: slide.number, detail: `${pastEdge ? "not on the page (past the slide edge)" : "missing from the page"}: ${slide.missing.map((entry) => entry.word).slice(0, 8).join(" ")}` });
       if (slide.offSlide?.length) defects.push({ check: "slide-edge", slide: slide.number, detail: slide.offSlide.slice(0, 4).map((entry) => `"${entry.str.trim().slice(-24)}" ${entry.side} +${entry.by} pt`).join("; ") });
       const sideways = (slide.outsideBox ?? []).filter((entry) => entry.side !== "bottom" || entry.wrap === "none");
       if (sideways.length) defects.push({ check: "text-box", slide: slide.number, detail: sideways.slice(0, 4).map((entry) => `"${entry.str.trim().slice(-24)}" ${entry.side} +${entry.by} pt`).join("; ") });
       const grown = (slide.outsideBox ?? []).filter((entry) => entry.side === "bottom" && entry.wrap !== "none");
       if (grown.length) differences.push({ check: "vertical-growth", slide: slide.number, detail: `${grown.length} run(s) below a wrapping box, up to ${Math.max(...grown.map((entry) => entry.by))} pt` });
+      if (slide.shrink) defects.push({ check: "shrink", slide: slide.number, detail: `${slide.shrink} text box(es) ask the viewer to shrink text on overflow (normAutofit)` });
+      if (slide.smartArtMissing?.length) differences.push({ check: "smartart-fallback", slide: slide.number, detail: `SmartArt text not on the page: ${slide.smartArtMissing.map((entry) => entry.word).slice(0, 6).join(" ")}` });
       const ink = Object.entries(slide.inkOutside ?? {}).filter(([side, count]) => count > 0 && !slide.bleeds?.includes(side));
       if (ink.length) defects.push({ check: "ink-edge", slide: slide.number, detail: ink.map(([side, count]) => `${count} px ${side}`).join(", ") });
       if (slide.preview && slide.preview.largePercent > 5) differences.push({ check: "preview", slide: slide.number, detail: `${slide.preview.largePercent.toFixed(1)}% of pixels differ from OPF's preview` });
@@ -168,8 +172,9 @@ export function verdict(result) {
       }
     }
     if (result.roundTrip && !result.roundTrip.converted) defects.push({ check: "round-trip", detail: "LibreOffice could not re-export the file as PPTX" });
+    if (result.roundTrip?.import && !result.roundTrip.import.ok) differences.push({ check: "round-trip-import", detail: `OPF could not import LibreOffice's copy: ${result.roundTrip.import.error}` });
     const substituted = (result.fonts?.requested ?? []).filter((entry) => entry.resolution === "substituted");
-    if (substituted.length) differences.push({ check: "fonts", detail: `substituted: ${substituted.map((entry) => `${entry.family} -> ${entry.drawn ?? "?"}`).join(", ")}` });
+    if (substituted.length) differences.push({ check: "fonts", detail: `not installed: ${substituted.map((entry) => entry.family).join(", ")}; LibreOffice drew ${(result.fonts.drawn ?? []).map((font) => font.name).join(", ") || "?"}` });
   }
   return { status: defects.length ? "fail" : "pass", defects, differences };
 }

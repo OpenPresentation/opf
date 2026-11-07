@@ -23,7 +23,7 @@ jobs:
       - uses: ./.github/actions/setup-workspace
         with:
           container: 'true'
-          build-also: '@openpresentation/opf-pptx @openpresentation/opf-render'
+          build-also: '@openpresentation/opf-pptx @openpresentation/opf-render @openpresentation/cli'
       - name: Cache the LibreOffice download
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -31,8 +31,22 @@ jobs:
           key: libreoffice-${{ hashFiles('scripts/libreoffice/environment.json') }}
       - name: Install the pinned LibreOffice
         run: bash scripts/libreoffice/install.sh "$HOME/.cache/opf-libreoffice"
+      # The release qualification corpus (scripts/native-acceptance/qualification): the same PPTX files the PowerPoint and Keynote runs open.
+      - name: Build the release qualification corpus
+        run: |
+          # TEMPORARY: the corpus is on its own branch (opf#1085) until it merges.
+          if [ ! -f scripts/native-acceptance/qualification/build.mjs ]; then
+            git fetch --depth 1 origin codex/rr-qual-0.33-windows && git checkout FETCH_HEAD -- scripts/native-acceptance/qualification
+          fi
+          if [ -f scripts/native-acceptance/qualification/build.mjs ]; then
+            node scripts/native-acceptance/qualification/build.mjs --out artifacts/qualification
+          fi
+
       - name: Qualify the export
-        run: node scripts/libreoffice/run.mjs --out artifacts/libreoffice
+        run: |
+          args=(--out artifacts/libreoffice)
+          if [ -f artifacts/qualification/build.json ]; then args+=(--qualification artifacts/qualification); fi
+          node scripts/libreoffice/run.mjs "${args[@]}"
       - name: Preserve the results
         if: ${{ always() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

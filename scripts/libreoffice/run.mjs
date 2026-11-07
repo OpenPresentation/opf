@@ -5,7 +5,10 @@
 // against its box and the slide edge, ink past the slide edge, the faces LibreOffice drew, and the difference from OPF's preview.
 //
 //   node scripts/libreoffice/run.mjs [--out artifacts/libreoffice] [--profiles opf,stock] [--case <id|group|prefix*>,...]
-//                                    [--soffice <path>] [--fail-on-defect]
+//                                    [--qualification <build dir>] [--soffice <path>] [--profiles none] [--no-control] [--fail-on-defect]
+//
+// --qualification adds the release qualification corpus built by scripts/native-acceptance/qualification/build.mjs (the same PPTX
+// files the PowerPoint and Keynote streams open) and grades its manifest's features.
 //
 // It reports and exits 0 unless --fail-on-defect is given and a baseline case fails in the opf profile (the switch the owner turns
 // on when the baseline is promoted). Needs the built packages (pnpm build), fontconfig and LibreOffice; in CI it runs in the pinned
@@ -16,15 +19,17 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { containment, compareStructure, inkOutside, missingWords, slideStructure, sourceBleeds, verdict } from "./checks.mjs";
-import { corpusCases, selectCases } from "./corpus.mjs";
+import { corpusCases, qualificationCases, qualificationManifest, selectCases } from "./corpus.mjs";
+import { featuresMarkdown, gradeFeatures } from "./features.mjs";
 import { fontInventory, PROFILES, prepareProfile, resolveRequested } from "./fonts.mjs";
 import { openPdf, pageRuns, pageText, pdfFonts, rasterize, sharp } from "./pdf-model.mjs";
-import { readPptx, slideWords } from "./pptx-model.mjs";
+import { readPptx, slideWords, tokenize } from "./pptx-model.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../..");
 const environment = JSON.parse(readFileSync(path.join(here, "environment.json"), "utf8"));
 const DATE = "2026-11-07";
+const engines = {};
 const MARGIN = 72;
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
@@ -43,6 +48,7 @@ function parseArgs(argv) {
     else if (arg === "--soffice") options.soffice = value();
     else if (arg === "--fail-on-defect") options.failOnDefect = true;
     else if (arg === "--no-control") options.control = false;
+    else if (arg === "--qualification") options.qualification = path.resolve(value());
     else throw new Error(`unknown argument ${arg}`);
   }
   for (const profile of options.profiles) if (!PROFILES.includes(profile)) throw new Error(`unknown profile ${profile} (known: ${PROFILES.join(", ")})`);
@@ -81,7 +87,7 @@ function identities(soffice) {
 
 /** Export one case: { pptx bytes, previews: [png bytes], findings }. */
 async function exportCase(entry, core) {
-  if (entry.pptx) return { pptx: new Uint8Array(readFileSync(entry.pptx)), previews: [], pdf: null, findings: [] };
+  if (entry.pptx) return { pptx: new Uint8Array(readFileSync(entry.pptx)), previews: (entry.previews ?? []).map((file) => readFileSync(file)), pdf: null, findings: [] };
   const input = entry.deck ?? entry.input;
   const common = { date: DATE, ...(entry.assetDir ? { assetDir: entry.assetDir } : {}) };
   const pptx = await core.convert(input, { format: "pptx", ...common, ...(entry.options ?? {}) });
@@ -153,10 +159,16 @@ async function measure(entry, exported, model, profile, paths, { control = false
       missing: missingWords(slideWords(slide), pageText(page)),
       offSlide: contained.offSlide,
       outsideBox: contained.outsideBox,
+      atEdge: contained.atEdge,
       unattributed: contained.unattributed.length,
       inkOutside: inkOutside(raster),
       bleeds: [...sourceBleeds(slide, model.slideSize)],
+      kinds: shapeKinds(slide),
+      shrink: slide.shapes.filter((shape) => shape.body?.autofit === "normal").length,
     };
+    // SmartArt node text (LibreOffice draws the fallback drawing; the words must still be on the page).
+    const smartArtStrings = slide.shapes.filter((shape) => shape.kind === "smartart").flatMap((shape) => shape.strings.flatMap((value) => tokenize(value)));
+    if (smartArtStrings.length) entrySlide.smartArtMissing = missingWords(smartArtStrings, pageText(page));
     const preview = exported.previews[index];
     if (preview) {
       const { width } = await sharp(preview).metadata();
@@ -171,11 +183,25 @@ async function measure(entry, exported, model, profile, paths, { control = false
   if (control) return { ...result, ...verdict(result) };
   result.roundTrip = { converted: existsSync(paths.roundTrip) };
   if (result.roundTrip.converted) {
-    const reread = readPptx(readFileSync(paths.roundTrip));
-    result.roundTrip.findings = compareStructure(slideStructure({ slides: visible }), slideStructure({ slides: reread.slides.filter((slide) => !slide.hidden) }));
+    const roundTripBytes = readFileSync(paths.roundTrip);
+    const reread = readPptx(roundTripBytes);
+    const rereadVisible = reread.slides.filter((slide) => !slide.hidden);
+    result.roundTrip.findings = compareStructure(slideStructure({ slides: visible }), slideStructure({ slides: rereadVisible }));
+    result.roundTrip.kinds = rereadVisible.map(shapeKinds);
+    // LibreOffice's saved copy read back by OPF's own import (the manifest's `roundtrip` check).
+    try {
+      const imported = await engines.core.convert(new Uint8Array(roundTripBytes), { format: "json" });
+      const deck = JSON.parse(new TextDecoder().decode(imported.files[0].bytes));
+      result.roundTrip.import = { ok: true, slides: deck.slides?.length ?? 0 };
+    } catch (error) {
+      result.roundTrip.import = { ok: false, error: String(error?.message ?? error).slice(0, 300) };
+    }
   }
   return { ...result, ...verdict(result) };
 }
+
+/** Shape counts of a slide by kind: {text, table, chart, smartart, picture, connector, other}. */
+const shapeKinds = (slide) => slide.shapes.reduce((counts, shape) => ({ ...counts, [shape.kind]: (counts[shape.kind] ?? 0) + 1 }), {});
 
 function summaryMarkdown(report) {
   const lines = [];
@@ -218,7 +244,8 @@ async function main() {
   rmSync(options.out, { recursive: true, force: true });
   mkdirSync(options.out, { recursive: true });
   const core = await import("@openpresentation/opf");
-  const cases = selectCases(await corpusCases(), options.cases);
+  engines.core = core;
+  const cases = selectCases([...(await corpusCases()), ...(options.qualification ? qualificationCases(options.qualification) : [])], options.cases);
   const report = { schemaVersion: 1, environment: identities(soffice), profiles: {}, cases: [] };
   console.log(`libreoffice: ${report.environment.libreoffice}; ${cases.length} cases; profiles ${options.profiles.join(", ")}`);
 
@@ -240,7 +267,9 @@ async function main() {
     }
   }
 
+  const full = new Map();
   const record = (item, name, result) => {
+    if (name === "opf") full.set(item.entry.id, result);
     writeFileSync(path.join(item.caseDir, `result-${name}.json`), json(result));
     let row = report.cases.find((entry) => entry.id === item.entry.id);
     if (!row) {
@@ -298,9 +327,18 @@ async function main() {
   const baselineFailures = report.cases.filter((entry) => entry.scope === "baseline" && (entry.exportError || entry.profiles.opf?.status === "fail"));
   const judged = options.profiles.includes("opf");
   report.baseline = judged ? { profile: "opf", cases: report.cases.filter((entry) => entry.scope === "baseline").length, failing: baselineFailures.map((entry) => entry.id) } : null;
+  const manifest = options.qualification ? qualificationManifest() : null;
+  let features = "";
+  if (manifest && full.size) {
+    report.features = gradeFeatures(manifest, full, new Map(cases.map((entry) => [entry.id, entry.scope])));
+    features = `## Release qualification features (opf profile)
+
+${featuresMarkdown(report.features)}
+`;
+  }
   writeFileSync(path.join(options.out, "results.json"), json(report));
-  writeFileSync(path.join(options.out, "summary.md"), summaryMarkdown(report));
-  if (process.env.GITHUB_STEP_SUMMARY) writeFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMarkdown(report), { flag: "a" });
+  writeFileSync(path.join(options.out, "summary.md"), summaryMarkdown(report) + features);
+  if (process.env.GITHUB_STEP_SUMMARY) writeFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMarkdown(report) + features, { flag: "a" });
   if (judged) console.log(`baseline (opf profile): ${report.baseline.cases - baselineFailures.length}/${report.baseline.cases} pass${baselineFailures.length ? `; failing: ${baselineFailures.map((entry) => entry.id).join(", ")}` : ""}`);
   const controlFailures = report.cases.filter((entry) => entry.profiles.control?.status === "fail").map((entry) => entry.id);
   if (controlFailures.length) console.log(`control failures (the instrument or OPF's own PDF, not LibreOffice): ${controlFailures.join(", ")}`);

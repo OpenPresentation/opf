@@ -329,7 +329,7 @@ pnpm --filter @openpresentation/opf-pptx test
 pnpm --filter @openpresentation/opf-pptx validate
 ```
 
-LibreOffice is not a runtime dependency. When it is installed in CI or a local verification environment, generated `.pptx` files can be smoke-opened there as an optional export check.
+LibreOffice is not a runtime dependency. Opening an exported `.pptx` in LibreOffice Impress is experimental: a nightly CI leg checks a maintained corpus in one pinned LibreOffice and Linux environment, with the font profile, the supported subset, the known differences and how to report a problem described in [LibreOffice interoperability](../../docs/libreoffice.md).
 
 ## Release Lane
 

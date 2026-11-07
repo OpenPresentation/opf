@@ -191,6 +191,13 @@ export function readPptx(bytes) {
             const chart = elements(data)[0];
             const target = rels[chart?.attributes["r:id"]]?.target;
             if (target && files[target]) entry.strings = chartStrings(text(target));
+          } else if (/\/diagram$/.test(uri)) {
+            // SmartArt: its node text lives in the data part (dgm:relIds r:dm). A viewer that does not lay SmartArt out draws the
+            // fallback drawing part instead; either way the node text is what the slide must show.
+            entry.kind = "smartart";
+            const ids = kid(data, "dgm:relIds");
+            const target = rels[ids?.attributes["r:dm"]]?.target;
+            if (target && files[target]) entry.strings = descendants(parseXml(text(target)).root, "a:t").map((t) => t.text).filter((value) => value.trim());
           }
         }
         shapes.push(entry);

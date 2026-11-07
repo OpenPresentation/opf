@@ -89,6 +89,13 @@ test("verdict: defects fail, documented differences do not", () => {
   overflow.perSlide[0].offSlide = [{ str: "for ", side: "right", by: 2 }];
   overflow.perSlide[0].missing = [{ word: "models)", expected: 1, found: 0 }];
   assert.deepEqual(verdict(overflow).defects.map((entry) => entry.check), ["clipped", "slide-edge", "text-box"]);
+  const cut = structuredClone(clean);
+  cut.perSlide[0].missing = [{ word: "for", expected: 1, found: 0 }];
+  cut.perSlide[0].atEdge = [{ str: "per-minute", side: "right" }];
+  assert.deepEqual(verdict(cut).defects.map((entry) => entry.check), ["clipped"], "a line cut at the page edge is clipped, not lost");
+  const lost = structuredClone(clean);
+  lost.perSlide[0].missing = [{ word: "for", expected: 1, found: 0 }];
+  assert.deepEqual(verdict(lost).defects.map((entry) => entry.check), ["content"]);
   assert.deepEqual(verdict({ converted: false }).defects.map((entry) => entry.check), ["open"]);
   assert.deepEqual(verdict({ ...clean, pages: 2 }).defects.map((entry) => entry.check), ["slides"]);
 });

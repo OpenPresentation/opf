@@ -101,7 +101,7 @@ The registry tries an exact supplied family first, then an explicit alias, the p
 | Keynote, imported PPTX | Authored names when available to Keynote | Installed fonts; Keynote handles missing-font substitution |
 | LibreOffice Impress, PPTX | Authored names, subject to local replacement settings | Installed fonts or system/LibreOffice substitutions |
 
-Native substitutions depend on application version, operating system, installed fonts and user settings. OPF cannot promise one fixed replacement for a missing native font. See [PowerPoint cloud fonts](https://support.microsoft.com/en-us/office/fonts/cloud-fonts-in-office), [Keynote missing fonts](https://support.apple.com/guide/keynote/tane1c9a464f/mac), and [LibreOffice replacement settings](https://help.libreoffice.org/latest/en-US/text/shared/optionen/01010700.html). There is no native OPF `.key` exporter: import PPTX into Keynote, then save there if needed.
+Native substitutions depend on application version, operating system, installed fonts and user settings. OPF cannot promise one fixed replacement for a missing native font. See [PowerPoint cloud fonts](https://support.microsoft.com/en-us/office/fonts/cloud-fonts-in-office), [Keynote missing fonts](https://support.apple.com/guide/keynote/tane1c9a464f/mac), and [LibreOffice replacement settings](https://help.libreoffice.org/latest/en-US/text/shared/optionen/01010700.html). There is no native OPF `.key` exporter: import PPTX into Keynote, then save there if needed. For LibreOffice (experimental), [LibreOffice interoperability](libreoffice.md) describes the font profile OPF tests with: its preview fonts plus a fontconfig alias from each proprietary family to its replacement.
 
 ### HTML and rendered exports
 
