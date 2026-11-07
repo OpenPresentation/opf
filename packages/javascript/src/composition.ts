@@ -513,15 +513,13 @@ export interface ComposedArrangement {
   background?: LayoutBox;
   /** The nodes in order (a matrix always has four); `path` is the entry's text path, absent for an empty quadrant. */
   nodes: (ArrangementNode & { path?: string })[];
-  /** SH-18: a cycle's arrows, the one after each node to the next (arrangements.ts cycleNodes, cycleRing), drawn after their node in the primary lightened (arrangementPaint's `arrow`). */
+  /** SH-18: a cycle's arrows, the one after each node to the next (arrangements.ts cycleNodes, cycleRing), drawn after their node in the primary lightened (arrangementPaint's `arrow`); SH-17: a flow's, the one after each box (linear-arrangements.ts). */
   arrows?: ArrangementArrow[];
   fontSize: number;
   /** The text inset inside each node's text rectangle (ARRANGEMENT_TEXT_MARGIN of the size). */
   textMargin: number;
   /** SH-17: the text insets (left, top, right, bottom) where they differ by side (a chevron's start); absent: `textMargin` on every side. */
   margins?: [number, number, number, number];
-  /** SH-17: the arrows between the nodes of a flow, drawn under the text after the nodes. */
-  arrows?: ArrangementArrow[];
   lineWidth: number;
   smartArt: { lines: number[]; stable: boolean[]; fill?: number; ink?: number };
 }
