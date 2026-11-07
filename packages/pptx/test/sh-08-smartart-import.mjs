@@ -184,16 +184,19 @@ async function withSmartArt(frames) {
 // 5. The PowerPoint-made fixture (fixtures/make-powerpoint-smartart.ps1): every slide's SmartArt imports with every node's text.
 const fixture = new URL('./fixtures/powerpoint-smartart.pptx', import.meta.url), manifestUrl = new URL('./fixtures/powerpoint-smartart.json', import.meta.url);
 if (existsSync(fixture) && existsSync(manifestUrl)) {
-  const manifest = JSON.parse(readFileSync(manifestUrl, 'utf8').replace(/^﻿/, ''));
+  const manifest = [JSON.parse(readFileSync(manifestUrl, 'utf8').replace(/^﻿/, ''))].flat();
   const diagnostics = [];
   const imported = await fromPptx(readFileSync(fixture), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   assert.equal(validate(imported).valid, true);
-  const json = JSON.stringify(imported).replace(/\\n/g, ' ');
+  assert.equal(JSON.stringify(imported).includes('PowerPoint object'), false, 'no SmartArt is an unknown object');
+  // Every string the slide holds (list items, a diagram's source and alt, overlay text and alt), whitespace folded, Mermaid's entities read.
+  const strings = value => typeof value === 'string' ? [value] : Array.isArray(value) ? value.flatMap(strings) : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
+  const fold = text => text.replace(/<br\/>/g, ' ').replace(/#quot;/g, '"').replace(/\s+/g, ' ').trim();
   for (const slide of manifest.filter(entry => !entry.error)) {
+    const content = fold(strings(imported.slides[slide.slide - 1]).join(' '));
     for (const node of [slide.nodes].flat()) {
-      const text = String(node.text).replace(/[\v\r]/g, ' ').trim();
-      if (text) assert.ok(json.includes(JSON.stringify(text).slice(1, -1).split(' ')[0]), `${slide.name}: ${text}`);
+      const text = fold(String(node.text ?? ''));
+      if (text) assert.ok(content.includes(text), `${slide.name}: ${JSON.stringify(text)} is imported`);
     }
   }
-  assert.equal(json.includes('PowerPoint object'), false);
 }
