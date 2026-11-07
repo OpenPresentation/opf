@@ -52,6 +52,15 @@ describe('LH-102: under-filled automatic bodies center', () => {
     });
   }
 
+  test('a short body grows past a list\'s display size before it is centered', () => {
+    const result = composeSlide({ title: 'Buyer Signal', left: { text: 'Teams want fewer exports.' }, 'center+right': { text: 'They want review status, owners, and exceptions in one operating view.' } });
+    assert.deepEqual(findings(result), []);
+    // LH-48 alone stops at 37 px (a list's display size at 1280 by 720); the body grows on, each text larger.
+    for (const item of body(result)) assert.ok(item.text.fontSize > 37 + 0.01, `size ${item.text.fontSize}`);
+    const { above, below } = margins(result);
+    assert.ok(Math.abs(above - below) < 0.25 * (above + below), `above ${above}, below ${below}`);
+  });
+
   test('a body that fills the slide keeps its top', () => {
     const long = 'Northgate Museum should focus the next cycle on prepare a self-running lobby deck with concise navigation cues while making the operating tradeoffs clear to visitor orientation stakeholders. ';
     const result = composeSlide({ title: 'Decision Options', composition: { mode: 'column' }, blocks: Array.from({ length: 5 }, () => ({ text: long.repeat(2).trim() })) });

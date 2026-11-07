@@ -554,8 +554,11 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
   the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
-  Without a layout, a stack of paragraphs and lists that LH-48 grows (or cannot grow) while it covers under half of the body
-  sits in the middle of the body under the headings too, rather than at its top over an empty foot. Promoted regions that
+  Without a layout, a short body of paragraphs and lists that still covers under half of the body after LH-48's three steps
+  grows on past a list's display size, as LH-05's compact grid does: step by step up to 56 px, each step larger, nothing
+  overflowing, at most 60% of the body covered, the body keeping its rows and columns (a body that may draw step badges or
+  cards keeps the three steps, so those drawings are held to the same body). The stack then sits in the middle of the body under the headings, rather than
+  at its top over an empty foot. Promoted regions that
   each run the body's full height (`left`, `center+right`) and hold only paragraphs and lists set them as one band in the
   middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
   no block reads smaller and nothing overflows.
