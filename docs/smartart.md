@@ -1,8 +1,8 @@
 # Pyramids, matrices and live SmartArt
 
-Five layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
-`matrix` (four parts of a whole, or the four cases of two choices, as quadrants), and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows)
-(stages or steps in order). The PowerPoint export writes them as **live
+Six layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
+`matrix` (four parts of a whole, or the four cases of two choices, as quadrants), `cycle` (steps that repeat, as a loop; see
+[Cycles](#cycles-sh-18)) and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows) (stages or steps in order). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it, and as the same drawing in native shapes everywhere
 else. A slide on either layout never turns into a stray bullet list: the arrangement has a second design of its own, drawn when
 PowerPoint's does not hold the entries.
@@ -28,7 +28,19 @@ one list of one level (no nested entries, no descriptions, no icons, no `numberi
 | A grid of cards (`cards`), for a matrix of other than four entries | — | one card per entry in the card neutral, in the grid that holds the text largest (one column of wide cards, or a balanced grid), start-aligned; reported as `opf/arrangement-adapted` (info): a matrix needs four entries |
 
 When none of them holds the entries, or the list has a shape the arrangement does not draw (nested entries, descriptions, icons,
-numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A matrix never draws
+numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A list that no design
+holds still fills the region (SH-18 review, for every arrangement): its text takes the largest size from 1.5 times the role size down to
+the size it has at which the whole list fits the region, and it sits in the middle of the region's height (LH-48's body growth leaves a
+list alone once it covers half the body).
+
+**List blocks as entries (SH-18 review).** A region whose arrangement holds two or more list blocks draws each block as an entry, its
+list inside, the same way for every count: a cycle's blocks on cards on OPF's ring or loop (whichever holds them larger) with an arrow
+from each to the next, a matrix's on a grid of cards, a pyramid's beside the levels of OPF's stepped pyramid. Every list keeps its
+markers, is start-aligned and vertically centered in its card, and all are set at one size, the largest from 1.5 times the role size
+down to the lists' own size at which every block fits without a broken word. Where a pyramid's levels or a cycle's ring and loops do not
+hold the lists, the blocks are a grid of cards, with `opf/arrangement-adapted`; lists that overflow their region keep its composition,
+which pagination splits. The cards are native shapes (a SmartArt node does not hold a list), and a region with an arrangement keeps its
+whole cell when LH-48 centers an under-filled body, so the diagram fills it. A matrix never draws
 an empty quadrant.
 
 PowerPoint's geometry was measured through COM for its Basic Pyramid (`pyramid1`) and Basic Matrix (`matrix3`) layouts:
@@ -90,7 +102,7 @@ vertical flow: columns), whichever holds the text largest (one line on a tie), a
 is one size for every node, the largest from 1.5 times the list's role size down to the role size at which every node holds its entry;
 then every node takes the height that text needs with its margins (0.15 em above and below a box's text; PowerPoint's proportion at
 least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
-holds the entries at the list's size does OPF draw a compact form of the same design (rooms of a gap and a half, the arrow 0.6 of the
+holds the entries at the list's size does OPF draw a compact form of the same design (rooms of two gaps, the arrow 0.6 of the
 room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row spans the region: a row of fewer entries widens them (a
 column of fewer lengthens them).
 
@@ -268,13 +280,85 @@ Change Layout working (the build checked each on a pyramid and a matrix):
 The empty id is the only form that is both schema-valid and names nothing that is missing. The Open XML SDK validator and LibreOffice were
 not installed on the comparison machine, so neither was run.
 
+## Cycles (SH-18)
+
+The `cycle` layout (a region's `arrangement: "cycle"`) draws its lone list of one level as the steps of a loop: each entry a node on a
+ring, the first at the top and the rest clockwise, with an arrow from each to the next and from the last back to the first. It draws
+1 to 8 entries (two make a pair with an arrow each way; more than 8 stay a list, with `opf/arrangement-adapted`).
+
+```json
+{ "layout": "cycle", "title": "How each round feeds the next", "items": ["Plan", "Pilot", "Measure", "Adjust"] }
+```
+
+The designs are tried in order, each at one text size for every node, from 1.5 times the list's role size down to the role size, never
+below it:
+
+| Design (`design`) | Drawing |
+| --- | --- |
+| PowerPoint's (`smartart`), written as live SmartArt inside the [domain](#the-cycle-domain) | Basic Cycle (`cycle2`): circles on a ring with an arrow after each, in a frame of the cycle's own proportion centered in the region |
+| OPF's (`opf`), where the circles do not hold the entries at the list's size or the instance lies outside the domain | the larger-text of two designs that fill the region: rounded rectangles on an ellipse (two entries side by side, or one above the other in a tall region), or a loop of two or three rows (columns in a tall region), clockwise from the top left, with a node on every place of its edge: two rows hold ceil(n/2) nodes on top and the rest below, three rows a node at each end of the middle row too, and a row of fewer nodes widens them so every row spans the region (no place is ever empty); the arrows on the lines between the nodes' centers, all one size |
+
+Every node is filled in the primary color with the 1.5 pt background-colored outline of the other arrangements; the arrows are the
+primary lightened 40% (`lumMod 60000`, `lumOff 40000`), without an outline; the entries are centered on their nodes in the color that
+reads on the primary. A right-to-left deck mirrors the cycle, so its steps run counterclockwise.
+
+### PowerPoint's Basic Cycle
+
+PowerPoint lays Basic Cycle out from its frame alone: through COM (PowerPoint for Microsoft 365 on Windows 11, 2026-11-06) the circles and
+arrows were the same for short, medium and long text and at every font size, and exactly proportional to the frame at a fixed width over
+height (the largest difference across frames 230 to 920 pt wide was 0.0004 pt). At other proportions the result is not a closed form:
+PowerPoint searches the circle size as a ten-bit binary fraction of the frame's width and fits the ring in a second step, so the circles
+move by up to 0.4 pt between frames a few points apart. OPF therefore gives the SmartArt frame one proportion per count, **1.8 : 1 for two
+entries and 1.15 : 1 otherwise** (the cycle's own proportion, a little wider so its height decides the size), the largest such frame
+centered in the region, and reproduces PowerPoint's geometry from the frame's width W (core `cycleFrame`, `cycleNodes`):
+
+| | Basic Cycle |
+| --- | --- |
+| Circles | DrawingML `ellipse`, diameter `CYCLE_DIAMETER[n]`·W: 890/1024, 818/2048, 774/2048, 570/2048, 538/2048, 890/4096, 830/4096 and 723/4096 for 1 to 8 entries |
+| Ring | the centers at radius `CYCLE_RADIUS[n]`·W (0.3002, 0.32775, 0.29552, 0.33524, 0.32594, 0.3506 and 0.34595 for 2 to 8), the first at the top and the rest clockwise 360/n degrees apart; two entries left and right; the ring centered in the frame, an odd count's moved down by half of r·(1 − cos(180°/n)) so the circles' bounds are centered |
+| Arrows | after each circle a DrawingML `rightArrow` (`adj1` 60000, `adj2` 50000) 0.3375 of a diameter thick, on the line between two centers, 0.53 of the gap between the circles long and starting 0.22 of it after the first circle, turned to point along the line; two entries: one over and one under the gap, 0.2491·W long, their centers 0.1888·W off the line and 0.4883 of the way along it |
+| Text rectangle | the ellipse's own (the inscribed square, as PowerPoint's `txXfrm`), inset by 0.1 of the font size |
+| Stacking | each arrow after its circle (two entries: an arrow's head runs under the next circle) |
+
+The model matches every circle and arrow PowerPoint drew within 0.0001 pt in the frames measured. In the live SmartArt, the arrows are the
+data model's transition points (`sibTrans`, one after each entry, the last closing the loop), styled by OPF's `sibTrans2D1` label.
+
+In PowerPoint (COM), a cycle OPF wrote opens as live SmartArt (`HasSmartArt`, Basic Cycle, one node per entry); a node edit keeps OPF's
+size on every node and the circles where they were, Change Layout switches it to another layout with every entry, and a file saved again
+by PowerPoint (which writes its own layout part) imports back as the same list on the `cycle` layout, as does a Basic Cycle PowerPoint
+authored. With the `mc:Choice` requiring a namespace PowerPoint does not know, PowerPoint draws the fallback picture as the preview does
+(mean difference 0.94 to 1.05 of 255 over the slide, two, four and six entries).
+
+### The cycle domain
+
+| | Cycle |
+| --- | --- |
+| Entries | 1 to 8 |
+| Frame proportions | exactly cycleAspect's (1.8 : 1 for two entries, 1.15 : 1 otherwise), which OPF always gives it |
+| Lines | at most 2 for an entry, each break holding when the width changes by 4%; no limit in all (each circle holds its own entry: eight entries of one line and four of two matched) |
+| Text | Latin script, left to right, with the run formatting of the other arrangements |
+
+Right-to-left decks stay native shapes: PowerPoint draws Basic Cycle clockwise from the data model whatever the deck's direction, so
+its circles are not where OPF's mirrored cycle draws them. Japanese text sat 11 px off in the comparison. Entries of three lines or more
+drew within the shapes but outside SH-07's native gate (mean difference 1.03 to 1.62).
+
+### The cycle gate
+
+The same comparison as SH-09's, plus every arrow's rotation: a cycle of 1 to 8 entries with short, medium and long entries on 16:9,
+4:3 and 1:1 slides, and an Arabic and a Japanese deck of 3, 4 and 5 entries, 78 decks, each exported live and as native shapes and drawn
+by PowerPoint. A first pass with the domain open to every count, line count and script drew 35 decks live: PowerPoint laid every circle
+and arrow out where core does (largest difference 0.000 pt, rotations equal) at core's size in all of them, and 26 passed every check; the
+nine that did not are the three right-to-left decks (PowerPoint's clockwise layout), the three Japanese decks (text 11 px off) and the
+three entries of three or four lines. With the domain above the 78 decks draw: PowerPoint's design as live SmartArt in 25 (every one passes: circles and arrows within 0.000 pt, rotations equal, sizes equal, no visible shape difference, the SmartArt within SH-07's gate of the native export: mean difference at most 0.84 at a quarter size and 1.29 at full size, no visibly different block, the text's ink within 1.03 px), OPF's design in 44 (PowerPoint draws the shapes as the preview does: mean difference at most 1.04 inside the shapes and outside the text, no visibly different block) and a list in 9, filling the region (five to eight long entries on 1:1 slides, six to eight on 4:3, eight on 16:9, and eight medium entries on a 1:1 slide; `opf/arrangement-adapted` says so). In each of the nine, every design breaks one of the two rules that keep text readable at the list's role size: a word wider than its node (OPF never breaks a word: "Customers" is 143 px at 32 px, a node of the 4 + 4 loop on 16:9 109 px wide) or entries taller than their node (OPF never shrinks text below the role size: the 3 + 1 + 1 + 3 loop on 16:9 is 16 px short). The evidence is in the SH-18 folder of the
+shapes program.
+
 ## Import
 
 A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the slide, the list path, the arrangement, the authored list
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
-Pyramid, Basic Matrix, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
+Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
 entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
-`pyramid`, `matrix`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
+`pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
 SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in which only the fallback picture survived (an app without
 SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its

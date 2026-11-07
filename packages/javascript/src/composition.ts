@@ -49,10 +49,12 @@ export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,samp
 import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
+import {CYCLE_RING_MARGIN,cycleFrame,cycleLoop,cycleNodes,cycleRing,type ArrangementArrow} from './arrangements.js';
 import {ARRANGEMENT_CARDS_MAX,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,CARD_TEXT_MARGIN,cardNodes,MATRIX_ENTRIES,matrixNodes,matrixQuadrants,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,pyramidSteps,SMART_ART_DOMAIN,smartArtScript,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type ArrangementNode} from './arrangements.js';
-import {isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_LINES_MAX,type ArrangementArrow} from './linear-arrangements.js';
-export {ARRANGEMENTS,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,SMART_ART_NAMES,ARROW_LIGHTEN,type Arrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
-export {ARROW_ADJUST,CHEVRON_ADJUST,FLOW_ROUND_ADJUST,LINEAR_ARRANGEMENTS,LINEAR_TEXT_MARGINS,SMART_ART_SCALES,chevronNodes,flowNodes,isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_ARROW_LENGTH,OPF_ARROW_ROOM,OPF_ARROW_THICKNESS,OPF_CHEVRON_DEPTH,OPF_COLUMN_ARROW_LENGTH,OPF_COLUMN_ARROW_THICKNESS,OPF_COLUMN_ROOM,OPF_LINES_MAX,rightArrowPoints,verticalFlowNodes,type ArrangementArrow,type LinearArrangement,type LinearGeometry} from './linear-arrangements.js';
+import {isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_LINES_MAX} from './linear-arrangements.js';
+export {CYCLE_ARROW,CYCLE_ARROW_ADJUST,CYCLE_ARROW_LIGHTEN,CYCLE_DIAMETER,CYCLE_RADIUS,CYCLE_RING_MARGIN,CYCLE_RING_NODE,CYCLE_TWO,cycleAspect,cycleFrame,cycleLoop,cycleNodes,cycleRing,rightArrowPoints,type ArrangementArrow} from './arrangements.js';
+export {ARRANGEMENTS,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,SMART_ART_NAMES,type Arrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
+export {ARROW_ADJUST,CHEVRON_ADJUST,FLOW_ROUND_ADJUST,LINEAR_ARRANGEMENTS,LINEAR_TEXT_MARGINS,SMART_ART_SCALES,chevronNodes,flowNodes,isLinearArrangement,linearDesign,linearMargins,linearNodes,OPF_ARROW_LENGTH,OPF_ARROW_ROOM,OPF_ARROW_THICKNESS,OPF_CHEVRON_DEPTH,OPF_COLUMN_ARROW_LENGTH,OPF_COLUMN_ARROW_THICKNESS,OPF_COLUMN_ROOM,OPF_LINES_MAX,verticalFlowNodes,type LinearArrangement,type LinearGeometry} from './linear-arrangements.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
 export {BUILT_IN_MASKS, composeShape, ensureShapes, isPresetShape, isShapeBlock, presetAspect, presetMask, shapeIssues, shapesPending, shapeTextColor, stackedText, SHAPE_PRESETS, shapeStyleLook, translatePathData, DEFAULT_SHAPE_STYLE, PICTURE_STROKE_WIDTH, SHAPE_BLOCK_KEYS, SHAPE_EFFECT_KEYS, SHAPE_PADDING, SHAPE_STROKE_WIDTH, SHAPE_STYLES} from './shape-block.js';
@@ -511,6 +513,8 @@ export interface ComposedArrangement {
   background?: LayoutBox;
   /** The nodes in order (a matrix always has four); `path` is the entry's text path, absent for an empty quadrant. */
   nodes: (ArrangementNode & { path?: string })[];
+  /** SH-18: a cycle's arrows, the one after each node to the next (arrangements.ts cycleNodes, cycleRing), drawn after their node in the primary lightened (arrangementPaint's `arrow`). */
+  arrows?: ArrangementArrow[];
   fontSize: number;
   /** The text inset inside each node's text rectangle (ARRANGEMENT_TEXT_MARGIN of the size). */
   textMargin: number;
@@ -8937,7 +8941,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     for (const region of plan.regions) {
       const units = unitsOf(region.name), bound = binding.regions.find(entry => entry.name === region.name)!;
       const rect = rects.get(region.name);
-      let cell = rect && !region.bleed ? regionCell(rect) : physical(logical(rect ?? ownRects.get(region.name)!));
+      // SH-18 review: a region with an arrangement keeps its whole cell under LH-48's centering, which its diagram fills (arrangedLists, arrangedBlocks).
+      let cell = rect && !region.bleed ? (region.arrangement ? physical(logical(rect)) : regionCell(rect)) : physical(logical(rect ?? ownRects.get(region.name)!));
       const areaBox = region.bleed && rect ? roundBox(cell) : undefined;
       if (region.bleed && rect && cell.width > 0) cell = bleed(cell);
       else if (rect && loneUnit && units[0] === loneUnit && plan.regions.every(other => other === region || empty.has(other.name))) cell = { ...cell, height: Math.max(cell.height, frame.y + frame.height - cell.y) };
@@ -9557,6 +9562,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const frame = pyramidFrame(area);
       designs.push({ design: 'smartart', frame, nodes: pyramidNodes(frame, count), margin: ARRANGEMENT_TEXT_MARGIN.pyramid, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
       designs.push({ design: 'opf', frame: area, nodes: pyramidSteps(area, count, gap / 2, radius), margin: 0, align: 'start', paint: 'primary', text: 'slide', lineWidth: primaryLine });
+    } else if (kind === 'cycle') {
+      // SH-18: PowerPoint's Basic Cycle in a frame of its own proportion (cycleFrame), then OPF's two designs filling the region (rounded
+      // rectangles on a ring, and a loop of two rows), of which the one that holds the entries larger is kept (the ring when they tie).
+      const frame = cycleFrame(area, count), basic = cycleNodes(frame, count, rtl), own = [cycleRing(area, count, gap, rtl), cycleLoop(area, count, gap, rtl), cycleLoop(area, count, gap, rtl, 3)];
+      designs.push({ design: 'smartart', frame, ...basic, margin: ARRANGEMENT_TEXT_MARGIN.cycle, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
+      for (const shapes of own) if (shapes) designs.push({ design: 'opf', frame: area, ...shapes, margin: CYCLE_RING_MARGIN, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
     } else if (isLinearArrangement(kind)) {
       // SH-17: PowerPoint's Basic Chevron Process, Basic Process or Vertical Process in the region, then OPF's own design filling it.
       // OPF's in one to four rows (columns, a vertical flow), whichever holds the entries at the largest size (one line on a tie).
@@ -9590,15 +9601,16 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
         nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })), ...(isLinearArrangement(kind) ? { fill: result.placed.fill, ink: result.placed.ink } : {}) });
       if (unavailable !== undefined) { outside ??= { design, ...result }; skipped = unavailable; continue; }
-      // Of the card grids, and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
-      const largest = design.design === 'cards' || design.largest === true;
-      if (largest && chosen && chosen.size >= result.size) continue;
+      // Of the card grids, of a cycle's designs and of OPF's rows or columns of a linear arrangement (SH-17, `largest`), the one that holds the largest text.
+      const largest = design.design === 'cards' || kind === 'cycle' || design.largest === true;
+      if (largest && chosen && chosen.design.design === design.design && chosen.size >= result.size) continue;
       chosen = { design, ...result };
-      if (!largest) break;
+      if (design.design === 'smartart' || !largest) break;
     }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The entries of the ${kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ')} do not fit its ${SMART_ART_NAMES[kind].nodes} at the list's size, so they are drawn as a list.` });
+      fillRegionWithList(item, area, top);
       return undefined;
     }
     let { design, placed } = chosen;
@@ -9620,11 +9632,124 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       ...(design.margins ? { margins: placed.margins } : {}), ...(design.arrows ? { arrows: design.arrows } : {}),
       align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, smartArt: { lines: placed.lines, stable: placed.stable, ...(isLinearArrangement(kind) ? { fill: +placed.fill.toFixed(4), ink: +placed.ink.toFixed(4) } : {}) }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
   };
+  // SH-18 review: a region whose arrangement holds two or more list blocks (each block an entry of its own, a list inside it) draws the
+  // blocks as the arrangement's entries, the same way for every count and for the three arrangements: a cycle's blocks on cards on OPF's
+  // ring or a loop (whichever holds them larger) with an arrow from each to the next, a matrix's blocks on a grid of cards, a pyramid's
+  // blocks beside the levels of OPF's stepped pyramid. Every block's list keeps its markers, is start-aligned and vertically centered in
+  // its card (or beside its level) and is set at one size for all: the largest from ARRANGEMENT_GROWTH times the role size down to the
+  // smallest of the lists' own sizes at which every block fits. When none does, the blocks keep the region's own composition and
+  // `arrangement-adapted` says why. PowerPoint's SmartArt nodes do not hold a list, so these are always native shapes.
+  const blockCutsWord = (entry: ListEntryLayout): boolean => {
+    const word = /[\p{L}\p{N}]/u, everywhere = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
+    return entry.text.richLines.slice(1).some((line, index) => {
+      const last = entry.text.richLines[index]!.fragments.filter(fragment => fragment.kind === undefined).at(-1), first = line.fragments.find(fragment => fragment.kind === undefined);
+      if (!last || !first || last.runIndex !== first.runIndex || first.start !== last.end) return false;
+      const before = [...last.text].at(-1) ?? '', after = [...first.text][0] ?? '';
+      return word.test(before) && word.test(after) && !everywhere.test(before) && !everywhere.test(after);
+    });
+  };
+  const arrangedBlocks = (members: ComposedItem[], kind: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
+    const count = members.length, role = LIST_NOMINAL_SIZE * scale, step = 4 / 3 * scale, primaryLine = ARRANGEMENT_LINE_POINTS / .75 * scale, radius = CARD_RADIUS * scale;
+    const bases = members.map(member => (member.text as ListFit).fontSize), floor = Math.min(role, ...bases), top = Math.max(...bases, snapFontSizeDown(role * ARRANGEMENT_GROWTH));
+    type BlockDesign = { design: ComposedArrangement['design']; nodes: ArrangementNode[]; arrows?: ArrangementArrow[]; card: boolean; compact?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined };
+    const designs: BlockDesign[] = [];
+    if (kind === 'cycle') for (const shapes of [cycleRing(area, count, gap, rtl), cycleLoop(area, count, gap, rtl), cycleLoop(area, count, gap, rtl, 3)]) { if (shapes) designs.push({ design: 'opf', ...shapes, card: true }); }
+    else if (kind === 'pyramid') designs.push({ design: 'opf', nodes: pyramidSteps(area, count, gap / 2, radius), card: false });
+    // SH-17: OPF's chevrons or boxes in one to four rows (columns), each block on a card of that shape with the arrows between; the
+    // compact forms only when none of the proportioned ones holds the lists. The cards then take the height of the lists (refit).
+    else if (isLinearArrangement(kind)) for (const compact of [false, true]) for (let lines = 1; lines <= Math.min(OPF_LINES_MAX, count); lines++) {
+      const shapes = linearDesign(kind, area, count, gap, rtl, lines, undefined, compact);
+      if (shapes) designs.push({ design: 'opf', nodes: shapes.nodes, ...(shapes.arrows.length ? { arrows: shapes.arrows } : {}), card: true, ...(compact ? { compact: true as const } : {}),
+        refit: need => linearDesign(kind, area, count, gap, rtl, lines, need, compact) });
+    }
+    // A grid of cards: a matrix's own design, and the fallback of a pyramid or a cycle whose design does not hold the lists.
+    const cards: BlockDesign[] = [...new Set([1, ...(count > 1 ? cardGridColumns(count) : []), Math.min(count, 2)])].filter(column => column <= count)
+      .map(column => ({ design: 'cards' as const, nodes: cardNodes(area, count, column, gap, radius), card: true }));
+    if (kind === 'matrix') designs.push(...cards);
+    const optionsOf = members.map(member => listOptionsFor(member.field, member.path, member.payload.numbering, member.value));
+    const place = (design: BlockDesign, size: number) => {
+      const margin = design.card ? CARD_TEXT_MARGIN * size : 0, fits: { box: LayoutBox; text: ListFit }[] = [];
+      for (const [index, member] of members.entries()) {
+        const node = design.nodes[index]!, inner = { x: node.textBox.x + margin, y: node.textBox.y + margin, width: node.textBox.width - 2 * margin, height: node.textBox.height - 2 * margin };
+        if (inner.width <= 0 || inner.height <= 0) return undefined;
+        const values = member.value as ListValue[], probe = fitList(values, { ...inner, height: 1e5 }, size, size, optionsOf[index]!);
+        if (probe.overflow || probe.height > inner.height + 1e-6) return undefined;
+        const box = { x: inner.x, y: inner.y + (inner.height - probe.height) / 2, width: inner.width, height: probe.height }, text = fitList(values, box, size, size, optionsOf[index]!);
+        // Never a word broken across lines (a word wider than the card): Chinese and Japanese break between characters.
+        if (text.overflow || text.listEntries.some(entry => blockCutsWord(entry))) return undefined;
+        fits.push({ box, text });
+      }
+      return { fits, margin };
+    };
+    let chosen: { design: BlockDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined;
+    const trySizes = (design: BlockDesign) => {
+      for (let candidate = top; candidate >= floor - 1e-6; candidate = snapFontSizeDown(candidate - step)) {
+        const placed = place(design, Math.max(candidate, floor));
+        if (placed) { if (!chosen || candidate > chosen.size + 1e-6) chosen = { design, placed, size: Math.max(candidate, floor) }; break; }
+        if (candidate <= floor + 1e-6) break;
+      }
+    };
+    for (const design of designs) if (!design.compact) trySizes(design);
+    if (!chosen) for (const design of designs) if (design.compact) trySizes(design);
+    const noun = kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ');
+    if (!chosen && kind !== 'matrix') {
+      for (const design of cards) trySizes(design);
+      if (chosen) diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${noun}'s ${count} lists do not fit its ${SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as a grid of cards.` });
+    }
+    if (!chosen) {
+      diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${noun}'s ${count} lists do not fit its ${kind === 'matrix' ? 'cards' : SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as the region's blocks.` });
+      return undefined;
+    }
+    let { design, placed } = chosen;
+    const { size } = chosen;
+    // SH-17: OPF's cards of a linear arrangement take the height of the tallest list and its margins, centered.
+    if (design.refit) {
+      const shapes = design.refit(Math.max(...placed.fits.map(fit => fit.box.height)) + 2 * placed.margin);
+      const next = shapes ? { ...design, nodes: shapes.nodes, ...(shapes.arrows.length ? { arrows: shapes.arrows } : {}) } : undefined, again = next ? place(next, size) : undefined;
+      if (next && again) { design = next; placed = again; }
+    }
+    for (const [index, member] of members.entries()) {
+      const fit = placed.fits[index]!;
+      member.text = fit.text; member.box = fit.box; delete member.frameBox;
+      member.alignment = rtl ? 'right' : 'left';
+    }
+    return { kind, design: design.design, region: members[0]!.region ?? '', path: members[0]!.path, frame: { ...area },
+      nodes: design.nodes.map((node, index) => ({ ...node, path: members[index]!.path })), ...(design.arrows ? { arrows: design.arrows } : {}), fontSize: size, textMargin: placed.margin,
+      align: 'start', paint: design.card ? 'card' : 'primary', text: 'slide', lineWidth: design.card ? scale : primaryLine, smartArt: { lines: [], stable: [] },
+      ...(design.design === 'opf' ? { instead: `its entries are lists, which a SmartArt node does not hold` } : {}) };
+  };
+  // SH-18 review (also SH-09's pyramids and matrices): a list that no design of its region's arrangement holds still fills the region
+  // as an arrangement would. Its text takes the largest size, from the arrangement's top size (ARRANGEMENT_GROWTH times the role size)
+  // down to the size it has, at which the whole list fits the region, and the list sits in the middle of the region's height. LH-48's
+  // body growth leaves a list alone once it covers half the body, which left a fallback list at the role size in the top of the region.
+  const fillRegionWithList = (item: ComposedItem, area: LayoutBox, top: number): void => {
+    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, step = 4 / 3 * scale;
+    const listOptions = listOptionsFor(item.field, item.path, item.payload.numbering, values);
+    let size = base, height = fit.overflow ? Infinity : fit.height;
+    for (let candidate = top; candidate > base + 1e-6; candidate = snapFontSizeDown(candidate - step)) {
+      const probe = fitList(values, area, candidate, candidate, listOptions);
+      if (!probe.overflow && probe.height <= area.height + 1e-6) { size = candidate; height = probe.height; break; }
+    }
+    if (!Number.isFinite(height)) return;
+    const box = { x: area.x, y: area.y + Math.max(0, (area.height - height) / 2), width: area.width, height: Math.min(area.height, height) };
+    const placed = fitList(values, box, size, size, listOptions);
+    if (placed.overflow) return;
+    item.text = placed;
+    item.box = box;
+  };
   const arrangedLists = (): ComposedArrangement[] => {
     const result: ComposedArrangement[] = [];
     for (const region of template!.regions) {
       if (!region.arrangement) continue;
       const members = items.filter(item => item.region === region.name && !headings.has(item.field)), item = members.length === 1 ? members[0]! : undefined;
+      // SH-18 review: two or more list blocks are the entries themselves (arrangedBlocks).
+      // A region whose lists overflow keeps its composition, which pagination splits (the arrangement never sets them smaller).
+      const lists = members.filter(member => (member.field === 'items' || member.field === 'bullets') && !member.listColumns && !member.caption && member.text && 'listEntries' in member.text && !member.text.overflow);
+      if (members.length > 1 && lists.length === members.length && members.length <= (region.arrangement === 'matrix' ? ARRANGEMENT_CARDS_MAX : ARRANGEMENT_MAX[region.arrangement])) {
+        const arranged = arrangedBlocks(members, region.arrangement, templateRegions.find(entry => entry.name === region.name)?.box ?? members[0]!.box);
+        if (arranged) result.push(arranged);
+        continue;
+      }
       if (!item || (item.field !== 'items' && item.field !== 'bullets') || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text)) continue;
       const values = Array.isArray(item.value) ? item.value as unknown[] : [];
       if (!values.length) continue;

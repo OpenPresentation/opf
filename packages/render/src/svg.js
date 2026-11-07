@@ -987,11 +987,20 @@ function renderSteps(bound, options) {
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
 }
-// SH-09: core's pyramids and matrices (SH-17: chevrons and flows; geometry.arrangements), under the text of their entries, as the PPTX export draws them (live
+// SH-09: core's pyramids and matrices (geometry.arrangements; SH-18: cycles, circles or rounded rectangles with an arrow after each; SH-17: chevrons and flows), under the text of their entries, as the PPTX export draws them (live
 // SmartArt or native shapes): the matrix's diamond in the primary lightened 80%, then every node (an empty quadrant too) in the primary with
 // a centered outline in the background color, core's lineWidth wide. A pyramid level is its trapezoid's polygon (the apex a triangle), a
 // quadrant a rounded square of core's corner radius (DrawingML roundRect's circular corners). With trace each shape names the entry it
 // holds in data-opf-arrangement-path, not data-opf-path: it is the layout's drawing.
+// SH-18: a cycle's circle (DrawingML ellipse) and its arrow (rightArrow, core's outline turned by its rotation), the arrow without an outline.
+function cycleCircle(node, fill, stroke, trace) {
+  const {x, y, width, height} = node.box, n = stableNumber;
+  return tag('ellipse', {...HIDDEN, cx: n(x + width / 2), cy: n(y + height / 2), rx: n(width / 2), ry: n(height / 2), fill, ...stroke, ...trace});
+}
+function cycleArrowPath(arrow, fill) {
+  const n = stableNumber;
+  return tag('path', {...HIDDEN, d: `M${arrow.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill});
+}
 function renderArrangements(bound, options) {
   const arrangements = bound.geometry.arrangements;
   if (!arrangements?.length) return '';
@@ -1007,10 +1016,11 @@ function renderArrangements(bound, options) {
     for (const node of arrangement.nodes) {
       const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
       if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
+      else if (node.preset === 'ellipse') parts.push(cycleCircle(node, fill, stroke, trace));
       else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
+      // SH-18: a cycle's arrow after its node, as PowerPoint stacks them (an arrow of two entries runs under the next circle).
+      for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) parts.push(cycleArrowPath(arrow, paint.arrow.hex));
     }
-    // SH-17: the arrows between a flow's boxes, in the primary lightened 40%, without an outline (core's turned rightArrow outline).
-    for (const arrow of arrangement.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: `M${arrow.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill: paint.arrow.hex}));
     return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-arrangement-design': arrangement.design, 'data-opf-region': arrangement.region} : {}, parts.join(''));
   }).join('\n');
 }

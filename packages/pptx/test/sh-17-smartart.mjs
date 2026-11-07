@@ -114,4 +114,14 @@ const live = await exported(deck);
   assert.equal((slide.match(/<a:xfrm flipH="1">(?:(?!<\/a:xfrm>)[\s\S])*<\/a:xfrm><a:prstGeom prst="chevron">/g) ?? []).length, 3, 'mirrored chevrons');
 }
 
-console.log('SH-17 SmartArt passed: live Basic Chevron Process, Basic Process and Vertical Process with fallback pictures (data model, OPF colors with the arrows, drawing, no layout part), the round trip from the frame and from the picture alone, PowerPoint-style data models and an edited node, native shapes, the domain fallback and mirrored chevrons.');
+// 6. List blocks are the entries: cards with arrows as native shapes, never live (a SmartArt node holds no list), with the reason.
+{
+  const blocks = await exported({slides: [{layout: 'flow', title: 'Workstreams', blocks: [{items: ['Interview users', 'Map the journey']}, {items: ['Prototype', 'Test']}, {items: ['Decide', 'Plan']}]}]});
+  assert.match(blocks.diagnostics.find(item => item.code === 'smartart-unavailable')?.reason ?? '', /lists, which a SmartArt node does not hold/);
+  assert.equal(Object.keys(blocks.entries).some(path => path.startsWith('ppt/diagrams/')), false);
+  const slide = blocks.text('ppt/slides/slide1.xml');
+  assert.equal((slide.match(/name="OPF arrangement slides\.0\.blocks\.0\.items node \d"/g) ?? []).length, 3, 'one card per block');
+  assert.equal((slide.match(/name="OPF arrangement slides\.0\.blocks\.0\.items arrow \d"/g) ?? []).length, 2, 'an arrow between two cards');
+}
+
+console.log('SH-17 SmartArt passed: live Basic Chevron Process, Basic Process and Vertical Process with fallback pictures (data model, OPF colors with the arrows, drawing, no layout part), the round trip from the frame and from the picture alone, PowerPoint-style data models and an edited node, native shapes, the domain fallback, mirrored chevrons and list blocks as cards.');

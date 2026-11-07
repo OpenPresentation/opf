@@ -28,12 +28,13 @@
  * Where PowerPoint's design does not hold the entries at the list's size, or the instance lies outside the SmartArt domain, OPF draws its
  * own design of the arrangement (chevronRow, flowRow, flowColumn), filling the region; a right-to-left deck mirrors both.
  */
-import type {ArrangementNode} from './arrangements.js';
+import {LINEAR_ARRANGEMENTS, rightArrowPoints, type ArrangementArrow, type ArrangementNode} from './arrangements.js';
+
+export {LINEAR_ARRANGEMENTS};
 
 interface Box { x: number; y: number; width: number; height: number }
 
-/** SH-17's arrangements. */
-export const LINEAR_ARRANGEMENTS = ['chevrons', 'flow', 'vertical-flow'] as const;
+/** SH-17's arrangements (arrangements.ts LINEAR_ARRANGEMENTS). */
 export type LinearArrangement = typeof LINEAR_ARRANGEMENTS[number];
 export const isLinearArrangement = (kind: string): kind is LinearArrangement => (LINEAR_ARRANGEMENTS as readonly string[]).includes(kind);
 
@@ -66,19 +67,6 @@ export const LINEAR_TEXT_MARGINS: Readonly<Record<LinearArrangement, readonly [n
 /** The most nodes PowerPoint's scale is known for. */
 export const LINEAR_SCALE_MAX = 10;
 
-/** An arrow between two nodes: a DrawingML rightArrow of `box` (before rotation), turned `rotation` degrees about its center. */
-export interface ArrangementArrow {
-  /** 0-based: the arrow after node `index`. */
-  index: number;
-  box: Box;
-  /** Degrees clockwise: 0 points right, 90 down, 180 left. */
-  rotation: number;
-  /** The rightArrow's adj1 (stem) and adj2 (head) of 100000. */
-  adjust: readonly [number, number];
-  /** Its outline, turned, in the units of `box`. */
-  points: [number, number][];
-}
-
 const round = (value: number) => Math.round(value * 1000) / 1000;
 const roundBox = (box: Box): Box => ({x: round(box.x), y: round(box.y), width: round(box.width), height: round(box.height)});
 const roundPoints = (points: [number, number][]) => points.map(([x, y]) => [round(x), round(y)] as [number, number]);
@@ -107,15 +95,6 @@ function boxNode(index: number, box: Box, adjust: number): ArrangementNode {
   const radius = Math.min(box.width, box.height) * adjust / 100000, inset = ROUND_RECT_TEXT_INSET * radius;
   return {index, box: roundBox(box), preset: 'roundRect', adjust, radius: round(radius),
     textBox: roundBox({x: box.x + inset, y: box.y + inset, width: box.width - 2 * inset, height: box.height - 2 * inset})};
-}
-
-/** The outline of a DrawingML rightArrow of `box` turned `rotation` degrees about its center (adj1 the stem, adj2 the head). */
-export function rightArrowPoints(box: Box, rotation: number, [adj1, adj2]: readonly [number, number]): [number, number][] {
-  const {x, y, width: w, height: h} = box, ss = Math.min(w, h), a1 = Math.min(Math.max(adj1, 0), 100000), a2 = Math.min(Math.max(adj2, 0), 100000 * w / ss);
-  const head = x + w - ss * a2 / 100000, half = h * a1 / 200000, middle = y + h / 2;
-  const points: [number, number][] = [[x, middle - half], [head, middle - half], [head, y], [x + w, middle], [head, y + h], [head, middle + half], [x, middle + half]];
-  const angle = rotation * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle), cx = x + w / 2, cy = y + h / 2;
-  return roundPoints(points.map(([px, py]) => [cx + (px - cx) * cos - (py - cy) * sin, cy + (px - cx) * sin + (py - cy) * cos]));
 }
 
 function arrow(index: number, box: Box, rotation: number): ArrangementArrow {
@@ -164,7 +143,7 @@ export function linearNodes(kind: LinearArrangement, frame: Box, count: number, 
 }
 
 /** OPF's compact design (linearDesign `compact`): rooms of gaps, arrows of the room, a shallower chevron point. */
-export const COMPACT_ROOM = 1.5, COMPACT_COLUMN_ROOM = 1.25, COMPACT_ARROW_LENGTH = .6, COMPACT_ARROW_THICKNESS = .7, COMPACT_CHEVRON_DEPTH = .12;
+export const COMPACT_ROOM = 2, COMPACT_COLUMN_ROOM = 1.25, COMPACT_ARROW_LENGTH = .6, COMPACT_ARROW_THICKNESS = .7, COMPACT_CHEVRON_DEPTH = .12;
 /** The most rows (chevrons, flow) or columns (vertical flow) OPF's own design wraps its entries into. */
 export const OPF_LINES_MAX = 4;
 /** OPF's flows: an arrow is PowerPoint's (0.212 of a box's width long, 0.248 thick), in a room of 0.4 of a box's width between two. */
@@ -204,7 +183,7 @@ function split(count: number, lines: number): number[] {
  * mirrors the design. Undefined when the area cannot hold it.
  *
  * `compact`: the design composition falls back to only when no proportioned one holds the entries at the list's size (so no list is left
- * as a list a design could hold): the rooms a gap and a half (a vertical flow's 1.25 gaps) with an arrow 0.6 of the room long, a
+ * as a list a design could hold): the rooms two gaps (a vertical flow's 1.25 gaps) with an arrow 0.6 of the room long, a
  * chevron's point at most 0.12 of its width deep and half a gap from the next notch, and no least height.
  */
 export function linearDesign(kind: LinearArrangement, area: Box, count: number, gap: number, rtl = false, lines = 1, need?: number, compact = false): LinearGeometry | undefined {

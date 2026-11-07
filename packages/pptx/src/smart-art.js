@@ -1,4 +1,5 @@
-// SH-09: core's pyramids and matrices (SlideComposition.arrangements, core arrangements.ts) in the PPTX export and import.
+// SH-09: core's pyramids and matrices (SlideComposition.arrangements, core arrangements.ts) in the PPTX export and import; SH-18 adds
+// cycles (Basic Cycle, cycle2: circles with a rightArrow after each, the arrows the sibTrans2D1 label).
 //
 // Export takes the first that fits (owner, 2026-11-06):
 //
@@ -51,7 +52,7 @@ const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
 /** SH-16: the alt text of the fallback picture: the kind and size, then each entry on its own line, in entry order. */
 export function smartArtOutline(kind, values) {
   const texts = values.map(plain), count = texts.length;
-  const head = kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
+  const head = kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'cycle' ? cycleOutlineHead(count) : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
     // SH-17: the linear arrangements, in order.
     : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
   return [`${head}:`, ...texts].join('\n');
@@ -95,6 +96,8 @@ export function smartArtBleed(arrangement) {
       }
     });
   }
+  // SH-18: a cycle's arrows have no outline; their corners are their reach.
+  for (const arrow of arrangement.arrows ?? []) points.push(...arrow.points);
   const reach = Math.max(0, ...points.flatMap(([x, y]) => [frame.x - x, frame.y - y, x - frame.x - frame.width, y - frame.y - frame.height]));
   return Math.ceil((reach + ANTIALIAS) * EMU) / EMU;
 }
@@ -185,7 +188,7 @@ const CONTENT_TYPES = Object.freeze({
 /** OPF's own quick style and colors definitions (uniqueId): not Microsoft's, whose content differs. */
 export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
 export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
-const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', chevrons: 'process', flow: 'process', 'vertical-flow': 'process'});
+const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', cycle: 'cycle', chevrons: 'process', flow: 'process', 'vertical-flow': 'process'});
 const KIND_OF_LAYOUT = new Map(Object.entries(SMART_ART_LAYOUTS).map(([kind, id]) => [id, kind]));
 const EMU = 9525; // per canvas pixel (1/96 inch)
 const emu = value => Math.round(value * EMU);
@@ -273,12 +276,8 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       slide.addShape(node.preset, {...box(node.box), fill: {color: fill}, line, objectName,
         ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
-    }
-    // SH-17: a flow's arrows, DrawingML rightArrows turned about their centers, in the primary lightened 40% without an outline.
-    for (const arrow of arrangement.arrows ?? []) {
-      const objectName = name(`arrow ${arrow.index}`);
-      slide.addShape('rightArrow', {...box(arrow.box), fill: {color: paint.arrow.hex.slice(1)}, line: {type: 'none'}, objectName, ...(arrow.rotation ? {rotate: arrow.rotation} : {})});
-      tag(objectName, 'arrow', {index: arrow.index, adjust: [...arrow.adjust]});
+      // SH-18: a cycle's arrow after its node, as PowerPoint stacks them.
+      for (const arrow of arrangement.arrows?.filter(entry => entry.index === node.index) ?? []) addCycleArrow(slide, arrow, {box, name, tag, color: paint.arrow.hex.slice(1)});
     }
   }
   return drawn;
@@ -291,11 +290,11 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
 export function writeArrangementAdjustments(entries, tags) {
   if (!tags.size) return;
   const geometry = preset => new RegExp(`<a:prstGeom prst="${preset}">\\s*(?:<a:avLst\\s*/>|<a:avLst>[\\s\\S]*?</a:avLst>)\\s*</a:prstGeom>`);
+  writeCycleArrowAdjustments(entries, tags);
   for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
     const xml = decoder.decode(entries[part]);
     const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
       const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
-      if (record?.role === 'arrow') return shape.replace(geometry('rightArrow'), `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${record.adjust[0]}"/><a:gd name="adj2" fmla="val ${record.adjust[1]}"/></a:avLst></a:prstGeom>`);
       if (record?.role !== 'node' || (record.preset !== 'trapezoid' && record.preset !== 'chevron')) return shape;
       return shape.replace(geometry(record.preset), `<a:prstGeom prst="${record.preset}"><a:avLst><a:gd name="adj" fmla="val ${record.adjust}"/></a:avLst></a:prstGeom>`);
     });
@@ -359,7 +358,7 @@ export function smartArtColorsXml(paint) {
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
     : name === 'revTx' ? list(name, none, none, '<a:schemeClr val="tx1"/>')
-      // SH-17: the arrows between a flow's boxes, in the primary lightened 40% without an outline.
+      // SH-18 and SH-17: the arrows of a cycle or a flow (sibTrans2D1) in the primary lightened 40%, without an outline.
       : name === 'sibTrans2D1' ? list(name, schemeXml(paint.arrow), none, schemeXml(paint.text))
       : list(name, schemeXml(paint.fill), schemeXml(paint.line), schemeXml(paint.text)));
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:colorsDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_COLORS}"><dgm:title val="OPF primary"/><dgm:desc val="OPF: the nodes in the primary color, outlined in the background"/><dgm:catLst><dgm:cat type="accent1" pri="11000"/></dgm:catLst>${labels.join('')}</dgm:colorsDef>`;
@@ -383,14 +382,12 @@ export function smartArtDrawingXml(record, number) {
   if (arrangement.background) shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 99)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrangement.background)}<a:prstGeom prst="diamond"><a:avLst/></a:prstGeom><a:solidFill>${schemeXml(paint.background)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
   for (const node of arrangement.nodes) {
     const index = node.index, text = node.path !== undefined ? nodeParagraph(record, index) : '';
-    // A quadrant's roundRect is at the default corner; a box's (SH-17) and a chevron's carry core's adjustment.
-    const geometry = node.preset === 'roundRect' && (node.adjust ?? 16667) === 16667 ? '<a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>' : `<a:prstGeom prst="${node.preset}"><a:avLst><a:gd name="adj" fmla="val ${node.adjust}"/></a:avLst></a:prstGeom>`;
+    // A cycle's ellipse, and a quadrant's roundRect at the default corner, have no adjustment; a box's (SH-17) and a chevron's carry core's.
+    const geometry = node.preset === 'ellipse' ? '<a:prstGeom prst="ellipse"><a:avLst/></a:prstGeom>' : node.preset === 'roundRect' && (node.adjust ?? 16667) === 16667 ? '<a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>' : `<a:prstGeom prst="${node.preset}"><a:avLst><a:gd name="adj" fmla="val ${node.adjust}"/></a:avLst></a:prstGeom>`;
     const insets = arrangement.margins ? `lIns="${left}" tIns="${top}" rIns="${right}" bIns="${bottom}"` : `lIns="${margin}" tIns="${margin}" rIns="${margin}" bIns="${margin}"`;
     shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(node.box, 'a:xfrm', {flip: node.flip === true})}${geometry}<a:solidFill>${schemeXml(paint.fill)}</a:solidFill><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill>${schemeXml(paint.line)}</a:solidFill></a:ln></dsp:spPr><dsp:style><a:lnRef idx="3">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr wrap="square" ${insets} anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>${text || `<a:endParaRPr lang="${escapeXml(record.lang)}"/>`}</a:p></dsp:txBody>${xfrm(node.textBox, 'dsp:txXfrm')}</dsp:sp>`);
-  }
-  // SH-17: the arrows between a flow's boxes (rightArrows turned about their centers), without text.
-  for (const arrow of arrangement.arrows ?? []) {
-    shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 50 + arrow.index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrow.box, 'a:xfrm', {rotation: arrow.rotation})}<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${arrow.adjust[0]}"/><a:gd name="adj2" fmla="val ${arrow.adjust[1]}"/></a:avLst></a:prstGeom><a:solidFill>${schemeXml(paint.arrow)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
+    // SH-18: an arrow after its node (a cycle's, SH-17 a flow's).
+    for (const arrow of arrangement.arrows?.filter(entry => entry.index === index) ?? []) shapes.push(cycleArrowDrawingXml(arrow, record, number, origin));
   }
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dsp:drawing xmlns:dgm="${NS.dgm}" xmlns:dsp="${NS.dsp}" xmlns:a="${NS.a}"><dsp:spTree><dsp:nvGrpSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvGrpSpPr/></dsp:nvGrpSpPr><dsp:grpSpPr/>${shapes.join('')}</dsp:spTree></dsp:drawing>`;
 }
@@ -496,6 +493,43 @@ export function attachSmartArtFallbacks(entries, records, relationshipsOf) {
     if (next !== xml) entries[part] = encoder.encode(next);
   }
   if (seen !== fallbacks.size) throw new Error('Missing generated SmartArt fallback pictures.');
+}
+
+// ---------------------------------------------------------------------------
+// SH-18: a cycle's arrows (core ComposedArrangement.arrows): DrawingML rightArrow shapes turned along the cycle, after their node.
+
+/** SH-18: the first line of a cycle's alt text. */
+function cycleOutlineHead(count) {
+  return `Cycle of ${count} step${count === 1 ? '' : 's'}, clockwise from the top, the last leading back to the first`;
+}
+
+/** SH-18, native shapes: one arrow of a cycle (a rightArrow at core's box and rotation, the primary lightened, no outline), tagged OPF_ARRANGEMENT_V1. */
+function addCycleArrow(slide, arrow, {box, name, tag, color}) {
+  const objectName = name(`arrow ${arrow.index}`);
+  slide.addShape('rightArrow', {...box(arrow.box), rotate: arrow.rotation, fill: {color}, line: {type: 'none'}, objectName});
+  tag(objectName, 'arrow', {index: arrow.index, rotation: arrow.rotation, adjust: [...arrow.adjust]});
+}
+
+/** SH-18: a cycle arrow's adjustments (pptxgenjs writes the preset's default): core's adj1 and adj2, by object name, in the finished slide parts. */
+function writeCycleArrowAdjustments(entries, tags) {
+  for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
+    const xml = decoder.decode(entries[part]);
+    const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
+      const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
+      if (record?.role !== 'arrow' || !Array.isArray(record.adjust)) return shape;
+      return shape.replace(/<a:prstGeom prst="rightArrow">\s*(?:<a:avLst\s*\/>|<a:avLst>[\s\S]*?<\/a:avLst>)\s*<\/a:prstGeom>/,
+        `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${record.adjust[0]}"/><a:gd name="adj2" fmla="val ${record.adjust[1]}"/></a:avLst></a:prstGeom>`);
+    });
+    if (next !== xml) entries[part] = encoder.encode(next);
+  }
+}
+
+/** SH-18: a cycle arrow in the SmartArt's cached drawing (relative to the frame `origin`, EMU). */
+function cycleArrowDrawingXml(arrow, record, number, origin) {
+  const {paint} = record, rot = Math.round(arrow.rotation * 60000) % 21600000;
+  const xfrm = `<a:xfrm${rot ? ` rot="${rot}"` : ''}><a:off x="${emu(arrow.box.x - origin.x)}" y="${emu(arrow.box.y - origin.y)}"/><a:ext cx="${emu(arrow.box.width)}" cy="${emu(arrow.box.height)}"/></a:xfrm>`;
+  const geometry = `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${arrow.adjust[0]}"/><a:gd name="adj2" fmla="val ${arrow.adjust[1]}"/></a:avLst></a:prstGeom>`;
+  return `<dsp:sp modelId="${modelId(number, ROLE.shape, 100 + arrow.index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm}${geometry}<a:solidFill>${schemeXml(paint.arrow)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dsp:txBody></dsp:sp>`;
 }
 
 // ---------------------------------------------------------------------------

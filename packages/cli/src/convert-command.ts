@@ -68,7 +68,7 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote
                                                   re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
-                   --smart-art <live|shapes>      a pyramid or matrix layout: live (the default) writes live SmartArt where
+                   --smart-art <live|shapes>      a pyramid, matrix or cycle layout: live (the default) writes live SmartArt where
                                                   PowerPoint draws it as the preview does, else native shapes (smartart-
                                                   unavailable says why); shapes writes native shapes always
                    --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": live (the default)

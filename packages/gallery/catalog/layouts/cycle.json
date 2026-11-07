@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "cycle",
+  "name": "Cycle",
+  "summary": "Steps that repeat, as a loop of nodes with arrows beside the title.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "row",
+  "regions": [
+    {
+      "name": "title",
+      "size": 2
+    },
+    {
+      "name": "stages",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "cycle",
+      "size": 3
+    }
+  ],
+  "description": "Show 2 to 8 steps that repeat, where the last leads back to the first (a review loop, a product lifecycle, a feedback cycle). Write one short list entry per step, in order; the first is drawn at the top and the rest clockwise, with an arrow from each to the next.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/cycle.svg"
+  }
+}

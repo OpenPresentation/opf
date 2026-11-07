@@ -97,10 +97,10 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   assert.deepEqual(column.arrows.map(arrow => arrow.rotation), [90, 90, 0, 270]);
   assert.ok(column.nodes[3].box.y > column.nodes[4].box.y, 'the second column runs up');
   near(column.nodes[3].box.y + column.nodes[3].box.height, column.nodes[2].box.y + column.nodes[2].box.height, 'both columns end at the same bottom');
-  // The compact form: rooms of a gap and a half with an arrow 0.6 of the room, no least height.
+  // The compact form: rooms of two gaps with an arrow 0.6 of the room, no least height.
   const compact = linearDesign('flow', area, 3, 24, false, 1, 40, true);
-  near(compact.nodes[1].box.x - (compact.nodes[0].box.x + compact.nodes[0].box.width), 36, 'a gap and a half');
-  near(compact.arrows[0].box.width, .6 * 36, 'arrow length');
+  near(compact.nodes[1].box.x - (compact.nodes[0].box.x + compact.nodes[0].box.width), 48, 'two gaps');
+  near(compact.arrows[0].box.width, .6 * 48, 'arrow length');
   assert.ok(compact.nodes[0].box.height < .6 * compact.nodes[0].box.width, 'as tall as its text');
 });
 
@@ -112,7 +112,7 @@ test('the gallery has a chevrons, a flow and a vertical-flow layout, each a lone
     const region = layoutTemplate(gallery.layouts[kind]).regions.find(entry => entry.arrangement);
     assert.deepEqual([region.name, region.arrangement], ['stages', kind]);
   }
-  assert.deepEqual(ARRANGEMENTS, ['pyramid', 'matrix', 'chevrons', 'flow', 'vertical-flow']);
+  assert.deepEqual(ARRANGEMENTS.filter(kind => ['chevrons', 'flow', 'vertical-flow'].includes(kind)), ['chevrons', 'flow', 'vertical-flow']);
   assert.equal(SMART_ART_LAYOUTS.chevrons, 'urn:microsoft.com/office/officeart/2005/8/layout/chevron1');
   assert.equal(SMART_ART_LAYOUTS.flow, 'urn:microsoft.com/office/officeart/2005/8/layout/process1');
   assert.equal(SMART_ART_LAYOUTS['vertical-flow'], 'urn:microsoft.com/office/officeart/2005/8/layout/process2');
@@ -156,6 +156,29 @@ test('long entries draw OPF\'s design, a right-to-left deck mirrors it, and what
   const nine = compose({ layout: 'chevrons', title: 'T', items: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] });
   assert.equal(nine.arrangements, undefined);
   assert.match(adapted(nine)[0], /A row of chevrons draws a list .* more than 8 chevrons/);
+});
+
+test('list blocks are the entries: each on a card of the design, arrows between, one size, the bullets kept; a card grid where they do not fit', () => {
+  const blocks = [{ items: ['Interview users', 'Map the journey'] }, { items: ['Prototype', 'Test with five teams'] }, { items: ['Decide', 'Plan the rollout'] }];
+  for (const kind of ['chevrons', 'flow', 'vertical-flow']) {
+    const result = compose({ layout: kind, title: 'Three workstreams', blocks });
+    const [arrangement] = result.arrangements, lists = result.items.filter(item => item.field === 'items');
+    assert.deepEqual([arrangement.kind, arrangement.design, arrangement.paint, arrangement.align], [kind, 'opf', 'card', 'start'], kind);
+    assert.equal(arrangement.nodes.length, 3);
+    assert.equal(arrangement.arrows?.length ?? 0, kind === 'chevrons' ? 0 : 2, `${kind}: arrows between the cards`);
+    assert.match(arrangement.instead, /lists, which a SmartArt node does not hold/);
+    assert.equal(new Set(lists.map(list => list.text.fontSize)).size, 1, `${kind}: one size`);
+    assert.ok(lists[0].text.fontSize >= LIST_NOMINAL_SIZE - 1e-6, `${kind}: never below the role size`);
+    assert.ok(lists.every(list => list.text.listEntries.every(entry => !entry.marker.none)), `${kind}: the bullets kept`);
+    for (const [index, list] of lists.entries()) {
+      const node = arrangement.nodes[index].box;
+      assert.ok(list.box.x >= node.x && list.box.x + list.box.width <= node.x + node.width + 1e-6 && list.box.y >= node.y - 1e-6 && list.box.y + list.box.height <= node.y + node.height + 1e-6, `${kind}: list ${index} on its card`);
+    }
+  }
+  // Lists no design holds at their size keep the region's composition (pagination splits them), with the finding.
+  const long = Array.from({ length: 3 }, () => ({ items: Array.from({ length: 7 }, (_, index) => `Item ${index + 1}: customers told us onboarding took too long, so we rebuilt it around them`) }));
+  const crowded = compose({ layout: 'flow', title: 'Long', blocks: long });
+  assert.equal(crowded.arrangements, undefined);
 });
 
 test('the arrows\' paint: the primary lightened 40%, a color SmartArt\'s colors part names exactly', () => {

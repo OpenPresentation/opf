@@ -76,7 +76,7 @@ export interface ExportOptions {
 	 */
 	bodyText?: "measured" | "native";
 	/**
-	 * `pptx` (SH-09): a pyramid or matrix (a layout region's `arrangement`) as live SmartArt (`live`, the default) where PowerPoint lays it
+	 * `pptx` (SH-09, SH-18): a pyramid, matrix or cycle (a layout region's `arrangement`) as live SmartArt (`live`, the default) where PowerPoint lays it
 	 * out exactly as the preview draws it, else as native shapes with a `smartart-unavailable` finding; `shapes` writes native shapes always.
 	 */
 	smartArt?: "live" | "shapes";
