@@ -13,7 +13,7 @@
 // Every feature also gets `content`: every word on the page and in the saved copy.
 
 const OVERFLOW = new Set(["slide-edge", "text-box", "clipped", "ink-edge"]);
-const CONTENT = new Set(["content", "round-trip"]);
+const CONTENT = new Set(["content", "round-trip", "chart-unsupported"]);
 
 const sum = (list, key) => list.reduce((total, counts) => total + (counts?.[key] ?? 0), 0);
 
@@ -61,7 +61,7 @@ export function gradeFeature(feature, result, scope) {
       checks.roundtrip = imported?.ok ? { status: "pass", detail: `OPF imports LibreOffice's copy (${imported.slides} slides)` } : { status: "fail", detail: imported?.error ?? "LibreOffice did not save a copy" };
     } else checks[check] = { status: "n/a", detail: "not gradable in LibreOffice" };
   }
-  if (result?.converted) {
+  if (result?.converted && feature.checks?.length) {
     const lost = defectsOn(CONTENT);
     checks.content = lost.length ? { status: "fail", detail: lost.slice(0, 2).map((defect) => `slide ${defect.slide ?? "?"}: ${defect.detail}`).join("; ") } : { status: "pass" };
   }

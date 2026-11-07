@@ -2,6 +2,12 @@
 // PPTX model (pptx-model.mjs) and the PDF runs (pdf-model.mjs), so they are unit-tested without LibreOffice (checks.test.mjs).
 import { slideWords, tokenize } from "./pptx-model.mjs";
 
+// Right-to-left letters (Hebrew, Arabic, Syriac, Thaana, NKo and their presentation forms), built from code points.
+const span = (from, to) => `${String.fromCodePoint(from)}-${String.fromCodePoint(to)}`;
+const RTL = new RegExp(`[${span(0x0590, 0x08ff)}${span(0xfb1d, 0xfdff)}${span(0xfe70, 0xfefe)}]`, "u");
+const LETTER = /\p{L}|\p{N}/u;
+const fold = (value) => value.normalize("NFKC").toLocaleLowerCase("und");
+
 /** Tolerances, in points. A run may pass its box or the slide by this much before it counts. */
 export const TOLERANCE = Object.freeze({ horizontal: 1, slide: 0.5, verticalEm: 0.35 });
 
@@ -66,10 +72,22 @@ export function containment(page, slide, slideSize) {
  * occurrences in the whitespace-free text are at least its occurrences in `words` (a run split by the viewer still matches).
  */
 export function missingWords(words, text) {
-  const haystack = tokenize(text).join("");
+  // Case-folded and NFKC: a run drawn in capitals (cap="all", an eyebrow) or with presentation-form glyphs still matches.
+  const haystack = fold(tokenize(text).join(""));
   const counts = new Map();
-  for (const word of words) counts.set(word, (counts.get(word) ?? 0) + 1);
+  const rtl = [];
+  for (const word of words) {
+    // A PDF's text layer gives right-to-left words as glyph clusters in visual order, split apart: they are compared as letters.
+    if (RTL.test(word)) rtl.push(word);
+    else counts.set(fold(word), (counts.get(fold(word)) ?? 0) + 1);
+  }
   const missing = [];
+  if (rtl.length) {
+    const letters = (value) => [...fold(value)].filter((char) => LETTER.test(char)).reduce((map, char) => map.set(char, (map.get(char) ?? 0) + 1), new Map());
+    const have = letters(text), need = letters(rtl.join(""));
+    const short = [...need].filter(([char, count]) => (have.get(char) ?? 0) < count);
+    if (short.length) missing.push({ word: rtl.join(" "), expected: need.size, found: need.size - short.length, letters: short.map(([char]) => char).join("") });
+  }
   for (const [word, count] of counts) {
     let found = 0, index = 0;
     while (found < count && (index = haystack.indexOf(word, index)) !== -1) { found += 1; index += word.length; }
@@ -157,6 +175,7 @@ export function verdict(result) {
       if (sideways.length) defects.push({ check: "text-box", slide: slide.number, detail: sideways.slice(0, 4).map((entry) => `"${entry.str.trim().slice(-24)}" ${entry.side} +${entry.by} pt`).join("; ") });
       const grown = (slide.outsideBox ?? []).filter((entry) => entry.side === "bottom" && entry.wrap !== "none");
       if (grown.length) differences.push({ check: "vertical-growth", slide: slide.number, detail: `${grown.length} run(s) below a wrapping box, up to ${Math.max(...grown.map((entry) => entry.by))} pt` });
+      if (slide.unsupportedCharts) defects.push({ check: "chart-unsupported", slide: slide.number, detail: `${slide.unsupportedCharts} chart(s) drawn as LibreOffice's "unsupported chart type" placeholder, without their data` });
       if (slide.shrink) defects.push({ check: "shrink", slide: slide.number, detail: `${slide.shrink} text box(es) ask the viewer to shrink text on overflow (normAutofit)` });
       if (slide.smartArtMissing?.length) differences.push({ check: "smartart-fallback", slide: slide.number, detail: `SmartArt text not on the page: ${slide.smartArtMissing.map((entry) => entry.word).slice(0, 6).join(" ")}` });
       const ink = Object.entries(slide.inkOutside ?? {}).filter(([side, count]) => count > 0 && !slide.bleeds?.includes(side));

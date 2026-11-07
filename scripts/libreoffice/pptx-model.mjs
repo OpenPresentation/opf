@@ -132,8 +132,12 @@ export function readPptx(bytes) {
     const scheme = descendants(parseXml(text(themePart)).root, "a:fontScheme")[0];
     themeFonts["+mj-lt"] = path2(scheme, "a:majorFont", "a:latin")?.attributes.typeface;
     themeFonts["+mn-lt"] = path2(scheme, "a:minorFont", "a:latin")?.attributes.typeface;
+    for (const [token, font, slot] of [["+mj-ea", "a:majorFont", "a:ea"], ["+mn-ea", "a:minorFont", "a:ea"], ["+mj-cs", "a:majorFont", "a:cs"], ["+mn-cs", "a:minorFont", "a:cs"]]) {
+      const typeface = path2(scheme, font, slot)?.attributes.typeface;
+      if (typeface) themeFonts[token] = typeface;
+    }
   }
-  const families = new Set(Object.values(themeFonts).filter(Boolean));
+  const families = new Set([themeFonts["+mj-lt"], themeFonts["+mn-lt"]].filter(Boolean));
   const slides = slideParts.map((part, index) => {
     const rels = relationships(files, part);
     const layoutPart = Object.values(rels).find((rel) => rel.type.endsWith("/slideLayout"))?.target;
@@ -141,18 +145,19 @@ export function readPptx(bytes) {
     const layers = [placeholderBoxes(text(layoutPart)), placeholderBoxes(text(masterPart))];
     const doc = parseXml(text(part)).root;
     const slideFonts = new Set();
-    for (const latin of descendants(doc, "a:latin")) {
+    for (const latin of [...descendants(doc, "a:latin"), ...descendants(doc, "a:ea"), ...descendants(doc, "a:cs")]) {
       const family = themeFonts[latin.attributes.typeface] ?? latin.attributes.typeface;
+      if (family?.startsWith("+")) continue;
       if (family) { slideFonts.add(family); families.add(family); }
     }
     const shapes = [];
     const visit = (container, transform) => {
       for (const node of elements(container)) {
         if (node.name === "mc:AlternateContent") {
-          // A viewer that does not know the Choice's namespace (chartex: cx) reads the Fallback; LibreOffice is such a viewer.
-          const choice = kid(node, "mc:Choice"), fallback = kid(node, "mc:Fallback");
-          const requires = choice?.attributes.Requires ?? "";
-          visit(/\bcx\d*\b/.test(requires) && fallback ? fallback : choice ?? fallback, transform);
+          // The Choice: OPF writes chartex charts (Requires="cx...") with a Fallback, and LibreOffice 26.8 reads the chartex Choice
+          // itself (it draws a histogram natively; a chart type it lacks becomes its "unsupported" placeholder, which run.mjs counts).
+          // LibreOffice's own re-export adds a text Fallback ("This chart isn't available...") that a viewer of the Choice never shows.
+          visit(kid(node, "mc:Choice") ?? kid(node, "mc:Fallback"), transform);
           continue;
         }
         if (!["p:sp", "p:pic", "p:graphicFrame", "p:grpSp", "p:cxnSp"].includes(node.name)) continue;
@@ -197,7 +202,8 @@ export function readPptx(bytes) {
             entry.kind = "smartart";
             const ids = kid(data, "dgm:relIds");
             const target = rels[ids?.attributes["r:dm"]]?.target;
-            if (target && files[target]) entry.strings = descendants(parseXml(text(target)).root, "a:t").map((t) => t.text).filter((value) => value.trim());
+            // Each node's text once: the data part repeats a node's text in its presentation points.
+            if (target && files[target]) entry.strings = [...new Set(descendants(parseXml(text(target)).root, "a:t").map((t) => t.text).filter((value) => value.trim()))];
           }
         }
         shapes.push(entry);

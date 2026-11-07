@@ -57,7 +57,8 @@ export async function prepareProfile(name, directory) {
   mkdirSync(cacheDir, { recursive: true });
   const requireRender = createRequire(path.join(root, "packages/render/package.json"));
   const { copyPreviewFonts } = await import(pathToFileURL(path.join(path.dirname(requireRender.resolve("@openpresentation/opf-render/package.json")), "dist/preview-fonts-node.js")).href);
-  const copied = copyPreviewFonts({ outDir: fontDir, cwd: root });
+  // Every script face too (Noto Sans JP, Noto Naskh Arabic, ...): OPF previews those scripts with them.
+  const copied = copyPreviewFonts({ outDir: fontDir, cwd: root, scripts: "all" });
   const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8"));
   const aliases = policyAliases(policy);
   const conf = path.join(directory, "fonts.conf");

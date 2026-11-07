@@ -164,6 +164,7 @@ async function measure(entry, exported, model, profile, paths, { control = false
       inkOutside: inkOutside(raster),
       bleeds: [...sourceBleeds(slide, model.slideSize)],
       kinds: shapeKinds(slide),
+      unsupportedCharts: (pageText(page).match(/unsupported in this version of LibreOffice/gi) ?? []).length,
       shrink: slide.shapes.filter((shape) => shape.body?.autofit === "normal").length,
     };
     // SmartArt node text (LibreOffice draws the fallback drawing; the words must still be on the page).

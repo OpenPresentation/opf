@@ -57,9 +57,9 @@ export function qualificationManifest() {
   return existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : null;
 }
 
-// Decks whose default export carries live SmartArt or chartex charts: LibreOffice draws their fallback pictures, so they are outside the
-// baseline (a defect there is a known difference).
-const ADVANCED_QUALIFICATION = new Set(["smartart", "smartart-arabic", "smartart-japanese", "chart-type-sampler"]);
+// Decks whose default export carries live SmartArt (LibreOffice draws its drawing part, not its own layout) or chartex types LibreOffice
+// may lack (treemap, sunburst, map): outside the baseline, so a defect there is a known difference.
+const ADVANCED_QUALIFICATION = new Set(["smartart", "chart-type-sampler"]);
 
 /**
  * The cases of a release qualification build (`node scripts/native-acceptance/qualification/build.mjs --out <dir>`): the very PPTX files

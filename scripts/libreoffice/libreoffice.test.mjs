@@ -54,7 +54,14 @@ test("containment reports text past its box and past the slide, with distances",
 
 test("missingWords counts occurrences and survives runs split by the viewer", () => {
   assert.deepEqual(missingWords(["audio", "models)"], "audio mod els)"), []);
-  assert.deepEqual(missingWords(["the", "the", "Vercel."], "the deploy to"), [{ word: "the", expected: 2, found: 1 }, { word: "Vercel.", expected: 1, found: 0 }]);
+  assert.deepEqual(missingWords(["the", "the", "Vercel."], "the deploy to"), [{ word: "the", expected: 2, found: 1 }, { word: "vercel.", expected: 1, found: 0 }]);
+});
+
+test("missingWords folds case (an all-caps eyebrow) and compares right-to-left words as letters", () => {
+  assert.deepEqual(missingWords(["Why", "data", "storytelling"], "WHY DATA STORYTELLING"), []);
+  const arabic = "الرؤية";
+  assert.deepEqual(missingWords([arabic], [...arabic].reverse().join(" | ")), [], "visual-order fragments of the same letters");
+  assert.equal(missingWords([arabic], "ال").length, 1);
 });
 
 test("compareStructure finds lost words and lost explicit breaks", () => {
