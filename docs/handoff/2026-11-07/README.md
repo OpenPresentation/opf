@@ -90,7 +90,10 @@ Fold these into one wave-2 integration PR, the way #1133 was built:
 Not started, still in scope for 0.34.0 if time allows:
 - Layout: LH-16 (duration-proportional timeline), LH-34 (image callouts), LH-106 (slide-level `language`).
 - Fonts and i18n: LH-183 (Yu Gothic draws lighter), LH-177 (Segoe UI Light/Semilight), LH-178 (Arabic complex-script font), LH-121 (timeline status words in other languages).
-- SmartArt live extras (SH-20 to SH-23). The COM sweep job is in [com-job-sh-live-extras.md](com-job-sh-live-extras.md); its results are on #1134, or rerun it. SH-23's code is on branch `codex/sh-23-smartart-more-entries` (aee3d430f). Open its PR once the ninth-node check passes. SH-20 and SH-22 set their live domains from SH-19's `gate.mjs` on the sweep. SH-21 fits org chart, hierarchy and Venn from the tree measurements, and that is a format decision.
+- SmartArt live extras (SH-20 to SH-23). The COM sweep **has run**, and its results are on draft #1134: 465 of 516 instances live, the ninth node correct on 18 of 18, and 580 tree measurements. The job is described in [com-job-sh-live-extras.md](com-job-sh-live-extras.md).
+  - SH-23's code is on branch `codex/sh-23-smartart-more-entries` (aee3d430f). The ninth-node check passed, so open its PR. A reopen check of the ninth node is still owed; #1134 says how.
+  - SH-20 and SH-22: run SH-19's `gate.mjs` (in `tools/shapes/sh-19/tools/` on the evidence branch) on the sweep results, and set the live domains from it.
+  - SH-21: fit org chart, hierarchy and Venn from the tree measurements. The arrangement values are a format decision.
 - Issues filed on 2026-11-07:
   - #1113: overlays anchored to a chart data point
   - #1127: native wrapped titles need slack, like #1089
