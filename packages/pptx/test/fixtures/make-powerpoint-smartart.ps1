@@ -34,22 +34,37 @@ $specs = @(
   @{name = 'Name and Title Organization Chart'; id = 'urn:microsoft.com/office/officeart/2008/layout/NameandTitleOrganizationalChart'; titles = @{'Ana Ruiz' = 'Chief Executive'; 'Kai Chen' = 'Technology'}; nodes = @((N 'Ana Ruiz' @((N 'Kai Chen'), (N 'Lea Park'))))}
 )
 
-function Fill($node, $spec) {
+# The text of one node, with its bold run.
+function Set-Text($node, $spec) {
   $node.TextFrame2.TextRange.Text = $spec.t
   if ($spec.b) {
     $start = $spec.t.IndexOf($spec.b)
     if ($start -ge 0) { $node.TextFrame2.TextRange.Characters($start + 1, $spec.b.Length).Font.Bold = -1 }
   }
-  foreach ($child in $spec.c) {
-    # msoSmartArtNodeBelow (5); msoSmartArtNodeTypeAssistant (2) for an assistant, else the default type (1).
-    $added = if ($child.a) { $node.AddNode(5, 2) } else { $node.AddNode(5, 1) }
-    Fill $added $child
+}
+# Make a node collection (a graphic's top level, or a node's children) hold `specs`: the layout's own nodes are filled in place first (a
+# fixed-count layout such as Basic Matrix refuses deletes and adds), a node is added only where more are needed, and the ones left over
+# are deleted, last first. Every failure is recorded in $script:issues and the rest goes on.
+function Sync($collection, $specs, $parent) {
+  $normal = @(); $assistants = @()
+  for ($i = 1; $i -le $collection.Count; $i++) { $n = $collection.Item($i); if ($n.Type -eq 2) { $assistants += $n } else { $normal += $n } }
+  $usedN = 0; $usedA = 0
+  foreach ($spec in $specs) {
+    try {
+      # msoSmartArtNodeBelow (5); msoSmartArtNodeTypeAssistant (2) for an assistant, else the default type (1).
+      if ($spec.a) { if ($usedA -lt $assistants.Count) { $node = $assistants[$usedA] } else { $node = $parent.AddNode(5, 2) }; $usedA++ }
+      else { if ($usedN -lt $normal.Count) { $node = $normal[$usedN] } elseif ($parent) { $node = $parent.AddNode(5, 1) } else { $node = $collection.Add() }; $usedN++ }
+      Set-Text $node $spec
+      Sync $node.Nodes $spec.c $node
+    } catch { $script:issues += "$($spec.t): $($_.Exception.Message)" }
   }
+  $extra = @(@($normal | Select-Object -Skip $usedN) + @($assistants | Select-Object -Skip $usedA))
+  for ($i = $extra.Count - 1; $i -ge 0; $i--) { try { $extra[$i].Delete() } catch { $script:issues += "delete a default node: $($_.Exception.Message)" } }
 }
 
 $ppt = New-Object -ComObject PowerPoint.Application
 $manifest = @()
-$pres = $null; $seed = $null
+$pres = $null; $seed = $null; $saved = $false
 try {
   $ppt.Visible = -1; $ppt.WindowState = 2
   # The layouts come from the seed deck (make-smartart-seeds.mjs): this PowerPoint build gives scripts no Application.SmartArtLayouts
@@ -60,38 +75,39 @@ try {
   $titleOnly = $pres.SlideMaster.CustomLayouts.Item(6)
   for ($k = 0; $k -lt $specs.Count; $k++) {
     $spec = $specs[$k]
-    $layout = $null; $seedNote = ''
+    # One layout's failure is recorded and the run goes on with the next.
     try {
+      $layout = $null
       $seedSlide = $seed.Slides.Item($k + 1)
       for ($s = 1; $s -le $seedSlide.Shapes.Count; $s++) { $candidate = $seedSlide.Shapes.Item($s); if ($candidate.HasSmartArt -eq -1) { $layout = $candidate.SmartArt.Layout; break } }
-      if (-not $layout) { $seedNote = 'the seed slide has no live SmartArt' }
-    } catch { $seedNote = $_.Exception.Message }
-    if (-not $layout) { $manifest += [pscustomobject]@{name = $spec.name; id = $spec.id; error = "no layout from the seed: $seedNote"}; continue }
-    $slide = $pres.Slides.AddSlide($pres.Slides.Count + 1, $titleOnly)
-    $slide.Shapes.Item(1).TextFrame.TextRange.Text = $spec.name
-    $shape = $slide.Shapes.AddSmartArt($layout, 40, 110, 880, 400)
-    $shape.Name = "SmartArt $($spec.name)"
-    $sa = $shape.SmartArt
-    while ($sa.AllNodes.Count -gt 0) { $sa.AllNodes.Item(1).Delete() }
-    foreach ($top in $spec.nodes) { Fill ($sa.Nodes.Add()) $top }
-    $titleResult = ''
-    if ($spec.titles) {
-      # Name and Title Organization Chart: the title box of a node, where the object model reaches it (recorded either way).
-      for ($n = 1; $n -le $sa.AllNodes.Count; $n++) {
-        $node = $sa.AllNodes.Item($n); $key = $node.TextFrame2.TextRange.Text
-        if ($spec.titles.ContainsKey($key)) {
-          try { $node.Shapes.Item(2).TextFrame2.TextRange.Text = $spec.titles[$key]; $titleResult += "$key=set;" } catch { $titleResult += "$key=$($_.Exception.Message);" }
+      if (-not $layout) { throw 'the seed slide has no live SmartArt' }
+      $slide = $pres.Slides.AddSlide($pres.Slides.Count + 1, $titleOnly)
+      $slide.Shapes.Item(1).TextFrame.TextRange.Text = $spec.name
+      $shape = $slide.Shapes.AddSmartArt($layout, 40, 110, 880, 400)
+      $shape.Name = "SmartArt $($spec.name)"
+      $sa = $shape.SmartArt
+      $script:issues = @()
+      Sync $sa.Nodes $spec.nodes $null
+      $titleResult = ''
+      if ($spec.titles) {
+        # Name and Title Organization Chart: the title box of a node, where the object model reaches it (recorded either way).
+        for ($n = 1; $n -le $sa.AllNodes.Count; $n++) {
+          $node = $sa.AllNodes.Item($n); $key = $node.TextFrame2.TextRange.Text
+          if ($spec.titles.ContainsKey($key)) {
+            try { $node.Shapes.Item(2).TextFrame2.TextRange.Text = $spec.titles[$key]; $titleResult += "$key=set;" } catch { $titleResult += "$key=$($_.Exception.Message);" }
+          }
         }
       }
-    }
-    $nodes = @()
-    for ($n = 1; $n -le $sa.AllNodes.Count; $n++) { $node = $sa.AllNodes.Item($n); $nodes += [pscustomobject]@{level = $node.Level; type = $node.Type; text = $node.TextFrame2.TextRange.Text; shapes = $node.Shapes.Count} }
-    $number = $slide.SlideIndex
-    $slide.Export((Join-Path $Out ("slide{0:D2}.png" -f $number)), 'PNG', 1280, 720)
-    $manifest += [pscustomobject]@{slide = $number; name = $spec.name; id = $sa.Layout.Id; layoutName = $sa.Layout.Name; category = $sa.Layout.Category; groupItems = $shape.GroupItems.Count; titles = $titleResult; nodes = $nodes}
+      $nodes = @()
+      for ($n = 1; $n -le $sa.AllNodes.Count; $n++) { $node = $sa.AllNodes.Item($n); $nodes += [pscustomobject]@{level = $node.Level; type = $node.Type; text = $node.TextFrame2.TextRange.Text; shapes = $node.Shapes.Count} }
+      $number = $slide.SlideIndex
+      $slide.Export((Join-Path $Out ("slide{0:D2}.png" -f $number)), 'PNG', 1280, 720)
+      $manifest += [pscustomobject]@{slide = $number; name = $spec.name; id = $sa.Layout.Id; layoutName = $sa.Layout.Name; category = $sa.Layout.Category; groupItems = $shape.GroupItems.Count; titles = $titleResult; issues = $script:issues; nodes = $nodes}
+    } catch { $manifest += [pscustomobject]@{name = $spec.name; id = $spec.id; error = $_.Exception.Message} }
   }
-  $pres.SaveAs((Join-Path $Out 'powerpoint-smartart.pptx'), 24)
 } finally {
+  # Always save what was built.
+  if ($pres) { try { $pres.SaveAs((Join-Path $Out 'powerpoint-smartart.pptx'), 24); $saved = $true } catch { $manifest += [pscustomobject]@{error = "save: $($_.Exception.Message)"} } }
   $manifest | ConvertTo-Json -Depth 6 | Out-File -Encoding utf8 (Join-Path $Out 'powerpoint-smartart.json')
   # Close only the presentations this script opened or added; quit only when no other presentation is open.
   foreach ($own in @($pres, $seed)) { if ($own) { try { $own.Saved = -1; $own.Close() } catch {} } }
