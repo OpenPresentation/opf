@@ -23,7 +23,7 @@ import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis}
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import {chartBarGeometry, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {chartBarGeometry, chartValueAxisHidden, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
@@ -465,7 +465,7 @@ export function placeStackNames(chart: unknown, data: ResolvedChartData, axis: C
  * LH-154: an axis title is a band the preview carves off the chart's edge (a value axis title under the tick row, a category axis title at
  * the start; one text line each), so the plot leaves both: the title no longer overlaps the tick labels or the row names.
  */
-function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false): ChartPlotInset | undefined {
+function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChartData, axis: ChartValueAxis, box: Box, header: ChartLayerHeader | undefined, namesRow: boolean, geometry: Omit<ChartPlotGeometry, 'box'>, hidden = false, extra: {legend?: boolean; labelRoom?: number} = {}): ChartPlotInset | undefined {
   if (!data.ok || !(axis.majorUnit > 0) || !Number.isFinite(axis.max - axis.min) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
   const {fontPx, pad, lineHeight} = metrics(box, geometry.scale, geometry.minFontSize);
   const width = (text: string) => geometry.measure(text, fontPx);
@@ -476,8 +476,8 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const longestWord = Math.max(0, ...categories.flatMap(name => name.split(BREAKABLE).map(width))) + fontPx * 0.5;
   const gutter = Math.min(Math.max(span * 0.3, Math.min(span * 0.4, longestWord)), Math.max(0, ...categories.map(width)) + fontPx * 0.5);
   // A chart whose legend is neither in the header nor replaced by names keeps the side legend (up to 45% of the chart), which the plot leaves room for.
-  const side = namesRow || header?.legend ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
-  let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx);
+  const side = namesRow || header?.legend || extra.legend === false ? 0 : Math.min(span * 0.45, fontPx * 1.0 + Math.max(0, ...data.columns.slice(1).map(name => width(label(name)))) + fontPx * 0.5) + pad;
+  let x = box.x + start + pad + gutter + pad / 2, plotWidth = Math.max(1, box.x + box.width - pad - side - x - fontPx - (extra.labelRoom ?? 0));
   const format = typeof data.formats[1] === 'string' && data.formats[1] !== '' && !numberFormatError(data.formats[1]) ? data.formats[1] : undefined;
   if (!hidden && format !== undefined && !typeOf(chart).startsWith('100pct')) {
     const first = width(tickLabel(axis.min, false, format)) / 2, endTick = axis.min + Math.floor((axis.max - axis.min) / axis.majorUnit + 1e-9) * axis.majorUnit;
@@ -489,6 +489,24 @@ function horizontalStackPlot(chart: Record<string, unknown>, data: ResolvedChart
   const top = namesRow ? below + (header ? 0 : pad) + lineHeight + fontPx * 0.1 : below + pad + lineHeight / 2, bottom = box.y + box.height - titleBand - pad - (hidden ? 0 : lineHeight);
   if (!(bottom - top > 1)) return undefined;
   return {left: x - box.x, top: top - box.y, right: box.x + box.width - (x + plotWidth), bottom: box.y + box.height - bottom};
+}
+
+const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
+
+/**
+ * LH-93: the inner plot of a horizontal bar chart (clustered, stacked or 100% stacked) without chart options, as an inset from its chart
+ * box, laid out as the preview lays it out (horizontalStackPlot): a side legend only for two series or more without a header legend, and
+ * a small chart's value labels (LH-03, no value axis) keep the widest label's room beyond the longest bar. Undefined for a chart with
+ * options, a stacked chart with its marks (LH-109, LH-125: values inside the segments and names above the plot are fitted to its own plot)
+ * or a chart drawn on a table's rows (LH-115): those keep their own plot.
+ */
+export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
+  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.stack || layer?.rows) return undefined;
+  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
+  const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
+  const labeled = hidden && layer?.small?.labels === true;
+  const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
+  return horizontalStackPlot(chart, data, axis, box, layer?.header, false, geometry, hidden, {legend: data.columns.length > 2, labelRoom});
 }
 
 /**
@@ -594,7 +612,8 @@ export function chartStack(chart: unknown, data: ResolvedChartData, layer: Chart
  * gutter and value labels the preview leaves). Any other layer is returned with its `rows`.
  */
 export function restackForRows(chart: unknown, data: ResolvedChartData, layer: ChartLayer, rows: ChartLayerRows, box: Box, axis: ChartValueAxis | undefined, geometry: Omit<ChartPlotGeometry, 'box'>): ChartLayer {
-  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) return {...layer, rows};
+  // LH-93: a plot shared with sibling charts gives way to the table's rows (rows take precedence in both engines).
+  if (!layer.stack || !axis || !stackCandidate(chart, data) || !isHorizontal(chart)) { const {plot: _shared, ...rest} = layer; return {...rest, rows}; }
   const {plot: _plot, header: _header, stack, ...rest} = layer;
   const header = stack.legend ?? layer.header;
   const plot: Box = {x: box.x + rows.left, y: box.y + rows.top, width: box.width - rows.left - rows.right, height: rows.bottom - rows.top};
