@@ -554,6 +554,11 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   region, such as hero's media) that covers under 60% of the body height after its regions take their need sits in the middle
   of the space under the headings, as a body of paragraphs does, when it moves as one (a region the layout holds at the foot keeps
   the body where it is) and no block reads smaller. Pictures, charts and videos in other regions keep the layout's cells.
+  Without a layout, a stack of paragraphs and lists that LH-48 grows (or cannot grow) while it covers under half of the body
+  sits in the middle of the body under the headings too, rather than at its top over an empty foot. Promoted regions that
+  each run the body's full height (`left`, `center+right`) and hold only paragraphs and lists set them as one band in the
+  middle of the body, each block starting at the band's top. Both are composed with LH-48's centering and kept only when
+  no block reads smaller and nothing overflows.
 - **Mixed cards (LH-64).** A row of middle- or bottom-anchored cards with a table, code panel or timeline among other measured
   kinds starts at the card top (or hugs and centers in an under-filled body) instead of each kind at its own anchor.
 - **Reading measure (LH-10).** A paragraph in a region wider than about 70 average characters of its size is set on that

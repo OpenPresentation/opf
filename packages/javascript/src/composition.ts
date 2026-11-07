@@ -7158,10 +7158,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       grid.rows = [{ offset: 0, size: area.height }];
       grid.gap = actualGap;
     } else if (cols === 1 && stacks) {
-      grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
-      // LH-52 with LH-48: a stack of paragraphs and lists keeps its top, as LH-48's grown stack does (the editor resizes its tracks from
-      // the top); a stack with a panel, table, timeline or media block sits in the middle of the body.
-      if (!pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
+      // LH-102: a stack of paragraphs and lists that fills too little of the body (LH-48's growBody composes it with CENTER, after any
+      // growth) sits in the middle of the body under the headings, as a template's under-filled body does, instead of at its top over an
+      // empty foot. Otherwise (LH-52 with LH-48) a stack of paragraphs and lists keeps its top; a stack with a panel, table, timeline or
+      // media block sits in the middle of the body.
+      const centeredProse = (options as Record<symbol, unknown>)[CENTER] === true && !pullItem && area === contentBox && nodes.every(proseLeaf);
+      grid.boxes = stackedBoxes(nodes, area, actualGap, settings, undefined, centeredProse ? 'middle' : 'top');
+      if (!centeredProse && !pullItem && area === contentBox && splitBlocks(nodes) && !nodes.every(proseLeaf) && splitFill(nodes, grid.boxes, area, settings) < SPLIT_FILL) grid.boxes = centeredSplitStack(nodes, grid.boxes, area, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
     } else if (stacks && cols > 1 && count > cols && nodes.every(proseLeaf)) {
       // LH-43: the rows of a grid of text and lists share one size, so they are sized jointly and fill the area (jointRowBoxes).
@@ -7177,8 +7180,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const stack: number[] = [];
     // LH-52 with LH-70 and LH-67: paragraph columns and a lead plus stack keep their own cells; LH-52 centers the scored grid or LH-71's row.
     const filled = !hasRegions && !paragraphs && !lead && count === nodes.length && fillsSplit(nodes, grid.boxes, area, settings, cols);
+    // LH-102: promoted regions that each run the body's full height (`left`, `center+right`), holding paragraphs and lists that fill too
+    // little of it (LH-48's growBody composes them with CENTER), set their blocks as one band in the middle of the body, each at the height
+    // the tallest of them needs, instead of each at the top of its column over an empty foot.
+    const regionBand = (options as Record<symbol, unknown>)[CENTER] === true && hasRegions && !pullItem && area === contentBox && nodes.every(node => node.region?.[0].length === rows.length && proseLeaf(node))
+      ? Math.max(...nodes.map(node => naturalHeight(node, regionBox(node.region!, area, actualGap).width, hasCards && !insideTier, undefined, settings) + 2 * rasterPadding + scale)) : undefined;
     nodes.forEach((node, index) => {
-      const box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
+      const placed = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
+      const box = regionBand !== undefined && regionBand < placed.height ? { ...placed, y: placed.y + (placed.height - regionBand) / 2, height: regionBand } : placed;
       const first = items.length;
       if (filled) placeSplitBlock(node, box, settings); else placeNode(node, box, settings);
       if (!hasRegions && (cols > 1 || stacks) && !node.children) stack.push(...range(first, items.length));
