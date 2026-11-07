@@ -116,7 +116,7 @@ function tokenize(source: string): Token[] {
     }
     const numeral = /^-?(?:\.\d+|\d+(?:\.\d*)?)/.exec(source.slice(index, index + 64));
     if (numeral) { push('id', numeral[0]); index += numeral[0].length; continue; }
-    const name = /^[A-Za-z_\u0080-￿][\w\u0080-￿]*/u.exec(source.slice(index, index + 4096));
+    const name = /^[A-Za-z_\u0080-\uFFFF][\w\u0080-\uFFFF]*/u.exec(source.slice(index, index + 4096));
     if (name) { push('id', name[0]); index += name[0].length; continue; }
     fail(`Unexpected character ${JSON.stringify(char)}.`);
   }
@@ -378,9 +378,21 @@ function labelText(entry: { value: string; html: boolean; token: Token } | undef
   let value = entry.value;
   if (record) {
     // A record's fields ({a|b|<port> c}) become lines: ports and braces are structure, the fields the text.
-    value = value.replace(/\\([{}|<> ])/g, (_, char: string) => `\u0000${char.charCodeAt(0)}\u0000`)
-      .replace(/<[^>]*>/g, '').replace(/[{}]/g, '').split('|').map(field => field.trim()).filter(Boolean).join('\\n')
-      .replace(/\u0000(\d+)\u0000/g, (_, code: string) => String.fromCharCode(Number(code)));
+    // An escaped brace, bar, angle bracket or space is text; the escapes of the label (\n, \N, ...) are kept for the pass below.
+    const fields: string[] = [];
+    let field = '', port = false;
+    for (let at = 0; at < value.length; at++) {
+      const char = value[at]!;
+      if (char === '\\' && at + 1 < value.length) {
+        const next = value[++at]!;
+        if (!port) field += '{}|<> '.includes(next) ? next : `\\${next}`;
+      } else if (port) port = char !== '>';
+      else if (char === '<') port = true;
+      else if (char === '|') { fields.push(field); field = ''; }
+      else if (char !== '{' && char !== '}') field += char;
+    }
+    fields.push(field);
+    value = fields.map(entry => entry.trim()).filter(Boolean).join('\\n');
   }
   const edgeName = context.tail !== undefined ? `${context.tail}${context.directed ? '->' : '--'}${context.head}` : '';
   return value.replace(/\\(.)/gs, (_, char: string) => {

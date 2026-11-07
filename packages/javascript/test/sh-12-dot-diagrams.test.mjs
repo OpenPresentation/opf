@@ -70,7 +70,9 @@ test('node shapes map to pele shapes, which the PPTX export writes as presets wh
   assert.equal(DOT_SHAPES.cylinder, 'cyl');
   const source = 'digraph {\n' + Object.keys(DOT_SHAPES).map((shape, index) => `  s${index} [shape=${shape}]`).join('\n') + '\n  r [shape=box, style="rounded,dashed"]\n  u [shape=star]\n}';
   const lines = mermaid(source).split('\n');
-  Object.values(DOT_SHAPES).forEach((shape, index) => assert.ok(lines.includes(`  s${index}@{ shape: ${shape}, label: "${shape === 'f-circ' ? ' ' : `s${index}`}" }`), `${Object.keys(DOT_SHAPES)[index]} -> ${shape}`));
+  for (const [index, [name, shape]] of Object.entries(DOT_SHAPES).entries()) {
+    assert.ok(lines.includes(`  s${index}@{ shape: ${shape}, label: "${shape === 'f-circ' ? ' ' : `s${index}`}" }`), `${name} -> ${shape}`);
+  }
   assert.ok(lines.includes('  r@{ shape: rounded, label: "r" }'));
   assert.ok(lines.includes('  style r stroke-dasharray: 6 4'));
   assert.ok(lines.includes('  u@{ shape: rect, label: "u" }'), 'a shape with no pele form is a box');
