@@ -16,6 +16,7 @@ name: Nightly
 #   installed           the old coordinated-CI "Installed candidates" job (Windows, macOS: packed tarballs, installed browser checks)
 #   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
 #   editor-macos        opf-editor `macos-playground`
+#   editor-windows      opf-editor browser suites on Windows (LH-179: playground in two shards, browser in three)
 #   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all seven packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
@@ -275,6 +276,50 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: editor-macos-${{ matrix.shard }}
+          path: packages/editor/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # opf-editor browser suites on Windows (LH-179): the playground suite in two shards and the standalone browser suite in three. CI uses the installed
+  # Chromium (a local run on Windows uses Edge); the file servers, the favicon request and the CRLF clipboard are what LH-179 fixed.
+  editor-windows:
+    name: editor browser suites on Windows (${{ matrix.suite }} ${{ matrix.shard }})
+    runs-on: windows-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { suite: playground, shard: 1/2 }
+          - { suite: playground, shard: 2/2 }
+          - { suite: browser, shard: 1/3 }
+          - { suite: browser, shard: 2/3 }
+          - { suite: browser, shard: 3/3 }
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf-editor'
+
+      - name: Install Chromium
+        working-directory: packages/editor
+        run: pnpm exec playwright install chromium
+
+      - name: ${{ matrix.suite }} browser suite (shard ${{ matrix.shard }})
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-suite "${{ matrix.suite }}" --shard "${{ matrix.shard }}"
+
+      - name: Preserve the failure evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: editor-windows-${{ matrix.suite }}-${{ strategy.job-index }}
           path: packages/editor/artifacts/**
           retention-days: 7
           if-no-files-found: ignore
@@ -620,7 +665,7 @@ jobs:
   # Opens or updates the one nightly-red issue on a red run and closes it on a green one. GITHUB_TOKEN only; no App, no polling.
   report:
     name: report
-    needs: [cli-portability, installed, pptx-windows, editor-macos, node-range, packed-linux, registry, npm12-consumer, audit, platform-residual, flake]
+    needs: [cli-portability, installed, pptx-windows, editor-macos, editor-windows, node-range, packed-linux, registry, npm12-consumer, audit, platform-residual, flake]
     if: ${{ always() && (github.event_name == 'schedule' || inputs.report == true) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5

@@ -40,13 +40,15 @@ const HARNESS = `<!doctype html><html lang="en"><head><meta charset="utf-8"><tit
 </script></body></html>`;
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
 const server = createServer(async (req, res) => {
+  if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   if (pathname === '/harness.html') { res.writeHead(200, { 'Content-Type': 'text/html' }).end(HARNESS); return; }
   try {
     const target = path.resolve(dist, '.' + pathname);
     const relative = path.relative(dist, target);
     if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+    const body = await readFile(target);
+    res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
