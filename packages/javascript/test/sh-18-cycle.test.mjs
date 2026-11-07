@@ -162,3 +162,29 @@ test('the SmartArt domain of a cycle', () => {
   assert.match(smartArtUnavailable({ kind: 'cycle', count: 4, frame, rtl: false, script: 'cjk', nodes }), /Japanese/);
   assert.match(smartArtUnavailable({ kind: 'cycle', count: 4, frame: { x: 0, y: 0, width: 800, height: 400 }, rtl: false, nodes }), /proportions/);
 });
+
+test('list blocks are the entries: a cycle\'s on cards with arrows, a matrix\'s on cards, a pyramid\'s beside its levels', () => {
+  const blocks = count => Array.from({ length: count }, () => ({ items: ['Item 1', 'Item 2', 'Item 3'] }));
+  const arranged = (layout, count) => composeSlide({ layout, title: 'T', blocks: blocks(count) }, { layout: gallery.layouts[layout] });
+  for (const count of [2, 3, 4, 5, 6]) {
+    const result = arranged('cycle', count), [arrangement] = result.arrangements;
+    assert.equal(arrangement.kind, 'cycle'); assert.equal(arrangement.paint, 'card'); assert.equal(arrangement.text, 'slide');
+    assert.equal(arrangement.nodes.length, count); assert.equal(arrangement.arrows.length, count, `${count}: an arrow after every card`);
+    assert.deepEqual(arrangement.nodes.map(node => node.path), Array.from({ length: count }, (_, index) => `slides.0.blocks.${index}.items`));
+    for (const [index, node] of arrangement.nodes.entries()) {
+      const list = result.items.find(item => item.path === node.path);
+      assert.equal(list.frameBox, undefined, 'the card is the arrangement\'s node');
+      assert.equal(list.text.fontSize, arrangement.fontSize, 'one size for every block');
+      assert.ok(list.box.x >= node.box.x && list.box.x + list.box.width <= node.box.x + node.box.width + 1e-6 && list.box.y >= node.box.y - 1e-6 && list.box.y + list.box.height <= node.box.y + node.box.height + 1e-6, `${count}: block ${index} inside its card`);
+      assert.ok(list.text.listEntries.every(entry => !entry.marker.none), 'the list keeps its markers');
+    }
+    assert.ok(arrangement.fontSize >= LIST_NOMINAL_SIZE - 1e-6);
+  }
+  assert.equal(arranged('matrix', 4).arrangements[0].design, 'cards');
+  const pyramid = arranged('pyramid', 2).arrangements[0];
+  assert.equal(pyramid.design, 'opf'); assert.equal(pyramid.nodes.every(node => node.beside), true, 'beside the levels of OPF\'s stepped pyramid');
+  // Levels too low for their lists: the same grid of cards for any count, and the finding says so.
+  const crowded = arranged('pyramid', 4);
+  assert.equal(crowded.arrangements[0].design, 'cards');
+  assert.match(crowded.diagnostics.find(item => item.code === 'arrangement-adapted').message, /grid of cards/);
+});

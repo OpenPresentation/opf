@@ -31,7 +31,16 @@ When none of them holds the entries, or the list has a shape the arrangement doe
 numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A list that no design
 holds still fills the region (SH-18 review, for every arrangement): its text takes the largest size from 1.5 times the role size down to
 the size it has at which the whole list fits the region, and it sits in the middle of the region's height (LH-48's body growth leaves a
-list alone once it covers half the body). A matrix never draws
+list alone once it covers half the body).
+
+**List blocks as entries (SH-18 review).** A region whose arrangement holds two or more list blocks draws each block as an entry, its
+list inside, the same way for every count: a cycle's blocks on cards on OPF's ring or loop (whichever holds them larger) with an arrow
+from each to the next, a matrix's on a grid of cards, a pyramid's beside the levels of OPF's stepped pyramid. Every list keeps its
+markers, is start-aligned and vertically centered in its card, and all are set at one size, the largest from 1.5 times the role size
+down to the lists' own size at which every block fits without a broken word. Where a pyramid's levels or a cycle's ring and loops do not
+hold the lists, the blocks are a grid of cards, with `opf/arrangement-adapted`; lists that overflow their region keep its composition,
+which pagination splits. The cards are native shapes (a SmartArt node does not hold a list), and a region with an arrangement keeps its
+whole cell when LH-48 centers an under-filled body, so the diagram fills it. A matrix never draws
 an empty quadrant.
 
 PowerPoint's geometry was measured through COM for its Basic Pyramid (`pyramid1`) and Basic Matrix (`matrix3`) layouts:
