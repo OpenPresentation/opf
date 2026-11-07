@@ -203,6 +203,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   c.waterfall = layer?.waterfall;
   c.histogram = layer?.histogram;
   c.valueList = layer?.valueList;
+  // LH-182: a doughnut's square and its hole (core), the hole filled with the surface.
+  c.doughnut = layer?.doughnut;
   c.stack = layer?.stack;
   if (layer?.valueList || layer?.stack?.names) c.legendManaged = true;
   // LH-93: sibling charts sharing one value axis share one plot height; core gives each its inner plot as an inset from the chart box.
@@ -1184,7 +1186,8 @@ function renderCircularChart(c, spec) {
   })));
   // LH-108: with a value list, the pie fills the square core gave it.
   const list = c.valueList;
-  const area = list ? list.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
+  // LH-182: a doughnut in core's square (the PPTX export pins its plot there too).
+  const area = list ? list.pie : spec.kind === "doughnut" && c.doughnut ? c.doughnut.pie : { x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legendWidth), height: Math.max(1, box.height - 2 * pad) };
   const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
   // RR-35: a slice's label text (category, the signed value, the share of the total); outside-end labels shrink the pie to leave room.
   const ringTexts = c.dataLabels ? rings.map((ring) => ring.values.map((value, i) => labelString(c, { category: categories[i], value: chartNumber(c.rows[i][ring.column]) ?? 0, share: ring.total ? value / ring.total : 0, format: c.formats[ring.column], group: c.group(ring.column) }))) : null;
@@ -1193,7 +1196,7 @@ function renderCircularChart(c, spec) {
   const outsideTexts = !ringTexts || spec.kind !== "pie" ? [] : c.sliceLabels ? ringTexts[0].filter((_, i) => c.sliceLabels.get(i) === "outside") : (c.dataLabels.position ?? "outside-end") === "outside-end" ? ringTexts[0] : [];
   const outside = outsideTexts.length > 0;
   const reserve = outside ? outsideLabelReserve(c, outsideTexts) : { x: 0, y: 0 };
-  const r = list ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const r = list || (spec.kind === "doughnut" && c.doughnut) ? Math.max(1, Math.min(area.width, area.height) / 2) : outside ? Math.max(1, Math.min(area.width / 2 - reserve.x, area.height / 2 - reserve.y)) : Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
   const hole = spec.kind === "doughnut" ? r * 0.5 : 0;
   if (rings.every((ring) => !ring.total)) {
     c.text("No positive chart values", area, c.path);
@@ -1202,6 +1205,8 @@ function renderCircularChart(c, spec) {
   // LH-161: a bordered pie separates its slices (the last from the first) by a surface-colored line.
   const border = c.sliceBordered ? { stroke: c.surface, "stroke-width": CHART_SLICE_SEPARATOR_PX * c.u } : { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
   const thickness = (r - hole) / rings.length;
+  // LH-182: the hole takes the surface the chart stands on, so a watermark or motif behind the chart does not show through it.
+  if (hole && c.doughnut) c.mark("circle", { cx, cy, r: hole, fill: c.surface });
   rings.forEach((ring, j) => {
     const inner = hole + j * thickness, outer = inner + thickness;
     let angle = -Math.PI / 2;

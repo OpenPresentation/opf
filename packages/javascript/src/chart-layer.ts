@@ -21,7 +21,7 @@ import {chartNumber, formatDataNumber, type ResolvedChartData} from './chart-dat
 import {chartCategoriesInTime} from './chart-time-order.js';
 import type {ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import type {ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
+import type {ChartLayerDoughnut, ChartLayerReferences, ChartLayerStack, ChartLayerValueList, ChartLayerWaterfall} from './chart-marks.js';
 import type {ChartLayerHistogram} from './chart-histogram.js';
 
 /** A small chart has at most this many series (LH-03). */
@@ -114,6 +114,8 @@ export interface ChartLayer {
   waterfall?: ChartLayerWaterfall;
   /** LH-108: a pie or one-series doughnut lists its categories and values beside it (chart-marks.ts). */
   valueList?: ChartLayerValueList;
+  /** LH-182: a doughnut's square and its hole, which both engines fill with the surface (chart-marks.ts). */
+  doughnut?: ChartLayerDoughnut;
   /** LH-109: a stacked column or area chart's values inside its segments and series names beside its last column (chart-marks.ts). */
   stack?: ChartLayerStack;
   /** LH-110: the reference line and the period band the slide title names (chart-marks.ts). */
