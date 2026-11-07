@@ -276,7 +276,7 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   none. The blocks beside the tiles grow with LH-48 as they would without them (the tiles' texts are left out of the body that grows), and
   the tiles (`placed-tiles`, tried with LH-165's icon cards) are kept only when no block reads smaller than on the settled slide without
   them, at its exact size: LH-149's half step is not given up for a tile. A short sentence ("Teams want fewer exports.") keeps the bold
-  heading of LH-69.
+  heading of LH-69, and a slide that draws cards (`design.contentBox`) keeps each region's text on its own card.
 - **Value color on dark (LH-57).** On a dark slide or card, a value whose accent falls under 4.5:1 against the surface is drawn in the
   light text color (`metricValueColor(color, background, text)`) instead of a lightened accent, so the number stays the strongest
   element. A unit on its value's line takes the value's color.

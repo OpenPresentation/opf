@@ -10306,11 +10306,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // and than the settled slide without tiles at its exact sizes (tilesShrink); settle grows the blocks beside the tiles (WITH_PLACED_TILES,
   // bodyFill leaves the tiles' texts out).
   const placedTiles = (): ComposedSteps | undefined => {
-    if (!ruleOn('placed-tiles') || useTemplate || !regions.length || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
+    // A slide that draws cards (design.contentBox) already sets each region's text on its card: it keeps its card and its heading.
+    if (!ruleOn('placed-tiles') || useTemplate || !regions.length || hasCards || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const tiled = items.filter(item => item.field === 'text' && displayFaces.has(item.path) && item.text && !item.eyebrow && !item.emphasis && item.caption === undefined && typeof item.value === 'string' && !PLACED_SENTENCE.test(item.value.trim()));
     if (!tiled.length) return undefined;
     const heightOf = (fit: TextFit | RichTextFit) => 'height' in fit && typeof fit.height === 'number' ? fit.height : Math.max(fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
-    const cells = tiled.map(item => item.frameBox ?? item.box), texts = tiled.map(item => flatten(item.value).trim());
+    const cells = tiled.map(item => item.box), texts = tiled.map(item => flatten(item.value).trim());
     const fitAt = (index: number, box: LayoutBox, size: number) => fitPlacedText('text', tiled[index]!.value, texts[index]!, box, size, size, tiled[index]!.path, tiled[index]!.alignment);
     const reads = (index: number, size: number): boolean => {
       const inner = cardInner(cells[index]!), fit = fitAt(index, inner, size);
@@ -10325,7 +10326,6 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const inner = cardInner(cells[index]!), height = heightOf(fitAt(index, inner, chosen)), box = { x: inner.x, y: inner.y + inner.height - height - scale, width: inner.width, height: height + scale };
       item.box = box;
       item.text = fitAt(index, box, chosen);
-      delete item.frameBox;
       PLACED_TILE_ITEMS.add(item);
     });
     placedTiled = true;
