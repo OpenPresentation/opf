@@ -67,6 +67,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // (was 4882241d...); every other digest is unchanged.
 // LH-176: clustered bars of several series are band / (n + 1.5) wide (PowerPoint's 150% gap width, core chartBarGeometry), which moves
 // column (was 9e0ac4ac...), bar (was 092e12de...), world (a map drawn as columns, was 01127948...) and column-no-options (was c74a507b...).
+// v0.33.0 integration: LH-175 draws a Pareto chart of several series as clustered columns and LH-176 sets those columns at the 150% gap,
+// which together move pareto (was a2bde742... with LH-175 alone); every other digest is unchanged.
 const REVIEWED_SVG_DIGESTS = {
   'column': '38c8d2000c4ef86d4398bb71',
   'stacked-column': '22c1bb68ee1f45037f081ace',
@@ -89,7 +91,7 @@ const REVIEWED_SVG_DIGESTS = {
   'filled-radar': '3f929717f9aaa20fc2a10060',
   'treemap': 'd73891c0d6e3f31848317ce8',
   'histogram': 'd53e45060a24e75965e468ea',
-  'pareto': 'a2bde74277ed024ca48ea3b6',
+  'pareto': 'ec94e9ddac1e8e23da47c54d',
   'box-and-whisker': '8a6324792766fc047f85cd59',
   'waterfall': '1634735baf70cec035c76edb',
   'funnel': '3f6d700694a038d2172c254a',
