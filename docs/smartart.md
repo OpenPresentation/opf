@@ -115,6 +115,13 @@ column of fewer lengthens them).
 A right-to-left deck mirrors the designs: the first chevron or box is at the right, the chevrons point left (`flipH`) and the arrows
 turn.
 
+Two or more list blocks in the region are the entries themselves, as SH-18 draws them for a cycle: each block on a card of OPF's
+chevrons or boxes (the card neutral and its border), with the arrows between them, its list kept with its markers, start-aligned and
+at one size for all, the largest from 1.5 times the role size at which every card holds its list without breaking a word; the cards
+then take the height of the tallest list. Where no row or column holds them, a grid of cards does (`opf/arrangement-adapted`), and
+where nothing does, the blocks keep the region's composition, which pagination splits. A SmartArt node holds no list, so these are
+native shapes, with `pptx/smartart-unavailable` saying so.
+
 ## In PowerPoint
 
 `toPptx(deck, { smartArt })` (CLI `--smart-art <live|shapes>`) takes the first that fits, as the owner decided for SmartArt:

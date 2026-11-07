@@ -9694,10 +9694,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const noun = kind === 'chevrons' ? 'row of chevrons' : kind.replace('-', ' ');
     if (!chosen && kind !== 'matrix') {
       for (const design of cards) trySizes(design);
-      if (chosen) diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${noun}'s ${count} lists do not fit its ${SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as a grid of cards.` });
+      if (chosen) diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${count} lists of the ${noun} do not fit its ${SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as a grid of cards.` });
     }
     if (!chosen) {
-      diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${noun}'s ${count} lists do not fit its ${kind === 'matrix' ? 'cards' : SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as the region's blocks.` });
+      diagnostics.push({ code: 'arrangement-adapted', path: members[0]!.path, message: `The ${count} lists of the ${noun} do not fit its ${kind === 'matrix' ? 'cards' : SMART_ART_NAMES[kind].nodes} at the lists' size, so they are drawn as the region's blocks.` });
       return undefined;
     }
     let { design, placed } = chosen;
