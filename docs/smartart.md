@@ -54,7 +54,7 @@ size it keeps. Centered lines are centered without the space they broke at, as P
 `toPptx(deck, { smartArt })` (CLI `--smart-art <live|shapes>`) takes the first that fits, as the owner decided for SmartArt:
 
 1. **Live SmartArt** (`"live"`, the default), for PowerPoint's design where the instance lies in the domain below. The slide holds a `p:graphicFrame` of the
-   diagram (`dgm:relIds`), and the package:
+   diagram (`dgm:relIds`) inside an `mc:AlternateContent` whose `mc:Fallback` is OPF's picture of it ([in other apps](#in-other-apps)), and the package:
    - the data model (`ppt/diagrams/dataN.xml`): the `doc` point names the layout (`loTypeId` pyramid1 or matrix3) and OPF's own quick
      style and colors (`qsTypeId` `urn:openpresentation.org/opf/smartart/quickstyle/flat`, `csTypeId`
      `urn:openpresentation.org/opf/smartart/colors/primary`); one point per entry, marked `custT="1"` so PowerPoint keeps the run size
@@ -65,13 +65,49 @@ size it keeps. Centered lines are centered without the space they broke at, as P
      recolors the SmartArt;
    - a drawing part built from OPF's geometry (`ppt/diagrams/drawingN.xml`), for readers that show the cached shapes;
    - **no layout part.** OPF never writes a SmartArt layout definition. `r:lo` is empty, and PowerPoint resolves its built-in layout
-     from `loTypeId` (see [the layout relationship](#the-layout-relationship)).
+     from `loTypeId` (see [the layout relationship](#the-layout-relationship));
+   - the fallback picture: an SVG (`asvg:svgBlip`) over its PNG raster, the picture path SH-07's diagrams use.
+
+   Live SmartArt needs that picture, so it needs opf-render (an optional peer) to draw the slide and an SVG rasterizer for the PNG (the
+   default in Node is opf-render's; a browser passes `svgRasterizer`). Without either the arrangement is written as native shapes and
+   `smartart-unavailable` says so.
 2. **Native shapes**: OPF's design, a card grid, PowerPoint's design outside the domain, and everything with `"shapes"`. The diamond and
    the nodes are presets (`diamond`, `trapezoid` with core's adjustment, `roundRect`) at core's boxes, under the list's measured lines,
    tagged `OPF_ARRANGEMENT_V1`. OPF's design and PowerPoint's outside the domain report the info finding `pptx/smartart-unavailable`
    with the reason (`reason` in the diagnostic); a card grid reports core's `arrangement-adapted`.
 
 Both look the same as the preview: the shapes are exact, and the text is where OPF's native text export puts any text.
+
+### In other apps
+
+Many apps that open PPTX files do not lay SmartArt out. Each live SmartArt is therefore written as an `mc:AlternateContent` (ECMA-376
+Part 3, markup compatibility): the `mc:Choice` holds the SmartArt frame and requires the namespace
+`http://schemas.microsoft.com/office/drawing/2016/12/diagram` (prefix `dgm1612`, Office 2016's SmartArt extensions), and the
+`mc:Fallback` holds a picture with the same id and name, at the same frame grown by its bleed on every side. **PowerPoint** understands the namespace and shows the live SmartArt.
+**Every other app**, one that does not claim the namespace, takes the fallback and shows OPF's own drawing: the preview of that frame
+(opf-render's SVG of the slide, cut to the arrangement and its entries, the text as glyph outlines in the deck's fonts when the export
+has the fonts handle), transparent around the drawing, as an SVG with a PNG raster at 192 dpi of the frame for apps without SVG. The
+bleed is how far the preview draws outside the frame: half of the nodes' outline, and further at a pyramid level's miter-joined corners
+(its base corners reach 2.6 px past a 16:9 frame), plus a pixel of antialiasing, so the picture draws everything the preview draws. With
+`typefaces: "safe"` the picture is laid out and drawn in the Office-safe families the export writes and lays the nodes out with (Arial
+for the default Aptos), not the preview's. Its
+alt text is the outline, one entry a line in entry order (`Pyramid of 4 levels, top to bottom:` then each level). SH-09's drawing part
+stays in the package for readers that draw the cached SmartArt shapes.
+
+The namespace was chosen through COM (PowerPoint for Microsoft 365 on Windows 11, 2026-11-06), on a pyramid and a matrix whose
+`mc:Choice` required each candidate in turn: `dgm1612` (2016/12 diagram), `dgm1611` (2016/11 diagram), `dgm14` (2010 diagram),
+`dsp` (2008 diagram drawing), `dgm` (the ECMA diagram namespace) and `p14` (PowerPoint 2010) all opened as live SmartArt
+(`HasSmartArt`, Basic Pyramid or Basic Matrix, every entry a node, the slide exported as the SmartArt); a namespace PowerPoint does not
+know took the fallback, which PowerPoint drew as the preview does (mean pixel difference 1.27 and 1.14 of 255 over the slide). The
+chosen namespace is the narrowest of those: only Office's SmartArt uses it, whereas an app that reads the ECMA diagram markup or the
+cached drawing, or claims the PowerPoint 2010 extensions, could claim the others without laying SmartArt out. No third-party app was
+run (LibreOffice and the Open XML SDK were not installed); the pptx tests check the markup with a markup-compatibility reader that does
+not know the namespace, which takes the fallback picture and finds a well-formed SVG and a PNG.
+
+**Saved again in PowerPoint**, the file keeps the live SmartArt (COM: `SaveCopyAs`, reopened, `HasSmartArt` and every node) but not
+the wrapper: PowerPoint writes the bare SmartArt frame and its own drawing and layout parts, and drops the fallback picture and its
+media. Other apps then see what any PowerPoint-saved SmartArt gives them, typically its cached drawing. Import reads the file as
+before.
 
 ### What PowerPoint does on edit
 
@@ -154,5 +190,8 @@ Pyramid or Basic Matrix that PowerPoint wrote, import their data model's nodes: 
 entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
 `pyramid` or `matrix` layout, with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
-SmartArt layout part. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
+SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in which only the fallback picture survived (an app without
+SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its
+SVG and PNG, so a picture still named for its list whose SVG or PNG is the one written is that list on its layout again; a replaced
+picture reports `invalid-smartart-provenance` and imports as a picture, as does any fallback without the record. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
 drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.

@@ -5,6 +5,7 @@ import {contentTopology, rebuildContent, validateTopology, listLineBreaks, valid
 import {runColorRecord, validateRunColors} from './run-colors.js';
 import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
+import {SMART_ART_URI} from './smart-art.js';
 import {parseReference, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
@@ -293,11 +294,27 @@ function structure(tree) {
   const kinds = {};
   const add = (kind, value) => (kinds[kind] ??= []).push(value);
   for (const node of array(tree?.['p:sp'])) add('sp', box(node?.['p:spPr']?.['a:xfrm']));
-  for (const node of array(tree?.['p:pic'])) add('pic', box(node?.['p:spPr']?.['a:xfrm']));
+  // SH-16: a SmartArt is one object whichever form holds it: its mc:AlternateContent (as exported), its bare frame (PowerPoint saves the
+  // mc:Choice alone) or its fallback picture (an app without SmartArt saves the mc:Fallback alone). The picture is the frame grown by its
+  // bleed on every side, so the object is recorded by its center, which the two share.
+  const isSmartArt = frame => frame?.['a:graphic']?.['a:graphicData']?.uri === SMART_ART_URI;
+  const smartArtFrame = node => array(node?.['mc:Choice']).map(choice => choice?.['p:graphicFrame']).find(isSmartArt);
+  // Twice the center (off + ext / 2), in whole EMU.
+  const center = xfrm => object(xfrm) ? `${2 * Number(xfrm['a:off']?.x) + Number(xfrm['a:ext']?.cx)},${2 * Number(xfrm['a:off']?.y) + Number(xfrm['a:ext']?.cy)}` : 'inherit';
+  const alternates = array(tree?.['mc:AlternateContent']), wrapped = alternates.map(smartArtFrame).filter(Boolean);
+  for (const node of array(tree?.['p:pic'])) {
+    if (/^OPF smartart /.test(String(node?.['p:nvPicPr']?.['p:cNvPr']?.name ?? ''))) add('smartArt', center(node?.['p:spPr']?.['a:xfrm']));
+    else add('pic', box(node?.['p:spPr']?.['a:xfrm']));
+  }
   for (const node of array(tree?.['p:cxnSp'])) add('cxnSp', box(node?.['p:spPr']?.['a:xfrm']));
-  for (const node of array(tree?.['p:graphicFrame'])) add('graphicFrame', box(node?.['p:xfrm'], true));
+  for (const node of array(tree?.['p:graphicFrame'])) {
+    if (isSmartArt(node)) add('smartArt', center(node?.['p:xfrm']));
+    else add('graphicFrame', box(node?.['p:xfrm'], true));
+  }
+  for (const node of wrapped) add('smartArt', center(node?.['p:xfrm']));
   for (const node of array(tree?.['p:grpSp'])) add('grpSp', `${box(node?.['p:grpSpPr']?.['a:xfrm'])}[${structure(node)}]`);
-  for (const kind of ['p:contentPart', 'mc:AlternateContent']) if (tree?.[kind] !== undefined) add(kind, String(array(tree[kind]).length));
+  if (tree?.['p:contentPart'] !== undefined) add('p:contentPart', String(array(tree['p:contentPart']).length));
+  if (alternates.length > wrapped.length) add('mc:AlternateContent', String(alternates.length - wrapped.length));
   // Stacking order is not structure; object kinds, positions and sizes are.
   return canonical(Object.fromEntries(Object.entries(kinds).map(([kind, values]) => [kind, values.sort()])));
 }
