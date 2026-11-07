@@ -5445,6 +5445,16 @@ function layoutFirstKeeps(next: SlideComposition, base: SlideComposition, shrunk
   if ([...codes(next)].some(([code, count]) => count > (was.get(code) ?? 0))) return false;
   const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), after = trackQuality(next, options);
   if (shrinks(next, base, options) || !readsAsWell(trackQuality(base, options), after, floor)) return false;
+  // LH-184's prose measure holds here too: a list in columns that the new arrangement sets in one column whose lines run past
+  // PROSE_MEASURE_CHARS stays in columns unless the one column is a type-scale step (10%) larger (a paginated FAQ page keeps its columns).
+  for (const item of next.items) {
+    if ((item.field !== 'items' && item.field !== 'bullets') || item.listColumns || !item.text) continue;
+    const before = base.items.find(entry => entry.path === item.path)?.listColumns;
+    if (!before?.length) continue;
+    const columnsSize = Math.min(...before.map(column => column.text.fontSize)), size = item.text.fontSize;
+    const measured = size * PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM >= item.box.width - .5;
+    if (!measured && size <= columnsSize * 1.1 + FONT_GRID_EPSILON) return false;
+  }
   const smallest = Math.min(...shrunk.values()), now = Math.min(...[...shrunk.keys()].map(path => after.blocks.get(path) ?? 0));
   return now >= typeScaleAbove(smallest, base.composition.minFontSize ?? 16, scale) - FONT_GRID_EPSILON;
 }
