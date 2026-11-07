@@ -2462,6 +2462,8 @@ export const PORTRAIT_SIDE_SHARES = [PORTRAIT_SIDE_SHARE, .35, .3] as const;
  * Design's 146 x 200) and at least this wide (4:3): a frame flatter than that crops a face to a strip, so the person keeps the avatar.
  */
 export const PORTRAIT_TALLEST = { top: .8, side: .7 } as const, PORTRAIT_WIDEST = 4 / 3;
+/** LH-187: a side portrait in a card that takes its whole cell may be this tall for its width (narrower than PORTRAIT_TALLEST.side), as Claude Design's n23. */
+export const PORTRAIT_SIDE_FILL = .6;
 /**
  * LH-132, in reference pixels: the narrowest card a portrait is drawn across the top of, the narrowest portrait beside the text and the
  * narrowest text beside it, and the gap between a portrait and its text.
@@ -7338,7 +7340,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       }
       const text = teamText.get(key);
       if (!text) return undefined;
-      const pictureHeight = Math.min(side ? inner.height : inner.height - between - text.need, pictureWidth / PORTRAIT_TALLEST[mode]);
+      // LH-187: a side portrait grows with its card, which takes the whole cell (the row's height), up to PORTRAIT_SIDE_FILL tall for its width.
+      const pictureHeight = Math.min(side ? inner.height : inner.height - between - text.need, pictureWidth / (side ? PORTRAIT_SIDE_FILL : PORTRAIT_TALLEST[mode]));
       return pictureHeight * PORTRAIT_WIDEST < pictureWidth - .5 ? undefined : { side, pictureWidth, pictureHeight, textWidth, text, ownNeed: side ? Math.min(text.need, needs(person.text, text.size)) : text.need };
     };
     // An authored mode is kept where it fits (top gives way to side); the automatic top portrait gives way to the side one where the side
@@ -7351,8 +7354,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!chosen) { portraitFallback = true; return false; }
     const { side, pictureWidth, pictureHeight, textWidth, text, ownNeed } = chosen;
     const content = side ? Math.max(pictureHeight, text.need) : pictureHeight + between + text.need;
-    const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = Math.min(cell.height, content + insetTop + insetBottom);
-    const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop;
+    // LH-187: a side card takes its whole cell, so a team of five or six fills its rows as four people fill the card top; its picture and
+    // text sit in the middle of it. A top card holds its portrait and text.
+    const insetTop = inner.y - cell.y, insetBottom = cell.y + cell.height - inner.y - inner.height, height = side ? cell.height : Math.min(cell.height, content + insetTop + insetBottom);
+    const card = { ...cell, y: cell.y + (cell.height - height) / 2, height }, start = card.y + insetTop + (side ? (inner.height - content) / 2 : 0);
     const picture = side ? { x: rtl ? inner.x + inner.width - pictureWidth : inner.x, y: start + (content - pictureHeight) / 2, width: pictureWidth, height: pictureHeight } : { x: inner.x, y: start, width: inner.width, height: pictureHeight };
     const words = side ? { x: rtl ? inner.x : inner.x + pictureWidth + between, y: start + (content - ownNeed) / 2, width: textWidth, height: ownNeed } : { x: inner.x, y: start + pictureHeight + between, width: inner.width, height: text.need };
     const host = record(person.image.host), shape = host.shape === undefined || host.shape === 'ellipse' ? 'roundRect' : host.shape, first = items.length;
