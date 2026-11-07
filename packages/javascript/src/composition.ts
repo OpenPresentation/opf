@@ -5969,6 +5969,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const fitShapeText = (shape: ComposedShape, value: unknown, textPath: string, minFontSize: number | undefined, sink: LayoutDiagnostic[], cap = Infinity): TextFit | RichTextFit | undefined => {
     if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) return undefined;
     const drawn = shape.textDirection === 'stacked' ? stackedText(value) : value;
+    // SH-11: a style with bold text (intense) is measured bold, as both engines draw it, so PowerPoint wraps it where the preview does.
+    if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
     // SH-10: text that holds the body size in a large shape grows as a lone body block does: up the type scale, one step at a time, to the
