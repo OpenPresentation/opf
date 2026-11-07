@@ -680,7 +680,7 @@ export async function fromPptx(input, options = {}) {
       index => resolveCoreSlideContext(imported, index, options.catalogs !== undefined ? {catalogs: options.catalogs} : {}).resolved.layout, report, packageLayoutTags);
   }
   for (const [index, context] of furnitureContexts.entries()) {
-    // SH-09: an untagged slide whose content is a Basic Pyramid or Basic Matrix SmartArt takes the pyramid or matrix layout.
+    // SH-09: an untagged slide whose content is a Basic Pyramid, Basic Matrix or (SH-18) Basic Cycle SmartArt takes the pyramid, matrix or cycle layout.
     if (!context.layoutTag && context.smartArtLayout !== undefined && imported.slides[index].layout === undefined) context.foreignLayout = context.smartArtLayout;
     if (!context.layoutTag && slideProvenance[index]?.structure === 'untagged' && context.foreignLayout !== undefined && imported.slides[index].layout === undefined)
       {

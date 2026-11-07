@@ -145,8 +145,8 @@ export interface ToPptxOptions {
    */
   diagrams?: "picture" | "shapes";
   /**
-   * SH-09: how a pyramid or matrix (a layout region's `arrangement`) is written. "live" (the default) writes live SmartArt (Basic
-   * Pyramid, Basic Matrix) where PowerPoint lays it out exactly as the preview draws it, and native shapes with an info
+   * SH-09: how a pyramid, matrix or cycle (SH-18; a layout region's `arrangement`) is written. "live" (the default) writes live SmartArt (Basic
+   * Pyramid, Basic Matrix, Basic Cycle) where PowerPoint lays it out exactly as the preview draws it, and native shapes with an info
    * `smartart-unavailable` diagnostic (its `reason`) where it would not; "shapes" writes native shapes always. SH-16: each live SmartArt is an
    * `mc:AlternateContent` whose fallback is OPF's preview of the frame (an SVG picture over a PNG), which apps without SmartArt show; it is
    * drawn with opf-render (an optional peer) and `svgRasterizer` (in a browser), and without them the arrangement is native shapes.

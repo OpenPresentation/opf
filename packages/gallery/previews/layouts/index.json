@@ -94,6 +94,11 @@
       "bytes": 3979
     },
     {
+      "id": "cycle",
+      "file": "cycle.svg",
+      "bytes": 3729
+    },
+    {
       "id": "metrics",
       "file": "metrics.svg",
       "bytes": 3885

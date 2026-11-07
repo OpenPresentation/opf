@@ -58,9 +58,10 @@ export interface LayoutRegion {
   sequence?: 'steps' | 'numbered';
   /**
    * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
-   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). Absent: a list.
+   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). SH-18: `cycle` (the
+   * entries as the steps of a loop, nodes on a ring with an arrow to the next). Absent: a list.
    */
-  arrangement?: 'pyramid' | 'matrix';
+  arrangement?: 'pyramid' | 'matrix' | 'cycle';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -158,7 +159,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' ? { arrangement: entry.arrangement } : {}),
+    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' || entry.arrangement === 'cycle' ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

@@ -49,7 +49,9 @@ export {pictureScrims,luminanceGrid,scrimOpacity,scrimGeometry,sampledGrays,samp
 import {choosePictureText,scorePictureText,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 export {choosePictureText,scorePictureText,CALM_PICTURE_SPREAD,SALIENT_LIMIT,PANEL_SCRIM_LIMIT,PICTURE_PANEL_SHARES,PICTURE_TEXT_COLUMNS,PICTURE_TEXT_PLACEMENTS,type PictureText,type PictureTextAlignment,type PictureTextAnchor,type PictureTextCandidate,type PictureTextInput,type PictureTextPlacement} from './picture-text.js';
 import {numericText} from './number-text.js';
+import {CYCLE_RING_MARGIN,cycleFrame,cycleLoop,cycleNodes,cycleRing,type ArrangementArrow} from './arrangements.js';
 import {ARRANGEMENT_CARDS_MAX,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,CARD_TEXT_MARGIN,cardNodes,MATRIX_ENTRIES,matrixNodes,matrixQuadrants,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,pyramidSteps,SMART_ART_DOMAIN,smartArtScript,smartArtUnavailable,type Arrangement,type ArrangementNode} from './arrangements.js';
+export {CYCLE_ARROW,CYCLE_ARROW_ADJUST,CYCLE_ARROW_LIGHTEN,CYCLE_DIAMETER,CYCLE_RADIUS,CYCLE_RING_MARGIN,CYCLE_RING_NODE,CYCLE_TWO,cycleAspect,cycleFrame,cycleLoop,cycleNodes,cycleRing,rightArrowPoints,type ArrangementArrow} from './arrangements.js';
 export {ARRANGEMENTS,ARRANGEMENT_CARDS_MAX,CARD_TEXT_MARGIN,MATRIX_ENTRIES,PYRAMID_STEPS_ASPECT,PYRAMID_STEPS_SHARE,cardNodes,matrixQuadrants,pyramidSteps,smartArtScript,ARRANGEMENT_GROWTH,ARRANGEMENT_LINE_POINTS,ARRANGEMENT_MAX,ARRANGEMENT_TEXT_MARGIN,MATRIX_BACKGROUND_LIGHTEN,MATRIX_GAP,MATRIX_INSET,MATRIX_QUADRANT,PYRAMID_MAX_ASPECT,PYRAMID_TEXT_WIDTH,ROUND_RECT_ADJUST,SMART_ART_DOMAIN,SMART_ART_LAYOUTS,arrangementPaint,matrixNodes,matrixSquare,nodeWidthAt,pyramidFrame,pyramidNodes,smartArtUnavailable,type Arrangement,type ArrangementColor,type ArrangementNode,type ArrangementPaint,type SmartArtCandidate} from './arrangements.js';
 export {emphasisSurface, EMPHASIS_TEXT_MIN_CONTRAST, EMPHASIS_SURFACE_MIN_CONTRAST} from './color.js';
 export type {EmphasisSurface} from './color.js';
@@ -509,6 +511,8 @@ export interface ComposedArrangement {
   background?: LayoutBox;
   /** The nodes in order (a matrix always has four); `path` is the entry's text path, absent for an empty quadrant. */
   nodes: (ArrangementNode & { path?: string })[];
+  /** SH-18: a cycle's arrows, the one after each node to the next (arrangements.ts cycleNodes, cycleRing), drawn after their node in the primary lightened (arrangementPaint's `arrow`). */
+  arrows?: ArrangementArrow[];
   fontSize: number;
   /** The text inset inside each node's text rectangle (ARRANGEMENT_TEXT_MARGIN of the size). */
   textMargin: number;
@@ -9476,7 +9480,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   //   each entry beside its level (start-aligned), or four quadrants filling the region (centered);
   // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
-  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number };
+  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; arrows?: ArrangementArrow[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number };
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
@@ -9545,6 +9549,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const frame = pyramidFrame(area);
       designs.push({ design: 'smartart', frame, nodes: pyramidNodes(frame, count), margin: ARRANGEMENT_TEXT_MARGIN.pyramid, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
       designs.push({ design: 'opf', frame: area, nodes: pyramidSteps(area, count, gap / 2, radius), margin: 0, align: 'start', paint: 'primary', text: 'slide', lineWidth: primaryLine });
+    } else if (kind === 'cycle') {
+      // SH-18: PowerPoint's Basic Cycle in a frame of its own proportion (cycleFrame), then OPF's two designs filling the region (rounded
+      // rectangles on a ring, and a loop of two rows), of which the one that holds the entries larger is kept (the ring when they tie).
+      const frame = cycleFrame(area, count), basic = cycleNodes(frame, count, rtl), own = [cycleRing(area, count, gap, rtl), cycleLoop(area, count, gap, rtl), cycleLoop(area, count, gap, rtl, 3)];
+      designs.push({ design: 'smartart', frame, ...basic, margin: ARRANGEMENT_TEXT_MARGIN.cycle, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
+      for (const shapes of own) if (shapes) designs.push({ design: 'opf', frame: area, ...shapes, margin: CYCLE_RING_MARGIN, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
     } else if (count === MATRIX_ENTRIES) {
       designs.push({ design: 'smartart', frame: area, nodes: matrixNodes(area), margin: ARRANGEMENT_TEXT_MARGIN.matrix, align: 'center', paint: 'primary', text: 'node', background: matrixSquare(area), lineWidth: primaryLine });
       designs.push({ design: 'opf', frame: area, nodes: matrixQuadrants(area, gap), margin: ARRANGEMENT_TEXT_MARGIN.matrix, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
@@ -9561,17 +9571,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let chosen: { design: ArrangementDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined, outside: typeof chosen, skipped: string | undefined;
     for (const design of designs) {
       const result = sized(design);
-      if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's Basic ${kind === 'pyramid' ? 'Pyramid' : 'Matrix'} at the list's size`; continue; }
+      if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's Basic ${kind === 'pyramid' ? 'Pyramid' : kind === 'cycle' ? 'Cycle' : 'Matrix'} at the list's size`; continue; }
       const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),
         nodes: result.placed.lines.map((lines, index) => ({ lines, stable: result.placed.stable[index]! })) });
       if (unavailable !== undefined) { outside ??= { design, ...result }; skipped = unavailable; continue; }
-      if (design.design === 'cards' && chosen && chosen.size >= result.size) continue;
+      if ((design.design === 'cards' || kind === 'cycle') && chosen && chosen.design.design === design.design && chosen.size >= result.size) continue;
       chosen = { design, ...result };
-      if (design.design !== 'cards') break;
+      if (design.design === 'smartart' || (design.design === 'opf' && kind !== 'cycle')) break;
     }
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen) {
-      diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The ${kind}'s entries do not fit its ${kind === 'pyramid' ? 'levels' : 'quadrants'} at the list's size, so they are drawn as a list.` });
+      diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The ${kind}'s entries do not fit its ${kind === 'pyramid' ? 'levels' : kind === 'cycle' ? 'steps' : 'quadrants'} at the list's size, so they are drawn as a list.` });
       return undefined;
     }
     const { design, placed, size } = chosen;
@@ -9581,7 +9591,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     item.box = { ...design.frame };
     const textPaths = placed.columns.map(column => column.text.listEntries[0]!.textPath!);
     return { kind, design: design.design, region: item.region ?? '', path: item.path, frame: { ...design.frame }, ...(design.background ? { background: design.background } : {}),
-      nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), fontSize: size, textMargin: placed.margin,
+      nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), ...(design.arrows ? { arrows: design.arrows } : {}), fontSize: size, textMargin: placed.margin,
       align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, smartArt: { lines: placed.lines, stable: placed.stable }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
   };
   const arrangedLists = (): ComposedArrangement[] => {
@@ -9594,7 +9604,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!values.length) continue;
       const reason = item.payload.numbering !== undefined ? 'a numbered list' : values.some(value => (record(value).level ?? 0) !== 0) ? 'nested entries'
         : values.some(value => record(value).description !== undefined) ? 'descriptions' : values.some(value => record(value).icon !== undefined) ? 'icons'
-          : region.arrangement === 'pyramid' && values.length > ARRANGEMENT_MAX.pyramid ? `more than ${ARRANGEMENT_MAX.pyramid} levels` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
+          : region.arrangement === 'pyramid' && values.length > ARRANGEMENT_MAX.pyramid ? `more than ${ARRANGEMENT_MAX.pyramid} levels` : region.arrangement === 'cycle' && values.length > ARRANGEMENT_MAX.cycle ? `more than ${ARRANGEMENT_MAX.cycle} steps` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
       if (reason) { diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `A ${region.arrangement} draws a list of one level of short entries; this list has ${reason}, so it is drawn as a list.` }); continue; }
       const area = templateRegions.find(entry => entry.name === region.name)?.box ?? item.box;
       const arranged = arrangedList(item, region.arrangement, area);

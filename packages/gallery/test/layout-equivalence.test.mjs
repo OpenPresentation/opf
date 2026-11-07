@@ -32,7 +32,7 @@ const ACCEPTS_ADDED = {
   ...Object.fromEntries(["chart/charts", "chart-beside/chart", "image/media", "image-beside/media", "hero/media", "comparison/first", "comparison/second", "process/steps", "timeline/timeline"].map((region) => [region, ["diagram"]])),
 };
 /** Records that did not exist in 4.0.0: they have no grid to be equal to. */
-const ADDED = new Set(["three-column", "agenda-split", "pyramid", "matrix"]);
+const ADDED = new Set(["three-column", "agenda-split", "pyramid", "matrix", "cycle"]);
 /** The generic column layouts take any content: their regions list every kind, which no other record does (WI-3). */
 const EVERY_KIND = new Set(["two-column", "three-column"]);
 /** Every content kind the regions accept, written out so editors can name the keys of a region (WI-3). */
