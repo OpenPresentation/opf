@@ -492,8 +492,9 @@ describe("the bundled sources", () => {
 		// (SH-03's docs/shape-effects.md, now a served page, LH-165's, LH-169's, LH-164's and LH-63's rules, the engines that load on demand) are 1,120,756 bytes.
 		// Shapes phase 2 together (SH-04's overlay shapes and connectors, SH-05's import, SH-06's editor and search_shapes, SH-07's native
 		// diagrams, in docs/shapes.md, docs/diagrams.md and the schema reference, and the integration's one shapes page) is 1,158,205 bytes,
-		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB).
-		assert.ok(bytes < 1_170_000, `${bytes} bytes of documentation`);
+		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB). SH-09 (the pyramid and matrix layouts, live SmartArt, the
+		// arrangement-adapted rule) is 1,174,552 bytes.
+		assert.ok(bytes < 1_190_000, `${bytes} bytes of documentation`);
 	});
 });
 
