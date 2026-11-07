@@ -7548,7 +7548,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // OPF 0.19, one long list: 1, 2 then 3 equal columns at the starting size, and the first count at which it fits, as
   // long as a column stays a quarter of the slide wide. Breaks fall between items (a nested item stays with its parent)
   // and keep the columns as even as possible; numbering continues across them. A payload's fixed `columns` count is
-  // used as written. When the largest allowed count does not fit, every column shrinks to one shared size. Undefined:
+  // used as written. When no count fits, `auto` takes the count with the largest shared size (LH-184, never below one column); a fixed count shrinks to one shared size. Undefined:
   // one column, fitted as any list.
   const listColumnsFor = (node: Pending, box: LayoutBox, settings: Composition, regionMode?: 'auto' | 1): ComposedListColumn[] | undefined => {
     if (node.field !== 'items' && node.field !== 'bullets') return undefined;
@@ -7605,10 +7605,21 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (columns.every(column => !column.text.overflow)) return capped(columns);
       }
     }
+    // LH-184: `auto` keeps the largest text. When no count fits at the starting size, it takes the count whose shared fitted
+    // size is largest (fewer columns on a tie), and never one that sets the text smaller than the list's one column. A fixed
+    // count is used as written, shrunk to one shared size.
+    const shared = (count: number) => { const shrunk = split(count, start, floor); return at(shrunk, Math.min(...shrunk.map(column => column.text.fontSize))); };
+    if (mode === 'auto') {
+      let best: ComposedListColumn[] | undefined, bestSize = fitList(values, box, start, floor, listOptions).fontSize;
+      for (const count of counts) {
+        const columns = shared(count), size = columns[0]!.text.fontSize;
+        if (size > bestSize + FONT_GRID_EPSILON) { best = columns; bestSize = size; }
+      }
+      return best && capped(best);
+    }
     const count = counts.at(-1);
     if (count === undefined) return undefined;
-    const shrunk = split(count, start, floor);
-    return capped(at(shrunk, Math.min(...shrunk.map(column => column.text.fontSize))));
+    return capped(shared(count));
   };
   // OPF 0.19, "long" for `flow: auto`: more than 6 lines at the starting body size in the cell the grid would give the
   // block, counted with core's own estimate (never the host's measurement), so every engine picks the same arrangement.

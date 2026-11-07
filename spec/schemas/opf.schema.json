@@ -3097,7 +3097,7 @@
               "maximum": 3
             }
           ],
-          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, the largest allowed count shrinks towards minFontSize. A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
+          "description": "Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a quarter of the slide wide; when none fits, 'auto' takes the count (1, 2 or 3) whose fitted size is largest, preferring fewer columns on a tie, and never sets the text smaller than the list in one column. A list of 6 or fewer entries is never split by 'auto'; it shrinks in one column. 1, 2 or 3 fixes the count. Column breaks fall between items (a nested item stays with its parent) and keep the columns as even as possible; numbering continues and reading order runs column by column. A lone list in a layout region with listColumns: 'auto' behaves as 'auto'.",
           "examples": ["auto", 2]
         },
         "image": {
