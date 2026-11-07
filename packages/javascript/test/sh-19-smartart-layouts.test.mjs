@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gallery } from '@openpresentation/gallery';
 import {
-  OPF_LAYOUT_DESIGNS, OPF_LAYOUT_KIND, SMART_ART_OPF_DOMAIN, composeSlide, compositeLayoutDefinition, evaluateLayoutDefinition, layoutArrangement, opfLayoutGeometry,
+  OPF_LAYOUT_DESIGNS, OPF_LAYOUT_KIND, SMART_ART_DOMAIN, SMART_ART_OPF_DOMAIN, smartArtUnavailable, composeSlide, compositeLayoutDefinition, evaluateLayoutDefinition, layoutArrangement, opfLayoutGeometry,
   opfSmartArtUnavailable, presetTextRect, turnedShapeBox,
 } from '../dist/composition.js';
 
@@ -97,4 +97,17 @@ test('a composed OPF design carries the recipe of its definition, and the domain
   assert.match(opfSmartArtUnavailable({ ...ok, lines: [3, 1, 1, 1] }), /3 lines/);
   assert.match(opfSmartArtUnavailable({ ...ok, stable: [true, false, true, true] }), /entry 2 wraps too close/);
   assert.match(opfSmartArtUnavailable({ ...ok, ink: SMART_ART_OPF_DOMAIN.ink + .01 }), /covers 9% of the frame/);
+});
+
+test("SMART_ART_DOMAIN.lineWidth: a line wider than PowerPoint sets within SH-07's text gate leaves the built-in layout and OPF's", () => {
+  // The sweep: a one-level pyramid's 537 px line sat 1.74 px from OPF's native text in PowerPoint; every line of 440 px or less was within 1.5 px.
+  const candidate = { kind: 'pyramid', count: 1, frame: { x: 0, y: 0, width: 1100, height: 500 }, nodes: [{ lines: 1, stable: true }], rtl: false };
+  assert.equal(smartArtUnavailable({ ...candidate, widest: 440 }), undefined);
+  assert.match(smartArtUnavailable({ ...candidate, widest: 537 }), /a line 537 px wide/);
+  assert.equal(SMART_ART_DOMAIN.lineWidth, 500);
+  assert.match(opfSmartArtUnavailable({ design: 'pyramid-steps', count: 1, lines: [1], stable: [true], ink: .05, widest: 624, rtl: false }), /a line 624 px wide/);
+  // A slide whose one entry is that long draws OPF's own design (native shapes), not PowerPoint's.
+  const slide = { layout: 'chevrons', title: 'How we work', items: ['Why we exist and who we serve, and how'] };
+  const arrangement = composeSlide(slide, { layout: gallery.layouts.chevrons }).arrangements?.[0];
+  if (arrangement && (arrangement.smartArt.widest ?? 0) > SMART_ART_DOMAIN.lineWidth) assert.notEqual(arrangement.design, 'smartart');
 });

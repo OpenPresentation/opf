@@ -224,7 +224,8 @@ export function smartArtReason(arrangement, values, rtl) {
   const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
   return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || rightToLeft,
     nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {}),
-    ...(arrangement.smartArt.fill !== undefined ? {fill: arrangement.smartArt.fill} : {}), ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {})});
+    ...(arrangement.smartArt.fill !== undefined ? {fill: arrangement.smartArt.fill} : {}), ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}),
+    ...(arrangement.smartArt.widest !== undefined ? {widest: arrangement.smartArt.widest} : {})});
 }
 
 /** SH-19: whether OPF's own design can be live SmartArt on OPF's layout definition: undefined when it can, else the reason. */
@@ -235,7 +236,7 @@ export function opfLayoutReason(arrangement, values, rtl) {
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
   const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
   return opfSmartArtUnavailable({design: arrangement.layout.design, ...(arrangement.layout.compact ? {compact: true} : {}), count: values.length, lines: arrangement.smartArt.lines,
-    stable: arrangement.smartArt.stable, ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}), rtl: rtl || rightToLeft, ...(script ? {script} : {})});
+    stable: arrangement.smartArt.stable, ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}), ...(arrangement.smartArt.widest !== undefined ? {widest: arrangement.smartArt.widest} : {}), rtl: rtl || rightToLeft, ...(script ? {script} : {})});
 }
 
 /** SH-19: a card grid's paint, as the native shapes draw it: the card neutral and its border. */

@@ -206,6 +206,7 @@ The PPTX export writes live SmartArt only for the instances the PowerPoint compa
 | Frame proportions (width over height) | 1.1 to 2.3 (the 16:9, 4:3 and 1:1 slides gave 2.26, 1.64 and 1.17) | 0.8 to 1.2 (16:9 and 4:3 gave 1.13 and 0.83; the 1:1 slide's 0.58 is outside) |
 | Lines | at most 2 for an entry and 6 for all of them, each break holding when the width changes by 4% (core fits every entry at both widths) | the same |
 | Text | Latin script, left to right; runs bold, italic, underlined or struck through only (no links, citations, code or sizes of their own); no line breaks or tabs | the same |
+| Line width (SH-19) | no line wider than 500 px: PowerPoint measures a line up to about 0.6% wider or narrower than OPF, and a centered line moves by half the difference (the SH-19 sweep: a one-level pyramid's 537 px line sat 1.74 px from OPF's native text, outside SH-07's 1.5 px; every line of 440 px or less was within it); it applies to every arrangement and to OPF's own layouts, and such an instance draws OPF's design | the same |
 
 Everything else (Arabic, Hebrew and Japanese text, longer or tighter entries, other proportions) is written as native shapes, which look
 the same as the live SmartArt; the finding names the first reason.
@@ -458,6 +459,7 @@ The export writes OPF's layout only for the instances the PowerPoint comparison 
 | Text density | the entries' text (each line's width times the size) at most 7.5% of the frame |
 | Lines | at most 2 an entry, each break holding when the width changes by 4% (core fits every entry at both widths, as for PowerPoint's designs) |
 | Text | Latin script, left to right, with the run formatting of the other arrangements |
+| Line width | no line wider than 500 px, as for PowerPoint's designs |
 
 Everything else is native shapes, which look the same: OPF's cycles and quadrants (every instance of the sweep held its entries only
 above the text density), the compact forms, right-to-left and Chinese or Japanese text, a row of chevrons pointing left (a layout
@@ -476,11 +478,12 @@ digest). With the digest every one of the 310 laid out within 0.1 pt of the inte
 the same) at OPF's size. The pixel checks then found what the domain keeps out: with the text centered in its node, PowerPoint set the
 lines up to a pixel off (mean difference from the native export up to 6 in dense frames); anchoring the text at OPF's first line halved
 that, and of the 292 Latin instances every one at a text density of 7.5% or less with stable breaks passed (30), while above it some did
-not (a mean difference of 1.01 at 8%, up to 3.3 in the densest), and every Japanese instance did not (text 11 px off). With the domain, 30
+not (a mean difference of 1.01 at 8%, up to 3.3 in the densest), and every Japanese instance did not (text 11 px off). With the domain (and the 500 px line limit, which moved five built-in decks with a single long entry to OPF's design), 30
 decks draw OPF's layout live and every one passes (node rectangles within 0.000 pt of the interpreter, sizes equal, no visible shape
 difference, within SH-07's gate of the native export: a mean difference of at most 0.8 at a quarter size and 0.94 at full size, the
-text's ink within 1.08 px); PowerPoint's built-in layouts draw their 107 live decks as before; OPF's design draws 266 decks and a card
-grid 43 as native shapes, and 32 stay a list. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
+text's ink within 1.08 px); PowerPoint's built-in layouts draw 102 live decks, every one passing; OPF's design draws 271 decks and a card
+grid 43 as native shapes, and 32 stay a list. The gate's shapes-versus-preview check leaves out each node's text rectangle grown by
+0.2 em up and down, so the preview's known text offset is not counted as a shape difference. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
 the design and the layout that drew it, and the COM records) is in the SH-19 folder of the shapes program.
 
 ## Import

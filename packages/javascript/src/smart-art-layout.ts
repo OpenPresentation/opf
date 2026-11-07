@@ -23,7 +23,7 @@
  *
  * Pure data and geometry: no Node built-ins, so it runs on the edge runtimes as the rest of core.
  */
-import { cardNodes, cycleLoop, cycleRing, matrixQuadrants, pyramidSteps, type Arrangement, type ArrangementArrow, type ArrangementNode, rightArrowPoints } from './arrangements.js';
+import { SMART_ART_DOMAIN, cardNodes, cycleLoop, cycleRing, matrixQuadrants, pyramidSteps, type Arrangement, type ArrangementArrow, type ArrangementNode, rightArrowPoints } from './arrangements.js';
 import { linearDesign, type LinearArrangement } from './linear-arrangements.js';
 
 interface Box { x: number; y: number; width: number; height: number }
@@ -458,6 +458,8 @@ export interface OpfSmartArtCandidate {
   /** Whether each entry's line breaks hold within SMART_ART_DOMAIN.slack of its width. */
   stable?: readonly boolean[];
   ink?: number;
+  /** The widest line of any entry, canvas pixels (SMART_ART_DOMAIN.lineWidth applies to OPF's layouts too). */
+  widest?: number;
   rtl: boolean;
   script?: 'cjk' | 'other';
 }
@@ -474,6 +476,7 @@ export function opfSmartArtUnavailable(candidate: OpfSmartArtCandidate): string 
   if (index >= 0) return `entry ${index + 1} wraps to ${candidate.lines[index]} lines (at most ${domain.lines} matched PowerPoint)`;
   const unstable = candidate.stable?.findIndex(stable => !stable) ?? -1;
   if (unstable >= 0) return `entry ${unstable + 1} wraps too close to its node's width for PowerPoint to break the same lines`;
+  if (candidate.widest !== undefined && candidate.widest > SMART_ART_DOMAIN.lineWidth + 1e-6) return `a line ${Math.round(candidate.widest)} px wide is longer than PowerPoint sets within a pixel of OPF's text (at most ${SMART_ART_DOMAIN.lineWidth} px)`;
   if (candidate.ink !== undefined && candidate.ink > domain.ink + 1e-6) return `its text covers ${Math.round(candidate.ink * 100)}% of the frame (at most ${domain.ink * 100}% matched PowerPoint's text placement)`;
   return undefined;
 }
