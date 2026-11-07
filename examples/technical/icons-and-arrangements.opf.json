@@ -199,5 +199,224 @@
         }
       ]
     }
-  ]
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "pyramid": {
+          "name": "Pyramid",
+          "summary": "Levels that build on each other, as a pyramid, the first at the top.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "levels",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "pyramid"
+            }
+          ],
+          "description": "Show a hierarchy of 1 to 8 levels, from the narrow top (the peak, the few, the goal) to the broad base (the foundation, the many). Write one short list entry per level, the top level first.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/pyramid.svg"
+          }
+        },
+        "matrix": {
+          "name": "Matrix",
+          "summary": "Four parts of a whole, as the quadrants of a square beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "quadrants",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "matrix",
+              "size": 3
+            }
+          ],
+          "description": "Show four parts that together make a whole, or the four cases of two choices, as a 2 x 2 matrix. Write four short list entries, in the order top left, top right, bottom left, bottom right; another count is drawn as a grid of cards.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/matrix.svg"
+          }
+        },
+        "cycle": {
+          "name": "Cycle",
+          "summary": "Steps that repeat, as a loop of nodes with arrows beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "cycle",
+              "size": 3
+            }
+          ],
+          "description": "Show 2 to 8 steps that repeat, where the last leads back to the first (a review loop, a product lifecycle, a feedback cycle). Write one short list entry per step, in order; the first is drawn at the top and the rest clockwise, with an arrow from each to the next.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/cycle.svg"
+          }
+        },
+        "chevrons": {
+          "name": "Chevrons",
+          "summary": "Stages in order, as a row of chevrons.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "chevrons"
+            }
+          ],
+          "description": "Show 1 to 8 stages that follow one another, each leading into the next. Write one short list entry per stage, in order; a word or two reads best inside a chevron.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/chevrons.svg"
+          }
+        },
+        "flow": {
+          "name": "Flow",
+          "summary": "Steps in order, as boxes joined by arrows in one row.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "flow"
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
+          }
+        },
+        "vertical-flow": {
+          "name": "Vertical flow",
+          "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+          "tags": [
+            "Groups of items"
+          ],
+          "direction": "row",
+          "regions": [
+            {
+              "name": "title",
+              "size": 2
+            },
+            {
+              "name": "stages",
+              "accepts": [
+                "list"
+              ],
+              "role": "primary",
+              "flow": "none",
+              "arrangement": "vertical-flow",
+              "size": 3
+            }
+          ],
+          "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
+          }
+        }
+      },
+      "iconSets": {
+        "lucide": {
+          "name": "Lucide",
+          "summary": "Clean, consistent outline icons on a 24 px grid with 2 px strokes; the default set.",
+          "version": "1.68.0",
+          "package": "lucide-static",
+          "homepage": "https://lucide.dev",
+          "license": "ISC",
+          "copyright": "Copyright (c) 2026 Lucide Icons and Contributors; Copyright (c) 2013-present Cole Bemis",
+          "viewBox": [
+            0,
+            0,
+            24,
+            24
+          ],
+          "style": "stroke",
+          "strokeWidth": 2,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "icons": {
+            "chart-bar": "M3 3v16a2 2 0 0 0 2 2h16M7 16h8M7 11h12M7 6h3",
+            "clock": "M2 12A10 10 0 1 0 22 12A10 10 0 1 0 2 12ZM12 6v6l4 2",
+            "shield-check": "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1zM9 12l2 2 4-4",
+            "users": "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 3.128a4 4 0 0 1 0 7.744M22 21v-2a4 4 0 0 0-3-3.87M5 7A4 4 0 1 0 13 7A4 4 0 1 0 5 7Z",
+            "wifi-off": "M12 20h.01M8.5 16.429a5 5 0 0 1 7 0M5 12.859a10 10 0 0 1 5.17-2.69M19 12.859a10 10 0 0 0-2.007-1.523M2 8.82a15 15 0 0 1 4.177-2.643M22 8.82a15 15 0 0 0-11.288-3.764M2 2l20 20"
+          }
+        },
+        "tabler": {
+          "name": "Tabler outline",
+          "summary": "Tabler's outline icons on a 24 px grid with 2 px strokes.",
+          "version": "3.50.0",
+          "package": "@tabler/icons",
+          "homepage": "https://tabler.io/icons",
+          "license": "MIT",
+          "copyright": "Copyright (c) 2020-2026 Paweł Kuna",
+          "viewBox": [
+            0,
+            0,
+            24,
+            24
+          ],
+          "style": "stroke",
+          "strokeWidth": 2,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "icons": {
+            "rocket": "M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"
+          }
+        }
+      }
+    }
+  }
 }
