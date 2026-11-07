@@ -5463,6 +5463,8 @@ const TABLE_NOTE = Symbol('opf.tableNote');
  * be under LH-66's minimum measure), the table's height under which it is short (half the body's) and the note's fewest lines.
  */
 const TABLE_NOTE_SHARES: readonly number[] = [.7, .65, .6], TABLE_NOTE_SHORT = .5, TABLE_NOTE_LINES = 2;
+/** LH-75 follow-up: the shares a grown pair may take, widest first; the note's column widens as its type grows, to at most half the row. */
+const TABLE_NOTE_GROWN_SHARES: readonly number[] = [.7, .65, .6, .55, .5];
 /** LH-75: beside its note a table cell may wrap onto at most this many lines (its words whole), so the table keeps its type size. */
 const TABLE_NOTE_CELL_LINES = 2;
 /**
@@ -5507,23 +5509,34 @@ function tableNote(input: unknown, options: ComposeSlideOptions, result: SlideCo
     } catch { return Infinity; }
   };
   const before = trackQuality(result, options), floor = snapFontSizeUp((result.composition.minFontSize ?? 16) * scale);
-  let best: SlideComposition | undefined;
-  for (const share of TABLE_NOTE_SHARES) {
-    for (let steps = 0; steps <= 3; steps++) {
-      const extra = { [TABLE_NOTE]: { share }, ...(steps ? { [GROW]: steps } : {}), ...(result.regions ? { [RECOMPOSE]: true } : {}) };
-      const next = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor), placedTable = next && tableOf(next), placedNote = next && noteOf(next);
-      if (!next || !placedTable || !placedNote?.frameBox || overflowCount(next) > 0 || !beside(placedTable.box, placedNote.box)) break;
-      const read = trackQuality(next, options);
-      // LH-75 decision (2026-11-07): a cell may wrap beside the note, onto at most TABLE_NOTE_CELL_LINES lines and with its words whole
-      // (a word too wide for its column is LH-44's overflow, refused above), so the table keeps its size instead of stepping down; the
-      // slide reads as well (no block smaller, no word split).
-      if (tableCellLines(placedTable) > TABLE_NOTE_CELL_LINES || !readsAsWell(before, read, floor)) break;
-      // The row (the note's card is as tall as the row) covers at most LONE_TARGET of the body, as LH-48's grown body does; each step is larger.
-      if (placedNote.frameBox.height > LONE_TARGET * bodyHeight(next) || (steps > 0 && shrinks(next, best!, options))) break;
-      best = next;
+  let best: SlideComposition | undefined, bestShare = 1;
+  // One arrangement at `share` and `steps` of LH-48's growth, or undefined when it does not hold (stacked, overflowing, reading less well).
+  const attempt = (share: number, steps: number): SlideComposition | undefined => {
+    const extra = { [TABLE_NOTE]: { share }, ...(steps ? { [GROW]: steps } : {}), ...(result.regions ? { [RECOMPOSE]: true } : {}) };
+    const next = composeVariant(input, { ...options, ...extra } as ComposeSlideOptions, before, floor), placedTable = next && tableOf(next), placedNote = next && noteOf(next);
+    if (!next || !placedTable || !placedNote?.frameBox || overflowCount(next) > 0 || !beside(placedTable.box, placedNote.box)) return undefined;
+    // LH-75 decision (2026-11-07): a cell may wrap beside the note, onto at most TABLE_NOTE_CELL_LINES lines and with its words whole
+    // (a word too wide for its column is LH-44's overflow, refused above), so the table keeps its size instead of stepping down; the
+    // slide reads as well (no block smaller, no word split).
+    if (tableCellLines(placedTable) > TABLE_NOTE_CELL_LINES || !readsAsWell(before, trackQuality(next, options), floor)) return undefined;
+    // The row (the note's card is as tall as the row) covers at most LONE_TARGET of the body, as LH-48's grown body does.
+    return placedNote.frameBox.height > LONE_TARGET * bodyHeight(next) ? undefined : next;
+  };
+  // The widest share at which the pair holds wins at the role sizes. LH-75 follow-up (2026-11-07): the pair then grows by LH-48's steps
+  // like any short body, each step at the widest share (that share or a narrower one, down to TABLE_NOTE_GROWN_SHARES' last, so the
+  // larger note keeps LH-66's measure) at which it still holds, while every block is at least as large and one is larger.
+  for (const share of TABLE_NOTE_SHARES) { const next = attempt(share, 0); if (next) { best = next; bestShare = share; break; } }
+  if (!best) return undefined;
+  const total = (composed: SlideComposition) => bodyReadability(composed, options).sizes.reduce((sum, entry) => sum + entry.size, 0);
+  for (let steps = 1; steps <= 3; steps++) {
+    let grown: SlideComposition | undefined, grownShare = bestShare;
+    for (const share of TABLE_NOTE_GROWN_SHARES) {
+      if (share > bestShare + 1e-9) continue;
+      const next = attempt(share, steps);
+      if (next) { grown = next; grownShare = share; break; }
     }
-    // The widest share at which the note reads as well wins.
-    if (best) break;
+    if (!grown || shrinks(grown, best, options) || total(grown) <= total(best) + FONT_GRID_EPSILON) break;
+    best = grown; bestShare = grownShare;
   }
   if (!best) return undefined;
   const after = trackQuality(best, options);
