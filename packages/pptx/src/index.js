@@ -2729,7 +2729,9 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined);
       if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
-      await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
+      // LH-168: a list numbered by core's step badges carries its numbers on the badges, not as list markers.
+      const badgeNumbered=(geometry.steps??[]).some(step=>step.badges?.some(badge=>badge.list?.path===item.path));
+      await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined&&!badgeNumbered);
       // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
       if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
@@ -4638,7 +4640,8 @@ function addPlaceholderPayload(slide, label, description, region, context) {
     fontFace: context.fonts.body,
     fontSize: 11,
     color: context.mutedColor,
-    fit: "shrink",
+    // RR-104: OPF writes explicit sizes and never asks PowerPoint to shrink text on overflow (no a:normAutofit).
+    fit: "none",
     valign: "mid",
     align: "center"
   });
@@ -4797,7 +4800,8 @@ function textBoxOptions(region, context, fontSize) {
     fontSize,
     color: context.textColor,
     breakLine: false,
-    fit: "shrink",
+    // RR-104: autofit off (PptxGenJS writes no autofit element, which is off): PowerPoint never refits OPF text.
+    fit: "none",
     valign: "top"
   };
 }
