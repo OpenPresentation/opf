@@ -219,6 +219,40 @@ export function chartValueList(chart: unknown, data: ResolvedChartData, geometry
   };
 }
 
+/** LH-182: a doughnut's square and its hole, in slide pixels. */
+export interface ChartLayerDoughnut {
+  /** The square the doughnut fills (its outer diameter): the preview draws it there and the PPTX export pins the plot area to it. */
+  pie: Box;
+  /** The hole, half the doughnut's radius (`c:holeSize` 50), which both engines fill with the surface the chart stands on. */
+  hole: {cx: number; cy: number; r: number};
+}
+
+/**
+ * LH-182: where a doughnut (the drawn type: a doughnut, or nested rings of a pie or doughnut of several series) is drawn, so its hole can
+ * be filled with the surface the chart stands on (`surface`): a deck watermark or a background motif behind the chart otherwise shows
+ * through the hole, and only in the hole. With a value list (LH-108) the doughnut fills the list's square. Without one, and without chart
+ * options (`legend`, `axisTitles`, `dataLabels`, which carve the box themselves), the square is the preview's: the box less its padding
+ * and the category legend at the end (none when the slices carry their names, LH-105), 90% of half the shorter side. A chart with options
+ * has no square (its hole stays open in both engines).
+ */
+export function chartDoughnut(chart: unknown, data: ResolvedChartData, geometry: ChartLayerGeometry, layer: ChartLayer | undefined): ChartLayerDoughnut | undefined {
+  if (!record(chart) || !data.ok || data.columns.length < 2 || !data.rows.length) return undefined;
+  if (typeOf(chart) !== 'doughnut') return undefined;
+  const {box, scale} = geometry;
+  if (!usable(box, scale)) return undefined;
+  const of = (pie: Box): ChartLayerDoughnut => ({pie, hole: {cx: pie.x + pie.width / 2, cy: pie.y + pie.height / 2, r: pie.width / 4}});
+  if (layer?.valueList) return of(layer.valueList.pie);
+  if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active || layer?.header) return undefined;
+  const {fontPx, pad} = metrics(box, scale, geometry.minFontSize);
+  // The preview's side legend (charts.js legendEntries): one entry per category, a swatch, a gap and the longest name, at most 45% of the box.
+  const names = data.rows.map(row => label(row[0]));
+  const legend = layer?.slices ? 0 : Math.min(box.width * 0.45, fontPx * 0.6 + fontPx * 0.4 + Math.max(0, ...names.map(name => geometry.measure(name, fontPx, 400))) + fontPx * 0.5) + pad;
+  const area = {x: box.x + pad, y: box.y + pad, width: Math.max(1, box.width - 2 * pad - legend), height: Math.max(1, box.height - 2 * pad)};
+  const r = Math.max(1, Math.min(area.width, area.height) / 2 * 0.9);
+  const cx = area.x + area.width / 2, cy = area.y + area.height / 2;
+  return of({x: cx - r, y: cy - r, width: 2 * r, height: 2 * r});
+}
+
 /**
  * LH-125: the value of the one slice the title names, in the hole of a doughnut (the hole is half the doughnut's radius, as both engines
  * draw it): twice the chart text size, bold, or smaller until its text fits 84% of the hole's width (a chord at the text's height), but not

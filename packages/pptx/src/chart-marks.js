@@ -13,6 +13,8 @@
 //   stacked ends (LH-125)      the first and last values of an edge-to-edge stacked area, text boxes inside the band at the plot's edges
 //                              (the chart part's own labels there are deleted), and a doughnut's focus value and category in its hole
 //                              (text boxes over the chart at core's boxes).
+//   doughnut hole (LH-182)     an ellipse in the surface color under the chart frame, at the hole of the doughnut core pinned (the
+//                              plot area's inner manual layout), so what is behind the chart does not show through the hole.
 //   reference marks (LH-110)   a period band (a rectangle under the chart frame: the chart and plot areas are unfilled) and a dashed
 //                              reference line with its bold label (over the frame), on the pinned plot.
 //
@@ -60,6 +62,14 @@ export function addChartMarks(slide, layer, phase, {chart, paint, font, size, sc
   const start = rtl ? 'right' : 'left', end = rtl ? 'left' : 'right';
   if (phase === 'under') {
     for (const band of layer.references?.bands ?? []) rect(band.box, 'band', chartBandColor(paint.surface, `#${paint.text}`));
+    // LH-182: a doughnut's hole in the surface color, under the chart frame (whose plot core pinned to the doughnut's square), so a
+    // watermark or a background motif does not show through it.
+    const hole = layer.doughnut?.hole;
+    if (hole) {
+      const objectName = name('hole');
+      slide.addShape('ellipse', {...inches({x: hole.cx - hole.r, y: hole.cy - hole.r, width: 2 * hole.r, height: 2 * hole.r}), objectName, fill: {color: hex(paint.surface)}, line: {type: 'none'}});
+      tag(objectName, 'hole');
+    }
     return;
   }
   for (const entry of layer.references?.lines ?? []) {

@@ -3784,7 +3784,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     return;
   }
   // LH-108 to LH-110: the period band under the chart frame, then the chart, then its reference lines, value list and stacked names over it.
-  const marks = layer && (layer.references || layer.valueList || layer.stack?.names || layer.stack?.ends) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
+  const marks = layer && (layer.references || layer.valueList || layer.doughnut || layer.stack?.names || layer.stack?.ends) ? {chart: objectName, font: context.fonts.body, size: textSize / 100, scale, rtl: context.direction === 'rtl', tags: context.chartMarkTags,
     paint: {text: markLabelColor, chartText: labelColor, grid: gridColor, surface: panelFill.slice(0, 7),
       slice: row => (highlight?.pointFills(0) ?? palette)[row % (highlight?.pointFills(0) ?? palette).length],
       series: index => (highlight ? highlight.seriesFills : palette)[index % (highlight ? highlight.seriesFills : palette).length],
