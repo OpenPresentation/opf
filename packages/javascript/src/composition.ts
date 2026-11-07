@@ -1433,6 +1433,30 @@ function breaksInsideWord(text: string, fit: SourceTextFit): boolean {
   });
 }
 
+/**
+ * LH-173: whether wrapped lines break a word of `source` (the lines joined again, with a space where a line did not end at a hyphen, dash or
+ * slash, differ from the text). Text in a script written without spaces breaks between characters and is never counted.
+ */
+function linesSplitWord(source: string, lines: readonly string[]): boolean {
+  if (lines.length < 2 || UNSPACED_SCRIPT.test(source)) return false;
+  let joined = '';
+  for (const line of lines.map(entry => entry.replace(/\s+/gu, ' ').trim()).filter(Boolean)) joined = !joined ? line : /[-‐–—/]$/u.test(joined) ? joined + line : `${joined} ${line}`;
+  return joined !== source.replace(/\s+/gu, ' ').trim();
+}
+/** LH-173: how many list labels and descriptions of a composition's body break a word (linesSplitWord). */
+function listSplitWords(result: SlideComposition): number {
+  const plain = (value: unknown) => typeof value === 'string' ? value : Array.isArray(value) ? value.map(run => typeof run === 'string' ? run : String(record(run).text ?? '')).join('') : '';
+  let count = 0;
+  for (const item of result.items) {
+    if (!item.text || !('listEntries' in item.text)) continue;
+    for (const entry of (item.text as ListFit).listEntries) {
+      if (linesSplitWord(plain(entry.value), entry.text.lines)) count++;
+      if (entry.description && linesSplitWord(plain(entry.descriptionValue), entry.description.lines)) count++;
+    }
+  }
+  return count;
+}
+
 /** Resolve and measure repeated fields without mutating metadata or consulting a clock. */
 export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {}): FurnitureLayout {
   const slide=record(input),width=options.width??1280,height=options.height??720,scale=Math.min(width,height)/720;
@@ -3608,7 +3632,10 @@ export interface ListEntryLayout {
    * `x`, `y` and `style` still say where the entry's first baseline and font are.
    */
   marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end';none?:true};
-  /** LH-77: the entry of a heading list (`ListFitOptions.heading`): bold at LIST_HEADING_SCALE times the list size, with no marker. */
+  /**
+   * LH-77: the entry of a heading list (`ListFitOptions.heading`): bold at LIST_HEADING_SCALE times the list size, with no marker. LH-173: a
+   * label whose longest word is wider than its box there steps down to the size at which the word fits whole, never under the list size.
+   */
   heading?:true;
   /**
    * LH-07: the entry's step badge (`ListFitOptions.badges`): a circle of `diameter` centered at (`cx`, `cy`) in the marker column,
@@ -3714,6 +3741,11 @@ export interface ListFitOptions extends RichTextOptions {
   display?:boolean;
   /** LH-136: the display word is at most this size in canvas pixels, so sibling pillars read at one word size (composition passes the smallest any of them fitted at). */
   displayMax?:number;
+  /**
+   * LH-173: the label of a heading list (`heading`, not `display`) is at most this size in canvas pixels, so the labels of a row of steps or
+   * columns read at one size when one of them stepped down to keep a word whole (composition passes the smallest any of them fitted at).
+   */
+  headingMax?:number;
   /** LH-69: the display word's rule is short (LIST_DISPLAY_SCALE em, the display word's own em) at the start edge, as LH-130's title rule, not across the box. */
   displayRule?:'short';
   /**
@@ -3772,6 +3804,21 @@ export interface ListFitOptions extends RichTextOptions {
 }
 /** LH-77: the heading of a one-entry described list is one size step (a major third) above the list text. */
 export const LIST_HEADING_SCALE=1.25;
+/**
+ * LH-173: the size of a heading list's label (LIST_HEADING_SCALE times the list size, at most `cap`): stepped down, on the font grid, to the
+ * largest size at which its widest word fits `width` whole, never under the list size; a word too wide even there keeps the full size (it
+ * breaks either way, and the composition's guard reads the split). Words of scripts written without spaces break between characters and
+ * are not measured.
+ */
+function headingLabelSize(text:string,width:number,fontSize:number,measure:(text:string,size:number)=>number,cap=Infinity):number {
+  const target=Math.min(fontSize*LIST_HEADING_SCALE,Math.max(fontSize,cap));
+  const words=text.split(/\s+/u).filter(word=>word&&!UNSPACED_SCRIPT.test(word));
+  if(!words.length)return target;
+  const widest=Math.max(...words.map(word=>measure(word,target)));
+  if(widest<=width+.5)return target;
+  const fitted=snapFontSizeDown(target*width/widest);
+  return fitted>=fontSize-FONT_GRID_EPSILON?fitted:target;
+}
 /** LH-136: a display heading is this many times the list size, over a rule of LIST_DISPLAY_RULE em with LIST_DISPLAY_GAP em under it. */
 export const LIST_DISPLAY_SCALE=2.3, LIST_DISPLAY_RULE=.14, LIST_DISPLAY_GAP=.3;
 /**
@@ -3811,6 +3858,7 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     return {index,level,direction,value:text,descriptionValue:description,textPath:base?base+(object?'.text':''):undefined,descriptionPath:base?base+'.description':undefined,runs:runs(text),descriptionRuns:description===undefined?undefined:runs(description)};
   });
   const numbers=options.numbering===undefined?undefined:listNumbers(input,options.numbering);
+  const listPlain=(value:ListText)=>typeof value==='string'?value:value.map(run=>typeof run==='string'?run:run.text).join('');
   // LH-133: a one-entry list that shares its label column with sibling blocks (`rowLabels`) is a ruled row, not a heading list.
   const heading=options.heading===true&&!numbers&&source.length===1&&source[0]!.descriptionRuns!==undefined&&!(options.rows===true&&options.rowLabels);
   // LH-07: entries drawn beside step badges (numbered, one level).
@@ -3818,6 +3866,14 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
   // LH-14: entries drawn beside icon chips (unnumbered, one level, at least one icon).
   const hasIcon=(index:number)=>{const value=input[index];return typeof value==='object'&&!Array.isArray(value)&&value!==null&&(value as {icon?:unknown}).icon!==undefined;};
   const iconed=options.icons===true&&!numbers&&!badged&&source.every(item=>item.level===0)&&source.some(item=>hasIcon(item.index));
+  // LH-174: in a list with icons on some entries, an entry without one keeps its bullet (unless the design asks for none), centered in the
+  // chip column: the marker starts half the room the bullet leaves in the chip in from the column's start edge, and its hanging indent is
+  // that much shorter, so PowerPoint's native bullet (at the paragraph's indent) sits where the preview draws it.
+  const chipBullet=(item:typeof source[number],chip:number,fontSize:number,style:TextStyle)=>{
+    if(!iconed||hasIcon(item.index)||options.bullet==='none')return undefined;
+    const text=LIST_MARKERS[item.level%LIST_MARKERS.length]!;
+    return {text,shift:Math.max(0,(chip-textWidthMeasurer(resolveTextStyle(style,options.textMeasurement),options.textMeasurement)(text,fontSize))/2)};
+  };
   // A native auto-number takes the weight and slant of the paragraph's first run.
   const markerStyleFor=(item:typeof source[number]):TextStyle=>{
     const first=item.runs.map(run=>typeof run==='string'?{text:run} as RichTextRun:run).find(run=>run.text);
@@ -3906,8 +3962,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
         badge={cx:left+numeralColumn/2,cy:baseline-numeralSize*.35,diameter:numeralColumn,label,fontSize:numeralSize,numeral:{x:left,y:baseline-(line?.baseline??numeralSize),width:numeralColumn,height:line?.height??numeralSize*1.22}};
         bottom=Math.max(bottom,baseline);
       }
-      const none=!number||badge!==undefined;
-      const marker={text:number&&!badge?number.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset):box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})};
+      // LH-174: a row without an icon in a list with icons keeps a bullet in the chip column (chipBullet), as a stacked list does.
+      const own=number?undefined:chipBullet(item,chip,fontSize,labelStyle(item)),shift=own?.shift??0;
+      const none=(!number||badge!==undefined)&&!own;
+      const marker={text:number&&!badge?number.text:own?own.text:'',x:rtl?(side?box.x+box.width:box.x+box.width-offset)-shift:box.x+offset+shift,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(labelStyle(item),options.textMeasurement),indent:indent-shift,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})};
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(badge?{badge}:{}),...(iconChip?{icon:iconChip}:{}),...(options.pairs==='term'&&described?{accent:true as const}:{}),...(item.direction?{direction:item.direction}:{})});
       y=bottom;
     }
@@ -3960,7 +4018,9 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
         const room=box.height-(y-box.y)-fontSize*.35-(item.descriptionRuns===undefined?0:richTextLayouter(item.descriptionRuns,{x,y:0,width,height:1e6},requestedSize*labelRatio,{...options,style:{...options.style,path:item.descriptionPath}},minFontSize)(fontSize*labelRatio).height);
         for(let step=0;step<48&&(displayText.richLines.length>1||displayText.height>room)&&size>least+1e-6;step++){size=Math.max(least,size*.96);displayText=wordAt(size,textBox);}
       }
-      const text=displayText??(heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(fontSize*LIST_HEADING_SCALE)
+      // LH-173: a label never splits a word: it steps down to the size its widest word fits at (headingLabelSize).
+      const labelSize=heading&&!displayed?headingLabelSize(listPlain(item.value),width,fontSize,textWidthMeasurer(resolveTextStyle({...style,fontWeight:700},options.textMeasurement),options.textMeasurement),options.headingMax):0;
+      const text=displayText??(heading?richTextLayouter(item.runs,textBox,requestedSize*LIST_HEADING_SCALE,{...options,style:{...style,fontWeight:700}},minFontSize)(labelSize)
         :richTextLayouter(item.runs,textBox,requestedSize,{...options,style},minFontSize)(fontSize));
       textBox.height=text.height;lines.push(...text.lines);if(options.direction==='rtl')directions.push(...(text.directions??[]));y+=text.height;
       // LH-07: the badge is centered on the first line's capitals (0.35 em above its baseline); an entry whose line is shorter than the
@@ -3977,12 +4037,14 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
       if(chipped)y=Math.max(y,textBox.y+center+diameter/2);
-      const marker={text:number&&!badged?number.text:none?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      // LH-174: an entry without an icon in a list with icons keeps its bullet in the chip column (chipBullet).
+      const own=chipBullet(item,diameter,fontSize,style),unmarked=none&&!own,shift=own?.shift??0;
+      const marker={text:number&&!badged?number.text:own?own.text:unmarked?'':LIST_MARKERS[item.level%LIST_MARKERS.length]!,x:rtl?box.x+box.width-offset-shift:box.x+offset+shift,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent:indent-shift,...(number?{number,width:markerWidths[item.index]!}:{}),...(unmarked?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       const badge=badged&&number?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter,label:listNumberLabel(number),fontSize}:undefined;
       const icon=iconed&&hasIcon(item.index)?{cx:rtl?marker.x-diameter/2:marker.x+diameter/2,cy:textBox.y+center,diameter}:undefined;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,...(heading?{heading:true as const}:{}),...(badge?{badge}:{}),...(icon?{icon}:{}),
         ...(item.direction?{direction:item.direction}:{}),
-        ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
+        ...(options.bulletImage&&!number&&!unmarked?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=chipped?Math.max(fontSize*.28,diameter*STEP_BADGE_GAP):fontSize*.28;
     }
     const height=y-box.y;
@@ -4675,7 +4737,8 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     let best = from, steps = 0;
     for (let next = 1; next <= limit; next++) {
       const grown = attempt({ [GROW]: next, ...extra }), fill = grown && bodyFill(grown);
-      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown)) break;
+      // LH-173: a step that breaks more words than the body had (a label or description of a list included) is no growth.
+      if (!grown || !fill || overflowCount(grown) > 0 || fill.fill > LONE_TARGET || smallest(grown) <= smallest(best) + FONT_GRID_EPSILON || shrinks(grown, best, options) || !accept(grown) || bodyReadability(grown, options).splitWords + listSplitWords(grown) > bodyReadability(best, options).splitWords + listSplitWords(best)) break;
       best = grown; steps = next;
     }
     const centered = pulled ? undefined : attempt({ [GROW]: steps, [CENTER]: true, ...extra }), fill = centered && bodyFill(centered);
@@ -5929,6 +5992,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // region asked for steps. Its other lists, and a slide whose badges the guard refused (NO_STEPS), may still be ruled.
   // LH-136: the lists drawn as display words (fitList's `display`), by path (pillarWords is filled once the slide's blocks are collected).
   const pillarWords = new Set<string>(), wordCaps = new Map<string, number>();
+  // LH-173: the heading lists whose label is capped at the size a sibling's label stepped down to (shareHeadings), by path.
+  const headingCaps = new Map<string, number>();
   // LH-69: the display words that are a lone label (their rule is short, at the start edge).
   const loneLabels = new Set<string>();
   // LH-134: the badge lists whose numbers draw as numerals beside ruled rows instead (composeTemplate): `row` for an agenda whose entries
@@ -5942,11 +6007,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const own = field === 'items' && !badgeLists.has(path) && !stepHeadings.has(path) && !numeralLists.has(path) && iconList(value, numbering) ? { ...listed, icons: true, iconScale: chipScale } : listed;
     return own.rows && spreadLists.has(path) ? { ...own, spread: true } : own;
   };
-  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none'}
+  const listOptionsOf = (field: string, path: string, numbering: unknown, value?: unknown): ListFitOptions => stepHeadings.has(path) ? {...richOptions(styleFor(field,path)),heading:true,bullet:'none',...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{})}
     : numeralLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),rows:true,numerals:numeralLists.get(path)!,...pairsOf(value, path)}
     : badgeLists.has(path) ? {...richOptions(styleFor(field,path)),numbering:badgeNumbering(path, numbering),badges:true}
     : pairRowLabels.has(path) ? {...richOptions(styleFor(field,path)),rows:true,pairs:'question',rowLabels:pairRowLabels.get(path)!,bullet:'none'}
-    : {...richOptions(styleFor(field,path)),heading:true,...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{}),...(loneLabels.has(path)?{displayRule:'short' as const}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
+    : {...richOptions(styleFor(field,path)),heading:true,...(headingCaps.has(path)?{headingMax:headingCaps.get(path)!}:{}),...(pillarWords.has(path)?{display:true,...(wordCaps.has(path)?{displayMax:wordCaps.get(path)!}:{}),...(loneLabels.has(path)?{displayRule:'short' as const}:{})}:{}),...(value!==undefined?listRows(value, path):{}),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})};
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   // LH-63: a plain text that opens with a short line the author broke (or a short "Label:"), drawn as a bold run-in heading over its body
   // (runInHeading). The runs hold the text's every character, so only the weight of the first words differs; the authored value is unchanged.
@@ -9027,6 +9092,24 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!refit.overflow && Math.abs(refit.fontSize - fit.fontSize) < 1e-9) item.text = refit; else wordCaps.delete(item.path);
     }
   };
+  // LH-173: the labels of sibling heading lists (a row of steps, columns of one described entry each) read at one size: when one stepped
+  // down to keep a word whole (headingLabelSize), the others take its size too. Each description keeps its fit, so no size the guard holds
+  // falls; a refit that would change the list's own size or overflow keeps the label as it was.
+  const shareHeadings = (): void => {
+    const labelOf = (index: number) => { const fit = items[index]?.text; const entries = fit && 'listEntries' in fit ? (fit as ListFit).listEntries : undefined; return entries?.length === 1 && entries[0]!.heading && !pillarWords.has(items[index]!.path) ? entries[0]!.text.fontSize : undefined; };
+    for (const set of peerSets) {
+      const labels = set.flatMap(index => { const size = labelOf(index); return size === undefined ? [] : [{ index, size, role: items[index]!.text!.fontSize * LIST_HEADING_SCALE }]; });
+      if (labels.length < 2 || labels.every(label => label.size >= label.role - FONT_GRID_EPSILON)) continue;
+      const size = Math.min(...labels.map(label => label.size));
+      for (const { index, size: own } of labels) {
+        if (own <= size + FONT_GRID_EPSILON) continue;
+        const item = items[index]!, fit = item.text!;
+        headingCaps.set(item.path, size);
+        const refit = fitContent(item.field, item.value, contentText(item.field, item.value) ?? '', item.box, fit.fontSize, fit.fontSize, item.path, item.payload.numbering, item.alignment);
+        if (!refit.overflow && Math.abs(refit.fontSize - fit.fontSize) < 1e-9) item.text = refit; else headingCaps.delete(item.path);
+      }
+    }
+  };
   const shareStartAlignment = (): void => {
     if (!startAligned.size) return;
     for (const set of peerSets) {
@@ -9271,6 +9354,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   shareTierPrices();
   shareWords();
   sharePeerSizes();
+  shareHeadings();
   capSizes();
   shareStartAlignment();
   hugQuoteCards();
