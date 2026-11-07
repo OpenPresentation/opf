@@ -460,6 +460,12 @@ export const SMART_ART_DOMAIN = Object.freeze({
    */
   slack: .04,
   /**
+   * SH-19: the widest line an entry may have (canvas pixels). PowerPoint measures a line up to about 0.6% wider or narrower than OPF does,
+   * and a centered line moves by half the difference, so a longer line can sit more than SH-07's 1.5 px text gate from OPF's native text
+   * (the sweep: a 537 px line of a one-level pyramid sat 1.74 px off; every line of 440 px or less was within 1.5 px).
+   */
+  lineWidth: 500,
+  /**
    * SH-17: the most of a node's text rectangle (less its margins) an entry's lines may fill from top to bottom: a box PowerPoint finds
    * nearly full is grown or searched to another scale (the sweep found it at 0.969 of the height and above).
    */
@@ -497,6 +503,8 @@ export interface SmartArtCandidate {
   /** SH-17: the most any entry's lines fill of its text rectangle's height (less margins), and the text's share of the frame. */
   fill?: number;
   ink?: number;
+  /** SH-19: the widest line of any entry, canvas pixels. */
+  widest?: number;
 }
 
 /**
@@ -520,6 +528,7 @@ export function smartArtUnavailable(candidate: SmartArtCandidate): string | unde
   const total = nodes.reduce((sum, node) => sum + node.lines, 0);
   const most = kind === 'cycle' ? CYCLE_DOMAIN_TOTAL_LINES : domain.totalLines;
   if (total > most) return `its entries wrap to ${total} lines in all (at most ${most} matched PowerPoint)`;
+  if (candidate.widest !== undefined && candidate.widest > domain.lineWidth + 1e-6) return `a line ${Math.round(candidate.widest)} px wide is longer than PowerPoint sets within a pixel of OPF's text (at most ${domain.lineWidth} px)`;
   const fill = domain.fill[kind], ink = domain.ink[kind];
   if (fill !== undefined && candidate.fill !== undefined && candidate.fill > fill + 1e-6) return `an entry fills ${Math.round(candidate.fill * 100)}% of its node's height (PowerPoint lays a node out again above ${Math.round(fill * 100)}%)`;
   if (ink !== undefined && candidate.ink !== undefined && candidate.ink > ink + 1e-6) return `its text covers ${Math.round(candidate.ink * 100)}% of the frame (at most ${Math.round(ink * 100)}% matched PowerPoint's text placement)`;

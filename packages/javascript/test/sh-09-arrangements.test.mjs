@@ -64,7 +64,8 @@ test('a region\'s arrangement is read from the layout record, and the gallery ha
 const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: gallery.layouts[layout] });
 
 test('a lone list in a pyramid region draws as a pyramid, every entry centered on its level at one size', () => {
-  const items = ['Vision', 'Strategy and goals', 'Programs we run', 'Teams, budgets and the platform'];
+  // SH-19: entries whose lines stay within SMART_ART_DOMAIN.lineWidth (a longer line leaves PowerPoint's design for OPF's own).
+  const items = ['Vision', 'Strategy and goals', 'Programs we run', 'Teams and budgets'];
   const result = compose({ layout: 'pyramid', title: 'Our strategy', items });
   assert.equal(result.arrangements?.length, 1);
   const [arrangement] = result.arrangements, list = result.items.find(item => item.field === 'items');

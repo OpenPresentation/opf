@@ -106,7 +106,7 @@ const live = await exported(deck);
 {
   const long = await exported({slides: [{layout: 'chevrons', title: 'Long', items: ['Research the whole market first', 'Design the pilot with two teams', 'Run it']}]});
   const [unavailable] = long.diagnostics.filter(item => item.code === 'smartart-unavailable');
-  assert.match(unavailable.message, /^The row of chevrons is exported as native shapes, not live SmartArt: .*so OPF's own row of chevrons is drawn\.$/);
+  assert.match(unavailable.message, /^The row of chevrons is exported as native shapes, not live SmartArt: .*so OPF's own row of chevrons is drawn; OPF's own layout does not hold it either: .+\.$/);
   assert.equal(Object.keys(long.entries).some(path => path.startsWith('ppt/diagrams/')), false);
   const arabic = await exported({language: {bcp47: 'ar', name: 'Arabic', direction: 'rtl', script: 'Arab'}, slides: [{layout: 'chevrons', title: 'المراحل', items: ['الرؤية', 'الأهداف', 'البرامج']}]});
   assert.match(arabic.diagnostics.find(item => item.code === 'smartart-unavailable').reason, /right-to-left/);

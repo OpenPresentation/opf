@@ -132,11 +132,14 @@ const live = await exported(deck);
   assert.equal((slide.match(/name="OPF arrangement slides\.0\.items node \d"/g) ?? []).length, 4);
   assert.doesNotMatch(slide, /name="OPF arrangement slides\.0\.items background"/, 'no diamond in OPF\'s quadrants');
 
+  // SH-19: the card grid is live SmartArt on OPF's own card-grid layout (src/smart-art-layouts.js); as native shapes, one card per entry.
   const three = await exported({slides: [{layout: 'matrix', title: 'Three', items: ['North', 'South', 'East']}]});
   assert.equal(three.diagnostics.filter(item => item.code === 'smartart-unavailable').length, 0);
   assert.equal(three.diagnostics.filter(item => item.code === 'arrangement-adapted').length, 1, 'core reports the card grid');
-  assert.equal(Object.keys(three.entries).some(path => path.startsWith('ppt/diagrams/')), false);
-  const cards = three.text('ppt/slides/slide1.xml');
+  assert.match(three.text('ppt/diagrams/layout1.xml'), /uniqueId="urn:openpresentation\.org\/smartart\/layout\/card-grid\/[0-9a-f]{16}"/);
+  const threeShapes = await exported({slides: [{layout: 'matrix', title: 'Three', items: ['North', 'South', 'East']}]}, {smartArt: 'shapes'});
+  assert.equal(Object.keys(threeShapes.entries).some(path => path.startsWith('ppt/diagrams/')), false);
+  const cards = threeShapes.text('ppt/slides/slide1.xml');
   assert.equal((cards.match(/name="OPF arrangement slides\.0\.items node \d"/g) ?? []).length, 3, 'one card per entry, no empty one');
   const back = await fromPptx(three.bytes);
   assert.deepEqual([back.slides[0].layout, back.slides[0].items], ['matrix', ['North', 'South', 'East']]);

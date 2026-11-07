@@ -138,7 +138,8 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes.
 		// SH-04: overlay shapes and connectors (their composition, routing and validation, and the overlay form of the schema): 7,974,844 bytes. Shapes phase 2 together (SH-04, SH-05, SH-06's shape catalog and search_shapes, SH-07): 7,994,440 bytes.
 		// SH-18 (the cycle arrangement and its SmartArt model): 8,052,585 bytes; the budget leaves room for SH-17's linear arrangements.
-		assert.ok(lean.bytes < 8_075_000, `${lean.bytes} bytes`);
+		// SH-19 (OPF's own SmartArt layout definitions: the interpreter, the definition builder and the domain): 8,075,721 bytes.
+		assert.ok(lean.bytes < 8_100_000, `${lean.bytes} bytes`);
 	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
