@@ -53,7 +53,8 @@ export type VariableDiagnosticCode =
   | "variable-builtin-missing"
   | "variable-unused"
   | "variable-rich-flattened"
-  | "variable-format";
+  | "variable-format"
+  | "variable-group-omitted";
 export type VariableDiagnosticSeverity = "error" | "warning" | "info";
 export interface VariableDiagnostic {
   code: VariableDiagnosticCode;
@@ -618,7 +619,7 @@ function subtreeVariables(value: unknown, path: string, context: Context, found 
     }
     return found;
   }
-  if (Array.isArray(value)) value.forEach((entry, index) => subtreeVariables(entry, `${path}/${index}`, context, found));
+  if (Array.isArray(value)) for (const [index, entry] of value.entries()) subtreeVariables(entry, `${path}/${index}`, context, found);
   else if (isRecord(value)) for (const [key, entry] of Object.entries(value)) if (!skippedKeys.has(key)) subtreeVariables(entry, pathFor(path, key), context, found);
   return found;
 }
