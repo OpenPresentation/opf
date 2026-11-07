@@ -40,6 +40,7 @@ for (const face of office.registry.embeddedFonts) {
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
 const bundle = await build({
+	// A path, not URL.pathname, which on Windows is "/C:/..." and does not resolve.
 	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
 	bundle: true,
 	write: false,

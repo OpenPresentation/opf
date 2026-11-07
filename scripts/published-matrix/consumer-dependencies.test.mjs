@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
-import {consumerDependencies, catalogGenerationForCore, assertCatalogGeneration, assertInstalledCatalog} from './consumer-dependencies.mjs';
+import {consumerDependencies, catalogGenerationForCore, assertCatalogGeneration, assertInstalledCatalog, withoutOpfLockEntries} from './consumer-dependencies.mjs';
+
+test('the baseline lockfile loses only its OPF entries, so a stale line cannot constrain the planned set', () => {
+  const lock = {lockfileVersion: 3, packages: {'': {dependencies: {}}, 'node_modules/fflate': {version: '0.8.3'}, 'node_modules/@openpresentation/opf-editor': {version: '0.25.3'}, 'node_modules/@openpresentation/opf': {version: '0.25.0'}, 'node_modules/@expo-google-fonts/roboto': {version: '0.4.3'}}};
+  const before = structuredClone(lock);
+  assert.deepEqual(Object.keys(withoutOpfLockEntries(lock).packages), ['', 'node_modules/fflate', 'node_modules/@expo-google-fonts/roboto']);
+  assert.equal(withoutOpfLockEntries(lock).lockfileVersion, 3);
+  assert.deepEqual(lock, before);
+});
 
 const libraries = {'@openpresentation/opf': '0.19.0', '@openpresentation/opf-render': '0.19.1', '@openpresentation/opf-pptx': '0.19.0', '@openpresentation/opf-editor': '0.19.0'};
 test('v2 standalone consumer declares the independently planned gallery and preserves library pins', () => {
