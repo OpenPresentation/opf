@@ -395,6 +395,14 @@ export const iconDroppedRule = rule(
 	'An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.',
 	{ cost: 'composition' },
 );
+export const arrangementAdaptedRule = rule(
+	'arrangement-adapted',
+	'layout',
+	'info',
+	'A pyramid or matrix is drawn another way.',
+	"A `pyramid` or `matrix` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
+	{ cost: 'composition' },
+);
 export const unplacedRule = rule(
 	'layout-unplaced',
 	'layout',
@@ -611,6 +619,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	regionFullRule,
 	unplacedRule,
 	iconDroppedRule,
+	arrangementAdaptedRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

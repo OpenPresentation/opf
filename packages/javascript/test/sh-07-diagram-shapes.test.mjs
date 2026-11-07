@@ -32,6 +32,6 @@ test('a deck whose diagrams become shapes needs the preset geometry; the diagram
   assert.deepEqual(shapesPending(deck, {diagrams: true}), []);
   assert.equal(resolveExportOptions({format: 'pptx', diagrams: 'shapes'}).diagrams, 'shapes');
   assert.throws(() => resolveExportOptions({format: 'pptx', diagrams: 'native'}), /diagrams/);
-  assert.throws(() => resolveExportOptions({format: 'png', diagrams: 'shapes'}), /charts, diagrams, provenance, images, bodyText, slideNumbers, typefaces and as apply to format pptx/);
+  assert.throws(() => resolveExportOptions({format: 'png', diagrams: 'shapes'}), /charts, diagrams, provenance, images, bodyText, smartArt, slideNumbers, typefaces and as apply to format pptx/);
   assert.throws(() => resolveExportOptions({format: 'pptx', as: 'images', diagrams: 'shapes'}), /do not apply to as: "images"/);
 });

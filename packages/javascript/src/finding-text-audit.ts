@@ -316,6 +316,15 @@ const iconDropped: RuleText = (finding) => {
   };
 };
 
+// SH-09: a pyramid or matrix drawn as cards or as a list.
+const arrangementAdapted: RuleText = (finding) => {
+  const cards = /needs four entries/.test(finding.message);
+  return {
+    message: cards ? "A matrix needs four entries, so this one is drawn as a grid of cards." : "This pyramid or matrix is drawn as a list.",
+    next: cards ? "write four entries for the quadrants, or choose another layout." : "shorten the entries, keep one level without descriptions, or choose another layout.",
+  };
+};
+
 const regionFull: RuleText = (finding) => {
   const found = match(finding.message, /^Region '(.+?)' already holds its (\d+) block/);
   if (!found) return undefined;
@@ -623,6 +632,7 @@ export const AUDIT_TEXT: Readonly<Record<string, RuleText>> = {
   "opf/region-kind": regionKind,
   "opf/region-full": regionFull,
   "opf/icon-dropped": iconDropped,
+  "opf/arrangement-adapted": arrangementAdapted,
   "opf/layout-unplaced": layoutUnplaced,
   "opf/furniture-wraps": furnitureWraps,
   "opf/font-outside-scheme": fontOutsideScheme,

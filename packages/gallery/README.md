@@ -9,7 +9,7 @@ It holds every layout, theme, colour scheme, font scheme, narrative, audience, p
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
 
-**2.x is the catalog of OPF 0.19.** Its layouts are the 30 OPF 0.19 layouts named by intent, written as templates
+**2.x is the catalog of OPF 0.19.** Its layouts are the 32 OPF 0.19 layouts named by intent, written as templates
 (`opf-layout/v2`). 1.x holds the 278 OPF 0.18 layouts. 2.0.0 changed the layouts with no migration path: see
 [Layouts](#layouts) and the [changelog](CHANGELOG.md).
 
@@ -81,6 +81,8 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `process` | Steps in order, in one row. |
 | `timeline` | Dated events or a roadmap along one axis, with optional notes. |
 | `faq` | Questions with their answers. |
+| `pyramid` | Levels that build on each other, as a pyramid, the first at the top. |
+| `matrix` | Four parts of a whole, as the quadrants of a square beside the title. |
 | **Numbers** | |
 | `metrics` | One to six headline numbers, with an optional note. |
 | `scorecard` | Metrics with commentary or status, as cards. |

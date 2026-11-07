@@ -103,6 +103,7 @@ Some OPF features have no exact PowerPoint form. The export draws the nearest na
 | Content with no PowerPoint form | A plain-language placeholder frame | `content-placeholder` |
 | `dateFormat` with no PowerPoint date field | Fixed text that PowerPoint does not update | `furniture-date-fixed` |
 | Text in `--body-text native` that native mode cannot carry | Measured line boxes | `native-body-fallback` |
+| A `pyramid` or `matrix` layout (a region's `arrangement`) | Live SmartArt (PowerPoint's Basic Pyramid or Basic Matrix, editable in its Text Pane) where PowerPoint lays it out exactly as the preview draws it; otherwise the same drawing, or OPF's own design of the arrangement when the entries need it, as native shapes and measured lines. `--smart-art shapes` (`smartArt: 'shapes'`) always writes native shapes. A node edited in PowerPoint keeps OPF's text size; PowerPoint lays the SmartArt out again with its own rules | `smartart-unavailable` (info) with the reason, for an instance outside the compared domain (docs/smartart.md) |
 | A font a viewer may not have | The selected name; the viewer substitutes | `typeface-not-office-safe` in the `convert` report; `typefaces: 'safe'` replaces it (`typeface-replaced`) |
 
 ## Ship fonts as pinned, licensed files

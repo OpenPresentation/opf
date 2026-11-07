@@ -20,6 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
+import {addArrangements,attachArrangementTags,attachSmartArt,exportPaint,importArrangementShapes,importSmartArt,writeArrangementAdjustments} from './smart-art.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
@@ -366,6 +367,10 @@ export async function toPptx(input, options = {}) {
   context.chartMarkTags = new Map();
   // LH-07: the shapes of the step badges, connectors and flows of a layout's sequence regions (src/step-badges.js).
   context.stepTags = new Map();
+  // SH-09: the pyramids and matrices of a layout's arrangement regions: live SmartArt frames and their tags, or native shapes (src/smart-art.js).
+  context.smartArt = new Map();
+  context.smartArtTags = new Map();
+  context.arrangementTags = new Map();
   context.iconTags = new Map();
   // LH-130: the accent rule core sets above a cover's or section's title (src/title-rule.js).
   context.titleRuleTags = new Map();
@@ -413,6 +418,11 @@ export async function toPptx(input, options = {}) {
     throw new OPFPptxError('invalid-chartex-mode', 'chartex must be auto, native or fallback.', {path: 'options.chartex'});
   }
   context.chartexMode = options.chartex ?? 'auto';
+  // SH-09: 'live' (default) writes a pyramid or matrix as live SmartArt where PowerPoint draws it as the preview does; 'shapes' as native shapes.
+  if (options.smartArt !== undefined && !['live', 'shapes'].includes(options.smartArt)) {
+    throw new OPFPptxError('invalid-smart-art-mode', 'smartArt must be live or shapes.', {path: 'options.smartArt'});
+  }
+  context.smartArtMode = options.smartArt ?? 'live';
   Object.assign(context, exportTheme(presentation, context, options));
   context.reportedReferences = new Set();
   // Document references and metadata tags (FF-32, docs/document-roundtrip.md).
@@ -670,6 +680,8 @@ export async function fromPptx(input, options = {}) {
       index => resolveCoreSlideContext(imported, index, options.catalogs !== undefined ? {catalogs: options.catalogs} : {}).resolved.layout, report, packageLayoutTags);
   }
   for (const [index, context] of furnitureContexts.entries()) {
+    // SH-09: an untagged slide whose content is a Basic Pyramid or Basic Matrix SmartArt takes the pyramid or matrix layout.
+    if (!context.layoutTag && context.smartArtLayout !== undefined && imported.slides[index].layout === undefined) context.foreignLayout = context.smartArtLayout;
     if (!context.layoutTag && slideProvenance[index]?.structure === 'untagged' && context.foreignLayout !== undefined && imported.slides[index].layout === undefined)
       {
         if (context.foreignLayout.startsWith('default:')) {
@@ -1200,6 +1212,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
   // LH-07: a sequence region's badges, connectors, chips and arrows are its layout's drawing, not content.
   const stepShapes=importStepShapes(shapes,relationships,entries);
   nativeContext.stepNumbers=stepShapes.numbers;
+  // SH-09: a pyramid's or matrix's native nodes (OPF_ARRANGEMENT_V1) are its layout's drawing, not content.
+  const arrangementShapes=importArrangementShapes(shapes,relationships,entries);
   // LH-14: an icon's chip, glyph and picture are the drawing of its `icon`, not content; the references go back on the document.
   const iconShapes=importIconShapes([...shapes,...(nativeContext.pictures??[])],relationships,entries);
   nativeContext.iconReferences=iconShapes.references;
@@ -1269,6 +1283,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (annotations.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'annotation'); continue; }
     if (chartMarks.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'chart-mark'); continue; }
     if (stepShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'step-badge'); continue; }
+    if (arrangementShapes.has(shape)) { roles.set(shapeKeys.get(shape), 'arrangement'); continue; }
     if (iconShapes.consumed.has(shape)) { roles.set(shapeKeys.get(shape), 'icon'); continue; }
     if (titleRules.has(shape)) { roles.set(shapeKeys.get(shape), 'title-rule'); continue; }
     if (code.consumed.has(shape)||metric.consumed.has(shape)||cards.has(shape)||media.consumed.has(shape)||headings.consumed.has(shape)||plainText.consumed.has(shape)||timelines.consumed.has(shape)||quotes.consumed.has(shape)) continue;
@@ -1320,7 +1335,16 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
   const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
+  // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js).
+  const smartArt = importSmartArt({frames, relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)});
   for (const [index, frame] of frames.entries()) {
+    if (smartArt.has(index)) {
+      const found = smartArt.get(index);
+      roles.set(`frame:${index}`, 'smartart');
+      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
+      items.push({kind: 'list', bounds: shapeBounds(frame['p:xfrm']), payload: found.payload, sources: [`frame:${index}`]});
+      continue;
+    }
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
     if (item) items.push({...item, sources: [`frame:${index}`]});
   }
@@ -2598,6 +2622,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   let emphasisDrawn = false, previousFrame;
   // LH-07: core's step badges, connectors and flows, under the text they number (src/step-badges.js).
   addSteps(slide, geometry.steps, {...slideContext, stepNumeral: tagColor(slideContext)}, context.stepTags, geometry.direction === 'rtl');
+  // SH-09: core's pyramids and matrices, under their entries: live SmartArt (the entries are its nodes) or native shapes (src/smart-art.js).
+  const liveArrangements = addArrangements(slide, geometry.arrangements, {context: {...slideContext, direction: geometry.direction, deckLang: context.deckLang}, mode: context.smartArtMode, items: geometry.items, slideIndex,
+    records: context.smartArt, tags: context.arrangementTags, smartArtTags: context.smartArtTags, provenance: context.provenanceMode, report: options.onDiagnostic, fontOf: nativeFontOptions});
+  const arranged = new Set((geometry.arrangements ?? []).map(arrangement => arrangement.path));
   // LH-130: core's accent rule above the title, in the tag's color (src/title-rule.js).
   addTitleRule(slide, geometry.titleRule, tagColor(slideContext), context.titleRuleTags);
   for (const [itemIndex, item] of geometry.items.entries()) {
@@ -2671,6 +2699,15 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         objectName,
         breakLine: false
       });
+    } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries && liveArrangements.has(item.path)) {
+      // SH-09: the entries are the live SmartArt's nodes.
+    } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries && arranged.has(item.path)) {
+      // SH-09: a pyramid's or matrix's entries on its native shapes, as core placed them.
+      // On its node in the color that reads on the primary, centered; beside a level or on a card in the slide's text color, at the start edge.
+      const arrangement = geometry.arrangements.find(entry => entry.path === item.path), text = exportPaint(itemContext).text.hex.slice(1);
+      const lineContext = arrangement.text === 'node' ? {...itemContext,colors:{...itemContext.colors,text},textColor:text} : itemContext;
+      await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined);
+      if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
       await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
       // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
@@ -2900,7 +2937,7 @@ function richLineRuns(line,color,native,context,path) {
 // PptxGenJS embeds the media and its relationship through one picture per slide (OPF bullet image); packaging removes
 // that picture and points each marker paragraph at the relationship with a:buBlip. An icon that cannot be embedded
 // keeps the character bullets, as the preview does.
-async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,slideIndex,options,numbered=false) {
+async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,slideIndex,options,numbered=false,align) {
   // RR-33: a numbered list writes native auto-numbers (a:buAutoNum) at core's marker geometry. Core older than the numbering
   // release composes bullet markers, so nothing numbered can be written; say so instead of exporting bullets silently.
   if(numbered&&!fit.listEntries.some(entry=>entry.marker.number))options.onDiagnostic?.({code:'numbering-unsupported-core',path,message:'The installed @openpresentation/opf does not compose numbered lists (numbering), so the list is exported with bullets. Use a core release that supports numbering.'});
@@ -2931,8 +2968,11 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         // Right to left (RR-05): the bullet column is at the right, so the first line's box extends right to hold it and the paragraph
         // is rtl with its text aligned to the right; marL/indent are the start-side margin and hanging indent in PowerPoint.
         const entryRtl=entry.direction==='rtl';
-        const region={x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
         const lineDirection=(text.directions?.[index])??entry.direction;
+        // SH-09: a centered line (an entry on a pyramid's or matrix's node) is its own width, centered in the entry's box, as core measured it
+        // without the space it broke at; it starts at its start edge.
+        const centered=align==='center'&&!inset,offset=centered?Math.max(0,(box.width-line.width)/2):0;
+        const region=centered?{x:(box.x+offset)/96,y:(box.y+line.y)/96,w:Math.max(1,line.width)/96,h:line.height/96}:{x:(entryRtl?box.x:box.x-inset)/96,y:(box.y+line.y)/96,w:(box.width+inset)/96,h:line.height/96};
         const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const number=first?entry.marker.number:undefined;
@@ -5259,6 +5299,10 @@ async function normalizePptxZip(raw, context) {
   attachTimelineTags(entries,context.timelineTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
+  // SH-09: the trapezoids' adjustments, the arrangement shapes' tags, then each tagged SmartArt placeholder becomes its frame and parts.
+  writeArrangementAdjustments(entries,context.arrangementTags);
+  attachArrangementTags(entries,context.arrangementTags,context.smartArtTags);
+  try{attachSmartArt(entries,context.smartArt);}catch(error){throw new OPFPptxError('packaging-failed',`SmartArt parts could not be attached: ${errorMessage(error)}`);}
   attachIconTags(entries,context.iconTags);
   attachTitleRuleTags(entries,context.titleRuleTags);
   attachQuoteTags(entries,context.quoteTags);

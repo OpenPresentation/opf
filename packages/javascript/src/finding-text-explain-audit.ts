@@ -118,6 +118,11 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }], numbering: "arabic" }] },
     { catalogs: { custom: { iconSets: { brand: { name: "Brand", license: "MIT", copyright: "Copyright (c) 2026 Example", viewBox: [0, 0, 24, 24], style: "stroke", icons: { star: "M12 3l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 10l6-1z" } } } } }, slides: [{ title: "Steps", items: [{ text: "Sign up", icon: "brand:star" }, { text: "Invite the team" }] }] },
   ),
+  "opf/arrangement-adapted": ex(
+    "Give a matrix exactly four short entries, or choose another layout for another count.",
+    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], flow: "none", arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East"] }] },
+    { catalogs: { custom: { layouts: { quad: { name: "Quad", regions: [{ name: "title" }, { name: "quadrants", accepts: ["list"], flow: "none", arrangement: "matrix" }] } } } }, slides: [{ layout: "quad", title: "Markets", items: ["North", "South", "East", "West"] }] },
+  ),
   "opf/region-full": ex(
     "Pin the block to another region with room, or remove `region` so it is placed by its kind.",
     { catalogs: { custom: { layouts: { roadmap: ROADMAP } } }, slides: [{ layout: "roadmap", blocks: [{ region: "timeline", ...TIMELINE }, { region: "timeline", ...TIMELINE }] }] },
