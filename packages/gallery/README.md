@@ -1,10 +1,10 @@
 # gallery
 
-The default catalog for Open Presentation: layouts, themes, colour schemes and font schemes for OPF decks, published as
+The default catalog for Open Presentation: layouts, themes, color schemes and font schemes for OPF decks, published as
 [`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) and previewed at
 [pptx.gallery](https://www.pptx.gallery).
 
-It holds every layout, theme, colour scheme, font scheme, narrative, audience, purpose and tone that
+It holds every layout, theme, color scheme, font scheme, narrative, audience, purpose and tone that
 [OPF](https://openpresentation.org) decks name by id (`layout: "pillars"`, `design: { theme: "minimal" }`). Engines
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
@@ -52,6 +52,19 @@ registers later.
 content in every region by the pinned `@openpresentation/opf-render`, a self-contained `<svg>` with a 16:9 viewBox. The
 package has no dependency, not even for its types: `GalleryCatalog` has the shape of core's `Catalog`, so `gallery` is
 assignable to it.
+
+## Icon sets
+
+`@openpresentation/gallery/icon-sets` exports `galleryIconSets`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,020 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). Each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`), so a host loads only the sets a deck uses. Register it beside `gallery`:
+
+```js
+import { gallery } from "@openpresentation/gallery";
+import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+
+const catalogs = [gallery, galleryIconSets];
+```
+
+The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).
 
 ## Layouts
 
