@@ -115,8 +115,8 @@ of a pair or a set (`featured-card`, see [Emphasis surface](#emphasis-surface-lh
 check-mark tiles of a dark summary list (`check-tiles`), LH-14's icon chips (`icons`, `icon-chips`), LH-170's closing note on the band (`note-band`, see [Emphasis surface](#emphasis-surface-lh-06)) LH-169's
 figure-led list as a row of figures (`figure-row`, see [Layout templates](layout-templates.md)), and LH-63's bold run-in heading over a text (`run-in`, see [Content payloads](content-payloads.md)). The decorative mark of a quote card (LH-78, `QuoteLayout.mark`) is not guarded: it is drawn in the card's own padding and moves nothing. The featured card, the pill, the tiles, the icon chips, the note band and the figure row only draw, so a slide that draws one of them is also composed under the guard without them and keeps the drawing only when no block reads smaller there, nothing more is found and a body role at the readability floor stays at it (the drawing never decides LH-83's recomposition); otherwise each is tried alone on top of the rules that slide kept. LH-39's figure on one line
 (`metric-figure`) is tried last, on top of the rules the guard kept, and kept when the slide reads as well with a split figure allowed
-the next smaller type-scale step (a slide that composes no metric is not composed again for it). LH-165's icon cards and LH-162's text
-tiles (`icon-cards`, `text-tiles`) are tried before it the same way, on top of the rules the guard kept: they rearrange the whole body,
+the next smaller type-scale step (a slide that composes no metric is not composed again for it). LH-165's icon cards, LH-162's text
+tiles and LH-69's placed tiles (`icon-cards`, `text-tiles`, `placed-tiles`) are tried before it the same way, on top of the rules the guard kept: they rearrange the whole body,
 so they are never part of the first composition, where a failure would take every rule that did not fire off the slide. A layout's
 lone list with icons also tries its cards across the whole body as the automatic grid (`recomposed.cards`), kept when its text reads at
 least as large as the layout's.
@@ -268,6 +268,15 @@ centered on its column in the tag's color, the PPTX export a text box at that bo
   kept only when no block reads smaller than without them, and than the settled slide without them (whose compact grid LH-48 may have
   grown further): with estimated text widths a compact grid of six texts reaches 43 px in three columns where tiles of two lines cannot,
   so it stays the compact grid.
+- **Placed tiles (LH-69).** A promoted region (a slide key such as `top:left`) whose one block is a plain text of at most four words
+  that is no sentence (it does not end in `.`, `!`, `?` or their equivalents in other scripts) draws as a tile, as Claude Design draws
+  "Product", "Engineering" and "Operations" over a list: a card in the theme's card surface filling the region, the text bold at its foot
+  at the start edge. The tiles of a slide share one size: the text's size, then each step of the type scale up to LH-05's 56 px while every
+  tile's text stays on at most three lines with its words whole and covers at most 60% of its card. No icon is drawn for a text that has
+  none. The blocks beside the tiles grow with LH-48 as they would without them (the tiles' texts are left out of the body that grows), and
+  the tiles (`placed-tiles`, tried with LH-165's icon cards) are kept only when no block reads smaller than on the settled slide without
+  them, at its exact size: LH-149's half step is not given up for a tile. A short sentence ("Teams want fewer exports.") keeps the bold
+  heading of LH-69.
 - **Value color on dark (LH-57).** On a dark slide or card, a value whose accent falls under 4.5:1 against the surface is drawn in the
   light text color (`metricValueColor(color, background, text)`) instead of a lightened accent, so the number stays the strongest
   element. A unit on its value's line takes the value's color.
