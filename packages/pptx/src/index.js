@@ -4638,7 +4638,8 @@ function addPlaceholderPayload(slide, label, description, region, context) {
     fontFace: context.fonts.body,
     fontSize: 11,
     color: context.mutedColor,
-    fit: "shrink",
+    // RR-104: OPF writes explicit sizes and never asks PowerPoint to shrink text on overflow (no a:normAutofit).
+    fit: "none",
     valign: "mid",
     align: "center"
   });
@@ -4797,7 +4798,8 @@ function textBoxOptions(region, context, fontSize) {
     fontSize,
     color: context.textColor,
     breakLine: false,
-    fit: "shrink",
+    // RR-104: autofit off (PptxGenJS writes no autofit element, which is off): PowerPoint never refits OPF text.
+    fit: "none",
     valign: "top"
   };
 }

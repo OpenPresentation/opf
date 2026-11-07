@@ -310,10 +310,11 @@ Core lays a diagram out for its block with the deck's measured fonts, the same w
 3. A diagram is centered in its block. A region anchored to the bottom places it there.
 4. Pele lays the diagram out for the width it has, so a smaller size is a new layout, not a shrunken picture: a wide flowchart may turn to run downward.
 
-When the diagram does not fit even at the floor, it is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, with advice. Fix it in the content, not in `minFontSize`:
+When the diagram does not fit even at the floor, a flowchart or a state diagram is first tried in the other main direction (`LR` and `TB` swap, `RL` and `BT` swap; a state diagram without a `direction` is top to bottom, so it tries `direction LR`). If the labels reach the floor there, the diagram is drawn that way and the slide reports an `arrangement-adapted` info finding ("The flowchart is drawn top to bottom because left to right does not fit at the readability floor"). This applies to a direction the author wrote too: the source keeps its text, only the drawing turns, and the preview and the PPTX export draw the same turned layout. A diagram that fits as written is never turned.
+
+When no direction holds the labels at the floor (or the diagram type has no direction), the diagram as written is drawn smaller to stay inside its block, and the slide reports a `text-overflow` finding at the diagram's path, naming the directions tried. Fix it in the content, not in `minFontSize`:
 
 - give the diagram a slide or a region of its own, or put it beside short text rather than under long text;
-- draw it the other way (`flowchart TB` for `LR`, or the reverse);
 - split it into two diagrams, or shorten the labels.
 
 The overflow check needs composition or rendering with the resolved fonts; `opf validate` alone cannot see it.
