@@ -9,6 +9,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const require = createRequire(import.meta.url);
@@ -39,7 +40,7 @@ for (const face of office.registry.embeddedFonts) {
 if (fonts.startup.length !== 1) throw new Error("The Office font pack has no Roboto Regular face to start the deck view with.");
 
 const bundle = await build({
-	entryPoints: [new URL("app/main.ts", here).pathname],
+	entryPoints: [fileURLToPath(new URL("app/main.ts", here))],
 	bundle: true,
 	write: false,
 	format: "esm",
