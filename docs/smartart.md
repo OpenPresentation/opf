@@ -28,7 +28,10 @@ one list of one level (no nested entries, no descriptions, no icons, no `numberi
 | A grid of cards (`cards`), for a matrix of other than four entries | — | one card per entry in the card neutral, in the grid that holds the text largest (one column of wide cards, or a balanced grid), start-aligned; reported as `opf/arrangement-adapted` (info): a matrix needs four entries |
 
 When none of them holds the entries, or the list has a shape the arrangement does not draw (nested entries, descriptions, icons,
-numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A matrix never draws
+numbering, more than 8 levels or 8 cards), the list draws as a list and `opf/arrangement-adapted` (info) says why. A list that no design
+holds still fills the region (SH-18 review, for every arrangement): its text takes the largest size from 1.5 times the role size down to
+the size it has at which the whole list fits the region, and it sits in the middle of the region's height (LH-48's body growth leaves a
+list alone once it covers half the body). A matrix never draws
 an empty quadrant.
 
 PowerPoint's geometry was measured through COM for its Basic Pyramid (`pyramid1`) and Basic Matrix (`matrix3`) layouts:
@@ -199,7 +202,7 @@ below it:
 | Design (`design`) | Drawing |
 | --- | --- |
 | PowerPoint's (`smartart`), written as live SmartArt inside the [domain](#the-cycle-domain) | Basic Cycle (`cycle2`): circles on a ring with an arrow after each, in a frame of the cycle's own proportion centered in the region |
-| OPF's (`opf`), where the circles do not hold the entries at the list's size or the instance lies outside the domain | the larger-text of two designs that fill the region: rounded rectangles on an ellipse (two entries side by side, or one above the other in a tall region), or a loop around the edge of a grid of two or three rows (columns in a tall region), clockwise from the top left; the arrows on the lines between the nodes' centers, all one size |
+| OPF's (`opf`), where the circles do not hold the entries at the list's size or the instance lies outside the domain | the larger-text of two designs that fill the region: rounded rectangles on an ellipse (two entries side by side, or one above the other in a tall region), or a loop of two or three rows (columns in a tall region), clockwise from the top left, with a node on every place of its edge: two rows hold ceil(n/2) nodes on top and the rest below, three rows a node at each end of the middle row too, and a row of fewer nodes widens them so every row spans the region (no place is ever empty); the arrows on the lines between the nodes' centers, all one size |
 
 Every node is filled in the primary color with the 1.5 pt background-colored outline of the other arrangements; the arrows are the
 primary lightened 40% (`lumMod 60000`, `lumOff 40000`), without an outline; the entries are centered on their nodes in the color that
@@ -252,7 +255,7 @@ The same comparison as SH-09's, plus every arrow's rotation: a cycle of 1 to 8 e
 by PowerPoint. A first pass with the domain open to every count, line count and script drew 35 decks live: PowerPoint laid every circle
 and arrow out where core does (largest difference 0.000 pt, rotations equal) at core's size in all of them, and 26 passed every check; the
 nine that did not are the three right-to-left decks (PowerPoint's clockwise layout), the three Japanese decks (text 11 px off) and the
-three entries of three or four lines. With the domain above the 78 decks draw: PowerPoint's design as live SmartArt in 25 (every one passes: circles and arrows within 0.000 pt, rotations equal, sizes equal, no visible shape difference, the SmartArt within SH-07's gate of the native export: mean difference at most 0.84 at a quarter size and 1.29 at full size, no visibly different block, the text's ink within 1.03 px), OPF's design in 43 (PowerPoint draws the shapes as the preview does: mean difference at most 1.08 inside the shapes and outside the text, no visibly different block) and a list in 10 (five to eight long entries on 4:3 and 1:1 slides, seven or eight on 16:9, and eight medium entries on a 1:1 slide, which no design holds at the list's role size; `opf/arrangement-adapted` says so). The evidence is in the SH-18 folder of the
+three entries of three or four lines. With the domain above the 78 decks draw: PowerPoint's design as live SmartArt in 25 (every one passes: circles and arrows within 0.000 pt, rotations equal, sizes equal, no visible shape difference, the SmartArt within SH-07's gate of the native export: mean difference at most 0.84 at a quarter size and 1.29 at full size, no visibly different block, the text's ink within 1.03 px), OPF's design in 44 (PowerPoint draws the shapes as the preview does: mean difference at most 1.04 inside the shapes and outside the text, no visibly different block) and a list in 9, filling the region (five to eight long entries on 1:1 slides, six to eight on 4:3, eight on 16:9, and eight medium entries on a 1:1 slide; `opf/arrangement-adapted` says so). In each of the nine, every design breaks one of the two rules that keep text readable at the list's role size: a word wider than its node (OPF never breaks a word: "Customers" is 143 px at 32 px, a node of the 4 + 4 loop on 16:9 109 px wide) or entries taller than their node (OPF never shrinks text below the role size: the 3 + 1 + 1 + 3 loop on 16:9 is 16 px short). The evidence is in the SH-18 folder of the
 shapes program.
 
 ## Import

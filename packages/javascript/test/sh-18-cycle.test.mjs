@@ -80,8 +80,22 @@ test("OPF's cycle fills the region: a ring of rounded rectangles, or a loop of t
   }
   assert.equal(cycleLoop(area, 2, gap), undefined, 'a loop needs three entries');
   const loop = cycleLoop(area, 5, gap);
-  assert.deepEqual(loop.nodes.map(node => [Math.round(node.box.x), Math.round(node.box.y)]), [[0, 0], [416, 0], [832, 0], [832, 324], [416, 324]], 'three across the top, two back along the bottom');
-  assert.equal(loop.arrows[2].rotation, 90, 'the turn down at the end');
+  assert.deepEqual(loop.nodes.map(node => [Math.round(node.box.x), Math.round(node.box.y), Math.round(node.box.width)]), [[0, 0, 368], [416, 0, 368], [832, 0, 368], [624, 324, 576], [0, 324, 576]],
+    'three across the top, two back along the bottom, widened so both rows span the area');
+  // No place on a loop's edge is ever empty: every row (and a three-row loop's middle row, a node at each end) spans the area.
+  const spans = nodes => { const rows = new Map(); for (const node of nodes) rows.set(node.box.y, [...(rows.get(node.box.y) ?? []), node.box]); return [...rows.values()]; };
+  for (const count of [3, 4, 5, 6, 7, 8]) for (const rows of [2, 3]) {
+    const shapes = cycleLoop(area, count, gap, false, rows);
+    if (!shapes) { assert.ok(rows === 3 && count < 5, `${count} in ${rows} rows`); continue; }
+    assert.equal(shapes.nodes.length, count); assert.equal(shapes.arrows.length, count);
+    for (const row of spans(shapes.nodes)) {
+      near(Math.min(...row.map(box => box.x)), 0, `${count}/${rows}: a row starts at the area's edge`);
+      near(Math.max(...row.map(box => box.x + box.width)), 1200, `${count}/${rows}: and ends at the other`);
+      if (row.length > 1 && row.length < count) for (const [index, box] of row.entries()) if (index) assert.ok(Math.abs(box.x - row[index - 1].x) > box.width, `${count}/${rows}: boxes apart`);
+    }
+  }
+  const seven = cycleLoop(area, 7, gap, false, 3);
+  assert.deepEqual(seven.nodes.map(node => Math.round(node.box.y)), [0, 0, 0, 216, 432, 432, 216], 'seven: three on top, one at each end of the middle row, two below');
   const tall = cycleLoop({ x: 0, y: 0, width: 400, height: 900 }, 4, gap);
   assert.ok(tall.nodes[0].box.x > tall.nodes[3].box.x && tall.nodes[1].box.y > tall.nodes[0].box.y, 'down the right column, up the left');
 });
@@ -123,6 +137,14 @@ test("long entries draw OPF's own cycle, never a plain list while a design holds
   assert.equal(arrangement.arrows.length, 5);
   assert.ok(arrangement.fontSize >= LIST_NOMINAL_SIZE - 1e-6);
   assert.equal(result.diagnostics.filter(item => item.code === 'arrangement-adapted').length, 0);
+  // A list no design holds still fills the region: larger than the role size where the whole list fits, in the middle of its height.
+  const long = ['Why we exist and who we serve', 'The few goals that matter this year', 'How teams plan, decide and ship', 'The reviews that keep plans honest',
+    'Data everyone can see and trust', 'Feedback loops measured in days', 'Releases that land every single week', 'Customers who stay and refer others'];
+  const fallback = compose({ layout: 'cycle', title: 'The loop', items: long }), listed = fallback.items.find(item => item.field === 'items'), region = fallback.regions.find(entry => entry.name === 'stages').box;
+  assert.equal(fallback.arrangements, undefined);
+  assert.ok(fallback.diagnostics.some(item => item.code === 'arrangement-adapted'));
+  assert.ok(listed.text.fontSize > LIST_NOMINAL_SIZE, `the fallback list grows (${listed.text.fontSize})`);
+  near(listed.box.y - region.y, region.y + region.height - listed.box.y - listed.box.height, 'the list in the middle of the region', .5);
   // Nine steps are more than a cycle draws: a list, and the finding says why.
   const nine = compose({ layout: 'cycle', title: 'Too many', items: Array.from({ length: 9 }, (_, index) => `Step ${index + 1}`) });
   assert.equal(nine.arrangements, undefined);

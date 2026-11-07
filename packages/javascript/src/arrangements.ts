@@ -390,27 +390,30 @@ function cycleLinks(nodes: ArrangementNode[]): ArrangementArrow[] {
 }
 
 /**
- * OPF's second cycle design, a loop around a grid of `rows` rows (columns in an area taller than wide): the nodes clockwise on the
- * grid's edge from its top left corner (along the top row, down the last column, back along the bottom row, up the first column),
- * every node one size, filling `area` with room for an arrow between neighbors (2 `gap`), and an arrow from each to the next
- * (cycleLinks). A count that leaves the edge a cell short leaves out its last cell. In a tall area the loop is turned a quarter
- * clockwise. Composition keeps whichever of the ring and the loops holds the entries larger.
+ * OPF's second cycle design, a loop of `rows` rows (columns in an area taller than wide) with exactly one node on every place of its
+ * edge, so no place is left empty: two rows hold ceil(n/2) nodes left to right on top and the rest right to left below; three rows hold a
+ * node at each end of the middle row too, the rest shared between the top and the bottom. A row of fewer nodes widens them, so every row
+ * spans the area; the rows are one height. Neighbors keep room for an arrow (2 `gap`), and an arrow goes from each node to the next
+ * (cycleLinks). In a tall area the loop is turned a quarter clockwise. Composition keeps whichever of the ring and the loops holds the
+ * entries larger.
  */
 export function cycleLoop(area: Box, count: number, gap: number, rtl = false, rows = 2): { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined {
-  const n = Math.floor(count), r = Math.max(2, Math.floor(rows));
-  if (n < 2 * r - 1) return undefined;
-  const columns = Math.max(2, Math.ceil((n - 2 * (r - 2)) / 2)), tall = area.height > area.width, long = tall ? area.height : area.width, short = tall ? area.width : area.height;
-  const room = Math.min(2 * gap, .2 * short / (r - 1)), w = (long - (columns - 1) * room) / columns, h = (short - (r - 1) * room) / r;
-  if (w <= 0 || h <= 0) return undefined;
-  // The grid's edge, clockwise from the top left (column, row), in the wide frame.
-  const edge: [number, number][] = [];
-  for (let c = 0; c < columns; c++) edge.push([c, 0]);
-  for (let row = 1; row < r - 1; row++) edge.push([columns - 1, row]);
-  for (let c = columns - 1; c >= 0; c--) edge.push([c, r - 1]);
-  for (let row = r - 2; row > 0; row--) edge.push([0, row]);
-  const nodes = edge.slice(0, n).map(([column, row], index) => {
-    const a = column * (w + room), b = row * (h + room);
-    const box = tall ? { x: area.x + area.width - b - h, y: area.y + a, width: h, height: w } : { x: area.x + a, y: area.y + b, width: w, height: h };
+  const n = Math.floor(count), r = rows === 3 ? 3 : 2, sides = r === 3 ? 2 : 0;
+  const top = Math.ceil((n - sides) / 2), bottom = n - sides - top;
+  if (n < 3 || bottom < 1 || (r === 3 && top < 2)) return undefined;
+  const tall = area.height > area.width, long = tall ? area.height : area.width, short = tall ? area.width : area.height;
+  const room = Math.min(2 * gap, .2 * short / (r - 1)), h = (short - (r - 1) * room) / r;
+  const width = (k: number) => (long - (k - 1) * room) / k, wTop = width(top), wBottom = width(bottom);
+  if (h <= 0 || wTop <= 0 || wBottom <= 0) return undefined;
+  // Clockwise from the top left, in the wide frame: [start along the long side, length, row].
+  const cells: [number, number, number][] = [];
+  for (let k = 0; k < top; k++) cells.push([k * (wTop + room), wTop, 0]);
+  if (r === 3) cells.push([long - wTop, wTop, 1]);
+  for (let k = bottom - 1; k >= 0; k--) cells.push([k * (wBottom + room), wBottom, r - 1]);
+  if (r === 3) cells.push([0, wTop, 1]);
+  const nodes = cells.map(([u, length, row], index) => {
+    const v = row * (h + room);
+    const box = tall ? { x: area.x + area.width - v - h, y: area.y + u, width: h, height: length } : { x: area.x + u, y: area.y + v, width: length, height: h };
     return roundNode(index, box, Math.min(box.width, box.height) * ROUND_RECT_ADJUST / 100000);
   });
   const arrows = cycleLinks(nodes);

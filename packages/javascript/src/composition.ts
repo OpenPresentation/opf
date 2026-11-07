@@ -9582,6 +9582,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!chosen && outside) { chosen = outside; skipped = undefined; }
     if (!chosen) {
       diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `The ${kind}'s entries do not fit its ${kind === 'pyramid' ? 'levels' : kind === 'cycle' ? 'steps' : 'quadrants'} at the list's size, so they are drawn as a list.` });
+      fillRegionWithList(item, area, top);
       return undefined;
     }
     const { design, placed, size } = chosen;
@@ -9593,6 +9594,25 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     return { kind, design: design.design, region: item.region ?? '', path: item.path, frame: { ...design.frame }, ...(design.background ? { background: design.background } : {}),
       nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), ...(design.arrows ? { arrows: design.arrows } : {}), fontSize: size, textMargin: placed.margin,
       align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, smartArt: { lines: placed.lines, stable: placed.stable }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
+  };
+  // SH-18 review (also SH-09's pyramids and matrices): a list that no design of its region's arrangement holds still fills the region
+  // as an arrangement would. Its text takes the largest size, from the arrangement's top size (ARRANGEMENT_GROWTH times the role size)
+  // down to the size it has, at which the whole list fits the region, and the list sits in the middle of the region's height. LH-48's
+  // body growth leaves a list alone once it covers half the body, which left a fallback list at the role size in the top of the region.
+  const fillRegionWithList = (item: ComposedItem, area: LayoutBox, top: number): void => {
+    const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, step = 4 / 3 * scale;
+    const listOptions = listOptionsFor(item.field, item.path, item.payload.numbering, values);
+    let size = base, height = fit.overflow ? Infinity : fit.height;
+    for (let candidate = top; candidate > base + 1e-6; candidate = snapFontSizeDown(candidate - step)) {
+      const probe = fitList(values, area, candidate, candidate, listOptions);
+      if (!probe.overflow && probe.height <= area.height + 1e-6) { size = candidate; height = probe.height; break; }
+    }
+    if (!Number.isFinite(height)) return;
+    const box = { x: area.x, y: area.y + Math.max(0, (area.height - height) / 2), width: area.width, height: Math.min(area.height, height) };
+    const placed = fitList(values, box, size, size, listOptions);
+    if (placed.overflow) return;
+    item.text = placed;
+    item.box = box;
   };
   const arrangedLists = (): ComposedArrangement[] => {
     const result: ComposedArrangement[] = [];
