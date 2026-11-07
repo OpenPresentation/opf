@@ -63,6 +63,8 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // 6e06a71f...), the doughnut (was 379c218a...) and the treemap (was 729597f6...); every other digest is unchanged.
 // LH wave 8: LH-160 draws a lone value column's histogram with only the bins its plot can label one beside another, which moves
 // histogram-lone-column (was 7c2a1efe...); every other digest is unchanged.
+// LH-175: a Pareto chart of several series is drawn as clustered columns of every series (core pareto-as-columns), which moves pareto
+// (was 4882241d...); every other digest is unchanged.
 const REVIEWED_SVG_DIGESTS = {
   'column': '9e0ac4ac35219f397723d0a0',
   'stacked-column': '22c1bb68ee1f45037f081ace',
@@ -85,7 +87,7 @@ const REVIEWED_SVG_DIGESTS = {
   'filled-radar': '3f929717f9aaa20fc2a10060',
   'treemap': 'd73891c0d6e3f31848317ce8',
   'histogram': 'd53e45060a24e75965e468ea',
-  'pareto': '4882241d769e6ea7fd8b7606',
+  'pareto': 'a2bde74277ed024ca48ea3b6',
   'box-and-whisker': '8a6324792766fc047f85cd59',
   'waterfall': '1634735baf70cec035c76edb',
   'funnel': '3f6d700694a038d2172c254a',

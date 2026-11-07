@@ -194,10 +194,10 @@ for (const type of ['treemap', 'waterfall', 'funnel', 'histogram']) {
   const {diagnostics} = await diagnosticsFor(type, categoryData);
   assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['series-dropped', 'slides.0.chart']], type);
 }
-// Pareto cannot represent independent series natively, so auto preserves them all in the explicit classic fallback.
+// LH-175: a Pareto chart of several series is core's pareto-as-columns fallback: clustered columns of every series, as the preview draws.
 {
   const {diagnostics, xml, chartex} = await diagnosticsFor('pareto', categoryData);
-  assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['chartex-fallback', 'slides.0.chart']]);
+  assert.deepEqual(diagnostics.map((diagnostic) => [diagnostic.adaptation, diagnostic.path]), [['chart-fallback', 'slides.0.chart']]);
   assert.equal(chartex, false);
   assert.equal(construct(xml).series.length, categoryData.columns.length - 1, 'Pareto fallback preserves every value series');
 }
