@@ -430,7 +430,7 @@ turned by `rot`, connectors, the closing transition) within 0.001 pt.
 The spike measured the other algorithms in OPF-written definitions too. Each evaluates, but none is a closed form: `lin` scales each axis
 on its own and centers with a 0.1 to 0.4 pt offset; `snake` picks its own grid (up to 343 pt from the best-grid form); `cycle` searches
 the node size (215 pt from the form its parameters describe); `pyra` keeps the levels to 0.67 of the width. OPF's definitions use none of
-them (only the `else` branch of no OPF definition; the tables cover every count).
+them.
 
 ### In PowerPoint
 
