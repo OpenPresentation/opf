@@ -381,7 +381,7 @@ A design inside a built-in layout's domain keeps PowerPoint's built-in layout, w
 The definition is a table of explicit constraints, the one form PowerPoint lays out with no algorithm of its own (the SH-19 spike,
 through COM):
 
-- a `composite` root with one `if` branch per entry count, 1 to 8 (`func="cnt"`); each branch places every node with `l`, `t`, `w` and `h`
+- a `composite` root with one `if` branch per entry count, 1 to 12 (`func="cnt"`; SH-23); each branch places every node with `l`, `t`, `w` and `h`
   constraints as shares of the frame's width and height, so the design scales with the frame when it is resized in PowerPoint;
 - a hidden full-frame child (`shape type="rect" hideGeom="1"`) in every branch: without one, PowerPoint moves a drawing whose shapes do
   not reach the frame's edges to the frame's center;
@@ -397,8 +397,10 @@ through COM):
   composition starts the entry's first line, so PowerPoint sets the lines where OPF's native text export does (centering the block,
   PowerPoint's line metrics put it up to a pixel off);
 - the tables of every other count, from the same design at the same frame (core `opfLayoutGeometry`), so a node added or deleted in
-  PowerPoint keeps OPF's design; more than 8 entries take the 8-entry table under names of their own (`x...`; the ninth entry is then not
-  drawn until one is removed).
+  PowerPoint keeps OPF's design. OPF draws at most 8 entries, but the definition carries tables up to 12 (`OPF_LAYOUT_TABLES`, SH-23),
+  so a ninth to twelfth entry a PowerPoint user adds is drawn in OPF's design at the same frame; more than 12 take the 12-entry table under
+  names of their own (`x...`, the entries past 12 not drawn until one is removed). A design whose larger tables do not hold (a node outside
+  the frame) keeps tables up to 8.
 
 Every name of a layout node or `forEach` is unique in the definition: PowerPoint rejects a definition that repeats one (it opens the
 SmartArt on Basic Block List instead). The identity is OPF's: the `uniqueId` is `urn:openpresentation.org/smartart/layout/<design>/<digest>`
