@@ -4,7 +4,7 @@ import {blipFillIdentity, canonical} from './image-provenance.js';
 import {mediaKey} from './media-dedupe.js';
 import {normalizeCrop, svgBlipRelationship} from './svg-image.js';
 
-// Diagrams (OPF `diagram`, Mermaid source drawn by core's layoutDiagram and painted by paintDiagram in the slide's palette).
+// Diagrams (OPF `diagram`, Mermaid or DOT source drawn by core's layoutDiagram and painted by paintDiagram in the slide's palette).
 //
 // A diagram exports as one native SVG picture (`OPF diagram N`, an `asvg:svgBlip` over its PNG fallback) at core's drawn box, its
 // `descr` the diagram's alt text. One that cannot be drawn (a source error, or no rasterizer for the fallback) is the unavailable-

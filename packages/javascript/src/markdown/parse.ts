@@ -557,7 +557,7 @@ class SlideParser {
     if (word === "chart") this.chart(rest, bodyText, range);
     else if (word === "metric") this.metric(body, range);
     else if (word === "timeline") this.timeline(rest, body, range);
-    else if (word === "mermaid") this.diagram(rest, bodyText, range);
+    else if (word === "mermaid" || word === "dot") this.diagram(word, rest, bodyText, range);
     else if (word === "opf-slide") this.embeddedSlide(bodyText, bodyStart, range);
     else if (word === "opf-block") this.embeddedBlock(bodyText, bodyStart, range);
     else {
@@ -574,21 +574,23 @@ class SlideParser {
     }
   }
 
-  // A ```mermaid fence is a diagram payload; `alt="..."` after the word is its text alternative.
-  private diagram(rest: string, text: string, range: Range): void {
+  // A ```mermaid or ```dot fence is a diagram payload in that syntax; `alt="..."` after the word is its text alternative.
+  private diagram(syntax: "mermaid" | "dot", rest: string, text: string, range: Range): void {
     const { ctx } = this;
     const { pairs, error } = parseAttributes(rest);
     let alt: string | undefined;
-    if (error) ctx.error("diagram-attributes", error, 'Write ```mermaid alt="What the diagram shows" (alt is optional).', range, this.path);
+    if (error) ctx.error("diagram-attributes", error, `Write \`\`\`${syntax} alt="What the diagram shows" (alt is optional).`, range, this.path);
     for (const [key, value] of pairs) {
       if (key === "alt" && typeof value === "string") alt = value;
-      else ctx.error("diagram-attributes", `Unknown diagram attribute ${JSON.stringify(key)}.`, "A mermaid fence takes alt, a text alternative in double quotes.", range, this.path);
+      else ctx.error("diagram-attributes", `Unknown diagram attribute ${JSON.stringify(key)}.`, `A ${syntax} fence takes alt, a text alternative in double quotes.`, range, this.path);
     }
     if (!text.trim()) {
-      ctx.error("diagram-source", "A mermaid block has no source.", "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).", range, this.path);
+      const advice = syntax === "dot" ? "Write the DOT graph between the fences (digraph { a -> b })." : "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).";
+      ctx.error("diagram-source", `A ${syntax} block has no source.`, advice, range, this.path);
       return;
     }
-    this.native("diagram", alt === undefined ? text : { source: text, alt }, range);
+    if (syntax === "dot") this.native("diagram", alt === undefined ? { source: text, syntax } : { source: text, syntax, alt }, range);
+    else this.native("diagram", alt === undefined ? text : { source: text, alt }, range);
   }
 
   private chart(rest: string, text: string, range: Range): void {

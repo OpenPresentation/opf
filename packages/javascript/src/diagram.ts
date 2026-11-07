@@ -7,10 +7,14 @@ import type { TextMeasurer } from 'pele';
 // The engine is chosen by export condition (package.json "imports"): every type registered at load in Node and edge runtimes, pele's
 // core with each type loaded on demand in browsers (diagram-engine-eager.ts, diagram-engine-lazy.ts).
 import { PeleError, detectType, loadDiagramType, parse as parseMermaid, registered, render as renderMermaid } from '#diagram-engine';
+import { dotToMermaid } from './diagram-dot.js';
 import { chartColorForFill, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, textColorForFill, type ChartColorContext } from './color.js';
 
-/** The syntaxes a diagram's `source` can be written in. */
-export const DIAGRAM_SYNTAXES = ['mermaid'] as const;
+/**
+ * The syntaxes a diagram's `source` can be written in: Mermaid, and Graphviz DOT (SH-12), which OPF reads itself and pele lays out with
+ * its layered layout as a flowchart (diagram-dot.ts).
+ */
+export const DIAGRAM_SYNTAXES = ['mermaid', 'dot'] as const;
 export type DiagramSyntax = typeof DIAGRAM_SYNTAXES[number];
 
 /** A diagram payload in its object form: the string shorthand is `{ source }`. */
@@ -35,7 +39,30 @@ export function diagramPayload(value: unknown): DiagramPayload | undefined {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
   const record = value as Record<string, unknown>;
   if (typeof record.source !== 'string') return undefined;
-  return { source: record.source, syntax: 'mermaid', ...(typeof record.alt === 'string' && record.alt.trim() ? { alt: record.alt } : {}) };
+  const syntax = record.syntax === undefined ? 'mermaid' : (DIAGRAM_SYNTAXES as readonly unknown[]).includes(record.syntax) ? record.syntax as DiagramSyntax : undefined;
+  if (!syntax) return undefined;
+  return { source: record.source, syntax, ...(typeof record.alt === 'string' && record.alt.trim() ? { alt: record.alt } : {}) };
+}
+
+/**
+ * The Mermaid source pele draws for a diagram payload: a Mermaid source as written, a DOT source as the flowchart OPF's reader makes of it.
+ * A DOT source's issue keeps its position in the DOT source.
+ */
+function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean } | { ok: false; issue: DiagramIssue } {
+  if (payload.syntax === 'mermaid') return { ok: true, source: payload.source, translated: false };
+  if (payload.source.length > DIAGRAM_SOURCE_LIMIT) return { ok: false, issue: { code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` } };
+  const result = dotToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
+  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true } : { ok: false, issue: result.issue };
+}
+
+/** The source limit pele checks: the authored source's for Mermaid; a translated source was checked before it was translated. */
+const peleLimit = (translated: boolean) => translated ? DIAGRAM_SOURCE_LIMIT * 16 : DIAGRAM_SOURCE_LIMIT;
+
+/** A diagram value's syntax when it names one OPF does not read. */
+function unknownSyntax(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const syntax = (value as Record<string, unknown>).syntax;
+  return syntax !== undefined && !(DIAGRAM_SYNTAXES as readonly unknown[]).includes(syntax) ? String(syntax) : undefined;
 }
 
 /** The share of the readability floor the smallest secondary label of a diagram keeps (its node labels keep the whole floor). */
@@ -52,14 +79,15 @@ export const DIAGRAM_SHAPE_FAMILIES: readonly string[] = Object.freeze(['agentfl
 export const DIAGRAM_SOURCE_LIMIT = 20000;
 export const DIAGRAM_MAX_EDGES = 500;
 
-function issueOf(error: unknown): DiagramIssue {
+function issueOf(error: unknown, translated = false): DiagramIssue {
   if (error instanceof PeleError) {
     const code = error.code === 'syntax' || error.code === 'semantic' ? 'diagram-syntax' : error.code === 'limit' ? 'diagram-limit' : 'diagram-unsupported';
     // A parse error's message is "Parse error on line N:", the source line, a caret under it and what was expected. The finding
     // gives the position separately, so it keeps what was expected.
     const lines = error.message.split('\n').map(line => line.trim()).filter(Boolean);
     const message = (lines.length > 1 && /^Parse error on line \d+:?$/.test(lines[0]!) ? lines.at(-1)! : lines[0]) || 'The diagram source cannot be read.';
-    return { code, message, ...(error.line > 0 ? { line: error.line, column: error.column } : {}) };
+    // A translated source's position is in the generated flowchart, not in what the author wrote, so it is not given.
+    return { code, message, ...(error.line > 0 && !translated ? { line: error.line, column: error.column } : {}) };
   }
   return { code: 'diagram-syntax', message: error instanceof Error ? error.message : String(error) };
 }
@@ -71,19 +99,23 @@ const checked = new Map<string, { type: string } | DiagramIssue>();
  * it. Parsing only: no text is measured. Results are cached by source.
  */
 export function checkDiagram(value: unknown): { ok: true; type: string } | { ok: false; issue: DiagramIssue } {
+  const unknown = unknownSyntax(value);
+  if (unknown !== undefined) return { ok: false, issue: { code: 'diagram-unsupported', message: `OPF does not read ${JSON.stringify(unknown)} diagrams; write the source in ${DIAGRAM_SYNTAXES.join(' or ')}.` } };
   const payload = diagramPayload(value);
   if (!payload || !payload.source.trim()) return { ok: false, issue: { code: 'diagram-empty', message: 'The diagram has no source.' } };
-  const unloaded = unloadedType(payload.source);
+  const pele = peleSource(payload);
+  if (!pele.ok) return pele;
+  const unloaded = unloadedType(pele.source);
   if (unloaded) return { ok: false, issue: { code: 'diagram-unloaded', message: `The ${unloaded} diagram type is still loading.` } };
-  let result = checked.get(payload.source);
+  let result = checked.get(pele.source);
   if (!result) {
     try {
-      result = { type: String(parseMermaid(payload.source, { limit: DIAGRAM_SOURCE_LIMIT, maxEdges: DIAGRAM_MAX_EDGES }).type) };
+      result = { type: String(parseMermaid(pele.source, { limit: peleLimit(pele.translated), maxEdges: DIAGRAM_MAX_EDGES }).type) };
     } catch (error) {
-      result = issueOf(error);
+      result = issueOf(error, pele.translated);
     }
     if (checked.size >= 2000) checked.clear();
-    checked.set(payload.source, result);
+    checked.set(pele.source, result);
   }
   return 'type' in result ? { ok: true, type: result.type } : { ok: false, issue: result };
 }
@@ -104,8 +136,9 @@ function diagramSources(input: unknown, found: string[] = [], depth = 0): string
   if (Array.isArray(input)) { for (const entry of input) diagramSources(entry, found, depth + 1); return found; }
   for (const [key, value] of Object.entries(input)) {
     const payload = key === 'diagram' ? diagramPayload(value) : undefined;
-    if (payload) found.push(payload.source);
-    else diagramSources(value, found, depth + 1);
+    const pele = payload ? peleSource(payload) : undefined;
+    if (pele?.ok) found.push(pele.source);
+    else if (!payload) diagramSources(value, found, depth + 1);
   }
   return found;
 }
@@ -220,7 +253,7 @@ function decodeXml(text: string): string {
 }
 
 // pele's diagram types (its registry), as a reader would name them.
-const TYPE_NAMES: Readonly<Record<string, string>> = { agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
+const TYPE_NAMES: Readonly<Record<string, string>> = { graph: 'Graph', agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
 
 /** The default text alternative of a drawing: its kind, then its labels, at most 400 characters. */
 function derivedAlt(type: string, svg: string): string {
@@ -235,7 +268,7 @@ function derivedAlt(type: string, svg: string): string {
 interface Drawn { svg: string; width: number; height: number; type: string }
 const drawings = new WeakMap<DiagramMeasure, Map<string, Drawn>>();
 
-function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptions, 'measure' | 'idPrefix'>): Drawn {
+function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptions, 'measure' | 'idPrefix'>, limit: number): Drawn {
   let cache = drawings.get(options.measure);
   if (!cache) {
     cache = new Map();
@@ -253,7 +286,7 @@ function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptio
   };
   const rendered = renderMermaid(source, {
     measurer, fontSize: BASE, maxWidth: Math.max(160, maxWidth), responsive: false, links: false, images: false, idPrefix: options.idPrefix,
-    limit: DIAGRAM_SOURCE_LIMIT, maxEdges: DIAGRAM_MAX_EDGES, now: NOW,
+    limit, maxEdges: DIAGRAM_MAX_EDGES, now: NOW,
   });
   const drawn = { svg: rendered.svg, width: rendered.width, height: rendered.height, type: String(rendered.type) };
   if (cache.size >= 500) cache.clear();
@@ -271,9 +304,11 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
   const checkedValue = checkDiagram(value);
   if (!checkedValue.ok) throw Object.assign(new Error(checkedValue.issue.message), { diagramIssue: checkedValue.issue });
   const payload = diagramPayload(value)!;
+  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean };
   const width = Math.max(1, options.width), height = Math.max(1, options.height);
   const down = options.grid?.down ?? ((size: number) => size), up = options.grid?.up ?? ((size: number) => size);
-  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(payload.source, width / scale, options) }; };
+  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(pele.source, width / scale, options, peleLimit(pele.translated)) }; };
+  const alt = (drawn: Drawn) => payload.alt ?? derivedAlt(payload.syntax === 'dot' ? 'graph' : drawn.type, drawn.svg);
   const fits = (candidate: ReturnType<typeof at>) => candidate.drawn.width * candidate.scale <= width + .5 && candidate.drawn.height * candidate.scale <= height + .5;
   // The smallest label's share of the base size is the diagram type's; it bounds the base size from below.
   const probe = at(Math.max(options.floor, options.nominal));
@@ -293,12 +328,12 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
     }
   }
   if (chosen) {
-    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: payload.alt ?? derivedAlt(chosen.drawn.type, chosen.drawn.svg) };
+    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: alt(chosen.drawn) };
   }
   // Not even the floor fits: the floor's layout, scaled down into the area.
   const floor = at(lowest);
   const scale = down(BASE * Math.min(width / floor.drawn.width, height / floor.drawn.height, floor.scale)) / BASE;
-  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: payload.alt ?? derivedAlt(floor.drawn.type, floor.drawn.svg), overflow: true };
+  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: alt(floor.drawn), overflow: true };
 }
 
 /** The colors and fonts a diagram is painted in, all opaque #RRGGBB colors except the families. */

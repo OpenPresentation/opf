@@ -1,0 +1,68 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "DOT diagrams",
+  "description": "Technical fixture for Graphviz DOT diagrams (diagram syntax \"dot\"): a release pipeline with a cluster and a decision, an undirected service graph beside text, an architecture with a database cylinder and labeled edges, a state graph on a dark variant, and a graph with an alt and a caption. OPF reads the DOT itself and pele lays it out in layers.",
+  "filename": "dot-diagrams",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "colorScheme": "forest-green",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "id": "pipeline",
+      "title": "Every change passes the same pipeline",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph release {\n  rankdir=LR\n  node [shape=box, style=rounded]\n  subgraph cluster_ci {\n    label=\"Continuous integration\"\n    Commit -> Build -> Test\n  }\n  Review [shape=diamond, label=\"Approved?\"]\n  Test -> Review [label=\"passes\"]\n  Test -> Build [label=\"fails\", style=dashed]\n  Review -> Release [label=\"yes\"]\n  Release [shape=ellipse]\n}"
+      }
+    },
+    {
+      "id": "services",
+      "title": "Three teams share one API",
+      "blocks": [
+        {
+          "bullets": [
+            "Web, mobile and partners call the same API",
+            "Search reads from the catalog the API writes",
+            "Billing hears about every order"
+          ]
+        },
+        {
+          "diagram": {
+            "syntax": "dot",
+            "source": "graph services {\n  API [shape=box]\n  Web -- API\n  Mobile -- API\n  Partners -- API\n  API -- Catalog -- Search\n  API -- Billing\n}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "title": "Decks are validated before they are stored",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph architecture {\n  rankdir=LR\n  node [shape=box]\n  Client [shape=ellipse]\n  Gateway -> Auth [label=\"token\"]\n  Client -> Gateway [label=\"POST /decks\"]\n  Gateway -> Validator\n  Validator -> Store [label=\"valid\"]\n  Validator -> Client [label=\"findings\", style=dashed]\n  Store [shape=cylinder, label=\"Deck store\"]\n}"
+      }
+    },
+    {
+      "id": "states",
+      "title": "A deck moves from draft to published",
+      "design": { "variant": "dark1" },
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph states {\n  rankdir=LR\n  node [shape=circle]\n  Draft -> Review [label=\"submit\"]\n  Review -> Draft [label=\"changes\"]\n  Review -> Published [label=\"approve\"]\n  Published [shape=doublecircle]\n}"
+      }
+    },
+    {
+      "id": "alt-and-caption",
+      "title": "Rejected briefs return to their author",
+      "diagram": {
+        "syntax": "dot",
+        "source": "digraph review {\n  rankdir=LR\n  Brief [shape=box]\n  Approved [shape=diamond, label=\"Approved?\"]\n  Brief -> Approved\n  Approved -> Build [label=\"yes\"]\n  Approved -> Brief [label=\"no\"]\n}",
+        "alt": "A brief goes to review. Approved work is built; rejected work returns to the brief."
+      },
+      "caption": "Figure 1. The review loop, written in DOT"
+    }
+  ]
+}

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { checkDiagram, composeSlide, diagramsPending, ensureDiagrams } from '../dist/composition.js';
 
 const deck = { slides: [{ title: 'Flow', diagram: 'flowchart LR\n  A --> B' }, { title: 'Order', blocks: [{ text: 'Context' }, { diagram: { source: 'sequenceDiagram\n  A->>B: hi' } }] }] };
+// SH-12: a DOT graph is drawn by pele's flowchart type, so it waits for that type.
+assert.deepEqual(diagramsPending({ diagram: { source: 'digraph { a -> b }', syntax: 'dot' } }), ['flowchart']);
 assert.deepEqual(diagramsPending(deck), ['flowchart', 'sequence']);
 assert.equal(checkDiagram(deck.slides[0].diagram).issue.code, 'diagram-unloaded');
 const before = composeSlide(deck.slides[0], { width: 1920, height: 1080, scale: 1.5 });

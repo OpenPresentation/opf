@@ -16,7 +16,7 @@ item's state edits its row and appends a log line in the same PR.
 | SH-09 | SmartArt export (tier 1): live SmartArt for the layouts OPF's engine draws exactly as PowerPoint does | core, render, pptx, gallery, cli | A layout is written as SmartArt only after it passes the comparison with the preview | done ([opf#1065](https://github.com/OpenPresentation/opf/pull/1065)): the `pyramid` and `matrix` layouts (a region's `arrangement`) as live Basic Pyramid and Basic Matrix SmartArt, no layout part, native shapes outside the compared domain (`smartArt: "live" | "shapes"`) |
 | SH-10 | Text in large shapes grows like body text instead of staying at the shape's base size | core, render, pptx | A large shape's text reads at the size body text of that area would | todo |
 | SH-11 | Small shape text is drawn smaller in PowerPoint than in the preview | core, pptx | The same small shape text measures alike in the preview and in PowerPoint | todo |
-| SH-12 | Graphviz DOT diagrams (owner-approved), laid out by pele | core, render, pptx | DOT sources draw in the preview and export as native shapes | todo |
+| SH-12 | Graphviz DOT diagrams (owner-approved), laid out by pele | core, render, pptx | DOT sources draw in the preview and export as native shapes | done (this PR): `syntax: "dot"` and the ```` ```dot ```` fence; OPF's own DOT reader hands the graph to pele's layered layout as a flowchart (SH-07 native shapes, provenance round trip); other layout engines and HTML table labels refused with a finding |
 | SH-13 | PlantUML diagrams (owner-approved), laid out by pele for the diagram types it already draws | core, render, pptx | PlantUML sources of those types draw in the preview and export as native shapes | todo |
 | SH-16 | An SVG fallback for every live SmartArt (owner, 2026-11-06: other apps probably do not accept SmartArt) | pptx | PowerPoint shows the live SmartArt; an app without SmartArt shows OPF's drawing of the frame; import reads either form | done (merged 2026-11-06, [opf#1068](https://github.com/OpenPresentation/opf/pull/1068)): each live SmartArt an `mc:AlternateContent` (`Requires="dgm1612"`, chosen through COM), its fallback OPF's preview of the frame as an SVG picture over a PNG, the outline as alt text, `OPF_SMARTART_V1` on the picture |
 | SH-18 | Live SmartArt for cycles: a `cycle` arrangement drawn as PowerPoint's Basic Cycle (`cycle2`), measured and fitted in core, else OPF's own cycle; live inside a measured domain | core, render, pptx, gallery, cli | Every live instance of the COM sweep lays out where core does (0.1 pt), at core's size, within SH-07's native gate | done (merged 2026-11-07, [opf#1071](https://github.com/OpenPresentation/opf/pull/1071)): `cycle` (layout and arrangement), frame 1.8 : 1 (two entries) or 1.15 : 1, live for 1 to 8 Latin entries of at most two lines; 25 of 25 live instances pass (0.000 pt); OPF's grid loops have no empty place and a fallback list fills its region (review) |
@@ -38,6 +38,15 @@ item's state edits its row and appends a log line in the same PR.
   bidirectional layout decides its placement). (4) All 32 families are allowlisted: the misses in the light, serif, Segoe UI and Japanese
   comparisons are glyph-only (the preview's stand-ins for Aptos, Segoe UI and Yu Gothic), with geometry and label positions matching.
 - **D2 diagrams: recommended against** (awaiting the owner).
+- **SH-12 decisions (vetoable, 2026-11-07).** (1) OPF reads DOT itself and writes the graph as pele flowchart source (`dotToMermaid`), so the
+  preview, sizing, palette, SH-07's native shapes and provenance are the flowchart's, unchanged; no second layout. (2) DOT's default
+  `ellipse` (and `oval`, `egg`) is pele's stadium (a fully rounded `roundRect`): pele has no ellipse node, and a stadium holds a label as an
+  ellipse does. Shapes pele has no form for (`house`, `star`, ...) are boxes. (3) Colors, fonts, sizes and positions in DOT are ignored, as
+  Mermaid themes are: the deck decides. (4) pele draws a marker at the head or the same one at both ends, so `dir=back` draws the edge from
+  its head to its tail (and ranks it that way), a pair of different end markers takes the head's, and arrow types map to arrowhead, circle
+  (`dot`, `odot`), cross (`tee`, `box`) or none. (5) A `layout` other than `dot` is `diagram-unsupported` at its position and an HTML-like
+  `<table>` label likewise; other HTML labels are read as text. (6) The derived alt text names a DOT diagram "Graph". (7) A code block in the
+  `dot` language is written to Markdown as an `opf-block`, since the `dot` fence is now a diagram.
 - **Pagination of overlays (SH-04).** When a slide splits, a shape placed by fractions is on every page, a shape `at` a block on its
   block's page, and a connector on the page that holds both ends; a connector whose ends land on different pages is on none and is
   reported as `connector-split`.
@@ -76,3 +85,4 @@ item's state edits its row and appends a log line in the same PR.
 - 2026-11-07: SH-18 done ([opf#1071](https://github.com/OpenPresentation/opf/pull/1071)): live SmartArt for cycles.
 - 2026-11-07: SH-17 done ([opf#1073](https://github.com/OpenPresentation/opf/pull/1073)): live SmartArt for chevrons and process flows.
 - 2026-11-07: SH-19 done ([opf#1075](https://github.com/OpenPresentation/opf/pull/1075)): OPF's own SmartArt layouts, drawn by OPF's interpreter.
+- 2026-11-07: SH-12 done: Graphviz DOT diagrams (`syntax: "dot"`, the `dot` fence), read by OPF and laid out by pele's layered layout as a flowchart, so they preview, size and export as native shapes like a flowchart and import back as their DOT source; `examples/technical/dot-diagrams.opf.json`. PowerPoint check of its native shapes is listed for the Office owner (no COM run here).

@@ -118,15 +118,16 @@ function canonCode(value: unknown): unknown {
   return out;
 }
 
-// A diagram is native Markdown when it is Mermaid source with at most an alt; the default syntax is dropped. A source with a blank
-// first or last line, or a carriage return, cannot round-trip through the fence and stays embedded.
+// A diagram is native Markdown when it is Mermaid or DOT source with at most an alt; the default syntax (mermaid) is dropped. A source
+// with a blank first or last line, or a carriage return, cannot round-trip through the fence and stays embedded.
 function canonDiagram(value: unknown): unknown {
   const source = typeof value === "string" ? value : isRecord(value) ? value.source : undefined;
   if (typeof source !== "string" || !source.trim() || source.includes("\r") || /^[ \t]*\n|\n[ \t]*$/.test(source)) return undefined;
   if (typeof value === "string") return value;
-  if (!isRecord(value) || !only(value, ["source", "syntax", "alt"]) || (value.syntax !== undefined && value.syntax !== "mermaid")) return undefined;
+  if (!isRecord(value) || !only(value, ["source", "syntax", "alt"]) || (value.syntax !== undefined && value.syntax !== "mermaid" && value.syntax !== "dot")) return undefined;
   if (value.alt !== undefined && typeof value.alt !== "string") return undefined;
-  return value.alt === undefined ? source : { source, alt: value.alt };
+  if (value.alt === undefined && value.syntax !== "dot") return source;
+  return { source, ...(value.syntax === "dot" ? { syntax: "dot" } : {}), ...(value.alt === undefined ? {} : { alt: value.alt }) };
 }
 
 function canonMetric(value: unknown): unknown {
