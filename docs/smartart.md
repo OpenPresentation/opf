@@ -1,8 +1,8 @@
 # Pyramids, matrices and live SmartArt
 
-Layouts of the default catalog that draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
-`matrix` (four parts of a whole, or the four cases of two choices, as quadrants) and `cycle` (steps that repeat, as a loop; see
-[Cycles](#cycles-sh-18)). The PowerPoint export writes them as **live
+Six layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
+`matrix` (four parts of a whole, or the four cases of two choices, as quadrants), `cycle` (steps that repeat, as a loop; see
+[Cycles](#cycles-sh-18)) and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows) (stages or steps in order). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it, and as the same drawing in native shapes everywhere
 else. A slide on either layout never turns into a stray bullet list: the arrangement has a second design of its own, drawn when
 PowerPoint's does not hold the entries.
@@ -62,19 +62,80 @@ outline (the top of a pyramid level is narrower than its base). The list's own s
 size below it. The arrangement fills its region, so the growth a lone list takes when it fills too little of the body (LH-48) is not the
 size it keeps. Centered lines are centered without the space they broke at, as PowerPoint wraps them.
 
+## Chevrons and flows
+
+Three more layouts draw a list of stages or steps in order (SH-17): `chevrons` (a row of chevrons, each leading into the next), `flow`
+(boxes joined by arrows in one row) and `vertical-flow` (the same as a column, beside the title). Each is a region's `arrangement` of the
+same name, with the same rules as a pyramid's: one list of one level, 1 to 8 short entries, one size for every node, never below the
+list's role size.
+
+```json
+{ "layout": "chevrons", "title": "How we work", "items": ["Plan", "Build", "Test", "Ship"] }
+```
+
+| | Chevrons (Basic Chevron Process, `chevron1`) | Flow (Basic Process, `process1`) | Vertical flow (Vertical Process, `process2`) |
+| --- | --- | --- | --- |
+| Frame | the region's cell | the region's cell | the region's cell |
+| Nodes | n chevrons of width w = s(n) W, height min(0.4 w, H), each 0.9 w after the last (the point of one in the notch of the next), the row centered | n boxes of width w = s(n) W, height min(0.6 w, H), each 1.4 w after the last, centered | n boxes of height h = s(n) H, width min(1.8 h, W), each 1.5 h below the last, centered |
+| Shape | DrawingML `chevron` at its default adjustment (the point half the height deep) | `roundRect` at adjustment 10000 | the same |
+| Arrows | none | a `rightArrow` (stem 0.6 of its height, the default head) 0.212 w long and 0.248 w tall, 0.1 w after the box before it, on the frame's middle | a `rightArrow` turned 90 degrees, 0.45 h wide and 0.375 h long, in the middle of the gap |
+| Text rectangle | the chevron's own, between its notch and its point | the rounded rectangle's own | the same |
+| Text margin | 0.315 of the font size at the start, 0.105 on the other sides | 0.3 of the font size on every side | the same |
+| Look | every chevron in the primary with a 1.5 pt outline in the background color | the boxes as the chevrons; the arrows in the primary lightened 40% (`lumMod 60000`, `lumOff 40000`), without an outline | the same |
+
+PowerPoint fits these layouts with a binary search on one scale and keeps the last step that fits, so a node is not the closed form
+W / (0.9 n + 0.1) wide but a multiple of 1/8192 of the frame that depends only on the node count: s(n) (core `SMART_ART_SCALES`) is, in
+1024ths of the frame, 1024, 538, 365.5, 276.5, 222.5, 186, 160 and 140.25 for 1 to 8 chevrons, 1024, 426.5, 269, 196.75, 155, 128,
+108.875 and 94.75 for boxes in a row, and 1024, 409.5, 256, 186, 146.25, 120.375, 102.375 and 89 (of the frame's height) for boxes in a
+column. Two chevrons at 800 pt are 420.31 pt wide where the closed form gives 421.05. One node squeezed by the other side of the frame
+(a chevron in a frame less than 0.4 times as tall as wide) is 1023/1024 of the frame and as tall as it. The COM sweep measured 1 to 10
+nodes of each in 20 frames from 250 x 120 to 800 x 540 pt; core places every node and arrow within 0.0001 pt of PowerPoint in all of them
+but those where PowerPoint's 8 pt test letter did not fit a node (a node a few points tall), whose text made the node grow.
+
+PowerPoint's design is drawn where it holds the entries at the list's size and lies in the [domain](#the-domain); else OPF's own design
+of the arrangement, filling the region:
+
+OPF's design keeps PowerPoint's proportions, so the two read as one family: a chevron 0.9 widths after the last (its point at
+most 0.2 of its width deep), a box 0.4 widths after the last with PowerPoint's arrow (0.212 x 0.248 of a box's width) in the room, a
+vertical box half its height below the last with a down arrow 0.45 x 0.375 of its height. The entries go into one to four rows (a
+vertical flow: columns), whichever holds the text largest (one line on a tie), as evenly as possible, the longer lines first. The text
+is one size for every node, the largest from 1.5 times the list's role size down to the role size at which every node holds its entry;
+then every node takes the height that text needs with its margins (0.15 em above and below a box's text; PowerPoint's proportion at
+least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
+holds the entries at the list's size does OPF draw a compact form of the same design (rooms of two gaps, the arrow 0.6 of the
+room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row spans the region: a row of fewer entries widens them (a
+column of fewer lengthens them).
+
+- **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
+  at the left, full width, so the points carry the order;
+- **flow**: the rows snake: the second runs right to left under the first, joined by a down arrow under the end where the first stops,
+  the third runs left to right again, and so on;
+- **vertical flow**: the columns snake the same way: the second runs bottom to top, joined by a right arrow at the bottom.
+
+A right-to-left deck mirrors the designs: the first chevron or box is at the right, the chevrons point left (`flipH`) and the arrows
+turn.
+
+Two or more list blocks in the region are the entries themselves, as SH-18 draws them for a cycle: each block on a card of OPF's
+chevrons or boxes (the card neutral and its border), with the arrows between them, its list kept with its markers, start-aligned and
+at one size for all, the largest from 1.5 times the role size at which every card holds its list without breaking a word; the cards
+then take the height of the tallest list. Where no row or column holds them, a grid of cards does (`opf/arrangement-adapted`), and
+where nothing does, the blocks keep the region's composition, which pagination splits. A SmartArt node holds no list, so these are
+native shapes, with `pptx/smartart-unavailable` saying so.
+
 ## In PowerPoint
 
 `toPptx(deck, { smartArt })` (CLI `--smart-art <live|shapes>`) takes the first that fits, as the owner decided for SmartArt:
 
 1. **Live SmartArt** (`"live"`, the default), for PowerPoint's design where the instance lies in the domain below. The slide holds a `p:graphicFrame` of the
    diagram (`dgm:relIds`) inside an `mc:AlternateContent` whose `mc:Fallback` is OPF's picture of it ([in other apps](#in-other-apps)), and the package:
-   - the data model (`ppt/diagrams/dataN.xml`): the `doc` point names the layout (`loTypeId` pyramid1 or matrix3) and OPF's own quick
+   - the data model (`ppt/diagrams/dataN.xml`): the `doc` point names the layout (`loTypeId` pyramid1, matrix3, chevron1, process1 or process2) and OPF's own quick
      style and colors (`qsTypeId` `urn:openpresentation.org/opf/smartart/quickstyle/flat`, `csTypeId`
      `urn:openpresentation.org/opf/smartart/colors/primary`); one point per entry, marked `custT="1"` so PowerPoint keeps the run size
      (and sets the text margins from it) instead of fitting the text again; runs with OPF's size, typeface and language; each paragraph
      centered at OPF's line pitch with no space before or after; one `cxn` per entry from the doc point, in entry order;
-   - OPF's colors and quick style parts, whose style labels cover every label the two layouts use (`node0`, `node1`, `bgShp`, `revTx`
-     and the transition labels: a label a part leaves out renders black), in the theme's scheme colors, so a theme change in PowerPoint
+   - OPF's colors and quick style parts, whose style labels cover every label the five layouts use (`node0`, `node1`, `bgShp`, `revTx`
+     and the transition labels: a label a part leaves out renders black; `sibTrans2D1`, a flow's arrows, is the primary lightened 40%
+     without a line), in the theme's scheme colors, so a theme change in PowerPoint
      recolors the SmartArt;
    - a drawing part built from OPF's geometry (`ppt/diagrams/drawingN.xml`), for readers that show the cached shapes;
    - **no layout part.** OPF never writes a SmartArt layout definition. `r:lo` is empty, and PowerPoint resolves its built-in layout
@@ -85,7 +146,8 @@ size it keeps. Centered lines are centered without the space they broke at, as P
    default in Node is opf-render's; a browser passes `svgRasterizer`). Without either the arrangement is written as native shapes and
    `smartart-unavailable` says so.
 2. **Native shapes**: OPF's design, a card grid, PowerPoint's design outside the domain, and everything with `"shapes"`. The diamond and
-   the nodes are presets (`diamond`, `trapezoid` with core's adjustment, `roundRect`) at core's boxes, under the list's measured lines,
+   the nodes are presets (`diamond`, `trapezoid` with core's adjustment, `roundRect`; SH-17: `chevron` with core's adjustment, mirrored
+   with `flipH` in a right-to-left deck, and a flow's arrows as `rightArrow` with core's two adjustments, turned with `rot`) at core's boxes, under the list's measured lines,
    tagged `OPF_ARRANGEMENT_V1`. OPF's design and PowerPoint's outside the domain report the info finding `pptx/smartart-unavailable`
    with the reason (`reason` in the diagnostic); a card grid reports core's `arrangement-adapted`.
 
@@ -179,6 +241,36 @@ box and is not SmartArt's; at the sizes of SH-07's diagram labels it is under th
 compares the SmartArt with the native export, and the preview offset is recorded in the gate table. The evidence (the gate table, the
 preview | PowerPoint | native export sheets and the COM records) is in the SH-09 build folder of the shapes program.
 
+### The domain and the gate of chevrons and flows
+
+The SH-17 sweep measured PowerPoint's own layout first (`AddSmartArt` through COM, 1 to 10 nodes in 20 frames per layout, the fitted
+model above), then ran the gate above on OPF's exports: chevrons, a flow and a vertical flow of 1 to 8 entries, short, medium and long,
+on 16:9, 4:3 and 1:1 slides, and an Arabic and a Japanese deck of each, 222 decks, each exported live and as native shapes and drawn by
+PowerPoint. The domain (core `SMART_ART_DOMAIN`) is what passed:
+
+| | Chevrons | Flow | Vertical flow |
+| --- | --- | --- | --- |
+| Entries | 1 to 6 (7 and 8 never fitted the list's size in PowerPoint's design) | 1 to 6 | 1 to 4 |
+| Frame proportions | 1.1 to 2.3 (the 16:9, 4:3 and 1:1 slides gave 2.26, 1.64 and 1.17) | the same | 0.55 to 1.2 (the region beside the title: 1.13, 0.81 and 0.58) |
+| Fill | no entry's lines more than 95% of its node's text height (less margins): PowerPoint lays a box nearly full of text out again, in the first pass at 0.969 and 0.996 of the height (node rectangles 0.22 and 5.3 pt off), while every box at 0.95 or less matched | the same | the same |
+| Ink | the entries' text (each line's width times the size) at most 8% of the frame: PowerPoint sets a SmartArt's lines up to a pixel from where it sets OPF's native text (the same text in both), which in a frame dense with large text passes SH-07's mean-difference gate no longer (every first-pass failure of that check was at 0.082 or more) | the same | the same |
+| Lines, text | as the pyramid's: at most 2 lines an entry and 6 in all, breaks that hold within 4% of the width, Latin left-to-right text with bold, italic, underline or strike only | the same | the same |
+
+In the first pass, before the fill and ink limits, 88 decks drew PowerPoint's design live; every node lay exactly where core lays it
+(0.000 pt) at core's size in 81, and 74 passed every check. The seven laid out again had nearly full text (the fill limit), and the
+seven others that drew the SmartArt more than a mean of 1 from the native export were dense with large text (the ink limit). With the domain in
+place: 63 decks draw live SmartArt, every one passing (node rectangles and arrows within 0.000 pt of core, sizes equal, no visible
+difference in the shapes, within SH-07's gate of the native export), 151 draw OPF's own design and 8 stay a list (7 or 8 long chevrons and 8 long boxes on the 1:1 slide, and vertical flows of 6 to 8 long entries on the 4:3 and
+1:1 slides, which no design holds at the list's size; `opf/arrangement-adapted` says so). Every native-shape instance PowerPoint draws as the preview
+does: no visibly different block in the shapes, a mean difference of at most 2.7 outside the text (the outlines' antialiasing). The
+Arabic and Japanese decks are OPF's design, as for the pyramid and matrix.
+
+COM also showed, on two live instances of each (short and medium entries): `HasSmartArt`, the layout's name, every entry a node of
+`AllNodes`; a node's text edited in PowerPoint keeps OPF's size in every node and every node rectangle; Change Layout to Basic Block List
+keeps the nodes. With its `mc:Choice` requiring an unknown namespace, PowerPoint draws SH-16's fallback picture of each (mean difference
+1.3 from the preview over the slide, about what it is for the live SmartArt). Import reads a Basic Chevron Process, Basic Process or
+Vertical Process that PowerPoint itself wrote back to the `chevrons`, `flow` or `vertical-flow` layout and its list, from the data model.
+
 ### The layout relationship
 
 The SH-09 spike found that PowerPoint resolves its built-in layout from the data model's `loTypeId` only when the package has no layout
@@ -271,9 +363,9 @@ shapes program.
 
 A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the slide, the list path, the arrangement, the authored list
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
-Pyramid, Basic Matrix or Basic Cycle that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
+Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
 entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
-`pyramid`, `matrix` or `cycle` layout, with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
+`pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
 SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in which only the fallback picture survived (an app without
 SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its

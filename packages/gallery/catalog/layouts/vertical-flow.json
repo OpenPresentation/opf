@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "vertical-flow",
+  "name": "Vertical flow",
+  "summary": "Steps in order, as boxes joined by arrows in a column beside the title.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "row",
+  "regions": [
+    {
+      "name": "title",
+      "size": 2
+    },
+    {
+      "name": "stages",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "vertical-flow",
+      "size": 3
+    }
+  ],
+  "description": "Show 1 to 8 steps that follow one another from top to bottom, each a box with an arrow to the next, beside the title. Write one short list entry per step, in order.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/vertical-flow.svg"
+  }
+}

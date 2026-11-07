@@ -11,9 +11,9 @@ test('layout summaries derive content and headings from template regions', () =>
   assert.match(layoutStructure(gallery.layouts['chart-beside']), /chart \(none: chart, diagram\)/);
 });
 
-test('all 33 gallery layouts validate and report their body region counts', () => {
-  assert.equal(Object.keys(gallery.layouts).length, 33);
-  assert.equal(catalogIndexes.layouts.records.length, 33);
+test('all 36 gallery layouts validate and report their body region counts', () => {
+  assert.equal(Object.keys(gallery.layouts).length, 36);
+  assert.equal(catalogIndexes.layouts.records.length, 36);
   for (const [id, record] of Object.entries(gallery.layouts)) {
     assert.equal(validateCatalogRecord('layouts', { ...record, id, $schema: 'https://openpresentation.org/schema/opf-layout/v2' }).valid, true, id);
     assert.equal(layoutContent(record).count, layoutTemplate(record).regions.length, id);

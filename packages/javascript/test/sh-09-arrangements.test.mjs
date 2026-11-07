@@ -48,9 +48,11 @@ test('a matrix is PowerPoint\'s Basic Matrix: four rounded squares in a centered
   }
   // roundRect's text rectangle: inset by 0.29289 of its 16667 corner (PowerPoint's txXfrm: 8 pt on a 163.8 pt quadrant).
   near(nodes[0].textBox.x - nodes[0].box.x, .29289 * .16667 * 163.8, 'quadrant text inset');
-  assert.deepEqual(SMART_ART_LAYOUTS, { pyramid: 'urn:microsoft.com/office/officeart/2005/8/layout/pyramid1', matrix: 'urn:microsoft.com/office/officeart/2005/8/layout/matrix3', cycle: 'urn:microsoft.com/office/officeart/2005/8/layout/cycle2' });
-  assert.deepEqual(ARRANGEMENT_MAX, { pyramid: 8, matrix: 4, cycle: 8 });
-  assert.deepEqual(ARRANGEMENT_TEXT_MARGIN, { pyramid: .1, matrix: .3, cycle: .1 });
+  // The pyramid's and the matrix's entries (later items add their own arrangements).
+  const own = record => ({ pyramid: record.pyramid, matrix: record.matrix });
+  assert.deepEqual(own(SMART_ART_LAYOUTS), { pyramid: 'urn:microsoft.com/office/officeart/2005/8/layout/pyramid1', matrix: 'urn:microsoft.com/office/officeart/2005/8/layout/matrix3' });
+  assert.deepEqual(own(ARRANGEMENT_MAX), { pyramid: 8, matrix: 4 });
+  assert.deepEqual(own(ARRANGEMENT_TEXT_MARGIN), { pyramid: .1, matrix: .3 });
 });
 
 test('a region\'s arrangement is read from the layout record, and the gallery has a pyramid and a matrix layout', () => {
@@ -152,7 +154,7 @@ test('the SmartArt domain names why an instance stays native shapes', () => {
   assert.equal(smartArtUnavailable(candidate()), undefined);
   // The domain the PowerPoint sweep passed (docs/smartart.md): up to 5 levels or 4 quadrants, the compared proportions, Latin text, at
   // most 2 lines an entry and 6 in all, and line breaks that hold.
-  assert.deepEqual(SMART_ART_DOMAIN.count, { pyramid: 5, matrix: 4, cycle: 8 });
+  assert.deepEqual({ pyramid: SMART_ART_DOMAIN.count.pyramid, matrix: SMART_ART_DOMAIN.count.matrix }, { pyramid: 5, matrix: 4 });
   assert.match(smartArtUnavailable(candidate({ count: 6 })), /outside the compared 1 to 5/);
   assert.match(smartArtUnavailable(candidate({ frame: { x: 0, y: 0, width: 1500, height: 500 } })), /proportions \(3\.00 : 1\)/);
   assert.equal(smartArtUnavailable(candidate({ kind: 'matrix', frame: { x: 0, y: 0, width: 600, height: 560 } })), undefined);

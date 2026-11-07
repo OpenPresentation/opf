@@ -987,7 +987,7 @@ function renderSteps(bound, options) {
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
 }
-// SH-09: core's pyramids and matrices (geometry.arrangements; SH-18: cycles, circles or rounded rectangles with an arrow after each), under the text of their entries, as the PPTX export draws them (live
+// SH-09: core's pyramids and matrices (geometry.arrangements; SH-18: cycles, circles or rounded rectangles with an arrow after each; SH-17: chevrons and flows), under the text of their entries, as the PPTX export draws them (live
 // SmartArt or native shapes): the matrix's diamond in the primary lightened 80%, then every node (an empty quadrant too) in the primary with
 // a centered outline in the background color, core's lineWidth wide. A pyramid level is its trapezoid's polygon (the apex a triangle), a
 // quadrant a rounded square of core's corner radius (DrawingML roundRect's circular corners). With trace each shape names the entry it

@@ -99,6 +99,21 @@
       "bytes": 3729
     },
     {
+      "id": "chevrons",
+      "file": "chevrons.svg",
+      "bytes": 2856
+    },
+    {
+      "id": "flow",
+      "file": "flow.svg",
+      "bytes": 3089
+    },
+    {
+      "id": "vertical-flow",
+      "file": "vertical-flow.svg",
+      "bytes": 2689
+    },
+    {
       "id": "metrics",
       "file": "metrics.svg",
       "bytes": 3885

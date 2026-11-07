@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "flow",
+  "name": "Flow",
+  "summary": "Steps in order, as boxes joined by arrows in one row.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "stages",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "flow"
+    }
+  ],
+  "description": "Show 1 to 8 steps that follow one another, each a box with an arrow to the next. Write one short list entry per step, in order.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/flow.svg"
+  }
+}
