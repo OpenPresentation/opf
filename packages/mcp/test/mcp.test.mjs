@@ -494,8 +494,9 @@ describe("the bundled sources", () => {
 		// diagrams, in docs/shapes.md, docs/diagrams.md and the schema reference, and the integration's one shapes page) is 1,158,205 bytes,
 		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB). SH-09 (the pyramid and matrix layouts, live SmartArt, the
 		// arrangement-adapted rule) is 1,174,552 bytes. The OPF viewer's sections of docs/mcp.md (show_deck, the hosted mode, the .mcpb
-		// extension, fonts for a hosted viewer) add about 11 KB to that.
-		assert.ok(bytes < 1_190_000, `${bytes} bytes of documentation`);
+		// extension, fonts for a hosted viewer) add about 11 KB to that. SH-18 (the cycle layout and arrangement, list-block entries) is
+		// 1,197,594 bytes; the budget leaves room for SH-17's three linear arrangements (about 22 KB).
+		assert.ok(bytes < 1_225_000, `${bytes} bytes of documentation`);
 	});
 });
 

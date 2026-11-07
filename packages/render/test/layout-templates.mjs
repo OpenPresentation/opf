@@ -251,5 +251,5 @@ for (const id of Object.keys(layouts)) for (const alignment of Object.keys(ancho
   assert.ok(drawn, `${id}/${alignment}: actual aligned text was checked`);
   aligned++;
 }
-assert.equal(aligned, 96);
+assert.equal(aligned, 99);
 console.log(`Gallery2 alignment: ${aligned} registered layout/alignment cases preserve traced anchors.`);
