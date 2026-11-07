@@ -2,8 +2,9 @@
 # PowerPoint's object model (Windows, PowerPoint installed; no UI control). One slide per layout: a title ("Title Only" layout) and one
 # SmartArt graphic at 40, 110, 880 x 400 pt on a 960 x 540 pt slide, its nodes filled through SmartArt.Nodes. Beside the deck it writes
 # powerpoint-smartart.json (per slide: the layout's Id, Name and Category as PowerPoint reports them, and every node of AllNodes in
-# order with its Level, NodeType and text) and a 1280 x 720 PNG of each slide, PowerPoint's own drawing of each graphic.
-param([string]$Out = 'C:\opf-work\_supervisor\com-jobs\sh-08')
+# order with its Level, NodeType and text) and a 1280 x 720 PNG of each slide, PowerPoint's own drawing of each graphic. Each layout is
+# taken from the seed deck (`node test/fixtures/make-smartart-seeds.mjs`, opened read-only), slide k for spec k.
+param([string]$Out = 'C:\opf-work\_supervisor\com-jobs\sh-08', [string]$Seeds = 'C:\opf-work\_supervisor\com-jobs\sh-08\smartart-seeds.pptx')
 $ErrorActionPreference = 'Stop'
 # PowerPoint is single-instance: New-Object would attach to a running PowerPoint (someone's open session), and Quit would close it.
 if (Get-Process POWERPNT -ErrorAction SilentlyContinue) { Write-Host 'PowerPoint is already running; close it first. Nothing was done.'; exit 1 }
@@ -48,28 +49,24 @@ function Fill($node, $spec) {
 
 $ppt = New-Object -ComObject PowerPoint.Application
 $manifest = @()
-$pres = $null
+$pres = $null; $seed = $null
 try {
-  # SmartArtLayouts fills only while PowerPoint is visible (SH-09); minimized keeps it out of the way. The collection is read by index:
-  # PowerShell does not enumerate it.
   $ppt.Visible = -1; $ppt.WindowState = 2
-  $layouts = @()
-  for ($try = 0; $try -lt 20 -and $ppt.SmartArtLayouts.Count -lt 1; $try++) { Start-Sleep -Milliseconds 500 }
-  for ($i = 1; $i -le $ppt.SmartArtLayouts.Count; $i++) { $layouts += $ppt.SmartArtLayouts.Item($i) }
-  $manifest += [pscustomobject]@{layouts = $ppt.SmartArtLayouts.Count; first = @($layouts | Select-Object -First 8 | ForEach-Object { "$($_.Id) | $($_.Name)" })}
+  # The layouts come from the seed deck (make-smartart-seeds.mjs): this PowerPoint build gives scripts no Application.SmartArtLayouts
+  # list, but a graphic's SmartArt.Layout is a layout AddSmartArt takes. Seed slide k holds the layout of spec k.
+  $seed = $ppt.Presentations.Open($Seeds, -1, 0, -1)
   $pres = $ppt.Presentations.Add(-1)
   $pres.PageSetup.SlideWidth = 960; $pres.PageSetup.SlideHeight = 540
   $titleOnly = $pres.SlideMaster.CustomLayouts.Item(6)
-  # An id as PowerPoint reports it, or its last segment (`pyramid1`), so a prefix PowerPoint writes differently still matches.
-  $stem = { param($id) ([string]$id).Split('/')[-1] }
-  foreach ($spec in $specs) {
-    $layout = $null
-    if ($spec.id) {
-      $layout = $layouts | Where-Object { $_.Id -eq $spec.id } | Select-Object -First 1
-      if (-not $layout) { $want = & $stem $spec.id; $layout = $layouts | Where-Object { (& $stem $_.Id) -eq $want } | Select-Object -First 1 }
-    }
-    if (-not $layout) { $layout = $layouts | Where-Object { $_.Name -eq $spec.name } | Select-Object -First 1 }
-    if (-not $layout) { $manifest += [pscustomobject]@{name = $spec.name; error = "layout not found among $($layouts.Count)"}; continue }
+  for ($k = 0; $k -lt $specs.Count; $k++) {
+    $spec = $specs[$k]
+    $layout = $null; $seedNote = ''
+    try {
+      $seedSlide = $seed.Slides.Item($k + 1)
+      for ($s = 1; $s -le $seedSlide.Shapes.Count; $s++) { $candidate = $seedSlide.Shapes.Item($s); if ($candidate.HasSmartArt -eq -1) { $layout = $candidate.SmartArt.Layout; break } }
+      if (-not $layout) { $seedNote = 'the seed slide has no live SmartArt' }
+    } catch { $seedNote = $_.Exception.Message }
+    if (-not $layout) { $manifest += [pscustomobject]@{name = $spec.name; id = $spec.id; error = "no layout from the seed: $seedNote"}; continue }
     $slide = $pres.Slides.AddSlide($pres.Slides.Count + 1, $titleOnly)
     $slide.Shapes.Item(1).TextFrame.TextRange.Text = $spec.name
     $shape = $slide.Shapes.AddSmartArt($layout, 40, 110, 880, 400)
@@ -80,24 +77,24 @@ try {
     $titleResult = ''
     if ($spec.titles) {
       # Name and Title Organization Chart: the title box of a node, where the object model reaches it (recorded either way).
-      foreach ($node in @($sa.AllNodes)) {
-        $key = $node.TextFrame2.TextRange.Text
+      for ($n = 1; $n -le $sa.AllNodes.Count; $n++) {
+        $node = $sa.AllNodes.Item($n); $key = $node.TextFrame2.TextRange.Text
         if ($spec.titles.ContainsKey($key)) {
           try { $node.Shapes.Item(2).TextFrame2.TextRange.Text = $spec.titles[$key]; $titleResult += "$key=set;" } catch { $titleResult += "$key=$($_.Exception.Message);" }
         }
       }
     }
     $nodes = @()
-    foreach ($node in @($sa.AllNodes)) { $nodes += [pscustomobject]@{level = $node.Level; type = $node.Type; text = $node.TextFrame2.TextRange.Text; shapes = $node.Shapes.Count} }
+    for ($n = 1; $n -le $sa.AllNodes.Count; $n++) { $node = $sa.AllNodes.Item($n); $nodes += [pscustomobject]@{level = $node.Level; type = $node.Type; text = $node.TextFrame2.TextRange.Text; shapes = $node.Shapes.Count} }
     $number = $slide.SlideIndex
     $slide.Export((Join-Path $Out ("slide{0:D2}.png" -f $number)), 'PNG', 1280, 720)
-    $manifest += [pscustomobject]@{slide = $number; name = $spec.name; id = $layout.Id; layoutName = $layout.Name; category = $layout.Category; groupItems = $shape.GroupItems.Count; titles = $titleResult; nodes = $nodes}
+    $manifest += [pscustomobject]@{slide = $number; name = $spec.name; id = $sa.Layout.Id; layoutName = $sa.Layout.Name; category = $sa.Layout.Category; groupItems = $shape.GroupItems.Count; titles = $titleResult; nodes = $nodes}
   }
   $pres.SaveAs((Join-Path $Out 'powerpoint-smartart.pptx'), 24)
 } finally {
   $manifest | ConvertTo-Json -Depth 6 | Out-File -Encoding utf8 (Join-Path $Out 'powerpoint-smartart.json')
-  # Close only the presentation this script added; quit only when no other presentation is open.
-  if ($pres) { try { $pres.Saved = -1; $pres.Close() } catch {} }
+  # Close only the presentations this script opened or added; quit only when no other presentation is open.
+  foreach ($own in @($pres, $seed)) { if ($own) { try { $own.Saved = -1; $own.Close() } catch {} } }
   if ($ppt.Presentations.Count -eq 0) { $ppt.Quit() }
   [System.Runtime.InteropServices.Marshal]::ReleaseComObject($ppt) | Out-Null
 }
