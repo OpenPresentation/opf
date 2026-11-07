@@ -13,7 +13,7 @@ import {spawnSync} from 'node:child_process';
 import {cp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {consumerDependencies, assertConsumerLock, assertInstalledConsumerPackage} from './consumer-dependencies.mjs';
+import {consumerDependencies, assertConsumerLock, assertInstalledConsumerPackage, withoutOpfLockEntries} from './consumer-dependencies.mjs';
 import {registryPlan} from '../registry-plan.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -71,7 +71,13 @@ manifest.dependencies = Object.fromEntries(Object.entries({...manifest.dependenc
 
 await rm(target, {recursive: true, force: true});
 await mkdir(target, {recursive: true});
-for (const file of ['package-lock.json', 'tsconfig.json', 'tsconfig.bundler.json', 'tsconfig.emit.json']) await cp(path.join(template, file), path.join(target, file));
+for (const file of ['tsconfig.json', 'tsconfig.bundler.json', 'tsconfig.emit.json']) await cp(path.join(template, file), path.join(target, file));
+// The committed lockfile is the base for everything that is not an OPF package. Its OPF entries are dropped: they pin the set the
+// baseline was last refreshed on (the 0.25 line), and npm keeps a locked node whose own peers still match even when the manifest asks
+// for a newer one, so the old editor's `@openpresentation/opf@^0.25.0` collided with the set's (ERESOLVE, slow-checks #911). With
+// the entries gone npm resolves the whole OPF set fresh, from one lockstep release.
+const baseLock = withoutOpfLockEntries(JSON.parse(await readFile(path.join(template, 'package-lock.json'), 'utf8')));
+await writeFile(path.join(target, 'package-lock.json'), `${JSON.stringify(baseLock, null, 2)}\n`);
 await cp(path.join(template, 'src'), path.join(target, 'src'), {recursive: true});
 await writeFile(path.join(target, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 // Registry tarballs only: no lifecycle scripts. The committed lockfile is the base: entries that still match stay as pinned and

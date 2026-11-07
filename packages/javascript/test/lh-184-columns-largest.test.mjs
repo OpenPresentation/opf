@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { gallery } from '@openpresentation/gallery';
 import { composeSlide } from '../dist/composition.js';
 
 // LH-184: `columns: "auto"` keeps the largest text. When no count fits at the starting size it takes the count with the
@@ -27,4 +28,11 @@ test('a list that fits at the starting size in two columns still takes two', () 
 test('a fixed count is used as written', () => {
   const items = Array.from({ length: 14 }, (_, i) => `Point ${i + 1}: ${words(10)}`);
   assert.equal(sizeOf({ title: 'x', items, columns: 3 }).columns, 3);
+});
+
+test('the FAQ layout keeps its three columns of ten described questions, not two columns that overflow', () => {
+  const items = Array.from({ length: 10 }, (_, i) => ({ text: `Question ${i + 1}?`, description: `The answer to question ${i + 1}, in one sentence.` }));
+  const result = composeSlide({ layout: 'faq', title: 'Questions', blocks: [{ items }] }, { layout: gallery.layouts.faq });
+  const list = result.items.find(item => item.field === 'items');
+  assert.equal(list.listColumns?.length, 3);
 });
