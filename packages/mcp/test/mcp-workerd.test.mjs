@@ -153,3 +153,36 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 		assert.equal(listed.structuredContent.total, 0);
 	});
 });
+
+describe("a site that hosts the deck view (deckApp with siteFontFiles)", () => {
+	let site;
+	let siteWorker;
+	before(async () => {
+		site = await bundleWorker("mcp-worker-site.mjs");
+		if (available) siteWorker = await startWorker(site.text);
+	});
+	after(async () => siteWorker?.stop());
+
+	test("opens the view and reads its fonts from the site's own files", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
+		const post = async (method, params) => {
+			const response = await fetch(siteWorker.url, { method: "POST", headers: { "content-type": "application/json", accept: "application/json, text/event-stream" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+			const message = JSON.parse(await response.text());
+			assert.equal(message.error, undefined, JSON.stringify(message.error));
+			return message.result;
+		};
+		const tools = (await post("tools/list", {})).tools;
+		assert.deepEqual(tools.find((tool) => tool.name === "show_deck")._meta.ui, { resourceUri: "ui://opf/deck" });
+		assert.deepEqual(tools.find((tool) => tool.name === "read_font_file")._meta.ui, { visibility: ["app"] });
+		assert.equal((await post("resources/read", { uri: "ui://opf/deck" })).contents[0].text, "<!doctype html><title>OPF deck</title>");
+		const shown = await post("tools/call", { name: "show_deck", arguments: { document: { name: "Hosted", slides: [{ title: "A" }] } } });
+		assert.equal(shown.structuredContent.checked, true, "the hosted server keeps its quick check");
+		const read = async (file) => {
+			const result = await post("tools/call", { name: "read_font_file", arguments: { file } });
+			return result.isError ? JSON.parse(result.content[0].text).code : atob(result.structuredContent.bytes);
+		};
+		assert.equal(await read("embedded/Carlito-700-normal.ttf"), "font:/opf-fonts/base/carlito/Carlito-Bold.ttf");
+		assert.equal(await read("fonts/intos/Intos-Regular.ttf"), "font:/opf-fonts/lazy/fonts/intos/Intos-Regular.ttf");
+		assert.equal(await read("script-fonts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf"), "font:/opf-fonts/scripts/noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf");
+		assert.equal(await read("fonts/../../etc/passwd.ttf"), "unknown-font");
+	});
+});

@@ -295,6 +295,8 @@ const INSTRUCTIONS_VIEWER = `OPF (Open Presentation Format) is a JSON format for
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
 To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context.`;
 
+export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts.js";
+
 /** The `ui://` resource of the deck view and the MIME type of an MCP App (SEP-1865). */
 export const DECK_APP_URI = "ui://opf/deck";
 export const MCP_APP_MIME_TYPE = "text/html;profile=mcp-app";

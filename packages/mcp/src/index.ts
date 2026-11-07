@@ -25,8 +25,11 @@ export {
 	type OpfMcpSources,
 	type ReadFontFile,
 	type ResolvedSchema,
+	type SiteFontsOptions,
 	createOpfMcpServer,
+	deckFontFile,
 	resolveSchema,
+	siteFontFiles,
 } from "./server.js";
 
 declare const OPF_CORE_VERSION: string;

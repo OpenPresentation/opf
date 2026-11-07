@@ -7,7 +7,7 @@ import path from "node:path";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { type ValidateOptions, type ValidationReport, ensureIcons } from "@openpresentation/opf";
 import { Reporter, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
-import { type DeckFormat, type ReadFontFile, createOpfServer } from "./index.js";
+import { type DeckFormat, type ReadFontFile, createOpfServer, deckFontFile } from "./index.js";
 
 declare const MCP_VERSION: string;
 
@@ -35,9 +35,6 @@ export async function checkDeckText(raw: string, format: DeckFormat, options: Va
 	}
 }
 
-/** The file name the deck view asks for an eager Office face by (scripts/build-app.mjs names them the same way). */
-const embeddedFontFile = (face: { family: string; weight: number; italic?: boolean }) => `embedded/${face.family.replace(/[^A-Za-z0-9]+/g, "-")}-${face.weight}-${face.italic ? "italic" : "normal"}.ttf`;
-
 type FontsNode = typeof import("@openpresentation/opf-render/fonts-node");
 
 /**
@@ -61,7 +58,7 @@ export function installedFontFiles(): ReadFontFile {
 		const render = await load();
 		if (!render) return undefined;
 		if (file.startsWith("embedded/")) {
-			const face = render.office.registry.embeddedFonts.find((item) => embeddedFontFile(item) === file);
+			const face = render.office.registry.embeddedFonts.find((item) => deckFontFile(item) === file);
 			return face ? new Uint8Array(Buffer.from(face.dataUrl.slice(face.dataUrl.indexOf(",") + 1), "base64")) : undefined;
 		}
 		if (file.startsWith("fonts/")) {
