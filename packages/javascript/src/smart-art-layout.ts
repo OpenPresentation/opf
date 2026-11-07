@@ -173,7 +173,7 @@ function instances(children: readonly LayoutChild[], count: number, point: Insta
   return out;
 }
 
-const valueOf = (constraint: LayoutConstraint, frame: Box, fontSize: number) => constraint.refType === 'w' ? (constraint.fact ?? 1) * frame.width
+const constraintValue = (constraint: LayoutConstraint, frame: Box, fontSize: number) => constraint.refType === 'w' ? (constraint.fact ?? 1) * frame.width
   : constraint.refType === 'h' ? (constraint.fact ?? 1) * frame.height : constraint.refType === 'primFontSz' ? (constraint.fact ?? 1) * fontSize
     : (constraint.val ?? 0) / MM_PER_PX;
 
@@ -191,7 +191,7 @@ export function evaluateLayoutDefinition(definition: LayoutDefinition, frame: Bo
   for (const entry of placed) {
     const value: Partial<Record<'l' | 't' | 'w' | 'h', number>> = {};
     for (const constraint of root.constraints) if (constraint.for === 'ch' && constraint.forName === entry.instance.def.name && ['l', 't', 'w', 'h'].includes(constraint.type))
-      value[constraint.type as 'l' | 't' | 'w' | 'h'] = valueOf(constraint, frame, 0);
+      value[constraint.type as 'l' | 't' | 'w' | 'h'] = constraintValue(constraint, frame, 0);
     if (entry.own.alg?.type === 'conn') continue;
     if (value.l === undefined || value.t === undefined || value.w === undefined || value.h === undefined) throw new Error(`layout node ${entry.instance.def.name} has no box`);
     entry.box = { x: frame.x + value.l, y: frame.y + value.t, width: value.w, height: value.h };
@@ -216,7 +216,7 @@ export function evaluateLayoutDefinition(definition: LayoutDefinition, frame: Bo
       if (!source?.box || !target?.box || params.begPts !== 'ctr' || params.endPts !== 'ctr') throw new Error(`connector ${def.name} does not join two node centers`);
       const p = [source.box.x + source.box.width / 2, source.box.y + source.box.height / 2], q = [target.box.x + target.box.width / 2, target.box.y + target.box.height / 2];
       const length = Math.hypot(q[0]! - p[0]!, q[1]! - p[1]!), ux = (q[0]! - p[0]!) / length, uy = (q[1]! - p[1]!) / length;
-      const own1 = (type: LayoutConstraint['type']) => { const c = own.constraints.find(entry1 => entry1.type === type && !entry1.for); return c ? valueOf(c, frame, 0) : 0; };
+      const own1 = (type: LayoutConstraint['type']) => { const c = own.constraints.find(entry1 => entry1.type === type && !entry1.for); return c ? constraintValue(c, frame, 0) : 0; };
       const start = own1('begPad'), drawn = length - start - own1('endPad'), thick = own1('h'), at = start + drawn / 2;
       box = { x: p[0]! + ux * at - drawn / 2, y: p[1]! + uy * at - thick / 2, width: drawn, height: thick };
       rotation = ((Math.atan2(uy, ux) * 180 / Math.PI) % 360 + 360) % 360;

@@ -440,8 +440,11 @@ layout's name and description, category as written, every entry a node of `AllNo
 rectangle; an added node takes the next count's table and OPF's size (`primFontSz`; without it PowerPoint's 36 pt), deleted nodes the
 smaller count's; Change Layout to Basic Block List and back (to the layout object read before) restores OPF's layout with every node
 where it was. A file saved again by PowerPoint keeps the layout part, rewritten but the same definition (PowerPoint adds empty sample,
-style and color data with `useDef`, leaves out attributes at their schema defaults and reorders attributes; normalized, the part equals
-OPF's), the same `uniqueId` and the same geometry on reopening; it drops SH-16's wrapper as for every SmartArt. A definition PowerPoint
+style and color data with `useDef`, leaves out attributes at their schema defaults, reorders attributes and writes the constraint factors
+to four decimals, a change of at most 0.00005 of the frame; normalized, the part equals OPF's), the same `uniqueId` and the same node
+rectangles on reopening (five designs checked); it drops SH-16's wrapper as for every SmartArt. OPF imports such a file back to the same
+arrangement and list. With the `mc:Choice` requiring a namespace PowerPoint does not know, PowerPoint draws SH-16's fallback picture
+(mean difference 1.3 to 1.6 from the preview over the slide, as for the other live SmartArt). A definition PowerPoint
 cannot evaluate (a connector to a node of another name, in a build of this item) made PowerPoint take the `mc:Fallback` picture.
 
 ### The domain of OPF's layouts
@@ -469,12 +472,15 @@ sizes, no visible shape difference from the preview, within SH-07's native gate 
 
 With the domain open (every OPF design live), 310 decks drew OPF's layout live. In the first pass PowerPoint laid 261 of them out where
 OPF's interpreter does; the other 49 were drawn with the tables of an earlier deck of the same `uniqueId` (the session's cache, hence the
-digest). With the digest every one of the 310 laid out within 0.1 pt of the interpreter (largest difference GATE_RECT pt, arrows turned
+digest). With the digest every one of the 310 laid out within 0.1 pt of the interpreter (largest difference 0.000 pt, arrows turned
 the same) at OPF's size. The pixel checks then found what the domain keeps out: with the text centered in its node, PowerPoint set the
 lines up to a pixel off (mean difference from the native export up to 6 in dense frames); anchoring the text at OPF's first line halved
 that, and of the 292 Latin instances every one at a text density of 7.5% or less with stable breaks passed (30), while above it some did
-not (a mean difference of 1.01 at 8%, up to 3.3 in the densest), and every Japanese instance did not (text 11 px off). With the domain,
-GATE_FINAL. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
+not (a mean difference of 1.01 at 8%, up to 3.3 in the densest), and every Japanese instance did not (text 11 px off). With the domain, 30
+decks draw OPF's layout live and every one passes (node rectangles within 0.000 pt of the interpreter, sizes equal, no visible shape
+difference, within SH-07's gate of the native export: a mean difference of at most 0.8 at a quarter size and 0.94 at full size, the
+text's ink within 1.08 px); PowerPoint's built-in layouts draw their 107 live decks as before; OPF's design draws 266 decks and a card
+grid 43 as native shapes, and 32 stay a list. The evidence (the gate table, sheets of preview, PowerPoint live and PowerPoint's drawing of the native export, labelled with
 the design and the layout that drew it, and the COM records) is in the SH-19 folder of the shapes program.
 
 ## Import

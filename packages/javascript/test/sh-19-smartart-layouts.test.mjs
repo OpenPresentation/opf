@@ -21,7 +21,7 @@ test('the interpreter draws what PowerPoint drew for OPF-written definitions (CO
     assert.equal(drawn.length, measured.length, `${id} ${W}x${H} n=${count}: shapes`);
     drawn.forEach((shape, index) => {
       const [l, t, w, h, rot] = measured[index], box = [shape.box.x, shape.box.y, shape.box.width, shape.box.height].map(value => value * PT);
-      [l, t, w, h].forEach((value, k) => assert.ok(Math.abs(box[k] - value) <= .001, `${id} ${W}x${H} n=${count} shape ${index + 1}: ${box[k]} is not ${value}`));
+      [l, t, w, h].forEach((value, k) => { assert.ok(Math.abs(box[k] - value) <= .001, `${id} ${W}x${H} n=${count} shape ${index + 1}: ${box[k]} is not ${value}`); });
       assert.ok(Math.abs((((shape.rotation - rot) % 360) + 540) % 360 - 180) <= .001, `${id} shape ${index + 1}: rotation ${shape.rotation} is not ${rot}`);
       shapes += 1;
     });
@@ -66,7 +66,7 @@ test('every OPF design comes back from its own definition at every count, both d
       const got = layoutArrangement(evaluateLayoutDefinition(definition, area, k));
       assert.equal(got.nodes.length, k, `${design} ${k}: nodes`);
       assert.equal(got.arrows.length, want.arrows?.length ?? 0, `${design} ${k}: arrows`);
-      const near = (a, b, what) => ['x', 'y', 'width', 'height'].forEach(key => assert.ok(Math.abs(a[key] - b[key]) <= .01, `${design} ${k} ${what}: ${key} ${a[key]} is not ${b[key]}`));
+      const near = (a, b, what) => { for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(a[key] - b[key]) <= .01, `${design} ${k} ${what}: ${key} ${a[key]} is not ${b[key]}`); };
       want.nodes.forEach((node, i) => { near(got.nodes[i].box, node.box, `node ${i}`); near(got.nodes[i].textBox, node.textBox, `text ${i}`); assert.equal(got.nodes[i].preset, node.preset); });
       (want.arrows ?? []).forEach((arrow, i) => { near(got.arrows[i].box, arrow.box, `arrow ${i}`); assert.ok(Math.abs((((got.arrows[i].rotation - arrow.rotation) % 360) + 540) % 360 - 180) < .01); });
     }
@@ -83,7 +83,7 @@ test('a composed OPF design carries the recipe of its definition, and the domain
   {
     assert.ok(arrangement.layout && OPF_LAYOUT_KIND[arrangement.layout.design] === 'cycle', JSON.stringify(arrangement.layout));
     const table = opfLayoutGeometry(arrangement.layout, arrangement.nodes.length);
-    arrangement.nodes.forEach((node, i) => assert.ok(Math.abs(node.box.x - table.nodes[i].box.x) < .01 && Math.abs(node.box.width - table.nodes[i].box.width) < .01, `node ${i} is the recipe's`));
+    arrangement.nodes.forEach((node, i) => { assert.ok(Math.abs(node.box.x - table.nodes[i].box.x) < .01 && Math.abs(node.box.width - table.nodes[i].box.width) < .01, `node ${i} is the recipe's`); });
   }
   // The domain the COM sweep passed (SMART_ART_OPF_DOMAIN): the designs and counts that passed, Latin text, two lines an entry, stable
   // breaks and the text density limit.
