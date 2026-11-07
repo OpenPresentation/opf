@@ -5969,6 +5969,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const fitShapeText = (shape: ComposedShape, value: unknown, textPath: string, minFontSize: number | undefined, sink: LayoutDiagnostic[]): TextFit | RichTextFit | undefined => {
     if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) return undefined;
     const drawn = shape.textDirection === 'stacked' ? stackedText(value) : value;
+    // SH-11: a style with bold text (intense) is measured bold, as both engines draw it, so PowerPoint wraps it where the preview does.
+    if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
