@@ -23,6 +23,7 @@ const buildOrBuy = {
     ]),
   ],
 };
+const short = { title: 'Build or buy', blocks: [column('first', 'Why buy', [{ text: 'Live in 8 weeks', description: 'Faster start' }, { text: 'Predictable cost', description: 'Flat fee' }, { text: 'Proven at scale', description: 'Reference customers' }]), column('second', 'Why build', [{ text: 'Full control', description: 'Our roadmap' }, { text: 'No seat fees', description: 'Flat cost' }, { text: 'Deeper integration', description: 'In the product' }])] };
 const lists = (result) => result.items.filter((item) => item.field === 'items');
 const heads = (result) => result.items.filter((item) => /\.blocks\.0\.text$/.test(item.path));
 const outer = (item) => item.frameBox ?? item.box;
@@ -36,8 +37,8 @@ test('LH-171: a short phrase is a row label, a sentence or a long phrase is not'
 });
 
 for (const direction of ['ltr', 'rtl']) {
-  test(`LH-171 (${direction}): both columns of a comparison draw their lists as ruled rows`, () => {
-    const result = composeSlide(buildOrBuy, { layout: layouts['two-column'], direction });
+  test(`LH-171 (${direction}): both columns of a comparison draw their lists as ruled rows (main ruled only the second)`, () => {
+    const result = composeSlide(short, { layout: layouts['two-column'], direction });
     const [first, second] = lists(result);
     assert.ok(first.text.rules?.length, 'the first column is ruled');
     assert.ok(second.text.rules?.length, 'the second column is ruled');
@@ -54,6 +55,12 @@ for (const direction of ['ltr', 'rtl']) {
     for (const list of [x, y]) assert.ok(list.box.y + list.text.height <= outer(list).y + outer(list).height + .01, 'the text stays in its card');
   });
 }
+
+test('LH-171: where the guard refuses rows, both columns keep the stacked list together', () => {
+  const result = composeSlide(buildOrBuy, { layout: layouts['two-column'] });
+  const forms = lists(result).map((item) => Boolean(item.text.rules?.length));
+  assert.equal(new Set(forms).size, 1, `forms ${forms}`);
+});
 
 test('LH-171: a lone list of short phrases keeps the stacked list (no sibling is ruled)', () => {
   const result = composeSlide({ title: 'Why buy', blocks: [{ items: buildOrBuy.blocks[0].blocks[1].items }] }, {});
