@@ -2179,8 +2179,7 @@
   "region stages 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items stages 57.6,193.6,1164.8,468.8 28px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item blocks.0.items stages 57.6,193.6,1164.8,468.8 29.3px cols=7"
  ],
  "chevrons 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -2465,7 +2464,7 @@
   "area title 57.6,57.6,456.3,290.4",
   "region stages 537.9,57.6,684.5,290.4 column 1",
   "item title - 57.6,110.1,456.3,185.4 38px",
-  "item blocks.0.items stages 537.9,57.6,684.5,290.4 16px",
+  "item blocks.0.items stages 537.9,57.6,684.5,290.4 16px cols=7",
   "item blocks.1.items - 57.6,372,273.2,290.4 16px",
   "item blocks.2.items - 354.8,372,273.2,290.4 16px",
   "item blocks.3.items - 652,372,273.2,290.4 16px",
@@ -2474,7 +2473,6 @@
   "diagnostic layout-unplaced blocks.2",
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4",
-  "diagnostic arrangement-adapted blocks.0.items",
   "diagnostic text-overflow blocks.1.items",
   "diagnostic text-overflow blocks.2.items",
   "diagnostic text-overflow blocks.3.items",
@@ -2484,7 +2482,7 @@
   "area title 57.6,57.6,456.3,290.4",
   "region stages 537.9,57.6,684.5,290.4 column 1",
   "item title - 57.6,110.1,456.3,185.4 38px",
-  "item blocks.0.items stages 537.9,57.6,684.5,290.4 16px",
+  "item blocks.0.items stages 537.9,57.6,684.5,290.4 16px cols=7",
   "item blocks.1.items - 57.6,372,273.2,133.2 16px",
   "item blocks.2.items - 354.8,372,273.2,133.2 16px",
   "item blocks.3.items - 652,372,273.2,133.2 16px",
@@ -2495,7 +2493,6 @@
   "diagnostic layout-unplaced blocks.3",
   "diagnostic layout-unplaced blocks.4",
   "diagnostic layout-unplaced blocks.5",
-  "diagnostic arrangement-adapted blocks.0.items",
   "diagnostic text-overflow blocks.1.items",
   "diagnostic text-overflow blocks.2.items",
   "diagnostic text-overflow blocks.3.items",

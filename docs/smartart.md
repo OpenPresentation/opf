@@ -88,8 +88,10 @@ most 0.2 of its width deep), a box 0.4 widths after the last with PowerPoint's a
 vertical box half its height below the last with a down arrow 0.45 x 0.375 of its height. The entries go into one to four rows (a
 vertical flow: columns), whichever holds the text largest (one line on a tie), as evenly as possible, the longer lines first. The text
 is one size for every node, the largest from 1.5 times the list's role size down to the role size at which every node holds its entry;
-then every node takes the height that text needs with its margins (PowerPoint's proportion at least: a chevron 0.4 of its width, a box
-0.6, a vertical box 1/1.8), and the whole is centered in the region. Every row spans the region: a row of fewer entries widens them (a
+then every node takes the height that text needs with its margins (0.15 em above and below a box's text; PowerPoint's proportion at
+least: a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8), and the whole is centered in the region. Only where none of these
+holds the entries at the list's size does OPF draw a compact form of the same design (rooms of a gap and a half, the arrow 0.6 of the
+room, a chevron's point 0.12 of its width deep, no least height), so a list is left a list only when no design holds it. Every row spans the region: a row of fewer entries widens them (a
 column of fewer lengthens them).
 
 - **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
@@ -239,9 +241,9 @@ In the first pass, before the fill and ink limits, 88 decks drew PowerPoint's de
 (0.000 pt) at core's size in 81, and 74 passed every check. The seven laid out again had nearly full text (the fill limit), and the
 seven others that drew the SmartArt more than a mean of 1 from the native export were dense with large text (the ink limit). With the domain in
 place: 63 decks draw live SmartArt, every one passing (node rectangles and arrows within 0.000 pt of core, sizes equal, no visible
-difference in the shapes, within SH-07's gate of the native export), 150 draw OPF's own design and 9 stay a list (7 or 8 long chevrons and 8 long boxes on the 1:1 slide, and vertical flows of 6 to 8 long or 8 medium entries on the 4:3 and
+difference in the shapes, within SH-07's gate of the native export), 151 draw OPF's own design and 8 stay a list (7 or 8 long chevrons and 8 long boxes on the 1:1 slide, and vertical flows of 6 to 8 long entries on the 4:3 and
 1:1 slides, which no design holds at the list's size; `opf/arrangement-adapted` says so). Every native-shape instance PowerPoint draws as the preview
-does: no visibly different block in the shapes, a mean difference of at most 2.6 outside the text (the outlines' antialiasing). The
+does: no visibly different block in the shapes, a mean difference of at most 2.7 outside the text (the outlines' antialiasing). The
 Arabic and Japanese decks are OPF's design, as for the pyramid and matrix.
 
 COM also showed, on two live instances of each (short and medium entries): `HasSmartArt`, the layout's name, every entry a node of

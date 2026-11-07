@@ -101,12 +101,12 @@
     {
       "id": "flow",
       "file": "flow.svg",
-      "bytes": 3097
+      "bytes": 3089
     },
     {
       "id": "vertical-flow",
       "file": "vertical-flow.svg",
-      "bytes": 2690
+      "bytes": 2689
     },
     {
       "id": "metrics",

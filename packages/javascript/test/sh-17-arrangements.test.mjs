@@ -97,6 +97,11 @@ test('OPF\'s own designs: PowerPoint\'s proportions, lines that span the region,
   assert.deepEqual(column.arrows.map(arrow => arrow.rotation), [90, 90, 0, 270]);
   assert.ok(column.nodes[3].box.y > column.nodes[4].box.y, 'the second column runs up');
   near(column.nodes[3].box.y + column.nodes[3].box.height, column.nodes[2].box.y + column.nodes[2].box.height, 'both columns end at the same bottom');
+  // The compact form: rooms of a gap and a half with an arrow 0.6 of the room, no least height.
+  const compact = linearDesign('flow', area, 3, 24, false, 1, 40, true);
+  near(compact.nodes[1].box.x - (compact.nodes[0].box.x + compact.nodes[0].box.width), 36, 'a gap and a half');
+  near(compact.arrows[0].box.width, .6 * 36, 'arrow length');
+  assert.ok(compact.nodes[0].box.height < .6 * compact.nodes[0].box.width, 'as tall as its text');
 });
 
 const compose = (slide, layout = slide.layout) => composeSlide(slide, { layout: gallery.layouts[layout] });
