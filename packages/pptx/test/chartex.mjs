@@ -437,20 +437,21 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
     // LH-60: a world chart over places is a map; over other categories (North, South) every mode draws it as clustered columns.
     const maps = deck.slides.filter((slide) => slide.chart.type === 'world' && chartDrawPlan(slide.chart, resolveChartData(slide.chart)).type === 'world').length;
     const mapColumns = deck.slides.filter((slide) => slide.chart.type === 'world').length - maps;
+    // LH-175: a Pareto chart of several series is core's pareto-as-columns fallback, clustered columns in every mode.
     const multiPareto = deck.slides.filter(slide => slide.chart.type === 'pareto' && slide.chart.data.columns.length > 2).length;
     const auto = await run(deck, undefined), explicit = await run(deck, 'auto');
-    if (multiPareto) await assert.rejects(run(deck, 'native'), e => e.code === 'unsupported-chart-data');
-    const native = multiPareto ? null : await run(deck, 'native');
+    const native = await run(deck, 'native');
     assert.deepEqual(digest(auto.bytes), digest(explicit.bytes), `${name}: the default is 'auto'`);
     assert.equal(auto.chartexParts, deck.slides.length - maps - mapColumns - multiPareto, `${name} (auto): chartex parts for every confirmed construct`);
-    if (native) assert.equal(native.chartexParts, deck.slides.length - mapColumns, `${name} (native): chartex parts for every construct`);
-    if (maps === 0 && native) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
-    else if (native) {
+    assert.equal(native.chartexParts, deck.slides.length - mapColumns - multiPareto, `${name} (native): chartex parts for every construct`);
+    if (maps === 0) assert.deepEqual(digest(auto.bytes), digest(native.bytes), `${name}: auto equals native without a map`);
+    else {
       assert.notEqual(digest(auto.bytes), digest(native.bytes), `${name}: the map differs between auto and native`);
       assert.deepEqual(auto.diagnostics.filter((d) => d.endsWith('/chartex-fallback')).length, maps, `${name} (auto): the map reports its fallback`);
       assert.ok(!auto.diagnostics.includes('chart-map-geodata') && native.diagnostics.includes('chart-map-geodata'), `${name}: geodata notice only when the map is native`);
     }
-    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps + multiPareto, `${name}: every unsupported construct reports fallback`);
+    assert.equal(auto.diagnostics.filter(d => d.endsWith('/chartex-fallback')).length, maps, `${name}: every unsupported construct reports fallback`);
+    assert.equal(native.diagnostics.filter(d => d.endsWith('/chart-fallback')).length >= multiPareto, true, `${name}: a Pareto chart of several series reports its column fallback`);
     assert.ok(!auto.diagnostics.includes('chart-data-adapted/series-dropped'), `${name}: no Pareto series are dropped`);
     if (maps === deck.slides.length) assert.deepEqual(digest(auto.bytes), fixture.entries[name].sha256, `${name} (auto): a map-only deck keeps the reviewed fallback bytes`);
     else assert.ok(auto.diagnostics.every((d) => d !== 'chart-data-adapted/histogram-binned'), `${name} (auto): histograms bin natively`);
