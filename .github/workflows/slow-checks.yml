@@ -5,7 +5,7 @@ name: Slow checks
 # packages installed from the registry on three operating systems (published matrix with its determinism grid, installed parity).
 # None of it is a required check.
 #
-# Triggers: weekly (Monday), on demand, and on a pull request that carries the label `slow-checks` (add it when a change touches
+# Triggers: weekly (Tuesday, 05:23 UTC), on demand, and on a pull request that carries the label `slow-checks` (add it when a change touches
 # scripts/published-matrix, the parity harness or the golden corpus). A scheduled red run opens or updates one issue labeled
 # `slow-checks-red`; a green one closes it.
 #

@@ -56,3 +56,12 @@ export function assertInstalledCatalog(core, manifest, exportedGeneration, consu
   assertCatalogGeneration(core, exportedGeneration);
   assert.equal(manifest.opf?.catalogSchema, exportedGeneration, 'Installed gallery manifest and exported catalog generation agree');
 }
+
+/**
+ * The committed baseline lockfile without its `@openpresentation/*` entries, so npm resolves the OPF set fresh (one lockstep
+ * release) and everything else stays as pinned. A locked OPF node from an older line keeps its own peers (for example the 0.25
+ * editor's `@openpresentation/opf@^0.25.0`) and collides with the set the manifest asks for.
+ */
+export function withoutOpfLockEntries(lock) {
+  return {...lock, packages: Object.fromEntries(Object.entries(lock.packages ?? {}).filter(([key]) => !key.startsWith('node_modules/@openpresentation/')))};
+}
