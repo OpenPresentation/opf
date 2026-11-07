@@ -16,7 +16,11 @@
 //          (the theme's third line style, 1.5 pt), their text in core's readable color, the matrix's diamond accent1 lightened 80%;
 //        - a drawing part (drawingN.xml) built from core's geometry, for readers that draw the cached shapes;
 //        - no layout part: `r:lo` is empty, so PowerPoint resolves its built-in layout from loTypeId (docs/smartart.md records why
-//          this is the most valid of the three forms the SH-09 spike found PowerPoint accepts). OPF never writes a layout definition.
+//          this is the most valid of the three forms the SH-09 spike found PowerPoint accepts). OPF never writes Microsoft's layout
+//          definitions.
+//      SH-19: OPF's own designs (the ring and loops of a cycle, the stepped pyramid, the quadrants and card grids, the wrapped and
+//      snaking chevrons and flows) are live SmartArt too, on OPF's own layout definition of the design (src/smart-art-layouts.js), written
+//      to the layout part (`r:lo` names it) where core's SMART_ART_OPF_DOMAIN holds and OPF's interpreter draws the design from it.
 //      SH-16: the frame is the mc:Choice of an mc:AlternateContent (Requires SMART_ART_REQUIRES) whose mc:Fallback is a picture of the
 //      same frame, id and name: OPF's preview of the frame (smartArtRegionSvg) as an SVG over its PNG raster, the outline as alt text.
 //      PowerPoint takes the Choice; an app that does not lay SmartArt out takes the picture. Without a fallback picture (no opf-render,
@@ -29,8 +33,10 @@
 // In `full` provenance the SmartArt frame carries OPF_SMARTART_V1: the slide, the list path, the arrangement, the authored list and the
 // text of every node as written. On import an unchanged tagged SmartArt is that list again; an edited one (a node's text changed, a
 // node added or removed) imports its data model's nodes, as any PowerPoint pyramid1 or matrix3 does: the points in `cxn` order, their
-// text and run properties, as a list in the `pyramid` or `matrix` layout. Import never stores a layout part.
-import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+// text and run properties, as a list in the `pyramid` or `matrix` layout (SH-19: OPF's own layouts by their uniqueId). Import never stores a
+// layout part.
+import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, opfSmartArtUnavailable, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {layoutDefinitionXml, opfLayoutDefinition, opfLayoutKind} from './smart-art-layouts.js';
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
@@ -181,6 +187,7 @@ export const SMART_ART_RELATIONSHIPS = Object.freeze({
 });
 const CONTENT_TYPES = Object.freeze({
   data: 'application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml',
+  layout: 'application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml',
   quickStyle: 'application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml',
   colors: 'application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml',
   drawing: 'application/vnd.ms-office.drawingml.diagramDrawing+xml',
@@ -220,6 +227,22 @@ export function smartArtReason(arrangement, values, rtl) {
     ...(arrangement.smartArt.fill !== undefined ? {fill: arrangement.smartArt.fill} : {}), ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {})});
 }
 
+/** SH-19: whether OPF's own design can be live SmartArt on OPF's layout definition: undefined when it can, else the reason. */
+export function opfLayoutReason(arrangement, values, rtl) {
+  if (!arrangement.layout) return 'its design has no OPF layout definition';
+  if (values.some(value => runsOf(value).some(run => !run || typeof run.text !== 'string' || Object.keys(run).some(key => !RUN_KEYS.has(key)))))
+    return 'an entry has text formatting a SmartArt node does not carry (a link, a citation, code or its own size)';
+  if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
+  const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
+  return opfSmartArtUnavailable({design: arrangement.layout.design, ...(arrangement.layout.compact ? {compact: true} : {}), count: values.length, lines: arrangement.smartArt.lines,
+    stable: arrangement.smartArt.stable, ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {}), rtl: rtl || rightToLeft, ...(script ? {script} : {})});
+}
+
+/** SH-19: a card grid's paint, as the native shapes draw it: the card neutral and its border. */
+function cardPaint(context) {
+  return {fill: hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface), line: hex6(context.roles?.neutrals?.cardBorder?.hex ?? context.colors.border)};
+}
+
 /** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons and a vertical flow. */
 const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-flow' ? 'vertical flow' : kind;
 
@@ -241,11 +264,19 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
   const paint = exportPaint(context), inches = value => value / 96, box = area => ({x: inches(area.x), y: inches(area.y), w: inches(area.width), h: inches(area.height)});
   for (const arrangement of arrangements) {
     const item = items.find(entry => entry.path === arrangement.path), values = Array.isArray(item?.value) ? item.value : [];
-    // Only PowerPoint's own design can be live SmartArt; OPF's design and a card grid are always native shapes.
+    // PowerPoint's own design is live SmartArt on its built-in layout; OPF's design and a card grid on OPF's own layout (SH-19, below).
     const design = arrangement.design ?? 'smartart';
     let reason = mode !== 'live' || design === 'cards' ? undefined : design === 'opf' ? `${arrangement.instead ?? `its entries do not fit PowerPoint's ${SMART_ART_NAMES[arrangement.kind].layout}`}, so OPF's own ${arrangementNoun(arrangement.kind)} is drawn` : smartArtReason(arrangement, values, context.direction === 'rtl');
+    // SH-19: OPF's own design (and a card grid) is live SmartArt on OPF's own layout definition, where PowerPoint draws that definition as
+    // the preview does (core opfSmartArtUnavailable) and OPF's interpreter draws the design from it (src/smart-art-layouts.js).
+    let own;
+    if (mode === 'live' && design !== 'smartart') {
+      const why = opfLayoutReason(arrangement, values, context.direction === 'rtl'), built = why === undefined ? opfLayoutDefinition(arrangement, item) : {reason: why};
+      if (built.definition) { own = built.definition; reason = undefined; }
+      else reason = reason === undefined ? `OPF's ${arrangementNoun(arrangement.kind)} has no live SmartArt: ${built.reason}` : `${reason}; OPF's own layout does not hold it either: ${built.reason}`;
+    }
     // SH-16: the picture every app without SmartArt shows (OPF's preview of the frame). Without one the arrangement is native shapes.
-    const candidate = mode === 'live' && design === 'smartart' && reason === undefined;
+    const candidate = mode === 'live' && ((design === 'smartart' && reason === undefined) || own !== undefined);
     const fallbackName = smartArtFallbackName(arrangement.path), alt = candidate ? smartArtOutline(arrangement.kind, values) : undefined;
     const picture = candidate ? (fallback ? await fallback(arrangement, {name: fallbackName, alt}) : 'no fallback picture can be drawn for apps without SmartArt') : undefined;
     if (typeof picture === 'string') reason = picture;
@@ -255,7 +286,8 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       slide.addShape('rect', {...box(arrangement.frame), fill: {color: paint.fill.hex.slice(1)}, line: {type: 'none'}, objectName});
       const bleed = picture();
       const tag = provenance === 'full' ? {v: 1, slide: slideIndex, path: arrangement.path, region: arrangement.region, kind: arrangement.kind, items: structuredClone(values), texts: values.map(plain)} : undefined;
-      records.set(objectName, {arrangement, values, item, paint, lang: context.deckLang ?? 'en-US', fontOf, rtl: context.direction === 'rtl', fallback: {name: fallbackName, alt, tag, bleed}});
+      records.set(objectName, {arrangement, values, item, paint, lang: context.deckLang ?? 'en-US', fontOf, rtl: context.direction === 'rtl', fallback: {name: fallbackName, alt, tag, bleed},
+        ...(own ? {layout: own, ...(arrangement.paint === 'card' ? {card: cardPaint(context)} : {})} : {})});
       if (tag) smartArtTags.set(objectName, tag);
       drawn.add(arrangement.path);
       continue;
@@ -330,17 +362,22 @@ function nodeParagraph(record, index) {
     return `<a:r><a:rPr lang="${escapeXml(run.lang ?? lang)}" sz="${size}"${bold ? ' b="1"' : ''}${italic ? ' i="1"' : ''}${run.underline ? ' u="sng"' : ''}${run.strikethrough ? ' strike="sngStrike"' : ''} dirty="0">${face}</a:rPr><a:t>${escapeXml(text)}</a:t></a:r>`;
   }).join('');
   const paragraphRtl = rtl || RTL.test(plain(values[index]));
-  return `<a:pPr algn="ctr"${paragraphRtl ? ' rtl="1"' : ''}><a:lnSpc><a:spcPts val="${pitch}"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft><a:buNone/></a:pPr>${runs}`;
+  // SH-19: a card's entry and an entry beside its level start at the line's start, as OPF's native text does.
+  const align = arrangement.align === 'start' ? (paragraphRtl ? 'r' : 'l') : 'ctr';
+  return `<a:pPr algn="${align}"${paragraphRtl ? ' rtl="1"' : ''}><a:lnSpc><a:spcPts val="${pitch}"/></a:lnSpc><a:spcBef><a:spcPts val="0"/></a:spcBef><a:spcAft><a:spcPts val="0"/></a:spcAft><a:buNone/></a:pPr>${runs}`;
 }
 
 /** The data model of one SmartArt: the doc point, one point per entry and the connections in entry order. */
 export function smartArtDataXml(record, number, drawingRelId) {
   const {arrangement, values} = record, doc = modelId(number, ROLE.doc);
-  const points = [`<dgm:pt modelId="${doc}" type="doc"><dgm:prSet loTypeId="${SMART_ART_LAYOUTS[arrangement.kind]}" loCatId="${LAYOUT_CATEGORY[arrangement.kind]}" qsTypeId="${OPF_QUICK_STYLE}" qsCatId="simple" csTypeId="${OPF_COLORS}" csCatId="accent1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`];
+  const loTypeId = record.layout?.uniqueId ?? SMART_ART_LAYOUTS[arrangement.kind], loCatId = record.layout?.category ?? LAYOUT_CATEGORY[arrangement.kind];
+  // SH-19: a card's outline is the native card's (the theme's line styles have no such width).
+  const spPr = record.card ? `<dgm:spPr><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill><a:srgbClr val="${record.card.line}"/></a:solidFill></a:ln></dgm:spPr>` : '<dgm:spPr/>';
+  const points = [`<dgm:pt modelId="${doc}" type="doc"><dgm:prSet loTypeId="${escapeXml(loTypeId)}" loCatId="${escapeXml(loCatId)}" qsTypeId="${OPF_QUICK_STYLE}" qsCatId="simple" csTypeId="${OPF_COLORS}" csCatId="accent1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`];
   const connections = [];
   values.forEach((_, index) => {
     const id = modelId(number, ROLE.node, index), parent = modelId(number, ROLE.parent, index), sibling = modelId(number, ROLE.sibling, index), cxn = modelId(number, ROLE.connection, index);
-    points.push(`<dgm:pt modelId="${id}"><dgm:prSet custT="1"/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p>${nodeParagraph(record, index)}</a:p></dgm:t></dgm:pt>`,
+    points.push(`<dgm:pt modelId="${id}"><dgm:prSet custT="1"/>${spPr}<dgm:t><a:bodyPr/><a:lstStyle/><a:p>${nodeParagraph(record, index)}</a:p></dgm:t></dgm:pt>`,
       `<dgm:pt modelId="${parent}" type="parTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`,
       `<dgm:pt modelId="${sibling}" type="sibTrans" cxnId="${cxn}"><dgm:prSet/><dgm:spPr/><dgm:t><a:bodyPr/><a:lstStyle/><a:p><a:endParaRPr lang="${escapeXml(record.lang)}"/></a:p></dgm:t></dgm:pt>`);
     connections.push(`<dgm:cxn modelId="${cxn}" srcId="${doc}" destId="${id}" srcOrd="${index}" destOrd="0" parTransId="${parent}" sibTransId="${sibling}"/>`);
@@ -350,14 +387,17 @@ export function smartArtDataXml(record, number, drawingRelId) {
 
 // The style labels pyramid1 and matrix3 use (node1, revTx, bgShp), the first node's (node0) and the transition labels, so no shape
 // takes PowerPoint's black default for a label the part leaves out.
-const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp'];
+// SH-19: OPF's layouts add text over a shape (fgAcc1, no fill) and a card (alignNode1, the card neutral and its border).
+const LABELS = ['node0', 'node1', 'bgShp', 'revTx', 'sibTrans2D1', 'parChTrans1D1', 'trBgShp', 'fgAcc1', 'alignNode1'];
 
 /** OPF's colors definition in the deck's theme: arrangementPaint's slots. */
-export function smartArtColorsXml(paint) {
+export function smartArtColorsXml(paint, card) {
   const none = '<a:schemeClr val="bg1"><a:alpha val="0"/></a:schemeClr>';
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
     : name === 'revTx' ? list(name, none, none, '<a:schemeClr val="tx1"/>')
+      : name === 'fgAcc1' ? list(name, none, none, schemeXml(paint.text))
+      : name === 'alignNode1' ? list(name, card ? `<a:srgbClr val="${card.fill}"/>` : schemeXml(paint.fill), card ? `<a:srgbClr val="${card.line}"/>` : schemeXml(paint.line), '<a:schemeClr val="tx1"/>')
       // SH-18 and SH-17: the arrows of a cycle or a flow (sibTrans2D1) in the primary lightened 40%, without an outline.
       : name === 'sibTrans2D1' ? list(name, schemeXml(paint.arrow), none, schemeXml(paint.text))
       : list(name, schemeXml(paint.fill), schemeXml(paint.line), schemeXml(paint.text)));
@@ -368,7 +408,7 @@ export function smartArtColorsXml(paint) {
 export function smartArtQuickStyleXml() {
   const scene = '<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
   const style = (line, fill) => `<dgm:style><a:lnRef idx="${line}">${srgb}</a:lnRef><a:fillRef idx="${fill}">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dgm:style>`;
-  const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' || name === 'sibTrans2D1' ? style(0, 1) : name === 'revTx' ? style(0, 0) : style(3, 1)}</dgm:styleLbl>`);
+  const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' || name === 'sibTrans2D1' ? style(0, 1) : name === 'revTx' || name === 'fgAcc1' ? style(0, 0) : name === 'alignNode1' ? style(1, 1) : style(3, 1)}</dgm:styleLbl>`);
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_QUICK_STYLE}"><dgm:title val="OPF flat"/><dgm:desc val="OPF: flat nodes with a 1.5 pt outline"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst><dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d>${labels.join('')}</dgm:styleDef>`;
 }
 
@@ -417,12 +457,14 @@ export function attachSmartArt(entries, records) {
       const name = shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1], record = records.get(name);
       if (!record) return shape;
       seen += 1; number += 1; changed = true;
-      const ids = {data: `rId${nextId++}`, quickStyle: `rId${nextId++}`, colors: `rId${nextId++}`, drawing: `rId${nextId++}`};
+      const ids = {data: `rId${nextId++}`, quickStyle: `rId${nextId++}`, colors: `rId${nextId++}`, drawing: `rId${nextId++}`, ...(record.layout ? {layout: `rId${nextId++}`} : {})};
+      // SH-19: OPF's own layout definition, when the arrangement is OPF's design.
+      if (record.layout) entries[`ppt/diagrams/layout${number}.xml`] = encoder.encode(layoutDefinitionXml(record.layout));
       entries[`ppt/diagrams/data${number}.xml`] = encoder.encode(smartArtDataXml(record, number, ids.drawing));
       entries[`ppt/diagrams/quickStyle${number}.xml`] = encoder.encode(smartArtQuickStyleXml());
-      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint));
+      entries[`ppt/diagrams/colors${number}.xml`] = encoder.encode(smartArtColorsXml(record.paint, record.card));
       entries[`ppt/diagrams/drawing${number}.xml`] = encoder.encode(smartArtDrawingXml(record, number));
-      for (const kind of ['data', 'quickStyle', 'colors', 'drawing']) {
+      for (const kind of ['data', ...(record.layout ? ['layout'] : []), 'quickStyle', 'colors', 'drawing']) {
         overrides.push(`<Override PartName="/ppt/diagrams/${kind}${number}.xml" ContentType="${CONTENT_TYPES[kind]}"/>`);
         rels = rels.replace('</Relationships>', `<Relationship Id="${ids[kind]}" Type="${SMART_ART_RELATIONSHIPS[kind]}" Target="../diagrams/${kind}${number}.xml"/></Relationships>`);
       }
@@ -430,8 +472,9 @@ export function attachSmartArt(entries, records) {
       const nvPr = shape.match(/<p:nvPr\s*\/>|<p:nvPr>[\s\S]*?<\/p:nvPr>/)?.[0] ?? '<p:nvPr/>';
       const {frame} = record.arrangement, alt = record.values.map(plain).join(', ');
       const named = cNvPr.includes(' descr=') ? cNvPr : cNvPr.replace(/<p:cNvPr\b/, `<p:cNvPr descr="${escapeXml(alt)}"`);
-      // `r:lo` is empty: no layout part, so PowerPoint resolves its built-in layout from the data model's loTypeId (docs/smartart.md).
-      const graphicFrame = `<p:graphicFrame><p:nvGraphicFramePr>${named}<p:cNvGraphicFramePr/>${nvPr}</p:nvGraphicFramePr><p:xfrm><a:off x="${emu(frame.x)}" y="${emu(frame.y)}"/><a:ext cx="${emu(frame.width)}" cy="${emu(frame.height)}"/></p:xfrm><a:graphic><a:graphicData uri="${SMART_ART_URI}"><dgm:relIds xmlns:dgm="${NS.dgm}" r:dm="${ids.data}" r:lo="" r:qs="${ids.quickStyle}" r:cs="${ids.colors}"/></a:graphicData></a:graphic></p:graphicFrame>`;
+      // `r:lo` is empty for a built-in layout: no layout part, so PowerPoint resolves it from the data model's loTypeId (docs/smartart.md);
+      // SH-19: it names OPF's own layout part for OPF's design.
+      const graphicFrame = `<p:graphicFrame><p:nvGraphicFramePr>${named}<p:cNvGraphicFramePr/>${nvPr}</p:nvGraphicFramePr><p:xfrm><a:off x="${emu(frame.x)}" y="${emu(frame.y)}"/><a:ext cx="${emu(frame.width)}" cy="${emu(frame.height)}"/></p:xfrm><a:graphic><a:graphicData uri="${SMART_ART_URI}"><dgm:relIds xmlns:dgm="${NS.dgm}" r:dm="${ids.data}" r:lo="${ids.layout ?? ''}" r:qs="${ids.quickStyle}" r:cs="${ids.colors}"/></a:graphicData></a:graphic></p:graphicFrame>`;
       // SH-16: PowerPoint takes the mc:Choice (the live SmartArt); an app that does not claim SMART_ART_REQUIRES takes the mc:Fallback,
       // OPF's preview of the frame as a picture (attachSmartArtFallbacks names, tags and describes it once its SVG part is attached).
       const picture = pictures.get(record.fallback?.name);
@@ -567,7 +610,7 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     let model;
     try { model = parser.parse(decoder.decode(entries[dataPart]))['dgm:dataModel']; } catch { continue; }
     const points = array(model?.['dgm:ptLst']?.['dgm:pt']), doc = points.find(point => point.type === 'doc');
-    const kind = KIND_OF_LAYOUT.get(doc?.['dgm:prSet']?.loTypeId);
+    const kind = KIND_OF_LAYOUT.get(doc?.['dgm:prSet']?.loTypeId) ?? opfLayoutKind(doc?.['dgm:prSet']?.loTypeId);
     if (!kind) continue;
     const byId = new Map(points.map(point => [point.modelId, point]));
     const children = array(model?.['dgm:cxnLst']?.['dgm:cxn']).filter(cxn => (cxn.type ?? 'parOf') === 'parOf' && cxn.srcId === doc.modelId)
