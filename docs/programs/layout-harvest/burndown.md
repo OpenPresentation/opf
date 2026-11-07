@@ -12,7 +12,7 @@ Sources:
 
 | ID | Improvement | Source | Package | Evidence |
 | --- | --- | --- | --- | --- |
-| LH-21 | Layout sampler: one slide per default layout and 13 dynamic compositions; scripts render it and tile contact sheets | CD | examples, scripts | [opf#942](https://github.com/OpenPresentation/opf/pull/942) |
+| LH-21 | Layout sampler: one slide per default layout and 13 dynamic compositions; scripts render it and tile contact sheets. The six diagram layouts (pyramid, matrix, cycle, chevrons, flow, vertical-flow) have their slides since 2026-11-07 | CD | examples, scripts | [opf#942](https://github.com/OpenPresentation/opf/pull/942) |
 | LH-22 | Full-height cards: a card fills its cell and the region's anchor places the content inside it. Filled cards start half a gap down and share one height and top edge. Pillars, team, two-column and three-column set text at the card's foot; scorecard sets its measures in the middle | CD, SG | core, gallery | opf#942; `layout-harvest.test.mjs` |
 | LH-23 | Hero: a text column (title, lead, supporting points) beside a full-height picture bled to three edges | CD | gallery | opf#942 |
 | LH-24 | Card inset scales with the card: a sixteenth of the shorter side, from 12 to 24 px, so cards are roomy and KPI tiles keep their room | SG | core | opf#942; `card-inset.test.mjs` |
@@ -307,3 +307,4 @@ Independent items (PPTX, validator, skills, gallery tooling) can land at any tim
 - 2026-11-06: LH-180 and LH-181 done in the wave 8 integration ([opf#1055](https://github.com/OpenPresentation/opf/pull/1055)): the message surface's display check measures with the slide's script fonts in every host, so the preview and PowerPoint agree on Arabic one-message slides; a double click in the editor selects a word of a run-in text.
 - 2026-11-06: LH-182 and LH-183 added (todo) by the shapes phase 2 integration: the doughnut hole motif and the Yu Gothic weight.
 - 2026-11-07: LH-185 done: a diagram that does not fit at the floor is tried in the other main direction before it is scaled ([opf#1080](https://github.com/OpenPresentation/opf/pull/1080)).
+- 2026-11-07: the layout sampler gains one slide for each of the six diagram layouts (pyramid, matrix, cycle, chevrons, flow, vertical-flow), with the gallery's editorial example content, after layout-logos (49 slides: 36 layouts and 13 dynamic compositions), so harvest reviews see them. Only the new layouts' records are embedded; every other record stays as it was.
