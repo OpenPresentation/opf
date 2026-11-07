@@ -29,7 +29,7 @@
 // text of every node as written. On import an unchanged tagged SmartArt is that list again; an edited one (a node's text changed, a
 // node added or removed) imports its data model's nodes, as any PowerPoint pyramid1 or matrix3 does: the points in `cxn` order, their
 // text and run properties, as a list in the `pyramid` or `matrix` layout. Import never stores a layout part.
-import {SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
+import {SMART_ART_LAYOUTS, SMART_ART_NAMES, arrangementPaint, applyColorTransform, bindNoBreak, colorContrast, smartArtScript, smartArtUnavailable} from '@openpresentation/opf/composition';
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
@@ -51,7 +51,9 @@ const MC = 'http://schemas.openxmlformats.org/markup-compatibility/2006';
 /** SH-16: the alt text of the fallback picture: the kind and size, then each entry on its own line, in entry order. */
 export function smartArtOutline(kind, values) {
   const texts = values.map(plain), count = texts.length;
-  const head = kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`;
+  const head = kind === 'pyramid' ? `Pyramid of ${count} level${count === 1 ? '' : 's'}, top to bottom` : kind === 'matrix' ? `Matrix of ${count} ${count === 1 ? 'entry' : 'entries'}, in reading order`
+    // SH-17: the linear arrangements, in order.
+    : `${kind === 'chevrons' ? 'Chevrons' : kind === 'flow' ? 'Flow' : 'Vertical flow'} of ${count} ${kind === 'chevrons' ? 'stage' : 'step'}${count === 1 ? '' : 's'}, ${kind === 'vertical-flow' ? 'top to bottom' : 'in order'}`;
   return [`${head}:`, ...texts].join('\n');
 }
 
@@ -183,7 +185,7 @@ const CONTENT_TYPES = Object.freeze({
 /** OPF's own quick style and colors definitions (uniqueId): not Microsoft's, whose content differs. */
 export const OPF_QUICK_STYLE = 'urn:openpresentation.org/opf/smartart/quickstyle/flat';
 export const OPF_COLORS = 'urn:openpresentation.org/opf/smartart/colors/primary';
-const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix'});
+const LAYOUT_CATEGORY = Object.freeze({pyramid: 'pyramid', matrix: 'matrix', chevrons: 'process', flow: 'process', 'vertical-flow': 'process'});
 const KIND_OF_LAYOUT = new Map(Object.entries(SMART_ART_LAYOUTS).map(([kind, id]) => [id, kind]));
 const EMU = 9525; // per canvas pixel (1/96 inch)
 const emu = value => Math.round(value * EMU);
@@ -211,8 +213,12 @@ export function smartArtReason(arrangement, values, rtl) {
   if (values.some(value => /[\r\n\t]/.test(plain(value)))) return 'an entry holds a line break or a tab';
   const {rtl: rightToLeft, script} = smartArtScript(values.map(plain));
   return smartArtUnavailable({kind: arrangement.kind, count: values.length, frame: arrangement.frame, rtl: rtl || rightToLeft,
-    nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {})});
+    nodes: arrangement.smartArt.lines.map((lines, index) => ({lines, stable: arrangement.smartArt.stable[index]})), ...(script ? {script} : {}),
+    ...(arrangement.smartArt.fill !== undefined ? {fill: arrangement.smartArt.fill} : {}), ...(arrangement.smartArt.ink !== undefined ? {ink: arrangement.smartArt.ink} : {})});
 }
+
+/** What a finding calls an arrangement: its kind, or (SH-17) a row of chevrons and a vertical flow. */
+const arrangementNoun = kind => kind === 'chevrons' ? 'row of chevrons' : kind === 'vertical-flow' ? 'vertical flow' : kind;
 
 /** The paint of the slide's arrangements (core arrangementPaint) from the slide's export context. */
 export function exportPaint(context) {
@@ -234,7 +240,7 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
     const item = items.find(entry => entry.path === arrangement.path), values = Array.isArray(item?.value) ? item.value : [];
     // Only PowerPoint's own design can be live SmartArt; OPF's design and a card grid are always native shapes.
     const design = arrangement.design ?? 'smartart';
-    let reason = mode !== 'live' || design === 'cards' ? undefined : design === 'opf' ? `${arrangement.instead ?? `its entries do not fit PowerPoint's Basic ${arrangement.kind === 'pyramid' ? 'Pyramid' : 'Matrix'}`}, so OPF's own ${arrangement.kind} is drawn` : smartArtReason(arrangement, values, context.direction === 'rtl');
+    let reason = mode !== 'live' || design === 'cards' ? undefined : design === 'opf' ? `${arrangement.instead ?? `its entries do not fit PowerPoint's ${SMART_ART_NAMES[arrangement.kind].layout}`}, so OPF's own ${arrangementNoun(arrangement.kind)} is drawn` : smartArtReason(arrangement, values, context.direction === 'rtl');
     // SH-16: the picture every app without SmartArt shows (OPF's preview of the frame). Without one the arrangement is native shapes.
     const candidate = mode === 'live' && design === 'smartart' && reason === undefined;
     const fallbackName = smartArtFallbackName(arrangement.path), alt = candidate ? smartArtOutline(arrangement.kind, values) : undefined;
@@ -252,7 +258,7 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       continue;
     }
     if (reason !== undefined) report?.({code: 'smartart-unavailable', path: arrangement.path, reason,
-      message: `The ${arrangement.kind} is exported as native shapes, not live SmartArt: ${reason}.`});
+      message: `The ${arrangementNoun(arrangement.kind)} is exported as native shapes, not live SmartArt: ${reason}.`});
     const name = role => `OPF arrangement ${arrangement.path} ${role}`, tag = (objectName, role, extra = {}) => tags.set(objectName, {v: 1, path: arrangement.path, kind: arrangement.kind, role, ...extra});
     // A card grid in the card neutral with its border, as every OPF card; the other designs in the primary with the background's outline.
     const card = arrangement.paint === 'card', fill = card ? hex6(context.roles?.neutrals?.card?.hex ?? context.colors.surface) : paint.fill.hex.slice(1);
@@ -264,23 +270,34 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
     }
     for (const node of arrangement.nodes) {
       const objectName = name(`node ${node.index}`);
-      slide.addShape(node.preset === 'trapezoid' ? 'trapezoid' : 'roundRect', {...box(node.box), fill: {color: fill}, line, objectName,
-        ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {})});
+      slide.addShape(node.preset, {...box(node.box), fill: {color: fill}, line, objectName,
+        ...(node.preset === 'roundRect' ? {rectRadius: inches(node.radius ?? 0)} : {}), ...(node.flip ? {flipH: true} : {})});
       tag(objectName, 'node', {index: node.index, adjust: node.adjust, preset: node.preset, ...(node.path ? {entry: node.path} : {})});
+    }
+    // SH-17: a flow's arrows, DrawingML rightArrows turned about their centers, in the primary lightened 40% without an outline.
+    for (const arrow of arrangement.arrows ?? []) {
+      const objectName = name(`arrow ${arrow.index}`);
+      slide.addShape('rightArrow', {...box(arrow.box), fill: {color: paint.arrow.hex.slice(1)}, line: {type: 'none'}, objectName, ...(arrow.rotation ? {rotate: arrow.rotation} : {})});
+      tag(objectName, 'arrow', {index: arrow.index, adjust: [...arrow.adjust]});
     }
   }
   return drawn;
 }
 
-/** A trapezoid's adjustment (pptxgenjs writes the preset's default): core's `adj`, by object name, in the finished slide parts. */
+/**
+ * A trapezoid's or (SH-17) a chevron's adjustment and an arrow's two (pptxgenjs writes the preset's default): core's, by object name, in
+ * the finished slide parts.
+ */
 export function writeArrangementAdjustments(entries, tags) {
   if (!tags.size) return;
+  const geometry = preset => new RegExp(`<a:prstGeom prst="${preset}">\\s*(?:<a:avLst\\s*/>|<a:avLst>[\\s\\S]*?</a:avLst>)\\s*</a:prstGeom>`);
   for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
     const xml = decoder.decode(entries[part]);
     const next = xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => {
       const record = tags.get(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]+)"/)?.[1]);
-      if (record?.role !== 'node' || record.preset !== 'trapezoid') return shape;
-      return shape.replace(/<a:prstGeom prst="trapezoid">\s*(?:<a:avLst\s*\/>|<a:avLst>[\s\S]*?<\/a:avLst>)\s*<\/a:prstGeom>/, `<a:prstGeom prst="trapezoid"><a:avLst><a:gd name="adj" fmla="val ${record.adjust}"/></a:avLst></a:prstGeom>`);
+      if (record?.role === 'arrow') return shape.replace(geometry('rightArrow'), `<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${record.adjust[0]}"/><a:gd name="adj2" fmla="val ${record.adjust[1]}"/></a:avLst></a:prstGeom>`);
+      if (record?.role !== 'node' || (record.preset !== 'trapezoid' && record.preset !== 'chevron')) return shape;
+      return shape.replace(geometry(record.preset), `<a:prstGeom prst="${record.preset}"><a:avLst><a:gd name="adj" fmla="val ${record.adjust}"/></a:avLst></a:prstGeom>`);
     });
     if (next !== xml) entries[part] = encoder.encode(next);
   }
@@ -342,6 +359,8 @@ export function smartArtColorsXml(paint) {
   const list = (name, fill, line, text) => `<dgm:styleLbl name="${name}"><dgm:fillClrLst meth="repeat">${fill}</dgm:fillClrLst><dgm:linClrLst meth="repeat">${line}</dgm:linClrLst><dgm:effectClrLst/><dgm:txLinClrLst/><dgm:txFillClrLst meth="repeat">${text}</dgm:txFillClrLst><dgm:txEffectClrLst/></dgm:styleLbl>`;
   const labels = LABELS.map(name => name === 'bgShp' || name === 'trBgShp' ? list(name, schemeXml(paint.background), schemeXml(paint.line), schemeXml(paint.text))
     : name === 'revTx' ? list(name, none, none, '<a:schemeClr val="tx1"/>')
+      // SH-17: the arrows between a flow's boxes, in the primary lightened 40% without an outline.
+      : name === 'sibTrans2D1' ? list(name, schemeXml(paint.arrow), none, schemeXml(paint.text))
       : list(name, schemeXml(paint.fill), schemeXml(paint.line), schemeXml(paint.text)));
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:colorsDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_COLORS}"><dgm:title val="OPF primary"/><dgm:desc val="OPF: the nodes in the primary color, outlined in the background"/><dgm:catLst><dgm:cat type="accent1" pri="11000"/></dgm:catLst>${labels.join('')}</dgm:colorsDef>`;
 }
@@ -350,20 +369,28 @@ export function smartArtColorsXml(paint) {
 export function smartArtQuickStyleXml() {
   const scene = '<dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d><dgm:sp3d/><dgm:txPr/>';
   const style = (line, fill) => `<dgm:style><a:lnRef idx="${line}">${srgb}</a:lnRef><a:fillRef idx="${fill}">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dgm:style>`;
-  const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' ? style(0, 1) : name === 'revTx' ? style(0, 0) : style(3, 1)}</dgm:styleLbl>`);
+  const labels = LABELS.map(name => `<dgm:styleLbl name="${name}">${scene}${name === 'bgShp' || name === 'trBgShp' || name === 'sibTrans2D1' ? style(0, 1) : name === 'revTx' ? style(0, 0) : style(3, 1)}</dgm:styleLbl>`);
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dgm:styleDef xmlns:dgm="${NS.dgm}" xmlns:a="${NS.a}" uniqueId="${OPF_QUICK_STYLE}"><dgm:title val="OPF flat"/><dgm:desc val="OPF: flat nodes with a 1.5 pt outline"/><dgm:catLst><dgm:cat type="simple" pri="10100"/></dgm:catLst><dgm:scene3d><a:camera prst="orthographicFront"/><a:lightRig rig="threePt" dir="t"/></dgm:scene3d>${labels.join('')}</dgm:styleDef>`;
 }
 
 /** The cached drawing from core's geometry, relative to the frame (EMU). */
 export function smartArtDrawingXml(record, number) {
   const {arrangement, paint} = record, origin = arrangement.frame, margin = emu(arrangement.textMargin);
-  const xfrm = (box, tag = 'a:xfrm') => `<${tag}><a:off x="${emu(box.x - origin.x)}" y="${emu(box.y - origin.y)}"/><a:ext cx="${emu(box.width)}" cy="${emu(box.height)}"/></${tag}>`;
+  // SH-17: a chevron's text margins differ by side.
+  const [left, top, right, bottom] = (arrangement.margins ?? [arrangement.textMargin, arrangement.textMargin, arrangement.textMargin, arrangement.textMargin]).map(emu);
+  const xfrm = (box, tag = 'a:xfrm', {rotation = 0, flip = false} = {}) => `<${tag}${rotation ? ` rot="${Math.round(rotation * 60000)}"` : ''}${flip ? ' flipH="1"' : ''}><a:off x="${emu(box.x - origin.x)}" y="${emu(box.y - origin.y)}"/><a:ext cx="${emu(box.width)}" cy="${emu(box.height)}"/></${tag}>`;
   const shapes = [];
   if (arrangement.background) shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 99)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrangement.background)}<a:prstGeom prst="diamond"><a:avLst/></a:prstGeom><a:solidFill>${schemeXml(paint.background)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
   for (const node of arrangement.nodes) {
     const index = node.index, text = node.path !== undefined ? nodeParagraph(record, index) : '';
-    const geometry = node.preset === 'trapezoid' ? `<a:prstGeom prst="trapezoid"><a:avLst><a:gd name="adj" fmla="val ${node.adjust}"/></a:avLst></a:prstGeom>` : '<a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>';
-    shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(node.box)}${geometry}<a:solidFill>${schemeXml(paint.fill)}</a:solidFill><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill>${schemeXml(paint.line)}</a:solidFill></a:ln></dsp:spPr><dsp:style><a:lnRef idx="3">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr wrap="square" lIns="${margin}" tIns="${margin}" rIns="${margin}" bIns="${margin}" anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>${text || `<a:endParaRPr lang="${escapeXml(record.lang)}"/>`}</a:p></dsp:txBody>${xfrm(node.textBox, 'dsp:txXfrm')}</dsp:sp>`);
+    // A quadrant's roundRect is at the default corner; a box's (SH-17) and a chevron's carry core's adjustment.
+    const geometry = node.preset === 'roundRect' && (node.adjust ?? 16667) === 16667 ? '<a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>' : `<a:prstGeom prst="${node.preset}"><a:avLst><a:gd name="adj" fmla="val ${node.adjust}"/></a:avLst></a:prstGeom>`;
+    const insets = arrangement.margins ? `lIns="${left}" tIns="${top}" rIns="${right}" bIns="${bottom}"` : `lIns="${margin}" tIns="${margin}" rIns="${margin}" bIns="${margin}"`;
+    shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(node.box, 'a:xfrm', {flip: node.flip === true})}${geometry}<a:solidFill>${schemeXml(paint.fill)}</a:solidFill><a:ln w="${emu(arrangement.lineWidth)}"><a:solidFill>${schemeXml(paint.line)}</a:solidFill></a:ln></dsp:spPr><dsp:style><a:lnRef idx="3">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor">${schemeXml(paint.text)}</a:fontRef></dsp:style><dsp:txBody><a:bodyPr wrap="square" ${insets} anchor="ctr"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p>${text || `<a:endParaRPr lang="${escapeXml(record.lang)}"/>`}</a:p></dsp:txBody>${xfrm(node.textBox, 'dsp:txXfrm')}</dsp:sp>`);
+  }
+  // SH-17: the arrows between a flow's boxes (rightArrows turned about their centers), without text.
+  for (const arrow of arrangement.arrows ?? []) {
+    shapes.push(`<dsp:sp modelId="${modelId(number, ROLE.shape, 50 + arrow.index)}"><dsp:nvSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvSpPr/></dsp:nvSpPr><dsp:spPr>${xfrm(arrow.box, 'a:xfrm', {rotation: arrow.rotation})}<a:prstGeom prst="rightArrow"><a:avLst><a:gd name="adj1" fmla="val ${arrow.adjust[0]}"/><a:gd name="adj2" fmla="val ${arrow.adjust[1]}"/></a:avLst></a:prstGeom><a:solidFill>${schemeXml(paint.arrow)}</a:solidFill><a:ln><a:noFill/></a:ln></dsp:spPr><dsp:style><a:lnRef idx="0">${srgb}</a:lnRef><a:fillRef idx="1">${srgb}</a:fillRef><a:effectRef idx="0">${srgb}</a:effectRef><a:fontRef idx="minor"/></dsp:style></dsp:sp>`);
   }
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><dsp:drawing xmlns:dgm="${NS.dgm}" xmlns:dsp="${NS.dsp}" xmlns:a="${NS.a}"><dsp:spTree><dsp:nvGrpSpPr><dsp:cNvPr id="0" name=""/><dsp:cNvGrpSpPr/></dsp:nvGrpSpPr><dsp:grpSpPr/>${shapes.join('')}</dsp:spTree></dsp:drawing>`;
 }

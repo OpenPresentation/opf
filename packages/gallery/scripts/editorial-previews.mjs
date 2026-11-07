@@ -18,6 +18,7 @@ const TITLES = {
   gallery: 'Compare three visual directions', hero: 'One team. One outcome.',
   code: 'Keep the implementation easy to inspect', scorecard: 'Track performance against a target',
   logos: 'Recognize the partners', pyramid: 'What the pilot builds on', matrix: 'Four ways to run the pilot',
+  chevrons: 'Four stages of the pilot', flow: 'From evidence to decision', 'vertical-flow': 'How a team joins the pilot',
 };
 const SUBTITLES = {
   cover: 'A six-week pilot with two teams', section: 'Part 2: the evidence',
@@ -83,6 +84,9 @@ export function editorialDeck(id, record) {
     else if (id === 'team') payload = labelled(PEOPLE[index % 3]);
     else if (id === 'pyramid') payload = { items: ['Goal', 'Evidence', 'Pilot teams', 'Shared baseline'] };
     else if (id === 'matrix') payload = { items: ['Small, fast', 'Small, slow', 'Broad, fast', 'Broad, slow'] };
+    else if (id === 'chevrons') payload = { items: ['Baseline', 'Pilot', 'Review', 'Decide'] };
+    else if (id === 'flow') payload = { items: ['Gather evidence', 'Run the pilot', 'Decide'] };
+    else if (id === 'vertical-flow') payload = { items: ['Nominate', 'Train', 'Start'] };
     else if (id === 'agenda' || id === 'agenda-split') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
     else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };

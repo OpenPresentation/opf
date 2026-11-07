@@ -1,7 +1,8 @@
 # Pyramids, matrices and live SmartArt
 
-Two layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top)
-and `matrix` (four parts of a whole, or the four cases of two choices, as quadrants). The PowerPoint export writes them as **live
+Five layouts of the default catalog draw a list as a diagram: `pyramid` (levels that build on each other, the first entry at the top),
+`matrix` (four parts of a whole, or the four cases of two choices, as quadrants), and [`chevrons`, `flow` and `vertical-flow`](#chevrons-and-flows)
+(stages or steps in order). The PowerPoint export writes them as **live
 SmartArt** where PowerPoint lays the SmartArt out exactly as the preview draws it, and as the same drawing in native shapes everywhere
 else. A slide on either layout never turns into a stray bullet list: the arrangement has a second design of its own, drawn when
 PowerPoint's does not hold the entries.
@@ -48,6 +49,48 @@ role size (24 pt) at which every entry fits its rectangle without breaking a wor
 outline (the top of a pyramid level is narrower than its base). The list's own size counts when it is smaller (a crowded slide), never a
 size below it. The arrangement fills its region, so the growth a lone list takes when it fills too little of the body (LH-48) is not the
 size it keeps. Centered lines are centered without the space they broke at, as PowerPoint wraps them.
+
+## Chevrons and flows
+
+Three more layouts draw a list of stages or steps in order (SH-17): `chevrons` (a row of chevrons, each leading into the next), `flow`
+(boxes joined by arrows in one row) and `vertical-flow` (the same as a column, beside the title). Each is a region's `arrangement` of the
+same name, with the same rules as a pyramid's: one list of one level, 1 to 8 short entries, one size for every node, never below the
+list's role size.
+
+```json
+{ "layout": "chevrons", "title": "How we work", "items": ["Plan", "Build", "Test", "Ship"] }
+```
+
+| | Chevrons (Basic Chevron Process, `chevron1`) | Flow (Basic Process, `process1`) | Vertical flow (Vertical Process, `process2`) |
+| --- | --- | --- | --- |
+| Frame | the region's cell | the region's cell | the region's cell |
+| Nodes | n chevrons of width w = s(n) W, height min(0.4 w, H), each 0.9 w after the last (the point of one in the notch of the next), the row centered | n boxes of width w = s(n) W, height min(0.6 w, H), each 1.4 w after the last, centered | n boxes of height h = s(n) H, width min(1.8 h, W), each 1.5 h below the last, centered |
+| Shape | DrawingML `chevron` at its default adjustment (the point half the height deep) | `roundRect` at adjustment 10000 | the same |
+| Arrows | none | a `rightArrow` (stem 0.6 of its height, the default head) 0.212 w long and 0.248 w tall, 0.1 w after the box before it, on the frame's middle | a `rightArrow` turned 90 degrees, 0.45 h wide and 0.375 h long, in the middle of the gap |
+| Text rectangle | the chevron's own, between its notch and its point | the rounded rectangle's own | the same |
+| Text margin | 0.315 of the font size at the start, 0.105 on the other sides | 0.3 of the font size on every side | the same |
+| Look | every chevron in the primary with a 1.5 pt outline in the background color | the boxes as the chevrons; the arrows in the primary lightened 40% (`lumMod 60000`, `lumOff 40000`), without an outline | the same |
+
+PowerPoint fits these layouts with a binary search on one scale and keeps the last step that fits, so a node is not the closed form
+W / (0.9 n + 0.1) wide but a multiple of 1/8192 of the frame that depends only on the node count: s(n) (core `SMART_ART_SCALES`) is, in
+1024ths of the frame, 1024, 538, 365.5, 276.5, 222.5, 186, 160 and 140.25 for 1 to 8 chevrons, 1024, 426.5, 269, 196.75, 155, 128,
+108.875 and 94.75 for boxes in a row, and 1024, 409.5, 256, 186, 146.25, 120.375, 102.375 and 89 (of the frame's height) for boxes in a
+column. Two chevrons at 800 pt are 420.31 pt wide where the closed form gives 421.05. One node squeezed by the other side of the frame
+(a chevron in a frame less than 0.4 times as tall as wide) is 1023/1024 of the frame and as tall as it. The COM sweep measured 1 to 10
+nodes of each in 20 frames from 250 x 120 to 800 x 540 pt; core places every node and arrow within 0.0001 pt of PowerPoint in all of them
+but those where PowerPoint's 8 pt test letter did not fit a node (a node a few points tall), whose text made the node grow.
+
+PowerPoint's design is drawn where it holds the entries at the list's size and lies in the [domain](#the-domain); else OPF's own design
+of the arrangement, filling the region:
+
+- **chevrons**: a row across the region's width, as tall as the region or 0.6 of a chevron's width, whichever is less, the point 0.3 of
+  the height deep and half a gap from the next chevron's notch;
+- **flow**: boxes across the region's width, a gap and a half apart, each at most 0.75 times as tall as wide, an arrow in each gap;
+- **vertical flow**: boxes as wide as the region, a gap and a half apart, each at most 0.4 of the region's width tall, a down arrow in
+  each gap.
+
+A right-to-left deck mirrors both designs of a row: the first chevron or box is at the right, the chevrons point left (`flipH`) and the
+arrows turn to 180 degrees.
 
 ## In PowerPoint
 

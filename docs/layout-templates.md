@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 32 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 35 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -116,7 +116,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
 | `sequence` | `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`) | none |
-| `arrangement` | `pyramid` or `matrix` (SH-09: the region's lone list of one level draws as PowerPoint's Basic Pyramid or Basic Matrix geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid` and `matrix` use them) | none |
+| `arrangement` | `pyramid`, `matrix`, `chevrons`, `flow` or `vertical-flow` (SH-09: the region's lone list of one level draws as PowerPoint's Basic Pyramid or Basic Matrix geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid` and `matrix` use them; SH-17: `chevrons` draws the list as PowerPoint's Basic Chevron Process, `flow` as its Basic Process (boxes with arrows) and `vertical-flow` as its Vertical Process, or OPF's own row or column of them, used by the gallery layouts of the same names) | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -246,7 +246,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 32 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 35 built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -607,4 +607,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 32 built-ins.
+`two-column`. The release notes list the 35 built-ins.

@@ -58,9 +58,10 @@ export interface LayoutRegion {
   sequence?: 'steps' | 'numbered';
   /**
    * SH-09: the region draws its lone list of one level as a diagram: `pyramid` (stacked levels, the first entry at the apex) or `matrix`
-   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). Absent: a list.
+   * (four quadrants; another count draws a grid of cards), in PowerPoint's geometry or OPF's own (composition.ts). SH-17: `chevrons` (a row
+   * of chevrons), `flow` (a row of boxes with arrows between them) or `vertical-flow` (a column of them). Absent: a list.
    */
-  arrangement?: 'pyramid' | 'matrix';
+  arrangement?: 'pyramid' | 'matrix' | 'chevrons' | 'flow' | 'vertical-flow';
   anchor: RegionAnchor;
   empty: 'collapse' | 'keep';
 }
@@ -158,7 +159,7 @@ export function layoutRegion(name: string, value: unknown, inherited?: RegionAnc
     listColumns: entry.listColumns === 'auto' ? 'auto' : 1,
     ...(entry.metrics === 'tile' ? { metrics: 'tile' as const } : {}),
     ...(entry.sequence === 'steps' || entry.sequence === 'numbered' ? { sequence: entry.sequence } : {}),
-    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' ? { arrangement: entry.arrangement } : {}),
+    ...(entry.arrangement === 'pyramid' || entry.arrangement === 'matrix' || entry.arrangement === 'chevrons' || entry.arrangement === 'flow' || entry.arrangement === 'vertical-flow' ? { arrangement: entry.arrangement } : {}),
     anchor: (REGION_ANCHORS as readonly unknown[]).includes(entry.anchor) ? entry.anchor as RegionAnchor : inherited ?? 'top',
     empty: entry.empty === 'keep' ? 'keep' : 'collapse',
   };

@@ -19,7 +19,7 @@ const catalogRoot = path.join(root, "catalog");
 const LAYOUT_IDS = [
   "cover", "section", "agenda", "agenda-split", "statement", "closing",
   "text", "list", "quote", "two-column", "three-column",
-  "pillars", "comparison", "process", "timeline", "faq", "pyramid", "matrix",
+  "pillars", "comparison", "process", "timeline", "faq", "pyramid", "matrix", "chevrons", "flow", "vertical-flow",
   "metrics", "scorecard",
   "image", "image-beside", "gallery", "chart", "chart-beside", "table", "table-beside", "code",
   "hero", "dashboard", "team", "logos",
@@ -41,7 +41,7 @@ test("every record is valid against the published core's companion schema", asyn
 
 const hasTitle = (list) => list.some((entry) => (entry.regions ? hasTitle(entry.regions) : entry.name === "title"));
 
-test("the layouts are the 32 intent templates, in six groups, each passing core's template rules", async () => {
+test("the layouts are the 35 intent templates, in six groups, each passing core's template rules", async () => {
   const { index, records } = await readSnapshotKind(catalogRoot, "layouts");
   assert.deepEqual(records.map((record) => record.id), LAYOUT_IDS);
   for (const record of records) {

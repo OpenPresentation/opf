@@ -987,7 +987,7 @@ function renderSteps(bound, options) {
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
 }
-// SH-09: core's pyramids and matrices (geometry.arrangements), under the text of their entries, as the PPTX export draws them (live
+// SH-09: core's pyramids and matrices (SH-17: chevrons and flows; geometry.arrangements), under the text of their entries, as the PPTX export draws them (live
 // SmartArt or native shapes): the matrix's diamond in the primary lightened 80%, then every node (an empty quadrant too) in the primary with
 // a centered outline in the background color, core's lineWidth wide. A pyramid level is its trapezoid's polygon (the apex a triangle), a
 // quadrant a rounded square of core's corner radius (DrawingML roundRect's circular corners). With trace each shape names the entry it
@@ -1009,6 +1009,8 @@ function renderArrangements(bound, options) {
       if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
       else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
     }
+    // SH-17: the arrows between a flow's boxes, in the primary lightened 40%, without an outline (core's turned rightArrow outline).
+    for (const arrow of arrangement.arrows ?? []) parts.push(tag('path', {...HIDDEN, d: `M${arrow.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill: paint.arrow.hex}));
     return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-arrangement-design': arrangement.design, 'data-opf-region': arrangement.region} : {}, parts.join(''));
   }).join('\n');
 }

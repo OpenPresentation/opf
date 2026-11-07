@@ -421,9 +421,12 @@
           "type": "string",
           "enum": [
             "pyramid",
-            "matrix"
+            "matrix",
+            "chevrons",
+            "flow",
+            "vertical-flow"
           ],
-          "description": "SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, or four quadrants filling the region). A matrix of other than four entries draws a grid of cards. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A list with nested entries, descriptions, icons or numbering, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. Absent: the region's content draws as any other."
+          "description": "SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's own geometry (Basic Pyramid: 1 to 8 entries as stacked levels, the first at the apex; Basic Matrix: exactly four entries as the quadrants of a centered square over a diamond), which the PPTX export writes as live SmartArt where PowerPoint lays it out as the preview draws it; else OPF's own design (a stepped pyramid with each entry beside its level, or four quadrants filling the region). A matrix of other than four entries draws a grid of cards. SH-17: 'chevrons' (Basic Chevron Process: 1 to 8 entries as a row of chevrons), 'flow' (Basic Process: a row of boxes with arrows between them) and 'vertical-flow' (Vertical Process: a column of boxes with arrows between them), in PowerPoint's geometry where it holds the entries, else OPF's own row or column filling the region. Nodes are filled in the primary color with a 1.5 pt outline in the background color (cards in the card neutral). A list with nested entries, descriptions, icons or numbering, or one no design holds, draws as a list; opf/arrangement-adapted (info) reports the cards and the lists. Absent: the region's content draws as any other."
         },
         "anchor": {
           "type": "string",

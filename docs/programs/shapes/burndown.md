@@ -19,6 +19,7 @@ item's state edits its row and appends a log line in the same PR.
 | SH-12 | Graphviz DOT diagrams (owner-approved), laid out by pele | core, render, pptx | DOT sources draw in the preview and export as native shapes | todo |
 | SH-13 | PlantUML diagrams (owner-approved), laid out by pele for the diagram types it already draws | core, render, pptx | PlantUML sources of those types draw in the preview and export as native shapes | todo |
 | SH-16 | An SVG fallback for every live SmartArt (owner, 2026-11-06: other apps probably do not accept SmartArt) | pptx | PowerPoint shows the live SmartArt; an app without SmartArt shows OPF's drawing of the frame; import reads either form | in review ([opf#1068](https://github.com/OpenPresentation/opf/pull/1068)): each live SmartArt an `mc:AlternateContent` (`Requires="dgm1612"`, chosen through COM), its fallback OPF's preview of the frame as an SVG picture over a PNG, the outline as alt text, `OPF_SMARTART_V1` on the picture |
+| SH-17 | Live SmartArt for chevrons and process flows: PowerPoint's Basic Chevron Process, Basic Process and Vertical Process measured and fitted in core | core, render, pptx, gallery | Each layout is written as live SmartArt only inside the domain its COM sweep passed (node rectangles within 0.1 pt, sizes equal, SH-07's pixel gate); OPF's own row or column elsewhere; import reads OPF's and PowerPoint's files back to the same arrangement | in-progress |
 
 ## Decisions
 
