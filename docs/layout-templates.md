@@ -306,7 +306,7 @@ slide that pins any block with `region` keeps the binding above as written.
    - The closing's `details` region already flows, so its blocks join nothing; it takes the same lead plus cards (the
      guarded rule `closing-lead`). A layout whose one body region is a flowing `supporting` region, holding 3 to 6 plain
      texts that its `auto` flow would stack (a text too long for a cell of the balanced grid) and that read as neither
-     paragraph columns (LH-70) nor a lead plus stack (LH-67), sets the first text, its call to action, across the region
+     paragraph columns (LH-70) nor a lead plus stack (LH-67), and whose other texts fill whole rows of the balanced grid (2, 3 or 4 of them, never a short last row), sets the first text, its call to action, across the region
      over the others in the balanced grid, as Claude Design draws a closing's details under its call to action. It is
      kept only when no text reads smaller and nothing more is found (the size guard).
    - The join is kept unless it overflows more than leaving the extra blocks below the grid (counting `text-overflow` and

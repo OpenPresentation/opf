@@ -8262,7 +8262,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     };
     const closingUnits = soleRegion && soleRegion.flow === 'auto' && soleRegion.role === 'supporting' && !binding.arrangements.has(soleRegion.name) && direction === undefined ? contents.get(soleRegion.name) ?? [] : [];
     if (closingUnits.length >= LEAD_STACK_MIN && closingUnits.length <= JOINED_FIXED_MAX && ruleOn('closing-lead') && closingUnits.every(unit => proseLeaf(unit) && unit.field === 'text' && unit.emphasis === undefined && !unit.eyebrow)
-      && !similarParagraphs(closingUnits) && !leadStackPlan(closingUnits) && closingStacks(closingUnits)) {
+      && !similarParagraphs(closingUnits) && !leadStackPlan(closingUnits) && closingStacks(closingUnits) && new Set(gridFlowShape(closingUnits.length - 1, frame.width >= frame.height).perRow).size === 1) {
       binding.arrangements.set(soleRegion!.name, 'lead');
       fire('closing-lead');
     }

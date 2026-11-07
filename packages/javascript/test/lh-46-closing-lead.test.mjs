@@ -42,6 +42,12 @@ describe('LH-46: the closing\'s lead plus cards', () => {
     for (const size of sizes(result)) assert.ok(size >= 28 - 0.01, `size ${size}`);
   });
 
+  test('details that would leave a short last row keep the stack', () => {
+    const result = composeSlide(slide([lead, ...details, 'Write the reason back to the audit log so the next review starts from it.']), { layout: layouts.closing });
+    const xs = new Set(body(result).map((item) => Math.round(item.box.x)));
+    assert.equal(xs.size, 1, 'one column');
+  });
+
   test('similar paragraphs keep their columns and two blocks keep the region\'s own flow', () => {
     const similar = Array.from({ length: 4 }, (_, index) => `${['Pinnacle Mutual', 'Civic Data Lab', 'Oaktrail Animal Health', 'Department of Revenue Services'][index]} should focus the next cycle on speed low-complexity claims while making the operating tradeoffs clear to insurance stakeholders.`);
     const grid = composeSlide(slide(similar), { layout: layouts.closing });
