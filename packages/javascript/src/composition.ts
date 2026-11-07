@@ -4603,17 +4603,19 @@ const RULES = Symbol('opf.rules'), FIRED = Symbol('opf.fired');
  * team portraits and a quote's portrait beside it (`portraits`), LH-18's shared heading track for sibling pillars, questions and cards of a heading over
  * its description (`heading-tracks`, placement only: it adds space under the shorter headings and never changes a size), LH-170's closing note on the emphasis band
  * (`note-band`: a verdict, or the paragraph after a row of figures), LH-169's figure-led list drawn as a metric row (`figure-row`), LH-63's bold run-in heading over its
- * text (`run-in`), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
+ * text (`run-in`), LH-186's arrangement before a smaller size (`layout-first`: a long list set more than one step of the type scale under its
+ * role size in its cell is dealt into two or three columns when that sets it at least one step larger; settle's layoutFirstRecompose does
+ * the same for a layout template with LH-83's automatic grid), and the drawing rules (DRAWING_RULES): LH-131's featured card (`featured-card`), LH-137's delta pill (`delta-pill`) and
  * check-mark tiles (`check-tiles`), LH-14's icons (`icons`, `icon-chips`), LH-165's icon cards (`icon-cards`) and LH-162's text tiles (`text-tiles`). LH-80 and LH-49's tracks are alternatives composeSlide tries afterwards
  * (automaticTracks) under the same guard; LH-52 and LH-71 only place blocks at the sizes they have.
  */
-type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'icon-cards' | 'text-tiles' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'heading-tracks' | 'note-band' | 'figure-row' | 'run-in';
+type GuardedRule = 'half-steps' | 'nested-gaps' | 'empty-columns' | 'centered-column' | 'region-measure' | 'mixed-cards' | 'short-row' | 'metric-start' | 'quote-beside' | 'quote-card' | 'emphasis-band' | 'featured-card' | 'pull-quote' | 'timeline-status' | 'metric-tiles' | 'long-text-rows' | 'reading-measure' | 'lead-stack' | 'paragraph-columns' | 'bar-chart-share' | 'metric-figure' | 'metric-display' | 'eyebrow' | 'list-rows' | 'pair-rows' | 'step-badges' | 'numerals' | 'delta-pill' | 'check-tiles' | 'tier-cards' | 'pillar-words' | 'icons' | 'icon-chips' | 'icon-cards' | 'text-tiles' | 'title-rule' | 'statement-message' | 'display-message' | 'table-note' | 'compact-grid' | 'portraits' | 'heading-tracks' | 'note-band' | 'figure-row' | 'run-in' | 'layout-first';
 /**
  * The guarded rules, tried in this order when the full set does not pass the guard: the smallest change first. LH-112's display size is
  * tried last, so it never displaces an arrangement of wave 3 or 4 (a lead plus stack, paragraph columns, a pull line) that reads well
  * without it.
  */
-const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'icon-cards', 'text-tiles', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'heading-tracks', 'note-band', 'figure-row', 'run-in'];
+const GUARDED_RULES: readonly GuardedRule[] = ['half-steps', 'nested-gaps', 'empty-columns', 'centered-column', 'region-measure', 'mixed-cards', 'short-row', 'metric-start', 'metric-figure', 'quote-beside', 'quote-card', 'emphasis-band', 'featured-card', 'pull-quote', 'timeline-status', 'metric-tiles', 'long-text-rows', 'reading-measure', 'lead-stack', 'paragraph-columns', 'bar-chart-share', 'metric-display', 'eyebrow', 'list-rows', 'pair-rows', 'step-badges', 'numerals', 'delta-pill', 'check-tiles', 'tier-cards', 'pillar-words', 'icons', 'icon-chips', 'icon-cards', 'text-tiles', 'title-rule', 'statement-message', 'display-message', 'table-note', 'compact-grid', 'portraits', 'heading-tracks', 'note-band', 'figure-row', 'run-in', 'layout-first'];
 const NO_RULES: ReadonlySet<GuardedRule> = new Set();
 /**
  * LH-131, LH-137: the guarded rules that only draw (a featured card, a delta pill, check-mark tiles), held to the slide without them.
@@ -5377,7 +5379,7 @@ function wholeStepSmallest(result: SlideComposition, options: ComposeSlideOption
 }
 function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
   const before = bodyReadability(result, options);
-  if (!before.sizes.some(entry => entry.atFloor)) return result;
+  if (!before.sizes.some(entry => entry.atFloor)) return layoutFirstRecompose(input, options, result);
   let automatic: SlideComposition;
   // A strict automatic grid that does not fit is no better than the layout: the layout's result stands.
   try { automatic = guardedCompose(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
@@ -5391,6 +5393,74 @@ function recomposeAtFloor(input: unknown, options: ComposeSlideOptions, result: 
   const fitsMore = size >= layoutSize - FONT_GRID_EPSILON && after.overflows < before.overflows;
   if (!after.sizes.length || !(larger || fitsMore) || after.overflows > before.overflows || after.splitWords > before.splitWords) return result;
   return { ...automatic, recomposed: { layoutSize: layoutSize / scale, size: size / scale } };
+}
+/**
+ * LH-186: the arrangement changes before the text gets smaller. A body block that the settled composition sets more than one step of the
+ * type scale (LH-149's half steps: 16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32 px) under its role size (a paragraph's 28 px, a list's 32 px,
+ * a table's 25 px, each held to `composition.maxFontSize`) is shrunk; then the slide tries the arrangements that keep text larger, under
+ * the guarded rule `layout-first`: a long list in two or three columns (composeLayout's listColumnsFor) and, on a layout template, LH-83's
+ * automatic grid (layoutFirstRecompose). An arrangement is kept only when it adds no finding, sets no block smaller (shrinks), reads as
+ * well (readsAsWell) and sets the most shrunk block at least one step larger. `fill: false` (NO_LAYOUT_FIRST internally) and a layout master
+ * keep the slide as it fits; a block with a run size of the author's is the author's choice and never counts as shrunk.
+ */
+const NO_LAYOUT_FIRST = Symbol('opf.noLayoutFirst');
+/** LH-186: the narrowest column, in characters at its size, a list is dealt into for a larger size. */
+const LIST_COLUMN_MEASURE = 36;
+function layoutFirstOn(options: ComposeSlideOptions): boolean {
+  return options.fill !== false && (options as Record<symbol, unknown>)[NO_LAYOUT_FIRST] !== true && (options as Record<symbol, unknown>)[LAYOUT_MASTER] !== true;
+}
+/** LH-186: the smallest size of the type scale (half steps) above `size` (canvas px). */
+function typeScaleAbove(size: number, floorPx: number, scale: number): number {
+  for (let power = 0; power < 64; power++) { const step = snapFontSizeDown(Math.round(floorPx * TYPE_SCALE_RATIO ** (power / 2)) * scale); if (step > size + FONT_GRID_EPSILON) return step; }
+  return Infinity;
+}
+/** LH-186: whether `size` is more than one step of the type scale (half steps) under `role` (canvas px). */
+function underRoleStep(size: number, role: number, floorPx: number, scale: number): boolean {
+  return size < typeScaleStep(role - FONT_GRID_EPSILON, floorPx, scale, true) - FONT_GRID_EPSILON;
+}
+/** LH-186: whether a value carries a run size of the author's (a TextRun `fontSize`), anywhere in it. */
+const ownRunSizes = (value: unknown): boolean => value !== null && typeof value === 'object' && JSON.stringify(value).includes('"fontSize"');
+/**
+ * LH-186: the shrunk body blocks of a composition (paragraphs, lists and tables more than one step of the scale under their role size, as the
+ * guard counts them: trackQuality, a half step at the step under it), by path, with that size. Empty when the rule is off.
+ */
+function layoutFirstShrunk(result: SlideComposition, options: ComposeSlideOptions): Map<string, number> {
+  const shrunk = new Map<string, number>();
+  if (!layoutFirstOn(options)) return shrunk;
+  // An arrangement (a pyramid, matrix, cycle or flow, SH-09 to SH-19) adapts its own design to its entries: its list is no shrunk block.
+  const scale = Math.min(result.width, result.height) / 720, blocks = trackQuality(result, options).blocks, arranged = new Set((result.arrangements ?? []).map(entry => entry.path));
+  for (const item of result.items) {
+    if (arranged.has(item.path) || headings.has(item.field) || item.eyebrow || !['text', 'items', 'bullets', 'table'].includes(item.field) || (item.emphasis && result.emphasis !== undefined && result.emphasis.shape !== 'card') || ownRunSizes(item.value)) continue;
+    const size = blocks.get(item.path), floorPx = item.composition.minFontSize ?? 16;
+    if (size === undefined) continue;
+    const role = Math.min(contentNominalSize(item.field) * scale, (item.composition.maxFontSize ?? Infinity) * scale);
+    if (underRoleStep(size, role, floorPx, scale)) shrunk.set(item.path, size);
+  }
+  return shrunk;
+}
+/** LH-186: whether `next` is kept over `base` for its shrunk blocks (layoutFirstShrunk of `base`): see NO_LAYOUT_FIRST. */
+function layoutFirstKeeps(next: SlideComposition, base: SlideComposition, shrunk: ReadonlyMap<string, number>, options: ComposeSlideOptions): boolean {
+  const codes = (composed: SlideComposition) => composed.diagnostics.reduce((counts, entry) => counts.set(entry.code, (counts.get(entry.code) ?? 0) + 1), new Map<string, number>());
+  const was = codes(base);
+  if ([...codes(next)].some(([code, count]) => count > (was.get(code) ?? 0))) return false;
+  const scale = Math.min(base.width, base.height) / 720, floor = snapFontSizeUp((base.composition.minFontSize ?? 16) * scale), after = trackQuality(next, options);
+  if (shrinks(next, base, options) || !readsAsWell(trackQuality(base, options), after, floor)) return false;
+  const smallest = Math.min(...shrunk.values()), now = Math.min(...[...shrunk.keys()].map(path => after.blocks.get(path) ?? 0));
+  return now >= typeScaleAbove(smallest, base.composition.minFontSize ?? 16, scale) - FONT_GRID_EPSILON;
+}
+/**
+ * LH-186 with LH-83: a layout template that sets a body block more than one step under its role size (above the floor, where LH-83's
+ * recomposeAtFloor decides) is composed as the automatic grid too, and that is kept when layoutFirstKeeps it (`recomposed`).
+ */
+function layoutFirstRecompose(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  const shrunk = layoutFirstShrunk(result, options);
+  if (!shrunk.size) return result;
+  let automatic: SlideComposition;
+  try { automatic = guardedCompose(input, { ...options, [RECOMPOSE]: true } as ComposeSlideOptions); }
+  catch (error) { if (error instanceof OPFCompositionError) return result; throw error; }
+  if (!layoutFirstKeeps(automatic, result, shrunk, options)) return result;
+  const scale = Math.min(result.width, result.height) / 720, size = (composed: SlideComposition) => Math.min(...bodyReadability(composed, options).sizes.map(entry => entry.size)) / scale;
+  return { ...automatic, recomposed: { layoutSize: size(result), size: size(automatic) } };
 }
 /**
  * LH-115, automatic composition (no layout record, no composition mode, columns or weights of the slide's own): a slide of two blocks, a
@@ -5752,7 +5822,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const recomposing = (options as Record<symbol, unknown>)[RECOMPOSE] === true;
   // Wave 3: the guarded rules composeSlide asks for (all when unset), and the ones that changed something (composeSlide's guard).
   const ruleSet = (options as Record<symbol, unknown>)[RULES] as ReadonlySet<GuardedRule> | undefined, firedRules = (options as Record<symbol, unknown>)[FIRED] as Set<GuardedRule> | undefined;
-  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'compact-grid' && (options as Record<symbol, unknown>)[NO_COMPACT_GRID] === true) && !((rule === 'step-badges' || rule === 'numerals' || rule === 'icon-cards' || rule === 'text-tiles') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)) && !(rule === 'portraits' && (options as Record<symbol, unknown>)[NO_PORTRAITS] === true) && !(rule === 'note-band' && (options as Record<symbol, unknown>)[NO_NOTE_BAND] === true), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
+  const ruleOn = (rule: GuardedRule) => (!ruleSet || ruleSet.has(rule)) && !(rule === 'region-measure' && (options as Record<symbol, unknown>)[NO_REGION_MEASURE] === true) && !(rule === 'compact-grid' && (options as Record<symbol, unknown>)[NO_COMPACT_GRID] === true) && !((rule === 'step-badges' || rule === 'numerals' || rule === 'icon-cards' || rule === 'text-tiles') && (options as Record<symbol, unknown>)[NO_STEPS] === true) && !((options as Record<symbol, unknown>)[NO_DRAWING] === true && DRAWING_RULES.includes(rule)) && !(rule === 'portraits' && (options as Record<symbol, unknown>)[NO_PORTRAITS] === true) && !(rule === 'note-band' && (options as Record<symbol, unknown>)[NO_NOTE_BAND] === true) && !(rule === 'layout-first' && !layoutFirstOn(options)), fire = (rule: GuardedRule) => { firedRules?.add(rule); };
   let regionMeasured = false, compactGrid = false, cardGrid = false;
   const width = options.width ?? 1280, height = options.height ?? 720;
   if (![width, height].every(value => Number.isFinite(value) && value > 0)) throw new RangeError("Canvas dimensions must be finite and positive.");
@@ -7724,7 +7794,12 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     if (!Array.isArray(values) || values.length < 2) return undefined;
     const own = node.payload.columns;
     const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
-    if (mode === undefined || mode === 1) return undefined;
+    // LH-186: a long list (more than LH-42's entries) that neither its payload nor a region gave a count, the slide's only list (siblings keep
+    // one size, LH-43), of plain entries (no description, icon, step badge or run size of the author's), may take columns (`layout-first`).
+    const layoutFirst = mode === undefined && own === undefined && values.length > LIST_WHOLE_ENTRIES && ruleOn('layout-first') && !badgeLists.has(node.path)
+      && values.every(entry => entry === null || typeof entry !== 'object' || Array.isArray(entry) || (record(entry).description === undefined && record(entry).icon === undefined)) && !ownRunSizes(values)
+      && (function lists(nodes: Pending[]): number { return nodes.reduce((sum, child) => sum + (child.children ? lists(child.children) : child.field === 'items' || child.field === 'bullets' ? 1 : 0), 0); })(pending) === 1;
+    if ((mode === undefined && !layoutFirst) || mode === 1) return undefined;
     // LH-42: `auto` never deals a short list across columns: entries of 6 or fewer split into columns read as rows of a table
     // ("Queue | Route | Resolve"), so such a list shrinks in its one column instead. A fixed count is used as written.
     if (mode === 'auto' && values.length <= LIST_WHOLE_ENTRIES) return undefined;
@@ -7777,6 +7852,25 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const smaller = at(columns, cap);
       return smaller.some(column => column.text.overflow) ? columns : smaller;
     };
+    if (layoutFirst) {
+      // LH-186: the list's one column, on the type scale (half steps) and under the cap, more than one step under its role size, is dealt into
+      // the count (2 or 3) that sets it largest, on the scale, with no overflow; kept when that is at least one step larger (the fewer columns
+      // on a tie). As LH-144's columns, the choice is made without composition.maxFontSize, which then caps the columns (a page of a paginated
+      // slide is arranged as the first page). The guard then holds the slide to the one without it (no block smaller, no more findings).
+      const floorPx = settings.minFontSize ?? 16, onScale = (size: number) => typeScaleStep(size + FONT_GRID_EPSILON, floorPx, scale, true);
+      const one = onScale(fitList(values, box, start, floor, listOptions).fontSize);
+      if (!underRoleStep(one, start, floorPx, scale)) return undefined;
+      let best: { columns: ComposedListColumn[]; size: number } | undefined;
+      for (const count of counts) {
+        const shrunk = split(count, start, floor), size = onScale(Math.min(...shrunk.map(column => column.text.fontSize))), columns = at(shrunk, size);
+        // A column keeps a reading measure (LIST_COLUMN_MEASURE characters at its size), so a list beside other blocks is not cut into slivers.
+        if (columns.some(column => column.text.overflow || column.box.width < LIST_COLUMN_MEASURE * AVERAGE_CHARACTER_EM * size - .5)) continue;
+        if (!best || size > best.size + FONT_GRID_EPSILON) best = { columns, size };
+      }
+      if (!best || best.size < typeScaleAbove(one, floorPx, scale) - FONT_GRID_EPSILON) return undefined;
+      fire('layout-first');
+      return capped(best.columns);
+    }
     if (mode === 'auto') {
       // One column first: a list that fits at the starting size stays one column.
       if (!fitList(values, box, start, start, listOptions).overflow) return undefined;

@@ -57,7 +57,7 @@ describe('LH-75: a short table beside its note', () => {
 
   test('stays stacked: a tall table, a one-line note, a table whose cells would take three lines, and a layout that already puts the note beside', () => {
     for (const [label, input, options] of [
-      ['a tall table', slide([plans(9), { text: note }]), { layout: layouts.table }],
+      ['a tall table', slide([plans(9), { text: note }]), { layout: layouts.table, recompose: false }],
       ['a one-line note', slide([plans(3), { text: 'One line only.' }]), { layout: layouts.table }],
       ['a table too tall stacked (its cells would take three lines beside the note)', slide([wide, { text: note }]), { layout: layouts.table }],
       ['recompose: false', slide([plans(3), { text: note }]), { layout: layouts.table, recompose: false }],
@@ -66,6 +66,10 @@ describe('LH-75: a short table beside its note', () => {
       assert.ok(!beside(itemOf(result, 'table').box, itemOf(result, 'text').box), label);
       assert.equal(result.recomposed?.table, undefined, label);
     }
+    // LH-186: the table layout sets the tall table's cells more than one step under their role size, so the slide is composed as the
+    // automatic grid, where they read larger; that is LH-186's recomposition, not LH-75's.
+    const tall = composeSlide(slide([plans(9), { text: note }]), { layout: layouts.table });
+    assert.ok(tall.recomposed && tall.recomposed.table === undefined && tall.recomposed.size > tall.recomposed.layoutSize, JSON.stringify(tall.recomposed));
     const kept = composeSlide(slide([plans(3), { text: note }]), { layout: layouts['table-beside'] });
     assert.equal(kept.recomposed?.table, undefined);
     assert.ok(beside(itemOf(kept, 'table').box, itemOf(kept, 'text').box));

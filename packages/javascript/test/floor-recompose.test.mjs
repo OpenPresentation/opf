@@ -41,10 +41,16 @@ test('the gallery layouts at their sample content: a slide the layout fits above
       assert.ok(result.recomposed.chart.layoutPlot < 120 && result.recomposed.chart.plot > result.recomposed.chart.layoutPlot, `${key}: a short plot grows (${JSON.stringify(result.recomposed.chart)})`);
       assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6 || overflows(result) < overflows(kept), `${key}: no smaller body unless it overflows less`);
     } else {
-      // Recomposed only from the floor, to a larger smallest size, with no more overflow and every block still drawn.
-      assert.ok(result.recomposed.layoutSize <= FLOOR_STEP + 1e-6, `${key}: the layout was at the floor (${result.recomposed.layoutSize})`);
-      // Larger, or (wave 2, sibling sets share one size) as large with less overflow.
-      assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
+      if (result.recomposed.layoutSize <= FLOOR_STEP + 1e-6) {
+        // Recomposed from the floor, to a larger smallest size (or, wave 2, sibling sets share one size, as large with less overflow).
+        assert.ok(result.recomposed.size > result.recomposed.layoutSize || (result.recomposed.size >= result.recomposed.layoutSize && overflows(result) < overflows(kept)), `${key}: the recomposition is larger or fits more`);
+      } else {
+        // LH-186: recomposed from more than one step of the type scale under a role size: no text or list is smaller, and one is larger.
+        const sizes = (composed) => new Map(composed.items.filter((item) => !HEADINGS.has(item.field) && item.text && ['text', 'items', 'bullets'].includes(item.field)).map((item) => [item.path, item.text.fontSize]));
+        const was = sizes(kept), now = sizes(result);
+        assert.ok([...now].every(([path, size]) => size >= (was.get(path) ?? 0) - 1e-6), `${key}: no text smaller`);
+        assert.ok(result.recomposed.size >= result.recomposed.layoutSize - 1e-6, `${key}: no smaller body (${JSON.stringify(result.recomposed)})`);
+      }
     }
     assert.ok(overflows(result) <= overflows(kept), `${key}: no more overflow`);
     assert.deepEqual(blocksDrawn(result), blocksDrawn(kept), `${key}: no block is lost`);
@@ -102,15 +108,18 @@ test('the recomposition keeps the layout record\'s design and composition', () =
   assert.equal(result.items.find((item) => item.field === 'title').box.x, Math.round(0.06 * 720 * 10) / 10, 'padding from the record\'s composition');
 });
 
-test('a pinned block, recompose: false and a slide above the floor keep the layout', () => {
+test('a pinned block, recompose: false and a slide at its role sizes keep the layout', () => {
   const record = gallery.layouts['agenda-split'];
   const pinned = agenda(3);
   pinned.blocks[0].region = 'items';
   assert.equal(composeSlide(pinned, { layout: record }).recomposed, undefined, 'a block pinned to a region');
   assert.equal(composeSlide(agenda(3), { layout: record, recompose: false }).recomposed, undefined, 'recompose: false');
-  const short = composeSlide(agenda(1), { layout: record });
-  assert.equal(short.recomposed, undefined, 'one agenda fits above the floor');
+  const short = composeSlide({ title: 'Three parts, one decision', blocks: [{ items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] }] }, { layout: record });
+  assert.equal(short.recomposed, undefined, 'a short agenda fits at its role size');
   assert.ok(short.regions);
+  // LH-186: one long agenda fits above the floor but more than one step under its role size, so it is composed as the automatic grid.
+  const one = composeSlide(agenda(1), { layout: record });
+  assert.ok(one.recomposed && one.recomposed.size > one.recomposed.layoutSize, JSON.stringify(one.recomposed));
 });
 
 test('a right-to-left deck recomposes the same way, mirrored', () => {

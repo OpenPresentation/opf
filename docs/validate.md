@@ -892,7 +892,7 @@ Default severity: **warning**. Cost: structure. A chart option cannot be shown b
 
 Default severity: **warning**. Cost: composition. Text or a table does not fit its space at the smallest allowed size.
 
-**Why.** Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
+**Why.** Core composition changes the arrangement (columns, the automatic grid, another design) before it sets text smaller, fits dense content that no arrangement holds down the type scale to the readable minimum, never below it, and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.
 
 **Approximations.** Uses composeSlide at the deck's slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core's portable estimate, which can differ from the real font by a few percent; pass the renderer's measurement for font-exact results. A composition that sets overflow: "error" is reported as a warning here, so that `valid` never depends on font metrics; rendering and export still refuse such a slide when it does not fit.
 

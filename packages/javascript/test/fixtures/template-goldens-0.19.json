@@ -204,18 +204,13 @@
   "diagnostic layout-unplaced blocks.3"
  ],
  "section 5 long": [
-  "area title 57.6,57.6,1164.8,131.8",
-  "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.text - 57.6,213.4,570.4,133.7 21px",
-  "item blocks.1.text - 652,213.4,570.4,133.7 21px",
-  "item blocks.2.text - 57.6,371,570.4,133.7 21px",
-  "item blocks.3.text - 652,371,570.4,133.7 21px",
-  "item blocks.4.text - 57.6,528.7,682.5,133.7 21px",
-  "diagnostic layout-unplaced blocks.0",
-  "diagnostic layout-unplaced blocks.1",
-  "diagnostic layout-unplaced blocks.2",
-  "diagnostic layout-unplaced blocks.3",
-  "diagnostic layout-unplaced blocks.4"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.text - 57.6,193.6,570.4,150.1 24px",
+  "item blocks.1.text - 652,193.6,570.4,150.1 24px",
+  "item blocks.2.text - 57.6,367.7,570.4,150.1 24px",
+  "item blocks.3.text - 652,367.7,570.4,150.1 24px",
+  "item blocks.4.text - 57.6,541.8,780,120.6 24px"
  ],
  "section 6 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -404,10 +399,9 @@
   "item blocks.5.items items 949.2,453,273.2,138 32px"
  ],
  "agenda-split 1 long": [
-  "area title 57.6,57.6,570.4,604.8",
-  "region items 652,57.6,570.4,604.8 column 1",
-  "item title - 57.6,274,570.4,172 47px",
-  "item blocks.0.items items 652,57.6,570.4,604.8 24px"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.items - 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "agenda-split 2 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
@@ -535,13 +529,12 @@
   "item blocks.2.text message 652,415.7,570.4,205 28px"
  ],
  "statement 4 long": [
-  "area title 57.6,120.7,1164.8,131.8",
-  "region message 57.6,276.5,1164.8,322.8 grid 4",
-  "item title - 57.6,120.7,1164.8,131.8 54px",
-  "item blocks.0.text message 57.6,276.5,570.4,149.4 24px",
-  "item blocks.1.text message 652,276.5,570.4,149.4 24px",
-  "item blocks.2.text message 57.6,449.9,570.4,149.4 24px",
-  "item blocks.3.text message 652,449.9,570.4,149.4 24px"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.text - 57.6,193.6,570.4,222.4 28px",
+  "item blocks.1.text - 652,193.6,570.4,222.4 28px",
+  "item blocks.2.text - 57.6,440,570.4,222.4 28px",
+  "item blocks.3.text - 652,440,570.4,222.4 28px"
  ],
  "statement 5 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -646,14 +639,13 @@
   "item blocks.3.text details 652,457.4,570.4,205 28px"
  ],
  "closing 5 long": [
-  "area title 57.6,57.6,1164.8,148.8",
-  "region details 57.6,230.4,1164.8,432 grid 5",
-  "item title - 57.6,74.6,1164.8,131.8 54px",
-  "item blocks.0.text details 57.6,252.9,570.4,105.5 21px",
-  "item blocks.1.text details 652,252.9,570.4,105.5 21px",
-  "item blocks.2.text details 57.6,404.9,570.4,105.5 21px",
-  "item blocks.3.text details 652,404.9,570.4,105.5 21px",
-  "item blocks.4.text details 57.6,556.9,682.5,105.5 21px"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.text - 57.6,193.6,570.4,150.1 24px",
+  "item blocks.1.text - 652,193.6,570.4,150.1 24px",
+  "item blocks.2.text - 57.6,367.7,570.4,150.1 24px",
+  "item blocks.3.text - 652,367.7,570.4,150.1 24px",
+  "item blocks.4.text - 57.6,541.8,780,120.6 24px"
  ],
  "closing 6 long": [
   "area title 57.6,57.6,1164.8,148.8",
@@ -1924,12 +1916,9 @@
   "diagnostic arrangement-adapted blocks.0.items"
  ],
  "pyramid 1 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region levels 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items levels 57.6,284.9,1164.8,286.2 28px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item blocks.0.items - 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "pyramid 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -2065,12 +2054,10 @@
   "diagnostic arrangement-adapted blocks.0.items"
  ],
  "matrix 2 long": [
-  "area title 57.6,57.6,456.3,604.8",
-  "region quadrants 537.9,57.6,684.5,604.8 grid 2",
-  "item title - 57.6,286.8,456.3,146.4 40px",
-  "item blocks.0.items quadrants 537.9,57.6,330.2,576.3 21px",
-  "item blocks.1.items quadrants 892.2,57.6,330.2,576.3 21px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.items - 57.6,193.6,570.4,468.8 24px",
+  "item blocks.1.items - 652,193.6,570.4,468.8 24px"
  ],
  "matrix 3 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
@@ -2189,12 +2176,10 @@
   "diagnostic arrangement-adapted blocks.0.items"
  ],
  "cycle 2 long": [
-  "area title 57.6,57.6,456.3,604.8",
-  "region stages 537.9,57.6,684.5,604.8 grid 2",
-  "item title - 57.6,285,456.3,150.1 41px",
-  "item blocks.0.items stages 537.9,57.6,330.2,576.3 21px",
-  "item blocks.1.items stages 892.2,57.6,330.2,576.3 21px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.items - 57.6,193.6,570.4,468.8 24px",
+  "item blocks.1.items - 652,193.6,570.4,468.8 24px"
  ],
  "cycle 3 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
@@ -2435,12 +2420,9 @@
   "item blocks.5.items stages 86.3,472.1,249.1,157.5 37.3px"
  ],
  "flow 1 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region stages 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items stages 57.6,284.9,1164.8,286.2 28px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item blocks.0.items - 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "flow 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -2574,12 +2556,10 @@
   "diagnostic arrangement-adapted blocks.0.items"
  ],
  "vertical-flow 2 long": [
-  "area title 57.6,57.6,456.3,604.8",
-  "region stages 537.9,57.6,684.5,604.8 grid 2",
-  "item title - 57.6,267.3,456.3,185.4 38px",
-  "item blocks.0.items stages 537.9,57.6,330.2,576.3 21px",
-  "item blocks.1.items stages 892.2,57.6,330.2,576.3 21px",
-  "diagnostic arrangement-adapted blocks.0.items"
+  "item title - 57.6,57.6,1164.8,65.9 54px",
+  "item title - 57.6,135.5,1164.8,34.2 28px",
+  "item blocks.0.items - 57.6,193.6,570.4,468.8 24px",
+  "item blocks.1.items - 652,193.6,570.4,468.8 24px"
  ],
  "vertical-flow 3 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",
@@ -2731,16 +2711,13 @@
   "item blocks.3.text metrics 652,420.2,570.4,205 28px"
  ],
  "metrics 5 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region metrics 57.6,193.6,1164.8,263.3 grid 3",
-  "region note 57.6,481,1164.8,181.4 row 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.metric metrics 57.6,229.4,372.3,191.9 76px",
-  "item blocks.2.metric metrics 453.9,229.4,372.3,191.9 76px",
-  "item blocks.4.metric metrics 850.1,229.4,372.3,191.9 76px",
-  "item blocks.1.text note 57.6,481,570.4,181.4 26px",
-  "item blocks.3.text note 652,481,570.4,181.4 26px"
+  "item blocks.0.metric - 57.6,193.6,372.3,188.9 76px",
+  "item blocks.2.metric - 453.9,193.6,372.3,188.9 76px",
+  "item blocks.4.metric - 850.1,193.6,372.3,188.9 76px",
+  "item blocks.1.text - 57.6,406.5,570.4,205 28px",
+  "item blocks.3.text - 652,406.5,570.4,205 28px"
  ],
  "metrics 6 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3295,16 +3272,13 @@
   "item blocks.3.text charts 652,457.4,570.4,205 28px"
  ],
  "chart 5 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region charts 57.6,193.6,1164.8,263.3 grid 3",
-  "region note 57.6,481,1164.8,181.4 row 2",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.chart charts 57.6,193.6,372.3,263.3",
-  "item blocks.2.chart charts 453.9,193.6,372.3,263.3",
-  "item blocks.4.chart charts 850.1,193.6,372.3,263.3",
-  "item blocks.1.text note 57.6,481,570.4,181.4 26px",
-  "item blocks.3.text note 652,481,570.4,181.4 26px"
+  "item blocks.0.chart - 57.6,193.6,372.3,239.8",
+  "item blocks.2.chart - 453.9,193.6,372.3,239.8",
+  "item blocks.4.chart - 850.1,193.6,372.3,239.8",
+  "item blocks.1.text - 57.6,457.4,570.4,205 28px",
+  "item blocks.3.text - 652,457.4,570.4,205 28px"
  ],
  "chart 6 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3476,16 +3450,13 @@
   "item blocks.3.text note 648.5,628.2,573.9,34.2 28px"
  ],
  "table 6 short": [
-  "area title 57.6,57.6,1164.8,65.9",
-  "region table 57.6,147.5,1164.8,514.9 column 6",
-  "region note 57.6,662.4,1164.8,0 - 0 collapsed",
   "item title - 57.6,57.6,1164.8,65.9 54px",
-  "item blocks.0.table table 57.6,147.5,576.4,155.6",
-  "item blocks.1.text table 646,147.5,576.4,155.6 28px",
-  "item blocks.2.table table 57.6,327.1,576.4,155.6",
-  "item blocks.3.text table 646,327.1,576.4,155.6 28px",
-  "item blocks.4.table table 57.6,506.8,576.4,155.6",
-  "item blocks.5.text table 646,506.8,576.4,155.6 28px"
+  "item blocks.0.table - 57.6,147.5,372.3,468.8",
+  "item blocks.1.text - 57.6,628.2,372.3,34.2 28px",
+  "item blocks.2.table - 453.9,147.5,372.3,468.8",
+  "item blocks.3.text - 453.9,628.2,372.3,34.2 28px",
+  "item blocks.4.table - 850.1,147.5,372.3,468.8",
+  "item blocks.5.text - 850.1,628.2,372.3,34.2 28px"
  ],
  "table 1 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -3496,13 +3467,10 @@
   "item blocks.0.table table 57.6,193.6,1164.8,468.8"
  ],
  "table 2 long": [
-  "area title 57.6,57.6,1164.8,112",
-  "region table 57.6,193.6,1164.8,342.3 column 1",
-  "region note 57.6,559.9,1164.8,102.5 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.table table 57.6,193.6,1164.8,342.3",
-  "item blocks.1.text note 57.6,559.9,1164.8,102.5 28px"
+  "item blocks.0.table - 57.6,214,570.4,428",
+  "item blocks.1.text - 652,324,570.4,208 28px"
  ],
  "table 3 long": [
   "item title - 57.6,57.6,1164.8,65.9 54px",

@@ -45,7 +45,8 @@ describe('LH-42: several lists in a region are one list per cell', () => {
   for (const id of ['list', 'agenda', 'faq']) {
     test(`${id}: 7 lists (one nested, one a heading) are 4 + 3 cells at one size, and nothing draws over another list`, () => {
       const blocks = [...['finance', 'human resources', 'operations', 'food security', 'government'].map((topic) => ({ items: three(topic) })), { items: nested }, { items: [described] }];
-      const result = compose({ title: 'FY27 Budget Tradeoff', blocks }, layouts[id]);
+      // LH-186: recompose: false keeps the layout's grid (the faq layout's lists read larger as the automatic grid).
+      const result = compose({ title: 'FY27 Budget Tradeoff', blocks }, layouts[id], { recompose: false });
       const items = lists(result);
       assert.equal(items.length, 7);
       assert.ok(items.every((item) => item.listColumns === undefined), 'no list is dealt across columns');

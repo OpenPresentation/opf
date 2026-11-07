@@ -567,6 +567,16 @@ composition sets a body role at the floor, `composeSlide` composes the same bloc
 more overflow (`text-overflow`, `small-cell`) and no more of its fits break a line inside a word; otherwise the layout's
 result stands. Both compositions are pure, so the choice is deterministic, and both engines read it from core.
 
+**Before the floor (LH-186).** A template's composition that sets a paragraph, list or table more than one step of the type scale
+(16, 17, 18, 20, 21, 23, 24, 26, 28, 30, 32 px) under its role size (28 px prose, 32 px lists, 25 px table cells, each held to
+`composition.maxFontSize`), but above the floor, is composed as the automatic grid too, under the guarded rule `layout-first`. That
+result is kept (`recomposed`) only when it adds no finding, sets no block smaller, reads as well (no more split words, no prose
+under the minimum measure) and sets the most shrunk block at least one step larger: an agenda's two lists that the agenda-split
+layout sets at 18 px beside its title read at 32 px across the slide. A text run with its own `fontSize`, a block pinned to a
+region, `recompose: false` and `fill: false` keep the layout. So composition grows short content to fill, changes the arrangement
+(columns, the automatic grid, another design) before it sets text smaller, and fits dense content that no arrangement holds down
+the type scale to the readability floor, never below it, flagging what still does not fit.
+
 - **Body roles.** Text, lists and table cells, and the main part of the other payloads: a quote's and a code panel's body, a
   metric's value and label, and a timeline event's `what`. The other parts (attribution, filename, language, unit, delta,
   description, trend, a timeline's name, dates and notes) ask for 14 to 20 px by design, so reaching the floor is no squeeze

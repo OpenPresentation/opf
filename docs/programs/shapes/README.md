@@ -64,7 +64,7 @@ Import reports them as findings.
 
 - Both engines draw the same thing; a geometry change belongs in core and both engines read it.
 - PPTX writes native DrawingML, never a picture of a shape.
-- Text inside a shape never shrinks below what composition gives it.
+- Composition fits a shape's text from the body size down to the readability floor (`minFontSize`), never below it; the export never shrinks what composition gives it.
 - Decks without shapes do not load the geometry (the catalog-free budget's `shape-engine-lazy` entry stays tiny).
 - Every format change updates the schema, the docs, the skills, the MCP's bundled docs and the editor together.
 
