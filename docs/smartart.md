@@ -508,8 +508,11 @@ layout part:
 
 - **The outline**: the `parOf` connections from the doc point, in `srcOrd` order, as a tree of entries (nodes and an organization
   chart's assistants, `type="asst"`). An entry left as a placeholder (no text) gives its place to its children. A run's bold, italic,
-  underline and strike are kept, a line break (`a:br`) is a newline, a field is its text, and the paragraphs of one node are one entry.
-  A presentation point with text of its own (`custT`, such as a name-and-title chart's title box) is its entry's `description`.
+  underline and strike are kept, a line break (`a:br`) is a newline and a field is its text. The paragraphs of one node are one entry,
+  except on the `list` and `process` layouts, where each is an item of its own at the node's level: PowerPoint holds a Vertical Bullet
+  List's or an Accent Process's bullets as the paragraphs of one child node (its object model adds no second child there).
+  A node's title box is its entry's `description`: in a Name and Title Organization Chart PowerPoint stores the title on the sibling
+  transition of the node's connection and presents it (`presOf`); a presentation point with text of its own (`custT`) is read the same way.
 - **The layout**: the doc point's `loTypeId`, then its category (`loCatId`).
 
 Then the first form that fits:
@@ -540,10 +543,19 @@ outline as its alt text (`SmartArt (venn1):` and an entry a line, indented a lev
 
 | Finding | When |
 | --- | --- |
-| `smartart-text-dropped` (with `text`) | Text on a transition (a connection's own text, other than an organization chart's edge label), text on a presentation point that belongs to no entry, or an entry no connection reaches |
+| `smartart-text-dropped` (with `text`) | Text on a transition (a connection's own text, other than an organization chart's edge label or a presented title box), text on a presentation point that belongs to no entry, or an entry no connection reaches |
 | `smartart-picture-dropped` | An entry's picture fill (a picture layout), in every form but the drawing |
 | `smartart-formatting-dropped` | Bold, italic, underlined or struck-through text in a hierarchy (Mermaid labels carry none); the text is kept |
 | `smartart-adapted` (with `form`: an arrangement, `list`, `process`, `diagram` or `shapes`) | A layout imported as anything other than the arrangement OPF writes for it |
 
 Every finding has the layout (`layout`, the last segment of `loTypeId`) and the slide's path. A SmartArt with no text and no drawing
 (only placeholders) imports as nothing.
+
+**Evidence.** `packages/pptx/test/fixtures/powerpoint-smartart.pptx` is PowerPoint-made (COM, PowerPoint for Microsoft 365 on Windows 11,
+2026-11-07): 17 layouts (Basic and Inverted Pyramid, Basic Matrix, Basic and Text Cycle, Basic Chevron Process, Basic, Vertical and
+Accent Process, Basic Block List, Vertical Bullet List, Basic Venn, Basic Radial, Organization Chart, Hierarchy, Horizontal Hierarchy and
+Name and Title Organization Chart), each added from a seed deck OPF writes (`make-smartart-seeds.mjs`: this PowerPoint build gives
+scripts no `SmartArtLayouts` list, so each layout is a seed graphic's `SmartArt.Layout`) and filled through `SmartArt.Nodes`;
+`powerpoint-smartart.json` is PowerPoint's own reading of every node. Every node's text imports, with no `smartart-text-dropped`.
+Known limit: a slide whose SmartArt became overlay shapes has only its title as content, so the title is composed as a heading-only
+slide's and can sit over the shapes (SH-05's overlays have the same limit).

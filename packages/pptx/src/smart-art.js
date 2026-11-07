@@ -639,7 +639,8 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
     }
     if (form.layout) {
       report?.({code: 'smartart-adapted', path, layout: stem, form: form.layout, message: `${named} is imported as a list on OPF's ${form.layout} layout.`});
-      out.set(index, items.length ? {type: 'list', kind: form.layout, layout: `default:${form.layout}`, tagged: false, payload: {type: 'list', items}} : {type: 'empty'});
+      // SH-08: the list and process families hold their bullets as one node's paragraphs, each an item of its own.
+      out.set(index, items.length ? {type: 'list', kind: form.layout, layout: `default:${form.layout}`, tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
       continue;
     }
     if (form.hierarchy) {
@@ -662,7 +663,7 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
       continue;
     }
     report?.({code: 'smartart-adapted', path, layout: stem, form: 'list', message: `${named} has no OPF arrangement and no drawing; its entries are imported as a list.`});
-    out.set(index, items.length ? {type: 'list', kind: 'list', layout: 'default:list', tagged: false, payload: {type: 'list', items}} : {type: 'empty'});
+    out.set(index, items.length ? {type: 'list', kind: 'list', layout: 'default:list', tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
   }
   return out;
 }

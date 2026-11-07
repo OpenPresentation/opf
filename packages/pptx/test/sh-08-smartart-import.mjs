@@ -34,6 +34,8 @@ function dataModel(layout, category, nodes, {orphan, drawingRelId = 'rId9'} = {}
     const pres = id();
     points.push(`<dgm:pt modelId="${pres}" type="pres"><dgm:prSet presAssocID="${me}" presName="node" presStyleLbl="node1" presStyleIdx="${order}" presStyleCnt="1"${node.pres ? ' custT="1"' : ''}/><dgm:spPr/>${node.pres ? `<dgm:t><a:bodyPr/><a:lstStyle/>${text(node.pres)}</dgm:t>` : ''}</dgm:pt>`);
     connections.push(`<dgm:cxn modelId="${id()}" type="presOf" srcId="${me}" destId="${pres}" srcOrd="0" destOrd="0" presId="${layout}"/>`);
+    // A name-and-title chart presents a node's sibling transition as its title box (PowerPoint's form in the COM-made fixture).
+    if (node.title) connections.push(`<dgm:cxn modelId="${id()}" type="presOf" srcId="${sib}" destId="${id()}" srcOrd="0" destOrd="0" presId="${layout}"/>`);
     add(me, node.c ?? []);
   });
   add(doc, nodes);
@@ -71,6 +73,19 @@ const N = (t, c = [], extra = {}) => ({t, c, ...extra});
   assert.deepEqual(checkDiagram(diagram.source), {ok: true, type: 'flowchart'});
   assert.match(hierarchyDiagram([{runs: [{text: 'Say "hi" <now> #1'}], children: []}], 'LR', 'Hierarchy').source, /n1\["Say #quot;hi#quot; #lt;now#gt; #35;1"\]/);
   assert.equal(readSmartArtModel('<p:sld/>'), undefined);
+}
+
+// 1b. A presented sibling transition is its node's title (a name-and-title chart); a node's paragraphs are one entry, or (split, the list
+// and process layouts) an item each.
+{
+  const bullets = '<a:p><a:r><a:rPr lang="en-US"/><a:t>Grow revenue</a:t></a:r></a:p><a:p><a:r><a:rPr lang="en-US"/><a:t>Enter two markets</a:t></a:r></a:p>';
+  const model = readSmartArtModel(dataModel('urn:microsoft.com/office/officeart/2008/layout/NameandTitleOrganizationalChart', 'hierarchy', [
+    N('Ana Ruiz', [N('Kai Chen', [], {sib: 'Technology', title: true}), N(bullets)], {sib: 'Chief Executive', title: true}),
+  ]));
+  assert.deepEqual(model.dropped, [], 'the titles are kept');
+  assert.equal(hierarchyDiagram(model.roots, 'TD', 'Organization chart').source.split('\n')[1], '  n1["Ana Ruiz<br/>Chief Executive"]');
+  assert.deepEqual(outlineItems(model.roots), [{text: 'Ana Ruiz', description: 'Chief Executive'}, {text: 'Kai Chen', description: 'Technology', level: 1}, {text: 'Grow revenue Enter two markets', level: 1}]);
+  assert.deepEqual(outlineItems(model.roots, {split: true}).slice(2), [{text: 'Grow revenue', level: 1}, {text: 'Enter two markets', level: 1}]);
 }
 
 // 2. Which OPF form: the layouts OPF writes exactly, each family by its id, then by the doc point's category.
@@ -181,22 +196,47 @@ async function withSmartArt(frames) {
   assert.equal(diagnostics.some(item => item.code === 'shape-property-dropped'), false, 'PowerPoint\'s no-op transforms and empty 3-D are not reported');
 }
 
-// 5. The PowerPoint-made fixture (fixtures/make-powerpoint-smartart.ps1): every slide's SmartArt imports with every node's text.
-const fixture = new URL('./fixtures/powerpoint-smartart.pptx', import.meta.url), manifestUrl = new URL('./fixtures/powerpoint-smartart.json', import.meta.url);
-if (existsSync(fixture) && existsSync(manifestUrl)) {
-  const manifest = [JSON.parse(readFileSync(manifestUrl, 'utf8').replace(/^﻿/, ''))].flat();
+// 5. The PowerPoint-made fixture (fixtures/powerpoint-smartart.pptx, built through COM by fixtures/make-powerpoint-smartart.ps1 from the
+// seed deck of make-smartart-seeds.mjs; powerpoint-smartart.json is PowerPoint's own reading of every node): 17 layouts PowerPoint laid
+// out, saved with its own data models and drawings. Every node's text is imported, in the form its layout takes.
+{
+  const manifest = [JSON.parse(readFileSync(new URL('./fixtures/powerpoint-smartart.json', import.meta.url), 'utf8').replace(/^﻿/, ''))].flat().filter(entry => entry.slide !== undefined);
+  assert.equal(manifest.length, 17);
   const diagnostics = [];
-  const imported = await fromPptx(readFileSync(fixture), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
+  const imported = await fromPptx(readFileSync(new URL('./fixtures/powerpoint-smartart.pptx', import.meta.url)), {onDiagnostic: diagnostic => diagnostics.push(diagnostic)});
   assert.equal(validate(imported).valid, true);
   assert.equal(JSON.stringify(imported).includes('PowerPoint object'), false, 'no SmartArt is an unknown object');
-  // Every string the slide holds (list items, a diagram's source and alt, overlay text and alt), whitespace folded, Mermaid's entities read.
-  const strings = value => typeof value === 'string' ? [value] : Array.isArray(value) ? value.flatMap(strings) : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
+  // Every string the slide holds (list items, a diagram's source and alt, overlay text and alt), a run array as one text, whitespace folded.
+  const strings = value => typeof value === 'string' ? [value] : Array.isArray(value) ? (value.every(run => run && typeof run === 'object' && typeof run.text === 'string') ? [value.map(run => run.text).join('')] : value.flatMap(strings))
+    : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
   const fold = text => text.replace(/<br\/>/g, ' ').replace(/#quot;/g, '"').replace(/\s+/g, ' ').trim();
-  for (const slide of manifest.filter(entry => entry.slide !== undefined && !entry.error)) {
+  for (const slide of manifest) {
     const content = fold(strings(imported.slides[slide.slide - 1]).join(' '));
     for (const node of [slide.nodes].flat()) {
       const text = fold(String(node.text ?? ''));
       if (text) assert.ok(content.includes(text), `${slide.name}: ${JSON.stringify(text)} is imported`);
     }
   }
+  const form = slide => {
+    const blocks = slide.blocks ?? [];
+    return blocks.find(block => block.diagram) ? `diagram:${blocks.find(block => block.diagram).diagram.source.split('\n')[0]}` : blocks.find(block => block.items) ? `list:${slide.layout}` : slide.shapes ? `shapes:${slide.shapes.length}` : 'none';
+  };
+  assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:pyramid', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
+    'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', `shapes:${imported.slides[11].shapes.length}`, `shapes:${imported.slides[12].shapes.length}`,
+    'diagram:flowchart TD', 'diagram:flowchart TD', 'diagram:flowchart LR', 'diagram:flowchart TD']);
+  const items = index => imported.slides[index].blocks.find(block => block.items).items;
+  assert.deepEqual(items(0)[0], [{text: 'Vision', bold: true}], 'a bold run');
+  assert.equal(items(6)[2], 'Run\nthe pilot', 'a line break');
+  assert.deepEqual(items(10), ['Goals', {text: 'Grow revenue 12%', level: 1}, 'Risks', {text: 'Hiring', level: 1}], 'nested entries keep their level');
+  // Basic Venn: three half-transparent circles, each text where PowerPoint set it, the outline as the first shape's alt text.
+  const venn = imported.slides[11].shapes;
+  assert.deepEqual(venn.filter(shape => shape.shape === 'ellipse').map(shape => shape.opacity), [0.5, 0.5, 0.5]);
+  assert.equal(venn[0].alt, 'SmartArt (venn1):\nPeople\nProcess\nTechnology');
+  // Organization chart: the assistant on a dotted edge; Name and Title: each title (PowerPoint's presented sibling transition) on its node.
+  assert.match(imported.slides[13].blocks[0].diagram.source, /n1 -\.-> n2\n/);
+  assert.match(imported.slides[16].blocks[0].diagram.source, /n1\["Ana Ruiz<br\/>Chief Executive"\]/);
+  assert.match(imported.slides[16].blocks[0].diagram.source, /\["Kai Chen<br\/>Technology"\]/);
+  assert.deepEqual(diagnostics.filter(item => item.code === 'smartart-text-dropped'), [], 'no text is dropped');
+  assert.deepEqual([...new Set(diagnostics.filter(item => item.code === 'smartart-adapted').map(item => `${item.layout}:${item.form}`))],
+    ['pyramid3:pyramid', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'venn1:shapes', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
 }

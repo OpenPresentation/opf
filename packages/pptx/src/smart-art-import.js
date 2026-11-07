@@ -88,8 +88,9 @@ export function readSmartArtModel(xml) {
   const kids = kidsOf(model);
   const points = every(kidsOf(find(kids, 'dgm:ptLst')), 'dgm:pt').map(node => {
     const attributes = attrsOf(node), own = kidsOf(node), spPr = kidsOf(find(own, 'dgm:spPr'));
+    const paragraphs = readParagraphs(kidsOf(find(own, 'dgm:t'))).filter(runs => plainText(runs).trim());
     return {id: attributes.modelId, type: attributes.type ?? 'node', cxnId: attributes.cxnId, set: attrsOf(find(own, 'dgm:prSet')),
-      runs: joinParagraphs(readParagraphs(kidsOf(find(own, 'dgm:t')))), picture: find(spPr, 'a:blipFill') !== undefined};
+      runs: joinParagraphs(paragraphs), paragraphs, picture: find(spPr, 'a:blipFill') !== undefined};
   });
   const connections = every(kidsOf(find(kids, 'dgm:cxnLst')), 'dgm:cxn').map(attrsOf);
   const doc = points.find(point => point.type === 'doc');
@@ -111,7 +112,16 @@ export function readSmartArtModel(xml) {
     if (owner && byId.get(owner) && ['node', 'asst'].includes(byId.get(owner).type) && !detailOf.has(owner)) detailOf.set(owner, point.runs);
     else dropped.push({role: 'presentation', text: plainText(point.runs)});
   }
-  const reached = new Set(), usedTransitions = new Set();
+  // A sibling transition the layout presents (a presOf from it), such as a name-and-title chart's title box: the title of the entry its
+  // connection leads to (the COM-made fixture: PowerPoint stores "Chief Executive" there).
+  const presented = new Set(connections.filter(cxn => cxn.type === 'presOf').map(cxn => cxn.srcId)), usedTransitions = new Set();
+  const byCxn = new Map(connections.filter(cxn => (cxn.type ?? 'parOf') === 'parOf').map(cxn => [cxn.modelId, cxn]));
+  for (const point of points) {
+    if (point.type !== 'sibTrans' || !presented.has(point.id) || !plainText(point.runs).trim()) continue;
+    const owner = byCxn.get(point.cxnId)?.destId;
+    if (owner && ['node', 'asst'].includes(byId.get(owner)?.type) && !detailOf.has(owner)) { detailOf.set(owner, point.runs); usedTransitions.add(point.id); }
+  }
+  const reached = new Set();
   const build = (parentId, seen) => (childrenOf.get(parentId) ?? []).slice().sort((a, b) => Number(a.srcOrd ?? 0) - Number(b.srcOrd ?? 0)).flatMap(cxn => {
     const point = byId.get(cxn.destId);
     if (!point || !['node', 'asst'].includes(point.type) || seen.has(point.id)) return [];
@@ -120,13 +130,14 @@ export function readSmartArtModel(xml) {
     const edge = byId.get(cxn.parTransId);
     if (!plainText(point.runs).trim()) return children;
     if (edge && plainText(edge.runs).trim()) usedTransitions.add(edge.id);
-    return [{runs: point.runs, assistant: point.type === 'asst', ...(detailOf.has(point.id) ? {detail: detailOf.get(point.id)} : {}),
+    return [{runs: point.runs, paragraphs: point.paragraphs, assistant: point.type === 'asst', ...(detailOf.has(point.id) ? {detail: detailOf.get(point.id)} : {}),
       ...(edge && plainText(edge.runs).trim() ? {edge: edge.runs, edgeId: edge.id} : {}), picture: point.picture, children}];
   });
   const roots = build(doc.id, new Set([doc.id]));
   for (const point of points) {
     if (['node', 'asst'].includes(point.type) && !reached.has(point.id) && plainText(point.runs).trim()) dropped.push({role: 'node', text: plainText(point.runs)});
-    if (['parTrans', 'sibTrans'].includes(point.type) && plainText(point.runs).trim()) dropped.push({role: 'transition', text: plainText(point.runs), id: point.id, used: usedTransitions.has(point.id)});
+    if (['parTrans', 'sibTrans'].includes(point.type) && plainText(point.runs).trim() && !(point.type === 'sibTrans' && usedTransitions.has(point.id)))
+      dropped.push({role: 'transition', text: plainText(point.runs), id: point.id, used: usedTransitions.has(point.id)});
   }
   const extension = (function search(nodes) {
     for (const node of nodes ?? []) {
@@ -175,13 +186,18 @@ export function smartArtForm(layoutId, category) {
 // ---------------------------------------------------------------------------
 // Into OPF
 
-/** The outline as list items: depth first, a nested entry with its `level`, a detail as the item's description. */
-export function outlineItems(roots) {
+/**
+ * The outline as list items: depth first, a nested entry with its `level`, a detail as the item's description. With `split`, each paragraph
+ * of an entry is an item of its own at the entry's level (the list and process layouts hold their bullets as one node's paragraphs: the
+ * COM-made fixture's Vertical Bullet List and Accent Process take one child node a parent); else an entry's paragraphs are one item.
+ */
+export function outlineItems(roots, {split = false} = {}) {
   const items = [];
+  const item = (runs, level, detail) => level === 0 && !detail ? textValue(runs) : {text: textValue(runs), ...(detail ? {description: textValue(detail)} : {}), ...(level ? {level} : {})};
   const visit = (entries, level) => {
     for (const entry of entries) {
-      const text = textValue(entry.runs);
-      items.push(level === 0 && !entry.detail ? text : {text, ...(entry.detail ? {description: textValue(entry.detail)} : {}), ...(level ? {level} : {})});
+      const parts = split && entry.paragraphs?.length > 1 ? entry.paragraphs : [entry.runs];
+      parts.forEach((runs, index) => items.push(item(runs, level, index === 0 ? entry.detail : undefined)));
       visit(entry.children, level + 1);
     }
   };
