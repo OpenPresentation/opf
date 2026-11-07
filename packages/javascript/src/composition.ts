@@ -7554,7 +7554,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // OPF 0.19, one long list: 1, 2 then 3 equal columns at the starting size, and the first count at which it fits, as
   // long as a column stays a quarter of the slide wide. Breaks fall between items (a nested item stays with its parent)
   // and keep the columns as even as possible; numbering continues across them. A payload's fixed `columns` count is
-  // used as written. When the largest allowed count does not fit, every column shrinks to one shared size. Undefined:
+  // used as written. When no count fits, `auto` takes the count with the largest shared size (LH-184, never below one column); a fixed count shrinks to one shared size. Undefined:
   // one column, fitted as any list.
   const listColumnsFor = (node: Pending, box: LayoutBox, settings: Composition, regionMode?: 'auto' | 1): ComposedListColumn[] | undefined => {
     if (node.field !== 'items' && node.field !== 'bullets') return undefined;
@@ -7585,13 +7585,25 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       return { textPath: `${node.path}.${index}${object ? '.text' : ''}`, descriptionPath: `${node.path}.${index}.description` };
     };
     const renumber = (fit: ListFit, from: number): ListFit => ({ ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, index: entry.index + from, ...sourcePaths(entry.index + from) })) });
-    const split = (count: number, size: number, minimum: number): ComposedListColumn[] => {
-      const boxes = columnBoxes(count);
-      const whole = fitList(values, { ...boxes[0]!, height: 1e6 }, start, start, listOptions);
+    // The breaks that keep the columns even at `at`: the entries' heights in one column of the columns' width, measured at that size.
+    const breaksAt = (count: number, boxes: LayoutBox[], at: number) => {
+      const whole = fitList(values, { ...boxes[0]!, height: 1e6 }, at, at, listOptions);
       const first = whole.listEntries[0]!.textBox.y;
       const heights = whole.listEntries.map((entry, index) => (whole.listEntries[index + 1]?.textBox.y ?? first + whole.height) - entry.textBox.y);
-      const breaks = [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
-      return boxes.slice(0, breaks.length - 1).map((cell, index) => ({ box: cell, start: breaks[index]!, end: breaks[index + 1]!, text: renumber(fitList(chunk(breaks[index]!, breaks[index + 1]!), cell, size, minimum, listOptions), breaks[index]!) }));
+      return [0, ...listColumnBreaks(heights, whole.listEntries.map(entry => entry.level), count), values.length];
+    };
+    const place = (boxes: LayoutBox[], breaks: number[], size: number, minimum: number): ComposedListColumn[] =>
+      boxes.slice(0, breaks.length - 1).map((cell, index) => ({ box: cell, start: breaks[index]!, end: breaks[index + 1]!, text: renumber(fitList(chunk(breaks[index]!, breaks[index + 1]!), cell, size, minimum, listOptions), breaks[index]!) }));
+    const split = (count: number, size: number, minimum: number): ComposedListColumn[] => {
+      const boxes = columnBoxes(count);
+      const columns = place(boxes, breaksAt(count, boxes, start), size, minimum);
+      // LH-184: `auto` columns that came out smaller than the starting size are balanced at the size they came out at (entries that
+      // wrapped at the starting size can be one line at the fitted size), and kept when that lets the text stay as large.
+      if (mode !== 'auto') return columns;
+      const fitted = Math.min(...columns.map(column => column.text.fontSize));
+      if (fitted >= size - FONT_GRID_EPSILON) return columns;
+      const again = place(boxes, breaksAt(count, boxes, fitted), size, minimum);
+      return Math.min(...again.map(column => column.text.fontSize)) >= fitted - FONT_GRID_EPSILON ? again : columns;
     };
     const quarter = width / 4;
     const counts = typeof mode === 'number' ? [mode] : [2, 3].filter(count => (box.width - columnGap(count) * (count - 1)) / count >= quarter);
@@ -7611,10 +7623,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         if (columns.every(column => !column.text.overflow)) return capped(columns);
       }
     }
+    // LH-184: `auto` keeps the largest text. When no count fits at the starting size, it takes the count whose shared fitted
+    // size is largest (fewer columns on a tie), and never one that sets the text smaller than the list's one column. A fixed
+    // count is used as written, shrunk to one shared size.
+    const shared = (count: number) => { const shrunk = split(count, start, floor); return at(shrunk, Math.min(...shrunk.map(column => column.text.fontSize))); };
+    if (mode === 'auto') {
+      // Each allowed count at its shared size. Only a count in which nothing overflows competes (the largest size wins, fewer
+      // columns on a tie); when none does, the largest count is shrunk, as it was before LH-184.
+      const results = counts.map(count => shared(count));
+      let best: ComposedListColumn[] | undefined;
+      for (const columns of results) if (columns.every(column => !column.text.overflow) && (best === undefined || columns[0]!.text.fontSize > best[0]!.text.fontSize + FONT_GRID_EPSILON)) best = columns;
+      best ??= results.at(-1);
+      // One column is a plain list that the later fits (sibling sizes, the page) can still set smaller, so it replaces the
+      // columns only when it fits and is larger than their shared size.
+      const whole = fitList(values, box, start, floor, listOptions);
+      // Its lines must stay within the prose measure (PROSE_MEASURE_CHARS), else a long line runs across the card and leaves much of it empty;
+      // beyond the measure it wins only when it is a type-scale step (10%) larger than the columns.
+      const measured = whole.fontSize * PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM >= box.width - .5;
+      if (best === undefined || (!whole.overflow && whole.fontSize > best[0]!.text.fontSize * (measured ? 1 : 1.1) + FONT_GRID_EPSILON)) return undefined;
+      return capped(best);
+    }
     const count = counts.at(-1);
     if (count === undefined) return undefined;
-    const shrunk = split(count, start, floor);
-    return capped(at(shrunk, Math.min(...shrunk.map(column => column.text.fontSize))));
+    return capped(shared(count));
   };
   // OPF 0.19, "long" for `flow: auto`: more than 6 lines at the starting body size in the cell the grid would give the
   // block, counted with core's own estimate (never the host's measurement), so every engine picks the same arrangement.

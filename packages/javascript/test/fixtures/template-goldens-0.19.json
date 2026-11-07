@@ -289,7 +289,7 @@
   "region items 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items items 57.6,193.6,1164.8,468.8 30px cols=3"
+  "item blocks.0.items items 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "agenda 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -830,7 +830,7 @@
   "region body 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items body 57.6,193.6,1164.8,468.8 30px cols=3"
+  "item blocks.0.items body 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "list 2 long": [
   "area title 57.6,57.6,1164.8,112",
@@ -1813,7 +1813,7 @@
   "region questions 57.6,193.6,1164.8,468.8 column 1",
   "item title - 57.6,57.6,1164.8,65.9 54px",
   "item title - 57.6,135.5,1164.8,34.2 28px",
-  "item blocks.0.items questions 57.6,193.6,1164.8,468.8 30px cols=3"
+  "item blocks.0.items questions 57.6,193.6,1164.8,468.8 30px cols=2"
  ],
  "faq 2 long": [
   "area title 57.6,57.6,1164.8,112",
