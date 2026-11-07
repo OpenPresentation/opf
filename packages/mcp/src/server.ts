@@ -54,8 +54,11 @@ export type ReadFontFile = (file: string) => Promise<Uint8Array | undefined> | U
 
 /** The deck view (an MCP App): the HTML of `ui://opf/deck`, which `show_deck` opens in a host that supports MCP Apps. */
 export interface OpfDeckApp {
-	/** The view's HTML: `DECK_APP_HTML` of `@openpresentation/mcp`. */
-	html: string;
+	/**
+	 * The view's HTML: `DECK_APP_HTML` of `@openpresentation/mcp`, or a function that returns it (called each time a client reads
+	 * `ui://opf/deck`, so a hosted server can load the 7.6 MB page from storage only for the requests that need it).
+	 */
+	html: string | (() => string | Promise<string>);
 	/**
 	 * Font files for the view (it fetches nothing itself). With it the app-only tool `read_font_file` is offered; without it the view
 	 * draws faces it cannot get with Roboto and names the substitution. `opf-mcp` serves the installed `@openpresentation/opf-render`'s.
@@ -779,7 +782,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			"deck-view",
 			DECK_APP_URI,
 			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck opens: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
-			(uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: deckApp.html, _meta: { ui: { prefersBorder: false } } }] }),
+			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: { ui: { prefersBorder: false } } }] }),
 		);
 
 		const readFontFile = deckApp.readFontFile;

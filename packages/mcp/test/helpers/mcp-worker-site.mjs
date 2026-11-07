@@ -1,6 +1,6 @@
 // The Worker of a site that hosts the deck view: the lean server with `deckApp`, its fonts read from the site's own static files
 // through siteFontFiles, as the OpenPresentation site's /mcp does with env.ASSETS. The "site" here is a few files in memory.
-// Bundled by test/helpers/workerd.mjs.
+// The page comes from a function, as a host that keeps it in storage passes it. Bundled by test/helpers/workerd.mjs.
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { createOpfMcpServer, siteFontFiles } from "../../dist/server.js";
 
@@ -18,7 +18,7 @@ const ASSETS = {
 export default {
 	async fetch(request) {
 		if (request.method !== "POST") return new Response("ok");
-		const server = createOpfMcpServer({ version: "0.0.0-test", sources, deckApp: { html: "<!doctype html><title>OPF deck</title>", readFontFile: siteFontFiles({ fetch: (path) => ASSETS.fetch(path) }) } });
+		const server = createOpfMcpServer({ version: "0.0.0-test", sources, deckApp: { html: async () => "<!doctype html><title>OPF deck</title>", readFontFile: siteFontFiles({ fetch: (path) => ASSETS.fetch(path) }) } });
 		const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
 		await server.connect(transport);
 		return transport.handleRequest(request);
