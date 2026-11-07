@@ -37,19 +37,29 @@ The runner therefore checks every deck in two profiles:
 - **`stock`, for information.** The image's fonts and LibreOffice's bundled fonts only: what a Linux user who has not installed OPF's
   fonts sees. Results here show the cost of font substitution; they never decide the baseline.
 
-To reproduce the `opf` profile on your own Linux machine, install the same fonts and aliases the runner does
-(`scripts/libreoffice/fonts.mjs`, `prepareProfile`):
+To get the `opf` profile on your own Linux machine, one command installs the same fonts and aliases the runner uses (it calls the
+same `copyPreviewFonts`, `fontconfigAliases` and `fontconfigConf` of `@openpresentation/opf-render/preview-fonts-node`):
 
 ```sh
-npx --package @openpresentation/opf-render opf-preview-fonts ~/.local/share/fonts/opf --scripts all
-node scripts/libreoffice/fonts.mjs aliases > ~/.config/fontconfig/conf.d/60-opf-font-policy.conf
-fc-cache -f
+npx --package @openpresentation/opf-render opf-preview-fonts ~/.local/share/fonts/opf --scripts all --fontconfig ~/.config/fontconfig/conf.d/60-opf-fonts.conf
 ```
+
+Then run `fc-cache -f` and restart LibreOffice. Remove the two paths to undo it.
 
 The aliases replace a family even where it is installed, so add them only on a machine that lacks the original fonts. The other
 route is to export with `typefaces: "safe"`, which writes Arial, Georgia, Courier New or Times New Roman and lays the text out with
 their metric twins; a viewer then needs those families or their metric equivalents (Liberation Sans, Liberation Serif and Liberation
 Mono ship with LibreOffice; Gelasio for Georgia does not).
+
+## Charts
+
+The common chart types (column, bar, line, pie, doughnut, area, scatter, stacked and combo) export as native charts that LibreOffice
+draws and keeps editable. For the chartex types (treemap, sunburst, histogram, Pareto, box and whisker, waterfall, funnel), the
+default `charts: "auto"` writes the chartex part that PowerPoint draws natively. LibreOffice 26.8 reads that part too, but draws only a
+single-series histogram from it; for the other types it shows "One or more chart types are unsupported in this version of LibreOffice".
+For a deck that will be opened in LibreOffice, export with `charts: "picture"` (CLI `--charts picture`): every chartex type is then a
+clustered column chart, which LibreOffice draws with all its data and which stays editable in every app. PowerPoint stays the primary
+target, so the default does not change.
 
 ## How a deck is checked
 

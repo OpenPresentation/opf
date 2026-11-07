@@ -329,7 +329,7 @@ pnpm --filter @openpresentation/opf-pptx test
 pnpm --filter @openpresentation/opf-pptx validate
 ```
 
-LibreOffice is not a runtime dependency. Opening an exported `.pptx` in LibreOffice Impress is experimental: a nightly CI leg checks a maintained corpus in one pinned LibreOffice and Linux environment, with the font profile, the supported subset, the known differences and how to report a problem described in [LibreOffice interoperability](../../docs/libreoffice.md).
+LibreOffice is not a runtime dependency. Opening an exported `.pptx` in LibreOffice Impress is experimental: a nightly CI leg checks a maintained corpus in one pinned LibreOffice and Linux environment, with the font profile, the supported subset, the known differences and how to report a problem described in [LibreOffice interoperability](../../docs/libreoffice.md). For LibreOffice, install OPF's fonts with `opf-preview-fonts <dir> --fontconfig <file>` (or export with `typefaces: "safe"`), and export the chartex chart types with `chartex: "fallback"` (core and CLI: `charts: "picture"`), which LibreOffice draws as clustered column charts.
 
 ## Release Lane
 

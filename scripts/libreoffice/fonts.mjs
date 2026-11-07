@@ -15,34 +15,11 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 export const PROFILES = Object.freeze(["opf", "stock"]);
 
-/** One alias per font-policy row that has a replacement family: [{family, prefer, compatibility}]. */
-export function policyAliases(policy) {
-  const aliases = [];
-  for (const row of policy.families) {
-    const replacement = row.replacement;
-    const prefer = replacement?.family ?? replacement?.measured?.replacement;
-    if (typeof prefer !== "string" || !prefer || prefer.toLowerCase() === row.family.toLowerCase()) continue;
-    aliases.push({ family: row.family, prefer, compatibility: replacement.compatibility ?? (replacement.measured?.maxAbsWidthDelta === 0 ? "metric" : "visual") });
-  }
-  return aliases;
-}
-
-const escapeXml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[char]);
-
-/**
- * A fonts.conf that keeps the system configuration and adds `fontDir` and the aliases. `binding="same"` with a strong match makes the
- * replacement win over fontconfig's generic fallback, as an installed family would.
- */
-export function fontsConf({ fontDir, aliases, cacheDir, includeSystem = true }) {
-  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<fontconfig>"];
-  if (includeSystem) lines.push('  <include ignore_missing="yes">/etc/fonts/fonts.conf</include>');
-  if (fontDir) lines.push(`  <dir>${escapeXml(fontDir)}</dir>`);
-  if (cacheDir) lines.push(`  <cachedir>${escapeXml(cacheDir)}</cachedir>`);
-  for (const alias of aliases) {
-    lines.push(`  <match target="pattern"><test name="family" qual="any"><string>${escapeXml(alias.family)}</string></test><edit name="family" mode="assign" binding="same"><string>${escapeXml(alias.prefer)}</string></edit></match>`);
-  }
-  lines.push("</fontconfig>", "");
-  return lines.join("\n");
+// The aliases and the fontconfig file come from opf-render (`fontconfigAliases`, `fontconfigConf`), the same code as
+// `opf-preview-fonts --fontconfig`, the one command docs/libreoffice.md gives Linux users: the qualification tests what they install.
+async function renderFonts() {
+  const requireRender = createRequire(path.join(root, "packages/render/package.json"));
+  return import(pathToFileURL(path.join(path.dirname(requireRender.resolve("@openpresentation/opf-render/package.json")), "dist/preview-fonts-node.js")).href);
 }
 
 const sha256File = (file) => createHash("sha256").update(readFileSync(file)).digest("hex");
@@ -55,14 +32,13 @@ export async function prepareProfile(name, directory) {
   const cacheDir = path.join(directory, "cache");
   mkdirSync(fontDir, { recursive: true });
   mkdirSync(cacheDir, { recursive: true });
-  const requireRender = createRequire(path.join(root, "packages/render/package.json"));
-  const { copyPreviewFonts } = await import(pathToFileURL(path.join(path.dirname(requireRender.resolve("@openpresentation/opf-render/package.json")), "dist/preview-fonts-node.js")).href);
+  const { copyPreviewFonts, fontconfigAliases, fontconfigConf } = await renderFonts();
   // Every script face too (Noto Sans JP, Noto Naskh Arabic, ...): OPF previews those scripts with them.
   const copied = copyPreviewFonts({ outDir: fontDir, cwd: root, scripts: "all" });
-  const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8"));
-  const aliases = policyAliases(policy);
+  const aliases = fontconfigAliases();
   const conf = path.join(directory, "fonts.conf");
-  writeFileSync(conf, fontsConf({ fontDir, aliases, cacheDir }));
+  // A whole configuration (the system's included) for FONTCONFIG_FILE, with its own cache.
+  writeFileSync(conf, fontconfigConf({ fontDir, aliases, cacheDir, includeSystem: true }));
   const env = { FONTCONFIG_FILE: conf };
   spawnSync("fc-cache", ["-f"], { env: { ...process.env, ...env }, encoding: "utf8" });
   return { name, env, fontDir, conf, copied: copied.copied ?? copied.files?.length ?? 0, missing: copied.missing ?? [], aliases };
@@ -103,14 +79,4 @@ export function resolveRequested(requested, env, aliases, pdfFontNames = []) {
     const resolution = normal(match.family) === normal(family) ? "installed" : alias && normal(match.family) === normal(alias.prefer) ? "aliased" : "substituted";
     return { family, resolution, matched: match.family, style: match.style, file: match.file ? path.basename(match.file) : null, sha256: match.sha256, drawn, ...(alias ? { alias: alias.prefer, aliasCompatibility: alias.compatibility } : {}) };
   });
-}
-
-/** `node scripts/libreoffice/fonts.mjs aliases` prints the aliases alone, as a file for ~/.config/fontconfig/conf.d/ (docs/libreoffice.md). */
-if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  if (process.argv[2] !== "aliases") {
-    console.error("Usage: node scripts/libreoffice/fonts.mjs aliases > ~/.config/fontconfig/conf.d/60-opf-font-policy.conf");
-    process.exit(2);
-  }
-  const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8"));
-  process.stdout.write(fontsConf({ aliases: policyAliases(policy), includeSystem: false }));
 }

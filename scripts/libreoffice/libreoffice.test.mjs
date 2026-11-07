@@ -7,7 +7,6 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { compareStructure, containment, inkOutside, missingWords, runExtent, shapeForRun, sourceBleeds, verdict } from "./checks.mjs";
 import { corpusCases, selectCases } from "./corpus.mjs";
-import { fontsConf, policyAliases } from "./fonts.mjs";
 import { pinnedImage } from "./image.mjs";
 import { readPptx, slideWords, tokenize } from "./pptx-model.mjs";
 
@@ -105,19 +104,6 @@ test("verdict: defects fail, documented differences do not", () => {
   assert.deepEqual(verdict(lost).defects.map((entry) => entry.check), ["content"]);
   assert.deepEqual(verdict({ converted: false }).defects.map((entry) => entry.check), ["open"]);
   assert.deepEqual(verdict({ ...clean, pages: 2 }).defects.map((entry) => entry.check), ["slides"]);
-});
-
-test("the opf font profile aliases each previewed family to OPF's replacement", () => {
-  const policy = JSON.parse(readFileSync(path.join(root, "spec/reference/font-policy.json"), "utf8"));
-  const aliases = policyAliases(policy);
-  const aptos = aliases.find((entry) => entry.family === "Aptos");
-  assert.deepEqual(aptos, { family: "Aptos", prefer: "Intos", compatibility: "metric" });
-  assert.equal(aliases.find((entry) => entry.family === "Calibri").prefer, "Carlito");
-  assert.ok(!aliases.some((entry) => entry.family.toLowerCase() === entry.prefer.toLowerCase()));
-  const conf = fontsConf({ fontDir: "/fonts", aliases: [aptos, { family: "A&B", prefer: "C", compatibility: "visual" }] });
-  assert.match(conf, /<dir>\/fonts<\/dir>/);
-  assert.match(conf, /<string>Aptos<\/string><\/test><edit name="family" mode="assign" binding="same"><string>Intos<\/string>/);
-  assert.match(conf, /A&amp;B/);
 });
 
 test("readPptx reads the retained opf#925 artifact as its manifest records it", () => {
