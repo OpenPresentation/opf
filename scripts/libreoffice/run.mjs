@@ -87,7 +87,11 @@ function identities(soffice) {
 
 /** Export one case: { pptx bytes, previews: [png bytes], findings }. */
 async function exportCase(entry, core) {
-  if (entry.pptx) return { pptx: new Uint8Array(readFileSync(entry.pptx)), previews: (entry.previews ?? []).map((file) => readFileSync(file)), pdf: null, findings: [] };
+  if (entry.pptx) {
+    // A built PPTX (the release qualification corpus) whose source deck is known also gets OPF's own PDF, for the control.
+    const pdf = entry.source ? (await core.convert(entry.source, { format: "pdf", date: DATE, ...(entry.assetDir ? { assetDir: entry.assetDir } : {}) })).files[0].bytes : null;
+    return { pptx: new Uint8Array(readFileSync(entry.pptx)), previews: (entry.previews ?? []).map((file) => readFileSync(file)), pdf, findings: [] };
+  }
   const input = entry.deck ?? entry.input;
   const common = { date: DATE, ...(entry.assetDir ? { assetDir: entry.assetDir } : {}) };
   const pptx = await core.convert(input, { format: "pptx", ...common, ...(entry.options ?? {}) });

@@ -169,7 +169,12 @@ export function verdict(result) {
       // pdf.js leaves out glyphs drawn past the page, so words pushed off the slide look missing: with a slide-edge finding they are
       // reported as clipped, not lost (the round trip shows whether the words themselves survive).
       const pastEdge = slide.offSlide?.length || slide.atEdge?.length || Object.entries(slide.inkOutside ?? {}).some(([side, count]) => count > 0 && !slide.bleeds?.includes(side));
-      if (slide.missing?.length) defects.push({ check: pastEdge ? "clipped" : "content", slide: slide.number, detail: `${pastEdge ? "not on the page (past the slide edge)" : "missing from the page"}: ${slide.missing.map((entry) => entry.word).slice(0, 8).join(" ")}` });
+      // Right-to-left text is compared as letters, and a PDF's text layer can drop the code points of contextual glyph forms, so a
+      // letter shortfall there is a difference; LibreOffice's re-export (round trip, compared as exact words) decides whether text is lost.
+      const rtlShort = (slide.missing ?? []).filter((entry) => entry.letters !== undefined && entry.found / entry.expected >= 0.75);
+      const missing = (slide.missing ?? []).filter((entry) => !rtlShort.includes(entry));
+      if (rtlShort.length) differences.push({ check: "rtl-text-layer", slide: slide.number, detail: `the PDF text layer lacks ${rtlShort.map((entry) => entry.letters).join("")} of the right-to-left letters` });
+      if (missing.length) defects.push({ check: pastEdge ? "clipped" : "content", slide: slide.number, detail: `${pastEdge ? "not on the page (past the slide edge)" : "missing from the page"}: ${missing.map((entry) => entry.word).slice(0, 8).join(" ")}` });
       if (slide.offSlide?.length) defects.push({ check: "slide-edge", slide: slide.number, detail: slide.offSlide.slice(0, 4).map((entry) => `"${entry.str.trim().slice(-24)}" ${entry.side} +${entry.by} pt`).join("; ") });
       const sideways = (slide.outsideBox ?? []).filter((entry) => entry.side !== "bottom" || entry.wrap === "none");
       if (sideways.length) defects.push({ check: "text-box", slide: slide.number, detail: sideways.slice(0, 4).map((entry) => `"${entry.str.trim().slice(-24)}" ${entry.side} +${entry.by} pt`).join("; ") });

@@ -24,6 +24,8 @@ export async function corpusCases() {
     { id: "issue-925-rebuilt-safe", group: "opf#925", scope: "baseline", input: corpus("long-text-925.opf.json"), options: { typefaces: "safe" }, note: "The same deck exported with typefaces: safe." },
     { id: "issue-925-rebuilt-native", group: "opf#925", scope: "baseline", input: corpus("long-text-925.opf.json"), options: { bodyText: "native" }, note: "The same deck exported with bodyText: native (one wrapping body per region)." },
     { id: "issue-925-original", group: "opf#925", scope: "regression", pptx: path.join(root, "packages/pptx/test/fixtures/native-long-text/llmreference.pptx"), note: "The retained seven-slide artifact of the report (exported by opf-pptx 0.20.2), checked unchanged." },
+    { id: "example-chart-type-sampler", group: "common charts", scope: "advanced", input: path.join(root, "examples/technical/chart-type-sampler.opf.json"), assetDir: path.join(root, "examples/technical"), note: "The chartex types with the default charts: auto." },
+    { id: "example-chart-type-sampler-picture", group: "common charts", scope: "baseline", input: path.join(root, "examples/technical/chart-type-sampler.opf.json"), assetDir: path.join(root, "examples/technical"), options: { charts: "picture" }, note: "The same deck with charts: picture, which writes the chartex types as clustered column charts LibreOffice draws." },
     { id: "example-rich-text-runs", group: "cover and text", scope: "baseline", input: path.join(root, "examples/technical/rich-text-runs.opf.json"), assetDir: path.join(root, "examples/technical") },
     { id: "example-table-cell-types", group: "tables", scope: "baseline", input: path.join(root, "examples/technical/table-cell-types.opf.json"), assetDir: path.join(root, "examples/technical") },
   ];
@@ -81,6 +83,9 @@ export function qualificationCases(buildDir) {
         pptx: path.join(buildDir, variant.pptx),
         previews,
         qualification: { deck: deck.id, variant: variant.name, sha256: variant.sha256, revision: build.revision },
+        // The deck itself, so the control can measure OPF's own PDF of it.
+        source: path.join(root, deck.source),
+        assetDir: path.dirname(path.join(root, deck.source)),
       });
     }
   }
