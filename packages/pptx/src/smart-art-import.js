@@ -166,6 +166,9 @@ export function smartArtForm(layoutId, category) {
   if (exact) return {arrangement: exact, exact: true};
   const stem = layoutStem(layoutId);
   if (/^(venn|radial|target|balance|funnel|gear|equation|arrow|bracket|opposingIdeas|counterbalance|plus|converging|diverging|hexagon|circleRelationship)/i.test(stem)) return {drawing: true};
+  // Inverted Pyramid (pyramid3) widens downward. OPF's pyramid puts its first entry at the narrow top, which would reverse the meaning, so
+  // its entries are a list in order, the widest first.
+  if (/^pyramid3$|invert/i.test(stem)) return {layout: 'list', inverted: true};
   if (/^pyramid\d*$/i.test(stem)) return {arrangement: 'pyramid'};
   if (/^matrix\d*$/i.test(stem)) return {arrangement: 'matrix'};
   if (/^cycle\d*$/i.test(stem)) return {arrangement: 'cycle'};

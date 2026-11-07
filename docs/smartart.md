@@ -520,6 +520,7 @@ Then the first form that fits:
 | Layout | OPF |
 | --- | --- |
 | The six OPF writes (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`) and OPF's own layouts | The list on that arrangement's layout, as above |
+| Inverted Pyramid (`pyramid3`), which widens downward | The list on the `list` layout, in order (the widest first), with `smartart-adapted`: OPF's pyramid puts its first entry at the narrow top, so drawing it upright would reverse its meaning |
 | Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
 | The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
 | The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
@@ -557,5 +558,7 @@ Accent Process, Basic Block List, Vertical Bullet List, Basic Venn, Basic Radial
 Name and Title Organization Chart), each added from a seed deck OPF writes (`make-smartart-seeds.mjs`: this PowerPoint build gives
 scripts no `SmartArtLayouts` list, so each layout is a seed graphic's `SmartArt.Layout`) and filled through `SmartArt.Nodes`;
 `powerpoint-smartart.json` is PowerPoint's own reading of every node. Every node's text imports, with no `smartart-text-dropped`.
-Known limit: a slide whose SmartArt became overlay shapes has only its title as content, so the title is composed as a heading-only
-slide's and can sit over the shapes (SH-05's overlays have the same limit).
+A slide whose SmartArt became overlay shapes has only its title besides them. Overlay shapes whose bounds cover at least a fifth of the
+slide (core `overlaysDrawBody`, `OVERLAY_BODY_SHARE`; front layer, placed by fractions) are the slide's body, so its title is a content
+slide's, on top, not a cover's centered over the shapes; a badge on a cover leaves the cover as it was. This holds for any slide, authored
+or imported (`examples/technical/shape-overlays.opf.json` slide 5's title moves to the top).

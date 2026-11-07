@@ -91,7 +91,7 @@ const N = (t, c = [], extra = {}) => ({t, c, ...extra});
 // 2. Which OPF form: the layouts OPF writes exactly, each family by its id, then by the doc point's category.
 {
   const forms = {
-    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid3`]: {arrangement: 'pyramid'}, [`${L}matrix1`]: {arrangement: 'matrix'},
+    [`${L}pyramid1`]: {arrangement: 'pyramid', exact: true}, [`${L}pyramid2`]: {arrangement: 'pyramid'}, [`${L}pyramid3`]: {layout: 'list', inverted: true}, [`${L}matrix1`]: {arrangement: 'matrix'},
     [`${L}cycle1`]: {arrangement: 'cycle'}, [`${L}chevron2`]: {arrangement: 'chevrons'}, [`${L}hChevron3`]: {arrangement: 'chevrons'},
     [`${L}process1`]: {arrangement: 'flow', exact: true}, [`${L}process2`]: {arrangement: 'vertical-flow', exact: true},
     [`${L}orgChart1`]: {hierarchy: 'TD'}, [`${L}hierarchy1`]: {hierarchy: 'TD'}, [`${L}hierarchy2`]: {hierarchy: 'LR'},
@@ -155,7 +155,7 @@ async function withSmartArt(frames) {
 }
 {
   const {imported, diagnostics} = await withSmartArt([
-    {data: dataModel(`${L}pyramid3`, 'pyramid', [N('Leads'), N('Prospects'), N('Customers')])},
+    {data: dataModel(`${L}pyramid2`, 'pyramid', [N('Leads'), N('Prospects'), N('Customers')])},
     {data: dataModel(`${L}vList2`, 'list', [N('Goals', [N('Grow revenue'), N('Enter two markets')]), N('Risks', [N('Hiring')])])},
     {data: dataModel(`${L}process3`, 'process', [N('Discover', [N('Interviews')]), N('Define'), N('Deliver')], {})},
     {data: dataModel(`${L}hierarchy2`, 'hierarchy', [N('Company', [N('Sales'), N('Engineering')])])},
@@ -190,7 +190,7 @@ async function withSmartArt(frames) {
   assert.deepEqual(blocks(empty), [], 'a SmartArt with only placeholders imports nothing');
   assert.equal(JSON.stringify(imported).includes('PowerPoint object'), false, 'no SmartArt is an unknown object');
   const of = code => diagnostics.filter(item => item.code === code).map(item => [item.path, item.layout, item.form ?? item.text]);
-  assert.deepEqual(of('smartart-adapted'), [['slides.0', 'pyramid3', 'pyramid'], ['slides.1', 'vList2', 'list'], ['slides.2', 'process3', 'process'], ['slides.3', 'hierarchy2', 'diagram'],
+  assert.deepEqual(of('smartart-adapted'), [['slides.0', 'pyramid2', 'pyramid'], ['slides.1', 'vList2', 'list'], ['slides.2', 'process3', 'process'], ['slides.3', 'hierarchy2', 'diagram'],
     ['slides.4', 'venn1', 'shapes'], ['slides.5', 'radial1', 'list'], ['slides.7', 'default', 'list']]);
   assert.deepEqual(of('smartart-text-dropped'), [['slides.6', 'chevron1', 'then']]);
   assert.equal(diagnostics.some(item => item.code === 'shape-property-dropped'), false, 'PowerPoint\'s no-op transforms and empty 3-D are not reported');
@@ -221,11 +221,13 @@ async function withSmartArt(frames) {
     const blocks = slide.blocks ?? [];
     return blocks.find(block => block.diagram) ? `diagram:${blocks.find(block => block.diagram).diagram.source.split('\n')[0]}` : blocks.find(block => block.items) ? `list:${slide.layout}` : slide.shapes ? `shapes:${slide.shapes.length}` : 'none';
   };
-  assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:pyramid', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
+  assert.deepEqual(imported.slides.map(form), ['list:default:pyramid', 'list:default:list', 'list:default:matrix', 'list:default:cycle', 'list:default:cycle', 'list:default:chevrons',
     'list:default:flow', 'list:default:vertical-flow', 'list:default:process', 'list:default:list', 'list:default:list', `shapes:${imported.slides[11].shapes.length}`, `shapes:${imported.slides[12].shapes.length}`,
     'diagram:flowchart TD', 'diagram:flowchart TD', 'diagram:flowchart LR', 'diagram:flowchart TD']);
   const items = index => imported.slides[index].blocks.find(block => block.items).items;
   assert.deepEqual(items(0)[0], [{text: 'Vision', bold: true}], 'a bold run');
+  assert.deepEqual(items(1), ['Leads', 'Prospects', 'Customers'], 'an inverted pyramid is a list in order, never an upright pyramid');
+  assert.match(diagnostics.find(item => item.layout === 'pyramid3').message, /inverted pyramid/);
   assert.equal(items(6)[2], 'Run\nthe pilot', 'a line break');
   assert.deepEqual(items(10), ['Goals', {text: 'Grow revenue 12%', level: 1}, 'Risks', {text: 'Hiring', level: 1}], 'nested entries keep their level');
   // Basic Venn: three half-transparent circles, each text where PowerPoint set it, the outline as the first shape's alt text.
@@ -238,5 +240,5 @@ async function withSmartArt(frames) {
   assert.match(imported.slides[16].blocks[0].diagram.source, /\["Kai Chen<br\/>Technology"\]/);
   assert.deepEqual(diagnostics.filter(item => item.code === 'smartart-text-dropped'), [], 'no text is dropped');
   assert.deepEqual([...new Set(diagnostics.filter(item => item.code === 'smartart-adapted').map(item => `${item.layout}:${item.form}`))],
-    ['pyramid3:pyramid', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'venn1:shapes', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
+    ['pyramid3:list', 'cycle1:cycle', 'process3:process', 'default:list', 'vList2:list', 'venn1:shapes', 'radial1:shapes', 'orgChart1:diagram', 'hierarchy1:diagram', 'hierarchy2:diagram', 'NameandTitleOrganizationalChart:diagram']);
 }

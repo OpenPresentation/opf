@@ -638,7 +638,9 @@ export function importSmartArt({frames, relationships, entries, slideIndex, repo
       continue;
     }
     if (form.layout) {
-      report?.({code: 'smartart-adapted', path, layout: stem, form: form.layout, message: `${named} is imported as a list on OPF's ${form.layout} layout.`});
+      report?.({code: 'smartart-adapted', path, layout: stem, form: form.layout, message: form.inverted
+        ? `${named} is an inverted pyramid, which OPF's pyramid does not draw (its first entry is the narrow top); its entries are imported as a list in order, the widest first.`
+        : `${named} is imported as a list on OPF's ${form.layout} layout.`});
       // SH-08: the list and process families hold their bullets as one node's paragraphs, each an item of its own.
       out.set(index, items.length ? {type: 'list', kind: form.layout, layout: `default:${form.layout}`, tagged: false, payload: {type: 'list', items: outlineItems(model.roots, {split: true})}} : {type: 'empty'});
       continue;
