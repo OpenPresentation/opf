@@ -1,0 +1,203 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Icons, arrangements and connectors",
+  "description": "Technical example for the 0.33 drawing features on one fictional product-launch story: icons from the gallery's Lucide and Tabler sets (icon cards, a list with icon chips, metric icons), the pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts (live SmartArt in PowerPoint where it holds the text, native shapes elsewhere), and a slide of shapes joined by connectors. The icon sets load on demand; the CLI and the MCP register them (see docs/icons.md, docs/smartart.md and docs/shapes.md).",
+  "language": "en-US",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "id": "icon-cards",
+      "title": "What is new in the launch",
+      "items": [
+        {
+          "text": "Offline mode",
+          "description": "Keep working without a connection.",
+          "icon": "lucide:wifi-off"
+        },
+        {
+          "text": "Shared workspaces",
+          "description": "One place for a team's files.",
+          "icon": "lucide:users"
+        },
+        {
+          "text": "Faster exports",
+          "description": "Decks leave as PDF in seconds.",
+          "icon": "tabler:rocket"
+        },
+        {
+          "text": "Safer sharing",
+          "description": "Links expire and can be revoked.",
+          "icon": "lucide:shield-check"
+        }
+      ]
+    },
+    {
+      "id": "icon-list",
+      "title": "Why customers switch",
+      "items": [
+        {
+          "text": "Setup takes an afternoon, not a quarter.",
+          "icon": "lucide:clock"
+        },
+        {
+          "text": "Every plan includes the admin console.",
+          "icon": "lucide:shield-check"
+        },
+        {
+          "text": "Support answers within one business day.",
+          "icon": "lucide:users"
+        }
+      ]
+    },
+    {
+      "id": "metric-icons",
+      "title": "Launch results at a glance",
+      "blocks": [
+        {
+          "metric": {
+            "value": "52",
+            "label": "Pilot teams",
+            "icon": "lucide:users"
+          }
+        },
+        {
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "icon": "lucide:chart-bar"
+          }
+        },
+        {
+          "metric": {
+            "value": "6.2",
+            "label": "Median task time",
+            "unit": "min",
+            "icon": "lucide:clock"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pyramid",
+      "layout": "pyramid",
+      "title": "Our strategy",
+      "items": [
+        "Vision",
+        "Goals",
+        "Programs",
+        "Teams"
+      ]
+    },
+    {
+      "id": "matrix",
+      "layout": "matrix",
+      "title": "Four markets",
+      "items": [
+        "Enterprise",
+        "Mid-market",
+        "Consumer",
+        "Public sector"
+      ]
+    },
+    {
+      "id": "cycle",
+      "layout": "cycle",
+      "title": "How each round feeds the next",
+      "items": [
+        "Plan",
+        "Pilot",
+        "Measure",
+        "Adjust"
+      ]
+    },
+    {
+      "id": "chevrons",
+      "layout": "chevrons",
+      "title": "How we work",
+      "items": [
+        "Plan",
+        "Build",
+        "Test",
+        "Ship"
+      ]
+    },
+    {
+      "id": "flow",
+      "layout": "flow",
+      "title": "From request to release",
+      "items": [
+        "Request",
+        "Review",
+        "Build",
+        "Release"
+      ]
+    },
+    {
+      "id": "vertical-flow",
+      "layout": "vertical-flow",
+      "title": "What happens after sign-up",
+      "items": [
+        "Create the workspace",
+        "Invite the team",
+        "Import the first deck",
+        "Share it"
+      ]
+    },
+    {
+      "id": "connectors",
+      "title": "Shapes joined by connectors",
+      "blocks": [
+        {
+          "id": "plan",
+          "text": "Plan",
+          "aspectRatio": 1.6,
+          "shape": "roundRect"
+        },
+        {
+          "id": "build",
+          "text": "Build",
+          "aspectRatio": 1.6,
+          "shape": "roundRect"
+        },
+        {
+          "id": "ship",
+          "text": "Ship",
+          "aspectRatio": 1,
+          "shape": "ellipse"
+        }
+      ],
+      "shapes": [
+        {
+          "connector": {
+            "from": "plan",
+            "to": "build",
+            "route": "straight"
+          },
+          "stroke": {
+            "width": 3,
+            "end": {
+              "type": "triangle"
+            }
+          }
+        },
+        {
+          "connector": {
+            "from": "build",
+            "to": "ship",
+            "route": "straight"
+          },
+          "stroke": {
+            "color": "accent1",
+            "width": 3,
+            "end": {
+              "type": "stealth",
+              "length": "large"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

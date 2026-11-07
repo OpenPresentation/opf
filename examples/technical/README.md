@@ -23,6 +23,7 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Styled tables: `bold` on a cell style (a bold cell keeps its number `format`), a rich cell in a numeric column, and a `padding` object ([`table-cell-types.opf.json`](./table-cell-types.opf.json)).
 - Color variants: `design.variant`, per slide, `tone` on a picture background, and the neutrals that follow ([`color-variants.opf.json`](./color-variants.opf.json), from core 0.23.0).
 - Diagrams: Mermaid `diagram` payloads (a full-slide flowchart, a sequence diagram beside text, a mind map, a timeline-family diagram, a pie diagram, a diagram with `alt`, and a diagram on a dark variant) drawn in the deck's fonts and colors ([`diagrams.opf.json`](./diagrams.opf.json)).
+- Icons from the gallery's icon sets, the pyramid, matrix, cycle, chevrons, flow and vertical-flow layouts (live SmartArt in PowerPoint) and shapes joined by connectors ([`icons-and-arrangements.opf.json`](./icons-and-arrangements.opf.json), from core 0.33.0). The shape fixtures are [`shapes`](./shapes.opf.json), [`shape-effects`](./shape-effects.opf.json) and [`shape-overlays`](./shape-overlays.opf.json).
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides (including `design.listBullet: "none"` for a label with its description, [`slide-design-overrides.opf.json`](./slide-design-overrides.opf.json)).
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.

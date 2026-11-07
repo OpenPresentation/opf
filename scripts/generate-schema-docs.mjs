@@ -238,6 +238,7 @@ async function examplesGuide() {
     "Use `examples/technical/` when you want a small file that exercises a specific schema surface:",
     "",
     "- content payloads, rich text, blocks, charts, tables, media, metrics, quotes, timelines, and diagrams",
+    "- icons, shapes, connectors, and the pyramid, matrix, cycle, chevrons, and flow layouts",
     "- promoted region keys and span combinations",
     "- asset string/object forms and asset-backed chart data",
     "- design backgrounds, organization logo shapes, headers, footers, watermarks, and slide-level overrides",
