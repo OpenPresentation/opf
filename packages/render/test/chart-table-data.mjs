@@ -63,11 +63,13 @@ if (process.env.RR54_PRINT_DIGESTS) {
 // 6e06a71f...), the doughnut (was 379c218a...) and the treemap (was 729597f6...); every other digest is unchanged.
 // LH wave 8: LH-160 draws a lone value column's histogram with only the bins its plot can label one beside another, which moves
 // histogram-lone-column (was 7c2a1efe...); every other digest is unchanged.
+// LH-176: clustered bars of several series are band / (n + 1.5) wide (PowerPoint's 150% gap width, core chartBarGeometry), which moves
+// column (was 9e0ac4ac...), bar (was 092e12de...), world (a map drawn as columns, was 01127948...) and column-no-options (was c74a507b...).
 const REVIEWED_SVG_DIGESTS = {
-  'column': '9e0ac4ac35219f397723d0a0',
+  'column': '38c8d2000c4ef86d4398bb71',
   'stacked-column': '22c1bb68ee1f45037f081ace',
   '100pct-stacked-column': 'c5e8ca6415e870028d442c77',
-  'bar': '092e12deb87ba85b108ddd19',
+  'bar': 'faa1e94becd692615e194823',
   'stacked-bar': '0b7adf7f2cd425d491e5e091',
   '100pct-stacked-bar': '358d352b2c3b612865011a67',
   'line': '6cabc1b834046cb5a5f16eb6',
@@ -89,9 +91,9 @@ const REVIEWED_SVG_DIGESTS = {
   'box-and-whisker': '8a6324792766fc047f85cd59',
   'waterfall': '1634735baf70cec035c76edb',
   'funnel': '3f6d700694a038d2172c254a',
-  'world': '0112794832461b1dc39da0fb',
+  'world': '308020cd9011dd44b81b41d3',
   'sketch': '412f5a537d5291557428c038',
-  'column-no-options': 'c74a507b8909ef64e0e44353',
+  'column-no-options': '04189898df40ba484c0b6f7c',
   'line-string-numbers': '892f93f3d8fc81ad13662b4a',
   'histogram-lone-column': 'e605e1ca2ab256e6940e7ed9',
   'table-styled': '8685c7ee57a5e3143c31d132',
