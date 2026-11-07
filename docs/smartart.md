@@ -520,7 +520,7 @@ Then the first form that fits:
 | Layout | OPF |
 | --- | --- |
 | The six OPF writes (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`) and OPF's own layouts | The list on that arrangement's layout, as above |
-| Inverted Pyramid (`pyramid3`), which widens downward | The list on the `list` layout, in order (the widest first), with `smartart-adapted`: OPF's pyramid puts its first entry at the narrow top, so drawing it upright would reverse its meaning |
+| Inverted Pyramid (`pyramid3`), which widens downward | The list on the `list` layout, in order (the widest first), with `smartart-adapted`: OPF's pyramid puts its first entry at the narrow top, so drawing it upright would reverse its meaning (an inverted arrangement is [opf#1128](https://github.com/OpenPresentation/opf/issues/1128)) |
 | Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
 | The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
 | The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
