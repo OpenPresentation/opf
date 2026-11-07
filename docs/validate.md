@@ -1055,11 +1055,11 @@ Default severity: **warning**. Cost: structure. A chart highlight is adapted by 
 
 Default severity: **warning**. Cost: structure. A chart series is not drawn by the chart type.
 
-**Why.** A treemap, histogram, Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
+**Why.** A treemap, histogram, one-series Pareto, waterfall, funnel, map or single-series pie plots one value series, and a scatter plots no X column without numbers. Every engine leaves the same columns out (LH-60), so the warning names them instead of losing them silently.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places is drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
+**Approximations.** Read from the drawn chart (chartDrawPlan): a world chart over categories that are mostly not places and a Pareto chart of several series are drawn as columns, a box-and-whisker chart with one value per category as one box per series and a pie or doughnut of several series as nested rings, and none of those drops a series.
 
 ### `opf/code-highlight-out-of-range`
 

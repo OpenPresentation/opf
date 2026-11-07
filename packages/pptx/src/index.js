@@ -4874,25 +4874,20 @@ function toPptxChartData(chart, chartexMode = 'auto', presentation, path = 'char
   const columnCodes = (plan.formats ?? []).map(excelCode);
   const diagnostics = resolvedData.diagnostics.filter((entry) => entry.severity === 'warning' && entry.code !== 'chart-value-not-numeric');
   const rejected = resolvedData.diagnostics.filter((entry) => entry.code === 'chart-value-not-numeric');
-  const {id: chartId, spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
+  const {spec: resolved} = resolveChartType(plan.fallback ? plan.type : chart.type);
   // A chartex type (treemap, histogram, pareto, box & whisker, waterfall, funnel, map) has no classic construct. Natively
   // it is written as its cx:chartSpace part and the clustered column chart of the same data is its mc:Fallback
   // (src/chartex.js). 'auto' (the default) does that for the constructs the native PowerPoint check confirmed and keeps
   // the unconfirmed map on the clustered column chart alone; 'fallback' keeps every chartex id there. The fallback is
-  // reported as chartex-fallback, never silent.
-  const multiSeriesPareto = chartId === 'pareto' && data.columns.length > 2;
-  if (multiSeriesPareto && chartexMode === 'native') {
-    throw new OPFPptxError('unsupported-chart-data', 'Native Pareto supports one value series. Use chartex auto or fallback to export every series as an editable clustered column chart.', {path, series: data.columns.slice(1)});
-  }
-  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed && !multiSeriesPareto);
+  // reported as chartex-fallback, never silent. LH-175: a Pareto chart of several series is core's pareto-as-columns fallback (a
+  // clustered column chart of every series, as the preview draws it), so it reaches here as a column chart in every mode.
+  const native = chartexMode === 'native' || (chartexMode === 'auto' && resolved.family === 'chartex' && !resolved.unconfirmed);
   const chartex = resolved.family === 'chartex' && native ? resolved : null;
   const spec = resolved.family === 'chartex' ? CHARTEX_FALLBACK : resolved;
   const typeName = stringifyText(chart.type);
   const adaptations = [];
   if (resolved.family === 'chartex' && !native) {
-    const reason = multiSeriesPareto && chartexMode === 'auto'
-      ? 'that cannot represent multiple value series natively; all authored series are preserved in the fallback'
-      : chartexMode === 'fallback'
+    const reason = chartexMode === 'fallback'
       ? 'that this exporter does not write'
       : 'that PowerPoint has not yet accepted natively from this exporter (pass chartex: \'native\' to write its chartex part)';
     adaptations.push({adaptation: "chartex-fallback", message: `The '${typeName}' chart is a PowerPoint extension (chartex) chart ${reason}; its data is exported as a native clustered column chart instead.`});
