@@ -772,12 +772,14 @@ function chartAggregateError(path, aggregate) {
 // A range so wide that min + n x majorUnit leaves Number's range (finite data up to Number.MAX_VALUE) has no ticks to rebuild from the
 // three numbers; it takes the saturating scale `niceScale` computes.
 function categoryScale(c, dataMin, dataMax, length, labelExtent, percent) {
-  const axis = c.valueAxis;
-  if (axis && Number.isFinite(axis.max - axis.min) && (axis.max - axis.min) / axis.majorUnit <= 1000) {
-    const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
-    if (scale.ticks.every(Number.isFinite)) return scale;
-  }
-  return niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
+  return composedScale(c.valueAxis) ?? niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
+}
+
+// The scale of an axis core composed ({min, max, majorUnit}), or undefined when there is none or its ticks leave Number's range.
+function composedScale(axis) {
+  if (!axis || !Number.isFinite(axis.max - axis.min) || !(axis.majorUnit > 0) || (axis.max - axis.min) / axis.majorUnit > 1000) return undefined;
+  const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
+  return scale.ticks.every(Number.isFinite) ? scale : undefined;
 }
 
 function renderCategoryChart(c, spec) {
@@ -1493,11 +1495,13 @@ function renderHistogramChart(c, spec) {
   const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
   const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
-  const probe = { ticks: probeTicks(dataMin, dataMax) };
+  // RR-105: the value axis core composed (layer.histogram.valueAxis), which the PPTX export writes as the chartex cx:valScaling.
+  const composed = composedScale(c.histogram?.valueAxis);
+  const probe = { ticks: composed ? composed.ticks : probeTicks(dataMin, dataMax) };
   // LH-153: the labels and the value axis group their thousands (a histogram's bin counts too) unless the column has a format.
   const labelGroup = format === undefined && groupsThousands(bars.map((bar) => bar.value)), tickGroup = dataGroup(c, format, bars.map((bar) => bar.value), { zeroBased: true });
   const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)), percentAxis: pareto });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composed ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at, crossing } = valueAxis(c, plot, scale, format, tickGroup);
   const width = band / 1.06, offset = (band - width) / 2;
   bars.forEach((bar, i) => {
@@ -1511,7 +1515,8 @@ function renderHistogramChart(c, spec) {
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
-    const percent = niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
+    // RR-105: the percentage step core composed (layer.histogram.percentUnit), which the PPTX export writes on the secondary axis.
+    const percent = (c.histogram?.percentUnit > 0 ? composedScale({ min: 0, max: 1, majorUnit: c.histogram.percentUnit }) : undefined) ?? niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
     const right = plot.x + plot.width;
     axisLine(c, right, plot.y, right, plot.y + plot.height);
     for (const tick of percent.ticks) {
