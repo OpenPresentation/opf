@@ -107,7 +107,7 @@ automatic band or pill, LH-114's pull line, LH-121's timeline status words, LH-6
 minimum measure, LH-67's lead plus stack, LH-70's paragraph columns, LH-10's reading measure in a layout's regions, LH-64's one start for
 a row of cards of mixed kinds, LH-47's stretched short last row, LH-120's 40% share of a bar chart in a row of three, LH-112's start
 alignment and display size of a metric beside other blocks (with LH-15's band), LH-50's label drawn as the eyebrow of the text after it,
-LH-08's ruled rows for a list of short labels with descriptions (see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
+LH-08's ruled rows for a list of short labels with descriptions (LH-171: on a slide where another list is ruled, a list whose labels are a short phrase of up to six words is ruled too, so sibling columns read alike; see [Design resolution](design-resolution.md#liststyle-lh-08-vetoable)),
 LH-133's questions as ruled rows (`pair-rows`, see [Questions and terms](#questions-and-terms-lh-133)), LH-07's step badges and flows
 of a `sequence` region (see [Step sequences](layout-templates.md#step-sequences-lh-07)), LH-134's numerals (`numerals`, see
 [Numerals, badges or rows](#numerals-badges-or-rows-lh-134)), LH-135's pricing tiers as one card each and LH-136's one-word pillar titles at display size over an accent rule (see [Layout templates](layout-templates.md)), LH-131's featured card
