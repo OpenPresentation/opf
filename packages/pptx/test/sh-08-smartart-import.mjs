@@ -192,7 +192,7 @@ if (existsSync(fixture) && existsSync(manifestUrl)) {
   // Every string the slide holds (list items, a diagram's source and alt, overlay text and alt), whitespace folded, Mermaid's entities read.
   const strings = value => typeof value === 'string' ? [value] : Array.isArray(value) ? value.flatMap(strings) : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
   const fold = text => text.replace(/<br\/>/g, ' ').replace(/#quot;/g, '"').replace(/\s+/g, ' ').trim();
-  for (const slide of manifest.filter(entry => !entry.error)) {
+  for (const slide of manifest.filter(entry => entry.slide !== undefined && !entry.error)) {
     const content = fold(strings(imported.slides[slide.slide - 1]).join(' '));
     for (const node of [slide.nodes].flat()) {
       const text = fold(String(node.text ?? ''));

@@ -50,14 +50,26 @@ $ppt = New-Object -ComObject PowerPoint.Application
 $manifest = @()
 $pres = $null
 try {
-  $layouts = @($ppt.SmartArtLayouts)
-  $pres = $ppt.Presentations.Add(0)
+  # SmartArtLayouts fills only while PowerPoint is visible (SH-09); minimized keeps it out of the way. The collection is read by index:
+  # PowerShell does not enumerate it.
+  $ppt.Visible = -1; $ppt.WindowState = 2
+  $layouts = @()
+  for ($try = 0; $try -lt 20 -and $ppt.SmartArtLayouts.Count -lt 1; $try++) { Start-Sleep -Milliseconds 500 }
+  for ($i = 1; $i -le $ppt.SmartArtLayouts.Count; $i++) { $layouts += $ppt.SmartArtLayouts.Item($i) }
+  $manifest += [pscustomobject]@{layouts = $ppt.SmartArtLayouts.Count; first = @($layouts | Select-Object -First 8 | ForEach-Object { "$($_.Id) | $($_.Name)" })}
+  $pres = $ppt.Presentations.Add(-1)
   $pres.PageSetup.SlideWidth = 960; $pres.PageSetup.SlideHeight = 540
   $titleOnly = $pres.SlideMaster.CustomLayouts.Item(6)
+  # An id as PowerPoint reports it, or its last segment (`pyramid1`), so a prefix PowerPoint writes differently still matches.
+  $stem = { param($id) ([string]$id).Split('/')[-1] }
   foreach ($spec in $specs) {
-    $layout = $layouts | Where-Object { ($spec.id -and $_.Id -eq $spec.id) } | Select-Object -First 1
+    $layout = $null
+    if ($spec.id) {
+      $layout = $layouts | Where-Object { $_.Id -eq $spec.id } | Select-Object -First 1
+      if (-not $layout) { $want = & $stem $spec.id; $layout = $layouts | Where-Object { (& $stem $_.Id) -eq $want } | Select-Object -First 1 }
+    }
     if (-not $layout) { $layout = $layouts | Where-Object { $_.Name -eq $spec.name } | Select-Object -First 1 }
-    if (-not $layout) { $manifest += [pscustomobject]@{name = $spec.name; error = 'layout not found'}; continue }
+    if (-not $layout) { $manifest += [pscustomobject]@{name = $spec.name; error = "layout not found among $($layouts.Count)"}; continue }
     $slide = $pres.Slides.AddSlide($pres.Slides.Count + 1, $titleOnly)
     $slide.Shapes.Item(1).TextFrame.TextRange.Text = $spec.name
     $shape = $slide.Shapes.AddSmartArt($layout, 40, 110, 880, 400)
