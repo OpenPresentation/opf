@@ -33,6 +33,7 @@ import {SMART_ART_LAYOUTS, arrangementPaint, applyColorTransform, bindNoBreak, c
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {mediaKey} from './media-dedupe.js';
+import {safeMeasurement} from './safe-typefaces.js';
 import {svgBlipRelationship} from './svg-image.js';
 
 export const SMART_ART_TAG = 'OPF_SMARTART_V1', ARRANGEMENT_TAG = 'OPF_ARRANGEMENT_V1';
@@ -59,12 +60,50 @@ const SVG_TAG = /<(\/?)([A-Za-z][\w:.-]*)((?:\s+[^\s=/>]+(?:\s*=\s*(?:"[^"]*"|'[
 const svgAttribute = (attributes, name) => new RegExp(`\\s${name}\\s*=\\s*"([^"]*)"`).exec(attributes)?.[1];
 const svgNumber = value => String(Number(value.toFixed(4)));
 
+// The miter limit opf-render strokes the arrangement's nodes with (stroke-miterlimit) and the antialiasing margin of the fallback picture.
+const MITER_LIMIT = 8, ANTIALIAS = 1;
+
+/**
+ * SH-16: how far the preview's ink reaches outside the SmartArt frame (canvas px): the nodes' outlines, centered on their edges, with
+ * the miter joins of a polygon's corners (a pyramid level's base corners reach furthest), plus a pixel of antialiasing. The fallback
+ * picture grows by it on every side, so it draws everything the preview draws. Rounded up to whole EMU.
+ */
+export function smartArtBleed(arrangement) {
+  const {frame} = arrangement, half = arrangement.lineWidth / 2, points = [];
+  if (arrangement.background) {
+    const {x, y, width, height} = arrangement.background;
+    points.push([x, y], [x + width, y + height]);
+  }
+  for (const node of arrangement.nodes) {
+    if (!node.points) {
+      const {x, y, width, height} = node.box;
+      points.push([x - half, y - half], [x + width + half, y + height + half]);
+      continue;
+    }
+    node.points.forEach((point, index, all) => {
+      const unit = ([dx, dy]) => { const length = Math.hypot(dx, dy) || 1; return [dx / length, dy / length]; };
+      const previous = all[(index + all.length - 1) % all.length], next = all[(index + 1) % all.length];
+      const u = unit([previous[0] - point[0], previous[1] - point[1]]), v = unit([next[0] - point[0], next[1] - point[1]]);
+      // Each edge's stroke reaches half the width either side of it; a miter join reaches half the width over sin(angle / 2).
+      for (const [dx, dy] of [u, v]) points.push([point[0] - dy * half, point[1] + dx * half], [point[0] + dy * half, point[1] - dx * half]);
+      const sine = Math.sqrt(Math.max(0, (1 - (u[0] * v[0] + u[1] * v[1])) / 2));
+      if (sine > 0 && 1 / sine <= MITER_LIMIT) {
+        const bisector = unit([u[0] + v[0], u[1] + v[1]]);
+        points.push([point[0] - bisector[0] * half / sine, point[1] - bisector[1] * half / sine]);
+      }
+    });
+  }
+  const reach = Math.max(0, ...points.flatMap(([x, y]) => [frame.x - x, frame.y - y, x - frame.x - frame.width, y - frame.y - frame.height]));
+  return Math.ceil((reach + ANTIALIAS) * EMU) / EMU;
+}
+
 /**
  * SH-16: OPF's preview of one SmartArt frame, from the slide's SVG as opf-render draws it with `trace`: the arrangement's drawing and
  * its entries' text (each element with its ancestors, so their transforms and clips apply), with the definitions they use, cropped to
- * the frame. Nothing else of the slide is drawn, so the picture is transparent around the drawing.
+ * the frame grown by `bleed` on every side (smartArtBleed). Nothing else of the slide is drawn, so the picture is transparent around
+ * the drawing.
  */
-export function smartArtRegionSvg(svg, arrangement) {
+export function smartArtRegionSvg(svg, arrangement, bleed = 0) {
   const {path, frame} = arrangement, stack = [], found = [];
   let root;
   for (const match of svg.matchAll(SVG_TAG)) {
@@ -94,7 +133,7 @@ export function smartArtRegionSvg(svg, arrangement) {
   const definitions = strip(found.filter(entry => entry.kind === 'defs').sort((a, b) => a.start - b.start).map(entry => entry.text).join(''))
     .replace(/<path id="(opf-g-[^"]+)"[^>]*\/>/g, (all, id) => used.has(id) ? all : '');
   const namespaces = [...root.matchAll(/\s(xmlns(?::[\w.-]+)?)\s*=\s*"([^"]*)"/g)].filter(([, key]) => key !== 'xmlns').map(([, key, value]) => ` ${key}="${value}"`).join('');
-  const [x, y, width, height] = [frame.x, frame.y, frame.width, frame.height].map(svgNumber);
+  const [x, y, width, height] = [frame.x - bleed, frame.y - bleed, frame.width + 2 * bleed, frame.height + 2 * bleed].map(svgNumber);
   return `<svg xmlns="http://www.w3.org/2000/svg"${namespaces} width="${width}" height="${height}" viewBox="${x} ${y} ${width} ${height}">${definitions}${body}</svg>`;
 }
 
@@ -113,10 +152,13 @@ export async function smartArtSlideSvg(presentation, slideNumber, options) {
   const base = {trace: true, validate: false, strictAssets: false, onDiagnostic: () => {}, ...(options.catalogs ? {catalogs: options.catalogs} : {}),
     ...(options.date ? {date: options.date} : {}), ...(typeof options.pictureLuminance === 'function' ? {pictureLuminance: options.pictureLuminance} : {})};
   if (!options.fonts) return toSvg(presentation, slideNumber, base);
-  try { return toSvg(presentation, slideNumber, {...base, fonts: options.fonts, text: 'paths'}); }
+  // `typefaces: "safe"`: the slide is laid out and drawn with the Office-safe families the export writes, as the export lays it out.
+  const fonts = options.safeTypeface && options.fonts.textMeasurement
+    ? Object.create(options.fonts, {textMeasurement: {value: safeMeasurement(options.fonts.textMeasurement, options.safeTypeface), enumerable: true}}) : options.fonts;
+  try { return toSvg(presentation, slideNumber, {...base, fonts, text: 'paths'}); }
   catch (error) {
     if (error?.code !== 'text-as-paths-needs-fonts') throw error;
-    return toSvg(presentation, slideNumber, {...base, fonts: options.fonts});
+    return toSvg(presentation, slideNumber, {...base, fonts});
   }
 }
 const NS = Object.freeze({
@@ -202,9 +244,9 @@ export async function addArrangements(slide, arrangements, {context, mode = 'liv
       const objectName = smartArtName(arrangement.path);
       // A placeholder at the frame, then its fallback picture: attachSmartArt makes the two the frame's mc:AlternateContent.
       slide.addShape('rect', {...box(arrangement.frame), fill: {color: paint.fill.hex.slice(1)}, line: {type: 'none'}, objectName});
-      picture();
+      const bleed = picture();
       const tag = provenance === 'full' ? {v: 1, slide: slideIndex, path: arrangement.path, region: arrangement.region, kind: arrangement.kind, items: structuredClone(values), texts: values.map(plain)} : undefined;
-      records.set(objectName, {arrangement, values, item, paint, lang: context.deckLang ?? 'en-US', fontOf, rtl: context.direction === 'rtl', fallback: {name: fallbackName, alt, tag}});
+      records.set(objectName, {arrangement, values, item, paint, lang: context.deckLang ?? 'en-US', fontOf, rtl: context.direction === 'rtl', fallback: {name: fallbackName, alt, tag, bleed}});
       if (tag) smartArtTags.set(objectName, tag);
       drawn.add(arrangement.path);
       continue;
@@ -402,7 +444,7 @@ export function attachSmartArtFallbacks(entries, records, relationshipsOf) {
       const png = entries[relationships.get(picture.match(/<a:blip\b[^>]*\br:embed="([^"]+)"/)?.[1])?.path];
       const svg = entries[relationships.get(picture.match(/<asvg:svgBlip\b[^>]*\br:embed="([^"]+)"/)?.[1])?.path];
       if (!png || !svg) throw new Error('A SmartArt fallback picture has no SVG or PNG part.');
-      manifests.set(record.fallback.name, {...record.fallback.tag, fallback: true, svg: mediaKey(svg), png: mediaKey(png)});
+      manifests.set(record.fallback.name, {...record.fallback.tag, fallback: true, svg: mediaKey(svg), png: mediaKey(png), bleed: Math.round((record.fallback.bleed ?? 0) * EMU)});
     }
   }
   attachTextTags(entries, manifests, SMART_ART_TAG, 'opfSmartArtFallback', 'SmartArt fallback', {pictures: true});
@@ -416,7 +458,13 @@ export function attachSmartArtFallbacks(entries, records, relationshipsOf) {
       const id = alternate.match(/<mc:Choice\b[\s\S]*?<p:cNvPr\b[^>]*\bid="(\d+)"/)?.[1];
       if (!id) throw new Error('A SmartArt frame has no id.');
       const descr = escapeXml(record.fallback.alt).replace(/\n/g, '&#10;');
-      return alternate.replace(picture, picture.replace(/<p:cNvPr\b[^>]*?(\/?)>/, (_, close) => `<p:cNvPr id="${id}" name="${escapeXml(smartArtName(record.arrangement.path))}" descr="${descr}"${close}>`));
+      // The frame grown by the bleed on every side, from the frame's own EMU, so the picture and the frame share one center.
+      const [, x, y] = alternate.match(/<p:xfrm><a:off x="(-?\d+)" y="(-?\d+)"\/>/) ?? [], [, cx, cy] = alternate.match(/<p:xfrm>[\s\S]*?<a:ext cx="(\d+)" cy="(\d+)"\/>/) ?? [];
+      if (x === undefined || cx === undefined) throw new Error('A SmartArt frame has no transform.');
+      const bleed = Math.round((record.fallback.bleed ?? 0) * EMU);
+      const grown = `<a:xfrm><a:off x="${Number(x) - bleed}" y="${Number(y) - bleed}"/><a:ext cx="${Number(cx) + 2 * bleed}" cy="${Number(cy) + 2 * bleed}"/></a:xfrm>`;
+      const named = picture.replace(/<p:cNvPr\b[^>]*?(\/?)>/, (_, close) => `<p:cNvPr id="${id}" name="${escapeXml(smartArtName(record.arrangement.path))}" descr="${descr}"${close}>`);
+      return alternate.replace(picture, named.replace(/<a:xfrm>[\s\S]*?<\/a:xfrm>/, grown));
     });
     if (next !== xml) entries[part] = encoder.encode(next);
   }
@@ -509,7 +557,7 @@ export function importArrangementShapes(shapes, relationships, entries) {
 /**
  * SH-16, import: the slide's pictures that are the fallback of a SmartArt OPF wrote (a file another app saved with only the
  * mc:Fallback): a picture named for its list, carrying OPF_SMARTART_V1 with `fallback: true` whose SVG or PNG is still the one written.
- * Returns Map<picture index, {kind, layout, payload}>; a tagged picture that was replaced or renamed imports as an ordinary picture.
+ * Returns Map<picture index, {kind, layout, frame (the SmartArt frame's a:xfrm), payload}>; a tagged picture that was replaced or renamed imports as an ordinary picture.
  */
 export function importSmartArtFallbacks({pictures, relationships, entries, slideIndex, report}) {
   const out = new Map();
@@ -535,7 +583,11 @@ export function importSmartArtFallbacks({pictures, relationships, entries, slide
       report?.({code: 'invalid-smartart-provenance', path: `slides.${slideIndex}`, message: 'A tagged OPF SmartArt fallback picture was replaced, renamed or damaged; it imports as an ordinary picture.'});
       continue;
     }
-    out.set(index, {kind: stored.kind, layout: `default:${stored.kind}`, payload: {type: 'list', items: structuredClone(stored.items)}});
+    // The frame the picture was grown from (its bleed on every side), where the list lies.
+    const xfrm = picture?.['p:spPr']?.['a:xfrm'], bleed = Number.isInteger(stored.bleed) && stored.bleed >= 0 ? stored.bleed : 0;
+    const frame = xfrm?.['a:off'] && xfrm?.['a:ext'] ? {...xfrm, 'a:off': {...xfrm['a:off'], x: String(Number(xfrm['a:off'].x) + bleed), y: String(Number(xfrm['a:off'].y) + bleed)},
+      'a:ext': {...xfrm['a:ext'], cx: String(Number(xfrm['a:ext'].cx) - 2 * bleed), cy: String(Number(xfrm['a:ext'].cy) - 2 * bleed)}} : xfrm;
+    out.set(index, {kind: stored.kind, layout: `default:${stored.kind}`, frame, payload: {type: 'list', items: structuredClone(stored.items)}});
   }
   return out;
 }

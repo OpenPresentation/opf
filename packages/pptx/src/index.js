@@ -20,7 +20,7 @@ import {applyChartLayerLayout,chartEmphasisPlan,chartFocusPlan,chartLayerOptions
 import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direct-labels.js';
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
-import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
+import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
@@ -1373,7 +1373,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
       const found = smartArtPictures.get(index);
       roles.set(`pic:${index}`, 'smartart');
       if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
-      items.push({kind: 'list', bounds: shapeBounds(picture['p:spPr']?.['a:xfrm']), payload: found.payload, sources: [`pic:${index}`]});
+      items.push({kind: 'list', bounds: shapeBounds(found.frame), payload: found.payload, sources: [`pic:${index}`]});
       continue;
     }
     const pictureRole = furniture.pictures.has(index) ? 'furniture' : nativeContext.imagePictures?.has(index) ? 'background' : nativeContext.watermarkPictures?.has(index) ? 'watermark' : nativeContext.logoPictures?.has(index) ? 'logo' : quotes.consumedPictures.has(picture) ? 'quote' : iconShapes.consumed.has(picture) ? 'icon' : undefined;
@@ -3317,14 +3317,16 @@ async function addDiagramItem(slide, item, slideIndex, context, options) {
 
 // SH-16: the fallback picture of a live SmartArt frame, for every app that does not lay SmartArt out: OPF's preview of the frame
 // (smartArtRegionSvg of the slide's preview) as an SVG picture over its PNG raster, the diagram picture's path (resolveSvgImage, 192 dpi
-// of the frame). Returns the function that places it after the frame's placeholder, or why it cannot be drawn (the arrangement is then
+// of the frame). Returns the function that places it after the frame's placeholder (and returns its bleed), or why it cannot be drawn (the arrangement is then
 // native shapes, smartart-unavailable).
 async function smartArtFallback(slide, arrangement, {name, alt}, preview, context, options) {
-  const {frame} = arrangement, box = {x: frame.x / 96, y: frame.y / 96, w: frame.width / 96, h: frame.height / 96};
+  // The frame grown by the preview's ink outside it (the nodes' outlines and miters), so the picture draws all the preview draws.
+  const {frame} = arrangement, bleed = smartArtBleed(arrangement);
+  const box = {x: (frame.x - bleed) / 96, y: (frame.y - bleed) / 96, w: (frame.width + 2 * bleed) / 96, h: (frame.height + 2 * bleed) / 96};
   const unavailable = reason => `no fallback picture can be drawn for apps without SmartArt (${reason})`;
   let svg;
   try {
-    svg = smartArtRegionSvg(await preview(), arrangement);
+    svg = smartArtRegionSvg(await preview(), arrangement, bleed);
   } catch (error) {
     return unavailable(errorMessage(error));
   }
@@ -3334,6 +3336,7 @@ async function smartArtFallback(slide, arrangement, {name, alt}, preview, contex
   return () => {
     context.svgPictures.set(name, outcome.svg);
     slide.addImage({...resolved, objectName: name, ...box, altText: alt});
+    return bleed;
   };
 }
 

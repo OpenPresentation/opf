@@ -83,10 +83,14 @@ Both look the same as the preview: the shapes are exact, and the text is where O
 Many apps that open PPTX files do not lay SmartArt out. Each live SmartArt is therefore written as an `mc:AlternateContent` (ECMA-376
 Part 3, markup compatibility): the `mc:Choice` holds the SmartArt frame and requires the namespace
 `http://schemas.microsoft.com/office/drawing/2016/12/diagram` (prefix `dgm1612`, Office 2016's SmartArt extensions), and the
-`mc:Fallback` holds a picture of the same frame, id and name. **PowerPoint** understands the namespace and shows the live SmartArt.
+`mc:Fallback` holds a picture with the same id and name, at the same frame grown by its bleed on every side. **PowerPoint** understands the namespace and shows the live SmartArt.
 **Every other app**, one that does not claim the namespace, takes the fallback and shows OPF's own drawing: the preview of that frame
 (opf-render's SVG of the slide, cut to the arrangement and its entries, the text as glyph outlines in the deck's fonts when the export
-has the fonts handle), transparent around the drawing, as an SVG with a PNG raster at 192 dpi of the frame for apps without SVG. Its
+has the fonts handle), transparent around the drawing, as an SVG with a PNG raster at 192 dpi of the frame for apps without SVG. The
+bleed is how far the preview draws outside the frame: half of the nodes' outline, and further at a pyramid level's miter-joined corners
+(its base corners reach 2.6 px past a 16:9 frame), plus a pixel of antialiasing, so the picture draws everything the preview draws. With
+`typefaces: "safe"` the picture is laid out and drawn in the Office-safe families the export writes and lays the nodes out with (Arial
+for the default Aptos), not the preview's. Its
 alt text is the outline, one entry a line in entry order (`Pyramid of 4 levels, top to bottom:` then each level). SH-09's drawing part
 stays in the package for readers that draw the cached SmartArt shapes.
 
