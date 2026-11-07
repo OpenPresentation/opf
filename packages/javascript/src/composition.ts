@@ -9504,10 +9504,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     });
     const place = (design: ArrangementDesign, size: number) => {
       const margin = design.margin * size, columns: ComposedListColumn[] = [], lines: number[] = [], stable: boolean[] = [];
-      // SH-17: a chevron's margin is larger at its start.
+      // SH-17: a chevron's margin is larger at its start (a design with one margin keeps SH-09's arithmetic, so its text lies exactly where it did).
       const [left, top, right, bottom] = (design.margins ?? [design.margin, design.margin, design.margin, design.margin]).map(share => share * size) as [number, number, number, number];
+      const across = design.margins ? left + right : 2 * margin, down = design.margins ? top + bottom : 2 * margin;
       for (let index = 0; index < count; index++) {
-        const node = design.nodes[index]!, inner = { x: node.textBox.x + left, y: node.textBox.y + top, width: node.textBox.width - left - right, height: node.textBox.height - top - bottom };
+        const node = design.nodes[index]!, inner = { x: node.textBox.x + left, y: node.textBox.y + top, width: node.textBox.width - across, height: node.textBox.height - down };
         if (inner.width <= 0 || inner.height <= 0) return undefined;
         const probe = single(index, { ...inner, height: 1e5 }, size), entry = probe.listEntries[0];
         if (!entry || probe.overflow || entry.text.height > inner.height + 1e-6) return undefined;
@@ -9526,7 +9527,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // The ink of every line (cap height over the baseline to the descenders) stays inside the node's outline, inset by the margin: a
         // pyramid level narrows toward its top, a quadrant at its corners. Text beside its level has no outline to keep to.
         if (!node.beside) for (const line of placed.text.richLines) {
-          const baseline = placed.textBox.y + line.baseline, room = Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)) - left - right;
+          const baseline = placed.textBox.y + line.baseline, room = Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)) - across;
           if (line.width > room + 1e-6) return undefined;
         }
         const own = breaks(placed), widths = design.design !== 'smartart' ? [] : [1 - SMART_ART_DOMAIN.slack, 1 + SMART_ART_DOMAIN.slack].map(share => breaks(single(index, { ...inner, width: inner.width * share, height: 1e5 }, size).listEntries[0]));
@@ -9534,7 +9535,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         columns.push({ box, start: index, end: index + 1, text });
       }
       // SH-17: how full the fullest text rectangle is, and the text's share of the frame (SMART_ART_DOMAIN.fill and ink).
-      const fill = Math.max(0, ...columns.map((column, index) => { const box = design.nodes[index]!.textBox; return column.box.height / Math.max(1e-6, box.height - top - bottom); }));
+      const fill = Math.max(0, ...columns.map((column, index) => { const box = design.nodes[index]!.textBox; return column.box.height / Math.max(1e-6, box.height - down); }));
       const ink = columns.reduce((sum, column) => sum + column.text.listEntries[0]!.text.richLines.reduce((all, line) => all + line.width * size, 0), 0) / Math.max(1e-6, design.frame.width * design.frame.height);
       return { columns, margin, margins: [left, top, right, bottom] as [number, number, number, number], lines, stable, fill, ink };
     };
