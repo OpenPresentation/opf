@@ -4,7 +4,7 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartBarGeometry, chartDrawPlan, chartBandColor, chartSlicePlan, CHART_SLICE_SEPARATOR_PX, histogramBins, scottBinCount, chartWaterfallColors, waterfallLabelText, markLabelColor, chartEmphasisColors, chartSeriesLabelColor, chartContextColors, chartHighlightColors, chartHighlightMarks, chartLayerDataLabels, chartNumber, chartValueAxisHidden, chartPaletteForFill, chartSchemeSeries, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, groupNumber, groupsAxisTicks, groupsDataRange, groupsThousands, maxIntervalsFor, niceScale, stackCategoryValues, waterfallSteps, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelFill, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
@@ -892,20 +892,11 @@ function renderCategoryChart(c, spec) {
   }
 }
 
-// PptxGenJS gap widths: clustered 150%, stacked 50% (overlap 100).
-export function barGeometry(band, seriesCount, grouping) {
-  if (grouping === "clustered") {
-    const group = band / 2.5;
-    return { group, width: group / seriesCount, offset: (band - group) / 2, clustered: true };
-  }
-  const width = band / 1.5;
-  return { group: width, width, offset: (band - width) / 2, clustered: false };
-}
-
 function drawBars(c, spec, series, stacks, { plot, band, at, horizontal, scale, categorySlot = (i) => i, rowTop = (i) => plot.y + i * band }) {
   // Bars grow from zero, or from the axis minimum (maximum, for all-negative data) when zero is off the axis.
   const base = (value) => Math.min(scale.max, Math.max(scale.min, value));
-  const geometry = barGeometry(band, series.length, spec.grouping);
+  // LH-176: core's bar geometry, PowerPoint's gap width (clustered 150%, stacked 50%) and overlap, as the PPTX export writes them.
+  const geometry = chartBarGeometry(band, series.length, spec.grouping);
   const labels = [];
   series.forEach((s, j) => {
     stacks[j].forEach((point, i) => {

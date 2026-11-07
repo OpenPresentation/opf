@@ -269,14 +269,14 @@ export function smallChart(chart: unknown, data: ResolvedChartData, geometry?: C
     const pad = 10 * scale;
     const widest = Math.max(0, ...values.flatMap(row => row.flatMap((value, j) => value === null ? [] : [geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx, 400)])));
     if (spec.horizontal) {
-      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, PptxGenJS gap width
-      // 150%), one series' a category apart.
+      // A bar's label sits past its end, one line tall: two series' labels sit a bar apart (the clustered slot, chartBarGeometry, LH-176),
+      // one series' a category apart.
       const band = Math.max(1, box.height - 2 * pad - fontPx * 1.5) / count;
-      if (fontPx * 1.22 > (seriesCount > 1 ? band / 2.5 / seriesCount : band)) return undefined;
+      if (fontPx * 1.22 > (seriesCount > 1 ? chartBarGeometry(band, seriesCount, 'clustered').width : band)) return undefined;
     } else {
       // A column label is centred on its column: two series' labels sit a column apart, one series' a category apart.
       const band = Math.max(1, box.width - 2 * pad) / count;
-      const room = seriesCount > 1 && spec.kind === 'bar' ? band / 2.5 / seriesCount : band;
+      const room = seriesCount > 1 && spec.kind === 'bar' ? chartBarGeometry(band, seriesCount, 'clustered').width : band;
       if (widest + fontPx * 0.1 > room) return undefined;
     }
   }
@@ -374,6 +374,38 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
     ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
     height: pad + rows * lineHeight,
   };
+}
+
+/**
+ * LH-176: the gap between two categories' bars, as a percent of one bar's width (DrawingML `c:gapWidth`): 150 for clustered bars and
+ * columns, 50 for stacked and 100% stacked ones. Their series overlap 0 (clustered: side by side) or 100 (stacked: on one another)
+ * (`c:overlap`). The PPTX export writes these values and the preview draws its bars from {@link chartBarGeometry}, so both agree.
+ */
+export const CHART_BAR_GAP_WIDTH = Object.freeze({clustered: 150, stacked: 50});
+
+/** The bars of one category band: each bar's width, the bars together, the offset of the first bar, and whether series sit side by side. */
+export interface ChartBarGeometry {
+  /** The width of one bar (a column's width, a horizontal bar's height). */
+  width: number;
+  /** The width of the category's bars together: the series' bars side by side, or one stacked bar. */
+  group: number;
+  /** From the band's start to its first bar: half the gap. */
+  offset: number;
+  clustered: boolean;
+}
+
+/**
+ * LH-176: where the bars of one category sit in its `band` (the plot length over the category count), as PowerPoint lays out
+ * {@link CHART_BAR_GAP_WIDTH}: a clustered band holds `seriesCount` bars side by side and a gap of 1.5 bar widths
+ * (`width = band / (seriesCount + 1.5)`), a stacked band one bar and a gap of half its width (`width = band / 1.5`). The gap is split
+ * evenly before and after the bars.
+ */
+export function chartBarGeometry(band: number, seriesCount: number, grouping: string | undefined): ChartBarGeometry {
+  const clustered = grouping !== 'stacked' && grouping !== 'percentStacked';
+  const bars = clustered ? Math.max(1, seriesCount) : 1;
+  const width = band / (bars + (clustered ? CHART_BAR_GAP_WIDTH.clustered : CHART_BAR_GAP_WIDTH.stacked) / 100);
+  const group = width * bars;
+  return {width, group, offset: (band - group) / 2, clustered};
 }
 
 /**

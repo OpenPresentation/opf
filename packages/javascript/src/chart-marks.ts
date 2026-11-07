@@ -23,7 +23,7 @@ import {chartTextSize, stackCategoryValues, waterfallSteps, type ChartValueAxis}
 import {chartNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {titleNumbers, words, type ChartLayerFocus} from './chart-focus.js';
 import type {ChartLayerRows} from './chart-rows.js';
-import {columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
+import {chartBarGeometry, columnGroups, columnValueLabel, valueLabel, type ChartLayer, type ChartLayerGeometry, type ChartLayerHeader, type ChartLayerSlices, type ChartPlotInset} from './chart-layer.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {BREAKABLE, chartPlotInset, tickLabel, type ChartPlotGeometry} from './chart-plot.js';
 import {chartCategoriesInTime, monthOf} from './chart-time-order.js';
@@ -366,14 +366,14 @@ function stackMarks(chart: Record<string, unknown>, data: ResolvedChartData, axi
     const point = shape.stacks[j]![i];
     if (percent || value === null || !point || value === 0) return false;
     const text = columnValueLabel(data, j + 1, value, geometry.language), wide = geometry.measure(text, fontPx) + fontPx * 0.25;
-    if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= shape.band / 1.5;
+    if (shape.horizontal) return wide <= Math.abs(shape.at(point.to) - shape.at(point.from)) && textHeight <= chartBarGeometry(shape.band, 1, 'stacked').width;
     // An area starts and ends at its first and last points: a value centered there would hang half outside the band.
     if (shape.kind === 'area' && (i === 0 || i === last)) {
       const end = shape.spaced ? areaEnd(shape, j, i, text, m, geometry) : undefined;
       if (end) ends.push(end);
       return false;
     }
-    const room = shape.kind === 'bar' ? shape.band / 1.5 : shape.band * 0.9;
+    const room = shape.kind === 'bar' ? chartBarGeometry(shape.band, 1, 'stacked').width : shape.band * 0.9;
     return wide <= room && textHeight <= Math.abs(shape.at(point.to) - shape.at(point.from));
   }));
   return {values, ends};
