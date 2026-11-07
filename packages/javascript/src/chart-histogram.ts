@@ -42,6 +42,8 @@ export interface ChartLayerHistogram {
   valueLabels?: false;
   /** RR-105: the value axis both engines draw (the preview's scale; the chartex `cx:valScaling` min, max and majorUnit). */
   valueAxis?: ChartValueAxis;
+  /** RR-105: a Pareto chart's percentage axis step (0 to 100%), the preview's ticks and the chartex secondary axis `majorUnit`. */
+  percentUnit?: number;
 }
 
 /**
@@ -182,6 +184,10 @@ export function chartHistogram(chart: unknown, data: ResolvedChartData, geometry
     const length = Math.max(1, box.height - 2 * pad - lineHeight * 1.5 - titleBand);
     const fitted = niceScale(Math.min(0, ...counts), Math.max(...counts), chartIntervalsFor(length, lineHeight * 1.2, scale));
     if ([fitted.min, fitted.max, fitted.step].every(Number.isFinite) && fitted.step > 0 && (fitted.max - fitted.min) / fitted.step <= 1000) out.valueAxis = {min: fitted.min, max: fitted.max, majorUnit: fitted.step};
+    if (target.kind === 'pareto') {
+      const percent = niceScale(0, 1, chartIntervalsFor(length, lineHeight * 1.2, scale), {percent: true});
+      if (Number.isFinite(percent.step) && percent.step > 0) out.percentUnit = percent.step;
+    }
   }
   // The data labels the author chose are drawn only where they fit beside each other (a label and half a text size of air per bar).
   const labels = resolveChartOptions(chart, target).dataLabels;

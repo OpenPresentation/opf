@@ -1524,7 +1524,8 @@ function renderHistogramChart(c, spec) {
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
-    const percent = niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
+    // RR-105: the percentage step core composed (layer.histogram.percentUnit), which the PPTX export writes on the secondary axis.
+    const percent = (c.histogram?.percentUnit > 0 ? composedScale({ min: 0, max: 1, majorUnit: c.histogram.percentUnit }) : undefined) ?? niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
     const right = plot.x + plot.width;
     axisLine(c, right, plot.y, right, plot.y + plot.height);
     for (const tick of percent.ticks) {

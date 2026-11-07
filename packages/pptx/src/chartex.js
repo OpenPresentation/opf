@@ -189,7 +189,7 @@ function valueScaling(axis) {
   return `<cx:valScaling max="${numberText(axis.max)}" min="${numberText(axis.min)}" majorUnit="${numberText(axis.majorUnit)}"/>`;
 }
 
-function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false, edgeCode, valueAxis) {
+function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = false, edgeCode, valueAxis, percentUnit) {
   if (!spec.axes) return '';
   const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
@@ -202,7 +202,7 @@ function axes(spec, gridColor, text, titles = {}, run = {}, code, hiddenValue = 
   const numberFormat = code === undefined ? '' : `<cx:numFmt formatCode="${escapeXml(code)}" sourceLinked="0"/>`;
   // LH-107: a waterfall whose bars carry their values has no value axis and no gridlines (cx:axis hidden, as the funnel's).
   const value = hiddenValue ? `<cx:axis id="1" hidden="1"><cx:valScaling/><cx:tickLabels/>${numberFormat}${text}</cx:axis>` : `<cx:axis id="1">${valueScaling(valueAxis)}${axisTitle(titles.value, text, run)}${gridlines}<cx:tickLabels/>${numberFormat}${text}</cx:axis>`;
-  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
+  const percentage = spec.layoutId === 'paretoLine' ? `<cx:axis id="2"><cx:valScaling max="1" min="0"${percentUnit > 0 && percentUnit <= 1 ? ` majorUnit="${numberText(percentUnit)}"` : ''}/><cx:units unit="percentage"/><cx:tickLabels/>${text}</cx:axis>` : '';
   return `${category}${value}${percentage}`;
 }
 
@@ -320,7 +320,7 @@ export function chartexPartXml({spec, series, hasCategories, number, workbookRel
   return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     `<cx:chartSpace xmlns:a="${NS.a}" xmlns:r="${NS.r}" xmlns:cx="${NS.cx}">` +
     `<cx:chartData><cx:externalData r:id="${workbookRelId}" cx:autoUpdate="0"/>${data}</cx:chartData>` +
-    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, spec.binning ? histogram?.valueAxis : undefined)}</cx:plotArea>${legend}</cx:chart>` +
+    `<cx:chart>${chartexCaption(waterfall?.caption, {labelColor: markLabelColor ?? labelColor, font, textSize, rtl})}<cx:plotArea><cx:plotAreaRegion>${plotted.join('')}</cx:plotAreaRegion>${axes(spec, gridColor, text, options?.axisTitles, {labelColor, font, textSize}, axisCode, waterfall?.valueAxis === false, counts && histogram?.decimals !== undefined ? histogramEdgeFormat(histogram.decimals) : undefined, spec.binning ? histogram?.valueAxis : undefined, spec.binning ? histogram?.percentUnit : undefined)}</cx:plotArea>${legend}</cx:chart>` +
     // LH-105: no chart draws a panel; the chart area is unfilled and the chart stands on the card or the slide background.
     `<cx:spPr>${fill.color ? solidFill(fill.color, alpha) : '<a:noFill/>'}<a:ln><a:noFill/></a:ln></cx:spPr>${text}` +
     '</cx:chartSpace>';
