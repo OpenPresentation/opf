@@ -16,7 +16,7 @@ import {visualReadingOrder} from './reading-order.js';
 import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,rootNodes,type BoundBlock} from './bind-regions.js';
 import {featuredCells,type FeaturedCells} from './featured-cards.js';
-import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
+import {EYEBROW_LABEL_CHARS,EYEBROW_TEXT_KIND,eyebrowLabel,isLabelText,rowLabel,groupBinding,majorityKind,PAIR_LENGTH_RATIO,repeatedPairs,textLength,type GroupedBinding} from './block-grouping.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,LIST_WHOLE_ENTRIES,listColumnBreaks,listGridShape,shareHeights,type CellRect,type FlowShape,type RowDemand} from './template-geometry.js';
 import {METRIC_TREND_ARROW_GAP,METRIC_TREND_ARROW_SIZE,type MetricSentiment} from './metric-trend.js';
 export {visualReadingOrder,type ReadingBox} from './reading-order.js';
@@ -319,6 +319,15 @@ function translateTextFit<T extends {placement?: TextPlacement}>(fit: T, dy: num
       })),
     },
   };
+}
+/** LH-133, LH-172: a placed list's fit moved down by `dy` (its entries, markers, badges, icons, numerals and rules). */
+function translateListFit(fit: ListFit, dy: number): ListFit {
+  if (!dy) return fit;
+  const down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
+  return { ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, textBox: down(entry.textBox), ...(entry.descriptionBox ? { descriptionBox: down(entry.descriptionBox) } : {}), marker: down(entry.marker),
+    ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}),
+    ...(entry.icon ? { icon: { ...entry.icon, cy: entry.icon.cy + dy } } : {}) })),
+    ...(fit.rules ? { rules: fit.rules.map(down) } : {}) };
 }
 /** RR-92: what composition computes for a chart item beyond its box. */
 export interface ComposedChart {
@@ -5716,11 +5725,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const termLists = new Set<string>();
   const pairsOf = (value: unknown, path?: string): Pick<ListFitOptions, 'pairs'> => path !== undefined && termLists.has(path) ? { pairs: 'term' }
     : Array.isArray(value) && value.length >= 2 && value.every(entry => pairEntry(entry) === 'question') ? { pairs: 'question' } : {};
+  // LH-171: sibling lists share one list form. A list of two or more first-level entries that each pair a label with a description is
+  // drawn as rows when its labels are short (isLabelText, `strict`), or, on a slide where another such list is drawn as rows, when its
+  // labels are a short phrase (rowLabel), so the two columns of a comparison read alike ("Live in 8 weeks" beside "Full control"). The
+  // guard still holds every row list of the slide together: `list-rows` is one rule, kept or refused for the whole slide.
+  const describedList = (value: unknown, strict: boolean): boolean => Array.isArray(value) && value.length >= 2 && value.every(entry => { const object = record(entry); return object.description !== undefined && (object.level ?? 0) === 0 && (strict ? isLabelText(object.text) : rowLabel(object.text)); });
+  let siblingRowLists: boolean | undefined;
+  const rowSiblings = (): boolean => siblingRowLists ??= (() => {
+    const lists: unknown[] = [];
+    const visit = (blocks: unknown): void => { for (const block of Array.isArray(blocks) ? blocks : []) { const object = record(block); for (const field of ['items', 'bullets']) if (Array.isArray(object[field])) lists.push(object[field]); visit(object.blocks); } };
+    visit(record(slide).blocks);
+    return lists.length >= 2 && lists.some(list => describedList(list, true));
+  })();
   const listRows = (value: unknown, path?: string): Pick<ListFitOptions, 'rows' | 'pairs'> => {
     const pairs = pairsOf(value, path), questions = pairs.pairs === 'question';
     if (hints.listStyle !== undefined) return hints.listStyle === 'rows' ? { rows: true, ...pairs } : {};
     if (questions && ruleOn('pair-rows')) { fire('pair-rows'); return { rows: true, ...pairs }; }
-    if (!ruleOn('list-rows') || !Array.isArray(value) || value.length < 2 || !value.every(entry => { const object = record(entry); return object.description !== undefined && (object.level ?? 0) === 0 && isLabelText(object.text); })) return {};
+    if (!ruleOn('list-rows') || !(describedList(value, true) || (rowSiblings() && describedList(value, false)))) return {};
     fire('list-rows');
     return { rows: true, ...pairs };
   };
@@ -9206,6 +9227,57 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       fire('heading-tracks');
     }
   };
+  // LH-172: sibling groups of a heading text over one body block (two columns of "Why buy" over a list, three plans of a name over a
+  // paragraph) share their row tracks, as LH-18's heading lists do: the headings of a row start on one line and take the tallest
+  // heading's height, and the bodies start on one line under them and end on one line, so their cards share one height. Text keeps its
+  // size: only boxes move, a heading's card grows to the track and a body's card to the row's foot. A row is two to six such groups of
+  // one container side by side; one whose aligned tracks would leave a body's text outside its card, or the content box, stays as it was.
+  const alignGroupTracks = (): void => {
+    if (!ruleOn('heading-tracks')) return;
+    const outer = (item: ComposedItem) => item.frameBox ?? item.box;
+    const textHeight = (item: ComposedItem) => { const fit = item.text!; return 'listEntries' in fit ? (fit as ListFit).height : 'richLines' in fit ? (fit as RichTextFit).height : fit.placement?.height ?? fit.lines.length * fit.lineHeight; };
+    const members = new Map<string, ComposedItem[]>();
+    for (const item of items) {
+      const match = /^(.+)\.blocks\.(\d+)\.[A-Za-z]+$/u.exec(item.path);
+      if (match) members.set(match[1]!, [...(members.get(match[1]!) ?? []), item]);
+    }
+    const pairs: { container: string; head: ComposedItem; body: ComposedItem }[] = [];
+    for (const [group, list] of members) {
+      const head = list.find(item => item.path === `${group}.blocks.0.text`), body = list.find(item => /\.blocks\.1\.(text|items|bullets)$/u.test(item.path) && item.path.startsWith(`${group}.blocks.1.`));
+      const container = /^(.+)\.blocks\.\d+$/u.exec(group)?.[1];
+      if (list.length !== 2 || !head || !body || !container || !head.text || !body.text || head.eyebrow || head.emphasis || body.emphasis || body.listColumns || body.caption || head.caption) continue;
+      if ((contentText('text', head.value) ?? '').length > 80 || outer(body).y < outer(head).y + outer(head).height - .5) continue;
+      pairs.push({ container, head, body });
+    }
+    const rows = new Map<string, typeof pairs>();
+    for (const pair of pairs) rows.set(pair.container, [...(rows.get(pair.container) ?? []), pair]);
+    for (const row of rows.values()) {
+      if (row.length < 2 || row.length > 6) continue;
+      row.sort((a, b) => outer(a.head).x - outer(b.head).x);
+      const span = (pair: typeof row[number]) => ({ x: Math.min(outer(pair.head).x, outer(pair.body).x), right: Math.max(outer(pair.head).x + outer(pair.head).width, outer(pair.body).x + outer(pair.body).width), top: outer(pair.head).y, bottom: outer(pair.body).y + outer(pair.body).height });
+      if (row.some((pair, index) => index && span(pair).x < span(row[index - 1]!).right - 1e-6) || row.some(pair => span(pair).top > span(row[0]!).bottom || span(pair).bottom < span(row[0]!).top)) continue;
+      const top = Math.min(...row.map(pair => outer(pair.head).y)), track = Math.max(...row.map(pair => outer(pair.head).height));
+      const between = Math.max(...row.map(pair => outer(pair.body).y - outer(pair.head).y - outer(pair.head).height)), bodyTop = top + track + between;
+      // The row ends at its lowest card, or lower where a body moved down needs more room for its text (never past the content box).
+      const need = (pair: typeof row[number]) => { const card = outer(pair.body), inset = pair.body.box.y - card.y, below = card.y + card.height - pair.body.box.y - pair.body.box.height; return bodyTop + inset + textHeight(pair.body) + below; };
+      const bottom = Math.max(...row.map(pair => Math.max(outer(pair.body).y + outer(pair.body).height, need(pair))));
+      if (bottom > contentBox.y + contentBox.height + .5 || top < contentBox.y - .5) continue;
+      const settledRow = row.every(pair => Math.abs(outer(pair.head).y - top) <= .5 && Math.abs(outer(pair.head).height - track) <= .5 && Math.abs(outer(pair.body).y - bodyTop) <= .5 && Math.abs(outer(pair.body).y + outer(pair.body).height - bottom) <= .5);
+      if (settledRow) continue;
+      const move = (item: ComposedItem, dy: number, height: number) => {
+        const card = outer(item), grow = height - card.height;
+        item.box = { ...item.box, y: item.box.y + dy, height: item.box.height + grow };
+        if (item.frameBox) item.frameBox = { ...item.frameBox, y: item.frameBox.y + dy, height: item.frameBox.height + grow };
+        const fit = item.text!;
+        item.text = 'listEntries' in fit ? translateListFit(fit as ListFit, dy) : translateTextFit(fit, dy);
+      };
+      for (const pair of row) {
+        move(pair.head, top - outer(pair.head).y, track);
+        move(pair.body, bodyTop - outer(pair.body).y, bottom - bodyTop);
+      }
+      fire('heading-tracks');
+    }
+  };
   const ownMode = record(slide.composition).mode as Composition['mode'] | undefined;
   const direction = recomposing && hints.sources.contentDirection === 'layout' ? undefined : hints.contentDirection;
   const directionMode: Composition['mode'] = direction === 'vertical' ? 'column' : direction === 'horizontal' ? 'row' : 'auto';
@@ -9276,6 +9348,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   hugQuoteCards();
   centerCardText();
   alignHeadingTracks();
+  alignGroupTracks();
   // LH-06: the automatic foot band or pill is the last block, so its text is the last body item (reading order).
   // LH-06: a pill follows its long text, one gap under the text's last line, at the start of the text's own box (its column and
   // alignment); with no room there it is composed at the foot of the body instead (PILL_AT_FOOT).
@@ -9784,12 +9857,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-133: a placed list moved down by `dy` (its box, entries, markers, numerals and rules).
   const shiftList = (item: ComposedItem, dy: number): void => {
     if (!dy) return;
-    const fit = item.text as ListFit, down = <T extends { y: number }>(box: T): T => ({ ...box, y: box.y + dy });
-    item.box = down(item.box);
-    item.text = { ...fit, listEntries: fit.listEntries.map(entry => ({ ...entry, textBox: down(entry.textBox), ...(entry.descriptionBox ? { descriptionBox: down(entry.descriptionBox) } : {}), marker: down(entry.marker),
-      ...(entry.bulletBox ? { bulletBox: down(entry.bulletBox) } : {}), ...(entry.badge ? { badge: { ...entry.badge, cy: entry.badge.cy + dy, ...(entry.badge.numeral ? { numeral: down(entry.badge.numeral) } : {}) } } : {}),
-      ...(entry.icon ? { icon: { ...entry.icon, cy: entry.icon.cy + dy } } : {}) })),
-      ...(fit.rules ? { rules: fit.rules.map(down) } : {}) };
+    item.box = { ...item.box, y: item.box.y + dy };
+    item.text = translateListFit(item.text as ListFit, dy);
   };
   const pairRules = (): void => {
     const listOf = (item: ComposedItem) => item.text && 'listEntries' in item.text && !item.listColumns && (item.text as ListFit).listEntries.length ? item.text as ListFit : undefined;
@@ -10531,7 +10600,7 @@ export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHint
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
 export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
-export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
+export { EYEBROW_LABEL_CHARS, EYEBROW_LABEL_WORDS, EYEBROW_TEXT_KIND, eyebrowLabel, isLabelText, rowLabel, ROW_LABEL_CHARS, ROW_LABEL_WORDS, groupBinding, groupingNode, JOINED_FIXED_MAX, majorityKind, MOVED_ROW_MAX, PAIR_FIGURE_KINDS, PAIR_LENGTH_RATIO, repeatedPairs, textLength, type GroupedBinding, type GroupingNode, type JoinedArrangement } from './block-grouping.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, LIST_WHOLE_ENTRIES, listColumnBreaks, listGridShape, shareHeights, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';
