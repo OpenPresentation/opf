@@ -172,6 +172,11 @@ export interface ComposedDiagram {
   alt: string;
   /** True when the diagram only fits below the readability floor: it is drawn smaller to stay inside its block. */
   overflow?: boolean;
+  /**
+   * LH-185: set when the written direction did not hold the labels at the floor and the other main direction was tried. `turned` is
+   * true when the drawing is in `to` (the labels fit there); false when neither did and the drawing stays as written, scaled.
+   */
+  direction?: { from: string; to: string; turned: boolean };
 }
 
 /** pele draws at 16 diagram units per em; the layout scales that to the chosen type size. */
@@ -264,16 +269,62 @@ function draw(source: string, maxWidth: number, options: Pick<DiagramLayoutOptio
 /**
  * Lay a diagram out for an area: the largest base type size, from `nominal` down, at which the drawing fits, its base size stays at
  * or above `floor` and its smallest label at or above DIAGRAM_SECONDARY_FLOOR of it. pele lays the diagram out for the width it has (a wide flowchart may turn to run down), so a
- * smaller size is a new layout, not a shrunken picture. When even the floor does not fit, the drawing at the floor is scaled
+ * smaller size is a new layout, not a shrunken picture. When even the floor does not fit, a flowchart or state diagram is tried in the other main
+ * direction (LH-185, `direction`); when neither holds the labels at the floor, the drawing as written at the floor is scaled
  * down to fit and marked `overflow`. Throws the diagram's issue (checkDiagram) when the source cannot be drawn.
  */
 export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): ComposedDiagram {
   const checkedValue = checkDiagram(value);
   if (!checkedValue.ok) throw Object.assign(new Error(checkedValue.issue.message), { diagramIssue: checkedValue.issue });
   const payload = diagramPayload(value)!;
+  const written = fitSource(payload.source, payload.alt, options);
+  if (!written.overflow) return written;
+  // LH-185: not even the floor fits, so the other main direction is tried before the drawing is scaled. The source keeps its text;
+  // only the drawing turns, and the result says so (`direction`).
+  const turned = turnedSource(payload.source);
+  if (!turned) return written;
+  let other: ComposedDiagram | undefined;
+  try { other = checkDiagram({ source: turned.source }).ok ? fitSource(turned.source, payload.alt, options) : undefined; } catch { other = undefined; }
+  if (other && !other.overflow) return { ...other, direction: { from: turned.from, to: turned.to, turned: true } };
+  return { ...written, direction: { from: turned.from, to: turned.to, turned: false } };
+}
+
+const OTHER_DIRECTION: Readonly<Record<string, string>> = { LR: 'TB', TB: 'LR', TD: 'LR', RL: 'BT', BT: 'RL' };
+const FLOWCHART_HEADER = /^([ \t]*(?:flowchart(?:-elk)?|graph))([ \t]+(?:LR|RL|TB|TD|BT))?(?=[ \t]*(?:;|\r?\n|$))/m;
+const STATE_HEADER = /^[ \t]*stateDiagram(?:-v2)?[ \t]*(?:;|\r?\n|$)/m;
+const STATE_DIRECTION = /^([ \t]*direction[ \t]+)(LR|RL|TB|TD|BT)(?=[ \t]*(?:;|\r?\n|$))/gm;
+
+/**
+ * The source drawn in the other main direction (LR and TB swap, RL and BT swap), or undefined when the syntax has no direction to turn:
+ * a flowchart's header, a state diagram's `direction` lines (one is added when it has none). The written direction defaults to TB.
+ */
+function turnedSource(source: string): { source: string; from: string; to: string } | undefined {
+  const type = detectType(source);
+  if (type === 'flowchart') {
+    const match = FLOWCHART_HEADER.exec(source);
+    if (!match) return undefined;
+    const from = match[2]?.trim() ?? 'TB', to = OTHER_DIRECTION[from]!;
+    return { source: source.slice(0, match.index) + match[1] + ' ' + to + source.slice(match.index + match[0].length), from, to };
+  }
+  if (type === 'state') {
+    const first = new RegExp(STATE_DIRECTION.source, 'm').exec(source);
+    if (first) {
+      const from = first[2]!;
+      return { source: source.replace(STATE_DIRECTION, (_all, lead: string, dir: string) => lead + OTHER_DIRECTION[dir]!), from, to: OTHER_DIRECTION[from]! };
+    }
+    const header = STATE_HEADER.exec(source);
+    if (!header) return undefined;
+    const at = header.index + header[0].length;
+    return { source: source.slice(0, at) + (header[0].endsWith('\n') ? '' : '\n') + '  direction LR\n' + source.slice(at), from: 'TB', to: 'LR' };
+  }
+  return undefined;
+}
+
+/** The fitting search for one source (layoutDiagram's body): the largest size that fits, else the floor's layout scaled and marked `overflow`. */
+function fitSource(source: string, alt: string | undefined, options: DiagramLayoutOptions): ComposedDiagram {
   const width = Math.max(1, options.width), height = Math.max(1, options.height);
   const down = options.grid?.down ?? ((size: number) => size), up = options.grid?.up ?? ((size: number) => size);
-  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(payload.source, width / scale, options) }; };
+  const at = (requested: number) => { const size = down(requested), scale = size / BASE; return { size, scale, drawn: draw(source, width / scale, options) }; };
   const fits = (candidate: ReturnType<typeof at>) => candidate.drawn.width * candidate.scale <= width + .5 && candidate.drawn.height * candidate.scale <= height + .5;
   // The smallest label's share of the base size is the diagram type's; it bounds the base size from below.
   const probe = at(Math.max(options.floor, options.nominal));
@@ -293,12 +344,12 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
     }
   }
   if (chosen) {
-    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: payload.alt ?? derivedAlt(chosen.drawn.type, chosen.drawn.svg) };
+    return { type: chosen.drawn.type, svg: chosen.drawn.svg, width: chosen.drawn.width, height: chosen.drawn.height, scale: chosen.scale, fontSize: chosen.size, smallestText: chosen.size * share, alt: alt ?? derivedAlt(chosen.drawn.type, chosen.drawn.svg) };
   }
   // Not even the floor fits: the floor's layout, scaled down into the area.
   const floor = at(lowest);
   const scale = down(BASE * Math.min(width / floor.drawn.width, height / floor.drawn.height, floor.scale)) / BASE;
-  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: payload.alt ?? derivedAlt(floor.drawn.type, floor.drawn.svg), overflow: true };
+  return { type: floor.drawn.type, svg: floor.drawn.svg, width: floor.drawn.width, height: floor.drawn.height, scale, fontSize: BASE * scale, smallestText: BASE * scale * share, alt: alt ?? derivedAlt(floor.drawn.type, floor.drawn.svg), overflow: true };
 }
 
 /** The colors and fonts a diagram is painted in, all opaque #RRGGBB colors except the families. */

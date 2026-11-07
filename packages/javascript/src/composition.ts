@@ -6039,6 +6039,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const fitShapeText = (shape: ComposedShape, value: unknown, textPath: string, minFontSize: number | undefined, sink: LayoutDiagnostic[]): TextFit | RichTextFit | undefined => {
     if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) return undefined;
     const drawn = shape.textDirection === 'stacked' ? stackedText(value) : value;
+    // SH-11: a style with bold text (intense) is measured bold, as both engines draw it, so PowerPoint wraps it where the preview does.
+    if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
@@ -7260,13 +7262,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // A diagram is laid out for its box in the body family (the code family for code-like labels) at the largest base size from the prose
   // size down at which it fits with every label at or above the readability floor, then drawn at that size, centered across and placed
   // by the anchor down. A source that cannot be drawn reports its issue; a drawing that only fits below the floor overflows.
+  const directionName = (direction: string) => ({ LR: 'left to right', RL: 'right to left', TB: 'top to bottom', TD: 'top to bottom', BT: 'bottom to top' } as Record<string, string>)[direction] ?? direction;
   const composeDiagram = (node: Pending, box: LayoutBox, settings: Composition, anchor: RegionAnchor): ComposedDiagramItem => {
     const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), nominal = Math.max(floor, DIAGRAM_NOMINAL_SIZE * scale);
     const measure = diagramMeasure(options.textMeasurement, options.fontFamilies?.body ?? 'sans-serif', options.fontFamilies?.code ?? FALLBACK_CODE_FAMILY);
     try {
       const laid = layoutDiagram(node.value, { width: box.width, height: box.height, nominal, floor, measure, idPrefix: `opf-${node.path.replace(/[^\w-]+/g, '-')}`, grid: { down: snapFontSizeDown, up: snapFontSizeUp } });
       const width = laid.width * laid.scale, height = laid.height * laid.scale;
-      if (laid.overflow) diagnostics.push({ code: 'text-overflow', path: node.path, message: 'The diagram does not fit its block at the readability floor, so it is drawn smaller; give it a slide or region of its own, draw it the other way (flowchart LR or TB, direction LR in a state diagram), or split it into smaller diagrams.' });
+      // LH-185: a flowchart or state diagram that does not fit at the floor is tried in the other main direction first.
+      const turn = laid.direction;
+      if (turn?.turned) diagnostics.push({ code: 'arrangement-adapted', path: node.path, message: `The ${laid.type === 'state' ? 'state diagram' : 'flowchart'} is drawn ${directionName(turn.to)} because ${directionName(turn.from)} does not fit at the readability floor.` });
+      if (laid.overflow) diagnostics.push({ code: 'text-overflow', path: node.path, message: `The diagram does not fit its block at the readability floor${turn ? ` in either direction (${directionName(turn.from)} and ${directionName(turn.to)} were tried)` : ''}, so it is drawn smaller; give it a slide or region of its own, split it into smaller diagrams${turn ? '' : ', or draw it the other way (flowchart LR or TB, direction LR in a state diagram)'}.` });
       // A diagram is a figure: centered in its block unless the region anchors it to the bottom.
       return { ...laid, box: roundBox({ x: box.x + (box.width - width) / 2, y: box.y + anchoredOffset(box.height - height, anchor === 'bottom' ? 'bottom' : 'middle'), width, height }) };
     } catch (error) {
