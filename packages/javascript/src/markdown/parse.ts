@@ -557,7 +557,7 @@ class SlideParser {
     if (word === "chart") this.chart(rest, bodyText, range);
     else if (word === "metric") this.metric(body, range);
     else if (word === "timeline") this.timeline(rest, body, range);
-    else if (word === "mermaid" || word === "dot") this.diagram(word, rest, bodyText, range);
+    else if (word === "mermaid" || word === "dot" || word === "plantuml") this.diagram(word, rest, bodyText, range);
     else if (word === "opf-slide") this.embeddedSlide(bodyText, bodyStart, range);
     else if (word === "opf-block") this.embeddedBlock(bodyText, bodyStart, range);
     else {
@@ -574,8 +574,8 @@ class SlideParser {
     }
   }
 
-  // A ```mermaid or ```dot fence is a diagram payload in that syntax; `alt="..."` after the word is its text alternative.
-  private diagram(syntax: "mermaid" | "dot", rest: string, text: string, range: Range): void {
+  // A ```mermaid, ```dot or ```plantuml fence is a diagram payload in that syntax; `alt="..."` after the word is its text alternative.
+  private diagram(syntax: "mermaid" | "dot" | "plantuml", rest: string, text: string, range: Range): void {
     const { ctx } = this;
     const { pairs, error } = parseAttributes(rest);
     let alt: string | undefined;
@@ -585,11 +585,11 @@ class SlideParser {
       else ctx.error("diagram-attributes", `Unknown diagram attribute ${JSON.stringify(key)}.`, `A ${syntax} fence takes alt, a text alternative in double quotes.`, range, this.path);
     }
     if (!text.trim()) {
-      const advice = syntax === "dot" ? "Write the DOT graph between the fences (digraph { a -> b })." : "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).";
+      const advice = syntax === "dot" ? "Write the DOT graph between the fences (digraph { a -> b })." : syntax === "plantuml" ? "Write the PlantUML diagram between the fences, from @startuml to @enduml." : "Write the Mermaid diagram between the fences, starting with its type (flowchart LR, sequenceDiagram, mindmap, ...).";
       ctx.error("diagram-source", `A ${syntax} block has no source.`, advice, range, this.path);
       return;
     }
-    if (syntax === "dot") this.native("diagram", alt === undefined ? { source: text, syntax } : { source: text, syntax, alt }, range);
+    if (syntax !== "mermaid") this.native("diagram", alt === undefined ? { source: text, syntax } : { source: text, syntax, alt }, range);
     else this.native("diagram", alt === undefined ? text : { source: text, alt }, range);
   }
 

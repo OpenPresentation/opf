@@ -928,7 +928,7 @@ export function createCanvasEditor(container, options = {}) {
         input.type = "checkbox";
         input.checked = field.value;
       } else {
-        // Diagram source (Mermaid or DOT) is several lines of code: more rows, a monospace face and no spell check.
+        // Diagram source (Mermaid, DOT or PlantUML) is several lines of code: more rows, a monospace face and no spell check.
         const source = isDiagramSource(field);
         input.rows = field.type === "number" ? 1 : source ? 8 : 2;
         input.value = field.value === null ? "null" : String(field.value);

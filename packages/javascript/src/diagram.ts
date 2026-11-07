@@ -8,13 +8,15 @@ import type { TextMeasurer } from 'pele';
 // core with each type loaded on demand in browsers (diagram-engine-eager.ts, diagram-engine-lazy.ts).
 import { PeleError, detectType, loadDiagramType, parse as parseMermaid, registered, render as renderMermaid } from '#diagram-engine';
 import { dotToMermaid } from './diagram-dot.js';
+import { plantumlToMermaid } from './diagram-plantuml.js';
 import { chartColorForFill, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, textColorForFill, type ChartColorContext } from './color.js';
 
 /**
- * The syntaxes a diagram's `source` can be written in: Mermaid, and Graphviz DOT (SH-12), which OPF reads itself and pele lays out with
- * its layered layout as a flowchart (diagram-dot.ts).
+ * The syntaxes a diagram's `source` can be written in: Mermaid; Graphviz DOT (SH-12), which OPF reads itself and pele lays out with its
+ * layered layout as a flowchart (diagram-dot.ts); and PlantUML (SH-13), which OPF reads itself and pele draws as the Mermaid family of the
+ * same kind (diagram-plantuml.ts).
  */
-export const DIAGRAM_SYNTAXES = ['mermaid', 'dot'] as const;
+export const DIAGRAM_SYNTAXES = ['mermaid', 'dot', 'plantuml'] as const;
 export type DiagramSyntax = typeof DIAGRAM_SYNTAXES[number];
 
 /** A diagram payload in its object form: the string shorthand is `{ source }`. */
@@ -45,15 +47,22 @@ export function diagramPayload(value: unknown): DiagramPayload | undefined {
 }
 
 /**
- * The Mermaid source pele draws for a diagram payload: a Mermaid source as written, a DOT source as the flowchart OPF's reader makes of it.
- * A DOT source's issue keeps its position in the DOT source.
+ * The Mermaid source pele draws for a diagram payload: a Mermaid source as written, a DOT or PlantUML source as the Mermaid OPF's reader
+ * makes of it, with the name of the kind for the derived alt text. A DOT or PlantUML source's issue keeps its position in that source.
  */
-function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean } | { ok: false; issue: DiagramIssue } {
+function peleSource(payload: DiagramPayload): { ok: true; source: string; translated: boolean; name?: string } | { ok: false; issue: DiagramIssue } {
   if (payload.syntax === 'mermaid') return { ok: true, source: payload.source, translated: false };
   if (payload.source.length > DIAGRAM_SOURCE_LIMIT) return { ok: false, issue: { code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` } };
+  if (payload.syntax === 'plantuml') {
+    const result = plantumlToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
+    return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: PLANTUML_NAMES[result.translation.diagram] } : { ok: false, issue: result.issue };
+  }
   const result = dotToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
-  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true } : { ok: false, issue: result.issue };
+  return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: 'graph' } : { ok: false, issue: result.issue };
 }
+
+/** The derived alt text's name of the PlantUML kinds pele draws as a family of another name. */
+const PLANTUML_NAMES: Readonly<Record<string, string>> = { activity: 'activity', component: 'component' };
 
 /** The source limit pele checks: the authored source's for Mermaid; a translated source was checked before it was translated. */
 const peleLimit = (translated: boolean) => translated ? DIAGRAM_SOURCE_LIMIT * 16 : DIAGRAM_SOURCE_LIMIT;
@@ -258,7 +267,7 @@ function decodeXml(text: string): string {
 }
 
 // pele's diagram types (its registry), as a reader would name them.
-const TYPE_NAMES: Readonly<Record<string, string>> = { graph: 'Graph', agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
+const TYPE_NAMES: Readonly<Record<string, string>> = { graph: 'Graph', activity: 'Activity diagram', component: 'Component diagram', agentflow: 'Agent flow', architecture: 'Architecture diagram', block: 'Block diagram', c4: 'C4 diagram', class: 'Class diagram', cynefin: 'Cynefin diagram', er: 'Entity relationship diagram', eventmodeling: 'Event model', flowchart: 'Flowchart', gantt: 'Gantt chart', gitGraph: 'Git graph', info: 'Diagram', ishikawa: 'Ishikawa diagram', journey: 'User journey', kanban: 'Kanban board', mindmap: 'Mind map', packet: 'Packet diagram', pie: 'Pie chart', quadrantChart: 'Quadrant chart', radar: 'Radar chart', railroad: 'Railroad diagram', requirement: 'Requirement diagram', sankey: 'Sankey diagram', sequence: 'Sequence diagram', state: 'State diagram', swimlane: 'Swimlane diagram', timeline: 'Timeline', treeView: 'Tree view', treemap: 'Treemap', usecase: 'Use case diagram', venn: 'Venn diagram', wardley: 'Wardley map', xychart: 'XY chart' };
 
 /** The default text alternative of a drawing: its kind, then its labels, at most 400 characters. */
 function derivedAlt(type: string, svg: string): string {
@@ -310,9 +319,10 @@ export function layoutDiagram(value: unknown, options: DiagramLayoutOptions): Co
   const checkedValue = checkDiagram(value);
   if (!checkedValue.ok) throw Object.assign(new Error(checkedValue.issue.message), { diagramIssue: checkedValue.issue });
   const payload = diagramPayload(value)!;
-  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean };
-  // A DOT graph is drawn as the flowchart OPF reads it as; its derived alt text names a graph.
-  const limit = peleLimit(pele.translated), name = payload.syntax === 'dot' ? 'graph' : undefined;
+  const pele = peleSource(payload) as { ok: true; source: string; translated: boolean; name?: string };
+  // A DOT graph is drawn as the flowchart OPF reads it as, and a PlantUML diagram as its Mermaid family; the derived alt text names the
+  // kind the author wrote (a graph, an activity or component diagram).
+  const limit = peleLimit(pele.translated), name = pele.name;
   const written = fitSource(pele.source, limit, payload.alt, name, options);
   if (!written.overflow) return written;
   // LH-185: not even the floor fits, so the other main direction is tried before the drawing is scaled. The source keeps its text;

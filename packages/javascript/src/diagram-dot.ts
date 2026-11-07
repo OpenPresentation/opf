@@ -116,7 +116,7 @@ function tokenize(source: string): Token[] {
     }
     const numeral = /^-?(?:\.\d+|\d+(?:\.\d*)?)/.exec(source.slice(index, index + 64));
     if (numeral) { push('id', numeral[0]); index += numeral[0].length; continue; }
-    const name = /^[A-Za-z_\u0080-￿][\w\u0080-￿]*/u.exec(source.slice(index, index + 4096));
+    const name = /^[A-Za-z_\u0080-\uFFFF][\w\u0080-\uFFFF]*/u.exec(source.slice(index, index + 4096));
     if (name) { push('id', name[0]); index += name[0].length; continue; }
     fail(`Unexpected character ${JSON.stringify(char)}.`);
   }

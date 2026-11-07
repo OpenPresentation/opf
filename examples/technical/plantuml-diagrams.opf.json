@@ -1,0 +1,79 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "PlantUML diagrams",
+  "description": "Technical fixture for PlantUML diagrams (diagram syntax \"plantuml\"), one slide per kind OPF draws: a sequence diagram, a class diagram, a state diagram, an activity diagram, a use case diagram, a component diagram, a mind map and a gantt chart. OPF reads the PlantUML itself and pele draws each as the Mermaid family of the same kind.",
+  "filename": "plantuml-diagrams",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "colorScheme": "steel-blue",
+    "fontScheme": "open-sans"
+  },
+  "slides": [
+    {
+      "id": "sequence",
+      "title": "The API answers every request with findings",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nactor Author\nparticipant \"Deck API\" as API\ndatabase Store\nAuthor -> API : POST /decks\nAPI -> Store : save\nStore --> API : id\nalt valid\n  API --> Author : 201 Created\nelse invalid\n  API --> Author : 422 findings\nend\n@enduml"
+      }
+    },
+    {
+      "id": "class",
+      "title": "A deck is a list of slides",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nclass Deck {\n  +name : String\n  +render() : Pptx\n}\nclass Slide {\n  +title : String\n}\ninterface Block\nclass Chart\nclass Diagram\nDeck \"1\" *-- \"many\" Slide : holds\nSlide o-- Block\nChart ..|> Block\nDiagram ..|> Block\n@enduml"
+      }
+    },
+    {
+      "id": "state",
+      "title": "A deck moves from draft to published",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\n[*] --> Draft\nstate \"In review\" as Review\nDraft --> Review : submit\nReview --> Draft : changes\nReview --> Published : approve\nPublished --> [*]\n@enduml"
+      }
+    },
+    {
+      "id": "activity",
+      "title": "Every brief is reviewed before it is built",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nstart\n:Write the brief;\nif (Approved?) then (yes)\n  :Build the deck;\nelse (no)\n  :Revise it;\nendif\nstop\n@enduml"
+      }
+    },
+    {
+      "id": "usecase",
+      "title": "Presenters write, reviewers approve",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nleft to right direction\nactor Presenter\nactor Reviewer\nrectangle OPF {\n  usecase (Write a deck) as Write\n  usecase (Review a deck) as Review\n  usecase (Export) as Export\n}\nPresenter --> Write\nReviewer --> Review\nWrite ..> Export : <<include>>\n@enduml"
+      }
+    },
+    {
+      "id": "component",
+      "title": "The editor and the site share one API",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startuml\nleft to right direction\npackage \"Front end\" {\n  [Editor]\n  [Site]\n}\nnode Server {\n  [API]\n  database \"Decks\" as DB\n}\n[Editor] --> [API] : REST\n[Site] --> [API] : REST\n[API] --> DB\n@enduml"
+      }
+    },
+    {
+      "id": "mindmap",
+      "title": "Three bets carry the strategy",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startmindmap\n* Strategy\n** Growth\n*** New markets\n*** Partners\n** Efficiency\n*** Automation\n** People\n*** Hiring\n@endmindmap"
+      }
+    },
+    {
+      "id": "gantt",
+      "title": "The release ships in February",
+      "diagram": {
+        "syntax": "plantuml",
+        "source": "@startgantt\nProject starts 2026-01-05\nsaturday are closed\nsunday are closed\n-- Design --\n[Brief] lasts 5 days\n[Brief] is 100% completed\nthen [Layouts] lasts 10 days\n-- Build --\nthen [Engine] lasts 10 days\n[Release] happens at [Engine]'s end\n@endgantt",
+        "alt": "Brief, layouts and engine run back to back from January 5; the release follows the engine in February."
+      }
+    }
+  ]
+}
