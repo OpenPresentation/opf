@@ -9482,7 +9482,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   //   each entry beside its level (start-aligned), or four quadrants filling the region (centered);
   // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
-  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; largest?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined };
+  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined };
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
@@ -9506,9 +9506,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const margin = design.margin * size, columns: ComposedListColumn[] = [], lines: number[] = [], stable: boolean[] = [];
       // SH-17: a chevron's margin is larger at its start (a design with one margin keeps SH-09's arithmetic, so its text lies exactly where it did).
       const [left, top, right, bottom] = (design.margins ?? [design.margin, design.margin, design.margin, design.margin]).map(share => share * size) as [number, number, number, number];
-      const across = design.margins ? left + right : 2 * margin, down = design.margins ? top + bottom : 2 * margin;
+      const less = (length: number, start: number, end: number) => design.margins ? length - start - end : length - 2 * margin;
       for (let index = 0; index < count; index++) {
-        const node = design.nodes[index]!, inner = { x: node.textBox.x + left, y: node.textBox.y + top, width: node.textBox.width - across, height: node.textBox.height - down };
+        const node = design.nodes[index]!, inner = { x: node.textBox.x + left, y: node.textBox.y + top, width: less(node.textBox.width, left, right), height: less(node.textBox.height, top, bottom) };
         if (inner.width <= 0 || inner.height <= 0) return undefined;
         const probe = single(index, { ...inner, height: 1e5 }, size), entry = probe.listEntries[0];
         if (!entry || probe.overflow || entry.text.height > inner.height + 1e-6) return undefined;
@@ -9527,7 +9527,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         // The ink of every line (cap height over the baseline to the descenders) stays inside the node's outline, inset by the margin: a
         // pyramid level narrows toward its top, a quadrant at its corners. Text beside its level has no outline to keep to.
         if (!node.beside) for (const line of placed.text.richLines) {
-          const baseline = placed.textBox.y + line.baseline, room = Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)) - across;
+          const baseline = placed.textBox.y + line.baseline, room = less(Math.min(nodeWidthAt(node, baseline - .72 * size), nodeWidthAt(node, baseline + .22 * size)), left, right);
           if (line.width > room + 1e-6) return undefined;
         }
         const own = breaks(placed), widths = design.design !== 'smartart' ? [] : [1 - SMART_ART_DOMAIN.slack, 1 + SMART_ART_DOMAIN.slack].map(share => breaks(single(index, { ...inner, width: inner.width * share, height: 1e5 }, size).listEntries[0]));
@@ -9535,7 +9535,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
         columns.push({ box, start: index, end: index + 1, text });
       }
       // SH-17: how full the fullest text rectangle is, and the text's share of the frame (SMART_ART_DOMAIN.fill and ink).
-      const fill = Math.max(0, ...columns.map((column, index) => { const box = design.nodes[index]!.textBox; return column.box.height / Math.max(1e-6, box.height - down); }));
+      const fill = Math.max(0, ...columns.map((column, index) => { const box = design.nodes[index]!.textBox; return column.box.height / Math.max(1e-6, box.height - top - bottom); }));
       const ink = columns.reduce((sum, column) => sum + column.text.listEntries[0]!.text.richLines.reduce((all, line) => all + line.width * size, 0), 0) / Math.max(1e-6, design.frame.width * design.frame.height);
       return { columns, margin, margins: [left, top, right, bottom] as [number, number, number, number], lines, stable, fill, ink };
     };
@@ -9563,10 +9563,11 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const own = linearNodes(kind, area, count, rtl), margins = linearMargins(kind, rtl);
       designs.push({ design: 'smartart', frame: area, nodes: own.nodes, ...(own.arrows.length ? { arrows: own.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
       // Each is sized in its tallest geometry, then its nodes take the height of the text (refit).
-      for (let lines = 1; lines <= Math.min(OPF_LINES_MAX, count); lines++) {
-        const opf = linearDesign(kind, area, count, gap, rtl, lines);
-        if (opf) designs.push({ design: 'opf', frame: area, nodes: opf.nodes, ...(opf.arrows.length ? { arrows: opf.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine, largest: true,
-          refit: need => linearDesign(kind, area, count, gap, rtl, lines, need) });
+      // The compact designs (closer rooms, smaller arrows) only when none of PowerPoint's proportions holds the entries (`last`).
+      for (const compact of [false, true]) for (let lines = 1; lines <= Math.min(OPF_LINES_MAX, count); lines++) {
+        const opf = linearDesign(kind, area, count, gap, rtl, lines, undefined, compact);
+        if (opf) designs.push({ design: 'opf', frame: area, nodes: opf.nodes, ...(opf.arrows.length ? { arrows: opf.arrows } : {}), margin: ARRANGEMENT_TEXT_MARGIN[kind], margins: linearMargins(kind, rtl, true), align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine, largest: true,
+          refit: need => linearDesign(kind, area, count, gap, rtl, lines, need, compact), ...(compact ? { last: true as const } : {}) });
       }
     } else if (count === MATRIX_ENTRIES) {
       designs.push({ design: 'smartart', frame: area, nodes: matrixNodes(area), margin: ARRANGEMENT_TEXT_MARGIN.matrix, align: 'center', paint: 'primary', text: 'node', background: matrixSquare(area), lineWidth: primaryLine });
@@ -9583,6 +9584,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const script = smartArtScript(values.map(value => flatten(typeof value === 'object' && value !== null && !Array.isArray(value) ? record(value).text : value)));
     let chosen: { design: ArrangementDesign; placed: NonNullable<ReturnType<typeof place>>; size: number } | undefined, outside: typeof chosen, skipped: string | undefined;
     for (const design of designs) {
+      if (design.last && chosen) break;
       const result = sized(design);
       if (!result) { if (design.design === 'smartart') skipped = `its entries do not fit PowerPoint's ${SMART_ART_NAMES[kind].layout} at the list's size`; continue; }
       const unavailable = design.design !== 'smartart' ? undefined : smartArtUnavailable({ kind, count, frame: design.frame, rtl: rtl || script.rtl, ...(script.script ? { script: script.script } : {}),

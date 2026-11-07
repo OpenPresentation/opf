@@ -163,6 +163,8 @@ export function linearNodes(kind: LinearArrangement, frame: Box, count: number, 
   return kind === 'chevrons' ? chevronNodes(frame, count, rtl) : kind === 'flow' ? flowNodes(frame, count, rtl) : verticalFlowNodes(frame, count);
 }
 
+/** OPF's compact design (linearDesign `compact`): rooms of gaps, arrows of the room, a shallower chevron point. */
+export const COMPACT_ROOM = 1.5, COMPACT_COLUMN_ROOM = 1.25, COMPACT_ARROW_LENGTH = .6, COMPACT_ARROW_THICKNESS = .7, COMPACT_CHEVRON_DEPTH = .12;
 /** The most rows (chevrons, flow) or columns (vertical flow) OPF's own design wraps its entries into. */
 export const OPF_LINES_MAX = 4;
 /** OPF's flows: an arrow is PowerPoint's (0.212 of a box's width long, 0.248 thick), in a room of 0.4 of a box's width between two. */
@@ -173,9 +175,9 @@ export const OPF_COLUMN_ARROW_LENGTH = .375, OPF_COLUMN_ARROW_THICKNESS = .45, O
 export const OPF_CHEVRON_DEPTH = .2;
 /**
  * The height OPF gives a node: at least PowerPoint's proportion (a chevron 0.4 of its width, a box 0.6, a vertical box 1/1.8 of its
- * width) and the text it holds with its margins, at most the room: a chevron 0.6 of its width, a box as tall as wide, a vertical box 0.6.
+ * width) and the text it holds with its margins, at most the room: a chevron 0.8 of its width, a box 1.25, a vertical box as tall as wide.
  */
-const OPF_LEAST = Object.freeze({ chevrons: .4, flow: .6, 'vertical-flow': 1 / 1.8 }), OPF_MOST = Object.freeze({ chevrons: .6, flow: 1, 'vertical-flow': .6 });
+const OPF_LEAST = Object.freeze({ chevrons: .4, flow: .6, 'vertical-flow': 1 / 1.8 }), OPF_MOST = Object.freeze({ chevrons: .8, flow: 1.25, 'vertical-flow': 1 });
 /** DrawingML roundRect at FLOW_ROUND_ADJUST insets its text by this share of its smaller side on every side. */
 const BOX_TEXT_INSET = ROUND_RECT_TEXT_INSET * FLOW_ROUND_ADJUST / 100000;
 
@@ -200,8 +202,12 @@ function split(count: number, lines: number): number[] {
  * `need` is the height the fullest node's text takes with its margins, once composition has sized the text in the tallest geometry
  * (`need` absent): each node is then that tall, or PowerPoint's proportion when that is taller, at most the room. A right-to-left deck
  * mirrors the design. Undefined when the area cannot hold it.
+ *
+ * `compact`: the design composition falls back to only when no proportioned one holds the entries at the list's size (so no list is left
+ * as a list a design could hold): the rooms a gap and a half (a vertical flow's 1.25 gaps) with an arrow 0.6 of the room long, a
+ * chevron's point at most 0.12 of its width deep and half a gap from the next notch, and no least height.
  */
-export function linearDesign(kind: LinearArrangement, area: Box, count: number, gap: number, rtl = false, lines = 1, need?: number): LinearGeometry | undefined {
+export function linearDesign(kind: LinearArrangement, area: Box, count: number, gap: number, rtl = false, lines = 1, need?: number, compact = false): LinearGeometry | undefined {
   const n = Math.max(1, Math.floor(count)), wrap = Math.max(1, Math.min(Math.floor(lines), n)), counts = split(n, wrap), most = counts[0]!;
   const nodes: ArrangementNode[] = [], arrows: ArrangementArrow[] = [];
   const place = (box: Box) => rtl ? mirrorBox(box, area) : box, turn = (rotation: number) => rtl ? (rotation === 0 ? 180 : rotation === 180 ? 0 : rotation) : rotation;
@@ -209,9 +215,13 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
     // Columns two gaps apart, which hold the right arrow from one column to the next; each box half its height from the next.
     const between = 2 * gap, width = (area.width - (wrap - 1) * between) / wrap;
     if (width <= 0) return undefined;
-    const tallest = Math.min(area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-flow'] * width), least = Math.min(tallest, OPF_LEAST['vertical-flow'] * width);
-    const h = need === undefined ? tallest : Math.min(tallest, Math.max(least, need / (1 - 2 * BOX_TEXT_INSET))), room = OPF_COLUMN_ROOM * h;
-    const span = most * h + (most - 1) * room, y0 = area.y + (area.height - span) / 2, length = OPF_COLUMN_ARROW_LENGTH * h, thick = OPF_COLUMN_ARROW_THICKNESS * h;
+    const fixed = compact ? COMPACT_COLUMN_ROOM * gap : 0;
+    const tallest = Math.min(compact ? (area.height - (most - 1) * fixed) / most : area.height / (most + OPF_COLUMN_ROOM * (most - 1)), OPF_MOST['vertical-flow'] * width);
+    const least = compact ? 0 : Math.min(tallest, OPF_LEAST['vertical-flow'] * width);
+    if (tallest <= 0) return undefined;
+    const h = need === undefined ? tallest : Math.min(tallest, Math.max(least, need / (1 - 2 * BOX_TEXT_INSET))), room = compact ? fixed : OPF_COLUMN_ROOM * h;
+    const span = most * h + (most - 1) * room, y0 = area.y + (area.height - span) / 2;
+    const length = compact ? COMPACT_ARROW_LENGTH * room : OPF_COLUMN_ARROW_LENGTH * h, thick = compact ? COMPACT_ARROW_THICKNESS * room : OPF_COLUMN_ARROW_THICKNESS * h;
     let entry = 0;
     counts.forEach((k, column) => {
       const own = (span - (k - 1) * room) / k, x = area.x + column * (width + between), up = column % 2 === 1;
@@ -235,20 +245,26 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
     return { nodes, arrows };
   }
   // Rows: chevrons 0.9 widths apart, boxes 0.4 widths apart; the width of a full row's node sets the arrows and the rooms of every row.
-  const chevrons = kind === 'chevrons', full = chevrons ? area.width / (CHEVRON_STEP * most + 1 - CHEVRON_STEP) : area.width / (most + OPF_ARROW_ROOM * (most - 1));
-  const room = OPF_ARROW_ROOM * full, rowGap = chevrons ? gap : room;
-  const band = (area.height - (wrap - 1) * rowGap) / wrap, tallest = Math.min(band, OPF_MOST[kind] * full), least = Math.min(tallest, OPF_LEAST[kind] * full);
+  const chevrons = kind === 'chevrons', depthShare = compact ? COMPACT_CHEVRON_DEPTH : OPF_CHEVRON_DEPTH, fixed = compact ? (chevrons ? gap / 2 : COMPACT_ROOM * gap) : 0;
+  // A run of k chevrons (compact: each its point half a gap from the next notch) or k boxes spans the area at this width.
+  const widthOf = (k: number) => chevrons ? (compact ? (area.width - (k - 1) * fixed) / (k - COMPACT_CHEVRON_DEPTH * (k - 1)) : area.width / (CHEVRON_STEP * k + 1 - CHEVRON_STEP))
+    : compact ? (area.width - (k - 1) * fixed) / k : area.width / (k + OPF_ARROW_ROOM * (k - 1));
+  const full = widthOf(most);
+  // Between two rows of a flow, the room for the down arrow from one row to the next (its length and half a gap).
+  const room = compact ? fixed : OPF_ARROW_ROOM * full, length = compact ? COMPACT_ARROW_LENGTH * room : OPF_ARROW_LENGTH * full, thick = compact ? COMPACT_ARROW_THICKNESS * room : OPF_ARROW_THICKNESS * full;
+  const rowGap = chevrons ? gap : length + gap / 2;
+  const band = (area.height - (wrap - 1) * rowGap) / wrap, tallest = Math.min(band, OPF_MOST[kind] * full), least = compact ? 0 : Math.min(tallest, OPF_LEAST[kind] * full);
   if (tallest <= 0) return undefined;
   const h = need === undefined ? tallest : Math.min(tallest, Math.max(least, chevrons ? need : need / (1 - 2 * BOX_TEXT_INSET)));
-  const y0 = area.y + (area.height - wrap * h - (wrap - 1) * rowGap) / 2, length = OPF_ARROW_LENGTH * full, thick = OPF_ARROW_THICKNESS * full;
+  const y0 = area.y + (area.height - wrap * h - (wrap - 1) * rowGap) / 2;
   let entry = 0;
   counts.forEach((k, row) => {
     const y = y0 + row * (h + rowGap), back = !chevrons && row % 2 === 1;
-    const w = chevrons ? area.width / (CHEVRON_STEP * k + 1 - CHEVRON_STEP) : (area.width - (k - 1) * room) / k;
-    const left = (slot: number) => area.x + slot * (chevrons ? CHEVRON_STEP * w : w + room);
+    const w = chevrons ? widthOf(k) : (area.width - (k - 1) * room) / k;
+    const left = (slot: number) => area.x + slot * (chevrons ? (compact ? w - COMPACT_CHEVRON_DEPTH * w + fixed : CHEVRON_STEP * w) : w + room);
     for (let j = 0; j < k; j++) {
       const slot = back ? k - 1 - j : j, box = { x: left(slot), y, width: w, height: h };
-      nodes.push(chevrons ? chevronNode(entry + j, place(box), Math.min(h / 2, OPF_CHEVRON_DEPTH * w), rtl) : boxNode(entry + j, place(box), FLOW_ROUND_ADJUST));
+      nodes.push(chevrons ? chevronNode(entry + j, place(box), Math.min(h / 2, depthShare * w), rtl) : boxNode(entry + j, place(box), FLOW_ROUND_ADJUST));
       if (!chevrons && j < k - 1) {
         // The arrow in the room between this box and the next, pointing the way the row runs.
         const x = (back ? left(slot - 1) : left(slot)) + w + (room - length) / 2;
@@ -258,7 +274,7 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
     if (!chevrons && row < wrap - 1) {
       // A down arrow from this row's last box to the next row's first, at the end where this row stops (the next row runs back).
       const next = counts[row + 1]!, end = Math.min(w, (area.width - (next - 1) * room) / next);
-      const cx = back ? area.x + end / 2 : area.x + area.width - end / 2, cy = y + h + rowGap / 2, down = Math.min(length, .8 * rowGap);
+      const cx = back ? area.x + end / 2 : area.x + area.width - end / 2, cy = y + h + rowGap / 2, down = Math.min(length, rowGap - gap / 4);
       arrows.push(arrow(entry + k - 1, place({ x: cx - down / 2, y: cy - thick / 2, width: down, height: thick }), 90));
     }
     entry += k;
@@ -266,8 +282,14 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   return { nodes, arrows };
 }
 
-/** A node's text margins (left, top, right, bottom) as shares of its size: a chevron's larger margin is at its start (the right when `rtl`). */
-export function linearMargins(kind: LinearArrangement, rtl: boolean): [number, number, number, number] {
-  const [left, top, right, bottom] = LINEAR_TEXT_MARGINS[kind];
+/** OPF's own boxes set their text 0.15 em from their top and bottom (PowerPoint's 0.3 em at the sides), so a box sized to its text holds more lines. */
+export const OPF_FLOW_MARGINS: readonly [number, number, number, number] = Object.freeze([.3, .15, .3, .15] as const);
+
+/**
+ * A node's text margins (left, top, right, bottom) as shares of its size, in PowerPoint's design or (`opf`) OPF's own: a chevron's larger
+ * margin is at its start (the right when `rtl`).
+ */
+export function linearMargins(kind: LinearArrangement, rtl: boolean, opf = false): [number, number, number, number] {
+  const [left, top, right, bottom] = opf && kind !== 'chevrons' ? OPF_FLOW_MARGINS : LINEAR_TEXT_MARGINS[kind];
   return rtl ? [right, top, left, bottom] : [left, top, right, bottom];
 }

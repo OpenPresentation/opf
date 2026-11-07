@@ -83,14 +83,23 @@ but those where PowerPoint's 8 pt test letter did not fit a node (a node a few p
 PowerPoint's design is drawn where it holds the entries at the list's size and lies in the [domain](#the-domain); else OPF's own design
 of the arrangement, filling the region:
 
-- **chevrons**: a row across the region's width, as tall as the region or 0.6 of a chevron's width, whichever is less, the point 0.3 of
-  the height deep and half a gap from the next chevron's notch;
-- **flow**: boxes across the region's width, a gap and a half apart, each at most 0.75 times as tall as wide, an arrow in each gap;
-- **vertical flow**: boxes as wide as the region, a gap and a half apart, each at most 0.4 of the region's width tall, a down arrow in
-  each gap.
+OPF's design keeps PowerPoint's proportions, so the two read as one family: a chevron 0.9 widths after the last (its point at
+most 0.2 of its width deep), a box 0.4 widths after the last with PowerPoint's arrow (0.212 x 0.248 of a box's width) in the room, a
+vertical box half its height below the last with a down arrow 0.45 x 0.375 of its height. The entries go into one to four rows (a
+vertical flow: columns), whichever holds the text largest (one line on a tie), as evenly as possible, the longer lines first. The text
+is one size for every node, the largest from 1.5 times the list's role size down to the role size at which every node holds its entry;
+then every node takes the height that text needs with its margins (PowerPoint's proportion at least: a chevron 0.4 of its width, a box
+0.6, a vertical box 1/1.8), and the whole is centered in the region. Every row spans the region: a row of fewer entries widens them (a
+column of fewer lengthens them).
 
-A right-to-left deck mirrors both designs of a row: the first chevron or box is at the right, the chevrons point left (`flipH`) and the
-arrows turn to 180 degrees.
+- **chevrons**: each row a run of chevrons, left to right; a wrapped row breaks after a chevron's point and the next row starts again
+  at the left, full width, so the points carry the order;
+- **flow**: the rows snake: the second runs right to left under the first, joined by a down arrow under the end where the first stops,
+  the third runs left to right again, and so on;
+- **vertical flow**: the columns snake the same way: the second runs bottom to top, joined by a right arrow at the bottom.
+
+A right-to-left deck mirrors the designs: the first chevron or box is at the right, the chevrons point left (`flipH`) and the arrows
+turn.
 
 ## In PowerPoint
 
