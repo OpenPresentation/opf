@@ -24,7 +24,7 @@ test('every measured frame: core lays the nodes and arrows out where PowerPoint 
       // PowerPoint lists a flow's shapes node, arrow, node, ...
       const ours = nodes.flatMap((node, index) => [rect(node.box), ...(arrows[index] ? [rect(arrows[index].box)] : [])]);
       assert.equal(ours.length, shapes.length, `${kind} ${width} x ${height}, ${count}`);
-      ours.forEach((box, index) => box.forEach((value, at) => near(value, shapes[index][at], `${kind} ${width} x ${height}, ${count}: shape ${index + 1} [${at}]`)));
+      for (const [index, box] of ours.entries()) for (const [at, value] of box.entries()) near(value, shapes[index][at], `${kind} ${width} x ${height}, ${count}: shape ${index + 1} [${at}]`);
     }
   }
 });

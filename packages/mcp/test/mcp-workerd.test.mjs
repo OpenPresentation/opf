@@ -137,7 +137,8 @@ describe("the server without the bundled data (@openpresentation/mcp/server)", (
 		// About 7.1 MB unminified, 1.1 MB of it the diagram types validate_deck loads to check a deck's diagrams. SH-02: composition evaluates
 		// the 187 preset shapes (SH-01's geometry table, about 0.3 MB), so a deck's shape blocks validate: 7,785,356 bytes.
 		// SH-04: overlay shapes and connectors (their composition, routing and validation, and the overlay form of the schema): 7,974,844 bytes. Shapes phase 2 together (SH-04, SH-05, SH-06's shape catalog and search_shapes, SH-07): 7,994,440 bytes.
-		assert.ok(lean.bytes < 8_050_000, `${lean.bytes} bytes`);
+		// SH-17 (the chevrons and flows, their PowerPoint scales and OPF's own designs): 8,050,149 bytes.
+		assert.ok(lean.bytes < 8_080_000, `${lean.bytes} bytes`);
 	});
 
 	test("serves the sources it is given", { skip: !available && "the workerd package has no binary for this platform" }, async () => {
