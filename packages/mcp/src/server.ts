@@ -52,6 +52,23 @@ export interface OpfMcpSources {
 /** Checks deck text as `opf validate` does and returns the report. The default is edge-safe (layout estimated); `opf mcp` supplies the measured one. */
 export type CheckText = (raw: string, format: DeckFormat, options: ValidateOptions) => Promise<ValidationReport> | ValidationReport;
 
+/** Reads a font file the deck view asks for (`embedded/...`, `fonts/...`, `script-fonts/...`); undefined when it has none. */
+export type ReadFontFile = (file: string) => Promise<Uint8Array | undefined> | Uint8Array | undefined;
+
+/** The deck view (an MCP App): the HTML of `ui://opf/deck`, which `show_deck` opens in a host that supports MCP Apps. */
+export interface OpfDeckApp {
+	/**
+	 * The view's HTML: `DECK_APP_HTML` of `@openpresentation/mcp`, or a function that returns it (called each time a client reads
+	 * `ui://opf/deck`, so a hosted server can load the 8 MB page from storage only for the requests that need it).
+	 */
+	html: string | (() => string | Promise<string>);
+	/**
+	 * Font files for the view (it fetches nothing itself). With it the app-only tool `read_font_file` is offered; without it the view
+	 * draws faces it cannot get with Roboto and names the substitution. `opf-mcp` serves the installed `@openpresentation/opf-render`'s.
+	 */
+	readFontFile?: ReadFontFile;
+}
+
 export interface OpfMcpOptions {
 	/** The version the server reports (the CLI's). */
 	version: string;
@@ -59,6 +76,14 @@ export interface OpfMcpOptions {
 	opfVersion?: string;
 	sources: OpfMcpSources;
 	checkText?: CheckText;
+	/** The deck view behind `show_deck`. Without it `show_deck` and `ui://opf/deck` are not offered. */
+	deckApp?: OpfDeckApp;
+	/**
+	 * Whether the server reads and checks decks itself. Default true. A hosted server that should do no deck work passes false: then
+	 * `validate_deck`, `convert` and the `fix_validation_findings` prompt are left out, and `show_deck` only opens the view, which
+	 * checks the deck on the user's machine and sends its findings to the model as context.
+	 */
+	processDecks?: boolean;
 }
 
 /** A failure the tools report as `{ ok: false, code, error, ... }` with `isError`. */
@@ -272,14 +297,42 @@ const INSTRUCTIONS = `OPF (Open Presentation Format) is a JSON format for slide 
 Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
 To author a deck: write JSON (or YAML or Markdown), call validate_deck, fix the findings (each has a rule id, a JSON Pointer path and a hint), repeat until ok. convert changes a deck between JSON, YAML and Markdown. Validation is not proof of how a deck looks: it does not render.`;
 
+const INSTRUCTIONS_SHOW = "To show the user a deck, call show_deck: in a client that supports MCP Apps it opens the OPF viewer (Preview, Source and Both), where the user can edit it; their edits come back to you as context, and you continue from that version.";
+const INSTRUCTIONS_VIEWER = `OPF (Open Presentation Format) is a JSON format for slide decks. This server teaches it and opens decks in the OPF viewer; it keeps no state and reads no files.
+Call start_here (with your goal) for a path through the docs, skills, examples and catalog; or start with the resource opf://docs/format-card (the whole authoring surface on one page) and opf://docs/index (every page). Look up exact fields with get_schema (or the opf://schema/<name> resources), default design records (layouts, themes, color and font schemes, ...) with search_catalog and get_catalog_record, worked decks with list_examples (opf://examples/<slug>), and prose with search_docs. Skills are resources too: opf://skills/<name>.
+To author a deck: write JSON (or YAML or Markdown) and open it with show_deck. The viewer checks it on the user's machine and sends you its findings (each has a rule id, a JSON Pointer path and a message) as context; fix them and call show_deck again. The user can edit the deck in the viewer; their edits come back to you as context.`;
+
+export { type SiteFontsOptions, deckFontFile, siteFontFiles } from "./site-fonts.js";
+
+/** The `ui://` resource of the deck view and the MIME type of an MCP App (SEP-1865). */
+export const DECK_APP_URI = "ui://opf/deck";
+export const MCP_APP_MIME_TYPE = "text/html;profile=mcp-app";
+
+/** The most of a font file one read_font_file call returns (the PDF viewer of ext-apps reads in pieces of the same size). */
+const FONT_CHUNK = 512 * 1024;
+
+/** Bytes as base64, without Buffer (edge-safe). */
+function base64Of(bytes: Uint8Array): string {
+	let binary = "";
+	for (let at = 0; at < bytes.length; at += 0x8000) binary += String.fromCharCode(...bytes.subarray(at, at + 0x8000));
+	return btoa(binary);
+}
+
+
 /** Build the server. Connect it to a transport (`server.connect(...)`): stdio for `opf mcp`, Streamable HTTP for a hosted one. */
 export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
-	const { sources, version } = options;
+	const { sources, version, deckApp } = options;
+	// A server that does no deck work (a thin hosted one) leaves the checks to the deck view.
+	const processDecks = options.processDecks !== false;
+	if (!processDecks && !deckApp) throw new TypeError("processDecks: false needs deckApp: without the deck view nothing would check a deck.");
 	// LH-14: a deck's icons resolve in the icon sets the server was given, besides the gallery.
 	const checkCatalogs: readonly Catalog[] = sources.iconSets ? [...CATALOGS, sources.iconSets] : CATALOGS;
 	const opfVersion = options.opfVersion;
 	const check: CheckText = options.checkText ?? readReport;
-	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions: INSTRUCTIONS });
+	const instructions = processDecks ? (deckApp ? `${INSTRUCTIONS}\n${INSTRUCTIONS_SHOW}` : INSTRUCTIONS) : INSTRUCTIONS_VIEWER;
+	const server = new McpServer({ name: "opf", title: "OpenPresentation (OPF)", version }, { instructions });
+	// The tool that checks a deck: validate_deck, or the viewer when the server does no deck work.
+	const checkTool = processDecks ? "validate_deck" : "show_deck";
 
 	const docs = sources.docs;
 	const docIndex = (): string =>
@@ -363,7 +416,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		};
 		const layouts = pick("layouts", 3, ["title", "two-column", "chart"]);
 		const themes = pick("themes", 2, Object.keys(recordsOf("themes").records).slice(0, 2));
-		const validateArguments = { document: "<your deck: a JSON object, or its text>", failOn: "warning" };
+		const validateArguments: Record<string, unknown> = processDecks ? { document: "<your deck: a JSON object, or its text>", failOn: "warning" } : { document: "<your deck: a JSON object, or its text>" };
 		let step = 0;
 		const steps: Record<string, unknown>[] = [
 			{ step: ++step, action: "Read the format card: the whole authoring surface on one page.", why: "Every later step assumes its vocabulary.", uri: URI.doc("format-card") },
@@ -373,19 +426,29 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			...(examples.length ? [{ step: ++step, action: `Open ${examples.length === 1 ? "an example deck" : "the example decks"} closest to the goal (${examples.map((example) => example.slug).join(", ")}) and copy their shapes.`, why: "Every example is valid OPF; the fastest way to see a working shape.", uri: (examples[0] as { uri: string }).uri }] : []),
 			{ step: ++step, action: `Choose layouts and a theme from the default catalog${layouts.length ? ` (suggested: ${layouts.map((layout) => layout.id).join(", ")}; theme ${themes.map((theme) => theme.id).join(" or ")})` : ""}. Read a layout's regions to see what it accepts.`, why: "A deck refers to catalog records by id; layouts bind content by kind.", tool: "search_catalog", arguments: { kind: "layouts", ...(words.length ? { query: words.slice(0, 3).join(" ") } : {}) } },
 			{ step: ++step, action: "Look up any field you are unsure of in the schema instead of guessing.", why: "The schema is authoritative; unknown keys are findings.", tool: "get_schema", arguments: { name: "Chart" } },
-			{ step: ++step, action: "Write the deck (JSON; YAML or Markdown also work), then validate it and fix every finding until ok. Repeat.", why: "failOn warning also asks you to fix contrast, alt text and layout warnings, not only errors.", tool: "validate_deck", arguments: validateArguments },
-			{ step: ++step, action: "Hand the deck over as JSON, YAML or Markdown; rendering and PPTX need the local opf command (opf convert).", why: "Validation checks the file; it does not show how the deck looks.", tool: "convert", arguments: { document: "<your deck>", to: "yaml" } },
+			processDecks
+				? { step: ++step, action: "Write the deck (JSON; YAML or Markdown also work), then validate it and fix every finding until ok. Repeat.", why: "failOn warning also asks you to fix contrast, alt text and layout warnings, not only errors.", tool: "validate_deck", arguments: validateArguments }
+				: { step: ++step, action: "Write the deck (JSON; YAML or Markdown also work) and open it with show_deck. The viewer checks it and sends you its findings as context; fix them and show it again.", why: "The viewer draws the deck and checks it on the user's machine, contrast, alt text and layout included.", tool: "show_deck", arguments: validateArguments },
+			...(processDecks ? [{ step: ++step, action: `Hand the deck over as JSON, YAML or Markdown${deckApp ? ", or show it with show_deck so the user can see and edit it" : ""}; rendering and PPTX need the local opf command (opf convert).`, why: "Validation checks the file; it does not show how the deck looks.", tool: "convert", arguments: { document: "<your deck>", to: "yaml" } }] : []),
 		];
 		return {
 			goal: asked ?? null,
-			summary: asked ? `A path for: ${asked}. Read, look at examples, choose layouts, write, then validate with failOn "warning" until ok.` : "The general path into OPF: read the format card and how OPF works, open an example, choose layouts and a theme, write the deck, then validate with failOn \"warning\" until ok.",
+			summary: processDecks
+				? asked
+					? `A path for: ${asked}. Read, look at examples, choose layouts, write, then validate with failOn "warning" until ok.`
+					: "The general path into OPF: read the format card and how OPF works, open an example, choose layouts and a theme, write the deck, then validate with failOn \"warning\" until ok."
+				: asked
+					? `A path for: ${asked}. Read, look at examples, choose layouts, write, then open the deck with show_deck and fix what the viewer finds.`
+					: "The general path into OPF: read the format card and how OPF works, open an example, choose layouts and a theme, write the deck, then open it with show_deck and fix what the viewer finds.",
 			steps,
 			docs: docList,
 			skills,
 			examples,
 			layouts,
 			themes,
-			validate: { tool: "validate_deck", arguments: validateArguments, note: "ok is false when a finding is at or above failOn. Fix errors first, then warnings; validation does not render the deck." },
+			validate: processDecks
+				? { tool: "validate_deck", arguments: validateArguments, note: "ok is false when a finding is at or above failOn. Fix errors first, then warnings; validation does not render the deck." }
+				: { tool: "show_deck", arguments: validateArguments, note: "This server does no deck work: the viewer checks the deck on the user's machine and sends its findings to you as context. Fix errors first, then warnings." },
 		};
 	};
 
@@ -427,7 +490,9 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		({ goal }) => respond(() => startHere(goal)),
 	);
 
-	server.registerTool(
+	// Left out when the server does no deck work: the deck view checks the deck instead.
+	if (processDecks)
+		server.registerTool(
 		"validate_deck",
 		{
 			title: "Validate an OPF deck",
@@ -615,7 +680,9 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			}),
 	);
 
-	server.registerTool(
+	// Left out when the server does no deck work: the deck view checks the deck instead.
+	if (processDecks)
+		server.registerTool(
 		"convert",
 		{
 			title: "Convert a deck between JSON, YAML and Markdown",
@@ -692,6 +759,139 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 				return { total: found.length, categories, examples: found };
 			}),
 	);
+
+	// -------------------------------------------------------------------------------------------------------------------
+	// The deck view (an MCP App, SEP-1865): show_deck opens ui://opf/deck in a host that supports MCP Apps. The view gets the deck
+	// from the tool's arguments, which the host hands it, and does the deck's work on the user's machine: the editor, the renderer
+	// and the checks. The server hands over the page and, through the app-only read_font_file, font files.
+
+	if (deckApp) {
+		const view = z.enum(["preview", "source", "both"]);
+		const outlineSchema = z.array(z.object({ slide: z.number(), title: z.string().nullable() }));
+		/** The deck's name and slide titles, read without checking it. */
+		const outlineOf = (input: { raw: string; format: DeckFormat }) => {
+			let deck: unknown;
+			try {
+				deck = input.format === "json" ? JSON.parse(input.raw.replace(/^\uFEFF/, "")) : readText(input.raw, input.format, WRITE_CHECK).presentation;
+			} catch {
+				return { name: null, slides: null, outline: [] };
+			}
+			const slides = Array.isArray((deck as { slides?: unknown })?.slides) ? ((deck as { slides: unknown[] }).slides as { title?: unknown; id?: unknown }[]) : [];
+			const name = typeof (deck as { name?: unknown })?.name === "string" ? ((deck as { name: string }).name as string) : null;
+			return { name, slides: slides.length, outline: slides.map((slide, index) => ({ slide: index + 1, title: typeof slide?.title === "string" ? slide.title : typeof slide?.id === "string" ? slide.id : null })) };
+		};
+		const summaryOf = (result: { name: string | null; slides: number | null; outline: { slide: number; title: string | null }[]; counts: { error: number; warning: number; info: number }; findings: Finding[] }) =>
+			[
+				`Opened ${result.name ? `"${result.name}"` : "the deck"} in the OPF viewer${result.slides === null ? "" : ` (${result.slides} slide${result.slides === 1 ? "" : "s"})`}. In a client that supports MCP Apps the user sees it there and can edit it; their edits come back to you as context.`,
+				...(result.outline.length ? [`Slides: ${result.outline.map((item) => `${item.slide}. ${item.title ?? "(untitled)"}`).join("; ")}.`] : []),
+				`Checks: ${result.counts.error} errors, ${result.counts.warning} warnings, ${result.counts.info} notes.`,
+				...result.findings.filter((finding) => finding.severity !== "info").slice(0, 10).map((finding) => `- ${finding.severity} ${finding.ruleId} at ${finding.path || "/"}: ${finding.message}`),
+			].join("\n");
+
+		server.registerTool(
+			"show_deck",
+			{
+				title: "Show a deck in the OPF viewer",
+				description: processDecks
+					? "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. Their edits come back to you as context: continue from that version. Also checks the deck as validate_deck does and returns its name, slide titles and findings as text, so a client without MCP Apps still gets an answer."
+					: "Show the user a deck. In a client that supports MCP Apps (Claude on the web and desktop) it opens the OPF viewer in the conversation: the slides (Preview), the deck's text (Source), or both side by side, and the user can edit it there. The viewer checks the deck on the user's machine and sends you its findings, and the user's edits, as context: fix the findings and continue from the user's version. This server does no deck work itself, so a client without MCP Apps gets no check.",
+				inputSchema: {
+					document: documentSchema,
+					format: formatSchema.optional().describe("The form of the document text. Default: JSON for an object or text that starts with { or [."),
+					view: view.optional().describe("What the viewer shows first: preview (the slides, the default), source (the text) or both."),
+					slide: z.number().int().min(1).optional().describe("The slide to open on, from 1."),
+				},
+				outputSchema: {
+					opened: z.boolean(),
+					checked: z.boolean(),
+					view,
+					slide: z.number().optional(),
+					format: formatSchema.optional(),
+					name: z.string().nullable().optional(),
+					slides: z.number().nullable().optional(),
+					outline: outlineSchema.optional(),
+					valid: z.boolean().optional(),
+					counts: countsSchema.optional(),
+					findings: z.array(findingSchema).optional(),
+				},
+				annotations: { ...READ_ONLY, title: "Show a deck in the OPF viewer" },
+				// SEP-1865: the view that renders this tool's results; the flat key is the older spelling some hosts still read.
+				_meta: { ui: { resourceUri: DECK_APP_URI }, "ui/resourceUri": DECK_APP_URI },
+			},
+			async ({ document, format, view: first, slide }) => {
+				const opened = { opened: true, view: first ?? "preview", ...(slide ? { slide } : {}) };
+				if (!processDecks) {
+					// No deck work here: the view reads and checks the deck. Only the shape of the arguments is looked at.
+					const result = { ...opened, checked: false, ...(format ? { format } : typeof document === "string" ? {} : { format: "json" as const }) };
+					return { content: [{ type: "text" as const, text: "Opened the deck in the OPF viewer. In a client that supports MCP Apps the user sees it there and can edit it; the viewer checks it on the user's machine and sends you its findings, and the user's edits, as context. This server does not check decks itself." }], structuredContent: result };
+				}
+				try {
+					const input = inputOf(document, format);
+					const report = await check(input.raw, input.format, { catalogs: checkCatalogs });
+					const deck = outlineOf(input);
+					const result = { ...opened, checked: true, format: input.format, ...deck, valid: report.valid, counts: report.counts, findings: report.findings.slice(0, 20) };
+					return { content: [{ type: "text" as const, text: summaryOf({ ...deck, counts: report.counts, findings: report.findings }) }], structuredContent: result };
+				} catch (error) {
+					// A deck the server cannot read still opens: the view shows the text and its syntax error in Source.
+					const message = error instanceof Error ? error.message : String(error);
+					return { content: [{ type: "text" as const, text: `Opened the deck in the OPF viewer, but it could not be read: ${message}` }], structuredContent: { ...opened, checked: false, ...(format ? { format } : {}) } };
+				}
+			},
+		);
+
+		server.registerResource(
+			"deck-view",
+			DECK_APP_URI,
+			{ title: "OPF deck viewer", description: "The OPF viewer that show_deck opens: Preview, Source and Both, with editing and checks, in one HTML page (an MCP App).", mimeType: MCP_APP_MIME_TYPE, _meta: { ui: { prefersBorder: false } } },
+			async (uri) => ({ contents: [{ uri: uri.href, mimeType: MCP_APP_MIME_TYPE, text: typeof deckApp.html === "function" ? await deckApp.html() : deckApp.html, _meta: { ui: { prefersBorder: false } } }] }),
+		);
+
+		const readFontFile = deckApp.readFontFile;
+		if (readFontFile) {
+			// Hosts relay tool results through the conversation, so a file goes in pieces (a script face can be 6 MB); the view asks
+			// for the next piece until it has the whole file, and the renderer then checks it against its pinned SHA-256.
+			const recent = new Map<string, Uint8Array>();
+			const bytesOf = async (file: string) => {
+				const kept = recent.get(file);
+				if (kept) return kept;
+				const bytes = await readFontFile(file);
+				if (bytes) {
+					recent.set(file, bytes);
+					if (recent.size > 4) recent.delete(recent.keys().next().value as string);
+				}
+				return bytes;
+			};
+			server.registerTool(
+				"read_font_file",
+				{
+					title: "Read a font file for the OPF viewer",
+					description: `Used by the OPF viewer only (it cannot fetch): a piece of a font file the renderer's font manifest names, at most ${FONT_CHUNK / 1024} KiB, base64. Do not call it yourself.`,
+					inputSchema: {
+						file: z.string().min(1).max(200).describe("A path from the renderer's font manifest: embedded/..., fonts/... or script-fonts/...."),
+						offset: z.number().int().min(0).optional().describe("Where the piece starts, in bytes. Default 0."),
+					},
+					outputSchema: { file: z.string(), offset: z.number(), total: z.number(), bytes: z.string() },
+					annotations: { ...READ_ONLY, title: "Read a font file for the OPF viewer" },
+					// SEP-1865: callable by the view, hidden from the model.
+					_meta: { ui: { visibility: ["app"] } },
+				},
+				async ({ file, offset }) => {
+					try {
+						const bytes = await bytesOf(file);
+						if (!bytes) throw fail(`No font file ${file}: it is not in the renderer's font manifest, or @openpresentation/opf-render is not installed beside this server.`, "unknown-font", { file });
+						const from = Math.min(offset ?? 0, bytes.length);
+						const piece = bytes.subarray(from, from + FONT_CHUNK);
+						const result = { file, offset: from, total: bytes.length, bytes: base64Of(piece) };
+						// The bytes go to the view only: the text says what the piece is.
+						return { content: [{ type: "text" as const, text: `Font file ${file}: bytes ${from} to ${from + piece.length} of ${bytes.length}.` }], structuredContent: result };
+					} catch (error) {
+						const report = error instanceof McpToolError ? { ok: false, code: error.code, error: error.message, ...error.details } : { ok: false, code: "internal-error", error: error instanceof Error ? error.message : String(error) };
+						return { isError: true, content: [{ type: "text" as const, text: JSON.stringify(report) }] };
+					}
+				},
+			);
+		}
+	}
 
 	// -------------------------------------------------------------------------------------------------------------------
 	// Resources
@@ -791,7 +991,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		() => ({
 			description: "Orientation to OPF.",
 			messages: [
-				userText("I want to work with OPF (Open Presentation Format) presentation files. Orient yourself first: read the format card below, then use opf://docs/index to find the page for what I ask. Use search_docs for questions, get_schema for exact fields, search_catalog and get_catalog_record for layouts, themes, color and font schemes, list_examples for worked decks, and validate_deck on every deck you write. Then wait for my task."),
+				userText(`I want to work with OPF (Open Presentation Format) presentation files. Orient yourself first: read the format card below, then use opf://docs/index to find the page for what I ask. Use search_docs for questions, get_schema for exact fields, search_catalog and get_catalog_record for layouts, themes, color and font schemes, list_examples for worked decks, and ${processDecks ? "validate_deck on every deck you write" : "show_deck to open every deck you write in the viewer, which checks it"}${processDecks && deckApp ? " (show_deck shows it to me)" : ""}. Then wait for my task.`),
 				...resourceMessage(URI.doc("format-card"), formatCard, "text/markdown"),
 			],
 		}),
@@ -813,7 +1013,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 						`Brief: ${brief}`,
 						...(audience ? [`Audience: ${audience}`] : []),
 						...(slides ? [`Length or structure: ${slides}`] : []),
-						"Steps: (1) pick layouts with search_catalog { kind: \"layouts\" } and read the ones you use with get_catalog_record; (2) look at a similar deck with list_examples if it helps; (3) write the deck; (4) call validate_deck, fix every error and every warning you can, and call it again until ok; (5) give me the deck and say what you chose and what the validator could not check (it does not render).",
+						`Steps: (1) pick layouts with search_catalog { kind: \"layouts\" } and read the ones you use with get_catalog_record; (2) look at a similar deck with list_examples if it helps; (3) write the deck; ${processDecks ? `(4) call validate_deck, fix every error and every warning you can, and call it again until ok; (5) give me the deck${deckApp ? " (show it with show_deck)" : ""} and say what you chose and what the validator could not check (it does not render).` : "(4) open it with show_deck; the viewer checks it and sends you its findings as context: fix every error and every warning you can and show it again until it is clean; (5) say what you chose."}`,
 					].join("\n\n"),
 				),
 				...resourceMessage(URI.doc("format-card"), formatCard, "text/markdown"),
@@ -822,7 +1022,8 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 		}),
 	);
 
-	server.registerPrompt(
+	if (processDecks)
+		server.registerPrompt(
 		"fix_validation_findings",
 		{
 			title: "Fix validation findings",
@@ -855,7 +1056,7 @@ export function createOpfMcpServer(options: OpfMcpOptions): McpServer {
 			messages: [
 				userText(
 					[
-						"Choose the layout for one slide. List the layouts with search_catalog { kind: \"layouts\" }, read the two or three that fit with get_catalog_record (their regions say what they accept), and choose by the kinds of content the slide carries, not by taste. Say which layout, why, how each piece of content binds to a region, and what the runner-up would cost. Then write the slide as JSON and check it with validate_deck.",
+						`Choose the layout for one slide. List the layouts with search_catalog { kind: \"layouts\" }, read the two or three that fit with get_catalog_record (their regions say what they accept), and choose by the kinds of content the slide carries, not by taste. Say which layout, why, how each piece of content binds to a region, and what the runner-up would cost. Then write the slide as JSON and check it with ${checkTool}.`,
 						`Content: ${content}`,
 						...(intent ? [`Purpose: ${intent}`] : []),
 					].join("\n\n"),

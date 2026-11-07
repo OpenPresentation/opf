@@ -66,7 +66,8 @@ export const LEG_PLAN = Object.freeze({
   gallery: { full: [["tests", 1]], contract: [["tests", 1]] },
   core: { full: [["tests", 1]], contract: [["tests", 1]] },
   cli: { full: [["tests", 1]], contract: [["tests", 1]] },
-  mcp: { full: [["tests", 1]], contract: [["tests", 1]] },
+  // The deck view (show_deck's MCP App) runs in Chromium under the sandbox an MCP Apps host applies: one browser leg, full tier only.
+  mcp: { full: [["tests", 1], ["browser", 1]], contract: [["tests", 1]] },
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
   pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
@@ -90,8 +91,8 @@ export const JOB_SHAPE = Object.freeze({
   // Core's tests load the renderer and PPTX (its optional peers) from their built dist.
   core: { history: true, timeout: 20, buildDeps: "@openpresentation/opf", buildAlso: "@openpresentation/opf-render @openpresentation/opf-pptx", reuse: true },
   cli: { history: true, timeout: 20, buildDeps: "@openpresentation/cli", reuse: true },
-  // The MCP server's tests compare it with the built `opf` (a dev dependency) and run it in workerd.
-  mcp: { timeout: 20, buildDeps: "@openpresentation/mcp", reuse: true },
+  // The MCP server's tests compare it with the built `opf` (a dev dependency) and run it in workerd; its browser leg runs the deck view.
+  mcp: { browser: true, timeout: 20, buildDeps: "@openpresentation/mcp", reuse: true, artifacts: "packages/mcp/artifacts/**" },
   render: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-render", artifacts: "packages/render/artifacts/**" },
   pptx: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-pptx", artifacts: "packages/pptx/artifacts/**" },
   editor: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-editor", artifacts: "packages/editor/artifacts/**" },
@@ -153,7 +154,8 @@ export const TARGET_GRAPH = Object.freeze({
   pptx: ["core", "gallery", "render"],
   editor: ["core", "gallery", "render", "pptx"],
   cli: ["core", "gallery", "render", "pptx"],
-  mcp: ["core", "gallery", "render", "cli"],
+  // The MCP server bundles the editor into its deck view (packages/mcp/app), so an editor change rebuilds and tests it.
+  mcp: ["core", "gallery", "render", "cli", "editor"],
   integration: ["gallery", "core", "render", "pptx"],
 });
 

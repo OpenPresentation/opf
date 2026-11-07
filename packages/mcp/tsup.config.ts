@@ -39,6 +39,8 @@ export default defineConfig({
   format: ["esm"],
   dts: { entry: { index: "src/index.ts", server: "src/server.ts", stdio: "src/stdio.ts" } },
   define: { MCP_VERSION: JSON.stringify(manifest.version), OPF_CORE_VERSION: JSON.stringify(JSON.parse(readFileSync(path.join(root, "packages/javascript/package.json"), "utf8")).version), OPF_MCP_SKILLS: JSON.stringify(skills), OPF_MCP_WHATS_NEW: JSON.stringify(whatsNew()) },
+  // The deck view (app-dist/deck-app.html, which scripts/build-app.mjs builds first) is inlined as the text of ui://opf/deck.
+  loader: { ".html": "text" },
   sourcemap: true,
   clean: true,
   target: "node24",

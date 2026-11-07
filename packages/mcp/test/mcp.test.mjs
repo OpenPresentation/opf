@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "read_font_file", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -493,7 +493,8 @@ describe("the bundled sources", () => {
 		// Shapes phase 2 together (SH-04's overlay shapes and connectors, SH-05's import, SH-06's editor and search_shapes, SH-07's native
 		// diagrams, in docs/shapes.md, docs/diagrams.md and the schema reference, and the integration's one shapes page) is 1,158,205 bytes,
 		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB). SH-09 (the pyramid and matrix layouts, live SmartArt, the
-		// arrangement-adapted rule) is 1,174,552 bytes.
+		// arrangement-adapted rule) is 1,174,552 bytes. The OPF viewer's sections of docs/mcp.md (show_deck, the hosted mode, the .mcpb
+		// extension, fonts for a hosted viewer) add about 11 KB to that.
 		assert.ok(bytes < 1_190_000, `${bytes} bytes of documentation`);
 	});
 });

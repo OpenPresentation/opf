@@ -20,7 +20,7 @@ Use only the skills relevant to the user's task; ordinary repository maintenance
 | `packages/javascript` | `@openpresentation/opf` | Core: schemas, validation, composition geometry, text formats, the Node file API. Its types and generated content are produced from `spec/` at build time; never edit generated output |
 | `packages/gallery` | `@openpresentation/gallery` | The default catalog: layouts, themes, color and font schemes and the other records, with layout previews |
 | `packages/cli` | `@openpresentation/cli` | The `opf` command |
-| `packages/mcp` | `@openpresentation/mcp` | The MCP server for learning and validating OPF (`npx -y @openpresentation/mcp`): tools, resources and prompts over the bundled docs, schemas, catalog, examples and skills. Edge-safe library entries (`.`, `./server`) and a stdio bin; `opf mcp` runs it when installed. Docs: `docs/mcp.md` |
+| `packages/mcp` | `@openpresentation/mcp` | The MCP server for learning and validating OPF (`npx -y @openpresentation/mcp`): tools, resources and prompts over the bundled docs, schemas, catalog, examples and skills, and `show_deck`, which opens the OPF viewer (an MCP App built from `packages/mcp/app` with the editor and renderer) in clients such as Claude. Edge-safe library entries (`.`, `./server`) and a stdio bin; `opf mcp` runs it when installed. Docs: `docs/mcp.md` |
 | `packages/render` | `@openpresentation/opf-render` | SVG, PNG and PDF rendering; the font packs; the golden corpus (`packages/render/test/golden/`) |
 | `packages/pptx` | `@openpresentation/opf-pptx` | PPTX export and import (vendored PptxGenJS, byte-exact) |
 | `packages/editor` | `@openpresentation/opf-editor` | The headless editor and its browser playground |
