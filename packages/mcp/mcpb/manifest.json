@@ -34,6 +34,7 @@
     { "name": "search_catalog", "description": "Search the default catalog: layouts, themes, colors, fonts and more" },
     { "name": "get_catalog_record", "description": "Read one catalog record in full" },
     { "name": "search_icons", "description": "Find icons in the gallery's icon sets" },
+    { "name": "search_shapes", "description": "Find preset shapes for a shape block" },
     { "name": "convert", "description": "Convert a deck between JSON, YAML and Markdown" },
     { "name": "search_docs", "description": "Search the OPF documentation and skills" },
     { "name": "list_examples", "description": "List the example decks" }

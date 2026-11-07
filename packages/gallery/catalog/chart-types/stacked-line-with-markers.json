@@ -8,11 +8,6 @@
       "grouping": "stacked",
       "marker": true,
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "StackedLineWithMarkers"
-      }
     }
   },
   "group": "Line",

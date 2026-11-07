@@ -26,9 +26,9 @@ test('every image item carries its picture geometry; an untreated block draws in
   // Slide.image is shorthand for one image block, and region payloads carry the same geometry.
   assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'contain');
   assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] } })).image.fit, 'cover', 'a layout keeps the engine default');
-  assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'circle' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
+  assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'ellipse' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
   // The payload reports the block's own options for editors.
-  assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'rounded' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'rounded' });
+  assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'roundRect' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'roundRect' });
 });
 
 test('fit: the block, then design.imageFit of the slide, the deck and the layout, then cover (contain with no layout)', () => {
@@ -46,21 +46,21 @@ test('aspect ratio and circle shape the frame inside the region', () => {
   near(letterbox.box.width / letterbox.box.height, 2.39, 'letterbox ratio');
   near(letterbox.box.x + letterbox.box.width / 2, letterbox.region.x + letterbox.region.width / 2, 'centered');
   near(letterbox.box.y + letterbox.box.height / 2, letterbox.region.y + letterbox.region.height / 2, 'centered');
-  const circle = imageOf(compose({ shape: 'circle', aspectRatio: 3 })).image;
+  const circle = imageOf(compose({ shape: 'ellipse', aspectRatio: 3 })).image;
   assert.equal(circle.box.width, circle.box.height);
   assert.equal(circle.shape.preset, 'ellipse');
 });
 
-test('shape outlines follow the DrawingML preset formulas', () => {
+test('shape outlines follow the DrawingML preset formulas: the four built-in masks, and every other preset from SH-01', () => {
   const box = { x: 10, y: 20, width: 300, height: 200 };
-  assert.deepEqual(imageShape('rectangle', box), { kind: 'rectangle', preset: 'rect', adjust: {}, path: 'M10 20H310V220H10Z' });
+  assert.deepEqual(imageShape('rect', box), { kind: 'rect', preset: 'rect', adjust: {}, path: 'M10 20H310V220H10Z' });
   // roundRect: radius = min(w,h) * adj / 100000, circular arcs.
-  const rounded = imageShape('rounded', box);
+  const rounded = imageShape('roundRect', box);
   assert.deepEqual(rounded.adjust, { adj: 16667 });
   assert.equal(rounded.path, 'M10 53.334A33.334 33.334 0 0 1 43.334 20H276.666A33.334 33.334 0 0 1 310 53.334V186.666A33.334 33.334 0 0 1 276.666 220H43.334A33.334 33.334 0 0 1 10 186.666Z');
-  assert.deepEqual(imageShape('rounded', box, 0.25).adjust, { adj: 25000 });
-  assert.equal(imageShape('rounded', box, 0).path, 'M10 20H310V220H10Z');
-  assert.equal(imageShape('circle', { x: 0, y: 0, width: 100, height: 100 }).path, 'M0 50A50 50 0 1 1 100 50A50 50 0 1 1 0 50Z');
+  assert.deepEqual(imageShape('roundRect', box, { adj: 0.25 }).adjust, { adj: 25000 });
+  assert.equal(imageShape('roundRect', box, { adj: 0 }).path, 'M10 20H310V220H10Z');
+  assert.equal(imageShape('ellipse', { x: 0, y: 0, width: 100, height: 100 }).path, 'M0 50A50 50 0 1 1 100 50A50 50 0 1 1 0 50Z');
   // hexagon (adj 25000, vf 115470): x1 = ss*adj/100000, dy1 = h/2 * vf/100000 * sin 60.
   const hexagon = imageShape('hexagon', { x: 0, y: 0, width: 100, height: 100 });
   assert.deepEqual(hexagon.adjust, { adj: 25000, vf: 115470 });
@@ -69,18 +69,22 @@ test('shape outlines follow the DrawingML preset formulas', () => {
   for (const [actual, expected] of points.map((point, index) => [point, [[0, 50], [25, 50 - dy1], [75, 50 - dy1], [100, 50], [75, 50 + dy1], [25, 50 + dy1]][index]])) {
     near(actual[0], expected[0], 'hexagon x'); near(actual[1], expected[1], 'hexagon y');
   }
+  // SH-02: every other preset is a mask, its outline SH-01's evaluated geometry.
+  const chevron = imageShape('chevron', box);
+  assert.equal(chevron.preset, 'chevron');
+  assert.match(chevron.path, /^M 10 20 L /);
 });
 
 test('border, opacity, recolor and overlay are normalized for both engines', () => {
-  const image = imageOf(compose({ shape: 'rounded', cornerRadius: 0.1, border: { color: 'dark1', width: 12 }, opacity: 0.4,
+  const image = imageOf(compose({ shape: 'roundRect', adjust: { adj: 0.1 }, stroke: { color: 'dark1', width: 12 }, opacity: 0.4,
     recolor: { dark: 'accent1', light: '#FFFFFF' }, overlay: { color: '#000000', opacity: 0.55 } }, { width: 1920, height: 1080 })).image;
-  assert.deepEqual(image.border, { color: 'dark1', width: 18 });
+  assert.deepEqual(image.stroke, { color: 'dark1', width: 18, dash: 'solid', cap: 'flat', join: 'miter', miterLimit: 8, compound: 'single', align: 'center' });
   assert.equal(image.opacity, 0.4);
   assert.deepEqual(image.recolor, { type: 'duotone', dark: 'accent1', light: '#FFFFFF' });
   assert.deepEqual(image.overlay, { path: 'slides.0.blocks.0.overlay', color: '#000000', opacity: 0.55, box: image.box, shape: image.shape });
   assert.deepEqual(imageOf(compose({ recolor: 'grayscale' })).image.recolor, { type: 'grayscale' });
-  assert.equal(imageOf(compose({ opacity: 1, border: { color: 'dark1', width: 0 } })).image.opacity, undefined);
-  assert.equal(imageOf(compose({ border: { color: 'dark1', width: 0 } })).image.border, undefined);
+  assert.equal(imageOf(compose({ opacity: 1, stroke: { color: 'dark1', width: 0 } })).image.opacity, undefined);
+  assert.equal(imageOf(compose({ stroke: { color: 'dark1', width: 0 } })).image.stroke, undefined);
   const caption = imageOf(compose({ overlay: { color: 'dark1', opacity: 0.75, edge: 'bottom', size: 0.25 } })).image;
   assert.equal(caption.overlay.edge, 'bottom');
   near(caption.overlay.box.height, caption.box.height * 0.25, 'band height');
@@ -89,24 +93,24 @@ test('border, opacity, recolor and overlay are normalized for both engines', () 
 });
 
 test('edge overlays on masked frames are reported, not drawn, and never fail strict layout', () => {
-  const result = composeSlide({ title: 'Heading', composition: { overflow: 'error' }, blocks: [{ image: photo, shape: 'circle', overlay: { color: '#000000', opacity: 0.5, edge: 'bottom' } }] });
+  const result = composeSlide({ title: 'Heading', composition: { overflow: 'error' }, blocks: [{ image: photo, shape: 'ellipse', overlay: { color: '#000000', opacity: 0.5, edge: 'bottom' } }] });
   assert.equal(imageOf(result).image.overlay, undefined);
   assert.deepEqual(result.diagnostics.map((d) => [d.code, d.path]), [['unsupported-image-treatment', 'slides.0.blocks.0.overlay.edge']]);
 });
 
 test('the treatment vocabulary validates on image payloads and is refused elsewhere', () => {
-  const block = { type: 'image', image: photo, fit: 'contain', focus: { x: 0.2, y: 0.8 }, aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12, border: { color: 'dark1', width: 12 }, opacity: 0.8,
+  const block = { type: 'image', image: photo, fit: 'contain', focus: { x: 0.2, y: 0.8 }, aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: { color: 'dark1', width: 12 }, opacity: 0.8,
     recolor: { dark: 'accent1', light: 'light1' }, overlay: { color: 'text', opacity: 0.2, edge: 'bottom', size: 0.3 }, placement: { edge: 'right', size: 0.4, inset: true } };
   assert.equal(check(deck([{ title: 'Heading', blocks: [block] }])).valid, true);
-  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { border: { color: 'dark1' } }, { placement: { edge: 'middle' } }, { placement: { edge: 'left', size: 0.95 } }])
+  for (const invalid of [{ blur: 8 }, { shadow: true }, { shape: 'star' }, { recolor: 'sepia' }, { fit: 'tile' }, { fit: 'crop' }, { opacity: 2 }, { stroke: { color: 'dark1', width: 70 } }, { border: { color: 'dark1', width: 2 } }, { cornerRadius: 0.1 }, { placement: { edge: 'middle' } }, { placement: { edge: 'left', size: 0.95 } }])
     assert.equal(check(deck([{ title: 'Heading', blocks: [{ image: photo, ...invalid }] }])).valid, false, JSON.stringify(invalid));
   // Image options on a text block or a group: opf/image-option-unsupported-payload at the option.
   const text = check(deck([{ title: 'Heading', blocks: [{ text: 'Body', fit: 'cover' }] }]));
   assert.deepEqual(errorsOf(text).map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/fit']]);
-  const group = check(deck([{ title: 'Heading', blocks: [{ blocks: [{ image: photo }], shape: 'circle' }] }]));
+  const group = check(deck([{ title: 'Heading', blocks: [{ blocks: [{ image: photo }], shape: 'ellipse' }] }]));
   assert.deepEqual(errorsOf(group).map((f) => [f.ruleId, f.path]), [['opf/image-option-unsupported-payload', '/slides/0/blocks/0/shape']]);
   // The root of a slide has no treatment keys: use a block.
-  assert.equal(check(deck([{ title: 'Heading', image: photo, shape: 'circle' }])).valid, false);
+  assert.equal(check(deck([{ title: 'Heading', image: photo, shape: 'ellipse' }])).valid, false);
 });
 
 // The 15 pptx.gallery image treatments (docs/fixtures/image-treatments.opf.json) against core 0.14's frozen picture goldens.
@@ -119,8 +123,13 @@ const composeTreatment = (slide, override = {}) => {
   // `fill: false`: the frozen 0.14 headings are at their role sizes; LH-129 grows the headings of a slide with no body (a cover).
   return composeSlide(presentation.slides[index], { ...context.options, fill: false });
 };
-const frameOf = (image) => ({ fit: image.fit, box: image.box, shape: image.shape, ...(image.border ? { border: image.border } : {}), ...(image.opacity !== undefined ? { opacity: image.opacity } : {}),
-  ...(image.recolor ? { recolor: image.recolor } : {}), ...(image.overlay ? { overlay: { color: image.overlay.color, opacity: image.overlay.opacity, box: image.overlay.box, shape: image.overlay.shape } } : {}) });
+// SH-02: masks are SH-01's evaluated presets, so a frame's shape is compared by its preset and its non-default adjust values (0.14 wrote
+// roundRect's and hexagon's defaults), and the picture's stroke (renamed from border) by its color and width.
+const PRESET_DEFAULTS = { roundRect: { adj: 16667 }, hexagon: { adj: 25000, vf: 115470 } };
+const shapeKey = (shape) => shape && { preset: shape.preset, adjust: Object.fromEntries(Object.entries(shape.adjust).filter(([name, value]) => PRESET_DEFAULTS[shape.preset]?.[name] !== value)) };
+const frameOf = (image) => ({ fit: image.fit, box: image.box, shape: shapeKey(image.shape), ...(image.stroke ? { border: { color: image.stroke.color, width: image.stroke.width } } : {}), ...(image.opacity !== undefined ? { opacity: image.opacity } : {}),
+  ...(image.recolor ? { recolor: image.recolor } : {}), ...(image.overlay ? { overlay: { color: image.overlay.color, opacity: image.overlay.opacity, box: image.overlay.box, shape: shapeKey(image.overlay.shape) } } : {}) });
+const goldenFrame = (frame) => ({ ...frame, shape: shapeKey(frame.shape), ...(frame.overlay ? { overlay: { ...frame.overlay, shape: shapeKey(frame.overlay.shape) } } : {}) });
 
 test('the fixture holds the 15 gallery treatments, all valid 0.15 documents', () => {
   assert.equal(fixture.slides.length, 15);
@@ -135,7 +144,7 @@ test('backgrounds: full-bleed, text-overlay, background-blur and duotone keep 0.
     assert.deepEqual(geometry.backgroundImage.box, expected.box, id);
     assert.equal(geometry.backgroundImage.fit, expected.fit, id);
     const overlay = geometry.backgroundImage.overlay;
-    assert.deepEqual(overlay && { color: overlay.color, opacity: overlay.opacity, box: overlay.box, shape: overlay.shape }, expected.overlay, id);
+    assert.deepEqual(overlay && { color: overlay.color, opacity: overlay.opacity, box: overlay.box, shape: shapeKey(overlay.shape) }, expected.overlay && { ...expected.overlay, shape: shapeKey(expected.overlay.shape) }, id);
     assert.deepEqual(geometry.backgroundImage.recolor, expected.recolor, `${id} recolor`);
     assert.equal(geometry.items.some((item) => item.field === 'image'), false, `${id}: no content picture`);
     assert.deepEqual(geometry.items.filter((item) => item.field !== 'image').map((item) => item.box), expected.headings, `${id} headings`);
@@ -149,7 +158,7 @@ test('placed image blocks: side-by-side, masked-shape, circular-crop, image-stri
     assert.equal(item.image.placement.edge, expected.position, id);
     assert.deepEqual(item.image.region, expected.region, `${id} region`);
     const { position, region, headings, ...frame } = expected;
-    assert.deepEqual(frameOf(item.image), frame, `${id} frame`);
+    assert.deepEqual(frameOf(item.image), goldenFrame(frame), `${id} frame`);
     assert.deepEqual(geometry.items.filter((entry) => entry.field !== 'image').map((entry) => entry.box), headings, `${id} headings`);
   }
 });
@@ -172,10 +181,10 @@ test('frame treatments behind 0.14 headings (caption-overlay, rounded-card, wate
       near(item.image.picture.image.width, whole.image.width, `${id} picture width`);
       near(item.image.picture.image.x, whole.image.x, `${id} picture x`);
       near(item.image.picture.image.y, whole.image.y, `${id} picture y`);
-      const { box, shape, ...rest } = frameOf(item.image), { box: _box, shape: _shape, ...expectedRest } = frame;
+      const { box, shape, ...rest } = frameOf(item.image), { box: _box, shape: _shape, ...expectedRest } = goldenFrame(frame);
       assert.deepEqual(rest, expectedRest, id);
       assert.deepEqual(box, item.image.picture.image, `${id}: the frame is the picture`);
-    } else assert.deepEqual(frameOf(item.image), frame, id);
+    } else assert.deepEqual(frameOf(item.image), goldenFrame(frame), id);
     // With its headings, the block composes below them like any content picture.
     const titled = imageOf(composeTreatment(slide));
     assert.ok(titled.image.box.y > 100, `${id} sits in the content area`);

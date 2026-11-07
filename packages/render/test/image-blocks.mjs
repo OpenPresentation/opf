@@ -92,7 +92,7 @@ checked++;
 }
 
 // Masks use exactly the core outline in a clipPath around the picture; rectangles need none.
-for (const shape of ['rounded', 'circle', 'hexagon']) {
+for (const shape of ['roundRect', 'ellipse', 'hexagon', 'star5']) {
   const deck = deckWith({ shape });
   const item = imageOf(deck), svg = toSvg(deck, 1);
   const id = `opf-s1-image-${item.path.replace(/[^A-Za-z0-9]+/g, '-')}-clip`;
@@ -105,13 +105,13 @@ assert.doesNotMatch(toSvg(deckWith({}), 1), /clipPath/);
 
 // Border: centered stroke on the same outline, width scaled with the canvas; alpha as stroke-opacity.
 {
-  const deck = deckWith({ shape: 'rounded', border: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
+  const deck = deckWith({ shape: 'roundRect', stroke: { color: '#10182080', width: 12 } }, { dimensions: { widthInches: 20, heightInches: 11.25 } });
   const item = imageOf(deck), stroke = element(toSvg(deck, 1), 'path', 'stroke=');
   assert.equal(attr(stroke, 'd'), item.image.shape.path);
   assert.equal(attr(stroke, 'stroke'), '#101820');
   assert.equal(Number(attr(stroke, 'stroke-opacity')), Math.round(0x80 / 255 * 1e6) / 1e6);
-  assert.equal(Number(attr(stroke, 'stroke-width')), item.image.border.width);
-  assert.equal(item.image.border.width, 18);
+  assert.equal(Number(attr(stroke, 'stroke-width')), item.image.stroke.width);
+  assert.equal(item.image.stroke.width, 18);
   assert.equal(attr(stroke, 'fill'), 'none');
   checked++;
 }
@@ -141,7 +141,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 
 // Overlay: its outline over the picture and border, colour alpha times overlay opacity; an edge band covers only its edge.
 {
-  const deck = deckWith({ border: { color: 'dark1', width: 2 }, overlay: { color: '#00000080', opacity: 0.5, edge: 'bottom', size: 0.25 } });
+  const deck = deckWith({ stroke: { color: 'dark1', width: 2 }, overlay: { color: '#00000080', opacity: 0.5, edge: 'bottom', size: 0.25 } });
   const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   const overlay = element(svg, 'path', 'data-opf-image-overlay');
   assert.equal(attr(overlay, 'd'), item.image.overlay.shape.path);
@@ -157,7 +157,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 // An edge overlay on a non-rectangle frame is not drawn; core reports it.
 {
   const diagnostics = [];
-  const svg = toSvg(deckWith({ shape: 'circle', overlay: { color: '#000000', opacity: 0.5, edge: 'top' } }), 1, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg(deckWith({ shape: 'ellipse', overlay: { color: '#000000', opacity: 0.5, edge: 'top' } }), 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.doesNotMatch(svg, /fill-opacity/);
   assert.ok(diagnostics.some(entry => entry.code === 'unsupported-image-treatment' && entry.path === 'slides.0.blocks.0.overlay.edge'), JSON.stringify(diagnostics));
   checked++;
@@ -182,7 +182,7 @@ const luma = (0.299 * orange[0] + 0.587 * orange[1] + 0.114 * orange[2]) / 255;
 {
   assert.match(toSvg(deckWith({ image: { src: orangeUri, alt: 'Harbor at dusk' } }), 1), /aria-label="Harbor at dusk"/);
   const diagnostics = [];
-  const svg = toSvg({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', shape: 'circle', border: { color: '#000000', width: 4 }, overlay: { color: '#000000', opacity: 0.5 } }] }] }, 1, { onDiagnostic: entry => diagnostics.push(entry) });
+  const svg = toSvg({ slides: [{ title: 'Missing', blocks: [{ type: 'image', image: 'asset:missing', shape: 'ellipse', stroke: { color: '#000000', width: 4 }, overlay: { color: '#000000', opacity: 0.5 } }] }] }, 1, { onDiagnostic: entry => diagnostics.push(entry) });
   assert.doesNotMatch(svg, /clipPath|fill-opacity|stroke-miterlimit/);
   assert.ok(diagnostics.some(entry => entry.code === 'unresolved-asset' && entry.path === 'slides.0.blocks.0.image'), JSON.stringify(diagnostics));
   checked += 2;

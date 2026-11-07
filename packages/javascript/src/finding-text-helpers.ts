@@ -164,7 +164,7 @@ export function chooseNext(value: unknown, candidates: readonly unknown[], alter
 
 /** How a block kind reads after "this block is": "a chart", "text", "an image". */
 export function kindPhrase(kind: string): string {
-  const phrases: Record<string, string> = { text: "text", code: "code", list: "a list", chart: "a chart", table: "a table", image: "an image", video: "a video", metric: "a metric", quote: "a quote", timeline: "a timeline", group: "a group" };
+  const phrases: Record<string, string> = { text: "text", code: "code", list: "a list", chart: "a chart", table: "a table", image: "an image", video: "a video", metric: "a metric", quote: "a quote", timeline: "a timeline", shape: "a shape", group: "a group" };
   return phrases[kind] ?? `${/^[aeiou]/i.test(kind) ? "an" : "a"} ${kind}`;
 }
 

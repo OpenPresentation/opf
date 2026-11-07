@@ -1,0 +1,24 @@
+[
+ {"source":"source.pptx","out":"edits.pptx","ops":[
+   {"slides":"all","item":"date","visible":true},
+   {"slides":[2],"item":"footer","visible":true,"text":"Acme Labs"},
+   {"slides":[3],"item":"number","visible":false},
+   {"slides":[6],"item":"footer","visible":true,"text":"Added in PowerPoint"},
+   {"slides":[6],"item":"number","visible":true}]},
+ {"source":"source-bare.pptx","out":"edits-bare.pptx","ops":[
+   {"slides":"all","item":"date","visible":true},
+   {"slides":[2],"item":"footer","visible":true,"text":"Acme Labs"},
+   {"slides":[3],"item":"number","visible":false},
+   {"slides":[6],"item":"footer","visible":true,"text":"Added in PowerPoint"},
+   {"slides":[6],"item":"number","visible":true}]},
+ {"source":"source.pptx","out":"apply-all.pptx","ops":[
+   {"slides":"all","item":"date","visible":true,"useFormat":false,"text":"Q4 2026"},
+   {"slides":"all","item":"footer","visible":true,"text":"Acme Group"},
+   {"slides":"all","item":"number","visible":false}]},
+ {"source":"source-bare.pptx","out":"apply-all-bare.pptx","ops":[
+   {"slides":"all","item":"date","visible":true,"useFormat":false,"text":"Q4 2026"},
+   {"slides":"all","item":"footer","visible":true,"text":"Acme Group"},
+   {"slides":"all","item":"number","visible":false}]},
+ {"source":"source.pptx","out":"date-format.pptx","ops":[
+   {"slides":"all","item":"date","visible":true,"useFormat":true,"format":4}]}
+]

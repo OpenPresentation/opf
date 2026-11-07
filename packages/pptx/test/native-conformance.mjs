@@ -124,9 +124,12 @@ function audit(entries, deck, {label = 'deck'} = {}) {
       const properties = /<p:spPr\b[\s\S]*?<\/p:spPr>|<p:spPr\/>/.exec(shape)?.[0] ?? '';
       const filled = /<a:(?:solidFill|gradFill|blipFill|pattFill)\b/.test(properties.replace(/<a:ln\b[\s\S]*?<\/a:ln>/g, ''));
       if (placeholder && textBox) fail('text-box', path, `placeholder "${name}" carries txBox="1"`);
-      if (!placeholder && hasText && !filled && !textBox) fail('text-box', path, `text shape "${name}" is not a text box`);
+      // SH-02: a shape block is a shape whose text sits in its preset's text rectangle at its own insets (a:bodyPr lIns and the rest).
+      // SH-07: a node or edge label of a diagram written as shapes is its shape's own text, placed by insets in the preset's text rectangle too.
+      const shapeBlock = /^OPF (?:shape |diagram \d+ (?:node|edge label) )/.test(name ?? '');
+      if (!placeholder && hasText && !filled && !textBox && !shapeBlock) fail('text-box', path, `text shape "${name}" is not a text box`);
       const body = /<a:bodyPr\b[^>]*>/.exec(shape)?.[0];
-      if (hasText && body) {
+      if (hasText && body && !shapeBlock) {
         const insets = ['lIns', 'tIns', 'rIns', 'bIns'].map(name => attr(body, name));
         if (insets.some(value => value !== '0')) fail('inset', path, `"${name}" has insets ${insets.join(',')} (want explicit 0)`);
       }

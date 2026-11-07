@@ -1,0 +1,2 @@
+{"name": "Header and footer dialog", "design": {"footer": {"left": {"text": "Acme Corp"}, "center": {"text": "Internal draft"}, "right": {"text": "Page {{slide.number}} of {{deck.slideCount}}"}}},
+ "slides": [{"title": "One", "text": "Body one"}, {"title": "Two", "text": "Body two"}, {"title": "Three", "text": "Body three"}, {"title": "Four", "text": "Body four"}, {"title": "Five", "text": "Body five"}, {"title": "Six", "text": "Body six", "design": {"footer": false}}]}

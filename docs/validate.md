@@ -233,6 +233,12 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/cite-unsupported-location`](#opfcite-unsupported-location) | Format | error | structure | A citation or footnote sits where no engine draws it. |
 | [`opf/caption-unsupported-payload`](#opfcaption-unsupported-payload) | Format | error | structure | A caption is on a payload that cannot carry one. |
 | [`opf/image-option-unsupported-payload`](#opfimage-option-unsupported-payload) | Format | error | structure | An image option is on a payload that is not an image. |
+| [`opf/shape-option-unsupported-payload`](#opfshape-option-unsupported-payload) | Format | error | structure | A shape option is on a payload that is not a shape block. |
+| [`opf/shape-adjust-unknown`](#opfshape-adjust-unknown) | Format | warning | structure | An adjust value names a guide the preset does not have. |
+| [`opf/shape-adjust-range`](#opfshape-adjust-range) | Format | warning | structure | An adjust value is outside the range of the preset's handle. |
+| [`opf/shape-link-hidden`](#opfshape-link-hidden) | Format | warning | structure | A hidden shape carries a link. |
+| [`opf/shape-anchor-missing`](#opfshape-anchor-missing) | Format | error | structure | An overlay shape is attached to a block that is not on the slide. |
+| [`opf/connector-end-missing`](#opfconnector-end-missing) | Format | error | structure | A connector end names no block or overlay shape on the slide. |
 | [`opf/image-placement-invalid`](#opfimage-placement-invalid) | Format | error | structure | An image placement cannot be honoured. |
 | [`opf/layout-placeholder-group`](#opflayout-placeholder-group) | Format | error | structure | A layout record's placeholder group breaks a nesting rule. |
 | [`opf/dataset-unknown`](#opfdataset-unknown) | Format | error | structure | A chart or table names a dataset that does not exist. |
@@ -290,6 +296,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
 | [`opf/icon-dropped`](#opficon-dropped) | Layout | warning | composition | An icon is not drawn. |
+| [`opf/arrangement-adapted`](#opfarrangement-adapted) | Layout | info | composition | A pyramid or matrix is drawn another way. |
 | [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
@@ -383,7 +390,57 @@ Default severity: **error**. Cost: structure. A caption is on a payload that can
 
 Default severity: **error**. Cost: structure. An image option is on a payload that is not an image.
 
-**Why.** `fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.
+**Why.** `fit`, `focus`, the image treatments (`shape`, `adjust`, `stroke`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to. A shape block takes `shape`, `adjust`, `stroke`, `opacity` and `aspectRatio` too.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-option-unsupported-payload`
+
+Default severity: **error**. Cost: structure. A shape option is on a payload that is not a shape block.
+
+**Why.** `fill`, `style`, `rotate`, `flip`, `anchor`, `padding`, `textDirection`, `alt`, `decorative`, `hidden`, `link` and the effects (`shadow`, `innerShadow`, `glow`, `softEdge`, `reflection`, `blur`) describe how a shape block is drawn; a text, chart or image block, or a group, has no shape for them to apply to.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-adjust-unknown`
+
+Default severity: **warning**. Cost: structure. An adjust value names a guide the preset does not have.
+
+**Why.** Each preset has its own adjust handles (DrawingML's avLst guides: `adj`, `adj1`, `adj2`, ...); a name the preset does not have changes nothing, and a custom `path` has none. The preset's default is drawn.
+
+**Basis.** ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml
+
+### `opf/shape-adjust-range`
+
+Default severity: **warning**. Cost: structure. An adjust value is outside the range of the preset's handle.
+
+**Why.** An adjust value outside the range its handle allows is pinned by the preset's own formulas, so the shape is not drawn as the value says; core draws the preset's default instead and both engines agree.
+
+**Basis.** ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml
+
+**Approximations.** Ranges are checked at a square shape of the default size; a handle whose range depends on the shape's proportions is checked at those proportions when the shape is drawn.
+
+### `opf/shape-link-hidden`
+
+Default severity: **warning**. Cost: structure. A hidden shape carries a link.
+
+**Why.** A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/shape-anchor-missing`
+
+Default severity: **error**. Cost: structure. An overlay shape is attached to a block that is not on the slide.
+
+**Why.** An overlay shape placed with `at` sits against a composed block of its slide, named by the block's `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.
+
+**Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
+
+### `opf/connector-end-missing`
+
+Default severity: **error**. Cost: structure. A connector end names no block or overlay shape on the slide.
+
+**Why.** A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
@@ -786,7 +843,7 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-colors-adjusted`
 
@@ -892,6 +949,12 @@ Default severity: **warning**. Cost: composition. No region of the layout has ro
 Default severity: **warning**. Cost: composition. An icon is not drawn.
 
 **Why.** An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.
+
+### `opf/arrangement-adapted`
+
+Default severity: **info**. Cost: composition. A pyramid or matrix is drawn another way.
+
+**Why.** A `pyramid` or `matrix` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.
 
 ### `opf/furniture-wraps`
 

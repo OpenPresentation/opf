@@ -268,6 +268,17 @@ A document can carry its own records, and take records from a company catalog by
 
 Binary content lives in the top-level `assets` registry, keyed by id. Content payloads and design fields reference entries with `asset:<id>` strings; asset `src` values accept HTTPS URLs, data URIs, and paths resolved against the OPF file location.
 
+## Engines and icon sets that load on demand
+
+Three parts of a deck draw from code or data that a browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only when a deck needs it: diagram types ([diagrams](diagrams.md#the-engine), the `#diagram-engine` import map), the preset shape geometry ([shapes](shapes.md#loading-in-browsers-and-edge-runtimes), `#shape-engine`) and icon sets ([icons](icons.md), each set a module of `@openpresentation/gallery/icon-sets` that a host registers with its catalogs). Node, Bun and Deno load the engines with core; icon sets always load on demand. One preload covers all three, and a host awaits it before synchronous code (`validate`, `composeSlide`, `toSvg`) reads the deck:
+
+```js
+import { ensureDiagrams, ensureIcons, ensureShapes } from "@openpresentation/opf/composition";
+await Promise.all([ensureDiagrams(deck), ensureShapes(deck), ensureIcons(deck, { catalogs })]);
+```
+
+`diagramsPending(deck)`, `shapesPending(deck)` and `iconsPending(deck, { catalogs }).sets` list what each would load. The renderer's browser fonts handle loads all three in `ensure` (its `pending` lists `diagram:<type>`, `shapes` and `icons:<set>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself, and the CLI, the MCP and core's Node file API load them before they check or draw a deck. Until a part is loaded it draws a placeholder that is not a finding: a "Loading diagram" box, a shape's frame and text with no outline (a picture mask beyond the four built-in ones as a rectangle), and no icon chip.
+
 ## A complete small deck
 
 Everything above, together — intent metadata, a catalog-backed narrative with beats, design, an organization and speaker, an asset-backed chart, regions, notes, and sections:

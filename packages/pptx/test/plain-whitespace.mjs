@@ -3,7 +3,7 @@ import {unzipSync,zipSync} from 'fflate';
 import {toPptx, fromPptx, resolvePresentation, toSvg} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const measured = {fonts: await loadFonts()},enc=new TextEncoder(),dec=new TextDecoder();
-const sources=['  A  B\tC\u00a0D\r\n\r\ntrail  \r','\t\t  ','Line one\n\nLine three\r\n','A long string of ordinary words that must retain every separator across soft wrapping. '.repeat(3),''];
+const sources=['  A  B\tC\u00a0D\r\n\r\ntrail  \r','\t\t  ','Line one.\n\nLine three\r\n','A long string of ordinary words that must retain every separator across soft wrapping. '.repeat(3),''];
 let cases=0;
 for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1280]])for(const text of sources) {
  const headings={title:'  Exact  title\tend  ',subtitle:'Subtitle  with spaces\r\nNext',tag:'  Tag  '};

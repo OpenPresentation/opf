@@ -1,3 +1,4 @@
+import { isShapeBlock } from './shape-block.js';
 import { layoutTemplate, type LayoutRegion, type LayoutTemplate, type RegionKind } from './layout-template.js';
 
 /** A diagnostic of content binding, in the `LayoutDiagnostic` shape composition reports. */
@@ -46,8 +47,8 @@ export interface BindRegionsOptions {
   slideIndex?: number;
 }
 
-const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram'] as const;
-const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', timeline: 'timeline', diagram: 'diagram' };
+const FIELDS = ['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape', 'path'] as const;
+const FIELD_KINDS: Readonly<Record<string, RegionKind>> = { text: 'text', bullets: 'text', items: 'list', image: 'image', video: 'video', chart: 'chart', table: 'table', code: 'code', metric: 'metric', quote: 'quote', shape: 'shape', path: 'shape', timeline: 'timeline', diagram: 'diagram' };
 const IMAGE_EDGES = ['left', 'right', 'top', 'bottom'];
 /** The promoted-region keys of a slide (`left`, `top:left`, `middle+bottom:center+right`, ...). */
 export const PROMOTED_REGION_KEY = /^(top|middle|bottom)(\+(top|middle|bottom))*(:(left|center|right)(\+(left|center|right))*)?$|^(left|center|right)(\+(left|center|right))*$/;
@@ -58,6 +59,8 @@ const empty = (value: unknown) => value === undefined || value === null || value
 export function blockKind(block: unknown): RegionKind {
   const value = record(block);
   if (Array.isArray(value.blocks)) return 'group';
+  // SH-02: a preset without an image, or a custom path, is a shape block (with its text inside).
+  if (isShapeBlock(value)) return 'shape';
   if (typeof value.type === 'string' && value.type !== 'group' && Object.values(FIELD_KINDS).includes(value.type as RegionKind)) return value.type as RegionKind;
   const field = FIELDS.find(name => value[name] !== undefined);
   return field ? FIELD_KINDS[field]! : 'text';
@@ -78,6 +81,8 @@ function leafKinds(block: Record<string, any>, into = new Set<RegionKind>(), dep
 export function regionAccepts(region: { readonly accepts: readonly string[] }, block: unknown): boolean {
   const kind = blockKind(block);
   if (region.accepts.includes(kind)) return true;
+  // SH-02: a shape is a figure, so a region that takes pictures takes it too.
+  if (kind === 'shape' && region.accepts.includes('image')) return true;
   if (kind !== 'group') return false;
   const kinds = leafKinds(record(block));
   return kinds.size > 0 && [...kinds].every(leaf => region.accepts.includes(leaf));

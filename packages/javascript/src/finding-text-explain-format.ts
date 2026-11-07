@@ -48,6 +48,36 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", chart: CHART, fit: "cover" },
     { title: "Revenue", image: IMG("team"), fit: "cover" },
   ),
+  "opf/shape-option-unsupported-payload": ex(
+    "Remove the shape option, or make the block a shape block with `shape` (a preset such as roundRect) or `path`. Options such as `fill`, `style` and `rotate` describe how a shape is drawn.",
+    { title: "Plan", blocks: [{ text: "Launch", fill: "accent2" }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", text: "Launch", fill: "accent2" }] },
+  ),
+  "opf/shape-adjust-unknown": ex(
+    "Use an adjust name the preset has (docs/shapes.md lists them; roundRect has `adj`, rightArrow `adj1` and `adj2`), or remove it.",
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj1: 0.3 } }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.3 } }] },
+  ),
+  "opf/shape-adjust-range": ex(
+    "Set the adjust value inside its handle's range: roundRect's corner `adj` runs from 0 to 0.5 of the shorter side.",
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.8 } }] },
+    { title: "Plan", blocks: [{ shape: "roundRect", adjust: { adj: 0.5 } }] },
+  ),
+  "opf/shape-link-hidden": ex(
+    "Show the shape, or drop its link: a hidden shape cannot be clicked.",
+    { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing", hidden: true }] },
+    { title: "Plan", blocks: [{ shape: "rect", text: "Pricing", link: "https://example.com/pricing" }] },
+  ),
+  "opf/shape-anchor-missing": ex(
+    "Name a block of the slide in `at.block` (give the block an `id`), or place the shape by `x`, `y`, `width` and `height`.",
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "phot", edge: "top" } }] },
+    { title: "Team", blocks: [{ id: "photo", image: IMG("team") }], shapes: [{ shape: "ellipse", text: "New", at: { block: "photo", edge: "top" } }] },
+  ),
+  "opf/connector-end-missing": ex(
+    "Name a block or an overlay shape of the slide in `from` and `to` (give it an `id`).",
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "shipping", route: "elbow" } }] },
+    { title: "Plan", blocks: [{ id: "plan", shape: "roundRect", text: "Plan" }, { id: "ship", shape: "roundRect", text: "Ship" }], shapes: [{ connector: { from: "plan", to: "ship", route: "elbow" } }] },
+  ),
   "opf/image-placement-invalid": ex(
     "Use `placement` on a top-level block of the slide, with one placed image per slide edge.",
     { title: "Team", blocks: [{ image: IMG("a"), placement: { edge: "left" } }, { image: IMG("b"), placement: { edge: "left" } }] },

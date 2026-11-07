@@ -167,7 +167,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
 // (native check 2026-10-01), so those stay native, the effect before the SVG extension; a duotone recolor and a non-rectangular mask
 // are unconfirmed on an SVG picture and keep the PNG (export-lossy, feature svg-rasterized). A picture bullet is a raster (a:buBlip).
 {
-  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, opacity: .5, recolor: 'grayscale', border: {color: '#c0392b', width: 6}}]}]};
+  const deck = {design: {watermark: {src: wide, opacity: .3}, background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, opacity: .5, recolor: 'grayscale', stroke: {color: '#c0392b', width: 6}}]}]};
   const {entries, diagnostics, bytes} = await open(deck);
   const xml = slideXml(entries);
   assert.deepEqual(diagnostics.filter(item => item.code === 'export-lossy'), []);
@@ -185,7 +185,7 @@ for (const [name, svg, raster, aspect] of [['wide', wide, widePng, 2], ['tall', 
   assert.equal(imported.slides[0].blocks[0].image.src, square);
   assert.equal(imported.slides[0].blocks[0].opacity, .5);
   assert.equal(imported.slides[0].blocks[0].recolor, 'grayscale');
-  for (const treatment of [{recolor: {dark: '#102030', light: '#f0e0d0'}}, {shape: 'circle'}]) {
+  for (const treatment of [{recolor: {dark: '#102030', light: '#f0e0d0'}}, {shape: 'ellipse'}]) {
     const result = await open({design: {background: light}, slides: [{title: 'T', blocks: [{type: 'image', image: square, placement: {edge: 'left'}, ...treatment}]}]});
     assert.ok(!/svgBlip/.test(slideXml(result.entries)), `${Object.keys(treatment)}: raster`);
     assert.deepEqual(result.diagnostics.filter(item => item.code === 'export-lossy').map(item => [item.feature, item.path]), [['svg-rasterized', 'slides.0.blocks.0.image']]);

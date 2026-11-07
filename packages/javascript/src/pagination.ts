@@ -1,3 +1,5 @@
+import {isShapeBlock} from "./shape-block.js";
+import {isOverlayConnector, slideBlockIds} from "./overlay-shapes.js";
 import { codeHighlightSlice } from './code-highlight.js';
 import {tableRowBoundaries} from './table.js';
 import { composeSlide, OPFCompositionError, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic, type SlideComposition } from './composition.js';
@@ -45,9 +47,16 @@ export interface PaginationMapping {
   /** Half-open offsets into the original leaf; text offsets use UTF-16. */
   range?: { unit: 'utf16' | 'items'; start: number; end: number };
 }
+/**
+ * SH-04: what a split did to the slide's overlay that a host should report: `connector-split`, a connector whose two ends landed on
+ * different pages, so no page draws it (`path` is the connector's source path, `slides.N.shapes.I`).
+ */
+export interface PaginationDiagnostic { code: 'connector-split'; path: string; message: string }
 export interface PaginatedPage {
   slideIndex: number;
   mappings: PaginationMapping[];
+  /** SH-04: what this page left out of the slide's overlay (a connector whose ends are on different pages). */
+  diagnostics?: PaginationDiagnostic[];
   /** Repeated headings/furniture and their metadata sources; separate from body slices. */
   repeatedMappings?: PaginationMapping[];
 }
@@ -66,6 +75,8 @@ const clone = <T>(value: T): T => structuredClone(value);
 const slideIds = (slide: Record<string, unknown>): string[] => {
   const ids = typeof slide.id === 'string' ? [slide.id] : [];
   visitContentPayloads(slide, '', payload => { if (typeof payload.id === 'string') ids.push(payload.id); });
+  // SH-04: overlay ids share the namespace.
+  if (Array.isArray(slide.shapes)) for (const entry of slide.shapes) if (isRecord(entry) && typeof entry.id === 'string') ids.push(entry.id);
   return ids;
 };
 const textOf = (value: any): string => typeof value === 'string' ? value : Array.isArray(value) ? value.map(textOf).join('') : value?.text ?? '';
@@ -272,9 +283,62 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     reservedIds.add(id); emittedIds.add(id); return id;
   };
   const assignPageIds = (slide: Record<string,unknown>, pageIndex: number) => {
-    const assign = (node: Record<string,unknown>) => { if (typeof node.id === 'string') node.id = pageId(node.id,pageIndex); };
+    const renamed = new Map<string,string>();
+    const assign = (node: Record<string,unknown>) => { if (typeof node.id === 'string') { const id = pageId(node.id,pageIndex); if (id !== node.id) renamed.set(node.id,id); node.id = id; } };
     assign(slide);
     visitContentPayloads(slide,'',assign);
+    // SH-04: overlay ids take their page's id too, and an `at` block and a connector's ends follow the ids they name.
+    if (!Array.isArray(slide.shapes)) return;
+    for (const entry of slide.shapes) if (isRecord(entry)) assign(entry);
+    const follow = (id: unknown) => typeof id === 'string' ? renamed.get(id) ?? id : id;
+    for (const entry of slide.shapes) {
+      if (!isRecord(entry)) continue;
+      if (isRecord(entry.at)) entry.at = {...entry.at, block: follow(entry.at.block)};
+      if (isRecord(entry.connector)) entry.connector = {...entry.connector, from: follow(entry.connector.from), to: follow(entry.connector.to)};
+    }
+  };
+  // SH-04: a page's overlay. A shape placed by fractions of the slide is on every page, as the headings are; a shape placed `at` a block is
+  // on the page that block lands on; a connector is on the page that holds both of its ends, and one whose ends land on different pages
+  // is on none (`connector-split`, reported on the first page that holds its `from` end, by splitDiagnostics).
+  const blockIds = slideBlockIds(source, sourceBase);
+  const pageOverlay = (mappings: PaginationMapping[]): { shapes?: unknown[]; connectors: number[]; starts: number[] } => {
+    if (!Array.isArray(source.shapes)) return {connectors: [], starts: []};
+    const onPage = (id: unknown): boolean => {
+      const path = typeof id === 'string' ? blockIds.get(id) : undefined;
+      return path !== undefined && mappings.some(mapping => mapping.sourcePath.startsWith(`${path}.`));
+    };
+    const kept = new Set<number>(), overlayIds = new Set<string>();
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || isOverlayConnector(entry)) return;
+      if (entry.at !== undefined && !onPage(isRecord(entry.at) ? entry.at.block : undefined)) return;
+      kept.add(index);
+      if (typeof entry.id === 'string') overlayIds.add(entry.id);
+    });
+    const present = (id: unknown) => onPage(id) || (typeof id === 'string' && overlayIds.has(id));
+    const connectors: number[] = [], starts: number[] = [];
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || !isOverlayConnector(entry)) return;
+      const connector = isRecord(entry.connector) ? entry.connector : {};
+      const from = present(connector.from);
+      if (from) starts.push(index);
+      if (from && present(connector.to)) { kept.add(index); connectors.push(index); }
+    });
+    const shapes = source.shapes.filter((_: unknown, index: number) => kept.has(index)).map((entry: unknown) => clone(entry));
+    return {...(shapes.length ? {shapes} : {}), connectors, starts};
+  };
+  // The connectors no page holds, each reported on the first page that holds its `from` end.
+  const pageConnectors: { connectors: number[]; starts: number[] }[] = [];
+  const splitDiagnostics = () => {
+    if (!Array.isArray(source.shapes)) return;
+    const drawn = new Set(pageConnectors.flatMap(page => page.connectors));
+    source.shapes.forEach((entry: unknown, index: number) => {
+      if (!isRecord(entry) || !isOverlayConnector(entry) || drawn.has(index)) return;
+      const page = pageConnectors.findIndex(entry => entry.starts.includes(index));
+      if (page < 0) return;
+      const connector = isRecord(entry.connector) ? entry.connector : {};
+      const target = pages[page]!;
+      target.diagnostics = [...(target.diagnostics ?? []), {code:'connector-split',path:`${sourceBase}.shapes.${index}`,message:`The connector from '${String(connector.from)}' to '${String(connector.to)}' is not drawn: its ends landed on different pages. Keep both of them on one page, or join shapes of one page.`}];
+    });
   };
 
   // Prune absent leaves, compact block arrays, and preserve every enclosing group.
@@ -309,13 +373,19 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
         } else if (root && isRecord(value) && /^(top|middle|bottom|left|center|right)([+:]|$)/.test(key)) {
           const child = visit(value,childPath,outputPath);
           if (child) { result[key] = child; hasContent = true; }
+        } else if (key === 'text' && isShapeBlock(node)) {
+          // SH-02: a shape's text goes with its shape (the leaf is the shape item, `<block>.shape` or `<block>.path`).
+          if (portions.has(`${path}.shape`) || portions.has(`${path}.path`)) result[key] = clone(value);
         } else if (!contentFields.has(key)) result[key] = clone(value);
       }
       return root || hasContent ? result : undefined;
     };
     const slide = visit(source,sourceBase,`slides.${sourceIndex+pageIndex}`,true)!;
     if (pageIndex > 0) delete slide.notes;
-    return {slide,mappings};
+    const overlay = pageOverlay(mappings);
+    delete slide.shapes;
+    if (overlay.shapes) slide.shapes = overlay.shapes;
+    return {slide,mappings,overlay};
   };
   const diagnosticsFor = (portions: Map<string,Portion>) => fit(geometry(project(portions,slides.length).slide,slides.length).diagnostics);
   // LH-144: the largest body size the first page draws for each kind of block (reference pixels). A later page is capped at the largest of
@@ -326,7 +396,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const finish = () => {
     if (!selected.size) return;
     if (slides.length >= maxSlides) throw new OPFPaginationError(`Pagination needs more than ${maxSlides} slides. No partial result was returned.`);
-    const {slide,mappings} = project(selected,slides.length);
+    const {slide,mappings,overlay} = project(selected,slides.length);
     const cap = firstSizes && Math.max(0, ...[...selected.values()].map(portion => firstSizes!.get(kindOf(portion.leaf.field)) ?? 0));
     if (cap) slide.composition = {...slide.composition, maxFontSize: Math.min(Math.max(8, cap), 200, slide.composition?.maxFontSize ?? Infinity)};
     const drawn = geometry(slide,slides.length), issues = fit(drawn.diagnostics);
@@ -336,6 +406,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     // RR-34: a page that cites references validates only with the deck's references list (RR-54: and its datasets).
     assertValid({...deckContext(options.presentation),slides:[slide]}, { only: ['format'] });
     slides.push(slide); pages.push({slideIndex:sourceIndex+slides.length-1,mappings,...(initial.furniture?{repeatedMappings:repeatedMappings(slides.length-1)}:{})});
+    pageConnectors.push(overlay);
     selected = new Map();
   };
   if (options.wholeBlocks) {
@@ -368,6 +439,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
     const balanced = Array.from({length:count},(_,page)=>{ const start = page*base+Math.min(page,extra); return [start,start+base+(page<extra?1:0)] as [number,number]; });
     const ranges = balanced.every(([from,to],page)=>!issuesOf(from,to,page).length) ? balanced : greedy;
     for (const [from,to] of ranges) { selected = portions(from,to); finish(); }
+    splitDiagnostics();
     return {slides,pages};
   }
   for (const leaf of leaves) {
@@ -414,6 +486,7 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   }
   finish();
   if (!slides.length) throw new OPFPaginationError('No body content can be paginated.', initial.diagnostics);
+  splitDiagnostics();
   return {slides,pages};
 }
 
@@ -584,7 +657,7 @@ function paginateSlides(input: unknown, options: PresentationPaginationOptions, 
       if (result.slides.length > 1) splits.push({sourceSlideIndex:index,outputStart,count:result.slides.length});
       result.pages.forEach((page,pageIndex)=>{
         const remap=(mapping:PaginationMapping)=>({...mapping,outputPath:mapping.outputPath.replace(/^slides\.\d+/,`slides.${outputStart+pageIndex}`)});
-        pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{})});
+        pages.push({sourceSlideIndex:index,slideIndex:outputStart+pageIndex,mappings:page.mappings.map(remap),...(page.repeatedMappings?{repeatedMappings:page.repeatedMappings.map(remap)}:{}),...(page.diagnostics?{diagnostics:page.diagnostics}:{})});
       });
       output.push(...result.slides);
       reservedIds.push(...result.slides.flatMap(slide=>slideIds(slide)));

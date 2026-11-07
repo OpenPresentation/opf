@@ -129,7 +129,7 @@ describe("the deck view", () => {
 	test("processDecks: false does no deck work: show_deck only opens the view, and validate_deck and convert are gone", async () => {
 		const client = await connected({ processDecks: false });
 		const names = (await client.listTools()).tools.map((tool) => tool.name).sort();
-		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "show_deck", "start_here"]);
+		assert.deepEqual(names, ["get_catalog_record", "get_schema", "list_examples", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here"]);
 		assert.deepEqual((await client.listPrompts()).prompts.map((prompt) => prompt.name).sort(), ["author_deck", "choose_layout", "learn_opf"]);
 		assert.doesNotMatch(client.getInstructions(), /validate_deck|convert/);
 		const result = await client.callTool({ name: "show_deck", arguments: { document: deck } });

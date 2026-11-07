@@ -121,6 +121,18 @@
         {
           "id": "playground:present-button-browser",
           "command": "node test/present-button-browser.mjs"
+        },
+        {
+          "id": "playground:icon-picker-browser",
+          "command": "node test/icon-picker-browser.mjs"
+        },
+        {
+          "id": "playground:shape-editing-browser",
+          "command": "node test/shape-editing-browser.mjs"
+        },
+        {
+          "id": "playground:shape-overlays-browser",
+          "command": "node test/shape-overlays-browser.mjs"
         }
       ]
     },
@@ -364,6 +376,10 @@
         {
           "id": "browser:variant-trend-fit",
           "command": "node test/variant-trend-fit-browser.mjs"
+        },
+        {
+          "id": "browser:icon-picker-studio",
+          "command": "node test/icon-picker-studio-browser.mjs"
         }
       ]
     }

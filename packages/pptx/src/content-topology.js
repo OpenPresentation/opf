@@ -50,7 +50,7 @@ import {sourceRunStyles, validateSourceRunStyles, restoreSourceRunStyles} from '
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const clone = value => value === undefined ? undefined : JSON.parse(JSON.stringify(value));
 
-export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
+export const CONTENT_KINDS = Object.freeze(['text', 'list', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram', 'shape']);
 export const ROOT_PAYLOAD_FIELDS = Object.freeze(['text', 'items', 'bullets', 'image', 'video', 'chart', 'table', 'code', 'metric', 'quote', 'timeline', 'diagram']);
 const HORIZONTAL = ['left', 'center', 'right', 'left+center', 'center+right', 'left+center+right'];
 const VERTICAL = ['top', 'middle', 'bottom', 'top+middle', 'middle+bottom', 'top+middle+bottom'];
@@ -223,6 +223,8 @@ export const softWrappedLines = item => {
 
 function blockKind(block) {
   if (typeof block.type === 'string' && block.type !== 'group') return CONTENT_KINDS.includes(block.type) ? block.type : null;
+  // SH-02: a preset with no picture, or a custom path, is a shape block (its text is inside it).
+  if (block.image === undefined && (typeof block.shape === 'string' || block.path !== undefined)) return 'shape';
   for (const field of ROOT_PAYLOAD_FIELDS) if (block[field] !== undefined) return kindOfField(field);
   return null;
 }
@@ -241,7 +243,9 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
   if (!object(slide)) return undefined;
   const boxes = new Map(), wrapped = new Map();
   for (const item of items ?? []) if (typeof item?.path === 'string' && object(item.box)) {
-    boxes.set(item.path, item.box);
+    // LH-78: a quote card's decorative mark is part of the quote's shapes, and sits in the card's padding above its box.
+    const mark = item.quoteLayout?.mark?.box;
+    if (mark && object(mark)) { const x = Math.min(item.box.x, mark.x), y = Math.min(item.box.y, mark.y); boxes.set(item.path, {...item.box, x, y, width: Math.max(item.box.x + item.box.width, mark.x + mark.width) - x, height: Math.max(item.box.y + item.box.height, mark.y + mark.height) - y}); } else boxes.set(item.path, item.box);
     const lines = wrappedLines(item);
     if (lines) wrapped.set(item.path, wrapRecord(lines));
   }
@@ -255,7 +259,8 @@ export function contentTopology(slide, items, slideIndex, report = () => {}) {
   let nodes = 0;
   const fail = reason => { throw new TopologyError(reason); };
   const leafBox = path => {
-    for (const field of ROOT_PAYLOAD_FIELDS) {
+    // SH-05: a shape block's one item is its `shape` or its custom `path` (its text is inside it).
+    for (const field of [...ROOT_PAYLOAD_FIELDS, 'shape', 'path']) {
       const box = boxes.get(`${path}.${field}`);
       if (box) return [box.x, box.y, box.width, box.height].map(round1);
     }

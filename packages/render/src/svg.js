@@ -2,9 +2,10 @@
 // load instead of switching a feature (script fonts, right-to-left, patterns, code colours, trend arrows) off.
 import {
   layoutTable, fitList, fitRichText, composeSlide, emphasisSurface, resolveTextStyle, textWidthMeasurer, fitText, styledText, LIST_RULE_WIDTH, LIST_ACCENT_RULE_WIDTH, textColorForFill, chartColorForFill,
-  resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
+  resolveColorRef as resolveCoreColorRef, colorTransform, applyColorTransform, stackedText, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns, isolateNumbers,
   metricTrendMark as coreMetricTrendMark, metricPillFill, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark, tableHighlightColor,
+  arrangementPaint, colorContrast,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize, diagramPalette, paintDiagramGroup, iconPathData,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
@@ -24,6 +25,7 @@ import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
+import { renderConnector, renderShapeBlock, strokeElements } from "./shapes.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
@@ -264,6 +266,12 @@ function resolveColorRef(value, bound, fallback) {
 // partial one for the background, before the text-dependent roles exist.
 function resolveColorRefIn(value, design, fallback) {
   if (value == null || value === "") return fallback;
+  // SH-02: { color, lighten } or { color, darken } resolves its base, then applies core's transform (an alpha byte is kept).
+  const transform = colorTransform(value);
+  if (transform) {
+    const base = resolveColorRefIn(transform.color, design, fallback);
+    return typeof base === "string" ? applyColorTransform(base, transform) : base;
+  }
   if (typeof value !== "string") return fallback;
   const trimmed = value.trim();
   // Core normalizeHexColor uppercases literals and strips #RRGGBBAA alpha.
@@ -723,14 +731,19 @@ function renderResolvedSlide(resolved, slideIndex, options) {
   let content = [
     renderBackground(bound, width, height, options),
     renderBranding(bound, resolved.presentation, width, height, options),
+    // SH-04: the back layer of the overlay, above the background and the watermark, below the content and the furniture.
+    renderOverlayShapes(bound, options, "back"),
     renderSteps(bound, options),
+    renderArrangements(bound, options),
     renderTitleRule(bound, options),
     ...renderSlideContent(bound, width, height, options),
     renderIcons(bound, options),
     // RR-34: the footnote area core reserved above the footer band, after the content and before the furniture.
     renderFootnotes(bound, options, drawHelpers),
     renderFurniture(bound, resolved.presentation, width, height, options, "header"),
-    renderFurniture(bound, resolved.presentation, width, height, options, "footer")
+    renderFurniture(bound, resolved.presentation, width, height, options, "footer"),
+    // SH-04: the slide's overlay (geometry.overlayShapes) over everything, in array order.
+    renderOverlayShapes(bound, options, "front")
   ].filter(Boolean);
   // RR-64: text as glyph outlines. The used-face rule below then embeds only the faces of text that stays text.
   let glyphs = "";
@@ -876,20 +889,41 @@ function renderImageBlock(item, bound, options) {
   const trace = options.trace && image.placement ? { "data-opf-image-placement": image.placement.edge } : {};
   if (isImagePlaceholder(picture)) return Object.keys(trace).length ? tag("g", trace, picture) : picture;
   const id = `opf-s${bound.index + 1}-image-${item.path.replace(/[^A-Za-z0-9]+/g, "-")}`, shape = image.shape, defs = [];
-  const masked = shape && shape.preset !== "rect";
-  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: shape.path })));
+  // A sketched stroke (core stroke.sketched) clips the picture to its sketched outline, as PowerPoint draws it.
+  const sketched = image.stroke?.sketched?.fills[0];
+  const masked = sketched || (shape && shape.preset !== "rect");
+  if (masked) defs.push(tag("clipPath", { id: `${id}-clip` }, tag("path", { d: sketched ?? shape.path })));
   const matrix = imageRecolorMatrix(image.recolor, bound);
   if (matrix) defs.push(tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix })));
   let pixels = matrix || image.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: image.opacity === undefined ? undefined : preciseNumber(image.opacity) }, picture) : picture;
   if (masked) pixels = tag("g", { "clip-path": `url(#${id}-clip)` }, pixels);
   const children = [defs.length ? tag("defs", {}, defs.join("")) : "", pixels];
-  if (image.border) {
-    const paint = imagePaint(image.border.color, bound, bound.design.colors.border);
-    children.push(tag("path", { ...HIDDEN, d: shape?.path ?? rectanglePath(image.box), fill: "none", stroke: paint.color, "stroke-opacity": paint.alpha < 1 ? preciseNumber(paint.alpha) : undefined, "stroke-width": stableNumber(image.border.width), "stroke-linejoin": "miter", "stroke-miterlimit": 8 }));
+  // SH-02: the picture's stroke (renamed from border) takes every stroke property, along the frame's preset outline.
+  if (image.stroke) {
+    const stroke = strokeElements(image.stroke, image.stroke.sketched?.lines[0] ?? shape?.path ?? rectanglePath(image.box), `${id}-stroke`, { box: image.box, closed: true, helpers: shapeHelpers(item, bound, options) });
+    if (stroke.defs) children[0] = (children[0] ? children[0].replace(/<\/defs>$/, "") : "<defs>") + stroke.defs + "</defs>";
+    children.push(stroke.elements);
   }
   if (image.overlay) children.push(renderImageOverlay(image.overlay, bound, options));
   if (children.length === 2 && !children[0] && !Object.keys(trace).length) return pixels;
   return tag("g", trace, children.filter(Boolean).join(""));
+}
+
+// SH-02: what the shape drawing (src/shapes.js) needs from the renderer: its tag writer, the slide's colors and ColorRef resolution, and
+// the text drawing of a composed item (a shape's text, fitted by core, drawn at the box it was fitted for).
+function shapeHelpers(item, bound, options) {
+  const colors = bound.design.colors;
+  return {
+    tag, idPrefix: `opf-s${bound.index + 1}`, trace: traceAttrs(options, item.path),
+    colors: { primary: colors.primary, background: bound.design.backgroundColor ?? colors.background, text: colors.text, border: colors.border },
+    resolveColorRef: (value, fallback) => resolveColorRef(value, bound, fallback),
+    report: diagnostic => reportDiagnostic({ ...diagnostic, path: item.path }, options),
+    drawText: (shapeItem, area, fill) => {
+      const value = shapeItem.shape.textDirection === "stacked" ? stackedText(shapeItem.payload.text) : shapeItem.payload.text;
+      const config = { path: `${shapeItem.path.replace(/\.(shape|path)$/, "")}.text`, align: "center", fit: shapeItem.text, textStyle: shapeItem.textStyle, fill, fontSize: 25, fontFamily: bound.design.fonts.body, fontWeight: shapeItem.shape.textBold ? 700 : 400, diagnosticsHandled: true, options };
+      return Array.isArray(value) ? renderRichTextBox(value, area, bound, config) : renderTextBox(flattenText(value), area, bound, config);
+    },
+  };
 }
 
 // One overlay (shared by image backgrounds and image blocks): its outline filled with the colour, the colour's alpha times the
@@ -953,6 +987,31 @@ function renderSteps(bound, options) {
     return tag('g', options.trace ? {'data-opf-steps': step.form, 'data-opf-region': step.region} : {}, parts.join('\n'));
   }).join('\n');
 }
+// SH-09: core's pyramids and matrices (geometry.arrangements), under the text of their entries, as the PPTX export draws them (live
+// SmartArt or native shapes): the matrix's diamond in the primary lightened 80%, then every node (an empty quadrant too) in the primary with
+// a centered outline in the background color, core's lineWidth wide. A pyramid level is its trapezoid's polygon (the apex a triangle), a
+// quadrant a rounded square of core's corner radius (DrawingML roundRect's circular corners). With trace each shape names the entry it
+// holds in data-opf-arrangement-path, not data-opf-path: it is the layout's drawing.
+function renderArrangements(bound, options) {
+  const arrangements = bound.geometry.arrangements;
+  if (!arrangements?.length) return '';
+  const roles = bound.design.roles, paint = arrangementPaint(bound.design.colors.primary, roles.background, roles.text, colorContrast, applyColorTransform), n = stableNumber;
+  return arrangements.map(arrangement => {
+    // A card grid (a matrix of other than four entries) is drawn in the card neutral with its border, as every OPF card.
+    const card = arrangement.paint === 'card', fill = card ? roles.neutrals.card.hex : paint.fill.hex;
+    const parts = [], stroke = {stroke: card ? roles.neutrals.cardBorder.hex : paint.line.hex, 'stroke-width': n(arrangement.lineWidth), 'stroke-linejoin': 'miter', 'stroke-miterlimit': 8};
+    if (arrangement.background) {
+      const {x, y, width, height} = arrangement.background;
+      parts.push(tag('path', {...HIDDEN, d: `M${n(x + width / 2)} ${n(y)} L${n(x + width)} ${n(y + height / 2)} L${n(x + width / 2)} ${n(y + height)} L${n(x)} ${n(y + height / 2)} Z`, fill: paint.background.hex}));
+    }
+    for (const node of arrangement.nodes) {
+      const trace = options.trace && node.path ? {'data-opf-arrangement-path': node.path} : {};
+      if (node.points) parts.push(tag('path', {...HIDDEN, d: `M${node.points.map(([px, py]) => `${n(px)} ${n(py)}`).join(' L')} Z`, fill, ...stroke, ...trace}));
+      else parts.push(tag('rect', {...HIDDEN, x: n(node.box.x), y: n(node.box.y), width: n(node.box.width), height: n(node.box.height), rx: n(node.radius ?? 0), fill, ...stroke, ...trace}));
+    }
+    return tag('g', options.trace ? {'data-opf-arrangement': arrangement.kind, 'data-opf-arrangement-design': arrangement.design, 'data-opf-region': arrangement.region} : {}, parts.join(''));
+  }).join('\n');
+}
 // LH-14: core's icons (geometry.icons) on their chips, over the cards they sit on, as the PPTX export draws them: the chip a circle in
 // core's chip color; a monochrome glyph core's placed path commands in its glyph color, each part filled (nonzero or even-odd), stroked at
 // its width with its caps and joins, or both; a multicolor SVG a picture contained in the chip's square, with no chip, in its own colors.
@@ -979,6 +1038,15 @@ function svgTextDataUri(text) {
   for (let index = 0; index < bytes.length; index += 0x8000) binary += String.fromCharCode(...bytes.subarray(index, index + 0x8000));
   return `data:image/svg+xml;base64,${btoa(binary)}`;
 }
+// SH-04: core's overlay (geometry.overlayShapes) in one of its layers, in array order, as the PPTX export writes it: the front layer (and
+// every connector) over the content and the furniture, the back layer behind the content, over the background and the watermark;
+// an overlay shape with the shape block's drawing (it is a shape block item, its text fitted by core), a connector its route stroked with
+// the shape stroke drawing. With trace each names its entry (slides.N.shapes.I) in data-opf-path, as a block does.
+function renderOverlayShapes(bound, options, layer) {
+  const overlay = bound.geometry.overlayShapes?.filter(entry => (entry.kind === "shape" && entry.layer === "back" ? "back" : "front") === layer);
+  if (!overlay?.length) return "";
+  return overlay.map(entry => entry.kind === "connector" ? renderConnector(entry, shapeHelpers(entry, bound, options)) : renderShapeBlock(entry, shapeHelpers(entry, bound, options))).join("\n");
+}
 // LH-130: the short accent rule core sets above a cover's or section's title (geometry.titleRule), filled in the tag's color (tagFill), as
 // the PPTX export draws it. With trace it names the title it stands for in data-opf-title-rule, not data-opf-path: it is the layout's
 // drawing, so hit-testing still finds the title by its own text.
@@ -1004,8 +1072,12 @@ function renderSlideContent(bound, width, height, options) {
   const emphasis=bound.geometry.emphasis;
   const onSurface=emphasis ? emphasisBound(bound, emphasisSurface(bound.design.colorScheme, bound.design.roles)) : undefined;
   let surfaceDrawn=false,previousFrame;
+  // SH-09: the entries of a pyramid or matrix (geometry.arrangements) are drawn on its nodes, in the color arrangementPaint reads on the primary.
+  // Only entries drawn on their nodes take the color that reads on the primary; beside a level or on a card they keep the slide's.
+  const arranged=new Set((bound.geometry.arrangements??[]).filter(arrangement=>arrangement.text==='node').map(arrangement=>arrangement.path));
+  const onNodes=arranged.size ? {...bound,design:{...bound.design,colors:{...bound.design.colors,text:arrangementPaint(bound.design.colors.primary,bound.design.roles.background,bound.design.roles.text,colorContrast,applyColorTransform).text.hex}}} : undefined;
   return bound.geometry.items.map(item => {
-    const itemBound=item.emphasis&&onSurface ? onSurface : bound;
+    const itemBound=item.emphasis&&onSurface ? onSurface : arranged.has(item.path) ? onNodes : bound;
     // LH-131: a featured before and after pair's arrow (emphasis.arrow), a primary block arrow as LH-07's flows draw theirs, with the surface.
     const under=item.emphasis&&onSurface&&!surfaceDrawn ? (surfaceDrawn=true, tag('rect',{...HIDDEN,x:emphasis.box.x,y:emphasis.box.y,width:emphasis.box.width,height:emphasis.box.height,rx:emphasis.radius,fill:onSurface.design.colors.background,...traceAttrs(options,emphasis.path)})
       +(emphasis.arrow?tag('path',{...HIDDEN,d:blockArrowPath(emphasis.arrow.box,emphasis.arrow.direction),fill:bound.design.colors.primary,...(options.trace?{'data-opf-emphasis-arrow':emphasis.path}:{})}):'')) : '';
@@ -1059,6 +1131,8 @@ function renderPayload(item, box, bound, options) {
       return altText(renderTable(item, box, bound, options), item.value?.alt, "group");
     case "image":
       return renderImageBlock(item, bound, options);
+    case "shape":
+      return renderShapeBlock(item, shapeHelpers(item, bound, options));
     case "video":
       return renderMedia(item, box, bound, options);
     case "code":
@@ -1079,7 +1153,9 @@ function renderPayload(item, box, bound, options) {
 }
 
 function renderTextPayload(item, box, bound, options) {
-  return (Array.isArray(item.value) ? renderRichTextBox : renderTextBox)(Array.isArray(item.value) ? item.value : flattenText(item.value), box, bound, {
+  // LH-63: a text whose first line is a run-in heading draws core's runs (item.runs: the same characters, the heading bold).
+  const value = item.runs ?? item.value;
+  return (Array.isArray(value) ? renderRichTextBox : renderTextBox)(Array.isArray(value) ? value : flattenText(value), box, bound, {
     path: item.path,
     // Core resolves one alignment per composed item for every engine, from the slide's design, the deck's design
     // and the layout record's design (SlideComposition.design).
@@ -1124,12 +1200,14 @@ function listEntriesSvg(item, fit, bound, options) {
   const children=[];
   // design.listBullet=image: core attaches the icon logo as item.bulletImage and its box (entry.bulletBox: 0.65 em, as PowerPoint draws a:buBlip). An icon that cannot be drawn keeps the glyph marker.
   const bullet=item.bulletImage?resolveBulletImage(item.bulletImage,bound,options):undefined;
+  const arranged=bound.geometry.arrangements?.find(arrangement=>arrangement.path===item.path)?.align==='center';
   for(const entry of fit.listEntries){
     if(entry.marker.none){/* design.listBullet: none draws no marker */}
     else if(bullet){const box=entry.bulletBox??{x:entry.marker.x,y:entry.marker.y-entry.marker.fontSize*.65,width:entry.marker.fontSize*.65,height:entry.marker.fontSize*.65};children.push(tag('image',{x:stableNumber(box.x),y:stableNumber(box.y),width:stableNumber(box.width),height:stableNumber(box.height),href:bullet,preserveAspectRatio:'xMidYMid meet','aria-hidden':'true',...(options.trace?{'data-opf-generated':'true'}:{})}));}
     else children.push(tag('text',{x:stableNumber(entry.marker.x),y:stableNumber(entry.marker.y),'font-family':fontStack(entry.marker.style.fontFamily,bound.design.fontScheme.type),'font-size':stableNumber(entry.marker.fontSize),...numberMarkerStyle(entry.marker),fill:bound.design.colors.text,'aria-hidden':'true',...(entry.marker.anchor==='end'?{'text-anchor':'end'}:{})},escapeText(entry.marker.text)));
     // LH-133: a glossary's term (entry.accent) draws in the tag's color on its backdrop, as the export writes it.
-    const config={path:entry.textPath,align:'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
+    // SH-09: an entry of a pyramid or matrix (geometry.arrangements) is centered on its node, as the export writes it.
+    const config={path:entry.textPath,align:arranged?'center':'left',fill:entry.accent?eyebrowFill(bound.design,item):bound.design.colors.text,rich:Array.isArray(entry.value),options};
     children.push(renderRichLines(typeof entry.value==='string'?[entry.value]:entry.value,entry.text,entry.textBox,bound,config));
     if(entry.description)children.push(renderRichLines(typeof entry.descriptionValue==='string'?[entry.descriptionValue]:entry.descriptionValue,entry.description,entry.descriptionBox,bound,{...config,path:entry.descriptionPath,rich:Array.isArray(entry.descriptionValue),fill:bound.design.colors.mutedText}));
   }
@@ -1586,7 +1664,7 @@ function renderQuote(item, box, bound, options) {
     if (!part.fit) throw new OPFRenderError('layout-overflow', 'Quote content has no usable internal space; increase its cell size before rendering.', {path:part.path,diagnostics:layout.diagnostics});
     const fill=part.role==='footer'?bound.design.colors.mutedText:bound.design.colors.text;
     // FA-10: a TextRun[] quote body is laid out by core's rich-text layouter; its runs (quotation marks joined to the first and last) draw like body runs.
-    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:-1,options});
+    if(part.runs&&part.fit.richLines)return renderRichLines(part.runs,part.fit,part.box,bound,{path:part.path,fill,fontFamily:part.requestedStyle.fontFamily,diagnosticsHandled:true,textOffset:layout.mark?.hidden?0:-1,options});
     return renderTextBox(part.text,part.box,bound,{
       path:part.path,fit:part.fit,textStyle:part.style,fontFamily:part.requestedStyle.fontFamily,
       fill,
@@ -1595,6 +1673,14 @@ function renderQuote(item, box, bound, options) {
   });
   // FA-12: the attributed person's headshot, cropped to fill the core circle frame (the clip is the outline the native ellipse picture uses).
   if (layout.photo) children.push(renderQuotePhoto(layout.photo, item, bound, options));
+  // LH-78: a quote card's decorative mark, in the primary color against the card (as a metric's value is); core places it in the room above the text.
+  if (layout.mark) {
+    const backdrop = item.frameBox ? bound.design.roles.neutrals.card.hex : bound.design.backgroundColor ?? bound.design.colors.background, mark = layout.mark;
+    children.push(tag('g', options.trace ? {'data-opf-quote-mark': 'true'} : {}, renderTextBox(mark.text, mark.box, bound, {
+      path: item.path, fit: mark.fit, textStyle: mark.style, fontFamily: mark.requestedStyle.fontFamily,
+      fill: metricValueColor(bound.design.colors.primary, backdrop, bound.design.colors.text), diagnosticsHandled: true, options,
+    })));
+  }
   // LH-114: a pull line's accent rule, in the primary color (core places it; the PPTX export draws the same rectangle).
   if (layout.rule) children.unshift(tag('rect', {...HIDDEN, x: stableNumber(layout.rule.x), y: stableNumber(layout.rule.y), width: stableNumber(layout.rule.width), height: stableNumber(layout.rule.height), fill: bound.design.colors.primary, ...(options.trace ? {'data-opf-quote-rule': 'true'} : {})}));
   return tag("g", traceAttrs(options, item.path), children.join("\n"));
@@ -1915,7 +2001,12 @@ function renderBranding(bound,presentation,width,height,options) {
     }
   } else if(design.watermark){
     // The group keeps its bare opacity attribute (opf-pptx's watermark parity test reads it); the picture itself is hidden.
-    pieces.push(tag('g',{opacity:typeof design.watermark==='object'?design.watermark.opacity??.08:.08},renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true})));
+    const mark=renderImage({value:design.watermark,path:rootFor('watermark')},{x:width*.3,y:height*.3,width:width*.4,height:height*.4},bound,{...options,imageFit:'contain',imageDecorative:true});
+    // LH-164: on the accent surface of a message-only slide the mark is drawn in the slide's text color (the export's one-color duotone), so a mark made for the plain surface still reads.
+    const matrix=bound.geometry?.surface&&!isImagePlaceholder(mark)?imageRecolorMatrix({type:'duotone',dark:bound.design.colors.text,light:bound.design.colors.text},bound):undefined, filterId=`opf-s${bound.index+1}-watermark-recolor`;
+    // The filter and the opacity sit on one group: the vector PDF rasterizes a filtered group on its own, without its ancestors' opacity.
+    const watermarkOpacity=typeof design.watermark==='object'?design.watermark.opacity??.08:.08;
+    pieces.push(matrix?tag('g',{opacity:watermarkOpacity,filter:`url(#${filterId})`},tag('defs',{},tag('filter',{id:filterId,'color-interpolation-filters':'sRGB'},tag('feColorMatrix',{type:'matrix',values:matrix})))+mark):tag('g',{opacity:watermarkOpacity},mark));
   }
   // Cover and section slides: the logo core composed (the primary organization's full logo, or the design.logo override, in the
   // variant for this slide's background) at the top-left of the free area, anchored left. RR-71: the picture is named by its

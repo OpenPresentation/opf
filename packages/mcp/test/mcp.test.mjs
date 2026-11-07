@@ -36,7 +36,7 @@ describe("opf-mcp", () => {
 		assert.equal(info.name, "opf");
 		assert.match(client.getInstructions(), /format-card/);
 		const { tools } = await client.listTools();
-		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "read_font_file", "search_catalog", "search_docs", "search_icons", "show_deck", "start_here", "validate_deck"]);
+		assert.deepEqual(tools.map((tool) => tool.name).sort(), ["convert", "get_catalog_record", "get_schema", "list_examples", "read_font_file", "search_catalog", "search_docs", "search_icons", "search_shapes", "show_deck", "start_here", "validate_deck"]);
 		for (const tool of tools) {
 			assert.equal(tool.inputSchema.type, "object", tool.name);
 			assert.equal(tool.outputSchema?.type, "object", tool.name);
@@ -183,6 +183,38 @@ describe("opf-mcp", () => {
 			const unknown = report.findings.find((finding) => finding.ruleId === "opf/icon-unknown");
 			assert.ok(unknown, JSON.stringify(report.findings));
 			assert.ok(unknown.suggestions.some((entry) => entry.value === "lucide:truck"));
+		});
+
+		test("search_shapes finds presets by DrawingML name and common words, with adjust handles and a drawing (SH-06)", async () => {
+			const shapes = async (arguments_) => (await client.callTool({ name: "search_shapes", arguments: arguments_ })).structuredContent;
+			const arrow = await shapes({ query: "rightArrow" });
+			assert.equal(arrow.shapes[0].shape, "rightArrow");
+			assert.deepEqual(Object.keys(arrow.shapes[0]).sort(), ["adjust", "aspect", "category", "categoryTitle", "shape", "svg"]);
+			assert.equal(arrow.shapes[0].category, "blockArrows");
+			assert.equal(arrow.shapes[0].categoryTitle, "Block Arrows");
+			assert.equal(arrow.shapes[0].aspect, 2);
+			assert.deepEqual(arrow.shapes[0].adjust, [
+				{ name: "adj1", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+				{ name: "adj2", default: 0.5, min: 0, max: 1, unit: "fraction", handle: true },
+			]);
+			assert.match(arrow.shapes[0].svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" viewBox="0 0 96 48"[^>]*><path d="M0 12 L72 12 L72 0 L96 24/);
+			assert.ok(!/<script|href=/.test(arrow.shapes[0].svg));
+			assert.deepEqual(arrow.categories.map((category) => category.id), ["lines", "rectangles", "basic", "blockArrows", "equations", "flowchart", "starsBanners", "callouts", "actionButtons"]);
+			assert.equal(arrow.categories.reduce((sum, category) => sum + category.shapes, 0), 187);
+			assert.equal((await shapes({ query: "wedgeRectCallout" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "speech bubble" })).shapes[0].shape, "wedgeRectCallout");
+			assert.equal((await shapes({ query: "cylinder" })).shapes[0].shape, "can");
+			const star = await shapes({ query: "star", category: "starsBanners", limit: 3 });
+			assert.equal(star.returned, 3);
+			assert.ok(star.total >= 12 && star.shapes.every((shape) => shape.category === "starsBanners"));
+			const browse = await shapes({ category: "equations" });
+			assert.deepEqual(browse.shapes.map((shape) => shape.shape), ["mathPlus", "mathMinus", "mathMultiply", "mathDivide", "mathEqual", "mathNotEqual"]);
+			// The angle handles are degrees, and a value no handle moves is listed without one.
+			const pie = (await shapes({ query: "pie", limit: 1 })).shapes[0];
+			assert.deepEqual(pie.adjust.map((entry) => [entry.name, entry.unit, entry.handle]), [["adj1", "degrees", true], ["adj2", "degrees", true]]);
+			const hexagon = (await shapes({ query: "hexagon", limit: 1 })).shapes[0];
+			assert.deepEqual(hexagon.adjust.map((entry) => [entry.name, entry.handle]), [["adj", true], ["vf", false]]);
+			assert.equal((await shapes({ query: "zzzzzz" })).total, 0);
 		});
 
 		test("names a kind or id that does not exist, with a suggestion", async () => {
@@ -455,8 +487,15 @@ describe("the bundled sources", () => {
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
 		// LH-14 added docs/icons.md and three rules to docs/validate.md. LH wave 7 together (LH-158's and LH-132's image treatments, LH-09's and
 		// LH-155's layout templates, the portrait key and the icon rules in the references) is 1,027,190 bytes; the lean Worker stays in bounds.
-		// The OPF viewer's sections of docs/mcp.md (show_deck, the hosted mode without deck work, the .mcpb extension) bring it to 1,036,101.
-		assert.ok(bytes < 1_040_000, `${bytes} bytes of documentation`);
+		// SH-02 added docs/shapes.md (the property map and the 187 presets) and the shape vocabulary of the schema reference: 1,077,362 bytes;
+		// with PowerPoint's gradient and sketch behavior and the lazy shape engine documented, about 1,093,000. Wave 8 and shapes phase 1 together
+		// (SH-03's docs/shape-effects.md, now a served page, LH-165's, LH-169's, LH-164's and LH-63's rules, the engines that load on demand) are 1,120,756 bytes.
+		// Shapes phase 2 together (SH-04's overlay shapes and connectors, SH-05's import, SH-06's editor and search_shapes, SH-07's native
+		// diagrams, in docs/shapes.md, docs/diagrams.md and the schema reference, and the integration's one shapes page) is 1,158,205 bytes,
+		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB). SH-09 (the pyramid and matrix layouts, live SmartArt, the
+		// arrangement-adapted rule) is 1,174,552 bytes. The OPF viewer's sections of docs/mcp.md (show_deck, the hosted mode, the .mcpb
+		// extension, fonts for a hosted viewer) add about 11 KB to that.
+		assert.ok(bytes < 1_190_000, `${bytes} bytes of documentation`);
 	});
 });
 

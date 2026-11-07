@@ -8,11 +8,6 @@
       "barDir": "bar",
       "grouping": "stacked",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "StackedBar"
-      }
     }
   },
   "group": "Bar",

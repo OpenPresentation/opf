@@ -1033,22 +1033,78 @@
     },
     "ColorRef": {
       "anyOf": [
-        { "$ref": "#/$defs/HexColor" },
+        {
+          "$ref": "#/$defs/HexColor"
+        },
         {
           "type": "string",
-          "enum": [
-            "accent1", "accent2", "accent3", "accent4", "accent5", "accent6",
-            "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink",
-            "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"
-          ]
+          "enum": ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6", "dark1", "dark2", "light1", "light2", "hyperlink", "followedHyperlink", "primary", "secondary", "accent", "background", "surface", "surfaceAlt", "text", "textSecondary"]
         },
         {
           "type": "string",
           "pattern": "^var:[a-z][a-z0-9-]*$"
+        },
+        {
+          "$ref": "#/$defs/ColorTransform"
         }
       ],
-      "description": "A color value or reference, enforced on styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Three forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes. 'surfaceAlt' has no slot: it is the alternate surface of banded table rows, derived from 'surface' and 'text' (the surface mixed a tenth of the way towards the text color, further when needed, so it always differs visibly from 'surface' and keeps 4.5:1 text contrast; core surfaceAltColor).\n- Variable reference: 'var:<id>' into the top-level variables map.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
-      "examples": ["#0F4C81", "accent2", "text", "var:risk"]
+      "description": "A color value or reference, enforced on shape fills and strokes, image strokes, styled table cell fill and text colors, cell border colors, solid background colors, gradient stop colors and pattern foreground and background colors. Four forms:\n- Literal hex: '#RGB', '#RRGGBB', or '#RRGGBBAA'.\n- Color-scheme name, resolved through the effective color scheme after design resolution: an OOXML slot ('accent1'-'accent6', 'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink') or an abstract role ('primary', 'secondary', 'accent', 'background', 'surface', 'surfaceAlt', 'text', 'textSecondary'). Roles resolve through the same role-to-slot mapping engines already apply to color schemes. 'surfaceAlt' has no slot: it is the alternate surface of banded table rows, derived from 'surface' and 'text' (the surface mixed a tenth of the way towards the text color, further when needed, so it always differs visibly from 'surface' and keeps 4.5:1 text contrast; core surfaceAltColor).\n- Variable reference: 'var:<id>' into the top-level variables map.\n- Lighter or darker (SH-02): { \"color\": <ColorRef>, \"lighten\": 0..1 } or { \"color\": <ColorRef>, \"darken\": 0..1 }, PowerPoint's \"Lighter 40%\" and \"Darker 25%\": the color's HSL luminance moved that share of the way to white (lighten) or to black (darken). Core resolves it (resolveColorRef); PPTX export writes the base color (a scheme color where it is one) with a:lumMod and a:lumOff.\n\nNames keep content theme-portable: re-theming the deck updates every named reference, where a literal hex stays frozen. Unknown 'var:' ids produce a validation warning, never an error, and engines fall back to their default text color. TextRun.color documents the same three forms but remains an open string so imported decks with unrecognized run colors stay valid; validators warn there instead of erroring.",
+      "examples": [
+        "#0F4C81",
+        "accent2",
+        "text",
+        "var:risk",
+        {
+          "color": "accent1",
+          "lighten": 0.4
+        },
+        {
+          "color": "text",
+          "darken": 0.25
+        }
+      ]
+    },
+    "ColorTransform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color"],
+      "description": "A ColorRef made lighter or darker (SH-02), as PowerPoint's theme color tints and shades: 'lighten' moves the color's HSL luminance that share of the way to white (lumMod 1 - lighten, lumOff lighten), 'darken' that share of the way to black (lumMod 1 - darken). Exactly one of the two. PPTX export writes a:lumMod and a:lumOff on the base color, a scheme color where the base names one, so re-theming the deck keeps the tint.",
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "The base color: any ColorRef."
+        },
+        "lighten": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Share of the way to white, 0 to 1. 0.4 is PowerPoint's \"Lighter 40%\"."
+        },
+        "darken": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Share of the way to black, 0 to 1. 0.25 is PowerPoint's \"Darker 25%\"."
+        }
+      },
+      "oneOf": [
+        {
+          "required": ["lighten"]
+        },
+        {
+          "required": ["darken"]
+        }
+      ],
+      "examples": [
+        {
+          "color": "accent1",
+          "lighten": 0.4
+        },
+        {
+          "color": "#0F4C81",
+          "darken": 0.25
+        }
+      ]
     },
     "Variables": {
       "type": "object",
@@ -1722,21 +1778,483 @@
       },
       "examples": [{ "edge": "left", "size": 0.45 }, { "edge": "right", "size": 0.4, "inset": true }]
     },
-    "ImageBorder": {
+    "Stroke": {
+      "anyOf": [
+        {
+          "type": "string",
+          "const": "none",
+          "description": "No line (a:ln with a:noFill), also on a shape whose style would draw one."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "$ref": "#/$defs/ColorRef",
+              "description": "Line color: any ColorRef (eight-digit hex keeps its alpha). Default the shape style's line color, or the slide's neutral line on a picture."
+            },
+            "gradient": {
+              "$ref": "#/$defs/Gradient",
+              "description": "A gradient line instead of a solid color (a:ln/a:gradFill)."
+            },
+            "width": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 64,
+              "description": "Line width in reference pixels at a 720-pixel short edge. 0 removes the line. Default 4/3 (1 point, PowerPoint's default line) on a shape, 2 on a picture."
+            },
+            "dash": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["solid", "dot", "dash", "longDash", "dashDot", "longDashDot", "longDashDotDot", "sysDot", "sysDash", "sysDashDot", "sysDashDotDot"],
+                  "description": "DrawingML preset dash (a:prstDash). Default solid."
+                },
+                {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 20,
+                  "items": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 100
+                  },
+                  "description": "A custom dash (a:custDash): dash and gap lengths in stroke widths, alternating, for example [4, 2]. An odd count repeats."
+                }
+              ],
+              "description": "Dash pattern: a preset name or an array of dash and gap lengths in stroke widths."
+            },
+            "cap": {
+              "type": "string",
+              "enum": ["flat", "round", "square"],
+              "description": "Line cap (a:ln cap flat, rnd, sq). Default flat."
+            },
+            "join": {
+              "type": "string",
+              "enum": ["miter", "round", "bevel"],
+              "description": "Line join (a:miter, a:round, a:bevel). Default miter, PowerPoint's default line join."
+            },
+            "miterLimit": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Miter join limit, as a multiple of the stroke width (a:miter lim). Default 8. Ignored by round and bevel joins."
+            },
+            "compound": {
+              "type": "string",
+              "enum": ["single", "double", "thickThin", "thinThick", "triple"],
+              "description": "Compound line (a:ln cmpd sng, dbl, thickThin, thinThick, tri). Default single."
+            },
+            "align": {
+              "type": "string",
+              "enum": ["center", "inside"],
+              "description": "Where the line sits on the outline (a:ln algn ctr or in). Default center. PowerPoint draws inside-aligned lines only on closed outlines."
+            },
+            "start": {
+              "$ref": "#/$defs/Arrowhead",
+              "description": "Arrowhead at the start of an open path (a:headEnd)."
+            },
+            "end": {
+              "$ref": "#/$defs/Arrowhead",
+              "description": "Arrowhead at the end of an open path (a:tailEnd)."
+            },
+            "sketch": {
+              "type": "string",
+              "enum": ["curved", "freehand", "scribble"],
+              "description": "Hand-drawn look (PowerPoint's Sketched line, ask:lineSketchStyleProps): curved, freehand or scribble. OPF computes the sketched outline from a seed and both engines draw it: the preview strokes it and the PPTX stores it, which PowerPoint draws as stored, so the two match. A stroked path's fill follows the sketched outline too. PowerPoint versions before 2021 draw the plain line."
+            }
+          }
+        }
+      ],
+      "description": "A line along an outline (SH-02): a shape block's outline or a picture's frame (the picture key 'border' was renamed 'stroke' in 0.33, with no alias). DrawingML a:ln. 'none' removes the line.",
+      "examples": [
+        "none",
+        {
+          "color": "accent1",
+          "width": 2
+        },
+        {
+          "color": "text",
+          "width": 1.5,
+          "dash": "dash",
+          "end": {
+            "type": "triangle"
+          }
+        },
+        {
+          "color": "#0F172A",
+          "width": 12,
+          "join": "round"
+        }
+      ]
+    },
+    "Arrowhead": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["color", "width"],
-      "description": "Solid line along the image frame's shape, centered on the outline with a miter join, like a native picture line. A thick dark border on a rounded portrait frame gives a device bezel.",
+      "description": "An arrowhead at one end of an open path or a line preset (DrawingML a:headEnd at the start, a:tailEnd at the end). Closed outlines have no ends, so arrowheads draw only on open paths such as arc, line or a custom path that is not closed.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["none", "triangle", "stealth", "diamond", "oval", "arrow"],
+          "description": "Arrowhead kind, DrawingML's ST_LineEndType. Default 'triangle' when the object is given."
+        },
+        "width": {
+          "type": "string",
+          "enum": ["small", "medium", "large"],
+          "description": "Arrowhead width relative to the stroke width (2, 3 or 5 stroke widths). Default medium."
+        },
+        "length": {
+          "type": "string",
+          "enum": ["small", "medium", "large"],
+          "description": "Arrowhead length relative to the stroke width (2, 3 or 5 stroke widths). Default medium."
+        }
+      },
+      "examples": [
+        {
+          "type": "triangle"
+        },
+        {
+          "type": "stealth",
+          "width": "large",
+          "length": "large"
+        }
+      ]
+    },
+    "Gradient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stops"],
+      "description": "A gradient fill (SH-02): the background gradient object extended with 'type'. DrawingML a:gradFill: a:lin for linear, a:path circle, rect or shape for the others. The gradient rotates with the shape.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["linear", "radial", "rectangle", "shape"],
+          "description": "linear runs along 'angle'; radial spreads from the center as a circle, rectangle as a rectangle and shape along the shape's own outline (a:path circle, rect, shape). Default linear."
+        },
+        "angle": {
+          "type": "number",
+          "description": "Linear gradients only: angle in degrees (0 = left to right, 90 = top to bottom). Default 90."
+        },
+        "stops": {
+          "type": "array",
+          "minItems": 2,
+          "description": "Ordered color stops; at least two. A radial, rectangle or shape gradient runs from the center (position 0) to the outline (position 1).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["color", "position"],
+            "properties": {
+              "color": {
+                "$ref": "#/$defs/ColorRef",
+                "description": "Stop color: any ColorRef (eight-digit hex keeps its alpha)."
+              },
+              "position": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Stop position, 0 to 1."
+              }
+            }
+          }
+        }
+      },
+      "examples": [
+        {
+          "type": "linear",
+          "angle": 90,
+          "stops": [
+            {
+              "color": "accent1",
+              "position": 0
+            },
+            {
+              "color": {
+                "color": "accent1",
+                "darken": 0.5
+              },
+              "position": 1
+            }
+          ]
+        }
+      ]
+    },
+    "Pattern": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preset"],
+      "description": "A two-color pattern fill (the background pattern object), DrawingML a:pattFill.",
+      "properties": {
+        "preset": {
+          "type": "string",
+          "description": "DrawingML pattern preset (ECMA-376 ST_PresetPatternVal), for example pct5, ltHorz, wdUpDiag, smGrid or dotDmnd.",
+          "examples": ["pct20", "ltUpDiag", "smGrid"]
+        },
+        "foregroundColor": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "Pattern color. Default the shape style's fill color."
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "Color behind the pattern. Default the slide background."
+        }
+      }
+    },
+    "ShapeFill": {
+      "anyOf": [
+        {
+          "type": "string",
+          "const": "none",
+          "description": "No fill (a:noFill)."
+        },
+        {
+          "$ref": "#/$defs/ColorRef",
+          "description": "A solid fill (a:solidFill): any ColorRef; eight-digit hex keeps its alpha."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["gradient"],
+          "properties": {
+            "gradient": {
+              "$ref": "#/$defs/Gradient"
+            }
+          },
+          "description": "A gradient fill (a:gradFill)."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["pattern"],
+          "properties": {
+            "pattern": {
+              "$ref": "#/$defs/Pattern"
+            }
+          },
+          "description": "A pattern fill (a:pattFill)."
+        }
+      ],
+      "description": "A shape block's fill (SH-02): 'none', a ColorRef, { gradient } or { pattern }. Without a fill a shape takes its style's fill (the theme's accent1 for the default style). Fills rotate with the shape (rotWithShape).",
+      "examples": [
+        "accent2",
+        "none",
+        {
+          "color": "accent1",
+          "lighten": 0.6
+        },
+        {
+          "gradient": {
+            "type": "radial",
+            "stops": [
+              {
+                "color": "light1",
+                "position": 0
+              },
+              {
+                "color": "accent1",
+                "position": 1
+              }
+            ]
+          }
+        },
+        {
+          "pattern": {
+            "preset": "ltUpDiag",
+            "foregroundColor": "accent1"
+          }
+        }
+      ]
+    },
+    "ShapePreset": {
+      "type": "string",
+      "enum": ["line", "lineInv", "triangle", "rtTriangle", "rect", "diamond", "parallelogram", "trapezoid", "nonIsoscelesTrapezoid", "pentagon", "hexagon", "heptagon", "octagon", "decagon", "dodecagon", "star4", "star5", "star6", "star7", "star8", "star10", "star12", "star16", "star24", "star32", "roundRect", "round1Rect", "round2SameRect", "round2DiagRect", "snipRoundRect", "snip1Rect", "snip2SameRect", "snip2DiagRect", "plaque", "ellipse", "teardrop", "homePlate", "chevron", "pieWedge", "pie", "blockArc", "donut", "noSmoking", "rightArrow", "leftArrow", "upArrow", "downArrow", "stripedRightArrow", "notchedRightArrow", "bentUpArrow", "leftRightArrow", "upDownArrow", "leftUpArrow", "leftRightUpArrow", "quadArrow", "leftArrowCallout", "rightArrowCallout", "upArrowCallout", "downArrowCallout", "leftRightArrowCallout", "upDownArrowCallout", "quadArrowCallout", "bentArrow", "uturnArrow", "circularArrow", "leftCircularArrow", "leftRightCircularArrow", "curvedRightArrow", "curvedLeftArrow", "curvedUpArrow", "curvedDownArrow", "swooshArrow", "cube", "can", "lightningBolt", "heart", "sun", "moon", "smileyFace", "irregularSeal1", "irregularSeal2", "foldedCorner", "bevel", "frame", "halfFrame", "corner", "diagStripe", "chord", "arc", "leftBracket", "rightBracket", "leftBrace", "rightBrace", "bracketPair", "bracePair", "straightConnector1", "bentConnector2", "bentConnector3", "bentConnector4", "bentConnector5", "curvedConnector2", "curvedConnector3", "curvedConnector4", "curvedConnector5", "callout1", "callout2", "callout3", "accentCallout1", "accentCallout2", "accentCallout3", "borderCallout1", "borderCallout2", "borderCallout3", "accentBorderCallout1", "accentBorderCallout2", "accentBorderCallout3", "wedgeRectCallout", "wedgeRoundRectCallout", "wedgeEllipseCallout", "cloudCallout", "cloud", "ribbon", "ribbon2", "ellipseRibbon", "ellipseRibbon2", "leftRightRibbon", "verticalScroll", "horizontalScroll", "wave", "doubleWave", "plus", "flowChartProcess", "flowChartDecision", "flowChartInputOutput", "flowChartPredefinedProcess", "flowChartInternalStorage", "flowChartDocument", "flowChartMultidocument", "flowChartTerminator", "flowChartPreparation", "flowChartManualInput", "flowChartManualOperation", "flowChartConnector", "flowChartPunchedCard", "flowChartPunchedTape", "flowChartSummingJunction", "flowChartOr", "flowChartCollate", "flowChartSort", "flowChartExtract", "flowChartMerge", "flowChartOfflineStorage", "flowChartOnlineStorage", "flowChartMagneticTape", "flowChartMagneticDisk", "flowChartMagneticDrum", "flowChartDisplay", "flowChartDelay", "flowChartAlternateProcess", "flowChartOffpageConnector", "actionButtonBlank", "actionButtonHome", "actionButtonHelp", "actionButtonInformation", "actionButtonForwardNext", "actionButtonBackPrevious", "actionButtonEnd", "actionButtonBeginning", "actionButtonReturn", "actionButtonDocument", "actionButtonSound", "actionButtonMovie", "gear6", "gear9", "funnel", "mathPlus", "mathMinus", "mathMultiply", "mathDivide", "mathEqual", "mathNotEqual", "cornerTabs", "squareTabs", "plaqueTabs", "chartX", "chartStar", "chartPlus"],
+      "description": "A DrawingML preset geometry (ECMA-376 ST_ShapeType, all 187), with PowerPoint's own names: rect, roundRect, ellipse, triangle, rightArrow, chevron, wedgeRectCallout, flowChartDecision and the rest. docs/shapes.md lists them with their default frames and adjust values.",
+      "examples": ["rect", "roundRect", "ellipse", "chevron", "rightArrow", "wedgeRectCallout", "flowChartDecision"]
+    },
+    "ShapePath": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "SVG path data in a 0 to 1 box: x and y run from 0 (left, top) to 1 (right, bottom) of the block, for example \"M0 0 L1 0 L0.5 1 Z\"."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["d", "viewBox"],
+          "properties": {
+            "d": {
+              "type": "string",
+              "minLength": 1,
+              "description": "SVG path data in the viewBox."
+            },
+            "viewBox": {
+              "type": "string",
+              "pattern": "^\\s*-?[0-9.]+([ ,]+-?[0-9.]+){3}\\s*$",
+              "description": "The path's own box, 'minX minY width height' as in SVG; it is stretched to the block."
+            }
+          },
+          "description": "SVG path data with its own viewBox, for example an icon outline drawn on a 24 by 24 grid."
+        }
+      ],
+      "description": "Custom geometry (SH-02): SVG path data (M, L, H, V, C, S, Q, T, A and Z, absolute or relative) instead of a preset. PPTX export writes a:custGeom with the same path. A subpath that ends without Z is open: arrowheads draw at its ends (its fill closes it, as in PowerPoint).",
+      "examples": [
+        "M0 0 L1 0 L0.5 1 Z",
+        {
+          "d": "M12 2 L22 22 L2 22 Z",
+          "viewBox": "0 0 24 24"
+        }
+      ]
+    },
+    "ShapePadding": {
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "The same inset on every side, in reference pixels at a 720-pixel short edge."
+        },
+        {
+          "$ref": "#/$defs/TableCellPadding"
+        }
+      ],
+      "description": "Text insets inside the shape's text rectangle (a:bodyPr lIns, tIns, rIns, bIns), in reference pixels at a 720-pixel short edge: one number for every side or { top, right, bottom, left }. Default 9.6 left and right, 4.8 top and bottom, PowerPoint's 0.1 and 0.05 inch."
+    },
+    "Shadow": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["soft", "hard", "perspective"],
+          "description": "A preset outer shadow."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "$ref": "#/$defs/ColorRef",
+              "description": "Shadow color. Default black."
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Shadow opacity."
+            },
+            "blur": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 200,
+              "description": "Blur radius in reference pixels at a 720-pixel short edge."
+            },
+            "distance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 200,
+              "description": "Offset from the shape in reference pixels at a 720-pixel short edge."
+            },
+            "angle": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 360,
+              "description": "Direction of the offset in degrees (0 = right, 90 = down)."
+            },
+            "size": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 2,
+              "description": "Shadow size relative to the shape (1 = the shape's own size)."
+            }
+          }
+        }
+      ],
+      "description": "Outer shadow (a:outerShdw): a preset name (soft, hard, perspective) or { color, opacity, blur, distance, angle, size }. SH-03 draws it in both engines."
+    },
+    "InnerShadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Inner shadow (a:innerShdw). SH-03 draws it in both engines.",
       "properties": {
         "color": {
           "$ref": "#/$defs/ColorRef",
-          "description": "Line color: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference."
+          "description": "Shadow color. Default black."
         },
-        "width": {
+        "opacity": {
           "type": "number",
           "minimum": 0,
-          "maximum": 64,
-          "description": "Line width in reference pixels at a 720-pixel short edge. 0 removes the line."
+          "maximum": 1,
+          "description": "Shadow opacity."
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Blur radius in reference pixels at a 720-pixel short edge."
+        },
+        "distance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Offset in reference pixels at a 720-pixel short edge."
+        },
+        "angle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360,
+          "description": "Direction of the offset in degrees (0 = right, 90 = down)."
+        }
+      }
+    },
+    "Glow": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Glow around the outline (a:glow). SH-03 draws it in both engines.",
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/ColorRef",
+          "description": "Glow color. Default accent."
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Glow opacity."
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Glow size in reference pixels at a 720-pixel short edge."
+        }
+      }
+    },
+    "Reflection": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Reflection below the shape (a:reflection). SH-03 draws it in both engines.",
+      "properties": {
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Opacity where the reflection starts."
+        },
+        "size": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Share of the shape's height reflected."
+        },
+        "distance": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Gap between the shape and its reflection in reference pixels at a 720-pixel short edge."
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Blur radius in reference pixels at a 720-pixel short edge."
         }
       }
     },
@@ -1937,6 +2455,244 @@
         }
       }
     },
+    "OverlayShape": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "SH-04: an entry of slide 'shapes', drawn over the composed slide above the content and the furniture, later entries on top; it never moves content. An entry with 'connector' is a connector between two blocks or overlay shapes: it takes only 'id', 'connector', 'adjust', 'stroke', 'alt', 'decorative', 'hidden' and 'extensions'; core routes it as PowerPoint's own connector presets and PPTX export writes a native p:cxnSp glued to the shapes at its ends, so it follows them when they are moved in PowerPoint. Any other entry is an overlay shape: the shape block vocabulary (geometry, paint, effects, transform, text, accessibility) and exactly one placement, 'x', 'y', 'width' and 'height' (fractions of the slide) or 'at' (against a block, so it follows the block wherever composition puts it); PPTX export writes a native p:sp.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional stable identifier, unique among slide, payload and overlay ids in the document. A connector names it in 'from' or 'to'.",
+          "examples": ["badge-new", "callout-1"]
+        },
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Left edge as a fraction of the slide width, from the left edge; in a right-to-left deck from the right edge, mirrored as OPF mirrors start and end. With 'y', 'width' and 'height'."
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Top edge as a fraction of the slide height, from the top edge."
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Width as a fraction of the slide width."
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Height as a fraction of the slide height."
+        },
+        "at": {
+          "$ref": "#/$defs/OverlayAnchor"
+        },
+        "layer": {
+          "type": "string",
+          "enum": ["front", "back"],
+          "description": "Overlay shapes only. front (the default) draws the shape over the slide: above the content and the furniture. back draws it behind the slide: above the background and the watermark, below the content and the furniture (a panel or band behind a block). Array order stacks the shapes within each layer. Connectors are always in front."
+        },
+        "connector": {
+          "$ref": "#/$defs/Connector",
+          "description": "Makes the entry a connector: what it joins and how it runs."
+        },
+        "shape": {
+          "$ref": "#/$defs/ShapePreset",
+          "description": "The preset geometry, as on a shape block. Default rect."
+        },
+        "path": {
+          "$ref": "#/$defs/ShapePath",
+          "description": "Custom geometry instead of a preset (a:custGeom), as on a shape block."
+        },
+        "adjust": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[a-z][A-Za-z0-9]*$" },
+          "additionalProperties": { "type": "number" },
+          "description": "The preset's adjust handles (a:avLst) in OPF units, as on a shape block. On a connector, the adjust values of its connector preset (adj1 of an elbow or a curve between sites on one axis, a fraction of the frame's width), which replace the automatic route's, so a route made in PowerPoint is kept exactly.",
+          "examples": [{ "adj": 0.25 }]
+        },
+        "fill": {
+          "$ref": "#/$defs/ShapeFill",
+          "description": "'none', a ColorRef, { gradient } or { pattern }. Default the style's fill."
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "The fill's opacity (a:alpha). Default 1."
+        },
+        "stroke": {
+          "$ref": "#/$defs/Stroke",
+          "description": "A shape's line along its outline (default the style's line), or a connector's line: color, width, dash, compound, sketch and arrowheads ('start' at 'from', 'end' at 'to'; default a 2-pixel line in the slide's text color with no arrowheads)."
+        },
+        "style": {
+          "type": "string",
+          "enum": ["none", "subtle", "moderate", "intense"],
+          "description": "The theme shape style, as on a shape block. Default moderate."
+        },
+        "shadow": {
+          "$ref": "#/$defs/Shadow",
+          "description": "Outer shadow."
+        },
+        "innerShadow": {
+          "$ref": "#/$defs/InnerShadow",
+          "description": "Inner shadow."
+        },
+        "glow": {
+          "$ref": "#/$defs/Glow",
+          "description": "Glow."
+        },
+        "softEdge": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Soft edges (a:softEdge), radius in reference pixels at a 720-pixel short edge."
+        },
+        "reflection": {
+          "$ref": "#/$defs/Reflection",
+          "description": "Reflection."
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge."
+        },
+        "rotate": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360,
+          "description": "Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Its connection sites turn with it."
+        },
+        "flip": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "both"],
+          "description": "Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored."
+        },
+        "text": {
+          "$ref": "#/$defs/ContentPayload/properties/text",
+          "description": "Text inside the shape's text rectangle (a string or TextRun[]), fitted by OPF's measured fonts from the body size down to the readability floor and never below it."
+        },
+        "anchor": {
+          "type": "string",
+          "enum": ["top", "middle", "bottom"],
+          "description": "Vertical placement of the text in the text rectangle (a:bodyPr anchor). Default middle."
+        },
+        "padding": {
+          "$ref": "#/$defs/ShapePadding",
+          "description": "Text insets inside the text rectangle."
+        },
+        "textDirection": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "vertical270", "stacked"],
+          "description": "Text direction (a:bodyPr vert). Default horizontal."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alternative text (p:cNvPr descr). Without it the shape's text is what is read."
+        },
+        "decorative": {
+          "type": "boolean",
+          "description": "Mark the shape decorative (a16:decorative): screen readers skip it."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Keep the shape in the file but do not draw it (p:cNvPr hidden). A link on a hidden shape is a validation finding (opf/shape-link-hidden)."
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^(https?://|mailto:|tel:)\\S+$",
+          "description": "URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
+          "examples": ["https://acme.com/pricing"]
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Custom data passthrough for agent workflows; ignored by the engine but preserved across read/write round-trips."
+        }
+      },
+      "examples": [
+        { "shape": "wedgeRectCallout", "text": "New this quarter", "x": 0.62, "y": 0.12, "width": 0.25, "height": 0.12, "style": "subtle" },
+        { "id": "badge", "shape": "ellipse", "text": "3", "at": { "block": "team-photo", "edge": "top", "offset": -12 } },
+        { "connector": { "from": "plan", "to": "build", "route": "elbow" }, "stroke": { "width": 2, "end": { "type": "triangle" } } }
+      ]
+    },
+    "OverlayAnchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["block", "edge"],
+      "description": "Places an overlay shape against a composed block's box, so the shape follows the block wherever composition puts it. 'edge' puts the shape outside that edge, centered along it ('start' and 'end' follow the deck's direction: left and right in a left-to-right deck, right and left in a right-to-left one); 'center' puts it on the block's center. A block id that is not on the slide is a finding (opf/shape-anchor-missing) and the shape is not drawn.",
+      "properties": {
+        "block": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of a block on this slide (a content payload or a group, at any depth)."
+        },
+        "edge": {
+          "type": "string",
+          "enum": ["top", "bottom", "start", "end", "center"],
+          "description": "The edge of the block the shape sits outside of, or its center."
+        },
+        "offset": {
+          "type": "number",
+          "minimum": -720,
+          "maximum": 720,
+          "description": "The gap between the block's edge and the shape, in reference pixels at a 720-pixel short edge; a negative offset overlaps the block. Default 0. Ignored for 'center'."
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1280,
+          "description": "The shape's width: up to 1 a fraction of the block's width, above 1 reference pixels at a 720-pixel short edge. Default the preset's natural proportions with the shape's shorter side at 15% of the block's shorter side."
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1280,
+          "description": "The shape's height: up to 1 a fraction of the block's height, above 1 reference pixels at a 720-pixel short edge. Default as for width."
+        }
+      },
+      "examples": [{ "block": "team-photo", "edge": "top", "offset": 8 }, { "block": "revenue-chart", "edge": "end", "width": 160, "height": 64 }]
+    },
+    "Connector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "description": "What a connector joins and how it runs. Each end attaches to a connection site of its shape: a preset's own sites (turned and flipped with the shape), or the four edge midpoints of a block that is not a shape (DrawingML's rect: 0 top, 1 left, 2 bottom, 3 right). Without 'fromSite' and 'toSite' core chooses the pair of sites that face each other with the shortest route.",
+      "properties": {
+        "from": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of the block or overlay shape on this slide the connector starts at. An id that is not on the slide is a finding (opf/connector-end-missing) and the connector is not drawn."
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The id of the block or overlay shape on this slide the connector ends at."
+        },
+        "route": {
+          "type": "string",
+          "enum": ["straight", "elbow", "curved"],
+          "description": "straight is one segment (straightConnector1); elbow runs horizontally and vertically (bentConnector3, bentConnector2 between perpendicular sites); curved is PowerPoint's curved connector (curvedConnector3, curvedConnector2 between perpendicular sites). Default straight."
+        },
+        "fromSite": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The connection site index at 'from' (DrawingML's cxn idx), instead of the automatic choice. An index the shape does not have is a validation error."
+        },
+        "toSite": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The connection site index at 'to', instead of the automatic choice."
+        }
+      },
+      "examples": [{ "from": "plan", "to": "build", "route": "elbow" }, { "from": "a", "to": "b", "fromSite": 3, "toSite": 1 }]
+    },
     "Slide": {
       "type": "object",
       "description": "A single slide. Content can be authored as a full-slide root payload, or inside promoted named region keys such as 'left', 'center+right', and 'top:left'.",
@@ -2082,6 +2838,15 @@
           "type": "array",
           "items": { "$ref": "#/$defs/ContentPayload" },
           "description": "Layout-agnostic content blocks rendered together as a composed payload when exact placement is unspecified. At slide root, multiple content payload kinds with no explicit type, blocks, or regions are accepted as shorthand for equivalent blocks."
+        },
+        "shapes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/OverlayShape" },
+          "description": "SH-04: shapes and connectors drawn over the composed slide, above its content and furniture, in array order (later entries on top). They never move content. An entry with connector is a connector between two blocks or overlay shapes; any other entry is an overlay shape placed by x, y, width and height (fractions of the slide) or at (against a block). See docs/shapes.md.",
+          "examples": [[
+            { "id": "note", "shape": "wedgeRectCallout", "text": "Launch", "x": 0.7, "y": 0.1, "width": 0.2, "height": 0.1 },
+            { "connector": { "from": "plan", "to": "ship", "route": "elbow" }, "stroke": { "end": { "type": "triangle" } } }
+          ]]
         },
         "design": {
           "$ref": "#/$defs/SlideDesign",
@@ -2276,9 +3041,8 @@
         },
         "type": {
           "type": "string",
-          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline",
-            "diagram", "group"],
-          "description": "Optional content kind. When omitted, engines infer the kind from the fields present."
+          "enum": ["text", "list", "image", "chart", "table", "video", "code", "metric", "quote", "timeline", "diagram", "shape", "group"],
+          "description": "Optional content kind. When omitted, engines infer the kind from the fields present: a block with 'shape' and no 'image', or with 'path', is a shape block."
         },
         "text": {
           "oneOf": [
@@ -2362,25 +3126,122 @@
           "description": "Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame. shape 'circle' always uses 1."
         },
         "shape": {
-          "type": "string",
-          "enum": ["rectangle", "rounded", "circle", "hexagon"],
-          "description": "Image payloads only. Mask applied to the frame, exported as the picture's native preset geometry (rect, roundRect, ellipse, hexagon). 'circle' makes the frame square. Default 'rectangle'."
+          "$ref": "#/$defs/ShapePreset",
+          "description": "The preset geometry. Without 'image' it makes the block a shape block (SH-02): the preset drawn at the block's own fitted size with 'fill', 'stroke' and 'style', and 'text' inside its text rectangle. On an image block it is the frame's mask, exported as the picture's native preset geometry (a:prstGeom); 0.33 renamed rectangle, rounded and circle to rect, roundRect and ellipse, and every other preset is a mask too. 'ellipse' makes an image frame square. Default rect.",
+          "examples": ["roundRect", "chevron", "ellipse", "wedgeRectCallout"]
         },
-        "cornerRadius": {
+        "stroke": {
+          "$ref": "#/$defs/Stroke",
+          "description": "Shape and image blocks. The line along the outline: a shape's outline or the picture frame's shape (renamed from the picture key 'border' in 0.33, no alias). Without it a shape takes its style's line; a picture has none."
+        },
+        "path": {
+          "$ref": "#/$defs/ShapePath",
+          "description": "Shape blocks only. Custom geometry instead of a preset (a:custGeom): SVG path data in a 0 to 1 box, or { d, viewBox }. A block with 'path' is a shape block."
+        },
+        "fill": {
+          "$ref": "#/$defs/ShapeFill",
+          "description": "Shape blocks only. 'none', a ColorRef, { gradient } or { pattern }. Default the style's fill."
+        },
+        "style": {
+          "type": "string",
+          "enum": ["none", "subtle", "moderate", "intense"],
+          "description": "Shape blocks only. The theme shape style, as PowerPoint's shape styles (p:style with a:lnRef, a:fillRef, a:effectRef and a:fontRef): subtle is a light tint of accent1 with an accent1 line and dark text, moderate (the default) a solid accent1 fill with a darker line and light text, intense accent1 25% darker with no line, light bold text and the soft shadow. none draws nothing the author did not set. An explicit fill, stroke or effect wins over the style's."
+        },
+        "rotate": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360,
+          "description": "Shape blocks only. Rotation in degrees, clockwise, about the shape's center (a:xfrm rot). Composition keeps the unrotated box; the rotated outline may reach past it."
+        },
+        "flip": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "both"],
+          "description": "Shape blocks only. Mirror the geometry (a:xfrm flipH, flipV). The text is not mirrored."
+        },
+        "anchor": {
+          "type": "string",
+          "enum": ["top", "middle", "bottom"],
+          "description": "Shape blocks only. Vertical placement of the text in the text rectangle (a:bodyPr anchor t, ctr, b). Default middle."
+        },
+        "padding": {
+          "$ref": "#/$defs/ShapePadding",
+          "description": "Shape blocks only. Text insets inside the text rectangle."
+        },
+        "textDirection": {
+          "type": "string",
+          "enum": ["horizontal", "vertical", "vertical270", "stacked"],
+          "description": "Shape blocks only. Text direction (a:bodyPr vert horz, vert, vert270, wordArtVert): vertical turns the text 90 degrees clockwise, vertical270 270, stacked stacks the letters top to bottom. Default horizontal."
+        },
+        "alt": {
+          "type": "string",
+          "description": "Shape blocks only. Alternative text for screen readers (p:cNvPr descr). Without it a shape's text is what is read."
+        },
+        "decorative": {
+          "type": "boolean",
+          "description": "Shape blocks only. Mark the shape decorative (a16:decorative): screen readers skip it and the accessibility checker does not ask for alt text."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Shape blocks only. Keep the shape in the file but do not draw it (p:cNvPr hidden). Composition still gives it its room. A link on a hidden shape cannot be clicked and is a validation finding (opf/shape-link-hidden)."
+        },
+        "link": {
+          "type": "string",
+          "pattern": "^(https?://|mailto:|tel:)\\S+$",
+          "description": "Shape blocks only. URL opened when the shape is clicked in a slide show (a:hlinkClick): an http(s) URL, a 'mailto:' address or a 'tel:' number.",
+          "examples": ["https://acme.com/pricing"]
+        },
+        "shadow": {
+          "$ref": "#/$defs/Shadow",
+          "description": "Shape blocks only. Outer shadow."
+        },
+        "innerShadow": {
+          "$ref": "#/$defs/InnerShadow",
+          "description": "Shape blocks only. Inner shadow."
+        },
+        "glow": {
+          "$ref": "#/$defs/Glow",
+          "description": "Shape blocks only. Glow."
+        },
+        "softEdge": {
           "type": "number",
           "minimum": 0,
-          "maximum": 0.5,
-          "description": "Image payloads only. Corner radius for shape 'rounded' as a fraction of the frame's shorter side. Default 0.16667, PowerPoint's roundRect default."
+          "maximum": 200,
+          "description": "Shape blocks only. Soft edges (a:softEdge): the radius over which the outline fades, in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines."
         },
-        "border": {
-          "$ref": "#/$defs/ImageBorder",
-          "description": "Image payloads only. Line along the frame's shape."
+        "reflection": {
+          "$ref": "#/$defs/Reflection",
+          "description": "Shape blocks only. Reflection."
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200,
+          "description": "Shape blocks only. Blur of the whole shape (a:blur), radius in reference pixels at a 720-pixel short edge. SH-03 draws it in both engines."
+        },
+        "adjust": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][A-Za-z0-9]*$"
+          },
+          "additionalProperties": {
+            "type": "number"
+          },
+          "description": "Shape and image blocks. The preset's adjust handles (a:avLst), named as DrawingML's guides (adj, adj1, adj2 ... and hexagon's vf): fractions of the shape's shorter side or of its size as the preset defines them, degrees for an angle, never DrawingML's 100000ths or 60000ths. roundRect's adj is the corner radius as a fraction of the shorter side (0.16667 by default, 0 to 0.5). An unknown name or a value out of the preset's range is a validation finding (opf/shape-adjust-unknown, opf/shape-adjust-range) and the preset's default is drawn.",
+          "examples": [
+            {
+              "adj": 0.25
+            },
+            {
+              "adj1": 0.5,
+              "adj2": 0.35
+            }
+          ]
         },
         "opacity": {
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "description": "Image payloads only. Picture opacity from 0 to 1, exported as a native alphaModFix. The border and overlay keep their own opacity. Default 1."
+          "description": "Image and shape blocks. On an image: the picture's opacity, exported as a native alphaModFix; the stroke and overlay keep their own. On a shape: the fill's opacity (a:alpha on the fill color, multiplied with an eight-digit hex alpha); the stroke and text keep theirs. Default 1."
         },
         "recolor": {
           "$ref": "#/$defs/ImageRecolor",
@@ -2527,7 +3388,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "list" } }
+            "properties": {
+              "type": {
+                "const": "list"
+              }
+            }
           },
           "then": {
             "required": ["items"]
@@ -2536,7 +3401,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "image" } }
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            }
           },
           "then": {
             "required": ["image"]
@@ -2545,7 +3414,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "chart" } }
+            "properties": {
+              "type": {
+                "const": "chart"
+              }
+            }
           },
           "then": {
             "required": ["chart"]
@@ -2554,7 +3427,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "table" } }
+            "properties": {
+              "type": {
+                "const": "table"
+              }
+            }
           },
           "then": {
             "required": ["table"]
@@ -2563,7 +3440,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "video" } }
+            "properties": {
+              "type": {
+                "const": "video"
+              }
+            }
           },
           "then": {
             "required": ["video"]
@@ -2572,7 +3453,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "code" } }
+            "properties": {
+              "type": {
+                "const": "code"
+              }
+            }
           },
           "then": {
             "required": ["code"]
@@ -2581,7 +3466,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "metric" } }
+            "properties": {
+              "type": {
+                "const": "metric"
+              }
+            }
           },
           "then": {
             "required": ["metric"]
@@ -2590,7 +3479,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "quote" } }
+            "properties": {
+              "type": {
+                "const": "quote"
+              }
+            }
           },
           "then": {
             "required": ["quote"]
@@ -2599,7 +3492,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "timeline" } }
+            "properties": {
+              "type": {
+                "const": "timeline"
+              }
+            }
           },
           "then": {
             "required": ["timeline"]
@@ -2608,7 +3505,11 @@
         {
           "if": {
             "required": ["type"],
-            "properties": { "type": { "const": "diagram" } }
+            "properties": {
+              "type": {
+                "const": "diagram"
+              }
+            }
           },
           "then": {
             "required": ["diagram"]
@@ -2616,9 +3517,27 @@
         },
         {
           "if": {
-            "required": [
-              "type"
-            ],
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "const": "shape"
+              }
+            }
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": ["shape"]
+              },
+              {
+                "required": ["path"]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": ["type"],
             "properties": {
               "type": {
                 "const": "group"
@@ -2626,28 +3545,20 @@
             }
           },
           "then": {
-            "required": [
-              "blocks"
-            ]
+            "required": ["blocks"]
           }
         },
         {
           "if": {
-            "required": [
-              "composition"
-            ]
+            "required": ["composition"]
           },
           "then": {
-            "required": [
-              "blocks"
-            ]
+            "required": ["blocks"]
           }
         },
         {
           "if": {
-            "required": [
-              "blocks"
-            ]
+            "required": ["blocks"]
           },
           "then": {
             "properties": {
@@ -2658,64 +3569,40 @@
             "not": {
               "anyOf": [
                 {
-                  "required": [
-                    "text"
-                  ]
+                  "required": ["text"]
                 },
                 {
-                  "required": [
-                    "items"
-                  ]
+                  "required": ["items"]
                 },
                 {
-                  "required": [
-                    "bullets"
-                  ]
+                  "required": ["bullets"]
                 },
                 {
-                  "required": [
-                    "image"
-                  ]
+                  "required": ["image"]
                 },
                 {
-                  "required": [
-                    "video"
-                  ]
+                  "required": ["video"]
                 },
                 {
-                  "required": [
-                    "chart"
-                  ]
+                  "required": ["chart"]
                 },
                 {
-                  "required": [
-                    "table"
-                  ]
+                  "required": ["table"]
                 },
                 {
-                  "required": [
-                    "code"
-                  ]
+                  "required": ["code"]
                 },
                 {
-                  "required": [
-                    "metric"
-                  ]
+                  "required": ["metric"]
                 },
                 {
-                  "required": [
-                    "quote"
-                  ]
+                  "required": ["quote"]
                 },
                 {
-                  "required": [
-                    "timeline"
-                  ]
+                  "required": ["timeline"]
                 },
                 {
-                  "required": [
-                    "diagram"
-                  ]
+                  "required": ["diagram"]
                 }
               ]
             }
@@ -2723,21 +3610,15 @@
         },
         {
           "if": {
-            "required": [
-              "columns"
-            ]
+            "required": ["columns"]
           },
           "then": {
             "anyOf": [
               {
-                "required": [
-                  "items"
-                ]
+                "required": ["items"]
               },
               {
-                "required": [
-                  "bullets"
-                ]
+                "required": ["bullets"]
               }
             ]
           }
@@ -3151,9 +4032,24 @@
               "description": "Whether the run is rendered with a strikethrough line."
             },
             "color": {
-              "type": "string",
-              "description": "Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Any other string stays schema-valid so imported decks keep validating: validators warn and renderers fall back to the theme text color.",
-              "examples": ["#0F172A", "accent2", "var:risk"]
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/ColorTransform"
+                }
+              ],
+              "description": "Run text color. Documented forms: a hex string ('#RGB', '#RRGGBB', '#RRGGBBAA'), a color-scheme slot or role name resolved through the effective color scheme ('accent2', 'text'), or a 'var:<id>' reference into the top-level variables map. Prefer names over hex so runs survive re-theming. Or the lighter or darker object form of a ColorRef ({ \"color\": \"accent1\", \"darken\": 0.25 }). Any other string stays schema-valid so imported decks keep validating: validators warn and renderers fall back to the theme text color.",
+              "examples": [
+                "#0F172A",
+                "accent2",
+                "var:risk",
+                {
+                  "color": "accent1",
+                  "darken": 0.25
+                }
+              ]
             },
             "fontSize": {
               "type": "number",
@@ -3279,7 +4175,7 @@
         "type": {
           "type": "string",
           "enum": ["100pct-stacked-area", "100pct-stacked-bar", "100pct-stacked-column", "area", "bar", "box-and-whisker", "column", "combo", "doughnut", "filled-radar", "funnel", "histogram", "line", "line-with-markers", "pareto", "pie", "radar", "radar-with-markers", "scatter", "stacked-area", "stacked-bar", "stacked-column", "stacked-line", "stacked-line-with-markers", "treemap", "waterfall", "world"],
-          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types Aspose.Slides officially supports, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
+          "description": "Chart type, an engine vocabulary validated directly (no catalog lookup): the chart types OPF supports natively in its preview and PPTX export, plus 'combo' (clustered columns with line series, see 'line' and 'secondaryAxis'). Each engine maps a type to its own chart model; labels and picker groups are catalog display metadata.",
           "examples": ["column", "bar", "line", "pie", "doughnut", "area", "scatter", "radar", "waterfall", "funnel", "treemap", "stacked-column", "combo"]
         },
         "data": {

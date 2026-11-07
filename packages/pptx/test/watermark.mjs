@@ -60,6 +60,8 @@ function assertParity(tree, svg, [sourceWidth, sourceHeight], path, note) {
 }
 const shapeNames = xml => [...xml.matchAll(/<p:cNvPr id="\d+" name="([^"]*)"/g)].map(match => match[1]).filter(Boolean);
 
+// Every sample slide has a subtitle: a lone short text is LH-164's one-message slide on the accent surface (wave 8), whose watermark is
+// recolored to the slide's text color; these tests are about the watermark's geometry, alpha and order.
 let checked = 0;
 
 // 1. Geometry, alpha and paint order against the traced preview.
@@ -68,7 +70,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
   for (const [imageLabel, source, size] of [['wide', wide, [120, 60]], ['tall', tall, null], ['square', square, null]]) {
     for (const opacity of [0.08, 0.15, 1, 0]) {
       const deck = { design: { dimensions: { widthInches: width / 96, heightInches: height / 96 }, watermark: { src: source, opacity } },
-        slides: [{ title: 'Watermarked', text: 'Body copy over the watermark.' }] };
+        slides: [{ subtitle: 'Second quarter', title: 'Watermarked', text: 'Body copy over the watermark.' }] };
       const svg = toSvg(deck, { trace: true })[0];
       const { trees, xml, diagnostics } = await exported(deck);
       assert.equal(diagnostics.filter(d => /watermark/.test(d.path ?? '')).length, 0, 'No diagnostics for a supported watermark');
@@ -87,8 +89,8 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
 {
   const deck = { assets: { mark: { src: wide, alt: 'Acme confidential' }, plain: wide },
     design: { watermark: 'asset:mark' },
-    slides: [{ title: 'Inherits', text: 'a' }, { title: 'Off', text: 'b', design: { watermark: false } },
-      { title: 'Own', text: 'c', design: { watermark: { src: 'asset:plain', opacity: 0.3 } } }, { title: 'String', text: 'd', design: { watermark: wide } }] };
+    slides: [{ subtitle: 'Second quarter', title: 'Inherits', text: 'a' }, { subtitle: 'Second quarter', title: 'Off', text: 'b', design: { watermark: false } },
+      { subtitle: 'Second quarter', title: 'Own', text: 'c', design: { watermark: { src: 'asset:plain', opacity: 0.3 } } }, { subtitle: 'Second quarter', title: 'String', text: 'd', design: { watermark: wide } }] };
   const svgs = toSvg(deck, { trace: true });
   const { trees, xml } = await exported(deck);
   assert.equal(watermarkOf(trees[0]).length, 1);
@@ -112,7 +114,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
   const cases = [['background', 'OPF background slides.0', 'slides.0.design.background', overlay => ({ design: { background: { type: 'image', src: square, alt: 'Square', ...overlay } } })],
     ...['left', 'right', 'top', 'bottom'].map(edge => [edge, 'OPF image 1', 'slides.0.blocks.0.image', overlay => ({ blocks: [{ type: 'image', image: square, placement: { edge }, ...overlay }, { type: 'text', text: 'Body' }] })])];
   for (const [position, pictureName, picturePath, slideOf] of cases) for (const overlay of [false, true]) {
-    const deck = { design: { watermark: { src: wide, opacity: 0.2 } }, slides: [{ title: 'Layered', ...slideOf(overlay ? { overlay: { color: '#000000', opacity: 0.3 } } : {}) }] };
+    const deck = { design: { watermark: { src: wide, opacity: 0.2 } }, slides: [{ subtitle: 'Second quarter', title: 'Layered', ...slideOf(overlay ? { overlay: { color: '#000000', opacity: 0.3 } } : {}) }] };
     const svg = toSvg(deck, { trace: true })[0];
     const at = path => svg.indexOf(`data-opf-path="${path}"`);
     const previewOrder = [[pictureName, picturePath], ['OPF watermark', 'design.watermark'], ['OPF heading slides.0.title line 0', 'slides.0.title']]
@@ -134,23 +136,23 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
 {
   // FA-13: a watermark names exactly one of src and text, so an opacity-only object (or one with both) is rejected by the schema.
   for (const deck of [
-    { design: { watermark: { opacity: 0.2 } }, slides: [{ title: 'A', text: 'b' }] },
-    { slides: [{ title: 'A', text: 'b', design: { watermark: { opacity: 0.2 } } }] },
-    { design: { watermark: { src: 'asset:a', text: 'DRAFT', opacity: 0.2 } }, slides: [{ title: 'A', text: 'b' }] }
+    { design: { watermark: { opacity: 0.2 } }, slides: [{ subtitle: 'Second quarter', title: 'A', text: 'b' }] },
+    { slides: [{ subtitle: 'Second quarter', title: 'A', text: 'b', design: { watermark: { opacity: 0.2 } } }] },
+    { design: { watermark: { src: 'asset:a', text: 'DRAFT', opacity: 0.2 } }, slides: [{ subtitle: 'Second quarter', title: 'A', text: 'b' }] }
   ]) {
     await assert.rejects(exported(deck), error => error.code === 'invalid-opf');
   }
-  const deck = { design: { watermark: 'https://example.com/watermark.png' }, slides: [{ title: 'A', text: 'b' }, { title: 'B', text: 'c', design: { watermark: 'asset:missing' } }] };
+  const deck = { design: { watermark: 'https://example.com/watermark.png' }, slides: [{ subtitle: 'Second quarter', title: 'A', text: 'b' }, { subtitle: 'Second quarter', title: 'B', text: 'c', design: { watermark: 'asset:missing' } }] };
   const diagnostics = [];
   await toPptx(deck, { onDiagnostic: d => diagnostics.push(d) });
   assert.deepEqual(diagnostics.filter(d => d.code === 'unresolved-asset' && /watermark/.test(d.path)).map(d => d.path), ['design.watermark', 'slides.1.design.watermark'], 'An unresolved image reports where it was dropped');
-  await assert.rejects(toPptx({ design: { watermark: 'https://example.com/watermark.png' }, slides: [{ title: 'A' }] }, { strictAssets: true }), /Remote image assets/, 'strictAssets rejects rather than dropping');
+  await assert.rejects(toPptx({ design: { watermark: 'https://example.com/watermark.png' }, slides: [{ subtitle: 'Second quarter', title: 'A' }] }, { strictAssets: true }), /Remote image assets/, 'strictAssets rejects rather than dropping');
   checked++;
 }
 
 // 5. Round trip: an unchanged watermark imports back as design.watermark.
 {
-  const deck = { design: { watermark: { src: wide, opacity: 0.15 } }, slides: [{ title: 'One', text: 'a' }, { title: 'Two', text: 'b' }, { title: 'Three', text: 'c' }] };
+  const deck = { design: { watermark: { src: wide, opacity: 0.15 } }, slides: [{ subtitle: 'Second quarter', title: 'One', text: 'a' }, { subtitle: 'Second quarter', title: 'Two', text: 'b' }, { subtitle: 'Second quarter', title: 'Three', text: 'c' }] };
   const { bytes, entries } = await exported(deck);
   const diagnostics = [];
   const imported = await fromPptx(bytes, { onDiagnostic: d => diagnostics.push(d) });
@@ -193,7 +195,7 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
 
 // 6. Package integrity: tag parts are typed and related.
 {
-  const { entries } = await exported({ design: { watermark: { src: wide, opacity: 0.1 } }, slides: [{ title: 'A' }, { title: 'B' }] });
+  const { entries } = await exported({ design: { watermark: { src: wide, opacity: 0.1 } }, slides: [{ subtitle: 'Second quarter', title: 'A' }, { subtitle: 'Second quarter', title: 'B' }] });
   const types = decode(entries['[Content_Types].xml']);
   for (const path of Object.keys(entries).filter(path => /^ppt\/tags\/opfWatermark\d+\.xml$/.test(path))) assert.ok(types.includes(`PartName="/${path}"`));
   assert.equal(Object.keys(entries).filter(path => /^ppt\/tags\/opfWatermark\d+\.xml$/.test(path)).length, 2);
@@ -206,10 +208,10 @@ for (const [label, [width, height]] of Object.entries(dimensions)) {
 // SVG picture). test/svg-image.mjs covers SVG pictures in depth.
 {
   const svg = 'data:image/svg+xml;base64,' + Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="#c00"/></svg>').toString('base64');
-  const opaque = await exported({ design: { watermark: { src: svg, opacity: 1 } }, slides: [{ title: 'A' }] });
+  const opaque = await exported({ design: { watermark: { src: svg, opacity: 1 } }, slides: [{ subtitle: 'Second quarter', title: 'A' }] });
   assert.match(opaque.xml[0], /<asvg:svgBlip /, 'an opaque SVG watermark is a native SVG picture');
   assert.deepEqual(opaque.diagnostics, []);
-  const faint = await exported({ design: { watermark: { src: svg, opacity: 0.1 } }, slides: [{ title: 'A' }] });
+  const faint = await exported({ design: { watermark: { src: svg, opacity: 0.1 } }, slides: [{ subtitle: 'Second quarter', title: 'A' }] });
   assert.match(faint.xml[0], /<a:blip r:embed="rId\d+"><a:alphaModFix amt="10000"\/><a:extLst><a:ext uri="\{96DAC541[^>]*><asvg:svgBlip /, 'a translucent SVG watermark: the effect, then the SVG extension, in the blip');
   assert.deepEqual(faint.diagnostics, []);
   checked++;

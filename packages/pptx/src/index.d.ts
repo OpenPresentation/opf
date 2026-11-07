@@ -50,6 +50,12 @@ export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"
  * `reason: "diagram-unavailable"`: a diagram whose source cannot be drawn (core reports why with `unresolved-content`) exports the preview's
  * unavailable-diagram placeholder, the dashed shape `OPF diagram placeholder N` that reads "Diagram unavailable".
  */
+/**
+ * SH-07, `diagrams: "shapes"`: a diagram that stays one SVG picture (info). `family` is its diagram type (pele's name, such as
+ * `flowchart`): a family not in core's DIAGRAM_SHAPE_FAMILIES (its native shapes have not passed the comparison with the preview in
+ * PowerPoint), or a drawing with a part that has no native form (the message names it).
+ */
+export interface DiagramShapesUnavailableDiagnostic { code: "diagram-shapes-unavailable"; path: string; family: string; message: string }
 export interface ContentPlaceholderDiagnostic { code: "content-placeholder"; path: string; message: string; reason: "table-has-no-rows" | "unsupported-payload" | "diagram-unavailable" }
 /**
  * An image that cannot be exported as a picture: the preview's placeholder was exported instead (or no watermark, or the background colour).
@@ -110,11 +116,12 @@ export interface VariableExampleUsedDiagnostic {
 export interface ToPptxOptions {
   /**
    * How a footer or header text with words around `{{slide.number}}` (`{{slide.number}} / {{deck.slideCount}}`, `Page {{slide.number}}`)
-   * writes its number. "static" (default) writes the number as fixed text in an ordinary shape, so PowerPoint and Keynote both show
-   * `2 / 6`; the total is fixed either way (PowerPoint has no slide-count field). "live" keeps PowerPoint's slide-number field (in the
-   * Slide Number placeholder for the first footer one) with the words as fixed runs: Keynote replaces the whole paragraph that holds a
-   * slide-number field with the number alone, so it shows only `2`. A text that is only `{{slide.number}}` keeps its live field and
-   * placeholder in both modes. A fixed number does not follow slides moved or deleted in PowerPoint; the authored text returns on import (RR-91).
+   * writes its number. "live" (default since RR-102) keeps PowerPoint's slide-number field with the words as fixed runs, in the Slide
+   * Number placeholder for the first footer one, so Insert > Header & Footer shows Slide number checked and PowerPoint renumbers it.
+   * "static" writes the number as fixed text in an ordinary shape, for Keynote targets: Keynote replaces the whole paragraph that holds a
+   * slide-number field with the number alone, so a live `{{slide.number}} / 6` shows only `2` there (RR-91). The total is fixed either
+   * way (PowerPoint has no slide-count field). A text that is only `{{slide.number}}` keeps its live field and placeholder in both modes.
+   * A fixed number does not follow slides moved or deleted in PowerPoint; the authored text returns on import.
    */
   slideNumberFields?: "static" | "live";
   /**
@@ -129,6 +136,22 @@ export interface ToPptxOptions {
    * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied (Keynote 15.1.1 was checked for Title/Body controls and reflow, PowerPoint was not).
    */
   bodyText?: "measured" | "native";
+  /**
+   * SH-07: how diagrams are written. "shapes" (default) writes a diagram of a family in core's DIAGRAM_SHAPE_FAMILIES as one group of
+   * native shapes, connectors and text built from the preview's own drawing (pele's laid-out geometry), with `OPF_DIAGRAM_V1` on the group
+   * so import reads the Mermaid source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
+   * form) stays a picture and reports `diagram-shapes-unavailable` (info). "picture" writes every diagram as one native SVG picture over
+   * its PNG fallback, the default of earlier releases.
+   */
+  diagrams?: "picture" | "shapes";
+  /**
+   * SH-09: how a pyramid or matrix (a layout region's `arrangement`) is written. "live" (the default) writes live SmartArt (Basic
+   * Pyramid, Basic Matrix) where PowerPoint lays it out exactly as the preview draws it, and native shapes with an info
+   * `smartart-unavailable` diagnostic (its `reason`) where it would not; "shapes" writes native shapes always. SH-16: each live SmartArt is an
+   * `mc:AlternateContent` whose fallback is OPF's preview of the frame (an SVG picture over a PNG), which apps without SmartArt show; it is
+   * drawn with opf-render (an optional peer) and `svgRasterizer` (in a browser), and without them the arrangement is native shapes.
+   */
+  smartArt?: "live" | "shapes";
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
   /**
@@ -213,7 +236,7 @@ export interface ToPptxOptions {
    */
   pictureLuminance?: (src: string) => PictureLuminance | undefined;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | ExportLossyDiagnostic | TypefaceReplacedDiagnostic | VariableExampleUsedDiagnostic | DiagramShapesUnavailableDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;
@@ -266,7 +289,7 @@ export interface ToPptxOptions {
 }
 
 export interface FromPptxOptions {
-  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms. Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a stored slide layout reference that resolves neither in the stored document catalogs, nor in the slide's own stored record, nor in `catalogs` reports `unresolved-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id` (docs/document-roundtrip.md). */
+  /** Reports native details that import cannot preserve, including code provenance fallback/reflow and grouped text transforms, and the shape properties OPF has no form for (`shape-property-dropped`, with `property` and `shape`: 3-D, preset shadows, fill overlay, wrap, columns and autofit, alternative text titles, hover links, locks, black-and-white mode, custom data; `shape-not-imported` for a filled shape across the whole slide). Table paths identify native frame and row/cell indexes (including headers). Stored catalog references that no longer match the package report `design-reference-changed` / `layout-reference-changed` at the reference path; a stored slide layout reference that resolves neither in the stored document catalogs, nor in the slide's own stored record, nor in `catalogs` reports `unresolved-reference`; a slide whose imported blocks no longer fit the stored content structure reports `content-structure-changed` at `slides.N`, a block id repeated by a duplicated slide `duplicate-block-id` (docs/document-roundtrip.md). */
   onDiagnostic?: (diagnostic: {code: string; path: string; message: string}) => void;
   fallbackName?: string;
   schema?: string;

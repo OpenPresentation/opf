@@ -28,13 +28,15 @@ const first = slide(1);
 const chips = shapes(first, 'chip"'), glyphs = shapes(first, 'glyph 0"');
 assert.equal(chips.length, 2);
 assert.equal(glyphs.length, 2);
-for (const chip of chips) assert.match(chip, /<a:prstGeom prst="ellipse">[\s\S]*<a:solidFill><a:schemeClr val="accent1"><a:lumMod val="20000"\/><a:lumOff val="80000"\/><\/a:schemeClr><\/a:solidFill>/, 'the chip is a tint of accent1');
-for (const glyph of glyphs) {
-  assert.match(glyph, /<a:custGeom>[\s\S]*<a:moveTo>[\s\S]*<a:cubicBezTo>/, 'the glyph is a native custom geometry with curves');
-  assert.match(glyph, /<a:noFill\/><a:ln w="\d+" cap="rnd"><a:solidFill><a:schemeClr val="accent1"\/><\/a:solidFill>[\s\S]*<a:round\/><\/a:ln>/, 'a stroke icon is a round-capped line in accent1, unfilled');
-}
-checks += 4 + glyphs.length;
-assert.equal(shapes(slide(2), 'chip"').length, 2, 'each metric has a chip');
+// LH-165: a short list with icons draws as icon cards (native shapes of the steps layer), whose chips are solid accent1.
+assert.match(first, /name="OPF steps [^"]* chip 0"/, 'each card is a native shape');
+for (const chip of chips) assert.match(chip, /<a:prstGeom prst="ellipse">[\s\S]*<a:solidFill><a:schemeClr val="accent1"\/><\/a:solidFill>/, 'a card chip is solid accent1');
+for (const glyph of glyphs) assert.match(glyph, /<a:custGeom>[\s\S]*<a:moveTo>[\s\S]*<a:cubicBezTo>/, 'the glyph is a native custom geometry with curves');
+const metricChips = shapes(slide(2), 'chip"'), metricGlyphs = shapes(slide(2), 'glyph 0"');
+assert.equal(metricChips.length, 2, 'each metric has a chip');
+for (const chip of metricChips) assert.match(chip, /<a:prstGeom prst="ellipse">[\s\S]*<a:solidFill><a:schemeClr val="accent1"><a:lumMod val="20000"\/><a:lumOff val="80000"\/><\/a:schemeClr><\/a:solidFill>/, 'a metric chip is a tint of accent1');
+for (const glyph of metricGlyphs) assert.match(glyph, /<a:noFill\/><a:ln w="\d+" cap="rnd"><a:solidFill><a:schemeClr val="accent1"\/><\/a:solidFill>[\s\S]*<a:round\/><\/a:ln>/, 'a stroke icon is a round-capped line in accent1, unfilled');
+checks += 6 + glyphs.length + metricGlyphs.length;
 const third = slide(3);
 assert.equal(shapes(third, 'picture"').length, 1, 'the multicolor icon is a picture');
 assert.ok(Object.keys(files).some(path => /^ppt\/media\/svg-3-\d+\.svg$/.test(path)), 'with its SVG part');

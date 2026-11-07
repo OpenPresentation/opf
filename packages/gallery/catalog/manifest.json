@@ -20,10 +20,10 @@
     "chart-types": {
       "mode": "mirror",
       "records": 27,
-      "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c",
+      "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09",
       "gallery": {
         "records": 27,
-        "contentSha256": "9ceb0d52aa1d09c03197e292f2d849bbc348c7a1280e020076f37166c570640c"
+        "contentSha256": "49b76df8acb8d028166fef6d5f15c65d1a956bd2f36dfa165da8a289afbfbc09"
       }
     },
     "color-schemes": {
@@ -64,11 +64,11 @@
     },
     "layouts": {
       "mode": "mirror",
-      "records": 30,
-      "contentSha256": "c0755e2501f47cc278d15ec012f2291f205cb1fcd51b494d14d9b5655921b3f8",
+      "records": 32,
+      "contentSha256": "4a936aa096161ba16b2deb4c923c32e4c8b56cc9356349a4b78473a56f31a664",
       "gallery": {
-        "records": 30,
-        "contentSha256": "c0755e2501f47cc278d15ec012f2291f205cb1fcd51b494d14d9b5655921b3f8"
+        "records": 32,
+        "contentSha256": "4a936aa096161ba16b2deb4c923c32e4c8b56cc9356349a4b78473a56f31a664"
       }
     },
     "narratives": {

@@ -81,9 +81,10 @@ await test('old or unmarked flattened dates stay literal', async () => {
   assert.deepEqual(footer((await read(zipSync(old))).document).center, {date: 'September 22, 2026'});
 });
 for (const [label, mutate, expected] of [
-  ['edited parseable date', xml => xml.replace('September ', 'October '), 'October 22, 2026'],
-  ['typed words', xml => xml.replace('September ', 'For review '), 'For review 22, 2026'],
-  ['cleared date', xml => xml.replace('September ', '').replace('22, 2026', ''), ''],
+  // RR-102: the master's Date placeholder caches the date in the deck's pattern too, so every copy of the words is edited.
+  ['edited parseable date', xml => xml.replaceAll('September ', 'October '), 'October 22, 2026'],
+  ['typed words', xml => xml.replaceAll('September ', 'For review '), 'For review 22, 2026'],
+  ['cleared date', xml => xml.replaceAll('September ', '').replaceAll('22, 2026', ''), ''],
 ]) await test(`${label} stays current literal text through reexport`, async () => {
   const {document, issues} = await read(zipSync(editText(exported.entries, mutate)));
   assert.deepEqual(footer(document).center, {date: expected});

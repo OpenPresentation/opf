@@ -17,7 +17,7 @@ const TITLES = {
   'image-beside': 'Explain what the audience should notice', image: 'Give the visual room to speak',
   gallery: 'Compare three visual directions', hero: 'One team. One outcome.',
   code: 'Keep the implementation easy to inspect', scorecard: 'Track performance against a target',
-  logos: 'Recognize the partners',
+  logos: 'Recognize the partners', pyramid: 'What the pilot builds on', matrix: 'Four ways to run the pilot',
 };
 const SUBTITLES = {
   cover: 'A six-week pilot with two teams', section: 'Part 2: the evidence',
@@ -81,6 +81,8 @@ export function editorialDeck(id, record) {
     if (id === 'faq') payload = labelled(QUESTIONS[index % 3]);
     else if (id === 'process') payload = { ...labelled(STEPS[index % 3], { start: index % 3 + 1 }), numbering: 'arabic' };
     else if (id === 'team') payload = labelled(PEOPLE[index % 3]);
+    else if (id === 'pyramid') payload = { items: ['Goal', 'Evidence', 'Pilot teams', 'Shared baseline'] };
+    else if (id === 'matrix') payload = { items: ['Small, fast', 'Small, slow', 'Broad, fast', 'Broad, slow'] };
     else if (id === 'agenda' || id === 'agenda-split') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
     else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };

@@ -251,6 +251,12 @@ try {
     await page.mouse.dblclick(inside.x, inside.y);
     const word = await state();
     assert.equal(word.value.slice(word.start, word.end).trim(), 'four', 'a double click selects the word');
+    // LH-181: the CRLF text's first line is a run-in heading (LH-63), drawn bold as runs; a double click on it selects its word too.
+    assert.equal(await target('slides.5.text').locator('text').first().getAttribute('font-weight'), '700', 'the first line is drawn as a bold run-in heading');
+    const heading = await point('slides.5.text', 'line one', 6, 'left');
+    await page.mouse.dblclick(heading.x, heading.y);
+    const headingWord = await state();
+    assert.equal(headingWord.value.slice(headingWord.start, headingWord.end).trim(), 'one', 'a double click on the run-in heading selects its word');
     await page.mouse.click(inside.x, inside.y, {clickCount: 3});
     const paragraph = await state();
     assert.equal(paragraph.value.slice(paragraph.start, paragraph.end).replace(/\n$/, ''), 'line four  spaced', 'a triple click selects the paragraph');

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "pyramid",
+  "name": "Pyramid",
+  "summary": "Levels that build on each other, as a pyramid, the first at the top.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "levels",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "pyramid"
+    }
+  ],
+  "description": "Show a hierarchy of 1 to 8 levels, from the narrow top (the peak, the few, the goal) to the broad base (the foundation, the many). Write one short list entry per level, the top level first.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/pyramid.svg"
+  }
+}

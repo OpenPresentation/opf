@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [opf, render, pptx]
+---
+LH-63, LH-78 (output-changing): a plain `text` whose first line is 40 characters or fewer and ends where the author broke the line draws that line as a bold run-in heading over its body, and a text that opens with a short "Label:" draws the label in bold, as Claude Design sets the options of a comparison and a recommendation (`runInHeading`, `ComposedItem.runs`; the guarded rule `run-in` keeps the bold only when no text on the slide reads smaller than as written, and the document is unchanged). A quote on a card draws a decorative quotation mark at the start edge of the card's top, in the primary color, in the card's own padding (`QuoteLayout.mark`, `markQuote`): it moves nothing and takes no size from the quote, and the quote's own opening mark is not drawn where the glyph is (the closing mark stays; the document text is unchanged), left to right and right to left. The preview draws both, the PowerPoint export writes the heading's bold run and the mark as a native text box tagged into the quote's group, and import consumes the mark and restores the hidden opening mark from the quote's provenance.

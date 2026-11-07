@@ -80,18 +80,20 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.equal(new Set(cells.map((cell) => cell.text.fontSize)).size, 1, 'one size across the grid');
     assert.ok(cells[0].text.fontSize < grown.text.fontSize + 1e-6, 'no sibling reads louder than a lone message');
     const rows = [...new Set(cells.map((cell) => Math.round(cell.box.y)))].sort((a, b) => a - b);
-    assert.ok(rows.length === 2 && rows[1] - (rows[0] + cells[0].box.height) < 0.5 * grid.contentBox.height, 'the rows hug');
+    // LH-162: where tiles read as well (here the Arabic grid), they replace the hugging rows, one tile per text.
+    if (grid.steps?.some((step) => step.form === 'tiles')) assert.equal(grid.steps.find((step) => step.form === 'tiles').chips.length, cells.length, 'one tile per text');
+    else assert.ok(rows.length === 2 && rows[1] - (rows[0] + cells[0].box.height) < 0.5 * grid.contentBox.height, 'the rows hug');
   });
 
   test(`LH-132 with LH-74 and LH-14 (${direction}): a team's pictures are portraits, and its group icons never cost the text`, () => {
-    const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'circle' }, { items: [{ text: name, description: text.role }] }] });
+    const person = (name, index, extra = {}) => ({ region: 'people', composition: { mode: 'column' }, ...extra, blocks: [{ image: { src: face, alt: name }, shape: 'ellipse' }, { items: [{ text: name, description: text.role }] }] });
     const team = (extra, first) => compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.map((name, index) => index === 0 && first ? first(name) : person(name, index, extra)) }, language));
     const portraits = team({});
-    assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'rounded'), 'portraits on the person cards');
+    assert.ok(portraits.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect'), 'portraits on the person cards');
     // An authored rectangle keeps its shape and focus: LH-74 does not make it fill a card.
-    const own = team({}, (name) => ({ ...person(name, 0), blocks: [{ image: { src: face, alt: name }, shape: 'rectangle', focus: { x: 0.2, y: 0.1 } }, person(name, 0).blocks[1]] }));
+    const own = team({}, (name) => ({ ...person(name, 0), blocks: [{ image: { src: face, alt: name }, shape: 'rect', focus: { x: 0.2, y: 0.1 } }, person(name, 0).blocks[1]] }));
     const first = own.items.find((item) => item.image);
-    assert.equal(first.image.shape.kind, 'rectangle');
+    assert.equal(first.image.shape.kind, 'rect');
     assert.deepEqual(first.image.focus, { x: 0.2, y: 0.1 });
     // Group icons on people: the portraits stay, the chips are reported, no text is smaller than without the icons.
     const iconned = team({ icon: 'brand:star' });
@@ -100,7 +102,7 @@ for (const [language, text] of Object.entries(TEXT)) {
     assert.equal(iconned.diagnostics.filter((entry) => entry.code === 'icon-dropped').length, text.names.length);
     // LH-74 still fills a card with a lone picture that is no person.
     const pictures = compose(deckOf({ layout: 'team', title: text.label, blocks: text.names.slice(0, 3).map((name) => ({ region: 'people', image: { src: face, alt: name }, fit: 'cover' })) }, language));
-    assert.ok(pictures.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'rounded' && !item.frameBox));
+    assert.ok(pictures.items.filter((item) => item.image).every((item) => item.image.shape.kind === 'roundRect' && !item.frameBox));
   });
 
   test(`LH-69 with LH-14 (${direction}): a lone label with an icon keeps its display word, the rule starts at the word`, () => {

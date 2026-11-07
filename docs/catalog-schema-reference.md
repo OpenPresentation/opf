@@ -97,7 +97,7 @@ OPF documents usually reference these records with string ids such as `design.th
 - Schema id: `https://openpresentation.org/schema/opf-chart-type/v1`
 - Type: `object`
 - Required fields: `$schema`, `id`, `name`, `mappings`
-- Purpose: Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that Aspose.Slides officially supports (see mappings.renderers["aspose-slides"].chartType), plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/galler...
+- Purpose: Schema for chart-type records: display metadata for chart pickers (name, group, expected series, complexity) and the Open XML mapping a picker can describe. One record per chart type that OPF supports natively in its preview and PPTX export, plus the column-and-line combination 'combo'. A document's chart.type is an engine vocabulary validated directly; engines never look a chart-type record up. pptx.gallery publishes these records and @openpresentation/gallery ships them as catalogDisplay.ch...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -124,7 +124,7 @@ OPF documents usually reference these records with string ids such as `design.th
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `openxml` | yes | `ref:OpenXmlChartMapping` | Canonical mapping to Open XML chart structures. |
-| `renderers` | no | `object` | Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records the matching Aspose.Slides ChartType enumeration member under the "aspose-slides" key, e.... |
+| `renderers` | no | `object` | Optional renderer-specific mappings. Keys are renderer ids; values are intentionally opaque to OPF. The bundled catalog records carry none. |
 
 #### OpenXmlChartMapping
 
@@ -372,7 +372,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words... |
 | `size` | no | `ref:RegionSize` |  |
-| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A group is also accepted where every one of its leaf kinds is. Omitted: every body content kind and 'group'. |
+| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| diagram \| shape \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A region that takes 'image' also takes a shape block (SH-02). A group is also accepted where every one of its lea... |
 | `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
 | `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it (blocks no region had room for join it, up to 6, and it flows as 'auto'); 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
@@ -380,6 +380,7 @@ _No named properties._
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'; a list of 6 o... |
 | `metrics` | no | `enum:stack \| tile` | How a metric block in the region is laid out. 'stack' (default): value, unit, label and the rest as one block at the region's anchor and content alignment. 'tile': the metric fills its cell (its card when the layout d... |
 | `sequence` | no | `enum:steps \| numbered` | The region lists the steps of a sequence (LH-07). 'steps': two or more text or list blocks are the steps, each under a numbered badge (an accent circle with its numeral; a one-entry numbered list gives the badge its n... |
+| `arrangement` | no | `enum:pyramid \| matrix` | SH-09: the region draws its lone list of one level as a diagram (docs/smartart.md), in the first design that holds every entry at one size, the list's role size or larger (up to 1.5 times), never smaller: PowerPoint's... |
 | `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown w... |
 | `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 

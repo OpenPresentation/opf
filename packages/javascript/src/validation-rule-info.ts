@@ -51,7 +51,13 @@ const formatRules: ValidationRuleInfo[] = [
 	rule('cite-unknown-reference', 'format', 'error', 'A citation names a reference that does not exist.', 'A cited id with no entry in `references` has nothing to show in the footnote area.', { standard: SCHEMA }),
 	rule('cite-unsupported-location', 'format', 'error', 'A citation or footnote sits where no engine draws it.', '`cite` and `footnote` apply to runs in text, bullets and list items; table cells, captions, and reference and footnote texts have no marker.', { standard: SCHEMA }),
 	rule('caption-unsupported-payload', 'format', 'error', 'A caption is on a payload that cannot carry one.', 'A caption belongs to exactly one image, chart, table or video; a group, text or code block has no place to draw it.', { standard: SCHEMA }),
-	rule('image-option-unsupported-payload', 'format', 'error', 'An image option is on a payload that is not an image.', '`fit`, `focus`, the image treatments (`shape`, `cornerRadius`, `border`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to.', { standard: SCHEMA }),
+	rule('image-option-unsupported-payload', 'format', 'error', 'An image option is on a payload that is not an image.', '`fit`, `focus`, the image treatments (`shape`, `adjust`, `stroke`, `opacity`, `recolor`, `overlay`, `aspectRatio`), `placement` and `portrait` describe how a picture is drawn; a group, text or chart block has no picture for them to apply to. A shape block takes `shape`, `adjust`, `stroke`, `opacity` and `aspectRatio` too.', { standard: SCHEMA }),
+	rule('shape-option-unsupported-payload', 'format', 'error', 'A shape option is on a payload that is not a shape block.', '`fill`, `style`, `rotate`, `flip`, `anchor`, `padding`, `textDirection`, `alt`, `decorative`, `hidden`, `link` and the effects (`shadow`, `innerShadow`, `glow`, `softEdge`, `reflection`, `blur`) describe how a shape block is drawn; a text, chart or image block, or a group, has no shape for them to apply to.', { standard: SCHEMA }),
+	rule('shape-adjust-unknown', 'format', 'warning', 'An adjust value names a guide the preset does not have.', 'Each preset has its own adjust handles (DrawingML\'s avLst guides: `adj`, `adj1`, `adj2`, ...); a name the preset does not have changes nothing, and a custom `path` has none. The preset\'s default is drawn.', { standard: 'ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml' }),
+	rule('shape-adjust-range', 'format', 'warning', 'An adjust value is outside the range of the preset\'s handle.', 'An adjust value outside the range its handle allows is pinned by the preset\'s own formulas, so the shape is not drawn as the value says; core draws the preset\'s default instead and both engines agree.', { standard: 'ECMA-376 Part 1, 20.1.10.56 (ST_ShapeType) and presetShapeDefinitions.xml', approximations: 'Ranges are checked at a square shape of the default size; a handle whose range depends on the shape\'s proportions is checked at those proportions when the shape is drawn.' }),
+	rule('shape-link-hidden', 'format', 'warning', 'A hidden shape carries a link.', 'A hidden shape (`hidden: true`) is not drawn, so its `link` can never be clicked in a slide show.', { standard: SCHEMA }),
+	rule('shape-anchor-missing', 'format', 'error', 'An overlay shape is attached to a block that is not on the slide.', 'An overlay shape placed with `at` sits against a composed block of its slide, named by the block\'s `id`. With no block of that id on the slide there is nowhere to put it, so it is not drawn.', { standard: SCHEMA }),
+	rule('connector-end-missing', 'format', 'error', 'A connector end names no block or overlay shape on the slide.', 'A connector joins two shapes of its slide, each named by the `id` of a block or an overlay shape. With an end that names nothing (or names a connector) there is nothing to glue it to, so it is not drawn.', { standard: SCHEMA }),
 	rule('image-placement-invalid', 'format', 'error', 'An image placement cannot be honoured.', 'A placed image bleeds to a slide edge and the rest of the slide composes beside it. Only a top-level block (slides.N.blocks.I) can do that, and a slide edge holds one placed image; a block in a group or a promoted region, or a second block on the same edge, has nowhere to go.', { standard: SCHEMA }),
 	rule('layout-placeholder-group', 'format', 'error', 'A layout record\'s placeholder group breaks a nesting rule.', 'A placeholder group arranges body regions inside one cell of its layout record. Groups nest at most three levels inside a record, and a group holds body regions and groups only: the headings (title, subtitle, tag) stay at the record\'s top level, where the engine places them. Composition cannot use a record that breaks either rule.', { standard: SCHEMA }),
 	rule('dataset-unknown', 'format', 'error', 'A chart or table names a dataset that does not exist.', 'The data cannot be drawn without the dataset it refers to.', { standard: SCHEMA }),
@@ -280,7 +286,7 @@ export const chartColorRule = rule(
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, the last beside the first) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide color scheme (accent1 to accent6, then their tints), adjusted for the slide background and softened like the engines draw them, LH-105) in series order: series i takes color i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Neighbouring series (and neighbouring slices, on a pie or doughnut the last beside the first, which the engines move off the first by at most 20 L* or, where that is not enough, separate with a surface-colored slice border that this rule accepts, LH-161) must also differ by at least 11 in CIE L* (the lightness step the engines keep when they adjust a palette), since lightness is the cue left without hue (LH-35); a pair under it is reported as a lightness pair. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 export const chartAltRule = rule(
@@ -387,6 +393,14 @@ export const iconDroppedRule = rule(
 	'warning',
 	'An icon is not drawn.',
 	'An icon is decoration: it never costs text its size. When the chips would set any block smaller than the slide sets it without them, the slide is drawn without its icons, and an icon on something icons do not mark (a nested or numbered list entry) is not drawn either. The text is always drawn.',
+	{ cost: 'composition' },
+);
+export const arrangementAdaptedRule = rule(
+	'arrangement-adapted',
+	'layout',
+	'info',
+	'A pyramid or matrix is drawn another way.',
+	"A `pyramid` or `matrix` region draws a list of one level of short entries as that diagram (docs/smartart.md). A matrix needs exactly four entries for its quadrants; with another count its entries are drawn as a grid of cards. A list the arrangement does not draw (nested entries, descriptions, icons, numbering, too many entries), or whose entries fit neither PowerPoint's design nor OPF's at the list's size, is drawn as a list.",
 	{ cost: 'composition' },
 );
 export const unplacedRule = rule(
@@ -605,6 +619,7 @@ const implementedRules: ValidationRuleInfo[] = [
 	regionFullRule,
 	unplacedRule,
 	iconDroppedRule,
+	arrangementAdaptedRule,
 	furnitureWrapsRule,
 	outsideRule,
 	resolutionRule,

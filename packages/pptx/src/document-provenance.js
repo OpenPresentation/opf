@@ -3,7 +3,9 @@ import {XMLParser} from 'fast-xml-parser';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
 import {contentTopology, rebuildContent, validateTopology, listLineBreaks, validateListBreaks, validateListRuns, listLineRoles, validateListRoles, MAX_LIST_PATHS} from './content-topology.js';
 import {runColorRecord, validateRunColors} from './run-colors.js';
+import {overlayRecord, validateOverlayRecord} from './shape-restore.js';
 import {validateCatalogRecord} from '@openpresentation/opf';
+import {SMART_ART_URI} from './smart-art.js';
 import {parseReference, resolveReference, resolveSocialProfile} from '@openpresentation/opf/composition';
 
 // FF-32: document and slide references survive a PPTX round trip.
@@ -292,11 +294,27 @@ function structure(tree) {
   const kinds = {};
   const add = (kind, value) => (kinds[kind] ??= []).push(value);
   for (const node of array(tree?.['p:sp'])) add('sp', box(node?.['p:spPr']?.['a:xfrm']));
-  for (const node of array(tree?.['p:pic'])) add('pic', box(node?.['p:spPr']?.['a:xfrm']));
+  // SH-16: a SmartArt is one object whichever form holds it: its mc:AlternateContent (as exported), its bare frame (PowerPoint saves the
+  // mc:Choice alone) or its fallback picture (an app without SmartArt saves the mc:Fallback alone). The picture is the frame grown by its
+  // bleed on every side, so the object is recorded by its center, which the two share.
+  const isSmartArt = frame => frame?.['a:graphic']?.['a:graphicData']?.uri === SMART_ART_URI;
+  const smartArtFrame = node => array(node?.['mc:Choice']).map(choice => choice?.['p:graphicFrame']).find(isSmartArt);
+  // Twice the center (off + ext / 2), in whole EMU.
+  const center = xfrm => object(xfrm) ? `${2 * Number(xfrm['a:off']?.x) + Number(xfrm['a:ext']?.cx)},${2 * Number(xfrm['a:off']?.y) + Number(xfrm['a:ext']?.cy)}` : 'inherit';
+  const alternates = array(tree?.['mc:AlternateContent']), wrapped = alternates.map(smartArtFrame).filter(Boolean);
+  for (const node of array(tree?.['p:pic'])) {
+    if (/^OPF smartart /.test(String(node?.['p:nvPicPr']?.['p:cNvPr']?.name ?? ''))) add('smartArt', center(node?.['p:spPr']?.['a:xfrm']));
+    else add('pic', box(node?.['p:spPr']?.['a:xfrm']));
+  }
   for (const node of array(tree?.['p:cxnSp'])) add('cxnSp', box(node?.['p:spPr']?.['a:xfrm']));
-  for (const node of array(tree?.['p:graphicFrame'])) add('graphicFrame', box(node?.['p:xfrm'], true));
+  for (const node of array(tree?.['p:graphicFrame'])) {
+    if (isSmartArt(node)) add('smartArt', center(node?.['p:xfrm']));
+    else add('graphicFrame', box(node?.['p:xfrm'], true));
+  }
+  for (const node of wrapped) add('smartArt', center(node?.['p:xfrm']));
   for (const node of array(tree?.['p:grpSp'])) add('grpSp', `${box(node?.['p:grpSpPr']?.['a:xfrm'])}[${structure(node)}]`);
-  for (const kind of ['p:contentPart', 'mc:AlternateContent']) if (tree?.[kind] !== undefined) add(kind, String(array(tree[kind]).length));
+  if (tree?.['p:contentPart'] !== undefined) add('p:contentPart', String(array(tree['p:contentPart']).length));
+  if (alternates.length > wrapped.length) add('mc:AlternateContent', String(alternates.length - wrapped.length));
   // Stacking order is not structure; object kinds, positions and sizes are.
   return canonical(Object.fromEntries(Object.entries(kinds).map(([kind, values]) => [kind, values.sort()])));
 }
@@ -558,6 +576,16 @@ export function recordContentTopology(provenance, slide, index, items) {
 }
 
 /**
+ * SH-05: record the ids and anchors of slide `index`'s overlay entries (`slide.shapes`, as authored), which their native shapes cannot carry
+ * (`full` mode only; see overlayRecord).
+ */
+export function recordOverlays(provenance, slide, index) {
+  if (!provenance || provenance.mode !== 'full' || !provenance.slides[index]) return;
+  const overlays = overlayRecord(slide);
+  if (overlays) provenance.slides[index].overlays = overlays;
+}
+
+/**
  * opf-pptx#212: record the look the exporter writes on every run of list `path` on slide `index` where the source states none
  * ({text, description?}, see validateListRuns), `full` mode only. Import removes a run value still equal to it.
  */
@@ -718,7 +746,7 @@ function storable(entries, provenance) {
     const result = {v: 1, slide: index};
     if (record.omittedContent) omit(`slides.${index}.content`, record.omittedContent);
     for (const [path, reason] of record.omittedLists ?? []) omit(path, reason);
-    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists', 'listRuns', 'listRoles']) {
+    for (const key of ['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'lists', 'listRuns', 'listRoles']) {
       if (record[key] === undefined) continue;
       const value = prepare(`slides.${index}.${key}`, record[key]);
       if (value !== undefined) result[key] = value;
@@ -755,7 +783,7 @@ function storable(entries, provenance) {
   }
   for (const [index, record] of slides.entries()) {
     while (tagChars(record) > budget) {
-      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'lists', 'listRuns', 'listRoles', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
+      const candidates = [...['id', 'beat', ...SLIDE_STRUCTURE, ...SLIDE_METADATA, 'content', 'colors', 'overlays', 'lists', 'listRuns', 'listRoles', 'layoutRecord'].filter(key => record[key] !== undefined).map(key => ({key, size: sizeOf(record[key])})),
         ...Object.keys(record.design ?? {}).map(key => ({key, design: true, size: sizeOf(record.design[key])}))];
       if (!candidates.length) break;
       const largest = candidates.sort((a, b) => b.size - a.size)[0];
@@ -894,6 +922,7 @@ function validateSlide(stored) {
   if (value.extensions !== undefined && !object(value.extensions)) throw Error('Invalid slide extensions record.');
   if (value.content !== undefined) validateTopology(value.content);
   if (value.colors !== undefined) validateRunColors(value.colors);
+  if (value.overlays !== undefined) validateOverlayRecord(value.overlays);
   if (value.lists !== undefined) validateListBreaks(value.lists);
   if (value.listRuns !== undefined) validateListRuns(value.listRuns);
   if (value.listRoles !== undefined) { validateListRoles(value.listRoles); if (!/^[a-f0-9]{14}$/.test(value.native.listIdentity ?? '')) throw Error('Invalid native list identity.'); }

@@ -6,11 +6,6 @@
     "openxml": {
       "element": "areaChart",
       "composition": "single"
-    },
-    "renderers": {
-      "aspose-slides": {
-        "chartType": "Area"
-      }
     }
   },
   "group": "Area",

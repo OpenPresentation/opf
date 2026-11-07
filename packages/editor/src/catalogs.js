@@ -12,8 +12,9 @@ const isObject = (value) => Boolean(value) && typeof value === "object" && !Arra
 /**
  * One catalog list from any number of lists (or single catalogs): the session's registration first, then each host list, in order.
  * A catalog is identified by its `source`; the first catalog with a source wins and later ones with the same source are dropped,
- * so the host default (the first entry) never moves. Entries that are not catalogs throw `invalid-catalogs` (core's
- * `OPFCatalogsOptionError` code).
+ * so the host default (the first entry) never moves. The one exception is a later catalog that registers `iconSets` (LH-166:
+ * `galleryIconSets` shares the gallery's source and is registered beside it): it is kept, because core reads the icon sets of every
+ * registered catalog. Entries that are not catalogs throw `invalid-catalogs` (core's `OPFCatalogsOptionError` code).
  */
 export function mergeCatalogs(...lists) {
   const merged = [];
@@ -24,7 +25,8 @@ export function mergeCatalogs(...lists) {
       if (catalog === undefined || catalog === null) continue;
       if (!isObject(catalog) || typeof catalog.source !== "string" || catalog.source === "")
         throw new OPFEditorError("invalid-catalogs", "A registered catalog is an object with a non-empty source, such as gallery from @openpresentation/gallery.", { catalog });
-      if (sources.has(catalog.source)) continue;
+      if (merged.includes(catalog)) continue;
+      if (sources.has(catalog.source) && !isObject(catalog.iconSets)) continue;
       sources.add(catalog.source);
       merged.push(catalog);
     }

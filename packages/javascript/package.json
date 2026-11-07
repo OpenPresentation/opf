@@ -96,6 +96,14 @@
       "types": "./dist/symbol-font-encodings.d.ts",
       "import": "./dist/symbol-font-encodings.js"
     },
+    "./shape-geometry": {
+      "types": "./dist/shape-geometry.d.ts",
+      "import": "./dist/shape-geometry.js"
+    },
+    "./shape-catalog": {
+      "types": "./dist/shape-catalog.d.ts",
+      "import": "./dist/shape-catalog.js"
+    },
     "./deck": {
       "types": "./dist/deck.d.ts",
       "import": "./dist/deck.js"
@@ -156,6 +164,14 @@
       "edge-light": "./dist/diagram-engine-lazy.js",
       "browser": "./dist/diagram-engine-lazy.js",
       "default": "./dist/diagram-engine-eager.js"
+    },
+    "#shape-engine": {
+      "types": "./src/shape-engine-eager.ts",
+      "workerd": "./dist/shape-engine-lazy.js",
+      "worker": "./dist/shape-engine-lazy.js",
+      "edge-light": "./dist/shape-engine-lazy.js",
+      "browser": "./dist/shape-engine-lazy.js",
+      "default": "./dist/shape-engine-eager.js"
     }
   },
   "files": [

@@ -4,8 +4,9 @@ import {toPptx, fromPptx} from '../dist/index.js';
 import {isBareSlideNumber} from '../dist/furniture-fields.js';
 
 // RR-91: Keynote replaces the whole paragraph that holds a slide-number field (placeholder or plain text box) with the number, so
-// `{{slide.number}} / {{deck.slideCount}}` shows only "2". `slideNumberFields` 'static' (the default) writes the number of such a part as
-// fixed text in an ordinary tagged shape; 'live' keeps the field in the Slide Number placeholder (PowerPoint-only targets).
+// `{{slide.number}} / {{deck.slideCount}}` shows only "2". `slideNumberFields` 'static' (for Keynote targets) writes the number of such a part
+// as fixed text in an ordinary tagged shape; 'live' (the default since RR-102) keeps the field in the Slide Number placeholder, so PowerPoint's
+// Insert > Header & Footer shows Slide number checked and renumbers it.
 const dec = new TextDecoder();
 const options = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
 const deck = right => ({design: {footer: {left: {text: 'Acme Corp'}, right: {text: right}}}, slides: [{title: 'One'}, {title: 'Two'}, {title: 'Three'}]});
@@ -20,18 +21,18 @@ assert.equal(isBareSlideNumber({text: '2 / 6', fields: [{type: 'slideNumber', st
 assert.equal(isBareSlideNumber({text: 'Page 2', fields: [{type: 'slideNumber', start: 5, end: 6}]}), false);
 assert.equal(isBareSlideNumber({text: 'Acme'}), false);
 
-// 'live': the placeholder holds the live field and the fixed words, as before the default changed.
-{
-  const entries = unzipSync(await toPptx(deck('{{slide.number}} / {{deck.slideCount}}'), {...options, slideNumberFields: 'live'}));
+// 'live' and the default (RR-102): the placeholder holds the live field and the fixed words.
+for (const mode of [undefined, 'live']) {
+  const entries = unzipSync(await toPptx(deck('{{slide.number}} / {{deck.slideCount}}'), {...options, ...(mode ? {slideNumberFields: mode} : {})}));
   for (const index of [1, 2, 3]) {
     assert.deepEqual(phTypes(slide(entries, index)), ['ftr', 'sldNum']);
     assert.match(slide(entries, index), new RegExp(`type="slidenum">(?:(?!</a:fld>)[\\s\\S])*<a:t>${index}</a:t></a:fld><a:r>(?:(?!</a:r>)[\\s\\S])*<a:t> / 3</a:t>`));
   }
 }
 
-// Default (static): "2 / 3" is one fixed run in an ordinary shape; no field and no Slide Number placeholder. The authored text still returns.
+// 'static': "2 / 3" is one fixed run in an ordinary shape; no field and no Slide Number placeholder. The authored text still returns.
 for (const right of ['{{slide.number}} / {{deck.slideCount}}', 'Page {{slide.number}}', '{{slide.number}}{{slide.number}}']) {
-  const bytes = await toPptx(deck(right), options);
+  const bytes = await toPptx(deck(right), {...options, slideNumberFields: 'static'});
   const entries = unzipSync(bytes);
   for (const index of [1, 2, 3]) {
     const xml = slide(entries, index), parts = shapes(xml);
@@ -47,9 +48,9 @@ for (const right of ['{{slide.number}} / {{deck.slideCount}}', 'Page {{slide.num
   assert.deepEqual(issues.filter(issue => !/-import-reflow$/.test(issue.code)), [], `${right}: no provenance diagnostic`);
 }
 
-// A bare number keeps its field and placeholder in the default mode (Keynote shows a lone number correctly).
+// A bare number keeps its field and placeholder in the static mode too (Keynote shows a lone number correctly).
 {
-  const entries = unzipSync(await toPptx(deck('{{slide.number}}'), options));
+  const entries = unzipSync(await toPptx(deck('{{slide.number}}'), {...options, slideNumberFields: 'static'}));
   for (const index of [1, 2, 3]) {
     assert.deepEqual(phTypes(slide(entries, index)), ['ftr', 'sldNum']);
     assert.match(slide(entries, index), /type="slidenum"/);
@@ -59,12 +60,12 @@ for (const right of ['{{slide.number}} / {{deck.slideCount}}', 'Page {{slide.num
 // A header number (never a placeholder) also becomes fixed text when it has words around it.
 {
   const source = {design: {header: {right: {text: 'Page {{slide.number}}'}}}, slides: [{title: 'One'}, {title: 'Two'}]};
-  assert.match(slide(unzipSync(await toPptx(source, {...options, slideNumberFields: 'live'})), 2), /type="slidenum"/);
-  const entries = unzipSync(await toPptx(source, options));
+  assert.match(slide(unzipSync(await toPptx(source, options)), 2), /type="slidenum"/);
+  const entries = unzipSync(await toPptx(source, {...options, slideNumberFields: 'static'}));
   assert.equal(/type="slidenum"/.test(slide(entries, 2)), false);
   const xml = [slide(entries, 2), dec.decode(entries['ppt/slideMasters/slideMaster1.xml'])].join('');
   assert.ok(/<a:t>Page 2<\/a:t>/.test(xml));
 }
 
 await assert.rejects(toPptx(deck('{{slide.number}}'), {...options, slideNumberFields: 'field'}), error => error.code === 'invalid-slide-number-option' && error.path === 'options.slideNumberFields');
-console.log('Static slide numbers passed: live mode keeps the placeholder field, three number-with-words forms fixed text, bare number and header, round trip and option validation.');
+console.log('Static slide numbers passed: live mode (the default) keeps the placeholder field, three number-with-words forms fixed text, bare number and header, round trip and option validation.');

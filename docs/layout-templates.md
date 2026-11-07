@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 30 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 32 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -116,6 +116,7 @@ headings. Region names are unique across the whole record and may not be `tag`, 
 | `listColumns` | `"auto"` (a list of more than 6 entries that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `metrics` | `stack` (value, unit, label and the rest as one block at the anchor) or `tile` (LH-68: each metric fills its cell, label first as an eyebrow, the value asking for a quarter of the cell's height between 76 and 152 px, description, delta and trend at the cell's foot, start-aligned; the gallery `scorecard` uses it) | `stack` |
 | `sequence` | `steps` or `numbered` (LH-07: the region lists the steps of a sequence, drawn under numbered badges joined by a connector, see [Step sequences](#step-sequences-lh-07); the gallery `process` uses `steps`, `agenda` and `agenda-split` use `numbered`) | none |
+| `arrangement` | `pyramid` or `matrix` (SH-09: the region's lone list of one level draws as PowerPoint's Basic Pyramid or Basic Matrix geometry, exported as live SmartArt where PowerPoint draws it as the preview does, or as OPF's own design of the arrangement where PowerPoint's does not hold the entries; a matrix of other than four entries draws cards; see [Pyramids, matrices and live SmartArt](smartart.md); the gallery `pyramid` and `matrix` use them) | none |
 | `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
@@ -245,7 +246,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 30 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 32 built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -463,7 +464,9 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
   beside badges, so an agenda is drawn one way. The numbers stay drawing, as the badges' are.
 
 Steps keep their text size: the badges are a guarded rule (`step-badges`, and `numerals` for numbered rows), so a slide whose blocks
-would get smaller under them draws as before, and a flow that does not fit one line at the list's size stays a list. A lone badge list
+would get smaller under them draws as before (LH-168: the comparison is also of the smallest size each block draws, a list's label and description
+sizes, not of the list's base size, which is the label's in columns and the description's beside a badge; steps whose descriptions wrap
+draw as a stepper in every language, and a row of steps is centered under the title as the columns are), and a flow that does not fit one line at the list's size stays a list. A lone badge list
 grows (LH-48) as the plain list would, as long as it fits with its badges (or numerals). The preview draws the badges, numerals,
 connector, chips and arrows from `steps`, and the PPTX export writes them as native shapes (an ellipse holding its numeral, a text box
 holding a numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets), tagged so that import consumes them and gives a
@@ -512,6 +515,9 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   on at most 4 balanced lines; its bold runs draw in the primary color where that reads 4.5:1. A lone one-entry list with a short
   label draws it as a display word over a short rule; a placed region's short text is a bold heading. Guarded rules
   `statement-message` and `display-message`.
+  LH-163: where the primary does not read 4.5:1 on a dark or accent surface, a display message's bold words draw in a lighter tint of
+  the primary that does (hue and saturation kept, lightness raised), never in a color the author did not mark. LH-164: a slide whose
+  whole body is one such message takes the accent surface on a light deck, where the accent is calm enough to fill a slide (docs/design-resolution.md, "A message-only slide").
 - **Pricing tiers (LH-135).** A slide whose body is 2 to 5 groups, each a metric with a `label` followed by a list or text (a
   tier's name, price and what it includes), draws each group as one card of its region's cell, in one row: the label is the
   metric's eyebrow (bold capitals with tracking, at the tag's 22 px, in the eyebrow's color; `MetricLayout.eyebrow`), the price
@@ -521,6 +527,17 @@ Short content steps up instead of sitting small at the top of an empty body, as 
   reach their 76 px role size read at one size; each tier's details keep the size they fit at. The guard holds every block to the
   size it had as two cards, so a price too wide for the narrower card (a four-tier row with "$1,200/mo") keeps them. A group with
   `emphasis: true` keeps LH-06's surface and the other tiers are cards. The group's `composition` is read as a column.
+- **Rows of figures (LH-169).** A list of 2 to 4 first-level entries that each lead with a short figure (`figureText`: a number with
+  its unit or comparison, after an optional sign and currency symbol, at most 4 words: "62 minutes a day", "1 in 6 reports", "$3.2M",
+  "٦٢ دقيقة يوميًا"; not a step number, a clock time, a year or a day of a month) and carry a description (`figureList`) draws as a row
+  of metrics, as Claude Design draws narrative n15: one column per entry across the list's box, in reading order (from the right in a
+  right-to-left deck), each the figure bold in the accent at display size (at most the metric value size, 76 px) over an accent rule,
+  its description as the label under it at the size the list draws its descriptions. The figures share one size, the smallest any of
+  them fits on one line at, never under the list size; a figure that would split there, or a label that overflows its column, keeps the
+  list. A list where only some entries lead with a figure, figures without descriptions, a numbered list, a list with icons, columns, a
+  caption or the author's `listStyle` stay lists. The row is drawn at the size the list has after the guard and LH-48's growth, so its
+  labels never read smaller than the list's descriptions; a region that holds only such a list has no card. It is a list in columns
+  (`listColumns`, each entry `accent` and `heading`), which both engines draw natively. The guarded rule `figure-row`.
 - **Pillars with one-word titles (LH-136).** A slide whose body is 2 to 5 lists of one entry each, a single word (at most 14
   characters) with its description, draws each as the word at display size (2.3 times the description's size, stepped down to one
   line and to the height the box leaves over the description) in bold over an accent rule of 0.14 em across the block (a native
@@ -590,4 +607,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 30 built-ins.
+`two-column`. The release notes list the 32 built-ins.

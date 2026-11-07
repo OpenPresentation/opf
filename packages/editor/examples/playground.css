@@ -1669,6 +1669,11 @@ dialog::backdrop {
     --inspector: 246px;
   }
 
+  /* The slide toolbar keeps one row beside the inspector: a connector's route is chosen in its Selected shape section (straight by default). */
+  #connector-route {
+    display: none;
+  }
+
   .workspace-badge,
   .breadcrumb-label,
   .breadcrumb > .icon,

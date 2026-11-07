@@ -47,6 +47,7 @@
       {"match": ["docs/examples.md", "docs/schema-reference.md", "docs/catalog-schema-reference.md"], "run": ["check:schema-docs"]},
       {"match": ["docs/programs/release-readiness/"], "run": ["check:release-report", "check:gallery-tracker"]},
       {"match": ["docs/programs/font-fidelity-everywhere/"], "run": ["check:font-tracker", "check:works-percent"]},
+      {"match": ["docs/diagrams.md", "docs/images/diagrams/", "packages/javascript/", "packages/render/", "packages/gallery/"], "run": ["check:diagram-doc-images"]},
       {"match": ["packages/javascript/"], "run": ["check:font-hotlinks", "check:catalog-free", "check:browser-safe", "check:text"]},
       {"match": ["packages/render/", "packages/pptx/", "packages/editor/", "packages/gallery/"], "run": ["check:font-hotlinks", "check:text"]},
       {"match": ["packages/gallery/catalog/", "packages/gallery/previews/"], "run": ["check:catalog", "check:palette", "check:catalog-free", "check:spec", "check:schema-examples", "check:stability"]},

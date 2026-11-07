@@ -18,6 +18,7 @@
     {
       "id": "named-runs",
       "title": "Scheme Names In Runs",
+      "subtitle": "Run colors by name",
       "text": [
         "Named colors keep this run ",
         {

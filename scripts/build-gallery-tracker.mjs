@@ -274,7 +274,7 @@ export function matchRule(rules, type, id, gap) {
 
 export function linkState(link, burndown) {
   if (!link) return { kind: "none", addressed: false };
-  if (/^RR-\d{2}$/.test(link)) {
+  if (/^RR-\d{2,3}$/.test(link)) {
     const item = burndown.get(link);
     if (!item) throw new Error(`gallery tracker: rule links unknown burndown item ${link}`);
     return { kind: "rr", status: item.status, addressed: OPEN_RR.has(item.status) };

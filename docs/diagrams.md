@@ -26,6 +26,10 @@ A string is shorthand for `{ "source": value }`. The object form adds `alt`, the
 }
 ```
 
+The slide this draws, in the engine's default design:
+
+![The slide drawn from the example: the title above a flowchart in which a request goes to an Approved? decision, yes leads to Build and no leads to Revise, which loops back to the request.](images/diagrams/review-loop.svg)
+
 With an `alt` and a caption:
 
 ```json
@@ -38,6 +42,8 @@ With an `alt` and a caption:
   "caption": "Figure 1. The review loop"
 }
 ```
+
+![The slide drawn from the example: a brief goes to an Approved? decision, yes leads to Build and no returns to the brief, with the caption Figure 1. The review loop under the diagram.](images/diagrams/review-loop-caption.svg)
 
 As YAML a block scalar keeps the source readable:
 
@@ -64,6 +70,8 @@ Beside text, give the slide `blocks`; the diagram takes its own cell:
   ]
 }
 ```
+
+![The slide drawn from the example: two bullets on the left and, on the right, a sequence diagram in which the client sends POST /decks to the API and the API answers 201 Created.](images/diagrams/beside-text.svg)
 
 ### In Markdown
 
@@ -122,7 +130,7 @@ OPF draws diagrams with [pele](https://pele.run), which parses Mermaid 12.1 synt
 | Swimlane | `swimlane-beta` | A flowchart in lanes |
 | Agent flow | `agentflow-beta` | The steps and tools of an agent workflow |
 
-The six most useful, each as a complete source:
+The six most useful, each as a complete source and the slide it draws in the default design:
 
 ````text
 flowchart LR
@@ -131,11 +139,15 @@ flowchart LR
   B -->|no| D[Park it]
 ````
 
+![A flowchart: an idea goes to a Worth testing? decision; yes leads to Prototype and no to Park it.](images/diagrams/family-flowchart.svg)
+
 ````text
 sequenceDiagram
   Client->>API: POST /decks
   API-->>Client: 201 Created
 ````
+
+![A sequence diagram: the client sends POST /decks to the API, and the API answers 201 Created.](images/diagrams/family-sequence.svg)
 
 ````text
 mindmap
@@ -144,6 +156,8 @@ mindmap
     Efficiency
     People
 ````
+
+![A mind map: Strategy in a circle at the center with the branches Growth, Efficiency and People.](images/diagrams/family-mindmap.svg)
 
 ````text
 timeline
@@ -154,6 +168,8 @@ timeline
     2026 Q3 : All regions
 ````
 
+![A timeline titled Regional rollout: the Pilot section in 2026 Q1 with one operations team, and the Rollout section in 2026 Q3 with all regions.](images/diagrams/family-timeline.svg)
+
 ````text
 stateDiagram-v2
   [*] --> Queued
@@ -162,6 +178,8 @@ stateDiagram-v2
   Building --> Failed: error
   Failed --> Queued: retry
 ````
+
+![A state diagram: Queued goes to Building, which goes to Live on success or Failed on error, and Failed returns to Queued on retry.](images/diagrams/family-state.svg)
 
 ````text
 journey
@@ -172,6 +190,8 @@ journey
   section First week
     Build a first deck: 4: New user
 ````
+
+![A user journey titled Onboarding: creating an account scores 5, verifying the email 3 and building a first deck 4.](images/diagrams/family-journey.svg)
 
 For the full syntax of each family, read the [Mermaid documentation](https://mermaid.js.org/intro/); pele follows it, but draws with its own layout (see [The engine](#the-engine)).
 
@@ -185,6 +205,23 @@ The deck decides colors and fonts, so a diagram follows the slide it sits on:
 - **Text** keeps 4.5:1 against its fill.
 - **Fonts.** Labels use the font scheme's body font, and code-like labels (class members, for example) its code font.
 - **Dark backgrounds, dark variants and color maps** adapt with no change to the source: `design.variant: "dark1"` on a slide redraws its diagram from the dark surface.
+
+The same slide, with the same source, in four designs from the default catalog:
+
+```json
+{
+  "title": "Every request is reviewed before it ships",
+  "diagram": "flowchart LR\n  A[Request] --> B{Approved?}\n  B -->|yes| C[Build]\n  B -->|no| D[Revise]\n  D --> A\n  C --> E[Test]\n  E --> F{Passes?}\n  F -->|yes| G[Release]\n  F -->|no| C"
+}
+```
+
+| `classic`, `forest-green`, `aptos` | `bold`, `deep-purple`, `montserrat` |
+| --- | --- |
+| ![The flowchart on a white slide with pale green nodes.](images/diagrams/style-classic.svg) | ![The flowchart on a white slide with pale purple nodes and the Montserrat font.](images/diagrams/style-bold.svg) |
+| **`minimal`, `burnt-orange`, `georgia`** | **`classic`, `steel-blue`, `open-sans`, slide `design.variant: "dark1"`** |
+| ![The flowchart on a dark brown slide with orange-brown nodes and a serif font.](images/diagrams/style-minimal.svg) | ![The flowchart on a black slide with dark nodes, light labels and the Open Sans font.](images/diagrams/style-dark.svg) |
+
+Every image in this guide is the renderer's own SVG output for the source above it, drawn by `scripts/build-diagram-doc-images.mjs` (`pnpm check:diagram-doc-images` keeps them current).
 
 Mermaid's own theming (`%%{init: ...}%%`, themes, `themeVariables`) and click callbacks are ignored. Authored `style`, `classDef` and C4 `UpdateElementStyle` colors are the exception: pele applies them and OPF's painter keeps them, so a shape with an authored color no longer follows the deck's colors, variant or contrast rules. Leave them out and let the deck decide; if one shape must stand out, prefer a different node shape or a label to a color.
 
@@ -223,7 +260,7 @@ A block binds to a region by kind, role and reading order ([Binding content to r
 
 ## Accessibility
 
-`alt` is the text alternative: say what the diagram shows, not that it is a diagram ("A brief goes to review; approved work is built, rejected work returns to the brief."). Without `alt`, engines derive one from the diagram type and its labels (for example "Flowchart: Request, Approved?, Build, Revise"), up to 400 characters. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the picture's description.
+`alt` is the text alternative: say what the diagram shows, not that it is a diagram ("A brief goes to review; approved work is built, rejected work returns to the brief."). Without `alt`, engines derive one from the diagram type and its labels (for example "Flowchart: Request, Approved?, Build, Revise"), up to 400 characters. The preview draws the diagram as one `role="img"` named by that text, and the PPTX export writes it as the description of the picture (or of the group of shapes).
 
 ## Exports
 
@@ -232,9 +269,61 @@ A block binds to a region by kind, role and reading order ([Binding content to r
 | SVG preview | The diagram as vector shapes and text in the slide's colors and fonts |
 | PNG | The preview rasterized |
 | PDF | Vector; the diagram's labels stay selectable text |
-| PPTX | A native SVG picture with a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, `alt` as the picture's description. `fromPptx` brings it back as a `diagram`. |
+| PPTX (the default, `diagrams: "shapes"`) | Native PowerPoint shapes, connectors and text in one group, drawn from the preview's own geometry, `alt` as the group's description. `fromPptx` brings an unchanged group back as a `diagram`. A diagram that cannot be written as shapes is the picture below. |
+| PPTX, `diagrams: "picture"` | A native SVG picture with a PNG fallback: crisp at any size, recolorable as a picture in PowerPoint, `alt` as the picture's description. `fromPptx` brings it back as a `diagram`. |
 
-The PPTX diagram is a picture, not native PowerPoint shapes and connectors: the nodes are not editable one by one. PowerPoint's own "Convert to Shape" works on the picture and gives editable shapes, but that is PowerPoint's conversion, not an OPF export, and it does not map back to the diagram. To change a diagram, edit its source in OPF and export again. Native editable PPTX shapes are planned; see the [diagram plan](plans/diagrams-svg.md) and the [compatibility matrix](compatibility-matrix.md).
+### Native shapes in PowerPoint
+
+The PPTX export writes each diagram as editable PowerPoint shapes that look like the preview (`diagrams: "shapes"`, the default). To get one SVG picture per diagram instead, as earlier releases did, opt out:
+
+```js
+const bytes = await toPptx(deck, { diagrams: "picture" });
+await convert(deck, "deck.pptx", { diagrams: "picture" });
+```
+
+```sh
+opf convert deck.opf.json deck.pptx --diagrams picture
+```
+
+The shapes are built from pele's laid-out drawing, the same geometry the preview draws, never a second layout or PowerPoint's connector routing:
+
+- **Nodes** are shapes. An outline that is exactly a PowerPoint preset is that preset (`rect`, `roundRect`, `ellipse`, `diamond`, `hexagon`, `parallelogram`, `trapezoid`, `triangle`, checked against the [shape geometry](shapes.md)); any other outline (a cylinder, a flag, a stick figure, a pie slice) is a freeform of its exact path.
+- **Labels** are real text in the deck's fonts at the preview's size, weight, color and baseline, with no wrapping and no autofit. A node's label is the node's own text, so it moves with the node; other labels are text boxes.
+- **Edges** keep their exact path and arrowheads. A straight edge without arrowheads is a PowerPoint connector glued to the connection sites of the nodes it touches, so it follows a node you move. Every other edge is a freeform of its line and its arrowheads: PowerPoint opens a connector only with one of its preset routes (a connector of freeform geometry makes the file unreadable), and its largest line end is about a fifth shorter than pele's arrowhead, so a glued connector would not look like the preview.
+- **Fills and lines** keep their colors, opacity, gradients, widths, dashes, caps and joins.
+- Everything is one group named `OPF diagram N`, with the diagram's `alt` as its description.
+
+A diagram family is written as shapes only after PowerPoint's drawing of it has been compared with the preview, source by source. Every family below passed: in PowerPoint 365 for Windows, with an example source per family (the ones in this guide where it has one) and a harder one (more nodes, long labels, right to left where the family has a direction), each slide rendered through PowerPoint and compared with the preview pixel by pixel and by eye, in five designs: the engine default (a dark slide in Aptos), a light theme, a serif font scheme (Georgia), a deck in Segoe UI, and a Japanese deck in Yu Gothic for the families that take labels (flowchart, sequence, mind map, timeline, kanban). In every design the shapes, lines and fills match the preview to antialiasing and every label sits where the preview puts it; what differs is the glyphs where the preview draws a font with a stand-in (see below).
+
+| Family | Written as shapes | Family | Written as shapes |
+| --- | --- | --- | --- |
+| Flowchart | yes | Architecture | yes |
+| Sequence | yes | Kanban | yes |
+| Class | yes | Packet | yes |
+| State | yes | Radar | yes |
+| Entity relationship | yes | Treemap | yes |
+| Gantt | yes | Venn | yes |
+| Pie | yes | Ishikawa | yes |
+| Quadrant | yes | Requirement | yes |
+| Mind map | yes | Wardley map | yes |
+| Timeline | yes | Tree view | yes |
+| User journey | yes | Event modeling | yes |
+| XY chart | yes | Railroad | yes |
+| Sankey | yes | Cynefin | yes |
+| Git graph | yes | Use case | yes |
+| C4 | yes | Swimlane | yes |
+| Block | yes | Agent flow | yes |
+
+The list is core's `DIAGRAM_SHAPE_FAMILIES` (from `@openpresentation/opf/composition`). A diagram stays the picture, with the info finding `pptx/diagram-shapes-unavailable` naming its family and the reason, when:
+
+- its family is not in that list (a new pele diagram type, until it has been compared);
+- its drawing uses something PowerPoint has no native form for: a clip path, a mask, a filter, a pattern, an embedded image, text on a path, or right-to-left text (whose placement PowerPoint decides by its own bidirectional layout).
+
+What can differ from the preview is what differs for all of the deck's text: where the preview draws a font with a stand-in (Aptos, Segoe UI and Yu Gothic, for example, which OPF does not bundle), PowerPoint draws the real font, so the glyph shapes and weight differ a little, while every line starts, ends and sits where the preview puts it. For a diagram that must be the preview to the pixel, export with `diagrams: "picture"`.
+
+**Editing and import.** The shapes are ordinary PowerPoint shapes: restyle, move or retype them as you like. `fromPptx` reads an unchanged group back as the diagram, with its Mermaid source and the group's current description as `alt`. Once a member is moved, resized, retyped, added or removed, the group imports as its shapes and reports `invalid-diagram-provenance`: the edit is kept and the source is not reconstructed. To keep the source as the truth, edit it in OPF and export again. With `provenance: false` (`--provenance none`) the group carries no source and imports as its shapes.
+
+PowerPoint's own "Convert to Shape" on a picture diagram also gives shapes, but that is PowerPoint's conversion, not an OPF export, and it does not map back to the diagram. See the [compatibility matrix](compatibility-matrix.md).
 
 ## Errors and limits
 
@@ -246,6 +335,6 @@ The PPTX diagram is a picture, not native PowerPoint shapes and connectors: the 
 
 [pele](https://pele.run) 1.13.0 (MIT, no runtime dependencies) is the engine. It is synchronous and does not use the DOM, so the preview, the PDF and the PPTX export need no browser, and the drawing is deterministic for a given source and fonts. Core measures the text with the deck's fonts, so line breaks match the rest of the slide.
 
-Node, Bun and Deno load every diagram type with core and draw any diagram at once. A browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only pele's core with OPF (about 12 KB gzipped) and each diagram type the first time a deck draws one (13 to 54 KB gzipped each), through the package's `#diagram-engine` import map; a Worker that never loads a diagram type does not carry their code. The renderer's browser fonts handle loads them in `ensure` (its `pending` lists them as `diagram:<type>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself. A host that validates or draws with `validate`, `composeSlide` or `toSvg` directly calls `await ensureDiagrams(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `diagramsPending(presentation)` lists what it would load. Until then a diagram draws as a "Loading diagram" placeholder and its source is not checked, which is not a finding.
+Node, Bun and Deno load every diagram type with core and draw any diagram at once. A browser bundle or an edge Worker (Cloudflare Workers, Vercel Edge) loads only pele's core with OPF (about 12 KB gzipped) and each diagram type the first time a deck draws one (13 to 54 KB gzipped each), through the package's `#diagram-engine` import map; a Worker that never loads a diagram type does not carry their code. The renderer's browser fonts handle loads them in `ensure` (its `pending` lists them as `diagram:<type>`), so `<opf-deck>`, the player, browser export and the editor wait for them as they wait for fonts; `toPptx` loads them itself. A host that validates or draws with `validate`, `composeSlide` or `toSvg` directly calls `await ensureDiagrams(presentation)` (from `@openpresentation/opf` or `@openpresentation/opf/composition`) first; `diagramsPending(presentation)` lists what it would load. Shapes and icon sets load the same way, and one preload covers all three: see [Engines and icon sets that load on demand](how-opf-works.md#engines-and-icon-sets-that-load-on-demand). Until then a diagram draws as a "Loading diagram" placeholder and its source is not checked, which is not a finding.
 
 Pele reads Mermaid 12.1 syntax but has its own layout and drawing, so a diagram does not match the pixels of mermaid.js, and an unusual construct may parse in one and not in the other. Write for the OPF drawing: check a diagram in the preview (`opf convert deck.opf.json slide-{n}.png`), not in Mermaid's live editor.

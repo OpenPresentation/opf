@@ -118,7 +118,8 @@ test('composition: a list draws its icons on chips in the marker column, left to
 test('composition: metrics and groups take their chips above their content; an icon nothing can mark is dropped with a finding, its text kept', () => {
   const deck = { name: 'Icons', language: 'en', catalogs: { custom: { iconSets: { brand: SET } } }, slides: [
     { title: 'Numbers', blocks: [{ metric: { value: '98%', label: 'Uptime', icon: 'brand:star' } }, { metric: { value: '12k', label: 'Users', icon: 'brand:dot' } }] },
-    { title: 'Groups', blocks: [{ icon: 'brand:star', blocks: [{ text: 'Speed' }, { text: 'Pages load in under a second.' }] }, { icon: 'brand:dot', blocks: [{ text: 'Security' }, { text: 'SSO on every plan.' }] }] },
+    // Groups of a label and two paragraphs: not LH-165's icon cards (a label and one description), so their chips sit over the eyebrow.
+    { title: 'Groups', blocks: [{ icon: 'brand:star', blocks: [{ text: 'Speed' }, { text: 'Pages load in under a second.' }, { text: 'On every device and network.' }] }, { icon: 'brand:dot', blocks: [{ text: 'Security' }, { text: 'SSO on every plan.' }, { text: 'Audit logs for two years.' }] }] },
     { title: 'Steps', items: [{ text: 'Sign up', icon: 'brand:star' }, { text: 'Invite the team' }], numbering: 'arabic' },
   ] };
   const metrics = compose(deck, 0);

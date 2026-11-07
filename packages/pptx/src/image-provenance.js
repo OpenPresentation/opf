@@ -6,7 +6,7 @@ import {attachTextTags, decodeTextTag} from './code-provenance.js';
 //
 // Every image block (core ComposedItem.image) exports as one native picture at core's frame. Its fit and focus are an
 // a:srcRect; its treatments keep the DrawingML mapping 0.14's slide image used: the mask is a:prstGeom with core's guide
-// values, the border an a:ln centered on the outline with a miter join, and the recolor and opacity a:grayscl or
+// values, the stroke an a:ln with every stroke property (SH-02, src/shape-blocks.js lineXml), and the recolor and opacity a:grayscl or
 // a:duotone then a:alphaModFix on the blip. An overlay is one native shape directly above its picture.
 //
 // An image background (core SlideComposition.backgroundImage) with alt text is a full-slide picture at the back of the
@@ -28,7 +28,7 @@ export const canonical = value => JSON.stringify(value, (_key, item) => item && 
   ? Object.fromEntries(Object.keys(item).sort().filter(key => !(key === '#text' && typeof item[key] === 'string' && !item[key].trim())).map(key => [key, item[key]])) : item);
 
 /** An image block's own fields (everything but its type, asset, id, caption and extensions). */
-export const IMAGE_TREATMENT_KEYS = Object.freeze(['fit', 'focus', 'shape', 'cornerRadius', 'border', 'opacity', 'recolor', 'overlay', 'aspectRatio', 'placement', 'portrait']);
+export const IMAGE_TREATMENT_KEYS = Object.freeze(['fit', 'focus', 'shape', 'adjust', 'stroke', 'opacity', 'recolor', 'overlay', 'aspectRatio', 'placement', 'portrait']);
 /** An image background's own fields besides its source. */
 export const BACKGROUND_IMAGE_KEYS = Object.freeze(['alt', 'fit', 'focus', 'opacity', 'recolor', 'overlay']);
 
@@ -57,7 +57,6 @@ const colorXml = ({hex, alpha}, extraAlpha = 1) => {
   const value = Math.round(alpha * extraAlpha * 100000);
   return `<a:srgbClr val="${hex}">${value < 100000 ? `<a:alpha val="${value}"/>` : ''}</a:srgbClr>`;
 };
-const lineXml = border => border ? `<a:ln w="${Math.round(border.width / 96 * EMUS_PER_INCH)}" algn="ctr"><a:solidFill>${colorXml(border)}</a:solidFill><a:miter lim="800000"/></a:ln>` : '';
 function blipEffects(effects) {
   let xml = '';
   if (effects?.recolor?.type === 'grayscale') xml += '<a:grayscl/>';
@@ -172,7 +171,7 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
       if (image.fit === 'tile') picture = picture.replace(/<a:stretch>[\s\S]*?<\/a:stretch>|<a:stretch\/>/, `<a:tile tx="0" ty="0" sx="${srcRectValue((metadata.dpiX ?? 96) / 96)}" sy="${srcRectValue((metadata.dpiY ?? 96) / 96)}" flip="none" algn="tl"/>`);
       const effects = image.effects;
       if (effects) {
-        picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, presetXml(effects.shape) + lineXml(effects.border));
+        picture = picture.replace(/<a:prstGeom\b[\s\S]*?<\/a:prstGeom>/, presetXml(effects.shape) + (effects.strokeXml ?? ''));
         const blip = blipEffects(effects);
         if (blip) picture = picture.replace(/<a:blip\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:blip>)/, (_, attributes, inner = '') => `<a:blip${attributes}>${blip}${inner}</a:blip>`);
       }

@@ -139,6 +139,26 @@
       "types": "./dist/background-options.d.ts",
       "default": "./dist/background-options.js"
     },
+    "./icon-options": {
+      "types": "./dist/icon-options.d.ts",
+      "default": "./dist/icon-options.js"
+    },
+    "./icon-picker": {
+      "types": "./dist/icon-picker.d.ts",
+      "default": "./dist/icon-picker.js"
+    },
+    "./shape-options": {
+      "types": "./dist/shape-options.d.ts",
+      "default": "./dist/shape-options.js"
+    },
+    "./shape-overlays": {
+      "types": "./dist/shape-overlays.d.ts",
+      "default": "./dist/shape-overlays.js"
+    },
+    "./shape-picker": {
+      "types": "./dist/shape-picker.d.ts",
+      "default": "./dist/shape-picker.js"
+    },
     "./image-options": {
       "types": "./dist/image-options.d.ts",
       "default": "./dist/image-options.js"
@@ -348,7 +368,7 @@
     "check:font-hotlinks:built": "node ../../scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",
     "build:chrome-examples": "node scripts/build-chrome-examples.mjs",
-    "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
+    "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs && node test/icon-picker-browser.mjs && node test/shape-editing-browser.mjs && node test/shape-overlays-browser.mjs",
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
@@ -386,6 +406,9 @@
     "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs",
     "test:presenter-browser": "node test/presenter-browser.mjs",
     "test:present-button-browser": "node test/present-button-browser.mjs",
+    "test:icon-picker-browser": "node test/icon-picker-browser.mjs",
+    "test:shape-editing-browser": "node test/shape-editing-browser.mjs",
+    "test:shape-overlays-browser": "node test/shape-overlays-browser.mjs",
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
     "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs",
     "test:workspace-browser": "node test/workspace-browser.mjs",

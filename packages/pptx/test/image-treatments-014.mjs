@@ -24,13 +24,13 @@ const SLIDES = {
   'side-by-side': {blocks: [block({fit: 'cover', placement: {edge: 'left', size: 0.46}})]},                           // left 0.46 crop
   'caption-overlay': {blocks: [block({fit: 'cover', overlay: {color: 'dark1', opacity: 0.75, edge: 'bottom', size: 0.25}})]},
   'masked-shape': {blocks: [block({fit: 'cover', aspectRatio: 1.1547, shape: 'hexagon', placement: {edge: 'right', inset: true}})]},
-  'circular-crop': {blocks: [block({fit: 'cover', shape: 'circle', placement: {edge: 'left', size: 0.4, inset: true}})]},
-  'rounded-card': {blocks: [block({fit: 'cover', shape: 'rounded', cornerRadius: 0.05, border: {color: 'accent5', width: 1}})]},
+  'circular-crop': {blocks: [block({fit: 'cover', shape: 'ellipse', placement: {edge: 'left', size: 0.4, inset: true}})]},
+  'rounded-card': {blocks: [block({fit: 'cover', shape: 'roundRect', adjust: { adj: 0.05 }, stroke: {color: 'accent5', width: 1}})]},
   duotone: {design: {background: background({recolor: {dark: 'accent1', light: 'light1'}})}},                     // background, crop, duotone
   'background-blur': {design: {contentBox: true, background: background({overlay: {color: 'light1', opacity: 0.4}})}},
   'image-strip': {blocks: [block({fit: 'cover', placement: {edge: 'bottom', size: 0.3}})]},
   'collage-grid': {design: {imageFit: 'cover'}, composition: {mode: 'grid', columns: 2}, blocks: [block({}), block({}), block({}), block({})]},
-  'device-frame': {blocks: [block({fit: 'cover', aspectRatio: 0.5, shape: 'rounded', cornerRadius: 0.12, border: {color: 'dark1', width: 12}, placement: {edge: 'right', inset: true}})]},
+  'device-frame': {blocks: [block({fit: 'cover', aspectRatio: 0.5, shape: 'roundRect', adjust: { adj: 0.12 }, stroke: {color: 'dark1', width: 12}, placement: {edge: 'right', inset: true}})]},
   'cutout-subject': {blocks: [block({fit: 'contain', placement: {edge: 'right'}})]},
   watermark: {blocks: [block({fit: 'contain', opacity: 0.1, recolor: 'grayscale'})]},
   'cinematic-crop': {design: {background: 'dark1'}, blocks: [block({fit: 'cover', aspectRatio: 2.39})]}
@@ -58,6 +58,22 @@ const sameNumbers = (actual, expected, label) => {
   const a = Object.fromEntries(flatten(literal(actual))), e = Object.fromEntries(flatten(expected));
   assert.deepEqual(Object.keys(a).sort(), Object.keys(e).sort(), label);
   for (const key of Object.keys(e)) assert.ok(/^-?\d+$/.test(e[key]) ? near(a[key], e[key]) : a[key] === e[key], `${label}${key}: ${a[key]} vs ${e[key]}`);
+};
+// SH-02: a mask the block gives no adjust values writes an empty a:avLst (PowerPoint's defaults), where 0.14 wrote roundRect's and
+// hexagon's defaults; a picture's line now names its cap, compound and dash (flat, single, solid: PowerPoint's defaults too).
+const PRESET_DEFAULTS = {roundRect: {adj: '16667'}, hexagon: {adj: '25000', vf: '115470'}};
+const geometry = geom => {
+  if (!geom) return geom;
+  const guides = [geom['a:avLst']?.['a:gd'] ?? []].flat().filter(gd => PRESET_DEFAULTS[geom.prst]?.[gd.name] !== gd.fmla?.replace('val ', ''));
+  return {prst: geom.prst, 'a:avLst': guides.length ? {'a:gd': guides.length === 1 ? guides[0] : guides} : ''};
+};
+const line = ln => {
+  if (!ln) return ln;
+  const {cap, cmpd, ['a:prstDash']: dash, ...rest} = ln;
+  if (cap !== undefined) assert.equal(cap, 'flat');
+  if (cmpd !== undefined) assert.equal(cmpd, 'sng');
+  if (dash !== undefined) assert.equal(dash.val, 'solid');
+  return rest;
 };
 let same = 0, changed = 0;
 // RR-96: a theme colour in a blip effect (the duotone pair) is an a:schemeClr; compare what it resolves to, as the 0.14 literal.
@@ -96,8 +112,8 @@ deck.slides.forEach((slide, index) => {
   drawn.forEach((picture, at) => {
     const was = expected.pictures[at];
     sameNumbers(picture.xfrm, was.xfrm, `${slide.id} frame`);
-    sameNumbers(picture.geom, was.geom, `${slide.id} mask`);
-    sameNumbers(picture.ln, was.ln, `${slide.id} line`);
+    sameNumbers(geometry(picture.geom), geometry(was.geom), `${slide.id} mask`);
+    sameNumbers(line(picture.ln), was.ln, `${slide.id} line`);
     // Zero sides of a crop are no crop (a native background fill omits them, as PowerPoint does when it saves).
     const crop = rect => rect && Object.fromEntries(Object.entries(rect).filter(([, value]) => Number(value) !== 0));
     sameNumbers(crop(picture.srcRect), crop(was.srcRect), `${slide.id} crop`);
@@ -106,7 +122,7 @@ deck.slides.forEach((slide, index) => {
   const overlay = [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([s]) => flat.parse(s)['p:sp']).find(s => /overlay/.test(s['p:nvSpPr']['p:cNvPr'].name));
   if (expected.overlay) {
     sameNumbers(overlay['p:spPr']['a:xfrm'], expected.overlay.xfrm, `${slide.id} overlay frame`);
-    sameNumbers(overlay['p:spPr']['a:prstGeom'], expected.overlay.geom, `${slide.id} overlay shape`);
+    sameNumbers(geometry(overlay['p:spPr']['a:prstGeom']), geometry(expected.overlay.geom), `${slide.id} overlay shape`);
     // RR-96: the overlay colour is a theme colour (a:schemeClr), so compare what it resolves to and its alpha.
     const fill = overlay['p:spPr']['a:solidFill'];
     assert.ok(schemeRole(fill), `${slide.id} overlay fill is a scheme colour`);
