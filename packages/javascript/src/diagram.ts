@@ -6,9 +6,9 @@
 import type { TextMeasurer } from 'pele';
 // The engine is chosen by export condition (package.json "imports"): every type registered at load in Node and edge runtimes, pele's
 // core with each type loaded on demand in browsers (diagram-engine-eager.ts, diagram-engine-lazy.ts).
-import { PeleError, detectType, loadDiagramType, parse as parseMermaid, registered, render as renderMermaid } from '#diagram-engine';
+import { PeleError, detectType, loadDiagramType, loadPlantumlReader, parse as parseMermaid, plantumlReader, registered, render as renderMermaid } from '#diagram-engine';
 import { dotToMermaid } from './diagram-dot.js';
-import { plantumlToMermaid } from './diagram-plantuml.js';
+import type { PlantumlIssue, PlantumlTranslation } from './diagram-plantuml.js';
 import { chartColorForFill, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, textColorForFill, type ChartColorContext } from './color.js';
 
 /**
@@ -54,11 +54,29 @@ function peleSource(payload: DiagramPayload): { ok: true; source: string; transl
   if (payload.syntax === 'mermaid') return { ok: true, source: payload.source, translated: false };
   if (payload.source.length > DIAGRAM_SOURCE_LIMIT) return { ok: false, issue: { code: 'diagram-limit', message: `The diagram source is longer than ${DIAGRAM_SOURCE_LIMIT} characters.` } };
   if (payload.syntax === 'plantuml') {
+    // In a browser the reader loads on demand (ensureDiagrams), like a pele type.
+    if (!plantumlReader()) return { ok: false, issue: { code: 'diagram-unloaded', message: 'The PlantUML reader is still loading.' } };
     const result = plantumlToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
     return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: PLANTUML_NAMES[result.translation.diagram] } : { ok: false, issue: result.issue };
   }
   const result = dotToMermaid(payload.source, { maxEdges: DIAGRAM_MAX_EDGES });
   return result.ok ? { ok: true, source: result.translation.mermaid, translated: true, name: 'graph' } : { ok: false, issue: result.issue };
+}
+
+/**
+ * SH-13: the PlantUML diagram types OPF draws, and the pele family each is drawn as (diagram-plantuml.ts writes the source of that family).
+ */
+export const PLANTUML_DIAGRAMS: Readonly<Record<string, string>> = Object.freeze({
+  sequence: 'sequence', class: 'class', state: 'state', activity: 'flowchart', usecase: 'usecase', component: 'flowchart', mindmap: 'mindmap', gantt: 'gantt',
+});
+
+/**
+ * SH-13: a PlantUML source as the pele source that draws it, or the issue that stops it (with its line and column in the PlantUML source);
+ * `diagram-unloaded` in a browser until ensureDiagrams has loaded the reader.
+ */
+export function plantumlToMermaid(source: string, options: { maxEdges: number }): { ok: true; translation: PlantumlTranslation } | { ok: false; issue: PlantumlIssue | DiagramIssue } {
+  const reader = plantumlReader();
+  return reader ? reader(source, options) : { ok: false, issue: { code: 'diagram-unloaded', message: 'The PlantUML reader is still loading.' } };
 }
 
 /** The derived alt text's name of the PlantUML kinds pele draws as a family of another name. */
@@ -147,6 +165,7 @@ function diagramSources(input: unknown, found: string[] = [], depth = 0): string
     const payload = key === 'diagram' ? diagramPayload(value) : undefined;
     const pele = payload ? peleSource(payload) : undefined;
     if (pele?.ok) found.push(pele.source);
+    else if (pele?.issue.code === 'diagram-unloaded') found.push(PLANTUML_PENDING);
     else if (!payload) diagramSources(value, found, depth + 1);
   }
   return found;
@@ -159,6 +178,7 @@ function diagramSources(input: unknown, found: string[] = [], depth = 0): string
 export function diagramsPending(input: unknown): string[] {
   const pending = new Set<string>();
   for (const source of diagramSources(input)) {
+    if (source === PLANTUML_PENDING) { pending.add('plantuml'); continue; }
     const type = unloadedType(source);
     if (type) pending.add(type);
   }
@@ -172,9 +192,15 @@ export function diagramsPending(input: unknown): string[] {
  */
 export async function ensureDiagrams(input: unknown): Promise<string[]> {
   const pending = diagramsPending(input);
-  await Promise.all(pending.map(type => loadDiagramType(type)));
-  return pending;
+  // The PlantUML reader first: only then is the pele type of each PlantUML diagram known.
+  if (pending.includes('plantuml')) await loadPlantumlReader();
+  const types = pending.includes('plantuml') ? diagramsPending(input) : pending;
+  await Promise.all(types.map(type => loadDiagramType(type)));
+  return [...new Set([...pending, ...types])];
 }
+
+/** The pending marker diagramSources gives a PlantUML diagram while its reader loads (no Mermaid source starts with NUL). */
+const PLANTUML_PENDING = '\u0000plantuml';
 
 /** How the host measures diagram text: `mono` is the code family, the rest the body family. */
 export type DiagramMeasure = (text: string, fontSize: number, style: { bold: boolean; italic: boolean; mono: boolean }) => number;

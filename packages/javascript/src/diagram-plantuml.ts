@@ -14,11 +14,8 @@ export interface PlantumlIssue {
   column?: number;
 }
 
-/** The PlantUML diagram types OPF draws, and the pele family each is drawn as. */
-export const PLANTUML_DIAGRAMS: Readonly<Record<string, string>> = Object.freeze({
-  sequence: 'sequence', class: 'class', state: 'state', activity: 'flowchart', usecase: 'usecase', component: 'flowchart', mindmap: 'mindmap', gantt: 'gantt',
-});
-export type PlantumlDiagram = keyof typeof PLANTUML_DIAGRAMS;
+/** The PlantUML diagram types OPF draws (diagram.ts PLANTUML_DIAGRAMS names the pele family of each). */
+export type PlantumlDiagram = 'sequence' | 'class' | 'state' | 'activity' | 'usecase' | 'component' | 'mindmap' | 'gantt';
 
 /** A PlantUML diagram as the pele source that draws it. */
 export interface PlantumlTranslation {
@@ -117,7 +114,7 @@ function strip(lines: Line[]): { lines: Line[]; title?: string; direction?: 'LR'
       continue;
     }
     const titled = /^title\s+(.+)$/i.exec(text);
-    if (titled) { title = unescape(titled[1]!); continue; }
+    if (titled) { title = plainText(titled[1]!); continue; }
     if (/^(header|footer|caption)\s*$/i.test(text)) {
       const closing = new RegExp(`^end\\s*${text.toLowerCase()}\\b`, 'i');
       while (index < lines.length && !closing.test(lines[index]!.text)) index++;
@@ -130,7 +127,7 @@ function strip(lines: Line[]): { lines: Line[]; title?: string; direction?: 'LR'
 }
 
 /** PlantUML text with its markup read: \n breaks a line, creole bold and italics and HTML-like tags are text. */
-function unescape(text: string): string {
+function plainText(text: string): string {
   return text.replace(/\\n/g, '\n').replace(/\\t/g, ' ').replace(/<\/?(b|i|u|s|font|color|size|back|strike|del|sup|sub|w|plain)\b[^>]*>/gi, '')
     .replace(/\*\*(.+?)\*\*/g, '$1').replace(/\/\/(.+?)\/\//g, '$1').replace(/""(.+?)""/g, '$1').replace(/__(.+?)__/g, '$1').replace(/~~(.+?)~~/g, '$1').trim();
 }
@@ -228,8 +225,8 @@ function readLink(text: string): Link | undefined {
   const line = /hidden/i.test(style) ? 'hidden' : body.includes('.') || /dashed|dotted/i.test(style) ? 'dotted' : body.includes('=') || /bold|thickness=[2-9]/i.test(style) ? 'bold' : 'solid';
   return {
     from: from!, to: to!, left, right, line, length: Math.max(1, body.replace(/[^-.=~]/g, '').length - 1),
-    ...(label?.trim() ? { label: unescape(label.replace(/\s+[<>]$|^[<>]\s+/g, '')) } : {}),
-    ...(leftLabel ? { leftLabel: unescape(leftLabel) } : {}), ...(rightLabel ? { rightLabel: unescape(rightLabel) } : {}),
+    ...(label?.trim() ? { label: plainText(label.replace(/\s+[<>]$|^[<>]\s+/g, '')) } : {}),
+    ...(leftLabel ? { leftLabel: plainText(leftLabel) } : {}), ...(rightLabel ? { rightLabel: plainText(rightLabel) } : {}),
   };
 }
 
@@ -251,7 +248,7 @@ function noteBlock(lines: Line[], index: number, first: string): { text: string;
   let at = index;
   while (++at < lines.length && !/^end\s*(note|hnote|rnote)\b/i.test(lines[at]!.text)) body.push(lines[at]!.text);
   if (at >= lines.length) fail('diagram-syntax', 'A note is not closed with end note.', lines[index]!.line, 1);
-  return { text: unescape(body.join('\n')), end: at };
+  return { text: plainText(body.join('\n')), end: at };
 }
 
 // ---- Sequence diagrams -> pele sequence.
@@ -283,36 +280,42 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
     const current = lines[index]!;
     const { text } = current;
     let match: RegExpExecArray | null;
-    if ((match = PARTICIPANT.exec(text))) {
+    match = PARTICIPANT.exec(text);
+    if (match) {
       const kind = match[1]!.toLowerCase();
       const name = match[3] ?? match[4] ?? match[6] ?? match[8] ?? match[9]!;
       const label = match[2] ?? match[5] ?? match[7] ?? match[8] ?? undefined;
-      declare(name, kind, label && label !== name ? unescape(label) : undefined);
+      declare(name, kind, label && label !== name ? plainText(label) : undefined);
       continue;
     }
     if (/^autonumber\b/i.test(text)) { out.push('  autonumber'); continue; }
-    if ((match = /^(activate|deactivate|destroy)\s+("[^"]+"|[\w.]+)/i.exec(text))) { out.push(`  ${match[1]!.toLowerCase()} ${declare(unquote(match[2]!))}`); continue; }
-    if ((match = /^create\s+(?:(participant|actor|boundary|control|entity|database|collections|queue)\s+)?("[^"]+"|[\w.]+)/i.exec(text))) {
+    match = /^(activate|deactivate|destroy)\s+("[^"]+"|[\w.]+)/i.exec(text);
+    if (match) { out.push(`  ${match[1]!.toLowerCase()} ${declare(unquote(match[2]!))}`); continue; }
+    match = /^create\s+(?:(participant|actor|boundary|control|entity|database|collections|queue)\s+)?("[^"]+"|[\w.]+)/i.exec(text);
+    if (match) {
       const name = unquote(match[2]!);
       out.push(`  create ${match[1]?.toLowerCase() === 'actor' ? 'actor' : 'participant'} ${ids.of(name)}`);
       declared.add(ids.of(name));
       order.push(ids.of(name));
       continue;
     }
-    if ((match = /^box\b\s*("[^"]*"|[^#]*)?/i.exec(text))) { out.push(`  box ${bare(unescape(unquote(match[1] ?? '')) || ' ')}`); frames.push('box'); continue; }
+    match = /^box\b\s*("[^"]*"|[^#]*)?/i.exec(text);
+    if (match) { out.push(`  box ${bare(plainText(unquote(match[1] ?? '')) || ' ')}`); frames.push('box'); continue; }
     if (/^end\s*box\b/i.test(text)) { out.push('  end'); frames.pop(); continue; }
-    if ((match = /^(alt|opt|loop|par|break|critical|group)\b\s*(.*)$/i.exec(text))) {
-      const kind = match[1]!.toLowerCase(), label = unescape(match[2]!.replace(/^#\S+\s*/, '').replace(/\[([^\]]*)\]/, '$1'));
+    match = /^(alt|opt|loop|par|break|critical|group)\b\s*(.*)$/i.exec(text);
+    if (match) {
+      const kind = match[1]!.toLowerCase(), label = plainText(match[2]!.replace(/^#\S+\s*/, '').replace(/\[([^\]]*)\]/, '$1'));
       // pele has no labeled group: a group is a box whose label is a note over the first message in it.
       if (kind === 'group') { out.push('  rect'); groupLabel = label || undefined; }
       else out.push(`  ${kind}${label ? ` ${bare(label)}` : ''}`);
       frames.push(kind);
       continue;
     }
-    if ((match = /^else\b\s*(.*)$/i.exec(text))) {
+    match = /^else\b\s*(.*)$/i.exec(text);
+    if (match) {
       const frame = frames.at(-1);
       if (!frame || !['alt', 'par', 'critical'].includes(frame)) unknown(current, 'sequence');
-      out.push(`  ${frame === 'par' ? 'and' : frame === 'critical' ? 'option' : 'else'}${match[1]!.trim() ? ` ${bare(unescape(match[1]!.replace(/^#\S+\s*/, '')))}` : ''}`);
+      out.push(`  ${frame === 'par' ? 'and' : frame === 'critical' ? 'option' : 'else'}${match[1]!.trim() ? ` ${bare(plainText(match[1]!.replace(/^#\S+\s*/, '')))}` : ''}`);
       continue;
     }
     if (/^end$/i.test(text)) {
@@ -321,36 +324,41 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
       out.push('  end');
       continue;
     }
-    if ((match = /^(note|hnote|rnote)\s+(left|right|over)(?:\s+of)?\s*([^:]*?)\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^(note|hnote|rnote)\s+(left|right|over)(?:\s+of)?\s*([^:]*?)\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       const side = match[2]!.toLowerCase();
       let body = match[5];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       const names = match[3]!.split(',').map(name => unquote(name)).filter(Boolean);
       const targets = names.length ? names.map(name => declare(name)) : last ? [last.to] : order.slice(0, 1);
       if (!targets.length) unknown(current, 'sequence');
-      out.push(`  Note ${side === 'over' ? 'over' : `${side} of`} ${(side === 'over' ? targets.slice(0, 2) : targets.slice(0, 1)).join(',')}: ${bare(unescape(body!)) || ' '}`);
+      out.push(`  Note ${side === 'over' ? 'over' : `${side} of`} ${(side === 'over' ? targets.slice(0, 2) : targets.slice(0, 1)).join(',')}: ${bare(plainText(body!)) || ' '}`);
       continue;
     }
-    if ((match = /^ref\s+over\s+([^:]+?)\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^ref\s+over\s+([^:]+?)\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[2];
       if (body === undefined) { const block = noteBlock(lines.map(line => ({ ...line, text: line.text.replace(/^end\s*ref\b/i, 'end note') })), index, ''); body = block.text; index = block.end; }
       const targets = match[1]!.split(',').map(name => declare(unquote(name)));
-      out.push(`  Note over ${targets.slice(0, 2).join(',')}: ref ${bare(unescape(body!))}`);
+      out.push(`  Note over ${targets.slice(0, 2).join(',')}: ref ${bare(plainText(body!))}`);
       continue;
     }
-    if ((match = /^={2,}\s*(.*?)\s*={2,}$/.exec(text))) {
+    match = /^={2,}\s*(.*?)\s*={2,}$/.exec(text);
+    if (match) {
       // A divider: a note over every participant so far.
-      if (order.length) out.push(`  Note over ${order.length > 1 ? `${order[0]},${order.at(-1)}` : order[0]}: ${bare(unescape(match[1]!)) || ' '}`);
+      if (order.length) out.push(`  Note over ${order.length > 1 ? `${order[0]},${order.at(-1)}` : order[0]}: ${bare(plainText(match[1]!)) || ' '}`);
       continue;
     }
     if (/^(\.{3}.*\.{3}|\.{3}|\|{3}|\|\|\d+\|\|)$/.test(text)) continue;
-    if ((match = /^return\b\s*(.*)$/i.exec(text))) {
+    match = /^return\b\s*(.*)$/i.exec(text);
+    if (match) {
       const call = callStack.pop() ?? last;
       if (!call) unknown(current, 'sequence');
-      out.push(`  ${call!.to}-->>-${call!.from}: ${bare(unescape(match[1]!)) || ' '}`);
+      out.push(`  ${call!.to}-->>-${call!.from}: ${bare(plainText(match[1]!)) || ' '}`);
       continue;
     }
-    if ((match = MESSAGE.exec(text)) && match[4] && (match[1] || match[8])) {
+    match = MESSAGE.exec(text);
+    if (match && match[4] && (match[1] || match[8])) {
       const [, rawFrom, openLeft, leftHead = '', dashes = '', , rightHead = '', openRight, rawTo, activation, label] = match;
       if (rawFrom === '[' || rawTo === ']' || openLeft || openRight) fail('diagram-unsupported', 'A message from or to outside the diagram ([-> or ->]) is not drawn; name the participant it comes from or goes to.', current.line, 1);
       if (!rawFrom || !rawTo) unknown(current, 'sequence');
@@ -362,7 +370,7 @@ function sequence(lines: Line[], title: string | undefined, maxEdges: number): s
       const arrow = both ? (dashed ? '<<-->>' : '<<->>') : head.includes('x') ? (dashed ? '--x' : '-x') : head === '>>' || head.startsWith('\\') || head.startsWith('/') ? (dashed ? '--)' : '-)') : (dashed ? '-->>' : '->>');
       const act = activation === '++' ? '+' : activation === '--' ? '-' : '';
       if (groupLabel !== undefined) { out.push(`  Note over ${from === to ? from : `${from},${to}`}: ${bare(groupLabel)}`); groupLabel = undefined; }
-      out.push(`  ${from}${arrow}${act}${to}: ${bare(unescape(label ?? '')) || ' '}`);
+      out.push(`  ${from}${arrow}${act}${to}: ${bare(plainText(label ?? '')) || ' '}`);
       if (activation === '**') out.push(`  create participant ${to}`);
       if (activation === '!!') out.push(`  destroy ${to}`);
       if (activation === '++') callStack.push({ from, to });
@@ -401,7 +409,7 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
     const isStatic = /\{(static|classifier)\}/i.test(text), isAbstract = /\{abstract\}/i.test(text);
     // A method `name(args) : Ret` is pele's `name(args) Ret`.
     line = line.replace(/^([+\-#~]?\s*[^():]+\([^)]*\))\s*:\s*(.+)$/, '$1 $2');
-    return unescape(line).replace(/[<>]/g, '~').replace(/[&"]/g, char => (char === '&' ? '#amp;' : '#quot;')).replace(/\n/g, ' ') + (isStatic ? '$' : isAbstract ? '*' : '');
+    return plainText(line).replace(/[<>]/g, '~').replace(/[&"]/g, char => (char === '&' ? '#amp;' : '#quot;')).replace(/\n/g, ' ') + (isStatic ? '$' : isAbstract ? '*' : '');
   };
   const stack: Array<{ kind: 'namespace' | 'class'; id?: string; start?: number }> = [];
   for (let index = 0; index < lines.length; index++) {
@@ -415,7 +423,8 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       out.push(`${'  '.repeat(stack.length + 1)}${member(text)}`);
       continue;
     }
-    if ((match = /^(package|namespace|together)\b\s*("[^"]+"|[\w.$]+)?[^{]*\{\s*$/i.exec(text))) {
+    match = /^(package|namespace|together)\b\s*("[^"]+"|[\w.$]+)?[^{]*\{\s*$/i.exec(text);
+    if (match) {
       if (match[1]!.toLowerCase() === 'together' || stack.some(entry => entry.kind === 'namespace')) { stack.push({ kind: 'namespace' }); out.push(''); continue; }
       stack.push({ kind: 'namespace', id: 'ns', start: out.length });
       out.push(`  namespace ${(unquote(match[2] ?? 'Package').replace(/[^\w]/g, '_') || 'Package')} {`);
@@ -427,7 +436,8 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       if (top!.id === 'ns') { if (out.length - 1 === top!.start) out.pop(); else out.push('  }'); }
       continue;
     }
-    if ((match = CLASS_DECLARATION.exec(text))) {
+    match = CLASS_DECLARATION.exec(text);
+    if (match) {
       const kind = match[1]!.toLowerCase().replace(/\s+/g, ' ');
       let raw = match[2]!, label: string | undefined;
       if (match[3]) { label = unquote(raw); raw = match[3]; }
@@ -453,18 +463,21 @@ function classDiagram(lines: Line[], title: string | undefined, maxEdges: number
       }
       continue;
     }
-    if ((match = /^note\s+(?:(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.$]+)|"([^"]+)"\s+as\s+\w+|as\s+\w+)\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^note\s+(?:(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.$]+)|"([^"]+)"\s+as\s+\w+|as\s+\w+)\s*(#\S+)?\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[5] ?? match[3];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
-      out.push(match[2] ? `  note for ${declare(match[2])} "${quoted(unescape(body))}"` : `  note "${quoted(unescape(body))}"`);
+      out.push(match[2] ? `  note for ${declare(match[2])} "${quoted(plainText(body))}"` : `  note "${quoted(plainText(body))}"`);
       continue;
     }
-    if ((match = /^note\s+(?:on\s+)?link\b/i.exec(text))) {
+    match = /^note\s+(?:on\s+)?link\b/i.exec(text);
+    if (match) {
       if (!/:/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; }
       continue;
     }
     // A member added outside the body: `Name : +field`.
-    if ((match = /^("[^"]+"|[\w.$]+)\s*:\s*(.+)$/u.exec(text)) && !readLink(text)) { out.push(`  ${declare(match[1]!)} : ${member(match[2]!)}`); continue; }
+    match = /^("[^"]+"|[\w.$]+)\s*:\s*(.+)$/u.exec(text);
+    if (match && !readLink(text)) { out.push(`  ${declare(match[1]!)} : ${member(match[2]!)}`); continue; }
     const link = readLink(text);
     if (link) {
       const from = declare(link.from), to = declare(link.to);
@@ -505,7 +518,8 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
     const text = current.text.replace(/\s+#\S+(\s|$)/g, ' ').replace(/\s+##\S*/g, '').trim();
     const indent = '  '.repeat(depth);
     let match: RegExpExecArray | null;
-    if ((match = /^state\s+("[^"]+"|[\w.]+)(?:\s+as\s+([\w.]+))?\s*(<<\s*(\w+)\s*>>)?\s*(\{)?\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^state\s+("[^"]+"|[\w.]+)(?:\s+as\s+([\w.]+))?\s*(<<\s*(\w+)\s*>>)?\s*(\{)?\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let raw = match[1]!, label: string | undefined;
       if (match[2]) { label = unquote(raw); raw = match[2]; }
       const id = state(raw);
@@ -513,7 +527,7 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
       if (stereotype && ['choice', 'fork', 'join'].includes(stereotype)) out.push(`${indent}state ${id} <<${stereotype}>>`);
       else if (stereotype === 'end') out.push(`${indent}state ${id}`);
       else if (label && label !== id) out.push(`${indent}state "${bare(label)}" as ${id}`);
-      if (match[6]) out.push(`${indent}${id} : ${bare(unescape(match[6]))}`);
+      if (match[6]) out.push(`${indent}${id} : ${bare(plainText(match[6]))}`);
       if (match[5]) { out.push(`${indent}state ${id} {`); depth++; }
       else if (!stereotype && !label && !match[6]) out.push(`${indent}${id}`);
       continue;
@@ -525,11 +539,12 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
       continue;
     }
     if (/^(--+|\|\|+)$/.test(text)) { out.push(`${indent}--`); continue; }
-    if ((match = /^note\s+(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^note\s+(left|right|top|bottom)\s+of\s+("[^"]+"|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[3];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       const side = match[1]!.toLowerCase() === 'left' ? 'left' : 'right';
-      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${bare(unescape(body))}`);
+      out.push(`${indent}note ${side} of ${state(match[2]!)} : ${bare(plainText(body))}`);
       continue;
     }
     if (/^note\s+(on\s+)?link\b/i.test(text) || /^note\s+"/i.test(text) || /^note\s+as\b/i.test(text)) {
@@ -542,8 +557,10 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
       if (++transitions > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} transitions.`);
       continue;
     }
-    if ((match = /^("[^"]+"|[\w.]+)\s*:\s*(.*)$/.exec(text))) { out.push(`${indent}${state(match[1]!)} : ${bare(unescape(match[2]!))}`); continue; }
-    if ((match = /^("[^"]+"|[\w.]+)$/.exec(text))) { out.push(`${indent}${state(match[1]!)}`); continue; }
+    match = /^("[^"]+"|[\w.]+)\s*:\s*(.*)$/.exec(text);
+    if (match) { out.push(`${indent}${state(match[1]!)} : ${bare(plainText(match[2]!))}`); continue; }
+    match = /^("[^"]+"|[\w.]+)$/.exec(text);
+    if (match) { out.push(`${indent}${state(match[1]!)}`); continue; }
     unknown(current, 'state');
   }
   if (depth > 1) fail('diagram-syntax', 'A state block is not closed with }.');
@@ -591,7 +608,7 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
     if (!frame || !(kinds as string[]).includes(frame.kind)) unknown(current, 'activity');
     return frame as Extract<Frame, { kind: K }>;
   };
-  const label = (text: string | undefined) => (text ?? '').trim() ? unescape(text!.trim()) : undefined;
+  const label = (text: string | undefined) => (text ?? '').trim() ? plainText(text!.trim()) : undefined;
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
     const { text } = current;
@@ -599,34 +616,39 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
     if (/^start$/i.test(text)) { enter(node('sm-circ', '')); continue; }
     if (/^(stop|end)$/i.test(text)) { enter(node('fr-circ', '')); tails = []; continue; }
     if (/^(kill|detach)$/i.test(text)) { tails = []; continue; }
-    if ((match = /^(#\S+)?:([\s\S]*)$/.exec(text))) {
+    match = /^(#\S+)?:([\s\S]*)$/.exec(text);
+    if (match) {
       // An action: :text; possibly over several lines, ended by ; (or an SDL ending | < > / ] }).
       let body = match[2]!;
       while (!/[;|<>/\]}]$/.test(body) && index + 1 < lines.length) body += `\n${lines[++index]!.text}`;
       if (!/[;|<>/\]}]$/.test(body)) fail('diagram-syntax', 'An action (:...) is not ended with ;.', current.line, 1);
       const ending = body.at(-1)!;
       const shape = ending === '|' ? 'fr-rect' : ending === '<' || ending === '>' ? 'flag' : ending === '/' ? 'lean-r' : ending === ']' ? 'rect' : ending === '}' ? 'st-rect' : 'rounded';
-      enter(node(shape, unescape(body.slice(0, -1))));
+      enter(node(shape, plainText(body.slice(0, -1))));
       continue;
     }
-    if ((match = /^-+(\[[^\]]*\])?>\s*(.*?);?$/.exec(text))) { pending = label(match[2]); continue; }
-    if ((match = /^if\s*\((.*?)\)\s*(?:is\s*\((.*?)\)\s*)?then\s*(?:\((.*)\))?$/i.exec(text))) {
-      const diamond = node('diam', unescape(match[1]! + (match[2] ? ` ${match[2]}` : '')));
+    match = /^-+(\[[^\]]*\])?>\s*(.*?);?$/.exec(text);
+    if (match) { pending = label(match[2]); continue; }
+    match = /^if\s*\((.*?)\)\s*(?:is\s*\((.*?)\)\s*)?then\s*(?:\((.*)\))?$/i.exec(text);
+    if (match) {
+      const diamond = node('diam', plainText(match[1]! + (match[2] ? ` ${match[2]}` : '')));
       enter(diamond);
       tails = [{ id: diamond, ...(label(match[3]) ? { label: label(match[3]) } : {}) }];
       frames.push({ kind: 'if', diamond, ends: [], hasElse: false, line: current.line });
       continue;
     }
-    if ((match = /^(?:elseif|else\s+if)\s*\((.*?)\)\s*(?:is\s*\((.*?)\)\s*)?then\s*(?:\((.*)\))?$/i.exec(text))) {
+    match = /^(?:elseif|else\s+if)\s*\((.*?)\)\s*(?:is\s*\((.*?)\)\s*)?then\s*(?:\((.*)\))?$/i.exec(text);
+    if (match) {
       const frame = top(['if'], current);
       frame.ends.push(...tails);
-      const diamond = node('diam', unescape(match[1]! + (match[2] ? ` ${match[2]}` : '')));
+      const diamond = node('diam', plainText(match[1]! + (match[2] ? ` ${match[2]}` : '')));
       link(frame.diamond, diamond);
       frame.diamond = diamond;
       tails = [{ id: diamond, ...(label(match[3]) ? { label: label(match[3]) } : {}) }];
       continue;
     }
-    if ((match = /^else\s*(?:\((.*)\))?$/i.exec(text))) {
+    match = /^else\s*(?:\((.*)\))?$/i.exec(text);
+    if (match) {
       const frame = top(['if'], current);
       frame.ends.push(...tails);
       frame.hasElse = true;
@@ -639,14 +661,16 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       tails = [...frame.ends, ...tails, ...(frame.hasElse ? [] : [{ id: frame.diamond }])];
       continue;
     }
-    if ((match = /^switch\s*\((.*)\)$/i.exec(text))) {
-      const diamond = node('diam', unescape(match[1]!));
+    match = /^switch\s*\((.*)\)$/i.exec(text);
+    if (match) {
+      const diamond = node('diam', plainText(match[1]!));
       enter(diamond);
       tails = [];
       frames.push({ kind: 'switch', diamond, ends: [], line: current.line, started: false });
       continue;
     }
-    if ((match = /^case\s*\((.*)\)$/i.exec(text))) {
+    match = /^case\s*\((.*)\)$/i.exec(text);
+    if (match) {
       const frame = top(['switch'], current);
       if (frame.started) frame.ends.push(...tails);
       frame.started = true;
@@ -659,14 +683,16 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       tails = [...frame.ends, ...tails];
       continue;
     }
-    if ((match = /^while\s*\((.*?)\)\s*(?:is\s*\((.*)\))?$/i.exec(text))) {
-      const diamond = node('diam', unescape(match[1]!));
+    match = /^while\s*\((.*?)\)\s*(?:is\s*\((.*)\))?$/i.exec(text);
+    if (match) {
+      const diamond = node('diam', plainText(match[1]!));
       enter(diamond);
       tails = [{ id: diamond, ...(label(match[2]) ? { label: label(match[2]) } : {}) }];
       frames.push({ kind: 'while', diamond, line: current.line });
       continue;
     }
-    if ((match = /^end\s*while\s*(?:\((.*)\))?$/i.exec(text))) {
+    match = /^end\s*while\s*(?:\((.*)\))?$/i.exec(text);
+    if (match) {
       const frame = top(['while'], current);
       frames.pop();
       for (const tail of tails) link(tail.id, frame.diamond, tail.label ?? pending);
@@ -679,16 +705,18 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       if (/^repeat\s*:/.test(text)) { lines[index] = { ...current, text: text.replace(/^repeat\s*/, '') }; index--; }
       continue;
     }
-    if ((match = /^repeat\s*while\s*\((.*?)\)\s*(?:is\s*\((.*?)\))?\s*(?:not\s*\((.*?)\))?$/i.exec(text))) {
+    match = /^repeat\s*while\s*\((.*?)\)\s*(?:is\s*\((.*?)\))?\s*(?:not\s*\((.*?)\))?$/i.exec(text);
+    if (match) {
       const frame = top(['repeat'], current);
       frames.pop();
-      const diamond = node('diam', unescape(match[1]!));
+      const diamond = node('diam', plainText(match[1]!));
       enter(diamond);
       link(diamond, frame.first ?? diamond, label(match[2]));
       tails = [{ id: diamond, ...(label(match[3]) ? { label: label(match[3]) } : {}) }];
       continue;
     }
-    if ((match = /^backward\s*:([\s\S]*);$/.exec(text))) continue;
+    match = /^backward\s*:([\s\S]*);$/.exec(text);
+    if (match) continue;
     if (/^fork$/i.test(text)) {
       const bar = node('fork', '');
       enter(bar);
@@ -722,8 +750,9 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       tails = [...frame.ends, ...tails];
       continue;
     }
-    if ((match = /^(partition|group|package|rectangle|card)\s+("[^"]+"|[^{]+?)\s*(#\S+)?\s*\{?$/i.exec(text))) {
-      groups.push({ id: `g${groups.length}`, label: unescape(unquote(match[2]!)), nodes: [], ...(group !== undefined ? { parent: group } : lane !== undefined ? { parent: lane } : {}) });
+    match = /^(partition|group|package|rectangle|card)\s+("[^"]+"|[^{]+?)\s*(#\S+)?\s*\{?$/i.exec(text);
+    if (match) {
+      groups.push({ id: `g${groups.length}`, label: plainText(unquote(match[2]!)), nodes: [], ...(group !== undefined ? { parent: group } : lane !== undefined ? { parent: lane } : {}) });
       frames.push({ kind: 'group', previous: group, line: current.line });
       group = groups.length - 1;
       if (!text.endsWith('{')) { /* `end group` closes it */ }
@@ -735,22 +764,25 @@ function activity(lines: Line[], title: string | undefined, maxEdges: number): s
       group = frame.previous;
       continue;
     }
-    if ((match = /^\|(?:#[^|]*\|)?([^|]+)\|$/.exec(text))) {
+    match = /^\|(?:#[^|]*\|)?([^|]+)\|$/.exec(text);
+    if (match) {
       const name = match[1]!.trim();
       let at = lanes.get(name);
-      if (at === undefined) { groups.push({ id: `g${groups.length}`, label: unescape(name), nodes: [] }); at = groups.length - 1; lanes.set(name, at); }
+      if (at === undefined) { groups.push({ id: `g${groups.length}`, label: plainText(name), nodes: [] }); at = groups.length - 1; lanes.set(name, at); }
       lane = at;
       continue;
     }
-    if ((match = /^(floating\s+)?note\s+(left|right)?\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^(floating\s+)?note\s+(left|right)?\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[3];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       const anchor = tails[0]?.id;
-      const note = node('notch-rect', unescape(body));
+      const note = node('notch-rect', plainText(body));
       if (anchor) edges.push(`  ${anchor} -.- ${note}`);
       continue;
     }
-    if ((match = /^\((\w)\)$/.exec(text))) { enter(node('circle', match[1]!)); continue; }
+    match = /^\((\w)\)$/.exec(text);
+    if (match) { enter(node('circle', match[1]!)); continue; }
     if (/^(label|goto)\s/i.test(text)) fail('diagram-unsupported', 'label and goto are not drawn; write the flow with if, while or repeat.', current.line, 1);
     unknown(current, 'activity');
   }
@@ -792,10 +824,10 @@ function usecase(lines: Line[], title: string | undefined, direction: string | u
     const id = ids.of(name);
     if ((kind ?? 'actor') === 'actor') {
       actors.set(name, id);
-      actorLines.push(`  actor ${id}${label !== id ? `("${quoted(unescape(label))}")` : ''}`);
+      actorLines.push(`  actor ${id}${label !== id ? `("${quoted(plainText(label))}")` : ''}`);
     } else {
       cases.set(name, id);
-      caseLines.push({ line: `${id}("${quoted(unescape(label))}")`, ...(stack.length ? { boundary: stack.at(-1)! } : {}) });
+      caseLines.push({ line: `${id}("${quoted(plainText(label))}")`, ...(stack.length ? { boundary: stack.at(-1)! } : {}) });
     }
     return id;
   };
@@ -809,32 +841,38 @@ function usecase(lines: Line[], title: string | undefined, direction: string | u
     const plain = current.text.replace(/\s+#\S+$/, '');
     const text = readLink(plain) ? plain : plain.replace(/\s*<<[^>]*>>\s*$/, '');
     let match: RegExpExecArray | null;
-    if ((match = /^actor\s+(?::([^:]+):|"([^"]+)"|([\w.\u0080-\uFFFF]+))(?:\s+as\s+(?::([^:]+):|"([^"]+)"|([\w.]+)))?$/iu.exec(text))) {
+    match = /^actor\s+(?::([^:]+):|"([^"]+)"|([\w.\u0080-\uFFFF]+))(?:\s+as\s+(?::([^:]+):|"([^"]+)"|([\w.]+)))?$/iu.exec(text);
+    if (match) {
       const quotedFirst = match[1] !== undefined || match[2] !== undefined;
       const second = match[4] ?? match[5] ?? match[6];
       if (second !== undefined && (match[4] !== undefined || match[5] !== undefined)) element(match[4] ?? match[5]!, 'actor', match[1] ?? match[2] ?? match[3]);
       else declared(match[1] ?? match[2] ?? match[3]!, quotedFirst, second, 'actor');
       continue;
     }
-    if ((match = /^:([^:]+):(?:\s+as\s+([\w.]+))?$/.exec(text))) { element(match[1]!, 'actor', match[2]); continue; }
-    if ((match = /^usecase\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+))(?:\s+as\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+)))?$/i.exec(text))) {
+    match = /^:([^:]+):(?:\s+as\s+([\w.]+))?$/.exec(text);
+    if (match) { element(match[1]!, 'actor', match[2]); continue; }
+    match = /^usecase\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+))(?:\s+as\s+(?:\(([^)]+)\)|"([^"]+)"|([\w.]+)))?$/i.exec(text);
+    if (match) {
       const quotedFirst = match[1] !== undefined || match[2] !== undefined;
       const second = match[4] ?? match[5] ?? match[6];
       if (second !== undefined && (match[4] !== undefined || match[5] !== undefined)) element(match[4] ?? match[5]!, 'usecase', match[1] ?? match[2] ?? match[3]);
       else declared(match[1] ?? match[2] ?? match[3]!, quotedFirst, second, 'usecase');
       continue;
     }
-    if ((match = /^\(([^)]+)\)(?:\s+as\s+([\w.]+))?$/.exec(text))) { element(match[1]!, 'usecase', match[2]); continue; }
-    if ((match = /^(rectangle|package|frame|node|folder|cloud)\s+("[^"]+"|[\w.]+)(?:\s+as\s+[\w.]+)?\s*\{$/i.exec(text))) {
-      boundaries.push({ label: unescape(unquote(match[2]!)), package: match[1]!.toLowerCase() !== 'rectangle' });
+    match = /^\(([^)]+)\)(?:\s+as\s+([\w.]+))?$/.exec(text);
+    if (match) { element(match[1]!, 'usecase', match[2]); continue; }
+    match = /^(rectangle|package|frame|node|folder|cloud)\s+("[^"]+"|[\w.]+)(?:\s+as\s+[\w.]+)?\s*\{$/i.exec(text);
+    if (match) {
+      boundaries.push({ label: plainText(unquote(match[2]!)), package: match[1]!.toLowerCase() !== 'rectangle' });
       stack.push(boundaries.length - 1);
       continue;
     }
     if (/^\}$/.test(text)) { if (!stack.length) unknown(current, 'use case'); stack.pop(); continue; }
-    if ((match = /^note\s+(?:left|right|top|bottom)\s+of\s+("[^"]+"|\([^)]+\)|:[^:]+:|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^note\s+(?:left|right|top|bottom)\s+of\s+("[^"]+"|\([^)]+\)|:[^:]+:|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[2];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
-      relationLines.push(`  note for ${element(match[1]!)} "${quoted(unescape(body))}"`);
+      relationLines.push(`  note for ${element(match[1]!)} "${quoted(plainText(body))}"`);
       continue;
     }
     if (/^note\b/i.test(text)) { if (!/:|"/.test(text)) { const block = noteBlock(lines, index, ''); index = block.end; } continue; }
@@ -891,19 +929,20 @@ function component(lines: Line[], title: string | undefined, direction: string |
     label = name;
     if (alias) name = alias;
     const id = ids.of(name);
-    if (!nodes.has(id)) nodes.set(id, { line: `${id}@{ shape: ${shape}, label: "${quoted(unescape(label))}" }`, ...(stack.length ? { group: stack.at(-1)! } : {}) });
+    if (!nodes.has(id)) nodes.set(id, { line: `${id}@{ shape: ${shape}, label: "${quoted(plainText(label))}" }`, ...(stack.length ? { group: stack.at(-1)! } : {}) });
     return id;
   };
   for (let index = 0; index < lines.length; index++) {
     const current = lines[index]!;
     const text = current.text.replace(/\s+#\S+(\s*\{)?$/, '$1').replace(/\s*<<[^>]*>>/g, '').trim();
     let match: RegExpExecArray | null;
-    if ((match = /^(component|interface|database|node|cloud|artifact|file|folder|frame|package|queue|storage|actor|person|card|agent|collections|stack|hexagon|label|boundary|control|entity|rectangle|usecase|port|portin|portout)\s+("[^"]+"|\[[^\]]+\]|\([^)]+\)|:[^:]+:|[\w.\u0080-\uFFFF]+)(?:\s+as\s+("[^"]+"|[\w.]+))?\s*(\{)?$/iu.exec(text))) {
+    match = /^(component|interface|database|node|cloud|artifact|file|folder|frame|package|queue|storage|actor|person|card|agent|collections|stack|hexagon|label|boundary|control|entity|rectangle|usecase|port|portin|portout)\s+("[^"]+"|\[[^\]]+\]|\([^)]+\)|:[^:]+:|[\w.\u0080-\uFFFF]+)(?:\s+as\s+("[^"]+"|[\w.]+))?\s*(\{)?$/iu.exec(text);
+    if (match) {
       const kind = match[1]!.toLowerCase();
       let raw = match[2]!, alias = match[3] ? unquote(match[3]) : undefined;
       if (alias && /^"/.test(match[3]!)) { [raw, alias] = [match[3]!, unquote(match[2]!)]; }
       if (match[4]) {
-        groups.push({ id: `g${groups.length}`, label: unescape(unquote(raw).replace(/^\[|\]$/g, '')), ...(stack.length ? { parent: stack.at(-1)! } : {}) });
+        groups.push({ id: `g${groups.length}`, label: plainText(unquote(raw).replace(/^\[|\]$/g, '')), ...(stack.length ? { parent: stack.at(-1)! } : {}) });
         stack.push(groups.length - 1);
         if (alias) ids.of(alias);
         continue;
@@ -911,14 +950,16 @@ function component(lines: Line[], title: string | undefined, direction: string |
       element(raw, kind, alias);
       continue;
     }
-    if ((match = /^(\[[^\]]+\]|\(\)\s*("[^"]+"|[\w.]+))(?:\s+as\s+([\w.]+))?$/.exec(text))) { element(match[1]!, undefined, match[3]); continue; }
+    match = /^(\[[^\]]+\]|\(\)\s*("[^"]+"|[\w.]+))(?:\s+as\s+([\w.]+))?$/.exec(text);
+    if (match) { element(match[1]!, undefined, match[3]); continue; }
     if (/^\}$/.test(text)) { if (!stack.length) unknown(current, 'component'); stack.pop(); continue; }
-    if ((match = /^note\s+(?:left|right|top|bottom)\s+of\s+("[^"]+"|\[[^\]]+\]|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text))) {
+    match = /^note\s+(?:left|right|top|bottom)\s+of\s+("[^"]+"|\[[^\]]+\]|[\w.]+)\s*(?::\s*(.*))?$/i.exec(text);
+    if (match) {
       let body = match[2];
       if (body === undefined) { const block = noteBlock(lines, index, ''); body = block.text; index = block.end; }
       const target = element(match[1]!);
       const note = ids.of(`note ${index}`);
-      nodes.set(note, { line: `${note}@{ shape: notch-rect, label: "${quoted(unescape(body))}" }` });
+      nodes.set(note, { line: `${note}@{ shape: notch-rect, label: "${quoted(plainText(body))}" }` });
       edges.push(`  ${target} -.- ${note}`);
       continue;
     }
@@ -981,7 +1022,7 @@ function mindmap(lines: Line[]): string {
     }
     if (depth === 1 && ++roots > 1) fail('diagram-unsupported', 'A mind map has one root; draw the second tree as its own diagram.', current.line, 1);
     if (depth > 1 && !count) fail('diagram-syntax', 'A mind map starts with its root (*).', current.line, 1);
-    const label = unescape(text);
+    const label = plainText(text);
     // A node is a rounded box, a boxless node (*_) a square one: pele's mind map has no node without an outline that takes any text.
     out.push(`${'  '.repeat(depth)}m${count++}${match![3] ? `["${quoted(label)}"]` : `("${quoted(label)}")`}`);
   }
@@ -1015,37 +1056,51 @@ function gantt(lines: Line[], title: string | undefined): string {
   for (const current of lines) {
     const text = current.text.replace(/\s+and\s+(is\s+colored|is\s+displayed|on\s+\{).*$/i, '');
     let match: RegExpExecArray | null;
-    if ((match = /^project\s+starts?\s+(?:the\s+|on\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(text))) { projectStart = date(match[1]!, current.line); continue; }
-    if ((match = /^(saturday|sunday|monday|tuesday|wednesday|thursday|friday)s?\s+(?:are|is)\s+closed$/i.exec(text))) { closed.add(WEEKDAYS.indexOf(match[1]!.toLowerCase())); continue; }
-    if ((match = /^(\d{4}[-/]\d{1,2}[-/]\d{1,2})\s+(?:is|are)\s+closed$/i.exec(text))) { closedDates.add(date(match[1]!, current.line)); continue; }
-    if ((match = /^--\s*(.*?)\s*--$/.exec(text))) { section = unescape(match[1]!); continue; }
+    match = /^project\s+starts?\s+(?:the\s+|on\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(text);
+    if (match) { projectStart = date(match[1]!, current.line); continue; }
+    match = /^(saturday|sunday|monday|tuesday|wednesday|thursday|friday)s?\s+(?:are|is)\s+closed$/i.exec(text);
+    if (match) { closed.add(WEEKDAYS.indexOf(match[1]!.toLowerCase())); continue; }
+    match = /^(\d{4}[-/]\d{1,2}[-/]\d{1,2})\s+(?:is|are)\s+closed$/i.exec(text);
+    if (match) { closedDates.add(date(match[1]!, current.line)); continue; }
+    match = /^--\s*(.*?)\s*--$/.exec(text);
+    if (match) { section = plainText(match[1]!); continue; }
     if (/^(printscale|projectscale|language|today|hide\s+ressources|hide\s+footbox|<style>|\d{4}[-/]\d{1,2}[-/]\d{1,2}\s+is\s+(colored|named)|\[[^\]]+\]\s+is\s+colored|\[[^\]]+\]\s+is\s+displayed|separator\b|\{[^}]*\}\s+is\s+off)/i.test(text)) continue;
     let rest = text;
     let subject: Task | undefined;
-    if ((match = /^then\s+(\[[^\]]+\].*)$/i.exec(rest))) {
+    match = /^then\s+(\[[^\]]+\].*)$/i.exec(rest);
+    if (match) {
       rest = match[1]!;
       const name = /^\[([^\]]+)\]/.exec(rest)![1]!;
       subject = task(name, current.line);
       if (previous) subject.startRef = { task: previous.name, at: 'end', offset: 0 };
     }
-    if ((match = /^\[([^\]]+)\]\s+as\s+\[([^\]]+)\]\s*(.*)$/i.exec(rest))) { aliases.set(match[2]!, match[1]!); task(match[1]!, current.line); rest = `[${match[1]}] ${match[3]}`.trim(); if (!match[3]) { previous = task(match[1]!, current.line); continue; } }
-    if (!(match = /^\[([^\]]+)\]\s*(.*)$/.exec(rest))) unknown(current, 'gantt');
+    match = /^\[([^\]]+)\]\s+as\s+\[([^\]]+)\]\s*(.*)$/i.exec(rest);
+    if (match) { aliases.set(match[2]!, match[1]!); task(match[1]!, current.line); rest = `[${match[1]}] ${match[3]}`.trim(); if (!match[3]) { previous = task(match[1]!, current.line); continue; } }
+    match = /^\[([^\]]+)\]\s*(.*)$/.exec(rest);
+    if (!match) unknown(current, 'gantt');
     subject = task(match![1]!, current.line);
     previous = subject;
     for (const clause of match![2]!.split(/\s+and\s+/i).map(part => part.trim()).filter(Boolean)) {
       let part: RegExpExecArray | null;
-      if ((part = /^(?:lasts|requires)\s+(\d+)\s+(days?|weeks?)(?:\s+and\s+(\d+)\s+days?)?$/i.exec(clause))) { subject.duration = amount(part[1]!, part[2]!) + Number(part[3] ?? 0); continue; }
-      if ((part = /^starts?\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause))) { subject.start = date(part[1]!, current.line); continue; }
-      if ((part = /^ends?\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause))) { subject.end = date(part[1]!, current.line); continue; }
-      if ((part = /^(starts?|ends?)\s+(?:(\d+)\s+(days?|weeks?)\s+(after|before)\s+)?(?:at\s+)?\[([^\]]+)\]'s\s+(start|end)$/i.exec(clause))) {
+      part = /^(?:lasts|requires)\s+(\d+)\s+(days?|weeks?)(?:\s+and\s+(\d+)\s+days?)?$/i.exec(clause);
+      if (part) { subject.duration = amount(part[1]!, part[2]!) + Number(part[3] ?? 0); continue; }
+      part = /^starts?\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause);
+      if (part) { subject.start = date(part[1]!, current.line); continue; }
+      part = /^ends?\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause);
+      if (part) { subject.end = date(part[1]!, current.line); continue; }
+      part = /^(starts?|ends?)\s+(?:(\d+)\s+(days?|weeks?)\s+(after|before)\s+)?(?:at\s+)?\[([^\]]+)\]'s\s+(start|end)$/i.exec(clause);
+      if (part) {
         const offset = part[2] ? amount(part[2], part[3]!) * (part[4]!.toLowerCase() === 'before' ? -1 : 1) : 0;
         const ref = { task: aliases.get(part[5]!) ?? part[5]!, at: part[6]!.toLowerCase() as 'start' | 'end', offset };
         if (/^start/i.test(part[1]!)) subject.startRef = ref; else subject.endRef = ref;
         continue;
       }
-      if ((part = /^happens\s+(?:at\s+)?\[([^\]]+)\]'s\s+(start|end)$/i.exec(clause))) { subject.milestone = true; subject.startRef = { task: aliases.get(part[1]!) ?? part[1]!, at: part[2]!.toLowerCase() as 'start' | 'end', offset: 0 }; subject.duration = 0; continue; }
-      if ((part = /^happens\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause))) { subject.milestone = true; subject.start = date(part[1]!, current.line); subject.duration = 0; continue; }
-      if ((part = /^is\s+(\d+)%\s+complete(?:d)?$/i.exec(clause))) { subject.complete = Number(part[1]); continue; }
+      part = /^happens\s+(?:at\s+)?\[([^\]]+)\]'s\s+(start|end)$/i.exec(clause);
+      if (part) { subject.milestone = true; subject.startRef = { task: aliases.get(part[1]!) ?? part[1]!, at: part[2]!.toLowerCase() as 'start' | 'end', offset: 0 }; subject.duration = 0; continue; }
+      part = /^happens\s+(?:on\s+|the\s+)?(\d{4}[-/]\d{1,2}[-/]\d{1,2})$/i.exec(clause);
+      if (part) { subject.milestone = true; subject.start = date(part[1]!, current.line); subject.duration = 0; continue; }
+      part = /^is\s+(\d+)%\s+complete(?:d)?$/i.exec(clause);
+      if (part) { subject.complete = Number(part[1]); continue; }
       if (/^(is\s+colored\b|is\s+displayed\b|on\s+\{|is\s+deleted|pauses\b|links\s+to\b)/i.test(clause)) continue;
       fail('diagram-syntax', `OPF cannot read this part of a PlantUML gantt chart: ${JSON.stringify(clause)}.`, current.line, 1);
     }
@@ -1091,7 +1146,7 @@ function gantt(lines: Line[], title: string | undefined): string {
     if (entry.section !== currentSection) { currentSection = entry.section; if (entry.section !== undefined) out.push(`  section ${bare(entry.section)}`); }
     const tags = [entry.milestone ? 'milestone' : '', entry.complete === 100 ? 'done' : entry.complete ? 'active' : ''].filter(Boolean);
     const days = entry.milestone ? 0 : Math.max(1, Math.round((span.end - span.start) / DAY) - [...Array(Math.max(0, Math.round((span.end - span.start) / DAY))).keys()].filter(step => !open(span.start + step * DAY)).length);
-    out.push(`  ${bare(unescape(entry.name)).replace(/:/g, '#58;')} :${[...tags, entry.id, iso(span.start), `${days}d`].join(', ')}`);
+    out.push(`  ${bare(plainText(entry.name)).replace(/:/g, '#58;')} :${[...tags, entry.id, iso(span.start), `${days}d`].join(', ')}`);
   }
   return out.join('\n');
 }

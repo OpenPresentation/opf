@@ -18,4 +18,11 @@ assert.ok(after.items.find(item => item.field === 'diagram').diagram.svg.startsW
 // A type the page never loaded is still reported as loading, not as an error of the document; an unknown one is an error.
 assert.deepEqual(diagramsPending({ diagram: 'pie\n  "A" : 1' }), ['pie']);
 assert.equal(checkDiagram('not a diagram').issue.code, 'diagram-unsupported');
+// SH-13: the PlantUML reader loads on demand too, then the pele type its diagram is drawn as.
+const plantuml = { diagram: { source: '@startmindmap\n* Root\n** Child\n@endmindmap', syntax: 'plantuml' } };
+assert.deepEqual(diagramsPending(plantuml), ['plantuml']);
+assert.equal(checkDiagram(plantuml.diagram).issue.code, 'diagram-unloaded');
+assert.deepEqual(await ensureDiagrams(plantuml), ['plantuml', 'mindmap']);
+assert.deepEqual(diagramsPending(plantuml), []);
+assert.deepEqual(checkDiagram(plantuml.diagram), { ok: true, type: 'mindmap' });
 console.log('lazy diagram engine: ok');

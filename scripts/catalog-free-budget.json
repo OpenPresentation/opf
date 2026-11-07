@@ -6,7 +6,7 @@
     "convert": 454639,
     "data": 8970,
     "deck": 494598,
-    "diagram-engine-eager": 278413,
+    "diagram-engine-eager": 292067,
     "diagram-engine-lazy": 11598,
     "diff": 6280,
     "font-policy": 16019,
@@ -53,8 +53,8 @@
       "gzip": 480192
     },
     "diagram-engine-eager": {
-      "minified": 716570,
-      "gzip": 270303
+      "minified": 753482,
+      "gzip": 283560
     },
     "diagram-engine-lazy": {
       "minified": 27014,

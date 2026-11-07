@@ -21,7 +21,7 @@ const issue = source => {
 const PIPELINE = 'digraph pipeline {\n  rankdir=LR\n  node [shape=box]\n  Commit -> Build -> Test -> Deploy\n  Test -> Fix [label="fails", style=dashed]\n  Fix -> Build\n}';
 
 test('DOT is a diagram syntax beside Mermaid, read from the object form only', () => {
-  assert.deepEqual([...DIAGRAM_SYNTAXES], ['mermaid', 'dot']);
+  assert.deepEqual([...DIAGRAM_SYNTAXES], ['mermaid', 'dot', 'plantuml']);
   assert.deepEqual(diagramPayload({source: 'digraph { a -> b }', syntax: 'dot', alt: 'A to B'}), {source: 'digraph { a -> b }', syntax: 'dot', alt: 'A to B'});
   assert.deepEqual(diagramPayload('digraph { a -> b }'), {source: 'digraph { a -> b }', syntax: 'mermaid'}, 'a string is always Mermaid');
   assert.equal(diagramPayload({source: 'x', syntax: 'plantuml-later'}), undefined);
