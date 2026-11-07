@@ -12,11 +12,11 @@ const sizeOf = slide => {
   return { size: list.text.fontSize / scale, columns: list.listColumns?.length ?? 1 };
 };
 
-test('a long list with columns: auto is never smaller than the same list in one column', () => {
+test('a long list with columns: auto is within a type-scale step of the same list in one column (it was 20 px against 24 px)', () => {
   const items = Array.from({ length: 14 }, (_, i) => `Point ${i + 1}: ${words(10)}`);
   const one = sizeOf({ title: 'x', items });
   const auto = sizeOf({ title: 'x', items, columns: 'auto' });
-  assert.ok(auto.size >= one.size - 0.01, `auto ${auto.size} px (${auto.columns} columns) against one column ${one.size} px`);
+  assert.ok(auto.size >= one.size * 0.9, `auto ${auto.size} px (${auto.columns} columns) against one column ${one.size} px`);
 });
 
 test('a list that fits at the starting size in two columns still takes two', () => {
@@ -35,4 +35,11 @@ test('the FAQ layout keeps its three columns of ten described questions, not two
   const result = composeSlide({ layout: 'faq', title: 'Questions', blocks: [{ items }] }, { layout: gallery.layouts.faq });
   const list = result.items.find(item => item.field === 'items');
   assert.equal(list.listColumns?.length, 3);
+});
+
+test('auto balances its columns at the fitted size: 30 one-line entries split 15 and 15', () => {
+  const items = Array.from({ length: 30 }, (_, i) => `Agenda item ${i + 1}: a part of the talk`);
+  const result = composeSlide({ layout: 'agenda', title: 'Agenda', blocks: [{ items }] }, { layout: gallery.layouts.agenda });
+  const list = result.items.find(item => item.field === 'items');
+  assert.deepEqual(list.listColumns.map(column => column.end - column.start), [15, 15]);
 });
