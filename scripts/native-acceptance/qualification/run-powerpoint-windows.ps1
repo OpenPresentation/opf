@@ -17,6 +17,8 @@ param(
   [double]$Tolerance = 1.5
 )
 $ErrorActionPreference = 'Stop'
+# -File passes "a,b" as one string; accept both forms.
+$Only = @($Only | ForEach-Object { $_ -split ',' } | Where-Object { $_ })
 $Out = (Resolve-Path -LiteralPath $Out).Path
 $build = Get-Content -LiteralPath (Join-Path $Out 'build.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $root = Join-Path $Out 'powerpoint'
@@ -73,8 +75,17 @@ function Get-TextInfo($shape) {
     $left = $shape.Left; $top = $shape.Top; $right = $left + $shape.Width; $bottom = $top + $shape.Height
     if ($range.BoundTop -lt $top - $Tolerance) { $info.overflow += 'top' }
     if ($range.BoundTop + $range.BoundHeight -gt $bottom + $Tolerance) { $info.overflow += 'bottom' }
-    if ($range.BoundLeft -lt $left - $Tolerance) { $info.overflow += 'left' }
-    if ($range.BoundLeft + $range.BoundWidth -gt $right + $Tolerance) { $info.overflow += 'right' }
+    # Horizontally the whole range's bound also counts trailing spaces and about 0.2 em after the paragraph mark; the trimmed
+    # range's bound is the drawn text (it matches a box OPF sized to its text within 1 pt).
+    $ink = Get-Safe { $range.TrimText() }
+    if (-not $ink) { $ink = $range }
+    $info.inkBound = @([math]::Round($ink.BoundLeft, 2), [math]::Round($ink.BoundWidth, 2))
+    # A wrapping box (native body text) re-wraps instead of running sideways, and its lines' trailing spaces widen the bound, so
+    # only an unwrapped box (OPF's measured lines) is checked sideways; every box is checked at the top and bottom.
+    if ($tf.WordWrap -ne -1) {
+      if ($ink.BoundLeft -lt $left - $Tolerance) { $info.overflow += 'left' }
+      if ($ink.BoundLeft + $ink.BoundWidth -gt $right + $Tolerance) { $info.overflow += 'right' }
+    }
   }
   return $info
 }
@@ -112,8 +123,10 @@ function Get-ShapeInfo($shape, [int]$depth) {
   $text = Get-TextInfo $shape
   if ($text) { $rec.text = $text }
   if ($shape.Type -eq 6 -or (Get-Safe { $shape.HasSmartArt -eq -1 })) {
-    $items = Get-Safe { $shape.GroupItems }
-    if ($items) { $rec.children = @(for ($i = 1; $i -le $items.Count; $i++) { Get-ShapeInfo $items.Item($i) ($depth + 1) }) }
+    # Not through Get-Safe: returning a COM collection from a script block unrolls it into a 0-based array.
+    $items = $null
+    try { $items = $shape.GroupItems } catch {}
+    if ($null -ne $items) { $rec.children = @(for ($i = 1; $i -le $items.Count; $i++) { Get-ShapeInfo $items.Item($i) ($depth + 1) }) }
   }
   return $rec
 }

@@ -111,7 +111,11 @@ export function gradeCheck(check, feature, probe, facts) {
   const expect = feature.expect ?? {};
   switch (check) {
     case 'opens': return pass(`${probe.openSeconds}s`);
-    case 'slides': return probe.slideCount === probe.previewSlides ? pass(`${probe.slideCount}`) : fail(`${probe.slideCount} slides, preview ${probe.previewSlides}`);
+    case 'slides': {
+      // The preview leaves hidden slides out; the app lists them.
+      const visible = list(probe.slides).filter((slide) => !slide.hidden).length || probe.slideCount;
+      return visible === probe.previewSlides ? pass(`${visible}${visible !== probe.slideCount ? ` visible of ${probe.slideCount}` : ''}`) : fail(`${visible} visible slides, preview ${probe.previewSlides}`);
+    }
     case 'noOverflow': {
       const bad = slides.flatMap((n) => (at(n)?.overflow ?? []).map((o) => `s${n} "${o.text}" ${o.sides.join('+')}`));
       return bad.length ? fail(bad.slice(0, 6).join('; ') + (bad.length > 6 ? ` (+${bad.length - 6})` : '')) : pass();
@@ -196,9 +200,12 @@ async function main() {
       const probe = readJson(probeFile);
       const facts = list(probe.slides).map(slideFacts);
       const visual = [];
+      let shown = 0;
       for (let n = 1; n <= (probe.slideCount ?? 0); n += 1) {
-        // The CLI pads {n} to the largest slide number (slide-01.png of ten slides).
-        const preview = [1, 2, 3].map((width) => path.join(out, 'preview', deck.id, `slide-${String(n).padStart(width, '0')}.png`)).find((file) => existsSync(file)) ?? '';
+        // The preview numbers visible slides only; the CLI pads {n} to the largest slide number (slide-01.png of ten slides).
+        if (list(probe.slides)[n - 1]?.hidden) { visual.push({ slide: n, hidden: true }); continue; }
+        shown += 1;
+        const preview = [1, 2, 3].map((width) => path.join(out, 'preview', deck.id, `slide-${String(shown).padStart(width, '0')}.png`)).find((file) => existsSync(file)) ?? '';
         const native = path.join(appDir, name, `slide-${n}.png`);
         if (!existsSync(preview) || !existsSync(native)) { visual.push({ slide: n, missing: true }); continue; }
         visual.push({ slide: n, ...(await imageDiff(sharp, preview, native, options.sheets ? path.join(appDir, 'sheets', `${name}-${n}.png`) : undefined)) });

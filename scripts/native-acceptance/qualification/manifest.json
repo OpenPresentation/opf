@@ -115,6 +115,10 @@
       "source": "examples/markdown/diagrams.opf.md"
     },
     {
+      "id": "diagram-connectors",
+      "source": "scripts/native-acceptance/qualification/decks/diagram-connectors.opf.json"
+    },
+    {
       "id": "layout-sampler",
       "source": "examples/technical/layout-sampler.opf.json",
       "variants": [
@@ -175,16 +179,37 @@
         "noOverflow",
         "noShrink",
         "visual",
-        "shapes",
         "roundtrip"
       ],
       "expect": {
-        "shapes": 1,
         "roundtrip": {
           "shapes": 20
         }
       },
       "check": "Every preset keeps its outline and adjust handles in PowerPoint (yellow handles: not run, UI); fills, strokes, gradients and text match the preview."
+    },
+    {
+      "id": "SH-02-native",
+      "title": "Shape blocks are native presets and freeforms (slide 8 is masked pictures)",
+      "changes": [
+        "sh-02-shape-block"
+      ],
+      "deck": "shapes",
+      "slides": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "checks": [
+        "shapes"
+      ],
+      "expect": {
+        "shapes": 1
+      }
     },
     {
       "id": "SH-03",
@@ -270,7 +295,7 @@
     },
     {
       "id": "SH-07",
-      "title": "Native Mermaid diagrams (shapes, text and glued connectors)",
+      "title": "Native Mermaid diagrams: shapes, text and exact edge paths, read back as diagrams",
       "changes": [
         "sh-07-native-diagrams",
         "sh-phase-2-integration"
@@ -287,14 +312,40 @@
         "noOverflow",
         "noShrink",
         "visual",
-        "connectors",
-        "shapes"
+        "shapes",
+        "roundtrip"
       ],
       "expect": {
-        "connectors": 2,
-        "shapes": 3
+        "shapes": 3,
+        "roundtrip": {
+          "diagrams": 7
+        }
       },
       "check": "Flowchart and state diagrams are native shapes with editable labels and glued connectors."
+    },
+    {
+      "id": "SH-07-connectors",
+      "title": "Straight diagram edges without arrowheads are native connectors glued to their nodes",
+      "changes": [
+        "sh-07-native-diagrams",
+        "sh-phase-2-integration"
+      ],
+      "deck": "diagram-connectors",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "connectors",
+        "roundtrip"
+      ],
+      "expect": {
+        "connectors": 1,
+        "roundtrip": {
+          "diagrams": 2
+        }
+      }
     },
     {
       "id": "SH-07-families",
@@ -344,7 +395,7 @@
     },
     {
       "id": "SH-09",
-      "title": "Live SmartArt: Basic Pyramid and Basic Matrix",
+      "title": "Live SmartArt: Basic Pyramid and Basic Matrix; a PowerPoint-saved copy imports back as the six arrangement layouts",
       "changes": [
         "sh-09-smartart-tier1"
       ],
@@ -372,7 +423,14 @@
           "matrix"
         ],
         "roundtrip": {
-          "arrangements": 10
+          "layouts": [
+            "pyramid",
+            "matrix",
+            "cycle",
+            "chevrons",
+            "flow",
+            "vertical-flow"
+          ]
         }
       }
     },
@@ -930,7 +988,7 @@
     },
     {
       "id": "RR-102",
-      "title": "Header & Footer: footer, live slide number and date placeholders; hidden footer",
+      "title": "Header & Footer: footer, live slide number and date placeholders; a slide's own footer (number only) and a hidden footer",
       "changes": [
         "rr-102-header-footer-dialog"
       ],
@@ -968,9 +1026,9 @@
             "date": false
           },
           {
-            "footer": true,
+            "footer": false,
             "slideNumber": true,
-            "date": true
+            "date": false
           }
         ],
         "renumber": true
