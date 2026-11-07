@@ -1,0 +1,1189 @@
+{
+  "version": "0.33.0",
+  "description": "Release qualification corpus: every user-facing change since v0.32.1, as decks (new ones in decks/, existing examples by path), the PPTX variants to export, and per feature the slides and what to check in each native app. build.mjs exports it; run-powerpoint-windows.ps1 probes it through COM; evaluate.mjs grades the probe against the checks below. The Mac (PowerPoint for Mac, Keynote) and Linux (LibreOffice) streams run the same decks and grade the same features by hand where they have no object model.",
+  "checks": {
+    "opens": "The file opens without a repair prompt or an error.",
+    "slides": "The app shows as many slides as OPF's preview draws.",
+    "visual": "Each slide matches OPF's preview (side-by-side sheet; the pixel difference is reported, the verdict is a reviewer's).",
+    "noOverflow": "No text runs past its text box (PowerPoint: TextFrame2 bound height and width against the frame, 1.5 pt tolerance).",
+    "noShrink": "No text box asks the app to shrink text on overflow (normAutofit with a font scale, or shrink-on-overflow).",
+    "smartArt": "The slide carries live SmartArt with one node per entry, the entries' text, and the expected layout; a node edit keeps every node's size.",
+    "noSmartArt": "The slide carries no SmartArt (native shapes instead).",
+    "nativeChart": "The slide carries a native chart (not a picture); its type is listed.",
+    "nativeTable": "The slide carries a native table whose cells take an edit.",
+    "connectors": "The slide carries native connectors glued at both ends.",
+    "shapes": "The slide carries native preset or freeform shapes with text.",
+    "footer": "Header and Footer: the footer, slide number and date placeholders the deck asks for are visible on that slide (hidden where the deck hides them) and the slide number is a live field that renumbers when a slide moves.",
+    "roundtrip": "A copy saved by the app imports back through `opf convert` with the deck's shapes, diagrams and arrangements.",
+    "fallback": "Apps without SmartArt layout show the picture fallback (Keynote, LibreOffice; PowerPoint takes the SmartArt choice, so its fallback is checked by the other streams)."
+  },
+  "decks": [
+    {
+      "id": "smartart",
+      "source": "scripts/native-acceptance/qualification/decks/smartart.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "shapes",
+          "flags": [
+            "--smart-art",
+            "shapes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "smartart-arabic",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-arabic.opf.json"
+    },
+    {
+      "id": "smartart-japanese",
+      "source": "scripts/native-acceptance/qualification/decks/smartart-japanese.opf.json"
+    },
+    {
+      "id": "layout-harvest",
+      "source": "scripts/native-acceptance/qualification/decks/layout-harvest.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footers",
+      "source": "scripts/native-acceptance/qualification/decks/footers.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "static",
+          "flags": [
+            "--slide-numbers",
+            "static"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shapes",
+      "source": "examples/technical/shapes.opf.json"
+    },
+    {
+      "id": "shape-effects",
+      "source": "examples/technical/shape-effects.opf.json"
+    },
+    {
+      "id": "shape-overlays",
+      "source": "examples/technical/shape-overlays.opf.json"
+    },
+    {
+      "id": "shape-overlays-rtl",
+      "source": "examples/technical/shape-overlays-rtl.opf.json"
+    },
+    {
+      "id": "diagrams",
+      "source": "examples/technical/diagrams.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "picture",
+          "flags": [
+            "--diagrams",
+            "picture"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "diagrams-markdown",
+      "source": "examples/markdown/diagrams.opf.md"
+    },
+    {
+      "id": "layout-sampler",
+      "source": "examples/technical/layout-sampler.opf.json",
+      "variants": [
+        {
+          "name": "default",
+          "flags": []
+        },
+        {
+          "name": "native-body",
+          "flags": [
+            "--body-text",
+            "native"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-type-sampler",
+      "source": "examples/technical/chart-type-sampler.opf.json"
+    },
+    {
+      "id": "table-and-code",
+      "source": "examples/technical/table-and-code.opf.json"
+    },
+    {
+      "id": "columns",
+      "source": "examples/technical/columns.opf.json"
+    },
+    {
+      "id": "header-footer-logo-set",
+      "source": "examples/technical/header-footer-logo-set.opf.json"
+    },
+    {
+      "id": "full-feature-tour",
+      "source": "examples/technical/full-feature-tour.opf.json"
+    },
+    {
+      "id": "data-story-academy",
+      "source": "examples/gallery/design-and-media/data-story-academy-corporate-programs.opf.json"
+    },
+    {
+      "id": "compliance-readiness-review",
+      "source": "examples/gallery/business-functions/compliance-readiness-review.opf.json"
+    }
+  ],
+  "features": [
+    {
+      "id": "SH-02",
+      "title": "Shape blocks: presets, adjust values, custom paths, fills and strokes, text in shapes",
+      "changes": [
+        "sh-01-geometry",
+        "sh-02-shape-block"
+      ],
+      "deck": "shapes",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes",
+        "roundtrip"
+      ],
+      "expect": {
+        "shapes": 1,
+        "roundtrip": {
+          "shapes": 20
+        }
+      },
+      "check": "Every preset keeps its outline and adjust handles in PowerPoint (yellow handles: not run, UI); fills, strokes, gradients and text match the preview."
+    },
+    {
+      "id": "SH-03",
+      "title": "Shape effects: shadow, inner shadow, glow, soft edge, reflection, blur",
+      "changes": [
+        "sh-03-effects"
+      ],
+      "deck": "shape-effects",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ],
+      "check": "Each effect is native (Format Shape > Effects) and looks like the preview."
+    },
+    {
+      "id": "SH-04",
+      "title": "Overlay shapes and glued connectors",
+      "changes": [
+        "sh-04-overlays-connectors"
+      ],
+      "deck": "shape-overlays",
+      "slides": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "connectors",
+        "roundtrip"
+      ],
+      "expect": {
+        "connectors": 1,
+        "roundtrip": {
+          "overlays": 10
+        }
+      },
+      "check": "Connectors are glued to their shapes at both ends; moving a shape reroutes them (move: not run, UI)."
+    },
+    {
+      "id": "SH-04-rtl",
+      "title": "Overlay shapes right to left",
+      "changes": [
+        "sh-04-overlays-connectors"
+      ],
+      "deck": "shape-overlays-rtl",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ],
+      "check": "Overlays mirror where the deck is right to left."
+    },
+    {
+      "id": "SH-05",
+      "title": "PPTX import of shapes after a PowerPoint save",
+      "changes": [
+        "sh-05-shape-import",
+        "sh-phase-2-integration"
+      ],
+      "deck": "shapes",
+      "checks": [
+        "roundtrip"
+      ],
+      "expect": {
+        "roundtrip": {
+          "shapes": 20
+        }
+      },
+      "check": "A copy PowerPoint saved imports back with its shape blocks."
+    },
+    {
+      "id": "SH-07",
+      "title": "Native Mermaid diagrams (shapes, text and glued connectors)",
+      "changes": [
+        "sh-07-native-diagrams",
+        "sh-phase-2-integration"
+      ],
+      "deck": "diagrams",
+      "slides": [
+        1,
+        6,
+        7
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "connectors",
+        "shapes"
+      ],
+      "expect": {
+        "connectors": 2,
+        "shapes": 3
+      },
+      "check": "Flowchart and state diagrams are native shapes with editable labels and glued connectors."
+    },
+    {
+      "id": "SH-07-families",
+      "title": "Every Mermaid family as shapes",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "deck": "diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ]
+    },
+    {
+      "id": "SH-07-picture",
+      "title": "Diagrams as pictures (--diagrams picture)",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "deck": "diagrams",
+      "variant": "picture",
+      "checks": [
+        "opens",
+        "slides",
+        "visual"
+      ]
+    },
+    {
+      "id": "SH-07-md",
+      "title": "Mermaid in OPF Markdown",
+      "changes": [
+        "sh-07-native-diagrams"
+      ],
+      "deck": "diagrams-markdown",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ]
+    },
+    {
+      "id": "SH-09",
+      "title": "Live SmartArt: Basic Pyramid and Basic Matrix",
+      "changes": [
+        "sh-09-smartart-tier1"
+      ],
+      "deck": "smartart",
+      "slides": [
+        1,
+        3
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "smartArt",
+        "roundtrip"
+      ],
+      "expect": {
+        "nodes": [
+          3,
+          4
+        ],
+        "layouts": [
+          "pyramid",
+          "matrix"
+        ],
+        "roundtrip": {
+          "arrangements": 10
+        }
+      }
+    },
+    {
+      "id": "SH-17",
+      "title": "Live SmartArt: Basic Chevron Process, Basic Process, Vertical Process",
+      "changes": [
+        "sh-17-linear-smartart"
+      ],
+      "deck": "smartart",
+      "slides": [
+        7,
+        9,
+        11
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "smartArt"
+      ],
+      "expect": {
+        "nodes": [
+          4,
+          4,
+          3
+        ],
+        "layouts": [
+          "chevron",
+          "process",
+          "vertical"
+        ]
+      }
+    },
+    {
+      "id": "SH-18",
+      "title": "Live SmartArt: Basic Cycle",
+      "changes": [
+        "sh-18-cycle-smartart"
+      ],
+      "deck": "smartart",
+      "slides": [
+        5
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "smartArt"
+      ],
+      "expect": {
+        "nodes": [
+          5
+        ],
+        "layouts": [
+          "cycle"
+        ]
+      }
+    },
+    {
+      "id": "SH-19",
+      "title": "Live SmartArt on OPF's own layout definitions (stepped pyramid, card grid, wrapped chevrons and flows, columns)",
+      "changes": [
+        "sh-19-smartart-layouts"
+      ],
+      "deck": "smartart",
+      "slides": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "smartArt"
+      ],
+      "expect": {
+        "nodes": [
+          7,
+          3,
+          8,
+          8,
+          6
+        ]
+      }
+    },
+    {
+      "id": "SH-19-native",
+      "title": "OPF's designs outside the live domain stay native shapes",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart",
+        "sh-18-cycle-smartart",
+        "sh-19-smartart-layouts"
+      ],
+      "deck": "smartart",
+      "slides": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "noSmartArt",
+        "shapes"
+      ]
+    },
+    {
+      "id": "SH-16",
+      "title": "SmartArt picture fallback (mc:AlternateContent)",
+      "changes": [
+        "sh-16-smartart-fallback"
+      ],
+      "deck": "smartart",
+      "slides": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "checks": [
+        "fallback"
+      ],
+      "manual": "PowerPoint takes the mc:Choice (live SmartArt, checked by SH-09/17/18); the picture fallback is graded in Keynote and LibreOffice."
+    },
+    {
+      "id": "SH-smartart-shapes",
+      "title": "--smart-art shapes writes native shapes everywhere",
+      "changes": [
+        "sh-09-smartart-tier1"
+      ],
+      "deck": "smartart",
+      "variant": "shapes",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "noSmartArt",
+        "shapes"
+      ]
+    },
+    {
+      "id": "SH-smartart-rtl",
+      "title": "Arrangements right to left (native shapes by design)",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart",
+        "sh-18-cycle-smartart"
+      ],
+      "deck": "smartart-arabic",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "noSmartArt",
+        "shapes"
+      ]
+    },
+    {
+      "id": "SH-smartart-cjk",
+      "title": "Arrangements in Japanese (native shapes by design)",
+      "changes": [
+        "sh-09-smartart-tier1",
+        "sh-17-linear-smartart"
+      ],
+      "deck": "smartart-japanese",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "noSmartArt",
+        "shapes"
+      ]
+    },
+    {
+      "id": "LH-158",
+      "title": "Picture bands: heading placement and panel over picture backgrounds",
+      "changes": [
+        "lh-158-picture-bands"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        1,
+        11
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-09",
+      "title": "Statements at display size under the accent rule",
+      "changes": [
+        "lh-09-statements"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        2
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-164",
+      "title": "Message surface (accent slide for one display message)",
+      "changes": [
+        "lh-164-message-surface",
+        "lh-180-181-surface-and-run-in-editing"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        2,
+        4
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-14",
+      "title": "Icons on list entries, metrics and groups (native ellipse + editable glyph)",
+      "changes": [
+        "lh-14-icons"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        3,
+        6,
+        7
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ]
+    },
+    {
+      "id": "LH-165",
+      "title": "Icon cards and text tiles",
+      "changes": [
+        "lh-165-icon-cards"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        5,
+        8
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ]
+    },
+    {
+      "id": "LH-132",
+      "title": "Portraits at card size; testimonial portrait",
+      "changes": [
+        "lh-132-portraits"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        9,
+        10
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-168",
+      "title": "Steppers (badges on a connector)",
+      "changes": [
+        "lh-168-steppers"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        12
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "shapes"
+      ]
+    },
+    {
+      "id": "LH-169",
+      "title": "Figure rows and the emphasis band",
+      "changes": [
+        "lh-169-figure-rows"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        13
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-63",
+      "title": "Run-in heads and bold labels",
+      "changes": [
+        "lh-63-run-in-quotes"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        14
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-75",
+      "title": "Table and note side by side",
+      "changes": [
+        "lh-75-table-note-grids"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        15
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeTable"
+      ]
+    },
+    {
+      "id": "LH-18",
+      "title": "Shared heading tracks",
+      "changes": [
+        "lh-18-heading-tracks"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        16
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-160",
+      "title": "Histogram and Pareto labels and bins",
+      "changes": [
+        "lh-160-chart-labels",
+        "lh-153-chart-follow-ups"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        17,
+        18
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ]
+    },
+    {
+      "id": "LH-153",
+      "title": "Thousands grouping on waterfall labels and axes",
+      "changes": [
+        "lh-153-chart-follow-ups"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        19
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ]
+    },
+    {
+      "id": "LH-155",
+      "title": "Closing takes the cover treatment",
+      "changes": [
+        "lh-155-closing"
+      ],
+      "deck": "layout-harvest",
+      "slides": [
+        20
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-native-body",
+      "title": "Layout harvest slides with --body-text native",
+      "changes": [
+        "lh-wave-7-integration",
+        "lh-wave-8-integration"
+      ],
+      "deck": "layout-harvest",
+      "variant": "native-body",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-sampler",
+      "title": "Every gallery layout (waves 7 and 8 integration, LH-156 small fixes)",
+      "changes": [
+        "lh-wave-7-integration",
+        "lh-wave-8-integration",
+        "lh-156-small-fixes"
+      ],
+      "deck": "layout-sampler",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-sampler-charts",
+      "title": "Gallery chart and table layouts stay native",
+      "changes": [
+        "lh-wave-8-integration"
+      ],
+      "deck": "layout-sampler",
+      "slides": [
+        22,
+        23
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ]
+    },
+    {
+      "id": "LH-sampler-tables",
+      "title": "Gallery table layouts stay native and editable",
+      "changes": [
+        "lh-75-table-note-grids"
+      ],
+      "deck": "layout-sampler",
+      "slides": [
+        24,
+        25
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeTable"
+      ]
+    },
+    {
+      "id": "LH-sampler-native-body",
+      "title": "Every gallery layout with --body-text native",
+      "changes": [
+        "lh-wave-8-integration"
+      ],
+      "deck": "layout-sampler",
+      "variant": "native-body",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "RR-102",
+      "title": "Header & Footer: footer, live slide number and date placeholders; hidden footer",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "deck": "footers",
+      "slides": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "footer",
+        "roundtrip"
+      ],
+      "expect": {
+        "footer": [
+          {
+            "footer": true,
+            "slideNumber": true,
+            "date": true
+          },
+          {
+            "footer": true,
+            "slideNumber": true,
+            "date": true
+          },
+          {
+            "footer": false,
+            "slideNumber": false,
+            "date": false
+          },
+          {
+            "footer": true,
+            "slideNumber": true,
+            "date": true
+          }
+        ],
+        "renumber": true
+      }
+    },
+    {
+      "id": "RR-102-static",
+      "title": "--slide-numbers static",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "deck": "footers",
+      "variant": "static",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "RR-102-logos",
+      "title": "Header and footer zones with logos",
+      "changes": [
+        "rr-102-header-footer-dialog"
+      ],
+      "deck": "header-footer-logo-set",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "RR-103",
+      "title": "Chart types export unchanged (no vendor names)",
+      "changes": [
+        "rr-103-no-vendor-names"
+      ],
+      "deck": "chart-type-sampler",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeChart"
+      ]
+    },
+    {
+      "id": "tables",
+      "title": "Native tables stay editable",
+      "changes": [],
+      "deck": "table-and-code",
+      "slides": [
+        1
+      ],
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "nativeTable"
+      ]
+    },
+    {
+      "id": "example-academy",
+      "title": "New example: Data Story Academy corporate programs",
+      "changes": [
+        "example-data-story-academy"
+      ],
+      "deck": "data-story-academy",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ]
+    },
+    {
+      "id": "example-icons",
+      "title": "Gallery example with icons",
+      "changes": [
+        "lh-14-icons"
+      ],
+      "deck": "compliance-readiness-review",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "feature-tour",
+      "title": "Full feature tour (regression)",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual",
+        "roundtrip"
+      ]
+    },
+    {
+      "id": "RR-104",
+      "title": "Autofit cleanup: no shrink-on-overflow anywhere",
+      "changes": [
+        "(pending) rr-104"
+      ],
+      "deck": "layout-sampler",
+      "checks": [
+        "noShrink"
+      ],
+      "note": "Graded on every file by the noShrink column; the batch must not add a shrink autofit."
+    },
+    {
+      "id": "LH-184",
+      "title": "Columns",
+      "changes": [
+        "(pending) lh-184"
+      ],
+      "deck": "columns",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-185",
+      "title": "Diagram direction",
+      "changes": [
+        "(pending) lh-185"
+      ],
+      "deck": "diagrams",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "LH-186",
+      "title": "Layout before shrink",
+      "changes": [
+        "(pending) lh-186"
+      ],
+      "deck": "layout-sampler",
+      "checks": [
+        "opens",
+        "slides",
+        "noOverflow",
+        "noShrink",
+        "visual"
+      ]
+    },
+    {
+      "id": "SH-11",
+      "title": "Small shape text in PowerPoint",
+      "changes": [
+        "(pending) sh-11"
+      ],
+      "deck": "shapes",
+      "checks": [
+        "noOverflow",
+        "visual"
+      ]
+    },
+    {
+      "id": "mcp-viewer",
+      "title": "MCP deck viewer (show_deck)",
+      "changes": [
+        "mcp-deck-viewer"
+      ],
+      "deck": "full-feature-tour",
+      "checks": [],
+      "manual": "Not a PowerPoint feature; covered by the MCP package tests."
+    },
+    {
+      "id": "editor",
+      "title": "Editor: shapes, overlays, icons, surface and run-in editing",
+      "changes": [
+        "sh-06-editor-shapes",
+        "sh-06-editor-overlays",
+        "lh-166-editor-icons",
+        "lh-180-181-surface-and-run-in-editing"
+      ],
+      "deck": "full-feature-tour",
+      "checks": [],
+      "manual": "Editor features; their PPTX output is covered by the shape and icon decks."
+    },
+    {
+      "id": "ui-only",
+      "title": "Accessibility Checker, Edit Data, adjust handles, Change Shape",
+      "changes": [],
+      "deck": "full-feature-tour",
+      "checks": [],
+      "manual": "Not run: needs PowerPoint UI control, which the owner declined."
+    }
+  ]
+}
