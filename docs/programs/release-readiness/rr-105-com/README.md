@@ -76,7 +76,57 @@ The job was `make-powerpoint-smartart.ps1` on branch `sh-08-smartart-import`. It
 
 ## 3. SmartArt live-gate sweep (SH-20 to SH-23)
 
-Running on 2026-11-07 when this was first committed. The results replace this paragraph when the run finishes. The job sheet is `C:opf-work_supervisorcom-jobssh-live-extras.md`.
+The job ran `C:\opf-work\_supervisor\com-jobs\sh-live-extras\run.ps1` on 2026-11-07, 14:36 to 14:55. Its job sheet is
+[sweep/job.md](sweep/job.md), and the logs are [sweep/run.log](sweep/run.log) and [sweep/trees-run.log](sweep/trees-run.log).
+**All three steps completed.**
+
+**Step 1: `com-probe` over the live and native-shape decks. Exit 0.**
+- **Live export (`sweep\ppt`):** 516 decks, 516 slides, no open errors.
+  - 465 slides are live SmartArt.
+    - On OPF's own layouts (347): pyramid-steps 59, card-grid 61, matrix-quadrants 10, cycle-ring 13, cycle-loop 27,
+      cycle-loop-3 7, chevron-rows 50 (+2 compact), flow-rows 54 (+5 compact), vertical-flow-columns 58 (+1 compact).
+    - On built-in layouts (118): pyramid1 20, matrix3 3, cycle2 28, chevron1 24, process1 23, process2 20.
+  - 51 slides stay native shapes by design: the list-block controls, the `-rtl-` and `-he-` decks, and long or
+    medium text at high counts.
+  - The probe is [sweep/ppt-probe.json.gz](sweep/ppt-probe.json.gz) (6.8 MB raw). It records every node, every
+    GroupItems shape, and each text line's bounds.
+- **Native-shape export (`sweep\ppt-shapes`):** 516 decks, no SmartArt, no errors
+  ([sweep/ppt-shapes-probe.json](sweep/ppt-shapes-probe.json)).
+- [sweep/meta.json](sweep/meta.json) is the sweep's instance metadata: kind, count, text, slide size, script and findings.
+
+**Step 2: the ninth node, `com-checks` on the 18 `*-8-short-*` decks. Results:
+[sweep/ninth-com-checks.json](sweep/ninth-com-checks.json).**
+- All 18 are live on OPF's layout.
+- A node edit keeps every size and rectangle (18 of 18).
+- `add=9` keeps OPF's layout and OPF's size on all nine nodes (18 of 18). This is the SH-23 input: the nine-entry
+  tables apply.
+- Deleting two nodes leaves 7 on OPF's layout (18 of 18).
+- **Change Layout** to Basic Block List:
+  - It worked on the first deck, `chevrons-8-short-square`, which switched and came back to OPF Chevron Rows. That
+    deck's SaveCopyAs and reopen kept the layout and rectangles.
+  - On the other 17 decks it failed as expected: "layout not found: …/layout/default", because this build refuses
+    `SmartArtLayouts`. The exception skipped those decks' SaveCopyAs-and-reopen check, which is still owed (section 4).
+
+**Step 3: tree measurements, `measure-trees.ps1`. Exit 0.**
+- In `run.ps1` this step refused to start: PowerPoint, closed by step 2, was still exiting after the 60-second wait.
+  It was rerun by itself at 14:53 and took about 2 minutes.
+- **Coverage:** 580 measurements.
+  - Organization Chart (`orgChart1`): 11 trees × 20 frames.
+  - Hierarchy (`hierarchy1`): 11 trees × 20 frames.
+  - Basic Venn (`venn1`): 7 counts × 20 frames.
+- **Errors:** none.
+- **One known issue:** in all 20 frames of the Hierarchy tree with an assistant (`asst`), adding the assistant failed
+  with "Aide: The specified value is out of range". Hierarchy has no assistant node type, so that tree was measured
+  without it.
+- The data is [sweep/trees.json.gz](sweep/trees.json.gz) (4.8 MB raw). For each row it records every shape PowerPoint
+  drew: type, connector flag, rectangle, rotation, flips, text, size and margins. The script is
+  [sweep/measure-trees.ps1](sweep/measure-trees.ps1).
+
+**Local outputs** in `C:\opf-work\_supervisor\com-jobs\sh-live-extras\`:
+- `sweep\ppt\` (16 MB) and `sweep\ppt-shapes\` (9 MB): the PNGs.
+- `sweep\ninth\` (4 MB): working copies, resaved copies and the PNG of each step.
+- `trees\`: 29 PNGs.
+- `sweep\pptx\`, `sweep\pptx-shapes\` and `sweep\preview\`: the decks and OPF's previews.
 
 ## 4. COM checks still owed
 
@@ -85,7 +135,7 @@ Running on 2026-11-07 when this was first committed. The results replace this pa
    - Grade the never-shrink rows (RR-104, LH-184, LH-185, LH-186, SH-11).
    - Fill in "Pass 2" of `docs/programs/release-readiness/qualification-0.33-windows.md`.
    - Run the extra checks below as well.
-2. **The sweep steps not completed above**, if any.
+2. **The ninth-node SaveCopyAs and reopen check** on the 17 decks where Change Layout threw (section 3, step 2). Reorder or guard `com-checks.ps1` so a Change Layout failure does not skip it.
 3. **SH-08:** a decision on the multi-paragraph children (section 2), or an owner-made deck.
 
 ### Extra checks for the final pass (the supervisor's list, `final-033-extra.md`)
