@@ -466,7 +466,7 @@ A region with `sequence` lists the steps of a sequence, and composition draws th
 Steps keep their text size: the badges are a guarded rule (`step-badges`, and `numerals` for numbered rows), so a slide whose blocks
 would get smaller under them draws as before (LH-168: the comparison is also of the smallest size each block draws, a list's label and description
 sizes, not of the list's base size, which is the label's in columns and the description's beside a badge; steps whose descriptions wrap
-draw as a stepper in every language, and a row of steps is centered under the title as the columns are), and a flow that does not fit one line at the list's size stays a list. A lone badge list
+draw as a stepper in every language, and a row of steps is centered under the title as the columns are). A step's label never splits a word (LH-173): a label whose widest word does not fit its column at 1.25 times the list size steps down to the size the word fits at, never under the list size, and the labels of the row take that size too; LH-48's growth stops at the step before one that breaks a word of any label or description. A flow that does not fit one line at the list's size stays a list. A lone badge list
 grows (LH-48) as the plain list would, as long as it fits with its badges (or numerals). The preview draws the badges, numerals,
 connector, chips and arrows from `steps`, and the PPTX export writes them as native shapes (an ellipse holding its numeral, a text box
 holding a numeral, a line, rounded rectangles and `rightArrow` or `leftArrow` presets), tagged so that import consumes them and gives a
