@@ -26,9 +26,11 @@ describe('LH-75: a short table beside its note', () => {
         assert.ok(text.frameBox, 'the note is on a plain card');
         // Reading order: the table is first, so it sits at the start edge (the right in a right-to-left deck).
         if (direction === 'rtl') assert.ok(table.box.x > text.box.x); else assert.ok(table.box.x < text.box.x);
-        // The table takes between 60% and 70% of the width: the widest share at which the note keeps LH-66's measure.
-        const share = table.box.width / (table.box.width + text.frameBox.width);
-        assert.ok(share >= .59 && share <= .71, `share ${share}`);
+        // The table takes between 60% and 70% of the width at the role sizes (the widest share at which the note keeps LH-66's measure);
+        // the LH-75 follow-up grows the pair by LH-48's steps, the note's column widening to keep its measure, to at most half the row.
+        const share = table.box.width / (table.box.width + text.frameBox.width), roleSize = composeSlide(slide([plans(3), { text: note }]), { ...options, direction, fill: false });
+        assert.ok(share >= .49 && share <= .71, `share ${share}`);
+        if (share < .59) assert.ok(text.text.fontSize > itemOf(roleSize, 'text').text.fontSize, 'a narrower share only for a grown note');
         // The card is as tall as the row, which is centered in the body under the headings.
         const body = result.contentBox, top = text.frameBox.y - body.y, bottom = body.y + body.height - (text.frameBox.y + text.frameBox.height);
         if (!result.regions) assert.ok(Math.abs(top - bottom) < .02 * body.height + 1, 'centered');

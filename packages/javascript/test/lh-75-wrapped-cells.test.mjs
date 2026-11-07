@@ -32,3 +32,15 @@ test('LH-75: a table whose cells would take three lines beside the note keeps th
   const result = composeSlide(slide(['Tighten every one of the metric definitions', 'Add weekly office hours for the field teams']), {});
   assert.ok(!beside(itemOf(result, 'table').box, itemOf(result, 'text').box));
 });
+
+// LH-75 follow-up (2026-11-07): the pair grows by LH-48's steps like any short body, never below its role sizes.
+test('LH-75: a short table and its note grow together, the note card widening to keep its measure', () => {
+  const plans = { table: { columns: ['Plan', 'Seats', 'Price'], rows: [['Plan 1', '10', '$9'], ['Plan 2', '20', '$29'], ['Plan 3', '30', '$49']] } };
+  const input = { title: 'Plans at a glance', blocks: [plans, { text: note }] };
+  const grown = composeSlide(input, { layout: gallery.layouts.table }), role = composeSlide(input, { layout: gallery.layouts.table, fill: false });
+  const text = itemOf(grown, 'text');
+  assert.ok(beside(itemOf(grown, 'table').box, text.box) && text.frameBox);
+  assert.ok(text.text.fontSize > itemOf(role, 'text').text.fontSize, `note ${text.text.fontSize} over ${itemOf(role, 'text').text.fontSize}`);
+  assert.ok((itemOf(grown, 'table').tableGrowth ?? 1) >= 1);
+  assert.deepEqual(findings(grown), []);
+});
