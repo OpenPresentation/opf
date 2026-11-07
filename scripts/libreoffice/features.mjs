@@ -20,7 +20,7 @@ const sum = (list, key) => list.reduce((total, counts) => total + (counts?.[key]
 /** Grade one feature against the full result of its case (opf profile). Returns {status, checks: {name: {status, detail}}}. */
 export function gradeFeature(feature, result, scope) {
   const checks = {};
-  const wanted = feature.slides ?? (result?.perSlide ?? []).map((slide, index) => index + 1);
+  const wanted = feature.slides ?? (result?.perSlide ?? []).map((_, index) => index + 1);
   const slides = (result?.perSlide ?? []).filter((_, index) => wanted.includes(index + 1));
   const defectsOn = (kinds) => (result?.defects ?? []).filter((defect) => kinds.has(defect.check) && (defect.slide === undefined || wanted.includes(defect.slide)));
   const roundKinds = (result?.roundTrip?.kinds ?? []).filter((_, index) => wanted.includes(index + 1));

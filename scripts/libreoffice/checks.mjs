@@ -89,8 +89,8 @@ export function missingWords(words, text) {
     if (short.length) missing.push({ word: rtl.join(" "), expected: need.size, found: need.size - short.length, letters: short.map(([char]) => char).join("") });
   }
   for (const [word, count] of counts) {
-    let found = 0, index = 0;
-    while (found < count && (index = haystack.indexOf(word, index)) !== -1) { found += 1; index += word.length; }
+    let found = 0;
+    for (let index = haystack.indexOf(word); found < count && index !== -1; index = haystack.indexOf(word, index + word.length)) found += 1;
     if (found < count) missing.push({ word, expected: count, found });
   }
   return missing;

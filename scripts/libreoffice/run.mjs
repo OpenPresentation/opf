@@ -209,7 +209,11 @@ async function measure(entry, exported, model, profile, paths, { control = false
 }
 
 /** Shape counts of a slide by kind: {text, table, chart, smartart, picture, connector, other}. */
-const shapeKinds = (slide) => slide.shapes.reduce((counts, shape) => ({ ...counts, [shape.kind]: (counts[shape.kind] ?? 0) + 1 }), {});
+const shapeKinds = (slide) => {
+  const counts = {};
+  for (const shape of slide.shapes) counts[shape.kind] = (counts[shape.kind] ?? 0) + 1;
+  return counts;
+};
 
 function summaryMarkdown(report) {
   const lines = [];
@@ -267,7 +271,7 @@ async function main() {
       const exported = await exportCase(entry, core);
       const file = path.join(inputs, `${entry.id}.pptx`);
       writeFileSync(file, exported.pptx);
-      exported.previews.forEach((bytes, index) => writeFileSync(path.join(caseDir, `preview-${String(index + 1).padStart(2, "0")}.png`), bytes));
+      for (const [index, bytes] of exported.previews.entries()) writeFileSync(path.join(caseDir, `preview-${String(index + 1).padStart(2, "0")}.png`), bytes);
       prepared.push({ entry, exported, file, caseDir, model: readPptx(exported.pptx), sha256: sha256(exported.pptx) });
     } catch (error) {
       report.cases.push({ id: entry.id, group: entry.group, scope: entry.scope, exportError: error.message, profiles: {} });
