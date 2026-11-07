@@ -1,0 +1,12 @@
+const W = 'file:///C:/opf-work/sh-18-cycle-smartart/packages';
+const comp = await import(`${W}/javascript/dist/composition.js`);
+const core = await import(`${W}/javascript/dist/index.js`);
+const { gallery } = await import(`${W}/gallery/dist/index.js`);
+const [count = 5, dims = '1:1'] = process.argv.slice(2);
+const deck = { $schema: 'https://openpresentation.org/schema/opf/v1', design: { dimensions: dims }, slides: [{ layout: 'cycle', title: 'The loop', items: ['Plan', 'Build', 'Ship', 'Learn', 'Grow', 'Scale', 'Serve', 'Rest'].slice(0, +count) }] };
+const ctx = core.resolveSlideContext(deck, 0, { catalogs: [gallery] });
+const g = comp.composeSlide(deck.slides[0], ctx.options);
+const region = g.regions?.find(r => r.name === 'stages');
+console.log('canvas', ctx.options.width, ctx.options.height, 'region', JSON.stringify(region?.box), 'list', g.items.find(i => i.field === 'items')?.text?.fontSize);
+const ring = comp.cycleRing(region.box, +count, 24);
+console.log(JSON.stringify(ring.nodes.map(n => n.box)));

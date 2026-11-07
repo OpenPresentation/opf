@@ -1,0 +1,3 @@
+import { compile } from 'json-schema-to-typescript';
+const schema = { title: 'S', type: 'object', properties: { shapes: { type: 'array', items: { if: { required: ['connector'] }, then: { $ref: '#/$defs/C' }, else: { $ref: '#/$defs/O' } } }, other: { type: 'array', items: { anyOf: [{ $ref: '#/$defs/C' }, { $ref: '#/$defs/O' }], if: { required: ['connector'] }, then: { $ref: '#/$defs/C' }, else: { $ref: '#/$defs/O' } } } }, $defs: { C: { type: 'object', properties: { connector: { type: 'string' } }, required: ['connector'], additionalProperties: false }, O: { type: 'object', properties: { x: { type: 'number' } }, additionalProperties: false } } };
+console.log(await compile(schema, 'S', { bannerComment: '' }));

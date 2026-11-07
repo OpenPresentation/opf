@@ -1,0 +1,10 @@
+import {readFileSync} from 'node:fs';
+const core = await import('file:///C:/opf-work/sh-09-smartart-tier1/packages/javascript/dist/index.js');
+const comp = await import('file:///C:/opf-work/sh-09-smartart-tier1/packages/javascript/dist/composition.js');
+const {gallery} = await import('file:///C:/opf-work/sh-09-smartart-tier1/packages/gallery/dist/index.js');
+const deck = JSON.parse(readFileSync(process.argv[2], 'utf8'));
+const i = Number(process.argv[3] ?? 0);
+const ctx = core.resolveSlideContext(deck, i, {catalogs: [gallery]});
+const g = comp.composeSlide(deck.slides[i], ctx.options);
+const list = g.items.find(item => item.field === 'items');
+for (const c of list.listColumns ?? []) for (const e of c.text.listEntries) console.log(JSON.stringify(c.box), e.text.richLines.map(l => l.fragments.map(f => `${f.text}[${f.runIndex}:${f.start}-${f.end}${f.kind ?? ''}]`).join('|') + ` w${l.width.toFixed(1)}`).join(' / '));

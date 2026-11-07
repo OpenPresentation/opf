@@ -1,0 +1,12 @@
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+const repo = 'C:/opf-work/sh-phase-2';
+const { convert } = await import(pathToFileURL(`${repo}/packages/javascript/dist/index.js`).href);
+const out = 'C:/opf-work/shapes/integration/sh05';
+const src = `${repo}/packages/pptx/test/fixtures/powerpoint-shapes.pptx`;
+const imported = await convert(src, `${out}/imported.opf.json`);
+console.log('import findings', (imported.findings ?? []).map(f => f.ruleId).join(', '));
+const p = await convert(`${out}/imported.opf.json`, `${out}/roundtrip.pptx`);
+console.log('export findings', (p.findings ?? []).filter(f => f.severity !== 'info').map(f => f.ruleId).join(', '));
+mkdirSync(`${out}/preview/roundtrip`, { recursive: true });
+await convert(`${out}/imported.opf.json`, `${out}/preview/roundtrip/s-{n}.png`);

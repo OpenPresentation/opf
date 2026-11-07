@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const root = 'C:/opf-work/sh-07-native-diagrams/';
+const ed = (f, a, b) => { const s = fs.readFileSync(root + f, 'utf8'); if (!s.includes(a)) throw new Error(`${f} missing ${a.slice(0, 60)}`); fs.writeFileSync(root + f, s.replace(a, b)); };
+ed('packages/javascript/src/node/conversion.ts', '"raster", "text", "charts", "provenance", "images", "bodyText",', '"raster", "text", "charts", "diagrams", "provenance", "images", "bodyText",');
+ed('packages/javascript/src/node/conversion.ts', 'const pptxOnly = (["charts", "provenance", "images", "bodyText", "slideNumbers", "typefaces"] as const)', 'const pptxOnly = (["charts", "diagrams", "provenance", "images", "bodyText", "slideNumbers", "typefaces"] as const)');
+ed('packages/javascript/src/node/conversion.ts', '${names("charts", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as")} apply to pptx output.', '${names("charts", "diagrams", "provenance", "images", "bodyText", "slideNumbers", "typefaces", "as")} apply to pptx output.');
+ed('packages/cli/test/convert.test.mjs', '/--charts, --provenance, --images, --body-text, --slide-numbers, --typefaces and --as apply to pptx output/', '/--charts, --diagrams, --provenance, --images, --body-text, --slide-numbers, --typefaces and --as apply to pptx output/');
+ed('packages/cli/test/convert.test.mjs', '      [["deck.opf.json", "x.pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],', '      [["deck.opf.json", "x.pptx", "--charts", "fallback"], /--charts must be one of: auto, native, picture/],\n      [["deck.opf.json", "x.pptx", "--diagrams", "native"], /--diagrams must be one of: picture, shapes/],');
+ed('packages/cli/test/convert.test.mjs', '    const pptx = await stub(["convert", "deck.opf.json", "deck.pptx", "--charts", "picture", "--images", "preserve"]);', '    const pptx = await stub(["convert", "deck.opf.json", "deck.pptx", "--charts", "picture", "--images", "preserve", "--diagrams", "shapes"]);');
+ed('packages/cli/test/convert.test.mjs', '    assert.equal((await callsOf("toPptx"))[0].args[0].chartex, "fallback");', '    assert.equal((await callsOf("toPptx"))[0].args[0].chartex, "fallback");\n    assert.equal((await callsOf("toPptx"))[0].args[0].diagrams, "shapes");');
+console.log('ok');

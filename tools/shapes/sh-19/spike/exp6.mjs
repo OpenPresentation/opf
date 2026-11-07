@@ -1,0 +1,22 @@
+// Experiment 6 (spike 1a): the other algorithms in an OPF-written definition, swept by COM over node counts and frames.
+import { mkdirSync } from 'node:fs';
+import { buildPptx, layoutDef } from './make.mjs';
+const dir = 'C:/opf-work/shapes/sh-19/spike/exp6';
+mkdirSync(dir, { recursive: true });
+const tx = (name, shape = 'roundRect', extra = '') => `<dgm:layoutNode name="${name}" styleLbl="node1"><dgm:varLst><dgm:bulletEnabled val="1"/></dgm:varLst><dgm:alg type="tx"/><dgm:shape type="${shape}"><dgm:adjLst/></dgm:shape><dgm:presOf axis="desOrSelf" ptType="node"/><dgm:constrLst><dgm:constr type="tMarg" refType="primFontSz" fact="0.1"/><dgm:constr type="bMarg" refType="primFontSz" fact="0.1"/><dgm:constr type="lMarg" refType="primFontSz" fact="0.1"/><dgm:constr type="rMarg" refType="primFontSz" fact="0.1"/></dgm:constrLst><dgm:ruleLst/>${extra}</dgm:layoutNode>`;
+const gap = `<dgm:forEach name="gaps" axis="followSib" ptType="sibTrans" cnt="1"><dgm:layoutNode name="gap"><dgm:alg type="sp"/><dgm:shape><dgm:adjLst/></dgm:shape><dgm:presOf/><dgm:constrLst/><dgm:ruleLst/></dgm:layoutNode></dgm:forEach>`;
+const sized = (h = .6) => `<dgm:constr type="w" for="ch" forName="node" refType="w"/><dgm:constr type="h" for="ch" forName="node" refType="w" refFor="ch" refForName="node" fact="${h}"/><dgm:constr type="w" for="ch" forName="gap" refType="w" refFor="ch" refForName="node" fact="0.1"/>`;
+const root = (alg, constr, inner) => `<dgm:layoutNode name="root"><dgm:alg type="${alg.type}">${(alg.params ?? []).map(([t, v]) => `<dgm:param type="${t}" val="${v}"/>`).join('')}</dgm:alg><dgm:shape><dgm:adjLst/></dgm:shape><dgm:presOf/><dgm:constrLst>${constr}</dgm:constrLst><dgm:ruleLst/>${inner}</dgm:layoutNode>`;
+const defs = {
+  lin: root({ type: 'lin', params: [['linDir', 'fromL'], ['nodeVertAlign', 'mid']] }, sized(), `<dgm:forEach name="nodes" axis="ch" ptType="node">${tx('node')}${gap}</dgm:forEach>`),
+  snake: root({ type: 'snake', params: [['grDir', 'tL'], ['flowDir', 'row'], ['contDir', 'sameDir'], ['bkpt', 'endCnv']] }, sized(), `<dgm:forEach name="nodes" axis="ch" ptType="node">${tx('node')}${gap}</dgm:forEach>`),
+  cycle: root({ type: 'cycle', params: [['stAng', '0'], ['spanAng', '360']] }, `<dgm:constr type="w" for="ch" forName="node" refType="w" fact="0.25"/><dgm:constr type="h" for="ch" forName="node" refType="w" refFor="ch" refForName="node"/><dgm:constr type="diam" refType="w" fact="0.6"/>`, `<dgm:forEach name="nodes" axis="ch" ptType="node">${tx('node', 'ellipse')}</dgm:forEach>`),
+  pyra: root({ type: 'pyra', params: [['linDir', 'fromT'], ['pyraAcctPos', 'bef'], ['pyraAcctTxMar', 'step']] }, `<dgm:constr type="w" for="ch" forName="level" refType="w"/><dgm:constr type="h" for="ch" forName="level" refType="h"/>`, `<dgm:forEach name="levels" axis="ch" ptType="node"><dgm:layoutNode name="level" styleLbl="node1"><dgm:alg type="tx"/><dgm:shape type="trapezoid"><dgm:adjLst><dgm:adj idx="1" val="0.5"/></dgm:adjLst></dgm:shape><dgm:presOf axis="desOrSelf" ptType="node"/><dgm:constrLst/><dgm:ruleLst/></dgm:layoutNode></dgm:forEach>`),
+  hier: root({ type: 'hierRoot' }, `<dgm:constr type="w" for="des" forName="box" refType="w" fact="0.18"/><dgm:constr type="h" for="des" forName="box" refType="w" refFor="des" refForName="box" fact="0.5"/><dgm:constr type="sibSp" refType="w" refFor="des" refForName="box" fact="0.2"/><dgm:constr type="secSibSp" refType="w" refFor="des" refForName="box" fact="0.2"/>`,
+    `<dgm:forEach name="tops" axis="ch" ptType="node">${tx('box', 'rect')}<dgm:layoutNode name="kids"><dgm:alg type="hierChild"/><dgm:shape><dgm:adjLst/></dgm:shape><dgm:presOf/><dgm:constrLst/><dgm:ruleLst/><dgm:forEach name="ks" axis="ch" ptType="node"><dgm:layoutNode name="kid"><dgm:alg type="hierRoot"/><dgm:shape><dgm:adjLst/></dgm:shape><dgm:presOf/><dgm:constrLst/><dgm:ruleLst/>${tx('box2', 'rect').replace('name="box2"', 'name="leaf"')}</dgm:layoutNode></dgm:forEach></dgm:layoutNode></dgm:forEach>`),
+};
+for (const [k, body] of Object.entries(defs)) {
+  const uid = `urn:openpresentation.org/smartart/layout/spike-${k}`;
+  const nodes = k === 'hier' ? [{ text: 'Root', sz: 12 }, { text: 'A', sz: 12, parent: 0 }, { text: 'B', sz: 12, parent: 0 }, { text: 'C', sz: 12, parent: 0 }] : [1, 2, 3].map(i => ({ text: `N${i}`, sz: 12 }));
+  buildPptx(`${dir}/${k}.pptx`, [{ frame: { x: 60, y: 40, w: 600, h: 400 }, layoutXml: layoutDef({ uniqueId: uid, title: `OPF ${k}`, body }), loId: uid, nodes }]);
+}

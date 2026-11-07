@@ -1,0 +1,13 @@
+import { toPng } from 'file:///C:/opf-work/sh-04-overlays-connectors/packages/render/dist/index.js';
+import { loadFonts } from 'file:///C:/opf-work/sh-04-overlays-connectors/packages/render/dist/fonts-node.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { loadDeck } from './load.mjs';
+const [file, outDir, prefix = 'preview'] = process.argv.slice(2);
+fs.mkdirSync(outDir, { recursive: true });
+const deck = loadDeck(file);
+const fonts = await loadFonts({ presentation: deck, pack: 'office', substitutionPolicy: 'metric' });
+if (typeof fonts.ensure === 'function') await fonts.ensure(deck);
+const pngs = await toPng(deck, { fonts, onDiagnostic: d => console.log('diag', d.code, d.path, (d.message ?? '').slice(0, 100)) });
+(Array.isArray(pngs) ? pngs : [pngs]).forEach((png, i) => fs.writeFileSync(path.join(outDir, `${prefix}${i + 1}.png`), png));
+console.log('wrote', (Array.isArray(pngs) ? pngs : [pngs]).length);

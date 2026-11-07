@@ -1,0 +1,10 @@
+import PptxGenJS from "file:///C:/opf-work/sh-03-effects/packages/pptx/vendor/pptxgenjs/pptxgen.es.js";
+import JSZip from "file:///C:/opf-work/sh-03-effects/packages/pptx/vendor/jszip/index-min.js";
+const p = new PptxGenJS(); p.layout = "LAYOUT_WIDE";
+const s = p.addSlide();
+s.addShape("rect", { x: 1, y: 1, w: 2, h: 1, fill: { color: "4472C4" }, objectName: "fx-0", line:{color:"2F528F", width:1} });
+s.addShape("ellipse", { x: 4, y: 1, w: 2, h: 1, fill: { color: "4472C4" }, objectName: "fx-1" });
+const buf = await p.write({ outputType: "nodebuffer" });
+const z = await JSZip.loadAsync(buf);
+console.log(Object.keys(z.files));
+console.log((await z.file("ppt/slides/slide1.xml").async("string")).slice(0, 4000));

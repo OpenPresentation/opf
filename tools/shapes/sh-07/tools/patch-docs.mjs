@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+const root = 'C:/opf-work/sh-07-native-diagrams/';
+const ed = (f, a, b) => { const s = fs.readFileSync(root + f, 'utf8'); if (!s.includes(a)) throw new Error(`${f} missing ${a.slice(0, 60)}`); fs.writeFileSync(root + f, s.replace(a, b)); };
+ed('docs/cli.md', '| pptx | `--charts auto\\|native\\|picture`, ', '| pptx | `--charts auto\\|native\\|picture`, `--diagrams picture\\|shapes`, ');
+ed('docs/cli.md', '(`--typefaces`, `--body-text`, `--charts`, `--images`,', '(`--typefaces`, `--body-text`, `--charts`, `--diagrams`, `--images`,');
+ed('docs/node.md', '`charts` (`"auto"`, `"native"` or `"picture"`), `provenance`', '`charts` (`"auto"`, `"native"` or `"picture"`), `diagrams` (`"picture"` or `"shapes"`), `provenance`');
+ed('skills/opf-export/SKILL.md', '`charts` (`auto`, `native` or `picture`), `provenance`, `images`, `bodyText`', '`charts` (`auto`, `native` or `picture`), `diagrams` (`picture` or `shapes`), `provenance`, `images`, `bodyText`');
+ed('skills/opf-export/references/rendering.md', '[--charts auto|native|picture] [--images', '[--charts auto|native|picture] [--diagrams picture|shapes] [--images');
+ed('skills/opf-export/references/rendering.md', '`text` (`fonts`, `system` or `paths`), `charts`, `images`,', '`text` (`fonts`, `system` or `paths`), `charts`, `diagrams`, `images`,');
+ed('packages/cli/README.md', '`--text`, `--charts`,', '`--text`, `--charts`, `--diagrams`,');
+console.log('ok');

@@ -1,0 +1,12 @@
+import { writeFile } from "node:fs/promises"; import { createRequire } from "node:module"; import { pathToFileURL } from "node:url";
+const wt = "C:/opf-work/sh-01-geometry";
+const { default: PptxGenJS } = await import(pathToFileURL(wt + "/packages/pptx/vendor/pptxgenjs/pptxgen.es.js").href);
+const { unzipSync, zipSync, strFromU8, strToU8 } = createRequire(wt + "/packages/pptx/package.json")("fflate");
+const pptx = new PptxGenJS(); pptx.layout = "LAYOUT_WIDE"; pptx.addSlide();
+const files = unzipSync(await pptx.write({ outputType: "uint8array" }));
+const E = 9525;
+const sp = (id, prst, x, y, w, h, fill) => `<p:sp><p:nvSpPr><p:cNvPr id="${id}" name="s${id}"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="${x*E}" y="${y*E}"/><a:ext cx="${w*E}" cy="${h*E}"/></a:xfrm><a:prstGeom prst="${prst}"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="${fill}"/></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr><p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"><a:noAutofit/></a:bodyPr><a:lstStyle/><a:p><a:pPr algn="l"/><a:r><a:rPr lang="en-US" sz="1200"><a:solidFill><a:srgbClr val="FF0000"/></a:solidFill><a:latin typeface="Arial"/></a:rPr><a:t>WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW</a:t></a:r></a:p></p:txBody></p:sp>`;
+let xml = strFromU8(files["ppt/slides/slide1.xml"]);
+xml = xml.replace("</p:grpSpPr>", "</p:grpSpPr>" + sp(10, "pie", 100, 100, 360, 200, "DDDDDD") + sp(11, "ellipse", 700, 100, 360, 200, "DDDDDD"));
+files["ppt/slides/slide1.xml"] = strToU8(xml);
+await writeFile("pie.pptx", zipSync(files));

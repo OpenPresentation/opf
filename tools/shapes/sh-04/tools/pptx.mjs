@@ -1,0 +1,11 @@
+import { toPptx } from 'file:///C:/opf-work/sh-04-overlays-connectors/packages/pptx/dist/index.js';
+import { loadFonts } from 'file:///C:/opf-work/sh-04-overlays-connectors/packages/render/dist/fonts-node.js';
+import fs from 'node:fs';
+import { loadDeck } from './load.mjs';
+const [file, out] = process.argv.slice(2);
+const deck = loadDeck(file);
+const fonts = await loadFonts({ presentation: deck, pack: 'office', substitutionPolicy: 'metric' });
+if (typeof fonts.ensure === 'function') await fonts.ensure(deck);
+const result = await toPptx(deck, { fonts, onDiagnostic: d => console.log('diag', d.code, d.path, (d.message ?? '').slice(0, 120)) });
+fs.writeFileSync(out, Buffer.from(result.data ?? result));
+console.log('wrote', out);

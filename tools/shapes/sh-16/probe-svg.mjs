@@ -1,0 +1,11 @@
+import {toSvg, resolvePresentation} from './helpers/default-catalog.mjs';
+import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {writeFileSync} from 'node:fs';
+const deck = {slides: [{layout: 'pyramid', title: 'Our strategy', items: ['Vision', 'Goals', 'Programs', 'Teams']}]};
+const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck});
+const svg = toSvg(deck, 1, {trace: true, text: 'paths', fonts});
+const s = Array.isArray(svg) ? svg[0] : svg;
+writeFileSync('C:/opf-work/shapes/sh-16/probe.svg', s);
+console.log(s.length);
+const r = resolvePresentation(deck, {fonts});
+console.log(JSON.stringify(r.slides[0].geometry.arrangements[0].frame), r.slides[0].geometry.arrangements[0].path);

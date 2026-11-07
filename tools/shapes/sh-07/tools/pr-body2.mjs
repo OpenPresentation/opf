@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+const f = 'C:/opf-work/shapes/sh-07/pr-body.md';
+let s = fs.readFileSync(f, 'utf8');
+const table = fs.readFileSync('C:/opf-work/shapes/sh-07/designs/summary.md', 'utf8');
+const rows = table.split('\n').filter((line) => line.startsWith('|')).map((line) => line.replace(/; geometry pass; mad ([\d.]+), hot ([\d.]+) %/g, ' (mad $1, hot $2 %)')).join('\n');
+s = s.replace('- **The option.** `toPptx(deck, { diagrams: "picture" | "shapes" })`, `convert`/`exportDeck` option `diagrams`, CLI `opf convert ... --diagrams picture|shapes`. The default is `"picture"`: today\'s SVG picture with PNG fallback and `OPF_DIAGRAM_V1` is unchanged.',
+  '- **The option, and the new default (output-changing).** `toPptx(deck, { diagrams: "shapes" | "picture" })`, `convert`/`exportDeck` option `diagrams`, CLI `opf convert ... --diagrams shapes|picture`. **The default is `"shapes"`** (the owner\'s rule: a family switches to shapes by default once its comparison passes): every diagram of an allowlisted family exports as native shapes; `"picture"` opts out and gives exactly the earlier SVG picture with PNG fallback and `OPF_DIAGRAM_V1`; a family outside the allowlist, right-to-left text or a drawing with no native form stays the picture with the info finding.');
+s = s.replace('## The comparison', `## The comparison in five designs
+
+All 64 sources again in a light theme (classic, forest-green, Aptos), a serif font scheme (minimal, burnt-orange, Georgia), a non-Aptos deck (bold, deep-purple, Segoe UI), and ten Japanese sources for the families that take labels (flowchart, sequence, mind map, timeline, kanban; classic, steel-blue, Yu Gothic, ja-JP). Same thresholds. Each cell: the whole-slide result ("over (a,b)" names the sources over), then the worst mad (320) and hot (1280); the geometry outside every text body passes in every cell.
+
+${rows}
+
+**Decision 4 (vetoable): all 32 families stay in \`DIAGRAM_SHAPE_FAMILIES\`.** In every design the geometry outside the text passes the same limits (worst geometry mad 1.81, light treemap-b; geometry hot <= 0.03 %), and every label box lands where the preview puts it. Every "over" is in text glyphs, checked on the sheets: the preview draws Aptos, Segoe UI and Yu Gothic with stand-in fonts (OPF bundles none of them), PowerPoint draws the real fonts, so glyph shapes, word spaces and weight differ (Yu Gothic Regular is lighter in PowerPoint). The deck's other native text has the same difference in PowerPoint, and \`diagrams: "picture"\` keeps the pixel copy. The two text-offset overs (light block-a 2.06 px, Segoe class-a 2.9 px) are ink-centroid shifts of the stand-in glyphs, aligned on the zoomed crops. Segoe cynefin: the preview's Segoe stand-in has no U+2192, so both engines draw the placeholder there. **Strict reading of "fails a design"** would drop block, c4, class, eventmodeling, gantt, ishikawa, kanban, mindmap, pie, sequence, timeline and treemap and keep the other 20; that is a one-line change of the constant if you prefer it.
+
+## The comparison in the default design`);
+s = s.replace('Pinned files: none move (no render goldens, catalog-free budget passes, chartex fixture untouched).',
+  'Pinned files: none in the repository moves (no render goldens; the catalog-free budget, the chartex fixture, the PPTX determinism fixtures and the rr-54 locks pass unchanged; `check:examples-convert` and `check:stability` pass). What changes is the PPTX output of every deck with a diagram, for example `examples/technical/diagrams.opf.json`, `examples/technical/content-payload-matrix.opf.json` and `examples/markdown/diagrams.opf.md`, and the sites\' PPTX downloads of such decks. Two tests learned the new default: `native-conformance.mjs` treats a diagram node or edge label like a shape block (its text sits at insets in the preset\'s text rectangle), and `diagram.mjs` now tests the picture path with `diagrams: "picture"`. `packed-bundle-browser.mjs` caught that the browser build must load the preset geometry under the default too (fixed: browser and Node exports are byte-identical again).');
+fs.writeFileSync(f, s);
+console.log('ok');

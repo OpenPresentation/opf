@@ -1,0 +1,13 @@
+# Implementing one OPF shapes item
+
+You implement ONE item of the OPF shapes work (SH-NN) in OpenPresentation/opf as one pull request. Read `C:/opf-work/shapes/design.md` in full: it is the owner-approved design and property map; follow its names exactly. Read `AGENTS.md` and the skills it names for your area. Do not spawn sub-agents. Do not merge. Do not poll CI (the GitHub API quota is shared).
+
+- **Worktree.** From `C:/Users/micha/Source/opf/.claude/worktrees/opf-tables-charts-storage-40ab73`: `node scripts/agent-worktree.mjs add sh-NN-<slug>` (branch `codex/sh-NN-<slug>` in `C:/opf-work/sh-NN-<slug>`, from a fresh origin/main). In Git Bash, write paths with forward slashes.
+- **Format changes** follow the pre-1.0 rule: no aliases or deprecations. Update `spec/schemas/`, `docs/` (create or extend `docs/shapes.md`), the skills under `skills/`, the MCP's bundled docs, and the editor's types where it reads the field. Generated content comes from `spec/` at build time; never edit generated output.
+- **Both engines agree.** Preview (render, SVG and PNG) and PPTX export draw the same thing. PPTX writes native DrawingML (preset geometry, `a:ln`, `a:effectLst`), never a picture of a shape. Open your PPTX in PowerPoint via COM (`New-Object -ComObject PowerPoint.Application`, open read-only, `Slides(i).Export(path,'PNG',1280,720)`, Quit) and put preview | PowerPoint pairs in `C:/opf-work/shapes/<item>/sheet.png`.
+- **Never shrink text** below what main gives; text inside shapes fits by OPF composition.
+- **Tests and changelog.** A focused `test/*.mjs` per package touched; a changelog fragment `changes/sh-NN-<slug>.md`. Do not regenerate shared pinned files (render goldens, `scripts/catalog-free-budget.json`, the chartex fixture, rr-54 locks, generated gallery examples); say which ones move. Core composition goldens may be regenerated in your branch; list what moved.
+- **Checks.** `pnpm check:changed`, then every test file of the packages you touch, file by file, including `*-browser.mjs` and playground tests. Compare failures with main before calling them environmental.
+- **Other agents.** Two other shapes agents and eight layout-harvest agents work at the same time, several in `packages/javascript/src/composition.ts` and the PPTX writer. Keep your change local, do not reformat or move unrelated code.
+- **PR.** `gh pr create`, title `SH-NN: <summary>`, body ending with `🤖 Generated with [Claude Code](https://claude.com/claude-code)`; commits end with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`. American English everywhere.
+- **Report back:** PR URL, what you built, the sheet path, tests run, pinned files that move, anything you could not do.
