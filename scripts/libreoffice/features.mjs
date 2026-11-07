@@ -48,7 +48,8 @@ export function gradeFeature(feature, result, scope) {
     else if (check === "fallback") {
       const missing = slides.flatMap((slide) => slide.smartArtMissing ?? []);
       const withSmartArt = slides.filter((slide) => slide.kinds?.smartart).length;
-      checks.fallback = !withSmartArt ? { status: "n/a", detail: "no SmartArt on these slides" } : missing.length ? { status: "fail", detail: `node text not drawn: ${missing.map((entry) => entry.word).slice(0, 5).join(" ")}` } : { status: "pass", detail: `node text drawn on ${withSmartArt} slide(s)` };
+      const asGraphics = slides.filter((slide) => slide.kinds?.smartart).every((slide) => slide.smartArtAsGraphics);
+      checks.fallback = !withSmartArt ? { status: "n/a", detail: "no SmartArt on these slides" } : asGraphics ? { status: "review", detail: `drawn from the drawing part as graphics on ${withSmartArt} slide(s) (no text layer); see the side-by-side sheets` } : missing.length ? { status: "fail", detail: `node text not drawn: ${missing.map((entry) => entry.word).slice(0, 5).join(" ")}` } : { status: "pass", detail: `node text drawn on ${withSmartArt} slide(s)` };
     } else if (check === "noSmartArt") checks.noSmartArt = sum(sourceKinds, "smartart") ? { status: "fail", detail: "the file has SmartArt here" } : { status: "pass" };
     else if (check === "nativeChart") checks.nativeChart = kept("chart");
     else if (check === "nativeTable") checks.nativeTable = kept("table");

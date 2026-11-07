@@ -182,7 +182,9 @@ export function verdict(result) {
       if (grown.length) differences.push({ check: "vertical-growth", slide: slide.number, detail: `${grown.length} run(s) below a wrapping box, up to ${Math.max(...grown.map((entry) => entry.by))} pt` });
       if (slide.unsupportedCharts) defects.push({ check: "chart-unsupported", slide: slide.number, detail: `${slide.unsupportedCharts} chart(s) drawn as LibreOffice's "unsupported chart type" placeholder, without their data` });
       if (slide.shrink) defects.push({ check: "shrink", slide: slide.number, detail: `${slide.shrink} text box(es) ask the viewer to shrink text on overflow (normAutofit)` });
-      if (slide.smartArtMissing?.length) differences.push({ check: "smartart-fallback", slide: slide.number, detail: `SmartArt text not on the page: ${slide.smartArtMissing.map((entry) => entry.word).slice(0, 6).join(" ")}` });
+      // LibreOffice draws SmartArt from the file's drawing part as graphics: none of the node text reaches the PDF's text layer. Only
+      // a partial shortfall (some node text drawn as text, some not) is listed.
+      if (slide.smartArtMissing?.length && !slide.smartArtAsGraphics) differences.push({ check: "smartart-fallback", slide: slide.number, detail: `SmartArt text not on the page: ${slide.smartArtMissing.map((entry) => entry.word).slice(0, 6).join(" ")}` });
       const ink = Object.entries(slide.inkOutside ?? {}).filter(([side, count]) => count > 0 && !slide.bleeds?.includes(side));
       if (ink.length) defects.push({ check: "ink-edge", slide: slide.number, detail: ink.map(([side, count]) => `${count} px ${side}`).join(", ") });
       if (slide.preview && slide.preview.largePercent > 5) differences.push({ check: "preview", slide: slide.number, detail: `${slide.preview.largePercent.toFixed(1)}% of pixels differ from OPF's preview` });

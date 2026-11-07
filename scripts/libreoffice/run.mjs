@@ -173,7 +173,10 @@ async function measure(entry, exported, model, profile, paths, { control = false
     };
     // SmartArt node text (LibreOffice draws the fallback drawing; the words must still be on the page).
     const smartArtStrings = slide.shapes.filter((shape) => shape.kind === "smartart").flatMap((shape) => shape.strings.flatMap((value) => tokenize(value)));
-    if (smartArtStrings.length) entrySlide.smartArtMissing = missingWords(smartArtStrings, pageText(page));
+    if (smartArtStrings.length) {
+      entrySlide.smartArtMissing = missingWords(smartArtStrings, pageText(page));
+      entrySlide.smartArtAsGraphics = entrySlide.smartArtMissing.length === new Set(smartArtStrings.map((word) => word.toLowerCase())).size;
+    }
     const preview = exported.previews[index];
     if (preview) {
       const { width } = await sharp(preview).metadata();

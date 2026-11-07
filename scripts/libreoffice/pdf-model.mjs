@@ -13,6 +13,8 @@ const { createCanvas } = await load("@napi-rs/canvas");
 const pdfLib = await load("pdf-lib");
 export const sharp = (await load("sharp")).default;
 
+const VISIBLE = /[\p{L}\p{N}\p{P}\p{S}]/u;
+
 export async function openPdf(bytes) {
   return pdfjs.getDocument({ data: new Uint8Array(bytes), isEvalSupported: false, verbosity: 0, useSystemFonts: false, disableFontFace: true }).promise;
 }
@@ -31,7 +33,8 @@ export async function pageRuns(doc, number, slideWidth = null) {
   const content = await page.getTextContent();
   const runs = [];
   for (const item of content.items) {
-    if (typeof item.str !== "string" || !item.str.trim()) continue;
+    // Skip whitespace, and the control characters pdf.js gives for glyphs without a Unicode mapping (LibreOffice's contextual forms).
+    if (typeof item.str !== "string" || !VISIBLE.test(item.str)) continue;
     const [a, b, c, d, e, f] = item.transform;
     runs.push({ str: item.str, x: (e - page.view[0]) * k, baseline: (pageTop - f) * k, width: item.width * k, size: (Math.hypot(c, d) || Math.abs(d) || item.height) * k, rotated: Math.abs(b) > 1e-6 || Math.abs(c) > 1e-6 || a < 0 });
   }
