@@ -84,7 +84,7 @@ import {CAPTIONABLE_FIELDS,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_
 export {CAPTIONABLE_FIELDS,CAPTION_FONT_RATIO,CAPTION_MAX_RATIO,CITATION_MARKER_RAISE,CITATION_MARKER_SCALE,FOOTNOTE_MAX_RATIO,RUN_IN_HEADING_CHARS,annotationText,captionSettings,citationMarkerText,collectCitations,layoutCaption,layoutFootnotes,referencesSlide,runInHeading,slideCitations,walkCitationRuns} from './annotations.js';
 import {layoutDiagram,type ComposedDiagram,type DiagramIssue,type DiagramMeasure} from './diagram.js';
 import {composeShape,composeStroke,isPresetShape,isShapeBlock,presetAspect,presetMask,sketchStroke,stackedText,PICTURE_STROKE_WIDTH,SHAPE_BLOCK_KEYS,type ComposedShape,type ComposedStroke} from './shape-block.js';
-import {composeOverlayShapes,hasOverlayShapes,type ComposedOverlayEntry} from './overlay-shapes.js';
+import {composeOverlayShapes,hasOverlayShapes,type ComposedOverlayEntry,type ComposedOverlayShape} from './overlay-shapes.js';
 import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconCommands,resolveIcon,type IconPaint,type IconPart,type ResolvedIcon} from './icons.js';
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
@@ -6079,13 +6079,29 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // SH-02, SH-04: a shape's text fitted in its text rectangle less the insets by the measured fonts, from the body size down to the
   // readability floor and never below it (a text that does not fit there overflows with a finding in `sink`), and placed at the
   // shape's anchor (`shape.textArea`). Shape blocks (placeShape) and overlay shapes share it.
-  const fitShapeText = (shape: ComposedShape, value: unknown, textPath: string, minFontSize: number | undefined, sink: LayoutDiagnostic[]): TextFit | RichTextFit | undefined => {
+  const fitShapeText = (shape: ComposedShape, value: unknown, textPath: string, minFontSize: number | undefined, sink: LayoutDiagnostic[], cap = Infinity): TextFit | RichTextFit | undefined => {
     if (value === undefined || value === '' || (Array.isArray(value) && value.length === 0)) return undefined;
     const drawn = shape.textDirection === 'stacked' ? stackedText(value) : value;
     // SH-11: a style with bold text (intense) is measured bold, as both engines draw it, so PowerPoint wraps it where the preview does.
     if (shape.textBold) boldLabels.add(textPath);
     const floor = snapFontSizeUp((minFontSize ?? 16) * scale), start = Math.max(floor, contentNominalSize('text') * scale);
     let text: TextFit | RichTextFit = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, start, floor, textPath, undefined, 'center');
+    // SH-10: text that holds the body size in a large shape grows as a lone body block does: up the type scale, one step at a time, to the
+    // display size of a paragraph, while it still fits at that size and fills at most LONE_TARGET of the text rectangle's height. It never
+    // ends below the body size (growth only); text that does not hold the body size is fitted down to the floor as before. `cap` is the
+    // size its sibling shapes share (evenShapeText).
+    if (!text.overflow && text.fontSize >= start - FONT_GRID_EPSILON) {
+      const display = Math.min(cap, LONE_DISPLAY_SIZES.text * scale), floorPx = minFontSize ?? 16;
+      const filled = (fit: TextFit | RichTextFit) => Math.max('richLines' in fit ? (fit as RichTextFit).height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
+      for (let size = text.fontSize; ;) {
+        const next = typeScaleStepsUp(size, 1, display, floorPx, scale);
+        if (next <= size + FONT_GRID_EPSILON) break;
+        const grown = fitContent('text', drawn, contentText('text', drawn) ?? '', shape.textBox, next, next, textPath, undefined, 'center');
+        if (grown.overflow || grown.fontSize < next - FONT_GRID_EPSILON || filled(grown) > LONE_TARGET * shape.textBox.height + .5) break;
+        text = grown;
+        size = next;
+      }
+    }
     if (text.overflow) sink.push({ code: 'text-overflow', path: textPath, message: 'The text does not fit inside the shape at the readable minimum size; give the shape more room (a larger cell or another aspectRatio), shorten the text or lower its padding.' });
     // The text block sits at the shape's anchor in its box (PowerPoint's a:bodyPr anchor): the preview draws the fit in textArea.
     const area = shape.textBox, height = Math.max('richLines' in text ? (text as RichTextFit).height : text.lines.length * text.lineHeight, text.placement?.height ?? 0);
@@ -6094,13 +6110,39 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     shape.textArea = { x: area.x, y: round(area.y + offset), width: area.width, height: round(Math.min(area.height, height)) };
     return text;
   };
+  // SH-10: sibling shapes keep one size, as sibling body blocks do (LH-43): of the shapes with one parent (the blocks of a group, or a
+  // slide's overlay shapes) whose text grew past the body size, each is set at the smallest size they all reached. A shape whose text
+  // is at or under the body size keeps it.
+  const shapeTexts = new Map<string, { value: unknown; textPath: string }>();
+  const evenShapeText = (entries: readonly ComposedItem[]): void => {
+    const groups = new Map<string, ComposedItem[]>();
+    for (const item of entries) {
+      if (item.field !== 'shape' || !item.shape || !item.text || !shapeTexts.has(item.path)) continue;
+      // The shape's own path (a block's `slides.0.blocks.2`, an overlay's `slides.0.shapes.1`) less its index.
+      const parent = shapeTexts.get(item.path)!.textPath.replace(/\.text$/, '').replace(/\.\d+$/, '');
+      groups.set(parent, [...(groups.get(parent) ?? []), item]);
+    }
+    for (const group of groups.values()) {
+      const start = (item: ComposedItem) => Math.max(snapFontSizeUp((item.composition.minFontSize ?? 16) * scale), contentNominalSize('text') * scale);
+      const grown = group.filter(item => item.text!.fontSize > start(item) + FONT_GRID_EPSILON), holding = group.filter(item => item.text!.fontSize >= start(item) - FONT_GRID_EPSILON);
+      if (!grown.length || holding.length < 2) continue;
+      const shared = Math.min(...holding.map(item => item.text!.fontSize));
+      for (const item of grown) {
+        if (item.text!.fontSize <= shared + FONT_GRID_EPSILON) continue;
+        const source = shapeTexts.get(item.path)!, text = fitShapeText(item.shape!, source.value, source.textPath, item.composition.minFontSize, [], shared);
+        if (text) item.text = text;
+      }
+    }
+  };
   // SH-04: composeSlide's overlay pass: the slide's `shapes` on its final composition, their text fitted as a shape block's.
   const overlayOnto = (options as Record<symbol, unknown>)[OVERLAY_ONTO] as SlideComposition | undefined;
   if (overlayOnto) {
     const overlayShapes = composeOverlayShapes(slide, overlayOnto, { path, scale, rtl, item: (host, shape, itemPath) => {
       const textPath = `${itemPath}.text`, text = fitShapeText(shape, host.text, textPath, composition.minFontSize, overlayOnto.diagnostics);
+      shapeTexts.set(itemPath, { value: host.text, textPath });
       return { ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition };
     } });
+    evenShapeText(overlayShapes.filter((entry): entry is ComposedOverlayShape => entry.kind === 'shape'));
     if (overlayShapes.length) overlayOnto.overlayShapes = overlayShapes;
     return overlayOnto;
   }
@@ -7492,6 +7534,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const host = node.host ?? {}, hostPath = node.hostPath ?? node.path, textPath = `${hostPath}.text`;
     const shape = composeShape(host, roundBox(cell), { scale, anchorY: anchor === 'bottom' ? 'bottom' : anchor === 'top' ? 'top' : 'middle' });
     const text = fitShapeText(shape, host.text, textPath, settings.minFontSize, diagnostics);
+    shapeTexts.set(node.path, { value: host.text, textPath });
     items.push({ path: node.path, field: 'shape', type: 'shape', value: node.value, payload: node.payload, box: { ...shape.box }, shape, ...(text ? { text } : {}), textStyle: { ...styleFor('text', textPath), ...(shape.textBold ? { fontWeight: 700 } : {}) }, composition: settings, alignment: 'center' });
   };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top', frame?: LayoutBox): void => {
@@ -10655,6 +10698,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   if (surface && pairArrow) surface = { ...surface, arrow: pairArrow };
+  evenShapeText(items);
   const composed: SlideComposition = { width, height, contentBox, items, groups, flows, ...(useTemplate ? { regions: templateRegions, headingAreas } : {}), diagnostics, composition, design: hints, ...(furniture?{furniture}:{}), ...(backgroundImage?{backgroundImage}:{}), ...(logo?{logo}:{}), ...(rtl?{direction:'rtl' as const}:{}), ...(footnotes?{footnotes}:{}), ...(surface?{emphasis:surface}:{}), ...(steps.length?{steps}:{}),...(arrangements.length?{arrangements}:{}), ...(icons.length?{icons}:{}), ...(titleRule&&useTemplate?{titleRule}:{}), ...(pictureText&&useTemplate?{pictureText}:{}), ...(explanation?{explanation}:{}) };
   // LH-155 with LH-158: the low stack's text ink scored at the foot (where it is), the middle and the top of the content box; a stack that
   // reads better elsewhere (choosePictureText, the foot first) is composed again there.
