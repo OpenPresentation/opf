@@ -53,7 +53,8 @@ test('long body text keeps the filled card at its anchor; very unequal texts sta
     assert.ok(Math.abs(bottomOf(item.frameBox) - bottomOf(body(even))) < 1, `${item.path}: the card fills its region`);
     assert.ok(item.box.y - item.frameBox.y > bottomOf(item.frameBox) - bottomOf(item.box), `${item.path}: at the foot`);
   }
-  const uneven = composeSlide({ title: 'Cards', blocks: [{ text: `${sentence} ${sentence} ${sentence}` }, { text: 'Two teams.' }, { text: 'Six weeks.' }] }, { layout: columns('bottom') });
+  const uneven = composeSlide({ title: 'Cards', blocks: [{ text: `${sentence} ${sentence} ${sentence}` }, { text: 'Two teams.' }, { text: 'Six weeks.' }] }, { layout: columns('bottom'), recompose: false });
+  // LH-186: without recompose: false the slide is composed as the automatic grid, where the long text reads larger.
   const items = cards(uneven);
   assert.equal(new Set(items.map((item) => item.box.y)).size, 1, 'one first line');
   for (const item of items) assert.ok(item.box.y - item.frameBox.y < 25, `${item.path}: at the card top`);

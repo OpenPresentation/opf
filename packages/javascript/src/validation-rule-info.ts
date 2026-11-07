@@ -327,7 +327,7 @@ export const overflowRule = rule(
 	'layout',
 	'warning',
 	'Text or a table does not fit its space at the smallest allowed size.',
-	'Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.',
+	'Core composition changes the arrangement (columns, the automatic grid, another design) before it sets text smaller, fits dense content that no arrangement holds down the type scale to the readable minimum, never below it, and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.',
 	{
 		cost: 'composition',
 		approximations:
