@@ -6,7 +6,9 @@ const out=document.querySelector('#results'),host=document.querySelector('#canva
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 const text=[{text:'Select these words to format them. ',fontSize:30}, {text:'Keep this link',bold:true,link:'https://example.org',fontSize:30},' and the final sentence.'];
-const original={design:{fontScheme:'roboto'},slides:[{title:'Rich text, on the slide',text,notes:'Keep these notes'},{title:'A plain field',metric:{value:42,unit:'ms',label:'Median latency'}}]};
+// The slide's own variant keeps it on the deck's plain surface: its body is one short message, which LH-164 would otherwise draw on the
+// accent surface, where a run color that does not read 4.5:1 (this file's #2563eb on the blue accent) is drawn in its legible tint.
+const original={design:{fontScheme:'roboto'},slides:[{title:'Rich text, on the slide',text,notes:'Keep these notes',design:{variant:'light1'}},{title:'A plain field',metric:{value:42,unit:'ms',label:'Median latency'}}]};
 const fonts=await loadFonts({faces:(await fetch('./fonts.json').then(r=>r.json())).filter(f=>['Roboto','Roboto Mono'].includes(f.family)&&[400,700].includes(f.weight)).map(f=>({...f,data:Uint8Array.from(atob(f.dataUrl.split(',')[1]),c=>c.charCodeAt(0))}))});
 const estimated=new URLSearchParams(location.search).has('estimated')||location.pathname.includes('rich-text-estimated');
 const canvasFonts=estimated?{}:{fonts};
@@ -22,6 +24,11 @@ async function select(start,end,reverse=false) {
  else{const range=document.createRange();range.setStart(a.firstChild,start-Number(a.dataset.opfTextStart));range.setEnd(b.firstChild,end-Number(b.dataset.opfTextStart));selection.addRange(range);}
  await paint();
 }
+// The drawn fill of every traced fragment, and the fragments inside or wholly outside a source range.
+const fills=()=>nodes().map(n=>({start:+n.dataset.opfTextStart,end:+n.dataset.opfTextEnd,fill:n.getAttribute('fill')}));
+const fillAt=(drawn,offset)=>drawn.find(part=>part.start<=offset&&offset<part.end)?.fill;
+const inRange=(start,end)=>nodes().filter(n=>+n.dataset.opfTextStart>=start&&+n.dataset.opfTextEnd<=end);
+const outOfRange=(start,end)=>nodes().filter(n=>+n.dataset.opfTextEnd<=start||+n.dataset.opfTextStart>=end);
 function change(name,value){const node=input(name);node.value=value;node.dispatchEvent(new Event('change',{bubbles:true}));}
 try {
  await canvas.ready;
@@ -35,7 +42,7 @@ try {
  button('Italic').click();check(editor.get('slides.0.text').some(r=>r.text==='these words'&&r.bold&&r.italic),'repeated style changes retain the same range');
  editor.undo();check(editor.get('slides.0.text').some(r=>r.text==='these words'&&r.bold&&!r.italic),'one undo removes one formatting action');
  editor.undo();check(JSON.stringify(editor.get('slides.0.text'))===JSON.stringify(text),'undo restores original run boundaries');
- await select(7,40,true);change('Text color','#2563eb');check(nodes().filter(n=>+n.dataset.opfTextStart>=7&&+n.dataset.opfTextEnd<=40).every(n=>n.getAttribute('fill')==='#2563eb'),'reverse cross-run selection colors only the range');
+ await select(7,40,true);let drawnBefore=fills();change('Text color','#2563eb');check(inRange(7,40).every(n=>n.getAttribute('fill')==='#2563eb')&&outOfRange(7,40).every(n=>n.getAttribute('fill')===fillAt(drawnBefore,+n.dataset.opfTextStart)),'reverse cross-run selection colors only the range');
  change('Font size (pt)','24');check(editor.get('slides.0.text').filter(r=>r.color==='#2563eb').every(r=>r.fontSize===24),'point size applies to all selected runs');
  change('Link URL','javascript:alert(1)');check(errors.at(-1)?.includes('HTTP'),'unsafe link entry rejected');errors=[];
  if(!estimated){const beforeMissingFont=JSON.stringify(editor.presentation);change('Font family','Definitely Missing OPF Test Font');check(JSON.stringify(editor.presentation)===beforeMissingFont&&errors.at(-1)?.includes('font'),'missing font fails before changing the document');errors=[];}
@@ -102,6 +109,21 @@ try {
  check(commits>0,'formatting notifies canvas commit callbacks');check(host.querySelector('[role="status"]').hidden,'successful edits clear prior formatting errors');
  check(errors.length===0,'no unexpected canvas errors');
  canvas.destroy();check(!host.children.length,'destroy cleans up canvas and toolbar');
+ // LH-164: without its own variant the slide's one short message takes the accent surface. The document keeps the authored color on exactly
+ // the range; the range is drawn in one legible tint of it (#2563eb does not read 4.5:1 on the blue accent), and the text outside keeps its fill.
+ const {design:_plainSurface,...messageSlide}=original.slides[0];
+ const surfaceEditor=createEditorSession({...original,slides:[messageSlide,original.slides[1]]},{rejectInvalid:true});
+ const surfaceCanvas=createCanvasEditor(host,{editor:surfaceEditor,...canvasFonts,onError:error=>errors.push(error.message)});await surfaceCanvas.ready;
+ await select(7,40,true);drawnBefore=fills();change('Text color','#2563eb');
+ check(surfaceEditor.get('slides.0.text').filter(r=>r.color==='#2563eb').map(r=>r.text).join('')===richTextContent(text).slice(7,40),'on the accent surface the document keeps the authored color on the range');
+ const tints=new Set(inRange(7,40).map(n=>n.getAttribute('fill'))),tint=[...tints][0],surface=host.querySelector('rect[data-opf-path="slides.0.design.background"]')?.getAttribute('fill');
+ const luminance=hex=>[1,3,5].map(at=>Number.parseInt(hex.slice(at,at+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+ const contrast=(a,b)=>{const [hi,lo]=[luminance(a),luminance(b)].sort((x,y)=>y-x);return (hi+.05)/(lo+.05);};
+ check(/^#[0-9a-f]{6}$/i.test(surface??'')&&contrast('#2563eb',surface)<4.5,'the message slide is on the accent surface, where #2563eb does not read');
+ check(tints.size===1&&/^#[0-9a-f]{6}$/i.test(tint??'')&&tint.toLowerCase()!=='#2563eb'&&contrast(tint,surface)>=4.5,'on the accent surface the range draws in one legible tint of the authored color');
+ check(outOfRange(7,40).every(n=>n.getAttribute('fill')===fillAt(drawnBefore,+n.dataset.opfTextStart)),'on the accent surface the text outside the range keeps its fill');
+ check(errors.length===0,'no canvas errors on the accent surface');
+ surfaceCanvas.destroy();check(!host.children.length,'destroy cleans up the accent-surface canvas');
  out.textContent+=`\n${checks} checks passed`;document.title=`PASS ${checks} rich text canvas checks`;
  // Leave an interactive specimen after verification.
  const demo=createCanvasEditor(host,{presentation:original,...canvasFonts});await demo.ready;

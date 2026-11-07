@@ -36,9 +36,11 @@ export {
 // any other option overrides the resolved one (`layout`, ...). FA-31: `slide` is the slide to compose and draw, with `{{slide.number}}`,
 // `{{slide.section}}` and `{{deck.slideCount}}` substituted for `slideNumber` and `slideCount` (default: its place in the open deck and the
 // deck's length), the same numbers the options carry. Pagination takes the source slide instead and substitutes while it measures.
+// `date` (the host's current date for `date: true` header and footer fields) goes into the resolution too, as the renderer passes it:
+// LH-164 decides a message slide's accent surface by composing the slide, which a date field without a date fails.
 function slideContext(presentation, slideIndex, catalogs, { fonts, catalogs: _extra, onDiagnostic, ...overrides } = {}) {
   if (!Number.isInteger(slideIndex) || !presentation.slides?.[slideIndex]) throw new OPFEditorError("slide-index-out-of-range", "Slide index is out of range.");
-  const { slide, options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs, slideNumber: overrides.slideNumber, slideCount: overrides.slideCount });
+  const { slide, options, diagnostics } = resolveSlideContext(presentation, slideIndex, { fonts, catalogs, slideNumber: overrides.slideNumber, slideCount: overrides.slideCount, ...(overrides.date !== undefined ? { date: overrides.date } : {}) });
   for (const diagnostic of diagnostics) onDiagnostic?.(diagnostic);
   return { slide, options: { ...options, ...overrides } };
 }
