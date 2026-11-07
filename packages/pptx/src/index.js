@@ -2729,7 +2729,9 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       await addMeasuredList(slide,item.text,lineContext,item.path,item.bulletImage,presentation,slideIndex,options,false,arrangement.align === 'center' ? 'center' : undefined);
       if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if ((item.field === "items" || item.field === "bullets") && item.text?.listEntries) {
-      await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined);
+      // LH-168: a list numbered by core's step badges carries its numbers on the badges, not as list markers.
+      const badgeNumbered=(geometry.steps??[]).some(step=>step.badges?.some(badge=>badge.list?.path===item.path));
+      await addMeasuredList(slide,item.text,itemContext,item.path,item.bulletImage,presentation,slideIndex,options,item.payload?.numbering!==undefined&&!badgeNumbered);
       // opf-pptx#212: the look every run of the list is written with where its source states none (full provenance only).
       if(item.textStyle)recordListRuns(context.documentProvenance,slideIndex,item.path,listRunLook(item.text,item.textStyle,itemContext));
     } else if (["text", "title", "subtitle", "tag"].includes(item.field) && item.text?.richLines) {
