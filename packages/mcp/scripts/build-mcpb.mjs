@@ -14,6 +14,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { manifestProblems, packDirectory, unpackFile } from "./mcpb.mjs";
 
 const here = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const packages = path.dirname(here);
@@ -25,7 +26,6 @@ const artifacts = path.join(here, "artifacts");
 const stage = path.join(artifacts, "mcpb-stage");
 const tarballs = path.join(artifacts, "mcpb-tarballs");
 const out = path.join(artifacts, `opf-${version}${scriptFonts ? "" : "-lite"}.mcpb`);
-const mcpb = path.join(here, "node_modules", ".bin", process.platform === "win32" ? "mcpb.cmd" : "mcpb");
 
 const run = (command, commandArgs, options = {}) => {
 	const result = spawnSync(command, commandArgs, { stdio: "inherit", shell: process.platform === "win32", ...options });
@@ -117,16 +117,18 @@ if (!scriptFonts) bundleManifest.display_name += " (lite)";
 writeFileSync(path.join(stage, "manifest.json"), `${JSON.stringify(bundleManifest, null, 2)}\n`);
 cpSync(path.join(here, "mcpb", "icon.png"), path.join(stage, "icon.png"));
 cpSync(path.join(here, "LICENSE"), path.join(stage, "LICENSE"));
-run(mcpb, ["validate", path.join(stage, "manifest.json")]);
+// The checks Claude Desktop applies, then the zip `mcpb pack` would write (scripts/mcpb.mjs; no bundle CLI is installed).
+const problems = manifestProblems(bundleManifest, stage);
+if (problems.length) throw new Error(`The bundle manifest is not valid:\n- ${problems.join("\n- ")}`);
 rmSync(out, { force: true });
-run(mcpb, ["pack", stage, out]);
-console.log(`build-mcpb: ${path.relative(process.cwd(), out)} ${mib(statSync(out).size)} (${scriptFonts ? "with" : "without"} script fonts; ${mib(removed)} of unused fonts, maps and declarations left out)`);
+const packed = packDirectory(stage, out);
+console.log(`build-mcpb: ${path.relative(process.cwd(), out)} ${mib(statSync(out).size)}, ${packed} files (${scriptFonts ? "with" : "without"} script fonts; ${mib(removed)} of unused fonts, maps and declarations left out)`);
 
 // 5. --check: unpack the bundle and drive its server the way Claude Desktop starts it (node, the manifest's entry point).
 if (args.has("--check")) {
 	const unpacked = path.join(artifacts, "mcpb-check");
 	rmSync(unpacked, { recursive: true, force: true });
-	run(mcpb, ["unpack", out, unpacked]);
+	unpackFile(out, unpacked);
 	const entry = JSON.parse(readFileSync(path.join(unpacked, "manifest.json"), "utf8")).server.mcp_config.args[0].replace("${__dirname}", unpacked);
 	const check = execFileSync(process.execPath, [path.join(here, "scripts", "check-mcpb.mjs"), entry, path.join(unpacked, "manifest.json"), scriptFonts ? "script-fonts" : "no-script-fonts"], { cwd: here, encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] });
 	process.stdout.write(check);

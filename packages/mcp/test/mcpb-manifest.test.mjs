@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { validateManifest } from "@anthropic-ai/mcpb";
+import { manifestProblems } from "../scripts/mcpb.mjs";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createOpfServer } from "../dist/index.js";
@@ -14,12 +14,19 @@ const manifestFile = fileURLToPath(new URL("../mcpb/manifest.json", import.meta.
 const manifest = JSON.parse(readFileSync(manifestFile, "utf8"));
 
 test("the bundle manifest is a valid MCPB manifest that starts opf-mcp", () => {
-	assert.equal(validateManifest(manifestFile), true);
+	assert.deepEqual(manifestProblems(manifest), []);
 	assert.equal(manifest.server.type, "node");
 	assert.equal(manifest.server.entry_point, "node_modules/@openpresentation/mcp/dist/bin.js");
 	assert.deepEqual(manifest.server.mcp_config.args, ["${__dirname}/node_modules/@openpresentation/mcp/dist/bin.js"]);
 	assert.equal(manifest.icon, "icon.png");
 	assert.equal(manifest.license, JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")).license);
+});
+
+test("the manifest check refuses what Claude Desktop would", () => {
+	assert.deepEqual(manifestProblems({ ...manifest, manifest_version: "0.2", version: "next" }), ['manifest_version must be "0.3".', "version next is not a semantic version."]);
+	const server = { ...manifest.server, mcp_config: { ...manifest.server.mcp_config, args: ["${__dirname}/elsewhere.js"] } };
+	assert.match(manifestProblems({ ...manifest, server }).join(" "), /must start the entry point/);
+	assert.match(manifestProblems(manifest, fileURLToPath(new URL("../mcpb/", import.meta.url))).join(" "), /entry point .* is not in the bundle/, "the files are checked too");
 });
 
 test("the bundle manifest lists exactly the tools the model sees", async () => {
