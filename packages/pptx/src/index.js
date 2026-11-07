@@ -21,6 +21,7 @@ import {applyEndLabels,applySliceLabels,directLabelDefaults} from './chart-direc
 import {addChartMarks,applyStackValueDeletes,attachChartMarkTags,importChartMarks} from './chart-marks.js';
 import {addSteps,attachStepTags,importStepShapes,restoreStepNumbers} from './step-badges.js';
 import {addArrangements,attachArrangementTags,attachSmartArt,attachSmartArtFallbacks,exportPaint,importArrangementShapes,importSmartArt,importSmartArtFallbacks,smartArtBleed,smartArtRegionSvg,smartArtSlideSvg,writeArrangementAdjustments} from './smart-art.js';
+import {importSmartArtShapes} from './smart-art-import.js';
 import {addIcons,attachIconTags,importIconShapes,restoreIcons} from './icons.js';
 import {addTitleRule,attachTitleRuleTags,importTitleRules} from './title-rule.js';
 import {attachCodeTags, attachTextTags, codeManifest, importCodeGroups, nativeShapeParagraphs, nativeTextShapes} from './code-provenance.js';
@@ -623,7 +624,8 @@ export async function fromPptx(input, options = {}) {
   const datasets = readDatasetsTag(entries, presentationRoot, presentationRels, options.onDiagnostic);
   const mediaRegistry = Object.create(null);
   // SH-05: shape readers are synchronous; the preset geometry they read (SH-01) loads here, when a slide has a shape other than a rectangle.
-  if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path])))) await loadShapeGeometry();
+  // SH-08: a SmartArt's drawing (ppt/diagrams/drawingN.xml) is read as shapes when its layout has no OPF form.
+  if (slidePaths.some(path => /<a:prstGeom\s+prst="(?!rect")|<a:custGeom\b/.test(decodeText(entries[path]))) || Object.keys(entries).some(path => /^ppt\/diagrams\/drawing\d+\.xml$/.test(path))) await loadShapeGeometry();
   for (let index = 0; index < slidePaths.length; index += 1) {
     furnitureContexts[index].mediaRegistry = mediaRegistry;
     imported.slides.push(importSlide(entries, slidePaths[index], index, dimensions, {...options, rtlDeck: observedRtl(observedLanguage), deckLang: observedLanguage.lang, codeFamily: Object.keys(entries).some(path => /^ppt\/tags\/opf/i.test(path)) ? importedCodeFamily(imported, options.catalogs) : undefined, dataProvenance: {datasets}}, furniture.slides[index], furnitureContexts[index]));
@@ -1335,14 +1337,24 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     }, relationships, (frame, cell, code, message) => options.onDiagnostic?.({code, message, path: `slides.${slideIndex}.tables.${frame}${cell ? '.' + cell : ''}`}), dimensions, {rtlDeck: options.rtlDeck === true}) : [];
   // RR-54: chart and table data records (OPF_DATA_V1) restore against the stored datasets; their diagnostics name the frame.
   const dataContext = label => ({datasets: options.dataProvenance?.datasets, markedCharts: chartMarks.charts, report: (kind, diagnostic) => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.${kind === 'table' ? 'tables' : 'charts'}.${label}`})});
-  // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js).
+  // SH-09: a Basic Pyramid or Basic Matrix SmartArt (OPF's or PowerPoint's) is its list again, on the pyramid or matrix layout (src/smart-art.js);
+  // SH-08: any SmartArt is a list (an arrangement's layout, the list or the process layout), a Mermaid hierarchy, or its drawing as overlay shapes.
   const smartArt = importSmartArt({frames, relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)});
+  const addSmartArt = (found, xfrm, source) => {
+    if (found.type === 'list') {
+      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
+      items.push({kind: 'list', bounds: shapeBounds(xfrm), payload: found.payload, sources: [source]});
+    } else if (found.type === 'diagram') items.push({kind: 'diagram', bounds: shapeBounds(xfrm), payload: found.payload, sources: [source]});
+    else if (found.type === 'shapes') {
+      // The drawing takes the frame's place in the slide's z order.
+      const at = drawnAll.find(entry => entry.tag === 'p:graphicFrame' && entry.frame && ['x', 'y', 'cx', 'cy'].every(key => entry.frame[key] === found.frame[key]));
+      importSmartArtShapes(found, {context: shapeContext, z: at?.z ?? Math.max(0, ...drawnAll.map(entry => entry.z)) + 1});
+    }
+  };
   for (const [index, frame] of frames.entries()) {
     if (smartArt.has(index)) {
-      const found = smartArt.get(index);
       roles.set(`frame:${index}`, 'smartart');
-      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = found.layout;
-      items.push({kind: 'list', bounds: shapeBounds(frame['p:xfrm']), payload: found.payload, sources: [`frame:${index}`]});
+      addSmartArt(smartArt.get(index), frame['p:xfrm'], `frame:${index}`);
       continue;
     }
     const item = importGraphicFrame(entries, frame, slidePath, relationships, tables[index], chartReport(`charts.${index}`), dataContext(index));
@@ -1356,8 +1368,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const wrapped = choice ? importSmartArt({frames: [choice], relationships, entries, slideIndex, report: diagnostic => options.onDiagnostic?.(diagnostic)}).get(0) : undefined;
     if (wrapped) {
       roles.set(`alt:${alternateIndex}`, 'smartart');
-      if (!nativeContext.layoutTag && nativeContext.smartArtLayout === undefined) nativeContext.smartArtLayout = wrapped.layout;
-      items.push({kind: 'list', bounds: shapeBounds(choice['p:xfrm']), payload: wrapped.payload, sources: [`alt:${alternateIndex}`]});
+      addSmartArt(wrapped, choice['p:xfrm'], `alt:${alternateIndex}`);
       continue;
     }
     const fallback = asArray(alternate?.["mc:Fallback"]).map((node) => node?.["p:graphicFrame"]).find(Boolean);

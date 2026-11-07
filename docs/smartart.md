@@ -490,8 +490,8 @@ the design and the layout that drew it, and the COM records) is in the SH-19 fol
 
 A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the slide, the list path, the arrangement, the authored list
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
-Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
-entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
+Pyramid, Basic Matrix, Basic Cycle, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (nested
+entries keep their `level`, SH-08), their text and run properties (bold, italic, underline, strike), as a list on the
 `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement; SH-19: a SmartArt on one of
 OPF's own layouts by its `uniqueId`, `urn:openpresentation.org/smartart/layout/<design>/...`, also after PowerPoint saved it again), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
@@ -499,4 +499,51 @@ SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in wh
 SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its
 SVG and PNG, so a picture still named for its list whose SVG or PNG is the one written is that list on its layout again; a replaced
 picture reports `invalid-smartart-provenance` and imports as a picture, as does any fallback without the record. Native-shape arrangements (`OPF_ARRANGEMENT_V1` on every node) are the layout's
-drawing: import consumes them and reads the measured lines as the list. Other SmartArt layouts are SH-08.
+drawing: import consumes them and reads the measured lines as the list. Every other SmartArt imports as the next section says.
+
+### SmartArt PowerPoint users made (SH-08)
+
+Any SmartArt PowerPoint wrote imports with its text (`src/smart-art-import.js` in opf-pptx). Import reads the data model, not the
+layout part:
+
+- **The outline**: the `parOf` connections from the doc point, in `srcOrd` order, as a tree of entries (nodes and an organization
+  chart's assistants, `type="asst"`). An entry left as a placeholder (no text) gives its place to its children. A run's bold, italic,
+  underline and strike are kept, a line break (`a:br`) is a newline, a field is its text, and the paragraphs of one node are one entry.
+  A presentation point with text of its own (`custT`, such as a name-and-title chart's title box) is its entry's `description`.
+- **The layout**: the doc point's `loTypeId`, then its category (`loCatId`).
+
+Then the first form that fits:
+
+| Layout | OPF |
+| --- | --- |
+| The six OPF writes (`pyramid1`, `matrix3`, `cycle2`, `chevron1`, `process1`, `process2`) and OPF's own layouts | The list on that arrangement's layout, as above |
+| Another layout of those families: `pyramidN`, `matrixN`, `cycleN` (Text Cycle, Block Cycle...), any chevron layout (`chevron2`, `hChevron3`...); a layout of category `pyramid`, `matrix` or `cycle` | The list on the `pyramid`, `matrix`, `cycle` or `chevrons` layout, with `smartart-adapted` (info) |
+| The list family (category `list`: Basic Block List `default`, Vertical Bullet List `vList2`...) | The list on the `list` layout, with `smartart-adapted` |
+| The process family (category `process`, other than the arrangements above: Accent Process, Step Up Process...) | The list on the `process` layout, with `smartart-adapted` |
+| Hierarchies and organization charts (`orgChartN`, `hierarchyN`, the 2008 and 2009 organization charts; category `hierarchy`) | A Mermaid flowchart (`flowchart TD`, `flowchart LR` for a horizontal hierarchy): a node per entry, its description on a second line, an edge from each parent, dotted (`-.->`) to an assistant, the connection's own text as the edge's label; the outline as the diagram's `alt`; `smartart-adapted` |
+| Every other layout (Venn, radial, target, funnel, gear, picture layouts...) | The drawing (`dsp:drawing`, which PowerPoint saves with every SmartArt) as overlay shapes, with `smartart-adapted`; without a drawing, the list on the `list` layout |
+
+Nested entries keep their `level` in every list. An arrangement draws one level, so a pyramid of nested entries draws as a list
+(`opf/arrangement-adapted` says so) with all of its text.
+
+**The drawing as overlay shapes.** The drawing's shapes are read by SH-05's reader ([shapes](shapes.md)), in a group that places the
+drawing's space on the SmartArt's frame, so each is an overlay shape with its preset, fill, line, effects and text, in PowerPoint's
+z order at the frame's place. PowerPoint sets a SmartArt shape's text in a rectangle of its own (`dsp:txXfrm`): where it lies inside
+the shape's own text rectangle, the difference is the shape's `padding`; where it does not (a Venn circle's text across the overlap,
+text beside a shape), the shape is drawn without text and a text-only overlay (no fill, no line, style `none`) holds the text at
+PowerPoint's rectangle. Text in another color than the slide's text color keeps it (the style's `fontRef`). The first shape carries the
+outline as its alt text (`SmartArt (venn1):` and an entry a line, indented a level by two spaces). The no-op color transforms and empty
+3-D element PowerPoint writes on every SmartArt shape are not reported as dropped properties; anything else SH-05 does not keep is
+(`shape-property-dropped`).
+
+**Nothing dropped silently.** What the OPF form does not keep is a finding naming it:
+
+| Finding | When |
+| --- | --- |
+| `smartart-text-dropped` (with `text`) | Text on a transition (a connection's own text, other than an organization chart's edge label), text on a presentation point that belongs to no entry, or an entry no connection reaches |
+| `smartart-picture-dropped` | An entry's picture fill (a picture layout), in every form but the drawing |
+| `smartart-formatting-dropped` | Bold, italic, underlined or struck-through text in a hierarchy (Mermaid labels carry none); the text is kept |
+| `smartart-adapted` (with `form`: an arrangement, `list`, `process`, `diagram` or `shapes`) | A layout imported as anything other than the arrangement OPF writes for it |
+
+Every finding has the layout (`layout`, the last segment of `loTypeId`) and the slide's path. A SmartArt with no text and no drawing
+(only placeholders) imports as nothing.
