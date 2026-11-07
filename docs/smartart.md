@@ -98,13 +98,14 @@ arrows turn to 180 degrees.
 
 1. **Live SmartArt** (`"live"`, the default), for PowerPoint's design where the instance lies in the domain below. The slide holds a `p:graphicFrame` of the
    diagram (`dgm:relIds`) inside an `mc:AlternateContent` whose `mc:Fallback` is OPF's picture of it ([in other apps](#in-other-apps)), and the package:
-   - the data model (`ppt/diagrams/dataN.xml`): the `doc` point names the layout (`loTypeId` pyramid1 or matrix3) and OPF's own quick
+   - the data model (`ppt/diagrams/dataN.xml`): the `doc` point names the layout (`loTypeId` pyramid1, matrix3, chevron1, process1 or process2) and OPF's own quick
      style and colors (`qsTypeId` `urn:openpresentation.org/opf/smartart/quickstyle/flat`, `csTypeId`
      `urn:openpresentation.org/opf/smartart/colors/primary`); one point per entry, marked `custT="1"` so PowerPoint keeps the run size
      (and sets the text margins from it) instead of fitting the text again; runs with OPF's size, typeface and language; each paragraph
      centered at OPF's line pitch with no space before or after; one `cxn` per entry from the doc point, in entry order;
-   - OPF's colors and quick style parts, whose style labels cover every label the two layouts use (`node0`, `node1`, `bgShp`, `revTx`
-     and the transition labels: a label a part leaves out renders black), in the theme's scheme colors, so a theme change in PowerPoint
+   - OPF's colors and quick style parts, whose style labels cover every label the five layouts use (`node0`, `node1`, `bgShp`, `revTx`
+     and the transition labels: a label a part leaves out renders black; `sibTrans2D1`, a flow's arrows, is the primary lightened 40%
+     without a line), in the theme's scheme colors, so a theme change in PowerPoint
      recolors the SmartArt;
    - a drawing part built from OPF's geometry (`ppt/diagrams/drawingN.xml`), for readers that show the cached shapes;
    - **no layout part.** OPF never writes a SmartArt layout definition. `r:lo` is empty, and PowerPoint resolves its built-in layout
@@ -115,7 +116,8 @@ arrows turn to 180 degrees.
    default in Node is opf-render's; a browser passes `svgRasterizer`). Without either the arrangement is written as native shapes and
    `smartart-unavailable` says so.
 2. **Native shapes**: OPF's design, a card grid, PowerPoint's design outside the domain, and everything with `"shapes"`. The diamond and
-   the nodes are presets (`diamond`, `trapezoid` with core's adjustment, `roundRect`) at core's boxes, under the list's measured lines,
+   the nodes are presets (`diamond`, `trapezoid` with core's adjustment, `roundRect`; SH-17: `chevron` with core's adjustment, mirrored
+   with `flipH` in a right-to-left deck, and a flow's arrows as `rightArrow` with core's two adjustments, turned with `rot`) at core's boxes, under the list's measured lines,
    tagged `OPF_ARRANGEMENT_V1`. OPF's design and PowerPoint's outside the domain report the info finding `pptx/smartart-unavailable`
    with the reason (`reason` in the diagnostic); a card grid reports core's `arrangement-adapted`.
 
@@ -209,6 +211,36 @@ box and is not SmartArt's; at the sizes of SH-07's diagram labels it is under th
 compares the SmartArt with the native export, and the preview offset is recorded in the gate table. The evidence (the gate table, the
 preview | PowerPoint | native export sheets and the COM records) is in the SH-09 build folder of the shapes program.
 
+### The domain and the gate of chevrons and flows
+
+The SH-17 sweep measured PowerPoint's own layout first (`AddSmartArt` through COM, 1 to 10 nodes in 20 frames per layout, the fitted
+model above), then ran the gate above on OPF's exports: chevrons, a flow and a vertical flow of 1 to 8 entries, short, medium and long,
+on 16:9, 4:3 and 1:1 slides, and an Arabic and a Japanese deck of each, 222 decks, each exported live and as native shapes and drawn by
+PowerPoint. The domain (core `SMART_ART_DOMAIN`) is what passed:
+
+| | Chevrons | Flow | Vertical flow |
+| --- | --- | --- | --- |
+| Entries | 1 to 6 (7 and 8 never fitted the list's size in PowerPoint's design) | 1 to 6 | 1 to 4 |
+| Frame proportions | 1.1 to 2.3 (the 16:9, 4:3 and 1:1 slides gave 2.26, 1.64 and 1.17) | the same | 0.55 to 1.2 (the region beside the title: 1.13, 0.81 and 0.58) |
+| Fill | no entry's lines more than 95% of its node's text height (less margins): PowerPoint lays a box nearly full of text out again, in the first pass at 0.969 and 0.996 of the height (node rectangles 0.22 and 5.3 pt off), while every box at 0.95 or less matched | the same | the same |
+| Ink | the entries' text (each line's width times the size) at most 8% of the frame: PowerPoint sets a SmartArt's lines up to a pixel from where it sets OPF's native text (the same text in both), which in a frame dense with large text passes SH-07's mean-difference gate no longer (every first-pass failure of that check was at 0.082 or more) | the same | the same |
+| Lines, text | as the pyramid's: at most 2 lines an entry and 6 in all, breaks that hold within 4% of the width, Latin left-to-right text with bold, italic, underline or strike only | the same | the same |
+
+In the first pass, before the fill and ink limits, 88 decks drew PowerPoint's design live; every node lay exactly where core lays it
+(0.000 pt) at core's size in 81, and 74 passed every check. The seven laid out again had nearly full text (the fill limit), and the
+seven others that drew the SmartArt more than a mean of 1 from the native export were dense with large text (the ink limit). With the domain in
+place: 63 decks draw live SmartArt, every one passing (node rectangles and arrows within 0.000 pt of core, sizes equal, no visible
+difference in the shapes, within SH-07's gate of the native export), 150 draw OPF's own design and 9 stay a list (7 or 8 long chevrons and 8 long boxes on the 1:1 slide, and vertical flows of 6 to 8 long or 8 medium entries on the 4:3 and
+1:1 slides, which no design holds at the list's size; `opf/arrangement-adapted` says so). Every native-shape instance PowerPoint draws as the preview
+does: no visibly different block in the shapes, a mean difference of at most 2.6 outside the text (the outlines' antialiasing). The
+Arabic and Japanese decks are OPF's design, as for the pyramid and matrix.
+
+COM also showed, on two live instances of each (short and medium entries): `HasSmartArt`, the layout's name, every entry a node of
+`AllNodes`; a node's text edited in PowerPoint keeps OPF's size in every node and every node rectangle; Change Layout to Basic Block List
+keeps the nodes. With its `mc:Choice` requiring an unknown namespace, PowerPoint draws SH-16's fallback picture of each (mean difference
+1.3 from the preview over the slide, about what it is for the live SmartArt). Import reads a Basic Chevron Process, Basic Process or
+Vertical Process that PowerPoint itself wrote back to the `chevrons`, `flow` or `vertical-flow` layout and its list, from the data model.
+
 ### The layout relationship
 
 The SH-09 spike found that PowerPoint resolves its built-in layout from the data model's `loTypeId` only when the package has no layout
@@ -229,9 +261,9 @@ not installed on the comparison machine, so neither was run.
 
 A SmartArt OPF wrote (in `full` provenance it carries `OPF_SMARTART_V1`: the slide, the list path, the arrangement, the authored list
 and the text of every node) imports as its list on its layout again when its node texts are unchanged. An edited one, and a Basic
-Pyramid or Basic Matrix that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
+Pyramid, Basic Matrix, Basic Chevron Process, Basic Process or Vertical Process that PowerPoint wrote, import their data model's nodes: the points in `cxn` order (the top level only; nested
 entries are reported as `smartart-flattened`), their text and run properties (bold, italic, underline, strike), as a list on the
-`pyramid` or `matrix` layout, with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
+`pyramid`, `matrix`, `chevrons`, `flow` or `vertical-flow` layout (the one of the same arrangement), with `smartart-edited` for an edited OPF SmartArt. The diagram's place on the slide is its frame's;
 the nodes' geometry is the layout's again, as OPF draws it, so nothing of PowerPoint's layout is kept. Import never reads or stores a
 SmartArt layout part. A wrapped frame is read from its `mc:Choice`. A file in which only the fallback picture survived (an app without
 SmartArt saved it) imports the same way in `full` provenance: the picture carries `OPF_SMARTART_V1` too, with the media keys of its

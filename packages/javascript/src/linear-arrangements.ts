@@ -167,8 +167,11 @@ export function linearNodes(kind: LinearArrangement, frame: Box, count: number, 
 export const OPF_CHEVRON_HEIGHT = .6, OPF_CHEVRON_DEPTH = .3;
 /** OPF's flow: a box's tallest, as a share of its width; a vertical box's tallest, as a share of the region's width. */
 export const OPF_FLOW_HEIGHT = .75, OPF_VERTICAL_FLOW_HEIGHT = .4;
-/** OPF's flows: the room an arrow takes between two boxes, as a multiple of the layout's gap; the arrow's length and thickness in it. */
-export const OPF_ARROW_ROOM = 1.5, OPF_ARROW_LENGTH = .6, OPF_ARROW_THICKNESS = .7;
+/**
+ * OPF's flows: the room an arrow takes between two boxes, as a multiple of the layout's gap, in a row and in a column (where the boxes'
+ * height is short); the arrow's length and thickness in it.
+ */
+export const OPF_ARROW_ROOM = 2, OPF_COLUMN_ARROW_ROOM = 1.25, OPF_ARROW_LENGTH = .6, OPF_ARROW_THICKNESS = .7;
 
 /**
  * OPF's own chevrons: a row filling `area`'s width, each chevron's point `gap / 2` from the next one's notch, as tall as the area or
@@ -196,9 +199,9 @@ export function flowRow(area: Box, count: number, gap: number, rtl = false): Lin
   return {nodes, arrows};
 }
 
-/** OPF's own vertical flow: boxes as wide as `area`, OPF_ARROW_ROOM gaps apart with a down arrow in each, the column centered. */
+/** OPF's own vertical flow: boxes as wide as `area`, OPF_COLUMN_ARROW_ROOM gaps apart with a down arrow in each, the column centered. */
 export function flowColumn(area: Box, count: number, gap: number): LinearGeometry {
-  const n = Math.max(1, Math.floor(count)), room = OPF_ARROW_ROOM * gap, h = Math.min((area.height - (n - 1) * room) / n, OPF_VERTICAL_FLOW_HEIGHT * area.width);
+  const n = Math.max(1, Math.floor(count)), room = OPF_COLUMN_ARROW_ROOM * gap, h = Math.min((area.height - (n - 1) * room) / n, OPF_VERTICAL_FLOW_HEIGHT * area.width);
   const y0 = area.y + (area.height - n * h - (n - 1) * room) / 2;
   const nodes = Array.from({length: n}, (_, index) => boxNode(index, {x: area.x, y: y0 + index * (h + room), width: area.width, height: h}, FLOW_ROUND_ADJUST));
   const length = OPF_ARROW_LENGTH * room, thickness = OPF_ARROW_THICKNESS * room;
@@ -234,8 +237,14 @@ export function linearDesign(kind: LinearArrangement, area: Box, count: number, 
   return {nodes, arrows};
 }
 
-/** A node's text margins (left, top, right, bottom) as shares of its size: a chevron's larger margin is at its start (the right when `rtl`). */
-export function linearMargins(kind: LinearArrangement, rtl: boolean): [number, number, number, number] {
-  const [left, top, right, bottom] = LINEAR_TEXT_MARGINS[kind];
+/** OPF's own flows set a box's text 0.15 em from its top and bottom (PowerPoint's 0.3 em at the sides), so a short box holds a line. */
+export const OPF_FLOW_MARGINS: readonly [number, number, number, number] = Object.freeze([.3, .15, .3, .15] as const);
+
+/**
+ * A node's text margins (left, top, right, bottom) as shares of its size, in PowerPoint's design or (`opf`) OPF's own: a chevron's larger
+ * margin is at its start (the right when `rtl`).
+ */
+export function linearMargins(kind: LinearArrangement, rtl: boolean, opf = false): [number, number, number, number] {
+  const [left, top, right, bottom] = opf && kind !== 'chevrons' ? OPF_FLOW_MARGINS : LINEAR_TEXT_MARGINS[kind];
   return rtl ? [right, top, left, bottom] : [left, top, right, bottom];
 }

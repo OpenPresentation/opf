@@ -320,7 +320,7 @@ const iconDropped: RuleText = (finding) => {
 const arrangementAdapted: RuleText = (finding) => {
   const cards = /needs four entries/.test(finding.message);
   return {
-    message: cards ? "A matrix needs four entries, so this one is drawn as a grid of cards." : "This pyramid or matrix is drawn as a list.",
+    message: cards ? "A matrix needs four entries, so this one is drawn as a grid of cards." : "This diagram (a pyramid, matrix, row of chevrons or flow) is drawn as a list.",
     next: cards ? "write four entries for the quadrants, or choose another layout." : "shorten the entries, keep one level without descriptions, or choose another layout.",
   };
 };
