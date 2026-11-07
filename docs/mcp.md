@@ -70,7 +70,7 @@ Resources have stable URIs. The server lists them (`resources/list`) and also of
 | `opf://catalog/<kind>/<id>` | A record of the default catalog (`@openpresentation/gallery`): `opf://catalog/layouts/two-column` |
 | `opf://skills/<name>` | A skill entrypoint (`opf-author`, `opf-layout`, `opf-presets`, `opf-edit`, `opf-export`, `opf-inspect`) |
 | `opf://skills/<name>/<path>` | A reference or asset of a skill: `opf://skills/opf-author/references/content.md` |
-| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page, about 7.6 MB (2 MB compressed), that `show_deck` opens |
+| `ui://opf/deck` | The OPF viewer (`text/html;profile=mcp-app`): one HTML page, about 8.3 MB (2.1 MB compressed), that `show_deck` opens |
 
 Skill scripts and agent manifests are not served; the server runs no code from them.
 
@@ -139,7 +139,7 @@ export default {
 
 The bundled data is most of the size of a Worker bundle (about 12 MB minified, 5.6 MB gzipped, of which the example decks are 7 MB and the documentation 1.4 MB). A host that must stay small imports `createOpfMcpServer` from `@openpresentation/mcp/server`, which bundles none of it (about 3.5 MB minified, 0.7 MB gzipped), and takes `sources: { docs, examples, skills, whatsNew? }` from wherever it keeps them (KV, R2, static assets): `docs` is `[{ slug, title, markdown }]`, `examples` is `[{ slug, category, file, deck }]`, `skills` maps a skill name to `{ "SKILL.md": text, ... }`. `defaultSources()` and `DOC_SLUGS` (the pages served) are exported from `@openpresentation/mcp`.
 
-**A hosted server that does no deck work.** A tool call always runs on the server the client calls, so a hosted server runs every call on your compute. Pass `processDecks: false` and it does no OPF processing of decks: `show_deck` only opens the viewer, which reads, checks and renders the deck on the user's machine and sends its findings to the model as context; `validate_deck`, `convert` and the `fix_validation_findings` prompt are left out, and `start_here` and the other prompts point to `show_deck`. What stays on the server is the lookups (docs, schemas, catalog, examples), which are small and the same for every caller, and handing over the viewer's HTML. A client without MCP Apps gets no check from such a server. `deckApp: { readFontFile }` gives the viewer font files (the local server reads the installed renderer's); `deckApp: false` leaves the viewer out. The lean `createOpfMcpServer` takes `deckApp: { html }` with `DECK_APP_HTML` from `@openpresentation/mcp`, or a function that returns the same page from storage; the function runs only when a client opens the viewer, so other requests never load the 7.6 MB page.
+**A hosted server that does no deck work.** A tool call always runs on the server the client calls, so a hosted server runs every call on your compute. Pass `processDecks: false` and it does no OPF processing of decks: `show_deck` only opens the viewer, which reads, checks and renders the deck on the user's machine and sends its findings to the model as context; `validate_deck`, `convert` and the `fix_validation_findings` prompt are left out, and `start_here` and the other prompts point to `show_deck`. What stays on the server is the lookups (docs, schemas, catalog, examples), which are small and the same for every caller, and handing over the viewer's HTML. A client without MCP Apps gets no check from such a server. `deckApp: { readFontFile }` gives the viewer font files (the local server reads the installed renderer's); `deckApp: false` leaves the viewer out. The lean `createOpfMcpServer` takes `deckApp: { html }` with `DECK_APP_HTML` from `@openpresentation/mcp`, or a function that returns the same page from storage; the function runs only when a client opens the viewer, so other requests never load the 8 MB page.
 
 **Fonts for a hosted viewer.** A site that already serves the OPF preview fonts (the layout the OpenPresentation site's `prepare-opf-fonts.mjs` writes: `/opf-fonts/manifest.json`, `base/`, `lazy/fonts/` and `scripts/`) passes `readFontFile: siteFontFiles({ fetch })`, exported by both library entries. `fetch` reads a file by its path on the site; in a Worker it is the static-assets binding, so the fonts cost no storage of their own and no request leaves the Worker:
 
@@ -156,7 +156,7 @@ It reads only font files under the font folders and the faces the site's manifes
 
 ## Limits
 
-- The viewer is about 7.6 MB of HTML (2 MB compressed), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
+- The viewer is about 8.3 MB of HTML (2.1 MB compressed), loaded once per conversation or cached by the client. A client may cap the size of an MCP App or ask the user before it shows one.
 - The viewer has no export yet (a sandboxed iframe cannot download; SEP-1865's draft `ui/download-file` is the way once clients support it), and the model sees the deck as JSON, not as pictures of the slides.
 - Text formats only for `convert`. Rendering and PowerPoint need the local `opf` command, which can write files.
 - `validate_deck` reads no files, so a local image path in a deck is not looked up (the CLI warns with `cli/asset-missing`). Pass images as data URIs or assets.

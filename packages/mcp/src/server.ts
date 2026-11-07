@@ -59,7 +59,7 @@ export type ReadFontFile = (file: string) => Promise<Uint8Array | undefined> | U
 export interface OpfDeckApp {
 	/**
 	 * The view's HTML: `DECK_APP_HTML` of `@openpresentation/mcp`, or a function that returns it (called each time a client reads
-	 * `ui://opf/deck`, so a hosted server can load the 7.6 MB page from storage only for the requests that need it).
+	 * `ui://opf/deck`, so a hosted server can load the 8 MB page from storage only for the requests that need it).
 	 */
 	html: string | (() => string | Promise<string>);
 	/**

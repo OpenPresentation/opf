@@ -44,7 +44,8 @@ button:focus-visible { outline: 2px solid var(--deck-accent); outline-offset: 2p
 :root[data-display="fullscreen"] #opf-deck, :root[data-fixed-height="true"] #opf-deck { height: 100vh; max-height: none; }
 
 .deck-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-bottom: 1px solid var(--deck-line); min-width: 0; }
-.deck-title { flex: 0 1 220px; min-width: 0; overflow: hidden; }
+/* The title takes what the bar has left (basis 0), down to 96px, so it never pushes the controls onto a second row. */
+.deck-title { flex: 1 1 0; min-width: 96px; max-width: 260px; overflow: hidden; }
 .deck-spacer { flex: 1 1 0; }
 .deck-tabs { display: inline-flex; border: 1px solid var(--deck-line); border-radius: var(--deck-radius); padding: 2px; gap: 2px; flex: none; }
 .deck-tabs [role="tab"] { border: 0; background: none; padding: 4px 10px; border-radius: calc(var(--deck-radius) - 2px); cursor: pointer; color: var(--deck-muted); }
