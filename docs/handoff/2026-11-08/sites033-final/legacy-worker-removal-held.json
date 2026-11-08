@@ -1,0 +1,454 @@
+{
+  "status": "held-before-delete",
+  "reason": "AI_GATEWAY_API_KEY and CONVEX_SERVICE_SECRET exist only as legacy runtime binding names; available GitHub preview secret names do not yet provide their development sources.",
+  "authorization": "Owner explicitly requested removal of pptx-dev-preview; coordinator requires resolving newly verified runtime configuration dependency before deletion.",
+  "checkedAt": "2026-11-08T17:20:13.830Z",
+  "account": "136efd25cc10afb20714b72b2eb41cf3",
+  "worker": {
+    "id": "96dd66e9ebb247ebb468f2b73efd424c",
+    "name": "pptx-dev-preview",
+    "tags": [
+      "cf:service=pptx-dev",
+      "cf:environment=preview"
+    ],
+    "observability": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "redact_query_string": false,
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "invocation_logs": true,
+        "persist": true
+      },
+      "traces": {
+        "enabled": false,
+        "head_sampling_rate": 1,
+        "persist": true
+      }
+    },
+    "logpush": false,
+    "created_on": "2026-10-26T20:00:35.40358Z",
+    "updated_on": "2026-11-08T12:13:04.133934Z",
+    "deployed_on": "2026-10-26T20:03:18.653482Z",
+    "references": {
+      "workers": [
+        {
+          "id": "96dd66e9ebb247ebb468f2b73efd424c",
+          "name": "pptx-dev-preview"
+        }
+      ],
+      "domains": [],
+      "dispatch_namespace_outbounds": [],
+      "durable_objects": [],
+      "queues": []
+    },
+    "subdomain": {
+      "enabled": true,
+      "previews_enabled": true,
+      "url": "https://pptx-dev-preview.michael-136.workers.dev",
+      "preview_url_suffix": "-pptx-dev-preview.michael-136.workers.dev"
+    },
+    "tail_consumers": []
+  },
+  "bindings": [
+    {
+      "name": "AI_GATEWAY_API_KEY",
+      "type": "secret_text"
+    },
+    {
+      "name": "ASSETS",
+      "type": "assets"
+    },
+    {
+      "name": "CLERK_SECRET_KEY",
+      "type": "secret_text"
+    },
+    {
+      "name": "CONVEX_SERVICE_SECRET",
+      "type": "secret_text"
+    },
+    {
+      "name": "DECKS",
+      "type": "r2_bucket",
+      "bucket_name": "pptx-dev-user-preview"
+    },
+    {
+      "name": "WORKER_SELF_REFERENCE",
+      "type": "service",
+      "service": "pptx-dev-preview"
+    }
+  ],
+  "versions": [
+    {
+      "id": "2e00ed62-93c5-4ed8-9014-e9decd7566c2",
+      "number": 32,
+      "createdOn": "2026-11-08T12:13:04.133934Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-200",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "bab0912d-8a16-4849-9351-355e75b4db65",
+      "number": 31,
+      "createdOn": "2026-11-08T11:41:11.106712Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-200",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "407e19c7-ccda-4547-bbc0-b9033ee22c95",
+      "number": 30,
+      "createdOn": "2026-11-08T11:26:35.322754Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-200",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "b4592984-0a0f-4c1a-836d-b4811dc4698b",
+      "number": 29,
+      "createdOn": "2026-11-08T10:01:31.34548Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-200",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "2cc284c8-e075-463c-8449-961451349c49",
+      "number": 28,
+      "createdOn": "2026-11-06T08:09:28.476639Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-196",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "dcd1cd92-d0ec-479b-8661-467ee0a0cc48",
+      "number": 27,
+      "createdOn": "2026-11-05T01:46:24.294076Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-196",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "c213ec93-d8ea-4925-ba2e-b24805f50cc7",
+      "number": 26,
+      "createdOn": "2026-11-04T22:32:49.511593Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-196",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "a0d04ef0-7faa-4603-ab85-f2c847b0e14e",
+      "number": 25,
+      "createdOn": "2026-11-02T18:24:02.546823Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-193",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "1f3b3a05-6c3d-4d33-b1d6-ddada76f859b",
+      "number": 24,
+      "createdOn": "2026-11-02T17:10:27.405989Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-193",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "c41a4364-4ae2-4ed0-ad49-b05d79dff367",
+      "number": 23,
+      "createdOn": "2026-11-02T17:06:18.048832Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-192",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "274ed2e0-f0e3-4f53-8bb2-ca0bd0cadba6",
+      "number": 22,
+      "createdOn": "2026-11-02T09:00:44.440403Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-192",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "73cca089-e173-4b13-8690-410e40facaf0",
+      "number": 21,
+      "createdOn": "2026-11-02T08:54:23.594273Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-192",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "a91bb516-d857-4821-bb7c-a67e0770525f",
+      "number": 20,
+      "createdOn": "2026-11-02T08:48:53.043681Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-193",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "b0562b91-83eb-4203-9874-d7f98cd9df8d",
+      "number": 19,
+      "createdOn": "2026-11-02T08:24:36.687647Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-192",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "9251ea4b-9c63-4231-bb07-947288a83e29",
+      "number": 18,
+      "createdOn": "2026-11-02T08:08:52.369896Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-190",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "df57b6d4-4048-41aa-bd96-3afc68ef82a6",
+      "number": 17,
+      "createdOn": "2026-11-02T07:06:43.851752Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-192",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "fc67c2d9-be84-4562-a39f-4e68a6a51fab",
+      "number": 16,
+      "createdOn": "2026-11-02T05:53:53.798632Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-190",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "f4d9f6ed-ccec-4a19-a051-3d7e4485f0fb",
+      "number": 15,
+      "createdOn": "2026-11-02T03:02:32.466963Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-190",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "9c4687a0-18ba-4729-88eb-049398afe03d",
+      "number": 14,
+      "createdOn": "2026-10-27T15:50:09.069728Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-189",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "a6a3f57d-bd81-4137-878e-2b7f3a3f597c",
+      "number": 13,
+      "createdOn": "2026-10-27T12:38:07.374238Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-188",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "faa88324-139e-478e-b904-40ce1183f93c",
+      "number": 12,
+      "createdOn": "2026-10-27T04:54:43.536155Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-187",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "58da88c4-6278-4e80-80fa-0fb65189a64f",
+      "number": 11,
+      "createdOn": "2026-10-27T04:23:25.864226Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-185",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "329b0708-0ef6-4a0d-ae67-f8cb78356119",
+      "number": 10,
+      "createdOn": "2026-10-27T03:55:12.445907Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-185",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "8933bd5d-26fa-4902-a883-5fe26d30330d",
+      "number": 9,
+      "createdOn": "2026-10-27T03:33:04.856867Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-185",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "c45f878d-fd33-49a4-9536-d7e5d62fbe0b",
+      "number": 8,
+      "createdOn": "2026-10-27T02:50:34.643293Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-185",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "d80bf464-9a6e-43fa-ba01-c453a6fb0357",
+      "number": 7,
+      "createdOn": "2026-10-27T02:03:47.19793Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-185",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "defc5c8c-9178-4526-b0b5-acd7f2d441ec",
+      "number": 6,
+      "createdOn": "2026-10-27T01:06:47.726785Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-184",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "d8ad88e9-5d6e-4edd-a23d-2837773a332c",
+      "number": 5,
+      "createdOn": "2026-10-26T20:25:23.859541Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/alias": "pr-183",
+        "workers/triggered_by": "version_upload"
+      }
+    },
+    {
+      "id": "75a3fe62-69aa-4341-be24-71f190684d94",
+      "number": 4,
+      "createdOn": "2026-10-26T20:03:18.653482Z",
+      "hasPreview": false,
+      "annotations": {
+        "workers/triggered_by": "secret"
+      }
+    },
+    {
+      "id": "33ab179f-f52f-47fa-8fdf-427bd66b5f5f",
+      "number": 3,
+      "createdOn": "2026-10-26T20:02:55.808407Z",
+      "hasPreview": false,
+      "annotations": {
+        "workers/triggered_by": "secret"
+      }
+    },
+    {
+      "id": "e28a50a0-862a-46ad-94d9-1f8c7668061c",
+      "number": 2,
+      "createdOn": "2026-10-26T20:02:40.590947Z",
+      "hasPreview": false,
+      "annotations": {
+        "workers/triggered_by": "secret"
+      }
+    },
+    {
+      "id": "d09da6d6-e112-4dec-9f11-23dc5d47c23c",
+      "number": 1,
+      "createdOn": "2026-10-26T20:01:25.515572Z",
+      "hasPreview": true,
+      "annotations": {
+        "workers/triggered_by": "upload"
+      }
+    }
+  ],
+  "versionsInfo": {
+    "page": 1,
+    "per_page": 100,
+    "count": 32,
+    "total_count": 32
+  },
+  "inventory": [
+    {
+      "name": "llmreference",
+      "workerId": "8b1a4953ac4e4739a2f441742b12ddd0",
+      "modified_on": "2026-11-08T16:47:37.605749Z"
+    },
+    {
+      "name": "openpresentation-site",
+      "workerId": "11b9b5a1e6a94a64a9bbd0ad816e3a0f",
+      "modified_on": "2026-11-07T20:39:33.624173Z"
+    },
+    {
+      "name": "pptx-dev",
+      "workerId": "dee96f3be47449839bee79e9008d2dd7",
+      "modified_on": "2026-11-06T08:55:36.396874Z"
+    },
+    {
+      "name": "pptx-dev-preview",
+      "workerId": "96dd66e9ebb247ebb468f2b73efd424c",
+      "modified_on": "2026-11-08T12:13:04.133934Z"
+    },
+    {
+      "name": "pptx-gallery",
+      "workerId": "cb21c925379148c9a57a62ba02bccdf9",
+      "modified_on": "2026-11-07T21:13:46.234635Z"
+    }
+  ],
+  "bucket": {
+    "name": "pptx-dev-user-preview",
+    "creation_date": "2026-10-26T07:36:52.884Z",
+    "location": "ENAM",
+    "storage_class": "Standard",
+    "jurisdiction": "default"
+  },
+  "objects": {
+    "count": 0,
+    "bytes": 0,
+    "etags": []
+  },
+  "routingScope": {
+    "zoneCount": 30,
+    "allRoutesReadSuccessfully": true,
+    "matchingRoutes": [],
+    "matchingCustomDomains": [],
+    "accountCustomDomainCount": 4
+  },
+  "mutations": [],
+  "credentialValuesRead": false
+}
