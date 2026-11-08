@@ -1,0 +1,9 @@
+# LH-75 growth of the retained table-note pairs
+
+Branch `codex/lh-75-table-note-growth` is an isolated fresh-main worktree fast-forwarded normally to approved main-aligned 034 preparation 924a302ef10bf20d37eead5c4724e3f4a9535fe1. Do not push after folding.
+
+Only the successful growth pass changes: a table-note pair that already passes its two-line/60% initial placement may grow with up to three whole-word cell lines and use 75% of its body. The shared two-line allowance used by picture tracks stays unchanged. Existing width shares and three-step search, whole-word/no-overflow/readability checks, source order and RTL behavior remain. No block may end smaller.
+
+Decision (vetoable): permit the extra cell line and enough body height for larger readable type. Exact b15 s23/s41 rows need about 71% of their body, so 75% retains space around them. Matched Office visual fonts grow the notes 28→32px and cells 25→about 28.75px; every table word/data value remains complete and no finding appears. Authored maxFontSize continues to cap body text; tables intentionally keep their own sizes under the documented contract. Native run signals are points: 24pt equals the intended 32px note size.
+
+Seventeen existing core table-note/wrapped-cell controls pass unchanged, including refusing a three-line initial placement. Two new private integration tests use the same prepared fonts through core geometry and the maintained file conversion route, then inspect native import/signals: full data/text survives and native note runs are 24pt. The actual b15 fixtures are committed. Next: bounded structural table+note scan, all changed shipped-CLI before/after/Claude panels, a sealed native batch, required check:changed, and PR publication. No native Office execution or golden regeneration by this agent.
