@@ -15,6 +15,7 @@ const findings=[],back=await fromPptx(native,{onDiagnostic:d=>findings.push(d)})
 assert.deepEqual(callouts.map(c=>c.text),current,'actual multiline and cleared native words');
 const original=await fromPptx(source);assert.deepEqual(callouts.map(({text,...frame})=>frame),imageOf(original).callouts.map(({text,...frame})=>frame),'exact authored fractions survive');
 assert.ok(!findings.some(d=>d.code==='invalid-image-callout-provenance'));
+assert.ok(findings.some(d=>d.code==='image-callout-import-reflow'&&d.message.includes('panel fill/line styling')),'native paint is explicitly a reflow limitation');
 for(const [name,mutate]of [
  ['one-EMU-move',shape=>shape.replace(/<a:off x="(\d+)"/,(_,x)=>'<a:off x="'+(Number(x)+1)+'"')],
  ['rotation',shape=>shape.replace('<a:xfrm>','<a:xfrm rot="60000">')],

@@ -48,7 +48,7 @@ export function importImageCallouts({shapes,paragraphs,pictures,relationships,en
     }
     if(used.size!==group.length||new Set(group.map(item=>item.shape)).size!==group.length||result.some(value=>!value))throw Error('Duplicated or unknown callout elements.');
     values.set(owners[0],result);for(const item of group)consumed.add(item.index);
-    if(!group.every(item=>groupUnchanged([item],item.data.role==='panel'?[]:paragraphs)))report({code:'image-callout-import-reflow',message:'Current native callout words and authored fractional frames were recovered. Native text formatting and positions reflow from OPF; review the labels.'});
+    if(!group.every(item=>groupUnchanged([item],item.data.role==='panel'?[]:paragraphs)))report({code:'image-callout-import-reflow',message:'Current native callout words and authored fractional frames were recovered. Native text formatting, panel fill/line styling and positions reflow from OPF; review the labels.'});
   }catch(error){report({code:'invalid-image-callout-provenance',message:`${error.message} Ordinary import preserves the current native panels and text.`});}
   return {consumed,values};
 }
