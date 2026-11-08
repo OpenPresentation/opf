@@ -1,0 +1,46 @@
+{
+  "scope": "Prepared PR source/local checks; not a deployed org/gallery or terminal three-site gate claim.",
+  "sites": {
+    "org": {
+      "pr": 202,
+      "head": "baf63e47a591f99a4c9642be598af58c27953a1c",
+      "documentation": "9545016583ccfa151077cda4d51043ac6505a140",
+      "runtime": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "local": "168 Node + 5 font, types/build/built-font scan, 21 production browsers, 5 local MCP and 1 actual Next frozen-schema controls pass",
+      "receipt": "https://github.com/Data-Advantage/openpresentation-site/blob/baf63e47a591f99a4c9642be598af58c27953a1c/docs/evidence/registry-033/final-corrections/receipt.json",
+      "clean": true
+    },
+    "gallery": {
+      "pr": 172,
+      "head": "8a476459cd6d9cbba412ef4450401b702d63c8bb",
+      "priorRequiredAll": "Green twice; same head; deployed preview remains owner-provided"
+    },
+    "dev": {
+      "pr": 200,
+      "head": "7d7359148eb45c073e002738f378314441094d38",
+      "priorRequiredAll": "Linux/Windows green twice; same head",
+      "preview": "https://pr-200-pptx-dev-preview.michael-136.workers.dev",
+      "qualification": "12 actual deployed inspector/source-pane cases and all 13 served SVG hashes pass"
+    }
+  },
+  "observer": {
+    "session": 4057,
+    "log": "C:/opf-work/g033-sites-954-corrected-final-gate.log",
+    "mode": "Single maintained pr-gate batch; exact heads; required all; interval180; no merge",
+    "state": "Active at checkpoint; do not start a second observer"
+  },
+  "history": "Old observer49367 was stopped before a metadata-only correction committing the already-tested homepage954 source ref; raw log is preserved in the org receipt.",
+  "ownerOnly": [
+    "Provide/create org/gallery exact-head deployed previews; agents then verify read-only",
+    "Merge verified site defaults; org merge auto-deploys",
+    "Claude connector, local extension uninstall, LO promotion, D2, deploy/DNS/login"
+  ],
+  "separateArtifactDebt": "Six UI/design screenshots and hosted-MCP artifact8MFGJNmzZp3NqxDbtPh5Kb after genuine hosted viewer availability",
+  "coreContinuation": {
+    "archiveResolver1198": "Reviewed/folded by coordinator, source permanently frozen",
+    "codeMirror1201": {
+      "head": "58cc9cdc27d0f6a3180f35a65b203b80ade803dd",
+      "state": "Published/frozen for independent review; actual Windows fixture regression and mapped checks retained; no production delta"
+    }
+  }
+}
