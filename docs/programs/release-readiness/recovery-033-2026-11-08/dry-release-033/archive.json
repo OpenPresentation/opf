@@ -1,0 +1,20 @@
+{
+  "status": "PreparePASS, mainverifyPASS, fullrehearsal still pending",
+  "run": 42462759180,
+  "files": [
+    {
+      "file": "release.patch.gz",
+      "rawSha256": "f5c7c60d550bd6ccd2b5914be473e83c3edd87ee89bdd544500d3680f34b9980",
+      "gzipSha256": "5b7bfb8729cb4ed6ad9bd4e741fb61b024efa1839942bf29e40cec76b2ea6605"
+    },
+    {
+      "file": "review-release-patch.mjs.gz",
+      "rawSha256": "3aa917104a7aa556dcb49f7941c79c09b4b112e21fe4d7a9d02efcf6edd8f300",
+      "gzipSha256": "6db19baa420b1d38be6ef1133351f49b626e5326c4220449296d0dc6ebd20c2f"
+    }
+  ],
+  "observations": [
+    "First ad-hoc metadata allowlist omitted root core changelog and gallery drawing metadata; authoritative generator/config inspected before corrected check.",
+    "Temporary read-only review script needed Windows file URL imports; final review ran Node24.20.0. Neither failed harness attempt changed release artifact or source."
+  ]
+}

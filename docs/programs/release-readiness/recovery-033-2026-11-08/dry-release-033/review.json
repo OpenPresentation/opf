@@ -1,0 +1,29 @@
+{
+  "run": 42462759180,
+  "source": "afac3f7fc07539667fe9298f8efc08c967aacb0d",
+  "node": "v24.20.0",
+  "sha256": "f5c7c60d550bd6ccd2b5914be473e83c3edd87ee89bdd544500d3680f34b9980",
+  "bytes": 337960,
+  "paths": 86,
+  "packageVersions": [
+    "packages/cli/package.json",
+    "packages/editor/package.json",
+    "packages/gallery/package.json",
+    "packages/javascript/package.json",
+    "packages/mcp/package.json",
+    "packages/pptx/package.json",
+    "packages/render/package.json"
+  ],
+  "changelogs": [
+    "CHANGELOG.md",
+    "packages/cli/CHANGELOG.md",
+    "packages/editor/CHANGELOG.md",
+    "packages/gallery/CHANGELOG.md",
+    "packages/mcp/CHANGELOG.md",
+    "packages/pptx/CHANGELOG.md",
+    "packages/render/CHANGELOG.md"
+  ],
+  "consumedFragments": 70,
+  "decision": "Only allowed release metadata, exactly seven033versions/changelogs and the exact maintained gallery drawing record; no product/schema/font/golden source changes.",
+  "initialReview": "First ad-hoc allowlist omitted authoritative root core CHANGELOG and generated gallery release-drawing metadata. Source generator/config inspected; review corrected without changing artifact or source."
+}
