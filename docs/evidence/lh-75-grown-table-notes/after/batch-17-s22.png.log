@@ -1,0 +1,73 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\lh75-bounded-scan\\cases\\batch-17-s22.opf.json",
+    "sha256": "30aaff9155d01d7748d425cdc3011bca5e13a38d7d64105d402c5b9699f46bd8",
+    "bytes": 1145
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\lh75-cli-review\\after\\batch-17-s22.png",
+      "sha256": "ed8924b69db67d29cc61fe8764fc39d2c74b885f62adadd2e992708018308525",
+      "bytes": 23144,
+      "mediaType": "image/png",
+      "slide": 1,
+      "id": "s22",
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

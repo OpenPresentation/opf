@@ -5640,6 +5640,8 @@ const TABLE_NOTE_GROWN_SHARES: readonly number[] = [.7, .65, .6, .55, .5];
  * same allowance holds for a table beside a picture track (automaticTracks).
  */
 const TABLE_NOTE_CELL_LINES = 2;
+/** LH-75: actual growth may use three whole-word cell lines and three quarters of the body, while initial placement keeps its two-line/60% rules. */
+const TABLE_NOTE_GROWN_CELL_LINES = 3, TABLE_NOTE_GROWN_TARGET = .75;
 /** LH-75, LH-80: the most lines any one cell of a placed table is set on (Infinity when it cannot be laid out). */
 function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale: number): number {
   try {
@@ -5651,8 +5653,8 @@ function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale:
  * LH-75: a slide whose body is one short table (under half the body's height) and a note of two or more lines (a plain text block), which the
  * layout or the automatic grid sets one above the other, is composed again with the two side by side, about 70:30, the note on one plain
  * card as tall as the row (Claude Design's note panel beside its table), the row in the middle of the body. The table keeps its words whole.
- * The type steps up by LH-48's steps (GROW, the table's rows with it) to the largest at which the row covers at most LONE_TARGET of the
- * body, nothing overflows and no block is smaller, and no cell takes more than TABLE_NOTE_CELL_LINES lines or breaks a word (LH-75's
+ * The type steps up by LH-48's steps (GROW, the table's rows with it) to the largest at which the row covers at most TABLE_NOTE_GROWN_TARGET of the
+ * body, nothing overflows and no block is smaller, and no grown cell takes more than TABLE_NOTE_GROWN_CELL_LINES lines or breaks a word (LH-75's
  * decision: a wrapped cell keeps the table's size; a table whose words do not fit its share keeps the full width, as does a note whose column
  * would be under LH-66's measure at 60:40). Kept
  * (`recomposed.table` on a template slide, composed as the automatic grid with the record's design as LH-61 does) when it reads as
@@ -5691,9 +5693,9 @@ function tableNote(input: unknown, options: ComposeSlideOptions, result: SlideCo
     // LH-75 decision (2026-11-07): a cell may wrap beside the note, onto at most TABLE_NOTE_CELL_LINES lines and with its words whole
     // (a word too wide for its column is LH-44's overflow, refused above), so the table keeps its size instead of stepping down; the
     // slide reads as well (no block smaller, no word split).
-    if (tableCellLines(placedTable, options, scale) > TABLE_NOTE_CELL_LINES || !readsAsWell(before, trackQuality(next, options), floor)) return undefined;
-    // The row (the note's card is as tall as the row) covers at most LONE_TARGET of the body, as LH-48's grown body does.
-    return placedNote.frameBox.height > LONE_TARGET * bodyHeight(next) ? undefined : next;
+    if (tableCellLines(placedTable, options, scale) > (steps ? TABLE_NOTE_GROWN_CELL_LINES : TABLE_NOTE_CELL_LINES) || !readsAsWell(before, trackQuality(next, options), floor)) return undefined;
+    // Initial placement keeps LH-48's short-body target; a genuinely larger pair may use three quarters of the body.
+    return placedNote.frameBox.height > (steps ? TABLE_NOTE_GROWN_TARGET : LONE_TARGET) * bodyHeight(next) ? undefined : next;
   };
   // The widest share at which the pair holds wins at the role sizes. LH-75 follow-up (2026-11-07): the pair then grows by LH-48's steps
   // like any short body, each step at the widest share (that share or a narrower one, down to TABLE_NOTE_GROWN_SHARES' last, so the
