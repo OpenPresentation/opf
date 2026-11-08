@@ -32,7 +32,11 @@ export function importImageCallouts({shapes,paragraphs,pictures,relationships,en
       const {index,frame,lines}=panel.data;
       if(panel.ambiguous||panel.data.total!==total||!Number.isSafeInteger(index)||index<0||index>=total||result[index]||!Number.isSafeInteger(lines)||lines<1||lines>10000)throw Error('Ambiguous callout panel.');
       if(!frame||Object.keys(frame).some(key=>!['x','y','width','height'].includes(key))||['x','y','width','height'].some(key=>typeof frame[key]!=='number'||!Number.isFinite(frame[key])||frame[key]<0||frame[key]>1)||frame.width<=0||frame.height<=0)throw Error('Invalid fractional frame.');
-      if(panel.shape['p:spPr']?.['a:prstGeom']?.prst!=='rect'||(paragraphs[panel.index]??[]).some(p=>p.text||p.bullet)||!groupUnchanged([panel],paragraphs))throw Error('The native callout panel was moved or changed.');
+      const transform=panel.shape['p:spPr']?.['a:xfrm'];
+      const flipped=value=>value!==undefined&&value!==false&&value!==0&&value!=='0'&&value!=='false';
+      // PowerPoint adds a blank text body to a rectangle that exported without one.
+      // Reject visible words/bullets, then compare the original EXACT geometry signature with no panel paragraphs.
+      if(panel.shape['p:spPr']?.['a:prstGeom']?.prst!=='rect'||Number(transform?.rot??0)!==0||flipped(transform?.flipH)||flipped(transform?.flipV)||(paragraphs[panel.index]??[]).some(p=>p.text||p.bullet)||!groupUnchanged([panel],[]))throw Error('The native callout panel was moved or changed.');
       const parts=group.filter(item=>item.data.role==='text'&&item.data.index===index),ordered=Array(lines);
       if(parts.length!==lines)throw Error('Missing callout source lines.');
       for(const part of parts) {
@@ -44,7 +48,7 @@ export function importImageCallouts({shapes,paragraphs,pictures,relationships,en
     }
     if(used.size!==group.length||new Set(group.map(item=>item.shape)).size!==group.length||result.some(value=>!value))throw Error('Duplicated or unknown callout elements.');
     values.set(owners[0],result);for(const item of group)consumed.add(item.index);
-    if(!groupUnchanged(group,paragraphs))report({code:'image-callout-import-reflow',message:'Current native callout words and authored fractional frames were recovered. Native text formatting and positions reflow from OPF; review the labels.'});
+    if(!group.every(item=>groupUnchanged([item],item.data.role==='panel'?[]:paragraphs)))report({code:'image-callout-import-reflow',message:'Current native callout words and authored fractional frames were recovered. Native text formatting and positions reflow from OPF; review the labels.'});
   }catch(error){report({code:'invalid-image-callout-provenance',message:`${error.message} Ordinary import preserves the current native panels and text.`});}
   return {consumed,values};
 }
