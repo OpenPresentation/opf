@@ -137,6 +137,7 @@ function timelineLines(timeline: unknown): string[] | undefined {
   const info = ["timeline", ...["name", "description"].filter((key) => meta[key] !== undefined).map((key) => `${key}=${JSON.stringify(meta[key])}`)].join(" ");
   const body: string[] = [];
   for (const event of events) {
+    if (event.duration !== undefined) return undefined; // LH-16: embedded JSON retains the numeric period.
     for (const key of ["when", "what", "description"]) if (typeof event[key] === "string" && (/[\r\n]/.test(event[key]) || event[key] !== event[key].trim() || event[key] === "")) return undefined;
     const line = event.when === undefined ? event.what : `${event.when} — ${event.what}`;
     // Text that already starts like a status mark cannot be told apart from one, so it stays embedded JSON.

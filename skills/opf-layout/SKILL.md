@@ -51,6 +51,7 @@ Set a slide's `language` to a BCP-47 tag or inline Language object when it diffe
 
 A timeline with semantic `status` values adds localized status words where the engine vocabulary provides them and the source labels keep their size. Regional variants share their language words; Chinese scripts differ. Unsupported generated translations keep markers and progress without inserting English. Keep precise local wording and schedule-health notes in the event text. See docs/dynamic-composition.md, "Localized timeline status words".
 
+A timeline can give each event a positive numeric `duration` in one shared unit: 1 for Week 1 and 4 for Weeks 2–5. Omission is one unit. OPF draws proportional ranges and links them to a balanced, readable label track, keeping `when` as written. It never guesses durations from date prose or shrinks labels to match a short period. A range too short to draw visibly, or labels that cannot fit, reports overflow; enlarge the timeline or split its events rather than alter its duration or shrink the text.
 
 ## Headers and footers
 

@@ -5,6 +5,7 @@ import {presetTextRect} from './smart-art-layout.js';
 export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
 export {arrangementTree,type ArrangementTreeNode,type ArrangementTreeResult} from './tree-arrangement.js';
 export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
+import {timelineDurationFractions} from './timeline-duration.js';
 import {tableGrid,type TableCellStyle} from './table.js';
 import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,tableKeyText,type DataTableCell} from './chart-data.js';
 import {chartTextSize,chartValueAxis,shareSiblingChartAxes,type ChartValueAxis} from './chart-axis.js';
@@ -2952,7 +2953,7 @@ const TIMELINE_STEP_GROWTH = [10, 6] as const;
 const TIMELINE_FLOOR_OFFSET = 1000;
 /** LH-41: several timelines in one region stack in one column of bands while each band is at least this tall (reference pixels). */
 const TIMELINE_BAND_MIN_HEIGHT = 56;
-export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
+export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus; duration?: number }
 export interface TimelineContent { name?: string; description?: string; events: TimelineEvent[] }
 export interface TimelineTextPart {
   /** `status` (LH-121) is a generated word under the label, never a source field: such parts are in `statusLabels`, not `parts`. */
@@ -2993,7 +2994,11 @@ export interface TimelineLayout {
    * 'current' or 'planned' marker has the `strokeWidth` of its outline and ring. Every radius is that
    * of the drawn ellipse; an outline is centered on the ellipse edge, so it reaches half a stroke beyond.
    */
-  markers: {path:string;eventIndex:number;x:number;y:number;radius:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
+  markers: {path:string;eventIndex:number;x:number;y:number;radius:number;duration?:number;status?:TimelineStatus;ring?:{radius:number};strokeWidth?:number}[];
+  /** LH-16: consecutive duration ranges, in reading order; their lengths preserve authored ratios in every arrangement. */
+  ranges?: {path:string;eventIndex:number;box:LayoutBox}[];
+  /** Each proportional range links to its readable label/marker track; labels never inherit a short period's narrow cell. */
+  rangeLinks?: {path:string;eventIndex:number;x1:number;y1:number;x2:number;y2:number}[];
   connector: {x1:number;y1:number;x2:number;y2:number};
   /**
    * LH-121: the part of the connector drawn in the primary color, from the first event to the current one (to the last `done` one when
@@ -3026,6 +3031,8 @@ export interface TimelineLayoutOptions extends QuoteLayoutOptions {
   sizeOffset?: number;
   /** LH-121: draw a status word under the label of each event with a status (where a localized vocabulary exists; see timelineStatusWordsFor). */
   statusWords?: boolean;
+  /** LH-16: measure the intrinsic height of proportional ranges rather than filling their allocated vertical rail. */
+  intrinsic?: boolean;
 }
 
 /** Preserve event order and field boundaries while trying at most 100 readable arrangements. */
@@ -3037,6 +3044,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     throw new TypeError('Timeline content requires ordered events with string labels and optional string metadata.');
   }
   if(timeline.events.some(event=>event.status!==undefined&&!TIMELINE_STATUS_VALUES.includes(event.status)))throw new TypeError("Timeline event status must be 'done', 'current' or 'planned'.");
+  const durations=timelineDurationFractions(timeline.events.map(event=>event.duration));
   const scale=options.scale??1,minimum=snapFontSizeUp((options.minFontSize??16)*scale),padding=(options.textRasterPadding??1)*scale,offset=options.sizeOffset??0;
   if(![box.x,box.y,box.width,box.height,scale,minimum,padding,offset].every(Number.isFinite)||box.width<=0||box.height<=0||scale<=0||minimum<=0||padding<0)throw new RangeError('Timeline dimensions, scale and minimum must be positive, with finite nonnegative raster padding and a finite size offset.');
   if(options.overflow!==undefined&&!['warn','error'].includes(options.overflow))throw new RangeError('Invalid timeline overflow policy.');
@@ -3079,28 +3087,32 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     if(!Number.isFinite(height))throw new RangeError('Timeline text exceeds finite layout coordinates.');
     measured={fit,ink,height};cache.set(key,measured);return measured;
   };
-  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
+  type Candidate={arrangement:TimelineLayout['arrangement'];parts:TimelineTextPart[];markers:TimelineLayout['markers'];ranges?:TimelineLayout['ranges'];rangeLinks?:TimelineLayout['rangeLinks'];connector:TimelineLayout['connector'];progress?:TimelineLayout['progress'];diagnostics:TimelineLayoutDiagnostic[];score:number};
   let selected:Candidate|undefined,attempts=0;
   // The search starts `sizeOffset` from the role sizes and steps down one reference pixel at a time to the floor.
-  const sizeAt=(part:TimelineTextPart,reduction:number)=>gridFontSize(part.requestedFontSize+(offset-reduction)*scale,minimum);
+  const effectiveOffset=durations&&!options.intrinsic?Math.max(0,offset):offset;
+  const sizeAt=(part:TimelineTextPart,reduction:number)=>gridFontSize(part.requestedFontSize+(effectiveOffset-reduction)*scale,minimum);
   let reductionLimit=0;
   for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize+offset*scale-minimum)/scale);
-  const reductions=Math.min(24+Math.max(0,Math.ceil(offset)),Math.ceil(reductionLimit));
+  const reductions=durations?0:Math.min(24+Math.max(0,Math.ceil(offset)),Math.ceil(reductionLimit));
   // WI-5 (P22): a horizontal timeline gives each event `box.width / events` of width. Below 8 ems of the label size the labels wrap one word per
   // line, so the timeline is composed vertically (events stacked down the cell, the same markers, statuses and order). The full-width
   // timeline keeps a horizontal arrangement. A band of a stack (`horizontal`) never turns vertical. The test is at the role sizes, whatever
   // the size offset, so a timeline measured at the floor has the arrangement it is placed in.
   const count=events.length,labelSize=source.find(part=>part.role==='what')?.requestedFontSize??gridFontSize(roles.what*scale,minimum);
-  const narrow=!options.horizontal&&count>1&&box.width/Math.max(2,count)<TIMELINE_NARROW_EM*labelSize;
-  // LH-41: a band gives each event one spacing (`box.width / events`) less a gutter, so neighbouring labels never touch.
-  const bandStep=box.width/count,bandWidth=count>1?Math.max(scale,bandStep-Math.min(16*scale,bandStep/4)):box.width;
+  const bandStep=box.width/count;
+  const narrow=!options.horizontal&&count>1&&(box.width/Math.max(2,count)<TIMELINE_NARROW_EM*labelSize||!!durations&&!options.intrinsic&&box.height>box.width*1.15);
+  const bandWidth=count>1?Math.max(scale,bandStep-Math.min(16*scale,bandStep/4)):box.width;
+  const bandWidthAt=(_index:number)=>bandWidth;
+  const centerAt=(index:number)=>box.x+bandStep/2+(rtl?count-1-index:index)*bandStep;
+  const durationTrack=durations?(options.compact?16:24)*scale:0;
   const lineWidth=(part:TimelineTextPart,reduction:number)=>{const measured=measure(part,sizeAt(part,reduction),1e6,'left');return measured.fit.sourceLines.length===1?measured.fit.sourceLines[0]!.width+(outlines?2*padding:0):Infinity;};
   // LH-41: labels alternate above and below only when a `when` or `what` label is wider than its event spacing; otherwise they all
   // sit in one band.
-  const wideAt=(reduction:number)=>count>1&&events.some(fields=>fields.some(part=>(part.role==='when'||part.role==='what')&&lineWidth(part,reduction)>bandWidth+.01));
+  const wideAt=(reduction:number)=>count>1&&events.some((fields,index)=>fields.some(part=>(part.role==='when'||part.role==='what')&&lineWidth(part,reduction)>bandWidthAt(index)+.01));
   const tryArrangement=(arrangement:TimelineLayout['arrangement'],reduction:number):TimelineLayoutDiagnostic[]=>{
       attempts++;
-      const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],diagnostics:TimelineLayoutDiagnostic[]=[];
+      const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],ranges:NonNullable<TimelineLayout['ranges']>=[],rangeLinks:NonNullable<TimelineLayout['rangeLinks']>=[],diagnostics:TimelineLayoutDiagnostic[]=[];
       let score=0;
       const report=(part:TimelineTextPart,reason:TimelineLayoutDiagnostic['reason'],message:string,excess=1)=>{diagnostics.push({code:'text-overflow',reason,path:part.path,message});score+=Math.max(1,excess);};
       const place=(part:TimelineTextPart,x:number,y:number,width:number,alignment:TimelineTextPart['alignment'])=>{
@@ -3134,7 +3146,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       const setRadius=(value:number)=>{radius=value;ringRadius=radius*TIMELINE_RING_RATIO;strokeWidth=Math.min(2*scale,radius/2);};
       const marker=(index:number,x:number,y:number):TimelineLayout['markers'][number]=>{
         const status=statusOf(index);
-        return {path:eventPath(index),eventIndex:index,x,y,radius,...(status?{status}:{}),...(status==='current'?{ring:{radius:ringRadius}}:{}),...(status==='current'||status==='planned'?{strokeWidth}:{})};
+        return {path:eventPath(index),eventIndex:index,x,y,radius,...(timeline.events[index]!.duration!==undefined?{duration:timeline.events[index]!.duration}:{}),...(status?{status}:{}),...(status==='current'?{ring:{radius:ringRadius}}:{}),...(status==='current'||status==='planned'?{strokeWidth}:{})};
       };
       if(arrangement==='band'){
         // LH-41: a band, every label one event spacing wide. Each `when` is an eyebrow above its marker (bottom-aligned, so the eyebrows
@@ -3147,27 +3159,28 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const lift=(options.compact?5:6)*scale,fieldGap=(options.compact?2:4)*scale,pairGap=6*scale,extent=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0);
         const whenOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='when'),whatOf=(fields:TimelineTextPart[])=>fields.find(part=>part.role==='what')!;
         const pair=(fields:TimelineTextPart[])=>{const when=whenOf(fields);return when?{when:lineWidth(when,reduction)+scale,what:lineWidth(whatOf(fields),reduction)+scale}:undefined;};
-        const inline=!!options.compact&&events.every(fields=>{const widths=pair(fields);return !widths||widths.when+pairGap+widths.what<=bandWidth+.01;});
+        const inline=!!options.compact&&events.every((fields,index)=>{const widths=pair(fields);return !widths||widths.when+pairGap+widths.what<=bandWidthAt(index)+.01;});
         const below=(fields:TimelineTextPart[])=>fields.filter(part=>inline?part.role==='event-description'||part.role==='status':part.role!=='when');
-        const rowHeight=(fields:TimelineTextPart[])=>{const widths=pair(fields);return widths?Math.max(heightOf(whenOf(fields)!,widths.when,'left'),heightOf(whatOf(fields),widths.what,'left')):heightOf(whatOf(fields),bandWidth,'center');};
-        const whenHeights=events.map(fields=>{const when=whenOf(fields);return when&&!inline?heightOf(when,bandWidth,'center'):0;});
-        const belowHeights=events.map(fields=>(inline?rowHeight(fields)+(below(fields).length?fieldGap:0):0)+below(fields).reduce((height,part)=>height+heightOf(part,bandWidth,'center'),0)+Math.max(0,below(fields).length-1)*fieldGap);
-        const eyebrow=Math.max(0,...whenHeights),envelope=(eyebrow?eyebrow+lift:0)+2*extent+lift+Math.max(0,...belowHeights);
+        const rowHeight=(fields:TimelineTextPart[],index:number)=>{const widths=pair(fields);return widths?Math.max(heightOf(whenOf(fields)!,widths.when,'left'),heightOf(whatOf(fields),widths.what,'left')):heightOf(whatOf(fields),bandWidthAt(index),'center');};
+        const whenHeights=events.map((fields,index)=>{const when=whenOf(fields);return when&&!inline?heightOf(when,bandWidthAt(index),'center'):0;});
+        const belowHeights=events.map((fields,index)=>(inline?rowHeight(fields,index)+(below(fields).length?fieldGap:0):0)+below(fields).reduce((height,part)=>height+heightOf(part,bandWidthAt(index),'center'),0)+Math.max(0,below(fields).length-1)*fieldGap);
+        const eyebrow=Math.max(0,...whenHeights),envelope=(eyebrow?eyebrow+lift:0)+2*extent+lift+durationTrack+Math.max(0,...belowHeights);
         const top=placeHeader(box.y+(options.horizontal?0:Math.max(0,(box.height-headerHeight-envelope)/2))),lineY=top+(eyebrow?eyebrow+lift:0)+extent;
         events.forEach((fields,index)=>{
-          const x=box.x+bandStep/2+(rtl?count-1-index:index)*bandStep;
+          const x=centerAt(index),width=bandWidthAt(index);
+          if(durations){const range=durations[index]!,rangeY=lineY+extent+lift+durationTrack/2;ranges.push({path:eventPath(index),eventIndex:index,box:{x:box.x+(rtl?1-range.start-range.size:range.start)*box.width,y:rangeY-5*scale,width:range.size*box.width,height:10*scale}});rangeLinks.push({path:eventPath(index),eventIndex:index,x1:box.x+(rtl?1-range.start-range.size/2:range.start+range.size/2)*box.width,y1:rangeY,x2:x,y2:lineY});}
           markers.push(marker(index,x,lineY));
-          let cursor=lineY+extent+lift;
+          let cursor=lineY+extent+lift+durationTrack;
           const when=whenOf(fields),widths=inline?pair(fields):undefined;
           if(widths&&when){
             // `when` then `what`, centred under the marker as one row (in reading order: a right-to-left row starts at the right) and
             // bottom-aligned so the two single lines share a baseline.
-            const row=rowHeight(fields),start=x-(widths.when+pairGap+widths.what)/2,whenX=rtl?start+widths.what+pairGap:start,whatX=rtl?start:start+widths.when+pairGap;
+            const row=rowHeight(fields,index),start=x-(widths.when+pairGap+widths.what)/2,whenX=rtl?start+widths.what+pairGap:start,whatX=rtl?start:start+widths.when+pairGap;
             place(when,whenX,cursor+row-heightOf(when,widths.when,'left'),widths.when,'left');
             place(whatOf(fields),whatX,cursor+row-heightOf(whatOf(fields),widths.what,'left'),widths.what,'left');
             cursor+=row+fieldGap;
-          }else if(when)place(when,x-bandWidth/2,lineY-extent-lift-whenHeights[index]!,bandWidth,'center');
-          for(const [fieldIndex,part] of below(fields).entries()){const placed=place(part,x-bandWidth/2,cursor,bandWidth,'center');cursor+=placed.box.height;if(fieldIndex<below(fields).length-1)cursor+=fieldGap;}
+          }else if(when)place(when,x-width/2,lineY-extent-lift-whenHeights[index]!,width,'center');
+          for(const [fieldIndex,part] of below(fields).entries()){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(fieldIndex<below(fields).length-1)cursor+=fieldGap;}
         });
       }else if(arrangement==='alternating'){
         // Labels wider than one spacing: each is two spacings wide less a gutter, and alternates above and below, so labels on one
@@ -3177,13 +3190,15 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const start=count===1?box.x+box.width/2:box.x+width/2;
         setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.height-headerHeight)*.04));
         const fieldGap=4*scale,clearance=24*scale;
-        const heights=events.map(fields=>fields.reduce((height,part)=>height+heightOf(part,width,'center'),0)+Math.max(0,fields.length-1)*fieldGap);
+        const alternatingWidth=(_index:number)=>width;
+        const heights=events.map((fields,index)=>fields.reduce((height,part)=>height+heightOf(part,alternatingWidth(index),'center'),0)+Math.max(0,fields.length-1)*fieldGap);
         const markerExtent=hasRing?ringRadius+strokeWidth/2:radius;
         const upper=Math.max(markerExtent,...heights.filter((_,index)=>index%2===0).map(height=>height+clearance));
-        const lower=Math.max(markerExtent,...heights.filter((_,index)=>index%2===1).map(height=>height+clearance));
+        const lower=Math.max(markerExtent,...heights.filter((_,index)=>index%2===1).map(height=>height+clearance+durationTrack));
         const top=placeHeader(box.y+Math.max(0,(box.height-headerHeight-upper-lower)/2)),lineY=top+upper;
         events.forEach((fields,index)=>{
-          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?lineY-clearance-heights[index]!:lineY+clearance,bottom=index%2===0?lineY-clearance:box.y+box.height;
+          const x=start+(rtl?count-1-index:index)*step,width=alternatingWidth(index),top=index%2===0?lineY-clearance-heights[index]!:lineY+clearance+durationTrack,bottom=index%2===0?lineY-clearance:box.y+box.height;
+          if(durations){const range=durations[index]!,rangeY=lineY+durationTrack/2;ranges.push({path:eventPath(index),eventIndex:index,box:{x:box.x+(rtl?1-range.start-range.size:range.start)*box.width,y:rangeY-5*scale,width:range.size*box.width,height:10*scale}});rangeLinks.push({path:eventPath(index),eventIndex:index,x1:box.x+(rtl?1-range.start-range.size/2:range.start+range.size/2)*box.width,y1:rangeY,x2:x,y2:lineY});}
           markers.push(marker(index,x,lineY));let cursor=top;
           for(const [fieldIndex,part] of fields.entries()){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);if(fieldIndex<fields.length-1)cursor+=fieldGap;}
         });
@@ -3193,26 +3208,43 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         let y=placeHeader(box.y);
         setRadius(Math.min(9*scale,box.width/Math.max(2,count)/5,Math.max(scale,box.y+box.height-y)*.04));
         const lead=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0),gap=2*lead+12*scale;
-        const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
+        const track=durations?34*scale:0;
+        const x=rtl?box.x+box.width-lead-track:box.x+lead+track,textX=rtl?box.x:box.x+gap+track,width=box.width-gap-track;
+        const fieldWidth=(part:TimelineTextPart)=>durations?Math.min(width,32*sizeAt(part,reduction)):width;
+        const rangeTop=y,fieldHeights=events.map(fields=>fields.reduce((height,part)=>height+heightOf(part,fieldWidth(part),'left'),0)+Math.max(0,fields.length-1)*4*scale);
+        const needs=fieldHeights.map(height=>Math.max(height,2*lead)),needed=needs.reduce((sum,height)=>sum+height,0);
+        const availableHeight=Math.max(scale,box.y+box.height-rangeTop),rangeHeight=durations&&options.intrinsic?Math.min(availableHeight,needed+Math.max(0,count-1)*16*scale):availableHeight;
+        const spacing=durations?Math.max(0,(rangeHeight-needed)/(count+1)):16*scale;
+        let labelY=rangeTop+spacing;
         events.forEach((fields,index)=>{
+          const range=durations?.[index];
+          if(range)y=labelY+(needs[index]!-fieldHeights[index]!)/2;
           const top=y;let first:TimelineTextPart|undefined;
-          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;if(fieldIndex<fields.length-1)y+=4*scale;}
-          markers.push(marker(index,x,top+Math.min(first?.box.height??2*radius,2*radius)/2));
+          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,textX,y,fieldWidth(part),'left');first??=placed;y+=placed.box.height;if(fieldIndex<fields.length-1)y+=4*scale;}
+          const markerY=range?labelY+needs[index]!/2:top+Math.min(first?.box.height??2*radius,2*radius)/2;
+          if(range){
+            const rangeX=rtl?box.x+box.width-10*scale:box.x;
+            ranges.push({path:eventPath(index),eventIndex:index,box:{x:rangeX,y:rangeTop+range.start*rangeHeight,width:10*scale,height:range.size*rangeHeight}});
+            rangeLinks.push({path:eventPath(index),eventIndex:index,x1:rangeX+5*scale,y1:rangeTop+(range.start+range.size/2)*rangeHeight,x2:x,y2:markerY});
+            labelY+=needs[index]!+spacing;
+          }
+          markers.push(marker(index,x,markerY));
           y+=16*scale;
         });
       }
+      for(const range of ranges){const length=arrangement==='vertical'?range.box.height:range.box.width;if(length<2*scale){diagnostics.push({code:'text-overflow',reason:'event-space',path:range.path,message:'Timeline period is too short to draw readably; enlarge the timeline or split its events.'});score+=2*scale-length;}}
       for(const marker of markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;if(marker.x-extent<box.x-.01||marker.y-extent<box.y-.01||marker.x+extent>box.x+box.width+.01||marker.y+extent>box.y+box.height+.01){diagnostics.push({code:'text-overflow',reason:'event-space',path:marker.path,message:'Timeline marker has no usable space; increase the cell or paginate events.'});score+=1;}}
       const firstMarker=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(firstMarker.x,last.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,last.x),y2:last.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:last.x,y2:last.y};
       // LH-121: progress runs from the first event to the current one, or to the last done one when none is current.
       const current=markers.findIndex(entry=>entry.status==='current'),reached=current>=0?current:markers.map(entry=>entry.status).lastIndexOf('done');
       const end=reached>0?markers[reached]!:undefined,progress=end?rtl?{x1:Math.min(firstMarker.x,end.x),y1:firstMarker.y,x2:Math.max(firstMarker.x,end.x),y2:end.y}:{x1:firstMarker.x,y1:firstMarker.y,x2:end.x,y2:end.y}:undefined;
-      const candidate={arrangement,parts,markers,connector,...(progress?{progress}:{}),diagnostics,score};
+      const candidate={arrangement,parts,markers,...(durations?{ranges,rangeLinks}:{}),connector,...(progress?{progress}:{}),diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
       return diagnostics;
   };
   let settled=false;
   // A narrow cell tries the vertical arrangement first, with up to a few pixels of size reduction, before the usual search.
-  if(narrow)for(let reduction=0;reduction<=Math.min(reductions,TIMELINE_NARROW_REDUCTIONS)&&!settled;reduction++)settled=!tryArrangement('vertical',reduction).length;
+  if(narrow)for(let reduction=0;reduction<=(durations?0:Math.min(reductions,TIMELINE_NARROW_REDUCTIONS))&&!settled;reduction++)settled=!tryArrangement('vertical',reduction).length;
   // Then, per size: the horizontal arrangement the labels call for, the other one when a band's labels do not fit its spacing, and
   // the vertical rail (except in a band of a stack).
   for(let reduction=0;reduction<=Math.max(0,reductions)&&!settled;reduction++){
@@ -3227,6 +3259,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   const cover=(x:number,y:number,width:number,height:number)=>{left=Math.min(left,x);top=Math.min(top,y);right=Math.max(right,x+width);bottom=Math.max(bottom,y+height);};
   for(const part of result.parts)cover(part.box.x,part.box.y,part.box.width,part.box.height);
   for(const marker of result.markers){const extent=(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2;cover(marker.x-extent,marker.y-extent,2*extent,2*extent);}
+  for(const range of result.ranges??[])cover(range.box.x,range.box.y,range.box.width,range.box.height);
   // LH-121: the status words are drawn, measured and covered like the other parts, but they are not source fields.
   const statusLabels=result.parts.filter(part=>part.role==='status'),parts=result.parts.filter(part=>part.role!=='status');
   return {algorithm:'timeline-flow-v1',attempts,textMeasurement:options.textMeasurement?'provided':'estimated',textOutlines:outlines?'provided':'unavailable',...result,parts,...(statusLabels.length?{statusLabels}:{}),bounds:{x:left,y:top,width:right-left,height:bottom-top},overflow:result.diagnostics.length>0};
@@ -7050,13 +7083,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // region (horizontal only, compact at four or more, all at one size) or a lone timeline that may grow. `sizes` is `role` for
   // the role sizes, `floor` for the readability floor and `placed` for the size the region chose.
   const timelineHints = new WeakMap<Pending, { horizontal?: true; compact?: true; inlineHeader?: boolean; sizeOffset?: number; grow?: true }>();
-  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number) => {
+  const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number, intrinsic = false) => {
     const hint = timelineHints.get(node);
     // LH-121: status words under the labels, a guarded rule (they take height the timeline's text might need).
     const events = Array.isArray(node.value) ? node.value : record(node.value).events, statusWords = ruleOn('timeline-status') && Array.isArray(events) && events.some((event: unknown) => record(event).status !== undefined) && timelineStatusWordsFor(deckLanguage()) !== undefined;
     if (statusWords) fire('timeline-status');
     return layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
-      ...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),
+      ...(intrinsic?{intrinsic:true}:{}),...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),
       fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,textRasterPadding:options.textRasterPadding,direction:textDirection,
       ...(hint?.horizontal ? {horizontal:true} : {}),...(hint?.compact ? {compact:true} : {}),...(hint?.inlineHeader ? {inlineHeader:true} : {}),
       sizeOffset: sizeOffset ?? (sizes === 'floor' ? -TIMELINE_FLOOR_OFFSET : sizes === 'placed' ? hint?.sizeOffset ?? 0 : 0),
@@ -7065,7 +7098,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-41: a lone timeline grows its type by up to TIMELINE_GROWTH reference pixels when it still fits its box in the arrangement
   // it has at its role sizes (modest: LH-48 owns filling the body).
   const placeTimeline = (node: Pending, box: LayoutBox, settings: Composition): TimelineLayout => {
-    const placed = measureTimeline(node, box, settings, 'placed');
+    const placed = measureTimeline(node, box, settings, 'placed'), ranged = placed.ranges !== undefined;
     if (!timelineHints.get(node)?.grow && !node.lone || placed.overflow) return placed;
     // LH-129: first by the type scale's steps, as LH-48 grows a lone block: two or three steps of its labels (18 and 22 px roles to
     // 24 and 28, or 28 and 32), when it keeps its arrangement and fits its box; then by LH-41's few pixels.
@@ -7074,13 +7107,24 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const lines = (layout: TimelineLayout) => layout.parts.map(part => part.role === 'description' || part.role === 'event-description' ? 0 : part.fit?.lines.length ?? 0).join();
     // LH-144: growth stops at composition.maxFontSize.
     const capped = (layout: TimelineLayout) => largestPart(layout) <= capOf(settings) + FONT_GRID_EPSILON;
+    // LH-16 owner review: a ranged rail fills its height even with tiny labels, so occupied bounds cannot decide growth.
+    // Try the existing body type scale through its display limit before the historical +10 px timeline ceiling.
+    if (ranged) {
+      const start = Math.max(...placed.parts.map(part => part.requestedFontSize)), display = Math.max(start, Math.min(LONE_DISPLAY_SIZES.text * scale, capOf(settings)));
+      const candidates = [...new Set(Array.from({ length: 8 }, (_, index) => typeScaleStepsUp(start, index + 1, display, settings.minFontSize ?? 16, scale)))].sort((a, b) => b - a);
+      for (const size of candidates) {
+        if (size <= start + FONT_GRID_EPSILON) continue;
+        const grown = measureTimeline(node, box, settings, 'placed', (size - start) / scale);
+        if (!grown.overflow && lines(grown) === lines(placed) && capped(grown) && grown.parts.every((part, index) => { const before = placed.parts[index]?.fit; return !!part.fit && !!before && part.fit.fontSize >= before.fontSize - FONT_GRID_EPSILON; })) return grown;
+      }
+    }
     for (const growth of TIMELINE_STEP_GROWTH) {
       const grown = measureTimeline(node, box, settings, 'placed', growth);
-      if (!grown.overflow && grown.arrangement === placed.arrangement && lines(grown) === lines(placed) && capped(grown)) return grown;
+      if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && lines(grown) === lines(placed) && capped(grown)) return grown;
     }
     for (let growth = TIMELINE_GROWTH; growth > 0; growth--) {
       const grown = measureTimeline(node, box, settings, 'placed', growth);
-      if (!grown.overflow && grown.arrangement === placed.arrangement && capped(grown)) return grown;
+      if (!grown.overflow && (ranged || grown.arrangement === placed.arrangement) && capped(grown)) return grown;
     }
     return placed;
   };
@@ -8207,7 +8251,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-135: a tier's price at the floor of its stack is at its role size, not scaled down: display headroom is the only thing it gives up.
     else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings, false, atFloor && tierMetricPaths.has(node.path) ? {value: METRIC_ROLE_VALUE_SIZE * scale} : undefined).bounds.height;
     // LH-41: laid out as the region will (a band, compact, at its role sizes or the floor): its name, label bands and markers.
-    else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role').bounds.height + scale;
+    else if (node.field === 'timeline') content = measureTimeline(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings, atFloor ? 'floor' : 'role', undefined, true).bounds.height + scale;
     else if (node.field === 'table') content = (atFloor ? measureTable(node, inner, naturalSettings, true)?.height : measureTable(node, inner, naturalSettings)?.naturalHeight) ?? ((Array.isArray(record(node.value).rows) ? record(node.value).rows.length : 4) + 1) * 36 * scale * (atFloor ? Math.min(1, floorSize / startSize) : 1);
     else content = inner / 1.6;
     if (atFloor && !tierMetricPaths.has(node.path) && !(node.field === 'text' || node.field === 'items' || node.field === 'bullets' || node.field === 'table' || node.field === 'timeline')) content *= Math.min(1, floorSize / startSize);
@@ -8787,7 +8831,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // A compact stack sets each description beside its name only when every band's pair fits on one row, so the bands match.
       const inline = units.every((unit, index) => {
         const width = bandWidthOf(index, units.length, columns, cell.width), inner = width - (cards ? 2 * Math.min(CARD_INSET * scale, width / 4) : 0);
-        const parts = measureTimeline(unit, { x: 0, y: 0, width: Math.max(scale, inner), height: 1e6 }, composition).parts, name = parts.find(part => part.role === 'name'), description = parts.find(part => part.role === 'description');
+        const parts = measureTimeline(unit, { x: 0, y: 0, width: Math.max(scale, inner), height: 1e6 }, composition, 'role', undefined, true).parts, name = parts.find(part => part.role === 'name'), description = parts.find(part => part.role === 'description');
         return !name || !description || description.box.y < name.box.y + name.box.height;
       });
       if (!inline) for (const unit of units) if (timelineHints.get(unit)?.inlineHeader) timelineHints.set(unit, { ...timelineHints.get(unit), inlineHeader: false });
@@ -9800,7 +9844,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   }
   else if (underChart?.chart && underChart.timeline) {
     timelineHints.set(underChart.timeline, { horizontal: true });
-    const band = measureTimeline(underChart.timeline, { x: 0, y: 0, width: contentBox.width, height: 1e6 }, composition).bounds.height + scale;
+    const band = measureTimeline(underChart.timeline, { x: 0, y: 0, width: contentBox.width, height: 1e6 }, composition, 'role', undefined, true).bounds.height + scale;
     arrange([underChart.chart, underChart.timeline], contentBox, { ...composition, mode: 'column', weights: [Math.max(scale, contentBox.height - gap - band), band], columns: undefined }, 0);
   }
   else if (chartPrimary) {
