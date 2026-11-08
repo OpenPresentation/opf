@@ -1,0 +1,3035 @@
+{
+  "scope": "All seven sealed mixed-code whole slides, actual owned read-only SaveCopyAs/reopen. Exact current-user pinned Mono installed before runs; no arbitrary after-edit promise. Parent whole-sheet review required.",
+  "sourceManifestSha256": "344e9427e2115bcea90207c9b4681a87df03980a7150c017bc97dd739032cccc",
+  "importerSource": "513156a982397eaa0033808215fbb86dd284745b",
+  "rows": [
+    {
+      "id": "overview-dynamic",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-02/overview-dynamic",
+      "inputSha256": "0c2a23e949fb2a568da217eefad0168283e07486e6d692d628edb206e8b90bf6",
+      "savedSha256": "efe79557789c97009aa83b3e99394a333d5a3022d6006f8032a41237881aeb22",
+      "terminal": {
+        "timestamp": "2026-11-08T15:46:47.5543588Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 13,
+      "declaredShapes": 13,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1",
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1",
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "How the running total works",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "javascript",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const total = ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "items.reduce((sum, ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "item) => sum + ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 4",
+          "text": "item.value, 0);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 5",
+          "text": "console.log(total);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "The reducer adds each item’s value to ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "a running sum. Starting at zero also ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "makes an empty list return zero.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 0 line 0",
+          "text": "Illustrative example • fictional data",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 1 line 0",
+          "text": "1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pilot-dynamic",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/pilot-dynamic",
+      "inputSha256": "fd12446d56b5ee5a75a7e2451cdbfe11c16c325fc1b972d722d63d6722aee23d",
+      "savedSha256": "b4b6e365c171b4ebdef90366e6721b20642b478068c194d620d8dd26cff6ae48",
+      "terminal": {
+        "timestamp": "2026-11-08T15:48:27.3128192Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 13,
+      "declaredShapes": 13,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1",
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1",
+        "8419cfd4247135b189f102165128cdeac6fa8185079286c4522a50a6a8ab64a1"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "How the running total works",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "javascript",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const total = ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "items.reduce((sum, ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "item) => sum + ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 4",
+          "text": "item.value, 0);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 5",
+          "text": "console.log(total);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 42,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "The reducer adds each item’s value to ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "a running sum. Starting at zero also ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "makes an empty list return zero.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 0 line 0",
+          "text": "Illustrative example • fictional data",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 1 line 0",
+          "text": "1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "batch02-s34",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/batch02-s34",
+      "inputSha256": "c264e197ee4baaef4b6b9df1b1f4e8d6cb925f3ba558ad49d2e1b8b64412254f",
+      "savedSha256": "f69e76f023b83f011a3bbcd659b5acd80326aa2e23647366f46fd8e55149b264",
+      "terminal": {
+        "timestamp": "2026-11-08T15:48:43.5790352Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 16,
+      "declaredShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "edd1d85c5183b20e358aa542d1cc19d8d9b41c89200ac530f49dd312ed32452c",
+        "edd1d85c5183b20e358aa542d1cc19d8d9b41c89200ac530f49dd312ed32452c",
+        "edd1d85c5183b20e358aa542d1cc19d8d9b41c89200ac530f49dd312ed32452c"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "Signal Trend",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 filename line 1",
+          "text": "kiosk-orientation-deck-rule.ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const score = urgency * ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "confidence;",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "if (score >= threshold) {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 4",
+          "text": "  routeToSponsor(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 5",
+          "text": "} else {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 6",
+          "text": "  keepInWeeklyReview(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 7",
+          "text": "}",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "Novara Therapeutics should focus the next ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "cycle on restore patient enrollment momentum ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "across priority sites while making the operating ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 3",
+          "text": "tradeoffs clear to pharmaceuticals ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 4",
+          "text": "stakeholders.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "batch03-s12",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/batch03-s12",
+      "inputSha256": "36a3254678309937f3acee40dbabcf1653a095a7882ea96d5e9bf64363b7b475",
+      "savedSha256": "a4ba0f516ece7f2a87ab7740fc3292b97815623d06d6f8b6853556404578fae9",
+      "terminal": {
+        "timestamp": "2026-11-08T15:49:00.1980091Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 15,
+      "declaredShapes": 15,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "8acbb6efc186c8ddd5b800f4a651824da75034885bd366ddb6f84bc5c9ee5904",
+        "8acbb6efc186c8ddd5b800f4a651824da75034885bd366ddb6f84bc5c9ee5904",
+        "8acbb6efc186c8ddd5b800f4a651824da75034885bd366ddb6f84bc5c9ee5904"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "Decision Options",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 filename line 1",
+          "text": "boutique-hotel-revenue-recovery-rule.ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const score = urgency * ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "confidence;",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "if (score >= threshold) {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 4",
+          "text": "  routeToSponsor(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 5",
+          "text": "} else {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 6",
+          "text": "  keepInWeeklyReview(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 7",
+          "text": "}",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 19.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "Oaktrail Animal Health should focus the next ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "cycle on balance appointment access with ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "staff retention while making the operating ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 3",
+          "text": "tradeoffs clear to veterinary care stakeholders.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "overview-layout-control",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/overview-layout-control",
+      "inputSha256": "9e1b58f2e9d8f07404daaff6a72452bca36b12ff82f71b0aac744bf80829758f",
+      "savedSha256": "30a67d02250ad3854781d12ab6e98b960980fb8776157bf293cb251984d95e80",
+      "terminal": {
+        "timestamp": "2026-11-08T15:49:15.3149133Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 11,
+      "declaredShapes": 11,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3",
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3",
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "Keep the implementation easy to inspect",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "javascript",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const total = items.reduce((sum, item) => sum + ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "item.value, 0);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "console.log(total);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "The reducer adds each item’s value to ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "a running sum. Starting at zero also ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "makes an empty list return zero.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 0 line 0",
+          "text": "Illustrative example • fictional data",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 1 line 0",
+          "text": "1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "pilot-layout-control",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/pilot-layout-control",
+      "inputSha256": "eebcc55ad7c908638e09f16d6e83a2f26be7c9b35d8639d89f0e2a4c59e02ddd",
+      "savedSha256": "5f49750c2248ab825d5b890682cc4b8a05351b3c92d3a7184e9e764da153772c",
+      "terminal": {
+        "timestamp": "2026-11-08T15:49:30.6829078Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 11,
+      "declaredShapes": 11,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3",
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3",
+        "521af128a6d479ed2278b547a565b824bc15695ccee5ac0113232ea87dbd0bf3"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "Keep the implementation easy to inspect",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "javascript",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const total = items.reduce((sum, item) => sum + ",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "item.value, 0);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "console.log(total);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "The reducer adds each item’s value to ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "a running sum. Starting at zero also ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "makes an empty list return zero.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 0 line 0",
+          "text": "Illustrative example • fictional data",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF furniture 0 part 1 line 0",
+          "text": "1",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 12,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "batch02-layout-control",
+      "nativeDirectory": "C:/opf-work/qualification034-lh101-native-03/batch02-layout-control",
+      "inputSha256": "2a74590b5f2e88e2330f4af9c25e9a5b09fe036137be5a8fdfaa7f3dee11697a",
+      "savedSha256": "8ffa2ebb53340d7c627f576abc642d72a8dd9ab77f30d65f0fe8e95d7b389f8e",
+      "terminal": {
+        "timestamp": "2026-11-08T15:49:47.5605670Z",
+        "timedOut": false,
+        "exitCode": 0,
+        "cleanupConfirmed": true,
+        "lastDurableStage": "worker.complete",
+        "lastDurableStatus": "success"
+      },
+      "nativeShapes": 16,
+      "declaredShapes": 16,
+      "canonicalImportExact": true,
+      "canonicalChanges": [],
+      "namedStatesExact": true,
+      "stateChanges": {
+        "edited": [],
+        "reopened": []
+      },
+      "phaseImagesExact": true,
+      "phaseImagesSha256": [
+        "5f39277a72d57118b07f740790e25fcd1e3da5cf96b27f283f2e1958bfc8ba5e",
+        "5f39277a72d57118b07f740790e25fcd1e3da5cf96b27f283f2e1958bfc8ba5e",
+        "5f39277a72d57118b07f740790e25fcd1e3da5cf96b27f283f2e1958bfc8ba5e"
+      ],
+      "shrink": [],
+      "beforeDiagnostics": [
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "afterDiagnostics": [
+        {
+          "code": "code-import-reflow",
+          "message": "Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.",
+          "path": "slides.0.code"
+        },
+        {
+          "code": "unresolved-reference",
+          "path": "slides.0.layout",
+          "message": "Layout 'code' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement."
+        }
+      ],
+      "nativeFonts": [
+        {
+          "name": "OPF heading slides.0.title line 0",
+          "text": "Operating Model",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos Display",
+            "sizePoints": 40.5,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 filename line 1",
+          "text": "broadband-public-hearing-deck-rule.ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 language line 1",
+          "text": "ts",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 12,
+            "bold": -1,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 1",
+          "text": "const score = urgency * confidence;",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 2",
+          "text": "if (score >= threshold) {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 3",
+          "text": "  routeToSponsor(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 4",
+          "text": "} else {",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 5",
+          "text": "  keepInWeeklyReview(workstream);",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF code 1 body line 6",
+          "text": "}",
+          "font": {
+            "status": "uniform",
+            "name": "Roboto Mono",
+            "sizePoints": 16.5,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 0",
+          "text": "Rural Connectivity Office should ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 1",
+          "text": "focus the next cycle on explain ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 2",
+          "text": "broadband route choices and ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 3",
+          "text": "resident impact while making the ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 4",
+          "text": "operating tradeoffs clear to public ",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        },
+        {
+          "name": "OPF text slides.0.blocks.1.text line 5",
+          "text": "engagement stakeholders.",
+          "font": {
+            "status": "uniform",
+            "name": "Aptos",
+            "sizePoints": 21,
+            "bold": 0,
+            "italic": 0,
+            "unavailableFields": [],
+            "scope": "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+          }
+        }
+      ]
+    }
+  ],
+  "parentAcceptance": {
+    "accepted": true,
+    "scope": "Root viewed all seven complete preview/native pairs. Exact current native states/imports and all phaseimages match,0shrink; Mono requested identity has exact installed renderer-pinned files. Dynamic code grows56px reducer and26px token-bounded six-line examples; authored layout controls retain22px and full originalframes.",
+    "limitations": "Seven code-import-reflow notices after native save explain missing syntax-token/style/position reconstruction; three existing unresolved code-layout references remain. Canonical equality is original-import versus saved-import, not full native-format reconstruction. Original missing output-parent and post-Quit settling guard refusals remain; no Office operation was attempted by either failed preflight."
+  },
+  "combined": {
+    "scope": "Exact all14 CLI output byte identity from final combined513source vs acceptedc949producer; actual original fixed dates/options, source files unchanged",
+    "source": "513156a982397eaa0033808215fbb86dd284745b",
+    "node": "v24.20.0",
+    "rows": [
+      {
+        "id": "overview-dynamic",
+        "kind": "pptx",
+        "bytes": 107039,
+        "sha256": "0c2a23e949fb2a568da217eefad0168283e07486e6d692d628edb206e8b90bf6",
+        "exact": true
+      },
+      {
+        "id": "overview-dynamic",
+        "kind": "png",
+        "bytes": 71425,
+        "sha256": "9df787937eef92910399db385674b25773975f40bb89ceda83106fae4a05f078",
+        "exact": true
+      },
+      {
+        "id": "pilot-dynamic",
+        "kind": "pptx",
+        "bytes": 107039,
+        "sha256": "fd12446d56b5ee5a75a7e2451cdbfe11c16c325fc1b972d722d63d6722aee23d",
+        "exact": true
+      },
+      {
+        "id": "pilot-dynamic",
+        "kind": "png",
+        "bytes": 71425,
+        "sha256": "9df787937eef92910399db385674b25773975f40bb89ceda83106fae4a05f078",
+        "exact": true
+      },
+      {
+        "id": "batch02-s34",
+        "kind": "pptx",
+        "bytes": 107690,
+        "sha256": "c264e197ee4baaef4b6b9df1b1f4e8d6cb925f3ba558ad49d2e1b8b64412254f",
+        "exact": true
+      },
+      {
+        "id": "batch02-s34",
+        "kind": "png",
+        "bytes": 71476,
+        "sha256": "ff775d2e6bdfc3357dea8eeb82ed8b142c5edca17ea4677cfa64e58ffa980dc2",
+        "exact": true
+      },
+      {
+        "id": "batch03-s12",
+        "kind": "pptx",
+        "bytes": 107274,
+        "sha256": "36a3254678309937f3acee40dbabcf1653a095a7882ea96d5e9bf64363b7b475",
+        "exact": true
+      },
+      {
+        "id": "batch03-s12",
+        "kind": "png",
+        "bytes": 72333,
+        "sha256": "86cbc8a786a94334dfe7ac6a734355ccab111ca6eadefc3ea52930d7a18eca72",
+        "exact": true
+      },
+      {
+        "id": "overview-layout-control",
+        "kind": "pptx",
+        "bytes": 104401,
+        "sha256": "9e1b58f2e9d8f07404daaff6a72452bca36b12ff82f71b0aac744bf80829758f",
+        "exact": true
+      },
+      {
+        "id": "overview-layout-control",
+        "kind": "png",
+        "bytes": 52584,
+        "sha256": "c21e889eb71d72dc3c28ca1b31364b2167220f82bee0475b141214ae66f2749b",
+        "exact": true
+      },
+      {
+        "id": "pilot-layout-control",
+        "kind": "pptx",
+        "bytes": 104401,
+        "sha256": "eebcc55ad7c908638e09f16d6e83a2f26be7c9b35d8639d89f0e2a4c59e02ddd",
+        "exact": true
+      },
+      {
+        "id": "pilot-layout-control",
+        "kind": "png",
+        "bytes": 52584,
+        "sha256": "c21e889eb71d72dc3c28ca1b31364b2167220f82bee0475b141214ae66f2749b",
+        "exact": true
+      },
+      {
+        "id": "batch02-layout-control",
+        "kind": "pptx",
+        "bytes": 105896,
+        "sha256": "2a74590b5f2e88e2330f4af9c25e9a5b09fe036137be5a8fdfaa7f3dee11697a",
+        "exact": true
+      },
+      {
+        "id": "batch02-layout-control",
+        "kind": "png",
+        "bytes": 69774,
+        "sha256": "431c270e22e1ea7676e361127eed681d46360002d449dfbf3c4cfe9f78af713c",
+        "exact": true
+      }
+    ]
+  },
+  "importerRuntime": {
+    "head": "513156a982397eaa0033808215fbb86dd284745b",
+    "dist": [
+      {
+        "path": "packages/javascript/dist/browser.js",
+        "bytes": 4410,
+        "sha256": "abbb48f170cede757b4fa50c986e60f6c34ab827f9c55a1d42db90318511a83e"
+      },
+      {
+        "path": "packages/javascript/dist/catalog-refs-BacOFTcg.d.ts",
+        "bytes": 7729,
+        "sha256": "1a354bba8c6ab8ee04b98659e4291288e8bc3ebfe8d6b554fb62a8e9c4f86595"
+      },
+      {
+        "path": "packages/javascript/dist/catalog-schemas-CiEafJRf.d.ts",
+        "bytes": 1738,
+        "sha256": "73b46fbd317941de642cc7fe5bfd8ee6a582a24416e8623d585659cea6b1392d"
+      },
+      {
+        "path": "packages/javascript/dist/chart-data-oIZQlFGi.d.ts",
+        "bytes": 11234,
+        "sha256": "2ab91c1aaf4e654984b3b25d256827b1f78dc20f47d4e54ab36c82c897b70a22"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-43JWUIGF.js",
+        "bytes": 203,
+        "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-466I5SCB.js",
+        "bytes": 63844,
+        "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-4DC3EFLX.js",
+        "bytes": 28142,
+        "sha256": "21e79f013d00c7815e2095f0930ee0adc9c2f97f019824ee845d42b8a46b9e19"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-5GNOT73M.js",
+        "bytes": 6461,
+        "sha256": "c8f9be6e232e6842486b37c34951e9dee23f58f5a5a84b943bf54b8a7c4c0168"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-5RZF5INH.js",
+        "bytes": 1396514,
+        "sha256": "6b68034b82f7c486a5d3521b122370e57600015e0274d9d7cee7e1508eb99e22"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-67BR2ZG6.js",
+        "bytes": 15552,
+        "sha256": "544ef025fac4dd3992655eb04d93605edb26985ab6a7163f5c6708e4a7f52e6d"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-CLJRDCRL.js",
+        "bytes": 5033,
+        "sha256": "c74efac047363d08a05c2657a0068b0025f106e8ec547bf668338f5645004ae1"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-DGSXVN5C.js",
+        "bytes": 44620,
+        "sha256": "53b2e134b11d3fb8c7ec3e9422e844a2793c2262bf88e24530f567edbca8f027"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-DWVU2DOM.js",
+        "bytes": 10267,
+        "sha256": "5d4e9c3a3252ea6e5faf00ed57fc22911922e9fc8ef049450d4de216463815c7"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-E4B3I63R.js",
+        "bytes": 32288,
+        "sha256": "6f997f41e6f55e06dc03e0ab73f4db05cb1993fcab416e0d538b24bc1b7c44ca"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-EHZSGHEK.js",
+        "bytes": 31311,
+        "sha256": "feddcc2f2fc0428e88ba480ff93d949618a081e19231d8ad34334759e335509b"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-FK5XG742.js",
+        "bytes": 157304,
+        "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-GWUYRLMI.js",
+        "bytes": 3788,
+        "sha256": "e2928553a5391756c74bdccd4a4a85b6229160cf2e007ba06f578fc18ec0152f"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-IJXKVM4W.js",
+        "bytes": 10945,
+        "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-INIMUBSE.js",
+        "bytes": 286,
+        "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-JBARNYFR.js",
+        "bytes": 776,
+        "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-PRXZD2II.js",
+        "bytes": 463,
+        "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-Q3GR6VSX.js",
+        "bytes": 494662,
+        "sha256": "0738593caf013b97f31ba26e34a425527e9bc49f3f555b57713c90c51f975a5f"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-QGK2G2OB.js",
+        "bytes": 4798,
+        "sha256": "fe4bab4a30e50af7c22a98762f4d9efffb0dc245848a562c6143ba37dc9d94f5"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-RWPUU322.js",
+        "bytes": 31234,
+        "sha256": "effec410ddb35debd2326ea8885e37cc9c6ac9bc0462e7f62258486244a508a8"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-RYZPBJLB.js",
+        "bytes": 302,
+        "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-SFREIW6V.js",
+        "bytes": 452189,
+        "sha256": "2c0cd9ebc9101101fb0e9765c089a54ad470fbb2e7c9bee4a90eabc545ade123"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-VE4LOSIR.js",
+        "bytes": 1847504,
+        "sha256": "b6f9bfa9bf062b4f2fbf723dd5dadee17053a29878794efe36a1df940fd719c6"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-W24RLCM7.js",
+        "bytes": 48416,
+        "sha256": "5bd53fa5d612ff629166b135ed96b489e74755d83aa8b34c186749d0ddd1bb7d"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-W4DYDRV2.js",
+        "bytes": 6363,
+        "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-XGYOSDRJ.js",
+        "bytes": 56369,
+        "sha256": "7c778ca8eeb626ed3308ba474992b1e58946b9e2ff2fc5747fff309d3896c922"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-YA5V2OTR.js",
+        "bytes": 72070,
+        "sha256": "a831292fea6a7763f0e8cb87dabcde37f49f78d8fac4818ff7e0bf3ac4374e4d"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-YYEIDFA4.js",
+        "bytes": 3008,
+        "sha256": "2b20fdd3033a6eee241441b0bd78324e882c188e26069e9ba44fc0a8972fd3c2"
+      },
+      {
+        "path": "packages/javascript/dist/chunk-YYT6N7AI.js",
+        "bytes": 267856,
+        "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+      },
+      {
+        "path": "packages/javascript/dist/composition-DUdz50HU.d.ts",
+        "bytes": 480160,
+        "sha256": "727b9d745b247b19d45f22abb645f4b6350f403ea8b5b6efc21d4c9cdccf0287"
+      },
+      {
+        "path": "packages/javascript/dist/composition.d.ts",
+        "bytes": 26135,
+        "sha256": "3902de328ed950db8dc7841b393a4b96b7310981d954aac89b5a80ba8bed915f"
+      },
+      {
+        "path": "packages/javascript/dist/composition.js",
+        "bytes": 13204,
+        "sha256": "86535aae593aedeba7ca3c565a999f8f7e536d4f3c8e92290c9f5769f2b95223"
+      },
+      {
+        "path": "packages/javascript/dist/conversion-jafjSTFK.d.ts",
+        "bytes": 32735,
+        "sha256": "6671a0075f6ea67ea5eb836f8a0d764734256cad941d450f63db5e82fa8e20b8"
+      },
+      {
+        "path": "packages/javascript/dist/conversion-TO25RBRZ.js",
+        "bytes": 835,
+        "sha256": "825208ce2962d93df9006e5652ec60e26bc525df054174d860708db1556a9f0d"
+      },
+      {
+        "path": "packages/javascript/dist/convert.d.ts",
+        "bytes": 15040,
+        "sha256": "895e07c4d39717056ed5a58f8627bd2d5d4273f6d3ffb95c65ac4f5a68302650"
+      },
+      {
+        "path": "packages/javascript/dist/convert.js",
+        "bytes": 61383,
+        "sha256": "257cec5b512265340d1aaa5ad4ce5b07ea3e47d8d93ddf6ef58746e5694f5943"
+      },
+      {
+        "path": "packages/javascript/dist/data.d.ts",
+        "bytes": 2609,
+        "sha256": "163c2fea6fb262a7dc11dd366c55e9d1cb756de413bb1e455ed6cd2839a78118"
+      },
+      {
+        "path": "packages/javascript/dist/data.js",
+        "bytes": 443,
+        "sha256": "d10188522cb0dc8cc94d466c3321a28505b1fb0dfed0396f093e0300ed80200a"
+      },
+      {
+        "path": "packages/javascript/dist/deck-report-C6eBVmWR.d.ts",
+        "bytes": 2414,
+        "sha256": "0b809447714773054b7a5f4855a90f4af504822739eefa2722a135557a3254be"
+      },
+      {
+        "path": "packages/javascript/dist/deck.d.ts",
+        "bytes": 2964,
+        "sha256": "a300d88e989a787489b0d807f7ba1f354614126bf458062969d71349128e24ad"
+      },
+      {
+        "path": "packages/javascript/dist/deck.js",
+        "bytes": 474,
+        "sha256": "ceb6d340af4b3c1bab5516eb0889a60e774f02338e07d98522ff10598abc4e6e"
+      },
+      {
+        "path": "packages/javascript/dist/diagram-engine-eager.js",
+        "bytes": 360,
+        "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+      },
+      {
+        "path": "packages/javascript/dist/diagram-engine-lazy.js",
+        "bytes": 430,
+        "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+      },
+      {
+        "path": "packages/javascript/dist/diagram-plantuml-ZZYMHBHZ.js",
+        "bytes": 87,
+        "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+      },
+      {
+        "path": "packages/javascript/dist/diff.d.ts",
+        "bytes": 5944,
+        "sha256": "9310bd7aaa538370e43d6d4879a7ac0676021df5b8495f61be4be1cf7e3e0d14"
+      },
+      {
+        "path": "packages/javascript/dist/diff.js",
+        "bytes": 271,
+        "sha256": "e999faef6778ac68f15b49f9cfa35004da8b3cab99a20d10e2a5981e9f3a86b2"
+      },
+      {
+        "path": "packages/javascript/dist/docs.d.ts",
+        "bytes": 682,
+        "sha256": "7a3737469cc71abe1ae87c951f46657168a142b88118c97a651ee783903db6f1"
+      },
+      {
+        "path": "packages/javascript/dist/docs.js",
+        "bytes": 1898425,
+        "sha256": "e8e468680c2ba27b92a9fc8b59cc7b15b5dbf3ab9770501ce5f5e73f8acc677a"
+      },
+      {
+        "path": "packages/javascript/dist/examples.d.ts",
+        "bytes": 2126,
+        "sha256": "966cd6a4a161b3822aba2038671e28f207b7d058c3434fc1ed8c10370b5f9164"
+      },
+      {
+        "path": "packages/javascript/dist/examples.js",
+        "bytes": 9329935,
+        "sha256": "69eacf69d3d0b10cb661610b27eb9ee891e6c23da07f21f598daa6b0d9663d9b"
+      },
+      {
+        "path": "packages/javascript/dist/explain-iZeNOUc6.d.ts",
+        "bytes": 3979,
+        "sha256": "805cc0e5e2ea25a92a498a5fb5b0d81379d431f6bcb96bbfe4779a67da8c39bb"
+      },
+      {
+        "path": "packages/javascript/dist/finding-l9dlQ2NF.d.ts",
+        "bytes": 7413,
+        "sha256": "c129e210603a48ad0f305c8600ea99d7b58a324a717d2feb37e00491adafbaf9"
+      },
+      {
+        "path": "packages/javascript/dist/font-policy.d.ts",
+        "bytes": 7904,
+        "sha256": "76ecc80cf6c34910ec09e14b972bdca923d59475e274f6d23d07ca62292b6ff2"
+      },
+      {
+        "path": "packages/javascript/dist/font-policy.js",
+        "bytes": 151,
+        "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+      },
+      {
+        "path": "packages/javascript/dist/format.d.ts",
+        "bytes": 951,
+        "sha256": "f8e4861f53c2b9156485c893394f8160553f5b77ac59f49ab9485e9ac13b96a5"
+      },
+      {
+        "path": "packages/javascript/dist/format.js",
+        "bytes": 157,
+        "sha256": "c891519be219a52d8efdc4b485fc39f151816c9f18dbda749cdab6e52cd4d1f9"
+      },
+      {
+        "path": "packages/javascript/dist/ids.d.ts",
+        "bytes": 6870,
+        "sha256": "5a4c9c081e42fd9b3edfc790665b9a6a72cee42302ac9886c99ed5a1d254c5b3"
+      },
+      {
+        "path": "packages/javascript/dist/ids.js",
+        "bytes": 339,
+        "sha256": "05d3dd7103cc4d88bb03724a760039a4ec7dfa075b1cede9e3f6c2fbb2a35e32"
+      },
+      {
+        "path": "packages/javascript/dist/index.d.ts",
+        "bytes": 40223,
+        "sha256": "2f0422972c2d657185437842f6304e7bdc098701d0e0a3b0f28042f35199590d"
+      },
+      {
+        "path": "packages/javascript/dist/index.js",
+        "bytes": 5540,
+        "sha256": "111d443185d19af0a49efafdd43b37fc3a9367bf1e6c0c2bc3eb0dd7540f9800"
+      },
+      {
+        "path": "packages/javascript/dist/json-BFSdESOE.d.ts",
+        "bytes": 827,
+        "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78"
+      },
+      {
+        "path": "packages/javascript/dist/markdown.d.ts",
+        "bytes": 5142,
+        "sha256": "8ac232cabb3c29efff76479af1313b2fd9d7158913fa864afa542c291c4aaba7"
+      },
+      {
+        "path": "packages/javascript/dist/markdown.js",
+        "bytes": 390,
+        "sha256": "f9f575b25ca57df8df6da1025591ad171e2bb7df62c1ee24818d58ef600913b0"
+      },
+      {
+        "path": "packages/javascript/dist/node-engine.d.ts",
+        "bytes": 11170,
+        "sha256": "e408cf79f7ab6bf0eebc817820fd36fb4546d030bb7f81b58ca50ee398416b49"
+      },
+      {
+        "path": "packages/javascript/dist/node-engine.js",
+        "bytes": 2915,
+        "sha256": "dd23b428bb20eddfbaac3b0821e7ca82fa14f4728689e379a2e855d0a4d6b222"
+      },
+      {
+        "path": "packages/javascript/dist/pagination-DTzigzsv.d.ts",
+        "bytes": 13756,
+        "sha256": "1319e7f1feb7aac44be07e6c5e6ec835803f40da742b1e10ebfa6356c6812296"
+      },
+      {
+        "path": "packages/javascript/dist/pagination.d.ts",
+        "bytes": 540,
+        "sha256": "b8c1515dbe5ecba0c60636afe046e085b421e9a5137b4bfda71abb3d04f7229d"
+      },
+      {
+        "path": "packages/javascript/dist/pagination.js",
+        "bytes": 282,
+        "sha256": "a99732d38a096e5430c7e99792ae413434f6a7e3fe6cce52d1414e77efcea5c5"
+      },
+      {
+        "path": "packages/javascript/dist/patch.d.ts",
+        "bytes": 10686,
+        "sha256": "676307d0fc64c3e7f8493a77fcb0a85624538c20197d93db8c9fdcbebde911eb"
+      },
+      {
+        "path": "packages/javascript/dist/patch.js",
+        "bytes": 536,
+        "sha256": "8dedb8e0424050c90e3d01fe1356518872ff08b45ac42ef9bed53d6d78cee8f2"
+      },
+      {
+        "path": "packages/javascript/dist/precompiled.d.ts",
+        "bytes": 13,
+        "sha256": "4bd5186f89b856606fcd365feda2e5daa184651613339dcbc297e371b26dd169"
+      },
+      {
+        "path": "packages/javascript/dist/precompiled.js",
+        "bytes": 231,
+        "sha256": "73e1235b786ce79f010de1562bcf88793b7540df398a5c9b827b70be8be37b13"
+      },
+      {
+        "path": "packages/javascript/dist/presentation-D_7a4Mdi.d.ts",
+        "bytes": 294342,
+        "sha256": "b07029efb5aacf82adb4c4372fdb68c1d4f39f322c3d5be8805e19b3ff64cfd1"
+      },
+      {
+        "path": "packages/javascript/dist/repo-readme.d.ts",
+        "bytes": 139,
+        "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+      },
+      {
+        "path": "packages/javascript/dist/repo-readme.js",
+        "bytes": 19933,
+        "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+      },
+      {
+        "path": "packages/javascript/dist/schema-engine-ajv.js",
+        "bytes": 1179,
+        "sha256": "9c017392c25c98d36f9708f347c87f8117db62313947ff74ab49c39fe772fd3b"
+      },
+      {
+        "path": "packages/javascript/dist/schema-engine-precompiled.js",
+        "bytes": 131,
+        "sha256": "f62a84ef227c91c41ece856db8f70082e757c22dc50c8268c3eb94f6e24da62f"
+      },
+      {
+        "path": "packages/javascript/dist/schema.d.ts",
+        "bytes": 9555,
+        "sha256": "ba30c3b7dd7d67f38437bb81a5c85fcc14dd23e8b846cef1900732ea05f74191"
+      },
+      {
+        "path": "packages/javascript/dist/schema.js",
+        "bytes": 396,
+        "sha256": "073ebe0192e052557cad7b4a5d37c364dda97e2fdd5d3264737cd397e7dbdc7c"
+      },
+      {
+        "path": "packages/javascript/dist/schemas.d.ts",
+        "bytes": 14589,
+        "sha256": "5b2eebd4d66609c102828f9c23da5f400b3d320c66b28c6f20e9316783656352"
+      },
+      {
+        "path": "packages/javascript/dist/schemas.js",
+        "bytes": 241,
+        "sha256": "41a3498fed74d01b1d7d66cf3545d8ebfc07fff84f29ae096a2c119952bb5238"
+      },
+      {
+        "path": "packages/javascript/dist/shape-catalog.d.ts",
+        "bytes": 4600,
+        "sha256": "27442f3b79ae5979bc0d45450298174d3a352405bdecfcc6025b88a92a667999"
+      },
+      {
+        "path": "packages/javascript/dist/shape-catalog.js",
+        "bytes": 14977,
+        "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+      },
+      {
+        "path": "packages/javascript/dist/shape-engine-eager.js",
+        "bytes": 323,
+        "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+      },
+      {
+        "path": "packages/javascript/dist/shape-engine-lazy.js",
+        "bytes": 308,
+        "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+      },
+      {
+        "path": "packages/javascript/dist/shape-engine-module-BK7JNEUV.js",
+        "bytes": 308,
+        "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+      },
+      {
+        "path": "packages/javascript/dist/shape-geometry.d.ts",
+        "bytes": 7580,
+        "sha256": "9b2f42b5e25d44e99a9c1d3080b2b00fa6fb54761713a8aa2d9d5f41ae366bd5"
+      },
+      {
+        "path": "packages/javascript/dist/shape-geometry.js",
+        "bytes": 229,
+        "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+      },
+      {
+        "path": "packages/javascript/dist/source.d.ts",
+        "bytes": 16598,
+        "sha256": "de235e53f7d2476b7e7a48676e67a3e73c6a9c1dff338aea353383e79361b6cf"
+      },
+      {
+        "path": "packages/javascript/dist/source.js",
+        "bytes": 23245,
+        "sha256": "af9efbf46f53d27994424bdecb00b2087ce91e243dd8eef2f728da109df83678"
+      },
+      {
+        "path": "packages/javascript/dist/spec/openapi.yaml",
+        "bytes": 24151,
+        "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79"
+      },
+      {
+        "path": "packages/javascript/dist/spec/README.md",
+        "bytes": 5985,
+        "sha256": "3697401941147266a208924fc0418f8d86b87f9c9866e4a855c984be1d9841b2"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/engine-defaults.json",
+        "bytes": 1341,
+        "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/engine-vocabularies.json",
+        "bytes": 37175,
+        "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/font-policy.json",
+        "bytes": 153842,
+        "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/font-policy.schema.json",
+        "bytes": 10295,
+        "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/preset-geometry.json",
+        "bytes": 318701,
+        "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/preset-geometry.schema.json",
+        "bytes": 5271,
+        "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/symbol-font-encodings.json",
+        "bytes": 318426,
+        "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+      },
+      {
+        "path": "packages/javascript/dist/spec/reference/symbol-font-encodings.schema.json",
+        "bytes": 7451,
+        "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/audience.schema.json",
+        "bytes": 6240,
+        "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/catalog-index.schema.json",
+        "bytes": 4861,
+        "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/catalog-manifest.schema.json",
+        "bytes": 3787,
+        "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/chart-type.schema.json",
+        "bytes": 9736,
+        "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/color-scheme.schema.json",
+        "bytes": 7408,
+        "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/finding.schema.json",
+        "bytes": 10374,
+        "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/font-scheme.schema.json",
+        "bytes": 10211,
+        "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/icon-set.schema.json",
+        "bytes": 4896,
+        "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/language.schema.json",
+        "bytes": 7329,
+        "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/layout-preview-index.schema.json",
+        "bytes": 2563,
+        "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/layout.schema.json",
+        "bytes": 32341,
+        "sha256": "47084e6b0d622f690149ece4cfda9b809f0383ae37971c433a01fbfcef08daab"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/narrative.schema.json",
+        "bytes": 8651,
+        "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/opf.schema.json",
+        "bytes": 290696,
+        "sha256": "818278d68ee86bf02ebf04967d6470cf30bf26306e9a86a171ad4e5fd21913f3"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/purpose.schema.json",
+        "bytes": 4191,
+        "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/social-platform.schema.json",
+        "bytes": 5925,
+        "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/theme.schema.json",
+        "bytes": 10948,
+        "sha256": "7ccc6a5d6155ab5946f81464cee44c3cb51fef76be987c4bcc6ea0fb22befa0e"
+      },
+      {
+        "path": "packages/javascript/dist/spec/schemas/tone.schema.json",
+        "bytes": 5750,
+        "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+      },
+      {
+        "path": "packages/javascript/dist/spec-files.d.ts",
+        "bytes": 1629,
+        "sha256": "0d11b1d24d33398abf30a63aaf8f85bfaa172e71a16ff40e9aed9d7785ca3276"
+      },
+      {
+        "path": "packages/javascript/dist/spec-files.js",
+        "bytes": 115,
+        "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+      },
+      {
+        "path": "packages/javascript/dist/symbol-font-encodings.d.ts",
+        "bytes": 5692,
+        "sha256": "2b80f418cd25ce395a5d87a0d40aa40facf9607bf41123171553f19122fde207"
+      },
+      {
+        "path": "packages/javascript/dist/symbol-font-encodings.js",
+        "bytes": 424031,
+        "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+      },
+      {
+        "path": "packages/javascript/dist/types.d.ts",
+        "bytes": 76101,
+        "sha256": "8079eb2d4fb6f967141da9c11b6c59dcc3dffb476b40de205e94c7d2bf896cf9"
+      },
+      {
+        "path": "packages/javascript/dist/types.js",
+        "bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "path": "packages/javascript/dist/validation-types-BUiwvmcn.d.ts",
+        "bytes": 15510,
+        "sha256": "3b62f19e620dad3f9065e2c1d071b472e6e14d68ed7c9eec2a5b751f7f1a51dd"
+      },
+      {
+        "path": "packages/javascript/dist/validator.d.ts",
+        "bytes": 5119,
+        "sha256": "ceaff980232411d2d44768fbb8d441b4a9218cca85f4c54465626460354d6208"
+      },
+      {
+        "path": "packages/javascript/dist/validator.js",
+        "bytes": 368,
+        "sha256": "2d855b2e896e82bebc8984254993532581c5174c2ad9dd57cc0cf0e25c70433f"
+      },
+      {
+        "path": "packages/javascript/dist/yaml.d.ts",
+        "bytes": 6023,
+        "sha256": "9f61f71cb4a4b0095e3dd4b6aef9b8eb0c673a520fd09915229ca5387ffe93b3"
+      },
+      {
+        "path": "packages/javascript/dist/yaml.js",
+        "bytes": 390,
+        "sha256": "859b00ff312520d7cae3e16eeb536280f8b1771caff1c4df40b66ad078f85251"
+      },
+      {
+        "path": "packages/render/dist/annotations.js",
+        "bytes": 4097,
+        "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+      },
+      {
+        "path": "packages/render/dist/chart-options.js",
+        "bytes": 10447,
+        "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+      },
+      {
+        "path": "packages/render/dist/charts.js",
+        "bytes": 121430,
+        "sha256": "93caff20aa041241e1e34fab81202eae9abc72a126dbdfabb1978936509a1d0b"
+      },
+      {
+        "path": "packages/render/dist/color-fonts.js",
+        "bytes": 2435,
+        "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+      },
+      {
+        "path": "packages/render/dist/converters.js",
+        "bytes": 2679,
+        "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+      },
+      {
+        "path": "packages/render/dist/deck-runtime.js",
+        "bytes": 23518,
+        "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+      },
+      {
+        "path": "packages/render/dist/drawn-faces.js",
+        "bytes": 2865,
+        "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+      },
+      {
+        "path": "packages/render/dist/effects.js",
+        "bytes": 18498,
+        "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+      },
+      {
+        "path": "packages/render/dist/element-define.d.ts",
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      {
+        "path": "packages/render/dist/element-define.js",
+        "bytes": 314,
+        "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+      },
+      {
+        "path": "packages/render/dist/element.d.ts",
+        "bytes": 5683,
+        "sha256": "81cc9c65c1fe092c497b1debc86e00856a982b95ced661df4a8002e864c93153"
+      },
+      {
+        "path": "packages/render/dist/element.js",
+        "bytes": 38903,
+        "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+      },
+      {
+        "path": "packages/render/dist/export-browser.d.ts",
+        "bytes": 3787,
+        "sha256": "f8bfd3a7bc4e44eea75ed3cdc610b63e246472c931797f0b638264fc15f36c40"
+      },
+      {
+        "path": "packages/render/dist/export-browser.js",
+        "bytes": 15104,
+        "sha256": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8"
+      },
+      {
+        "path": "packages/render/dist/font-compatibility.js",
+        "bytes": 9574,
+        "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+      },
+      {
+        "path": "packages/render/dist/font-fstype.js",
+        "bytes": 3542,
+        "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+      },
+      {
+        "path": "packages/render/dist/font-manifest.js",
+        "bytes": 110526,
+        "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+      },
+      {
+        "path": "packages/render/dist/font-registry.js",
+        "bytes": 33455,
+        "sha256": "0402fa8c0373406153e284f1955f6f1a91f7aeeac420ef385792300d89e7aab0"
+      },
+      {
+        "path": "packages/render/dist/font-subset.js",
+        "bytes": 9956,
+        "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+      },
+      {
+        "path": "packages/render/dist/fonts-browser.d.ts",
+        "bytes": 14599,
+        "sha256": "57ec7eb44de4054cfba02409a7590c3a8b12517b127a93382b2d403fb45b10d0"
+      },
+      {
+        "path": "packages/render/dist/fonts-browser.js",
+        "bytes": 25371,
+        "sha256": "7c96c843ba87fe7db8943455b0d1dcbce8c35e54ad12f11dd6fd5142a20d4917"
+      },
+      {
+        "path": "packages/render/dist/fonts-node.d.ts",
+        "bytes": 8629,
+        "sha256": "2c80c2c811ce76a8a4922bd26c1b76272e3da4eadebbf00958f6a3c7180d5faa"
+      },
+      {
+        "path": "packages/render/dist/fonts-node.js",
+        "bytes": 24759,
+        "sha256": "9e99ae8aa21e5927bc9ede011fb3bb7dbbb43a049372b6f4d836c85c8e4ed049"
+      },
+      {
+        "path": "packages/render/dist/fonts.d.ts",
+        "bytes": 14914,
+        "sha256": "8b5d2cb3922e7f07f2b285cfae7806fe32299c467843ae2cc801746e2456889f"
+      },
+      {
+        "path": "packages/render/dist/fonts.js",
+        "bytes": 1409,
+        "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+      },
+      {
+        "path": "packages/render/dist/hb-shape.js",
+        "bytes": 7333,
+        "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+      },
+      {
+        "path": "packages/render/dist/index.d.ts",
+        "bytes": 22154,
+        "sha256": "5bb6c4f72b1110324fe9aeeaf745b244de8dbca36b8d7edd673fd601940593c6"
+      },
+      {
+        "path": "packages/render/dist/index.js",
+        "bytes": 237,
+        "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+      },
+      {
+        "path": "packages/render/dist/lazy-font-list.js",
+        "bytes": 4834,
+        "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+      },
+      {
+        "path": "packages/render/dist/lazy-fonts.js",
+        "bytes": 22706,
+        "sha256": "5ff9ca5aa9c50a2f464edd49e47b7b00f24015201ec69465a8336d4ef3e2080d"
+      },
+      {
+        "path": "packages/render/dist/measure-pictures-node.js",
+        "bytes": 1311,
+        "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+      },
+      {
+        "path": "packages/render/dist/measure-pictures.js",
+        "bytes": 10875,
+        "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+      },
+      {
+        "path": "packages/render/dist/node-resolve.js",
+        "bytes": 1796,
+        "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+      },
+      {
+        "path": "packages/render/dist/pdf-fonts.js",
+        "bytes": 16436,
+        "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+      },
+      {
+        "path": "packages/render/dist/pdf-style.js",
+        "bytes": 26153,
+        "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+      },
+      {
+        "path": "packages/render/dist/pdf-subset.js",
+        "bytes": 8232,
+        "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+      },
+      {
+        "path": "packages/render/dist/pdf-text.js",
+        "bytes": 17334,
+        "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+      },
+      {
+        "path": "packages/render/dist/pdf-vector.js",
+        "bytes": 72285,
+        "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+      },
+      {
+        "path": "packages/render/dist/pdf-writer.js",
+        "bytes": 6009,
+        "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+      },
+      {
+        "path": "packages/render/dist/pdf-xml.js",
+        "bytes": 3847,
+        "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+      },
+      {
+        "path": "packages/render/dist/pdf.d.ts",
+        "bytes": 112,
+        "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1"
+      },
+      {
+        "path": "packages/render/dist/pdf.js",
+        "bytes": 448,
+        "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+      },
+      {
+        "path": "packages/render/dist/player.d.ts",
+        "bytes": 5783,
+        "sha256": "e17b92ca0c538fcfc340c426086da5edf803e4e36032304f9f1bf0d3f993d6d3"
+      },
+      {
+        "path": "packages/render/dist/player.js",
+        "bytes": 42455,
+        "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+      },
+      {
+        "path": "packages/render/dist/png.d.ts",
+        "bytes": 84,
+        "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b"
+      },
+      {
+        "path": "packages/render/dist/png.js",
+        "bytes": 345,
+        "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+      },
+      {
+        "path": "packages/render/dist/preview-fonts-cli.js",
+        "bytes": 2219,
+        "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+      },
+      {
+        "path": "packages/render/dist/preview-fonts-node.d.ts",
+        "bytes": 1848,
+        "sha256": "8c4696cb164b1010a27e8a8e976c538ab19b4de088076d92683df30c92934524"
+      },
+      {
+        "path": "packages/render/dist/preview-fonts-node.js",
+        "bytes": 7956,
+        "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+      },
+      {
+        "path": "packages/render/dist/preview-fonts.d.ts",
+        "bytes": 1569,
+        "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572"
+      },
+      {
+        "path": "packages/render/dist/preview-fonts.js",
+        "bytes": 4587,
+        "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+      },
+      {
+        "path": "packages/render/dist/raster-images.js",
+        "bytes": 5367,
+        "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+      },
+      {
+        "path": "packages/render/dist/raster-text.js",
+        "bytes": 34635,
+        "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+      },
+      {
+        "path": "packages/render/dist/raster.js",
+        "bytes": 12058,
+        "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+      },
+      {
+        "path": "packages/render/dist/script-font-pack.js",
+        "bytes": 20650,
+        "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+      },
+      {
+        "path": "packages/render/dist/script-fonts.js",
+        "bytes": 51715,
+        "sha256": "f625910027dedbfacef97d86e138fc9eddbeacaf871b015789d4f87306610a46"
+      },
+      {
+        "path": "packages/render/dist/sha256.js",
+        "bytes": 3035,
+        "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+      },
+      {
+        "path": "packages/render/dist/shapes.js",
+        "bytes": 25718,
+        "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+      },
+      {
+        "path": "packages/render/dist/slide-sources.js",
+        "bytes": 2976,
+        "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+      },
+      {
+        "path": "packages/render/dist/svg-internals.js",
+        "bytes": 248,
+        "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+      },
+      {
+        "path": "packages/render/dist/svg.d.ts",
+        "bytes": 15054,
+        "sha256": "198cd8cea7f32d54d2a90ead4c66e87cd34fd9083f10cfe80cdccc9652c5b59e"
+      },
+      {
+        "path": "packages/render/dist/svg.js",
+        "bytes": 180648,
+        "sha256": "5ce6c0471e4c38c6aea60e3ea01ff470c2d8e32065b9847190b609b713e991f7"
+      },
+      {
+        "path": "packages/render/dist/symbol-fonts.js",
+        "bytes": 3986,
+        "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+      },
+      {
+        "path": "packages/render/dist/text-paths.js",
+        "bytes": 20837,
+        "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+      },
+      {
+        "path": "packages/gallery/dist/icon-sets/icon-set.d.ts",
+        "bytes": 1218,
+        "sha256": "701a5665b8da753eda82ba593b8384015c9b6991e7a87e1c5fd8387645da93c4"
+      },
+      {
+        "path": "packages/gallery/dist/icon-sets/lucide.js",
+        "bytes": 757487,
+        "sha256": "5d05b96f4f6b908a3a115e23b326ed54489a39dec627680e4c3b9884d0d5bbd1"
+      },
+      {
+        "path": "packages/gallery/dist/icon-sets/tabler.js",
+        "bytes": 1700906,
+        "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+      },
+      {
+        "path": "packages/gallery/dist/icon-sets.d.ts",
+        "bytes": 1036,
+        "sha256": "21f7c2185eabb1cd60282267fedc309fcc87e14739192ab31b28e72473013070"
+      },
+      {
+        "path": "packages/gallery/dist/icon-sets.js",
+        "bytes": 645,
+        "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+      },
+      {
+        "path": "packages/gallery/dist/index.d.ts",
+        "bytes": 4208,
+        "sha256": "0351071f62b30d8db227f0e67bb6e3d1d8d5e72dae7429723455c7fc7c8dfce7"
+      },
+      {
+        "path": "packages/gallery/dist/index.js",
+        "bytes": 345133,
+        "sha256": "c88a18675185023b55f67271a5331854cd2b8b03141a3966de00b5222cc795e4"
+      },
+      {
+        "path": "packages/gallery/dist/previews.d.ts",
+        "bytes": 1692,
+        "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364"
+      },
+      {
+        "path": "packages/gallery/dist/previews.js",
+        "bytes": 190931,
+        "sha256": "3d5b36fcddb1196de0a5966e47a9e143ba4a1d96b873ea61c4c66d418529efb8"
+      },
+      {
+        "path": "packages/pptx/dist/annotation-export.js",
+        "bytes": 7203,
+        "sha256": "f45f743368b87e4c5f6f4b3c76d3f6cf3ed3fd2f78be13fce3c69c68b79e641e"
+      },
+      {
+        "path": "packages/pptx/dist/annotation-provenance.js",
+        "bytes": 17692,
+        "sha256": "57a2a1699755c3d46ca78ffa42daa6f000feaf9f3b7b67c267303f3cb1f77a83"
+      },
+      {
+        "path": "packages/pptx/dist/background-import.js",
+        "bytes": 11727,
+        "sha256": "8903e0408961bccb16db12d4395748b8c2c06b3d708061f92b9e05c67a172af0"
+      },
+      {
+        "path": "packages/pptx/dist/background.js",
+        "bytes": 16997,
+        "sha256": "e34e5bbc125be779efbe012f41290432f107d29b2635e2e6fd1b0b6bbcb83000"
+      },
+      {
+        "path": "packages/pptx/dist/body-text-import.js",
+        "bytes": 12335,
+        "sha256": "56eb625337e06bc39829fbb6c86421d6753ad34ca0b9bd4ed324c6b7ebf5f313"
+      },
+      {
+        "path": "packages/pptx/dist/card-provenance.js",
+        "bytes": 3588,
+        "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb"
+      },
+      {
+        "path": "packages/pptx/dist/chart-data.js",
+        "bytes": 9643,
+        "sha256": "0505a4df3d90f8221ccc5efc294c0095efd2dfc5d4c3a3eda8eccd77b5ab6f8c"
+      },
+      {
+        "path": "packages/pptx/dist/chart-direct-labels.js",
+        "bytes": 8784,
+        "sha256": "06f3341477aa19a6119156b2827dd27301973736303947feead00fdc1725c4bd"
+      },
+      {
+        "path": "packages/pptx/dist/chart-fallback.js",
+        "bytes": 7749,
+        "sha256": "7656f61cbd2163c83da809ed888e0aa2875e9b1ccc2cef9582d34ed6d3226afd"
+      },
+      {
+        "path": "packages/pptx/dist/chart-highlight.js",
+        "bytes": 8080,
+        "sha256": "9a6b258ba94815dd3ff997101055db18d954c4c063204d2f58769679fe8018f2"
+      },
+      {
+        "path": "packages/pptx/dist/chart-layer.js",
+        "bytes": 14439,
+        "sha256": "ec41409c914a95c4d5e7ddd6d0cdcc1703c218dff470cba5e515c0644c1fd51f"
+      },
+      {
+        "path": "packages/pptx/dist/chart-marks.js",
+        "bytes": 10901,
+        "sha256": "ef03bd84c6f2c1206d85c754b9e8c0af240a2b1b308f7d5f20226a46ed0c1d29"
+      },
+      {
+        "path": "packages/pptx/dist/chart-options.js",
+        "bytes": 21181,
+        "sha256": "00db5b585cc2733938bec6c4145a0e2ee58cefbb1aa27e6a746a860c626f1b50"
+      },
+      {
+        "path": "packages/pptx/dist/chart-order.js",
+        "bytes": 4252,
+        "sha256": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543"
+      },
+      {
+        "path": "packages/pptx/dist/chart-scheme-colors.js",
+        "bytes": 4422,
+        "sha256": "3057bff3044a8260e68c4428ee8b7131993aec5845d84d999099eab2ea801bce"
+      },
+      {
+        "path": "packages/pptx/dist/chart-types.js",
+        "bytes": 11302,
+        "sha256": "e1d897724933a7659bd3e4872e7e7f218b5397b46f4b488d956ca520c921562b"
+      },
+      {
+        "path": "packages/pptx/dist/chart-workbook.js",
+        "bytes": 13344,
+        "sha256": "c0b742b78ea7eac0b1cf140693d80e95ee80548a94f5826d4ebae002d3a4247b"
+      },
+      {
+        "path": "packages/pptx/dist/chartex.js",
+        "bytes": 41440,
+        "sha256": "3afcc3a81ba1418cd42955301711d6b6e5075085c32685f4a8e1bc47d67f12fd"
+      },
+      {
+        "path": "packages/pptx/dist/code-provenance.js",
+        "bytes": 18969,
+        "sha256": "81638a0aa1fa13469bca56a102920e2036707668bb6a453284f209f9a328021c"
+      },
+      {
+        "path": "packages/pptx/dist/color-ref.js",
+        "bytes": 4265,
+        "sha256": "390e828de8c7f84d988f29f78e35eab380930178b851b94e46e8f5dd9e6b6ef4"
+      },
+      {
+        "path": "packages/pptx/dist/connectors.js",
+        "bytes": 6676,
+        "sha256": "84794a467d4b5c490f3da48c10a0100cebfb02a2b8e8cac944c6bd4de756a19e"
+      },
+      {
+        "path": "packages/pptx/dist/content-topology.js",
+        "bytes": 42664,
+        "sha256": "5db44e8d426358411d6c6707cbbc1c16250a5adf590a6fc45983d5c1e40fc1f3"
+      },
+      {
+        "path": "packages/pptx/dist/data-provenance.js",
+        "bytes": 38084,
+        "sha256": "57714800c8c70faea594f816cfe953d46b8c789404a23924923804d174522cef"
+      },
+      {
+        "path": "packages/pptx/dist/diagram-provenance.js",
+        "bytes": 13507,
+        "sha256": "6aa4d96e2e3cbedf9013f37cb292e02802b2094d2b8ad099c6e66df15c139cf4"
+      },
+      {
+        "path": "packages/pptx/dist/diagram-shapes.js",
+        "bytes": 64758,
+        "sha256": "0549d3bcdc0bd20b5eeff9727fd8a0ecf207e48be18c5fa7f62dafdd9fca739d"
+      },
+      {
+        "path": "packages/pptx/dist/document-provenance.js",
+        "bytes": 97326,
+        "sha256": "fee8c409b00c0efd8aa28da7f4d40b0d6d0740a8d4a8d0f0eafce0fa0d3da13f"
+      },
+      {
+        "path": "packages/pptx/dist/effects.js",
+        "bytes": 8821,
+        "sha256": "81daadab6a098794f36befead6a741dd9b7e9b1917a5d716459a00c7fbae489d"
+      },
+      {
+        "path": "packages/pptx/dist/errors.js",
+        "bytes": 372,
+        "sha256": "a21814578efacd0f8d77f376ebc5414d4f5f686c3257ed4f516b7f2d6322af67"
+      },
+      {
+        "path": "packages/pptx/dist/font-weights.js",
+        "bytes": 3259,
+        "sha256": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e"
+      },
+      {
+        "path": "packages/pptx/dist/format-check.js",
+        "bytes": 594,
+        "sha256": "837d8668c11adc531a717d3499448e7cbb128f678e1116e745a02532ad4e4edb"
+      },
+      {
+        "path": "packages/pptx/dist/frame-alt.js",
+        "bytes": 3846,
+        "sha256": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100"
+      },
+      {
+        "path": "packages/pptx/dist/furniture-fields.js",
+        "bytes": 17254,
+        "sha256": "0c2ecb783fe74bd10400f1cd6ee6720bec22f5c381c3fdec35585afdf0670121"
+      },
+      {
+        "path": "packages/pptx/dist/furniture-provenance.js",
+        "bytes": 43961,
+        "sha256": "e456f1d121411e90949a5e43182d9c73f73c7b1d83690d938e6afa66c79d3a8c"
+      },
+      {
+        "path": "packages/pptx/dist/heading-provenance.js",
+        "bytes": 4289,
+        "sha256": "2ffc3de9d96b5e9b2698b2537eadb444c6623c3357646135389a15326b90fe45"
+      },
+      {
+        "path": "packages/pptx/dist/icons.js",
+        "bytes": 8451,
+        "sha256": "39861f6fc801b12344078fd603d6f0c7c0ad4737c9eda38dbc79b0d794df4ba5"
+      },
+      {
+        "path": "packages/pptx/dist/image-callout-provenance.js",
+        "bytes": 5204,
+        "sha256": "e861652d2073e2ef0460d8c5d26860dbaa56eab76a43899061b6581bdaf419ab"
+      },
+      {
+        "path": "packages/pptx/dist/image-fallback-browser.js",
+        "bytes": 2338,
+        "sha256": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4"
+      },
+      {
+        "path": "packages/pptx/dist/image-fallback-node.js",
+        "bytes": 3044,
+        "sha256": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0"
+      },
+      {
+        "path": "packages/pptx/dist/image-geometry.js",
+        "bytes": 10359,
+        "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e"
+      },
+      {
+        "path": "packages/pptx/dist/image-import.js",
+        "bytes": 5776,
+        "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+      },
+      {
+        "path": "packages/pptx/dist/image-provenance.js",
+        "bytes": 27294,
+        "sha256": "5b0aea8401e85f3f46660f5b44ee4d5d4529827c46e124e9b61f777edbc32c77"
+      },
+      {
+        "path": "packages/pptx/dist/import-signals.js",
+        "bytes": 44035,
+        "sha256": "efd03f841eedf52fc0c10f9c3e9fe9e0a3caaff2fef070d1feb8336993b15334"
+      },
+      {
+        "path": "packages/pptx/dist/index.d.ts",
+        "bytes": 44051,
+        "sha256": "a345d1585c73c215c918a86bb13c109fb8db99cdf51707769185eb6d031337ca"
+      },
+      {
+        "path": "packages/pptx/dist/index.js",
+        "bytes": 469997,
+        "sha256": "e859ea07e176842c7db8488da746d2ffb42b8d9ce651f6b9dac20e857303e35d"
+      },
+      {
+        "path": "packages/pptx/dist/input-safety.js",
+        "bytes": 7271,
+        "sha256": "d57d4b01582cbb3c3bb4180e880ad66a1bd0f4e1730ef49acaad76c47f265c62"
+      },
+      {
+        "path": "packages/pptx/dist/logo-provenance.js",
+        "bytes": 11171,
+        "sha256": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac"
+      },
+      {
+        "path": "packages/pptx/dist/master-furniture.js",
+        "bytes": 24218,
+        "sha256": "874762541dcfe6c762dfc8f79d30ed01cf94aadbf31627509bf46cc9279654ed"
+      },
+      {
+        "path": "packages/pptx/dist/master-themes.js",
+        "bytes": 10369,
+        "sha256": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426"
+      },
+      {
+        "path": "packages/pptx/dist/media-dedupe.js",
+        "bytes": 2702,
+        "sha256": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef"
+      },
+      {
+        "path": "packages/pptx/dist/media-provenance.js",
+        "bytes": 16905,
+        "sha256": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7"
+      },
+      {
+        "path": "packages/pptx/dist/metric-provenance.js",
+        "bytes": 8026,
+        "sha256": "648d16a9e86e5e51b9c3a71e52e6aaab7cf8f66e5e4c9200354298e63cbc1df3"
+      },
+      {
+        "path": "packages/pptx/dist/native-body.js",
+        "bytes": 23592,
+        "sha256": "4e6975110fd201b39d3fd9a8ee4ff0e8b1941781d9b2b109ff7f65d3b64139d7"
+      },
+      {
+        "path": "packages/pptx/dist/native-footer-classification.js",
+        "bytes": 8151,
+        "sha256": "ee784048e83aadbf6771a434b1adc5bafb1b1a1f0c55a51c567419e9e36b4223"
+      },
+      {
+        "path": "packages/pptx/dist/native-furniture.js",
+        "bytes": 25335,
+        "sha256": "476dcc15cc141b3bee3708cd73f935bd82faeef9bdc3e3281866a47dffe8f1f6"
+      },
+      {
+        "path": "packages/pptx/dist/native-text-style.js",
+        "bytes": 5869,
+        "sha256": "ca7b23474307ab9f41c806badaf4c1b80c5cb8d285d7e9f3da2799befa4005ef"
+      },
+      {
+        "path": "packages/pptx/dist/numbered-list.js",
+        "bytes": 7284,
+        "sha256": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557"
+      },
+      {
+        "path": "packages/pptx/dist/package-fonts.js",
+        "bytes": 9791,
+        "sha256": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb"
+      },
+      {
+        "path": "packages/pptx/dist/picture-slides.js",
+        "bytes": 8357,
+        "sha256": "765dffcc2ba30ed2bbe5b765c49ed3f5424fe976f62f610342370c0d3cecbb4d"
+      },
+      {
+        "path": "packages/pptx/dist/quote-provenance.js",
+        "bytes": 14384,
+        "sha256": "77cf365fff84fcd44b8a7c2e334ee2b017bf4a192470ec47a52cef1ecf840815"
+      },
+      {
+        "path": "packages/pptx/dist/rich-heading.js",
+        "bytes": 7765,
+        "sha256": "771be6a28469f362c1f9ad8e5eabf1ca79b12939ca2505c1f2bd3564c3b8425d"
+      },
+      {
+        "path": "packages/pptx/dist/run-colors.js",
+        "bytes": 8828,
+        "sha256": "766277ef5d69c57a364816471c6feb938575ab053231d3b093943f67bd245a40"
+      },
+      {
+        "path": "packages/pptx/dist/safe-typefaces.js",
+        "bytes": 9586,
+        "sha256": "f58516973dd92fec0654c1825cac503c6236519d57f0adea71b39cd3385b581f"
+      },
+      {
+        "path": "packages/pptx/dist/script-fonts.js",
+        "bytes": 38707,
+        "sha256": "4b27accea02167d9dad93cada0ac6d60e01965ff41f2f30fe1cd8dfb13a79481"
+      },
+      {
+        "path": "packages/pptx/dist/sections.js",
+        "bytes": 6466,
+        "sha256": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2"
+      },
+      {
+        "path": "packages/pptx/dist/shape-blocks.js",
+        "bytes": 19034,
+        "sha256": "c1e90a2379b3a8397240f9ffee419b608c468ba76f8592ecca1e7309de41112f"
+      },
+      {
+        "path": "packages/pptx/dist/shape-import.js",
+        "bytes": 49621,
+        "sha256": "8890d31de02f4b7bcaf6110a0e1845c2e8ad830d241f0955c81223fd8237d961"
+      },
+      {
+        "path": "packages/pptx/dist/shape-restore.js",
+        "bytes": 17761,
+        "sha256": "0bc350ff4d5305a5e12ecfbeadf4e753f155f67fd529f7d2a9775994c3f9d9ba"
+      },
+      {
+        "path": "packages/pptx/dist/smart-art-import.js",
+        "bytes": 23105,
+        "sha256": "92a0e3c5c76a773f71785db37152a25e8eac70dd49f59b79238b90f01f0b1741"
+      },
+      {
+        "path": "packages/pptx/dist/smart-art-layouts.js",
+        "bytes": 11700,
+        "sha256": "d6450e4e610a1b91793e78274ca13cf2fa0064bb8b7c11fe9aef1ae28774c722"
+      },
+      {
+        "path": "packages/pptx/dist/smart-art.js",
+        "bytes": 74570,
+        "sha256": "ab9f4561d17b9eb44dab62811ef9ca7e4b4590ee4517651fdde708649c0874cb"
+      },
+      {
+        "path": "packages/pptx/dist/source-run-styles.js",
+        "bytes": 4535,
+        "sha256": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c"
+      },
+      {
+        "path": "packages/pptx/dist/step-badges.js",
+        "bytes": 10880,
+        "sha256": "c7a438735fc8502f80352d55a0b7683415ce4cca1dc44fc0c0fa47ee6e4f7a03"
+      },
+      {
+        "path": "packages/pptx/dist/svg-image.js",
+        "bytes": 19986,
+        "sha256": "f4816024704dd1059bccdce42c8f372588f2c81066a9856c6cb410f70f83b1ea"
+      },
+      {
+        "path": "packages/pptx/dist/table-border-import.js",
+        "bytes": 3629,
+        "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+      },
+      {
+        "path": "packages/pptx/dist/table-cell-import.js",
+        "bytes": 10232,
+        "sha256": "539bfc262fb73fcef2c339c59e3e53ec8d2d4e6358dbf030ea4126ab3bf84c55"
+      },
+      {
+        "path": "packages/pptx/dist/table-import.js",
+        "bytes": 10235,
+        "sha256": "21b64d516c432f15fe91bc04c82b2271e886262d49d942d1bd702ede1b40fd91"
+      },
+      {
+        "path": "packages/pptx/dist/template-layouts.js",
+        "bytes": 45399,
+        "sha256": "6608e59125d57d303292ddd0bffbb62a416823ddd02238b7fccc37bbd8209458"
+      },
+      {
+        "path": "packages/pptx/dist/text-provenance.js",
+        "bytes": 4210,
+        "sha256": "c1b506b10b8719c5edbc82e3b4b8736114fca2ecacd5a68692c310e5a1438522"
+      },
+      {
+        "path": "packages/pptx/dist/theme-colors.js",
+        "bytes": 24410,
+        "sha256": "c23e3675acddabad7d598648d409177f724eeeb749a9eced9ccadbbc6229e0c2"
+      },
+      {
+        "path": "packages/pptx/dist/timeline-provenance.js",
+        "bytes": 9927,
+        "sha256": "8fb4ba812eda4ff70351991bf820c7ddbd18994a1139dbab8b61ac171970752b"
+      },
+      {
+        "path": "packages/pptx/dist/title-rule.js",
+        "bytes": 2703,
+        "sha256": "2d64bb95bafaf56704e98113b7d02363fe0242fe1fed8e5878a8c4476b5cc7e2"
+      },
+      {
+        "path": "packages/pptx/dist/typeface-inventory.js",
+        "bytes": 15017,
+        "sha256": "38b9e969e62c2483b33b9b0cf90d48d1f8b16b96948d8271e4c35c10efdc5a9d"
+      },
+      {
+        "path": "packages/pptx/dist/vendor-compat.js",
+        "bytes": 10914,
+        "sha256": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433"
+      },
+      {
+        "path": "packages/pptx/dist/watermark-provenance.js",
+        "bytes": 13331,
+        "sha256": "15ff4d314c215b196be68fad84600e8accf740ec6aa8e93cfd2b5fddec031f1f"
+      },
+      {
+        "path": "packages/cli/dist/index.js",
+        "bytes": 358735,
+        "sha256": "30939593de895ab6ac0400611d807e2e359fc338f635f14bd8be4cd898861f98"
+      },
+      {
+        "path": "packages/cli/dist/index.js.map",
+        "bytes": 510409,
+        "sha256": "dd0e7e595617c7ce1061696f4d9aa31ad8d282811efe6d52f4797c7919a41ff0"
+      }
+    ]
+  },
+  "fontCleanup": "Both exact owned profiles still ready during qualification; cleanup remains owed using frozen original helpers."
+}

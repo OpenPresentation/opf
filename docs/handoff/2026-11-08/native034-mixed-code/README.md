@@ -1,0 +1,7 @@
+# Mixed-code native acceptance
+
+Evidence only; never merge. All seven exact one-slide inputs pass actual owned read-only Open/SaveCopyAs/read-only reopen/cleanup. All95 native shapes retain exact geometry, text and captured fonts; all seven canonical input/saved imports and all three phaseimages per case match, with zero shrink tags. Root reviewed every complete preview/native pair. Four dynamic cases grow code without changing prose/content/families; three authored layout controls are unchanged. Final combined source513 reproduces all14 original CLI outputs byte-for-byte using the original fixed date/options.
+
+Two exact OFL Roboto Mono0.4.2 faces were separately installed/checked using reviewed frozen helper b1dfba; existing seven-face Roboto remained intact. Both owned profiles still require exact-helper cleanup after qualification. Original pre-Office missing-parent failure and immediate post-Quit process guard refusal remain literal; the transient owned process exited without intervention, fresh zero-process checks preceded each later case. No Office kill/owner-instance attach.
+
+Native-save import reports code-import-reflow for each case and retains three unresolved code-layout references. Canonical equality does not claim syntax/style/native-position reconstruction. Full source, suite, fonts/license inputs, real process preflights, both failed attempts, all successful rawreports/PNGs/savecopies/imports/CLI outputs and runtime digests are losslessly retained.
