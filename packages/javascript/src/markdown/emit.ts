@@ -147,15 +147,15 @@ function timelineLines(timeline: unknown): string[] | undefined {
   return fenced(info, body);
 }
 
-// A diagram is a ```mermaid fence, longer than any run of backticks in its source, with its alt in the info string. An alt with a
-// backtick would end a backtick fence's info string, so such a diagram is embedded instead.
+// A diagram is a ```mermaid, ```dot or ```plantuml fence (its syntax), longer than any run of backticks in its source, with its alt in the info
+// string. An alt with a backtick would end a backtick fence's info string, so such a diagram is embedded instead.
 function diagramLines(diagram: unknown): string[] | undefined {
   const value = typeof diagram === "string" ? { source: diagram } : (diagram as Obj);
-  const source = value.source as string, alt = value.alt as string | undefined;
+  const source = value.source as string, alt = value.alt as string | undefined, syntax = value.syntax === "dot" || value.syntax === "plantuml" ? value.syntax : "mermaid";
   if (alt !== undefined && (alt.includes("`") || /[\r\n]/.test(alt))) return undefined;
   const longest = Math.max(2, ...[...source.matchAll(/`+/g)].map((match) => match[0].length));
   const fence = "`".repeat(longest + 1);
-  return [`${fence}mermaid${alt === undefined ? "" : ` alt=${JSON.stringify(alt)}`}`, ...source.split("\n"), fence];
+  return [`${fence}${syntax}${alt === undefined ? "" : ` alt=${JSON.stringify(alt)}`}`, ...source.split("\n"), fence];
 }
 
 function metricLines(metric: unknown): string[] | undefined {
@@ -217,7 +217,7 @@ function nativeLines(key: string, canon: unknown, marker: string): string[] | un
     case "code": {
       const code = typeof canon === "string" ? { source: canon } : (canon as Obj);
       const language = code.language as string | undefined;
-      if (language !== undefined && (!/^[A-Za-z0-9_+#.-]+$/.test(language) || ["chart", "metric", "timeline", "mermaid", "opf-slide", "opf-block"].includes(language))) return undefined;
+      if (language !== undefined && (!/^[A-Za-z0-9_+#.-]+$/.test(language) || ["chart", "metric", "timeline", "mermaid", "dot", "plantuml", "opf-slide", "opf-block"].includes(language))) return undefined;
       return fenceCode(code.source as string, language, code.filename as string | undefined);
     }
     case "metric":

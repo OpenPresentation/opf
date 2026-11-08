@@ -139,7 +139,7 @@ export interface ToPptxOptions {
   /**
    * SH-07: how diagrams are written. "shapes" (default) writes a diagram of a family in core's DIAGRAM_SHAPE_FAMILIES as one group of
    * native shapes, connectors and text built from the preview's own drawing (pele's laid-out geometry), with `OPF_DIAGRAM_V1` on the group
-   * so import reads the Mermaid source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
+   * so import reads the Mermaid, DOT or PlantUML source back; any other diagram (a family not compared yet, right-to-left text, a part with no native
    * form) stays a picture and reports `diagram-shapes-unavailable` (info). "picture" writes every diagram as one native SVG picture over
    * its PNG fallback, the default of earlier releases.
    */

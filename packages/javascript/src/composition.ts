@@ -89,6 +89,9 @@ import {ICON_VIEWBOX,documentIcons,iconColors,parseIconReference,placeIconComman
 export {ICON_CHIP_TINT,ICON_MIN_CONTRAST,ICON_VIEWBOX,documentIcons,embedIcons,ensureIcons,iconColors,iconFromSvg,iconPathCommands,iconPathData,iconsPending,nearIconNames,parseIconReference,placeIconCommands,resolveIcon,type IconCommand,type IconOptions,type IconPaint,type IconPart,type IconReference,type IconResolution,type IconSetIcon,type IconSetLoader,type IconSetRecord,type ResolvedIcon} from './icons.js';
 export {DIAGRAM_BORDER_MIN_CONTRAST,DIAGRAM_LINE_MIN_CONTRAST,DIAGRAM_MAX_EDGES,DIAGRAM_SHAPE_FAMILIES,DIAGRAM_SECONDARY_FLOOR,DIAGRAM_SOURCE_LIMIT,DIAGRAM_SURFACE_ALT_MIX,DIAGRAM_SURFACE_MIX,DIAGRAM_SYNTAXES,checkDiagram,diagramPalette,diagramPayload,diagramsPending,ensureDiagrams,layoutDiagram,paintDiagram,paintDiagramGroup} from './diagram.js';
 export type {ComposedDiagram,DiagramIssue,DiagramLayoutOptions,DiagramMeasure,DiagramPalette,DiagramPaletteInput,DiagramPayload,DiagramSyntax} from './diagram.js';
+export {DOT_LAYOUT_ENGINES,DOT_SHAPES,dotToMermaid,type DotIssue,type DotTranslation} from './diagram-dot.js';
+export {PLANTUML_DIAGRAMS,plantumlToMermaid} from './diagram.js';
+export type {PlantumlDiagram,PlantumlIssue,PlantumlTranslation} from './diagram-plantuml.js';
 export type {AnnotatedRun,AnnotationFitter,AnnotationLayoutOptions,Caption,CaptionAlignment,CaptionObject,CaptionPosition,CaptionSettings,CitationMarker,CitationNote,ComposedCaption,ComposedFootnoteEntry,ComposedFootnotes,DeckCitations,FootnoteLayoutOptions,Reference,ReferencesSlideOptions,RichText,SlideCitations} from './annotations.js';
 /** Portable layout geometry. No fonts, DOM, renderer, or network dependencies. */
 export interface Composition {
