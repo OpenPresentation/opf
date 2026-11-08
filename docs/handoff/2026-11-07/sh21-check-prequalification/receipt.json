@@ -1,0 +1,362 @@
+{
+  "sourceHead": "45e4017d176ae401f4b49f92a11e9937597917b3",
+  "node": "v24.20.0",
+  "command": "pnpm check:changed",
+  "exit": 1,
+  "seconds": 450,
+  "passed": 28,
+  "failed": 11,
+  "steps": [
+    {
+      "step": "build",
+      "status": "passed",
+      "seconds": 9.6,
+      "log": "build.log",
+      "originalSha256": "8c4fcaaaeff939427cabb2e634974db2a0d122f8ef2113eca53dde2d1bdf3ebb",
+      "bytes": 14579,
+      "compressedSha256": "b65a13e94d0fc3d7434e7d47ae003a4d4b37759207fbc835924da1a4bc070800"
+    },
+    {
+      "step": "biome",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "biome.log",
+      "originalSha256": "85abccfdc47b4d9960fc7a943040502c94ba295ec78fcd71e390a311fbcfcb31",
+      "bytes": 48156,
+      "compressedSha256": "c518527a54cd3537caa373508710deec96594925ab6cb149bdf72bdef1348c64"
+    },
+    {
+      "step": "pnpm run check:catalog",
+      "status": "passed",
+      "seconds": 2.7,
+      "log": "pnpm_run_check_catalog.log",
+      "originalSha256": "7d05d159a1d2a517ff2db59e8a6c28da2cf037493756374db4107166283d6eaf",
+      "bytes": 1131,
+      "compressedSha256": "ae375b2b62453162a1c93f9ab3c3f8caf6a18bfdbecd71a9b55843a0b1f6093d"
+    },
+    {
+      "step": "pnpm run check:browser-safe",
+      "status": "passed",
+      "seconds": 3.7,
+      "log": "pnpm_run_check_browser-safe.log",
+      "originalSha256": "a64d9f90508044618460ad53406ff6b734cf4ba858ca0811597aa32d23f7b0c4",
+      "bytes": 1148,
+      "compressedSha256": "a9748ac9cdbf50ec5a204f760f12ff3ec13a337d7f53afa2ecf899f1c73ce6cd"
+    },
+    {
+      "step": "pnpm run check:changes",
+      "status": "passed",
+      "seconds": 0.8,
+      "log": "pnpm_run_check_changes.log",
+      "originalSha256": "c771f220ff6f71df8d339b79cd0bf5f1c1e9c0dd2b1fcb53cac04f23c2f36a13",
+      "bytes": 2637,
+      "compressedSha256": "df0d7dc922b1b83c532bfd6031bec60df8d8bdc31fe24cc3c91fa031e6a3c4b8"
+    },
+    {
+      "step": "pnpm run check:catalog-free",
+      "status": "failed",
+      "seconds": 2.4,
+      "log": "pnpm_run_check_catalog-free.log",
+      "originalSha256": "91af434eeed037d3249571bd0c5e7b33f70f53bbe6b9bb263053e2ba4bed7b12",
+      "bytes": 310,
+      "compressedSha256": "9578f72a9d18a8fedcb183cb7428d5800ac8983e1a51dbcea0b890f80e3c9576"
+    },
+    {
+      "step": "pnpm run check:ci-workflows",
+      "status": "passed",
+      "seconds": 0.6,
+      "log": "pnpm_run_check_ci-workflows.log",
+      "originalSha256": "b8b05e10a952c6b46265df15e9bd503eb815416a7d11a4180a75b29bf71ea650",
+      "bytes": 8694,
+      "compressedSha256": "7dcd87460df163cf0d2a203ec38809f19a5a8edb643f832dbbdfdb5ee2798298"
+    },
+    {
+      "step": "pnpm run check:diagram-doc-images",
+      "status": "passed",
+      "seconds": 2.1,
+      "log": "pnpm_run_check_diagram-doc-images.log",
+      "originalSha256": "ea04459014a92acde0a9311d8f7fd5c070b18e756275d6a10bd0707866fc7710",
+      "bytes": 170,
+      "compressedSha256": "b696f8a46ec237b0c0b4a3288ef418f671d4f996ce3c14fbd31894637f61a7ed"
+    },
+    {
+      "step": "pnpm run check:engines-range",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "pnpm_run_check_engines-range.log",
+      "originalSha256": "552eae6d7238abeddb93a002171a302f5ecced2ddaae3eb9d0c1c53749c4ad32",
+      "bytes": 843,
+      "compressedSha256": "5ade1442d7223df4f9500d77307d5f6a1f0e82b1ca45fa1db3a7951301eb5921"
+    },
+    {
+      "step": "pnpm run check:ci-scope",
+      "status": "passed",
+      "seconds": 10.7,
+      "log": "pnpm_run_check_ci-scope.log",
+      "originalSha256": "dc9ccba2af38c80ffeb94abd11d0c867be50e301952686669311051e669a517d",
+      "bytes": 3337,
+      "compressedSha256": "549776f8b92c00956b7efbbd9a94b26c5758b30127ce8437d07981b19bdedcb9"
+    },
+    {
+      "step": "pnpm run check:examples",
+      "status": "passed",
+      "seconds": 43.5,
+      "log": "pnpm_run_check_examples.log",
+      "originalSha256": "8f4593733c0348e916bce6bd9d88c461b4b7bfebb40f99c909293c54f6ae37c8",
+      "bytes": 512,
+      "compressedSha256": "35e782f47c5933a7de1cda51790556684d96c68b10e629aae85771569641b7ea"
+    },
+    {
+      "step": "pnpm run check:font-hotlinks",
+      "status": "passed",
+      "seconds": 8.3,
+      "log": "pnpm_run_check_font-hotlinks.log",
+      "originalSha256": "69c7f42374486b88c3fd4ddd716ddd8b3050a36ec944bc2967aa34ccc2e2dedd",
+      "bytes": 884,
+      "compressedSha256": "69abdb0597ff99cfbb01909eede30293adb560112c4d3aaf17a5333c3336bf4b"
+    },
+    {
+      "step": "pnpm run check:font-tracker",
+      "status": "failed",
+      "seconds": 0.7,
+      "log": "pnpm_run_check_font-tracker.log",
+      "originalSha256": "daf5f9038f0989f9dfe1f7a859e0e63e7375ef991515ce515dfc88aa63e0a649",
+      "bytes": 27305,
+      "compressedSha256": "a4aa11652d8ae0c9e494fb674faef28757c842ee6302244673662c4511352acf"
+    },
+    {
+      "step": "pnpm run check:gallery-tracker",
+      "status": "failed",
+      "seconds": 0.6,
+      "log": "pnpm_run_check_gallery-tracker.log",
+      "originalSha256": "d6d0dddf6771cc0b10aa5d3da887465944e5d4b2812cfd6ee40ff09c416d91b0",
+      "bytes": 12360,
+      "compressedSha256": "68d13a5e4bda1bac6038e2a872b11392f0c4d8f3e1be3e0fcc2b8f258f60805a"
+    },
+    {
+      "step": "pnpm run check:libreoffice",
+      "status": "passed",
+      "seconds": 0.5,
+      "log": "pnpm_run_check_libreoffice.log",
+      "originalSha256": "0ae58df44327f4dea3681056c11572cef1c362b102359d2e5137dfc624b6ff85",
+      "bytes": 1407,
+      "compressedSha256": "67891a68894bd16fee6f8e880d3fff574f2c5120f232afd5a7c107b68d60f042"
+    },
+    {
+      "step": "pnpm run check:native-acceptance",
+      "status": "failed",
+      "seconds": 3.1,
+      "log": "pnpm_run_check_native-acceptance.log",
+      "originalSha256": "fb8c09a868f7ef3e09810d7c306bc3bb26662c1d900cde40287135334d98a823",
+      "bytes": 8663,
+      "compressedSha256": "4d230511be5c99a7f2faca3864d20405293d135fe8c087063c961edc709ae94c"
+    },
+    {
+      "step": "pnpm run check:palette",
+      "status": "passed",
+      "seconds": 0.6,
+      "log": "pnpm_run_check_palette.log",
+      "originalSha256": "70b896d47abde393d552476ab5c65ca1a75580bf1fd106a200f272915fda72ed",
+      "bytes": 1393,
+      "compressedSha256": "d55ec0d3920bb1d30df16fce55b022a8968f734c1c38ccd119664ff148e5bd66"
+    },
+    {
+      "step": "pnpm run check:playwright-pin",
+      "status": "passed",
+      "seconds": 0.6,
+      "log": "pnpm_run_check_playwright-pin.log",
+      "originalSha256": "1a7a8ba5d7c27a6f93f4331f44c035bbc845f1b06c76266c5acb607c5d7c6b7f",
+      "bytes": 777,
+      "compressedSha256": "64f7d9206b6c9c9f9cfdc5b34a68534b784824b90bbeba19b0651eb8c3ba079c"
+    },
+    {
+      "step": "pnpm run check:registry-golden",
+      "status": "passed",
+      "seconds": 2.8,
+      "log": "pnpm_run_check_registry-golden.log",
+      "originalSha256": "0a2aab243bf5dd3bdcbc389d5a5d5eb9d4126c1fe2c813ad10d39f20d7cfc703",
+      "bytes": 689,
+      "compressedSha256": "67403d0065dc458d2b1328a7a2518f1ac54bdeb38b996fee8d44b85fe4d842e7"
+    },
+    {
+      "step": "pnpm run check:release",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "pnpm_run_check_release.log",
+      "originalSha256": "7faa61f35194177ed0ed3787684596558035fd84c5238d730921fe653f641030",
+      "bytes": 5528,
+      "compressedSha256": "bb8d6a64d501ca84db544979fa4bedd2f298dd686ed7e380493fcecb35bfdf2c"
+    },
+    {
+      "step": "pnpm run check:release-report",
+      "status": "failed",
+      "seconds": 0.4,
+      "log": "pnpm_run_check_release-report.log",
+      "originalSha256": "7dcd604be8dcc633e53b0cdba681a28df956b6390683acc8b475ab749219d92a",
+      "bytes": 3869,
+      "compressedSha256": "5b6815a85f8f466f81f65c88e203d57b76fb1700119eea362ecb11afc1acfe71"
+    },
+    {
+      "step": "pnpm run check:runners",
+      "status": "passed",
+      "seconds": 1.1,
+      "log": "pnpm_run_check_runners.log",
+      "originalSha256": "50763ef786adfe2a6b2ff17056e8fd8b13f6b98485ead21ef4a5e2fb79da8521",
+      "bytes": 1745,
+      "compressedSha256": "ec6c6989b73fa5a3c4bde5b31f53f765c6ccff05e08fb615ed47d3e5271e3ddb"
+    },
+    {
+      "step": "pnpm run check:schema-docs",
+      "status": "passed",
+      "seconds": 0.4,
+      "log": "pnpm_run_check_schema-docs.log",
+      "originalSha256": "8f63283a76b4eee756a51746f3248233e37801d656fc53cb6575d2b3422cdd07",
+      "bytes": 189,
+      "compressedSha256": "53a685bfa766fa4f3bbbc00118e122b1e50d195129dba3a9e7195706bc433ce4"
+    },
+    {
+      "step": "pnpm run check:examples-convert",
+      "status": "passed",
+      "seconds": 59.4,
+      "log": "pnpm_run_check_examples-convert.log",
+      "originalSha256": "1604602712d31f4ce6d675267034f4872d68c0181b573ba806dd02d95d4bb8d2",
+      "bytes": 987,
+      "compressedSha256": "7591849be57d95f5697e8ad8445040484c7423734bd79934b5d7ec4e4313724a"
+    },
+    {
+      "step": "pnpm run check:schema-strict",
+      "status": "passed",
+      "seconds": 0.9,
+      "log": "pnpm_run_check_schema-strict.log",
+      "originalSha256": "aebd622688c5f5a29b78fd600980d9c163f59bcce6a69e71b32862e73d67e4d5",
+      "bytes": 495,
+      "compressedSha256": "2420342ba10dfbcc5c67388e4531e32273d1064a51f3b8db3a00dc39ad565b34"
+    },
+    {
+      "step": "pnpm run check:schema-examples",
+      "status": "passed",
+      "seconds": 3.3,
+      "log": "pnpm_run_check_schema-examples.log",
+      "originalSha256": "abe4fa328ba19c91978d3246f77cf513b63d6e69c281a643867585be1cdfb37a",
+      "bytes": 1062,
+      "compressedSha256": "cee7757d5c47f8a10d8d0e1b7166d4ab2b33bc559d058a22a89651887d31255c"
+    },
+    {
+      "step": "pnpm run check:skill-glossary",
+      "status": "passed",
+      "seconds": 0.4,
+      "log": "pnpm_run_check_skill-glossary.log",
+      "originalSha256": "1b6895696f5712f1615d54b4e9da0af9f11ec75c6f3bb6c072ce63225a00a2c4",
+      "bytes": 413,
+      "compressedSha256": "c15df3068aa49f620eea451a329630b6bb29b9e394d80b6d02363a56a8aba221"
+    },
+    {
+      "step": "pnpm run check:spec",
+      "status": "passed",
+      "seconds": 0.6,
+      "log": "pnpm_run_check_spec.log",
+      "originalSha256": "6bcb4a6addf13de198f72bb159787413d725742d1c92357bbd399cbf2e49a7f1",
+      "bytes": 1048,
+      "compressedSha256": "c32b74c0a407f53e3271ee67bed00d892c24f0f219a8fabf0f399ecfb364f7d0"
+    },
+    {
+      "step": "pnpm run check:skill-commands",
+      "status": "passed",
+      "seconds": 19.2,
+      "log": "pnpm_run_check_skill-commands.log",
+      "originalSha256": "32151f5d4de2e8dba321dd0c4df88205889ddd19caf0e08244c704765ca06576",
+      "bytes": 1038,
+      "compressedSha256": "0d6511e6c0743a92e3a6c07f5876d02786b9177eae32ff05f15979d2cf1d7981"
+    },
+    {
+      "step": "pnpm run check:text",
+      "status": "failed",
+      "seconds": 0.4,
+      "log": "pnpm_run_check_text.log",
+      "originalSha256": "d316c73c5071ace4b656acece2f45bcbbef7e0f8c3200e8c02926c6b4983d9d9",
+      "bytes": 1740,
+      "compressedSha256": "cffed780f0c4ec92eebea25f4b012512384704fe6e98ee75c04bc52e4a5a6099"
+    },
+    {
+      "step": "pnpm run check:works-percent",
+      "status": "passed",
+      "seconds": 0.4,
+      "log": "pnpm_run_check_works-percent.log",
+      "originalSha256": "2d0b29ee0eb56e9081605ec5f17ad87fa11ae721c72c307ef854e4968cdfd218",
+      "bytes": 539,
+      "compressedSha256": "f583ec5bab764650e89fc8141816c4689905c7e07933174980f60c106599a0b4"
+    },
+    {
+      "step": "pnpm run check:stability",
+      "status": "passed",
+      "seconds": 49.1,
+      "log": "pnpm_run_check_stability.log",
+      "originalSha256": "bc3264b2eaa8951b31047a2278c5b05620cacdb27c63e82a306f6787e340e004",
+      "bytes": 3615,
+      "compressedSha256": "20ad78865567d280d2509839338c8bcbc591f60a5b5b20699c692b20e9a05cef"
+    },
+    {
+      "step": "typecheck",
+      "status": "passed",
+      "seconds": 22.5,
+      "log": "typecheck.log",
+      "originalSha256": "fe741e101f76dd7ac155d7b957b13a94c89cfdcfc9f11df9d4156bdada09949b",
+      "bytes": 5238,
+      "compressedSha256": "dc2308c793b4b9ae968eadb8658fb202ee5eabd9998f2e3e1eb1a3b08c8de52e"
+    },
+    {
+      "step": "tests opf",
+      "status": "failed",
+      "seconds": 76.3,
+      "log": "tests_opf.log",
+      "originalSha256": "9457f988e077bb6752f3daf58457003471cd77f3bbaae0695c49911a586dd54b",
+      "bytes": 390688,
+      "compressedSha256": "21b1705edbcd3568ef5f593d61e0e8584f6bda1800aec51590cb04ae3be38db2"
+    },
+    {
+      "step": "tests mcp",
+      "status": "failed",
+      "seconds": 68.1,
+      "log": "tests_mcp.log",
+      "originalSha256": "c4b548a40ff2e5cc5b9a0ffbcf02393addf1b46443e750964f618e28a51d48fa",
+      "bytes": 9865,
+      "compressedSha256": "d44fc026c175b6132a19953b88f88eebf6e3abe98f6a38dd849bb4eb8c93e499"
+    },
+    {
+      "step": "tests render",
+      "status": "failed",
+      "seconds": 72.7,
+      "log": "tests_render.log",
+      "originalSha256": "a14b09fcbd1cde717dc3ad4d9c57b934327ca53252f35e1b6d9eb5a5dfc149a0",
+      "bytes": 9343,
+      "compressedSha256": "e8819fd5137f72474cebaf55180b84613b64d3fb656d146775f735fec8208e29"
+    },
+    {
+      "step": "tests pptx",
+      "status": "failed",
+      "seconds": 51.3,
+      "log": "tests_pptx.log",
+      "originalSha256": "ec45ed05299dccb437f27d261785960c5c7053392d4867eb60310e98b13dc826",
+      "bytes": 11096,
+      "compressedSha256": "3f88a3dd01368c869be4abc129da057065a2c0a14ceb4acc96af0ccd4aab725e"
+    },
+    {
+      "step": "tests editor",
+      "status": "failed",
+      "seconds": 19.6,
+      "log": "tests_editor.log",
+      "originalSha256": "f9b5ce2ae39d6878fa2dabc6dbec649c4d36e1dc4699fa7aaf1dc4a799766164",
+      "bytes": 5817,
+      "compressedSha256": "9e87691e0bd6eb6f5a7e25699091856bf88d126aea92dda637871a473e1e5c9a"
+    },
+    {
+      "step": "tests gallery",
+      "status": "passed",
+      "seconds": 3.4,
+      "log": "tests_gallery.log",
+      "originalSha256": "75df5c13d93aad5a84f10c225f28d52fa6fe353ea2e808b65ba73d36d94b62b6",
+      "bytes": 27629,
+      "compressedSha256": "45a387bd48a058293a51721f2181f77ed227b513914034ca471dc3a521c9baaf"
+    }
+  ]
+}
