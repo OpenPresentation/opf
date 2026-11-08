@@ -1,0 +1,245 @@
+{
+  "scope": "Manual inspection of all three failed geometryHot cases; original thresholds and eligibility unchanged.",
+  "files": [
+    {
+      "file": "preview-chevrons-8-medium-standard-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/preview/chevrons-8-medium-standard-1.png",
+      "sha256": "1b74253cec8120af0b66c5ea755baf065f7a9d57c00cf8408ce12f8abc1f5804",
+      "bytes": 46170
+    },
+    {
+      "file": "ppt-chevrons-8-medium-standard-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt/chevrons-8-medium-standard-1.png",
+      "sha256": "fe6559eb7b7a3af25d3580a75379d57a9c7155fcdcf2f2bae7ce293b63d98be6",
+      "bytes": 22200
+    },
+    {
+      "file": "ppt-shapes-chevrons-8-medium-standard-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt-shapes/chevrons-8-medium-standard-1.png",
+      "sha256": "4988abe12f694a7ff1bd7941c5e90013cbcf423e65f7b0d425806b02c7e03341",
+      "bytes": 22403
+    },
+    {
+      "file": "preview-vertical-flow-3-long-square-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/preview/vertical-flow-3-long-square-1.png",
+      "sha256": "ee2251367e903abf94f6e9f2c700230b0a58dd4f37c2bd648927407eebd240be",
+      "bytes": 37075
+    },
+    {
+      "file": "ppt-vertical-flow-3-long-square-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt/vertical-flow-3-long-square-1.png",
+      "sha256": "7917482aa6f173c905944816c9cb00679ddd6c05138d48ae1b912b33eb102bf8",
+      "bytes": 17973
+    },
+    {
+      "file": "ppt-shapes-vertical-flow-3-long-square-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt-shapes/vertical-flow-3-long-square-1.png",
+      "sha256": "50911e57104e5b28741692fe02752123fc224ecf84e1ccf72f01a882a7ae2dfa",
+      "bytes": 17399
+    },
+    {
+      "file": "preview-vertical-flow-8-long-wide-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/preview/vertical-flow-8-long-wide-1.png",
+      "sha256": "1dba52e91b3bebc8c016a175803462b157824ecc07df68dd893902d23ed124f9",
+      "bytes": 71513
+    },
+    {
+      "file": "ppt-vertical-flow-8-long-wide-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt/vertical-flow-8-long-wide-1.png",
+      "sha256": "1d4da156b91de828126ce64414c663500bb1f46405dc5f9faa276fe09eee3011",
+      "bytes": 33061
+    },
+    {
+      "file": "ppt-shapes-vertical-flow-8-long-wide-1.png",
+      "source": "C:/opf-work/_supervisor/com-jobs/sh-live-extras/sweep/ppt-shapes/vertical-flow-8-long-wide-1.png",
+      "sha256": "ad9eb1d5c996ba8fefb15a153b7b9a27266ad8357d4d0733c8658b953cf65616",
+      "bytes": 32612
+    }
+  ],
+  "cases": [
+    {
+      "id": "chevrons-8-medium-standard-1",
+      "candidate": {
+        "lines": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          2
+        ],
+        "stable": [
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          true,
+          false
+        ],
+        "fill": 0.9318,
+        "ink": 0.1963,
+        "widest": 272.73,
+        "design": "chevron-rows",
+        "count": 8,
+        "compact": false,
+        "rtl": false
+      },
+      "currentReason": "entry 5 wraps too close to its node's width for PowerPoint to break the same lines",
+      "checks": {
+        "layout": true,
+        "size": true,
+        "geometry": false,
+        "native": false
+      },
+      "preview": {
+        "mad": 7.41,
+        "hot": 0.44,
+        "mad1280": 7.66,
+        "hot1280": 2.24,
+        "geometry": 0.94,
+        "geometryHot": 0.79,
+        "text": 5.87,
+        "textMax": 8,
+        "dx": -0.06,
+        "dy": -5.9
+      },
+      "native": {
+        "mad": 2.05,
+        "hot": 0.44,
+        "mad1280": 2.21,
+        "hot1280": 0.45,
+        "geometry": 0.38,
+        "geometryHot": 0.64,
+        "text": 0.82,
+        "textMax": 3.05,
+        "dx": -1.15,
+        "dy": -0.13
+      }
+    },
+    {
+      "id": "vertical-flow-3-long-square-1",
+      "candidate": {
+        "lines": [
+          2,
+          2,
+          2
+        ],
+        "stable": [
+          true,
+          false,
+          true
+        ],
+        "fill": 0.7761,
+        "ink": 0.3281,
+        "widest": 313.47,
+        "design": "vertical-flow-columns",
+        "count": 3,
+        "compact": false,
+        "rtl": false
+      },
+      "currentReason": "OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 3",
+      "checks": {
+        "layout": true,
+        "size": true,
+        "geometry": false,
+        "native": false
+      },
+      "preview": {
+        "mad": 11,
+        "hot": 0.96,
+        "mad1280": 11.84,
+        "hot1280": 3.12,
+        "geometry": 1.44,
+        "geometryHot": 0.63,
+        "text": 5,
+        "textMax": 5.34,
+        "dx": -0.68,
+        "dy": -4.69
+      },
+      "native": {
+        "mad": 5.7,
+        "hot": 1.44,
+        "mad1280": 6.3,
+        "hot1280": 2.34,
+        "geometry": 0.82,
+        "geometryHot": 0.63,
+        "text": 1.62,
+        "textMax": 4.09,
+        "dx": -1.55,
+        "dy": 0.48
+      }
+    },
+    {
+      "id": "vertical-flow-8-long-wide-1",
+      "candidate": {
+        "lines": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "stable": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "fill": 0.9083,
+        "ink": 0.3245,
+        "widest": 289.43,
+        "design": "vertical-flow-columns",
+        "count": 8,
+        "compact": false,
+        "rtl": false
+      },
+      "currentReason": "OPF's vertical-flow-columns layout passed PowerPoint's comparison for 5 to 6 entries, not 8",
+      "checks": {
+        "layout": true,
+        "size": true,
+        "geometry": false,
+        "native": false
+      },
+      "preview": {
+        "mad": 9.86,
+        "hot": 0.96,
+        "mad1280": 11.75,
+        "hot1280": 1.46,
+        "geometry": 1.71,
+        "geometryHot": 0.91,
+        "text": 4.24,
+        "textMax": 4.73,
+        "dx": 0,
+        "dy": -4.39
+      },
+      "native": {
+        "mad": 3.8,
+        "hot": 0.96,
+        "mad1280": 4.89,
+        "hot1280": 0.87,
+        "geometry": 0.78,
+        "geometryHot": 0.91,
+        "text": 0.66,
+        "textMax": 1.66,
+        "dx": -0.47,
+        "dy": 0.45
+      }
+    }
+  ],
+  "classification": {
+    "chevrons-8-medium-standard-1": "Live roadmap/feedback break inside their last word onto a third line beyond the node; preview and native lines use two.",
+    "vertical-flow-3-long-square-1": "Live The few goals that matter this year wraps to three lines beyond the second box into arrow; preview and native lines use two.",
+    "vertical-flow-8-long-wide-1": "Live Customers who stay and refer others wraps to three lines beyond the top-right box into upward arrow; preview and native lines use two."
+  }
+}
