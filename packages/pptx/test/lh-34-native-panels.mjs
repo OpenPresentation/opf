@@ -16,6 +16,23 @@ assert.deepEqual(callouts.map(c=>c.text),current,'actual multiline and cleared n
 const original=await fromPptx(source);assert.deepEqual(callouts.map(({text,...frame})=>frame),imageOf(original).callouts.map(({text,...frame})=>frame),'exact authored fractions survive');
 assert.ok(!findings.some(d=>d.code==='invalid-image-callout-provenance'));
 assert.ok(findings.some(d=>d.code==='image-callout-import-reflow'&&d.message.includes('panel fill/line styling')),'native paint is explicitly a reflow limitation');
+// Preserve original words: a paint-only edit must not be hidden by the earlier text-edit witness.
+const originalXml=strFromU8(sourceZip['ppt/slides/slide1.xml']);
+for(const changePaint of [false,true]){
+ let painted=false;
+ const panelXml=originalXml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>{
+  const name=panelNames.find(name=>shape.includes('name="'+name+'"'));if(!name)return shape;
+  const savedPanel=shapes(xml).find(s=>s.includes('name="'+name+'"')),blank=savedPanel.match(/<p:txBody>[\s\S]*?<\/p:txBody>/)?.[0];assert.ok(blank&&!blank.includes('<a:t>'),'exact real native blank body');
+  shape=shape.replace('</p:sp>',blank+'</p:sp>');
+  if(changePaint&&name===panelNames[0]){const before=shape;shape=shape.replace(/(<a:solidFill><a:srgbClr val=")[A-Fa-f0-9]{6}/,'$1FF00FF');assert.notEqual(shape,before,'paint-only mutation effective');painted=true;}
+  return shape;
+ });
+ assert.equal(painted,changePaint);
+ const issues=[],back=await fromPptx(zipSync({...sourceZip,'ppt/slides/slide1.xml':strToU8(panelXml)}),{onDiagnostic:d=>issues.push(d)});
+ assert.deepEqual(imageOf(back).callouts,imageOf(original).callouts,'untouched native words and exact authored frames recover');
+ assert.ok(!issues.some(d=>d.code==='invalid-image-callout-provenance'));
+ assert.ok(issues.some(d=>d.code==='image-callout-import-reflow'&&d.message.includes('panel fill/line styling')),changePaint?'paint-only change reports reflow':'unknown paint equivalence reports reflow even with unchanged text');
+}
 for(const [name,mutate]of [
  ['one-EMU-move',shape=>shape.replace(/<a:off x="(\d+)"/,(_,x)=>'<a:off x="'+(Number(x)+1)+'"')],
  ['rotation',shape=>shape.replace('<a:xfrm>','<a:xfrm rot="60000">')],
@@ -28,4 +45,4 @@ for(const [name,mutate]of [
  const zip={...nativeZip},text=xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g,shape=>shape.includes('name="'+panelNames[0]+'"')?mutate(shape):shape);assert.notEqual(text,xml,name+' mutation effective');zip['ppt/slides/slide1.xml']=strToU8(text);
  const issues=[],fallback=await fromPptx(zipSync(zip),{onDiagnostic:d=>issues.push(d)});assert.equal(imageOf(fallback)?.callouts,undefined,name+' remains ordinary native content');assert.ok(issues.some(d=>d.code==='invalid-image-callout-provenance'),name+' located diagnostic');const visible=JSON.stringify(fallback.slides);assert.ok(visible.includes('Native edit\\nSecond line'),name+' current words survive');assert.ok(!visible.includes('Red zone')&&!visible.includes('Blue zone'),name+' no old words restored');
 }
-console.log('LH34 actual PowerPoint empty-body normalization: current multiline/cleared text and exact frames pass; seven strict tamper refusals pass. Source '+hash(source)+', saved '+hash(native));
+console.log('LH34 actual PowerPoint empty-body normalization: current multiline/cleared text and exact frames pass; untouched-text/paint-only reflow and seven strict tamper refusals pass. Source '+hash(source)+', saved '+hash(native));
