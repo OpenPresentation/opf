@@ -6,14 +6,15 @@
 // Writes <sweep-dir>/gate.json and <sweep-dir>/gate.md.
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { parseLayoutDefinition } from './layout-xml.mjs';
-const core = await import('file:///C:/opf-work/wave2-review/packages/javascript/dist/composition.js');
+import { gateOutputDirectory } from './output-path.mjs';
+const core = await import(new URL('../../../packages/javascript/dist/composition.js', import.meta.url));
 import { createRequire } from 'node:module';
-const require = createRequire('C:/opf-work/wave2-review/packages/pptx/package.json');
+const require = createRequire(new URL('../../../packages/pptx/package.json', import.meta.url));
 const sharp = require('sharp');
 const { unzipSync, strFromU8 } = require('fflate');
 const dir = process.argv[2];
-const output = process.argv[3] ?? dir;
-mkdirSync(output, { recursive: true });
+const output = gateOutputDirectory(dir, process.argv[3]);
+mkdirSync(output); // Exclusive creation also refuses a concurrent writer after preflight.
 const probe = JSON.parse(readFileSync(`${dir}/ppt/probe.json`, 'utf8').replace(/^\uFEFF/, ''));
 const decks = Array.isArray(probe) ? probe : [probe];
 const meta = existsSync(`${dir}/meta.json`) ? JSON.parse(readFileSync(`${dir}/meta.json`, 'utf8')) : {};
