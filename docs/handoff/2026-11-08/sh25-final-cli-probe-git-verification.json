@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "archiveCommit": "b0d0d2d146cf09b1615cae4000baa58160bbfc65",
+  "verifiedBlobs": 619,
+  "verifiedBytes": 9325663,
+  "method": "One git cat-file --batch; every committed blob exact length and SHA-256 matches the archive inventory",
+  "passed": true,
+  "officeCalls": 0
+}
