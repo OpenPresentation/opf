@@ -3,7 +3,7 @@
 // anywhere in the graph fails the bundle), and the `workerd`, `worker` and `browser` export conditions. Core's lane does the same for
 // the validators (packages/javascript/test/support/workerd.mjs). Not a test.
 import { spawn } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import net from "node:net";
 import { tmpdir } from "node:os";
@@ -44,9 +44,12 @@ export async function bundleWorker(entry = "mcp-worker.mjs", { minify = false } 
 	const text = result.outputFiles[0].text;
 	// Audit retained local modules, not just output length. Core keeps source banners; MCP also ships source maps.
 	const sourceInputs = [];
+	const ownedDist = [path.join(packageRoot, "dist"), path.dirname(require.resolve("@openpresentation/opf")), path.dirname(require.resolve("@openpresentation/gallery"))].map(directory => realpathSync(directory) + path.sep);
 	for (const [input, retained] of Object.entries(Object.values(result.metafile.outputs)[0].inputs)) {
-		if (retained.bytesInOutput === 0 || !/^(?:dist\/|\.\.\/(?:javascript|gallery)\/dist\/)/.test(input)) continue;
-		const file = path.resolve(packageRoot, input), compiled = readFileSync(file, "utf8");
+		if (retained.bytesInOutput === 0) continue;
+		const file = realpathSync(path.resolve(packageRoot, input));
+		if (!ownedDist.some(directory => file.startsWith(directory))) continue;
+		const compiled = readFileSync(file, "utf8");
 		const sources = new Set([...compiled.matchAll(/^\/\/ (.+)$/gm)].map(match => match[1].replaceAll("\\", "/")));
 		if (existsSync(file + ".map")) for (const source of JSON.parse(readFileSync(file + ".map", "utf8")).sources) sources.add(source.replaceAll("\\", "/"));
 		sourceInputs.push({ input, bytes: retained.bytesInOutput, sources: [...sources].sort() });

@@ -218,6 +218,70 @@
   },
   "final": {
     "lean": {
+      "raw": 8116787,
+      "minified": 5300992,
+      "gzipLevel9": 1199308,
+      "forbiddenSourceInputs": [],
+      "productionForbiddenSourceInputs": []
+    },
+    "full": {
+      "raw": 30273895,
+      "forbiddenSourcePositiveControls": [
+        {
+          "input": "../javascript/dist/docs.js",
+          "bytes": 1820501,
+          "sources": [
+            "src/generated/docs.ts"
+          ]
+        },
+        {
+          "input": "../javascript/dist/examples.js",
+          "bytes": 9247842,
+          "sources": [
+            "src/generated/examples.ts"
+          ]
+        },
+        {
+          "input": "dist/chunk-TIKDCS5G.js",
+          "bytes": 8654568,
+          "sources": [
+            "../app-dist/deck-app.html",
+            "../src/data.ts",
+            "app-dist/deck-app.html",
+            "src/data.ts"
+          ]
+        }
+      ],
+      "removedBytes": 22157108
+    },
+    "documentation": {
+      "pages": 42,
+      "bytes": 1231624,
+      "sourceEquality": "Every served page equals its selected docs/<slug>.md, normalized to LF; asserted by the maintained test.",
+      "mcpMetricCorrectionBytes": 27
+    }
+  },
+  "ceilings": {
+    "leanRaw": 8150000,
+    "leanMinified": 5350000,
+    "leanGzipLevel9": 1210000,
+    "publicDocumentation": 1240000,
+    "minimumRemovedDataBytes": 7000000
+  },
+  "checks": [
+    "Exact d260 CI byte sizes reproduced",
+    "Lean retained-source audit passes; full entry proves all four data origins are detected",
+    "Minified and gzip budgets pass",
+    "All 42 public pages and unchanged slug/skill/no-maintainer checks pass"
+  ],
+  "notPerformed": [
+    "Windows workerd protocol rerun: native executable independently fails spawn UNKNOWN on this host; d260 Linux protocol checks passed",
+    "deployment",
+    "publication"
+  ],
+  "combinedBase": "a4322cdd9686c2ef34732088c48d72366d379190",
+  "beforeWaterfallFinal": {
+    "lean": {
       "raw": 8110959,
       "minified": 5298351,
       "gzipLevel9": 1198373,
@@ -261,22 +325,10 @@
       "mcpMetricCorrectionBytes": 27
     }
   },
-  "ceilings": {
-    "leanRaw": 8150000,
-    "leanMinified": 5350000,
-    "leanGzipLevel9": 1210000,
-    "publicDocumentation": 1240000,
-    "minimumRemovedDataBytes": 7000000
-  },
-  "checks": [
-    "Exact d260 CI byte sizes reproduced",
-    "Lean retained-source audit passes; full entry proves all four data origins are detected",
-    "Minified and gzip budgets pass",
-    "All 42 public pages and unchanged slug/skill/no-maintainer checks pass"
-  ],
-  "notPerformed": [
-    "Windows workerd protocol rerun: native executable independently fails spawn UNKNOWN on this host; d260 Linux protocol checks passed",
-    "deployment",
-    "publication"
-  ]
+  "rootChecks": {
+    "command": "OPF_TRACKER_STALE=warn pnpm check:changed --base a4322cdd9686c2ef34732088c48d72366d379190 --files docs/mcp.md changes/rr-105-mcp-size-audit.md docs/handoff/2026-11-07/mcp-size-budget-033.md docs/programs/release-readiness/burndown.md docs/evidence/mcp-size-budget-033/measurements.json",
+    "result": "passed",
+    "seconds": 61.5,
+    "scope": "All changed root docs/fragments/tracker/evidence files. Package budget/doc checks passed separately; known Windows workerd protocol launch failure not redundantly rerun."
+  }
 }

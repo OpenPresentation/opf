@@ -37,13 +37,13 @@ test("lean Worker preserves data exclusions and production size budgets", async 
 	for (const source of ["src/generated/docs.ts", "src/generated/examples.ts", "src/data.ts", "app-dist/deck-app.html"]) {
 		assert.ok(fullSources.some(name => name === source || name.endsWith("/" + source)), source + " is a positive audit control in the full entry");
 	}
-	// Reviewed v0.33 refresh: SH-19 measured 8,075,721; d260 measures 8,110,959, with no retained data.
+	// Reviewed v0.33 refresh: SH-19 8,075,721; d260 8,110,959; with the waterfall fix 8,116,787, no retained data.
 	// The added composition features explain the growth. See docs/handoff/2026-11-07/mcp-size-budget-033.md.
 	assert.ok(lean.bytes < 8_150_000, `${lean.bytes} unminified bytes`);
 	const production = await bundleWorker("mcp-worker-lean.mjs", { minify: true });
 	assert.deepEqual(retainedData(production), [], "production also excludes every data source");
 	const compressed = gzipSync(production.text, { level: 9 }).length;
-	// d260: 5,298,351 minified / 1,198,373 gzip bytes; ceilings leave 0.97% headroom, independently of raw formatting.
+	// Combined waterfall candidate: 5,300,992 minified / 1,199,308 gzip bytes; ceilings leave under 1% headroom.
 	assert.ok(production.bytes < 5_350_000, `${production.bytes} minified bytes`);
 	assert.ok(compressed < 1_210_000, `${compressed} gzip bytes`);
 });
