@@ -942,6 +942,20 @@ function validateSlide(stored) {
   return value;
 }
 
+// Language override conventions apply only to the current referenced OPF slide.
+// Editors may rename tag parts and relationship ids; neither spelling is ownership.
+export function opfSlideOwnership(entries, paths) {
+  return paths.map(path => {
+    try {
+      const root = parser.parse(dec.decode(entries[path]))?.['p:sld'];
+      const container = root?.['p:cSld']?.['p:custDataLst'];
+      if (array(container?.['p:tags']).length !== 1) return false;
+      const found = readTag(entries, container, relationships(entries, path), SLIDE_TAG);
+      return !found.missing && validateSlide(found.value).native.structure === nativeSlide(entries, path, false).structure;
+    } catch { return false; }
+  });
+}
+
 const label = value => typeof value === 'string' ? `'${value}'` : object(value) && typeof value.id === 'string' ? `'${value.id}' (with inline overrides)` : 'inline value';
 
 function changedSlots(stored, observed) {
