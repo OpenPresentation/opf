@@ -174,3 +174,5 @@ item's state edits its row and appends a log line in the same PR.
 
 
 - 2026-11-08: SH25native name-action review correction fixes maintained runner ASTdependency import after an actual pre-Office refusal. Real ValidateOnly valid/formula/duplicate controls and existing runner2tests pass; raw original/after receipts retained. Mapped23seconds7pass/1skip, exact sparse restoration43/44native-toolingpass; inherited Windows symlink EPERM explicitly retained. Worker/owned lifecycle unchanged; native rename/current-import remains blocked pending separate literal-name importer correction.
+
+- 2026-11-08: SH25actualName attempt02setter/readback succeeds then conservatively fails incorrect marker-kind testplan; no SaveCopyAs/reopen acceptance. Failed supervisor and separate exact-owned cleanup retained. New actual-native-XML plan helper/16type+7XML+real-column controls pass; fresh02plan uses vertical-bar with original source/PPTX/PNG bytes unchanged.137.8second mappedreview5pass/TSskip, inherited archive246unrun. No worker/product/tolerance/guard change; actual acceptance remains owed.
