@@ -3,7 +3,6 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {existsSync,readFileSync,readdirSync,realpathSync} from 'node:fs';
-import {createRequire} from 'node:module';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {reviewFallbackArchives,sha256,validateFixture} from './chartex-fallback-archives.mjs';
@@ -33,8 +32,13 @@ async function loadRuntime(root,expected){
   const head=git(root,'rev-parse','HEAD');assert.match(head,/^[0-9a-f]{40}$/);
   if(expected)assert.equal(head,expected,'Baseline checkout must be the exact selected export revision');
   assert.equal(git(root,'status','--porcelain'),'','Use a clean committed producer and preserve its build receipt');
-  const require=createRequire(path.join(root,'packages/pptx/package.json'));
-  const modules={pptx:path.join(root,'packages/pptx/dist/index.js'),gallery:require.resolve('@openpresentation/gallery'),core:require.resolve('@openpresentation/opf/composition'),render:require.resolve('@openpresentation/opf-render/svg')};
+  // Use Node's import conditions from the selected producer, including import-only subpaths.
+  // This resolver reads package metadata only; no producer file is written or module executed.
+  const specifiers={pptx:'@openpresentation/opf-pptx',gallery:'@openpresentation/gallery',core:'@openpresentation/opf/composition',render:'@openpresentation/opf-render/svg'};
+  const resolver='const names=JSON.parse(process.argv[1]);process.stdout.write(JSON.stringify(Object.fromEntries(Object.entries(names).map(([name,specifier])=>[name,import.meta.resolve(specifier)]))));';
+  const urls=JSON.parse(execFileSync(process.execPath,['--input-type=module','--eval',resolver,JSON.stringify(specifiers)],{cwd:path.join(root,'packages/pptx'),encoding:'utf8',timeout:10000,maxBuffer:1024*1024}));
+  assert.deepEqual(Object.keys(urls),Object.keys(specifiers),'Exactly four declared runtime modules');
+  const modules=Object.fromEntries(Object.entries(urls).map(([name,url])=>[name,fileURLToPath(url)]));
   const resolved=Object.fromEntries(Object.entries(modules).map(([name,file])=>[name,inside(root,file)]));
   const dist=['javascript','gallery','render','pptx'].flatMap(pkg=>inventory(root,path.join(root,'packages',pkg,'dist')));
   const sourceTrees=git(root,'ls-tree','HEAD','--','packages/javascript','packages/gallery','packages/render','packages/pptx','spec','pnpm-lock.yaml','pnpm-workspace.yaml','package.json');

@@ -1,0 +1,11 @@
+# RR20 archive review: import-only runtime resolution
+
+The first real maintained nine-archive command failed before baseline generation: `require.resolve('@openpresentation/opf/composition')` selected require conditions, while the genuine core subpath exports only an import target. The original Node24 Windows failure is retained in original-failure.log.gz. No fixture or output was promoted by that failed attempt.
+
+Vetoable decision: use the actual Node ESM resolver, via a bounded `--input-type=module` subprocess with cwd fixed to each selected producer's packages/pptx. Resolve exactly four declared package entries (PPTX, Gallery, composition and SVG); require local file URLs and the existing producer containment, clean-source and dist/catalog seals. No package, dependency, runtime export, input producer file, baseline policy or archive hash is changed.
+
+This branch starts at actual main fef5d76e06bae126d6cdda0e3f7658e42c49db03 and normally merges frozen PR1175 at f842e303f50b907d11556db122fdebd7b78d7d1b. Its merge retains both main's current033 documentation history and the prerequisite034 source history. The frozen source branch is not written. This correction belongs to existing RR20; RR108's final pinned golden batch remains separate.
+
+Focused controls run the real command in a synthetic clean Git checkout with genuine import-only exports, a deliberately different require target, exact local runtime identities, all nine baseline calls before any candidate call, dirty-producer refusal and every preexisting lock/caller/ZIP/XLSX/immutability control. The require resolver reproduces the import-only failure inside the same regression. Actual baseline/candidate generation and full final-source raw-part review remain coordinator-owned after the final source is selected; no real archive candidate or native acceptance is claimed here.
+
+Checks and immutable fixture/source hashes are recorded in receipt.json after the required changed-scope run. OS/Node coverage is owed once in the final034 integration gate; no duplicate source CI watcher is started.
