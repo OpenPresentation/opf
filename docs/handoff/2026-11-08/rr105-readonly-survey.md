@@ -1,0 +1,9 @@
+# RR-105 bounded read-only survey
+
+The final LH-41 timeline witness has one slide and 92 top-level shapes. It cannot pass the existing 30-shape native furniture guard. This derived tooling change introduces an explicit `-ReadOnlySurvey` switch in the worker and maintained runner, rather than silently increasing the editing limit.
+
+Vetoable decision: permit exactly one declared integer slide, one physical slide part and one actual native slide, at most 100 top-level shapes, and an empty validated action list. Inputs are at most 16 MiB with at most 4096 ZIP directory entries. Only the directory is read during pure preflight. The existing 3-slide/30-shape/20-action edit guard remains the default. The 60-second maximum, owned read-only Open, derivative SaveCopyAs, read-only reopen, per-operation failure latch, process identity, source hashes and no-UI/no-kill/no-retry rules remain unchanged.
+
+Meaningful Office-free controls execute the actual functions and maintained runner: 30/31 default and 92/100/101 survey shape boundaries, actual two-slide refusal, missing/wrongly typed worker switch, empty versus nonempty/null plans, physical/declared slide counts including string and Boolean declarations, corrupt/oversized/too-many-entry ZIP inputs, timeout 61 refusal and request-option mismatch. ValidateOnly succeeds only as a pure observation with nativeAcceptance=false. Earlier test-report serialization and exception-wording failures are preserved and do not represent native attempts.
+
+No actual Office operation has run on this new mode yet. Independent review, actual whole-slide qualification, canonical saved-import/phase/geometry/font/image checks and final integration CI remain owed. This mode establishes bounded observation capability, not general native fidelity or nested-group coverage.

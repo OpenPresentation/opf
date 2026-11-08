@@ -5,7 +5,8 @@ param(
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
     [switch]$ValidateOnly,
-    [switch]$CaptureTextFonts
+    [switch]$CaptureTextFonts,
+    [switch]$ReadOnlySurvey
 )
 $ErrorActionPreference='Stop'
 
@@ -93,11 +94,17 @@ function Assert-FreshNativeOutput([string]$Directory,[string[]]$ProtectedRoots) 
     }
     return $full
 }
-function Import-NativePlanValidation([string]$Worker) {
+function Import-NativePlanValidation([string]$Worker,[bool]$Survey=$false) {
     $tokens=$null;$parseErrors=$null
     $ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$parseErrors)
     if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-    foreach($name in @('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeriesName','Read-AndValidateActionPlan')) {
+    $definitions=@('Test-Integer','Require-Property','Assert-String','Assert-LiteralSeriesName','Read-AndValidateActionPlan')
+    if($Survey) {
+        $surveyParameter=@($ast.ParamBlock.Parameters | Where-Object { $_.Name.VariablePath.UserPath -ceq 'ReadOnlySurvey' })
+        if($surveyParameter.Count -ne 1 -or $surveyParameter[0].StaticType -ne [System.Management.Automation.SwitchParameter]) { throw 'Selected worker does not support reviewed read-only survey mode' }
+        $definitions+=@('Get-FurnitureSurveySlideCount','Assert-FurnitureSurvey')
+    }
+    foreach($name in $definitions) {
         $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
         if($null -eq $function) { throw "Missing pure plan validator: $name" }
         # Only these pure definitions are loaded; no worker entrypoint or Office operation is evaluated.
@@ -130,9 +137,13 @@ $suiteRoot=Assert-PlainNativePath (Join-Path $PSScriptRoot '../..')
 $workerIdentity=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.provenance.workerRepository @('test/native-furniture-control.ps1','test/native-process.ps1','test/native-process-check.ps1','test/native-furniture-harness-check.ps1')
 $suiteIdentity=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
 $worker=Resolve-NativeAsset $workerRoot 'test/native-furniture-control.ps1'
-Import-NativePlanValidation $worker
+Import-NativePlanValidation $worker ([bool]$ReadOnlySurvey)
 Assert-NativeFontCaptureSupport $worker ([bool]$CaptureTextFonts)
-$null=Read-AndValidateActionPlan $binding.planPath
+$validatedActions=Read-AndValidateActionPlan $binding.planPath
+if($ReadOnlySurvey) {
+    if(-not (Test-Integer $binding.selected.slideCount) -or $binding.selected.slideCount -ne 1) { throw 'Read-only survey requires exactly one declared slide' }
+    Assert-FurnitureSurvey $true $validatedActions $binding.inputPath
+}
 $output=Assert-FreshNativeOutput $OutputDirectory @($binding.root,$workerRoot,$suiteRoot)
 if([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'Run this entrypoint on Windows; pure self-tests do not require Office' }
 $shell=Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
@@ -141,6 +152,7 @@ if(-not (Test-Path -LiteralPath $shell -PathType Leaf)) { throw 'Windows PowerSh
 $harness=Join-Path $output 'harness';[void](New-Item -ItemType Directory -Path $harness)
 $receipt=[ordered]@{schemaVersion=1;case=$Case;timestamp=(Get-Date).ToUniversalTime().ToString('o');manifestSha256=$binding.manifestSha256;selectedCase=$binding.selected;provenance=$binding.suite.provenance;executingCode=[ordered]@{suite=$suiteIdentity;workers=$workerIdentity};timeoutSeconds=$TimeoutSeconds;status='pure-checks-pending';nativeAcceptance=$false;registryAcceptance=$false}
 if($CaptureTextFonts) { $receipt.captureTextFonts=$true }
+if($ReadOnlySurvey) { $receipt.readOnlySurvey=$true }
 $snapshots=Join-Path $output 'inputs';[void](New-Item -ItemType Directory -Path $snapshots)
 $inputSnapshot=Join-Path $snapshots 'case.pptx';$planSnapshot=Join-Path $snapshots 'action-plan.json'
 $expectedInput=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.input })[0]
@@ -160,10 +172,12 @@ try {
     $null=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.provenance.workerRepository @('test/native-furniture-control.ps1')
     $null=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
     if($ValidateOnly) { $receipt.status='pure-checks-completed; native-not-run';Write-RunnerReceipt;return }
-    $null=Read-AndValidateActionPlan $planSnapshot
+    $validatedActions=Read-AndValidateActionPlan $planSnapshot
+    if($ReadOnlySurvey) { Assert-FurnitureSurvey $true $validatedActions $inputSnapshot }
     Assert-NativeFileRecords $snapshots $snapshotRecords
     $receipt.status='native-worker-pending';Write-RunnerReceipt
     $workerArguments=@('-InputPresentation',$inputSnapshot,'-ActionPlan',$planSnapshot,'-OutputDirectory',(Join-Path $output 'native'),'-TimeoutSeconds',([string]$TimeoutSeconds)) + @(Get-NativeFontCaptureArguments ([bool]$CaptureTextFonts))
+    if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
     Invoke-NativeChild $shell $worker $workerArguments (Join-Path $output 'native-worker.log')
     $terminal=Get-Content -LiteralPath (Join-Path $output 'native/supervisor.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($terminal.timedOut -ne $false -or $terminal.exitCode -ne 0 -or $terminal.cleanupConfirmed -ne $true) { throw 'Worker did not confirm successful completion and cleanup; preserve the attempt and inspect Office' }

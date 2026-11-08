@@ -4,7 +4,8 @@ param(
     [string]$ActionPlan='',
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
     [switch]$Worker,
-    [switch]$CaptureTextFonts
+    [switch]$CaptureTextFonts,
+    [switch]$ReadOnlySurvey
 )
 $ErrorActionPreference='Stop'
 
@@ -114,10 +115,29 @@ function Read-AndValidateActionPlan([string]$Path) {
     return ,$items
 }
 
+function Get-FurnitureSurveySlideCount([string]$Path) {
+    # Read the ZIP directory only. No extraction, XML execution or Office construction.
+    if((Get-Item -LiteralPath $Path).Length -gt 16777216) { throw 'Read-only survey input exceeds 16 MiB' }
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $surveyArchive=[IO.Compression.ZipFile]::OpenRead($Path)
+    try {
+        if($surveyArchive.Entries.Count -gt 4096) { throw 'Read-only survey ZIP directory exceeds 4096 entries' }
+        $surveySlides=0
+        foreach($surveyEntry in $surveyArchive.Entries) { if($surveyEntry.FullName -cmatch '^ppt/slides/slide[1-9][0-9]*\.xml$') { $surveySlides++ } }
+        return $surveySlides
+    } finally { $surveyArchive.Dispose() }
+}
+function Assert-FurnitureSurvey([bool]$Requested,$Actions,[string]$Path) {
+    if(-not $Requested) { return }
+    if($Actions -isnot [array] -or $Actions.Count -ne 0) { throw 'Read-only survey requires an empty validated action plan' }
+    if((Get-FurnitureSurveySlideCount $Path) -ne 1) { throw 'Read-only survey requires exactly one slide part' }
+}
+
 if(-not $Worker) {
     $inputPath=(Resolve-Path -LiteralPath $InputPresentation).Path
     if([IO.Path]::GetExtension($inputPath) -ine '.pptx') { throw 'InputPresentation must select one existing .pptx file' }
     $plan=Read-AndValidateActionPlan $ActionPlan
+    Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $plan $inputPath
     $planPath=$(if($ActionPlan -eq ''){$null}else{(Resolve-Path -LiteralPath $ActionPlan).Path})
     $outputRoot=[IO.Path]::GetFullPath($OutputDirectory)
     if(Test-Path -LiteralPath $outputRoot) { throw 'Preserve the prior attempt and select a fresh output directory' }
@@ -135,6 +155,7 @@ if(-not $Worker) {
     else { ConvertTo-Json -InputObject @() | Set-Content -LiteralPath $planSnapshot -Encoding UTF8 }
     $request=[ordered]@{
         captureTextFonts=[bool]$CaptureTextFonts
+        readOnlySurvey=[bool]$ReadOnlySurvey
         source=[ordered]@{path=$inputPath;sha256=(Get-FurnitureSha256 $inputPath);snapshotPath=$presentationSnapshot;snapshotSha256=(Get-FurnitureSha256 $presentationSnapshot)}
         actionPlan=[ordered]@{path=$planPath;sha256=$(if($null -eq $planPath){$null}else{Get-FurnitureSha256 $planPath});snapshotPath=$planSnapshot;snapshotSha256=(Get-FurnitureSha256 $planSnapshot);count=$plan.Count}
         verifier=[ordered]@{path=$PSCommandPath;sha256=(Get-FurnitureSha256 $PSCommandPath);snapshotPath=$verifierSnapshot;snapshotSha256=(Get-FurnitureSha256 $verifierSnapshot)}
@@ -144,6 +165,7 @@ if(-not $Worker) {
     . (Join-Path $PSScriptRoot 'native-process.ps1')
     $workerArguments=@('-OutputDirectory',$outputRoot,'-InputPresentation',$presentationSnapshot,'-ActionPlan',$planSnapshot,'-Worker')
     if($CaptureTextFonts) { $workerArguments+='-CaptureTextFonts' }
+    if($ReadOnlySurvey) { $workerArguments+='-ReadOnlySurvey' }
     $result=Invoke-OpfNativeWorker -ScriptPath $PSCommandPath -WorkerArguments $workerArguments -OutputDirectory $outputRoot -TimeoutSeconds $TimeoutSeconds
     $lastDurable=$null
     if(Test-Path -LiteralPath (Join-Path $outputRoot 'progress.json')) { try { $lastDurable=Get-Content -LiteralPath (Join-Path $outputRoot 'progress.json') -Raw -Encoding UTF8 | ConvertFrom-Json } catch { } }
@@ -169,6 +191,12 @@ if(-not $Worker) {
 $root=(Resolve-Path -LiteralPath $OutputDirectory).Path
 $request=Get-Content -LiteralPath (Join-Path $root 'request.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 if($request.captureTextFonts -isnot [bool] -or $request.captureTextFonts -ne [bool]$CaptureTextFonts) { throw 'Font observation option differs from validated request' }
+$surveyRequested=$false
+if($null -ne $request.PSObject.Properties['readOnlySurvey']) {
+    if($request.readOnlySurvey -isnot [bool]) { throw 'Read-only survey request must be a Boolean' }
+    $surveyRequested=$request.readOnlySurvey
+}
+if($surveyRequested -ne [bool]$ReadOnlySurvey) { throw 'Read-only survey option differs from validated request' }
 $sourcePath=$request.source.path; $sourceHash=$request.source.sha256; $sourceSnapshot=(Resolve-Path -LiteralPath $request.source.snapshotPath).Path
 $planSnapshot=(Resolve-Path -LiteralPath $request.actionPlan.snapshotPath).Path; $actions=Read-AndValidateActionPlan $planSnapshot
 $savedPath=Join-Path $root 'native-furniture-control.pptx'
@@ -179,12 +207,15 @@ if((Get-FurnitureSha256 $request.processHelper.path) -cne $request.processHelper
 if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation snapshot hash does not match the requested source' }
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
+Assert-FurnitureSurvey ([bool]$ReadOnlySurvey) $actions $sourceSnapshot
+
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
 $script:ownedPresentationPath=$null; $script:presentation=$null; $script:ownedApplication=$null
 $os=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $report=[ordered]@{
     schemaVersion=1
     captureTextFonts=[bool]$CaptureTextFonts
+    readOnlySurvey=[bool]$ReadOnlySurvey
     source=[ordered]@{path=$sourcePath;sha256=$sourceHash;openedPath=$sourceSnapshot;openedSha256=(Get-FurnitureSha256 $sourceSnapshot)}
     saved=[ordered]@{path=$savedPath;sha256=$null}
     reopened=[ordered]@{path=$savedPath;sha256=$null}
@@ -195,6 +226,7 @@ $report=[ordered]@{
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
     scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
+if($ReadOnlySurvey) { $report.scope='One explicitly supplied read-only survey: exactly one slide, at most 100 shapes, an empty action plan, source at most 16 MiB/4096 ZIP entries and the unchanged 60-second maximum. Owned read-only Open, SaveCopyAs, read-only reopen and observations only; no content edits, UI, process termination or retry.' }
 function Write-FurnitureReport {
     $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus
     $report | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $reportFile -Encoding UTF8
@@ -274,13 +306,18 @@ function Read-FurnitureTextFont($Shape,[string]$Text,[string]$Prefix) {
 function Read-FurnitureState($Presentation,[string]$Phase) {
     $slides=Invoke-FurnitureCom "$Phase.slides.get" { return ,$Presentation.Slides }; $slideCount=Invoke-FurnitureCom "$Phase.slides.count.get" { $slides.Count }
     if($slideCount -lt 1 -or $slideCount -gt 3) { throw "Presentation must contain 1 through 3 slides; observed $slideCount" }
+    if($ReadOnlySurvey -and $slideCount -ne 1) { throw 'Read-only survey requires exactly one actual slide' }
     $slideRecords=@(); $rasters=@()
     for($slideIndex=1;$slideIndex -le $slideCount;$slideIndex++) {
         $slide=Invoke-FurnitureCom "$Phase.slide-$slideIndex.get" { $slides.Item($slideIndex) }
         $slideId=Invoke-FurnitureCom "$Phase.slide-$slideIndex.id.get" { $slide.SlideID }; $slideName=Invoke-FurnitureCom "$Phase.slide-$slideIndex.name.get" { $slide.Name }
         $slideTagsObject=Invoke-FurnitureCom "$Phase.slide-$slideIndex.tags.get" { return ,$slide.Tags }; $slideTags=Read-NativeTags $slideTagsObject "$Phase.slide-$slideIndex.tags"
         $shapes=Invoke-FurnitureCom "$Phase.slide-$slideIndex.shapes.get" { return ,$slide.Shapes }; $shapeCount=Invoke-FurnitureCom "$Phase.slide-$slideIndex.shapes.count.get" { $shapes.Count }
-        if($shapeCount -gt 30) { throw "$Phase slide $slideIndex exceeds the 30-shape limit" }
+        if($ReadOnlySurvey) {
+            if($shapeCount -gt 100) { throw "$Phase slide $slideIndex exceeds the 100-shape read-only survey limit" }
+        } else {
+            if($shapeCount -gt 30) { throw "$Phase slide $slideIndex exceeds the 30-shape limit" }
+        }
         $shapeRecords=@()
         for($shapeIndex=1;$shapeIndex -le $shapeCount;$shapeIndex++) {
             $shape=Invoke-FurnitureCom "$Phase.slide-$slideIndex.shape-$shapeIndex.get" { $shapes.Item($shapeIndex) }
