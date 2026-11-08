@@ -1,0 +1,40 @@
+{
+  "initial": {
+    "command": "pnpm check:changed",
+    "exit": 1,
+    "seconds": 34,
+    "passed": [
+      "install",
+      "build",
+      "biome",
+      "check:changes",
+      "check:release-report",
+      "check:skill-commands"
+    ],
+    "failedSparseInputs": [
+      "check:gallery-tracker",
+      "check:text"
+    ],
+    "typecheck": "unselected",
+    "packageSuites": "unselected"
+  },
+  "focused": {
+    "tracker": {
+      "command": "pnpm check:gallery-tracker",
+      "exit": 0,
+      "tests": 18,
+      "fresh": true,
+      "records": 863
+    },
+    "text": {
+      "command": "pnpm check:text",
+      "exit": 0,
+      "tests": 6,
+      "scannedFiles": 8572,
+      "finalScannedFiles": 8578
+    }
+  },
+  "noAssertionOrFixtureChanges": true,
+  "ciWatch": false,
+  "githubApiCalls": 0
+}

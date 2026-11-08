@@ -1,0 +1,10 @@
+check-changed: 8 changed files since fef5d76e0 (plus uncommitted and untracked)
+run   install
+run   build
+run   biome
+run   pnpm run check:changes
+run   pnpm run check:gallery-tracker
+run   pnpm run check:release-report
+run   pnpm run check:skill-commands
+run   pnpm run check:text
+skip  typecheck  (no .ts, .mts or tsconfig change)

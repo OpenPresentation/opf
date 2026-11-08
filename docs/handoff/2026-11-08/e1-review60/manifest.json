@@ -1,0 +1,95 @@
+{
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "branch": "codex/rr-20-e1-review60",
+  "base": "fef5d76e06bae126d6cdda0e3f7658e42c49db03",
+  "immutableSource": "29ba0ae536b019ada68623d44850d6cb3b7a6350",
+  "reviewedSheets": 60,
+  "reviewedTriptychs": 232,
+  "remainingSheets": 184,
+  "remainingTriptychs": 704,
+  "newConfirmedDefectClasses": 1,
+  "actualRenders": 0,
+  "files": [
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/capture-review.mjs",
+      "bytes": 12680,
+      "sha256": "abb047c7e4bda67d062440e0a192cb633e7422064ff34f0e107deb4fbd5aeaae"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/check-changed-plan.log",
+      "bytes": 333,
+      "sha256": "7d19c6da37439f28f5c66bf5bc071842dd8b789299050ffcc9f46733ebb778ad"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/check-changed.log",
+      "bytes": 6946,
+      "sha256": "3bae7ac838b41a30c06f47dd717825295f4f7cef58d6339057cc977f7293eec4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/checks.json",
+      "bytes": 798,
+      "sha256": "fa3ba815708bbb59808531a252edb78a44646d204ea5285c07d08dade6f347a6"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/exact-catalog-fixture-hydration.json",
+      "bytes": 422,
+      "sha256": "1480e8832a4eb9c90a8b8340f9bf40e24cb30db8c6025d6a885f24b8ff695084"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/exact-fixture-hydration.json",
+      "bytes": 506636,
+      "sha256": "66ae977c30d18592f075265ac5d363096d7585ba425f376df25a5d13be158e73"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/findings.json",
+      "bytes": 5781,
+      "sha256": "c0820782b55c2baaeed154b680f0ef0cc7081e32ed08f82d0146e5e50c03b376"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/gallery-tracker-final.log",
+      "bytes": 2020,
+      "sha256": "6688cf01c474e199ad0267c03c4621f2aef9d592b72b5f3b1d8c5188b6dac36a"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/gallery-tracker-rerun.log",
+      "bytes": 12859,
+      "sha256": "34a420b966dc748ad7da4931d5cd91d955180a99a44e38016d134ec0386edad0"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/measure-code.mjs",
+      "bytes": 2665,
+      "sha256": "7965ade1a28523c1799213699fd3cefd48c81d92f75daa469ce0ca14caf2d7b3"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/measured-code.json",
+      "bytes": 17216,
+      "sha256": "4bd2b6c1833481c64843b76071b100da113cdd13cfbd00d5529b8497520836d8"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/review.json",
+      "bytes": 306665,
+      "sha256": "196fdbbb87c3072697637f2728fbd5bbfe8155e6df826a9ee747ced420f91ca9"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/text-final.log",
+      "bytes": 997,
+      "sha256": "41ba19e29ec5633b6be5d6d87f9960fd01c8d0db60e5a28a7d9335a305288478"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/text-rerun.log",
+      "bytes": 995,
+      "sha256": "868ef082d24360094ed25873f33e5842312c3fe09bb2e2a92e4711379a86daab"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60/verification.json",
+      "bytes": 606,
+      "sha256": "427b69db3b8f0f4ebb4a0b6a21081b2ec3c176dbb411465b29033ee9ddb02723"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-review60.md",
+      "bytes": 7895,
+      "sha256": "161db0d25417a8f32b3c1e5f2d8a14a5e758320e5bb7d89f9e1fc36b1104a763"
+    }
+  ]
+}

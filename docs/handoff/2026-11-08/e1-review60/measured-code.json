@@ -1,0 +1,585 @@
+{
+  "scope": "Advisory measured composition only; no render or source mutation. Primary visual judgments use immutable after02 PNGs. Latin code/text, published 0.33 office/visual/auto fonts and declared public APIs.",
+  "consumer": "C:/opf-work/core033-office-consumer-01",
+  "release": "0.33.0",
+  "scaleOfActualImages": 0.5,
+  "rows": [
+    {
+      "deck": "overview",
+      "id": "layout-code",
+      "ordinal": 26,
+      "sourceSha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729",
+      "authored": {
+        "id": "layout-code",
+        "layout": "code",
+        "title": "Keep the implementation easy to inspect",
+        "blocks": [
+          {
+            "region": "code",
+            "code": {
+              "language": "javascript",
+              "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+            }
+          },
+          {
+            "region": "notes",
+            "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+          }
+        ]
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 600.803125
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.25.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 327.421563,
+            "width": 684.48,
+            "height": 148.04
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const total = items.reduce((sum, item) => sum + ",
+            "item.value, 0);",
+            "console.log(total);"
+          ],
+          "overflow": false,
+          "textHeight": 80.52,
+          "textHeightToBoxHeight": 0.5439070521480681
+        },
+        {
+          "path": "slides.25.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 766.08,
+            "y": 327.421563,
+            "width": 456.32,
+            "height": 151.04
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "The reducer adds each item’s value to ",
+            "a running sum. Starting at zero also ",
+            "makes an empty list return zero."
+          ],
+          "overflow": false,
+          "textHeight": 102.47999999999999,
+          "textHeightToBoxHeight": 0.6784957627118644
+        }
+      ]
+    },
+    {
+      "deck": "overview",
+      "id": "dynamic-code-text",
+      "ordinal": 48,
+      "sourceSha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729",
+      "authored": {
+        "id": "dynamic-code-text",
+        "title": "How the running total works",
+        "composition": {
+          "mode": "row",
+          "weights": [
+            3,
+            2
+          ]
+        },
+        "blocks": [
+          {
+            "code": {
+              "language": "javascript",
+              "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+            }
+          },
+          {
+            "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+          }
+        ]
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 510.923125
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.47.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 684.48,
+            "height": 510.923125
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const total = items.reduce((sum, item) => sum + ",
+            "item.value, 0);",
+            "console.log(total);"
+          ],
+          "overflow": false,
+          "textHeight": 80.52,
+          "textHeightToBoxHeight": 0.15759709447482925
+        },
+        {
+          "path": "slides.47.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 766.08,
+            "y": 350.201563,
+            "width": 456.32,
+            "height": 105.48
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "The reducer adds each item’s value to ",
+            "a running sum. Starting at zero also ",
+            "makes an empty list return zero."
+          ],
+          "overflow": false,
+          "textHeight": 102.47999999999999,
+          "textHeightToBoxHeight": 0.9715585893060295
+        }
+      ]
+    },
+    {
+      "deck": "pilot",
+      "id": "layout-code",
+      "ordinal": 26,
+      "sourceSha256": "bc1f4d001e04450bf2172ddfffad6210de8999d4a38f730cdebe96d81540a389",
+      "authored": {
+        "id": "layout-code",
+        "layout": "code",
+        "title": "Keep the implementation easy to inspect",
+        "blocks": [
+          {
+            "region": "code",
+            "code": {
+              "language": "javascript",
+              "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+            }
+          },
+          {
+            "region": "notes",
+            "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+          }
+        ]
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 600.803125
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.25.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 327.421563,
+            "width": 684.48,
+            "height": 148.04
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const total = items.reduce((sum, item) => sum + ",
+            "item.value, 0);",
+            "console.log(total);"
+          ],
+          "overflow": false,
+          "textHeight": 80.52,
+          "textHeightToBoxHeight": 0.5439070521480681
+        },
+        {
+          "path": "slides.25.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 766.08,
+            "y": 327.421563,
+            "width": 456.32,
+            "height": 151.04
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "The reducer adds each item’s value to ",
+            "a running sum. Starting at zero also ",
+            "makes an empty list return zero."
+          ],
+          "overflow": false,
+          "textHeight": 102.47999999999999,
+          "textHeightToBoxHeight": 0.6784957627118644
+        }
+      ]
+    },
+    {
+      "deck": "pilot",
+      "id": "dynamic-code-text",
+      "ordinal": 42,
+      "sourceSha256": "bc1f4d001e04450bf2172ddfffad6210de8999d4a38f730cdebe96d81540a389",
+      "authored": {
+        "id": "dynamic-code-text",
+        "title": "How the running total works",
+        "composition": {
+          "mode": "row",
+          "weights": [
+            3,
+            2
+          ]
+        },
+        "blocks": [
+          {
+            "code": {
+              "language": "javascript",
+              "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+            }
+          },
+          {
+            "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+          }
+        ]
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 510.923125
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.41.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 684.48,
+            "height": 510.923125
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const total = items.reduce((sum, item) => sum + ",
+            "item.value, 0);",
+            "console.log(total);"
+          ],
+          "overflow": false,
+          "textHeight": 80.52,
+          "textHeightToBoxHeight": 0.15759709447482925
+        },
+        {
+          "path": "slides.41.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 766.08,
+            "y": 350.201563,
+            "width": 456.32,
+            "height": 105.48
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "The reducer adds each item’s value to ",
+            "a running sum. Starting at zero also ",
+            "makes an empty list return zero."
+          ],
+          "overflow": false,
+          "textHeight": 102.47999999999999,
+          "textHeightToBoxHeight": 0.9715585893060295
+        }
+      ]
+    },
+    {
+      "deck": "batch-02",
+      "id": "s30",
+      "ordinal": 30,
+      "sourceSha256": "6ec1901791c4a5b480a491fdee241ad4eeb098579a406e3d533b9b8efa6f894b",
+      "authored": {
+        "layout": "code",
+        "title": "Operating Model",
+        "blocks": [
+          {
+            "code": {
+              "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+              "language": "ts",
+              "filename": "broadband-public-hearing-deck-rule.ts"
+            }
+          },
+          {
+            "text": "Rural Connectivity Office should focus the next cycle on explain broadband route choices and resident impact while making the operating tradeoffs clear to public engagement stakeholders."
+          }
+        ],
+        "id": "s30"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 604.8
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.29.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 275.4,
+            "width": 684.48,
+            "height": 256.08
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const score = urgency * confidence;",
+            "if (score >= threshold) {",
+            "  routeToSponsor(workstream);",
+            "} else {",
+            "  keepInWeeklyReview(workstream);",
+            "}"
+          ],
+          "overflow": false,
+          "textHeight": 161.04,
+          "textHeightToBoxHeight": 0.6288659793814433
+        },
+        {
+          "path": "slides.29.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 766.08,
+            "y": 275.4,
+            "width": 456.32,
+            "height": 259.08
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "Rural Connectivity Office should ",
+            "focus the next cycle on explain ",
+            "broadband route choices and ",
+            "resident impact while making the ",
+            "operating tradeoffs clear to public ",
+            "engagement stakeholders."
+          ],
+          "overflow": false,
+          "textHeight": 204.95999999999998,
+          "textHeightToBoxHeight": 0.7911069939786938
+        }
+      ]
+    },
+    {
+      "deck": "batch-02",
+      "id": "s34",
+      "ordinal": 34,
+      "sourceSha256": "6ec1901791c4a5b480a491fdee241ad4eeb098579a406e3d533b9b8efa6f894b",
+      "authored": {
+        "title": "Signal Trend",
+        "composition": {
+          "mode": "row"
+        },
+        "blocks": [
+          {
+            "code": {
+              "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+              "language": "ts",
+              "filename": "kiosk-orientation-deck-rule.ts"
+            }
+          },
+          {
+            "text": "Novara Therapeutics should focus the next cycle on restore patient enrollment momentum across priority sites while making the operating tradeoffs clear to pharmaceuticals stakeholders."
+          }
+        ],
+        "id": "s34"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 514.92
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.33.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 570.4,
+            "height": 514.92
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const score = urgency * confidence;",
+            "if (score >= threshold) {",
+            "  routeToSponsor(workstream);",
+            "} else {",
+            "  keepInWeeklyReview(workstream);",
+            "}"
+          ],
+          "overflow": false,
+          "textHeight": 161.04,
+          "textHeightToBoxHeight": 0.3127476112794221
+        },
+        {
+          "path": "slides.33.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 652,
+            "y": 318.04,
+            "width": 570.4,
+            "height": 173.8
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "Novara Therapeutics should focus the next ",
+            "cycle on restore patient enrollment momentum ",
+            "across priority sites while making the operating ",
+            "tradeoffs clear to pharmaceuticals ",
+            "stakeholders."
+          ],
+          "overflow": false,
+          "textHeight": 170.79999999999998,
+          "textHeightToBoxHeight": 0.9827387802071345
+        }
+      ]
+    },
+    {
+      "deck": "batch-03",
+      "id": "s12",
+      "ordinal": 12,
+      "sourceSha256": "39f7be5e75bd2d46ece260e77b38d0c7f84fcdf85a0072de9bc0fd750301bbbf",
+      "authored": {
+        "title": "Decision Options",
+        "composition": {
+          "mode": "row"
+        },
+        "blocks": [
+          {
+            "code": {
+              "source": "const score = urgency * confidence;\nif (score >= threshold) {\n  routeToSponsor(workstream);\n} else {\n  keepInWeeklyReview(workstream);\n}",
+              "language": "ts",
+              "filename": "boutique-hotel-revenue-recovery-rule.ts"
+            }
+          },
+          {
+            "text": "Oaktrail Animal Health should focus the next cycle on balance appointment access with staff retention while making the operating tradeoffs clear to veterinary care stakeholders."
+          }
+        ],
+        "id": "s12"
+      },
+      "canvas": {
+        "width": 1280,
+        "height": 720
+      },
+      "contentBox": {
+        "x": 57.6,
+        "y": 147.48,
+        "width": 1164.8,
+        "height": 514.92
+      },
+      "diagnostics": [],
+      "items": [
+        {
+          "path": "slides.11.blocks.0.code",
+          "type": "code",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 570.4,
+            "height": 514.92
+          },
+          "fontFamily": "Roboto Mono",
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "const score = urgency * confidence;",
+            "if (score >= threshold) {",
+            "  routeToSponsor(workstream);",
+            "} else {",
+            "  keepInWeeklyReview(workstream);",
+            "}"
+          ],
+          "overflow": false,
+          "textHeight": 161.04,
+          "textHeightToBoxHeight": 0.3127476112794221
+        },
+        {
+          "path": "slides.11.blocks.1.text",
+          "type": "text",
+          "box": {
+            "x": 652,
+            "y": 335.12,
+            "width": 570.4,
+            "height": 139.64
+          },
+          "fontFamily": "Intos",
+          "fontSize": 28,
+          "lineHeight": 34.16,
+          "lines": [
+            "Oaktrail Animal Health should focus the next ",
+            "cycle on balance appointment access with ",
+            "staff retention while making the operating ",
+            "tradeoffs clear to veterinary care stakeholders."
+          ],
+          "overflow": false,
+          "textHeight": 136.64,
+          "textHeightToBoxHeight": 0.9785161844743626
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "new": [
+    {
+      "id": "E1V60-01",
+      "priority": 2,
+      "status": "confirmed-current033-under-capacity; queued for bounded034fix",
+      "title": "Grow short code in underfilled mixed code/text rows",
+      "uniqueAuthoredCases": 3,
+      "occurrences": 4,
+      "actualCodePx": 22,
+      "actualPngCodePxAtScaleHalf": 11,
+      "authoredSizeOverrides": false,
+      "diagnostics": [],
+      "cases": [
+        {
+          "deck": "overview",
+          "id": "dynamic-code-text",
+          "ordinal": 48,
+          "sheet": {
+            "file": "sheets/overview/review-12.png",
+            "sha256": "62ba9acac616bfa3eb7a379e382a5126c5eb6bcdbb8006f1c960b17167677a5c",
+            "bytes": 299341,
+            "gitBlob": "9523b818a468992c3165cae7652f9ba045eab97a",
+            "width": 1456,
+            "height": 1218
+          },
+          "source": {
+            "file": "decks/overview/current-gallery.opf.json",
+            "sha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729",
+            "immutableStorage": {
+              "kind": "archive",
+              "file": "packets/overview-01.zip",
+              "entry": "current-gallery.opf.json"
+            }
+          },
+          "authoredSlideSha256": "1e265b80af612bfec75933bfef3b141ab1e3189a8fe706bd48e529425ea9e87f",
+          "after": {
+            "ordinal": 48,
+            "file": "slide-48.png",
+            "bytes": 22409,
+            "sha256": "0f898009828de81ccea3a106712f5788ce764fab41747d7fe0fa6429d7d6b05f",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "deck": "pilot",
+          "id": "dynamic-code-text",
+          "ordinal": 42,
+          "sheet": {
+            "file": "sheets/pilot/review-11.png",
+            "sha256": "0a62e50f3701d7704971c4576d84c64c509e37e6159be1931ed984c7e5283ad7",
+            "bytes": 229960,
+            "gitBlob": "09142c4d7c1e5afbdf2539778a894f96e6b1362b",
+            "width": 1456,
+            "height": 922
+          },
+          "source": {
+            "file": "decks/pilot/current-gallery.opf.json",
+            "sha256": "bc1f4d001e04450bf2172ddfffad6210de8999d4a38f730cdebe96d81540a389",
+            "immutableStorage": {
+              "kind": "archive",
+              "file": "packets/pilot-01.zip",
+              "entry": "current-gallery.opf.json"
+            }
+          },
+          "authoredSlideSha256": "1e265b80af612bfec75933bfef3b141ab1e3189a8fe706bd48e529425ea9e87f",
+          "after": {
+            "ordinal": 42,
+            "file": "slide-42.png",
+            "bytes": 22413,
+            "sha256": "37792de26021263aa5a682c5d24640cb78004988f95ff8bea29f0f61f88e0a10",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "deck": "batch-02",
+          "id": "s34",
+          "ordinal": 34,
+          "sheet": {
+            "file": "sheets/batch-02/review-09.png",
+            "sha256": "c2bb9fe0da267ba58f3fd485b3676b4b558676029ee58b13c4691c01ad5d525e",
+            "bytes": 301052,
+            "gitBlob": "4112158319ac55b375c5eacb0205be5db144c3ce",
+            "width": 1456,
+            "height": 1218
+          },
+          "source": {
+            "file": "decks/batch-02/current-gallery.opf.json",
+            "sha256": "6ec1901791c4a5b480a491fdee241ad4eeb098579a406e3d533b9b8efa6f894b",
+            "immutableStorage": {
+              "kind": "archive",
+              "file": "packets/batch-02-01.zip",
+              "entry": "current-gallery.opf.json"
+            }
+          },
+          "authoredSlideSha256": "8e8abb059a79f1b868193d4d1b9f49e10e4c64b01cd7edfcc28158a3c0c8a519",
+          "after": {
+            "ordinal": 34,
+            "file": "slide-34.png",
+            "bytes": 28764,
+            "sha256": "a0083125aba54d10d0ac01dbac3e223c2d60beb210e5a2ba7790371bdd8f51f4",
+            "width": 640,
+            "height": 360
+          }
+        },
+        {
+          "deck": "batch-03",
+          "id": "s12",
+          "ordinal": 12,
+          "sheet": {
+            "file": "sheets/batch-03/review-03.png",
+            "sha256": "8afdaabc44f6bbb2c595d3d14b887b2cb56b6a785c4ecf64d676f8aa53bba329",
+            "bytes": 394128,
+            "gitBlob": "08a154460bc85592259738b695cc7db24d269186",
+            "width": 1456,
+            "height": 1218
+          },
+          "source": {
+            "file": "decks/batch-03/current-gallery.opf.json",
+            "sha256": "39f7be5e75bd2d46ece260e77b38d0c7f84fcdf85a0072de9bc0fd750301bbbf",
+            "immutableStorage": {
+              "kind": "archive",
+              "file": "packets/batch-03-01.zip",
+              "entry": "current-gallery.opf.json"
+            }
+          },
+          "authoredSlideSha256": "4ae8265ca5d774a7d8b7b901db895debb9553f63813f95af18993c66545415e7",
+          "after": {
+            "ordinal": 12,
+            "file": "slide-12.png",
+            "bytes": 28392,
+            "sha256": "3d54e575453682332bc54ec7fcb1d74d3883093b4bd0ceab1f718945b6187dcf",
+            "width": 640,
+            "height": 360
+          }
+        }
+      ],
+      "expected": "Spend unused panel space on larger readable code; preserve notes, fonts, content and order; require measured fit and before/after sheets.",
+      "controls": [
+        "overview/layout-code",
+        "pilot/layout-code",
+        "batch-02/s30"
+      ],
+      "notClaimed": [
+        "No exact historical font-size regression",
+        "No new duplicate1194 orLH41 item",
+        "No full936-slide acceptance"
+      ]
+    }
+  ],
+  "knownBoundaries": [
+    {
+      "deck": "batch-02",
+      "id": "s36",
+      "numericSeries": 2,
+      "actualFindings": [],
+      "classification": "Known multi-series Pareto adaptation, verify reporting withF3; do not drop a series"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "pass": true,
+  "checks": [
+    "All60 PNG SHA256 values equal execution receipt",
+    "All60 actual PNG Git blob IDs equal immutable29ba tree",
+    "All232 after PNG SHA256 values equal execution receipt",
+    "All5 selected derived-source SHA256 values equal immutable files.json references",
+    "Finite60-row judgment index, 244 total sheets, 184 explicitly unreviewed"
+  ],
+  "reviewedFindingOccurrences": {
+    "opf/numbering-start-ignored": 10
+  },
+  "allCorpusWarnings427PreservedInSourcePacket": true,
+  "imagesCreated": 0,
+  "inputMutations": 0,
+  "registryCalls": 0,
+  "githubApiCalls": 0
+}
