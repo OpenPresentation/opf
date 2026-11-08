@@ -1,0 +1,28 @@
+﻿{
+    "captureTextFonts":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\inputs\\case.pptx",
+                   "sha256":  "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+                   "snapshotPath":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\input.pptx",
+                   "snapshotSha256":  "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+               },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\inputs\\action-plan.json",
+                       "sha256":  "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba",
+                       "snapshotPath":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba",
+                       "count":  2
+                   },
+    "verifier":  {
+                     "path":  "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-furniture-control.ps1",
+                     "sha256":  "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593",
+                     "snapshotPath":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\native-furniture-control.ps1",
+                     "snapshotSha256":  "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+                 },
+    "processHelper":  {
+                          "path":  "C:\\opf-work\\rr109-readonly\\packages\\pptx\\test\\native-process.ps1",
+                          "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c",
+                          "snapshotPath":  "C:\\opf-work\\release-033-artifacts\\lh34-edit-cli-01\\native\\inputs\\native-process.ps1",
+                          "snapshotSha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                      }
+}

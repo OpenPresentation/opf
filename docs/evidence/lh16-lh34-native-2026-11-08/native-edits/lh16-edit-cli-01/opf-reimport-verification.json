@@ -1,0 +1,59 @@
+{
+  "sourceHead": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+  "savedSha256": "32f11c0a738d89620501af39e7b6e73c46d291f661db614bb05678b27ec1c593",
+  "currentEvents": [
+    {
+      "when": "Week 1",
+      "what": "Discover",
+      "status": "done",
+      "duration": 1
+    },
+    {
+      "when": "Weeks 2–5",
+      "what": "Build in PowerPoint",
+      "status": "current",
+      "duration": 4
+    },
+    {
+      "when": "Week 6",
+      "what": "Launch",
+      "status": "planned"
+    }
+  ],
+  "expected": {
+    "events": [
+      {
+        "index": 1,
+        "what": "Build in PowerPoint",
+        "duration": 4
+      }
+    ]
+  },
+  "sourceSha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+  "snapshotSha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+  "sourceAndSnapshotUnchanged": true,
+  "actionPlan": {
+    "path": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\inputs\\action-plan.json",
+    "sha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970",
+    "snapshotPath": "C:\\opf-work\\release-033-artifacts\\lh16-edit-cli-01\\native\\inputs\\action-plan.json",
+    "snapshotSha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970",
+    "actions": [
+      {
+        "op": "set-text",
+        "slideIndex": 1,
+        "shapeName": "OPF timeline 0 part 3 line 0",
+        "text": "Build in PowerPoint"
+      }
+    ],
+    "completed": [
+      {
+        "index": 1,
+        "op": "set-text",
+        "status": "success"
+      }
+    ],
+    "styleEdits": []
+  },
+  "cleanupConfirmed": true,
+  "nativeWordsAndDurationAccepted": true
+}

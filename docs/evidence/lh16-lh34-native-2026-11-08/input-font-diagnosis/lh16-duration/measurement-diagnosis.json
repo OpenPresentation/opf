@@ -1,0 +1,696 @@
+{
+  "item": "lh16-duration",
+  "cause": "Original sealed archives omitted the measured fonts provider used in review SVGs; these exports use the same measured provider.",
+  "records": [
+    {
+      "id": "wide",
+      "beforeSha256": "28ae08b84e329472eebc2acdd2c478897437149ab151621b634c02343926db33",
+      "afterSha256": "3a4f9ceb9f08f09231914def9ef15fe485c61ab4c4fd5c862bb4b9d1aae6a394",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Six-week delivery",
+          "frame": "<a:off x=\"548640\" y=\"1911382\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"624840\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"624840\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"624840\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"4323080\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test ",
+          "frame": "<a:off x=\"4323080\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "the working ",
+          "frame": "<a:off x=\"4323080\" y=\"4942808\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 2",
+          "text": "product.",
+          "frame": "<a:off x=\"4323080\" y=\"5372767\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"8021320\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"8021320\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the ",
+          "frame": "<a:off x=\"8021320\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 1",
+          "text": "team.",
+          "frame": "<a:off x=\"8021320\" y=\"4942808\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Six-week delivery",
+          "frame": "<a:off x=\"548640\" y=\"2123279\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"624840\" y=\"2705973\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"624840\" y=\"3772202\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"624840\" y=\"4731560\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"4323080\" y=\"2705973\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3772202\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test the ",
+          "frame": "<a:off x=\"4323080\" y=\"4731560\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "working product.",
+          "frame": "<a:off x=\"4323080\" y=\"5161518\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"8021320\" y=\"2705973\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"8021320\" y=\"3772202\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the team.",
+          "frame": "<a:off x=\"8021320\" y=\"4731560\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "beforeSha256": "b6ef7ef7be462580b06aa3f8350a309ed20b8fd58cb4fd9b089e97744c2fb280",
+      "afterSha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"960120\" y=\"2093936\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"960120\" y=\"2462294\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"960120\" y=\"4306797\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"960120\" y=\"4675156\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"960120\" y=\"6519659\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"960120\" y=\"6888017\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"960872\" y=\"2124219\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"960120\" y=\"2492577\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"960872\" y=\"4326986\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"960120\" y=\"4695344\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"960872\" y=\"6529753\"/><a:ext cx=\"3771900\" cy=\"339783\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"960120\" y=\"6898111\"/><a:ext cx=\"3771900\" cy=\"374645\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "rtl",
+      "beforeSha256": "6d9047b2092e2019322520a6f68651c4bcbe1942838f290059eb07dec485375d",
+      "afterSha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Six-week delivery",
+          "frame": "<a:off x=\"548640\" y=\"2133791\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"8021320\" y=\"2709672\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"8021320\" y=\"3775900\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"8021320\" y=\"4290441\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"4323080\" y=\"2709672\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3775900\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test ",
+          "frame": "<a:off x=\"4323080\" y=\"4290441\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "the working ",
+          "frame": "<a:off x=\"4323080\" y=\"4720399\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 2",
+          "text": "product.",
+          "frame": "<a:off x=\"4323080\" y=\"5150358\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"624840\" y=\"2709672\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"624840\" y=\"3775900\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the ",
+          "frame": "<a:off x=\"624840\" y=\"4290441\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 1",
+          "text": "team.",
+          "frame": "<a:off x=\"624840\" y=\"4720399\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Six-week delivery",
+          "frame": "<a:off x=\"548640\" y=\"2345688\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Week 1",
+          "frame": "<a:off x=\"8021320\" y=\"2928382\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"8021320\" y=\"3994611\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"8021320\" y=\"4509151\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Weeks 2–5",
+          "frame": "<a:off x=\"4323080\" y=\"2928382\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3994611\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test the ",
+          "frame": "<a:off x=\"4323080\" y=\"4509151\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "working product.",
+          "frame": "<a:off x=\"4323080\" y=\"4939110\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Week 6",
+          "frame": "<a:off x=\"624840\" y=\"2928382\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"624840\" y=\"3994611\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the team.",
+          "frame": "<a:off x=\"624840\" y=\"4509151\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\" rtl=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "nine-periods",
+      "beforeSha256": "326af57eba0c716847660a4222e09be7185ae334a93be0b2e0bacfafb3096c44",
+      "afterSha256": "2929f5c6035b6e70c6b1e2eeb6b2581d4f7d03397448cc5ebbe25bcc2f5a10f0",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Phase 1",
+          "frame": "<a:off x=\"1158240\" y=\"1445495\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Phase 2",
+          "frame": "<a:off x=\"1158240\" y=\"1985924\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Phase 3",
+          "frame": "<a:off x=\"1158240\" y=\"2526354\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Phase 4",
+          "frame": "<a:off x=\"1158240\" y=\"3066783\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Phase 5",
+          "frame": "<a:off x=\"1158240\" y=\"3607213\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Phase 6",
+          "frame": "<a:off x=\"1158240\" y=\"4147642\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Phase 7",
+          "frame": "<a:off x=\"1158240\" y=\"4688072\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Phase 8",
+          "frame": "<a:off x=\"1158240\" y=\"5228501\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Phase 9",
+          "frame": "<a:off x=\"1158240\" y=\"5768931\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Phase 1",
+          "frame": "<a:off x=\"1158240\" y=\"1448516\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Phase 2",
+          "frame": "<a:off x=\"1158240\" y=\"1988610\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Phase 3",
+          "frame": "<a:off x=\"1158240\" y=\"2528704\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Phase 4",
+          "frame": "<a:off x=\"1158240\" y=\"3068797\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Phase 5",
+          "frame": "<a:off x=\"1158240\" y=\"3608891\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Phase 6",
+          "frame": "<a:off x=\"1158240\" y=\"4148985\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Phase 7",
+          "frame": "<a:off x=\"1158240\" y=\"4689079\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Phase 8",
+          "frame": "<a:off x=\"1158240\" y=\"5229172\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Phase 9",
+          "frame": "<a:off x=\"1158240\" y=\"5769266\"/><a:ext cx=\"10485120\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"l\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "single-period",
+      "beforeSha256": "73b19d7b96d2b348158a7f536c2cc6c3187e2fc09c30fc5df268b0bc58e91d40",
+      "afterSha256": "6d3de2341d9695ecba717ef34758fd59e6d5969d0d50ca9f4f3b4c17dc7ae84d",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Weeks 1–4",
+          "frame": "<a:off x=\"548640\" y=\"2828449\"/><a:ext cx=\"11094720\" cy=\"453200\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Deliver the working product",
+          "frame": "<a:off x=\"548640\" y=\"3917918\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Weeks 1–4",
+          "frame": "<a:off x=\"548640\" y=\"2829202\"/><a:ext cx=\"11094720\" cy=\"453200\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Deliver the working product",
+          "frame": "<a:off x=\"548640\" y=\"3918671\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "partial-periods",
+      "beforeSha256": "32cd96a7ea97ec2b13f10da9cf9dc64aaf5f0020e234b739558c06dc178c5755",
+      "afterSha256": "200dbfd5b8cd4d3df74f94f1cbd074dae06bc54d01790d8595f014693c36d050",
+      "before": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Relative periods",
+          "frame": "<a:off x=\"548640\" y=\"1911382\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Period A",
+          "frame": "<a:off x=\"624840\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"624840\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"624840\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Half unit",
+          "frame": "<a:off x=\"4323080\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test ",
+          "frame": "<a:off x=\"4323080\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "the working ",
+          "frame": "<a:off x=\"4323080\" y=\"4942808\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 2",
+          "text": "product.",
+          "frame": "<a:off x=\"4323080\" y=\"5372767\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Period C",
+          "frame": "<a:off x=\"8021320\" y=\"2487263\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"8021320\" y=\"3553492\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the ",
+          "frame": "<a:off x=\"8021320\" y=\"4512850\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 1",
+          "text": "team.",
+          "frame": "<a:off x=\"8021320\" y=\"4942808\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF timeline 0 part 0 line 0",
+          "text": "Relative periods",
+          "frame": "<a:off x=\"548640\" y=\"2122319\"/><a:ext cx=\"11094720\" cy=\"499682\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 1 line 0",
+          "text": "Period A",
+          "frame": "<a:off x=\"624840\" y=\"2700814\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 2 line 0",
+          "text": "Discover",
+          "frame": "<a:off x=\"624840\" y=\"3767042\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 3 line 0",
+          "text": "Agree the scope.",
+          "frame": "<a:off x=\"624840\" y=\"4726400\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 4 line 0",
+          "text": "Half unit",
+          "frame": "<a:off x=\"4323080\" y=\"2700814\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 5 line 0",
+          "text": "Build",
+          "frame": "<a:off x=\"4323080\" y=\"3767042\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 0",
+          "text": "Deliver and test the ",
+          "frame": "<a:off x=\"4323080\" y=\"4726400\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 6 line 1",
+          "text": "working product.",
+          "frame": "<a:off x=\"4323080\" y=\"5156359\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 7 line 0",
+          "text": "Period C",
+          "frame": "<a:off x=\"8021320\" y=\"2700814\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 8 line 0",
+          "text": "Launch",
+          "frame": "<a:off x=\"8021320\" y=\"3767042\"/><a:ext cx=\"3545840\" cy=\"476440\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF timeline 0 part 9 line 0",
+          "text": "Release to the team.",
+          "frame": "<a:off x=\"8021320\" y=\"4726400\"/><a:ext cx=\"3545840\" cy=\"429959\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    }
+  ]
+}

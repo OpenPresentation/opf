@@ -1,0 +1,336 @@
+{
+  "item": "lh34-callouts",
+  "cause": "Original sealed archives omitted the measured fonts provider used in review SVGs; these exports use the same measured provider.",
+  "records": [
+    {
+      "id": "wide",
+      "beforeSha256": "f3d0a9c8f1f37dc041a4e100a8d9b5abdbb6c2fbd2e5516badc63eeb9f4e107f",
+      "afterSha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red zone",
+          "frame": "<a:off x=\"1174257\" y=\"2224556\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue zone",
+          "frame": "<a:off x=\"7063770\" y=\"2224556\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Inspection point",
+          "frame": "<a:off x=\"2919298\" y=\"5114780\"/><a:ext cx=\"6353404\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red zone",
+          "frame": "<a:off x=\"1177346\" y=\"2227208\"/><a:ext cx=\"3951421\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue zone",
+          "frame": "<a:off x=\"7063233\" y=\"2227208\"/><a:ext cx=\"3951421\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Inspection point",
+          "frame": "<a:off x=\"2921312\" y=\"5115653\"/><a:ext cx=\"6349375\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "portrait",
+      "beforeSha256": "1728dd76ca1366139ea2695461dd1dcb9abc87be30053c515767723e852ae564",
+      "afterSha256": "4c2c6f460ac5f7645e25fe4181e74e7a6d6eb4e9c5dc950ff5086c6edad6d94d",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red",
+          "frame": "<a:off x=\"755321\" y=\"2743882\"/><a:ext cx=\"1498748\" cy=\"488061\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue",
+          "frame": "<a:off x=\"2889431\" y=\"2743882\"/><a:ext cx=\"1498748\" cy=\"488061\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red",
+          "frame": "<a:off x=\"764337\" y=\"2773282\"/><a:ext cx=\"1490908\" cy=\"488061\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue",
+          "frame": "<a:off x=\"2888255\" y=\"2773282\"/><a:ext cx=\"1490908\" cy=\"488061\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "cover-focus",
+      "beforeSha256": "6891804f258c5b62afd3697334820d1d639f6f3526372f034163af60d1d3add1",
+      "afterSha256": "7f2c2097dc8303a7ca712d77f8636630861802c5d221c92d16658af92660d12c",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red zone",
+          "frame": "<a:off x=\"1425107\" y=\"2224556\"/><a:ext cx=\"3746749\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue zone",
+          "frame": "<a:off x=\"7020144\" y=\"2224556\"/><a:ext cx=\"3746749\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Inspection point",
+          "frame": "<a:off x=\"3082896\" y=\"5114780\"/><a:ext cx=\"6026208\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Red zone",
+          "frame": "<a:off x=\"1428041\" y=\"2227208\"/><a:ext cx=\"3744325\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Blue zone",
+          "frame": "<a:off x=\"7019634\" y=\"2227208\"/><a:ext cx=\"3744325\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Inspection point",
+          "frame": "<a:off x=\"3084809\" y=\"5115653\"/><a:ext cx=\"6022382\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "masked-rtl",
+      "beforeSha256": "7a58810a82c53418276c184949e033869252231cb334cb2322e60f490951f809",
+      "afterSha256": "64b1cc7f7cda7266b527f2d87b1ceaa9852b375145041bea6973515a74e91593",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "المنطقة ",
+          "frame": "<a:off x=\"1174257\" y=\"1899182\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 0 line 1",
+          "text": "الحمراء",
+          "frame": "<a:off x=\"1174257\" y=\"2549930\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "المنطقة ",
+          "frame": "<a:off x=\"7063770\" y=\"1899182\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 1",
+          "text": "الزرقاء",
+          "frame": "<a:off x=\"7063770\" y=\"2549930\"/><a:ext cx=\"3953972\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "نقطة الفحص",
+          "frame": "<a:off x=\"2919298\" y=\"5114780\"/><a:ext cx=\"6353404\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "المنطقة الحمراء",
+          "frame": "<a:off x=\"1177346\" y=\"2227208\"/><a:ext cx=\"3951421\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "المنطقة الزرقاء",
+          "frame": "<a:off x=\"7063233\" y=\"2227208\"/><a:ext cx=\"3951421\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "نقطة الفحص",
+          "frame": "<a:off x=\"2921312\" y=\"5115653\"/><a:ext cx=\"6349375\" cy=\"650748\"/>",
+          "rtl": "<a:pPr rtl=\"1\"  algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "nine-labels",
+      "beforeSha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+      "afterSha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Zone 1",
+          "frame": "<a:off x=\"956127\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Zone 2",
+          "frame": "<a:off x=\"4591629\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Zone 3",
+          "frame": "<a:off x=\"8227131\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 3 line 0",
+          "text": "Zone 4",
+          "frame": "<a:off x=\"956127\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 4 line 0",
+          "text": "Zone 5",
+          "frame": "<a:off x=\"4591629\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 5 line 0",
+          "text": "Zone 6",
+          "frame": "<a:off x=\"8227131\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 6 line 0",
+          "text": "Zone 7",
+          "frame": "<a:off x=\"956127\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 7 line 0",
+          "text": "Zone 8",
+          "frame": "<a:off x=\"4591629\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 8 line 0",
+          "text": "Zone 9",
+          "frame": "<a:off x=\"8227131\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "Zone 1",
+          "frame": "<a:off x=\"956127\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 1 line 0",
+          "text": "Zone 2",
+          "frame": "<a:off x=\"4591629\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 2 line 0",
+          "text": "Zone 3",
+          "frame": "<a:off x=\"8227131\" y=\"1897361\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 3 line 0",
+          "text": "Zone 4",
+          "frame": "<a:off x=\"956127\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 4 line 0",
+          "text": "Zone 5",
+          "frame": "<a:off x=\"4591629\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 5 line 0",
+          "text": "Zone 6",
+          "frame": "<a:off x=\"8227131\" y=\"3715112\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 6 line 0",
+          "text": "Zone 7",
+          "frame": "<a:off x=\"956127\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 7 line 0",
+          "text": "Zone 8",
+          "frame": "<a:off x=\"4591629\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 8 line 0",
+          "text": "Zone 9",
+          "frame": "<a:off x=\"8227131\" y=\"5532863\"/><a:ext cx=\"2863322\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    },
+    {
+      "id": "long-label",
+      "beforeSha256": "042f526d89c2d10c4f1f3bc01c21514bde5e4291156d7e4b13209acc9f4fa90d",
+      "afterSha256": "58aba68ad2dc3824f405b651211677169c897c4da6e6c3da6c26160f797ef11c",
+      "before": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "A measured label stays readable ",
+          "frame": "<a:off x=\"1610517\" y=\"3480625\"/><a:ext cx=\"8970965\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 0 line 1",
+          "text": "above the image and its overlay.",
+          "frame": "<a:off x=\"1610517\" y=\"4131373\"/><a:ext cx=\"8970965\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ],
+      "after": [
+        {
+          "name": "OPF image callout OPF image 1 0 line 0",
+          "text": "A measured label stays readable ",
+          "frame": "<a:off x=\"1610517\" y=\"3480625\"/><a:ext cx=\"8970965\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        },
+        {
+          "name": "OPF image callout OPF image 1 0 line 1",
+          "text": "above the image and its overlay.",
+          "frame": "<a:off x=\"1610517\" y=\"4131374\"/><a:ext cx=\"8970965\" cy=\"650748\"/>",
+          "rtl": "<a:pPr algn=\"ctr\" indent=\"0\" marL=\"0\">"
+        }
+      ]
+    }
+  ]
+}

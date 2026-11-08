@@ -1,0 +1,23 @@
+{
+  "verified": [
+    {
+      "id": "lh16-duration",
+      "sourceRevision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+      "importerRevision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+      "sourceAndSnapshotCount": 4,
+      "codeFiles": 9,
+      "savedSha256": "32f11c0a738d89620501af39e7b6e73c46d291f661db614bb05678b27ec1c593",
+      "nativeSemanticsAccepted": true
+    },
+    {
+      "id": "lh34-callouts",
+      "sourceRevision": "0a4a909688850637b955664df6d20b5ac2744bd1",
+      "importerRevision": "7adef994ded49c5c1d1c46821cf46613b1b9308a",
+      "sourceAndSnapshotCount": 4,
+      "codeFiles": 9,
+      "savedSha256": "e1f8de266a4bec04c54d8b09c32dc46dada8ed1ad0cf5292bbda54b4a38032a8",
+      "nativeSemanticsAccepted": true
+    }
+  ],
+  "scope": "No Office calls. Independent original/snapshot, sealed suite, frozen source/worker code and saved-file import verification."
+}

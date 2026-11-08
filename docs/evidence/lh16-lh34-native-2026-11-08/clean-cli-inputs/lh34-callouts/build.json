@@ -1,0 +1,1112 @@
+{
+  "manifestVersion": 1,
+  "revision": "0a4a909688850637b955664df6d20b5ac2744bd1",
+  "dirty": false,
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "platform": "win32-x64",
+  "builtAt": "2026-11-08T06:59:55.119Z",
+  "fontPreparation": "Maintained CLI, office pack, visual policy, automatic script preparation for matching PNG and PPTX.",
+  "sourceCode": [
+    {
+      "path": "spec/schemas/opf.schema.json",
+      "sha256": "04e7d13e192e6b877872118e4557683ce415029b8fb15fac7139f87f73f91871",
+      "bytes": 286450
+    },
+    {
+      "path": "packages/javascript/src/composition.ts",
+      "sha256": "7a2663638da1efc6c6af91adcea94deef46b5c64fa27e9173ca53a52eda843c3",
+      "bytes": 967040
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "sha256": "13947a40145ef6b02d6987ade61d4fb3a7c4faa5a2b56570f6f36ef71b5b2b78",
+      "bytes": 462992
+    },
+    {
+      "path": "packages/pptx/src/image-callout-provenance.js",
+      "sha256": "85c5709de287d10f97f4c612b644f69a6aceab8331b9b78b139eb3f65659a463",
+      "bytes": 4673
+    }
+  ],
+  "decks": [
+    {
+      "id": "lh34-callouts-wide",
+      "source": "source/lh34-callouts-wide.opf.json",
+      "sourceSha256": "49d371e88960bbe7ba5b66ecf000f01894dae6d414a307ae5159bf25ead3a29e",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-wide.pptx",
+          "ok": true,
+          "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-wide.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-wide.opf.json",
+              "sha256": "49d371e88960bbe7ba5b66ecf000f01894dae6d414a307ae5159bf25ead3a29e",
+              "bytes": 6518
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-wide.pptx",
+                "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+                "bytes": 97763,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-wide/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-wide.opf.json",
+              "sha256": "49d371e88960bbe7ba5b66ecf000f01894dae6d414a307ae5159bf25ead3a29e",
+              "bytes": 6518
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-wide\\slide-1.png",
+                "sha256": "e9b533d0781dfee9a733741d095a3468e1493e75ee0629752d42eeee052a145a",
+                "bytes": 74095,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-portrait",
+      "source": "source/lh34-callouts-portrait.opf.json",
+      "sourceSha256": "5feda429ef3fe504fe170e9f36b3da2475aa4699d79af47ed9a4124581a93761",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-portrait.pptx",
+          "ok": true,
+          "sha256": "4c2c6f460ac5f7645e25fe4181e74e7a6d6eb4e9c5dc950ff5086c6edad6d94d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-portrait.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-portrait.opf.json",
+              "sha256": "5feda429ef3fe504fe170e9f36b3da2475aa4699d79af47ed9a4124581a93761",
+              "bytes": 6483
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-portrait.pptx",
+                "sha256": "4c2c6f460ac5f7645e25fe4181e74e7a6d6eb4e9c5dc950ff5086c6edad6d94d",
+                "bytes": 96830,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-portrait/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-portrait.opf.json",
+              "sha256": "5feda429ef3fe504fe170e9f36b3da2475aa4699d79af47ed9a4124581a93761",
+              "bytes": 6483
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-portrait\\slide-1.png",
+                "sha256": "3f884fab68d76babb43d0a6dcc81652a620b9985c84d4f98ec06eb782dbab3d1",
+                "bytes": 51563,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 540,
+                "height": 960
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-cover-focus",
+      "source": "source/lh34-callouts-cover-focus.opf.json",
+      "sourceSha256": "84716c7bfa02293ac25bb22967826f84f427707ac49efcf96f7d278f8c92c007",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-cover-focus.pptx",
+          "ok": true,
+          "sha256": "7f2c2097dc8303a7ca712d77f8636630861802c5d221c92d16658af92660d12c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-cover-focus.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-cover-focus.opf.json",
+              "sha256": "84716c7bfa02293ac25bb22967826f84f427707ac49efcf96f7d278f8c92c007",
+              "bytes": 6622
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-cover-focus.pptx",
+                "sha256": "7f2c2097dc8303a7ca712d77f8636630861802c5d221c92d16658af92660d12c",
+                "bytes": 97834,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-cover-focus/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-cover-focus.opf.json",
+              "sha256": "84716c7bfa02293ac25bb22967826f84f427707ac49efcf96f7d278f8c92c007",
+              "bytes": 6622
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-cover-focus\\slide-1.png",
+                "sha256": "3e5d7933af975fdbe0e2110bc10652a8442ffa6de0f446f155b0c13e08a20573",
+                "bytes": 70728,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-masked-rtl",
+      "source": "source/lh34-callouts-masked-rtl.opf.json",
+      "sourceSha256": "08c413ee44372d5ff2b9df7a799612744676aa763ac7acfbd768f334fcb3168f",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-masked-rtl.pptx",
+          "ok": true,
+          "sha256": "64b1cc7f7cda7266b527f2d87b1ceaa9852b375145041bea6973515a74e91593",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-masked-rtl.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-masked-rtl.opf.json",
+              "sha256": "08c413ee44372d5ff2b9df7a799612744676aa763ac7acfbd768f334fcb3168f",
+              "bytes": 6710
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-masked-rtl.pptx",
+                "sha256": "64b1cc7f7cda7266b527f2d87b1ceaa9852b375145041bea6973515a74e91593",
+                "bytes": 98665,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [
+                {
+                  "requested": "Arabic Typesetting",
+                  "resolved": "Noto Naskh Arabic",
+                  "compatibility": "visual"
+                }
+              ],
+              "scripts": {
+                "detected": [
+                  "Arab"
+                ],
+                "scripts": [
+                  "Arab"
+                ],
+                "unavailable": [],
+                "packages": [
+                  "@expo-google-fonts/noto-sans-arabic",
+                  "@expo-google-fonts/noto-naskh-arabic",
+                  "@expo-google-fonts/noto-nastaliq-urdu"
+                ],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-masked-rtl/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-masked-rtl.opf.json",
+              "sha256": "08c413ee44372d5ff2b9df7a799612744676aa763ac7acfbd768f334fcb3168f",
+              "bytes": 6710
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-masked-rtl\\slide-1.png",
+                "sha256": "4a375ce30e703e111e524f85b87f29c8f109e879e606f8dc466d9e23ce65384f",
+                "bytes": 61122,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [
+                {
+                  "requested": "Arabic Typesetting",
+                  "resolved": "Noto Naskh Arabic",
+                  "compatibility": "visual"
+                }
+              ],
+              "scripts": {
+                "detected": [
+                  "Arab"
+                ],
+                "scripts": [
+                  "Arab"
+                ],
+                "unavailable": [],
+                "packages": [
+                  "@expo-google-fonts/noto-sans-arabic",
+                  "@expo-google-fonts/noto-naskh-arabic",
+                  "@expo-google-fonts/noto-nastaliq-urdu"
+                ],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-nine-labels",
+      "source": "source/lh34-callouts-nine-labels.opf.json",
+      "sourceSha256": "9603564668a9a2d1988677266bdd8d5684e0e8d1f9e0e0072f78b1c475c92c9e",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-nine-labels.pptx",
+          "ok": true,
+          "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-nine-labels.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-nine-labels.opf.json",
+              "sha256": "9603564668a9a2d1988677266bdd8d5684e0e8d1f9e0e0072f78b1c475c92c9e",
+              "bytes": 7754
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-nine-labels.pptx",
+                "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+                "bytes": 103481,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-nine-labels/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-nine-labels.opf.json",
+              "sha256": "9603564668a9a2d1988677266bdd8d5684e0e8d1f9e0e0072f78b1c475c92c9e",
+              "bytes": 7754
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-nine-labels\\slide-1.png",
+                "sha256": "5d605b23dab0b3145db14263ab618d58d3fdad9a505a20411beeae5cf732c3c8",
+                "bytes": 84770,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-long-label",
+      "source": "source/lh34-callouts-long-label.opf.json",
+      "sourceSha256": "5391a4ca9a10ea1d0cf6b70066fbfe9580823576550b2f2dafc3a633da25f0a0",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-long-label.pptx",
+          "ok": true,
+          "sha256": "58aba68ad2dc3824f405b651211677169c897c4da6e6c3da6c26160f797ef11c",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh34-callouts-long-label.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-long-label.opf.json",
+              "sha256": "5391a4ca9a10ea1d0cf6b70066fbfe9580823576550b2f2dafc3a633da25f0a0",
+              "bytes": 6184
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\pptx\\lh34-callouts-long-label.pptx",
+                "sha256": "58aba68ad2dc3824f405b651211677169c897c4da6e6c3da6c26160f797ef11c",
+                "bytes": 96313,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh34-callouts-long-label/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\source\\lh34-callouts-long-label.opf.json",
+              "sha256": "5391a4ca9a10ea1d0cf6b70066fbfe9580823576550b2f2dafc3a633da25f0a0",
+              "bytes": 6184
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh34-callouts\\preview\\lh34-callouts-long-label\\slide-1.png",
+                "sha256": "ae4e64f2cbd95c91ee3dabe22cbab298aca40950c8861803ccf67c173df5276a",
+                "bytes": 52928,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "annotated-picture",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    }
+  ]
+}

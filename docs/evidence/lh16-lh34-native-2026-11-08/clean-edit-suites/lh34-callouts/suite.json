@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "sourceCliManifest": {
+      "path": "C:/opf-work/qualification-034-cli-v1/lh34-callouts/build.json",
+      "sha256": "b119706d228786c3b6931bb97edb90de678315f22da7b316e2bd174d1944f441",
+      "sourceRevision": "0a4a909688850637b955664df6d20b5ac2744bd1",
+      "dirty": false
+    },
+    "suiteRepository": {
+      "revision": "0a4a909688850637b955664df6d20b5ac2744bd1",
+      "dirty": false,
+      "files": [
+        {
+          "path": "scripts/native-acceptance/run-windows.ps1",
+          "bytes": 14306,
+          "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+        },
+        {
+          "path": "spec/schemas/opf.schema.json",
+          "bytes": 286450,
+          "sha256": "04e7d13e192e6b877872118e4557683ce415029b8fb15fac7139f87f73f91871"
+        },
+        {
+          "path": "packages/javascript/src/composition.ts",
+          "bytes": 967040,
+          "sha256": "7a2663638da1efc6c6af91adcea94deef46b5c64fa27e9173ca53a52eda843c3"
+        },
+        {
+          "path": "packages/pptx/src/index.js",
+          "bytes": 462992,
+          "sha256": "13947a40145ef6b02d6987ade61d4fb3a7c4faa5a2b56570f6f36ef71b5b2b78"
+        },
+        {
+          "path": "packages/pptx/src/image-callout-provenance.js",
+          "bytes": 4673,
+          "sha256": "85c5709de287d10f97f4c612b644f69a6aceab8331b9b78b139eb3f65659a463"
+        }
+      ]
+    },
+    "workerRepository": {
+      "revision": "ff501beb2613bc7419edcc2f8967ccaf738c6770",
+      "dirty": false,
+      "files": [
+        {
+          "path": "test/native-furniture-control.ps1",
+          "bytes": 36494,
+          "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+        },
+        {
+          "path": "test/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "test/native-process-check.ps1",
+          "bytes": 2333,
+          "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+        },
+        {
+          "path": "test/native-furniture-harness-check.ps1",
+          "bytes": 24181,
+          "sha256": "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8"
+        }
+      ]
+    }
+  },
+  "files": [
+    {
+      "path": "input.pptx",
+      "bytes": 97763,
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+    },
+    {
+      "path": "action-plan.json",
+      "bytes": 279,
+      "sha256": "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba"
+    },
+    {
+      "path": "expected.json",
+      "bytes": 143,
+      "sha256": "774002ed09802fd73af8095e87a50247100ef6443f4f4edb9bf92639ab0aad60"
+    }
+  ],
+  "cases": [
+    {
+      "id": "lh34-callouts",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "input.pptx",
+      "actionPlan": "action-plan.json",
+      "archiveSha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+      "slideCount": 1
+    }
+  ]
+}

@@ -1,0 +1,1401 @@
+{
+  "schemaVersion": 1,
+  "scope": "Evidence only; visual acceptance remains held",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2902,
+      "sha256": "d1fd560dd2e1163186c54a4cc37f8e5a652e699433302b6c19d174ca0d90a7ba"
+    },
+    {
+      "path": "archive-gate.json",
+      "bytes": 536,
+      "sha256": "c0c84fed46fa9b03432838b3e3eea70fbc9be0a46aecddc0d7d64a466393bf68"
+    },
+    {
+      "path": "check-native-edits.mjs",
+      "bytes": 5675,
+      "sha256": "f37bea76e2821a47ad43cb6d368955d40dfa6ed61e154eaeb113dfdb4b382d9f"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/build.json",
+      "bytes": 41604,
+      "sha256": "84baa4e4adb1791209b519c85254162921d33b4f98a528d33b8d915c7d60b1b6"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-nine-periods.pptx",
+      "bytes": 108736,
+      "sha256": "2929f5c6035b6e70c6b1e2eeb6b2581d4f7d03397448cc5ebbe25bcc2f5a10f0"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-partial-periods.pptx",
+      "bytes": 104555,
+      "sha256": "200dbfd5b8cd4d3df74f94f1cbd074dae06bc54d01790d8595f014693c36d050"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-portrait.pptx",
+      "bytes": 102345,
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-rtl.pptx",
+      "bytes": 103388,
+      "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-single-period.pptx",
+      "bytes": 96671,
+      "sha256": "6d3de2341d9695ecba717ef34758fd59e6d5969d0d50ca9f4f3b4c17dc7ae84d"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/pptx/lh16-duration-wide.pptx",
+      "bytes": 104562,
+      "sha256": "3a4f9ceb9f08f09231914def9ef15fe485c61ab4c4fd5c862bb4b9d1aae6a394"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-nine-periods/slide-1.png",
+      "bytes": 50920,
+      "sha256": "4f8e9467500a5751e7a3ce7b3fd4a06fe482a2b4f90c61845cc492bbd9d29878"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-partial-periods/slide-1.png",
+      "bytes": 62713,
+      "sha256": "4a5af19e827687841e4a06de43fdfadaeed6fd819415328a2e561f7338891f9a"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-portrait/slide-1.png",
+      "bytes": 31369,
+      "sha256": "69273e14053bd7dc5ddca9db382bb1aebb69d918a9808e0175fd4e4846395439"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-rtl/slide-1.png",
+      "bytes": 61543,
+      "sha256": "bf0d28db94eabea17aafddba2ef8deb41de5ad683777146ea39f52a6af960a50"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-single-period/slide-1.png",
+      "bytes": 32159,
+      "sha256": "c367f01583856068197f240478905d300d6cf0e52d6220a7baac0dcf23186683"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/preview/lh16-duration-wide/slide-1.png",
+      "bytes": 66195,
+      "sha256": "d34a35122d3e46a554dc597c3f9f3745c141fa98e415e8e82b43e52fade1d624"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-nine-periods.opf.json",
+      "bytes": 6104,
+      "sha256": "740b9517b948284ca177c0c7f3f9b43374af0ee334d56fa43cdc0746741e593b"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-partial-periods.opf.json",
+      "bytes": 5947,
+      "sha256": "8ba8f1252ad6600ebe16e167576b5b1acaf5fe86e62f1d2939a311210e949595"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-portrait.opf.json",
+      "bytes": 5840,
+      "sha256": "b5ef8a4b5fb2171259600ed29437a6fc1c1283fd1660c2936729778b451fa4fe"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-rtl.opf.json",
+      "bytes": 5999,
+      "sha256": "d86267cbedbec9b0a01318659cf72aa0da53300074bad4c186f0e5248614385a"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-single-period.opf.json",
+      "bytes": 5527,
+      "sha256": "511920d2b5eea1f0ec5b55badd3b20ea3418d4a37000cbeb79ceb675c837ba75"
+    },
+    {
+      "path": "clean-cli-inputs/lh16-duration/source/lh16-duration-wide.opf.json",
+      "bytes": 5979,
+      "sha256": "3afd2afaba6bfcd860bb0afa62fa5c86fcf59ef84b6d09f83a0704aeb724d0b5"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/build.json",
+      "bytes": 41467,
+      "sha256": "b119706d228786c3b6931bb97edb90de678315f22da7b316e2bd174d1944f441"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-cover-focus.pptx",
+      "bytes": 97834,
+      "sha256": "7f2c2097dc8303a7ca712d77f8636630861802c5d221c92d16658af92660d12c"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-long-label.pptx",
+      "bytes": 96313,
+      "sha256": "58aba68ad2dc3824f405b651211677169c897c4da6e6c3da6c26160f797ef11c"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-masked-rtl.pptx",
+      "bytes": 98665,
+      "sha256": "64b1cc7f7cda7266b527f2d87b1ceaa9852b375145041bea6973515a74e91593"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-nine-labels.pptx",
+      "bytes": 103481,
+      "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-portrait.pptx",
+      "bytes": 96830,
+      "sha256": "4c2c6f460ac5f7645e25fe4181e74e7a6d6eb4e9c5dc950ff5086c6edad6d94d"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/pptx/lh34-callouts-wide.pptx",
+      "bytes": 97763,
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-cover-focus/slide-1.png",
+      "bytes": 70728,
+      "sha256": "3e5d7933af975fdbe0e2110bc10652a8442ffa6de0f446f155b0c13e08a20573"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-long-label/slide-1.png",
+      "bytes": 52928,
+      "sha256": "ae4e64f2cbd95c91ee3dabe22cbab298aca40950c8861803ccf67c173df5276a"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-masked-rtl/slide-1.png",
+      "bytes": 61122,
+      "sha256": "4a375ce30e703e111e524f85b87f29c8f109e879e606f8dc466d9e23ce65384f"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-nine-labels/slide-1.png",
+      "bytes": 84770,
+      "sha256": "5d605b23dab0b3145db14263ab618d58d3fdad9a505a20411beeae5cf732c3c8"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-portrait/slide-1.png",
+      "bytes": 51563,
+      "sha256": "3f884fab68d76babb43d0a6dcc81652a620b9985c84d4f98ec06eb782dbab3d1"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/preview/lh34-callouts-wide/slide-1.png",
+      "bytes": 74095,
+      "sha256": "e9b533d0781dfee9a733741d095a3468e1493e75ee0629752d42eeee052a145a"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-cover-focus.opf.json",
+      "bytes": 6622,
+      "sha256": "84716c7bfa02293ac25bb22967826f84f427707ac49efcf96f7d278f8c92c007"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-long-label.opf.json",
+      "bytes": 6184,
+      "sha256": "5391a4ca9a10ea1d0cf6b70066fbfe9580823576550b2f2dafc3a633da25f0a0"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-masked-rtl.opf.json",
+      "bytes": 6710,
+      "sha256": "08c413ee44372d5ff2b9df7a799612744676aa763ac7acfbd768f334fcb3168f"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-nine-labels.opf.json",
+      "bytes": 7754,
+      "sha256": "9603564668a9a2d1988677266bdd8d5684e0e8d1f9e0e0072f78b1c475c92c9e"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-portrait.opf.json",
+      "bytes": 6483,
+      "sha256": "5feda429ef3fe504fe170e9f36b3da2475aa4699d79af47ed9a4124581a93761"
+    },
+    {
+      "path": "clean-cli-inputs/lh34-callouts/source/lh34-callouts-wide.opf.json",
+      "bytes": 6518,
+      "sha256": "49d371e88960bbe7ba5b66ecf000f01894dae6d414a307ae5159bf25ead3a29e"
+    },
+    {
+      "path": "clean-edit-suites/lh16-duration/action-plan.json",
+      "bytes": 138,
+      "sha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970"
+    },
+    {
+      "path": "clean-edit-suites/lh16-duration/expected.json",
+      "bytes": 109,
+      "sha256": "c8dbaba1c5c9fc1ea5a9c8d89c59e522647c295ef9e8794404b98dfd781b2100"
+    },
+    {
+      "path": "clean-edit-suites/lh16-duration/input.pptx",
+      "bytes": 102345,
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a"
+    },
+    {
+      "path": "clean-edit-suites/lh16-duration/suite.json",
+      "bytes": 3090,
+      "sha256": "d6a8ff2ad7a2d4b410eff73867d2f4b681e11df45dcf355f9b5c1eb3aecb62b6"
+    },
+    {
+      "path": "clean-edit-suites/lh34-callouts/action-plan.json",
+      "bytes": 279,
+      "sha256": "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba"
+    },
+    {
+      "path": "clean-edit-suites/lh34-callouts/expected.json",
+      "bytes": 143,
+      "sha256": "774002ed09802fd73af8095e87a50247100ef6443f4f4edb9bf92639ab0aad60"
+    },
+    {
+      "path": "clean-edit-suites/lh34-callouts/input.pptx",
+      "bytes": 97763,
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+    },
+    {
+      "path": "clean-edit-suites/lh34-callouts/suite.json",
+      "bytes": 3090,
+      "sha256": "46ed121a409c31bf74a8e606d7222e9844b767d28b5082f24815c2ee5f6917e1"
+    },
+    {
+      "path": "font-profile/fonts/roboto/400Regular/Roboto_400Regular.ttf",
+      "bytes": 159108,
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459"
+    },
+    {
+      "path": "font-profile/fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "bytes": 165268,
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793"
+    },
+    {
+      "path": "font-profile/fonts/roboto/500Medium/Roboto_500Medium.ttf",
+      "bytes": 159296,
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38"
+    },
+    {
+      "path": "font-profile/fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+      "bytes": 159876,
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab"
+    },
+    {
+      "path": "font-profile/fonts/roboto/700Bold/Roboto_700Bold.ttf",
+      "bytes": 159900,
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6"
+    },
+    {
+      "path": "font-profile/fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "bytes": 166256,
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee"
+    },
+    {
+      "path": "font-profile/fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+      "bytes": 160012,
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5"
+    },
+    {
+      "path": "font-profile/fonts/roboto/LICENSE",
+      "bytes": 4394,
+      "sha256": "061402327a96aadb0bfb694a960ed289ecd38d383e396243831ab81feb109c41"
+    },
+    {
+      "path": "font-profile/native-embedding-check.json",
+      "bytes": 2502,
+      "sha256": "a5fc1834c871f19caf29ff441b5dc846cd76c1ecba57d82ac2ef0aac6cb31fe3"
+    },
+    {
+      "path": "font-profile/pure-preflight.json",
+      "bytes": 664,
+      "sha256": "edf83cbaaf818af009cbf2d8f316321daa460776579cf7e33dc866b970de66ca"
+    },
+    {
+      "path": "font-profile/pure-preflight.ps1",
+      "bytes": 1276,
+      "sha256": "375be05906fa2bf1d161b0b525d954e57d187fd53145860549e8c13a3b90b788"
+    },
+    {
+      "path": "font-profile/sfnt-names.json",
+      "bytes": 4863,
+      "sha256": "519f381fd9b2dde2351fc183707abe1124560b7701efafb1d339f2fc9bcfbeb3"
+    },
+    {
+      "path": "font-profile/suite.json",
+      "bytes": 6544,
+      "sha256": "1d26699d87944071f80baed8ec77687acebbfe30044081b43865174a4b110f3f"
+    },
+    {
+      "path": "independent-verification.json",
+      "bytes": 889,
+      "sha256": "f96e9e1ed011ef80a1e608d94a7f99c05281eadfa762f49fc740ff959ec686a7"
+    },
+    {
+      "path": "input-font-diagnosis/lh16-duration/measurement-diagnosis.json",
+      "bytes": 29859,
+      "sha256": "546b51f4ab64e07deb4f14006caf00ca76c8d2b6a26c460024df5408d2602e60"
+    },
+    {
+      "path": "input-font-diagnosis/lh34-callouts/measurement-diagnosis.json",
+      "bytes": 14507,
+      "sha256": "544dc329476467357f7bb6b44920b54aac1d671639b4e3540de718f1992400d7"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json",
+      "bytes": 47899,
+      "sha256": "4f96b85ecd30fde6695982c09a0ba6803b2f6926d81f1307b5c239da17b555c7"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "f60eb1ef58a5a0831fe3ccdfcff0893b53e3a75e1d3031be08d7de31f9ed93ff"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/failure/worker.stderr.log",
+      "bytes": 334,
+      "sha256": "0ac3b2283cd7e4eae858427defb616e21a8b9d593c65a13cf583e8d5728a593e"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "472589ca3a0607a934c839c5519ce44ccbea7576a5321f47852f5030ca6ad230"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "53467a434b65173349beffe4e74603428b452b7da32d4de1f7d9663258345889"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "18c5e2c175c9c5993def449a4c7ecc4595e2c0d2c1a68be896e6f8ed53be14c7"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/inputs/action-plan.json",
+      "bytes": 138,
+      "sha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/inputs/case.pptx",
+      "bytes": 102345,
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/edited-slide-01.png",
+      "bytes": 54391,
+      "sha256": "87087efe5230908644b5874380c069568d91f8636a8e417ab4247562f7ee1ec5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/inputs/action-plan.json",
+      "bytes": 138,
+      "sha256": "08f66acc9405a80ba1bab5040e04fdcbdbf4c67946a3db4052afc18318f1d970"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/inputs/input.pptx",
+      "bytes": 102345,
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/inputs/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/native-furniture-control.pptx",
+      "bytes": 106048,
+      "sha256": "32f11c0a738d89620501af39e7b6e73c46d291f661db614bb05678b27ec1c593"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/original-slide-01.png",
+      "bytes": 49729,
+      "sha256": "ed87fb0ba90b5952bc13037e9c1af50d13e53981ca4338e4e3e1bfde0b4efc8e"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/progress.json",
+      "bytes": 272,
+      "sha256": "a0725a756967af3014662714d9fdf8e9920ed1f7b96c249b91e3340135aeaf8f"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/reopened-slide-01.png",
+      "bytes": 54391,
+      "sha256": "87087efe5230908644b5874380c069568d91f8636a8e417ab4247562f7ee1ec5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/report.json",
+      "bytes": 158417,
+      "sha256": "9f713cfbb6dc0ca285c87e79550f7df40de4c8a189300c19bd009485ebf4a067"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/request.json",
+      "bytes": 2077,
+      "sha256": "1348234f5e4cae5b9fec2548437f2c9593ee62ab35c6d0486579a72bc7d58b01"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/stages.jsonl",
+      "bytes": 797002,
+      "sha256": "530d019dc677d567feaff72f47f95e0e5b9f072ba92f5b7b1217c12d8f777ac5"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "66ec39928626e100eefee8ad0ad353f0dfc696ca99a808b2a45f8bd79f77e4e8"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/worker.json",
+      "bytes": 341,
+      "sha256": "624d036ff8a6baca5f1eb01b146900181889e3257719211aa58a8ec9556fda66"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "bb79ee03f691de41e2637d776c18c0b3ff599a47844d7cf95e4508340a2ee087"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/native-worker.log",
+      "bytes": 110,
+      "sha256": "6cc36f888035db2b63b6b927b36d9edb620c3fde81f30d8a8a616430766b477f"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport-corrected-verification.json",
+      "bytes": 4840,
+      "sha256": "8d1a86e4826cb01ef98f98104d3f3de2c236050530ffb9211da96daec6d6e9fe"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport-corrected.opf.json",
+      "bytes": 5829,
+      "sha256": "914a34c8519a3c319d9e5bc3b37e13c13c0f64eec1ea9795bbe9e81db2fe6533"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport-verification.json",
+      "bytes": 1635,
+      "sha256": "26756d375340c2ec412bad03c2fd155118ce0fca85dc980a01719de9cf0e3080"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/opf-reimport.opf.json",
+      "bytes": 5829,
+      "sha256": "914a34c8519a3c319d9e5bc3b37e13c13c0f64eec1ea9795bbe9e81db2fe6533"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "native-edits/lh16-edit-cli-01/runner.json",
+      "bytes": 11129,
+      "sha256": "8bbd0649399e61765a0b26930e540317c436ef6dd493cea0b50d09d2778778b5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json",
+      "bytes": 47899,
+      "sha256": "980b889f529899dacc8be8fbbe73a30714f8df4397f99b8f57927e5a2f0a02f0"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "36e5db0b7ca257973799984f6d710dca7be8a90d9b495928414fd677b6feb0be"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/failure/worker.stderr.log",
+      "bytes": 334,
+      "sha256": "1dd42c15730a8cc8f1ec932cb2b83fb5989e5f863ffd68acd22d86532167a3cc"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "c720b505e671e3baed990707efd3304de50f1bdfa0e15a134b3009de559b716f"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "b313bd101a48813222566d7c5919dc1a09b1700572b8d9f14e8de825fa811e16"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "d3c4a2fe3df3611206685cd50c6d75e1fad2d06fd89b4d1361785ddd2fc4346b"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/inputs/action-plan.json",
+      "bytes": 279,
+      "sha256": "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/inputs/case.pptx",
+      "bytes": 97763,
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/edited-slide-01.png",
+      "bytes": 68646,
+      "sha256": "7eb0c56c895c7732b5c90baa056a061eb38806d7018ec4796ede0bdc94298cb0"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/inputs/action-plan.json",
+      "bytes": 279,
+      "sha256": "88d4418331aa588632775728348833c70ac768d1c0be4dfd950e4541d78876ba"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/inputs/input.pptx",
+      "bytes": 97763,
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/inputs/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/native-furniture-control.pptx",
+      "bytes": 100957,
+      "sha256": "e1f8de266a4bec04c54d8b09c32dc46dada8ed1ad0cf5292bbda54b4a38032a8"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/original-slide-01.png",
+      "bytes": 67726,
+      "sha256": "69f3bb1bf6eb614d5aaee6ec1791d087469573c055c65430ba9e99b59b501438"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/progress.json",
+      "bytes": 272,
+      "sha256": "c334e7e744d76aa4beae4570331b2f4559db17e60436ff6f53bb0704766fa2a9"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/reopened-slide-01.png",
+      "bytes": 68646,
+      "sha256": "7eb0c56c895c7732b5c90baa056a061eb38806d7018ec4796ede0bdc94298cb0"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/report.json",
+      "bytes": 73096,
+      "sha256": "31d8dc68a39492aee7d17e211624132b093b38e97c239f1eef926153fa387905"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/request.json",
+      "bytes": 2077,
+      "sha256": "7af4c91c72c0e03692d5639d8d84d91a01b546cfc5e307b086a5a04a6364b5f3"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/stages.jsonl",
+      "bytes": 325972,
+      "sha256": "d91098868fd7cc0aed35bfac4db9e319c01907803dc78a1e8ed60c9029ca15b7"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "7c1ed92d3515648613abf9d52a4b7526fc00c3fd22dc5540220ac1cb4fd92cb2"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/worker.json",
+      "bytes": 341,
+      "sha256": "8d1cd8bdc2699e337eb09c7ffe456cf0da20e40ae50cf3305dfdabaa48fc26df"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "a5041c5b65d8cf107bff293fa8b763fdaaaca2aefbb7c23819cab4891433c743"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/native-worker.log",
+      "bytes": 110,
+      "sha256": "cfc4b09ea174ae3181861de882b9145d78a8bf3d611a2da9978907a330cb9ee6"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/opf-reimport-corrected-verification.json",
+      "bytes": 5006,
+      "sha256": "e575c7b1a38eb77c7340156b40b0825cc8c73ebd6a2a0ca7c042e49d66673f62"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/opf-reimport-corrected.opf.json",
+      "bytes": 6500,
+      "sha256": "ff1cdf787991067270f553a3c6f8f7c1f21e5853c667d8c2f4d42e5e4ac8cb48"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/opf-reimport.opf.json",
+      "bytes": 6571,
+      "sha256": "3c922d637b3d3a841831db851e00c00204915c0c21e102cd28b1e85fcb8c5bc3"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "path": "native-edits/lh34-edit-cli-01/runner.json",
+      "bytes": 11131,
+      "sha256": "9116dacc42b77e39930d07e61efcbdf6fccf59cbc6a8c323779d6d5bf502a808"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/build.json",
+      "bytes": 3707,
+      "sha256": "8b88a43367da4c42e4263ef09a6096950410e150afa5b68f22dd4e12bc2f3cd8"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-nine-periods.pptx",
+      "bytes": 108729,
+      "sha256": "326af57eba0c716847660a4222e09be7185ae334a93be0b2e0bacfafb3096c44"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-partial-periods.pptx",
+      "bytes": 105392,
+      "sha256": "32cd96a7ea97ec2b13f10da9cf9dc64aaf5f0020e234b739558c06dc178c5755"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-portrait.pptx",
+      "bytes": 102285,
+      "sha256": "b6ef7ef7be462580b06aa3f8350a309ed20b8fd58cb4fd9b089e97744c2fb280"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-rtl.pptx",
+      "bytes": 104219,
+      "sha256": "6d9047b2092e2019322520a6f68651c4bcbe1942838f290059eb07dec485375d"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-single-period.pptx",
+      "bytes": 96645,
+      "sha256": "73b19d7b96d2b348158a7f536c2cc6c3187e2fc09c30fc5df268b0bc58e91d40"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/pptx/lh16-duration-wide.pptx",
+      "bytes": 105374,
+      "sha256": "28ae08b84e329472eebc2acdd2c478897437149ab151621b634c02343926db33"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-nine-periods/slide-1.png",
+      "bytes": 50920,
+      "sha256": "4f8e9467500a5751e7a3ce7b3fd4a06fe482a2b4f90c61845cc492bbd9d29878"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-partial-periods/slide-1.png",
+      "bytes": 62713,
+      "sha256": "4a5af19e827687841e4a06de43fdfadaeed6fd819415328a2e561f7338891f9a"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-portrait/slide-1.png",
+      "bytes": 31369,
+      "sha256": "69273e14053bd7dc5ddca9db382bb1aebb69d918a9808e0175fd4e4846395439"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-rtl/slide-1.png",
+      "bytes": 61543,
+      "sha256": "bf0d28db94eabea17aafddba2ef8deb41de5ad683777146ea39f52a6af960a50"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-single-period/slide-1.png",
+      "bytes": 32159,
+      "sha256": "c367f01583856068197f240478905d300d6cf0e52d6220a7baac0dcf23186683"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh16-duration/preview/lh16-duration-wide/slide-1.png",
+      "bytes": 66195,
+      "sha256": "d34a35122d3e46a554dc597c3f9f3745c141fa98e415e8e82b43e52fade1d624"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/build.json",
+      "bytes": 3704,
+      "sha256": "cb2ce3e56c028a29ff997bec42570dfa61f0d850ca9d6c90b117ec8446a43ea6"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-cover-focus.pptx",
+      "bytes": 97838,
+      "sha256": "6891804f258c5b62afd3697334820d1d639f6f3526372f034163af60d1d3add1"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-long-label.pptx",
+      "bytes": 96317,
+      "sha256": "042f526d89c2d10c4f1f3bc01c21514bde5e4291156d7e4b13209acc9f4fa90d"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-masked-rtl.pptx",
+      "bytes": 99622,
+      "sha256": "7a58810a82c53418276c184949e033869252231cb334cb2322e60f490951f809"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-nine-labels.pptx",
+      "bytes": 103481,
+      "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-portrait.pptx",
+      "bytes": 96823,
+      "sha256": "1728dd76ca1366139ea2695461dd1dcb9abc87be30053c515767723e852ae564"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/pptx/lh34-callouts-wide.pptx",
+      "bytes": 97764,
+      "sha256": "f3d0a9c8f1f37dc041a4e100a8d9b5abdbb6c2fbd2e5516badc63eeb9f4e107f"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-cover-focus/slide-1.png",
+      "bytes": 70728,
+      "sha256": "3e5d7933af975fdbe0e2110bc10652a8442ffa6de0f446f155b0c13e08a20573"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-long-label/slide-1.png",
+      "bytes": 52928,
+      "sha256": "ae4e64f2cbd95c91ee3dabe22cbab298aca40950c8861803ccf67c173df5276a"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-masked-rtl/slide-1.png",
+      "bytes": 61122,
+      "sha256": "4a375ce30e703e111e524f85b87f29c8f109e879e606f8dc466d9e23ce65384f"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-nine-labels/slide-1.png",
+      "bytes": 84770,
+      "sha256": "5d605b23dab0b3145db14263ab618d58d3fdad9a505a20411beeae5cf732c3c8"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-portrait/slide-1.png",
+      "bytes": 51563,
+      "sha256": "3f884fab68d76babb43d0a6dcc81652a620b9985c84d4f98ec06eb782dbab3d1"
+    },
+    {
+      "path": "original-unmeasured-inputs/lh34-callouts/preview/lh34-callouts-wide/slide-1.png",
+      "bytes": 74095,
+      "sha256": "e9b533d0781dfee9a733741d095a3468e1493e75ee0629752d42eeee052a145a"
+    },
+    {
+      "path": "sealed-code/lh16-duration/feature/packages/javascript/src/composition.ts",
+      "bytes": 968456,
+      "sha256": "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e"
+    },
+    {
+      "path": "sealed-code/lh16-duration/feature/packages/javascript/src/timeline-duration.ts",
+      "bytes": 1201,
+      "sha256": "018e421fd95481b932aa40d2b6b4730e2f332f089d59132cd549a2b0416c35d4"
+    },
+    {
+      "path": "sealed-code/lh16-duration/feature/packages/pptx/src/index.js",
+      "bytes": 461335,
+      "sha256": "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0"
+    },
+    {
+      "path": "sealed-code/lh16-duration/feature/scripts/native-acceptance/run-windows.ps1",
+      "bytes": 14306,
+      "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+    },
+    {
+      "path": "sealed-code/lh16-duration/feature/spec/schemas/opf.schema.json",
+      "bytes": 282942,
+      "sha256": "e89dc87eacca8c4bbfc80ae16c61900d7c2ee1b64d91d0d534ffeafbd9511b0e"
+    },
+    {
+      "path": "sealed-code/lh16-duration/worker/test/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+    },
+    {
+      "path": "sealed-code/lh16-duration/worker/test/native-furniture-harness-check.ps1",
+      "bytes": 24181,
+      "sha256": "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8"
+    },
+    {
+      "path": "sealed-code/lh16-duration/worker/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "sealed-code/lh16-duration/worker/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/feature/packages/javascript/src/composition.ts",
+      "bytes": 967040,
+      "sha256": "7a2663638da1efc6c6af91adcea94deef46b5c64fa27e9173ca53a52eda843c3"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/feature/packages/pptx/src/image-callout-provenance.js",
+      "bytes": 4673,
+      "sha256": "85c5709de287d10f97f4c612b644f69a6aceab8331b9b78b139eb3f65659a463"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/feature/packages/pptx/src/index.js",
+      "bytes": 462992,
+      "sha256": "13947a40145ef6b02d6987ade61d4fb3a7c4faa5a2b56570f6f36ef71b5b2b78"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/feature/scripts/native-acceptance/run-windows.ps1",
+      "bytes": 14306,
+      "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/feature/spec/schemas/opf.schema.json",
+      "bytes": 286450,
+      "sha256": "04e7d13e192e6b877872118e4557683ce415029b8fb15fac7139f87f73f91871"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/worker/test/native-furniture-control.ps1",
+      "bytes": 36494,
+      "sha256": "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/worker/test/native-furniture-harness-check.ps1",
+      "bytes": 24181,
+      "sha256": "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/worker/test/native-process-check.ps1",
+      "bytes": 2333,
+      "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+    },
+    {
+      "path": "sealed-code/lh34-callouts/worker/test/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "sealed-code/lh34-correction/image-callout-provenance.js",
+      "bytes": 5182,
+      "sha256": "a01f871335541b7b604751bd629318da2633d06af012a6caf2a2e0c4d98e73ac"
+    }
+  ]
+}

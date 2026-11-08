@@ -1,0 +1,5 @@
+C:\opf-work\release-033-artifacts\lh16-edit-cli-01\harness\process\failure\owned worker with spaces.ps1 : Controlled 
+verifier failure
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,owned worker with spaces.ps1
+ 

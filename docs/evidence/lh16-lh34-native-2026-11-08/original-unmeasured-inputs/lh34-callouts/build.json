@@ -1,0 +1,118 @@
+{
+  "manifestVersion": 1,
+  "revision": "4bd1f4919320941cbc0d3b292e9a7ed4abe443c5",
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "platform": "win32-x64",
+  "builtAt": "2026-11-08T06:32:38.009Z",
+  "decks": [
+    {
+      "id": "lh34-callouts-wide",
+      "source": "docs/evidence/lh34-callouts/review.json#wide",
+      "sourceSha256": "7579c78034c477fa5ad2f014dd3a60a2ad2eeceb4b1b2a47df20714db659cf99",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-wide.pptx",
+          "ok": true,
+          "sha256": "f3d0a9c8f1f37dc041a4e100a8d9b5abdbb6c2fbd2e5516badc63eeb9f4e107f",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-portrait",
+      "source": "docs/evidence/lh34-callouts/review.json#portrait",
+      "sourceSha256": "defc98f958c5eb8c88dba8649347cc11b603dce234c31b8efff04ac7c7880133",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-portrait.pptx",
+          "ok": true,
+          "sha256": "1728dd76ca1366139ea2695461dd1dcb9abc87be30053c515767723e852ae564",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-cover-focus",
+      "source": "docs/evidence/lh34-callouts/review.json#cover-focus",
+      "sourceSha256": "e793c6c806a22a7e8c7328094d72f98891c8bf2ad8ac56378e3fbd1125aa9bb0",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-cover-focus.pptx",
+          "ok": true,
+          "sha256": "6891804f258c5b62afd3697334820d1d639f6f3526372f034163af60d1d3add1",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-masked-rtl",
+      "source": "docs/evidence/lh34-callouts/review.json#masked-rtl",
+      "sourceSha256": "0fce0825af1075455c36983aa9bbfd3d1118c173fc2eb9ce4f60ce79719c1e84",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-masked-rtl.pptx",
+          "ok": true,
+          "sha256": "7a58810a82c53418276c184949e033869252231cb334cb2322e60f490951f809",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-nine-labels",
+      "source": "docs/evidence/lh34-callouts/review.json#nine-labels",
+      "sourceSha256": "00f4e0bc58cdfdced7666af989af5d68661be8f78dbdf81773735b20c013e115",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-nine-labels.pptx",
+          "ok": true,
+          "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh34-callouts-long-label",
+      "source": "docs/evidence/lh34-callouts/review.json#long-label",
+      "sourceSha256": "0e5435e623838321c7363f654a2b5b1b2cebb7425b6eb2e9c9c1fc4292d2b641",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh34-callouts-long-label.pptx",
+          "ok": true,
+          "sha256": "042f526d89c2d10c4f1f3bc01c21514bde5e4291156d7e4b13209acc9f4fa90d",
+          "findings": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "manifestVersion": 1,
+  "revision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "platform": "win32-x64",
+  "builtAt": "2026-11-08T06:32:39.945Z",
+  "decks": [
+    {
+      "id": "lh16-duration-wide",
+      "source": "docs/evidence/lh16-duration/review.json#wide",
+      "sourceSha256": "ff7909be9b3c1a33f31b6c20daf4ae537f75b7de59a34c28f50d6219614ef250",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-wide.pptx",
+          "ok": true,
+          "sha256": "28ae08b84e329472eebc2acdd2c478897437149ab151621b634c02343926db33",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-portrait",
+      "source": "docs/evidence/lh16-duration/review.json#portrait",
+      "sourceSha256": "09ab3b3671a45afd6b1e2e7cafd7ac22a976783baebea831dec3f8ceee547a1d",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-portrait.pptx",
+          "ok": true,
+          "sha256": "b6ef7ef7be462580b06aa3f8350a309ed20b8fd58cb4fd9b089e97744c2fb280",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-rtl",
+      "source": "docs/evidence/lh16-duration/review.json#rtl",
+      "sourceSha256": "be0cd7c5db29a8cd41585cda08a85aa33d35392bc41dc8eeb350286ebc9a8b9f",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-rtl.pptx",
+          "ok": true,
+          "sha256": "6d9047b2092e2019322520a6f68651c4bcbe1942838f290059eb07dec485375d",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-nine-periods",
+      "source": "docs/evidence/lh16-duration/review.json#nine-periods",
+      "sourceSha256": "9da73b52de7b32d63ef74151fa8ead4e882a097530e4975fe9953ded5e4aa148",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-nine-periods.pptx",
+          "ok": true,
+          "sha256": "326af57eba0c716847660a4222e09be7185ae334a93be0b2e0bacfafb3096c44",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-single-period",
+      "source": "docs/evidence/lh16-duration/review.json#single-period",
+      "sourceSha256": "7751235cd74c06cdecbf4807ffd44494e4c779044f76543d8f95ca90bc672072",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-single-period.pptx",
+          "ok": true,
+          "sha256": "73b19d7b96d2b348158a7f536c2cc6c3187e2fc09c30fc5df268b0bc58e91d40",
+          "findings": []
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-partial-periods",
+      "source": "docs/evidence/lh16-duration/review.json#partial-periods",
+      "sourceSha256": "8a664c29dd2c0b8b1a3775d9f5ae799b28c8008f9b7d269b7d713e03a4d86dd2",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-partial-periods.pptx",
+          "ok": true,
+          "sha256": "32cd96a7ea97ec2b13f10da9cf9dc64aaf5f0020e234b739558c06dc178c5755",
+          "findings": []
+        }
+      ]
+    }
+  ]
+}

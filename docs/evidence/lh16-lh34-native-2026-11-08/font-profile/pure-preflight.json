@@ -1,0 +1,18 @@
+﻿{
+    "purePreflightPassed":  true,
+    "registeredByAgent":  false,
+    "officeInvoked":  false,
+    "faces":  7,
+    "sfntLegacyFamilies":  [
+                               "Roboto",
+                               "Roboto ExtraBold",
+                               "Roboto Medium",
+                               "Roboto SemiBold"
+                           ],
+    "installedFamilyCount":  419,
+    "installedRobotoFamilies":  [
+
+                                ],
+    "toolSha256":  "eea52129b8aee679506bac4268360472eff3e213f19026955c0faa0bacc14069",
+    "suiteSha256":  "1d26699d87944071f80baed8ec77687acebbfe30044081b43865174a4b110f3f"
+}

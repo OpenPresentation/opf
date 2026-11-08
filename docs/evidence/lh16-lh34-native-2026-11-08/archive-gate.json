@@ -1,0 +1,18 @@
+{
+  "checkChanged": {
+    "passed": true,
+    "seconds": 34.5,
+    "selected": [
+      "docs/handoff/2026-11-08/native-feature-evidence.md",
+      "docs/evidence/lh16-lh34-native-2026-11-08/README.md"
+    ],
+    "steps": [
+      "workspace build",
+      "changes",
+      "skill commands",
+      "text"
+    ]
+  },
+  "sparsePrerequisite": "Initial run lacked the existing painting-Linux.json.gz sparse-checkout fixture. Restoring its exact HEAD object made the same gate pass; no assertion or fixture byte changed.",
+  "officeCalls": 0
+}

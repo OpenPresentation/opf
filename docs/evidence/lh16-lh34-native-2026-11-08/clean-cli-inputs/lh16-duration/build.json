@@ -1,0 +1,1104 @@
+{
+  "manifestVersion": 1,
+  "revision": "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+  "dirty": false,
+  "opfVersion": "0.32.1",
+  "node": "v24.20.0",
+  "platform": "win32-x64",
+  "builtAt": "2026-11-08T06:58:15.569Z",
+  "fontPreparation": "Maintained CLI uses office pack, visual policy and automatic script preparation; identical route for PNG and PPTX.",
+  "sourceCode": [
+    {
+      "path": "spec/schemas/opf.schema.json",
+      "sha256": "e89dc87eacca8c4bbfc80ae16c61900d7c2ee1b64d91d0d534ffeafbd9511b0e",
+      "bytes": 282942
+    },
+    {
+      "path": "packages/javascript/src/composition.ts",
+      "sha256": "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e",
+      "bytes": 968456
+    },
+    {
+      "path": "packages/pptx/src/index.js",
+      "sha256": "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0",
+      "bytes": 461335
+    },
+    {
+      "path": "packages/javascript/src/timeline-duration.ts",
+      "sha256": "018e421fd95481b932aa40d2b6b4730e2f332f089d59132cd549a2b0416c35d4",
+      "bytes": 1201
+    }
+  ],
+  "decks": [
+    {
+      "id": "lh16-duration-wide",
+      "source": "source/lh16-duration-wide.opf.json",
+      "sourceSha256": "3afd2afaba6bfcd860bb0afa62fa5c86fcf59ef84b6d09f83a0704aeb724d0b5",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-wide.pptx",
+          "ok": true,
+          "sha256": "3a4f9ceb9f08f09231914def9ef15fe485c61ab4c4fd5c862bb4b9d1aae6a394",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto Medium",
+                "Roboto SemiBold"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-wide.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-wide.opf.json",
+              "sha256": "3afd2afaba6bfcd860bb0afa62fa5c86fcf59ef84b6d09f83a0704aeb724d0b5",
+              "bytes": 5979
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-wide.pptx",
+                "sha256": "3a4f9ceb9f08f09231914def9ef15fe485c61ab4c4fd5c862bb4b9d1aae6a394",
+                "bytes": 104562,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto Medium",
+                  "Roboto SemiBold"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-wide/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-wide.opf.json",
+              "sha256": "3afd2afaba6bfcd860bb0afa62fa5c86fcf59ef84b6d09f83a0704aeb724d0b5",
+              "bytes": 5979
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-wide\\slide-1.png",
+                "sha256": "d34a35122d3e46a554dc597c3f9f3745c141fa98e415e8e82b43e52fade1d624",
+                "bytes": 66195,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-portrait",
+      "source": "source/lh16-duration-portrait.opf.json",
+      "sourceSha256": "b5ef8a4b5fb2171259600ed29437a6fc1c1283fd1660c2936729778b451fa4fe",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-portrait.pptx",
+          "ok": true,
+          "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto Medium",
+                "Roboto SemiBold"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-portrait.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-portrait.opf.json",
+              "sha256": "b5ef8a4b5fb2171259600ed29437a6fc1c1283fd1660c2936729778b451fa4fe",
+              "bytes": 5840
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-portrait.pptx",
+                "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+                "bytes": 102345,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto Medium",
+                  "Roboto SemiBold"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-portrait/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-portrait.opf.json",
+              "sha256": "b5ef8a4b5fb2171259600ed29437a6fc1c1283fd1660c2936729778b451fa4fe",
+              "bytes": 5840
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-portrait\\slide-1.png",
+                "sha256": "69273e14053bd7dc5ddca9db382bb1aebb69d918a9808e0175fd4e4846395439",
+                "bytes": 31369,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 540,
+                "height": 960
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-rtl",
+      "source": "source/lh16-duration-rtl.opf.json",
+      "sourceSha256": "d86267cbedbec9b0a01318659cf72aa0da53300074bad4c186f0e5248614385a",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-rtl.pptx",
+          "ok": true,
+          "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto Medium",
+                "Roboto SemiBold"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-rtl.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-rtl.opf.json",
+              "sha256": "d86267cbedbec9b0a01318659cf72aa0da53300074bad4c186f0e5248614385a",
+              "bytes": 5999
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-rtl.pptx",
+                "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac",
+                "bytes": 103388,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto Medium",
+                  "Roboto SemiBold"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-rtl/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-rtl.opf.json",
+              "sha256": "d86267cbedbec9b0a01318659cf72aa0da53300074bad4c186f0e5248614385a",
+              "bytes": 5999
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-rtl\\slide-1.png",
+                "sha256": "bf0d28db94eabea17aafddba2ef8deb41de5ad683777146ea39f52a6af960a50",
+                "bytes": 61543,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-nine-periods",
+      "source": "source/lh16-duration-nine-periods.opf.json",
+      "sourceSha256": "740b9517b948284ca177c0c7f3f9b43374af0ee334d56fa43cdc0746741e593b",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-nine-periods.pptx",
+          "ok": true,
+          "sha256": "2929f5c6035b6e70c6b1e2eeb6b2581d4f7d03397448cc5ebbe25bcc2f5a10f0",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto SemiBold"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-nine-periods.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-nine-periods.opf.json",
+              "sha256": "740b9517b948284ca177c0c7f3f9b43374af0ee334d56fa43cdc0746741e593b",
+              "bytes": 6104
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-nine-periods.pptx",
+                "sha256": "2929f5c6035b6e70c6b1e2eeb6b2581d4f7d03397448cc5ebbe25bcc2f5a10f0",
+                "bytes": 108736,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto SemiBold"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-nine-periods/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-nine-periods.opf.json",
+              "sha256": "740b9517b948284ca177c0c7f3f9b43374af0ee334d56fa43cdc0746741e593b",
+              "bytes": 6104
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-nine-periods\\slide-1.png",
+                "sha256": "4f8e9467500a5751e7a3ce7b3fd4a06fe482a2b4f90c61845cc492bbd9d29878",
+                "bytes": 50920,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-single-period",
+      "source": "source/lh16-duration-single-period.opf.json",
+      "sourceSha256": "511920d2b5eea1f0ec5b55badd3b20ea3418d4a37000cbeb79ceb675c837ba75",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-single-period.pptx",
+          "ok": true,
+          "sha256": "6d3de2341d9695ecba717ef34758fd59e6d5969d0d50ca9f4f3b4c17dc7ae84d",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto Medium, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto Medium"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-single-period.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-single-period.opf.json",
+              "sha256": "511920d2b5eea1f0ec5b55badd3b20ea3418d4a37000cbeb79ceb675c837ba75",
+              "bytes": 5527
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-single-period.pptx",
+                "sha256": "6d3de2341d9695ecba717ef34758fd59e6d5969d0d50ca9f4f3b4c17dc7ae84d",
+                "bytes": 96671,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto Medium, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto Medium"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-single-period/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-single-period.opf.json",
+              "sha256": "511920d2b5eea1f0ec5b55badd3b20ea3418d4a37000cbeb79ceb675c837ba75",
+              "bytes": 5527
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-single-period\\slide-1.png",
+                "sha256": "c367f01583856068197f240478905d300d6cf0e52d6220a7baac0dcf23186683",
+                "bytes": 32159,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "lh16-duration-partial-periods",
+      "source": "source/lh16-duration-partial-periods.opf.json",
+      "sourceSha256": "8ba8f1252ad6600ebe16e167576b5b1acaf5fe86e62f1d2939a311210e949595",
+      "previewOk": true,
+      "previewSlides": 1,
+      "previewFindings": [],
+      "variants": [
+        {
+          "name": "default",
+          "flags": [],
+          "pptx": "pptx/lh16-duration-partial-periods.pptx",
+          "ok": true,
+          "sha256": "200dbfd5b8cd4d3df74f94f1cbd074dae06bc54d01790d8595f014693c36d050",
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Roboto",
+                "Roboto Medium",
+                "Roboto SemiBold"
+              ]
+            }
+          ]
+        }
+      ],
+      "cliRuns": [
+        {
+          "destination": "pptx/lh16-duration-partial-periods.pptx",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-partial-periods.opf.json",
+              "sha256": "8ba8f1252ad6600ebe16e167576b5b1acaf5fe86e62f1d2939a311210e949595",
+              "bytes": 5947
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\pptx\\lh16-duration-partial-periods.pptx",
+                "sha256": "200dbfd5b8cd4d3df74f94f1cbd074dae06bc54d01790d8595f014693c36d050",
+                "bytes": 104555,
+                "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+              }
+            ],
+            "findings": [
+              {
+                "ruleId": "pptx/typeface-not-office-safe",
+                "severity": "info",
+                "category": "pptx",
+                "path": "",
+                "scope": "document",
+                "message": "The PPTX names Roboto, Roboto Medium, Roboto SemiBold, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+                "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+                "families": [
+                  "Roboto",
+                  "Roboto Medium",
+                  "Roboto SemiBold"
+                ]
+              }
+            ],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 1
+            },
+            "format": "pptx",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "pptx": {
+              "package": "@openpresentation/opf-pptx",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        },
+        {
+          "destination": "preview/lh16-duration-partial-periods/slide-{n}.png",
+          "report": {
+            "command": "convert",
+            "ok": true,
+            "input": {
+              "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\source\\lh16-duration-partial-periods.opf.json",
+              "sha256": "8ba8f1252ad6600ebe16e167576b5b1acaf5fe86e62f1d2939a311210e949595",
+              "bytes": 5947
+            },
+            "outputs": [
+              {
+                "file": "C:\\opf-work\\qualification-034-cli-v1\\lh16-duration\\preview\\lh16-duration-partial-periods\\slide-1.png",
+                "sha256": "4a5af19e827687841e4a06de43fdfadaeed6fd819415328a2e561f7338891f9a",
+                "bytes": 62713,
+                "mediaType": "image/png",
+                "slide": 1,
+                "id": "six-week-delivery",
+                "width": 1280,
+                "height": 720
+              }
+            ],
+            "findings": [],
+            "counts": {
+              "error": 0,
+              "warning": 0,
+              "info": 0
+            },
+            "format": "png",
+            "opfVersion": "0.32.1",
+            "cli": "0.32.1",
+            "renderer": {
+              "package": "@openpresentation/opf-render",
+              "version": "0.32.1"
+            },
+            "fonts": {
+              "pack": "office",
+              "substitutionPolicy": "visual",
+              "userFonts": [],
+              "substitutions": [],
+              "scripts": {
+                "detected": [],
+                "scripts": [],
+                "unavailable": [],
+                "packages": [],
+                "notInstalled": []
+              }
+            },
+            "skippedHidden": [],
+            "checks": {
+              "syntax": "not-applicable",
+              "schema": "checked",
+              "references": "checked",
+              "policy": "not-run",
+              "accessibility": "not-run",
+              "content": "not-run",
+              "layout": "measured",
+              "backgroundPixels": "not-read",
+              "imageBytes": "embedded-only",
+              "nativeExport": "not-checked",
+              "fonts": "checked"
+            },
+            "written": true
+          }
+        }
+      ]
+    }
+  ]
+}

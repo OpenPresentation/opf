@@ -1,0 +1,143 @@
+﻿{
+    "schemaVersion":  1,
+    "case":  "lh16-duration",
+    "timestamp":  "2026-11-08T07:11:56.5129495Z",
+    "manifestSha256":  "d6a8ff2ad7a2d4b410eff73867d2f4b681e11df45dcf355f9b5c1eb3aecb62b6",
+    "selectedCase":  {
+                         "id":  "lh16-duration",
+                         "worker":  "furniture",
+                         "automaticControlEligible":  true,
+                         "input":  "input.pptx",
+                         "actionPlan":  "action-plan.json",
+                         "archiveSha256":  "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+                         "slideCount":  1
+                     },
+    "provenance":  {
+                       "sourceCliManifest":  {
+                                                 "path":  "C:/opf-work/qualification-034-cli-v1/lh16-duration/build.json",
+                                                 "sha256":  "84baa4e4adb1791209b519c85254162921d33b4f98a528d33b8d915c7d60b1b6",
+                                                 "sourceRevision":  "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+                                                 "dirty":  false
+                                             },
+                       "suiteRepository":  {
+                                               "revision":  "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+                                               "dirty":  false,
+                                               "files":  [
+                                                             {
+                                                                 "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                                 "bytes":  14306,
+                                                                 "sha256":  "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+                                                             },
+                                                             {
+                                                                 "path":  "spec/schemas/opf.schema.json",
+                                                                 "bytes":  282942,
+                                                                 "sha256":  "e89dc87eacca8c4bbfc80ae16c61900d7c2ee1b64d91d0d534ffeafbd9511b0e"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/composition.ts",
+                                                                 "bytes":  968456,
+                                                                 "sha256":  "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/pptx/src/index.js",
+                                                                 "bytes":  461335,
+                                                                 "sha256":  "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0"
+                                                             },
+                                                             {
+                                                                 "path":  "packages/javascript/src/timeline-duration.ts",
+                                                                 "bytes":  1201,
+                                                                 "sha256":  "018e421fd95481b932aa40d2b6b4730e2f332f089d59132cd549a2b0416c35d4"
+                                                             }
+                                                         ]
+                                           },
+                       "workerRepository":  {
+                                                "revision":  "ff501beb2613bc7419edcc2f8967ccaf738c6770",
+                                                "dirty":  false,
+                                                "files":  [
+                                                              {
+                                                                  "path":  "test/native-furniture-control.ps1",
+                                                                  "bytes":  36494,
+                                                                  "sha256":  "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process.ps1",
+                                                                  "bytes":  2341,
+                                                                  "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-process-check.ps1",
+                                                                  "bytes":  2333,
+                                                                  "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                              },
+                                                              {
+                                                                  "path":  "test/native-furniture-harness-check.ps1",
+                                                                  "bytes":  24181,
+                                                                  "sha256":  "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8"
+                                                              }
+                                                          ]
+                                            }
+                   },
+    "executingCode":  {
+                          "suite":  {
+                                        "revision":  "5c8b84047ea40e2f29ec77240dc1574229c1ae8e",
+                                        "dirty":  false,
+                                        "files":  [
+                                                      {
+                                                          "path":  "scripts/native-acceptance/run-windows.ps1",
+                                                          "bytes":  14306,
+                                                          "sha256":  "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+                                                      },
+                                                      {
+                                                          "path":  "spec/schemas/opf.schema.json",
+                                                          "bytes":  282942,
+                                                          "sha256":  "e89dc87eacca8c4bbfc80ae16c61900d7c2ee1b64d91d0d534ffeafbd9511b0e"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/composition.ts",
+                                                          "bytes":  968456,
+                                                          "sha256":  "4ba311679b29aee7b2d36fc946de7f02a0f4822314a58d4d9dda31640bfa760e"
+                                                      },
+                                                      {
+                                                          "path":  "packages/pptx/src/index.js",
+                                                          "bytes":  461335,
+                                                          "sha256":  "720052921e32371ff3c35e2f8de6e3b27666f121e334e50a7e8b60b07f475ad0"
+                                                      },
+                                                      {
+                                                          "path":  "packages/javascript/src/timeline-duration.ts",
+                                                          "bytes":  1201,
+                                                          "sha256":  "018e421fd95481b932aa40d2b6b4730e2f332f089d59132cd549a2b0416c35d4"
+                                                      }
+                                                  ]
+                                    },
+                          "workers":  {
+                                          "revision":  "ff501beb2613bc7419edcc2f8967ccaf738c6770",
+                                          "dirty":  false,
+                                          "files":  [
+                                                        {
+                                                            "path":  "test/native-furniture-control.ps1",
+                                                            "bytes":  36494,
+                                                            "sha256":  "1f0b03e9f4a29736e8a8e7491fe8772d43f8f9a63e37d82a3f1f16ddbbdf9593"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process.ps1",
+                                                            "bytes":  2341,
+                                                            "sha256":  "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-process-check.ps1",
+                                                            "bytes":  2333,
+                                                            "sha256":  "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+                                                        },
+                                                        {
+                                                            "path":  "test/native-furniture-harness-check.ps1",
+                                                            "bytes":  24181,
+                                                            "sha256":  "8c060252ecaf8a3c275bc55df9ffe0b5ae3e27b3b8732c7cb5283dd2603d6da8"
+                                                        }
+                                                    ]
+                                      }
+                      },
+    "timeoutSeconds":  60,
+    "status":  "native-observation-completed; acceptance-requires-supervisor-review",
+    "nativeAcceptance":  false,
+    "registryAcceptance":  false
+}

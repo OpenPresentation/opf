@@ -1,0 +1,77 @@
+{
+  "scope": "Exact clean CLI qualification inputs; no native font registration occurred.",
+  "archives": [
+    {
+      "id": "lh16-duration-wide",
+      "sha256": "3a4f9ceb9f08f09231914def9ef15fe485c61ab4c4fd5c862bb4b9d1aae6a394",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh16-duration-portrait",
+      "sha256": "e0ad502fe34fd0d48f36f59569ec67fc2529d30695061b60b9481f61f8d17b6a",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh16-duration-rtl",
+      "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh16-duration-nine-periods",
+      "sha256": "2929f5c6035b6e70c6b1e2eeb6b2581d4f7d03397448cc5ebbe25bcc2f5a10f0",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh16-duration-single-period",
+      "sha256": "6d3de2341d9695ecba717ef34758fd59e6d5969d0d50ca9f4f3b4c17dc7ae84d",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh16-duration-partial-periods",
+      "sha256": "200dbfd5b8cd4d3df74f94f1cbd074dae06bc54d01790d8595f014693c36d050",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-wide",
+      "sha256": "5bd9945e79f2cd68447b62eb66883a6a4e99863374cc5120c73e3a9e741c9622",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-portrait",
+      "sha256": "4c2c6f460ac5f7645e25fe4181e74e7a6d6eb4e9c5dc950ff5086c6edad6d94d",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-cover-focus",
+      "sha256": "7f2c2097dc8303a7ca712d77f8636630861802c5d221c92d16658af92660d12c",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-masked-rtl",
+      "sha256": "64b1cc7f7cda7266b527f2d87b1ceaa9852b375145041bea6973515a74e91593",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-nine-labels",
+      "sha256": "a133818381c8dc3894bf66c99e7fd2b9dc52271860b3cc308132df22eb960f2b",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    },
+    {
+      "id": "lh34-callouts-long-label",
+      "sha256": "58aba68ad2dc3824f405b651211677169c897c4da6e6c3da6c26160f797ef11c",
+      "embeddedFontParts": [],
+      "embeddedFontList": false
+    }
+  ]
+}

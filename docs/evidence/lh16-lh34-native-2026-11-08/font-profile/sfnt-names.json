@@ -1,0 +1,225 @@
+{
+  "source": "Pinned bundled SFNT name/OS2 tables, read directly without registration.",
+  "faces": [
+    {
+      "file": "fonts/roboto/400Regular/Roboto_400Regular.ttf",
+      "sha256": "15256405ecb0d880678833a582760efad538ab2932318b52c8105b267d159459",
+      "bytes": 159108,
+      "family": "Roboto",
+      "weight": 400,
+      "italic": false,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto"
+        },
+        {
+          "id": 2,
+          "value": "Regular"
+        },
+        {
+          "id": 4,
+          "value": "Roboto Regular"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-Regular"
+        }
+      ],
+      "os2Weight": 400,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/500Medium/Roboto_500Medium.ttf",
+      "sha256": "79343dc641a2e8d48a703a4667b71fc8dc6565cc8ce47dfc34fc52c12aadbf38",
+      "bytes": 159296,
+      "family": "Roboto Medium",
+      "weight": 500,
+      "italic": false,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto Medium"
+        },
+        {
+          "id": 2,
+          "value": "Regular"
+        },
+        {
+          "id": 4,
+          "value": "Roboto Medium"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-Medium"
+        },
+        {
+          "id": 16,
+          "value": "Roboto"
+        },
+        {
+          "id": 17,
+          "value": "Medium"
+        }
+      ],
+      "os2Weight": 500,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/600SemiBold/Roboto_600SemiBold.ttf",
+      "sha256": "32fe2086b0e54eca85a68eb74e3d89bb16a7ffe59085d6dc7d079f5b3c26d6ab",
+      "bytes": 159876,
+      "family": "Roboto SemiBold",
+      "weight": 600,
+      "italic": false,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto SemiBold"
+        },
+        {
+          "id": 2,
+          "value": "Regular"
+        },
+        {
+          "id": 4,
+          "value": "Roboto SemiBold"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-SemiBold"
+        },
+        {
+          "id": 16,
+          "value": "Roboto"
+        },
+        {
+          "id": 17,
+          "value": "SemiBold"
+        }
+      ],
+      "os2Weight": 600,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/700Bold/Roboto_700Bold.ttf",
+      "sha256": "4aaf8c5b661a386998c2e70cf2b87e2440f5404e0b8fd81164f0413fb3435ec6",
+      "bytes": 159900,
+      "family": "Roboto",
+      "weight": 700,
+      "italic": false,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto"
+        },
+        {
+          "id": 2,
+          "value": "Bold"
+        },
+        {
+          "id": 4,
+          "value": "Roboto Bold"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-Bold"
+        }
+      ],
+      "os2Weight": 700,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/800ExtraBold/Roboto_800ExtraBold.ttf",
+      "sha256": "43d5ce98c58336045220fa1dac2bd22281b1aab3eca66785cb34eb3ad1dfe1a5",
+      "bytes": 160012,
+      "family": "Roboto ExtraBold",
+      "weight": 800,
+      "italic": false,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto ExtraBold"
+        },
+        {
+          "id": 2,
+          "value": "Regular"
+        },
+        {
+          "id": 4,
+          "value": "Roboto ExtraBold"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-ExtraBold"
+        },
+        {
+          "id": 16,
+          "value": "Roboto"
+        },
+        {
+          "id": 17,
+          "value": "ExtraBold"
+        }
+      ],
+      "os2Weight": 800,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/400Regular_Italic/Roboto_400Regular_Italic.ttf",
+      "sha256": "6a372c348dc20c246b92d60b9bda3c0a9ffedc129790ed3f31faf89daa99d793",
+      "bytes": 165268,
+      "family": "Roboto",
+      "weight": 400,
+      "italic": true,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto"
+        },
+        {
+          "id": 2,
+          "value": "Italic"
+        },
+        {
+          "id": 4,
+          "value": "Roboto Italic"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-Italic"
+        }
+      ],
+      "os2Weight": 400,
+      "fsType": 0
+    },
+    {
+      "file": "fonts/roboto/700Bold_Italic/Roboto_700Bold_Italic.ttf",
+      "sha256": "c6a5e7c224d3bf6698e5d3c124f0f0220cad20d5d413920447a96f033a0292ee",
+      "bytes": 166256,
+      "family": "Roboto",
+      "weight": 700,
+      "italic": true,
+      "names": [
+        {
+          "id": 1,
+          "value": "Roboto"
+        },
+        {
+          "id": 2,
+          "value": "Bold Italic"
+        },
+        {
+          "id": 4,
+          "value": "Roboto Bold Italic"
+        },
+        {
+          "id": 6,
+          "value": "Roboto-BoldItalic"
+        }
+      ],
+      "os2Weight": 700,
+      "fsType": 0
+    }
+  ]
+}
