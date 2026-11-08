@@ -1,0 +1,3 @@
+# Historical 0.34 gallery staged outputs
+
+Evidence only; never merge or publish this branch. These were left uncommitted by the earlier staged 04a7 wave-2 qualification, with genuine package pins restored. The earlier handoff explicitly separates its staged build/browser results from registry acceptance. This snapshot preserves every remaining generated working file, the exact tracked diff and hashes so no historical result remains local-only. It does not certify a reconstructed install graph, final 40-layout output or current native fidelity. The source worktree is unchanged. Final 0.34 must regenerate from its actual published packages and source tag, then pass local, CI and deployed-preview checks.

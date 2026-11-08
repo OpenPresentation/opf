@@ -1,0 +1,547 @@
+{
+  "classification": "Historical unpublished staged candidate only; never merge or publish this evidence branch.",
+  "sourceBranch": "codex/sites-034-continuation",
+  "sourceHead": "77a66ecc22932921a663982c006c732007c3e603",
+  "documentedCandidateAssembly": "04a7fc6636569bdb09c0435188f289ddffe4c4d7",
+  "provenanceLimit": "Snapshot preserves generated working files and historical handoff claims, not a reconstructed install graph or current native/registry qualification.",
+  "genuineCommittedPins": {
+    "@fontsource-variable/bitter": "5.3.0",
+    "@fontsource-variable/eb-garamond": "5.3.0",
+    "@fontsource-variable/figtree": "5.3.0",
+    "@fontsource-variable/gelasio": "5.3.0",
+    "@fontsource-variable/montserrat": "5.3.0",
+    "@fontsource-variable/noto-naskh-arabic": "5.3.0",
+    "@fontsource-variable/noto-nastaliq-urdu": "5.3.0",
+    "@fontsource-variable/noto-sans-hebrew": "5.3.0",
+    "@fontsource-variable/noto-sans-jp": "5.3.0",
+    "@fontsource-variable/noto-sans-kr": "5.3.0",
+    "@fontsource-variable/noto-sans-sc": "5.3.0",
+    "@fontsource-variable/noto-sans-tc": "5.3.0",
+    "@fontsource-variable/red-hat-display": "5.3.0",
+    "@fontsource-variable/roboto": "5.3.0",
+    "@fontsource-variable/source-sans-3": "5.3.0",
+    "@fontsource/anton": "5.3.0",
+    "@fontsource/arimo": "5.3.0",
+    "@fontsource/barlow": "5.3.0",
+    "@fontsource/bebas-neue": "5.3.0",
+    "@fontsource/cousine": "5.3.0",
+    "@fontsource/libre-caslon-text": "5.3.0",
+    "@fontsource/merriweather-sans": "5.3.0",
+    "@fontsource/noto-sans": "5.3.0",
+    "@fontsource/noto-sans-armenian": "5.3.0",
+    "@fontsource/noto-sans-bengali": "5.3.0",
+    "@fontsource/noto-sans-devanagari": "5.3.0",
+    "@fontsource/noto-sans-ethiopic": "5.3.0",
+    "@fontsource/noto-sans-georgian": "5.3.0",
+    "@fontsource/noto-sans-gujarati": "5.3.0",
+    "@fontsource/noto-sans-gurmukhi": "5.3.0",
+    "@fontsource/noto-sans-kannada": "5.3.0",
+    "@fontsource/noto-sans-khmer": "5.3.0",
+    "@fontsource/noto-sans-malayalam": "5.3.0",
+    "@fontsource/noto-sans-mongolian": "5.3.0",
+    "@fontsource/noto-sans-oriya": "5.3.0",
+    "@fontsource/noto-sans-tamil": "5.3.0",
+    "@fontsource/noto-sans-telugu": "5.3.0",
+    "@fontsource/noto-sans-thai": "5.3.0",
+    "@fontsource/noto-serif-hebrew": "5.3.0",
+    "@fontsource/open-sans": "5.3.0",
+    "@fontsource/poppins": "5.3.0",
+    "@fontsource/pt-serif": "5.3.0",
+    "@fontsource/red-hat-text": "5.3.0",
+    "@fontsource/tinos": "5.3.0",
+    "@fontsource/work-sans": "5.3.0",
+    "@openpresentation/gallery": "^0.32.1",
+    "@openpresentation/opf": "0.32.1",
+    "@types/mdast": "^4.0.4",
+    "@vercel/analytics": "^2.0.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
+    "lucide-react": "^1.55.0",
+    "next": "16.4.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-html": "^16.0.1",
+    "simple-icons": "16.31.0",
+    "tailwind-merge": "^2.6.0"
+  },
+  "packageManifestSha256": "23a4ab26525c199f5b755eb793ca8cb52c90cd07edae910420f181bd820a2696",
+  "lockSha256": "30325c455188b47939891bce548c6852b74e339e1f3cbb2235c6d5164174820d",
+  "trackedDiff": {
+    "bytes": 123607,
+    "sha256": "9b92eef666c7a0483bf8f6b8f3dd182863ef9a4b654f82da48372ce954bf714e"
+  },
+  "files": [
+    {
+      "file": "data/charts.json",
+      "status": " M",
+      "bytes": 91658,
+      "sha256": "64edac4faac43363e6f2e289b96f005c7cb9814c7364e88234e0eead2ba8e5d6",
+      "archive": "files/data/charts.json.gz"
+    },
+    {
+      "file": "data/layout-examples.json",
+      "status": " M",
+      "bytes": 123508,
+      "sha256": "a89525c9a54d6013f35ac3d9193d28134e99f0ddb5dc5848263e18119d5a0dbc",
+      "archive": "files/data/layout-examples.json.gz"
+    },
+    {
+      "file": "data/layouts.json",
+      "status": " M",
+      "bytes": 56320,
+      "sha256": "628f7dddf14fcd1aae2ee2d633b48ea2787bdc3eb894f1864990406569c6cf05",
+      "archive": "files/data/layouts.json.gz"
+    },
+    {
+      "file": "public/chart-previews/funnel.svg",
+      "status": " M",
+      "bytes": 2992,
+      "sha256": "2b2ecd3146c37ff2dd9d80b683aed549d9c140425042562105eb8c4ad7cc06a8",
+      "archive": "files/public/chart-previews/funnel.svg.gz"
+    },
+    {
+      "file": "public/chart-previews/histogram.svg",
+      "status": " M",
+      "bytes": 3930,
+      "sha256": "923fffae72c8abfdde1d45e091e8c05a9119e97efa37a2c796417c4f49f9fdc3",
+      "archive": "files/public/chart-previews/histogram.svg.gz"
+    },
+    {
+      "file": "public/chart-previews/manifest.json",
+      "status": " M",
+      "bytes": 5936,
+      "sha256": "f10061fc762e3bdc0846c7a6c2a070fde95c5d954ed30b0b8ae2bff0ee6fa803",
+      "archive": "files/public/chart-previews/manifest.json.gz"
+    },
+    {
+      "file": "public/chart-previews/scatter.svg",
+      "status": " M",
+      "bytes": 4851,
+      "sha256": "fd801238a3ac1461293b9805aac5914cc723993cce266f5b7f20fc69ba9d75bb",
+      "archive": "files/public/chart-previews/scatter.svg.gz"
+    },
+    {
+      "file": "public/chart-previews/treemap.svg",
+      "status": " M",
+      "bytes": 2358,
+      "sha256": "7dbf638d976cdd404dd568b616fbef54e3d529399ee159f23a9cf5a7f7ed280d",
+      "archive": "files/public/chart-previews/treemap.svg.gz"
+    },
+    {
+      "file": "public/chart-previews/waterfall.svg",
+      "status": " M",
+      "bytes": 5796,
+      "sha256": "ddffea3c8b5025db314f10754bbcea56c3b1a0a1ccd16a8d670114a2e25b321b",
+      "archive": "files/public/chart-previews/waterfall.svg.gz"
+    },
+    {
+      "file": "public/chart-types/100pct-stacked-area.json",
+      "status": " M",
+      "bytes": 3315,
+      "sha256": "4a0cd6de4257a3babae88f820ee12c5a3cc0361dafd5e6fe18d689724ebfb4b8",
+      "archive": "files/public/chart-types/100pct-stacked-area.json.gz"
+    },
+    {
+      "file": "public/chart-types/100pct-stacked-bar.json",
+      "status": " M",
+      "bytes": 2931,
+      "sha256": "f616c7fab607098c4936bc061578c4667ed80c71d1df761c4590c21947b1d7fa",
+      "archive": "files/public/chart-types/100pct-stacked-bar.json.gz"
+    },
+    {
+      "file": "public/chart-types/100pct-stacked-column.json",
+      "status": " M",
+      "bytes": 3082,
+      "sha256": "ab347dd56ac07727c7fdc41945c3df13439246e7130bb1bbf88fc3266e3140c7",
+      "archive": "files/public/chart-types/100pct-stacked-column.json.gz"
+    },
+    {
+      "file": "public/chart-types/area.json",
+      "status": " M",
+      "bytes": 2384,
+      "sha256": "e5ca88bf342ded0189b06fddb3fe4c7c132cdd1c9494f410b328e523810c25de",
+      "archive": "files/public/chart-types/area.json.gz"
+    },
+    {
+      "file": "public/chart-types/bar.json",
+      "status": " M",
+      "bytes": 2245,
+      "sha256": "4af8d9b7a23ed1cf57fcf141952041d58f7b7a7aaf1c176c39f35c6e4250b4dd",
+      "archive": "files/public/chart-types/bar.json.gz"
+    },
+    {
+      "file": "public/chart-types/box-and-whisker.json",
+      "status": " M",
+      "bytes": 3754,
+      "sha256": "bcc8d81cd463e332fc7f42fcccd516db8bdcb5b2cf8a0257fe6a56aec2e13fb2",
+      "archive": "files/public/chart-types/box-and-whisker.json.gz"
+    },
+    {
+      "file": "public/chart-types/column.json",
+      "status": " M",
+      "bytes": 2328,
+      "sha256": "014478f17d6dbb923b25f75f97ff55898a29d3690602b90cac26ba4c8f5c69a5",
+      "archive": "files/public/chart-types/column.json.gz"
+    },
+    {
+      "file": "public/chart-types/combo.json",
+      "status": " M",
+      "bytes": 3584,
+      "sha256": "2bea85135d52331b33bc20a3c46ca4de528472472c67ca92389f57fc8d88d3fb",
+      "archive": "files/public/chart-types/combo.json.gz"
+    },
+    {
+      "file": "public/chart-types/doughnut.json",
+      "status": " M",
+      "bytes": 2018,
+      "sha256": "86c646426cf7cca641e430459aefbae46cf6a8820e1ea4a1af0114042a0fc96c",
+      "archive": "files/public/chart-types/doughnut.json.gz"
+    },
+    {
+      "file": "public/chart-types/filled-radar.json",
+      "status": " M",
+      "bytes": 2338,
+      "sha256": "a7f62ca4785cff1f5fea6af752601f0790e8ffb791a10929b6b5883c1b869ce0",
+      "archive": "files/public/chart-types/filled-radar.json.gz"
+    },
+    {
+      "file": "public/chart-types/funnel.json",
+      "status": " M",
+      "bytes": 2310,
+      "sha256": "a0fb5e22eee6edb86ba08e16988ff6f57eaf3aaed040b0273dc9362f6eb9ae54",
+      "archive": "files/public/chart-types/funnel.json.gz"
+    },
+    {
+      "file": "public/chart-types/histogram.json",
+      "status": " M",
+      "bytes": 3679,
+      "sha256": "29587163d30f0e2151b2fc24d6ccb0350f60ea14225d6b92a257dcfdf6377a7d",
+      "archive": "files/public/chart-types/histogram.json.gz"
+    },
+    {
+      "file": "public/chart-types/index.json",
+      "status": " M",
+      "bytes": 3895,
+      "sha256": "d705bd6c478349cc272cf2f8f7de4cace716e37aac86c6e317c02fa29337c40e",
+      "archive": "files/public/chart-types/index.json.gz"
+    },
+    {
+      "file": "public/chart-types/line-with-markers.json",
+      "status": " M",
+      "bytes": 2551,
+      "sha256": "4b8964febee173b8a5ef569b5b628f02c3b142bf586f5686d680e1fdaaebf3fe",
+      "archive": "files/public/chart-types/line-with-markers.json.gz"
+    },
+    {
+      "file": "public/chart-types/line.json",
+      "status": " M",
+      "bytes": 2438,
+      "sha256": "f2430bc81163da7959aed0c8b45909bb69d526662c97124744ff93cd208d2592",
+      "archive": "files/public/chart-types/line.json.gz"
+    },
+    {
+      "file": "public/chart-types/pareto.json",
+      "status": " M",
+      "bytes": 2641,
+      "sha256": "acb3e8eae7b27bca249214602ee710335df11e344d6168a5a08237681d421c29",
+      "archive": "files/public/chart-types/pareto.json.gz"
+    },
+    {
+      "file": "public/chart-types/pie.json",
+      "status": " M",
+      "bytes": 1981,
+      "sha256": "a90846d2112b001e379c66f19caecb2e0316e3d02fbd90d2425ed7d642a4948e",
+      "archive": "files/public/chart-types/pie.json.gz"
+    },
+    {
+      "file": "public/chart-types/radar-with-markers.json",
+      "status": " M",
+      "bytes": 2380,
+      "sha256": "69987b9053044551d5e1631e2c2c008a486d103074cdde96769846b09a58d756",
+      "archive": "files/public/chart-types/radar-with-markers.json.gz"
+    },
+    {
+      "file": "public/chart-types/radar.json",
+      "status": " M",
+      "bytes": 2291,
+      "sha256": "579e0cbf952578f6e2f6f69bc1ace4bb7a7ab9247f75f0f83f1e22a76307a998",
+      "archive": "files/public/chart-types/radar.json.gz"
+    },
+    {
+      "file": "public/chart-types/scatter.json",
+      "status": " M",
+      "bytes": 2734,
+      "sha256": "12899dd48f5ab4a7df11968e8849d0fd270bff58e3892da7c187449688beecfa",
+      "archive": "files/public/chart-types/scatter.json.gz"
+    },
+    {
+      "file": "public/chart-types/stacked-area.json",
+      "status": " M",
+      "bytes": 3261,
+      "sha256": "3221b64958408c8aac609f39d31cc0908b058c2a422bb6892863d90a944c4a4d",
+      "archive": "files/public/chart-types/stacked-area.json.gz"
+    },
+    {
+      "file": "public/chart-types/stacked-bar.json",
+      "status": " M",
+      "bytes": 2877,
+      "sha256": "fe95568bdd45f060ba4b099fe148de4fdb91beecf1763a9476f994ab9db133b4",
+      "archive": "files/public/chart-types/stacked-bar.json.gz"
+    },
+    {
+      "file": "public/chart-types/stacked-column.json",
+      "status": " M",
+      "bytes": 3028,
+      "sha256": "e6f09401f9c633dd5737fd0a21bbf1539012e8925a4ec0e96d5dc9c7dbc0e74b",
+      "archive": "files/public/chart-types/stacked-column.json.gz"
+    },
+    {
+      "file": "public/chart-types/stacked-line-with-markers.json",
+      "status": " M",
+      "bytes": 3428,
+      "sha256": "4f15e7680a6f819526fb4717cd736ee8f1dedd15e0209aad247cfe3ecf92ca9d",
+      "archive": "files/public/chart-types/stacked-line-with-markers.json.gz"
+    },
+    {
+      "file": "public/chart-types/stacked-line.json",
+      "status": " M",
+      "bytes": 3315,
+      "sha256": "0e8e15755f929ebc0756f30c1a9619d254c32a0973781502e6309592d06c7b0f",
+      "archive": "files/public/chart-types/stacked-line.json.gz"
+    },
+    {
+      "file": "public/chart-types/treemap.json",
+      "status": " M",
+      "bytes": 2243,
+      "sha256": "6fb93d4870305901563493ff156f2e4018674024c21fc708b8df126a5c7d95fb",
+      "archive": "files/public/chart-types/treemap.json.gz"
+    },
+    {
+      "file": "public/chart-types/waterfall.json",
+      "status": " M",
+      "bytes": 2442,
+      "sha256": "c846a698e07048fa46d4d96918c5ea72f79a2dc083bc9b5c495ebab490ea8600",
+      "archive": "files/public/chart-types/waterfall.json.gz"
+    },
+    {
+      "file": "public/chart-types/world.json",
+      "status": " M",
+      "bytes": 2524,
+      "sha256": "df684a72972d7f83cda94f40cb31e85053fa9409ec2ba27a37c18237992e54f1",
+      "archive": "files/public/chart-types/world.json.gz"
+    },
+    {
+      "file": "public/diagram-previews/manifest.json",
+      "status": " M",
+      "bytes": 3978,
+      "sha256": "61b895d4b818b9ed13f17be05fa923b9d96ec7ee5e412a0a5112d3905f69dbdf",
+      "archive": "files/public/diagram-previews/manifest.json.gz"
+    },
+    {
+      "file": "public/diagram-previews/sankey.svg",
+      "status": " M",
+      "bytes": 3303,
+      "sha256": "d1908eb77b00f734c57c5ff9e79b7a58ef81417568bf848c082358713e4035de",
+      "archive": "files/public/diagram-previews/sankey.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/closing.svg",
+      "status": " M",
+      "bytes": 1499,
+      "sha256": "80986dfa9909c3e720906f2477de5dc84789d511296fadb8a63fee1ceacd1dad",
+      "archive": "files/public/layout-previews/closing.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/comparison.svg",
+      "status": " M",
+      "bytes": 4006,
+      "sha256": "6de618de3640227964fadb01a9d58665b99bbcfe859cab3399cd0cb3749d02b2",
+      "archive": "files/public/layout-previews/comparison.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/manifest.json",
+      "status": " M",
+      "bytes": 7071,
+      "sha256": "2de88e21c60db7dc6000c452419635552628002d8f7125dfb6007ab365097f74",
+      "archive": "files/public/layout-previews/manifest.json.gz"
+    },
+    {
+      "file": "public/layout-previews/metrics.svg",
+      "status": " M",
+      "bytes": 3885,
+      "sha256": "9dc604c1b2a82f18915e8b95ad163c192fe8edc01b4da7d7cb6dc0e0e65b351a",
+      "archive": "files/public/layout-previews/metrics.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/pillars.svg",
+      "status": " M",
+      "bytes": 5887,
+      "sha256": "3f09a438ab8fc0e94a46110727f5876f1f23af0811b4b91581014cf0cd324db0",
+      "archive": "files/public/layout-previews/pillars.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/process.svg",
+      "status": " M",
+      "bytes": 6166,
+      "sha256": "c3c883767bceb8ba9203028714e088dfd300aa457d2388e26797e6691ca98048",
+      "archive": "files/public/layout-previews/process.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/statement.svg",
+      "status": " M",
+      "bytes": 1260,
+      "sha256": "fcde40bccbb16482a1c78a684e0c7f7a28a06ec37403d9d917ac743618c7ef99",
+      "archive": "files/public/layout-previews/statement.svg.gz"
+    },
+    {
+      "file": "public/layouts/closing.json",
+      "status": " M",
+      "bytes": 1357,
+      "sha256": "d6e74a70110ea10f374e97900ba58a5a2fc2352b439e267d9bb803d7b83a88a6",
+      "archive": "files/public/layouts/closing.json.gz"
+    },
+    {
+      "file": "public/layouts/index.json",
+      "status": " M",
+      "bytes": 7606,
+      "sha256": "a08e160c9c5ae00b955eea9f60f3a95d5035f59d43671dcc62991f729787d636",
+      "archive": "files/public/layouts/index.json.gz"
+    },
+    {
+      "file": "public/layouts/statement.json",
+      "status": " M",
+      "bytes": 1301,
+      "sha256": "b532b2dc367d7b11af651e2b8454aebca870a8a5b3c411e8e515dc6e9bdeb0bc",
+      "archive": "files/public/layouts/statement.json.gz"
+    },
+    {
+      "file": "public/layouts/three-column.json",
+      "status": " M",
+      "bytes": 3020,
+      "sha256": "eec33040ca3df401d8973eb6abe29fa5327df08684a7cafa92dca3dfd34bb21e",
+      "archive": "files/public/layouts/three-column.json.gz"
+    },
+    {
+      "file": "public/layouts/two-column.json",
+      "status": " M",
+      "bytes": 2399,
+      "sha256": "3e138e0ddd252902ee479bb349bd5954492c090ecf75e2dcc9fe476d0e9ff491",
+      "archive": "files/public/layouts/two-column.json.gz"
+    },
+    {
+      "file": "artifacts/layout-examples/generation-proof.json",
+      "status": "??",
+      "bytes": 14820,
+      "sha256": "3bb2ea5c1663a04631f3fcff80b7f752e1bcf435956243141f752eedb9f0388d",
+      "archive": "files/artifacts/layout-examples/generation-proof.json.gz"
+    },
+    {
+      "file": "artifacts/layout-examples/portable.mjs",
+      "status": "??",
+      "bytes": 2846267,
+      "sha256": "92f2fe3c0176d2d723a86263ba1f137edf7e17b08900f71afe5c4bd71a53ac0e",
+      "archive": "files/artifacts/layout-examples/portable.mjs.gz"
+    },
+    {
+      "file": "public/diagram-previews/dot-review-flow.svg",
+      "status": "??",
+      "bytes": 2562,
+      "sha256": "d7d34efd1cfdc34778f6f86f6ce8e3f6efaf8b3ed87db687e714eb4583b52065",
+      "archive": "files/public/diagram-previews/dot-review-flow.svg.gz"
+    },
+    {
+      "file": "public/diagram-previews/plantuml-checkout.svg",
+      "status": "??",
+      "bytes": 2889,
+      "sha256": "b1176a121ef49fc42ccf8e37b5098ee43c776e8a62ee9e186fc9f8f1929f6c96",
+      "archive": "files/public/diagram-previews/plantuml-checkout.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/chevrons.svg",
+      "status": "??",
+      "bytes": 2856,
+      "sha256": "0a78a3b537c62b5c53f4f85e69f830c1b6e35e97e3d2544d25a9c7b0129b3837",
+      "archive": "files/public/layout-previews/chevrons.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/cycle.svg",
+      "status": "??",
+      "bytes": 3729,
+      "sha256": "23367d7e474b8e19415228c05123d0ee7472c7a19b9893e3562becc5d7c593f4",
+      "archive": "files/public/layout-previews/cycle.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/flow.svg",
+      "status": "??",
+      "bytes": 3089,
+      "sha256": "3ad708eff99c7076c3137d47dec2324855d82e5b6e2ddce1a610f55e9ed7a42b",
+      "archive": "files/public/layout-previews/flow.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/matrix.svg",
+      "status": "??",
+      "bytes": 3979,
+      "sha256": "1efac9673e1a84653c2d13be85c3348d694cb8cf33867264f6fc4d9848840550",
+      "archive": "files/public/layout-previews/matrix.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/pyramid.svg",
+      "status": "??",
+      "bytes": 2681,
+      "sha256": "cfb38314be4bafc62e85d2f89cd89a84bec6d61f77a830c8ce0a7aa64e68b9ea",
+      "archive": "files/public/layout-previews/pyramid.svg.gz"
+    },
+    {
+      "file": "public/layout-previews/vertical-flow.svg",
+      "status": "??",
+      "bytes": 2689,
+      "sha256": "7b0f762d2a22dd64f84f6f8076c44a60667cca3dfd35051e7f6c4c4976b66f4e",
+      "archive": "files/public/layout-previews/vertical-flow.svg.gz"
+    },
+    {
+      "file": "public/layouts/chevrons.json",
+      "status": "??",
+      "bytes": 1144,
+      "sha256": "ac5ae9463bae1dd42007ffb130f43c9a6911ae9ef7f2560e80b073b12a3ea5de",
+      "archive": "files/public/layouts/chevrons.json.gz"
+    },
+    {
+      "file": "public/layouts/cycle.json",
+      "status": "??",
+      "bytes": 1284,
+      "sha256": "a3f6c8d5e1c440806eb645b46fa7739642aa0a2fa71b1235ac4392599e66b37a",
+      "archive": "files/public/layouts/cycle.json.gz"
+    },
+    {
+      "file": "public/layouts/flow.json",
+      "status": "??",
+      "bytes": 1096,
+      "sha256": "1de71f929df3fe086cd5419f1b0668defcf99aee4062b9e4a11313887333a439",
+      "archive": "files/public/layouts/flow.json.gz"
+    },
+    {
+      "file": "public/layouts/matrix.json",
+      "status": "??",
+      "bytes": 1267,
+      "sha256": "41c69a792f8f80bfa02f844e94a07d984931b442175b7636afc5324fd5e5c62c",
+      "archive": "files/public/layouts/matrix.json.gz"
+    },
+    {
+      "file": "public/layouts/pyramid.json",
+      "status": "??",
+      "bytes": 1194,
+      "sha256": "f385cb21c6c7370783f8529a3d59c71ce2432f2334cf43ff712f4df3075e7811",
+      "archive": "files/public/layouts/pyramid.json.gz"
+    },
+    {
+      "file": "public/layouts/vertical-flow.json",
+      "status": "??",
+      "bytes": 1245,
+      "sha256": "5e9a31c213cf028c927916bef9cef458c46f75e0b46dad9dbd79c1323dd2dccb",
+      "archive": "files/public/layouts/vertical-flow.json.gz"
+    }
+  ]
+}
