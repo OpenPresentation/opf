@@ -1,0 +1,9 @@
+{
+  "args": [
+    "scripts/build-font-tracker.mjs",
+    "--check"
+  ],
+  "status": 1,
+  "OPF_TRACKER_STALE": "unset (strict default)",
+  "node": "v24.20.0"
+}

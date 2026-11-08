@@ -1,0 +1,190 @@
+{
+  "source": "7c0c3f13e9de77e038b6ec26183043eb7fe90822",
+  "files": [
+    {
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/README.md",
+      "bytes": 8836,
+      "sha256": "7902967546134939fbd4a9c89b997b2e54500c00854859b67317b19abf25d6cd"
+    },
+    {
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005-fonts/compare.json",
+      "bytes": 1174585,
+      "sha256": "c1776d8928c64ce04576c9af0dbfe613345270a47a40c3aec147684ad21c4dd2"
+    },
+    {
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005/README.md",
+      "bytes": 11927,
+      "sha256": "f7eb2de4bdf2226cf98709fb763481878888b0f8b3d0a19ec9e2a72ee9d108a4"
+    },
+    {
+      "file": "docs/evidence/ff-46-documented-visual-native-20261005/compare.json",
+      "bytes": 917055,
+      "sha256": "74a6f97b419cd618129609a2408bd51e06c5da1927e6be751dcbd51012704d1b"
+    },
+    {
+      "file": "docs/evidence/ff-46-native-0.12-20261002/README.md",
+      "bytes": 8478,
+      "sha256": "5b91141c6e94a032a7b31de0bb6cf78bb2e862caa19b40196ee56e1f2611f17d"
+    },
+    {
+      "file": "docs/evidence/ff-46-native-0.12-20261002/compare.json",
+      "bytes": 203259,
+      "sha256": "41426a2f5540405843d0e55c911d96063844e89188e991f28e78a04d90bd5ca3"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/README.md",
+      "bytes": 12707,
+      "sha256": "06872a4891069b7788b3eec8df65e52c8170f23403c871fc1efada09baf39c2b"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/bundled-replacements-ff43-20260929.json",
+      "bytes": 93966,
+      "sha256": "0333cf3c12873d7f6e10e0612aa6e521434716201405bb07c7951b2ac28ebc7d"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/latin-host-fixtures-20261001.json",
+      "bytes": 96556,
+      "sha256": "2006a623945bed73a2ad25b73c1a35e99999da8f0c3430276432c38cefaa31be"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/latin-qualification-20261001.json",
+      "bytes": 450441,
+      "sha256": "ad64244fe39e134b82f737074c0db3b18f65e03661a6d5a64c3378ae5275d64f"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/metric-candidates-20260929.json",
+      "bytes": 51000,
+      "sha256": "b724daad97dbec59639e1051bfe97d9919fa124acc0f2c7202581940e12aaa34"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/report.json",
+      "bytes": 123961,
+      "sha256": "8073a569a74ea4c2df62bd15035ec96242f615d068c768481c571020dd4c8a39"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/script-host-fixtures-20261002.json",
+      "bytes": 64643,
+      "sha256": "cf2c1611f90f8515989c46f373c24b3ed23ec1f723c971125bf55e9cd32118c0"
+    },
+    {
+      "file": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json",
+      "bytes": 53652,
+      "sha256": "dbd33c76447dcbd1dc08c4d8f163dffe05b7c341d19c39796387de73d2fbfd7a"
+    },
+    {
+      "file": "docs/evidence/mac-checks-20261002/README.md",
+      "bytes": 19218,
+      "sha256": "15179b0b3fe85b4051e76418a5050aad0e972c17b8aa45946d0ed2ffbbcce2ab"
+    },
+    {
+      "file": "docs/evidence/rr-05-cjk-native-20261002/README.md",
+      "bytes": 2390,
+      "sha256": "272d6be45b91db81724dc3871a3d843bf6467f962f73c96900dc1e8bf368d353"
+    },
+    {
+      "file": "docs/evidence/rr-05-cjk-native-20261002/compare.json",
+      "bytes": 53726,
+      "sha256": "6006274e35cafabb292136f9d076ed8621cbb313d7b9e89e76aa67543b320a16"
+    },
+    {
+      "file": "docs/evidence/rr-05b-native-20261002/README.md",
+      "bytes": 1940,
+      "sha256": "adf7aef1982c2cc6f51ec3a5713f8cd39e5d2470a430cf07a562a15e6309327d"
+    },
+    {
+      "file": "docs/evidence/rr-05b-native-20261002/compare.json",
+      "bytes": 17880,
+      "sha256": "9fff7be5aed6b34aff180d6426afaf883f9e9d49c047d051283c8f0f3836abd7"
+    },
+    {
+      "file": "docs/evidence/script-corpora-20261001/README.md",
+      "bytes": 2819,
+      "sha256": "49d366d6ae696d52e146d3ab1999886a912396d52394c69691b1264a641af8a1"
+    },
+    {
+      "file": "docs/evidence/script-corpora-20261001/qualification.json",
+      "bytes": 353633,
+      "sha256": "d6168296db65f02f2c03f7b4cab05efc32c12e36a208d7063c95ca7581e5548d"
+    },
+    {
+      "file": "docs/evidence/script-corpora-20261001/references.json",
+      "bytes": 99680,
+      "sha256": "bc799af3982ffa85215d8ddafb0a61894a61998db88b4cdb288e2125ffded318"
+    },
+    {
+      "file": "docs/evidence/script-corpora-20261001/script-corpora.json",
+      "bytes": 34996,
+      "sha256": "cd31a9c8cc848548bc0114561b34e4454858d5d7e786af3e08609a2ddbf2f31a"
+    },
+    {
+      "file": "docs/evidence/windows-native-calibri-control-20260929/README.md",
+      "bytes": 6959,
+      "sha256": "393eb8ec1f8165c3f4970f6820e7941663b6316e2013251cd84bdd76e7fbb9b0"
+    },
+    {
+      "file": "docs/evidence/windows-native-font-inventory-20260929/README.md",
+      "bytes": 3433,
+      "sha256": "fb952bcbc2d3265e49f0ee576a6e53e09e3c7fb153d06b671108e44d2bfea2dc"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/aptos-origin-brief.md",
+      "bytes": 15888,
+      "sha256": "6f13876e6e56bfc7d64e49bfe9703e4ac23d890ea7fa2710ead12640c79c4731"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/font-licensing.md",
+      "bytes": 42932,
+      "sha256": "2adcb3a54d5953f34324a7957536f275e7361965357970917d7a77695fd3fb72"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/font-tracker.gallery-preview-fonts.json",
+      "bytes": 18104,
+      "sha256": "97211ecde247156a85dfebb0763e0ec6de02f835343e520486012a1a8b73d679"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/font-tracker.render-manifest.json",
+      "bytes": 76976,
+      "sha256": "2da2873bcd7d6c63ff1f4d0adcabeb558406900772081df566ce553e4d1872b7"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/font-tracker.symbol-fonts.json",
+      "bytes": 1391,
+      "sha256": "5a8804222177ea0e5ad77318d8f4d2680d3d40cb57017f352e891538b1e7726f"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-29-intos-default.md",
+      "bytes": 34519,
+      "sha256": "120c8a333f7645ee58d1b12aee1f03e5a103fbf90c924e44fd89726d00990849"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/PARITY-2026-09-30-gallery-font-host.md",
+      "bytes": 42069,
+      "sha256": "d71e4f2f913c2365fb709642bd1a911db51f5001b9a11a4a4242c5ba8b1bee7d"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/gallery-support/parity/parity-results-2026-10-02-published-0.12.json",
+      "bytes": 3552129,
+      "sha256": "b667bfdae800bf1274d1446cfc109247310023ec33b3bff662010e48502f86f9"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/script-corpora.md",
+      "bytes": 24932,
+      "sha256": "702d6fe001dbec8ff988adb05373ca35aeeba458f9b86dd796bf1de9d76c26c8"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/script-font-model.md",
+      "bytes": 37199,
+      "sha256": "2afeb3035e464fad061001bbb4a06b0cd8b45c9b3e6c281594752f2eb9577653"
+    },
+    {
+      "file": "docs/programs/font-fidelity-everywhere/special-families-emoji-math.md",
+      "bytes": 19958,
+      "sha256": "a31bed31407e43edc2127f8d4dc11cc1f637f895c10f5ae654572315f0d0eab3"
+    },
+    {
+      "file": "spec/reference/symbol-font-encodings.json",
+      "bytes": 318426,
+      "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+    }
+  ]
+}
