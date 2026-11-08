@@ -1,0 +1,51 @@
+{
+  "schema": "opf-mixed-language-native/v1",
+  "consumerCommit": "dde3809913e9d2e38d9c199f67ece8741426067e",
+  "inputSha256": "cc80750441f7dda063b837cf1a2717022e8bc60f6f018a3e9ad886babefebf3f",
+  "sourceFiles": {
+    "packages/pptx/src/index.js": "ff31ce9de20759fdd599147a516062d88a6349569b377d004b63e17ee7d490f8",
+    "packages/pptx/src/script-fonts.js": "dba62e31f5017e0b4f19471dc4fea515aff6f42023ad183929a9b04a289d876b",
+    "packages/pptx/src/body-text-import.js": "56eb625337e06bc39829fbb6c86421d6753ad34ca0b9bd4ed324c6b7ebf5f313",
+    "packages/pptx/dist/index.js": "ff31ce9de20759fdd599147a516062d88a6349569b377d004b63e17ee7d490f8",
+    "packages/pptx/dist/script-fonts.js": "dba62e31f5017e0b4f19471dc4fea515aff6f42023ad183929a9b04a289d876b",
+    "packages/pptx/dist/body-text-import.js": "56eb625337e06bc39829fbb6c86421d6753ad34ca0b9bd4ed324c6b7ebf5f313",
+    "packages/javascript/dist/composition.js": "df8557da6edc56bee5490f5502675aa8afd852e48d8366c425ab09bceb1894c9"
+  },
+  "artifacts": {
+    "measured.pptx": {
+      "sha256": "f85787ab7604d8f8d86a549972f61b86cc8ecfadb48c539caed2d7956b51bdc1",
+      "bytes": 177342,
+      "bodyText": "measured"
+    },
+    "native.pptx": {
+      "sha256": "f85787ab7604d8f8d86a549972f61b86cc8ecfadb48c539caed2d7956b51bdc1",
+      "bytes": 177342,
+      "bodyText": "native"
+    },
+    "preview-1.png": {
+      "sha256": "bc186fd4c2382015da6950f8b11490f0fda8c6870e2894a9291b55fa736721ff",
+      "bytes": 50136
+    },
+    "preview-2.png": {
+      "sha256": "f2de57cf78e740f300b56c76ed627e2819d9b45f27e64e9291e10647e97ab8ad",
+      "bytes": 44739
+    },
+    "export-diagnostics.json": {
+      "sha256": "722dfaab16aa5eb9c33872f27146f17baafcbf138908e9cbf59b01ebc95413f8",
+      "bytes": 517
+    }
+  },
+  "expectations": [
+    {
+      "slide": 1,
+      "text": "مرحبا بالعالم",
+      "language": "ar-SA"
+    },
+    {
+      "slide": 2,
+      "text": "Hello from this English run.",
+      "nativeText": "Hello from this English run",
+      "language": "en-US"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Mixed slide and run languages",
+  "language": "en-US",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "title": "English slide with an Arabic run",
+      "text": [
+        {
+          "text": "This English paragraph keeps its own proofing language. "
+        },
+        {
+          "text": "مرحبا بالعالم",
+          "lang": "ar-SA"
+        },
+        {
+          "text": " The Arabic run keeps its explicit language."
+        }
+      ]
+    },
+    {
+      "language": {
+        "bcp47": "ar-SA",
+        "fontScheme": "noto-sans-arabic"
+      },
+      "title": "شريحة عربية وفيها نص إنجليزي",
+      "text": [
+        {
+          "text": "هذا النص العربي يحافظ على لغة الشريحة. "
+        },
+        {
+          "text": "Hello from this English run.",
+          "lang": "en-US"
+        },
+        {
+          "text": " ويظل هذا النص باللغة العربية."
+        }
+      ]
+    }
+  ]
+}
