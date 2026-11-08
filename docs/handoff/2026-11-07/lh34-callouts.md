@@ -17,3 +17,7 @@ SVG uses real text above the picture's mask/overlay. PPTX uses native panel rect
 ## Vetoable decisions
 
 Use physical visible-frame fractions, not logical RTL coordinates or source-pixel coordinates. Keep callouts specific to image content rather than promising annotations on every resource slot. Use a plain text string, theme panel and measured line editing without adding a styling sublanguage. Preserve the current native words; do not infer new fractions after dragging panel geometry. All judgments remain vetoable in the owner review. No new layout ID or dependency is introduced.
+
+## Schema staging correction
+
+The first review head4bd1f491 omitted spec/schemas/opf.schema.json from its staged commit. Local builds, tests and sealed six-file native inputs had used this exact authored schema, so those receipts exercised the intended format, but the pushed source was incomplete. This corrective commit adds that already-tested schema unchanged. A fresh `pnpm check:changed --base 4bd1f4919320941cbc0d3b292e9a7ed4abe443c5` passed all selected checks (108.8s: build, Biome, examples, conversion, registry, schema docs/examples/strict, spec and text). No assertion or native-input bytes changed. Original dirty=true qualification provenance is retained; a fresh clean suite will bind the corrected source and the separately reviewed read-only native worker.
