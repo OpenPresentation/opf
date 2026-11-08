@@ -52,7 +52,7 @@ for(const kind of ['foreign-name','unreferenced','malformed','stale','moved','du
   if(kind==='unreferenced')changeSlide(parts,1,xml=>xml.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,''));
   if(kind==='malformed')changeTag(parts,record=>{record.v=999;});
   if(kind==='stale')changeTag(parts,record=>{record.native.structure='00000000000000';});
-  if(kind==='moved')changeSlide(parts,1,xml=>xml.replace(/<a:off x="(\d+)"/,(_all,x)=>'<a:off x="'+(Number(x)+1)+'"'));
+  if(kind==='moved')changeSlide(parts,1,xml=>xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/,shape=>shape.replace(/<a:off x="(\d+)"/,(_all,x)=>'<a:off x="'+(Number(x)+1)+'"')));
   if(kind==='duplicate'){const key='ppt/tags/opfSlide1.xml',xml=strFromU8(parts[key]),tag=xml.match(/<p:tag\s+name="OPF_SLIDE_V1"[^>]*\/>/)[0];parts[key]=strToU8(xml.replace('</p:tagLst>',tag+'</p:tagLst>'));}
   if(kind==='external'){const key='ppt/slides/_rels/slide1.xml.rels',xml=strFromU8(parts[key]);parts[key]=strToU8(xml.replace(/<Relationship\b[^>]*Target="\.\.\/tags\/opfSlide1\.xml"[^>]*\/>/,rel=>rel.replace('/>',' TargetMode="External"/>')));assert.notEqual(strFromU8(parts[key]),xml);}
  });
@@ -73,4 +73,8 @@ test('pasted unowned slide uses its own actual vote while owned slide keeps its 
 test('per-slide vote ownership never changes diagnostic all-run counts or global boolean compatibility',()=>{
  const xml='<a:p><a:pPr/><a:r><a:rPr lang="ar-SA"/><a:t>عنوان</a:t></a:r><a:r><a:rPr lang="fr-FR" altLang="en-US"/><a:t>a</a:t></a:r><a:r><a:rPr lang="fr-FR" altLang="en-US"/><a:t>b</a:t></a:r></a:p>',owned=observeLanguage({slides:[xml,xml],preferBaseRuns:[true,false]}),plain=observeLanguage({slides:[xml,xml]}),global=observeLanguage({slides:[xml,xml],preferBaseRuns:true});
  assert.equal(owned.slides[0].lang,'ar-SA');assert.equal(owned.slides[1].lang,'fr-FR');assert.equal(global.slides[1].lang,'ar-SA');assert.equal(plain.slides[0].lang,'fr-FR');assert.deepEqual(owned.ranked,plain.ranked);
+});
+
+test('current native base-language edits remain authoritative after tag parts are renamed',async()=>{
+ const bytes=renameTags(await exportDeck(source11)),candidate=edit(bytes,parts=>changeSlide(parts,1,xml=>xml.replaceAll('lang="ar-SA"','lang="he-IL"'))),expected=structuredClone(source11);expected.language='he-IL';assert.deepEqual(await importDeck(candidate),expected);
 });
