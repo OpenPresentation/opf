@@ -5,9 +5,11 @@
     "sha256": "393da4c6ede4e233b19f4dbe22b3f7288e4f90300efb6e02a6c90f9b8ff78281"
   },
   {
-    "file": "export.log",
-    "bytes": 1235,
-    "sha256": "4fe98db2c540bb873a9c5b35cb3baaf058828d667b86e2dbc709069a7c5aac67"
+    "file": "export.log.gz",
+    "bytes": 317,
+    "sha256": "f8bbf20d6053092cb9c2d235c011cea77dca34a7e7f70f7bfd0667c5fdb68bed",
+    "originalBytes": 1235,
+    "originalSha256": "4fe98db2c540bb873a9c5b35cb3baaf058828d667b86e2dbc709069a7c5aac67"
   },
   {
     "file": "inputs/hierarchy-3.opf.json",
