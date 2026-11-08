@@ -3074,14 +3074,7 @@
       "replacement": {
         "decision": "segoe-ui-preview",
         "weight": 300,
-        "measured": {
-          "replacement": "Red Hat Display",
-          "meanAbsWidthDelta": 0.0187,
-          "meanWidthDelta": 0.0179,
-          "maxAbsWidthDelta": 0.0662,
-          "styles": 2,
-          "reference": "Segoe UI Light 5.71"
-        }
+        "measured": null
       },
       "alternates": [
         "Carlito"
@@ -3139,14 +3132,8 @@
       "embeddableByOpf": false,
       "replacement": {
         "decision": "segoe-ui-preview",
-        "measured": {
-          "replacement": "Red Hat Display",
-          "meanAbsWidthDelta": 0.0322,
-          "meanWidthDelta": 0.0321,
-          "maxAbsWidthDelta": 0.0905,
-          "styles": 2,
-          "reference": "Segoe UI Semilight 5.71"
-        }
+        "weight": 350,
+        "measured": null
       },
       "alternates": [
         "Roboto"

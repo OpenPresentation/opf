@@ -1,0 +1,18 @@
+{
+  "schema": "opf-font-weight-review/v1",
+  "basis": "Existing native PowerPoint witnesses, read-only; no new Office automation.",
+  "lightweight": {
+    "before": "origin/main d19c4bb61",
+    "example": "examples/gallery/education/stem-lab-funding-proposal.opf.json",
+    "nativeDirectory": "C:/opf-work/harvest/wave8/verify/w8/ppt-ex/ex__gallery__education__stem-lab-funding-proposal",
+    "result": "Red Hat Display 300 regular and 400 bold visibly match the native lightweight stroke better. No font size reduced."
+  },
+  "yuGothic": {
+    "source": "C:/opf-work/shapes/sh-07/designs/japanese/shapes/sheets/flowchart.png",
+    "result": "Noto Sans JP Regular preview strokes remain heavier than Yu Gothic Regular in PowerPoint; gap retained."
+  },
+  "sheets": {
+    "stem-lab-before-after-native.png": "74e3235a59bf654c8a6fc21f3d99eade87b32983abee55af038d30f443eafdbc",
+    "yu-gothic-preview-native-gap.png": "35cf5e8da0c58bf2fe711c0103c5d439d2bc102ddc03e91c8a1b90fd1a1ed959"
+  }
+}
