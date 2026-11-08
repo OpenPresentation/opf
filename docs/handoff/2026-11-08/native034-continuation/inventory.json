@@ -1,0 +1,3709 @@
+{
+  "nativeAcceptance": false,
+  "diagnosticOnly": true,
+  "entries": 740,
+  "archiveBytes": 2218928,
+  "archiveSha256": "00ecef49c8ef9606265e2f15341bcc28c8454f4930087ac1df7e75186e377ddd",
+  "files": [
+    {
+      "file": "pie-failed/cleanup.json",
+      "bytes": 436,
+      "sha256": "fa51a07059cc814e7b9a7c0eef4c1617df778cd1a3ba8e8ff7c750070d623f4e"
+    },
+    {
+      "file": "pie-failed/cleanup.ps1",
+      "bytes": 1808,
+      "sha256": "ace8721132f089eb4b8f18f40999fe1b1da7e6f85191cd69c867db99a94999a2"
+    },
+    {
+      "file": "pie-failed/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json",
+      "bytes": 187196,
+      "sha256": "64a960936016f3c13e191f209d010208255de9515174dce3ce7190969dc741db"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "pie-failed/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "file": "pie-failed/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "45215ea00e62a515678850284ca5cd822afbf22455b6361947d04c9e30367b19"
+    },
+    {
+      "file": "pie-failed/harness/process/failure/worker.stderr.log",
+      "bytes": 318,
+      "sha256": "0e40a91b699a4aa49cfb8ae540cfeb493e817274698908fc981c970f3b081a52"
+    },
+    {
+      "file": "pie-failed/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "074d418c645f8077714d319bbd6916c729069a6498fced037faf7de8efda2397"
+    },
+    {
+      "file": "pie-failed/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "file": "pie-failed/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "4159eac9236b6b9ec7c1fccf21c158802a30e826e2980d6b2177c3a3cae2850a"
+    },
+    {
+      "file": "pie-failed/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "file": "pie-failed/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "file": "pie-failed/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "b1e5266875613224c9819143ea01beb0ac68f383f35acf40f6ec68111ed78929"
+    },
+    {
+      "file": "pie-failed/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/inputs/action-plan.json",
+      "bytes": 1261,
+      "sha256": "e4b276f734c1380a0a392037fd2a0862d66fe2e7b73dccf01fd0c19b55b46033"
+    },
+    {
+      "file": "pie-failed/inputs/case.pptx",
+      "bytes": 115765,
+      "sha256": "30b55067a65b746906817e99ada7e190936df1596a03f5d360d99959b820e2b0"
+    },
+    {
+      "file": "pie-failed/native/inputs/action-plan.json",
+      "bytes": 1261,
+      "sha256": "e4b276f734c1380a0a392037fd2a0862d66fe2e7b73dccf01fd0c19b55b46033"
+    },
+    {
+      "file": "pie-failed/native/inputs/input.pptx",
+      "bytes": 115765,
+      "sha256": "30b55067a65b746906817e99ada7e190936df1596a03f5d360d99959b820e2b0"
+    },
+    {
+      "file": "pie-failed/native/inputs/native-furniture-control.ps1",
+      "bytes": 44232,
+      "sha256": "74cccbb9278adae1642eba762eefeccd924ada2bec423e4a6de1c40c5ea4fb8b"
+    },
+    {
+      "file": "pie-failed/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "file": "pie-failed/native/original-slide-01.png",
+      "bytes": 32356,
+      "sha256": "939f8982def661ace278e65041f2aa46e2d31f4ef8e3bc72b726a9b5e792bb7a"
+    },
+    {
+      "file": "pie-failed/native/progress.json",
+      "bytes": 379,
+      "sha256": "21604c918eca71b611d92e5924e2e11bd4de8392165659f4f55bcd9f1b865908"
+    },
+    {
+      "file": "pie-failed/native/report.json",
+      "bytes": 54797,
+      "sha256": "f2daa03275093c80374c0da295e74e9f3d5a5168bba8edf9166e51bc5ab1dbcb"
+    },
+    {
+      "file": "pie-failed/native/request.json",
+      "bytes": 1993,
+      "sha256": "ffe2e1dca4dffc09cfaff07b34adcf4bbf8830d0249c0f939e6671ef623a7524"
+    },
+    {
+      "file": "pie-failed/native/stages.jsonl",
+      "bytes": 314312,
+      "sha256": "4e857876e789995a0de43bf9c41397bea6a3dc55ec381ef88548b802747319d0"
+    },
+    {
+      "file": "pie-failed/native/supervisor.json",
+      "bytes": 218,
+      "sha256": "92bbd1434c1fbe76eca024e7b77abccbf5f813a366edf71b062c9000a4d7b3b7"
+    },
+    {
+      "file": "pie-failed/native/worker.json",
+      "bytes": 341,
+      "sha256": "943c4c469a100666585c2afd32c003f15dc4bbfee3d79848781756e685b5d0e6"
+    },
+    {
+      "file": "pie-failed/native/worker.stderr.log",
+      "bytes": 429,
+      "sha256": "f7b8a15208f4b6e729b935e47d81d4e0e86ccb46025abc59cecc4b35965b40b0"
+    },
+    {
+      "file": "pie-failed/native/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/native-worker.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "pie-failed/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "file": "pie-failed/runner.json",
+      "bytes": 17890,
+      "sha256": "8793cecf38d61a0e1fb8e2cae00e490ccc1fc705c928fe7ebbe23d6140ac25c2"
+    },
+    {
+      "file": "rtl-three-suite/empty-actions.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-three-suite/inputs/rtl-dates-control.pptx",
+      "bytes": 103388,
+      "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac"
+    },
+    {
+      "file": "rtl-three-suite/inputs/rtl-dates-latin-run-off-and-cs.pptx",
+      "bytes": 103402,
+      "sha256": "a3568153d53f3c643e8d2efa4ff1f4844d55d128b0130596d47ccd57ecc73d20"
+    },
+    {
+      "file": "rtl-three-suite/inputs/rtl-dates-latin-run-off.pptx",
+      "bytes": 103398,
+      "sha256": "026b53fd936426538ecc720c82a46e9659b62eb4ddd68b6b5f256568b321cc74"
+    },
+    {
+      "file": "rtl-three-suite/source-records/build.json",
+      "bytes": 2760,
+      "sha256": "2a62298da3f0a7980e65d47fde9d5ff749f43fcbf732dab5534ee70c8f7a946e"
+    },
+    {
+      "file": "rtl-three-suite/suite.json",
+      "bytes": 3710,
+      "sha256": "0ea1d78a075e11a75b2c5d2f61e91ff28b514ba31639ba60e1a103daad676fb2"
+    },
+    {
+      "file": "rtl-control/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json",
+      "bytes": 187306,
+      "sha256": "891663369b3615c3c5f19888e936ea1d42ef21ada70c5a9d5ffc54e2bc1643b6"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-control/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "file": "rtl-control/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "f349096834f5917f42e19a3204617e96e1f8e3e37ea22bdf3eee7f8f5d650252"
+    },
+    {
+      "file": "rtl-control/harness/process/failure/worker.stderr.log",
+      "bytes": 342,
+      "sha256": "5427c3ec7f8e8937bcff0cd5a1424a730fb48f51c0dc1041d64d6a5663531315"
+    },
+    {
+      "file": "rtl-control/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-control/harness/process/report.json",
+      "bytes": 1744,
+      "sha256": "b66df4bfe4a11955a56e53c3dbd6a7144e592f669f8477a5bac0be1bcb51ce9a"
+    },
+    {
+      "file": "rtl-control/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "file": "rtl-control/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "fc512e2a311dc7903f25afc6250b2dff0eaa68af30fd7c1cf9f661c18324d93f"
+    },
+    {
+      "file": "rtl-control/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-control/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "file": "rtl-control/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "file": "rtl-control/harness/process/timeout/worker.json",
+      "bytes": 339,
+      "sha256": "00bf1b1fa24c15e322c3f151b6e75503ef8b521ff4a4e0b082ddf2f0983f8abf"
+    },
+    {
+      "file": "rtl-control/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-control/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-control/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-control/inputs/case.pptx",
+      "bytes": 103388,
+      "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac"
+    },
+    {
+      "file": "rtl-control/native/edited-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-control/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-control/native/inputs/input.pptx",
+      "bytes": 103388,
+      "sha256": "7f0348afe59fee8824efda02e950a9d94dbf5cf2d4b3daae6b9b4ec4dc8aeaac"
+    },
+    {
+      "file": "rtl-control/native/inputs/native-furniture-control.ps1",
+      "bytes": 44232,
+      "sha256": "74cccbb9278adae1642eba762eefeccd924ada2bec423e4a6de1c40c5ea4fb8b"
+    },
+    {
+      "file": "rtl-control/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "file": "rtl-control/native/native-furniture-control.pptx",
+      "bytes": 107170,
+      "sha256": "41c7fc23e60b248ee26edea2dab9eb68fe6fcbf779c68b00e489b44f06ba3da8"
+    },
+    {
+      "file": "rtl-control/native/original-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-control/native/progress.json",
+      "bytes": 272,
+      "sha256": "a9d5b79d020d286762b1cc893cb1b22c88c8e2911d0383e22ee00d1b6c25dd7b"
+    },
+    {
+      "file": "rtl-control/native/reopened-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-control/native/report.json",
+      "bytes": 231472,
+      "sha256": "342f438ef276fa0898c81878384a8d1aca0e16842f2fe00d4fef69b45f81650d"
+    },
+    {
+      "file": "rtl-control/native/request.json",
+      "bytes": 2124,
+      "sha256": "aa2de62cf0fef18100349b20834c758d785338e2f43a9d810d818383d00e0b8f"
+    },
+    {
+      "file": "rtl-control/native/stages.jsonl",
+      "bytes": 1009974,
+      "sha256": "d4fbdbcdf3f9d283917df51349621508a605376467d5ab3c70142cf2f8074f77"
+    },
+    {
+      "file": "rtl-control/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "ca44fa88cfcce53158d04da8ddee6aa542aa9cab508ed3be47025096955c6346"
+    },
+    {
+      "file": "rtl-control/native/worker.json",
+      "bytes": 341,
+      "sha256": "d0eb7ff8da1e064a3636d183248719ade80b93e133c82e9282cea08d699895b4"
+    },
+    {
+      "file": "rtl-control/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-control/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "file": "rtl-control/native-worker.log",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "file": "rtl-control/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "file": "rtl-control/runner.json",
+      "bytes": 7999,
+      "sha256": "0f685910ec5ae28a24ca84ccc868dce5efe90639819433bec700b3021225efb7"
+    },
+    {
+      "file": "rtl-run-off/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json",
+      "bytes": 187336,
+      "sha256": "c441ebc78d835531988277262b20e699aae41de725544cff0c83bc637a2a5f9f"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "file": "rtl-run-off/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "239517b2dcefb94e91900c5021d814b6bf2b3e31ce4d387980ccf833f9f6fd4e"
+    },
+    {
+      "file": "rtl-run-off/harness/process/failure/worker.stderr.log",
+      "bytes": 348,
+      "sha256": "5f00f89aa6bc67aeacd50047e62b07023d94fbbf1587c02e57fdf2d6c94c890b"
+    },
+    {
+      "file": "rtl-run-off/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "762c7382addcf90c47a7a31f90b6134f7d8c7489dbeb4b01f9d21f249d605d65"
+    },
+    {
+      "file": "rtl-run-off/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "file": "rtl-run-off/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "4186680fca3220d3a65a6f0f55385aea42d8691733b062a161917b253bd980b1"
+    },
+    {
+      "file": "rtl-run-off/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "file": "rtl-run-off/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "file": "rtl-run-off/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "f8fe14cb41e116912d09aa4f5e172323dabfc70bcb1f559f13ee0f0b4884656a"
+    },
+    {
+      "file": "rtl-run-off/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-run-off/inputs/case.pptx",
+      "bytes": 103398,
+      "sha256": "026b53fd936426538ecc720c82a46e9659b62eb4ddd68b6b5f256568b321cc74"
+    },
+    {
+      "file": "rtl-run-off/native/edited-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-run-off/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-run-off/native/inputs/input.pptx",
+      "bytes": 103398,
+      "sha256": "026b53fd936426538ecc720c82a46e9659b62eb4ddd68b6b5f256568b321cc74"
+    },
+    {
+      "file": "rtl-run-off/native/inputs/native-furniture-control.ps1",
+      "bytes": 44232,
+      "sha256": "74cccbb9278adae1642eba762eefeccd924ada2bec423e4a6de1c40c5ea4fb8b"
+    },
+    {
+      "file": "rtl-run-off/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "file": "rtl-run-off/native/native-furniture-control.pptx",
+      "bytes": 107178,
+      "sha256": "f4a2988b371096f3af8e3da84b8207566673d2fe1b498544daff9cf98538b79d"
+    },
+    {
+      "file": "rtl-run-off/native/original-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-run-off/native/progress.json",
+      "bytes": 272,
+      "sha256": "5454db17d74992166035a93a05144209fdeea76b33f8017ad2325af110fc42b4"
+    },
+    {
+      "file": "rtl-run-off/native/reopened-slide-01.png",
+      "bytes": 23877,
+      "sha256": "90003dccc5486938146875b1b793a42eebe2bca4874c69d31a7c283b47de3a41"
+    },
+    {
+      "file": "rtl-run-off/native/report.json",
+      "bytes": 231538,
+      "sha256": "9ab5f966fb5597f9152c35a2a024b5328b6360b6afc67dae136e551619f49034"
+    },
+    {
+      "file": "rtl-run-off/native/request.json",
+      "bytes": 2160,
+      "sha256": "802e4015efc5faa4183441a5399b4d1051458bb7a0c8954ff28fb789b0d4bbfc"
+    },
+    {
+      "file": "rtl-run-off/native/stages.jsonl",
+      "bytes": 1029186,
+      "sha256": "4b905342a88af9e4b3fa315725c0ed9d110ddef6b5fd41d0e7a0526adb768f3b"
+    },
+    {
+      "file": "rtl-run-off/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "8d8d35784f90d5bd108dfda99d13fd5ecbb2b9be24d968f57454f59acfe43bef"
+    },
+    {
+      "file": "rtl-run-off/native/worker.json",
+      "bytes": 340,
+      "sha256": "47dd3f44d4e7b0cdb87db57f323125e5353c5d86ed1961618fca5d0fbc578e69"
+    },
+    {
+      "file": "rtl-run-off/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "file": "rtl-run-off/native-worker.log",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "file": "rtl-run-off/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "file": "rtl-run-off/runner.json",
+      "bytes": 8017,
+      "sha256": "9dce8e3540789b9dea26a12fdc78b4c08e6640fec42cf0b9bc8f7d2d2f153690"
+    },
+    {
+      "file": "rtl-run-off-cs/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json",
+      "bytes": 187371,
+      "sha256": "10165cdb4ac35431e5168372f68419306572d02c5a7d249f0b9843c1aa4d2bc0"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/failure/worker.json",
+      "bytes": 342,
+      "sha256": "8fb31588f199fcce418fa48611148263212fbddbdaf437a09f1f074fd667b48a"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/failure/worker.stderr.log",
+      "bytes": 355,
+      "sha256": "3b66a96c13351f092bea65eaed687ff28883ff7b0fb12d17de22c13b2c2fef88"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/report.json",
+      "bytes": 1745,
+      "sha256": "4e51da8488c59f27b46fea9b96b122545a4e845bbfe1c0f1a7c9f526f4f4e8f7"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "da8d6ff90f35536cd5091453e8b713014f297f6d026c4f56a6edea2c77006f72"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "b716582fceec68c2c0f203f185030e09313ce93bafa2d21cc9fdabb5c11fee85"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off-cs/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off-cs/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-run-off-cs/inputs/case.pptx",
+      "bytes": 103402,
+      "sha256": "a3568153d53f3c643e8d2efa4ff1f4844d55d128b0130596d47ccd57ecc73d20"
+    },
+    {
+      "file": "rtl-run-off-cs/native/edited-slide-01.png",
+      "bytes": 24144,
+      "sha256": "df2ab7d1d1ecb218ae2af29c24c6f508c0bf8a6d261b9cc45d28b217e1c89877"
+    },
+    {
+      "file": "rtl-run-off-cs/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-run-off-cs/native/inputs/input.pptx",
+      "bytes": 103402,
+      "sha256": "a3568153d53f3c643e8d2efa4ff1f4844d55d128b0130596d47ccd57ecc73d20"
+    },
+    {
+      "file": "rtl-run-off-cs/native/inputs/native-furniture-control.ps1",
+      "bytes": 44232,
+      "sha256": "74cccbb9278adae1642eba762eefeccd924ada2bec423e4a6de1c40c5ea4fb8b"
+    },
+    {
+      "file": "rtl-run-off-cs/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "file": "rtl-run-off-cs/native/native-furniture-control.pptx",
+      "bytes": 107185,
+      "sha256": "e1a0549a8d3a97ff6c2e186f6f0f4d23fe376f6a2d78c12fabf98e69d872a19a"
+    },
+    {
+      "file": "rtl-run-off-cs/native/original-slide-01.png",
+      "bytes": 24144,
+      "sha256": "df2ab7d1d1ecb218ae2af29c24c6f508c0bf8a6d261b9cc45d28b217e1c89877"
+    },
+    {
+      "file": "rtl-run-off-cs/native/progress.json",
+      "bytes": 272,
+      "sha256": "45e1b320f76d907e0fd322e42b5206a2cf62b1413a5394a5f3b5b936a0a6b640"
+    },
+    {
+      "file": "rtl-run-off-cs/native/reopened-slide-01.png",
+      "bytes": 24144,
+      "sha256": "df2ab7d1d1ecb218ae2af29c24c6f508c0bf8a6d261b9cc45d28b217e1c89877"
+    },
+    {
+      "file": "rtl-run-off-cs/native/report.json",
+      "bytes": 231615,
+      "sha256": "0f4f022cb83d56b51c1d44e3e493b5d928fbde20ff8d8ee3ca61eea8e51034e2"
+    },
+    {
+      "file": "rtl-run-off-cs/native/request.json",
+      "bytes": 2202,
+      "sha256": "08517e7af2b228769484144ada2d4b8e105ea5742204e057a9ef0b088d2b572d"
+    },
+    {
+      "file": "rtl-run-off-cs/native/stages.jsonl",
+      "bytes": 1051600,
+      "sha256": "f751c9cf22583ed27ec5cbf5a762b0d20856c7f76e3b84ca1ecb0eb80762b177"
+    },
+    {
+      "file": "rtl-run-off-cs/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "f67af3498e26f7d6a50066af2880b1ca82cb95ccb4aad82a77024c97b96339c9"
+    },
+    {
+      "file": "rtl-run-off-cs/native/worker.json",
+      "bytes": 341,
+      "sha256": "990e33265da8d51d0b2a46c387ec6a1c498aebd890657270e7be2606121b071e"
+    },
+    {
+      "file": "rtl-run-off-cs/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-run-off-cs/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "file": "rtl-run-off-cs/native-worker.log",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "file": "rtl-run-off-cs/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "file": "rtl-run-off-cs/runner.json",
+      "bytes": 8038,
+      "sha256": "45f1f62b6165f67907873d3ef52366e8eb0614b3578438018c7170edc72939d9"
+    },
+    {
+      "file": "rtl-language-suite/empty-actions.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-language-suite/input.pptx",
+      "bytes": 103397,
+      "sha256": "bc0eba5f82798c037fc91d708b471d381a8192748b32e1a062796ae651cd3d58"
+    },
+    {
+      "file": "rtl-language-suite/proof.json",
+      "bytes": 451,
+      "sha256": "90eb05ea4408352042844d5e2a4546d69d37faae69c6759b2dde2dd7ba3410d4"
+    },
+    {
+      "file": "rtl-language-suite/suite.json",
+      "bytes": 2270,
+      "sha256": "b99e3a56222c2326b2f32fd4ee960cda9c9279aa18dc6a82ea8b858cd2f57a10"
+    },
+    {
+      "file": "rtl-language-native/furniture-harness.log",
+      "bytes": 228,
+      "sha256": "aec041524b1a69e32b6aa26ab5a37361e419c0b58dd42de06b2c2ee0fe231cad"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json",
+      "bytes": 187271,
+      "sha256": "f116944b5306bf1d805517326cdcd19e7f4667a969b856c019639c44c842f3e4"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/close-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/copy-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/copy-identity-change-saved.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/copy-identity-change.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/empty-list.json",
+      "bytes": 7,
+      "sha256": "50056c08ce479cc2f54c4d6595a4264bdf32bf84f2995d59ff3bd513897ab414"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/existing-output-saved.pptx",
+      "bytes": 13,
+      "sha256": "75f45b48d1c479c1dbd9d5f8ef9d5d42df0fd6504cccf896a6614291a770af99"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/existing-output.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/foreign-at-adoption.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/foreign-at-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/fractional-move-index.json",
+      "bytes": 55,
+      "sha256": "7782dd624a5ed5ecc74fa98a89df3be38becb5e6667b8ee8130185ddec7ea5f9"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-op-array.json",
+      "bytes": 81,
+      "sha256": "0fc75a9bb0f5db840c30412db0a8f7d3b264653d262937f2e23cf4430ab539cb"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-op-null.json",
+      "bytes": 73,
+      "sha256": "37e85d77e0daed06482543e8944d819074220e540f5143446e8f38c534aabf21"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-op-number.json",
+      "bytes": 70,
+      "sha256": "b4dbdf5aa0f3677a2fcfa8e69bbb66ca994f0024cb2f3d4e873a22e4530b4582"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-shape-array.json",
+      "bytes": 81,
+      "sha256": "81242f79a72ab863eb9c887fcb8e504a19fa77ad8eadddb9ffa87ef79595cd88"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-shape-null.json",
+      "bytes": 71,
+      "sha256": "3847629219ff005b67e9d424597971791b36d0f51c1d1352c0a1e6bfadc4df6a"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-shape-number.json",
+      "bytes": 68,
+      "sha256": "b3d40cb980bbafe54a1e9970e8e7601687a1190725ae578a84dfbb7bd53c1cde"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-slide-array.json",
+      "bytes": 81,
+      "sha256": "fbc7e9dd58ad21cec8b947bc59d3d7cc827ac592cc15455d60b70be6e4b670dd"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-common-slide-null.json",
+      "bytes": 82,
+      "sha256": "6517a95a84d4aaf94a3589b8211cf6794941e3737cb401681c7f7d634fc4fedc"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/legacy-text-array.json",
+      "bytes": 81,
+      "sha256": "4399ccada9c8429e0a17316cfa94d4767dd6a9455ce4b11419399a312a97c27d"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/malformed-json.json",
+      "bytes": 6,
+      "sha256": "6b29077574aec48496c5a062b5dc5d7fd6274aabc7b0ab0dab04c0e4183c4467"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/move-index-four.json",
+      "bytes": 53,
+      "sha256": "b1a7442842a6dfead1143c932613e4a720aa562525064207a4db5a832ff9a5f5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/multi-empty-alt.json",
+      "bytes": 204,
+      "sha256": "f6d5bc8e08005730e62b8db7c366319554a4a1faae5fa3d871a03fd908a3d188"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/non-list-root.json",
+      "bytes": 51,
+      "sha256": "6c9008ff81181c7960aac8adae443265dbdc64b2c8e0156eb7df73623776724b"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/null-entry.json",
+      "bytes": 11,
+      "sha256": "5e8ce0e9d4b35b48cab822823dffe9ae26beeb7dac09d16c236cb771ce72dd10"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/numeric-target.json",
+      "bytes": 98,
+      "sha256": "62498e3c47ed62422dbdb7c8d1755739a27a13aec61fd6ceac8cf0fc63ce4d14"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/numeric-text.json",
+      "bytes": 69,
+      "sha256": "7eeb6f18db71c8b628f5f929219c747355d34626d47bb394e8e60e2653187610"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-chartName-array.json",
+      "bytes": 185,
+      "sha256": "4fc0163c250d5169389f324dc0f4c4964663764b6fa05060d3ad438246aebdd1"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-chartName-empty.json",
+      "bytes": 172,
+      "sha256": "5b680e16ea341b0a12f5efb9f7e48bb8b3b7534fd4f365111bec8ab53a1b9af2"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-chartName-number.json",
+      "bytes": 171,
+      "sha256": "48f3202f0827698fa80621e8bca9ea452f3be7adffec5b31f83549e207f275e3"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-chartName-too-long.json",
+      "bytes": 428,
+      "sha256": "1fa738d428c0b4f3baa9e0ea432ecc5063e284676a136b99ed3429f594e44851"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-op-array.json",
+      "bytes": 185,
+      "sha256": "75dec9657a5d539af4fe1e332525ecd517061a050c02052876af8e505f08f615"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-op-null.json",
+      "bytes": 166,
+      "sha256": "e253d7bb981cbc7f11285fd8e73b58889c5b4180bff3acbd7e6957d3a5ba4576"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-op-number.json",
+      "bytes": 163,
+      "sha256": "ba63a9de46a8112979ee26581d8857f4fc4b396169aa9f6155fbea6276c064e5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-shape-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-shape-null.json",
+      "bytes": 175,
+      "sha256": "9960cbe3bd954c9125a6d2d6c633273945b617d531e5f7cfce7259e66944f48d"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-shape-number.json",
+      "bytes": 172,
+      "sha256": "ce2b20c3f5d0eff5a61bc4b5215bb68310f5b2bb552d4285eddf1c0a29028d86"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-slide-array.json",
+      "bytes": 185,
+      "sha256": "a90c7f3e36b658d46b88707444f5efb8c66ca25e2b332f7e16872643fe57b5fc"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-common-slide-null.json",
+      "bytes": 186,
+      "sha256": "e61f157bae31ef74808f71aa9d5a4888ab8a2d099308237dba414bc6ea22950a"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-edge-array.json",
+      "bytes": 185,
+      "sha256": "e11a6998553e812e9106ab988d5425c577eb6d10fca6ef8c26f6864d8a879aee"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-edge-case.json",
+      "bytes": 183,
+      "sha256": "6d8c33c88855fa8d3e7fd9f0e7c88f6046d1cf6957c38617b0a74e664a5c7621"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-edge-unsupported.json",
+      "bytes": 181,
+      "sha256": "cbec8e81f25cd91cf1379e32bc09476e8789e9d591b790acc67e90b2bada2e6a"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-index-upper-bound.json",
+      "bytes": 187,
+      "sha256": "55694b12a085c5ce1ed317aa8874e1775065b10b8523c199119332ec8d700d53"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-array.json",
+      "bytes": 185,
+      "sha256": "c6dbe109ab53d471928b6e7fa1fc6de939b8f849613acca2cae74e2c48a7e606"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-case.json",
+      "bytes": 183,
+      "sha256": "6644b0870eb2510c86e4325ff76318ca3bc487459f21bf2fe23de0cc9b359f9b"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-horizontal-bar.json",
+      "bytes": 191,
+      "sha256": "826335f73274319e563d069ce92f0bfd29ad0664e6e8f5b91999f35388323c9c"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-marker.json",
+      "bytes": 183,
+      "sha256": "6b1584e53ecc018d8de96128d8618939df7a92afe1b8bb828091d4461c726353"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-slice.json",
+      "bytes": 182,
+      "sha256": "990227f337db93f5d7e1c5e88ac9c0e5a4ac68a5de789545c55691f296c22449"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-unsupported.json",
+      "bytes": 182,
+      "sha256": "c53b3e5ae7c298f17f958ebb61bc8c067993087b5adbbc2ff285eec449ff8f38"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-kind-vertical-bar.json",
+      "bytes": 189,
+      "sha256": "d71d9aaae3478f7537daedd182009894fc693da79b6de7009fb00953d0e475fd"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-chartKind.json",
+      "bytes": 162,
+      "sha256": "9a4e405a43d480242d7782dbb8e5d144db9296f170e2cb5c0727f484475634c6"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-chartName.json",
+      "bytes": 157,
+      "sha256": "ee41faace72983d293f2012b8a37bc6b6ae6ebfd7dccf77b2ff8a085a0f07c9c"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-edge.json",
+      "bytes": 167,
+      "sha256": "c80361ce632c87b265804f1ced2399290b3b826940e578e7a32d12f051e229c0"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-pointIndex.json",
+      "bytes": 168,
+      "sha256": "379b5a9ab567e6d523c23c66f985be2ea184a6303d56adf2d1c429e84a38ef9b"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-seriesIndex.json",
+      "bytes": 167,
+      "sha256": "5a2a5103d06366c0a1c5828629f520af8b2469cc1da79ff259f0be555c40e959"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-missing-valueSign.json",
+      "bytes": 169,
+      "sha256": "5def106cf9c7edec9a0af8de357cae3b6e8e0287872435d9b806d1d231ddf354"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-array.json",
+      "bytes": 185,
+      "sha256": "15c6e05437a4f1c217851d984f0371fb9e11991ca441c0729765291e7f32c3dc"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "d7c12c979bb106acdb8ecb3ac0cff124e3066d9272fb0e0461c2e42c8bb6ec30"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "d8ea73b537a44f61a9b5c50c266f82a826bfdc03827d954974c91537107ce9fa"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-negative.json",
+      "bytes": 184,
+      "sha256": "4dd0e5037fe4e1f3bcd2bfde324fba13188bdaec0c8c37d79c6022420aaf6647"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-null.json",
+      "bytes": 186,
+      "sha256": "7613ef28fcf55c71b6a5ae1e8401d2f7d8f46b1fec079aee4053ff932691d420"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-string.json",
+      "bytes": 185,
+      "sha256": "ae949976860df1e61eaf9c765cdb0e45b9bfe90c7f08408f7d6e1504f1aa5145"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "005c2c1e14479175c8a30913c10c3b2e064ffd82afe3db1e7967c9c78990874a"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-pointIndex-zero.json",
+      "bytes": 183,
+      "sha256": "7396dcf0ed9c33296ba7411098eee6e4dbd3a297eca4ff5baf1431e3cc48980b"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-array.json",
+      "bytes": 185,
+      "sha256": "425ec0028f9aa9e4e38e3f83da98a23220c8e3f3e848fbcde6a99712d4a49518"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-boolean.json",
+      "bytes": 186,
+      "sha256": "c6e9a1b964edb585af5e897d6c0e11bf6cefd6d1e1749580f5ff3f383ba65973"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-fraction.json",
+      "bytes": 185,
+      "sha256": "46b86517c11a80b9ad6c9b3e262f5b9b50012a0b0af40e95102de160ad1fc88d"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-negative.json",
+      "bytes": 184,
+      "sha256": "a531071ad7c5159f4286ff6c18353290fca9960dbce8ad81b939b542ab75fbf1"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-null.json",
+      "bytes": 186,
+      "sha256": "6db405b9085cc825b07327a7fac8fded2772ea524ab7aaecc23593a8963b986f"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-string.json",
+      "bytes": 185,
+      "sha256": "5552b000b55d8379b3d1ce6515b6d14566e984f48ee8b790fc4edda172ad5eda"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-too-high.json",
+      "bytes": 185,
+      "sha256": "b07ea5f2675474edc7e3ded3ae9f6414ba3b13dc2aa0546ee2d0533f822d1780"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-seriesIndex-zero.json",
+      "bytes": 183,
+      "sha256": "d417a512802ed7b5037c16e85c095c9202a2f201c25ef95bbcbe8e3f1e55a915"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-shapeName-array.json",
+      "bytes": 185,
+      "sha256": "3ec0c869f0e83648c1a0f7ebfb425338f9362aced472790f8dd22458a4c6dbe7"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-shapeName-empty.json",
+      "bytes": 173,
+      "sha256": "1d98b5946a2b0dea5266e42df6219fa21cf21c8c57ea726efe7e2c05c6084469"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-array.json",
+      "bytes": 185,
+      "sha256": "3be584b310bc9d662d0a9718aa55bc2044cf727e6ee7e29705bbb0cb8e6d4cd0"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-boolean.json",
+      "bytes": 186,
+      "sha256": "b56f7df42e7278aa74f153c78a038b229c5086abdf36b080e55cb2389b1d3225"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-fraction.json",
+      "bytes": 185,
+      "sha256": "9cdd421d5cfac727fe75f7ea6c5c92f344f1ba23e8a91e5682e1012588f81ee2"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-string.json",
+      "bytes": 185,
+      "sha256": "0ed118c3d51c201fcf17166c6cec824fe47b706ad8333541dba1d4475fe16c56"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-too-high.json",
+      "bytes": 183,
+      "sha256": "65b4e1f1f064e6aff5181aa9304236bedcfbb2384702e4adaff7d096405734ef"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-sign-too-low.json",
+      "bytes": 184,
+      "sha256": "9344338a062b693f610c2df337275f23f09d5ca8b4234ac32b7d9bce5fe58482"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-unknown-field.json",
+      "bytes": 197,
+      "sha256": "190eb968dcdb82fb0dec39ab58a04ef6f5c9bed1028d979fd007f103e3e013e7"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/point-zero-sign.json",
+      "bytes": 183,
+      "sha256": "572872a3df15ea4b2def426714dc7990b2238cd578254821734a349699d03799"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/quit-failure.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/same-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/singleton-empty-text.json",
+      "bytes": 75,
+      "sha256": "5b853ffcfdb7b0f7329de9cae448ca3d890ae6eaee724e23fab0ed757583d946"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/slide-index-four.json",
+      "bytes": 63,
+      "sha256": "142da2fc038c6d2320d4c629b5b0960c1d23232004f1af54a0bb8945c38365c0"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/slide-index-zero.json",
+      "bytes": 63,
+      "sha256": "b248281155d69d6c1e939e33d678d6096d155280be98f96e2ae91203e10c3eb2"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/string-slide-index.json",
+      "bytes": 76,
+      "sha256": "053b48d9332a7aef3ae58b1ac22254449a72bf998067c5b4b12e3c8157d61fd6"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-bool-size.json",
+      "bytes": 87,
+      "sha256": "9980df9e9c99ec306b4ea118ff4672ebdb8961d66cd2b4c409d1a1be530c672d"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-both.json",
+      "bytes": 104,
+      "sha256": "267c9feaf89593003a1dc924e2c6b57dc37b04526cc59bafdee7308327ff7128"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-color.json",
+      "bytes": 88,
+      "sha256": "2565ccc581f601bf201e1b675e66e1e01ff47a188ad60a9490ca72ff879d8765"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-empty.json",
+      "bytes": 71,
+      "sha256": "c8538700fcf8f4f7a057dbde4b9da8811a8bdc04417e6ab6101fe385e04ef36e"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-extra-key.json",
+      "bytes": 106,
+      "sha256": "929acdb78b2ac9a97800778616eb5cc364f9a76de76f83706fb00159ee1a9993"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-hash-color.json",
+      "bytes": 89,
+      "sha256": "4173b13a90b6f05abcae80e65c4793e266d6396700c5d9b5c6a4367d6cc5c08d"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-overflow.json",
+      "bytes": 88,
+      "sha256": "e74294cdfbfed93b85c6910f132bd0cb82991ae12ba0e48a45157bf06e6e3471"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-reference-color.json",
+      "bytes": 89,
+      "sha256": "fe35300ec2ace23a18f1dcd439201d47af72a928820a78948ee8728a6458fb32"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-short-color.json",
+      "bytes": 86,
+      "sha256": "593743b1d784df7b6a3e266f3a019e7aa0b70e0c44503370a9de8263c3451833"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-size.json",
+      "bytes": 85,
+      "sha256": "f5f75b801d14eabc854793de3079f0b870d4ccb0eb7b9e72a65ed2a51cee01e8"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-string-size.json",
+      "bytes": 87,
+      "sha256": "5ce10ffaa05fd7352d079dd8f00935ecdcf9bfc3f2e8904c37ee541e619aa343"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-too-big.json",
+      "bytes": 85,
+      "sha256": "8b6d9af71f16c1d08e7f4ed8ff7878daaf49201ee89d790dd0cca64be9388ef3"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/style-zero.json",
+      "bytes": 84,
+      "sha256": "2575306a51999796b30c5a33afbd8f24dc1f88a3aae53f0455bc7ee98711b2c1"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/success-saved.pptx",
+      "bytes": 23,
+      "sha256": "22a8416650fce56e9b4488783f82174ef371ebd64ead0b29ebeb5c10d03fc560"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/success.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/twenty-one-actions.json",
+      "bytes": 2003,
+      "sha256": "25954534dc26aaba3f0f10b70e9e2e7f4ad5d012b59972733128a5ba5d468480"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/unknown-operation.json",
+      "bytes": 63,
+      "sha256": "9cc024363aa10c9362f88079b659ef0ec8dc8a7ee20c869207879b18228d026c"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/unknown-property.json",
+      "bytes": 92,
+      "sha256": "b9ed7c0945c7529478f728d9044902bc3ff20551b5ab23e0dee5e95d4133857c"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/unowned-quit.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/writable-open.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/wrong-close-owner.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/furniture.json.plans/wrong-open-path.pptx",
+      "bytes": 8,
+      "sha256": "0682c5f2076f099c34cfdd15a9e063849ed437a49677e6fcc5b4198c76575be5"
+    },
+    {
+      "file": "rtl-language-native/harness/process/failure/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "8d2be1f299c67bf5c0af6debad15f4c7c49ec7db137ea23eeab511df8f41e30c"
+    },
+    {
+      "file": "rtl-language-native/harness/process/failure/worker.json",
+      "bytes": 341,
+      "sha256": "51f218fad6e1b92a7aa8b73c597a87cc1c90845c3f0fa114a2dd5020bf858fa4"
+    },
+    {
+      "file": "rtl-language-native/harness/process/failure/worker.stderr.log",
+      "bytes": 335,
+      "sha256": "b52d2799119e75615935fae45f51422d591f11f332bc6aa058902d9950efabf9"
+    },
+    {
+      "file": "rtl-language-native/harness/process/failure/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-language-native/harness/process/report.json",
+      "bytes": 1744,
+      "sha256": "03496c4d4def7ad614c7d2d15508a216a92b96a146a257fceb6db280304d832a"
+    },
+    {
+      "file": "rtl-language-native/harness/process/success/owned worker with spaces.ps1",
+      "bytes": 55,
+      "sha256": "c8091909959c2ced1ea1fda2be26c81096994e2077b15af13749e9a664e30db7"
+    },
+    {
+      "file": "rtl-language-native/harness/process/success/worker.json",
+      "bytes": 341,
+      "sha256": "b8473d2b83a35b53fa5d410be75237847eac7d73a02b6dde80209f91b973ea0b"
+    },
+    {
+      "file": "rtl-language-native/harness/process/success/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-language-native/harness/process/success/worker.stdout.log",
+      "bytes": 52,
+      "sha256": "4ebdaf27f710724fedac9c583e436d48e33cc4507da8d064a496d3d3cf1d43a0"
+    },
+    {
+      "file": "rtl-language-native/harness/process/timeout/owned worker with spaces.ps1",
+      "bytes": 133,
+      "sha256": "b41e2d44ea26955268a39957527aedeef720ae40e3298e9d4db5270870908323"
+    },
+    {
+      "file": "rtl-language-native/harness/process/timeout/worker.json",
+      "bytes": 340,
+      "sha256": "07e224999ce6192563e19354e5264526a593dac9e12173e3d8931a69f1d84775"
+    },
+    {
+      "file": "rtl-language-native/harness/process/timeout/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-language-native/harness/process/timeout/worker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-language-native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-language-native/inputs/case.pptx",
+      "bytes": 103397,
+      "sha256": "bc0eba5f82798c037fc91d708b471d381a8192748b32e1a062796ae651cd3d58"
+    },
+    {
+      "file": "rtl-language-native/native/edited-slide-01.png",
+      "bytes": 24164,
+      "sha256": "38a50d292348025387c452eff122e8a87ba5c54c713a9b14d76a4264dbcee44e"
+    },
+    {
+      "file": "rtl-language-native/native/inputs/action-plan.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "file": "rtl-language-native/native/inputs/input.pptx",
+      "bytes": 103397,
+      "sha256": "bc0eba5f82798c037fc91d708b471d381a8192748b32e1a062796ae651cd3d58"
+    },
+    {
+      "file": "rtl-language-native/native/inputs/native-furniture-control.ps1",
+      "bytes": 44232,
+      "sha256": "74cccbb9278adae1642eba762eefeccd924ada2bec423e4a6de1c40c5ea4fb8b"
+    },
+    {
+      "file": "rtl-language-native/native/inputs/native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "file": "rtl-language-native/native/native-furniture-control.pptx",
+      "bytes": 107179,
+      "sha256": "7a96c9ca9c04e8b10f40e13da002ab1b1395b3b1a58ecf9f628efe2f6ca94f3d"
+    },
+    {
+      "file": "rtl-language-native/native/original-slide-01.png",
+      "bytes": 24164,
+      "sha256": "38a50d292348025387c452eff122e8a87ba5c54c713a9b14d76a4264dbcee44e"
+    },
+    {
+      "file": "rtl-language-native/native/progress.json",
+      "bytes": 272,
+      "sha256": "065a2beb159368db8be2339f2533777e905d878f1fc8b9522e4253834ec46cea"
+    },
+    {
+      "file": "rtl-language-native/native/reopened-slide-01.png",
+      "bytes": 24164,
+      "sha256": "38a50d292348025387c452eff122e8a87ba5c54c713a9b14d76a4264dbcee44e"
+    },
+    {
+      "file": "rtl-language-native/native/report.json",
+      "bytes": 231395,
+      "sha256": "b7c83af33a943699d321c216e25bebb3f9180c1482579aee8ccf69d265d40960"
+    },
+    {
+      "file": "rtl-language-native/native/request.json",
+      "bytes": 2082,
+      "sha256": "00105d5a44359dc63e937979631a98f0d70bd7b54f0edc20d41f3246b163735b"
+    },
+    {
+      "file": "rtl-language-native/native/stages.jsonl",
+      "bytes": 987560,
+      "sha256": "6233c56dae7c76a32b924a2c9e35eb2604f44d0df46e4879d278ce109eb610eb"
+    },
+    {
+      "file": "rtl-language-native/native/supervisor.json",
+      "bytes": 220,
+      "sha256": "ceb71ae016590da3e9be8e5fdf0b46339331007f77d6a2ae7f5cf18051aac68e"
+    },
+    {
+      "file": "rtl-language-native/native/worker.json",
+      "bytes": 341,
+      "sha256": "b8ae2954758ff686dfd50cae07d9e2aee28f133d1cf49c0f05a5c75404011197"
+    },
+    {
+      "file": "rtl-language-native/native/worker.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "file": "rtl-language-native/native/worker.stdout.log",
+      "bytes": 54,
+      "sha256": "9193db23a5ef082ce70e61698e4c9a097be6b1108bd90fcca5fe40ec041f9f46"
+    },
+    {
+      "file": "rtl-language-native/native-worker.log",
+      "bytes": 110,
+      "sha256": "7eb006d13c4063d29bcac3f0004c8ccedd7319bac904a88d3f4e7615fc4f63ca"
+    },
+    {
+      "file": "rtl-language-native/process-check.log",
+      "bytes": 280,
+      "sha256": "5641052ba8f44b70bc67d6403ff188198dc8257bc280e71c3d3b353808276a54"
+    },
+    {
+      "file": "rtl-language-native/runner.json",
+      "bytes": 7408,
+      "sha256": "8437f0c75a037858fea50bfe79b81357f815d401b137262dd857babe445c5f4e"
+    },
+    {
+      "file": "tools/parent-sh25-final-harness.json",
+      "bytes": 187216,
+      "sha256": "9a500fd6ae8063e79ee9ea8ee07894014bf5d32a25a5169890e20457e0d59506"
+    },
+    {
+      "file": "tools/font-profile034-setup.log",
+      "bytes": 71,
+      "sha256": "7b41af775154f451c5c5358173bfa979d4a10e315b5a6b1aa459f076d6502caa"
+    },
+    {
+      "file": "tools/seal-rtl-safe-suite.mjs",
+      "bytes": 2291,
+      "sha256": "b820bf11b3c470a5c3ab6b7586885faf635755620705cf0bb7abe95f2cf3b30b"
+    },
+    {
+      "file": "tools/seal-rtl-safe-suite.mjs.initial.txt",
+      "bytes": 2291,
+      "sha256": "b820bf11b3c470a5c3ab6b7586885faf635755620705cf0bb7abe95f2cf3b30b"
+    },
+    {
+      "file": "tools/seal-rtl-language-probe.mjs",
+      "bytes": 2935,
+      "sha256": "95180e3edaca51709f35331c83a7fa3fa284aaacd1ed15a5380c1c5712ec96ad"
+    },
+    {
+      "file": "font-profile/state.json",
+      "bytes": 3344,
+      "sha256": "acdf50213fc0986dd9044bc400b7f7ab279e6d8e6ae7656f744b555a3fbe3e51"
+    }
+  ]
+}
