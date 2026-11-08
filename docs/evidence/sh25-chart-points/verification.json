@@ -8,7 +8,7 @@
   "coreTests": 6,
   "editorTransactionTestPassed": true,
   "actualHelperLifecycleControls": 14,
-  "actualHelperChartPointControls": 24,
+  "actualHelperChartPointControls": 28,
   "nativeCentersQualified": false,
   "editorBrowserPassed": false,
   "gate": {
@@ -27,5 +27,16 @@
       "budgetBytes": 256668,
       "ceilingChanged": false
     }
-  }
+  },
+  "nativeTypeBinding": "Sixteen bounded classic native types; selected series matches the homogeneous chart; wrong-kind/mixed/unsupported refusals before point geometry",
+  "doughnutSliceApi": "Unqualified; pie-only slice mocks and unavailable-method latch control; first actual runs separate",
+  "remaining": [
+    "160 actual native centers within4px",
+    "matched clean CLI qualification packet",
+    "reviewed current integration merge",
+    "editor browser",
+    "point-action malformed-input controls",
+    "all-eight-sheet visual review",
+    "full integration gate and reviewed composition budget audit"
+  ]
 }

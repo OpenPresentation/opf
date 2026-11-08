@@ -329,10 +329,17 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
     if($hasChart -ne -1) {Stop-FurnitureLifecycle 'The exact chart shape has no native chart'}
     $chart=Invoke-FurnitureCom "$Prefix.chart.get" {$chartShape.Chart}
     $chartType=Invoke-FurnitureCom "$Prefix.chart.type" {$chart.ChartType}
+    # Only the sixteen source-supported homogeneous classic types; never guess a combo/3-D/ChartEx formula.
+    # Microsoft XlChartType: https://learn.microsoft.com/en-us/office/vba/api/excel.xlcharttype
+    $nativeKinds=@{51='vertical-bar';52='vertical-bar';53='vertical-bar';57='horizontal-bar';58='horizontal-bar';59='horizontal-bar';4='marker';65='marker';63='marker';66='marker';1='marker';76='marker';77='marker';-4169='marker';5='slice';-4120='slice'}
+    if(-not (Test-Integer $chartType) -or -not $nativeKinds.ContainsKey([int]$chartType)) {Stop-FurnitureLifecycle 'Native chart type is not a supported classic point domain'}
+    if($nativeKinds[[int]$chartType] -cne $Action.chartKind) {Stop-FurnitureLifecycle 'Action chartKind differs from the actual native chart type'}
     $seriesCollection=Invoke-FurnitureCom "$Prefix.series.get" {return ,$chart.SeriesCollection()}
     $seriesCount=Invoke-FurnitureCom "$Prefix.series.count" {$seriesCollection.Count}
     if($Action.seriesIndex -gt $seriesCount) {Stop-FurnitureLifecycle 'Native series index is no longer present'}
     $series=Invoke-FurnitureCom "$Prefix.series.item" {$seriesCollection.Item([int]$Action.seriesIndex)}
+    $seriesType=Invoke-FurnitureCom "$Prefix.series.type" {$series.ChartType}
+    if(-not (Test-Integer $seriesType) -or $seriesType -ne $chartType) {Stop-FurnitureLifecycle 'Selected native series type differs from the homogeneous chart type'}
     $seriesName=Invoke-FurnitureCom "$Prefix.series.name" {$series.Name}
     $points=Invoke-FurnitureCom "$Prefix.points.get" {return ,$series.Points()}
     $pointCount=Invoke-FurnitureCom "$Prefix.points.count" {$points.Count}
@@ -347,7 +354,9 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
     if($width -lt 0 -or $height -lt 0) {Stop-FurnitureLifecycle 'Native point bounds are negative'}
     $x=$left+$width/2; $y=$top+$height/2
     if($Action.chartKind -eq 'slice' -and $Action.edge -in @('start','end','center')) {
-        # Microsoft XlPieSliceLocation x=1/y=2; XlPieSliceIndex outer=2, center=5, inner=8.
+        # Microsoft documents PieSliceLocation for pie only. Doughnut availability is unqualified;
+        # its first owned probe must be separate and a getter failure latches without fallback.
+        # XlPieSliceLocation x=1/y=2; XlPieSliceIndex outer=2, center=5, inner=8.
         $sliceIndex=switch($Action.edge){'start'{8};'center'{5};default{2}}
         $x=Invoke-FurnitureCom "$Prefix.point.slice.x" {$point.PieSliceLocation(1,$sliceIndex)}
         $y=Invoke-FurnitureCom "$Prefix.point.slice.y" {$point.PieSliceLocation(2,$sliceIndex)}
@@ -368,7 +377,7 @@ function Read-FurnitureChartPoint($Presentation,$Action,[string]$Prefix) {
     $nativeX=$chartLeft+[double]$x; $nativeY=$chartTop+[double]$y
     $overlayX=$overlayLeft+$overlayWidth/2; $overlayY=$overlayTop+$overlayHeight/2
     $distance=[math]::Sqrt([math]::Pow($overlayX-$nativeX,2)+[math]::Pow($overlayY-$nativeY,2))*4/3
-    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
+    return [ordered]@{chartName=$Action.chartName;shapeName=$Action.shapeName;chartType=$chartType;seriesChartType=$seriesType;seriesName=$seriesName;seriesIndex=$Action.seriesIndex;pointIndex=$Action.pointIndex;kind=$Action.chartKind;edge=$Action.edge;valueSign=$Action.valueSign;nativeLocalBoundsPoints=@($left,$top,$width,$height);nativePointSlidePoints=@($nativeX,$nativeY);overlayCenterSlidePoints=@($overlayX,$overlayY);distancePixels=$distance;withinFourPixels=($distance -le 4);scope='Independent actual native point/shape coordinates; no serialized overlay coordinate is used as the point measurement'}
 }
 
 function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {

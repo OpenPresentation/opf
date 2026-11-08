@@ -279,7 +279,9 @@ $lifecycleCases.Add([ordered]@{name='refuse-running-office';passed=$true})
 
 # SH-25: tabled independent actual-property probes. No expected source coordinates enter the action.
 $chartPointCases=New-Object 'System.Collections.Generic.List[object]'
-function New-ChartPointFixture {
+function New-ChartPointFixture([string]$Kind='horizontal-bar') {
+    $fixtureType=switch($Kind){'horizontal-bar'{57};'vertical-bar'{51};'marker'{65};'slice'{5};default{throw 'Unknown fake native kind'}}
+    # Slice success is a pie (type5) fixture, never evidence of doughnut API availability.
     $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:forbiddenChartData=$false
     $point=[pscustomobject]@{Left=10;Top=20;Width=40;Height=30}
     $point | Add-Member -MemberType ScriptMethod -Name PieSliceLocation -Value {
@@ -289,11 +291,11 @@ function New-ChartPointFixture {
     }
     $points=[pscustomobject]@{Count=1;Values=@($point)}
     $points | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
-    $series=[pscustomobject]@{Name='Native value';PointCollection=$points}
+    $series=[pscustomobject]@{Name='Native value';ChartType=$fixtureType;PointCollection=$points}
     $series | Add-Member -MemberType ScriptMethod -Name Points -Value {return ,$this.PointCollection}
     $seriesCollection=[pscustomobject]@{Count=1;Values=@($series)}
     $seriesCollection | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
-    $chart=[pscustomobject]@{ChartType=57;Series=$seriesCollection}
+    $chart=[pscustomobject]@{ChartType=$fixtureType;Series=$seriesCollection}
     $chart | Add-Member -MemberType ScriptMethod -Name SeriesCollection -Value {return ,$this.Series}
     $chart | Add-Member -MemberType ScriptProperty -Name ChartData -Value {$script:forbiddenChartData=$true;throw 'ChartData must not be activated or read'}
     $chartShape=[pscustomobject]@{Name='Native chart';Left=100;Top=200;HasChart=-1;Chart=$chart}
@@ -315,14 +317,14 @@ $coordinateCases=@(
     @('slice','top',1,130,220),@('slice','bottom',1,130,250)
 )
 foreach($spec in $coordinateCases) {
-    $nativeFixture=New-ChartPointFixture
+    $nativeFixture=New-ChartPointFixture $spec[0]
     $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind=$spec[0];edge=$spec[1];valueSign=$spec[2]}
     $nativeFixture.overlay.Left=$spec[3]-5; $nativeFixture.overlay.Top=$spec[4]-5
     $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'
     if($observed.nativePointSlidePoints[0] -ne $spec[3] -or $observed.nativePointSlidePoints[1] -ne $spec[4] -or $observed.distancePixels -ne 0 -or -not $observed.withinFourPixels -or $script:forbiddenChartData) {throw 'Native point probe changed coordinate systems or accessed data workbook'}
     $chartPointCases.Add([ordered]@{kind=$spec[0];edge=$spec[1];sign=$spec[2];nativeSlidePoints=@($spec[3],$spec[4]);passed=$true})
 }
-$nativeFixture=New-ChartPointFixture
+$nativeFixture=New-ChartPointFixture 'marker'
 $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
 foreach($delta in @(3,3.01)) {
     $nativeFixture.overlay.Left=125+$delta; $nativeFixture.overlay.Top=230
@@ -331,17 +333,34 @@ foreach($delta in @(3,3.01)) {
 }
 $chartPointCases.Add([ordered]@{name='exact-four-pixel-bound';passed=$true})
 foreach($failure in @('missing-series','missing-point','nonfinite-point','slice-getter')) {
-    $nativeFixture=New-ChartPointFixture
+    $nativeFixture=New-ChartPointFixture 'marker';$action.chartKind='marker';$action.edge='center'
     switch($failure) {
         'missing-series' {$nativeFixture.series.Count=0}
         'missing-point' {$nativeFixture.points.Count=0}
         'nonfinite-point' {$nativeFixture.point.Left=[double]::NaN}
-        'slice-getter' {$action.chartKind='slice';$action.edge='end';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Injected native slice getter failure'}}
+        'slice-getter' {$nativeFixture=New-ChartPointFixture 'slice';$action.chartKind='slice';$action.edge='end';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Injected native slice getter failure'}}
     }
     $rejected=$false;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'refusal'} catch {$rejected=$true}
     if(-not $rejected -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) {throw 'Missing/nonfinite/failed native point was not latched'}
     $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-followup'} catch {}
     if($script:events.Count -ne $eventCount -or $script:forbiddenChartData) {throw 'A later native measurement ran after failure'}
+    $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
+}
+
+foreach($failure in @('wrong-native-kind','mixed-series-type','unsupported-native-type','doughnut-api-unavailable')) {
+    $nativeFixture=New-ChartPointFixture 'vertical-bar'
+    $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='vertical-bar';edge='end';valueSign=1}
+    $wanted=switch($failure){
+        'wrong-native-kind' {$action.chartKind='marker';'chartKind differs'}
+        'mixed-series-type' {$nativeFixture.series.Values[0].ChartType=65;'series type differs'}
+        'unsupported-native-type' {$nativeFixture.chart.ChartType=-4152;'not a supported classic'}
+        'doughnut-api-unavailable' {$nativeFixture=New-ChartPointFixture 'slice';$nativeFixture.chart.ChartType=-4120;$nativeFixture.series.Values[0].ChartType=-4120;$action.chartKind='slice';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Doughnut API availability is unqualified'};'Doughnut API availability is unqualified'}
+    }
+    $errorText=$null;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'type-refusal'} catch {$errorText=$_.Exception.Message}
+    if($null -eq $errorText -or -not $errorText.Contains($wanted) -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed -or $script:forbiddenChartData) {throw ('Native type/availability refusal failed: '+$failure)}
+    if($failure -ne 'doughnut-api-unavailable' -and @($script:events | Where-Object {$_ -like 'type-refusal.point.*'}).Count -ne 0) {throw 'Wrong native type reached point geometry'}
+    $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-type-followup'} catch {}
+    if($script:events.Count -ne $eventCount) {throw 'A native type failure allowed later calls'}
     $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
 }
 

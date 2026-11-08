@@ -95,7 +95,8 @@ if (process.platform === "win32") {
 	assert.equal(report.passed, true);
 	assert.equal(report.accepted, 6);
 	assert.equal(report.rejected, 23);
-	assert.equal(report.chartPointControls.length, 24);
+	assert.equal(report.chartPointControls.length, 28);
+	assert.deepEqual(report.chartPointControls.slice(-4).map(item => item.name), ["wrong-native-kind", "mixed-series-type", "unsupported-native-type", "doughnut-api-unavailable"]);
 	assert.ok(report.chartPointControls.every(item => item.passed));
 	assert.equal(report.lifecycleControls.length, 14);
 	assert.ok(report.lifecycleControls.every(item => item.passed));
