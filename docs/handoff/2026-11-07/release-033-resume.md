@@ -77,3 +77,11 @@ The last CI failure was the older RR105 test still expecting automatic box/water
 The combined MCP production bundle/doc controls also pass2/2. At c7518474491f8143d4844c6857f3f855cd9fe4db a fresh full corpus opens25files/270slides in owned read-only PowerPoint copies; exact-head evaluation/review follows the final test-only commit. All required-all CI and FullCI must pass before merge; the integration remains the sole033release PR. No release has been dispatched.
 
 Vetoable decision: preserve exact scale assertions and retain the reviewed RR54 old locks rather than relaxing archive or axis checks. Frozen folded sources#1140,#1145,#1146 must never be pushed again.
+
+## Final completion and gate corrections
+
+Full CI on 0e02db5a0aa6a68b7459fe62e3ed5b60f38784ea passed every slow leg except the first macOS editor-playground shard. Its completion test read the old popup before the tone catalog result arrived. Folded #1154 at08474f73daf0b1846c10570cb96ae338243da03e waits for the exact casual label and retains the original assertion. The controlled stale-result witness fails before and passes after; the natural focused case passes under CPU/worker delay. Product/UI/native code is unchanged.
+
+Folded #1156 atc810b40be5dceb470b8bb884ffd9340416e22e7a fixes the shared gate itself: GitHub statusCheckRollup omitted all30manual FullCI checks on the same SHA. The one batched query now includes explicit suite runs, completes bounded pages and conservatively retains unstarted pending retries. Required-all auto-merge waits for two complete green observations and known mergeability. All28offline tests pass; independent review accepted the fixes, and a live gate now reports the real macOS failure. Its mapped checks pass, with the tracker controls passing18/18 after exact historical-input restoration under the documented PR warning policy. Neither assertion nor tracker is weakened or regenerated.
+
+Both source branches are permanently frozen. The coordinator will push this combined source once, dispatch Full CI and use only the repaired required-all gate on its exact head. Fresh native source/input identity is recorded before merge. The existing0e02full native acceptance remains valid historical evidence; no merge/release is approved before the new combined normal/full gate is green.
