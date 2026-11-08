@@ -65,7 +65,7 @@ the source settles at 32 px Intos in a 330.133 px inner body (377.295 px card).
 Seven complete labels cannot satisfy the reading measure in that owned frame.
 The new truthful refusal is correct; no frame expansion or type reduction is
 permitted. Explicit maintained `opf paginate` splits whole items 2+2+2+1, all at
-37 px, with no overflow and lines at most 65 characters. Four genuine renderer
+37 px, with no overflow and lines at most 68 characters. Five genuine renderer
 font regressions pass. The original failed after invocation is retained intact;
 estimated 26 px fits are not claimed as measured office-font acceptance.
 

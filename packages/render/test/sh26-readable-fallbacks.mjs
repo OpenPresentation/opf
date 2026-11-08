@@ -24,3 +24,16 @@ for(const source of fixture.cases)test(`SH-26 measured ${source.slide.layout}: r
     }
   }
 });
+
+
+test('SH-26 measured RTL pagination preserves the exact numbered sequence through generated continuation starts',async()=>{
+  const slide=structuredClone(fixture.cases[1].slide);slide.language='ar-SA';slide.blocks[0].numbering='arabic';slide.composition.gap=.02;
+  const deck={catalogs:{custom:{layouts:{'org-chart':structuredClone(gallery.layouts['org-chart'])}}},slides:[slide]},saved=structuredClone(deck);
+  const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:deck});await fonts.ensure(deck,{renderOptions:{catalogs:[gallery]}});
+  const result=paginate(deck,{catalogs:[gallery],fonts:{textMeasurement:fonts.textMeasurement}});assert.deepEqual(deck,saved);assert.equal(result.layout,'measured');
+  const actual=result.presentation.slides.flatMap(slide=>slide.blocks.flatMap(block=>block.items??[]));assert.deepEqual(actual.map(value=>typeof value==='string'?value:value.text),slide.blocks[0].items);
+  for(const [index,value]of actual.entries())if(typeof value!=='string')assert.deepEqual(value,{text:slide.blocks[0].items[index],start:index+1});
+  const drawn=resolvePresentation(result.presentation,{fonts,catalogs:[gallery],date:'2026-11-08'}),entries=drawn.slides.flatMap(slide=>lists(slide.geometry).flatMap(item=>fits(item).flatMap(fit=>fit.listEntries)));
+  assert.deepEqual(entries.map(entry=>entry.marker.number.value),[1,2,3,4,5,6,7]);assert.ok(drawn.slides.every(slide=>!slide.geometry.diagnostics.some(d=>d.code==='text-overflow')));
+  assert.ok(drawn.slides.flatMap(slide=>lists(slide.geometry)).every(item=>fits(item).every(fit=>fit.fontSize>=32)));
+});
