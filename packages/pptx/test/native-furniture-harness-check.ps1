@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','Read-FurnitureChartPoint')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -277,10 +277,79 @@ $script:mockPowerPointRunning=$false; Assert-FurnitureOfficeIdle
 Remove-Item Function:Get-Process
 $lifecycleCases.Add([ordered]@{name='refuse-running-office';passed=$true})
 
+# SH-25: tabled independent actual-property probes. No expected source coordinates enter the action.
+$chartPointCases=New-Object 'System.Collections.Generic.List[object]'
+function New-ChartPointFixture {
+    $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:forbiddenChartData=$false
+    $point=[pscustomobject]@{Left=10;Top=20;Width=40;Height=30}
+    $point | Add-Member -MemberType ScriptMethod -Name PieSliceLocation -Value {
+        param($location,$index)
+        $values=switch($index){2{@(60,70)};5{@(30,40)};8{@(10,20)};default{throw 'Unexpected slice index'}}
+        return $values[$location-1]
+    }
+    $points=[pscustomobject]@{Count=1;Values=@($point)}
+    $points | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $series=[pscustomobject]@{Name='Native value';PointCollection=$points}
+    $series | Add-Member -MemberType ScriptMethod -Name Points -Value {return ,$this.PointCollection}
+    $seriesCollection=[pscustomobject]@{Count=1;Values=@($series)}
+    $seriesCollection | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $chart=[pscustomobject]@{ChartType=57;Series=$seriesCollection}
+    $chart | Add-Member -MemberType ScriptMethod -Name SeriesCollection -Value {return ,$this.Series}
+    $chart | Add-Member -MemberType ScriptProperty -Name ChartData -Value {$script:forbiddenChartData=$true;throw 'ChartData must not be activated or read'}
+    $chartShape=[pscustomobject]@{Name='Native chart';Left=100;Top=200;HasChart=-1;Chart=$chart}
+    $overlay=[pscustomobject]@{Name='Native ring';Left=0;Top=0;Width=10;Height=10}
+    $shapes=[pscustomobject]@{Count=2;Values=@($chartShape,$overlay)}
+    $shapes | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    $slides=[pscustomobject]@{Count=1;Values=@([pscustomobject]@{Shapes=$shapes})}
+    $slides | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
+    return [ordered]@{presentation=[pscustomobject]@{Slides=$slides};point=$point;points=$points;overlay=$overlay;chart=$chart;series=$seriesCollection}
+}
+$coordinateCases=@(
+    @('horizontal-bar','end',1,150,235),@('horizontal-bar','start',1,110,235),
+    @('horizontal-bar','end',-1,110,235),@('horizontal-bar','start',-1,150,235),
+    @('horizontal-bar','top',1,130,220),@('horizontal-bar','bottom',1,130,250),@('horizontal-bar','center',1,130,235),
+    @('vertical-bar','end',1,130,220),@('vertical-bar','start',1,130,250),
+    @('vertical-bar','end',-1,130,250),@('vertical-bar','start',-1,130,220),
+    @('marker','end',1,130,235),@('marker','top',1,130,235),@('marker','center',1,130,235),
+    @('slice','end',1,160,270),@('slice','start',1,110,220),@('slice','center',1,130,240),
+    @('slice','top',1,130,220),@('slice','bottom',1,130,250)
+)
+foreach($spec in $coordinateCases) {
+    $nativeFixture=New-ChartPointFixture
+    $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind=$spec[0];edge=$spec[1];valueSign=$spec[2]}
+    $nativeFixture.overlay.Left=$spec[3]-5; $nativeFixture.overlay.Top=$spec[4]-5
+    $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'
+    if($observed.nativePointSlidePoints[0] -ne $spec[3] -or $observed.nativePointSlidePoints[1] -ne $spec[4] -or $observed.distancePixels -ne 0 -or -not $observed.withinFourPixels -or $script:forbiddenChartData) {throw 'Native point probe changed coordinate systems or accessed data workbook'}
+    $chartPointCases.Add([ordered]@{kind=$spec[0];edge=$spec[1];sign=$spec[2];nativeSlidePoints=@($spec[3],$spec[4]);passed=$true})
+}
+$nativeFixture=New-ChartPointFixture
+$action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind='marker';edge='center';valueSign=1}
+foreach($delta in @(3,3.01)) {
+    $nativeFixture.overlay.Left=125+$delta; $nativeFixture.overlay.Top=230
+    $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'distance-bound'
+    if($observed.withinFourPixels -ne ($delta -eq 3)) {throw 'Actual4px measurement threshold changed'}
+}
+$chartPointCases.Add([ordered]@{name='exact-four-pixel-bound';passed=$true})
+foreach($failure in @('missing-series','missing-point','nonfinite-point','slice-getter')) {
+    $nativeFixture=New-ChartPointFixture
+    switch($failure) {
+        'missing-series' {$nativeFixture.series.Count=0}
+        'missing-point' {$nativeFixture.points.Count=0}
+        'nonfinite-point' {$nativeFixture.point.Left=[double]::NaN}
+        'slice-getter' {$action.chartKind='slice';$action.edge='end';$nativeFixture.point | Add-Member -Force -MemberType ScriptMethod -Name PieSliceLocation -Value {throw 'Injected native slice getter failure'}}
+    }
+    $rejected=$false;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'refusal'} catch {$rejected=$true}
+    if(-not $rejected -or -not $script:officeOperationsStopped -or $script:cleanupConfirmed) {throw 'Missing/nonfinite/failed native point was not latched'}
+    $eventCount=$script:events.Count;try {$null=Read-FurnitureChartPoint $nativeFixture.presentation $action 'forbidden-followup'} catch {}
+    if($script:events.Count -ne $eventCount -or $script:forbiddenChartData) {throw 'A later native measurement ran after failure'}
+    $chartPointCases.Add([ordered]@{name=$failure;passed=$true})
+}
+
 [ordered]@{
     passed=$true
     textFontControls=$fontCases
     lifecycleControls=@($lifecycleCases.ToArray())
+    chartPointControls=@($chartPointCases.ToArray())
     scope='Read-only owned-copy lifecycle, SaveCopyAs identity, overwrite/unowned-close/running-Office refusals, error latch; Windows PowerShell 5.1 parse; pure uniform/mixed/unavailable whole-range font descriptors and error latch; size/color edit and exact-target mocks; readback/text-change refusal;  AST-only action-plan validation; empty/single/multi list behavior; invalid-plan rejection; collection identity and fail-closed wrapper. No Office object was constructed.'
     powershell=$PSVersionTable.PSVersion.ToString()
     verifierSha256=(Get-FileHash -LiteralPath $ScriptPath -Algorithm SHA256).Hash.ToLowerInvariant()
