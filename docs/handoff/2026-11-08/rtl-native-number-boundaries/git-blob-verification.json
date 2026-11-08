@@ -1,0 +1,66 @@
+{
+  "head": "3dd0c57023d299729fa04f55fe81dc5d26eb9f48",
+  "verified": true,
+  "records": [
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries.md",
+      "bytes": 4256,
+      "gitBlobSha1": "dafe87b8b5b5caad6c8477b497d08e4f0aea275f",
+      "sha256": "d0ef8eb27a1a064efd9121a5bceeadff89adc49ef05f725ed9247f09958b998b"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/failed-import-candidate.files.json",
+      "bytes": 11150,
+      "gitBlobSha1": "2cd7a790f8a9dcf8da81db111101e4d84bbcd449",
+      "sha256": "d32c94241e2dd0f47a1ec5a4d62c3f0194cd0d74cd5a51501da91bb8e2b0e9ca"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/failed-import-candidate.zip",
+      "bytes": 715082,
+      "gitBlobSha1": "0c18a618f8e33dc9768944ab6da37a83fa9299e1",
+      "sha256": "506c9ea475d17b31439fa6f9ddaa2e102344b9371c4ad27280d655beeacd7d4e"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/frozen-base-probes.files.json",
+      "bytes": 7593,
+      "gitBlobSha1": "7f6d27370288813493203052e150288875441b0a",
+      "sha256": "deceae65216cd412f95b31a99b2110cb30d70d6ed2f4e519df5b239a05433513"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/frozen-base-probes.zip",
+      "bytes": 393758,
+      "gitBlobSha1": "9620512a4d3f9ca148b9d28d17c09dd3cfcb40b7",
+      "sha256": "a187eda1431f837ac4460a6b86a9114c59563bb2a7e55545918d1703f71ff0a8"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/original-combined-sources.files.json",
+      "bytes": 579,
+      "gitBlobSha1": "626c94146618a1ecaed7eaae565e67792f06f616",
+      "sha256": "24df6e21654d1b2451f8bd16a08fa129be137a082aebdc820478a33aed0492e4"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/original-combined-sources.zip",
+      "bytes": 1192,
+      "gitBlobSha1": "4a351cd90e4c0a900a9dc405084bcfad131e7cd5",
+      "sha256": "b0ac091a7dc5c7245aae456aaed131769a562ddb01115d6ff74df68a02c99e73"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/producer-validation-first-failures.files.json",
+      "bytes": 3235,
+      "gitBlobSha1": "fa99438c76e0aac550f462374d23fb8bac893d74",
+      "sha256": "1daf2acc26b607baf1562612d49806c9ea5be9d3cba3bd2674c59f16990496a9"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/producer-validation-first-failures.zip",
+      "bytes": 25890,
+      "gitBlobSha1": "d227bb9d5e044976bc5ff43963801f8227b374b8",
+      "sha256": "d245c48c09b02a49b8e1ba2ab8b0f06a2f8d4e6694b8ae6bf7ee2db164efb25e"
+    },
+    {
+      "path": "docs/handoff/2026-11-08/rtl-native-number-boundaries/receipt.json",
+      "bytes": 3805,
+      "gitBlobSha1": "a1fabe4c62b0a442487fa81000affb6913137113",
+      "sha256": "3a25883176bc4ee009954def983f2ea2d910a7210561f30194e7f2a348ecec1a"
+    }
+  ]
+}
