@@ -1,5 +1,5 @@
 // RR-105 (opf#1089): a native body (bodyText 'native') is wrapped by PowerPoint itself, whose advances and kerning differ from core's
-// measurement by a fraction of a percent. Written at exactly core's wrap width, layout-sampler slide 41's "Share results with both teams."
+// measurement by a fraction of a percent. Written at exactly core's wrap width, the six-card sampler witness's "Share results with both teams."
 // (0.45 px inside its 483.55 px box) wrapped to two lines in PowerPoint 16.0.20527 and ran out of its card. The native box now wraps where
 // core wrapped with WRAP_MARGIN to spare on both sides: every line fits with that room, and every soft break overruns by as much, so
 // PowerPoint cannot pull a word up either (a region wider than core's measure, or lines core balanced). A body for which no width does both
@@ -40,16 +40,33 @@ const margins = (item, shape) => {
   return {room: wrap - widths.widest, overrun: widths.unbroken - wrap, need: WRAP_MARGIN * (item.box.width - indent)};
 };
 
-// 1. layout-sampler slides 41 (step cards), 22 (a text block core measured at 980 px in a 1164.8 px region) and 20 (a body PowerPoint could
-// break either way). Slides keep their positions in a three-slide deck.
+// Select the original authored witnesses by identity: sampler additions must not silently change the regression cases.
+const fixtureIds = ['dynamic-six-points', 'layout-chart', 'layout-image-beside'];
+const selectFixtures = slides => fixtureIds.map(id => {
+  const matches = slides.filter(slide => slide.id === id);
+  assert.equal(matches.length, 1, id + ' must appear exactly once in the sampler');
+  return matches[0];
+});
+const fixtures = selectFixtures(sampler.slides);
+assert.deepEqual(selectFixtures([...sampler.slides].reverse()), fixtures, 'Sampler order cannot change the native-wrap witnesses');
+assert.throws(() => selectFixtures(sampler.slides.filter(slide => slide.id !== fixtureIds[0])), /must appear exactly once/);
+assert.throws(() => selectFixtures([...sampler.slides, fixtures[0]]), /must appear exactly once/);
+assert.deepEqual(fixtures[0].blocks.map(block => block.text), [
+  'Start with a baseline.', 'Keep the scope to one workflow.', 'Review feedback every week.',
+  'Name one owner per decision.', 'Share results with both teams.', 'Decide with the evidence, not the calendar.',
+], 'All six original card texts remain the tested source');
+for (const fixture of fixtures.slice(1)) assert.equal(fixture.blocks[1].text,
+  'Test with two teams for six weeks. Measure task completion and time before deciding what to scale.');
+
+// 1. Six step cards, a lead measured narrower than its region, and a body PowerPoint could break either way.
+// Their order within this three-slide deck preserves the original assertion paths.
 {
-  const picked = [40, 21, 19];
-  const deck = {...sampler, slides: picked.map(index => sampler.slides[index])};
+  const deck = {...sampler, slides: fixtures};
   const diagnostics = [];
   const entries = unzipSync(new Uint8Array(await toPptx(deck, {fonts, bodyText: 'native', onDiagnostic: diagnostic => diagnostics.push(diagnostic)})));
   const slideXml = index => strFromU8(entries[`ppt/slides/slide${index + 1}.xml`]);
 
-  // Slide 41: all six cards stay native, each box wraps where core did with the margin to spare, and no box leaves the slide.
+  // Six-card witness: all six cards stay native, each box wraps where core did with the margin to spare, and no box leaves the slide.
   const cards = compose(deck, 0).items.filter(item => item.field === 'text');
   assert.equal(cards.length, 6);
   for (const item of cards) {
@@ -68,7 +85,7 @@ const margins = (item, shape) => {
   assert.ok(before.room < before.need, `the old box (core's exact width) left only ${before.room} px`);
   assert.ok(frame(nativeBody(slideXml(0), share.path)).width - share.box.width > 10, 'about one average character of slack');
 
-  // Slide 22: the box is core's 980 px measure plus slack, not the 1164.8 px region, where PowerPoint would take "deciding" up a line.
+  // Lead witness: the box is core's 980 px measure plus slack, not the 1164.8 px region, where PowerPoint would take "deciding" up a line.
   const lead = compose(deck, 1).items.find(item => item.path === 'slides.1.blocks.1.text');
   const region = compose(deck, 1).regions?.find(entry => entry.name === lead.region)?.box;
   assert.ok(region && region.width - lead.box.width > 100, 'core measures this text narrower than its region');
@@ -76,14 +93,14 @@ const margins = (item, shape) => {
   assert.ok(leadMargins.overrun >= leadMargins.need && leadMargins.room >= leadMargins.need);
   assert.ok(frame(leadShape).width < region.width - 100);
 
-  // Slide 20: line 1 plus "task" overruns core's 570.4 px by 0.14 px, so no width keeps both: the measured lines stay.
+  // Tight-wrap witness: line 1 plus "task" overruns core's 570.4 px by 0.14 px, so no width keeps both: the measured lines stay.
   assert.ok(diagnostics.some(diagnostic => diagnostic.code === 'native-body-fallback' && diagnostic.reason === 'tight-wrap' && diagnostic.path === 'slides.2.blocks.1.text'));
   assert.equal(nativeBody(slideXml(2), 'slides.2.blocks.1.text'), undefined);
   assert.ok(shapesOf(slideXml(2)).some(shape => shape.includes('name="OPF text slides.2.blocks.1.text line 0"')), 'measured lines exported');
 }
 
 // 2. The corpus: every body of every example that the exporter writes natively keeps both margins in its planned box, and the check bites
-// (bodies that the exact-width box left within the margin exist, layout-sampler slide 41 among them).
+// (bodies that the exact-width box left within the margin exist, the six-card sampler witness among them).
 {
   let checked = 0, tight = 0, unsafeBefore = 0;
   for (const {file, deck} of examples) {
