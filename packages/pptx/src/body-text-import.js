@@ -152,7 +152,8 @@ export function nativeBodyReader(slidePath, archive, relationships, report, extr
         const properties = mergeNativeRunProperties(defaults, drawingObject(node[tag])['a:rPr']);
         // RR-05: a Latin phrase of a right-to-left paragraph is its own en-US run; its East Asian/complex-script slots can render nothing in it, so the face loss is not reported.
         // LH-118: so is a number (core numberRanges), in a right-to-left paragraph or a letterless one.
-        const phrase = (nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' || letterless) && properties.lang === 'en-US' && properties.altLang !== 'en-US' && LATIN_ONLY.test(current);
+        // The legacy splitter writes no alternate language. Unowned alternate pairs stay observed; owned pairs were normalized in the read view.
+        const phrase = (nodes(content, 'a:pPr')[0]?.[':@']?.rtl === '1' || letterless) && properties.lang === 'en-US' && properties.altLang === undefined && LATIN_ONLY.test(current);
         const runExtras = {...extras, inheritedBody, ...(phrase ? {deckLang: undefined} : {})};
         const style = languageOnly ? nativeRunLanguage(properties, runExtras) : bodyRunStyle(properties, context, relationships, (code, message) => { if (!(phrase && code === 'unsupported-body-font')) report({code,message,path}); }, runExtras);
         // Supported canonical forms may intentionally omit a resolved family
