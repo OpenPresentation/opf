@@ -273,6 +273,110 @@
         }
       ]
     },
+    "ImagePayload": {
+      "description": "An image source and optional image-local text callouts. Other resource kinds use Asset and do not accept callouts.",
+      "oneOf": [
+        {
+          "type": "string",
+          "examples": [
+            "asset:acme-logo",
+            "https://cdn.acme.com/image.png",
+            "./assets/image.png",
+            "data:image/png;base64,..."
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "src"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "description": "Resource source. Accepts an 'asset:<id>' reference, HTTPS URL, data URI, relative path resolved against the OPF file location, or local filesystem path.",
+              "examples": [
+                "asset:acme-logo",
+                "./assets/logo.svg",
+                "https://cdn.acme.com/logo.png",
+                "data:image/svg+xml;base64,...",
+                "/Users/alice/decks/data/revenue.csv"
+              ]
+            },
+            "alt": {
+              "type": "string",
+              "description": "Alternative text for images and other visual assets."
+            },
+            "title": {
+              "type": "string",
+              "description": "Human-readable asset title for editors and asset pickers."
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional notes about the asset's contents, provenance, or intended use."
+            },
+            "mediaType": {
+              "type": "string",
+              "description": "Optional MIME media type when it cannot be inferred from src.",
+              "examples": [
+                "image/svg+xml",
+                "image/png",
+                "text/csv",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              ]
+            },
+            "callouts": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ImageCallout"
+              },
+              "description": "Editable text panels over this image. Coordinates are fractions of its visible frame, measured from the physical top-left even in RTL. Panels are drawn above masks and overlays; overflowing text is reported, never clipped or shrunk below the body role."
+            }
+          }
+        }
+      ]
+    },
+    "ImageCallout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Plain editable text. Native edits preserve current words; an empty string is retained."
+        },
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "description": "Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1,
+          "description": "Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping."
+        }
+      }
+    },
     "Audience": {
       "type": "object",
       "description": "Inline audience metadata for the presentation. Use 'id' to reference an audiences record (a bare id or 'name:id') and override selected fields, or use 'name' for a custom inline audience.",
@@ -2847,7 +2951,7 @@
           "examples": ["arabic", "roman-lower", { "style": "alpha-upper", "start": 3, "suffix": "paren" }, ["arabic", "alpha-lower", { "style": "roman-lower", "suffix": "paren-both" }]]
         },
         "image": {
-          "$ref": "#/$defs/Asset",
+          "$ref": "#/$defs/ImagePayload",
           "description": "Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting may extend its outer edges to the slide edge. For fit, focus, treatments or an explicit placement use an image block in blocks; for a full-slide picture behind the content use design.background. Presence of this field infers type 'image'."
         },
         "video": {
@@ -3166,7 +3270,7 @@
           "examples": ["auto", 2]
         },
         "image": {
-          "$ref": "#/$defs/Asset",
+          "$ref": "#/$defs/ImagePayload",
           "description": "Source for an image item.",
           "examples": [
             "https://cdn.acme.com/images/diagram.png",

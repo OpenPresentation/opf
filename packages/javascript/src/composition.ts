@@ -764,7 +764,14 @@ export interface ComposedPlacement {
  * only, then the `border` on the shape outline, then the `overlay`. This is the paint order and the treatment code
  * 0.14's slide image used.
  */
+export interface ComposedImageCallout {
+  path: string; text: string; box: LayoutBox; textBox: LayoutBox; textStyle: TextStyle; fit: TextFit | RichTextFit;
+}
 export interface ComposedImage {
+  /** LH-34: text over the visible frame; physical coordinates, independent of pixel masks and RTL. */
+  callouts?: ComposedImageCallout[];
+  /** Visible contained picture bounds when known, else its composed frame. */
+  calloutFrame?: LayoutBox;
   /** Allocated region, equal to the item's box: the flow cell (after any card padding and caption band) or the placement band. */
   region: LayoutBox;
   /** Picture frame inside the region: the band inside the slide padding for an inset placement, then the largest centered box with `aspectRatio` (a circle uses 1). */
@@ -1270,7 +1277,7 @@ function diagramMeasure(measurement: TextMeasurement | undefined, body: string, 
  * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
-function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor; calloutDiagnostics: LayoutDiagnostic[]; callout?: (text: string, box: LayoutBox, path: string) => ComposedImageCallout }): ComposedImage {
   const kindName = isPresetShape(host.shape) ? host.shape : 'rect';
   const { scale } = context;
   const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
@@ -1312,6 +1319,18 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
   if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
+  const callouts = record(host.image).callouts;
+  if (callouts !== undefined && context.callout) {
+    if (!Array.isArray(callouts)) throw new TypeError('Image callouts must be an array at ' + hostPath);
+    const frame = fit === 'contain' && result.picture ? result.picture.image : box;
+    if (callouts.length) result.calloutFrame = { ...frame };
+    result.callouts = callouts.map((value: unknown, index: number) => {
+      const source = record(value), path = `${hostPath}.image.callouts.${index}`;
+      if (typeof source.text !== 'string' || ['x','y','width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] < 0 || source[key] > 1) || source.width <= 0 || source.height <= 0) throw new TypeError('Callouts need plain text, unit coordinates and positive unit width and height at ' + path);
+      if (source.x + source.width > 1 + 1e-9 || source.y + source.height > 1 + 1e-9) context.calloutDiagnostics.push({ code: 'text-overflow', path, message: 'The image callout extends beyond its visible image frame; move or resize the panel. Its text is preserved without clipping.' });
+      return context.callout!(source.text, roundBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }), path);
+    });
+  }
   return result;
 }
 
@@ -5622,6 +5641,8 @@ const TABLE_NOTE_GROWN_SHARES: readonly number[] = [.7, .65, .6, .55, .5];
  * same allowance holds for a table beside a picture track (automaticTracks).
  */
 const TABLE_NOTE_CELL_LINES = 2;
+/** LH-75: actual growth may use three whole-word cell lines and three quarters of the body, while initial placement keeps its two-line/60% rules. */
+const TABLE_NOTE_GROWN_CELL_LINES = 3, TABLE_NOTE_GROWN_TARGET = .75;
 /** LH-75, LH-80: the most lines any one cell of a placed table is set on (Infinity when it cannot be laid out). */
 function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale: number): number {
   try {
@@ -5633,8 +5654,8 @@ function tableCellLines(item: ComposedItem, options: ComposeSlideOptions, scale:
  * LH-75: a slide whose body is one short table (under half the body's height) and a note of two or more lines (a plain text block), which the
  * layout or the automatic grid sets one above the other, is composed again with the two side by side, about 70:30, the note on one plain
  * card as tall as the row (Claude Design's note panel beside its table), the row in the middle of the body. The table keeps its words whole.
- * The type steps up by LH-48's steps (GROW, the table's rows with it) to the largest at which the row covers at most LONE_TARGET of the
- * body, nothing overflows and no block is smaller, and no cell takes more than TABLE_NOTE_CELL_LINES lines or breaks a word (LH-75's
+ * The type steps up by LH-48's steps (GROW, the table's rows with it) to the largest at which the row covers at most TABLE_NOTE_GROWN_TARGET of the
+ * body, nothing overflows and no block is smaller, and no grown cell takes more than TABLE_NOTE_GROWN_CELL_LINES lines or breaks a word (LH-75's
  * decision: a wrapped cell keeps the table's size; a table whose words do not fit its share keeps the full width, as does a note whose column
  * would be under LH-66's measure at 60:40). Kept
  * (`recomposed.table` on a template slide, composed as the automatic grid with the record's design as LH-61 does) when it reads as
@@ -5673,9 +5694,9 @@ function tableNote(input: unknown, options: ComposeSlideOptions, result: SlideCo
     // LH-75 decision (2026-11-07): a cell may wrap beside the note, onto at most TABLE_NOTE_CELL_LINES lines and with its words whole
     // (a word too wide for its column is LH-44's overflow, refused above), so the table keeps its size instead of stepping down; the
     // slide reads as well (no block smaller, no word split).
-    if (tableCellLines(placedTable, options, scale) > TABLE_NOTE_CELL_LINES || !readsAsWell(before, trackQuality(next, options), floor)) return undefined;
-    // The row (the note's card is as tall as the row) covers at most LONE_TARGET of the body, as LH-48's grown body does.
-    return placedNote.frameBox.height > LONE_TARGET * bodyHeight(next) ? undefined : next;
+    if (tableCellLines(placedTable, options, scale) > (steps ? TABLE_NOTE_GROWN_CELL_LINES : TABLE_NOTE_CELL_LINES) || !readsAsWell(before, trackQuality(next, options), floor)) return undefined;
+    // Initial placement keeps LH-48's short-body target; a genuinely larger pair may use three quarters of the body.
+    return placedNote.frameBox.height > (steps ? TABLE_NOTE_GROWN_TARGET : LONE_TARGET) * bodyHeight(next) ? undefined : next;
   };
   // The widest share at which the pair holds wins at the role sizes. LH-75 follow-up (2026-11-07): the pair then grows by LH-48's steps
   // like any short body, each step at the widest share (that share or a narrower one, down to TABLE_NOTE_GROWN_SHARES' last, so the
@@ -6323,7 +6344,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
   const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
-  const imageDiagnostics: LayoutDiagnostic[] = [];
+  const imageDiagnostics: LayoutDiagnostic[] = [], imageCalloutDiagnostics: LayoutDiagnostic[] = [];
   // A right-to-left deck mirrors placements and edge overlays: `left` is the start side, drawn at the right.
   const mirrorSide = (side: string): string => !rtl ? side : side === 'left' ? 'right' : side === 'right' ? 'left' : side;
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
@@ -6331,7 +6352,27 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
-  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor) => ({ fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
+  const fitImageCallout = (text: string, box: LayoutBox, calloutPath: string, settings: Composition): ComposedImageCallout => {
+    const inset = 10 * scale, floor = Math.max(contentNominalSize('text'), settings.minFontSize ?? 16) * scale;
+    const available = { x: box.x + inset, y: box.y + inset, width: Math.max(scale, box.width - 2 * inset), height: Math.max(scale, box.height - 2 * inset) };
+    const limit = Math.max(floor, Math.min(2 * floor, (settings.maxFontSize ?? Infinity) * scale));
+    const areaAt = (fontSize: number): LayoutBox => { const width = Math.min(available.width, 32 * fontSize); return { ...available, x: available.x + (available.width - width) / 2, width }; };
+    let area = areaAt(floor);
+    let fit = fitPlacedText('text', text, text, area, floor, floor, calloutPath, 'center');
+    if (!fit.overflow) for (let grown = floor + 2 * scale; grown <= limit + 1e-9; grown += 2 * scale) {
+      const candidateArea = areaAt(grown);
+      const candidate = fitPlacedText('text', text, text, candidateArea, grown, grown, calloutPath, 'center');
+      if (candidate.overflow) break;
+      area = candidateArea; fit = candidate;
+    }
+    // A readable panel never shrinks to fit. Small boxes keep every word and report their overflow.
+    if (fit.overflow || box.width < 2 * inset || box.height < 2 * inset) imageCalloutDiagnostics.push({ code: 'text-overflow', path: calloutPath, message: 'The image callout cannot fit at its body size; enlarge the panel or shorten the text.' });
+    const textHeight = 'height' in fit ? fit.height : fit.lines.length * fit.lineHeight;
+    const dy = Math.max(0, (available.height - textHeight) / 2);
+    area = { ...area, y: area.y + dy }; fit = translateTextFit(fit, dy);
+    return { path: calloutPath, text, box, textBox: area, fit, textStyle: styleFor('text', calloutPath) };
+  };
+  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor, settings: Composition = composition) => ({ calloutDiagnostics: imageCalloutDiagnostics, callout: (text: string, box: LayoutBox, at: string) => fitImageCallout(text, box, at, settings), fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
   // FA-22 placement. The top-level image nodes are the image blocks of `blocks` (not groups) or the root image; promoted
   // regions have none. The n-th takes its own placement, else the n-th layout image placeholder's (FA-26: image regions are
   // counted in reading order through placeholder groups, and only a top-level one carries a placement). Each band takes its
@@ -6458,7 +6499,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let frameArea: LayoutBox = placement.inset ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
     const caption = host.caption !== undefined && entry.block !== undefined ? layoutCaption(host.caption, roundBox(frameArea), `${hostPath}.caption`, { ...annotationOptions, nameDetail: true }) : undefined;
     if (caption) { frameArea = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
-    const image = composeImage(host, hostPath, region, frameArea, imageContext(placement));
+    const image = composeImage(host, hostPath, region, frameArea, imageContext(placement, undefined, { ...composition, ...record(host.composition) }));
     const type = host.type ?? 'image';
     items.push({ path: `${hostPath}.image`, field: 'image', type, value: host.image, payload: imagePayload(host), box: { ...region }, image,
       textStyle: styleFor('image', `${hostPath}.image`), composition, alignment: alignmentFor('image'), ...(caption ? { caption } : {}) });
@@ -7201,6 +7242,23 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // Words before type: the minimum width when the neighbours keep their fit, if at a smaller size.
     return least > equal[index]!.width + scale && neighbours(least) < baseline + 1000 ? weightsAt(least) : undefined;
   };
+  // LH-73: moved notes can use the same measured, bounded width redistribution as automatic prose rows.
+  const proseRowWeights = (nodes: Pending[], equalWidths: number[], cards: boolean, settings: Composition): number[] | undefined => {
+    const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
+    if (nodes.length !== 2 || !nodes.every(prose)) return undefined;
+    const need = (node: Pending, width: number) => naturalHeight(node, width, cards, undefined, settings);
+    const heights = nodes.map((node, index) => need(node, equalWidths[index]!));
+    const long = heights[0]! >= heights[1]! ? 0 : 1, short = 1 - long;
+    if (heights[long]! < WEIGHTED_DEMAND_RATIO * heights[short]!) return undefined;
+    const total = equalWidths[0]! + equalWidths[1]!, line = contentNominalSize(nodes[short]!.field) * scale * 1.3;
+    let best: { share: number; height: number } | undefined;
+    for (const share of WEIGHTED_SHARES) {
+      const longHeight = need(nodes[long]!, total * share), shortHeight = need(nodes[short]!, total * (1 - share));
+      if (shortHeight > heights[short]! + line || longHeight > heights[long]! - line * .5) continue;
+      if (!best || longHeight < best.height - 1e-6) best = { share, height: longHeight };
+    }
+    return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
+  };
   const autoRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
     if (!autoComposition() || settings.weights?.length || count < 2 || count > 3 || cols !== count || nodes.length !== count) return undefined;
     const equal = gridGeometry(count, area, cols, rowGap, [], false).boxes;
@@ -7225,20 +7283,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const total = equal.reduce((sum, box) => sum + box.width, 0);
       return nodes.map((_, index) => index === bars[0] ? BAR_CHART_MIN_SHARE * total : (1 - BAR_CHART_MIN_SHARE) * total / 2);
     }
-    const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
-    if (count !== 2 || !nodes.every(prose)) return undefined;
-    const need = (node: Pending, width: number) => naturalHeight(node, width, hasCards, undefined, settings);
-    const heights = nodes.map((node, index) => need(node, equal[index]!.width));
-    const long = heights[0]! >= heights[1]! ? 0 : 1, short = 1 - long;
-    if (heights[long]! < WEIGHTED_DEMAND_RATIO * heights[short]!) return undefined;
-    const total = equal[0]!.width + equal[1]!.width, line = contentNominalSize(nodes[short]!.field) * scale * 1.3;
-    let best: { share: number; height: number } | undefined;
-    for (const share of WEIGHTED_SHARES) {
-      const longHeight = need(nodes[long]!, total * share), shortHeight = need(nodes[short]!, total * (1 - share));
-      if (shortHeight > heights[short]! + line || longHeight > heights[long]! - line * .5) continue;
-      if (!best || longHeight < best.height - 1e-6) best = { share, height: longHeight };
-    }
-    return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
+    return proseRowWeights(nodes, equal.map(box => box.width), hasCards, settings);
   };
   // LH-44: when the grid the scores chose gives a table a cell narrower than its words (the sum of its columns' minimum widths at the
   // starting size, plus a card's insets), the arrangement changes. Two candidates are scored against that grid and the lowest wins:
@@ -7859,10 +7904,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let imageHost: Record<string, any> = portraitHosts.get(node.path) ?? node.host ?? {};
     if (node.field === 'image' && !portraitHosts.has(node.path) && !personPictures.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.adjust === undefined && (imageHost.shape === undefined || imageHost.shape === 'rect') && (imageHost.stroke === undefined || imageHost.stroke === 'none' || record(imageHost.stroke).width === 0)) {
       const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'roundRect', adjust: { adj: radius } };
-      const context = { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
-      if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [] }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
+      const context = { ...imageContext(undefined, anchor, settings), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
+      if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [], callout: undefined }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
     }
-    const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
+    const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor, settings), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
@@ -8862,9 +8907,14 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     // LH-82: blocks of another kind taken out of a grid sit in one row under it, or stacked when that is shorter, and ask for at
     // most MOVED_SHARE of the content box (down to their height at the floor), so the grid keeps about 60-65% of the body.
     const MOVED_SHARE = .3;
+    const movedWidths = (units: Pending[], width: number, cards: boolean): number[] => {
+      const equal = columnWidths(units.map(() => 1), width, gap);
+      const weights = units.length === 2 && units.every(unit => !unit.children && unit.field === 'text') ? proseRowWeights(units, equal, cards, composition) : undefined;
+      return weights ? columnWidths(weights, width, gap) : equal;
+    };
     const movedHeights = (units: Pending[], width: number, cards: boolean, atFloor = false) => {
-      const share = (width - gap * (units.length - 1)) / units.length;
-      return { across: Math.max(...units.map(unit => naturalHeight(unit, share, cards, undefined, composition, atFloor))), stacked: units.reduce((sum, unit) => sum + naturalHeight(unit, width, cards, undefined, composition, atFloor), 0) + gap * (units.length - 1) };
+      const widths = movedWidths(units, width, cards);
+      return { across: Math.max(...units.map((unit, index) => naturalHeight(unit, widths[index]!, cards, undefined, composition, atFloor))), stacked: units.reduce((sum, unit) => sum + naturalHeight(unit, width, cards, undefined, composition, atFloor), 0) + gap * (units.length - 1) };
     };
     const movedAcross = (units: Pending[], width: number, cards: boolean) => { const heights = movedHeights(units, width, cards); return heights.across <= heights.stacked; };
     const movedNeed = (units: Pending[], width: number, cards: boolean, atFloor = false) => { const heights = movedHeights(units, width, cards, atFloor), across = movedAcross(units, width, cards); return across ? heights.across : heights.stacked; };
@@ -8889,7 +8939,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!hint || units.length < 2 || direction !== undefined) return undefined;
       if (hint === 'row') {
         const across = movedAcross(units, cell.width, cards), shape = flowShape(across ? 'row' : 'column', units.length, true);
-        return { shape, boxes: across ? flowCells(shape, cell, gap).cells : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
+        return { shape, boxes: across ? gridBoxes(units.length, cell, units.length, gap, movedWidths(units, cell.width, cards), false) : stackedBoxes(units, cell, gap, composition, cards, region.anchor) };
       }
       if (hint === 'mosaic') {
         if (hints.sources.imageFit === undefined || hints.sources.imageFit === 'layout') for (const unit of units) coverPictures.add(unit);
@@ -9818,16 +9868,22 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // LH-33: sibling charts of one unit share their value axis (chart-axis.ts); LH-93: and one plot height (chart-plot.ts).
   const chartMeasure = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 400, italic: false, path}, options.textMeasurement), options.textMeasurement);
   const plotGeometry = (item: unknown) => ({scale, minFontSize: (item as ComposedItem).composition.minFontSize, measure: chartMeasure, direction: rtl ? 'rtl' as const : 'ltr' as const, language: deckLanguage()});
-  shareSiblingPlots(shareSiblingChartAxes(items, options.presentation), plotGeometry, options.presentation);
-  // LH-105: a shared plot moves the line ends, so their names are placed again.
-  refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
+  const siblingCharts = shareSiblingChartAxes(items, options.presentation);
+  shareSiblingPlots(siblingCharts, plotGeometry, options.presentation);
   // LH-109, LH-110: and so do a stacked chart's names and the reference marks. The bold face is resolved only for a slide that has them
   // (a deck without a bold body face must not fail on a slide that never draws one).
-  const marked = items.filter(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
+  const marked = items.filter(item => item.chart?.layer?.stack || item.chart?.layer?.references);
   if (marked.length) {
-    const chartBold = textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement);
-    refreshChartMarks(marked, item => ({...plotGeometry(item), bold: chartBold}), options.presentation);
+    const needsBold = marked.some(item => item.chart?.layer?.stack?.names || item.chart?.layer?.stack?.ends || item.chart?.layer?.references);
+    const chartBold = needsBold ? textWidthMeasurer(resolveTextStyle({fontFamily: options.fontFamilies?.body ?? 'sans-serif', fontWeight: 700, italic: false, path}, options.textMeasurement), options.textMeasurement) : undefined;
+    // Each horizontal chart can only lose its names row and restore its axis once, so at most two monotonic transitions per chart.
+    for (let pass = 0; pass <= marked.length * 2; pass++) {
+      if (!refreshChartMarks(marked, item => ({...plotGeometry(item), ...(chartBold ? {bold: chartBold} : {})}), options.presentation)) break;
+      shareSiblingPlots(siblingCharts, plotGeometry, options.presentation);
+    }
   }
+  // LH-105: after all shared plot changes, line-end names follow their final points.
+  refreshEndLabels(items.filter(item => item.chart?.layer?.endLabels), plotGeometry, options.presentation);
   // LH-113: a table draws the rows its `highlight` names, else the rows the slide's texts name (chart-focus.ts), on the highlight tint.
   for (const item of items) {
     if (item.field !== 'table') continue;
@@ -10899,6 +10955,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
+  diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
     if(composition.overflow==='error')return true;

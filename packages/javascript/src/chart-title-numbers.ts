@@ -1,10 +1,11 @@
 // LH-110 remainder: the numbers a slide title compares its chart's data with, in English and the main European languages, written in digits
-// or, in English, in words ("above twenty percent", "more than ninety-two percent"). Pure and browser-safe; chart-marks.ts reads the result.
+// or in words ("above twenty percent", "more than ninety-two percent"). Pure and browser-safe; chart-marks.ts reads the result.
 //
 // A title names a reference value when a comparison word stands right before the number ("stayed above 92%", "über 92 %", "au-dessus de
 // 92 %"); any other number in a title is a data value or not a reference. The word lists are deliberately short: a missed reference draws
 // no line, a false one draws a wrong line.
 import {titleNumbers} from './chart-focus.js';
+import {localizedWordNumbers} from './chart-title-word-numbers.js';
 
 /** One number a title compares with: its value, the decimals it is written to, whether it is a percent, its label and the text before it. */
 export interface TitleReferenceNumber {
@@ -132,12 +133,12 @@ function wordNumbers(text: string): TitleReferenceNumber[] {
 /**
  * LH-110: the numbers of a title that a comparison word of its language names (`titleReferenceLanguage`), in the order they appear:
  * digits as the language writes them (a decimal point in English, a decimal comma in the others, LH-110's `titleNumbers` for English),
- * and English number words. Empty for a language LH-110 does not read.
+ * and cardinal words in each supported language. Empty for a language LH-110 does not read.
  */
 export function titleReferenceNumbers(text: string, language?: string): TitleReferenceNumber[] {
   const spec = titleReferenceLanguage(language);
   if (!spec) return [];
   const digits = spec.decimal === '.' ? titleNumbers(text) : commaNumbers(text);
-  const english = spec === TITLE_REFERENCE_LANGUAGES.en ? wordNumbers(text) : [];
-  return [...digits, ...english].filter(number => spec.comparison.test(number.before)).sort((a, b) => a.before.length - b.before.length);
+  const written = spec === TITLE_REFERENCE_LANGUAGES.en ? wordNumbers(text) : localizedWordNumbers(text, (language || 'en').toLowerCase().split(/[-_]/)[0]!, spec.comparison);
+  return [...digits, ...written].filter(number => spec.comparison.test(number.before)).sort((a, b) => a.before.length - b.before.length);
 }

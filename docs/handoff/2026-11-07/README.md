@@ -1,3 +1,5 @@
+Current continuation: [2026-11-08 release recovery and next steps](../2026-11-08/README.md). The original rules and evidence below remain historical context.
+
 # Handoff of 2026-11-07: v0.33.0 and v0.34.0
 
 This is the entry point for whoever continues this work. A supervisor session coordinated about a dozen agents on 2026-11-07 while the owner was away. All of their work is on GitHub: in open PRs, on pushed branches, in the evidence branch `handoff/review-sheets-2026-11-07`, and in this folder. Nothing exists only on the old machine. Start with [KICKOFF.md](KICKOFF.md), which is the one prompt to give the next agent.
@@ -124,3 +126,5 @@ SH-23 isolated qualification: [source scope, five native ninth-node save/reopen 
 - Inverted pyramid continuation: [SH-24](sh24-inverted-pyramid.md), issue #1128; source implementation is isolated, with review/native/integration gates still owed.
 
 - v0.33 integration #1133 merged at7c0c3f13e9de77e038b6ec26183043eb7fe90822 after exact-head native and required-all CI acceptance. Release dry-run42456530874 and main verification are active; publication and site updates remain owed. [Gate correction](fullci-gate.md).
+
+- Evidence checker continuation: [RR-110](rr110-zip-text.md) recognizes ZIP archive signatures while keeping source text and named gzip reports checked.

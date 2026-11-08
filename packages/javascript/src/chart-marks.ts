@@ -528,12 +528,12 @@ const HORIZONTAL_BARS = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
  * LH-93: the inner plot of a horizontal bar chart (clustered, stacked or 100% stacked) without chart options, as an inset from its chart
  * box, laid out as the preview lays it out (horizontalStackPlot): a side legend only for two series or more without a header legend, and
  * a small chart's value labels (LH-03, no value axis) keep the widest label's room beyond the longest bar. Undefined for a chart with
- * options, a stacked chart with its marks (LH-109, LH-125: values inside the segments and names above the plot are fitted to its own plot)
- * or a chart drawn on a table's rows (LH-115): those keep their own plot.
+ * options or a chart drawn on a table's rows (LH-115): those keep their own plot. Stacked marks are refitted after sharing (refreshChartMarks).
  */
 export function horizontalBarPlot(chart: unknown, data: ResolvedChartData, layer: ChartLayer | undefined, axis: ChartValueAxis, box: Box, geometry: Omit<ChartPlotGeometry, 'box'>): ChartPlotInset | undefined {
-  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.stack || layer?.rows) return undefined;
+  if (!record(chart) || !data.ok || data.combo || data.hasX || !HORIZONTAL_BARS.has(typeOf(chart)) || layer?.rows) return undefined;
   if (resolveChartOptions(chart, chartOptionTarget(typeOf(chart))).active) return undefined;
+  if (layer?.stack) return layer.plot;
   const hidden = chartValueAxisHidden(layer), {fontPx} = metrics(box, geometry.scale, geometry.minFontSize);
   const labeled = hidden && layer?.small?.labels === true;
   const labelRoom = labeled ? Math.max(0, ...data.rows.flatMap(row => row.slice(1).map((cell, j) => { const value = chartNumber(cell); return value === null ? 0 : geometry.measure(columnValueLabel(data, j + 1, value, geometry.language), fontPx) + fontPx * 0.5; }))) : 0;
@@ -666,23 +666,33 @@ const LINE_TYPES = new Set(['column', 'line', 'line-with-markers', 'area']);
 const BAND_TYPES = new Set(['line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area']);
 // The comparisons that name a threshold right before the number are chart-title-numbers.ts' (TITLE_REFERENCE_LANGUAGES: English, German,
 // French, Spanish, Italian, Portuguese, Dutch): "stayed above 92%", "beat the target of 30", "über 92 %", "above ninety percent".
-const PERIOD_PREPOSITIONS = new Set(['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around']);
+// Explicit suffix phrases only: article/contraction forms and multiword prepositions are matched as whole title tokens.
+const PERIOD_PREPOSITIONS: Readonly<Record<string, readonly string[]>> = {
+  en: ['in', 'since', 'during', 'after', 'from', 'until', 'before', 'by', 'around'],
+  de: ['in', 'im', 'im Jahr', 'im Monat', 'seit', 'während', 'nach', 'ab', 'bis', 'vor', 'um'],
+  fr: ['en', 'en l’année', 'au cours de', 'depuis', 'pendant', 'durant', 'après', 'à partir de', 'jusqu’en', 'jusqu’à', 'avant', 'd’ici', 'vers'],
+  es: ['en', 'en el año', 'desde', 'durante', 'después de', 'a partir de', 'hasta', 'antes de', 'para', 'alrededor de'],
+  it: ['in', 'nel', 'nel mese di', 'a partire da', 'a partire dal', 'nello', 'nella', 'nei', 'nelle', 'da', 'dal', 'dalla', 'dallo', 'dai', 'dalle', 'durante', 'dopo', 'fino a', 'prima di', 'entro', 'intorno a'],
+  pt: ['em', 'no', 'no ano de', 'no mês de', 'na', 'nos', 'nas', 'desde', 'durante', 'após', 'depois de', 'a partir de', 'até', 'antes de', 'por volta de'],
+  nl: ['in', 'in het jaar', 'in de maand', 'sinds', 'tijdens', 'na', 'vanaf', 'tot', 'voor', 'vóór', 'rond', 'tegen'],
+};
 
 /**
  * LH-110: what the slide title (and subtitle) `text` names for reference marks, or undefined: `lines`, the numbers it compares the data
- * with (a comparison right before the number in the deck language, `titleReferenceNumbers`: digits, and in English number words) that no
+ * with (a comparison right before the number in the deck language, `titleReferenceNumbers`: digits and cardinal number words) that no
  * plotted value equals at the precision written, of the value axis' kind (a percent only on a percent column) and within the data's range
  * widened by its span on each side; `rows`, the one category it names after a time preposition ("in 2023", "since March") on a line or
  * area chart whose categories run in time. Column, line and area charts (not stacked) take lines; line and area charts take bands. Lines
- * in English, German, French, Spanish, Italian, Portuguese and Dutch titles, bands in English titles; `highlight` keeps the chart as
+ * in English, German, French, Spanish, Italian, Portuguese and Dutch titles, with bands in the same languages; `highlight` keeps the chart as
  * authored.
  */
 export function chartTitleReferences(chart: unknown, data: ResolvedChartData, options: {text?: string; language?: string} = {}): {lines: {value: number; text: string}[]; rows: number[]} | undefined {
   if (!record(chart) || !data.ok || data.combo || chart.highlight !== undefined || !options.text?.trim()) return undefined;
   const language = options.language || 'en';
-  const english = /^en(?:-|$)/i.test(language);
+  const primary = language.toLowerCase().split(/[-_]/)[0]!;
+  const periods = Object.hasOwn(PERIOD_PREPOSITIONS, primary) ? PERIOD_PREPOSITIONS[primary] : undefined;
   const numbers = titleReferenceNumbers(options.text, language);
-  if (!english && !numbers.length) return undefined;
+  if (!periods && !numbers.length) return undefined;
   const type = typeOf(chart);
   if (!LINE_TYPES.has(type) && !BAND_TYPES.has(type)) return undefined;
   if (data.columns.length < 2 || !data.rows.length) return undefined;
@@ -703,10 +713,11 @@ export function chartTitleReferences(chart: unknown, data: ResolvedChartData, op
   }
   const rows: number[] = [];
   const categories = data.rows.map(row => label(row[0]));
-  // The period a title names stays English (its time prepositions).
-  if (english && BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
+  // A period is named only after an explicit time phrase in the effective slide language.
+  if (periods && BAND_TYPES.has(type) && chartCategoriesInTime(data.rows.map(row => row[0]), {title: label(data.columns[0]), language})) {
     const title = words(options.text, language);
-    const after = (at: number) => at > 0 && PERIOD_PREPOSITIONS.has(title[at - 1]!);
+    const phrases = periods.map(phrase => words(phrase, language));
+    const after = (at: number) => phrases.some(phrase => at >= phrase.length && phrase.every((token, index) => title[at - phrase.length + index] === token));
     categories.forEach((category, row) => {
       const tokens = words(category, language);
       if (!tokens.length) return;
@@ -752,15 +763,43 @@ interface ComposedChartItem { value: unknown; box: Box; chart?: {valueAxis?: Cha
 
 /**
  * LH-109, LH-110 with LH-93: after sibling charts share one plot height, the names beside a stacked chart's last column, an area's end
- * values (LH-125) and the reference marks are placed again against the chart's new plot.
+ * values (LH-125) and the reference marks are placed again against the chart's new plot. Horizontal stacks refit their names and value
+ * labels. Returns true when a names-to-legend or hidden-to-visible-axis fallback changed the plot, requiring another sharing pass.
  */
-export function refreshChartMarks(items: readonly ComposedChartItem[], geometryFor: (item: ComposedChartItem) => Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, document?: unknown): void {
+export function refreshChartMarks(items: readonly ComposedChartItem[], geometryFor: (item: ComposedChartItem) => Omit<ChartPlotGeometry, 'box'> & {bold?: (text: string, size: number) => number}, document?: unknown): boolean {
+  let layoutChanged = false;
   for (const item of items) {
     const layer = item.chart?.layer, axis = item.chart?.valueAxis;
-    if (!layer?.plot || !axis || (!layer.stack?.names && !layer.stack?.ends && !layer.references)) continue;
+    if (!layer?.plot || !axis || (!layer.stack && !layer.references)) continue;
     const data = resolveChartData(item.value, document), geometry = geometryFor(item);
     let next: ChartLayer = layer;
-    // The names above a horizontal bar chart (LH-125) and its plot do not move with a shared plot (only vertical charts share one).
+    // LH-93: horizontal siblings may contract either dimension. Refit marks at their unchanged text size.
+    if (layer.stack && record(item.value) && stackCandidate(item.value, data) && isHorizontal(item.value)) {
+      if (layer.stack.names?.above) {
+        const entries = placeBarNames(item.value, data, axis, item.box, layer.plot, geometry, layer.focus?.series);
+        if (entries) next = {...next, stack: {...next.stack!, names: {...layer.stack.names, entries}}};
+        else {
+          // Names no longer fit their segment starts: restore the original full-size header/side legend, then share again.
+          const {names: _names, legend, ...stack} = next.stack!;
+          const {header: _header, ...rest} = next;
+          const header = legend ?? layer.header;
+          const plot = horizontalStackPlot(item.value, data, axis, item.box, header, false, geometry, chartValueAxisHidden(next));
+          next = {...rest, ...(header ? {header} : {}), stack, ...(plot ? {plot} : {})};
+          layoutChanged = true;
+        }
+      }
+      const marks = stackMarks(item.value, data, axis, plotOf(item.box, next.plot!), {...geometry, box: item.box});
+      if (marks) {
+        next = {...next, stack: {...next.stack!, values: marks.values}};
+        if (next.stack!.valueAxis === false && !labeledEverySegment(data, marks.values)) {
+          // Direct values no longer replace every segment's axis. Restore the tick band and refit on the next shared plot.
+          const {valueAxis: _hidden, ...stack} = next.stack!;
+          const plot = horizontalStackPlot(item.value, data, axis, item.box, next.header, stack.names?.above === true, geometry);
+          next = {...next, stack, ...(plot ? {plot} : {})};
+          layoutChanged = true;
+        }
+      }
+    }
     if (layer.stack?.names && !layer.stack.names.above) {
       const entries = placeStackNames(item.value, data, axis, item.box, layer.plot, geometry, true, layer.focus?.series, layer.stack.edge === true);
       if (entries) next = {...next, stack: {...next.stack!, names: {...layer.stack.names, entries}}};
@@ -776,4 +815,5 @@ export function refreshChartMarks(items: readonly ComposedChartItem[], geometryF
     }
     item.chart!.layer = next;
   }
+  return layoutChanged;
 }
