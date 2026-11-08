@@ -1,0 +1,11 @@
+{
+  "pass": true,
+  "reviewed": 60,
+  "actualImageShaAndGitBlobBindings": 60,
+  "afterImageBindings": 230,
+  "sourceBindings": 60,
+  "imagesCreated": 0,
+  "inputMutations": 0,
+  "officeCalls": 0,
+  "githubApiCalls": 0
+}

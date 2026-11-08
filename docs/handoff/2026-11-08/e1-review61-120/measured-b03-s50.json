@@ -1,0 +1,558 @@
+{
+  "scope": "Read-only published033 composition measurement; no rerender/source rewrite",
+  "consumer": "core033-office-consumer-01",
+  "sourceSha256": "39f7be5e75bd2d46ece260e77b38d0c7f84fcdf85a0072de9bc0fd750301bbbf",
+  "authored": {
+    "layout": "process",
+    "title": "Why This Matters",
+    "blocks": [
+      {
+        "timeline": {
+          "name": "Conference talk execution path",
+          "description": "Major milestones for VectorTrail.",
+          "events": [
+            {
+              "when": "Oct",
+              "what": "Baseline",
+              "description": "Confirm current state, owners, and constraints."
+            },
+            {
+              "when": "May",
+              "what": "Pilot",
+              "description": "Run a narrow pilot with visible success criteria."
+            },
+            {
+              "when": "Jun",
+              "what": "Scale",
+              "description": "Expand the approach after risk review."
+            },
+            {
+              "when": "Jul",
+              "what": "Embed",
+              "description": "Move reporting and routines into steady-state operations."
+            }
+          ]
+        }
+      },
+      {
+        "timeline": {
+          "name": "Customer support execution path",
+          "description": "Major milestones for Waypoint Apps.",
+          "events": [
+            {
+              "when": "Sep",
+              "what": "Baseline",
+              "description": "Confirm current state, owners, and constraints."
+            },
+            {
+              "when": "Oct",
+              "what": "Pilot",
+              "description": "Run a narrow pilot with visible success criteria."
+            },
+            {
+              "when": "May",
+              "what": "Scale",
+              "description": "Expand the approach after risk review."
+            },
+            {
+              "when": "Jun",
+              "what": "Embed",
+              "description": "Move reporting and routines into steady-state operations."
+            }
+          ]
+        }
+      }
+    ],
+    "id": "s50"
+  },
+  "contentBox": {
+    "x": 57.6,
+    "y": 57.6,
+    "width": 1164.8,
+    "height": 604.8
+  },
+  "composition": {},
+  "diagnostics": [],
+  "timelines": [
+    {
+      "path": "slides.49.blocks.0.timeline",
+      "box": {
+        "x": 57.6,
+        "y": 197.253555,
+        "width": 1164.8,
+        "height": 195.668867
+      },
+      "arrangement": "band",
+      "parts": [
+        {
+          "role": "name",
+          "text": "Conference talk execution path",
+          "box": {
+            "x": 57.6,
+            "y": 197.253555,
+            "width": 1164.8,
+            "height": 29.28
+          },
+          "fontSize": 24,
+          "lineHeight": 29.28,
+          "lines": [
+            "Conference talk execution path"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "description",
+          "text": "Major milestones for VectorTrail.",
+          "box": {
+            "x": 57.6,
+            "y": 234.533555,
+            "width": 1164.8,
+            "height": 22.1728515625
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Major milestones for VectorTrail."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Oct",
+          "box": {
+            "x": 65.6,
+            "y": 264.954414375,
+            "width": 275.2,
+            "height": 21.96
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Oct"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Baseline",
+          "box": {
+            "x": 65.6,
+            "y": 316.914414375,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Baseline"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Confirm current state, owners, and constraints.",
+          "box": {
+            "x": 65.6,
+            "y": 347.75441437499995,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Confirm current state, owners, and ",
+            "constraints."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "May",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 264.7064065625,
+            "width": 275.2,
+            "height": 22.2080078125
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "May"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Pilot",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 316.914414375,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Pilot"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Run a narrow pilot with visible success criteria.",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 347.75441437499995,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Run a narrow pilot with visible ",
+            "success criteria."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Jun",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 264.954414375,
+            "width": 275.2,
+            "height": 21.96
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Jun"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Scale",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 316.914414375,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Scale"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Expand the approach after risk review.",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 347.75441437499995,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Expand the approach after risk ",
+            "review."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Jul",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 264.954414375,
+            "width": 275.2,
+            "height": 21.96
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Jul"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Embed",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 316.914414375,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Embed"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Move reporting and routines into steady-state operations.",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 347.75441437499995,
+            "width": 275.2,
+            "height": 44.1680078125
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Move reporting and routines into ",
+            "steady-state operations."
+          ],
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "path": "slides.49.blocks.1.timeline",
+      "box": {
+        "x": 57.6,
+        "y": 416.922422,
+        "width": 1164.8,
+        "height": 195.704023
+      },
+      "arrangement": "band",
+      "parts": [
+        {
+          "role": "name",
+          "text": "Customer support execution path",
+          "box": {
+            "x": 57.6,
+            "y": 416.922422,
+            "width": 1164.8,
+            "height": 29.28
+          },
+          "fontSize": 24,
+          "lineHeight": 29.28,
+          "lines": [
+            "Customer support execution path"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "description",
+          "text": "Major milestones for Waypoint Apps.",
+          "box": {
+            "x": 57.6,
+            "y": 454.20242199999996,
+            "width": 1164.8,
+            "height": 22.2080078125
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Major milestones for Waypoint Apps."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Sep",
+          "box": {
+            "x": 65.6,
+            "y": 484.47195324999996,
+            "width": 275.2,
+            "height": 22.146484375
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Sep"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Baseline",
+          "box": {
+            "x": 65.6,
+            "y": 536.618437625,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Baseline"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Confirm current state, owners, and constraints.",
+          "box": {
+            "x": 65.6,
+            "y": 567.458437625,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Confirm current state, owners, and ",
+            "constraints."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Oct",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 484.658437625,
+            "width": 275.2,
+            "height": 21.96
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Oct"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Pilot",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 536.618437625,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Pilot"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Run a narrow pilot with visible success criteria.",
+          "box": {
+            "x": 356.79999999999995,
+            "y": 567.458437625,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Run a narrow pilot with visible ",
+            "success criteria."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "May",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 484.41042981249996,
+            "width": 275.2,
+            "height": 22.2080078125
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "May"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Scale",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 536.618437625,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Scale"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Expand the approach after risk review.",
+          "box": {
+            "x": 647.9999999999999,
+            "y": 567.458437625,
+            "width": 275.2,
+            "height": 43.92
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Expand the approach after risk ",
+            "review."
+          ],
+          "overflow": false
+        },
+        {
+          "role": "when",
+          "text": "Jun",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 484.658437625,
+            "width": 275.2,
+            "height": 21.96
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Jun"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "what",
+          "text": "Embed",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 536.618437625,
+            "width": 275.2,
+            "height": 26.84
+          },
+          "fontSize": 22,
+          "lineHeight": 26.84,
+          "lines": [
+            "Embed"
+          ],
+          "overflow": false
+        },
+        {
+          "role": "event-description",
+          "text": "Move reporting and routines into steady-state operations.",
+          "box": {
+            "x": 939.1999999999999,
+            "y": 567.458437625,
+            "width": 275.2,
+            "height": 44.1680078125
+          },
+          "fontSize": 18,
+          "lineHeight": 21.96,
+          "lines": [
+            "Move reporting and routines into ",
+            "steady-state operations."
+          ],
+          "overflow": false
+        }
+      ]
+    }
+  ]
+}

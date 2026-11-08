@@ -1,0 +1,47 @@
+{
+  "mappedSeconds": 28.2,
+  "steps": 6,
+  "initialPass": 4,
+  "initialFail": 1,
+  "typecheck": "not selected: no TypeScript change",
+  "firstFailure": "One missing sparse painting-Linux.json.gz fixture",
+  "exactFixtureRestoration": "../exact-painting-hydration.json",
+  "affectedRerun": {
+    "textTests": 6,
+    "textScanFiles": 6776,
+    "passed": true
+  },
+  "warningOwnership": "Explicit slideId when supplied, otherwise the real zero-based /slides/index JSON pointer; no slideId-only render-warning omission",
+  "originalFindings": {
+    "render/layout-unplaced": 35,
+    "opf/numbering-start-ignored": 2,
+    "render/text-overflow": 92
+  },
+  "renderWarningSheets": [
+    62,
+    63,
+    66,
+    67,
+    70,
+    74,
+    77,
+    82,
+    84,
+    87,
+    89,
+    92,
+    96,
+    99,
+    101,
+    102,
+    107,
+    113,
+    114,
+    120
+  ],
+  "inputImagesChanged": 0,
+  "imagesRendered": 0,
+  "officeCalls": 0,
+  "sourceMutations": 0,
+  "registryCalls": 0
+}

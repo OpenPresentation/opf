@@ -39,3 +39,7 @@ Never force-push, push folded source branches, merge evidence-only branches, rew
 [Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. All seven 0.33.0 packages are now genuinely verified at 26fd4de9; the once-only registry plan and maintained quickstart pass, and the retained six-package consumer binds exact counts/content/lock integrity. [Post-publication receipt](core-033-currency/post-publication/receipt.json). E1/E2/E3 comparison/planning artifact refresh and sites remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.
 
 - [Current033skill-reference correction](033-skill-reference.md): published-schema-backed regions/direction/size guidance plus current YAML convert verb; all six skill entrypoints/eight references audited within format/export-availability scope, historical guidance retained, public sites await gated main SHA.
+
+## Evidence-only visual continuation
+
+[Sheets61–120](e1-review61-120.md) are individually reviewed and checksum-bound:60sheets/230triptychs, with129 original warnings retained and invalid stress layouts explicitly unaccepted. No new defect class; a duplicate reducer maps to LH101, and actual chart-report gaps are being corrected in F3. Earlier60 remain immutable. The other124 sheets/474triptychs are still separately assigned, not silently accepted. Never merge this evidence branch.

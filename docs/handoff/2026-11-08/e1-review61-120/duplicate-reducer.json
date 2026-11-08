@@ -1,0 +1,60 @@
+{
+  "authoredBlocksExact": true,
+  "compositionExact": true,
+  "overview": {
+    "id": "dynamic-code-text",
+    "title": "How the running total works",
+    "composition": {
+      "mode": "row",
+      "weights": [
+        3,
+        2
+      ]
+    },
+    "blocks": [
+      {
+        "code": {
+          "language": "javascript",
+          "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+        }
+      },
+      {
+        "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+      }
+    ]
+  },
+  "batch04": {
+    "title": "How the running total works",
+    "composition": {
+      "mode": "row",
+      "weights": [
+        3,
+        2
+      ]
+    },
+    "blocks": [
+      {
+        "code": {
+          "language": "javascript",
+          "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+        }
+      },
+      {
+        "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+      }
+    ],
+    "id": "s50"
+  },
+  "sourceFiles": [
+    {
+      "deck": "overview",
+      "bytes": 40940,
+      "sha256": "d6b26009e7fd11d5750939cfa4f184e89c67ea17365d1142aee57d0c43426729"
+    },
+    {
+      "deck": "batch-04",
+      "bytes": 66114,
+      "sha256": "dd1914a31f922d3b7b38703941ecdcbc8c61efda881d240f0f42221ffbe65aa4"
+    }
+  ]
+}
