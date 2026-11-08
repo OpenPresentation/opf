@@ -1,0 +1,1075 @@
+﻿2026-11-08T06:52:34.7333891Z Current runner version: '2.338.2'
+2026-11-08T06:52:34.7362507Z ##[group]Runner Image Provisioner
+2026-11-08T06:52:34.7363570Z Hosted Compute Agent
+2026-11-08T06:52:34.7364173Z Version: 20261028.624
+2026-11-08T06:52:34.7365038Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-08T06:52:34.7365930Z Build Date: 2026-10-28T21:51:42Z
+2026-11-08T06:52:34.7366614Z Worker ID: {12e79222-ee41-4ac6-96b4-52d368e4b2fe}
+2026-11-08T06:52:34.7367368Z Region: westus
+2026-11-08T06:52:34.7367985Z Cloud: Azure
+2026-11-08T06:52:34.7368503Z ##[endgroup]
+2026-11-08T06:52:34.7370158Z ##[group]Operating System
+2026-11-08T06:52:34.7370820Z Ubuntu
+2026-11-08T06:52:34.7371403Z 24.04.5
+2026-11-08T06:52:34.7371932Z LTS
+2026-11-08T06:52:34.7372447Z ##[endgroup]
+2026-11-08T06:52:34.7373090Z ##[group]Runner Image
+2026-11-08T06:52:34.7373701Z Image: ubuntu-24.04
+2026-11-08T06:52:34.7374345Z Version: 20261101.360.1
+2026-11-08T06:52:34.7375995Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261101.360/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-08T06:52:34.7377713Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261101.360
+2026-11-08T06:52:34.7378742Z ##[endgroup]
+2026-11-08T06:52:34.7379953Z ##[group]GITHUB_TOKEN Permissions
+2026-11-08T06:52:34.7382542Z Contents: read
+2026-11-08T06:52:34.7383265Z Metadata: read
+2026-11-08T06:52:34.7383853Z ##[endgroup]
+2026-11-08T06:52:34.7386745Z Secret source: Actions
+2026-11-08T06:52:34.7387784Z Cache mode: write
+2026-11-08T06:52:34.7388775Z Prepare workflow directory
+2026-11-08T06:52:34.8020583Z Prepare all required actions
+2026-11-08T06:52:34.8073822Z Getting action download info
+2026-11-08T06:52:35.1444348Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-08T06:52:35.2623477Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-08T06:52:35.4471032Z Complete job name: lint (checks 2/2)
+2026-11-08T06:52:35.5739396Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-08T06:52:35.5740536Z with:
+2026-11-08T06:52:35.5740973Z   fetch-depth: 0
+2026-11-08T06:52:35.5741415Z   filter: blob:none
+2026-11-08T06:52:35.5741880Z   persist-credentials: false
+2026-11-08T06:52:35.5742416Z   repository: OpenPresentation/opf
+2026-11-08T06:52:35.5747811Z   token: ***
+2026-11-08T06:52:35.5748301Z   ssh-strict: true
+2026-11-08T06:52:35.5748745Z   ssh-user: git
+2026-11-08T06:52:35.5749218Z   clean: true
+2026-11-08T06:52:35.5749674Z   sparse-checkout-cone-mode: true
+2026-11-08T06:52:35.5750218Z   fetch-tags: false
+2026-11-08T06:52:35.5750669Z   show-progress: true
+2026-11-08T06:52:35.5751115Z   lfs: false
+2026-11-08T06:52:35.5751529Z   submodules: false
+2026-11-08T06:52:35.5751991Z   set-safe-directory: true
+2026-11-08T06:52:35.5752499Z   allow-unsafe-pr-checkout: false
+2026-11-08T06:52:35.5753383Z env:
+2026-11-08T06:52:35.5753862Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:52:35.5754529Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:52:35.5755347Z ##[endgroup]
+2026-11-08T06:52:35.8775945Z Syncing repository: OpenPresentation/opf
+2026-11-08T06:52:35.8779206Z ##[group]Getting Git version info
+2026-11-08T06:52:35.8780440Z Working directory is '/home/runner/work/opf/opf'
+2026-11-08T06:52:35.8782205Z [command]/usr/bin/git version
+2026-11-08T06:52:35.8866615Z git version 2.56.0
+2026-11-08T06:52:35.8892740Z ##[endgroup]
+2026-11-08T06:52:35.8906383Z Temporarily overriding HOME='/home/runner/work/_temp/6acb9bfe-6ed2-4a43-89d6-aaae846c05b3' before making global git config changes
+2026-11-08T06:52:35.8914964Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-08T06:52:35.8936279Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/opf/opf
+2026-11-08T06:52:35.8982019Z Deleting the contents of '/home/runner/work/opf/opf'
+2026-11-08T06:52:35.8986466Z ##[group]Determining repository object format
+2026-11-08T06:52:35.8988589Z ##[endgroup]
+2026-11-08T06:52:35.8989925Z ##[group]Initializing the repository
+2026-11-08T06:52:35.8993983Z [command]/usr/bin/git init /home/runner/work/opf/opf
+2026-11-08T06:52:35.9103524Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-08T06:52:35.9106231Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-08T06:52:35.9107909Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-08T06:52:35.9109157Z hint: call:
+2026-11-08T06:52:35.9109984Z hint:
+2026-11-08T06:52:35.9110783Z hint: 	git config --global init.defaultBranch <name>
+2026-11-08T06:52:35.9111749Z hint:
+2026-11-08T06:52:35.9112697Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-08T06:52:35.9114337Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-08T06:52:35.9115757Z hint:
+2026-11-08T06:52:35.9116402Z hint: 	git branch -m <name>
+2026-11-08T06:52:35.9117254Z hint:
+2026-11-08T06:52:35.9118328Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-08T06:52:35.9119917Z Initialized empty Git repository in /home/runner/work/opf/opf/.git/
+2026-11-08T06:52:35.9127863Z [command]/usr/bin/git remote add origin https://github.com/OpenPresentation/opf
+2026-11-08T06:52:35.9189792Z ##[endgroup]
+2026-11-08T06:52:35.9191282Z ##[group]Disabling automatic garbage collection
+2026-11-08T06:52:35.9193235Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-08T06:52:35.9237193Z ##[endgroup]
+2026-11-08T06:52:35.9238576Z ##[group]Setting up auth
+2026-11-08T06:52:35.9244261Z Removing SSH command configuration
+2026-11-08T06:52:35.9260689Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-08T06:52:35.9303053Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-08T06:52:35.9720072Z Removing HTTP extra header
+2026-11-08T06:52:35.9736915Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-08T06:52:35.9785752Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-08T06:52:36.0040295Z Removing includeIf entries pointing to credentials config files
+2026-11-08T06:52:36.0045822Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-08T06:52:36.0098341Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-08T06:52:36.0368123Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-08T06:52:36.0428769Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/opf/opf/.git.path /home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:36.0480176Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:36.0540696Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:36.0598327Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:36.0650390Z ##[endgroup]
+2026-11-08T06:52:36.0651200Z ##[group]Fetching the repository
+2026-11-08T06:52:36.0660355Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --filter=blob:none origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-11-08T06:52:36.8302309Z From https://github.com/OpenPresentation/opf
+2026-11-08T06:52:36.8305500Z  * [new branch]        bot/tracker-refresh     -> origin/bot/tracker-refresh
+2026-11-08T06:52:36.8308743Z  * [new branch]        claude/amazing-faraday-28p6dh -> origin/claude/amazing-faraday-28p6dh
+2026-11-08T06:52:36.8312084Z  * [new branch]        claude/mcp-windows-build-path -> origin/claude/mcp-windows-build-path
+2026-11-08T06:52:36.8315070Z  * [new branch]        claude/opf-layout-explainer-09ae16 -> origin/claude/opf-layout-explainer-09ae16
+2026-11-08T06:52:36.8318242Z  * [new branch]        codex/burndown-sync     -> origin/codex/burndown-sync
+2026-11-08T06:52:36.8321136Z  * [new branch]        codex/core-docs         -> origin/codex/core-docs
+2026-11-08T06:52:36.8324930Z  * [new branch]        codex/editor-worker-clone-catalogs -> origin/codex/editor-worker-clone-catalogs
+2026-11-08T06:52:36.8328663Z  * [new branch]        codex/handoff-docs      -> origin/codex/handoff-docs
+2026-11-08T06:52:36.8332089Z  * [new branch]        codex/integration-033   -> origin/codex/integration-033
+2026-11-08T06:52:36.8335759Z  * [new branch]        codex/integration-034   -> origin/codex/integration-034
+2026-11-08T06:52:36.8339184Z  * [new branch]        codex/lh-102-centered-stacks -> origin/codex/lh-102-centered-stacks
+2026-11-08T06:52:36.8343166Z  * [new branch]        codex/lh-106-language-embed -> origin/codex/lh-106-language-embed
+2026-11-08T06:52:36.8347146Z  * [new branch]        codex/lh-106-slide-language -> origin/codex/lh-106-slide-language
+2026-11-08T06:52:36.8351463Z  * [new branch]        codex/lh-110-word-numbers -> origin/codex/lh-110-word-numbers
+2026-11-08T06:52:36.8355183Z  * [new branch]        codex/lh-121-localized-status -> origin/codex/lh-121-localized-status
+2026-11-08T06:52:36.8359243Z  * [new branch]        codex/lh-129-closeouts  -> origin/codex/lh-129-closeouts
+2026-11-08T06:52:36.8362861Z  * [new branch]        codex/lh-16-duration-timeline -> origin/codex/lh-16-duration-timeline
+2026-11-08T06:52:36.8365995Z  * [new branch]        codex/lh-171-sibling-list-form -> origin/codex/lh-171-sibling-list-form
+2026-11-08T06:52:36.8368546Z  * [new branch]        codex/lh-173-list-markers -> origin/codex/lh-173-list-markers
+2026-11-08T06:52:36.8371920Z  * [new branch]        codex/lh-175-pareto     -> origin/codex/lh-175-pareto
+2026-11-08T06:52:36.8374225Z  * [new branch]        codex/lh-176-bar-gap    -> origin/codex/lh-176-bar-gap
+2026-11-08T06:52:36.8377097Z  * [new branch]        codex/lh-177-light-fonts -> origin/codex/lh-177-light-fonts
+2026-11-08T06:52:36.8379722Z  * [new branch]        codex/lh-179-editor-windows -> origin/codex/lh-179-editor-windows
+2026-11-08T06:52:36.8382450Z  * [new branch]        codex/lh-182-doughnut-hole -> origin/codex/lh-182-doughnut-hole
+2026-11-08T06:52:36.8385291Z  * [new branch]        codex/lh-182-doughnut-options -> origin/codex/lh-182-doughnut-options
+2026-11-08T06:52:36.8387971Z  * [new branch]        codex/lh-184-columns-largest -> origin/codex/lh-184-columns-largest
+2026-11-08T06:52:36.8390603Z  * [new branch]        codex/lh-185-diagram-direction -> origin/codex/lh-185-diagram-direction
+2026-11-08T06:52:36.8393383Z  * [new branch]        codex/lh-186-layout-before-shrink -> origin/codex/lh-186-layout-before-shrink
+2026-11-08T06:52:36.8396216Z  * [new branch]        codex/lh-187-team-rows  -> origin/codex/lh-187-team-rows
+2026-11-08T06:52:36.8398593Z  * [new branch]        codex/lh-21-sampler-diagrams -> origin/codex/lh-21-sampler-diagrams
+2026-11-08T06:52:36.8401555Z  * [new branch]        codex/lh-30-optional-groups -> origin/codex/lh-30-optional-groups
+2026-11-08T06:52:36.8405628Z  * [new branch]        codex/lh-34-image-callouts -> origin/codex/lh-34-image-callouts
+2026-11-08T06:52:36.8409351Z  * [new branch]        codex/lh-46-closing-lead -> origin/codex/lh-46-closing-lead
+2026-11-08T06:52:36.8413071Z  * [new branch]        codex/lh-61-73-decisions -> origin/codex/lh-61-73-decisions
+2026-11-08T06:52:36.8417546Z  * [new branch]        codex/lh-69-placed-tiles -> origin/codex/lh-69-placed-tiles
+2026-11-08T06:52:36.8421313Z  * [new branch]        codex/lh-75-note-growth -> origin/codex/lh-75-note-growth
+2026-11-08T06:52:36.8425267Z  * [new branch]        codex/lh-75-table-note-decisions -> origin/codex/lh-75-table-note-decisions
+2026-11-08T06:52:36.8429044Z  * [new branch]        codex/lh-80-table-track -> origin/codex/lh-80-table-track
+2026-11-08T06:52:36.8432742Z  * [new branch]        codex/lh-93-horizontal-siblings -> origin/codex/lh-93-horizontal-siblings
+2026-11-08T06:52:36.8437001Z  * [new branch]        codex/never-shrink-audit -> origin/codex/never-shrink-audit
+2026-11-08T06:52:36.8439532Z  * [new branch]        codex/nightly-mcp-windows -> origin/codex/nightly-mcp-windows
+2026-11-08T06:52:36.8442062Z  * [new branch]        codex/release-033-qualification -> origin/codex/release-033-qualification
+2026-11-08T06:52:36.8444598Z  * [new branch]        codex/rr-104-no-autofit -> origin/codex/rr-104-no-autofit
+2026-11-08T06:52:36.8447032Z  * [new branch]        codex/rr-105-academy-ring -> origin/codex/rr-105-academy-ring
+2026-11-08T06:52:36.8449168Z  * [new branch]        codex/rr-105-chart-axes -> origin/codex/rr-105-chart-axes
+2026-11-08T06:52:36.8451291Z  * [new branch]        codex/rr-105-chartex-scale -> origin/codex/rr-105-chartex-scale
+2026-11-08T06:52:36.8453441Z  * [new branch]        codex/rr-105-com-results -> origin/codex/rr-105-com-results
+2026-11-08T06:52:36.8457198Z  * [new branch]        codex/rr-105-completion-readiness -> origin/codex/rr-105-completion-readiness
+2026-11-08T06:52:36.8459712Z  * [new branch]        codex/rr-105-flip-text  -> origin/codex/rr-105-flip-text
+2026-11-08T06:52:36.8461949Z  * [new branch]        codex/rr-105-font-status-native -> origin/codex/rr-105-font-status-native
+2026-11-08T06:52:36.8464209Z  * [new branch]        codex/rr-105-fullci-gate -> origin/codex/rr-105-fullci-gate
+2026-11-08T06:52:36.8467006Z  * [new branch]        codex/rr-105-histogram-axis -> origin/codex/rr-105-histogram-axis
+2026-11-08T06:52:36.8469480Z  * [new branch]        codex/rr-105-language-native -> origin/codex/rr-105-language-native
+2026-11-08T06:52:36.8473026Z  * [new branch]        codex/rr-105-mcp-budget-033 -> origin/codex/rr-105-mcp-budget-033
+2026-11-08T06:52:36.8477135Z  * [new branch]        codex/rr-105-native-title-wrap -> origin/codex/rr-105-native-title-wrap
+2026-11-08T06:52:36.8481157Z  * [new branch]        codex/rr-105-native-wrap-title -> origin/codex/rr-105-native-wrap-title
+2026-11-08T06:52:36.8485312Z  * [new branch]        codex/rr-105-waterfall-axis -> origin/codex/rr-105-waterfall-axis
+2026-11-08T06:52:36.8488403Z  * [new branch]        codex/rr-106-fontconfig-aliases -> origin/codex/rr-106-fontconfig-aliases
+2026-11-08T06:52:36.8490099Z  * [new branch]        codex/rr-106-import-duplicate-ids -> origin/codex/rr-106-import-duplicate-ids
+2026-11-08T06:52:36.8491606Z  * [new branch]        codex/rr-107-release-mcpb -> origin/codex/rr-107-release-mcpb
+2026-11-08T06:52:36.8493131Z  * [new branch]        codex/rr-108-template-goldens -> origin/codex/rr-108-template-goldens
+2026-11-08T06:52:36.8494563Z  * [new branch]        codex/rr-20-table-gap   -> origin/codex/rr-20-table-gap
+2026-11-08T06:52:36.8496454Z  * [new branch]        codex/rr-87-native-owned-copy -> origin/codex/rr-87-native-owned-copy
+2026-11-08T06:52:36.8497925Z  * [new branch]        codex/rr-932-keep-draft-open -> origin/codex/rr-932-keep-draft-open
+2026-11-08T06:52:36.8499480Z  * [new branch]        codex/rr-lo-libreoffice-qualification -> origin/codex/rr-lo-libreoffice-qualification
+2026-11-08T06:52:36.8501123Z  * [new branch]        codex/rr-presenter-flake -> origin/codex/rr-presenter-flake
+2026-11-08T06:52:36.8502553Z  * [new branch]        codex/rr-qual-0.33-windows -> origin/codex/rr-qual-0.33-windows
+2026-11-08T06:52:36.8504055Z  * [new branch]        codex/rr-qual-step-numbering-warning -> origin/codex/rr-qual-step-numbering-warning
+2026-11-08T06:52:36.8505894Z  * [new branch]        codex/rr105-final-evidence -> origin/codex/rr105-final-evidence
+2026-11-08T06:52:36.8507576Z  * [new branch]        codex/sh-08-smartart-import -> origin/codex/sh-08-smartart-import
+2026-11-08T06:52:36.8508946Z  * [new branch]        codex/sh-10-shape-text  -> origin/codex/sh-10-shape-text
+2026-11-08T06:52:36.8510314Z  * [new branch]        codex/sh-11-shape-text-match -> origin/codex/sh-11-shape-text-match
+2026-11-08T06:52:36.8511648Z  * [new branch]        codex/sh-12-dot         -> origin/codex/sh-12-dot
+2026-11-08T06:52:36.8512918Z  * [new branch]        codex/sh-13-plantuml    -> origin/codex/sh-13-plantuml
+2026-11-08T06:52:36.8514295Z  * [new branch]        codex/sh-13-state-arrow-review -> origin/codex/sh-13-state-arrow-review
+2026-11-08T06:52:36.8515933Z  * [new branch]        codex/sh-20-live-domains -> origin/codex/sh-20-live-domains
+2026-11-08T06:52:36.8517285Z  * [new branch]        codex/sh-21-qualification -> origin/codex/sh-21-qualification
+2026-11-08T06:52:36.8519291Z  * [new branch]        codex/sh-23-qualified   -> origin/codex/sh-23-qualified
+2026-11-08T06:52:36.8521503Z  * [new branch]        codex/sh-23-smartart-more-entries -> origin/codex/sh-23-smartart-more-entries
+2026-11-08T06:52:36.8523060Z  * [new branch]        codex/sh-24-inverted-pyramid -> origin/codex/sh-24-inverted-pyramid
+2026-11-08T06:52:36.8524554Z  * [new branch]        codex/sh-25-chart-point-overlays -> origin/codex/sh-25-chart-point-overlays
+2026-11-08T06:52:36.8526579Z  * [new branch]        codex/sh23-check-evidence -> origin/codex/sh23-check-evidence
+2026-11-08T06:52:36.8528237Z  * [new branch]        codex/slide-design-audit-render-checkpoint-20261020 -> origin/codex/slide-design-audit-render-checkpoint-20261020
+2026-11-08T06:52:36.8529846Z  * [new branch]        codex/wave2-review      -> origin/codex/wave2-review
+2026-11-08T06:52:36.8531085Z  * [new branch]        codex/wi-2-evidence     -> origin/codex/wi-2-evidence
+2026-11-08T06:52:36.8532408Z  * [new branch]        handoff/review-sheets-2026-11-07 -> origin/handoff/review-sheets-2026-11-07
+2026-11-08T06:52:36.8533919Z  * [new branch]        main                    -> origin/main
+2026-11-08T06:52:36.8535389Z  * [new branch]        monorepo/import         -> origin/monorepo/import
+2026-11-08T06:52:36.8536617Z  * [new branch]        site-docs/v0.32.1       -> origin/site-docs/v0.32.1
+2026-11-08T06:52:36.8537908Z  * [new tag]           @openpresentation/opf-pptx@v0.8.1 -> @openpresentation/opf-pptx@v0.8.1
+2026-11-08T06:52:36.8539141Z  * [new tag]           cli-v0.1.1              -> cli-v0.1.1
+2026-11-08T06:52:36.8540404Z  * [new tag]           cli-v0.10.0             -> cli-v0.10.0
+2026-11-08T06:52:36.8541476Z  * [new tag]           cli-v0.10.1             -> cli-v0.10.1
+2026-11-08T06:52:36.8542539Z  * [new tag]           cli-v0.11.0             -> cli-v0.11.0
+2026-11-08T06:52:36.8543621Z  * [new tag]           cli-v0.14.0             -> cli-v0.14.0
+2026-11-08T06:52:36.8545044Z  * [new tag]           cli-v0.15.0             -> cli-v0.15.0
+2026-11-08T06:52:36.8546158Z  * [new tag]           cli-v0.16.0             -> cli-v0.16.0
+2026-11-08T06:52:36.8547386Z  * [new tag]           cli-v0.17.0             -> cli-v0.17.0
+2026-11-08T06:52:36.8548438Z  * [new tag]           cli-v0.17.1             -> cli-v0.17.1
+2026-11-08T06:52:36.8549480Z  * [new tag]           cli-v0.18.0             -> cli-v0.18.0
+2026-11-08T06:52:36.8550798Z  * [new tag]           cli-v0.18.1             -> cli-v0.18.1
+2026-11-08T06:52:36.8551860Z  * [new tag]           cli-v0.19.0             -> cli-v0.19.0
+2026-11-08T06:52:36.8552918Z  * [new tag]           cli-v0.2.0              -> cli-v0.2.0
+2026-11-08T06:52:36.8554531Z  * [new tag]           cli-v0.20.0             -> cli-v0.20.0
+2026-11-08T06:52:36.8555875Z  * [new tag]           cli-v0.20.1             -> cli-v0.20.1
+2026-11-08T06:52:36.8556915Z  * [new tag]           cli-v0.21.0             -> cli-v0.21.0
+2026-11-08T06:52:36.8557963Z  * [new tag]           cli-v0.22.0             -> cli-v0.22.0
+2026-11-08T06:52:36.8559115Z  * [new tag]           cli-v0.23.0             -> cli-v0.23.0
+2026-11-08T06:52:36.8560774Z  * [new tag]           cli-v0.24.0             -> cli-v0.24.0
+2026-11-08T06:52:36.8561821Z  * [new tag]           cli-v0.24.1             -> cli-v0.24.1
+2026-11-08T06:52:36.8562858Z  * [new tag]           cli-v0.25.0             -> cli-v0.25.0
+2026-11-08T06:52:36.8563892Z  * [new tag]           cli-v0.3.0              -> cli-v0.3.0
+2026-11-08T06:52:36.8565185Z  * [new tag]           cli-v0.4.0              -> cli-v0.4.0
+2026-11-08T06:52:36.8566273Z  * [new tag]           cli-v0.5.0              -> cli-v0.5.0
+2026-11-08T06:52:36.8567307Z  * [new tag]           cli-v0.6.0              -> cli-v0.6.0
+2026-11-08T06:52:36.8568351Z  * [new tag]           cli-v0.7.0              -> cli-v0.7.0
+2026-11-08T06:52:36.8569375Z  * [new tag]           cli-v0.8.0              -> cli-v0.8.0
+2026-11-08T06:52:36.8570419Z  * [new tag]           cli-v0.8.1              -> cli-v0.8.1
+2026-11-08T06:52:36.8571440Z  * [new tag]           cli-v0.9.0              -> cli-v0.9.0
+2026-11-08T06:52:36.8572534Z  * [new tag]           cli-v0.9.1              -> cli-v0.9.1
+2026-11-08T06:52:36.8573766Z  * [new tag]           cli-v0.9.2              -> cli-v0.9.2
+2026-11-08T06:52:36.8575106Z  * [new tag]           gallery-v1.0.0          -> gallery-v1.0.0
+2026-11-08T06:52:36.8576239Z  * [new tag]           gallery-v2.0.0          -> gallery-v2.0.0
+2026-11-08T06:52:36.8577323Z  * [new tag]           gallery-v3.0.0          -> gallery-v3.0.0
+2026-11-08T06:52:36.8578389Z  * [new tag]           gallery-v4.0.0          -> gallery-v4.0.0
+2026-11-08T06:52:36.8579471Z  * [new tag]           gallery-v5.0.0          -> gallery-v5.0.0
+2026-11-08T06:52:36.8580515Z  * [new tag]           go/v0.1.0               -> go/v0.1.0
+2026-11-08T06:52:36.8581534Z  * [new tag]           js/v0.2.1               -> js/v0.2.1
+2026-11-08T06:52:36.8582600Z  * [new tag]           opf-editor-v0.1.0       -> opf-editor-v0.1.0
+2026-11-08T06:52:36.8583730Z  * [new tag]           opf-editor-v0.1.1       -> opf-editor-v0.1.1
+2026-11-08T06:52:36.8585282Z  * [new tag]           opf-editor-v0.1.2       -> opf-editor-v0.1.2
+2026-11-08T06:52:36.8586497Z  * [new tag]           opf-editor-v0.10.0      -> opf-editor-v0.10.0
+2026-11-08T06:52:36.8587628Z  * [new tag]           opf-editor-v0.10.1      -> opf-editor-v0.10.1
+2026-11-08T06:52:36.8589196Z  * [new tag]           opf-editor-v0.10.2      -> opf-editor-v0.10.2
+2026-11-08T06:52:36.8590683Z  * [new tag]           opf-editor-v0.10.3      -> opf-editor-v0.10.3
+2026-11-08T06:52:36.8591805Z  * [new tag]           opf-editor-v0.10.4      -> opf-editor-v0.10.4
+2026-11-08T06:52:36.8592910Z  * [new tag]           opf-editor-v0.10.5      -> opf-editor-v0.10.5
+2026-11-08T06:52:36.8594022Z  * [new tag]           opf-editor-v0.10.6      -> opf-editor-v0.10.6
+2026-11-08T06:52:36.8595491Z  * [new tag]           opf-editor-v0.11.0      -> opf-editor-v0.11.0
+2026-11-08T06:52:36.8596615Z  * [new tag]           opf-editor-v0.11.1      -> opf-editor-v0.11.1
+2026-11-08T06:52:36.8597731Z  * [new tag]           opf-editor-v0.11.2      -> opf-editor-v0.11.2
+2026-11-08T06:52:36.8598850Z  * [new tag]           opf-editor-v0.11.3      -> opf-editor-v0.11.3
+2026-11-08T06:52:36.8599968Z  * [new tag]           opf-editor-v0.12.1      -> opf-editor-v0.12.1
+2026-11-08T06:52:36.8601216Z  * [new tag]           opf-editor-v0.14.0      -> opf-editor-v0.14.0
+2026-11-08T06:52:36.8602366Z  * [new tag]           opf-editor-v0.14.1      -> opf-editor-v0.14.1
+2026-11-08T06:52:36.8603602Z  * [new tag]           opf-editor-v0.14.2      -> opf-editor-v0.14.2
+2026-11-08T06:52:36.8605239Z  * [new tag]           opf-editor-v0.15.0      -> opf-editor-v0.15.0
+2026-11-08T06:52:36.8606431Z  * [new tag]           opf-editor-v0.16.0      -> opf-editor-v0.16.0
+2026-11-08T06:52:36.8608047Z  * [new tag]           opf-editor-v0.17.0      -> opf-editor-v0.17.0
+2026-11-08T06:52:36.8609493Z  * [new tag]           opf-editor-v0.18.0      -> opf-editor-v0.18.0
+2026-11-08T06:52:36.8610802Z  * [new tag]           opf-editor-v0.18.1      -> opf-editor-v0.18.1
+2026-11-08T06:52:36.8612382Z  * [new tag]           opf-editor-v0.18.2      -> opf-editor-v0.18.2
+2026-11-08T06:52:36.8613861Z  * [new tag]           opf-editor-v0.19.0      -> opf-editor-v0.19.0
+2026-11-08T06:52:36.8615224Z  * [new tag]           opf-editor-v0.2.0       -> opf-editor-v0.2.0
+2026-11-08T06:52:36.8616344Z  * [new tag]           opf-editor-v0.20.0      -> opf-editor-v0.20.0
+2026-11-08T06:52:36.8617444Z  * [new tag]           opf-editor-v0.20.1      -> opf-editor-v0.20.1
+2026-11-08T06:52:36.8618543Z  * [new tag]           opf-editor-v0.20.2      -> opf-editor-v0.20.2
+2026-11-08T06:52:36.8619645Z  * [new tag]           opf-editor-v0.20.3      -> opf-editor-v0.20.3
+2026-11-08T06:52:36.8620753Z  * [new tag]           opf-editor-v0.20.4      -> opf-editor-v0.20.4
+2026-11-08T06:52:36.8621850Z  * [new tag]           opf-editor-v0.22.0      -> opf-editor-v0.22.0
+2026-11-08T06:52:36.8622943Z  * [new tag]           opf-editor-v0.23.0      -> opf-editor-v0.23.0
+2026-11-08T06:52:36.8624039Z  * [new tag]           opf-editor-v0.24.0      -> opf-editor-v0.24.0
+2026-11-08T06:52:36.8625558Z  * [new tag]           opf-editor-v0.24.1      -> opf-editor-v0.24.1
+2026-11-08T06:52:36.8626858Z  * [new tag]           opf-editor-v0.24.2      -> opf-editor-v0.24.2
+2026-11-08T06:52:36.8627970Z  * [new tag]           opf-editor-v0.24.3      -> opf-editor-v0.24.3
+2026-11-08T06:52:36.8629074Z  * [new tag]           opf-editor-v0.25.0      -> opf-editor-v0.25.0
+2026-11-08T06:52:36.8630217Z  * [new tag]           opf-editor-v0.25.1      -> opf-editor-v0.25.1
+2026-11-08T06:52:36.8631337Z  * [new tag]           opf-editor-v0.25.2      -> opf-editor-v0.25.2
+2026-11-08T06:52:36.8632453Z  * [new tag]           opf-editor-v0.25.3      -> opf-editor-v0.25.3
+2026-11-08T06:52:36.8633581Z  * [new tag]           opf-editor-v0.3.0       -> opf-editor-v0.3.0
+2026-11-08T06:52:36.8634955Z  * [new tag]           opf-editor-v0.4.0       -> opf-editor-v0.4.0
+2026-11-08T06:52:36.8636117Z  * [new tag]           opf-editor-v0.5.0       -> opf-editor-v0.5.0
+2026-11-08T06:52:36.8637439Z  * [new tag]           opf-editor-v0.6.0       -> opf-editor-v0.6.0
+2026-11-08T06:52:36.8638564Z  * [new tag]           opf-editor-v0.7.0       -> opf-editor-v0.7.0
+2026-11-08T06:52:36.8639677Z  * [new tag]           opf-editor-v0.7.1       -> opf-editor-v0.7.1
+2026-11-08T06:52:36.8640790Z  * [new tag]           opf-editor-v0.8.0       -> opf-editor-v0.8.0
+2026-11-08T06:52:36.8641900Z  * [new tag]           opf-editor-v0.9.0       -> opf-editor-v0.9.0
+2026-11-08T06:52:36.8642997Z  * [new tag]           opf-pptx-v0.1.0         -> opf-pptx-v0.1.0
+2026-11-08T06:52:36.8644100Z  * [new tag]           opf-pptx-v0.10.0        -> opf-pptx-v0.10.0
+2026-11-08T06:52:36.8645663Z  * [new tag]           opf-pptx-v0.11.0        -> opf-pptx-v0.11.0
+2026-11-08T06:52:36.8646779Z  * [new tag]           opf-pptx-v0.11.1        -> opf-pptx-v0.11.1
+2026-11-08T06:52:36.8647872Z  * [new tag]           opf-pptx-v0.11.2        -> opf-pptx-v0.11.2
+2026-11-08T06:52:36.8648975Z  * [new tag]           opf-pptx-v0.11.3        -> opf-pptx-v0.11.3
+2026-11-08T06:52:36.8650082Z  * [new tag]           opf-pptx-v0.11.4        -> opf-pptx-v0.11.4
+2026-11-08T06:52:36.8651173Z  * [new tag]           opf-pptx-v0.11.5        -> opf-pptx-v0.11.5
+2026-11-08T06:52:36.8652265Z  * [new tag]           opf-pptx-v0.11.6        -> opf-pptx-v0.11.6
+2026-11-08T06:52:36.8653342Z  * [new tag]           opf-pptx-v0.11.7        -> opf-pptx-v0.11.7
+2026-11-08T06:52:36.8654426Z  * [new tag]           opf-pptx-v0.11.8        -> opf-pptx-v0.11.8
+2026-11-08T06:52:36.8655796Z  * [new tag]           opf-pptx-v0.11.9        -> opf-pptx-v0.11.9
+2026-11-08T06:52:36.8656900Z  * [new tag]           opf-pptx-v0.12.0        -> opf-pptx-v0.12.0
+2026-11-08T06:52:36.8657986Z  * [new tag]           opf-pptx-v0.12.1        -> opf-pptx-v0.12.1
+2026-11-08T06:52:36.8659083Z  * [new tag]           opf-pptx-v0.12.2        -> opf-pptx-v0.12.2
+2026-11-08T06:52:36.8660187Z  * [new tag]           opf-pptx-v0.12.3        -> opf-pptx-v0.12.3
+2026-11-08T06:52:36.8661516Z  * [new tag]           opf-pptx-v0.12.4        -> opf-pptx-v0.12.4
+2026-11-08T06:52:36.8662600Z  * [new tag]           opf-pptx-v0.13.0        -> opf-pptx-v0.13.0
+2026-11-08T06:52:36.8663686Z  * [new tag]           opf-pptx-v0.13.1        -> opf-pptx-v0.13.1
+2026-11-08T06:52:36.8664894Z  * [new tag]           opf-pptx-v0.13.2        -> opf-pptx-v0.13.2
+2026-11-08T06:52:36.8666155Z  * [new tag]           opf-pptx-v0.14.0        -> opf-pptx-v0.14.0
+2026-11-08T06:52:36.8667252Z  * [new tag]           opf-pptx-v0.15.0        -> opf-pptx-v0.15.0
+2026-11-08T06:52:36.8668332Z  * [new tag]           opf-pptx-v0.16.0        -> opf-pptx-v0.16.0
+2026-11-08T06:52:36.8669416Z  * [new tag]           opf-pptx-v0.16.1        -> opf-pptx-v0.16.1
+2026-11-08T06:52:36.8670492Z  * [new tag]           opf-pptx-v0.17.0        -> opf-pptx-v0.17.0
+2026-11-08T06:52:36.8671574Z  * [new tag]           opf-pptx-v0.18.0        -> opf-pptx-v0.18.0
+2026-11-08T06:52:36.8672651Z  * [new tag]           opf-pptx-v0.18.1        -> opf-pptx-v0.18.1
+2026-11-08T06:52:36.8673769Z  * [new tag]           opf-pptx-v0.18.2        -> opf-pptx-v0.18.2
+2026-11-08T06:52:36.8675153Z  * [new tag]           opf-pptx-v0.19.0        -> opf-pptx-v0.19.0
+2026-11-08T06:52:36.8676279Z  * [new tag]           opf-pptx-v0.2.0         -> opf-pptx-v0.2.0
+2026-11-08T06:52:36.8677387Z  * [new tag]           opf-pptx-v0.2.1         -> opf-pptx-v0.2.1
+2026-11-08T06:52:36.8678483Z  * [new tag]           opf-pptx-v0.20.0        -> opf-pptx-v0.20.0
+2026-11-08T06:52:36.8679568Z  * [new tag]           opf-pptx-v0.20.1        -> opf-pptx-v0.20.1
+2026-11-08T06:52:36.8680652Z  * [new tag]           opf-pptx-v0.20.2        -> opf-pptx-v0.20.2
+2026-11-08T06:52:36.8681752Z  * [new tag]           opf-pptx-v0.20.3        -> opf-pptx-v0.20.3
+2026-11-08T06:52:36.8682835Z  * [new tag]           opf-pptx-v0.20.4        -> opf-pptx-v0.20.4
+2026-11-08T06:52:36.8683909Z  * [new tag]           opf-pptx-v0.22.0        -> opf-pptx-v0.22.0
+2026-11-08T06:52:36.8685504Z  * [new tag]           opf-pptx-v0.22.1        -> opf-pptx-v0.22.1
+2026-11-08T06:52:36.8686659Z  * [new tag]           opf-pptx-v0.23.0        -> opf-pptx-v0.23.0
+2026-11-08T06:52:36.8687746Z  * [new tag]           opf-pptx-v0.24.0        -> opf-pptx-v0.24.0
+2026-11-08T06:52:36.8688824Z  * [new tag]           opf-pptx-v0.24.1        -> opf-pptx-v0.24.1
+2026-11-08T06:52:36.8689899Z  * [new tag]           opf-pptx-v0.25.0        -> opf-pptx-v0.25.0
+2026-11-08T06:52:36.8690985Z  * [new tag]           opf-pptx-v0.3.0         -> opf-pptx-v0.3.0
+2026-11-08T06:52:36.8692073Z  * [new tag]           opf-pptx-v0.4.0         -> opf-pptx-v0.4.0
+2026-11-08T06:52:36.8693156Z  * [new tag]           opf-pptx-v0.5.0         -> opf-pptx-v0.5.0
+2026-11-08T06:52:36.8694235Z  * [new tag]           opf-pptx-v0.5.1         -> opf-pptx-v0.5.1
+2026-11-08T06:52:36.8695683Z  * [new tag]           opf-pptx-v0.5.2         -> opf-pptx-v0.5.2
+2026-11-08T06:52:36.8696770Z  * [new tag]           opf-pptx-v0.6.0         -> opf-pptx-v0.6.0
+2026-11-08T06:52:36.8697875Z  * [new tag]           opf-pptx-v0.7.0         -> opf-pptx-v0.7.0
+2026-11-08T06:52:36.8698961Z  * [new tag]           opf-pptx-v0.8.0         -> opf-pptx-v0.8.0
+2026-11-08T06:52:36.8700038Z  * [new tag]           opf-pptx-v0.8.1         -> opf-pptx-v0.8.1
+2026-11-08T06:52:36.8701123Z  * [new tag]           opf-pptx-v0.9.0         -> opf-pptx-v0.9.0
+2026-11-08T06:52:36.8702194Z  * [new tag]           opf-pptx-v0.9.1         -> opf-pptx-v0.9.1
+2026-11-08T06:52:36.8703272Z  * [new tag]           opf-render-v0.1.0       -> opf-render-v0.1.0
+2026-11-08T06:52:36.8704360Z  * [new tag]           opf-render-v0.1.1       -> opf-render-v0.1.1
+2026-11-08T06:52:36.8705722Z  * [new tag]           opf-render-v0.10.0      -> opf-render-v0.10.0
+2026-11-08T06:52:36.8706814Z  * [new tag]           opf-render-v0.11.0      -> opf-render-v0.11.0
+2026-11-08T06:52:36.8707894Z  * [new tag]           opf-render-v0.11.1      -> opf-render-v0.11.1
+2026-11-08T06:52:36.8708993Z  * [new tag]           opf-render-v0.11.2      -> opf-render-v0.11.2
+2026-11-08T06:52:36.8710294Z  * [new tag]           opf-render-v0.11.3      -> opf-render-v0.11.3
+2026-11-08T06:52:36.8711386Z  * [new tag]           opf-render-v0.11.4      -> opf-render-v0.11.4
+2026-11-08T06:52:36.8712482Z  * [new tag]           opf-render-v0.11.5      -> opf-render-v0.11.5
+2026-11-08T06:52:36.8713574Z  * [new tag]           opf-render-v0.11.6      -> opf-render-v0.11.6
+2026-11-08T06:52:36.8715004Z  * [new tag]           opf-render-v0.11.7      -> opf-render-v0.11.7
+2026-11-08T06:52:36.8716245Z  * [new tag]           opf-render-v0.11.8      -> opf-render-v0.11.8
+2026-11-08T06:52:36.8717358Z  * [new tag]           opf-render-v0.11.9      -> opf-render-v0.11.9
+2026-11-08T06:52:36.8718449Z  * [new tag]           opf-render-v0.12.0      -> opf-render-v0.12.0
+2026-11-08T06:52:36.8719548Z  * [new tag]           opf-render-v0.12.1      -> opf-render-v0.12.1
+2026-11-08T06:52:36.8720650Z  * [new tag]           opf-render-v0.12.2      -> opf-render-v0.12.2
+2026-11-08T06:52:36.8721758Z  * [new tag]           opf-render-v0.13.0      -> opf-render-v0.13.0
+2026-11-08T06:52:36.8722846Z  * [new tag]           opf-render-v0.13.1      -> opf-render-v0.13.1
+2026-11-08T06:52:36.8723935Z  * [new tag]           opf-render-v0.14.0      -> opf-render-v0.14.0
+2026-11-08T06:52:36.8725344Z  * [new tag]           opf-render-v0.15.0      -> opf-render-v0.15.0
+2026-11-08T06:52:36.8726463Z  * [new tag]           opf-render-v0.16.0      -> opf-render-v0.16.0
+2026-11-08T06:52:36.8727553Z  * [new tag]           opf-render-v0.17.0      -> opf-render-v0.17.0
+2026-11-08T06:52:36.8728648Z  * [new tag]           opf-render-v0.17.1      -> opf-render-v0.17.1
+2026-11-08T06:52:36.8729729Z  * [new tag]           opf-render-v0.18.0      -> opf-render-v0.18.0
+2026-11-08T06:52:36.8730831Z  * [new tag]           opf-render-v0.18.1      -> opf-render-v0.18.1
+2026-11-08T06:52:36.8731914Z  * [new tag]           opf-render-v0.18.2      -> opf-render-v0.18.2
+2026-11-08T06:52:36.8733003Z  * [new tag]           opf-render-v0.19.0      -> opf-render-v0.19.0
+2026-11-08T06:52:36.8734268Z  * [new tag]           opf-render-v0.19.1      -> opf-render-v0.19.1
+2026-11-08T06:52:36.8735583Z  * [new tag]           opf-render-v0.2.0       -> opf-render-v0.2.0
+2026-11-08T06:52:36.8736693Z  * [new tag]           opf-render-v0.20.0      -> opf-render-v0.20.0
+2026-11-08T06:52:36.8737788Z  * [new tag]           opf-render-v0.20.1      -> opf-render-v0.20.1
+2026-11-08T06:52:36.8738894Z  * [new tag]           opf-render-v0.20.2      -> opf-render-v0.20.2
+2026-11-08T06:52:36.8739981Z  * [new tag]           opf-render-v0.20.3      -> opf-render-v0.20.3
+2026-11-08T06:52:36.8741066Z  * [new tag]           opf-render-v0.20.4      -> opf-render-v0.20.4
+2026-11-08T06:52:36.8742154Z  * [new tag]           opf-render-v0.22.0      -> opf-render-v0.22.0
+2026-11-08T06:52:36.8743241Z  * [new tag]           opf-render-v0.22.1      -> opf-render-v0.22.1
+2026-11-08T06:52:36.8744321Z  * [new tag]           opf-render-v0.22.2      -> opf-render-v0.22.2
+2026-11-08T06:52:36.8745769Z  * [new tag]           opf-render-v0.23.0      -> opf-render-v0.23.0
+2026-11-08T06:52:36.8746870Z  * [new tag]           opf-render-v0.24.0      -> opf-render-v0.24.0
+2026-11-08T06:52:36.8747967Z  * [new tag]           opf-render-v0.24.1      -> opf-render-v0.24.1
+2026-11-08T06:52:36.8749050Z  * [new tag]           opf-render-v0.24.2      -> opf-render-v0.24.2
+2026-11-08T06:52:36.8750146Z  * [new tag]           opf-render-v0.24.3      -> opf-render-v0.24.3
+2026-11-08T06:52:36.8751243Z  * [new tag]           opf-render-v0.25.0      -> opf-render-v0.25.0
+2026-11-08T06:52:36.8752331Z  * [new tag]           opf-render-v0.3.0       -> opf-render-v0.3.0
+2026-11-08T06:52:36.8753406Z  * [new tag]           opf-render-v0.4.0       -> opf-render-v0.4.0
+2026-11-08T06:52:36.8754484Z  * [new tag]           opf-render-v0.5.0       -> opf-render-v0.5.0
+2026-11-08T06:52:36.8755948Z  * [new tag]           opf-render-v0.5.1       -> opf-render-v0.5.1
+2026-11-08T06:52:36.8757066Z  * [new tag]           opf-render-v0.6.0       -> opf-render-v0.6.0
+2026-11-08T06:52:36.8758423Z  * [new tag]           opf-render-v0.7.0       -> opf-render-v0.7.0
+2026-11-08T06:52:36.8759505Z  * [new tag]           opf-render-v0.8.0       -> opf-render-v0.8.0
+2026-11-08T06:52:36.8760587Z  * [new tag]           opf-render-v0.8.1       -> opf-render-v0.8.1
+2026-11-08T06:52:36.8761666Z  * [new tag]           opf-render-v0.9.0       -> opf-render-v0.9.0
+2026-11-08T06:52:36.8762725Z  * [new tag]           opf-v0.10.0             -> opf-v0.10.0
+2026-11-08T06:52:36.8763756Z  * [new tag]           opf-v0.10.1             -> opf-v0.10.1
+2026-11-08T06:52:36.8764988Z  * [new tag]           opf-v0.11.0             -> opf-v0.11.0
+2026-11-08T06:52:36.8766038Z  * [new tag]           opf-v0.11.1             -> opf-v0.11.1
+2026-11-08T06:52:36.8767073Z  * [new tag]           opf-v0.11.2             -> opf-v0.11.2
+2026-11-08T06:52:36.8768102Z  * [new tag]           opf-v0.11.3             -> opf-v0.11.3
+2026-11-08T06:52:36.8769154Z  * [new tag]           opf-v0.11.4             -> opf-v0.11.4
+2026-11-08T06:52:36.8770191Z  * [new tag]           opf-v0.12.0             -> opf-v0.12.0
+2026-11-08T06:52:36.8771227Z  * [new tag]           opf-v0.12.1             -> opf-v0.12.1
+2026-11-08T06:52:36.8772259Z  * [new tag]           opf-v0.12.2             -> opf-v0.12.2
+2026-11-08T06:52:36.8773296Z  * [new tag]           opf-v0.13.0             -> opf-v0.13.0
+2026-11-08T06:52:36.8774371Z  * [new tag]           opf-v0.14.0             -> opf-v0.14.0
+2026-11-08T06:52:36.8775558Z  * [new tag]           opf-v0.15.0             -> opf-v0.15.0
+2026-11-08T06:52:36.8776959Z  * [new tag]           opf-v0.15.1             -> opf-v0.15.1
+2026-11-08T06:52:36.8777993Z  * [new tag]           opf-v0.16.0             -> opf-v0.16.0
+2026-11-08T06:52:36.8779030Z  * [new tag]           opf-v0.17.0             -> opf-v0.17.0
+2026-11-08T06:52:36.8780060Z  * [new tag]           opf-v0.18.0             -> opf-v0.18.0
+2026-11-08T06:52:36.8781082Z  * [new tag]           opf-v0.18.1             -> opf-v0.18.1
+2026-11-08T06:52:36.8782352Z  * [new tag]           opf-v0.18.2             -> opf-v0.18.2
+2026-11-08T06:52:36.8783406Z  * [new tag]           opf-v0.18.3             -> opf-v0.18.3
+2026-11-08T06:52:36.8784452Z  * [new tag]           opf-v0.18.4             -> opf-v0.18.4
+2026-11-08T06:52:36.8785806Z  * [new tag]           opf-v0.19.0             -> opf-v0.19.0
+2026-11-08T06:52:36.8786844Z  * [new tag]           opf-v0.2.2              -> opf-v0.2.2
+2026-11-08T06:52:36.8787864Z  * [new tag]           opf-v0.20.1             -> opf-v0.20.1
+2026-11-08T06:52:36.8788895Z  * [new tag]           opf-v0.20.2             -> opf-v0.20.2
+2026-11-08T06:52:36.8789916Z  * [new tag]           opf-v0.20.3             -> opf-v0.20.3
+2026-11-08T06:52:36.8790941Z  * [new tag]           opf-v0.20.4             -> opf-v0.20.4
+2026-11-08T06:52:36.8791961Z  * [new tag]           opf-v0.20.5             -> opf-v0.20.5
+2026-11-08T06:52:36.8793001Z  * [new tag]           opf-v0.21.0             -> opf-v0.21.0
+2026-11-08T06:52:36.8794062Z  * [new tag]           opf-v0.22.0             -> opf-v0.22.0
+2026-11-08T06:52:36.8795271Z  * [new tag]           opf-v0.22.1             -> opf-v0.22.1
+2026-11-08T06:52:36.8796292Z  * [new tag]           opf-v0.22.2             -> opf-v0.22.2
+2026-11-08T06:52:36.8797321Z  * [new tag]           opf-v0.23.0             -> opf-v0.23.0
+2026-11-08T06:52:36.8798348Z  * [new tag]           opf-v0.24.0             -> opf-v0.24.0
+2026-11-08T06:52:36.8799372Z  * [new tag]           opf-v0.24.1             -> opf-v0.24.1
+2026-11-08T06:52:36.8800413Z  * [new tag]           opf-v0.24.2             -> opf-v0.24.2
+2026-11-08T06:52:36.8801442Z  * [new tag]           opf-v0.25.0             -> opf-v0.25.0
+2026-11-08T06:52:36.8802468Z  * [new tag]           opf-v0.3.0              -> opf-v0.3.0
+2026-11-08T06:52:36.8803489Z  * [new tag]           opf-v0.4.0              -> opf-v0.4.0
+2026-11-08T06:52:36.8804501Z  * [new tag]           opf-v0.4.1              -> opf-v0.4.1
+2026-11-08T06:52:36.8805659Z  * [new tag]           opf-v0.5.0              -> opf-v0.5.0
+2026-11-08T06:52:36.8806858Z  * [new tag]           opf-v0.6.0              -> opf-v0.6.0
+2026-11-08T06:52:36.8807885Z  * [new tag]           opf-v0.7.0              -> opf-v0.7.0
+2026-11-08T06:52:36.8808907Z  * [new tag]           opf-v0.8.0              -> opf-v0.8.0
+2026-11-08T06:52:36.8809929Z  * [new tag]           opf-v0.9.0              -> opf-v0.9.0
+2026-11-08T06:52:36.8810940Z  * [new tag]           v0.26.0                 -> v0.26.0
+2026-11-08T06:52:36.8811968Z  * [new tag]           v0.26.0-rc.0            -> v0.26.0-rc.0
+2026-11-08T06:52:36.8812991Z  * [new tag]           v0.26.1                 -> v0.26.1
+2026-11-08T06:52:36.8813988Z  * [new tag]           v0.26.10                -> v0.26.10
+2026-11-08T06:52:36.8815131Z  * [new tag]           v0.26.2                 -> v0.26.2
+2026-11-08T06:52:36.8816122Z  * [new tag]           v0.26.3                 -> v0.26.3
+2026-11-08T06:52:36.8817110Z  * [new tag]           v0.26.4                 -> v0.26.4
+2026-11-08T06:52:36.8818114Z  * [new tag]           v0.26.5                 -> v0.26.5
+2026-11-08T06:52:36.8819101Z  * [new tag]           v0.26.6                 -> v0.26.6
+2026-11-08T06:52:36.8820103Z  * [new tag]           v0.26.7                 -> v0.26.7
+2026-11-08T06:52:36.8821108Z  * [new tag]           v0.26.8                 -> v0.26.8
+2026-11-08T06:52:36.8822093Z  * [new tag]           v0.26.9                 -> v0.26.9
+2026-11-08T06:52:36.8823088Z  * [new tag]           v0.27.0                 -> v0.27.0
+2026-11-08T06:52:36.8824059Z  * [new tag]           v0.28.0                 -> v0.28.0
+2026-11-08T06:52:36.8825205Z  * [new tag]           v0.29.0                 -> v0.29.0
+2026-11-08T06:52:36.8826174Z  * [new tag]           v0.29.1                 -> v0.29.1
+2026-11-08T06:52:36.8827138Z  * [new tag]           v0.30.0                 -> v0.30.0
+2026-11-08T06:52:36.8828107Z  * [new tag]           v0.31.0                 -> v0.31.0
+2026-11-08T06:52:36.8829073Z  * [new tag]           v0.32.0                 -> v0.32.0
+2026-11-08T06:52:36.8830179Z  * [new tag]           v0.32.1                 -> v0.32.1
+2026-11-08T06:52:36.8832480Z [command]/usr/bin/git branch --list --remote origin/main
+2026-11-08T06:52:36.8833569Z   origin/main
+2026-11-08T06:52:36.8835552Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-11-08T06:52:36.8836537Z 7c0c3f13e9de77e038b6ec26183043eb7fe90822
+2026-11-08T06:52:36.8838784Z ##[endgroup]
+2026-11-08T06:52:36.8840034Z ##[group]Determining the checkout info
+2026-11-08T06:52:36.8841330Z ##[endgroup]
+2026-11-08T06:52:36.8842147Z [command]/usr/bin/git sparse-checkout disable
+2026-11-08T06:52:36.8844157Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-08T06:52:36.8846909Z ##[group]Checking out the ref
+2026-11-08T06:52:36.8847992Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-08T06:52:43.0745603Z Updating files:   0% (1/22160)
+2026-11-08T06:52:43.0938420Z Updating files:   1% (222/22160)
+2026-11-08T06:52:43.1101423Z Updating files:   2% (444/22160)
+2026-11-08T06:52:43.1618933Z Updating files:   3% (665/22160)
+2026-11-08T06:52:43.1831887Z Updating files:   4% (887/22160)
+2026-11-08T06:52:43.2236159Z Updating files:   5% (1108/22160)
+2026-11-08T06:52:43.2393663Z Updating files:   6% (1330/22160)
+2026-11-08T06:52:43.2669279Z Updating files:   7% (1552/22160)
+2026-11-08T06:52:43.2900584Z Updating files:   8% (1773/22160)
+2026-11-08T06:52:43.3223720Z Updating files:   9% (1995/22160)
+2026-11-08T06:52:43.3394063Z Updating files:  10% (2216/22160)
+2026-11-08T06:52:43.3589197Z Updating files:  11% (2438/22160)
+2026-11-08T06:52:43.3792638Z Updating files:  12% (2660/22160)
+2026-11-08T06:52:43.3980929Z Updating files:  13% (2881/22160)
+2026-11-08T06:52:43.4165195Z Updating files:  14% (3103/22160)
+2026-11-08T06:52:43.4382657Z Updating files:  15% (3324/22160)
+2026-11-08T06:52:43.4562610Z Updating files:  16% (3546/22160)
+2026-11-08T06:52:43.4745772Z Updating files:  17% (3768/22160)
+2026-11-08T06:52:43.5087287Z Updating files:  18% (3989/22160)
+2026-11-08T06:52:43.5379916Z Updating files:  19% (4211/22160)
+2026-11-08T06:52:43.5646863Z Updating files:  20% (4432/22160)
+2026-11-08T06:52:43.5837768Z Updating files:  21% (4654/22160)
+2026-11-08T06:52:43.6050809Z Updating files:  22% (4876/22160)
+2026-11-08T06:52:43.6158251Z Updating files:  23% (5097/22160)
+2026-11-08T06:52:43.6307298Z Updating files:  24% (5319/22160)
+2026-11-08T06:52:43.6409439Z Updating files:  25% (5540/22160)
+2026-11-08T06:52:43.6550147Z Updating files:  26% (5762/22160)
+2026-11-08T06:52:43.6948390Z Updating files:  27% (5984/22160)
+2026-11-08T06:52:43.7114736Z Updating files:  28% (6205/22160)
+2026-11-08T06:52:43.7401311Z Updating files:  29% (6427/22160)
+2026-11-08T06:52:43.7541001Z Updating files:  30% (6648/22160)
+2026-11-08T06:52:43.7758205Z Updating files:  31% (6870/22160)
+2026-11-08T06:52:43.7937005Z Updating files:  32% (7092/22160)
+2026-11-08T06:52:43.8095364Z Updating files:  33% (7313/22160)
+2026-11-08T06:52:43.8211291Z Updating files:  34% (7535/22160)
+2026-11-08T06:52:43.8356757Z Updating files:  35% (7756/22160)
+2026-11-08T06:52:43.8535478Z Updating files:  36% (7978/22160)
+2026-11-08T06:52:43.8826135Z Updating files:  37% (8200/22160)
+2026-11-08T06:52:43.8865141Z Updating files:  37% (8345/22160)
+2026-11-08T06:52:43.9530705Z Updating files:  38% (8421/22160)
+2026-11-08T06:52:43.9690763Z Updating files:  39% (8643/22160)
+2026-11-08T06:52:43.9847954Z Updating files:  40% (8864/22160)
+2026-11-08T06:52:44.0297482Z Updating files:  41% (9086/22160)
+2026-11-08T06:52:44.0463055Z Updating files:  42% (9308/22160)
+2026-11-08T06:52:44.0621901Z Updating files:  43% (9529/22160)
+2026-11-08T06:52:44.0790672Z Updating files:  44% (9751/22160)
+2026-11-08T06:52:44.0963008Z Updating files:  45% (9972/22160)
+2026-11-08T06:52:44.1067279Z Updating files:  46% (10194/22160)
+2026-11-08T06:52:44.1178599Z Updating files:  47% (10416/22160)
+2026-11-08T06:52:44.1427361Z Updating files:  48% (10637/22160)
+2026-11-08T06:52:44.1748712Z Updating files:  49% (10859/22160)
+2026-11-08T06:52:44.1873124Z Updating files:  50% (11080/22160)
+2026-11-08T06:52:44.2091553Z Updating files:  51% (11302/22160)
+2026-11-08T06:52:44.2320507Z Updating files:  52% (11524/22160)
+2026-11-08T06:52:44.2524067Z Updating files:  53% (11745/22160)
+2026-11-08T06:52:44.2646008Z Updating files:  54% (11967/22160)
+2026-11-08T06:52:44.2764028Z Updating files:  55% (12188/22160)
+2026-11-08T06:52:44.2873530Z Updating files:  56% (12410/22160)
+2026-11-08T06:52:44.3123730Z Updating files:  57% (12632/22160)
+2026-11-08T06:52:44.3362633Z Updating files:  58% (12853/22160)
+2026-11-08T06:52:44.3553270Z Updating files:  59% (13075/22160)
+2026-11-08T06:52:44.3872844Z Updating files:  60% (13296/22160)
+2026-11-08T06:52:44.4020596Z Updating files:  61% (13518/22160)
+2026-11-08T06:52:44.4194946Z Updating files:  62% (13740/22160)
+2026-11-08T06:52:44.4493466Z Updating files:  63% (13961/22160)
+2026-11-08T06:52:44.4756607Z Updating files:  64% (14183/22160)
+2026-11-08T06:52:44.5078035Z Updating files:  65% (14404/22160)
+2026-11-08T06:52:44.5942712Z Updating files:  66% (14626/22160)
+2026-11-08T06:52:44.6357842Z Updating files:  67% (14848/22160)
+2026-11-08T06:52:44.6520235Z Updating files:  68% (15069/22160)
+2026-11-08T06:52:44.6700849Z Updating files:  69% (15291/22160)
+2026-11-08T06:52:44.6876935Z Updating files:  70% (15512/22160)
+2026-11-08T06:52:44.7004663Z Updating files:  71% (15734/22160)
+2026-11-08T06:52:44.7159525Z Updating files:  72% (15956/22160)
+2026-11-08T06:52:44.7357307Z Updating files:  73% (16177/22160)
+2026-11-08T06:52:44.7535226Z Updating files:  74% (16399/22160)
+2026-11-08T06:52:44.7709133Z Updating files:  75% (16620/22160)
+2026-11-08T06:52:44.8021745Z Updating files:  76% (16842/22160)
+2026-11-08T06:52:44.8314990Z Updating files:  77% (17064/22160)
+2026-11-08T06:52:44.8490277Z Updating files:  78% (17285/22160)
+2026-11-08T06:52:44.8826277Z Updating files:  79% (17507/22160)
+2026-11-08T06:52:44.8870155Z Updating files:  79% (17702/22160)
+2026-11-08T06:52:44.9952633Z Updating files:  80% (17728/22160)
+2026-11-08T06:52:45.0650889Z Updating files:  81% (17950/22160)
+2026-11-08T06:52:45.2020127Z Updating files:  82% (18172/22160)
+2026-11-08T06:52:45.2203733Z Updating files:  83% (18393/22160)
+2026-11-08T06:52:45.2309505Z Updating files:  84% (18615/22160)
+2026-11-08T06:52:45.2414363Z Updating files:  85% (18836/22160)
+2026-11-08T06:52:45.2506397Z Updating files:  86% (19058/22160)
+2026-11-08T06:52:45.2594588Z Updating files:  87% (19280/22160)
+2026-11-08T06:52:45.2681622Z Updating files:  88% (19501/22160)
+2026-11-08T06:52:45.2756848Z Updating files:  89% (19723/22160)
+2026-11-08T06:52:45.2832909Z Updating files:  90% (19944/22160)
+2026-11-08T06:52:45.2920979Z Updating files:  91% (20166/22160)
+2026-11-08T06:52:45.2998992Z Updating files:  92% (20388/22160)
+2026-11-08T06:52:45.3073408Z Updating files:  93% (20609/22160)
+2026-11-08T06:52:45.3155304Z Updating files:  94% (20831/22160)
+2026-11-08T06:52:45.3236389Z Updating files:  95% (21052/22160)
+2026-11-08T06:52:45.3319444Z Updating files:  96% (21274/22160)
+2026-11-08T06:52:45.3446946Z Updating files:  97% (21496/22160)
+2026-11-08T06:52:45.3604129Z Updating files:  98% (21717/22160)
+2026-11-08T06:52:45.3790617Z Updating files:  99% (21939/22160)
+2026-11-08T06:52:45.3791158Z Updating files: 100% (22160/22160)
+2026-11-08T06:52:45.3791604Z Updating files: 100% (22160/22160), done.
+2026-11-08T06:52:45.4050632Z Switched to a new branch 'main'
+2026-11-08T06:52:45.4057831Z branch 'main' set up to track 'origin/main'.
+2026-11-08T06:52:45.4165122Z ##[endgroup]
+2026-11-08T06:52:45.4225912Z [command]/usr/bin/git log -1 --format=%H
+2026-11-08T06:52:45.4264984Z 7c0c3f13e9de77e038b6ec26183043eb7fe90822
+2026-11-08T06:52:45.4274193Z ##[group]Removing auth
+2026-11-08T06:52:45.4274485Z Removing SSH command configuration
+2026-11-08T06:52:45.4279855Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-08T06:52:45.4323634Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-08T06:52:45.4608707Z Removing HTTP extra header
+2026-11-08T06:52:45.4613108Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-08T06:52:45.4658827Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-08T06:52:45.4937230Z Removing includeIf entries pointing to credentials config files
+2026-11-08T06:52:45.4941899Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-08T06:52:45.4982097Z includeif.gitdir:/home/runner/work/opf/opf/.git.path
+2026-11-08T06:52:45.4982853Z includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path
+2026-11-08T06:52:45.4983418Z includeif.gitdir:/github/workspace/.git.path
+2026-11-08T06:52:45.4983805Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-08T06:52:45.4991663Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/opf/opf/.git.path
+2026-11-08T06:52:45.5027266Z /home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:45.5040950Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/opf/opf/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-8d91eda7\-55d9\-41b1\-9f78\-ae67626bbc10\.config
+2026-11-08T06:52:45.5089183Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path
+2026-11-08T06:52:45.5127575Z /home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:45.5146408Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/opf/opf/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-8d91eda7\-55d9\-41b1\-9f78\-ae67626bbc10\.config
+2026-11-08T06:52:45.5184195Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-08T06:52:45.5220490Z /github/runner_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:45.5228477Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-8d91eda7\-55d9\-41b1\-9f78\-ae67626bbc10\.config
+2026-11-08T06:52:45.5273017Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-08T06:52:45.5308307Z /github/runner_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config
+2026-11-08T06:52:45.5317005Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-8d91eda7\-55d9\-41b1\-9f78\-ae67626bbc10\.config
+2026-11-08T06:52:45.5364979Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-08T06:52:45.5640001Z Removing credentials config '/home/runner/work/_temp/git-credentials-8d91eda7-55d9-41b1-9f78-ae67626bbc10.config'
+2026-11-08T06:52:45.5649773Z ##[endgroup]
+2026-11-08T06:52:45.5956961Z Prepare all required actions
+2026-11-08T06:52:45.5957543Z Getting action download info
+2026-11-08T06:52:45.7356870Z Download action repository 'pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413' (SHA:ea17c68df8912ef543352723c149a84f56e3d413)
+2026-11-08T06:52:46.0307721Z Download action repository 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+2026-11-08T06:52:46.2111856Z ##[group]Run ./.github/actions/setup-workspace
+2026-11-08T06:52:46.2112169Z with:
+2026-11-08T06:52:46.2112368Z   container: false
+2026-11-08T06:52:46.2112576Z   node-version: 24
+2026-11-08T06:52:46.2112766Z env:
+2026-11-08T06:52:46.2112980Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:52:46.2113273Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:52:46.2113494Z ##[endgroup]
+2026-11-08T06:52:46.2172630Z ##[start-action display=Install pnpm (host runner);id=__self.__pnpm_action-setup]
+2026-11-08T06:52:46.2231268Z ##[group]Run pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+2026-11-08T06:52:46.2231647Z with:
+2026-11-08T06:52:46.2231842Z   dest: ~/setup-pnpm
+2026-11-08T06:52:46.2232056Z   run_install: null
+2026-11-08T06:52:46.2232257Z   cache: false
+2026-11-08T06:52:46.2232476Z   cache_dependency_path: pnpm-lock.yaml
+2026-11-08T06:52:46.2232763Z   package_json_file: package.json
+2026-11-08T06:52:46.2233015Z   standalone: false
+2026-11-08T06:52:46.2233208Z env:
+2026-11-08T06:52:46.2233423Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:52:46.2233719Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:52:46.2233936Z ##[endgroup]
+2026-11-08T06:52:46.3850849Z ##[group]Running self-installer...
+2026-11-08T06:52:51.9130964Z 
+2026-11-08T06:52:51.9131492Z added 1 package, and audited 2 packages in 2s
+2026-11-08T06:52:51.9131950Z 
+2026-11-08T06:52:51.9132150Z 1 package is looking for funding
+2026-11-08T06:52:51.9132648Z   run `npm fund` for details
+2026-11-08T06:52:51.9139452Z 
+2026-11-08T06:52:51.9139667Z found 0 vulnerabilities
+2026-11-08T06:52:52.8795462Z Checking for updates...
+2026-11-08T06:52:53.0332499Z Switching pnpm from v11.25.0 to v10.33.2...
+2026-11-08T06:52:53.6218821Z .../v11/9ba-1a1b9ee6f3b-1e6c20cd0f34b59a | Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-08T06:52:53.6244595Z .../v11/9ba-1a1b9ee6f3b-1e6c20cd0f34b59a |   +1 +
+2026-11-08T06:52:53.9183728Z .../v11/9ba-1a1b9ee6f3b-1e6c20cd0f34b59a | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2026-11-08T06:52:54.3716159Z [WARN] Detected a pnpm v10 installation layout at PNPM_HOME. The pnpm shims at PNPM_HOME have been refreshed so the new version is active, but pnpm v11 expects bins in PNPM_HOME/bin. Run "pnpm setup" to migrate your PATH to the v11 layout.
+2026-11-08T06:52:54.3759050Z Successfully updated pnpm to v10.33.2
+2026-11-08T06:52:54.4134158Z ##[endgroup]
+2026-11-08T06:52:54.4135491Z Installation Completed!
+2026-11-08T06:52:54.4244513Z ##[end-action id=__self.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=8207]
+2026-11-08T06:52:54.4248879Z ##[start-action display=Install pnpm (container);id=__self.__run]
+2026-11-08T06:52:54.4256177Z ##[end-action id=__self.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-08T06:52:54.4258508Z ##[start-action display=Trust the checkout (container);id=__self.__run_2]
+2026-11-08T06:52:54.4262366Z ##[end-action id=__self.__run_2;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-08T06:52:54.4264364Z ##[start-action display=Set up Node.js;id=__self.__actions_setup-node]
+2026-11-08T06:52:54.4402223Z ##[group]Run actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+2026-11-08T06:52:54.4402595Z with:
+2026-11-08T06:52:54.4402792Z   node-version: 24
+2026-11-08T06:52:54.4403004Z   cache: pnpm
+2026-11-08T06:52:54.4403214Z   check-latest: false
+2026-11-08T06:52:54.4405779Z   token: ***
+2026-11-08T06:52:54.4406034Z   package-manager-cache: true
+2026-11-08T06:52:54.4406283Z env:
+2026-11-08T06:52:54.4406506Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:52:54.4407050Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:52:54.4407358Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-08T06:52:54.4407669Z ##[endgroup]
+2026-11-08T06:52:54.6285565Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-08T06:52:55.5141179Z ##[group]Environment details
+2026-11-08T06:52:57.8524944Z node: v24.22.2
+2026-11-08T06:52:57.8525381Z npm: 11.19.1
+2026-11-08T06:52:57.8525590Z yarn: 1.22.22
+2026-11-08T06:52:57.8526123Z ##[endgroup]
+2026-11-08T06:52:57.8548790Z [command]/home/runner/setup-pnpm/node_modules/.bin/bin/pnpm store path --silent
+2026-11-08T06:52:58.4966366Z /home/runner/setup-pnpm/node_modules/.bin/store/v10
+2026-11-08T06:52:58.7658265Z Cache hit for: node-cache-Linux-x64-pnpm-e2467126f29f2bdfb707528726852628e29784e1070dee3ea2ea7f2b15fdf6f6
+2026-11-08T06:53:00.0436001Z Received 16777216 of 400849942 (4.2%), 16.0 MBs/sec
+2026-11-08T06:53:01.0435430Z Received 134217728 of 400849942 (33.5%), 64.0 MBs/sec
+2026-11-08T06:53:02.0476096Z Received 293601280 of 400849942 (73.2%), 93.3 MBs/sec
+2026-11-08T06:53:02.6726366Z Received 400849942 of 400849942 (100.0%), 105.3 MBs/sec
+2026-11-08T06:53:02.6727880Z Cache Size: ~382 MB (400849942 B)
+2026-11-08T06:53:02.6846800Z [command]/usr/bin/tar -xf /home/runner/work/_temp/68b59801-acbf-40b7-9e6d-8a7c20ff0d96/cache.tzst -P -C /home/runner/work/opf/opf --use-compress-program unzstd
+2026-11-08T06:53:05.2553647Z Cache restored successfully
+2026-11-08T06:53:05.2740802Z Cache restored from key: node-cache-Linux-x64-pnpm-e2467126f29f2bdfb707528726852628e29784e1070dee3ea2ea7f2b15fdf6f6
+2026-11-08T06:53:05.2929094Z ##[end-action id=__self.__actions_setup-node;outcome=success;conclusion=success;duration_ms=10866]
+2026-11-08T06:53:05.2931966Z ##[start-action display=Install dependencies;id=__self.__run_3]
+2026-11-08T06:53:05.2969571Z ##[group]Run node -e "console.log('Node', process.version)"
+2026-11-08T06:53:05.2970119Z [36;1mnode -e "console.log('Node', process.version)"[0m
+2026-11-08T06:53:05.2970525Z [36;1mpnpm install --frozen-lockfile[0m
+2026-11-08T06:53:05.3129642Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-08T06:53:05.3130025Z env:
+2026-11-08T06:53:05.3130276Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:53:05.3130591Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:53:05.3130894Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-08T06:53:05.3131214Z ##[endgroup]
+2026-11-08T06:53:05.3588485Z Node v24.22.2
+2026-11-08T06:53:05.7065943Z Scope: all 9 workspace projects
+2026-11-08T06:53:05.7605915Z Lockfile is up to date, resolution step is skipped
+2026-11-08T06:53:05.8215510Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-11-08T06:53:05.8912182Z Packages: +297
+2026-11-08T06:53:05.8916006Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-11-08T06:53:06.8235024Z Progress: resolved 297, reused 297, downloaded 0, added 296
+2026-11-08T06:53:06.8761768Z Progress: resolved 297, reused 297, downloaded 0, added 297, done
+2026-11-08T06:53:07.0444116Z  WARN  Failed to create bin at /home/runner/work/opf/opf/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.0448364Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.0454563Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.0457930Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.0460966Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/cli/dist/index.js'
+2026-11-08T06:53:07.0464135Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.0468412Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1139466Z 
+2026-11-08T06:53:07.1139981Z devDependencies:
+2026-11-08T06:53:07.1140575Z + @biomejs/biome 2.6.4
+2026-11-08T06:53:07.1141305Z + @openpresentation/gallery 0.32.1 <- packages/gallery
+2026-11-08T06:53:07.1142165Z + @openpresentation/opf 0.32.1 <- packages/javascript
+2026-11-08T06:53:07.1142953Z + @openpresentation/opf-pptx 0.32.1 <- packages/pptx
+2026-11-08T06:53:07.1143796Z + @openpresentation/opf-render 0.32.1 <- packages/render
+2026-11-08T06:53:07.1144533Z + @typescript/native <- typescript 7.0.2
+2026-11-08T06:53:07.1145152Z 
+2026-11-08T06:53:07.1385330Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/pptx/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/pptx/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1599424Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/editor/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/editor/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1603611Z  WARN  Failed to create bin at /home/runner/work/opf/opf/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1607274Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/cli/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/cli/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1610971Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/integration/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/integration/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1700484Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/mcp/node_modules/.bin/opf. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/mcp/node_modules/@openpresentation/cli/dist/index.js'
+2026-11-08T06:53:07.1703036Z  WARN  Failed to create bin at /home/runner/work/opf/opf/packages/mcp/node_modules/.bin/opf-preview-fonts. ENOENT: no such file or directory, open '/home/runner/work/opf/opf/packages/mcp/node_modules/@openpresentation/opf-render/dist/preview-fonts-cli.js'
+2026-11-08T06:53:07.1895435Z Done in 1.7s using pnpm v10.33.2
+2026-11-08T06:53:07.2230142Z ##[end-action id=__self.__run_3;outcome=success;conclusion=success;duration_ms=1929]
+2026-11-08T06:53:07.2234204Z ##[start-action display=Build the dependencies;id=__self.__run_4]
+2026-11-08T06:53:07.2239812Z ##[end-action id=__self.__run_4;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-08T06:53:07.2289698Z ##[group]Run pnpm build
+2026-11-08T06:53:07.2289989Z [36;1mpnpm build[0m
+2026-11-08T06:53:07.2311315Z shell: /usr/bin/bash -e {0}
+2026-11-08T06:53:07.2311569Z env:
+2026-11-08T06:53:07.2311797Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:53:07.2312102Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:53:07.2312395Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-08T06:53:07.2312733Z ##[endgroup]
+2026-11-08T06:53:07.5477892Z 
+2026-11-08T06:53:07.5479011Z > openpresentation-workspace@ build /home/runner/work/opf/opf
+2026-11-08T06:53:07.5480031Z > pnpm run build:packages
+2026-11-08T06:53:07.5480491Z 
+2026-11-08T06:53:07.8921397Z 
+2026-11-08T06:53:07.8922575Z > openpresentation-workspace@ build:packages /home/runner/work/opf/opf
+2026-11-08T06:53:07.8923259Z > pnpm -r --if-present run build
+2026-11-08T06:53:07.8923511Z 
+2026-11-08T06:53:08.2559396Z Scope: 8 of 9 workspace projects
+2026-11-08T06:53:08.2619105Z packages/gallery build$ node scripts/build.mjs
+2026-11-08T06:53:08.4482189Z packages/gallery build: Built @openpresentation/gallery: 222 content records, 36 layout previews.
+2026-11-08T06:53:08.4565471Z packages/gallery build: Done
+2026-11-08T06:53:08.4575804Z packages/javascript build$ node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+2026-11-08T06:53:08.8176864Z packages/javascript build: > @openpresentation/opf@0.32.1 generate /home/runner/work/opf/opf/packages/javascript
+2026-11-08T06:53:08.8178941Z packages/javascript build: > node scripts/generate.mjs && node scripts/generate-content.mjs
+2026-11-08T06:53:10.5900692Z packages/javascript build: Generated src/generated/examples.ts (137 examples, 7 galleries)
+2026-11-08T06:53:10.6209097Z packages/javascript build: Generated src/generated/docs.ts (67 docs)
+2026-11-08T06:53:10.6216134Z packages/javascript build: Generated src/generated/repo-readme.ts (19043 bytes)
+2026-11-08T06:53:10.9913432Z packages/javascript build: [34mCLI[39m Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","schema":"src/schema-navigation.ts","source":"src/source.ts","patch":"src/patch.ts","ids":"src/ids.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","shape-geometry":"src/shape-geometry.ts","shape-catalog":"src/shape-catalog.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts","schema-engine-ajv":"src/schema-engine-ajv.ts","schema-engine-precompiled":"src/schema-engine-precompiled.ts","precompiled":"src/precompiled.ts","diagram-engine-eager":"src/diagram-engine-eager.ts","diagram-engine-lazy":"src/diagram-engine-lazy.ts","shape-engine-eager":"src/shape-engine-eager.ts","shape-engine-lazy":"src/shape-engine-lazy.ts"}
+2026-11-08T06:53:10.9930578Z packages/javascript build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-08T06:53:10.9931269Z packages/javascript build: [34mCLI[39m tsup v9.0.0
+2026-11-08T06:53:10.9932430Z packages/javascript build: [34mCLI[39m Using tsup config: /home/runner/work/opf/opf/packages/javascript/tsup.config.ts
+2026-11-08T06:53:11.0006053Z packages/javascript build: [34mCLI[39m Target: es2022
+2026-11-08T06:53:11.0059003Z packages/javascript build: [34mCLI[39m Cleaning output folder
+2026-11-08T06:53:11.0071578Z packages/javascript build: [34mESM[39m Build start
+2026-11-08T06:53:11.4937067Z packages/javascript build: [34mDTS[39m Build start
+2026-11-08T06:53:12.4306297Z packages/javascript build: Generated an empty chunk: "types".
+2026-11-08T06:53:18.0349152Z packages/javascript build: [32mESM[39m [1mdist/conversion-2ALFGO4U.js          [22m[32m835.00 B[39m
+2026-11-08T06:53:18.0351130Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-module-BK7JNEUV.js [22m[32m308.00 B[39m
+2026-11-08T06:53:18.0352787Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-eager.js           [22m[32m323.00 B[39m
+2026-11-08T06:53:18.0354429Z packages/javascript build: [32mESM[39m [1mdist/repo-readme.js                  [22m[32m19.00 KB[39m
+2026-11-08T06:53:18.0356567Z packages/javascript build: [32mESM[39m [1mdist/browser.js                      [22m[32m4.31 KB[39m
+2026-11-08T06:53:18.0358446Z packages/javascript build: [32mESM[39m [1mdist/shape-engine-lazy.js            [22m[32m308.00 B[39m
+2026-11-08T06:53:18.0366885Z packages/javascript build: [32mESM[39m [1mdist/node-engine.js                  [22m[32m2.85 KB[39m
+2026-11-08T06:53:18.0398356Z packages/javascript build: [32mESM[39m [1mdist/schema-engine-ajv.js            [22m[32m1.15 KB[39m
+2026-11-08T06:53:18.0420937Z packages/javascript build: [32mESM[39m [1mdist/schema-engine-precompiled.js    [22m[32m131.00 B[39m
+2026-11-08T06:53:18.0422251Z packages/javascript build: [32mESM[39m [1mdist/chunk-IJXKVM4W.js               [22m[32m10.69 KB[39m
+2026-11-08T06:53:18.0423197Z packages/javascript build: [32mESM[39m [1mdist/chunk-43JWUIGF.js               [22m[32m203.00 B[39m
+2026-11-08T06:53:18.0424081Z packages/javascript build: [32mESM[39m [1mdist/precompiled.js                  [22m[32m231.00 B[39m
+2026-11-08T06:53:18.0425256Z packages/javascript build: [32mESM[39m [1mdist/diagram-engine-lazy.js          [22m[32m133.00 B[39m
+2026-11-08T06:53:18.0426167Z packages/javascript build: [32mESM[39m [1mdist/diagram-engine-eager.js         [22m[32m178.00 B[39m
+2026-11-08T06:53:18.0427039Z packages/javascript build: [32mESM[39m [1mdist/chunk-PMF6OZDS.js               [22m[32m69.67 KB[39m
+2026-11-08T06:53:18.0427883Z packages/javascript build: [32mESM[39m [1mdist/index.js                        [22m[32m5.41 KB[39m
+2026-11-08T06:53:18.0428716Z packages/javascript build: [32mESM[39m [1mdist/chunk-INIMUBSE.js               [22m[32m286.00 B[39m
+2026-11-08T06:53:18.0429548Z packages/javascript build: [32mESM[39m [1mdist/composition.js                  [22m[32m12.54 KB[39m
+2026-11-08T06:53:18.0430372Z packages/javascript build: [32mESM[39m [1mdist/schemas.js                      [22m[32m241.00 B[39m
+2026-11-08T06:53:18.0431218Z packages/javascript build: [32mESM[39m [1mdist/types.js                        [22m[32m1.00 B[39m
+2026-11-08T06:53:18.0432056Z packages/javascript build: [32mESM[39m [1mdist/validator.js                    [22m[32m368.00 B[39m
+2026-11-08T06:53:18.0432906Z packages/javascript build: [32mESM[39m [1mdist/chunk-W4DYDRV2.js               [22m[32m6.21 KB[39m
+2026-11-08T06:53:18.0433738Z packages/javascript build: [32mESM[39m [1mdist/spec-files.js                   [22m[32m115.00 B[39m
+2026-11-08T06:53:18.0434578Z packages/javascript build: [32mESM[39m [1mdist/chunk-DAS75LGR.js               [22m[32m47.25 KB[39m
+2026-11-08T06:53:18.0435708Z packages/javascript build: [32mESM[39m [1mdist/format.js                       [22m[32m157.00 B[39m
+2026-11-08T06:53:18.0436554Z packages/javascript build: [32mESM[39m [1mdist/font-policy.js                  [22m[32m151.00 B[39m
+2026-11-08T06:53:18.0437701Z packages/javascript build: [32mESM[39m [1mdist/convert.js                      [22m[32m59.65 KB[39m
+2026-11-08T06:53:18.0438573Z packages/javascript build: [32mESM[39m [1mdist/chunk-PJSPHHRK.js               [22m[32m154.05 KB[39m
+2026-11-08T06:53:18.0439431Z packages/javascript build: [32mESM[39m [1mdist/shape-geometry.js               [22m[32m229.00 B[39m
+2026-11-08T06:53:18.0440295Z packages/javascript build: [32mESM[39m [1mdist/symbol-font-encodings.js        [22m[32m414.09 KB[39m
+2026-11-08T06:53:18.0441306Z packages/javascript build: [32mESM[39m [1mdist/shape-catalog.js                [22m[32m14.63 KB[39m
+2026-11-08T06:53:18.0442158Z packages/javascript build: [32mESM[39m [1mdist/data.js                         [22m[32m443.00 B[39m
+2026-11-08T06:53:18.0443005Z packages/javascript build: [32mESM[39m [1mdist/pagination.js                   [22m[32m282.00 B[39m
+2026-11-08T06:53:18.0443853Z packages/javascript build: [32mESM[39m [1mdist/chunk-XIOC6N5P.js               [22m[32m6.31 KB[39m
+2026-11-08T06:53:18.0445476Z packages/javascript build: [32mESM[39m [1mdist/deck.js                         [22m[32m474.00 B[39m
+2026-11-08T06:53:18.0446666Z packages/javascript build: [32mESM[39m [1mdist/chunk-XANW7MB7.js               [22m[32m2.94 KB[39m
+2026-11-08T06:53:18.0447555Z packages/javascript build: [32mESM[39m [1mdist/markdown.js                     [22m[32m390.00 B[39m
+2026-11-08T06:53:18.0448408Z packages/javascript build: [32mESM[39m [1mdist/chunk-ABWEUXLV.js               [22m[32m30.50 KB[39m
+2026-11-08T06:53:18.0449248Z packages/javascript build: [32mESM[39m [1mdist/yaml.js                         [22m[32m390.00 B[39m
+2026-11-08T06:53:18.0450081Z packages/javascript build: [32mESM[39m [1mdist/chunk-E7WQHMCL.js               [22m[32m31.09 KB[39m
+2026-11-08T06:53:18.0450919Z packages/javascript build: [32mESM[39m [1mdist/chunk-R6C6BQOG.js               [22m[32m3.70 KB[39m
+2026-11-08T06:53:18.0451749Z packages/javascript build: [32mESM[39m [1mdist/chunk-S5QRGMUQ.js               [22m[32m15.19 KB[39m
+2026-11-08T06:53:18.0452579Z packages/javascript build: [32mESM[39m [1mdist/schema.js                       [22m[32m396.00 B[39m
+2026-11-08T06:53:18.0453751Z packages/javascript build: [32mESM[39m [1mdist/chunk-RYZPBJLB.js               [22m[32m302.00 B[39m
+2026-11-08T06:53:18.0454909Z packages/javascript build: [32mESM[39m [1mdist/chunk-BI4ERFAA.js               [22m[32m42.86 KB[39m
+2026-11-08T06:53:18.0456524Z packages/javascript build: [32mESM[39m [1mdist/source.js                       [22m[32m22.70 KB[39m
+2026-11-08T06:53:18.0458080Z packages/javascript build: [32mESM[39m [1mdist/chunk-Y557TYML.js               [22m[32m54.56 KB[39m
+2026-11-08T06:53:18.0459634Z packages/javascript build: [32mESM[39m [1mdist/chunk-KVHNDHVS.js               [22m[32m4.88 KB[39m
+2026-11-08T06:53:18.0461208Z packages/javascript build: [32mESM[39m [1mdist/chunk-VKEYV3ZK.js               [22m[32m4.69 KB[39m
+2026-11-08T06:53:18.0462159Z packages/javascript build: [32mESM[39m [1mdist/patch.js                        [22m[32m536.00 B[39m
+2026-11-08T06:53:18.0463320Z packages/javascript build: [32mESM[39m [1mdist/ids.js                          [22m[32m339.00 B[39m
+2026-11-08T06:53:18.0465271Z packages/javascript build: [32mESM[39m [1mdist/chunk-YYT6N7AI.js               [22m[32m261.58 KB[39m
+2026-11-08T06:53:18.0466970Z packages/javascript build: [32mESM[39m [1mdist/diff.js                         [22m[32m271.00 B[39m
+2026-11-08T06:53:18.0468724Z packages/javascript build: [32mESM[39m [1mdist/chunk-QD6DPS7X.js               [22m[32m30.58 KB[39m
+2026-11-08T06:53:18.0470366Z packages/javascript build: [32mESM[39m [1mdist/chunk-YS333HLA.js               [22m[32m10.03 KB[39m
+2026-11-08T06:53:18.0471985Z packages/javascript build: [32mESM[39m [1mdist/chunk-JBARNYFR.js               [22m[32m776.00 B[39m
+2026-11-08T06:53:18.0473614Z packages/javascript build: [32mESM[39m [1mdist/chunk-VSBZC2PR.js               [22m[32m27.48 KB[39m
+2026-11-08T06:53:18.0479562Z packages/javascript build: [32mESM[39m [1mdist/chunk-QF5RSRXU.js               [22m[32m432.43 KB[39m
+2026-11-08T06:53:18.0480482Z packages/javascript build: [32mESM[39m [1mdist/chunk-PRXZD2II.js               [22m[32m463.00 B[39m
+2026-11-08T06:53:18.0481366Z packages/javascript build: [32mESM[39m [1mdist/chunk-UK3J6FSU.js               [22m[32m479.92 KB[39m
+2026-11-08T06:53:18.0482208Z packages/javascript build: [32mESM[39m [1mdist/chunk-OPVJLL7H.js               [22m[32m1.21 MB[39m
+2026-11-08T06:53:18.0483176Z packages/javascript build: [32mESM[39m [1mdist/docs.js                         [22m[32m1.74 MB[39m
+2026-11-08T06:53:18.0484035Z packages/javascript build: [32mESM[39m [1mdist/chunk-ZXOIGUHX.js               [22m[32m2.26 MB[39m
+2026-11-08T06:53:18.0485387Z packages/javascript build: [32mESM[39m [1mdist/examples.js                     [22m[32m8.82 MB[39m
+2026-11-08T06:53:18.0486744Z packages/javascript build: [32mESM[39m ⚡️ Build success in 7027ms
+2026-11-08T06:53:18.6227813Z packages/javascript build: [plugin dts] Entry "data.d.ts" still references private shared type exports with no public re-export: Chart. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-08T06:53:18.6312811Z packages/javascript build: [plugin dts] Entry "node-engine.d.ts" still references private shared type exports with no public re-export: EmbeddedFace. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-08T06:53:18.6316923Z packages/javascript build: [plugin dts] Entry "schemas.d.ts" still references private shared type exports with no public re-export: JsonObject, JsonSchemaDocument. rollup-plugin-dts will not invent new public exports for these types. Re-export them from a public entry to avoid downstream TS2742 errors.
+2026-11-08T06:53:18.6368186Z packages/javascript build: [32mDTS[39m ⚡️ Build success in 7145ms
+2026-11-08T06:53:18.6375511Z packages/javascript build: [32mDTS[39m [1mdist/precompiled.d.ts               [22m[32m13.00 B[39m
+2026-11-08T06:53:18.6377575Z packages/javascript build: [32mDTS[39m [1mdist/data.d.ts                      [22m[32m2.55 KB[39m
+2026-11-08T06:53:18.6378927Z packages/javascript build: [32mDTS[39m [1mdist/deck.d.ts                      [22m[32m2.89 KB[39m
+2026-11-08T06:53:18.6380691Z packages/javascript build: [32mDTS[39m [1mdist/format.d.ts                    [22m[32m951.00 B[39m
+2026-11-08T06:53:18.6382462Z packages/javascript build: [32mDTS[39m [1mdist/ids.d.ts                       [22m[32m6.71 KB[39m
+2026-11-08T06:53:18.6384126Z packages/javascript build: [32mDTS[39m [1mdist/repo-readme.d.ts               [22m[32m139.00 B[39m
+2026-11-08T06:53:18.6386113Z packages/javascript build: [32mDTS[39m [1mdist/shape-catalog.d.ts             [22m[32m4.49 KB[39m
+2026-11-08T06:53:18.6387108Z packages/javascript build: [32mDTS[39m [1mdist/symbol-font-encodings.d.ts     [22m[32m5.56 KB[39m
+2026-11-08T06:53:18.6387964Z packages/javascript build: [32mDTS[39m [1mdist/shape-geometry.d.ts            [22m[32m7.40 KB[39m
+2026-11-08T06:53:18.6394083Z packages/javascript build: [32mDTS[39m [1mdist/docs.d.ts                      [22m[32m682.00 B[39m
+2026-11-08T06:53:18.6395916Z packages/javascript build: [32mDTS[39m [1mdist/examples.d.ts                  [22m[32m2.07 KB[39m
+2026-11-08T06:53:18.6397475Z packages/javascript build: [32mDTS[39m [1mdist/font-policy.d.ts               [22m[32m7.72 KB[39m
+2026-11-08T06:53:18.6399012Z packages/javascript build: [32mDTS[39m [1mdist/patch.d.ts                     [22m[32m10.44 KB[39m
+2026-11-08T06:53:18.6400546Z packages/javascript build: [32mDTS[39m [1mdist/schema.d.ts                    [22m[32m9.33 KB[39m
+2026-11-08T06:53:18.6402044Z packages/javascript build: [32mDTS[39m [1mdist/yaml.d.ts                      [22m[32m5.88 KB[39m
+2026-11-08T06:53:18.6403800Z packages/javascript build: [32mDTS[39m [1mdist/diff.d.ts                      [22m[32m5.80 KB[39m
+2026-11-08T06:53:18.6405518Z packages/javascript build: [32mDTS[39m [1mdist/validator.d.ts                 [22m[32m5.00 KB[39m
+2026-11-08T06:53:18.6407049Z packages/javascript build: [32mDTS[39m [1mdist/markdown.d.ts                  [22m[32m5.02 KB[39m
+2026-11-08T06:53:18.6423257Z packages/javascript build: [32mDTS[39m [1mdist/convert.d.ts                   [22m[32m14.69 KB[39m
+2026-11-08T06:53:18.6424441Z packages/javascript build: [32mDTS[39m [1mdist/node-engine.d.ts               [22m[32m10.91 KB[39m
+2026-11-08T06:53:18.6425805Z packages/javascript build: [32mDTS[39m [1mdist/source.d.ts                    [22m[32m16.05 KB[39m
+2026-11-08T06:53:18.6426649Z packages/javascript build: [32mDTS[39m [1mdist/index.d.ts                     [22m[32m39.28 KB[39m
+2026-11-08T06:53:18.6427461Z packages/javascript build: [32mDTS[39m [1mdist/schemas.d.ts                   [22m[32m14.06 KB[39m
+2026-11-08T06:53:18.6428425Z packages/javascript build: [32mDTS[39m [1mdist/spec-files.d.ts                [22m[32m1.59 KB[39m
+2026-11-08T06:53:18.6429278Z packages/javascript build: [32mDTS[39m [1mdist/types.d.ts                     [22m[32m73.56 KB[39m
+2026-11-08T06:53:18.6430142Z packages/javascript build: [32mDTS[39m [1mdist/pagination.d.ts                [22m[32m540.00 B[39m
+2026-11-08T06:53:18.6431003Z packages/javascript build: [32mDTS[39m [1mdist/composition.d.ts               [22m[32m24.68 KB[39m
+2026-11-08T06:53:18.6431853Z packages/javascript build: [32mDTS[39m [1mdist/deck-report-BSlRiR0_.d.ts      [22m[32m2.36 KB[39m
+2026-11-08T06:53:18.6432718Z packages/javascript build: [32mDTS[39m [1mdist/catalog-schemas-CQTM-G8p.d.ts  [22m[32m1.70 KB[39m
+2026-11-08T06:53:18.6433563Z packages/javascript build: [32mDTS[39m [1mdist/chart-data-oIZQlFGi.d.ts       [22m[32m10.97 KB[39m
+2026-11-08T06:53:18.6434460Z packages/javascript build: [32mDTS[39m [1mdist/presentation-CXhfpB_z.d.ts     [22m[32m283.17 KB[39m
+2026-11-08T06:53:18.6435666Z packages/javascript build: [32mDTS[39m [1mdist/catalog-refs-B_0_vZg0.d.ts     [22m[32m7.55 KB[39m
+2026-11-08T06:53:18.6436564Z packages/javascript build: [32mDTS[39m [1mdist/json-BFSdESOE.d.ts             [22m[32m825.00 B[39m
+2026-11-08T06:53:18.6437420Z packages/javascript build: [32mDTS[39m [1mdist/finding-l9dlQ2NF.d.ts          [22m[32m7.24 KB[39m
+2026-11-08T06:53:18.6438269Z packages/javascript build: [32mDTS[39m [1mdist/pagination-CYzNMazO.d.ts       [22m[32m13.43 KB[39m
+2026-11-08T06:53:18.6439110Z packages/javascript build: [32mDTS[39m [1mdist/explain-iZeNOUc6.d.ts          [22m[32m3.89 KB[39m
+2026-11-08T06:53:18.6439950Z packages/javascript build: [32mDTS[39m [1mdist/validation-types-COwTel3H.d.ts [22m[32m15.12 KB[39m
+2026-11-08T06:53:18.6440781Z packages/javascript build: [32mDTS[39m [1mdist/conversion-B_qrIHaL.d.ts       [22m[32m31.92 KB[39m
+2026-11-08T06:53:18.6441633Z packages/javascript build: [32mDTS[39m [1mdist/composition-zMiIgzip.d.ts      [22m[32m456.70 KB[39m
+2026-11-08T06:53:19.1468265Z packages/javascript build: Minified dist/chunk-ZXOIGUHX.js: 2367010 -> 1808396 bytes.
+2026-11-08T06:53:19.2280717Z packages/javascript build: Done
+2026-11-08T06:53:19.2285242Z packages/render build$ node scripts/build.mjs
+2026-11-08T06:53:19.2691944Z packages/render build: Done
+2026-11-08T06:53:19.2696000Z packages/pptx build$ node scripts/build.mjs
+2026-11-08T06:53:19.3163408Z packages/pptx build: Vendored upstream distribution and license match recorded hashes.
+2026-11-08T06:53:19.3357149Z packages/pptx build: Done
+2026-11-08T06:53:19.3364502Z packages/cli build$ node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp)
+2026-11-08T06:53:19.3367128Z packages/editor build$ node scripts/build.mjs
+2026-11-08T06:53:19.4581717Z packages/editor build: Done
+2026-11-08T06:53:19.7104482Z packages/cli build: [34mCLI[39m Building entry: {"index":"src/index.ts"}
+2026-11-08T06:53:19.7106306Z packages/cli build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-08T06:53:19.7111214Z packages/cli build: [34mCLI[39m tsup v9.0.0
+2026-11-08T06:53:19.7112885Z packages/cli build: [34mCLI[39m Using tsup config: /home/runner/work/opf/opf/packages/cli/tsup.config.ts
+2026-11-08T06:53:19.7129465Z packages/cli build: [34mCLI[39m Target: node24
+2026-11-08T06:53:19.7159279Z packages/cli build: [34mCLI[39m Cleaning output folder
+2026-11-08T06:53:19.7171601Z packages/cli build: [34mESM[39m Build start
+2026-11-08T06:53:19.7718327Z packages/cli build: [32mESM[39m [1mdist/index.js     [22m[32m341.83 KB[39m
+2026-11-08T06:53:19.7719515Z packages/cli build: [32mESM[39m [1mdist/index.js.map [22m[32m489.75 KB[39m
+2026-11-08T06:53:19.7720645Z packages/cli build: [32mESM[39m ⚡️ Build success in 55ms
+2026-11-08T06:53:19.8128578Z packages/cli build: Done
+2026-11-08T06:53:19.8135437Z packages/mcp build$ node ../../scripts/reuse-build.mjs check || (node scripts/build-app.mjs && tsup && node ../../scripts/reuse-build.mjs stamp)
+2026-11-08T06:53:21.7575829Z packages/mcp build: build-app: app-dist/deck-app.html 8300 KiB (script 8057 KiB, styles 240 KiB, 32 faces on request)
+2026-11-08T06:53:22.1030542Z packages/mcp build: [34mCLI[39m Building entry: {"index":"src/index.ts","server":"src/server.ts","stdio":"src/stdio.ts","bin":"src/bin.ts"}
+2026-11-08T06:53:22.1037305Z packages/mcp build: [34mCLI[39m Using tsconfig: tsconfig.json
+2026-11-08T06:53:22.1043294Z packages/mcp build: [34mCLI[39m tsup v9.0.0
+2026-11-08T06:53:22.1044329Z packages/mcp build: [34mCLI[39m Using tsup config: /home/runner/work/opf/opf/packages/mcp/tsup.config.ts
+2026-11-08T06:53:22.1085951Z packages/mcp build: [34mCLI[39m Target: node24
+2026-11-08T06:53:22.1134393Z packages/mcp build: [34mCLI[39m Cleaning output folder
+2026-11-08T06:53:22.1147005Z packages/mcp build: [34mESM[39m Build start
+2026-11-08T06:53:22.4306069Z packages/mcp build: [34mDTS[39m Build start
+2026-11-08T06:53:22.8369563Z packages/mcp build: [32mESM[39m [1mdist/index.js              [22m[32m504.00 B[39m
+2026-11-08T06:53:22.8370949Z packages/mcp build: [32mESM[39m [1mdist/server.js             [22m[32m333.00 B[39m
+2026-11-08T06:53:22.8371802Z packages/mcp build: [32mESM[39m [1mdist/stdio.js              [22m[32m244.00 B[39m
+2026-11-08T06:53:22.8372599Z packages/mcp build: [32mESM[39m [1mdist/bin.js                [22m[32m1.55 KB[39m
+2026-11-08T06:53:22.8373431Z packages/mcp build: [32mESM[39m [1mdist/chunk-JDZ33MNF.js     [22m[32m3.48 KB[39m
+2026-11-08T06:53:22.8374255Z packages/mcp build: [32mESM[39m [1mdist/chunk-42JGPI7A.js     [22m[32m257.62 KB[39m
+2026-11-08T06:53:22.8375632Z packages/mcp build: [32mESM[39m [1mdist/index.js.map          [22m[32m71.00 B[39m
+2026-11-08T06:53:22.8376781Z packages/mcp build: [32mESM[39m [1mdist/server.js.map         [22m[32m71.00 B[39m
+2026-11-08T06:53:22.8377852Z packages/mcp build: [32mESM[39m [1mdist/stdio.js.map          [22m[32m71.00 B[39m
+2026-11-08T06:53:22.8378873Z packages/mcp build: [32mESM[39m [1mdist/bin.js.map            [22m[32m2.17 KB[39m
+2026-11-08T06:53:22.8379902Z packages/mcp build: [32mESM[39m [1mdist/chunk-JDZ33MNF.js.map [22m[32m7.69 KB[39m
+2026-11-08T06:53:22.8380956Z packages/mcp build: [32mESM[39m [1mdist/chunk-42JGPI7A.js.map [22m[32m329.79 KB[39m
+2026-11-08T06:53:22.8382269Z packages/mcp build: [32mESM[39m [1mdist/chunk-TIKDCS5G.js     [22m[32m8.25 MB[39m
+2026-11-08T06:53:22.8383124Z packages/mcp build: [32mESM[39m [1mdist/chunk-TIKDCS5G.js.map [22m[32m8.43 MB[39m
+2026-11-08T06:53:22.8383765Z packages/mcp build: [32mESM[39m ⚡️ Build success in 719ms
+2026-11-08T06:53:24.2953663Z packages/mcp build: [32mDTS[39m ⚡️ Build success in 1867ms
+2026-11-08T06:53:24.2959022Z packages/mcp build: [32mDTS[39m [1mdist/index.d.ts  [22m[32m1.83 KB[39m
+2026-11-08T06:53:24.2959817Z packages/mcp build: [32mDTS[39m [1mdist/stdio.d.ts  [22m[32m1.22 KB[39m
+2026-11-08T06:53:24.2960783Z packages/mcp build: [32mDTS[39m [1mdist/server.d.ts [22m[32m5.46 KB[39m
+2026-11-08T06:53:24.3999235Z packages/mcp build: Done
+2026-11-08T06:53:24.4543962Z ##[group]Run node scripts/run-checks.mjs --shard "2/2"
+2026-11-08T06:53:24.4544974Z [36;1mnode scripts/run-checks.mjs --shard "2/2"[0m
+2026-11-08T06:53:24.4567359Z shell: /usr/bin/bash -e {0}
+2026-11-08T06:53:24.4567632Z env:
+2026-11-08T06:53:24.4567876Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:53:24.4568195Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:53:24.4568499Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-08T06:53:24.4568825Z ##[endgroup]
+2026-11-08T06:53:24.4913784Z run-checks: 37 checks, 4 at a time; logs in artifacts/checks
+2026-11-08T06:53:25.2757464Z [1/37] pnpm run check:audit-restored: passed in 0.8 s
+2026-11-08T06:53:25.2854106Z [2/37] pnpm run check:audit-placement: passed in 0.8 s
+2026-11-08T06:53:25.2920591Z [3/37] pnpm run check:audit-chartex: passed in 0.8 s
+2026-11-08T06:53:26.0656934Z [4/37] pnpm run check:catalog-schema: passed in 0.8 s
+2026-11-08T06:53:27.0237791Z [5/37] pnpm run check:ci-workflows: passed in 1.0 s
+2026-11-08T06:53:27.3849844Z [6/37] pnpm run check:agent-worktree: passed in 2.9 s
+2026-11-08T06:53:27.9206100Z [7/37] pnpm run check:engines-range: passed in 0.9 s
+2026-11-08T06:53:29.8118749Z [8/37] pnpm run check:catalog: passed in 4.5 s
+2026-11-08T06:53:30.6046292Z [9/37] pnpm run check:gallery-editor-assets: passed in 0.8 s
+2026-11-08T06:53:31.3724166Z [10/37] pnpm run check:gallery-editor-wasm: passed in 0.8 s
+2026-11-08T06:53:34.5336691Z [11/37] pnpm run check:font-tracker: passed in 6.6 s
+2026-11-08T06:53:35.3786256Z [12/37] pnpm run check:lazy-font-counts: passed in 0.8 s
+2026-11-08T06:53:36.1739524Z [13/37] pnpm run check:ci-scope: passed in 10.9 s
+2026-11-08T06:53:36.7226619Z [14/37] pnpm run check:gallery-tracker: FAILED (exit 1) in 5.3 s
+2026-11-08T06:53:37.4061176Z [15/37] pnpm run check:one-core: passed in 1.2 s
+2026-11-08T06:53:37.8648290Z [16/37] pnpm run check:first-deck: passed in 10.5 s
+2026-11-08T06:53:38.0108317Z [17/37] pnpm run check:parity-work-directory: passed in 1.3 s
+2026-11-08T06:53:38.4864402Z [18/37] pnpm run check:pins: passed in 1.1 s
+2026-11-08T06:53:38.7643211Z [19/37] pnpm run check:preview-packaging: passed in 0.8 s
+2026-11-08T06:53:38.7721923Z [20/37] pnpm run check:pr-gate: passed in 0.9 s
+2026-11-08T06:53:39.2992657Z [21/37] pnpm run check:published-matrix-consumer: passed in 0.8 s
+2026-11-08T06:53:39.6915682Z [22/37] pnpm run check:native-acceptance: passed in 4.3 s
+2026-11-08T06:53:39.7109215Z [23/37] pnpm run check:registry-fidelity-archive: passed in 0.9 s
+2026-11-08T06:53:39.9786307Z [24/37] pnpm run check:registry-layout-v2: passed in 0.7 s
+2026-11-08T06:53:40.6830563Z [25/37] pnpm run check:release-notes: passed in 1.0 s
+2026-11-08T06:53:40.8588082Z [26/37] pnpm run check:reuse-build: passed in 0.9 s
+2026-11-08T06:53:41.1774450Z [27/37] pnpm run check:schema-docs: passed in 0.5 s
+2026-11-08T06:53:42.0065590Z [28/37] pnpm run check:registry-toolchain: passed in 2.3 s
+2026-11-08T06:53:43.2527820Z [29/37] pnpm run check:spec: passed in 1.2 s
+2026-11-08T06:53:43.4846350Z [30/37] pnpm run check:schema-strict: passed in 2.6 s
+2026-11-08T06:53:44.3351645Z [31/37] pnpm run check:versions: passed in 0.8 s
+2026-11-08T06:53:44.5212974Z [32/37] pnpm run check:stamp-githead: passed in 1.3 s
+2026-11-08T06:53:45.1060643Z [33/37] pnpm run test:gallery-base-fonts: passed in 0.6 s
+2026-11-08T06:53:45.2166312Z [34/37] pnpm run check:workspace-graph: passed in 0.9 s
+2026-11-08T06:53:46.0837168Z [35/37] pnpm run test:gallery-script-fonts: passed in 1.0 s
+2026-11-08T06:53:47.7133993Z [36/37] pnpm run check:rebuilt-release-files: passed in 8.9 s
+2026-11-08T06:54:06.3456677Z [37/37] pnpm run check:skill-commands: passed in 25.2 s
+2026-11-08T06:54:06.3458495Z 
+2026-11-08T06:54:06.3461321Z ##[group]run-checks: check:gallery-tracker failed (exit 1); its output (artifacts/checks/check_gallery-tracker.log):
+2026-11-08T06:54:06.3475637Z 
+2026-11-08T06:54:06.3476421Z > openpresentation-workspace@ check:gallery-tracker /home/runner/work/opf/opf
+2026-11-08T06:54:06.3478178Z > node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check
+2026-11-08T06:54:06.3479280Z 
+2026-11-08T06:54:06.3480311Z Gallery tracker is stale: docs/programs/release-readiness/gallery-tracker.json, docs/programs/release-readiness/gallery-tracker.md
+2026-11-08T06:54:06.3481689Z ✔ every catalog record and every gallery item is exactly one record (75.621528ms)
+2026-11-08T06:54:06.3482386Z ✔ statuses, gaps and the addressed flag are consistent (26.552519ms)
+2026-11-08T06:54:06.3483086Z ✔ columns use their documented values and unknown where nothing measured (16.431573ms)
+2026-11-08T06:54:06.3483808Z ✖ the committed tracker follows the configured freshness policy (912.842536ms)
+2026-11-08T06:54:06.3484542Z ✔ rules match by gap, type, id and detail; links resolve against the burndown (2.822171ms)
+2026-11-08T06:54:06.3485668Z ✔ native evidence counts only native or PowerPoint folders (5.614315ms)
+2026-11-08T06:54:06.3486551Z ✔ the gallery and editor snapshots read pages, previews, published ids, teasers and switch dimensions (9.079004ms)
+2026-11-08T06:54:06.3487405Z ✔ a stale tracker, an unused rule and an unknown RR link fail the build (469.796362ms)
+2026-11-08T06:54:06.3488855Z ✔ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (284.736989ms)
+2026-11-08T06:54:06.3490411Z ✔ input limitations reject unknown records, duplicate scopes and missing evidence (184.272998ms)
+2026-11-08T06:54:06.3491762Z ✔ offline catalog snapshot rejects missing and modified evidence (23.71172ms)
+2026-11-08T06:54:06.3493078Z ✔ v2 layout identity never inherits historical same-name measurements (735.380999ms)
+2026-11-08T06:54:06.3494331Z ✔ offline snapshot rejects wrong integrity, version and gitHead (60.76528ms)
+2026-11-08T06:54:06.3495993Z ✔ old passing and failing audit/native channels cannot certify any schema2 layout (1122.665786ms)
+2026-11-08T06:54:06.3497615Z ✔ slide-size fallback retains the general gap without requiring a dedicated preset result (377.303096ms)
+2026-11-08T06:54:06.3499354Z ✔ a stale tracker fails by default, so main, the merge queue, releases and a local pnpm test stay strict (6.631807ms)
+2026-11-08T06:54:06.3500813Z ✔ OPF_TRACKER_STALE=warn turns the failure into a warning annotation (1.620384ms)
+2026-11-08T06:54:06.3501934Z ✔ any other value is an error rather than a silent pass (0.727997ms)
+2026-11-08T06:54:06.3502603Z ℹ tests 18
+2026-11-08T06:54:06.3502958Z ℹ suites 0
+2026-11-08T06:54:06.3503311Z ℹ pass 17
+2026-11-08T06:54:06.3503664Z ℹ fail 1
+2026-11-08T06:54:06.3504025Z ℹ cancelled 0
+2026-11-08T06:54:06.3504395Z ℹ skipped 0
+2026-11-08T06:54:06.3505060Z ℹ todo 0
+2026-11-08T06:54:06.3505512Z ℹ duration_ms 4607.559143
+2026-11-08T06:54:06.3505771Z 
+2026-11-08T06:54:06.3505968Z ✖ failing tests:
+2026-11-08T06:54:06.3506206Z 
+2026-11-08T06:54:06.3506594Z test at scripts/build-gallery-tracker.test.mjs:121:1
+2026-11-08T06:54:06.3507655Z ✖ the committed tracker follows the configured freshness policy (912.842536ms)
+2026-11-08T06:54:06.3508623Z   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+2026-11-08T06:54:06.3509303Z   
+2026-11-08T06:54:06.3509614Z   true !== false
+2026-11-08T06:54:06.3509938Z   
+2026-11-08T06:54:06.3510824Z       at TestContext.<anonymous> (file:///home/runner/work/opf/opf/scripts/build-gallery-tracker.test.mjs:125:28)
+2026-11-08T06:54:06.3511804Z       at Test.runInAsyncScope (node:async_hooks:227:14)
+2026-11-08T06:54:06.3512496Z       at Test.run (node:internal/test_runner/test:1402:25)
+2026-11-08T06:54:06.3513259Z       at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+2026-11-08T06:54:06.3514029Z       at Test.postRun (node:internal/test_runner/test:1542:19)
+2026-11-08T06:54:06.3514909Z       at Test.run (node:internal/test_runner/test:1467:12)
+2026-11-08T06:54:06.3516077Z       at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+2026-11-08T06:54:06.3516832Z     generatedMessage: true,
+2026-11-08T06:54:06.3517276Z     code: 'ERR_ASSERTION',
+2026-11-08T06:54:06.3517858Z     actual: true,
+2026-11-08T06:54:06.3518282Z     expected: false,
+2026-11-08T06:54:06.3518650Z     operator: 'strictEqual',
+2026-11-08T06:54:06.3519019Z     diff: 'simple'
+2026-11-08T06:54:06.3519325Z   }
+2026-11-08T06:54:06.3519883Z  ELIFECYCLE  Command failed with exit code 1.
+2026-11-08T06:54:06.3520218Z 
+2026-11-08T06:54:06.3520647Z ##[endgroup]
+2026-11-08T06:54:06.3521157Z run-checks: 1 of 37 checks failed: check:gallery-tracker
+2026-11-08T06:54:06.3546484Z ##[error]Process completed with exit code 1.
+2026-11-08T06:54:06.3776368Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-08T06:54:06.3776805Z with:
+2026-11-08T06:54:06.3777022Z   name: evidence-lint-checks-2-2
+2026-11-08T06:54:06.3777295Z   path: artifacts/checks/*.log
+2026-11-08T06:54:06.3777560Z   retention-days: 7
+2026-11-08T06:54:06.3777790Z   if-no-files-found: ignore
+2026-11-08T06:54:06.3778036Z   compression-level: 6
+2026-11-08T06:54:06.3778256Z   overwrite: false
+2026-11-08T06:54:06.3778475Z   include-hidden-files: false
+2026-11-08T06:54:06.3778726Z   archive: true
+2026-11-08T06:54:06.3778923Z env:
+2026-11-08T06:54:06.3779149Z   OPF_REUSE_BUILD: 42456443778-1-lint-checks-2-2
+2026-11-08T06:54:06.3779449Z   OPF_TRACKER_STALE: fail
+2026-11-08T06:54:06.3779733Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2026-11-08T06:54:06.3780053Z ##[endgroup]
+2026-11-08T06:54:06.5356067Z With the provided path, there will be 37 files uploaded
+2026-11-08T06:54:06.5361885Z Artifact name is valid!
+2026-11-08T06:54:06.5362498Z Root directory input is valid!
+2026-11-08T06:54:06.8917838Z Uploading artifact: evidence-lint-checks-2-2.zip
+2026-11-08T06:54:06.8960450Z Beginning upload of artifact content to blob storage
+2026-11-08T06:54:07.3308932Z Uploaded bytes 31312
+2026-11-08T06:54:07.4102195Z Finished uploading artifact content to blob storage!
+2026-11-08T06:54:07.4103669Z SHA256 digest of uploaded artifact is a206aeda1fd83b5446956b001224e62e6c4e40aad7c1b5bd5fbcd9e873047576
+2026-11-08T06:54:07.4104982Z Finalizing artifact upload
+2026-11-08T06:54:07.9569369Z Artifact evidence-lint-checks-2-2 successfully finalized. Artifact ID 13608345075
+2026-11-08T06:54:07.9571196Z Artifact evidence-lint-checks-2-2 has been successfully uploaded! Final size is 31312 bytes. Artifact ID is 13608345075
+2026-11-08T06:54:07.9578540Z Artifact download URL: https://github.com/OpenPresentation/opf/actions/runs/42456443778/artifacts/13608345075
+2026-11-08T06:54:07.9884365Z Post job cleanup.
+2026-11-08T06:54:07.9889246Z ##[start-action display=Set up Node.js;id=__8ecab647-7845-489f-ba5e-334171cd6595.__actions_setup-node]
+2026-11-08T06:54:07.9891407Z ##[end-action id=__8ecab647-7845-489f-ba5e-334171cd6595.__actions_setup-node;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-11-08T06:54:07.9893385Z ##[start-action display=Install pnpm (host runner);id=__8ecab647-7845-489f-ba5e-334171cd6595.__pnpm_action-setup]
+2026-11-08T06:54:07.9927138Z Post job cleanup.
+2026-11-08T06:54:08.1502640Z Pruning is unnecessary.
+2026-11-08T06:54:08.1589299Z ##[end-action id=__8ecab647-7845-489f-ba5e-334171cd6595.__pnpm_action-setup;outcome=success;conclusion=success;duration_ms=169]
+2026-11-08T06:54:08.1662123Z Post job cleanup.
+2026-11-08T06:54:08.2771489Z [command]/usr/bin/git version
+2026-11-08T06:54:08.2823770Z git version 2.56.0
+2026-11-08T06:54:08.2866631Z Temporarily overriding HOME='/home/runner/work/_temp/a62c2a5e-e6e5-4655-aeeb-96553ee8b5d8' before making global git config changes
+2026-11-08T06:54:08.2870456Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-08T06:54:08.2873613Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/opf/opf
+2026-11-08T06:54:08.2915511Z Removing SSH command configuration
+2026-11-08T06:54:08.2923476Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-08T06:54:08.2973272Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-08T06:54:08.3295680Z Removing HTTP extra header
+2026-11-08T06:54:08.3303580Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-08T06:54:08.3349689Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-08T06:54:08.3664949Z Removing includeIf entries pointing to credentials config files
+2026-11-08T06:54:08.3673230Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-08T06:54:08.3729040Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-08T06:54:08.4175501Z Cleaning up orphan processes

@@ -1,0 +1,5 @@
+{
+  "processId": 16400,
+  "reason": "Replace verify-only observer with one required-all batched observer to see main and Release failures promptly",
+  "commandLine": "\"C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe\" scripts/pr-gate.mjs --commit OpenPresentation/opf@7c0c3f13e9de77e038b6ec26183043eb7fe90822 --required verify --interval 180 --timeout-minutes 100"
+}
