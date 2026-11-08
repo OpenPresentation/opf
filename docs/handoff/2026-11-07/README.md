@@ -4,6 +4,7 @@ This is the entry point for whoever continues this work. A supervisor session co
 
 Files in this folder:
 - [wave2-review.md](wave2-review.md): independent code/sheet review of all 17 wave-2 heads, reproduced defects and the assembled preparation branch (not yet CI/native-qualified).
+- [sh13-state-arrow-continuation.md](sh13-state-arrow-continuation.md): isolated syntax refusal and regression after frozen wave-2 review.
 - [working-rules.md](working-rules.md): how to work here (CI batching, goldens, COM, owner rules). Read it before anything else.
 - [com-checks.md](com-checks.md): the PowerPoint checks still owed, deck by deck.
 - [decisions.md](decisions.md): every judgment call made for the owner; each one is vetoable.
@@ -12,7 +13,7 @@ Files in this folder:
 
 Review sheets (before/after PNGs) for every output-changing PR are on the evidence-only branch `handoff/review-sheets-2026-11-07` (never merged): `git fetch origin handoff/review-sheets-2026-11-07`, or browse it on GitHub.
 
-Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; final qualification in progress).
+Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; blocker fixes folded; final combined gate next).
 
 ## State at handoff
 
@@ -117,3 +118,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
+
+SH-23 isolated qualification: [source scope, five native ninth-node save/reopen passes and remaining integration gate](sh23-qualified.md). Unfinished SH20–22 work stays on its separate continuation branch.

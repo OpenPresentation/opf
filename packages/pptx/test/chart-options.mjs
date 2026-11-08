@@ -218,7 +218,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   const axes = [...waterfall.chartex.matchAll(/<cx:axis id="(\d)">([\s\S]*?)<\/cx:axis>/g)];
   // Native check 2026-10-01: PowerPoint empties cx:txData/cx:v text without a cx:f formula, so titles are rich text.
   assert.match(axes.find(axis => axis[1] === '0')[2], /^<cx:catScaling[^>]*\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Step<\/a:t>[\s\S]*<\/cx:rich><\/cx:tx><\/cx:title><cx:tickLabels\/>/);
-  assert.match(axes.find(axis => axis[1] === '1')[2], /^<cx:valScaling\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Delta<\/a:t>/);
+  assert.match(axes.find(axis => axis[1] === '1')[2], /^<cx:valScaling max="50" min="0" majorUnit="10"\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Delta<\/a:t>/);
   assert.doesNotMatch(waterfall.chartex, /<cx:txData><cx:v>(Step|Delta)/, 'no title is written as cached formula text');
   // The importer reads both forms: this exporter's rich text, and txData/cx:v as an earlier build (or Excel) wrote it.
   {

@@ -553,6 +553,7 @@ function stateDiagram(lines: Line[], title: string | undefined, direction: strin
     }
     const link = readLink(text);
     if (link) {
+      if (link.left && link.right) fail('diagram-syntax', 'A state transition has one arrowhead; write two transitions for both directions.', current.line);
       const [from, to] = link.left && !link.right ? [link.to, link.from] : [link.from, link.to];
       out.push(`${indent}${state(from)} --> ${state(to)}${link.label ? ` : ${bare(link.label)}` : ''}`);
       if (++transitions > maxEdges) fail('diagram-limit', `The diagram has more than ${maxEdges} transitions.`);

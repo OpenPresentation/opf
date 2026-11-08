@@ -23,7 +23,7 @@ const ROWS = "(?:top|middle|bottom|top\\+middle|middle\\+bottom|top\\+middle\\+b
 const COLUMNS = "(?:left|center|right|left\\+center|center\\+right|left\\+center\\+right)";
 /** The promoted region keys of a slide: a row band, a column band, or both as `rows:columns`. */
 const REGION = new RegExp(`^(?:${ROWS}(?::${COLUMNS})?|${COLUMNS})$`);
-const NATIVE_SLIDE = new Set(["id", "type", "layout", "section", "tag", "hidden", "beat", "title", "subtitle", "notes", "blocks", ...CONTENT]);
+const NATIVE_SLIDE = new Set(["id", "type", "layout", "section", "tag", "hidden", "beat", "language", "title", "subtitle", "notes", "blocks", ...CONTENT]);
 
 /** Longest fence-safe marker for a body of lines. */
 function fenceFor(body: string[], char = "`"): string {
@@ -307,7 +307,7 @@ export function emitSlide(slide: Obj, index: number, mode: "embed" | "drop"): { 
 
   // Options comment.
   const options: [string, string][] = [];
-  const optionFields: [string, unknown][] = [["id", slide.id], ["type", slide.type], ["beat", slide.beat], ["layout", slide.layout], ["section", slide.section], ["tag", slide.tag]];
+  const optionFields: [string, unknown][] = [["id", slide.id], ["type", slide.type], ["beat", slide.beat], ["layout", slide.layout], ["section", slide.section], ["tag", slide.tag], ["language", slide.language]];
   const failed: string[] = [];
   for (const [key, value] of optionFields) {
     if (value === undefined) continue;

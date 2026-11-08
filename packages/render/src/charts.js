@@ -257,7 +257,7 @@ export function chartData(item, bound) {
   const resolved = resolveChartData(chart, bound?.presentation, { path: item.path });
   if (!resolved.ok) return null;
   // LH-60: core's draw plan (the fallback construct and the data as drawn), shared with the PPTX export.
-  const language = bound?.presentation?.language;
+  const language = bound?.scriptFonts?.profile?.bcp47;
   const plan = chartDrawPlan(chart, resolved, { language: typeof language === "string" ? language : undefined });
   const formats = plan.formats.map((format) => typeof format === "string" && format !== "" && !numberFormatError(format) ? format : undefined);
   return { type: plan.type, fallback: plan.fallback, columns: plan.columns, hasX: plan.hasX, rows: plan.rows, formats, trace: tracePaths(item, bound, { ...resolved, columns: plan.columns, regrouped: plan.columns.length !== resolved.columns.length }), ...(resolved.combo ? { combo: resolved.combo } : {}) };
@@ -366,7 +366,7 @@ const neutrals = bound.design.roles.neutrals;
     },
     // LH-141: whether the default value labels of column `column` group their thousands (no format of its own, whole numbers, one of four digits).
     group: (column) => (formats[column] === undefined || formats[column] === "") && groupsThousands(rows.map((row) => chartNumber(row[column]))),
-    language: bound.presentation?.language,
+    language: bound.scriptFonts?.profile?.bcp47,
     series(first = 1) {
       return columns.slice(first).map((name, offset) => ({
         name: c.label(name), column: first + offset, index: offset,
@@ -1559,7 +1559,7 @@ function renderWaterfallChart(c) {
   // LH-153: the labels group their thousands by the deck language (no format, whole numbers, one of four digits), and so does the axis.
   const labelGroup = c.group(column), tickGroup = dataGroup(c, format, extents, { zeroBased: true });
   const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format, tickGroup)), labelRoom: hidden });
-  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
+  const scale = composedScale(c.numericAxes?.value) ?? niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   let at;
   if (hidden) {
     // The category axis line stays, at zero; the labels carry the values.
