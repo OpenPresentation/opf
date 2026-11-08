@@ -1,0 +1,434 @@
+{
+  "records": [
+    {
+      "path": "exports/aptos-record.json",
+      "bytes": 346,
+      "sha256": "ac4895798843d108309a0981cb18a5ab15975c5529dff7cddef5d7cd8d6ab2fc"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/input.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/native-font-slots.json",
+      "bytes": 2322,
+      "sha256": "0b5d5f732117cec4964abdd0cf4c0b743e780519308110cbe47444c683809df4"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/png.exit.json",
+      "bytes": 500,
+      "sha256": "559c624b95ea8858a857e2341db4a015cce59ba60009ca82d004ca24599d0458"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/png.stdout.json",
+      "bytes": 2097,
+      "sha256": "fd8d23cd33ce4491560353caf6d271b6df298a7d30ee6078529500d5d216e0b7"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/pptx.exit.json",
+      "bytes": 499,
+      "sha256": "179d15e10debf1fa93d80ee0a5c7726df6c7dbe614447b49da7833089675f09e"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/pptx.stdout.json",
+      "bytes": 2814,
+      "sha256": "516ded43674858d11627c909faf483111e5f50448a31e9ee48212d0865d3b8d6"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/resolved-fonts.json",
+      "bytes": 1492,
+      "sha256": "b0069d65d720fec664d4b34c3a88482f2d2d8334bd47bf79c9c79406672a063b"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/source.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/strict-import.json",
+      "bytes": 1434,
+      "sha256": "84e2b0af92049c13f4d4a315a6d9704f8bc6deaa851bfdca7b9e2e797f339263"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/validate.exit.json",
+      "bytes": 406,
+      "sha256": "87add5771518823df64d0bee50287a08716532b1a23307906f9ff3bc8d834793"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/validate.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-control/validate.stdout.json",
+      "bytes": 1007,
+      "sha256": "0cb00320ecd359012d036b5562d986257f63b7123859b04c5ff6aa6a0e765897"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/input.pptx",
+      "bytes": 101066,
+      "sha256": "fdc9a25c5d8f517a665e853d1255093eb5d25ebd87b077e0d06bebd66e0743a5"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/native-font-slots.json",
+      "bytes": 3278,
+      "sha256": "b63b6aab87396543a7ddb9ac66ba643aee99c0c23d09b0979485a787dc2127a6"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/after/ppt/slides/slide1.xml",
+      "bytes": 3737,
+      "sha256": "e0056ea923ed447d7e6936efcb71db4d8762fb0452f8dd524e60e159007fb87a"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/after/ppt/tags/opfDocument.xml",
+      "bytes": 1607,
+      "sha256": "c1c793bc81bf38af3da27b0077efff62ccc1ea63da3f343efe20262161076ed6"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/after/ppt/tags/opfSlide1.xml",
+      "bytes": 774,
+      "sha256": "8039ad4feb6b4732c7fdf771d5c4516be131f2862a27b54d1ff3c83b08453bbf"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/after/ppt/theme/theme1.xml",
+      "bytes": 8353,
+      "sha256": "f512071d8a106796e50a5fc41e3e09996f3ec465f2102b07225b616f23807832"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/after/ppt/theme/theme2.xml",
+      "bytes": 8353,
+      "sha256": "f512071d8a106796e50a5fc41e3e09996f3ec465f2102b07225b616f23807832"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/before/ppt/slides/slide1.xml",
+      "bytes": 3811,
+      "sha256": "6ee08c297717d3dfab6c1ca34b8e4480db07325de1689641a0f7806804f1e9ca"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/before/ppt/tags/opfDocument.xml",
+      "bytes": 1469,
+      "sha256": "a8e7b4eaf2b75afa033ff4799483d6cfe200549bd96d872753d597dfbb892f14"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/before/ppt/tags/opfSlide1.xml",
+      "bytes": 774,
+      "sha256": "973bc7463305d042475fcbcca959fa6d1f7714ea12b42fae26413999f40b82fe"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/before/ppt/theme/theme1.xml",
+      "bytes": 8379,
+      "sha256": "4830c51d8fb3ccd6633d08f2d9d5281f3b39a1a0d31b91e619caecca61b13dc5"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/part-deltas/before/ppt/theme/theme2.xml",
+      "bytes": 8379,
+      "sha256": "4830c51d8fb3ccd6633d08f2d9d5281f3b39a1a0d31b91e619caecca61b13dc5"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/png.exit.json",
+      "bytes": 502,
+      "sha256": "8ec9b2b7d4b68caca98d48856c40ff3223b9cd48f672ac7a9fb9e707867116d5"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/png.stdout.json",
+      "bytes": 2099,
+      "sha256": "e30e64a7ecd49e4e46aba050f34c8027ad355d389769c38b6053b4ed34e687ca"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/pptx.exit.json",
+      "bytes": 501,
+      "sha256": "ac93fc2037392672bb355df8cfda54febc5df1c0afa01e967fe005b1698beea7"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/pptx.stdout.json",
+      "bytes": 2816,
+      "sha256": "805508795471ceef4f4f8639b5b400ec4eb29242a3104a0cc2f9d4fb39269cd0"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/preview.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/resolved-fonts.json",
+      "bytes": 1418,
+      "sha256": "2d285ef0233fb62c81017ebf2ae9f7c5aa1a13f5afaa1bfe41b1420e976c568c"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/source.opf.json",
+      "bytes": 534,
+      "sha256": "a7adbeeef94446873fa49ba2b8fc78a0eebf7e03e9590ab0fb399da3b3e5b64e"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/strict-import.json",
+      "bytes": 1290,
+      "sha256": "e3a62f2593cc2207dcf85ffaa51444bf33e4cd3d6109c3293dcd81e1c0d34e1a"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/validate.exit.json",
+      "bytes": 407,
+      "sha256": "becdea421a060797ac59238698a711780d6413244a91bcff75168ce6b969d4e5"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/validate.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-arabic-cs-aptos/validate.stdout.json",
+      "bytes": 1009,
+      "sha256": "c6fe0f91d4769b6663b2c3e5bacbc687b205a5a3ad39850f91d2d3b9792f4f28"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/input.pptx",
+      "bytes": 101073,
+      "sha256": "e2cea9baefc766723d9def2c8fe7f6647c654b02bb2c2770a5e871418e3af548"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/native-font-slots.json",
+      "bytes": 3018,
+      "sha256": "2d9f50b5ee383530567db846922f45cc94a004b42ef0273be051d1f03f8821b8"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/after/ppt/slides/slide1.xml",
+      "bytes": 3813,
+      "sha256": "a325c1e69878ecb992bfc5de7b972082418ab0f4075e3a2fd8e9018a62143547"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/after/ppt/tags/opfDocument.xml",
+      "bytes": 1659,
+      "sha256": "39d9a84b021b9e39e263f0b334e2bb630b135d0d61fcfde95e52c400df1c9e7f"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/after/ppt/tags/opfSlide1.xml",
+      "bytes": 774,
+      "sha256": "973bc7463305d042475fcbcca959fa6d1f7714ea12b42fae26413999f40b82fe"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/before/ppt/slides/slide1.xml",
+      "bytes": 3739,
+      "sha256": "ec274725b3353a8a9ed67aa70768932871cc0c3085f4c153f736ef0f3dd746fa"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/before/ppt/tags/opfDocument.xml",
+      "bytes": 1469,
+      "sha256": "a8e7b4eaf2b75afa033ff4799483d6cfe200549bd96d872753d597dfbb892f14"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/part-deltas/before/ppt/tags/opfSlide1.xml",
+      "bytes": 774,
+      "sha256": "8039ad4feb6b4732c7fdf771d5c4516be131f2862a27b54d1ff3c83b08453bbf"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/png.exit.json",
+      "bytes": 504,
+      "sha256": "a7c89e77b39ac4e5ed2ab2a17d31fe0b827e853aa919af696875319f92a48cf6"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/png.stdout.json",
+      "bytes": 2101,
+      "sha256": "53b18faa59026fe2d87c0641c51af1c31f1df4eadf6d2f0566bfb884de292437"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/pptx.exit.json",
+      "bytes": 503,
+      "sha256": "29488c6c41e59593ad26cb3afd83c00dafc8cee13eb0ff7ad8d63eeb7b57cb13"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/pptx.stdout.json",
+      "bytes": 2818,
+      "sha256": "55d8d7ff14aa86225b87b044b7a8e288bf3742badefe0fc61741b4693b3557ce"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/preview.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/resolved-fonts.json",
+      "bytes": 1364,
+      "sha256": "69cc715aedd0a1838cdc00113d15ac80b155b6442ac8c449211a959917ef4c24"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/source.opf.json",
+      "bytes": 549,
+      "sha256": "883595fdc2d6e75a4765842c9a1e3ba3495d808f8c988484553c0bb8b98985e3"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/strict-import.json",
+      "bytes": 2097,
+      "sha256": "11c41076c78f5c29fa4d7cfe6c2325537bc1f5a1c8b814c0d6465ed850e2c549"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/validate.exit.json",
+      "bytes": 408,
+      "sha256": "b5bfd3a0f7077cac283b06b2e2c2cca3fc8ddf41e2444ed2a75e37e222ffaace"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/validate.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "exports/cases/font-slot-french-cs-arabic/validate.stdout.json",
+      "bytes": 1011,
+      "sha256": "8c999ac8a9d5ec3acdbad28c4fa289d795e6794deff0bb27bf5bb5f0eeb5b44f"
+    },
+    {
+      "path": "exports/progress.json",
+      "bytes": 2294,
+      "sha256": "0702613fc3f92180a3d3512618461df0a1dc47212181c9215bd856d0f8d1aec0"
+    },
+    {
+      "path": "exports/receipt.json",
+      "bytes": 3161,
+      "sha256": "92738afcd1fb08fb62fcccbd92c1cddf066dfbb4f1ab8b6dc845372a83b8dd45"
+    },
+    {
+      "path": "exports/runtime-after.json",
+      "bytes": 105006,
+      "sha256": "53659fd06d62eccbd33fba1b73e9434419ad3af984b651fd06ce49ee4c8c0d75"
+    },
+    {
+      "path": "exports/runtime-before.json",
+      "bytes": 105006,
+      "sha256": "53659fd06d62eccbd33fba1b73e9434419ad3af984b651fd06ce49ee4c8c0d75"
+    },
+    {
+      "path": "exports/suite-identity.json",
+      "bytes": 321,
+      "sha256": "b83dd1f0b7e5125e7eaaf07ee0e8a729a82c844b3f5fc6fa0639e463182726ed"
+    },
+    {
+      "path": "exports/suite/actions/font-slot-arabic-control.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "exports/suite/actions/font-slot-arabic-cs-aptos.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "exports/suite/actions/font-slot-french-cs-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "exports/suite/font-slots/font-slot-arabic-control.json",
+      "bytes": 2322,
+      "sha256": "0b5d5f732117cec4964abdd0cf4c0b743e780519308110cbe47444c683809df4"
+    },
+    {
+      "path": "exports/suite/font-slots/font-slot-arabic-cs-aptos.json",
+      "bytes": 3278,
+      "sha256": "b63b6aab87396543a7ddb9ac66ba643aee99c0c23d09b0979485a787dc2127a6"
+    },
+    {
+      "path": "exports/suite/font-slots/font-slot-french-cs-arabic.json",
+      "bytes": 3018,
+      "sha256": "2d9f50b5ee383530567db846922f45cc94a004b42ef0273be051d1f03f8821b8"
+    },
+    {
+      "path": "exports/suite/inputs/font-slot-arabic-control.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "exports/suite/inputs/font-slot-arabic-cs-aptos.pptx",
+      "bytes": 101066,
+      "sha256": "fdc9a25c5d8f517a665e853d1255093eb5d25ebd87b077e0d06bebd66e0743a5"
+    },
+    {
+      "path": "exports/suite/inputs/font-slot-french-cs-arabic.pptx",
+      "bytes": 101073,
+      "sha256": "e2cea9baefc766723d9def2c8fe7f6647c654b02bb2c2770a5e871418e3af548"
+    },
+    {
+      "path": "exports/suite/previews/font-slot-arabic-control-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "exports/suite/previews/font-slot-arabic-cs-aptos-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "exports/suite/previews/font-slot-french-cs-arabic-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "exports/suite/sources/font-slot-arabic-control.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "exports/suite/sources/font-slot-arabic-cs-aptos.opf.json",
+      "bytes": 534,
+      "sha256": "a7adbeeef94446873fa49ba2b8fc78a0eebf7e03e9590ab0fb399da3b3e5b64e"
+    },
+    {
+      "path": "exports/suite/sources/font-slot-french-cs-arabic.opf.json",
+      "bytes": 549,
+      "sha256": "883595fdc2d6e75a4765842c9a1e3ba3495d808f8c988484553c0bb8b98985e3"
+    },
+    {
+      "path": "exports/suite/suite.json",
+      "bytes": 6628,
+      "sha256": "c8c993f13e86f271f01488bf87f5c41e6433dfd9ed2baa7e54d3c58f7698b3df"
+    },
+    {
+      "path": "executed-producer-log/produce.log",
+      "bytes": 2753,
+      "sha256": "9c3219c6472fb65a27cf506a34803ed1f95a4536b58b43562edfd851a9d2d022"
+    },
+    {
+      "path": "executed-producer-log/seal-font-slots.mjs",
+      "bytes": 5941,
+      "sha256": "01056fd66dd4b04fea0d3a148ecc61c2ab43a121e4d9523e27d5ead27d256dee"
+    },
+    {
+      "path": "executed-producer.mjs",
+      "bytes": 9517,
+      "sha256": "ababa57f59c6eca44bb756788f38bd77ef40258751e05b1ecba6738a61b52323"
+    }
+  ]
+}

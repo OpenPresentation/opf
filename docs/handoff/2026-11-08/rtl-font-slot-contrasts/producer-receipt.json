@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "authorSourceCommit": "99ac064d73dfefdd58871a10245a3f8da85aa08e",
+  "producerRevision": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "producerDirectory": "C:/opf-work/rr105-sh26-rtl",
+  "producerDirty": false,
+  "producerRuntimeSha256": "df5921ddc0689dea9ba5178cfb3b7f8a3b17f1a7e367088e223f9726facfa01b",
+  "publishedReferenceRuntimeFileSha256": "5cf011f7ff60c3a2c2d9a8f118d36ca2bfe5e5d9701cdbdb53b64d9b7b0303e7",
+  "sourceAndRuntimeUnchanged": true,
+  "node": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "nodeVersion": "v24.20.0",
+  "noEngineEdits": true,
+  "noProducerRebuild": true,
+  "nativeAcceptance": false,
+  "overallAccepted": false,
+  "results": [
+    {
+      "id": "font-slot-arabic-control",
+      "baseline": "rtl-contrast-09-long-explicit-arabic",
+      "intent": "control",
+      "sourceSha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+      "archiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "previewSha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd",
+      "slideCount": 1,
+      "declaredTopLevelShapes": 3,
+      "strictSchemaAndReferences": true,
+      "strictAuthoredItemsEqual": true,
+      "strictSourceDocumentEqual": true,
+      "logicalProofingLatinGeometryExact": true,
+      "originalPreviewByteExact": true,
+      "changedParts": []
+    },
+    {
+      "id": "font-slot-arabic-cs-aptos",
+      "baseline": "rtl-contrast-09-long-explicit-arabic",
+      "intent": "cs-aptos",
+      "sourceSha256": "a7adbeeef94446873fa49ba2b8fc78a0eebf7e03e9590ab0fb399da3b3e5b64e",
+      "archiveSha256": "fdc9a25c5d8f517a665e853d1255093eb5d25ebd87b077e0d06bebd66e0743a5",
+      "previewSha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd",
+      "slideCount": 1,
+      "declaredTopLevelShapes": 3,
+      "strictSchemaAndReferences": true,
+      "strictAuthoredItemsEqual": true,
+      "strictSourceDocumentEqual": true,
+      "logicalProofingLatinGeometryExact": true,
+      "originalPreviewByteExact": true,
+      "changedParts": [
+        "ppt/slides/slide1.xml",
+        "ppt/tags/opfDocument.xml",
+        "ppt/tags/opfSlide1.xml",
+        "ppt/theme/theme1.xml",
+        "ppt/theme/theme2.xml"
+      ]
+    },
+    {
+      "id": "font-slot-french-cs-arabic",
+      "baseline": "rtl-contrast-11-long-explicit-french",
+      "intent": "direct-cs-arabic",
+      "sourceSha256": "883595fdc2d6e75a4765842c9a1e3ba3495d808f8c988484553c0bb8b98985e3",
+      "archiveSha256": "e2cea9baefc766723d9def2c8fe7f6647c654b02bb2c2770a5e871418e3af548",
+      "previewSha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492",
+      "slideCount": 1,
+      "declaredTopLevelShapes": 3,
+      "strictSchemaAndReferences": true,
+      "strictAuthoredItemsEqual": true,
+      "strictSourceDocumentEqual": true,
+      "logicalProofingLatinGeometryExact": true,
+      "originalPreviewByteExact": true,
+      "changedParts": [
+        "ppt/slides/slide1.xml",
+        "ppt/tags/opfDocument.xml",
+        "ppt/tags/opfSlide1.xml"
+      ]
+    }
+  ],
+  "suiteSha256": "c8c993f13e86f271f01488bf87f5c41e6433dfd9ed2baa7e54d3c58f7698b3df",
+  "archive": {
+    "path": "sealed-font-slot-probes.zip",
+    "bytes": 710665,
+    "sha256": "ed54828514108150208a5541293af7b165cc00ec16b6441d37306277979c1037",
+    "files": 86,
+    "losslessVerified": true,
+    "credentialSignatureScan": "passed"
+  }
+}
