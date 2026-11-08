@@ -28,7 +28,7 @@ import {quoteLanguage,quoteMarksFor,type QuoteMarks} from './quote-marks.js';
 import {allowedBreak,proseTokens,proseWords} from './line-break.js';
 /** LH-11: where a line may not break (a number and its unit, a closing mark), and the same rule written as no-break spaces for a PowerPoint that wraps the text itself. */
 export {bindNoBreak,unbindNoBreak,lineMayStartAt} from './line-break.js';
-import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
+import {ENGINE_DEFAULT_FONT_SCHEME,LANGUAGES,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
 export {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
@@ -2857,11 +2857,16 @@ const TIMELINE_RING_RATIO = 1.6;
  */
 const TIMELINE_ROLE_SIZES = {name:24,description:18,when:18,what:22,'event-description':18,status:16} as const;
 const TIMELINE_COMPACT_SIZES = {name:18,description:16,when:16,what:18,'event-description':16,status:16} as const;
-/**
- * LH-121: the word drawn under an event's label for its status (`statusWords`). English only: a deck in another language keeps the
- * status in its markers and connector, until the catalog carries localized words.
- */
-export const TIMELINE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> = { done: 'Done', current: 'Current', planned: 'Planned' };
+/** English status vocabulary, kept for callers that explicitly draw English labels. */
+export const TIMELINE_STATUS_WORDS: Readonly<Record<TimelineStatus, string>> = LANGUAGES.find(entry=>entry.tag==='en')!.timelineStatusWords!;
+/** Localized generated labels, with regional variants sharing their language's vocabulary. Unknown translations keep status markers and progress. */
+export function timelineStatusWordsFor(language?: string): Readonly<Record<TimelineStatus, string>> | undefined {
+  let locale: Intl.Locale;
+  try { locale=new Intl.Locale(language??'en-US'); } catch { return undefined; }
+  const base=locale.language==='nb'?'no':locale.language;
+  const tag=base==='zh' ? (locale.script==='Hant'||!locale.script&&['TW','HK','MO'].includes(locale.region??'')?'zh-Hant':'zh-Hans') : base==='vi'?'vi-Latn':base;
+  return LANGUAGES.find(entry=>entry.tag===tag)?.timelineStatusWords;
+}
 /** LH-41: a lone timeline in its region may grow its type by up to this many reference pixels when it still fits. */
 const TIMELINE_GROWTH = 4;
 /**
@@ -2945,7 +2950,7 @@ export interface TimelineLayoutOptions extends QuoteLayoutOptions {
    * No part goes below `minFontSize`.
    */
   sizeOffset?: number;
-  /** LH-121: draw a status word under the label of each event with a status (English decks only; see TIMELINE_STATUS_WORDS). */
+  /** LH-121: draw a status word under the label of each event with a status (where a localized vocabulary exists; see timelineStatusWordsFor). */
   statusWords?: boolean;
 }
 
@@ -2974,10 +2979,10 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   };
   add('name',timeline.name,`${path}.name`,700);add('description',timeline.description,`${path}.description`,400);
   // LH-121: the status word sits right under the label, before the event's description.
-  const words=options.statusWords===true&&(options.language===undefined||/^en(-|$)/i.test(options.language));
+  const words=options.statusWords===true?timelineStatusWordsFor(options.language):undefined;
   timeline.events.forEach((event,index)=>{
     add('when',event.when,`${eventPath(index)}.when`,500,index);add('what',event.what,`${eventPath(index)}.what`,600,index);
-    if(words&&event.status){const before=source.length;add('status',TIMELINE_STATUS_WORDS[event.status],`${eventPath(index)}.status`,500,index);source[before]!.sources=[];}
+    if(words&&event.status){const before=source.length;add('status',words[event.status],`${eventPath(index)}.status`,500,index);source[before]!.sources=[];}
     add('event-description',event.description,`${eventPath(index)}.description`,400,index);
   });
   const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
@@ -6683,7 +6688,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const measureTimeline = (node: Pending, box: LayoutBox, settings: Composition, sizes: 'role' | 'floor' | 'placed' = 'role', sizeOffset?: number) => {
     const hint = timelineHints.get(node);
     // LH-121: status words under the labels, a guarded rule (they take height the timeline's text might need).
-    const events = Array.isArray(node.value) ? node.value : record(node.value).events, statusWords = ruleOn('timeline-status') && Array.isArray(events) && events.some((event: unknown) => record(event).status !== undefined) && (deckLanguage() === undefined || /^en(-|$)/i.test(deckLanguage()!));
+    const events = Array.isArray(node.value) ? node.value : record(node.value).events, statusWords = ruleOn('timeline-status') && Array.isArray(events) && events.some((event: unknown) => record(event).status !== undefined) && timelineStatusWordsFor(deckLanguage()) !== undefined;
     if (statusWords) fire('timeline-status');
     return layoutTimeline(node.value as TimelineContent, acceptedBox(box), {
       ...(statusWords ? {statusWords:true} : {}),...(deckLanguage() !== undefined ? {language:deckLanguage()!} : {}),

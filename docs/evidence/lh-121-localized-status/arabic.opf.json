@@ -1,0 +1,32 @@
+{
+  "language": {
+    "bcp47": "ar-SA",
+    "fontScheme": "noto-sans-arabic"
+  },
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "title": "من التجربة إلى الإطلاق",
+      "timeline": [
+        {
+          "when": "يناير",
+          "what": "اكتمال التجربة",
+          "status": "done"
+        },
+        {
+          "when": "فبراير",
+          "what": "التوسع الإقليمي",
+          "status": "current"
+        },
+        {
+          "when": "مارس",
+          "what": "الإطلاق العام",
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

@@ -112,9 +112,9 @@ test('LH-121: a timeline with status draws its progress to the current event and
   // Done events only: the progress reaches the last one. No done or current event: no progress.
   assert.equal(layoutTimeline(events.map((event, index) => ({ ...event, status: index < 2 ? 'done' : 'planned' })), { x: 0, y: 0, width: 1100, height: 300 }).progress.x2, layoutTimeline(events, { x: 0, y: 0, width: 1100, height: 300 }).markers[1].x);
   assert.equal(layoutTimeline(events.map((event) => ({ ...event, status: 'planned' })), { x: 0, y: 0, width: 1100, height: 300 }).progress, undefined);
-  // Words only when asked for, and only in English.
+  // Words only when asked for; localized words share the same generated-label contract.
   assert.equal(layoutTimeline(events, { x: 0, y: 0, width: 1100, height: 300 }).statusLabels, undefined);
-  assert.equal(layoutTimeline(events, { x: 0, y: 0, width: 1100, height: 300 }, { statusWords: true, language: 'de' }).statusLabels, undefined);
+  assert.deepEqual(layoutTimeline(events, { x: 0, y: 0, width: 1100, height: 300 }, { statusWords: true, language: 'de' }).statusLabels.map(label=>label.text), ['Abgeschlossen','Abgeschlossen','Aktuell','Geplant']);
   // In composition the words are a guarded rule: a timeline that fits them keeps its size and gets them.
   const result = composeSlide({ title: 'Platform migration roadmap', blocks: [{ timeline: events }] });
   assert.equal(result.items.find((item) => item.timelineLayout).timelineLayout.statusLabels?.length, 4);

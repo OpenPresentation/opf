@@ -26,3 +26,5 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides (including `design.listBullet: "none"` for a label with its description, [`slide-design-overrides.opf.json`](./slide-design-overrides.opf.json)).
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
+
+- Localized timeline status words: a French roadmap keeps its authored labels and adds Terminé, En cours and Prévu ([`localized-timeline.opf.json`](./localized-timeline.opf.json)).

@@ -601,11 +601,11 @@ A horizontal timeline centers its whole block (name, description and labels) in 
 - **Bold label.** The weight is part of the layout, not a drawing detail: the `what` part of a `current` event is requested at weight 700, so line breaks and heights were measured bold.
 - **Progress and status words (LH-121).** `TimelineLayout.progress` is the part of the connector from the first event to the
   `current` one (to the last `done` one when none is current; absent when no event is done or current); both engines draw it in the
-  primary color over the border-colored connector. With `statusWords` (composition sets it under the size guard, for an English deck)
-  each event with a status gets a word under its label, `Done`, `Current` or `Planned` (`TIMELINE_STATUS_WORDS`) at 16 reference
+  primary color over the border-colored connector. With `statusWords` (composition sets it under the size guard, where localized words are available)
+  each event with a status gets a localized word under its label (`timelineStatusWordsFor`, English `TIMELINE_STATUS_WORDS`) at 16 reference
   pixels, in `TimelineLayout.statusLabels`: generated text with no `sources`, never in `parts`. `timelineTextColor` sets the current
   event's word in the primary color and the others muted, at 4.5:1. A timeline that would set its labels smaller to make room keeps
-  them and draws no words; a deck in another language keeps the status in its markers and progress.
+  them and draws no words; a deck without a supported translation keeps the status in its markers and progress.
 - **PPTX.** The marker is a native `ellipse` (solid primary fill for `done`, `current` and no status; background fill plus a primary line for `planned`), the ring is a second native `ellipse` (background fill plus a primary line), the bold label is a bold run, and planned text takes the muted color. The exporter records each event's status in the marker's `OPF_TIMELINE_V1` tag and the ring in a tag of its own, and the importer restores `status` from them; a deck whose marker or ring was edited away imports as ordinary text without status, like the rest of the timeline provenance. The progress line is a second native `line` (`OPF timeline <group> progress`) and each status word a text shape tagged `status`; import consumes both and reads the status from the markers. Status is also written in Markdown as a task-list prefix on the event line: `[x]` done, `[>]` current, `[ ]` planned.
 
 ## Resizing in the preview
@@ -656,3 +656,9 @@ editor.applyPatch(prepared.patches, {rejectInvalid: true});
 `prepareBlockMove` returns `{presentation, patches, path, changed}`. It validates the complete result and emits guarded remove/add patches, so the editor or CLI can apply it atomically. No-op moves return `changed: false` and no patches. `listBlockContainers(presentation, {slideIndex})` optionally limits discovery to a single slide and excludes arbitrary extension data. Headless callers should render the candidate with their intended font provider before applying. The browser and installed-package block harnesses exercise nested moves, undo, stale menus, keyboard access, strict-fit rejection, and native drag reordering.
 
 Creation and deletion use the same layout engine: insertions can normalize implicit payloads into explicit blocks; deletions prune empty groups while retaining the slide. Existing track weights stay positional. See the [editor creation guide](live-editor.md#create-duplicate-and-delete-content) for the guarded APIs and canvas controls.
+
+### Localized timeline status words
+
+Generated words are available for Arabic, Chinese (Simplified and Traditional), Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hebrew, Hindi, Indonesian, Italian, Japanese, Korean, Norwegian, Polish, Portuguese, Russian, Spanish, Swedish, Thai, Turkish, Ukrainian and Vietnamese. Regional variants share these vocabularies. `timelineStatusWordsFor(tag)` returns the words, or `undefined` for an unsupported language.
+
+The words are engine vocabulary from `spec/reference/engine-vocabularies.json`, shared by SVG and native PPTX. They appear only when the guarded rule keeps the source labels at least as large. Unsupported generated translations omit the words while preserving the event statuses, markers, progress and authored event text. Put any precise local wording or schedule-health explanation in `what` or `description`. See [the French example](../examples/technical/localized-timeline.opf.json).
