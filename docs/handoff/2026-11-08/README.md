@@ -101,3 +101,6 @@ E1 maintained runner1181at34ae758d71abb77845d6b3feb08d2d53308f3a99 is independen
 
 - [LH-93 RTL legend correction](lh93-rtl-legend.md): shared header item order matches native; current native acceptance owed, all data/colors/gutters retained.
 
+
+- [Native feature reconciliation](native-feature-reconciliation.md): original516/465/201/264observations, exact script failures/OFF boundaries, current production/live/diagram/SH25 qualification still separated.
+
