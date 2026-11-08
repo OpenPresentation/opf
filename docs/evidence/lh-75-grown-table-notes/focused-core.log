@@ -1,0 +1,29 @@
+▶ LH-75: a short table beside its note
+  ✔ the table layout, ltr: the note sits on a card beside the table, as tall as the row, centered in the body (89.1637ms)
+  ✔ the table layout, rtl: the note sits on a card beside the table, as tall as the row, centered in the body (29.3877ms)
+  ✔ automatic composition, ltr: the note sits on a card beside the table, as tall as the row, centered in the body (31.443ms)
+  ✔ automatic composition, rtl: the note sits on a card beside the table, as tall as the row, centered in the body (25.7094ms)
+  ✔ the note first keeps its place before the table in reading order (19.0683ms)
+  ✔ no block is set smaller than without the rule, and the table keeps its cells on one line (28.1606ms)
+  ✔ stays stacked: a tall table, a one-line note, a table whose cells would take three lines, and a layout that already puts the note beside (59.9736ms)
+  ✔ a slide with another block, an emphasis or a composition of its own keeps its arrangement (13.8892ms)
+✔ LH-75: a short table beside its note (298.1568ms)
+▶ LH-05: the rows of a grid of short texts hug
+  ✔ a 3 x 3 grid of one-line texts keeps its rows one gap apart and sits in the middle of the body (ltr) (16.8297ms)
+  ✔ a 3 x 3 grid of one-line texts keeps its rows one gap apart and sits in the middle of the body (rtl) (10.1526ms)
+  ✔ a grid of short texts grows past a list display size (LH-162: as tiles) and never ends smaller than unhugged (16.9462ms)
+  ✔ longer texts keep the rows spread over the body, and sizes never fall (8.6379ms)
+  ✔ a grid in a card design hugs too, with the cards as tall as their text (7.962ms)
+✔ LH-05: the rows of a grid of short texts hug (60.9048ms)
+✔ LH-75, the table layout: a table whose cells wrap onto two lines sits beside its note at no smaller size (117.288ms)
+✔ LH-75, automatic composition: a table whose cells wrap onto two lines sits beside its note at no smaller size (53.5402ms)
+✔ LH-75: a table whose cells would take three lines beside the note keeps the stack (21.1556ms)
+✔ LH-75: a short table and its note grow together, the note card widening to keep its measure (31.4163ms)
+ℹ tests 17
+ℹ suites 2
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 505.1934

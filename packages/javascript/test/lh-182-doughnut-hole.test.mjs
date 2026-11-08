@@ -18,11 +18,11 @@ test('nested rings get a square inside the chart box and a hole of half the radi
 	assert.ok(pie.x + pie.width < item.box.x + item.box.width - 40, 'the category legend keeps its room at the end');
 });
 
-test('a pie of several series is drawn as nested rings and gets one too; a pie and a chart with options do not', () => {
+test('a pie of several series is drawn as nested rings and gets one too; a pie does not', () => {
 	assert.ok(chartOf({ type: 'pie', data: quarters }).chart.layer.doughnut, 'nested-rings fallback');
 	const one = { columns: ['Quarter', 'Current'], rows: quarters.rows.map((row) => row.slice(0, 2)) };
 	assert.equal(chartOf({ type: 'pie', data: one }).chart.layer?.doughnut, undefined, 'a pie has no hole');
-	assert.equal(chartOf({ type: 'doughnut', data: quarters, legend: 'bottom' }).chart.layer?.doughnut, undefined, 'options carve the box themselves');
+	assert.ok(chartOf({ type: 'doughnut', data: quarters, legend: 'bottom' }).chart.layer.doughnut, 'explicit options also fill the hole');
 });
 
 test('a doughnut with a value list takes the list square', () => {

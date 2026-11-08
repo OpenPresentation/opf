@@ -105,7 +105,12 @@ const [centeredBody] = bodyShapes(centeredOutput.entries);
 assert.match(centeredBody, /anchor="ctr"/); assert.match(centeredBody, /<a:pPr[^>]*algn="r"/);
 const context = resolveSlideContext(centered, 0, {catalogs}), geometry = composeSlide(context.slide, context.options);
 const regionBox = geometry.regions[0].box;
-assert.match(centeredBody, new RegExp(`<a:off x="${Math.round(regionBox.x * 9525)}" y="${Math.round(regionBox.y * 9525)}"/><a:ext cx="${Math.round(regionBox.width * 9525)}" cy="${Math.round(regionBox.height * 9525)}"/>`), 'Body uses whole allocated region, not its centered line box');
+// The body takes the whole allocated region's height, not its centered line box. RR-105: its width is core's wrap width plus a little
+// slack, grown on the side the right alignment leaves free, so its right edge (where the text sits) stays the region's.
+const [, offX, offY, extCx, extCy] = /<a:off x="(\d+)" y="(\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(centeredBody).map(Number);
+assert.deepEqual([offY, extCy], [Math.round(regionBox.y * 9525), Math.round(regionBox.height * 9525)], 'Body uses whole allocated region, not its centered line box');
+assert.ok(Math.abs(offX + extCx - Math.round((regionBox.x + regionBox.width) * 9525)) <= 1, 'Right-aligned body keeps its right edge');
+assert.ok(extCx > regionBox.width * 9525 && extCx < (regionBox.width + 75) * 9525, 'Right-aligned body grows to the left by the wrap slack only');
 
 const bulletDeck = deck({title: 'Bullets', layout: 'list', blocks: [{type: 'list', items: ['One bullet that remains a paragraph even when it wraps. '.repeat(5), [{text: 'Bold item', bold: true}]]}]});
 const bullets = await exported(bulletDeck, {bodyText: 'native'});

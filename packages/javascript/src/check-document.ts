@@ -515,6 +515,7 @@ const HELP: Record<string, string> = {
 	'variable-unknown': "Declare the variable in the top-level variables map, or write '\\{{' for literal braces.",
 	'variable-unknown-value': 'Remove the supplied value, or declare the variable it belongs to.',
 	'variable-unused': 'Reference the variable as {{id}} or var:id where it belongs, or remove its declaration.',
+	'variable-group-omitted': 'Give one of the variables a value to draw the group, make one of them required, or move the content that should always show out of the group.',
 	'variable-reference-unknown': 'Declare the variable in the top-level variables map, or use another colour.',
 	'run-color-unrecognized': 'Use a #RRGGBB hex colour, a colour-scheme name or a var: reference to a declared colour variable.',
 	'numbering-start-ignored': "Add a 'numbering' field to the payload, or remove 'start'.",
@@ -588,7 +589,7 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 				continue;
 			}
 		}
-		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', 'warning');
+		const found = issueFinding(issue, ruleId, 'presentation', '', 'document', code === 'variable-group-omitted' ? 'info' : 'warning');
 		const help = HELP[code];
 		if (help) found.help = help;
 		findings.push(found);

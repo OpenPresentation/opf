@@ -58,6 +58,29 @@ _No named properties._
 _No named properties._
 
 
+### ImagePayload
+
+- Type: `oneOf:string / object`
+- Required fields: none
+- Purpose: An image source and optional image-local text callouts. Other resource kinds use Asset and do not accept callouts.
+
+_No named properties._
+
+
+### ImageCallout
+
+- Type: `object`
+- Required fields: `text`, `x`, `y`, `width`, `height`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `text` | yes | `string` | Plain editable text. Native edits preserve current words; an empty string is retained. |
+| `x` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+| `y` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+| `width` | yes | `number` | Fraction of the visible image frame width. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+| `height` | yes | `number` | Fraction of the visible image frame height. The complete rectangle should stay within the frame; a protruding rectangle reports overflow without clipping. |
+
+
 ### Audience
 
 - Type: `anyOf:schema / schema`
@@ -932,6 +955,7 @@ _No named properties._
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `id` | no | `string` | Optional stable identifier for the slide within the document. Use when another system needs to reference a slide across edits, comments, generation state, exports, or narrative tooling. Slide order is defined by the s... |
+| `language` | no | `oneOf:ref:LanguageTag / ref:Language` | Language of this slide, overriding the presentation language. Accepts the same BCP-47 tag or inline Language object as the presentation. Omission inherits the deck language. Direction, script fonts, quotation marks, l... |
 | `type` | no | `enum:text \| list \| image \| chart \| table \| video \| code \| metric \| quote \| timeline \| diagram` | Optional full-slide content kind. When omitted, engines infer the kind from root payload fields. |
 | `beat` | no | `oneOf:string / array<string>` | Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an arr... |
 | `layout` | no | `ref:CatalogReference` | Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content... |
@@ -942,7 +966,7 @@ _No named properties._
 | `items` | no | `array<ref:ListItem>` | Full-slide structured list payload. Presence of this field infers type 'list'. Entries are strings, TextRun[] or objects with `text`, optional `description` (supporting detail under the entry), `level` and `start`. Us... |
 | `bullets` | no | `array<ref:BulletItem>` | Full-slide prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries are strings, TextRun[] or objects with `text`,... |
 | `numbering` | no | `ref:NumberingSpec` | Number the full-slide `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one ent... |
-| `image` | no | `ref:Asset` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
+| `image` | no | `ref:ImagePayload` | Shorthand for one image block: the picture composes as body content, like { type: 'image', image: value }, with the effective design.imageFit. A v2 layout binds it to a compatible body region; a region's bleed setting... |
 | `video` | no | `ref:Asset` | Full-slide video source. Presence of this field infers type 'video'. Engines do not play video: the preview draws a placeholder (a play badge with the asset's title or source as its caption), and PPTX export draws the... |
 | `chart` | no | `ref:Chart` | Full-slide chart payload. Presence of this field infers type 'chart'. |
 | `table` | no | `ref:Table` | Full-slide table payload. Presence of this field infers type 'table'. |
@@ -1027,7 +1051,7 @@ _No named properties._
 | `bullets` | no | `array<ref:BulletItem>` | Prose bullet payload: short talking points, each standing alone. Presence of this field infers type 'text', so it may sit beside `text` in one payload. Entries have no `description`; use `items` for entries with suppo... |
 | `numbering` | no | `ref:NumberingSpec` | Number the payload's `items` or `bullets` instead of bulleting them. A style name (arabic, roman-upper, roman-lower, alpha-upper, alpha-lower) or a Numbering object applies to every list level; an array gives one entr... |
 | `columns` | no | `oneOf:const:"auto" / integer` | Lay the payload's `items` or `bullets` out in columns (OPF 0.19). 'auto' tries 1, 2 then 3 equal columns at the starting text size and uses the first count at which the list fits, as long as a column stays at least a... |
-| `image` | no | `ref:Asset` | Source for an image item. |
+| `image` | no | `ref:ImagePayload` | Source for an image item. |
 | `fit` | no | `enum:cover \| contain \| stretch \| auto` | Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by... |
 | `focus` | no | `ref:ImageFocus` | Image payloads only. Point of the picture to keep in view when 'cover' crops it. Ignored by the other fits. Without a focus a portrait picture (taller than wide) cropped into a wider frame keeps y 0.3 so heads stay in... |
 | `aspectRatio` | no | `number` | Image payloads only. Width-to-height ratio of the frame: the frame becomes the largest centered box with this ratio inside the block's region, for example 2.39 for a cinematic letterbox or 0.5 for a phone-shaped frame... |
@@ -1124,12 +1148,12 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `source`
-- Purpose: A diagram written as text. Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { "source": value }.
+- Purpose: A diagram written as text (Mermaid, Graphviz DOT or PlantUML). Engines parse the source, lay it out with the deck's measured fonts at the largest type size that fits the block, and draw it in the slide's resolved colors (color scheme, variant, color map and background); the PPTX export writes it as a native SVG picture with a PNG fallback. A string value in a diagram field is shorthand for { "source": value }.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `source` | yes | `string` | The diagram source. With syntax 'mermaid' (the default) it is Mermaid 12.1 text whose first line names the diagram type (flowchart, sequenceDiagram, classDiagram, stateDiagram-v2, erDiagram, gantt, pie, mindmap, timel... |
-| `syntax` | no | `enum:mermaid` | The language of 'source'. Mermaid is the only syntax today. |
+| `syntax` | no | `enum:mermaid \| dot \| plantuml` | The language of 'source': 'mermaid' (Mermaid 12.1, the default), 'dot' (Graphviz DOT, drawn with the layered layout) or 'plantuml' (PlantUML, drawn as the Mermaid family of the same kind). OPF reads all three itself;... |
 | `alt` | no | `string` | Text alternative that says what the diagram shows. Exported as the picture's description. Without it, engines derive one from the diagram's labels. |
 
 
