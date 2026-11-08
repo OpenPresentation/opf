@@ -23,3 +23,8 @@ The coordinator's unified cross-repository list is [opf#1139](https://github.com
 | All | Full changed-branch/package checks and final native qualification on assembled release head | Owed after coordinator pause; prior run passes build/typecheck, known sparse-input/Windows symlink failures retained |
 
 Vetoable: Basic Venn supports the measured1–7 set domain; trees use a single level-zero root with explicit child depths; assistants remain outside native eligibility until measured; SH-23 tables cover at most12 native-edited entries as documented. None of these choices silently clamps authored input or treats an unmeasured domain as qualified.
+
+## Final SH20/22 result (2026-11-08)
+
+The historical in-progress SH20/22 rows above are superseded by [the complete final boundary report](../sh20-22-final-boundary-2026-11-08/README.md): all516observations retained/deeply identical,132current eligible/0fail, no additional safe OPF domain under unchanged caps, all72script inputs outside live eligibility with measured reasons. SH20is complete as a negative expansion result; SH22is complete through its accepted native-shape/refusal alternative. This does not close SH21live editing or imply a new native run.
+

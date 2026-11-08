@@ -1,0 +1,6 @@
+---
+type: changed
+packages: [opf, pptx]
+---
+
+Document the completed live SmartArt domain audit: every existing eligible measured case passes the unchanged native gate, and no additional design or script is safe under the existing density and wrapping limits. Keep excluded cases as editable native shapes with explicit measured reasons; no live eligibility or tolerance expands.
