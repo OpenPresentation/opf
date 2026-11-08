@@ -1,0 +1,31 @@
+{
+  "state": "Paused candidate; native and integration acceptance not earned",
+  "reviewedPreparation": "924a302ef10bf20d37eead5c4724e3f4a9535fe1",
+  "ordinaryBaseline": "67698fadd1b729526718e3d9e4f74909dd2e465e",
+  "ordinarySvgAndPptxControls": 32,
+  "actualSvgMarkComparisons": 18,
+  "nativeXmlImportControls": 16,
+  "coreTests": 6,
+  "editorTransactionTestPassed": true,
+  "actualHelperLifecycleControls": 14,
+  "actualHelperChartPointControls": 24,
+  "nativeCentersQualified": false,
+  "editorBrowserPassed": false,
+  "gate": {
+    "completed": false,
+    "reason": "Coordinator shipping-first pause; only owned check coordinator stopped",
+    "passed": [
+      "build",
+      "biome",
+      "changes",
+      "browser-safe",
+      "diagram-doc-images"
+    ],
+    "failed": {
+      "check": "catalog-free",
+      "compositionGzipBytes": 260563,
+      "budgetBytes": 256668,
+      "ceilingChanged": false
+    }
+  }
+}
