@@ -53,6 +53,7 @@ for (const [language, text] of Object.entries(WORDS)) {
     assert.ok(grid.chips[0].box.y + grid.chips[0].box.height <= list.box.y + 0.5, 'the tile stays in its region, above the list');
     const plain = composeSlide({ title: text.title, top: { text: `${text.focus}.` }, 'middle+bottom': { items: text.steps } }, { direction });
     assert.ok(list.text.fontSize >= field(plain, 'items').text.fontSize - 1e-6, 'the list is never smaller');
+    assert.ok(list.text.fontSize > head.text.fontSize, 'the sibling list grows past the fixed tile-label size');
   });
 
   test(`LH-69 (${direction}): a sentence or a longer text keeps its heading`, () => {
