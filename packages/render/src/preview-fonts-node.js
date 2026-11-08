@@ -5,6 +5,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { FONT_POLICY } from "@openpresentation/opf/font-policy";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { previewFontLayout } from "./preview-fonts.js";
 import { scriptFontPackages } from "./script-font-pack.js";
@@ -80,4 +81,40 @@ export function copyPreviewFonts({ outDir, scripts = false, cwd, manifest = BUND
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, "LICENSES.txt"), `Preview fonts served with <opf-deck>.\nEvery face is a pinned, unmodified copy, verified against its SHA-256.\n\n${notices.join("\n\n---\n\n")}\n`);
   return { copied, verified, bytes, files, packages: layout.length - missing.length, missing };
+}
+
+/**
+ * RR-106: one fontconfig alias per font-policy family that OPF previews with a replacement face (Aptos to Intos, Calibri to Carlito,
+ * Arial to Arimo, ...): with the preview fonts installed, an app that resolves fonts through fontconfig (LibreOffice on Linux) then
+ * draws each family with the face OPF measured it with. Returns [{ family, prefer, compatibility }] (compatibility "metric" when the
+ * replacement has the original's advances, else "visual").
+ */
+export function fontconfigAliases(policy = FONT_POLICY) {
+  const aliases = [];
+  for (const row of policy.families) {
+    const replacement = row.replacement;
+    const prefer = replacement?.family ?? replacement?.measured?.replacement;
+    if (typeof prefer !== "string" || !prefer || prefer.toLowerCase() === row.family.toLowerCase()) continue;
+    aliases.push({ family: row.family, prefer, compatibility: replacement.compatibility ?? (replacement.measured?.maxAbsWidthDelta === 0 ? "metric" : "visual") });
+  }
+  return aliases;
+}
+
+const escapeXml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[char]);
+
+/**
+ * A fontconfig file with the aliases (fontconfigAliases) and, with `fontDir`, the directory of the preview fonts. As written it is a
+ * file for `~/.config/fontconfig/conf.d/`; `includeSystem` makes it a whole configuration for FONTCONFIG_FILE that includes the
+ * system's, and `cacheDir` names its cache. An alias replaces the family even where the original is installed.
+ */
+export function fontconfigConf({ fontDir, aliases = fontconfigAliases(), includeSystem = false, cacheDir } = {}) {
+  const lines = ['<?xml version="1.0"?>', '<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">', "<!-- OPF preview fonts and font-policy aliases (opf-preview-fonts --fontconfig). -->", "<fontconfig>"];
+  if (includeSystem) lines.push('  <include ignore_missing="yes">/etc/fonts/fonts.conf</include>');
+  if (fontDir) lines.push(`  <dir>${escapeXml(fontDir)}</dir>`);
+  if (cacheDir) lines.push(`  <cachedir>${escapeXml(cacheDir)}</cachedir>`);
+  for (const alias of aliases) {
+    lines.push(`  <match target="pattern"><test name="family" qual="any"><string>${escapeXml(alias.family)}</string></test><edit name="family" mode="assign" binding="same"><string>${escapeXml(alias.prefer)}</string></edit></match>`);
+  }
+  lines.push("</fontconfig>", "");
+  return lines.join("\n");
 }

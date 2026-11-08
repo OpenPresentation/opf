@@ -1,0 +1,36 @@
+{
+  "name": "LibreOffice corpus: cover and text",
+  "slides": [
+    {
+      "layout": "cover",
+      "title": "Quarterly Operations Review",
+      "subtitle": "Prepared for the leadership team, November 2026"
+    },
+    {
+      "title": "Why we changed the release process",
+      "text": "Every release used to wait for one person to approve it by hand. Releases now run from one workflow that checks the same gates every time, records what it published and stops on the first failure. The change removed the queue, not the review: every pull request is still read before it merges."
+    },
+    {
+      "title": "A title long enough to wrap across two lines on a standard widescreen slide",
+      "text": "A short body under a long title."
+    },
+    {
+      "layout": "two-column",
+      "title": "Two columns of prose",
+      "left": {
+        "text": "The left column carries the situation: what happened, when it happened and who noticed first. It is long enough to wrap several times in a half-width column."
+      },
+      "right": {
+        "text": "The right column carries the decision: what we will do next, who owns it and how we will know it worked. It wraps as often as the left one does."
+      }
+    },
+    {
+      "layout": "statement",
+      "title": "Ship small changes often, and measure every one."
+    },
+    {
+      "title": "Text with explicit line breaks",
+      "text": "First line, broken on purpose.\nSecond line, also explicit.\nThird line, which is long enough that it also wraps on its own before it ends at the right edge of the text area."
+    }
+  ]
+}
