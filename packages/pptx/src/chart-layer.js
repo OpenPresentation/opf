@@ -34,8 +34,9 @@ export function chartLayerOptions(layer, {region, scale, textSize, labelColor, f
   // horizontal stacked bar chart whose every segment is labeled, has no value axis or gridlines.
   if (chartValueAxisHidden(layer)) Object.assign(options, {valAxisHidden: true, valGridLine: {style: 'none'}});
   const header = layer.header;
-  // LH-108: a pie with its value list is drawn in core's square (the plot area's inner layout), the list beside it.
-  const pie = layer.valueList?.pie;
+  // LH-108: a pie with its value list is drawn in core's square (the plot area's inner layout), the list beside it. LH-182: so is a
+  // doughnut, whose hole the chart marks fill with the surface.
+  const pie = layer.valueList?.pie ?? layer.doughnut?.pie;
   if (!header && !layer.plot && !layer.rows && !pie) return {options, layout};
   const left = region.x * 96, top = region.y * 96, width = region.w * 96, height = region.h * 96;
   if (pie) layout.plot = {x: fraction((pie.x - left) / width), y: fraction((pie.y - top) / height), w: fraction(pie.width / width), h: fraction(pie.height / height), target: 'inner'};

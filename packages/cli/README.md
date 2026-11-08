@@ -239,6 +239,15 @@ bundled open pack plus the `.ttf`/`.otf` files in each `--fonts` folder; relativ
 (`--asset-dir`); URLs are never fetched. Scripts beyond Latin, Greek and Cyrillic need the renderer's optional Noto script packages
 (the report names them). The full reference is in [docs/cli.md](https://github.com/OpenPresentation/opf/blob/main/docs/cli.md).
 
+## Shapes, icons, SmartArt and diagrams (0.33.0)
+
+`opf validate`, `opf convert` and the MCP server draw these with no extra flags:
+
+- **Shapes**: `shape` blocks (187 PowerPoint presets or a custom `path`), slide `shapes` overlays and connectors, six effects ([shapes](https://github.com/OpenPresentation/opf/blob/main/docs/shapes.md)).
+- **Icons**: `"icon": "lucide:truck"` on list entries, metrics and groups. The CLI registers the gallery's Lucide and Tabler sets and loads the ones a deck names ([icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md)).
+- **Live SmartArt**: the `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts export as live SmartArt where PowerPoint draws them as the preview does, else as native shapes; `--smart-art shapes` always writes shapes ([SmartArt layouts](https://github.com/OpenPresentation/opf/blob/main/docs/smartart.md)).
+- **Mermaid diagrams** export as native PowerPoint shapes by default; `--diagrams picture` writes a picture ([diagrams](https://github.com/OpenPresentation/opf/blob/main/docs/diagrams.md)).
+
 ## Markdown and YAML
 
 JSON stays the canonical form of a deck; YAML (`deck.opf.yaml`) and Markdown (`deck.opf.md`) are authoring forms of the same data,

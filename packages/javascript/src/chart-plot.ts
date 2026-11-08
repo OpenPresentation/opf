@@ -11,6 +11,7 @@ import {chartTextSize, type ChartValueAxis} from './chart-axis.js';
 import {formatDataNumber, numberFormatError, resolveChartData, type ResolvedChartData} from './chart-data.js';
 import {chartDrawPlan} from './chart-fallback.js';
 import type {ChartLayer, ChartPlotInset} from './chart-layer.js';
+import {horizontalBarPlot} from './chart-marks.js';
 import {chartOptionTarget, resolveChartOptions} from './chart-options.js';
 import {groupNumber, groupsAxisTicks} from './number-grouping.js';
 
@@ -209,37 +210,70 @@ export interface SiblingPlotChart {
 
 /**
  * LH-93: the charts of each shared set (`shareSiblingChartAxes`) get one plot height. Every member's plot is laid out on its own
- * (chartPlotInset); members whose boxes overlap vertically stand side by side and share their plots' lowest top and highest bottom, and
- * the set takes the shortest such plot height, each member's plot ending at its row's baseline. The result is written to the member's
- * layer as `plot`. A set with a member that has no inset (a horizontal bar chart, a chart without a usable axis) is left as it was.
- * `geometryFor` gives a member's scale, text floor, measure, direction and language; `document` resolves dataset references.
+ * (chartPlotInset, or horizontalBarPlot for a horizontal bar chart); members whose boxes overlap vertically stand side by side and share
+ * their plots' lowest top and highest bottom, and the set takes the shortest such plot height, each member's plot ending at its row's
+ * baseline (a horizontal bar chart's at its row's top: its categories read from the top). A set of horizontal bar charts, whose value axis
+ * runs across, also shares one plot width: members whose boxes overlap horizontally stand one above another and start their plots at the
+ * same x (the widest category gutter among them), and every member's plot takes the set's narrowest width, so one value is one bar length
+ * on every chart. The result is written to the member's layer as `plot`. A set with a member that has no inset (a chart without a
+ * usable axis, a chart with options of its own) is left as it was. `geometryFor` gives a member's scale, text floor, measure, direction
+ * and language; `document` resolves dataset references.
  */
 export function shareSiblingPlots(sets: readonly (readonly SiblingPlotChart[])[], geometryFor: (item: SiblingPlotChart) => Omit<ChartPlotGeometry, 'box'>, document?: unknown): void {
   for (const members of sets) {
     if (members.length < 2) continue;
     const plots = members.map(item => {
       const resolved = resolveChartData(item.value, document);
-      const inset = item.chart ? chartPlotInset(item.value, resolved, item.chart, {...geometryFor(item), box: item.box}) : undefined;
-      return inset ? {item, inset, top: item.box.y + inset.top, bottom: item.box.y + item.box.height - inset.bottom} : undefined;
+      const geometry = {...geometryFor(item), box: item.box};
+      const horizontal = HORIZONTAL.has(typeId(item.value));
+      const axis = item.chart?.valueAxis;
+      const inset = !item.chart ? undefined : horizontal ? (axis ? horizontalBarPlot(item.value, resolved, item.chart.layer, axis, item.box, geometry) : undefined) : chartPlotInset(item.value, resolved, item.chart, geometry);
+      return inset ? {item, inset, horizontal, top: item.box.y + inset.top, bottom: item.box.y + item.box.height - inset.bottom, left: item.box.x + inset.left, right: item.box.x + item.box.width - inset.right} : undefined;
     });
     if (plots.some(plot => plot === undefined)) continue;
     const placed = plots as NonNullable<(typeof plots)[number]>[];
+    const horizontal = placed.every(plot => plot.horizontal);
+    if (!horizontal && placed.some(plot => plot.horizontal)) continue;
     // Rows: members whose boxes overlap by at least half the shorter box's height stand side by side.
-    const rows: (typeof placed)[] = [];
-    for (const plot of [...placed].sort((a, b) => a.item.box.y - b.item.box.y)) {
-      const overlaps = (other: typeof plot) => Math.min(plot.item.box.y + plot.item.box.height, other.item.box.y + other.item.box.height) - Math.max(plot.item.box.y, other.item.box.y) >= Math.min(plot.item.box.height, other.item.box.height) / 2;
-      const row = rows.find(entry => entry.some(overlaps));
-      if (row) row.push(plot); else rows.push([plot]);
-    }
+    const rows = groups(placed, plot => [plot.item.box.y, plot.item.box.height]);
     const spans = rows.map(row => ({row, top: Math.max(...row.map(plot => plot.top)), bottom: Math.min(...row.map(plot => plot.bottom))}));
     const height = Math.min(...spans.map(span => span.bottom - span.top));
     if (!(height > 1)) continue;
-    for (const {row, bottom} of spans) {
-      for (const {item, inset} of row) {
-        const plot: ChartPlotInset = {left: inset.left, right: inset.right, top: bottom - height - item.box.y, bottom: item.box.y + item.box.height - bottom};
-        item.chart!.layer = {...item.chart!.layer, plot};
+    // Columns of horizontal bar charts: members whose boxes overlap by at least half the narrower box's width stand one above another.
+    const starts = new Map<(typeof placed)[number], number>();
+    let width = Infinity;
+    if (horizontal) {
+      for (const column of groups(placed, plot => [plot.item.box.x, plot.item.box.width])) {
+        const x = Math.max(...column.map(plot => plot.left));
+        for (const plot of column) { starts.set(plot, x); width = Math.min(width, plot.right - x); }
+      }
+      if (!(width > 1)) continue;
+    }
+    for (const {row, top, bottom} of spans) {
+      for (const plot of row) {
+        const {item, inset} = plot;
+        const y = horizontal ? top : bottom - height;
+        const x = horizontal ? starts.get(plot)! : item.box.x + inset.left;
+        const right = horizontal ? item.box.x + item.box.width - (x + width) : inset.right;
+        const shared: ChartPlotInset = {left: x - item.box.x, right, top: y - item.box.y, bottom: item.box.y + item.box.height - (y + height)};
+        item.chart!.layer = {...item.chart!.layer, plot: shared};
       }
     }
   }
+}
+
+const HORIZONTAL = new Set(['bar', 'stacked-bar', '100pct-stacked-bar']);
+const typeId = (chart: unknown): string => record(chart) && typeof chart.type === 'string' ? chart.type.trim().toLowerCase() : '';
+
+/** The members of a set in bands along one axis: two overlap when they share at least half the smaller extent. */
+function groups<T>(members: readonly T[], extent: (member: T) => [number, number]): T[][] {
+  const bands: T[][] = [];
+  for (const member of [...members].sort((a, b) => extent(a)[0] - extent(b)[0])) {
+    const [from, size] = extent(member);
+    const overlaps = (other: T) => { const [otherFrom, otherSize] = extent(other); return Math.min(from + size, otherFrom + otherSize) - Math.max(from, otherFrom) >= Math.min(size, otherSize) / 2; };
+    const band = bands.find(entry => entry.some(overlaps));
+    if (band) band.push(member); else bands.push([member]);
+  }
+  return bands;
 }
 

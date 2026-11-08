@@ -97,9 +97,22 @@ const plainOf = (value: unknown): string | undefined => typeof value === 'string
  * full stop at its end. A single character ("A", "1") is a marker or a placeholder, not a name.
  */
 export function isLabelText(value: unknown): boolean {
+  return labelWithin(value, EYEBROW_LABEL_WORDS, EYEBROW_LABEL_CHARS);
+}
+/** A one-line label of 2 to `chars` characters and at most `words` words, with no full stop at its end (isLabelText, rowLabel). */
+function labelWithin(value: unknown, words: number, chars: number): boolean {
   const text = plainOf(value)?.trim();
-  if (!text || /[\r\n\u2028\u2029]/.test(text) || [...text].length < 2 || [...text].length > EYEBROW_LABEL_CHARS || /[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(text)) return false;
-  return text.split(/\s+/u).length <= EYEBROW_LABEL_WORDS;
+  if (!text || /[\r\n\u2028\u2029]/.test(text) || [...text].length < 2 || [...text].length > chars || /[.!?\u3002\uff01\uff1f\u2026\u06d4\u0964]$/u.test(text)) return false;
+  return text.split(/\s+/u).length <= words;
+}
+/** LH-171: a row label beside sibling rows is a short phrase of at most this many words and characters (isLabelText allows 3 and 32). */
+export const ROW_LABEL_WORDS = 6, ROW_LABEL_CHARS = 48;
+/**
+ * LH-171: a list entry's label that may stand in a ruled row beside a sibling list drawn as rows: one line of 2 to ROW_LABEL_CHARS
+ * characters and at most ROW_LABEL_WORDS words, with no full stop at its end ("Live in 8 weeks", "Proven at our scale").
+ */
+export function rowLabel(value: unknown): boolean {
+  return labelWithin(value, ROW_LABEL_WORDS, ROW_LABEL_CHARS);
 }
 /**
  * LH-50: a short label next to a longer text is that text's eyebrow: `label` reads as a label (isLabelText), and `text`, the paragraph right

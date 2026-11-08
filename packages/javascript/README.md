@@ -117,6 +117,15 @@ Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the
 
 `@openpresentation/opf/ids` (all of it also on the package root, the pointer and hash parts also on `/patch`) makes edits addressable and checkable. `assignIds(document, { generate? })` fills the missing `id` of slides and content payloads deterministically (`{ document, patch, assigned }`; existing ids are never changed). In an array, the pointer token `@intro` names the element whose `id` is `intro`, so `/slides/@intro/blocks/@kpi/text` survives reordering: `applyPatch` and `readPointer` resolve it, `resolveIdPointer` and `toIdPointer` convert a pointer, `resolveIdPatch` and `toIdPatch` a whole patch. `documentHash(document)` is `sha256:` and a SHA-256 of the key-sorted JSON (pure JavaScript, the same in Node, browsers and edge runtimes); `applyPatch(document, patch, { expectHash })` and `edit(deck, patch, { expectHash })` apply only to the document that hash was taken from, else throw `OPFPatchHashError` and change nothing. `touches(patch, document?)` returns the pointers (index and id form), ids, slide ids and kinds a patch reads and writes, for conflict detection and permission checks. See [the guide](../../docs/patch-diff-merge-format.md#ids-id-addressed-paths-hashes-and-patch-scope).
 
+### Shapes, icons, SmartArt layouts and diagrams (0.33.0)
+
+A slide can draw more than text, pictures and charts, with no extra package:
+
+- **Shapes.** A `shape` block takes one of PowerPoint's 187 presets (`{ "shape": "chevron", "text": "Plan" }`) or a custom `path`, with fills, strokes and six effects; a slide's `shapes` list adds overlays and connectors between blocks. The preset table is `PRESET_SHAPES` of `@openpresentation/opf/shape-geometry`. See [shapes](https://github.com/OpenPresentation/opf/blob/main/docs/shapes.md) and [shape effects](https://github.com/OpenPresentation/opf/blob/main/docs/shape-effects.md).
+- **Icons.** `icon` on a list entry, a metric or a group (`"lucide:truck"`, `"tabler:rocket"`) draws a chip, and a list of short icon entries draws icon cards. The sets live in `@openpresentation/gallery/icon-sets`: register `galleryIconSets` beside `gallery` and await `ensureIcons(deck, { catalogs })` before synchronous drawing (`@openpresentation/opf/composition`). See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).
+- **SmartArt layouts.** The `pyramid`, `matrix`, `cycle`, `chevrons`, `flow` and `vertical-flow` layouts draw one diagram from a list; PowerPoint export writes live SmartArt where it holds the text, and native shapes elsewhere. See [SmartArt layouts](https://github.com/OpenPresentation/opf/blob/main/docs/smartart.md).
+- **Diagrams.** A Mermaid `diagram` payload is drawn in the deck's design and exports as native PowerPoint shapes by default (`--diagrams picture` for a picture). See [diagrams](https://github.com/OpenPresentation/opf/blob/main/docs/diagrams.md).
+
 ### Layout previews
 
 `@openpresentation/gallery/previews` ships pre-rendered SVG thumbnails for the
