@@ -1,0 +1,958 @@
+﻿{
+    "passed":  true,
+    "scope":  "Read-only product baseline, no native domain acceptance or edit qualification",
+    "stages":  [
+                   "create-app:ok",
+                   "empty-visible-minimized:ok",
+                   "hierarchy-5-live-open:ok",
+                   "hierarchy-5-live-export-read:ok",
+                   "hierarchy-5-live-close-owned:ok",
+                   "hierarchy-5-native-open:ok",
+                   "hierarchy-5-native-export-read:ok",
+                   "hierarchy-5-native-close-owned:ok",
+                   "quit-empty-owned-app:ok"
+               ],
+    "failure":  null,
+    "inputs":  [
+                   {
+                       "id":  "hierarchy-5",
+                       "sha256After":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9",
+                       "relative":  "pptx/hierarchy-5.pptx",
+                       "copySha256After":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-hierarchy5-count-03\\result\\pptx\\hierarchy-5.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\hierarchy-5.pptx",
+                       "spec":  {
+                                    "id":  "hierarchy-5",
+                                    "kind":  "hierarchy",
+                                    "count":  5,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+                                    "items":  [
+                                                  {
+                                                      "text":  "Root",
+                                                      "level":  0
+                                                  },
+                                                  {
+                                                      "text":  "Build",
+                                                      "level":  1
+                                                  },
+                                                  {
+                                                      "text":  "Web",
+                                                      "level":  2
+                                                  },
+                                                  {
+                                                      "text":  "App",
+                                                      "level":  2
+                                                  },
+                                                  {
+                                                      "text":  "Ship",
+                                                      "level":  1
+                                                  }
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/hierarchy-5.pptx",
+                                                 "sha256":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/hierarchy-5.pptx",
+                                                   "sha256":  "4294677842ca76b53229f994169aa7fd6863aea114d333c61dfafb91e86dda94"
+                                               }
+                                },
+                       "mode":  "live",
+                       "sha256":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9"
+                   },
+                   {
+                       "id":  "hierarchy-5",
+                       "sha256After":  "4294677842ca76b53229f994169aa7fd6863aea114d333c61dfafb91e86dda94",
+                       "relative":  "pptx-shapes/hierarchy-5.pptx",
+                       "copySha256After":  "4294677842ca76b53229f994169aa7fd6863aea114d333c61dfafb91e86dda94",
+                       "unchanged":  true,
+                       "copy":  "C:\\opf-work\\release-033-artifacts\\sh21-hierarchy5-count-03\\result\\pptx-shapes\\hierarchy-5.pptx",
+                       "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\hierarchy-5.pptx",
+                       "spec":  {
+                                    "id":  "hierarchy-5",
+                                    "kind":  "hierarchy",
+                                    "count":  5,
+                                    "layoutId":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+                                    "items":  [
+                                                  {
+                                                      "text":  "Root",
+                                                      "level":  0
+                                                  },
+                                                  {
+                                                      "text":  "Build",
+                                                      "level":  1
+                                                  },
+                                                  {
+                                                      "text":  "Web",
+                                                      "level":  2
+                                                  },
+                                                  {
+                                                      "text":  "App",
+                                                      "level":  2
+                                                  },
+                                                  {
+                                                      "text":  "Ship",
+                                                      "level":  1
+                                                  }
+                                              ],
+                                    "fontSize":  36,
+                                    "live":  {
+                                                 "file":  "pptx/hierarchy-5.pptx",
+                                                 "sha256":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9"
+                                             },
+                                    "native":  {
+                                                   "file":  "pptx-shapes/hierarchy-5.pptx",
+                                                   "sha256":  "4294677842ca76b53229f994169aa7fd6863aea114d333c61dfafb91e86dda94"
+                                               }
+                                },
+                       "mode":  "native",
+                       "sha256":  "4294677842ca76b53229f994169aa7fd6863aea114d333c61dfafb91e86dda94"
+                   }
+               ],
+    "controls":  [
+                     {
+                         "shapes":  [
+                                        {
+                                            "left":  43.200000762939453,
+                                            "rotation":  0,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "complexScript":  "+mj-cs",
+                                            "shapeType":  14,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  506.13,
+                                                              "top":  43.2,
+                                                              "height":  48.6,
+                                                              "text":  "Measured hierarchy geometry"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  40.5,
+                                            "text":  "Measured hierarchy geometry",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  43.200000762939453,
+                                            "fillType":  -2,
+                                            "height":  49.409999847412109,
+                                            "width":  873.5999755859375
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx\\hierarchy-5.pptx",
+                         "id":  "hierarchy-5",
+                         "mode":  "live",
+                         "smartArt":  [
+                                          {
+                                              "layoutName":  "Hierarchy",
+                                              "nodes":  5,
+                                              "layout":  "urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1",
+                                              "dataNodes":  [
+                                                                {
+                                                                    "children":  2,
+                                                                    "text":  "Root",
+                                                                    "type":  1,
+                                                                    "level":  1,
+                                                                    "parent":  null,
+                                                                    "index":  1
+                                                                },
+                                                                {
+                                                                    "children":  2,
+                                                                    "text":  "Build",
+                                                                    "type":  1,
+                                                                    "level":  2,
+                                                                    "parent":  "Root",
+                                                                    "index":  2
+                                                                },
+                                                                {
+                                                                    "children":  0,
+                                                                    "text":  "Web",
+                                                                    "type":  1,
+                                                                    "level":  3,
+                                                                    "parent":  "Build",
+                                                                    "index":  3
+                                                                },
+                                                                {
+                                                                    "children":  0,
+                                                                    "text":  "App",
+                                                                    "type":  1,
+                                                                    "level":  3,
+                                                                    "parent":  "Build",
+                                                                    "index":  4
+                                                                },
+                                                                {
+                                                                    "children":  0,
+                                                                    "text":  "Ship",
+                                                                    "type":  1,
+                                                                    "level":  2,
+                                                                    "parent":  "Root",
+                                                                    "index":  5
+                                                                }
+                                                            ],
+                                              "items":  [
+                                                            {
+                                                                "width":  90.911102294921875,
+                                                                "height":  43.265434265136719,
+                                                                "shapeType":  9,
+                                                                "transparency":  1,
+                                                                "type":  -2,
+                                                                "left":  517.19085693359375,
+                                                                "name":  "",
+                                                                "fillType":  -2,
+                                                                "top":  205.54843139648438,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "width":  90.911102294921875,
+                                                                "height":  43.265434265136719,
+                                                                "shapeType":  9,
+                                                                "transparency":  1,
+                                                                "type":  -2,
+                                                                "left":  426.27975463867188,
+                                                                "name":  "",
+                                                                "fillType":  -2,
+                                                                "top":  343.27874755859375,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "width":  90.911102294921875,
+                                                                "height":  43.265434265136719,
+                                                                "shapeType":  9,
+                                                                "transparency":  1,
+                                                                "type":  -2,
+                                                                "left":  335.36859130859375,
+                                                                "name":  "",
+                                                                "fillType":  -2,
+                                                                "top":  343.27874755859375,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "width":  90.911102294921875,
+                                                                "height":  43.265434265136719,
+                                                                "shapeType":  9,
+                                                                "transparency":  1,
+                                                                "type":  -2,
+                                                                "left":  426.27975463867188,
+                                                                "name":  "",
+                                                                "fillType":  -2,
+                                                                "top":  205.54843139648438,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "width":  148.76362609863281,
+                                                                "height":  94.464881896972656,
+                                                                "shapeType":  1,
+                                                                "transparency":  0,
+                                                                "type":  5,
+                                                                "left":  442.80905151367188,
+                                                                "name":  "",
+                                                                "fillType":  1,
+                                                                "top":  111.08346557617188,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "left":  459.33834838867188,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.10000002384185791,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  454.682678,
+                                                                                  "width":  71.68,
+                                                                                  "top":  40.1157074,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "Root"
+                                                                              }
+                                                                          ],
+                                                                "type":  5,
+                                                                "size":  36,
+                                                                "text":  "Root",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  126.78630065917969,
+                                                                "fillType":  1,
+                                                                "height":  94.464881896972656,
+                                                                "width":  148.76362609863281
+                                                            },
+                                                            {
+                                                                "width":  148.76362609863281,
+                                                                "height":  94.464881896972656,
+                                                                "shapeType":  1,
+                                                                "transparency":  0,
+                                                                "type":  5,
+                                                                "left":  351.89788818359375,
+                                                                "name":  "",
+                                                                "fillType":  1,
+                                                                "top":  248.81385803222656,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "left":  368.42724609375,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.10000002384185791,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  360.22406,
+                                                                                  "width":  78.77504,
+                                                                                  "top":  177.8461,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "Build"
+                                                                              }
+                                                                          ],
+                                                                "type":  5,
+                                                                "size":  36,
+                                                                "text":  "Build",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  264.51669311523438,
+                                                                "fillType":  1,
+                                                                "height":  94.464881896972656,
+                                                                "width":  148.76362609863281
+                                                            },
+                                                            {
+                                                                "width":  148.76362609863281,
+                                                                "height":  94.464881896972656,
+                                                                "shapeType":  1,
+                                                                "transparency":  0,
+                                                                "type":  5,
+                                                                "left":  260.98678588867188,
+                                                                "name":  "",
+                                                                "fillType":  1,
+                                                                "top":  386.54415893554688,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "left":  277.51605224609375,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.10000002384185791,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  275.667877,
+                                                                                  "width":  66.0649643,
+                                                                                  "top":  315.576416,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "Web"
+                                                                              }
+                                                                          ],
+                                                                "type":  5,
+                                                                "size":  36,
+                                                                "text":  "Web",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  402.24700927734375,
+                                                                "fillType":  1,
+                                                                "height":  94.464881896972656,
+                                                                "width":  148.76362609863281
+                                                            },
+                                                            {
+                                                                "width":  148.76362609863281,
+                                                                "height":  94.464881896972656,
+                                                                "shapeType":  1,
+                                                                "transparency":  0,
+                                                                "type":  5,
+                                                                "left":  442.80905151367188,
+                                                                "name":  "",
+                                                                "fillType":  1,
+                                                                "top":  386.54415893554688,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "left":  459.33834838867188,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.10000002384185791,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  460.765167,
+                                                                                  "width":  59.5150375,
+                                                                                  "top":  315.576416,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "App"
+                                                                              }
+                                                                          ],
+                                                                "type":  5,
+                                                                "size":  36,
+                                                                "text":  "App",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  402.24700927734375,
+                                                                "fillType":  1,
+                                                                "height":  94.464881896972656,
+                                                                "width":  148.76362609863281
+                                                            },
+                                                            {
+                                                                "width":  148.76362609863281,
+                                                                "height":  94.464881896972656,
+                                                                "shapeType":  1,
+                                                                "transparency":  0,
+                                                                "type":  5,
+                                                                "left":  533.72015380859375,
+                                                                "name":  "",
+                                                                "fillType":  1,
+                                                                "top":  248.81385803222656,
+                                                                "rotation":  0
+                                                            },
+                                                            {
+                                                                "left":  550.24945068359375,
+                                                                "rotation":  0,
+                                                                "name":  "",
+                                                                "complexScript":  "+mn-cs",
+                                                                "shapeType":  1,
+                                                                "transparency":  0.10000002384185791,
+                                                                "alignment":  2,
+                                                                "spacing":  {
+                                                                                "rule":  0,
+                                                                                "within":  43.92,
+                                                                                "before":  0,
+                                                                                "after":  0
+                                                                            },
+                                                                "lines":  [
+                                                                              {
+                                                                                  "left":  547.608765,
+                                                                                  "width":  67.65,
+                                                                                  "top":  177.8461,
+                                                                                  "height":  45.81504,
+                                                                                  "text":  "Ship"
+                                                                              }
+                                                                          ],
+                                                                "type":  5,
+                                                                "size":  36,
+                                                                "text":  "Ship",
+                                                                "eastAsian":  "Source Sans 3",
+                                                                "latin":  "Source Sans 3",
+                                                                "top":  264.51669311523438,
+                                                                "fillType":  1,
+                                                                "height":  94.464881896972656,
+                                                                "width":  148.76362609863281
+                                                            }
+                                                        ],
+                                              "frame":  {
+                                                            "left":  43.2,
+                                                            "width":  873.6,
+                                                            "top":  110.995514,
+                                                            "height":  385.804474
+                                                        }
+                                          }
+                                      ]
+                     },
+                     {
+                         "shapes":  [
+                                        {
+                                            "width":  0,
+                                            "height":  29.484094619750977,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  517.19091796875,
+                                            "name":  "OPF arrangement slides.0.items connector 4 segment 1",
+                                            "fillType":  -2,
+                                            "top":  205.54843139648438,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  90.911102294921875,
+                                            "height":  0,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  517.19091796875,
+                                            "name":  "OPF arrangement slides.0.items connector 4 segment 2",
+                                            "fillType":  -2,
+                                            "top":  235.0325927734375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  13.781338691711426,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  608.10205078125,
+                                            "name":  "OPF arrangement slides.0.items connector 4 segment 3",
+                                            "fillType":  -2,
+                                            "top":  235.0325927734375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  29.484094619750977,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  426.27975463867188,
+                                            "name":  "OPF arrangement slides.0.items connector 3 segment 1",
+                                            "fillType":  -2,
+                                            "top":  343.27880859375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  90.911102294921875,
+                                            "height":  0,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  426.27975463867188,
+                                            "name":  "OPF arrangement slides.0.items connector 3 segment 2",
+                                            "fillType":  -2,
+                                            "top":  372.76290893554688,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  13.781338691711426,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  517.19091796875,
+                                            "name":  "OPF arrangement slides.0.items connector 3 segment 3",
+                                            "fillType":  -2,
+                                            "top":  372.76290893554688,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  29.484094619750977,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  426.27975463867188,
+                                            "name":  "OPF arrangement slides.0.items connector 2 segment 1",
+                                            "fillType":  -2,
+                                            "top":  343.27880859375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  90.911102294921875,
+                                            "height":  0,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  335.36865234375,
+                                            "name":  "OPF arrangement slides.0.items connector 2 segment 2",
+                                            "fillType":  -2,
+                                            "top":  372.76290893554688,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  13.781338691711426,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  335.36865234375,
+                                            "name":  "OPF arrangement slides.0.items connector 2 segment 3",
+                                            "fillType":  -2,
+                                            "top":  372.76290893554688,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  29.484094619750977,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  517.19091796875,
+                                            "name":  "OPF arrangement slides.0.items connector 1 segment 1",
+                                            "fillType":  -2,
+                                            "top":  205.54843139648438,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  90.911102294921875,
+                                            "height":  0,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  426.27975463867188,
+                                            "name":  "OPF arrangement slides.0.items connector 1 segment 2",
+                                            "fillType":  -2,
+                                            "top":  235.0325927734375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  0,
+                                            "height":  13.781338691711426,
+                                            "shapeType":  9,
+                                            "transparency":  1,
+                                            "type":  -2,
+                                            "left":  426.27975463867188,
+                                            "name":  "OPF arrangement slides.0.items connector 1 segment 3",
+                                            "fillType":  -2,
+                                            "top":  235.0325927734375,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0,
+                                            "type":  5,
+                                            "left":  442.80905151367188,
+                                            "name":  "OPF arrangement slides.0.items rear 0",
+                                            "fillType":  1,
+                                            "top":  111.08346557617188,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0.10000002384185791,
+                                            "type":  5,
+                                            "left":  459.33834838867188,
+                                            "name":  "OPF arrangement slides.0.items node 0",
+                                            "fillType":  1,
+                                            "top":  126.78630065917969,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0,
+                                            "type":  5,
+                                            "left":  351.89794921875,
+                                            "name":  "OPF arrangement slides.0.items rear 1",
+                                            "fillType":  1,
+                                            "top":  248.81385803222656,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0.10000002384185791,
+                                            "type":  5,
+                                            "left":  368.42724609375,
+                                            "name":  "OPF arrangement slides.0.items node 1",
+                                            "fillType":  1,
+                                            "top":  264.51669311523438,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0,
+                                            "type":  5,
+                                            "left":  260.98684692382813,
+                                            "name":  "OPF arrangement slides.0.items rear 2",
+                                            "fillType":  1,
+                                            "top":  386.54425048828125,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0.10000002384185791,
+                                            "type":  5,
+                                            "left":  277.51614379882813,
+                                            "name":  "OPF arrangement slides.0.items node 2",
+                                            "fillType":  1,
+                                            "top":  402.24710083007813,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0,
+                                            "type":  5,
+                                            "left":  442.80905151367188,
+                                            "name":  "OPF arrangement slides.0.items rear 3",
+                                            "fillType":  1,
+                                            "top":  386.54425048828125,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0.10000002384185791,
+                                            "type":  5,
+                                            "left":  459.33834838867188,
+                                            "name":  "OPF arrangement slides.0.items node 3",
+                                            "fillType":  1,
+                                            "top":  402.24710083007813,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0,
+                                            "type":  5,
+                                            "left":  533.72021484375,
+                                            "name":  "OPF arrangement slides.0.items rear 4",
+                                            "fillType":  1,
+                                            "top":  248.81385803222656,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "width":  148.76370239257813,
+                                            "height":  94.464958190917969,
+                                            "shapeType":  1,
+                                            "transparency":  0.10000002384185791,
+                                            "type":  5,
+                                            "left":  550.24951171875,
+                                            "name":  "OPF arrangement slides.0.items node 4",
+                                            "fillType":  1,
+                                            "top":  264.51669311523438,
+                                            "rotation":  0
+                                        },
+                                        {
+                                            "left":  43.200000762939453,
+                                            "rotation":  0,
+                                            "name":  "OPF heading slides.0.title line 0",
+                                            "complexScript":  "+mj-cs",
+                                            "shapeType":  14,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  43.2,
+                                                              "width":  506.13,
+                                                              "top":  43.2,
+                                                              "height":  48.6,
+                                                              "text":  "Measured hierarchy geometry"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  40.5,
+                                            "text":  "Measured hierarchy geometry",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  43.200000762939453,
+                                            "fillType":  -2,
+                                            "height":  49.409999847412109,
+                                            "width":  873.5999755859375
+                                        },
+                                        {
+                                            "left":  498.36819458007813,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 0",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  498.3682,
+                                                              "width":  71.63,
+                                                              "top":  152.058823,
+                                                              "height":  43.2,
+                                                              "text":  "Root"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "Root",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  152.05882263183594,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  70.704017639160156
+                                        },
+                                        {
+                                            "left":  403.42510986328125,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 1",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  403.4251,
+                                                              "width":  78.75504,
+                                                              "top":  289.789124,
+                                                              "height":  43.2,
+                                                              "text":  "Build"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "Build",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  289.78912353515625,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  78.768028259277344
+                                        },
+                                        {
+                                            "left":  318.86795043945313,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 2",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  318.86795,
+                                                              "width":  66.00504,
+                                                              "top":  427.519531,
+                                                              "height":  43.2,
+                                                              "text":  "Web"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "Web",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  427.51953125,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  66.05999755859375
+                                        },
+                                        {
+                                            "left":  503.94818115234375,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 3",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  503.948181,
+                                                              "width":  59.50504,
+                                                              "top":  427.519531,
+                                                              "height":  43.2,
+                                                              "text":  "App"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "App",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  427.51953125,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  59.544013977050781
+                                        },
+                                        {
+                                            "left":  590.80938720703125,
+                                            "rotation":  0,
+                                            "name":  "OPF list slides.0.items line 4",
+                                            "complexScript":  "+mn-cs",
+                                            "shapeType":  17,
+                                            "transparency":  1,
+                                            "alignment":  1,
+                                            "spacing":  {
+                                                            "rule":  -1,
+                                                            "within":  1,
+                                                            "before":  0,
+                                                            "after":  0
+                                                        },
+                                            "lines":  [
+                                                          {
+                                                              "left":  590.8094,
+                                                              "width":  67.75504,
+                                                              "top":  289.789124,
+                                                              "height":  43.2,
+                                                              "text":  "Ship"
+                                                          }
+                                                      ],
+                                            "type":  1,
+                                            "size":  36,
+                                            "text":  "Ship",
+                                            "eastAsian":  "Source Sans 3",
+                                            "latin":  "Source Sans 3",
+                                            "top":  289.78912353515625,
+                                            "fillType":  -2,
+                                            "height":  43.919998168945313,
+                                            "width":  67.644012451171875
+                                        }
+                                    ],
+                         "source":  "C:\\opf-work\\sh21-qualification\\docs\\programs\\shapes\\sh21-product-candidate-2026-11-07-02\\pptx-shapes\\hierarchy-5.pptx",
+                         "id":  "hierarchy-5",
+                         "mode":  "native",
+                         "smartArt":  [
+
+                                      ]
+                     }
+                 ]
+}

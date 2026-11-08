@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "file": "protected-helpers.json",
+      "bytes": 873,
+      "sha256": "8ec5353b66c1691bf7230ee3b5c886d2b5719e9ab263b331474b956a603c4e10"
+    },
+    {
+      "file": "raw-checks.zip",
+      "bytes": 25119,
+      "sha256": "e389ccff0bb97d4ed52000e6fb7b0478a32aed08155a9612312a5c46219b8ee0"
+    },
+    {
+      "file": "receipt.json",
+      "bytes": 5888,
+      "sha256": "d2d6d35e68f7200887300a1f06a23f7d4f720346a884e7c05ab5c4293c2cc71a"
+    }
+  ]
+}

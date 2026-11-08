@@ -1,0 +1,6 @@
+{
+  "changed": [
+    "inverted-pyramid"
+  ],
+  "scope": "Only the new preview is promoted here; pre-existing wave2 preview differences belong to the integration regeneration."
+}

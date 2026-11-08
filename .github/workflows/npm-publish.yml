@@ -120,6 +120,24 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Build and check the Claude Desktop bundle
+        run: pnpm --filter @openpresentation/mcp run build:mcpb --check
+
+      - name: Hash the checked bundle
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release-mcpb.mjs checksum "$VERSION" --dir packages/mcp/artifacts
+
+      - name: Keep the checked MCP bundle and checksum
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mcpb
+          path: |
+            packages/mcp/artifacts/opf-${{ needs.plan.outputs.version }}.mcpb
+            packages/mcp/artifacts/opf-${{ needs.plan.outputs.version }}.mcpb.sha256
+          if-no-files-found: error
+          retention-days: 14
+
       # pnpm pack of the seven, then scripts/stamp-githead.mjs on each tarball: npm records gitHead only when it publishes a
       # directory, and a tarball publish would otherwise ship none (spike S4 F2).
       - name: Pack and stamp gitHead
@@ -257,6 +275,12 @@ jobs:
         with:
           node-version: 24
 
+      - name: Download the checked MCP bundle and checksum
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: mcpb
+          path: ${{ runner.temp }}/mcpb
+
       # The tag exists already (pushed by release.yml, or by hand). The notes are the seven package changelog sections, grouped by
       # package; a prerelease has no changelog section yet, so its notes come from the pending changes/ fragments. A prerelease is
       # marked so, and never becomes the repository's latest release.
@@ -268,12 +292,18 @@ jobs:
         run: |
           if gh release view "$TAG" --json tagName >/dev/null 2>&1; then
             echo "Release $TAG already exists; preserving its notes."
-            exit 0
+          else
+            node scripts/release.mjs notes "$VERSION" --out "$RUNNER_TEMP/notes.md"
+            flags=(--verify-tag)
+            case "$VERSION" in *-*) flags+=(--prerelease) ;; esac
+            gh release create "$TAG" --title "OPF $VERSION" --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
           fi
-          node scripts/release.mjs notes "$VERSION" --out "$RUNNER_TEMP/notes.md"
-          flags=(--verify-tag)
-          case "$VERSION" in *-*) flags+=(--prerelease) ;; esac
-          gh release create "$TAG" --title "OPF $VERSION" --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
+
+      - name: Attach missing MCP bundle assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release-mcpb.mjs attach "$VERSION" --dir "$RUNNER_TEMP/mcpb"
 
   # A failed release opens (or comments on) one issue "Release vX.Y.Z failed" labeled release-failed; the next green release
   # closes it. A dry run reports nothing.

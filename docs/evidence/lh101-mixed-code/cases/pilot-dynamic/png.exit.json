@@ -1,0 +1,13 @@
+{
+  "args": [
+    "packages/cli/dist/index.js",
+    "convert",
+    "C:/opf-work/lh101-mixed-code-after-03/cases/pilot-dynamic/source.opf.json",
+    "C:/opf-work/lh101-mixed-code-after-03/preview/pilot-dynamic/slide-{n}.png",
+    "--date",
+    "2026-11-08",
+    "--keep-slides",
+    "--include-hidden"
+  ],
+  "status": 0
+}

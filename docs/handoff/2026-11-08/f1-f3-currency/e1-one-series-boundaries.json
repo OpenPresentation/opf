@@ -1,0 +1,442 @@
+{
+  "scope": "Actual immutable after02 source and convert receipt, compared with current built semantic validation",
+  "rows": [
+    {
+      "deck": "batch-04",
+      "id": "s13",
+      "ordinal": 13,
+      "chart": {
+        "type": "radar",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Current",
+            "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              28,
+              25
+            ],
+            [
+              "Q2",
+              32,
+              27
+            ],
+            [
+              "Q3",
+              35,
+              29
+            ],
+            [
+              "Q4",
+              39,
+              31
+            ]
+          ]
+        }
+      },
+      "path": "/slides/12/blocks/0/chart",
+      "resolved": {
+        "ok": true,
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            28,
+            25
+          ],
+          [
+            "Q2",
+            32,
+            27
+          ],
+          [
+            "Q3",
+            35,
+            29
+          ],
+          [
+            "Q4",
+            39,
+            31
+          ]
+        ],
+        "diagnostics": []
+      },
+      "plan": {
+        "type": "radar",
+        "kind": "radar",
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            28,
+            25
+          ],
+          [
+            "Q2",
+            32,
+            27
+          ],
+          [
+            "Q3",
+            35,
+            29
+          ],
+          [
+            "Q4",
+            39,
+            31
+          ]
+        ],
+        "sources": [
+          0,
+          1,
+          2
+        ],
+        "dropped": []
+      },
+      "drawDiagnostics": [],
+      "publicValidateFindings": [],
+      "originalE1ConvertFindings": []
+    },
+    {
+      "deck": "batch-04",
+      "id": "s13",
+      "ordinal": 13,
+      "chart": {
+        "type": "waterfall",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Current",
+            "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              20,
+              17
+            ],
+            [
+              "Q2",
+              24,
+              19
+            ],
+            [
+              "Q3",
+              27,
+              21
+            ],
+            [
+              "Q4",
+              31,
+              23
+            ]
+          ]
+        }
+      },
+      "path": "/slides/12/blocks/1/chart",
+      "resolved": {
+        "ok": true,
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            20,
+            17
+          ],
+          [
+            "Q2",
+            24,
+            19
+          ],
+          [
+            "Q3",
+            27,
+            21
+          ],
+          [
+            "Q4",
+            31,
+            23
+          ]
+        ],
+        "diagnostics": []
+      },
+      "plan": {
+        "type": "waterfall",
+        "kind": "waterfall",
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            20,
+            17
+          ],
+          [
+            "Q2",
+            24,
+            19
+          ],
+          [
+            "Q3",
+            27,
+            21
+          ],
+          [
+            "Q4",
+            31,
+            23
+          ]
+        ],
+        "sources": [
+          0,
+          1,
+          2
+        ],
+        "dropped": [
+          "Baseline"
+        ]
+      },
+      "drawDiagnostics": [
+        {
+          "code": "chart-series-dropped",
+          "severity": "warning",
+          "path": "/slides/12/blocks/1/chart/type",
+          "message": "a 'waterfall' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series"
+        }
+      ],
+      "publicValidateFindings": [
+        {
+          "ruleId": "opf/chart-series-dropped",
+          "severity": "warning",
+          "category": "content",
+          "scope": "document",
+          "path": "/slides/12/blocks/1/chart/type",
+          "message": "a 'waterfall' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+          "help": "The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.",
+          "definition": "packages/javascript/src/schema-check.ts",
+          "lookup": [
+            "opf",
+            "schema",
+            "presentation",
+            ""
+          ],
+          "validation": {
+            "path": "/slides/12/blocks/1/chart/type",
+            "message": "a 'waterfall' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+            "keyword": "opf",
+            "schemaPath": "#/x-opf-semantics",
+            "params": {
+              "code": "chart-series-dropped"
+            }
+          },
+          "slide": 12,
+          "slideId": "s13"
+        }
+      ],
+      "originalE1ConvertFindings": []
+    },
+    {
+      "deck": "batch-05",
+      "id": "s07",
+      "ordinal": 7,
+      "chart": {
+        "type": "funnel",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Current",
+            "Baseline"
+          ],
+          "rows": [
+            [
+              "Q1",
+              25,
+              22
+            ],
+            [
+              "Q2",
+              29,
+              24
+            ],
+            [
+              "Q3",
+              32,
+              26
+            ],
+            [
+              "Q4",
+              36,
+              28
+            ]
+          ]
+        }
+      },
+      "path": "/slides/6/blocks/0/chart",
+      "resolved": {
+        "ok": true,
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            25,
+            22
+          ],
+          [
+            "Q2",
+            29,
+            24
+          ],
+          [
+            "Q3",
+            32,
+            26
+          ],
+          [
+            "Q4",
+            36,
+            28
+          ]
+        ],
+        "diagnostics": []
+      },
+      "plan": {
+        "type": "funnel",
+        "kind": "funnel",
+        "columns": [
+          "Quarter",
+          "Current",
+          "Baseline"
+        ],
+        "hasX": false,
+        "formats": [
+          null,
+          null,
+          null
+        ],
+        "rows": [
+          [
+            "Q1",
+            25,
+            22
+          ],
+          [
+            "Q2",
+            29,
+            24
+          ],
+          [
+            "Q3",
+            32,
+            26
+          ],
+          [
+            "Q4",
+            36,
+            28
+          ]
+        ],
+        "sources": [
+          0,
+          1,
+          2
+        ],
+        "dropped": [
+          "Baseline"
+        ]
+      },
+      "drawDiagnostics": [
+        {
+          "code": "chart-series-dropped",
+          "severity": "warning",
+          "path": "/slides/6/blocks/0/chart/type",
+          "message": "a 'funnel' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series"
+        }
+      ],
+      "publicValidateFindings": [
+        {
+          "ruleId": "opf/chart-series-dropped",
+          "severity": "warning",
+          "category": "content",
+          "scope": "document",
+          "path": "/slides/6/blocks/0/chart/type",
+          "message": "a 'funnel' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+          "help": "The chart type plots one series. Use a chart type that plots every series (column, bar, line), or one chart per series.",
+          "definition": "packages/javascript/src/schema-check.ts",
+          "lookup": [
+            "opf",
+            "schema",
+            "presentation",
+            ""
+          ],
+          "validation": {
+            "path": "/slides/6/blocks/0/chart/type",
+            "message": "a 'funnel' chart plots one series, so \"Baseline\" is not drawn; use a chart type that plots several series (column, bar, line) or one chart per series",
+            "keyword": "opf",
+            "schemaPath": "#/x-opf-semantics",
+            "params": {
+              "code": "chart-series-dropped"
+            }
+          },
+          "slide": 6,
+          "slideId": "s07"
+        }
+      ],
+      "originalE1ConvertFindings": []
+    }
+  ]
+}

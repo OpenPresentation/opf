@@ -1,6 +1,6 @@
 # Program: Cloudflare hosting (CF)
 
-Status: **active** (opened 2026-10-04). All three sites serve production from Cloudflare Workers (cut over 2026-10-05); the apex
+Status: **active** (opened 2026-10-04). Current CI/deployment authority: [docs/ci-cd.md](../../ci-cd.md). The 2026-11-08 native Preview and same-commit pipeline work is tracked as CF-17/CF-18; the older dated observations below retain their original scope. All three sites serve production from Cloudflare Workers (cut over 2026-10-05); the apex
 static-asset redirect (CF-07), the gallery media on R2 (CF-09) and the self-hosted fonts (CF-10) are done; what remains is the
 CI/CD that waits for the owner's secrets (CF-04 to CF-06) and the Vercel retirement (CF-08). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for moving the three sites from Vercel to Cloudflare. Agents and people
@@ -53,10 +53,7 @@ Every burndown item is `done` or `descoped` with its evidence or issue linked, a
 - **Fonts are bundled, never hotlinked**, with permissive licenses only; `pnpm check:font-hotlinks` keeps passing in
   every site build. The Workers per-file limit (25 MiB) is a font constraint: the largest bundled face is within
   1.05 MiB of it.
-- **Agents do not deploy, log in, or change DNS, Cloudflare or Vercel settings.** The owner (or the supervisor with the
-  owner's go-ahead per site) does. Agents build locally and run `wrangler dev` / `opennextjs-cloudflare preview` on
-  localhost only. The `wrangler` login on the owner's Mac belongs to a different company's account and is never used;
-  OPF deploys go to the "Data Advantage" account (`136efd25cc10afb20714b72b2eb41cf3`).
+- **Current 2026-11-08 authority:** the owner authorizes agent deployments and native `wrangler preview`, superseding the earlier localhost-only mode. Follow the [CI/CD contract](../../ci-cd.md): existing authorized credentials, exact same-source gates, isolated Preview bindings and deployed qualification. New logins, DNS changes, account-plan purchases and visibility changes remain owner actions. Never use another company's login; OPF uses Data Advantage (`136efd25cc10afb20714b72b2eb41cf3`).
 - **No network or model calls in the libraries**; AI lives only in pptx.dev.
 - Keep source, packed, registry and deployed claims separate.
 

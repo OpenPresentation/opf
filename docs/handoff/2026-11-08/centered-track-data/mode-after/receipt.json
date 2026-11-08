@@ -1,0 +1,902 @@
+{
+  "scope": "Identical four-text fixtures, actual pinned fonts, no system fonts; constrained modes versus unpinned automatic controls",
+  "phase": "after",
+  "node": "v24.20.0",
+  "execPath": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "records": [
+    {
+      "id": "implicit-en",
+      "language": "en",
+      "unchanged": true,
+      "svgSha256": "2d48e415c8c95f72e5e84189b2dce216cc87d93df0cec7888017d25e49c89d10",
+      "pngSha256": "23813ec3a46f3f71ee6e7133ba2c48eaaabacf4b7a52ea613386f37285ea6393",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 570.4
+          },
+          {
+            "offset": 594.4,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "auto-en",
+      "language": "en",
+      "composition": {
+        "mode": "auto"
+      },
+      "unchanged": true,
+      "svgSha256": "2d48e415c8c95f72e5e84189b2dce216cc87d93df0cec7888017d25e49c89d10",
+      "pngSha256": "23813ec3a46f3f71ee6e7133ba2c48eaaabacf4b7a52ea613386f37285ea6393",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 140.4,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 734.8,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 140.4,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 734.8,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 570.4
+          },
+          {
+            "offset": 594.4,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "implicit-ar",
+      "language": "ar",
+      "unchanged": true,
+      "svgSha256": "653487db3752000380ef3ac565cfd0f411702ffb954d77959adca6d995cef868",
+      "pngSha256": "e82b524083f55abcdffcb87c6763efbadc73dafd5decab4553e6e609bac72a1c",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 676,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 81.6,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 676,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 81.6,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 594.4,
+            "size": 570.4
+          },
+          {
+            "offset": 0,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "auto-ar",
+      "language": "ar",
+      "composition": {
+        "mode": "auto"
+      },
+      "unchanged": true,
+      "svgSha256": "653487db3752000380ef3ac565cfd0f411702ffb954d77959adca6d995cef868",
+      "pngSha256": "e82b524083f55abcdffcb87c6763efbadc73dafd5decab4553e6e609bac72a1c",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 676,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 81.6,
+            "y": 245.05,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 676,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 81.6,
+            "y": 508.51,
+            "width": 463.6,
+            "height": 69.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 594.4,
+            "size": 570.4
+          },
+          {
+            "offset": 0,
+            "size": 570.4
+          }
+        ],
+        "rows": [
+          {
+            "offset": 208.29999999999998,
+            "size": 37.16
+          },
+          {
+            "offset": 269.4599999999999,
+            "size": 37.16
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "column",
+      "language": "en",
+      "composition": {
+        "mode": "column"
+      },
+      "unchanged": false,
+      "svgSha256": "dc9ac21f691bad76c37bbde1e0f3daf7bf9fc56a8a56e7b650b0f16294195cea",
+      "pngSha256": "0b43fc2a0837ae1ea3bbaa6f2f56566aff836f2dd653e4080f88338dc81614f2",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 57.6,
+            "y": 232.3,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 57.6,
+            "y": 324.62,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 57.6,
+            "y": 416.94,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 57.6,
+            "y": 509.26,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "column"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 84.82,
+            "size": 68.32
+          },
+          {
+            "offset": 177.14000000000001,
+            "size": 68.32
+          },
+          {
+            "offset": 269.46000000000004,
+            "size": 68.32
+          },
+          {
+            "offset": 361.78,
+            "size": 68.32
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "row",
+      "language": "en",
+      "composition": {
+        "mode": "row"
+      },
+      "unchanged": false,
+      "svgSha256": "908382eae17b9386ed1bb7cacd8d98b60b26b62572bce65af16bc4109cfb9247",
+      "pngSha256": "513702fdf7093e0964c4d26c762fd2569c676edeeffa5d744718253ebcdfa087",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 273.2,
+            "height": 514.92
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 354.8,
+            "y": 147.48,
+            "width": 273.2,
+            "height": 514.92
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 652,
+            "y": 147.48,
+            "width": 273.2,
+            "height": 514.92
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 949.2,
+            "y": 147.48,
+            "width": 273.2,
+            "height": 514.92
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "row"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 273.2
+          },
+          {
+            "offset": 297.2,
+            "size": 273.2
+          },
+          {
+            "offset": 594.4,
+            "size": 273.2
+          },
+          {
+            "offset": 891.5999999999999,
+            "size": 273.2
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 514.92
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "grid-one",
+      "language": "en",
+      "composition": {
+        "mode": "grid",
+        "columns": 1
+      },
+      "unchanged": false,
+      "svgSha256": "dc9ac21f691bad76c37bbde1e0f3daf7bf9fc56a8a56e7b650b0f16294195cea",
+      "pngSha256": "0b43fc2a0837ae1ea3bbaa6f2f56566aff836f2dd653e4080f88338dc81614f2",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 57.6,
+            "y": 232.3,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 57.6,
+            "y": 324.62,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 57.6,
+            "y": 416.94,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 57.6,
+            "y": 509.26,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "grid",
+          "columns": 1
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 84.82,
+            "size": 68.32
+          },
+          {
+            "offset": 177.14000000000001,
+            "size": 68.32
+          },
+          {
+            "offset": 269.46000000000004,
+            "size": 68.32
+          },
+          {
+            "offset": 361.78,
+            "size": 68.32
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "auto-one",
+      "language": "en",
+      "composition": {
+        "mode": "auto",
+        "columns": 1
+      },
+      "unchanged": false,
+      "svgSha256": "dc9ac21f691bad76c37bbde1e0f3daf7bf9fc56a8a56e7b650b0f16294195cea",
+      "pngSha256": "0b43fc2a0837ae1ea3bbaa6f2f56566aff836f2dd653e4080f88338dc81614f2",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 57.6,
+            "y": 232.3,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 57.6,
+            "y": 324.62,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 57.6,
+            "y": 416.94,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 57.6,
+            "y": 509.26,
+            "width": 1164.8,
+            "height": 68.32
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "auto",
+          "columns": 1
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 84.82,
+            "size": 68.32
+          },
+          {
+            "offset": 177.14000000000001,
+            "size": 68.32
+          },
+          {
+            "offset": 269.46000000000004,
+            "size": 68.32
+          },
+          {
+            "offset": 361.78,
+            "size": 68.32
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    },
+    {
+      "id": "weighted-column",
+      "language": "en",
+      "composition": {
+        "mode": "column",
+        "weights": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "unchanged": false,
+      "svgSha256": "8def0dda803b30ad4c6246f39ee4ae0330b41bec8b429f8ee401ce7dbe11b1cc",
+      "pngSha256": "78da8e4997e52180ec21dbe02c4af708a7c1295cbf2ec2d49e590b6766eb40a2",
+      "body": [
+        {
+          "path": "slides.0.blocks.0.text",
+          "value": "Short line 1",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 110.73
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.1.text",
+          "value": "Short line 2",
+          "box": {
+            "x": 57.6,
+            "y": 282.21,
+            "width": 1164.8,
+            "height": 110.73
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.2.text",
+          "value": "Short line 3",
+          "box": {
+            "x": 57.6,
+            "y": 416.94,
+            "width": 1164.8,
+            "height": 110.73
+          },
+          "fontSize": 56,
+          "overflow": false
+        },
+        {
+          "path": "slides.0.blocks.3.text",
+          "value": "Short line 4",
+          "box": {
+            "x": 57.6,
+            "y": 551.67,
+            "width": 1164.8,
+            "height": 110.73
+          },
+          "fontSize": 56,
+          "overflow": false
+        }
+      ],
+      "flow": {
+        "path": "slides.0",
+        "box": {
+          "x": 57.6,
+          "y": 147.48,
+          "width": 1164.8,
+          "height": 514.92
+        },
+        "composition": {
+          "mode": "column",
+          "weights": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 134.73,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 269.46,
+            "size": 110.72999999999999
+          },
+          {
+            "offset": 404.18999999999994,
+            "size": 110.72999999999999
+          }
+        ],
+        "gap": 24,
+        "itemCount": 4,
+        "slotCount": 4
+      },
+      "diagnostics": []
+    }
+  ]
+}

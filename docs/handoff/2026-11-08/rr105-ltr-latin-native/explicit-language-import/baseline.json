@@ -1,0 +1,106 @@
+{
+  "cases": [
+    {
+      "lang": "ar-SA",
+      "fixture": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "items": [
+              {
+                "text": [
+                  {
+                    "text": "Item 1: authored proofing choice.",
+                    "lang": "ar-SA"
+                  }
+                ]
+              }
+            ],
+            "numbering": "arabic"
+          }
+        ]
+      },
+      "imported": {
+        "slides": [
+          {
+            "items": [
+              "Item 1: authored proofing choice."
+            ],
+            "numbering": "arabic"
+          }
+        ],
+        "language": "ar-SA"
+      },
+      "diagnostics": [],
+      "preserved": false
+    },
+    {
+      "lang": "fr",
+      "fixture": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "items": [
+              {
+                "text": [
+                  {
+                    "text": "Item 1: authored proofing choice.",
+                    "lang": "fr"
+                  }
+                ]
+              }
+            ],
+            "numbering": "arabic"
+          }
+        ]
+      },
+      "imported": {
+        "slides": [
+          {
+            "items": [
+              "Item 1: authored proofing choice."
+            ],
+            "numbering": "arabic"
+          }
+        ],
+        "language": "ar-SA"
+      },
+      "diagnostics": [],
+      "preserved": false
+    },
+    {
+      "lang": "en-US",
+      "fixture": {
+        "language": "ar-SA",
+        "slides": [
+          {
+            "items": [
+              {
+                "text": [
+                  {
+                    "text": "Item 1: authored proofing choice.",
+                    "lang": "en-US"
+                  }
+                ]
+              }
+            ],
+            "numbering": "arabic"
+          }
+        ]
+      },
+      "imported": {
+        "slides": [
+          {
+            "items": [
+              "Item 1: authored proofing choice."
+            ],
+            "numbering": "arabic"
+          }
+        ],
+        "language": "ar-SA"
+      },
+      "diagnostics": [],
+      "preserved": false
+    }
+  ]
+}

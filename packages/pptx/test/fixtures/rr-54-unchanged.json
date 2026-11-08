@@ -21,7 +21,39 @@
       "candidateHead": "a4322cdd9686c2ef34732088c48d72366d379190",
       "evidence": "docs/evidence/rr105-033-archive-review/review.json",
       "scope": "Reviewed v0.33 default bar labels, doughnut hole, scatter axes and histogram/waterfall scales; all other archives and embedded workbooks remain byte-identical."
-    }
+    },
+    "rr54ArchiveReviews": [
+      {
+        "baselineExportRef": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+        "baselineBuildHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+        "candidateHead": "513156a982397eaa0033808215fbb86dd284745b",
+        "exportCaller": {
+          "api": "toPptx",
+          "input": "structuredClone(entry.deck)",
+          "options": "omitted",
+          "catalogs": "not registered"
+        },
+        "evidence": {
+          "directory": "docs/evidence/rr105-034-archive-review",
+          "reviewFile": "review.json"
+        },
+        "sourceEvidence": {
+          "directory": "docs/evidence/rr105-034-archive-review",
+          "baselineSourceTrees": "100644 blob 88d10438bf85e0131f824c5ec2b9787b97ef39cb\tpackage.json\n040000 tree 21b796a245aa2d3c9f83ee853ef0fdc01a9762ae\tpackages/cli\n040000 tree 331e46a43c480ac577c64d6eacee6a2ccbfb11b4\tpackages/editor\n040000 tree b585799389797fc7cbb7c0e2db8f166d353c5c77\tpackages/gallery\n040000 tree 788d334f2dfb73a0a243dd8e91b8f89d92b6dde7\tpackages/javascript\n040000 tree be3e82bce07bfb7f92bb8030b2065173eec200aa\tpackages/mcp\n040000 tree b8254237748d400fa065dbeac369ea92b6f55518\tpackages/pptx\n040000 tree f74f19bc5514fc58be3fded5a0d8ae2fbde47104\tpackages/render\n100644 blob 3432ab613e493c84d6eea74cb68d30be08720102\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree d7107be1cf1e020d9e17769dec09c7c4bf2a808d\tspec",
+          "candidateSourceTrees": "100644 blob 0d5eec02984fea0ef0b564a4b83658cc35a1bbf0\tpackage.json\n040000 tree 410bcb89e14daca2b4d6856c53c28843f7511550\tpackages/cli\n040000 tree 4e4fda1438a020d8700f0d8e7e73dd140779ec47\tpackages/editor\n040000 tree 0299af51fc1866552ba6d6022e7caddeb0f2bf4f\tpackages/gallery\n040000 tree b74a16068838e9a31c1d52fe5580a807cc31f959\tpackages/javascript\n040000 tree 0a1749c9e7cb79aebf7c3158d6c431edaf2ead5a\tpackages/mcp\n040000 tree 0c570bd278c2deb0b83b4036dd42cb7bfc77ca75\tpackages/pptx\n040000 tree 20c8f6d1f1c5cd0efea0c96176b96b9bf7d4f47f\tpackages/render\n100644 blob 3432ab613e493c84d6eea74cb68d30be08720102\tpnpm-lock.yaml\n100644 blob c84e4ff16c7f717d30d69498f565b2b519d13e19\tpnpm-workspace.yaml\n040000 tree eead5477c84895367abc9d909866b23ba77e35ac\tspec",
+          "fixtureSha256": "c005a990dc7cb510060a5b4b497c71ff026742a57abbda0879e634215b5bea25",
+          "reviewerSha256": "4b3c1b3c6928842df9ff45875846e88f05510aef6e24cf07b3fcf1a8ff246698",
+          "candidateHelperSha256": "04c4c4e05a58fcb9dea2da100d886728b31e4b0f0d55753aa89449a3ca6f2519",
+          "sealedReportSha256": "b616e554a77f037a33777bca03ff22bd0a7c2eb9c342656e5761598941297626",
+          "sealedArchiveEvidenceCommit": "5e89a184ffc8a38539f5fb5e573f403066bcca17",
+          "candidateConstruction": {
+            "source": "07afb555113ee43560387a65d049ce859339a6f3",
+            "method": "Pure construction from previously sealed exact report/fixture and byte-identical native-locked controls; no archive serialization rerun."
+          }
+        },
+        "scope": "Exact bare toPptx caller; every old archive hash, byte length, part count and applicable native-slide digest reproduced before generating a review candidate."
+      }
+    ]
   },
   "entries": {
     "column": {
@@ -184,11 +216,11 @@
           }
         ]
       },
-      "sha256": "8c2f64413169bbdb8631176522073190e78de5e8113081475e8bae86d8837e5a",
+      "sha256": "0edac61c7f74aa56418d7327423d919adcddd44c5acbb4eb4d8040a49f314f91",
       "rr81PreviousSha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc",
       "rr20PreviousSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
       "rr20PartCount": 30,
-      "rr20Bytes": 26052,
+      "rr20Bytes": 26054,
       "rr90PreviousSha256": "71237ab580d86c9c9ae1ec984693666a438bb0050e827fed3c107aaf13e0aa30",
       "rr90PreviousBytes": 26055,
       "wi5PreviousSha256": "ed88c1b513ff14dbb51b12a4db2c99d86d05e15e71c857752d97c6d828a442b8",
@@ -204,7 +236,15 @@
         "sha256": "7719de62c938ebc055e494fe18f0a490ae685a936820b68cba7120c8090adc2f",
         "bytes": 26128,
         "partCount": 30
-      }
+      },
+      "rr54ArchivePrevious": [
+        {
+          "sha256": "8c2f64413169bbdb8631176522073190e78de5e8113081475e8bae86d8837e5a",
+          "bytes": 26052,
+          "partCount": 30,
+          "reviewIndex": 0
+        }
+      ]
     },
     "line": {
       "deck": {
@@ -481,10 +521,10 @@
           }
         ]
       },
-      "sha256": "5bfb5675e58f98b4aedeedd56122af60482a4daa8511ac3d78d6bbba0b2c0a1b",
+      "sha256": "bf51c580af4cf742c067b55b03e4f3a6f3e5d1e08bbb3e70fc5605017c0ffe88",
       "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
-      "rr20PartCount": 31,
-      "rr20Bytes": 26411,
+      "rr20PartCount": 32,
+      "rr20Bytes": 26935,
       "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
       "rr90PreviousBytes": 25631,
       "wi5PreviousSha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
@@ -495,7 +535,15 @@
       "lhWave2PreviousBytes": 25689,
       "lhWave3PreviousSha256": "a8e55011be36b79d847e1d03f47a0d25c9dd371fa4072324a5dcc8a7b2c1512c",
       "lhWave7PreviousSha256": "1e6cf49cb26a9fad67b486b8fa95d58eaa417ab7ac03bf5cd1aea1dbfd4a50cb",
-      "lhWave7PreviousBytes": 26404
+      "lhWave7PreviousBytes": 26404,
+      "rr54ArchivePrevious": [
+        {
+          "sha256": "5bfb5675e58f98b4aedeedd56122af60482a4daa8511ac3d78d6bbba0b2c0a1b",
+          "bytes": 26411,
+          "partCount": 31,
+          "reviewIndex": 0
+        }
+      ]
     },
     "doughnut": {
       "deck": {

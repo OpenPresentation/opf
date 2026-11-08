@@ -23,10 +23,11 @@
 /** The arrangements a region can ask for. */
 /** SH-17's linear arrangements (linear-arrangements.ts has their geometry). */
 export const LINEAR_ARRANGEMENTS = ['chevrons', 'flow', 'vertical-flow'] as const;
-export const ARRANGEMENTS = ['pyramid', 'matrix', 'cycle', ...LINEAR_ARRANGEMENTS] as const;
+export const ARRANGEMENTS = ['pyramid', 'matrix', 'cycle', 'org-chart', 'hierarchy', 'venn', ...LINEAR_ARRANGEMENTS] as const;
 export type Arrangement = typeof ARRANGEMENTS[number];
+export function isArrangement(value:unknown):value is Arrangement{return typeof value==='string'&&ARRANGEMENTS.some(kind=>kind===value);}
 /** The most entries each arrangement draws as its own shapes: a pyramid's levels, a matrix's quadrants (other counts draw cards). */
-export const ARRANGEMENT_MAX: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: 8, matrix: 4, cycle: 8, chevrons: 8, flow: 8, 'vertical-flow': 8 });
+export const ARRANGEMENT_MAX: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: 8, matrix: 4, cycle: 8, chevrons: 8, flow: 8, 'vertical-flow': 8, 'org-chart': 8, hierarchy: 8, venn: 7 });
 /** A matrix draws its quadrants for exactly this many entries; other counts draw a grid of cards (at most ARRANGEMENT_CARDS_MAX). */
 export const MATRIX_ENTRIES = 4, ARRANGEMENT_CARDS_MAX = 8;
 /** A card's text inset, as a share of the font size. */
@@ -39,14 +40,18 @@ export const SMART_ART_LAYOUTS: Readonly<Record<Arrangement, string>> = Object.f
   chevrons: 'urn:microsoft.com/office/officeart/2005/8/layout/chevron1',
   flow: 'urn:microsoft.com/office/officeart/2005/8/layout/process1',
   'vertical-flow': 'urn:microsoft.com/office/officeart/2005/8/layout/process2',
+  'org-chart': 'urn:microsoft.com/office/officeart/2005/8/layout/orgChart1',
+  hierarchy: 'urn:microsoft.com/office/officeart/2005/8/layout/hierarchy1',
+  venn: 'urn:microsoft.com/office/officeart/2005/8/layout/venn1',
 });
 /** The name PowerPoint gives each layout, and what a finding calls one node of each arrangement. */
 export const SMART_ART_NAMES: Readonly<Record<Arrangement, { layout: string; nodes: string }>> = Object.freeze({
   pyramid: { layout: 'Basic Pyramid', nodes: 'levels' }, matrix: { layout: 'Basic Matrix', nodes: 'quadrants' }, cycle: { layout: 'Basic Cycle', nodes: 'steps' },
+  'org-chart': {layout:'Organization Chart',nodes:'nodes'}, hierarchy:{layout:'Hierarchy',nodes:'nodes'}, venn:{layout:'Basic Venn',nodes:'sets'},
   chevrons: { layout: 'Basic Chevron Process', nodes: 'chevrons' }, flow: { layout: 'Basic Process', nodes: 'boxes' }, 'vertical-flow': { layout: 'Vertical Process', nodes: 'boxes' },
 });
 /** A node's text inset on every side, as a share of its font size (PowerPoint's: 0.1 em in a pyramid level or a cycle's circle, 0.3 em in a quadrant). */
-export const ARRANGEMENT_TEXT_MARGIN: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: .1, matrix: .3, cycle: .1, chevrons: .105, flow: .3, 'vertical-flow': .3 });
+export const ARRANGEMENT_TEXT_MARGIN: Readonly<Record<Arrangement, number>> = Object.freeze({ pyramid: .1, matrix: .3, cycle: .1, chevrons: .105, flow: .3, 'vertical-flow': .3, 'org-chart': .05, hierarchy: .3, venn: .1 });
 /** A lower pyramid level's text rectangle is this share of its width, centered (the apex's is its whole box). */
 export const PYRAMID_TEXT_WIDTH = .65;
 /** Matrix proportions, as shares of the square's side: the quadrant's side, its inset from the square's edge and the gap between two. */
@@ -73,7 +78,9 @@ export interface ArrangementNode {
   index: number;
   box: Box;
   /** DrawingML preset: `trapezoid` for a pyramid level (the apex too, as PowerPoint writes it), `roundRect` for a quadrant or a box, `ellipse` for a cycle's circle, `chevron` (SH-17). */
-  preset: 'trapezoid' | 'roundRect' | 'ellipse' | 'chevron';
+  preset: 'trapezoid' | 'roundRect' | 'ellipse' | 'chevron' | 'rect';
+  /** SH21: Hierarchy's rounded rear card; the entry's main box is its foreground card. */
+  background?: Box;
   /** The preset's `adj` (of 100000): a trapezoid's inset over its smaller side, a rounded rectangle's corner. */
   adjust: number;
   /** The outline as a polygon (a pyramid level), in the same units as `box`; absent for a rounded rectangle (`radius`). */
@@ -86,6 +93,8 @@ export interface ArrangementNode {
   beside?: true;
   /** SH-17: the shape is mirrored (a chevron pointing left, in a right-to-left deck). */
   flip?: true;
+  /** The downward pyramid mirrors only its trapezoid, never its text. */
+  flipV?: true;
 }
 
 const round = (value: number) => Math.round(value * 1000) / 1000;
@@ -98,7 +107,8 @@ export function pyramidFrame(area: Box): Box {
 }
 
 /** The levels of a pyramid of `count` entries in `frame`, the apex first (PowerPoint's Basic Pyramid). */
-export function pyramidNodes(frame: Box, count: number): ArrangementNode[] {
+export function pyramidNodes(frame: Box, count: number, direction: 'up' | 'down' = 'up'): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidNodes(frame, count), frame);
   const n = Math.max(1, Math.floor(count)), height = frame.height / n, step = frame.width / (2 * n);
   return Array.from({ length: n }, (_, index) => {
     const width = frame.width * (index + 1) / n, x = frame.x + (frame.width - width) / 2, y = frame.y + index * height;
@@ -110,6 +120,13 @@ export function pyramidNodes(frame: Box, count: number): ArrangementNode[] {
       textBox: roundBox({ x: x + (width - textWidth) / 2, y, width: textWidth, height }),
     };
   });
+}
+
+/** Reflect the geometry and reverse the node mapping so authored order remains top to bottom, widest first. */
+function invertedPyramid(nodes: ArrangementNode[], frame: Box): ArrangementNode[] {
+  const box = (area: Box): Box => roundBox({...area, y: 2 * frame.y + frame.height - area.y - area.height});
+  return [...nodes].reverse().map((node, index) => ({...node, index, box: box(node.box), textBox: box(node.textBox),
+    ...(node.points ? {points: node.points.map(([x, y]) => [x, round(2 * frame.y + frame.height - y)] as [number, number]), flipV: true as const} : {})}));
 }
 
 /** The square of a matrix in `frame` (its diamond's box). */
@@ -143,7 +160,8 @@ export const PYRAMID_STEPS_SHARE = .4, PYRAMID_STEPS_ASPECT = 1.6;
  * rounded bars at the start of `area` (level i of n is i/n of the steps' width, centered on one axis, `gap` apart), and each entry's
  * text beside its level, in one column across the rest of the area, vertically centered on its level.
  */
-export function pyramidSteps(area: Box, count: number, gap: number, radius: number): ArrangementNode[] {
+export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up'): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius), area);
   const n = Math.max(1, Math.floor(count)), width = Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
   const height = (area.height - (n - 1) * gap) / n, axis = area.x + width / 2, column = area.x + width + 2 * gap;
   return Array.from({ length: n }, (_, index) => {
@@ -181,7 +199,7 @@ export function nodeWidthAt(node: ArrangementNode, y: number): number {
   if (node.preset === 'ellipse') return ellipseWidthAt(box, y);
   if (node.preset === 'trapezoid') {
     const step = node.points ? node.points[0]![0] - box.x : 0;
-    return Math.max(0, box.width - 2 * step * (1 - t));
+    return Math.max(0, box.width - 2 * step * (node.flipV ? t : 1 - t));
   }
   const radius = node.radius ?? 0, from = Math.min(y - box.y, box.y + box.height - y);
   if (from >= radius) return box.width;
@@ -447,10 +465,10 @@ export const CYCLE_DOMAIN_TOTAL_LINES = 16;
  */
 export const SMART_ART_DOMAIN = Object.freeze({
   /** Entries: a pyramid of 1 to 5 levels (6 to 8 never fitted the list's role size in the compared frames), a matrix of 1 to 4 quadrants. */
-  count: Object.freeze({ pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, flow: 6, 'vertical-flow': 4 }) as Readonly<Record<Arrangement, number>>,
+  count: Object.freeze({ pyramid: 5, matrix: 4, cycle: CYCLE_DOMAIN_COUNT, chevrons: 6, flow: 6, 'vertical-flow': 4 }) as Readonly<Partial<Record<Arrangement, number>>>,
   /** The frame's width over its height, per arrangement: the range the 16:9, 4:3 and 1:1 slides gave, with a small margin. */
   aspect: Object.freeze({ pyramid: Object.freeze({ min: 1.1, max: 2.3 }), matrix: Object.freeze({ min: .8, max: 1.2 }), cycle: CYCLE_DOMAIN_ASPECT,
-    chevrons: Object.freeze({ min: 1.1, max: 2.3 }), flow: Object.freeze({ min: 1.1, max: 2.3 }), 'vertical-flow': Object.freeze({ min: .55, max: 1.2 }) }) as Readonly<Record<Arrangement, { min: number; max: number }>>,
+    chevrons: Object.freeze({ min: 1.1, max: 2.3 }), flow: Object.freeze({ min: 1.1, max: 2.3 }), 'vertical-flow': Object.freeze({ min: .55, max: 1.2 }) }) as Readonly<Partial<Record<Arrangement, { min: number; max: number }>>>,
   /** The most lines one entry may wrap to in its node, and in all its entries (a line drawn by PowerPoint's wrap can sit up to 1 px from core's). */
   lines: 2,
   totalLines: 6,
@@ -492,6 +510,7 @@ export function smartArtScript(texts: readonly string[]): { rtl: boolean; script
 /** The facts of one composed arrangement the domain is checked on (ComposedArrangement.smartArt, the frame and the text). */
 export interface SmartArtCandidate {
   kind: Arrangement;
+  pyramidDirection?: 'up' | 'down';
   count: number;
   frame: Box;
   /** Per entry: the lines it wraps to, and whether its breaks hold within SMART_ART_DOMAIN.slack of its width. */
@@ -513,8 +532,12 @@ export interface SmartArtCandidate {
  */
 export function smartArtUnavailable(candidate: SmartArtCandidate): string | undefined {
   const { kind, count, frame, nodes } = candidate, domain = SMART_ART_DOMAIN;
-  if (count < 1 || count > domain.count[kind]) return `a ${kind} of ${count} entries is outside the compared 1 to ${domain.count[kind]}`;
+  if (kind === 'pyramid' && candidate.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
+  const compared=domain.count[kind];
+  if(compared===undefined)return `${SMART_ART_NAMES[kind].layout} text and edits are awaiting native qualification`;
+  if (count < 1 || count > compared) return `a ${kind} of ${count} entries is outside the compared 1 to ${compared}`;
   const aspect = frame.width / frame.height, range = domain.aspect[kind];
+  if(!range)return 'its frame proportions are awaiting native qualification';
   if (!(aspect >= range.min - 1e-6 && aspect <= range.max + 1e-6)) return `its frame's proportions (${aspect.toFixed(2)} : 1) are outside the compared ${range.min} to ${range.max}`;
   // SH-18: PowerPoint's Basic Cycle was fitted at one frame proportion per count.
   if (kind === 'cycle' && Math.abs(aspect - cycleAspect(count)) > .002) return `its frame's proportions (${aspect.toFixed(2)} : 1) are not the ${cycleAspect(count)} : 1 PowerPoint's Basic Cycle was fitted at`;
