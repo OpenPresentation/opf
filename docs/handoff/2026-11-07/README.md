@@ -1,3 +1,5 @@
+Current continuation: [2026-11-08 release recovery and next steps](../2026-11-08/README.md). The original rules and evidence below remain historical context.
+
 # Handoff of 2026-11-07: v0.33.0 and v0.34.0
 
 This is the entry point for whoever continues this work. A supervisor session coordinated about a dozen agents on 2026-11-07 while the owner was away. All of their work is on GitHub: in open PRs, on pushed branches, in the evidence branch `handoff/review-sheets-2026-11-07`, and in this folder. Nothing exists only on the old machine. Start with [KICKOFF.md](KICKOFF.md), which is the one prompt to give the next agent.
