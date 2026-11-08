@@ -50,5 +50,26 @@ package/version/license/family/style/hash/tool/profile, changed input bytes,
 traversal, duplicate faces, pre-existing Mono refusal, existing Roboto
 coexistence, changed ownership refusal and exact owned/idempotent cleanup.
 Its mutation APIs and registry objects are mocks; this is not native font
-installation or PowerPoint acceptance. Required mapped checks and final sealed
-input/tool hashes will be recorded before the final push.
+installation or PowerPoint acceptance. The coordinator independently reviewed
+the source and passed all 16 new controls with actual Node 24/PowerShell 5.
+
+The once-only mapped check took 76.1 seconds: 9 of 10 steps passed. Its native
+contracts passed 59 of 60; the unchanged `font-routes.test.mjs:120` failed with
+Windows `EPERM` creating a symlink. The coordinator confirmed the assembled
+integration already has the junction correction from frozen PR #1196
+(`ffbcf353`). This branch preserves the first failure and changes no assertion.
+The final assembled native-acceptance check remains required.
+
+The exact data-only profile is at
+`C:/opf-work/rr105-mono-profile-inputs-final-01/suite.json`, SHA-256
+`a05c780f98fc23aebe6191481accf155040174cf7926748cdb996c00870349e4`.
+Its frozen helper SHA-256 is
+`b1dfba73768c11823dc0400597f38dc10b235bcde1c1183843c2dfb38343052a`;
+the unchanged probe is
+`49855dd4a941a7d39804ce6b7254b98d3561dfdbbf3716e4e8ff4622a2a2284f`.
+Both are byte-identical to source commit
+`20fcef93f4ea470c5e4d7133c36508c152a9c1f2`. The
+[portable packet](../../../evidence/rr105-roboto-mono-profile/receipt.json)
+seals the actual font/license/suite ZIP, all original raw check logs, the
+independent coordinator log, and six unchanged Roboto generator/helper/test
+files. No font registration or Office work was performed by this agent.
