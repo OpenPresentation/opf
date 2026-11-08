@@ -1,4 +1,4 @@
-import assert from'node:assert/strict';
+import assert from'node:assert/strict';import{readFileSync}from'node:fs';import{createHash}from'node:crypto';
 import {unzipSync,zipSync,strFromU8,strToU8} from'fflate';
 import {toPptx,fromPptx} from'./helpers/default-catalog.mjs';
 const escape=text=>text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -15,3 +15,12 @@ for(const type of ['column','scatter']){
  }
 }
 console.log('Current literal series-name import: '+controls+' exact-string/classic/scatter/source-integrity/refusal controls PASS.');
+
+// Exact coordinator-owned PowerPoint edit/SaveCopyAs/read-only-reopen witness.
+const actual=readFileSync(new URL('./fixtures/native-series-name-saved.pptx',import.meta.url));
+assert.equal(createHash('sha256').update(actual).digest('hex'),'eaa03f837aad1e13e53d9fc7afe5d5f9c4098b8992dff200b35798253ffbc2e3');
+const actualBefore=actual.slice(),findings=[],current=await fromPptx(actual,{onDiagnostic:d=>findings.push(d)}),slide=current.slides[0],actualChart=slide.blocks.find(b=>b.chart).chart;
+assert.deepEqual(actualChart.data.columns,['Country','Native renamed','Expansion'],'actual saved literal name beats original OPF/workbook header');
+assert.deepEqual(actualChart.data.rows,[['US',20,10],['France',15,8]],'actual native values and categories stay complete');
+assert.equal(slide.shapes[0].at.series,0,'actual numeric selector remains attached');assert.equal(slide.shapes[1].at,undefined,'actual stale named selector refuses');assert.ok(Number.isFinite(slide.shapes[1].x)&&Number.isFinite(slide.shapes[1].y),'actual native overlay position preserved');assert.ok(findings.some(d=>d.code==='shape-property-dropped'&&d.property==='chart point anchor'&&d.path==='slides.0.shapes.1'),'actual stale-name refusal is explicit');assert.deepEqual(actual,actualBefore,'actual saved fixture remains immutable');
+console.log('Actual PowerPoint saved literal series name, unchanged current data/index anchor and explicit stale-name refusal PASS.');
