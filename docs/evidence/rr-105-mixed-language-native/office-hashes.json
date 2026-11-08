@@ -1,15 +1,16 @@
 {
   "sourceCommit": "dde3809913e9d2e38d9c199f67ece8741426067e",
+  "textEncoding": "UTF-8; archived text uses repository LF newlines, binary inputs are byte-exact",
   "files": {
-    "office/attempt-01-no-acceptance/build.json": "f79972dd2d67f77888f7bec69b927379cd6c1f3bd8db19d8ea0eb0a1a4c46f94",
-    "office/attempt-01-no-acceptance/run.json": "a4262801e1030c679aac2af677d761e519cd04a3da604e83ec01e49e196ca806",
-    "office/build.json": "572379c64b27f3b4d27d76fbac44e833b415b65798e843a2fb4667ec066b0d87",
-    "office/metrics.json": "b4540c985abf8d1c57669ccd30e2644b35241ac69faf032f72ccd93f3cd52fc8",
+    "office/attempt-01-no-acceptance/build.json": "b68df46ebfc7bd40ff64d7bc5f716774c33e985335c03e2e2e72849ddf5aa1d5",
+    "office/attempt-01-no-acceptance/run.json": "1efeb6f8e380fd893fad12fef3919c139423334d0bae7e6bb1079a9cdfab5612",
+    "office/build.json": "cfe299761170b412487c9e41dd33d6b5f5eb4242030da028a6145b069bd9556c",
+    "office/metrics.json": "465eda47f6d0f6a5bbb0a48f7a39b145e2b3c251bcdb22b38a7b6b5f1a4280b7",
     "office/native-1.png": "35dca2356bb2cc44a81686e197b1511fc3839316048cadeeb932831cc4323997",
     "office/native-2.png": "cb6266de907e06875a7efbd76d41a6a550fb72c3fd348ec016c94300dd504124",
-    "office/office.log": "b69055bd5b9afb46cd3750e7572cc1473809becf69aad4a0131bb3859bd2ca0a",
+    "office/office.log": "248e2a0af8eba5fd7726845e575393f03e54d010386fb25606b1d84679846480",
     "office/preview-native.png": "6d8a5a303795c65d1b50a561bfc4b975ae36c5b33c39147b6c8246bb5d3f5d43",
-    "office/run.json": "ee46bdfcded0a3bfc92c15ef9c9fab55fa1f94ed4f163fe3bee15504b90b274f",
+    "office/run.json": "28a5760301dfb35fd680e546ceccf7b66e272e7433f3b08d14dbdb3ced8e6f9f",
     "office/saved.pptx": "884a408dd7fa4e50044e556d24a9962d4c4a0605677ff02783f8e655f6cfc3dc",
     "office/semantic-measured.json": "ae67e519a4baa3a69e4fe82e9ab7a1a2fbfca2499ff0b928e8bf46deffbf01a7",
     "office/semantic-native-fallback.json": "1d19b73a59999ff460c9470380377fe1a5b5c040443819252ec491200b40deab"
