@@ -1,3 +1,9 @@
 # Keep generated package text and indexed preview byte counts reproducible on
 # Windows as well as Unix. Binary files retain their original bytes.
 * text=auto eol=lf
+
+# Sealed public showcase qualification bytes.
+docs/handoff/2026-11-08/sites033-showcase/** -text
+docs/handoff/2026-11-08/sites033-showcase/** whitespace=cr-at-eol
+# The generated SVG retains exact upstream embedded font-license whitespace.
+docs/handoff/2026-11-08/sites033-showcase/*.svg whitespace=-blank-at-eol,cr-at-eol

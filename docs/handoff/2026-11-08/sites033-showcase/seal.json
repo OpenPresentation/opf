@@ -1,0 +1,53 @@
+{
+  "format": "opf-public-showcase-seal-v1",
+  "classification": "Exact genuine0.33 public showcase; native qualification owed; do not rewrite/project content",
+  "input": "example.pptx",
+  "preview": "preview.png",
+  "svg": "example.svg",
+  "source": "example.opf.json",
+  "slides": 1,
+  "topLevelShapeCount": 8,
+  "nativeOwner": "/root",
+  "files": [
+    {
+      "path": "consumer-files.json.gz",
+      "bytes": 508838,
+      "sha256": "349adbfb473f2da62928a49f1198965e27d5e484d64084c96b99e5cb699b0e6a"
+    },
+    {
+      "path": "example.opf.json",
+      "bytes": 4289,
+      "sha256": "9fd7fb920a302f9c4be338461ea895a272215226e5a3031e85a4179085786365"
+    },
+    {
+      "path": "example.pptx",
+      "bytes": 20508,
+      "sha256": "283fc05ca036877c9f42f51faf3a2e32a4fda6a6e124e5d1d3366f70142b712c"
+    },
+    {
+      "path": "example.svg",
+      "bytes": 432721,
+      "sha256": "5f18318761dc7793ebacca600878d17d8a6d49258ccde8d81d45fafa25a15d53"
+    },
+    {
+      "path": "preview.png",
+      "bytes": 52057,
+      "sha256": "917775b293be898e7ac4ed6068ccb3eb28c652cd5ee7bcfea6456b931d9515cf"
+    },
+    {
+      "path": "producer.json",
+      "bytes": 3560,
+      "sha256": "ee475029ed8601ba3ef8ed9958bcc912e55bfd84a35e36a9985c4ee9809a032b"
+    },
+    {
+      "path": "render-manifest.json",
+      "bytes": 2092,
+      "sha256": "a85fa54be1c09690c0275af71ae2dec3711698002e553b1610fc9236e602f2d6"
+    },
+    {
+      "path": "xml-audit.json",
+      "bytes": 386,
+      "sha256": "892aae107f7ef3441ac27647ff65faaf7798f831e2d46102c0cebf315dd5bcc1"
+    }
+  ]
+}

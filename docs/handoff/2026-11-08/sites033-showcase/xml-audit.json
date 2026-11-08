@@ -1,0 +1,19 @@
+{
+  "slides": 1,
+  "topLevelShapeCount": 8,
+  "limit": 30,
+  "typefaces": [
+    "Roboto"
+  ],
+  "text": [
+    "One format. Open tools.",
+    "Write plain JSON. ",
+    "Keep every word editable.",
+    "Validate, preview, and export with the same ",
+    "free libraries.",
+    "Portable agent skills",
+    "Local CLI and editor",
+    "Editable PPTX ",
+    "export"
+  ]
+}

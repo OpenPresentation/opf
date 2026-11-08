@@ -1,0 +1,79 @@
+{
+  "sourceRepository": "OpenPresentation/opf",
+  "sourceRef": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+  "sourceDirty": false,
+  "node": "v24.20.0",
+  "nodeExecutable": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+  "command": "node scripts/build-site-showcase.mjs --registry",
+  "consumerPolicy": "Isolated exact copy of immutable genuine font-complete033 consumer; original unchanged. Only maintained asset-resolver may be added to copy.",
+  "originalConsumerFiles": 5500,
+  "copiedConsumerFiles": 5501,
+  "consumerInventorySha256": "37e5cf44c76eb9f700dd13185f960dba1a6fe4c0c6b9ceafbf2390103dd2ba06",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "66d35b5416075d65f2dbafa0823817bb369ea081c3a366d0990539aeda9dc466"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "5f68ed885dd43e962a2359d83f2ad75e0b578d1cfc92b8a7d85355ca18708313"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "ae28dc4f05dfef5867fc2666336a2021a73eaf679229f98893d1e6dd2fd37597"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "a1c1eab80fec6dd8ca6de94a53e06a465174a6c2407bb8d8ba1c33ab1f4e7d45"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "65f3524b9a44489800101fdeabb67ff1a9385b25e3158540785947f7f55918f6"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "0.33.0",
+      "gitHead": "26fd4de9cee7e57f9e0620eddcad2dcef04e00e3",
+      "manifestSha256": "73b990ca77367fec962b1216ec17b9a24511809962cdc173b5440c5bfc6a28cc"
+    }
+  ],
+  "producerFiles": [
+    {
+      "path": "scripts/build-site-showcase.mjs",
+      "workingSha256": "059e8e7371c5ff84faab8cdc240898a0217cbc41f525ea9b99312e53b146d590",
+      "gitBlobSha256": "059e8e7371c5ff84faab8cdc240898a0217cbc41f525ea9b99312e53b146d590"
+    },
+    {
+      "path": "scripts/showcase-contract.mjs",
+      "workingSha256": "1cd18f81e2a83ede1b5a76f5db89d886ba26822db3b35306afa04e98fb0ea3c5",
+      "gitBlobSha256": "1cd18f81e2a83ede1b5a76f5db89d886ba26822db3b35306afa04e98fb0ea3c5"
+    },
+    {
+      "path": "scripts/registry-toolchain.mjs",
+      "workingSha256": "017fb6e8db82b891ed6d1f7022cac79810f07396a70d07147fdc1188aef841bc",
+      "gitBlobSha256": "017fb6e8db82b891ed6d1f7022cac79810f07396a70d07147fdc1188aef841bc"
+    },
+    {
+      "path": "scripts/registry-plan.mjs",
+      "workingSha256": "07b0a73146c0fc117af22685c83f4dc14b8356409e54306b1b2ba0c8ceb68965",
+      "gitBlobSha256": "07b0a73146c0fc117af22685c83f4dc14b8356409e54306b1b2ba0c8ceb68965"
+    },
+    {
+      "path": "scripts/gallery-editor-imports.mjs",
+      "workingSha256": "8d28d531e45487de1ce3d3c7268404247b69784d52d2db0192b8fb134a93b456",
+      "gitBlobSha256": "8d28d531e45487de1ce3d3c7268404247b69784d52d2db0192b8fb134a93b456"
+    }
+  ],
+  "authoredContentAndStyles": "public example.opf.json remains byte-identical to the prior0.24 source",
+  "nativeStatus": "unqualified; parent owns PowerPoint and must measure this exact public PPTX without content projection"
+}

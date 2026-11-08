@@ -1,0 +1,47 @@
+{
+  "renderer": "@openpresentation/opf-render",
+  "source": "example.opf.json",
+  "preview": "example.svg",
+  "pptx": "example.pptx",
+  "sha256": "5f18318761dc7793ebacca600878d17d8a6d49258ccde8d81d45fafa25a15d53",
+  "toolchain": {
+    "source": "npm",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.33.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.33.0.tgz",
+        "integrity": "sha512-A67Yv70WY6BbpbnAjY3se8ZKOCghiTUJt20VZdgogvaWfMbBS9XtcAzHPmvBWz+oNLXRsmL13Ovyq32tnRJ0fg=="
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.33.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.33.0.tgz",
+        "integrity": "sha512-IOY+9byTkLLSCkY82vnv5513lfjwtSjZ6JrqWC3bp5aLoH3rIyyGnx9eJRDLYWVnHny1PEr3ggUIKeetENbwDw=="
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.33.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.33.0.tgz",
+        "integrity": "sha512-r5Rui7ad0sBj46x8s+Kw9HxXfzgMv5w4kX098Vnbhz3H89STeG6FNl0Z1vDBUwcxdpb5ULblfH3n6WbZ58kSBg=="
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.33.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.33.0.tgz",
+        "integrity": "sha512-uBCE1GesAD9JyMDB9uU9OzU8ixWZuY26NtYqK+8WrIKMXnH4yO9HOaBpidAqd7MHd7XQKdEeFq1bMwsaZ8RfPQ=="
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.33.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.33.0.tgz",
+        "integrity": "sha512-YQL+Jw9l1LHwarUahHAE+xVliihn0dkW/Ph2j8Rw4bOlP6SMSZPNTxaPWLztQ2WJVQJwznwn9R7vWFJv1BUpRQ=="
+      }
+    ]
+  },
+  "files": {
+    "example.opf.json": "9fd7fb920a302f9c4be338461ea895a272215226e5a3031e85a4179085786365",
+    "example.svg": "5f18318761dc7793ebacca600878d17d8a6d49258ccde8d81d45fafa25a15d53",
+    "example.pptx": "283fc05ca036877c9f42f51faf3a2e32a4fda6a6e124e5d1d3366f70142b712c"
+  }
+}
