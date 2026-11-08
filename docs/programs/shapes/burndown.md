@@ -161,3 +161,6 @@ item's state edits its row and appends a log line in the same PR.
 
 - 2026-11-08: SH20/22 completed as explicit no-additional-safe-live-domain result. Full original516report(465live/201pass/264fail) reproduces deeply identical with current core and unchanged gate;132current candidates(102built-in+30OPF) allpass, all264failures stay refused. Dropping only design/count/compact restrictions admits zero new candidate under existing text/ink/wrap limits. Canonical renderer script binding fixes diagnostic setup; no product offset/font/tolerance change. All72script inputs remain native with measured reasons;3099original files losslessly archived on separate evidence-only branch. [Final decision/report](../../handoff/2026-11-08/sh20-22-final-boundary.md).
 
+
+- 2026-11-08: SH20/22 parentP2review correction preserves sealed inputs and old reports: both audit commands now demand fresh outside output and refuse existing/aliased paths before any metric read, with exclusive creation.14CLI/7pure refusal controls pass; all516valid gate/domain records and3099original input hashes stay exact. No threshold/predicate/geometry changes.
+
