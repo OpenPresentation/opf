@@ -37,3 +37,8 @@ Never force-push, push folded source branches, merge evidence-only branches, rew
 ## Core 0.33 documentation and artifact preflight
 
 [Core currency handoff](core-033-currency.md) records the narrow current-doc corrections, exact 137-JSON/2-Markdown/36-layout source counts, required post-registry quickstart checks and every E1/E2/E3 comparison/planning artifact obligation. All seven 0.33.0 packages are now genuinely verified at 26fd4de9; the once-only registry plan and maintained quickstart pass, and the retained six-package consumer binds exact counts/content/lock integrity. [Post-publication receipt](core-033-currency/post-publication/receipt.json). E1/E2/E3 comparison/planning artifact refresh and sites remain separately owed. The cited old corpus generator is missing and is not replaced with guessed output.
+
+
+## RR-20 no-force site-bump correction
+
+A narrow source PR removes existing bump-branch forced updates. Trusted generation still runs on the default branch before any existing PR history is merged. Closed heads are refused before preparation and before push; latest default/open branch histories are normally merged, and conflicts or concurrent remote updates fail without overwriting them. Seven actual local-Git regression cases pass; no GitHub network, deploy or login is part of those tests. D17 advisory failure/issue reporting remains unchanged. The130.8s mapped run passes eight steps, with type checking appropriately skipped; two sparse historical-fixture omissions are preserved, and exact-Git restoration plus only the affected strict text/tracker reruns passes. No generated tracker is edited. [Raw check receipt](site-bump-history/receipt.json). Independent review remains required before folding into034.
