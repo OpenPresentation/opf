@@ -1,0 +1,85 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\lh110-bounded-scan\\cases\\localized-chart-references-es-ES.opf.json",
+    "sha256": "a4dc544d31cbf10839f51d11c0583ecac06cf24f940a1eae87b01467bb0e7510",
+    "bytes": 4600
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\lh110-cli-review-final\\before\\localized-chart-references-es-ES.pptx",
+      "sha256": "c27ef87f03dc98ff54fabe325fb37e21a83653536668ce27689aa90df9760a13",
+      "bytes": 104137,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/typeface-not-office-safe",
+      "severity": "info",
+      "category": "pptx",
+      "path": "",
+      "scope": "document",
+      "message": "The PPTX names Arial Black, which is not on every Windows and macOS machine or not measured exactly by OPF. A viewer without it substitutes another font, and lines can break differently from the preview.",
+      "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+      "families": [
+        "Arial Black"
+      ]
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 1
+  },
+  "format": "pptx",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Arial Black",
+        "resolved": "Montserrat",
+        "compatibility": "visual"
+      },
+      {
+        "requested": "Arial",
+        "resolved": "Arimo",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}
