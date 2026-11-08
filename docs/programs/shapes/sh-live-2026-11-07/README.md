@@ -151,3 +151,7 @@ Production inspection of the genuine three-set drawing found custom txXfrm recta
 ### Core arrangement wiring increment
 
 Schema and template parsing now accept org-chart/hierarchy/venn; shared composition selects the measured tree or genuine Venn text geometry, preserves tree levels and every entry, and refuses malformed trees/excess counts with a reported complete-list fallback. New kinds never shrink the original composed list size. Eight focused geometry/composition tests pass. Renderer/PPTX/catalog/native product qualification are still in progress; live export explicitly reports awaiting native qualification instead of enabling an unmeasured domain. The seven-count Venn source/copy hashes are unchanged, saved derivative ca297ce6439ead34cf944ea2fb6021eeb1573147e75ea68d0ac38f2d6a5743ea; all seven text slots have independent native-coordinate tests.
+
+### Paragraph marker diagnostic rejected
+
+The guarded [marker-style attempt](native/sh20-marker-style-01/) completes with six nonempty controls, materialized groups8/4/4 and all seven source hashes unchanged. [Raw hashes](native/manifest-after-sh20-marker01.json) retain all bytes. The unchanged gate reports exactly baseline03 native scores: Latin MAD1.37/text1px, Japanese4.48/5.92px, Arabic1.90/4.78px. [Comparison](marker-comparison/comparison.json) records each PNG hash and exact scores. Explicit paragraph-end size/language is not an effective fix; no production change or new domain is accepted. Exact pitch and every threshold remain.
