@@ -457,21 +457,26 @@ const attribute = (xml, name) => new RegExp(`\\s${name}="([^"]*)"`).exec(xml)?.[
  * resolves. Nothing is reported here: languageDiagnostics() reports against
  * the final imported document, after FF-32 provenance.
  */
-export function observeLanguage({slides, theme, themePath, slideThemes, catalogs, perSlide = true}) {
-  const counts = new Map();
+export function observeLanguage({slides, theme, themePath, slideThemes, catalogs, perSlide = true, preferBaseRuns = false}) {
+  const counts = new Map(), baseCounts = new Map();
   let rtlParagraphs = 0;
   for (const xml of slides) {
-    for (const [, lang] of xml.matchAll(/<a:rPr\b[^>]*?\slang="([^"]+)"/g)) {
+    for (const [run] of xml.matchAll(/<a:rPr\b[^>]*>/g)) {
+      const lang = attribute(run, 'lang');
       // Values that name no language are not counted: malformed tags, x-none, und and zxx.
-      if (!LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
+      if (!lang || !LANGUAGE_TAG.test(lang) || /^(?:und|zxx)(?:-|$)/i.test(lang)) continue;
       counts.set(lang, (counts.get(lang) ?? 0) + 1);
+      // OPF marks a run's authored language override with altLang=en-US. A wrapped override
+      // may produce more native fragments than the slide's base language; it must not replace it.
+      if (String(attribute(run, 'altLang')).toLowerCase() !== 'en-us') baseCounts.set(lang, (baseCounts.get(lang) ?? 0) + 1);
     }
     rtlParagraphs += xml.match(/<a:pPr\b[^>]*?\srtl="1"/g)?.length ?? 0;
   }
   const ranked = [...counts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0));
-  const lang = ranked[0]?.[0];
+  const baseRanked = preferBaseRuns && baseCounts.size ? [...baseCounts].sort((left, right) => right[1] - left[1] || (left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : 0)) : ranked;
+  const lang = baseRanked[0]?.[0];
   return {lang, language: lang, ranked, rtlParagraphs, theme, themePath, slideThemes, catalogs,
-    ...(perSlide ? {slides: slides.map(xml => observeLanguage({slides: [xml], catalogs, perSlide: false}))} : {})};
+    ...(perSlide ? {slides: slides.map(xml => observeLanguage({slides: [xml], catalogs, perSlide: false, preferBaseRuns}))} : {})};
 }
 
 /**

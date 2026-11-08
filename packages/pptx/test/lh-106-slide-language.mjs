@@ -3,6 +3,8 @@ import { strFromU8, unzipSync, zipSync } from 'fflate';
 import { toPptx, fromPptx } from '../dist/index.js';
 import { gallery } from '@openpresentation/gallery';
 import { documentProvenance } from '../src/document-provenance.js';
+import { observeLanguage } from '../src/script-fonts.js';
+import { loadFonts } from '@openpresentation/opf-render/fonts-node';
 // Legacy decks must not gain per-slide provenance or change their exact archive bytes.
 assert.deepEqual(documentProvenance({language: 'en-US', slides: [{title: 'Legacy'}]}).slides, [{v: 1, slide: 0}]);
 assert.deepEqual(documentProvenance({slides: [{title: 'Legacy'}]}).slides, [{v: 1, slide: 0}]);
@@ -47,4 +49,29 @@ for (const bodyText of ['measured', 'native']) {
   const runs=value=>Array.isArray(value)?value.flatMap(runs):value&&typeof value==='object'?[...(typeof value.text==='string'?[value]:[]),...Object.values(value).filter(x=>typeof x==='object').flatMap(runs)]:[];
   assert.ok(runs(restored.slides[0]).some(r=>r.text==='مرحبا'&&r.lang==='ar-SA'),bodyText+' Arabic run survives import');
   assert.ok(runs(restored.slides[1]).some(r=>r.text==='Hello'&&r.lang==='en-US'),bodyText+' English run survives import');
+}
+
+// A measured override can wrap into more native runs than the base language.
+const measuredDeck={language:'en-US',design:{theme:'minimal',fontScheme:'aptos'},slides:[
+ {title:'English slide with an Arabic run',text:[{text:'This English paragraph keeps its own proofing language. '},{text:'مرحبا بالعالم',lang:'ar-SA'},{text:' The Arabic run keeps its explicit language.'}]},
+ {language:{bcp47:'ar-SA',fontScheme:'noto-sans-arabic'},title:'شريحة عربية وفيها نص إنجليزي',text:[{text:'هذا النص العربي يحافظ على لغة الشريحة. '},{text:'Hello from this English run.',lang:'en-US'},{text:' ويظل هذا النص باللغة العربية.'}]},
+]};
+const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual',scripts:'auto',presentation:measuredDeck});
+const allRuns=value=>Array.isArray(value)?value.flatMap(allRuns):value&&typeof value==='object'?[...(typeof value.text==='string'?[value]:[]),...Object.values(value).filter(x=>typeof x==='object').flatMap(allRuns)]:[];
+for(const bodyText of ['measured','native']){
+ const bytes=await toPptx(measuredDeck,{fonts,catalogs:[gallery],bodyText});
+ const parts=unzipSync(new Uint8Array(bytes));
+ const xml=strFromU8(parts['ppt/slides/slide2.xml']);
+ const source=observeLanguage({slides:[xml],preferBaseRuns:true}),foreign=observeLanguage({slides:[xml]});
+ assert.equal(source.language,'ar-SA');
+ assert.equal(foreign.language,'en-US','untagged foreign observation keeps its existing all-run vote');
+ assert.deepEqual(source.ranked,foreign.ranked,'mixed-language diagnostics retain all runs');
+ const restored=await fromPptx(bytes,{catalogs:[gallery]});
+ assert.equal(restored.language,'en-US');
+ assert.deepEqual(restored.slides[1].language,measuredDeck.slides[1].language);
+ assert.ok(allRuns(restored.slides[1]).some(run=>run.lang==='en-US'&&run.text.includes('Hello from this English run.')));
+ assert.ok(allRuns(restored.slides[0]).some(run=>run.lang==='ar-SA'&&run.text.includes('مرحبا بالعالم')));
+ const edited=xml.replace(/<a:rPr\b[^>]*>/g,run=>run.includes('altLang=')?run:run.replace('lang="ar-SA"','lang="he-IL"'));
+ const native={...parts,'ppt/slides/slide2.xml':new TextEncoder().encode(edited)};
+ assert.equal((await fromPptx(zipSync(native),{catalogs:[gallery]})).slides[1].language,'he-IL','an explicit native edit of base runs remains authoritative');
 }
