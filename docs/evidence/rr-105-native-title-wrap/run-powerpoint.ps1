@@ -70,6 +70,18 @@ foreach ($case in $selected) {
     $report | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $reportPath -Encoding UTF8
     if ($worker.timedOut -or $worker.exitCode -ne 0 -or $null -eq $record.result -or -not $record.result.officeCompleted) { throw 'Worker did not complete; raw logs retained. Office is never killed. Stop the batch.' }
     Write-Output "$($case.name) $mode : title matches=$($record.result.linesMatch), accepted=$($record.result.passed)"
+    # The exact-owned presentation closed and its empty application quit successfully. Office can linger briefly while exiting.
+    # Bound this read-only shutdown serialization to ten seconds; never attach, terminate Office or wait after a failed worker.
+    $shutdown = [Diagnostics.Stopwatch]::StartNew()
+    for ($check=0;$check -lt 40;$check++) {
+      if (-not (Get-Process -Name POWERPNT -ErrorAction SilentlyContinue)) { break }
+      Start-Sleep -Milliseconds 250
+    }
+    $record.shutdownWaitMilliseconds = $shutdown.ElapsedMilliseconds
+    $shutdown.Stop()
+    $record.officeStillRunning = [bool](Get-Process -Name POWERPNT -ErrorAction SilentlyContinue)
+    $report | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $reportPath -Encoding UTF8
+    if ($record.officeStillRunning) { throw 'Office remains running after bounded shutdown wait; stop without attaching or terminating it.' }
   }
 }
 $after = @($report.files | Where-Object { $_.mode -ceq 'After' })
