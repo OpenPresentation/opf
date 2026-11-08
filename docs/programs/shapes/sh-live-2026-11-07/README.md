@@ -65,3 +65,9 @@ Baseline attempt 01 (coordinator, `C:/opf-work/release-033-artifacts/sh20-baseli
 ### SH-21 incremental Venn fit
 
 Core `vennNodes(frame, count)` matches all circle and text rectangles of the 140 Basic Venn measurements with a maximum coordinate error of 0.000101 pt, well inside the unchanged 0.1 pt geometry gate. Counts one to four put text in their circles; five to seven use outside labels. The independent fixture retains all 140 original rectangles and the full corpus source hash. Tests also prove translation and explicit refusal of unsupported counts/invalid frames. This is a geometry helper only: schema/catalog/render/native tree wiring and final native editing qualification remain owed; no new arrangement is enabled by this commit.
+
+### Preserved native attempts and current measurement limits
+
+The coordinator's complete raw attempts are under [native/](native/), with [per-file SHA-256 and size manifest](native/manifest.json): baseline 01 (Open argument failure), baseline 02 (six safe controls, all seven source hashes unchanged) and tree witness 01 (E_FAIL at the first node text assignment). No Office process remained after each bounded worker. Inputs, snapshot scripts, worker records, logs and reports are retained without rewriting them.
+
+Baseline 02 is a partial measurement: native controls report actual Source Sans 3, Meiryo East Asian and Noto Naskh Arabic complex-script faces and single paragraph spacing, but all three live records have zero GroupItems, so live text metrics were not captured. The known SH-19 probe first exports slides and opens visible/minimized presentation windows to materialize the live groups. This witness opened windowless and measured before rendering. A smaller read-only export/materialization control is needed before any shared baseline diagnosis or node-sync retry; the empty groups do not justify enabling or excluding a product domain.

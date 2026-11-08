@@ -1,0 +1,7 @@
+Error HRESULT E_FAIL has been returned from a call to a COM component.
+At C:\opf-work\release-033-artifacts\sh21-witness-01\com-witness.ps1:56 char:5
++     $n.TextFrame2.TextRange.Text=$spec.text
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (:) [], COMException
+    + FullyQualifiedErrorId : System.Runtime.InteropServices.COMException
+ 
