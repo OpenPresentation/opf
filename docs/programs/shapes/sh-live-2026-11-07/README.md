@@ -83,3 +83,5 @@ The actual font slots match between each live/native pair: Source Sans 3; Aptos 
 [spacing-single/](spacing-single/) is a diagnostic pack, not an export or eligibility change. [spacing-variant.mjs](../../../../tools/shapes/sh-20/spacing-variant.mjs) refuses an existing output. It changes only `a:lnSpc` exact pitch to 100% single spacing in the active data and cached drawing XML of the three live controls; all other unzipped parts match. Its three native controls are byte-exact copies, and all source hashes remain unchanged. The coordinator can run the same `-BaselineOnly` guarded witness with Sweep set to `C:/opf-work/sh20-23-review/artifacts/spacing-single`, in a fresh attempt. This isolates paragraph behavior before choosing a source fix or requesting any domain change.
 
 The full [acceptance task list](tasks.md) separates completed geometry/model/process controls from schema/render wiring, native editing, source PRs and final gates still owed.
+
+Fresh SH-23 source/expected-table witnesses and the strict modified-state SaveCopyAs/reopen verifier are ready for coordinator review: [SH23-witness.md](SH23-witness.md).

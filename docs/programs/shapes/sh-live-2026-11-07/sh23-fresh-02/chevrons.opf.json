@@ -1,0 +1,36 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "SH23 chevrons",
+  "language": "en-US",
+  "catalogs": {
+    "custom": {
+      "fontSchemes": {
+        "source-sans-3": {
+          "name": "Source Sans 3",
+          "major": "Source Sans 3",
+          "minor": "Source Sans 3",
+          "type": "sans-serif"
+        }
+      }
+    }
+  },
+  "design": {
+    "dimensions": "16:9",
+    "fontScheme": "source-sans-3"
+  },
+  "slides": [
+    {
+      "layout": "chevrons",
+      "title": "Editable stages",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale"
+      ]
+    }
+  ]
+}
