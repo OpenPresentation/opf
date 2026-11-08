@@ -95,9 +95,9 @@ if (process.platform === "win32") {
 	assert.equal(report.passed, true);
 	assert.equal(report.accepted, 6);
 	assert.equal(report.rejected, 23);
-	assert.equal(report.lifecycleControls.length, 10);
+	assert.equal(report.lifecycleControls.length, 14);
 	assert.ok(report.lifecycleControls.every(item => item.passed));
-	assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-running-office"]);
+	assert.deepEqual(report.lifecycleControls.map(item => item.name), ["readonly-copy-edit-reopen", "wrong-open-path", "writable-open", "copy-failure", "copy-identity-change", "refuse-input-overwrite", "refuse-existing-output", "refuse-unowned-close", "close-failure", "refuse-nonempty-application-adoption", "refuse-nonempty-application-quit", "quit-failure", "refuse-unowned-application-quit", "refuse-running-office"]);
 	assert.equal(report.textFontControls.length, 15);
 	assert.ok(report.textFontControls.every((item) => item.passed));
 	console.log(

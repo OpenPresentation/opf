@@ -146,7 +146,7 @@ if((Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Presentation
 if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256 -or $actions.Count -ne $request.actionPlan.count) { throw 'Action-plan snapshot does not match the validated request' }
 
 $script:sequence=0; $script:lastStage='worker.initialize'; $script:lastStatus='begin'; $script:cleanupConfirmed=$true; $script:officeOperationsStopped=$false
-$script:ownedPresentationPath=$null; $script:presentation=$null
+$script:ownedPresentationPath=$null; $script:presentation=$null; $script:ownedApplication=$null
 $os=Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion'
 $report=[ordered]@{
     schemaVersion=1
@@ -159,7 +159,7 @@ $report=[ordered]@{
     inputs=[ordered]@{verifier=$request.verifier;processHelper=$request.processHelper}
     environment=[ordered]@{hostVersion=$PSVersionTable.PSVersion.ToString();windowsProductName=$os.ProductName;windowsDisplayVersion=$os.DisplayVersion;windowsBuild="$($os.CurrentBuild).$($os.UBR)";powerPointVersion=$null;powerPointExecutable=$null;powerPointBuild=$null;powerPointExecutableSha256=$null}
     cleanupConfirmed=$script:cleanupConfirmed;officeOperationsStopped=$script:officeOperationsStopped;lastStage=$script:lastStage;lastStatus=$script:lastStatus;error=$null
-    scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations.'
+    scope='One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker quits only its exact verified empty application, never kills Office, changes security, retries, or closes unrelated presentations.'
 }
 function Write-FurnitureReport {
     $report.cleanupConfirmed=$script:cleanupConfirmed; $report.officeOperationsStopped=$script:officeOperationsStopped; $report.lastStage=$script:lastStage; $report.lastStatus=$script:lastStatus
@@ -327,7 +327,22 @@ function Stop-FurnitureLifecycle([string]$Message) {
     $script:officeOperationsStopped=$true; $script:cleanupConfirmed=$false
     throw $Message
 }
+function Assert-OwnedFurnitureApplication($Application) {
+    $presentations=Invoke-FurnitureCom 'application.ownership.presentations.get' { return ,$Application.Presentations }
+    $count=Invoke-FurnitureCom 'application.ownership.presentations.count.get' { $presentations.Count }
+    if($count -ne 0) { Stop-FurnitureLifecycle 'Application has presentations; refuse to adopt or clean up a potentially foreign instance' }
+    $script:ownedApplication=$Application
+}
+function Quit-OwnedFurnitureApplication($Application) {
+    if(-not [object]::ReferenceEquals($script:ownedApplication,$Application)) { Stop-FurnitureLifecycle 'Refusing to quit an application this worker did not verify and own' }
+    $presentations=Invoke-FurnitureCom 'application.cleanup.presentations.get' { return ,$Application.Presentations }
+    $count=Invoke-FurnitureCom 'application.cleanup.presentations.count.get' { $presentations.Count }
+    if($count -ne 0) { Stop-FurnitureLifecycle 'Application is no longer empty; do not quit or close foreign presentations' }
+    Invoke-FurnitureCom 'application.cleanup.quit' { $Application.Quit() }
+    $script:ownedApplication=$null
+}
 function Open-OwnedFurniture($Application,[string]$Path,[string]$Phase) {
+    if(-not [object]::ReferenceEquals($script:ownedApplication,$Application)) { Stop-FurnitureLifecycle 'Refusing to open through an unverified application' }
     Assert-PresentationNotOpen $Application $Path "$Phase.preflight"
     $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$Path; Write-FurnitureReport
     $presentations=Invoke-FurnitureCom "$Phase.presentations.get" { return ,$Application.Presentations }
@@ -356,6 +371,7 @@ Write-FurnitureReport; Write-FurnitureStage 'worker.initialize' 'success'
 try {
     Assert-FurnitureOfficeIdle
     $app=Invoke-FurnitureCom 'application.create' { New-Object -ComObject PowerPoint.Application }
+    Assert-OwnedFurnitureApplication $app
     $officeVersion=Invoke-FurnitureCom 'application.version.get' { $app.Version }; $officeDirectory=Invoke-FurnitureCom 'application.path.get' { $app.Path }; $officeExecutable=Join-Path $officeDirectory 'POWERPNT.EXE'
     $report.environment.powerPointVersion=$officeVersion; $report.environment.powerPointExecutable=$officeExecutable; $report.environment.powerPointBuild=(Get-Item -LiteralPath $officeExecutable).VersionInfo.FileVersion; $report.environment.powerPointExecutableSha256=Get-FurnitureSha256 $officeExecutable; Write-FurnitureReport
     Assert-PresentationNotOpen $app $savedPath 'output.preflight'
@@ -371,6 +387,7 @@ try {
     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
     if((Get-FurnitureSha256 $planSnapshot) -cne $request.actionPlan.snapshotSha256) { throw 'Action-plan snapshot changed during the native lifecycle' }
+    Quit-OwnedFurnitureApplication $app
     Write-FurnitureStage 'worker.complete' 'success'; Write-FurnitureReport; Write-Output "Native furniture control completed with $($actions.Count) action(s)."
 } catch {
     $report.error=$_.Exception.Message; if($script:officeOperationsStopped -or $null -ne $script:presentation) { $script:cleanupConfirmed=$false }

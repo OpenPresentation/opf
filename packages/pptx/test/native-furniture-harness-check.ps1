@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -177,8 +177,8 @@ function New-LifecycleFixture([string]$Name,[string]$Mode='') {
     $script:officeOperationsStopped=$false; $script:cleanupConfirmed=$true; $script:presentation=$null; $script:ownedPresentationPath=$null
     $script:lifecycleLog=New-Object 'System.Collections.Generic.List[string]'
     $script:lifecycleMode=$Mode; $script:lifecycleCopies=@{}
-    $input=Join-Path $planRoot ($Name+'.pptx'); $copy=Join-Path $planRoot ($Name+'-saved.pptx')
-    [IO.File]::WriteAllText($input,'original')
+    $fixtureInput=Join-Path $planRoot ($Name+'.pptx'); $copy=Join-Path $planRoot ($Name+'-saved.pptx')
+    [IO.File]::WriteAllText($fixtureInput,'original')
     $list=[pscustomobject]@{Count=0;Values=@()}
     $list | Add-Member -MemberType ScriptMethod -Name Item -Value {param($index) return $this.Values[$index-1]}
     $list | Add-Member -MemberType ScriptMethod -Name Open -Value {
@@ -208,7 +208,16 @@ function New-LifecycleFixture([string]$Name,[string]$Mode='') {
         $this.Count=1; $this.Values=@($presentation); return $presentation
     }
     $script:lifecycleCollection=$list
-    return [ordered]@{input=$input;copy=$copy;app=[pscustomobject]@{Presentations=$list}}
+    $application=[pscustomobject]@{Presentations=$list;QuitCalled=$false}
+    $application | Add-Member -MemberType ScriptMethod -Name Quit -Value {
+        $script:lifecycleLog.Add('quit')
+        if($script:lifecycleMode -eq 'quit-failure') { throw 'Injected Quit failure' }
+        if($this.Presentations.Count -ne 0) { throw 'Foreign presentation must not be closed' }
+        $this.QuitCalled=$true
+    }
+    $script:ownedApplication=$null
+    Assert-OwnedFurnitureApplication $application
+    return [ordered]@{input=$fixtureInput;copy=$copy;app=$application}
 }
 function Assert-LifecycleLatched([string]$Name,[scriptblock]$Action) {
     $rejected=$false;try { & $Action } catch { $rejected=$true }
@@ -216,6 +225,7 @@ function Assert-LifecycleLatched([string]$Name,[scriptblock]$Action) {
     $before=$script:lifecycleLog.Count
     try { Save-OwnedFurnitureCopy 'forbidden.pptx' 'forbidden-copy.pptx' } catch { }
     try { Close-OwnedFurniture 'forbidden-close' 'forbidden.pptx' } catch { }
+    try { Quit-OwnedFurnitureApplication $fixture.app } catch { }
     if($script:lifecycleLog.Count -ne $before) { throw "$Name performed a later Office operation" }
     $lifecycleCases.Add([ordered]@{name=$Name;passed=$true})
 }
@@ -228,6 +238,8 @@ Close-OwnedFurniture 'edited' $fixture.input
 Open-OwnedFurniture $fixture.app $fixture.copy 'reopen'
 if($script:presentation.Text -cne ('Native edit' + [char]13 + 'Second line')) { throw 'Reopened current text differs' }
 Close-OwnedFurniture 'reopened' $fixture.copy
+Quit-OwnedFurnitureApplication $fixture.app
+if(-not $fixture.app.QuitCalled) {throw 'Owned empty application was not quit'}
 if([IO.File]::ReadAllText($fixture.input) -cne 'original' -or -not $script:cleanupConfirmed -or $script:presentation -ne $null) { throw 'Input changed or owned cleanup incomplete' }
 $lifecycleCases.Add([ordered]@{name='readonly-copy-edit-reopen';passed=$true;events=@($script:lifecycleLog.ToArray())})
 foreach($mode in @('wrong-open-path','writable-open')) {
@@ -248,6 +260,16 @@ Assert-LifecycleLatched 'refuse-unowned-close' { Close-OwnedFurniture 'unowned' 
 if($held.Saved -ne 0 -or $held.Closed) { throw 'Unowned presentation modified before identity refusal' }
 $fixture=New-LifecycleFixture 'close-failure' 'close-failure'; Open-OwnedFurniture $fixture.app $fixture.input 'input'
 Assert-LifecycleLatched 'close-failure' { Close-OwnedFurniture 'edited' $fixture.input }
+$fixture=New-LifecycleFixture 'foreign-at-adoption'; $script:ownedApplication=$null; $fixture.app.Presentations.Count=1
+Assert-LifecycleLatched 'refuse-nonempty-application-adoption' {Assert-OwnedFurnitureApplication $fixture.app}
+if($fixture.app.QuitCalled) {throw 'Foreign application was cleaned up'}
+$fixture=New-LifecycleFixture 'foreign-at-quit'; $fixture.app.Presentations.Count=1
+Assert-LifecycleLatched 'refuse-nonempty-application-quit' {Quit-OwnedFurnitureApplication $fixture.app}
+if($fixture.app.QuitCalled) {throw 'Foreign presentation application was quit'}
+$fixture=New-LifecycleFixture 'quit-failure' 'quit-failure'
+Assert-LifecycleLatched 'quit-failure' {Quit-OwnedFurnitureApplication $fixture.app}
+$fixture=New-LifecycleFixture 'unowned-quit'; $other=[pscustomobject]@{Presentations=$fixture.app.Presentations}
+Assert-LifecycleLatched 'refuse-unowned-application-quit' {Quit-OwnedFurnitureApplication $other}
 function Get-Process { param($Name,$ErrorAction) if($script:mockPowerPointRunning){return [pscustomobject]@{Name='POWERPNT'}} }
 $script:mockPowerPointRunning=$true; $rejected=$false;try {Assert-FurnitureOfficeIdle} catch {$rejected=$true}
 if(-not $rejected) {throw 'Running Office was not refused'}
