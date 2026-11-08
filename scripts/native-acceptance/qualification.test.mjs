@@ -68,3 +68,22 @@ test('qualification: the grader reads a probed slide', () => {
   assert.equal(gradeCheck('slides', {}, { ...probe, slideCount: 2 }, facts).status, 'fail');
   assert.equal(gradeCheck('noOverflow', {}, { opened: false }, facts).status, 'not-run');
 });
+
+
+test('qualification: every schema-supported diagram syntax has native visual and saved-import coverage', () => {
+  const schema = JSON.parse(readFileSync(path.join(root, 'spec/schemas/opf.schema.json'), 'utf8'));
+  const definition = Object.values(schema.$defs ?? schema.definitions).find((value) => value?.properties?.syntax?.enum?.includes('mermaid'));
+  assert.ok(definition, 'authoritative diagram syntax definition exists');
+  const covered = new Set();
+  const visit = (value) => {
+    if (!value || typeof value !== 'object') return;
+    if (value.diagram && typeof value.diagram.source === 'string') covered.add(value.diagram.syntax ?? 'mermaid');
+    for (const child of Object.values(value)) visit(child);
+  };
+  for (const feature of manifest.features) {
+    if (!['visual', 'shapes', 'roundtrip'].every((check) => feature.checks.includes(check))) continue;
+    const deck = manifest.decks.find((candidate) => candidate.id === feature.deck);
+    if (deck.source.endsWith('.json')) visit(JSON.parse(readFileSync(path.join(root, deck.source), 'utf8')));
+  }
+  for (const syntax of definition.properties.syntax.enum) assert.ok(covered.has(syntax), `${syntax}: missing native diagram qualification`);
+});
