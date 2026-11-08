@@ -1,0 +1,14 @@
+{
+  "node": {
+    "version": "v24.20.0",
+    "file": "C:\\Users\\micha\\AppData\\Local\\npm-cache\\_npx\\00a8f3ae68dc15e1\\node_modules\\node\\bin\\node.exe",
+    "bytes": 93381448,
+    "sha256": "5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5"
+  },
+  "producerFile": "C:\\opf-work\\rr105-tag-ownership\\artifacts\\tag-ownership\\scalar-owned-producer.mjs",
+  "producer": {
+    "bytes": 11874,
+    "sha256": "389543c44ad29c60ce14d67dc17eb64974e7670d10a58a4a808542d3f48abb60"
+  },
+  "date": "2026-11-08"
+}

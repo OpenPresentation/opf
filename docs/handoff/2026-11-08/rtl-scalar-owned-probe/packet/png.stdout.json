@@ -1,0 +1,85 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rtl-scalar-owned-export-01\\source.opf.json",
+    "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a",
+    "bytes": 206
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rtl-scalar-owned-export-01\\preview\\slide-1.png",
+      "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b",
+      "bytes": 16076,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Arabic Typesetting",
+        "resolved": "Noto Naskh Arabic",
+        "compatibility": "visual"
+      }
+    ],
+    "scripts": {
+      "detected": [
+        "Arab"
+      ],
+      "scripts": [
+        "Arab"
+      ],
+      "unavailable": [],
+      "packages": [
+        "@expo-google-fonts/noto-sans-arabic",
+        "@expo-google-fonts/noto-naskh-arabic",
+        "@expo-google-fonts/noto-nastaliq-urdu"
+      ],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "provenance": {
+    "scope": "Eleven complete one-slide RTL language contrasts; all8original controls preserve full deck metadata/per-slide language/Unicode. Three bounded exact-string contrasts. Producer-only; no Office/native/registry acceptance.",
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "exportProducer": {
+      "revision": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+      "dirty": false,
+      "buildSha256": "8f621fc980ecb7797d2b7622b6e7f99f6b1b031921c0d03abdcaa8ae8d32f4f7",
+      "successfulBuild": {
+        "bytes": 14859,
+        "sha256": "bdc01995fb27420962a9a76014899f192c16bb3cf0670331cdb06321b9109bae"
+      },
+      "sourceRuntimeBeforeSha256": "5cf011f7ff60c3a2c2d9a8f118d36ca2bfe5e5d9701cdbdb53b64d9b7b0303e7",
+      "sourceRuntimeAfterSha256": "5cf011f7ff60c3a2c2d9a8f118d36ca2bfe5e5d9701cdbdb53b64d9b7b0303e7",
+      "oldNativeSuiteSha256": "1f87dd96814a7c9582d77a28cde3471f30e5868817665b5cb0128cfd12958ce3",
+      "sourceControl": {
+        "bytes": 1854,
+        "sha256": "a48d5e41fe772fc4263b0afd487a1d6f2734710cb579af36a6e433dc37aca667"
+      }
+    },
+    "suiteRepository": {
+      "directory": "C:/opf-work/rr105-readonly-survey",
+      "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+      "dirty": false,
+      "files": [
+        {
+          "path": "scripts/native-acceptance/run-windows.ps1",
+          "bytes": 15359,
+          "sha256": "5121ce5438db3fd932f7780c13091162b0786fe5368a6d63e8059d76efa91e9a"
+        }
+      ]
+    },
+    "workerRepository": {
+      "directory": "C:/opf-work/rr105-readonly-survey/packages/pptx",
+      "revision": "ce92ccc65d8cb40cc6532b2d9082e12202d6c283",
+      "dirty": false,
+      "files": [
+        {
+          "path": "test/native-furniture-control.ps1",
+          "bytes": 71285,
+          "sha256": "de0905bd8024f3eebbd0518c338e67449c45f5e2de998714069d7a14210e1943"
+        },
+        {
+          "path": "test/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "test/native-process-check.ps1",
+          "bytes": 2333,
+          "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+        },
+        {
+          "path": "test/native-furniture-harness-check.ps1",
+          "bytes": 45855,
+          "sha256": "06ac3e49dc2b6973d58357b381f9319d9b2d5f2c9176d6fb6d1bf3fd8a3c650d"
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "rtl-contrast-01-ar-inherited-list",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-01-ar-inherited-list.pptx",
+      "actionPlan": "actions/rtl-contrast-01-ar-inherited-list.json",
+      "slideCount": 1,
+      "archiveSha256": "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b",
+      "preview": "previews/rtl-contrast-01-ar-inherited-list-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-02-he-inherited-list",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-02-he-inherited-list.pptx",
+      "actionPlan": "actions/rtl-contrast-02-he-inherited-list.json",
+      "slideCount": 1,
+      "archiveSha256": "486c8caca8b2ae447e15af202394ad78a161021d4a4ab4487727b80982a92c20",
+      "preview": "previews/rtl-contrast-02-he-inherited-list-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-03-nfd-inherited-body",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-03-nfd-inherited-body.pptx",
+      "actionPlan": "actions/rtl-contrast-03-nfd-inherited-body.json",
+      "slideCount": 1,
+      "archiveSha256": "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc",
+      "preview": "previews/rtl-contrast-03-nfd-inherited-body-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-04-mixed-explicit-french",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-04-mixed-explicit-french.pptx",
+      "actionPlan": "actions/rtl-contrast-04-mixed-explicit-french.json",
+      "slideCount": 1,
+      "archiveSha256": "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b",
+      "preview": "previews/rtl-contrast-04-mixed-explicit-french-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-05-mixed-explicit-arabic.pptx",
+      "actionPlan": "actions/rtl-contrast-05-mixed-explicit-arabic.json",
+      "slideCount": 1,
+      "archiveSha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+      "preview": "previews/rtl-contrast-05-mixed-explicit-arabic-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-06-whole-explicit-arabic.pptx",
+      "actionPlan": "actions/rtl-contrast-06-whole-explicit-arabic.json",
+      "slideCount": 1,
+      "archiveSha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331",
+      "preview": "previews/rtl-contrast-06-whole-explicit-arabic-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-07-mixed-inherited",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-07-mixed-inherited.pptx",
+      "actionPlan": "actions/rtl-contrast-07-mixed-inherited.json",
+      "slideCount": 1,
+      "archiveSha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8",
+      "preview": "previews/rtl-contrast-07-mixed-inherited-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-08-mixed-explicit-english",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-08-mixed-explicit-english.pptx",
+      "actionPlan": "actions/rtl-contrast-08-mixed-explicit-english.json",
+      "slideCount": 1,
+      "archiveSha256": "5d380f17eee6bf4af9fb9825dee65629ef31865290d0e86c6a68ccadef45d38f",
+      "preview": "previews/rtl-contrast-08-mixed-explicit-english-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-09-long-explicit-arabic",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-09-long-explicit-arabic.pptx",
+      "actionPlan": "actions/rtl-contrast-09-long-explicit-arabic.json",
+      "slideCount": 1,
+      "archiveSha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2",
+      "preview": "previews/rtl-contrast-09-long-explicit-arabic-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-10-non-ascii-digits.pptx",
+      "actionPlan": "actions/rtl-contrast-10-non-ascii-digits.json",
+      "slideCount": 1,
+      "archiveSha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+      "preview": "previews/rtl-contrast-10-non-ascii-digits-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    },
+    {
+      "id": "rtl-contrast-11-long-explicit-french",
+      "worker": "furniture",
+      "automaticControlEligible": true,
+      "input": "inputs/rtl-contrast-11-long-explicit-french.pptx",
+      "actionPlan": "actions/rtl-contrast-11-long-explicit-french.json",
+      "slideCount": 1,
+      "archiveSha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+      "preview": "previews/rtl-contrast-11-long-explicit-french-1.png",
+      "declaredTopLevelShapes": 16,
+      "scope": "Complete one-slide language contrast; owned read-only original/SaveCopyAs/reopen observations, empty actions, unchanged worker/caps. Producer validation is not native acceptance."
+    }
+  ],
+  "files": [
+    {
+      "path": "sources/rtl-contrast-01-ar-inherited-list.opf.json",
+      "bytes": 368,
+      "sha256": "6709d683eaaadc0c325814c48d6a924249b10b54f7c4775abc98b5a5841a830d"
+    },
+    {
+      "path": "inputs/rtl-contrast-01-ar-inherited-list.pptx",
+      "bytes": 102065,
+      "sha256": "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b"
+    },
+    {
+      "path": "previews/rtl-contrast-01-ar-inherited-list-1.png",
+      "bytes": 45571,
+      "sha256": "8b93376fab8721b1e72731abc96b418d3eab9ed01306ae362ff93c8c0cef9fb8"
+    },
+    {
+      "path": "actions/rtl-contrast-01-ar-inherited-list.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-02-he-inherited-list.opf.json",
+      "bytes": 288,
+      "sha256": "18d0990a5d10ea5dfd57b60da40dacb349d8274bdbbf7e4606f02868d6e156f1"
+    },
+    {
+      "path": "inputs/rtl-contrast-02-he-inherited-list.pptx",
+      "bytes": 101508,
+      "sha256": "486c8caca8b2ae447e15af202394ad78a161021d4a4ab4487727b80982a92c20"
+    },
+    {
+      "path": "previews/rtl-contrast-02-he-inherited-list-1.png",
+      "bytes": 29076,
+      "sha256": "4682b861cd07e901b8fe455027be64831cb648fea628a68e167a03cdb681c57f"
+    },
+    {
+      "path": "actions/rtl-contrast-02-he-inherited-list.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-03-nfd-inherited-body.opf.json",
+      "bytes": 158,
+      "sha256": "1f82de53e4eeb8b2285c1ed3f96a53eafb9fe076a973990baa32966fc70715cd"
+    },
+    {
+      "path": "inputs/rtl-contrast-03-nfd-inherited-body.pptx",
+      "bytes": 101375,
+      "sha256": "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc"
+    },
+    {
+      "path": "previews/rtl-contrast-03-nfd-inherited-body-1.png",
+      "bytes": 22316,
+      "sha256": "244fb3e9164e4209f271e3ab967562adb3f32e1149dfa9824f26d916893a60e6"
+    },
+    {
+      "path": "actions/rtl-contrast-03-nfd-inherited-body.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-04-mixed-explicit-french.opf.json",
+      "bytes": 291,
+      "sha256": "a3589d43b4ce4015bf60a6b153b142d1316f00c097905478d95934751e5b3eca"
+    },
+    {
+      "path": "inputs/rtl-contrast-04-mixed-explicit-french.pptx",
+      "bytes": 100901,
+      "sha256": "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b"
+    },
+    {
+      "path": "previews/rtl-contrast-04-mixed-explicit-french-1.png",
+      "bytes": 12413,
+      "sha256": "6475f6b933c982d1c0cccd84d140ded8776c0974bfcdce3a5a22d0398b0892d7"
+    },
+    {
+      "path": "actions/rtl-contrast-04-mixed-explicit-french.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-05-mixed-explicit-arabic.opf.json",
+      "bytes": 289,
+      "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+    },
+    {
+      "path": "inputs/rtl-contrast-05-mixed-explicit-arabic.pptx",
+      "bytes": 100906,
+      "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+    },
+    {
+      "path": "previews/rtl-contrast-05-mixed-explicit-arabic-1.png",
+      "bytes": 12169,
+      "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e"
+    },
+    {
+      "path": "actions/rtl-contrast-05-mixed-explicit-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-06-whole-explicit-arabic.opf.json",
+      "bytes": 269,
+      "sha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923"
+    },
+    {
+      "path": "inputs/rtl-contrast-06-whole-explicit-arabic.pptx",
+      "bytes": 100900,
+      "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+    },
+    {
+      "path": "previews/rtl-contrast-06-whole-explicit-arabic-1.png",
+      "bytes": 11680,
+      "sha256": "27cbf4fd66f0bffbbb77f78991525e28a42a89bc750fe98d4ce900633484ab52"
+    },
+    {
+      "path": "actions/rtl-contrast-06-whole-explicit-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-07-mixed-inherited.opf.json",
+      "bytes": 206,
+      "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a"
+    },
+    {
+      "path": "inputs/rtl-contrast-07-mixed-inherited.pptx",
+      "bytes": 100893,
+      "sha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8"
+    },
+    {
+      "path": "previews/rtl-contrast-07-mixed-inherited-1.png",
+      "bytes": 16076,
+      "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b"
+    },
+    {
+      "path": "actions/rtl-contrast-07-mixed-inherited.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-08-mixed-explicit-english.opf.json",
+      "bytes": 293,
+      "sha256": "0e5ec20ff293f72625005cfabe9ecd0f1a6785d0ca5d70d2db3fc089a76078f1"
+    },
+    {
+      "path": "inputs/rtl-contrast-08-mixed-explicit-english.pptx",
+      "bytes": 100895,
+      "sha256": "5d380f17eee6bf4af9fb9825dee65629ef31865290d0e86c6a68ccadef45d38f"
+    },
+    {
+      "path": "previews/rtl-contrast-08-mixed-explicit-english-1.png",
+      "bytes": 12237,
+      "sha256": "21518b37502f9fb0446d6e611471428c9b57bb13f6124a6ce24d56ad2bed459d"
+    },
+    {
+      "path": "actions/rtl-contrast-08-mixed-explicit-english.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-09-long-explicit-arabic.opf.json",
+      "bytes": 371,
+      "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c"
+    },
+    {
+      "path": "inputs/rtl-contrast-09-long-explicit-arabic.pptx",
+      "bytes": 101027,
+      "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+    },
+    {
+      "path": "previews/rtl-contrast-09-long-explicit-arabic-1.png",
+      "bytes": 30278,
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd"
+    },
+    {
+      "path": "actions/rtl-contrast-09-long-explicit-arabic.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-10-non-ascii-digits.opf.json",
+      "bytes": 519,
+      "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+    },
+    {
+      "path": "inputs/rtl-contrast-10-non-ascii-digits.pptx",
+      "bytes": 102481,
+      "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+    },
+    {
+      "path": "previews/rtl-contrast-10-non-ascii-digits-1.png",
+      "bytes": 31586,
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3"
+    },
+    {
+      "path": "actions/rtl-contrast-10-non-ascii-digits.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "sources/rtl-contrast-11-long-explicit-french.opf.json",
+      "bytes": 373,
+      "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+    },
+    {
+      "path": "inputs/rtl-contrast-11-long-explicit-french.pptx",
+      "bytes": 101016,
+      "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+    },
+    {
+      "path": "previews/rtl-contrast-11-long-explicit-french-1.png",
+      "bytes": 30522,
+      "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492"
+    },
+    {
+      "path": "actions/rtl-contrast-11-long-explicit-french.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "producer-build.json",
+      "bytes": 8309,
+      "sha256": "8f621fc980ecb7797d2b7622b6e7f99f6b1b031921c0d03abdcaa8ae8d32f4f7"
+    }
+  ]
+}

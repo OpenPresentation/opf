@@ -1,0 +1,134 @@
+{
+  "files": [
+    {
+      "path": "build.json",
+      "bytes": 1012,
+      "sha256": "6970e99bb76d41b1430cb4bd8fb8ba1a40edb1e2265c0ab14cde5ca3c461d1b6"
+    },
+    {
+      "path": "import.json.gz",
+      "bytes": 231,
+      "sha256": "d6068d00f055abe9ec3598f54e924b26f8b4eef82e2e50d3add7814a086feba3"
+    },
+    {
+      "path": "input.pptx",
+      "bytes": 100943,
+      "sha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713"
+    },
+    {
+      "path": "native-facts.json",
+      "bytes": 52260,
+      "sha256": "2fa28516de3b07f8d03bd0946828e6ed7006848792a99554fca32fd38dbf2504"
+    },
+    {
+      "path": "node-and-producer.json",
+      "bytes": 523,
+      "sha256": "30fec7ffc4d2a47bcf2de037d0e03d9b02780e24f52a2609b79f9453a42b3aa0"
+    },
+    {
+      "path": "png.exit.json",
+      "bytes": 355,
+      "sha256": "175fe451b6ecf7a6f050a2fcf04b2af805f17e92e802c05868fa9edf31599321"
+    },
+    {
+      "path": "png.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "png.stdout.json",
+      "bytes": 1995,
+      "sha256": "34f033dbccb6ddccf6bebb26667608333afa6b1ab7d97c9d43f41e143c7262c4"
+    },
+    {
+      "path": "pptx.exit.json",
+      "bytes": 320,
+      "sha256": "665b778429caeb06490d0ef166d6853a676c7f7d006421a555913cb36c34cff1"
+    },
+    {
+      "path": "pptx.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pptx.stdout.json",
+      "bytes": 2703,
+      "sha256": "bb0d52f7faa8cfc01be27e25d4ab5885b1f087a4f0e49cf03af12f0c3bd696f5"
+    },
+    {
+      "path": "preview/slide-1.png",
+      "bytes": 16076,
+      "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b"
+    },
+    {
+      "path": "receipt.json",
+      "bytes": 4781,
+      "sha256": "ff8118c0406d5189cd9836625bd468344ef066307c513f1bf01d12571a0e3c86"
+    },
+    {
+      "path": "reference-suite.json",
+      "bytes": 18333,
+      "sha256": "f8b3fb7d9e3809395be7e38eeb08c4a5359e786e1ab3fb5f5db83144ad7a5fd4"
+    },
+    {
+      "path": "runtime-after.json",
+      "bytes": 105087,
+      "sha256": "79ef7283933ac0bb5040fa364ce1d0228c2a9133ef822a3ef1daba9ea5199524"
+    },
+    {
+      "path": "runtime-before.json",
+      "bytes": 105087,
+      "sha256": "79ef7283933ac0bb5040fa364ce1d0228c2a9133ef822a3ef1daba9ea5199524"
+    },
+    {
+      "path": "source.opf.json",
+      "bytes": 206,
+      "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a"
+    },
+    {
+      "path": "successful-build.log",
+      "bytes": 14788,
+      "sha256": "6a7283d85b65d6e55386c5ee227baf79d69ad17ccfb6ae58da99fbbe08f508d2"
+    },
+    {
+      "path": "suite/actions/rtl-scalar-owned-07.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "suite/inputs/rtl-scalar-owned-07.pptx",
+      "bytes": 100943,
+      "sha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713"
+    },
+    {
+      "path": "suite/previews/rtl-scalar-owned-07-1.png",
+      "bytes": 16076,
+      "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b"
+    },
+    {
+      "path": "suite/producer-build.json",
+      "bytes": 1012,
+      "sha256": "6970e99bb76d41b1430cb4bd8fb8ba1a40edb1e2265c0ab14cde5ca3c461d1b6"
+    },
+    {
+      "path": "suite/sources/rtl-scalar-owned-07.opf.json",
+      "bytes": 206,
+      "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a"
+    },
+    {
+      "path": "suite/suite.json",
+      "bytes": 4029,
+      "sha256": "0ce6fb8a1b88d5ed719f6f026ae541fcb3d1d22d2b706b32d58c2d069eeeda80"
+    },
+    {
+      "path": "worker-after.json",
+      "bytes": 1275,
+      "sha256": "acce5a16627142d2cde0bbe336e224f4bbf34dbdc7bf1d28ff7ff2cb7898ce53"
+    },
+    {
+      "path": "worker-before.json",
+      "bytes": 1275,
+      "sha256": "acce5a16627142d2cde0bbe336e224f4bbf34dbdc7bf1d28ff7ff2cb7898ce53"
+    }
+  ]
+}

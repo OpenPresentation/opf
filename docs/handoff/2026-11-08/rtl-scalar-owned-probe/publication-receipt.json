@@ -1,0 +1,15 @@
+{
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "producerHead": "b7536f19e92cdea55384ba40471af700622d798e",
+  "evidenceCommitDistinct": true,
+  "packetFilesVerified": 26,
+  "producerSha256": "389543c44ad29c60ce14d67dc17eb64974e7670d10a58a4a808542d3f48abb60",
+  "credentialScan": {
+    "textFiles": 24,
+    "archiveXmlParts": 294,
+    "hits": 0
+  },
+  "nativeAcceptance": false,
+  "officeStarted": false
+}

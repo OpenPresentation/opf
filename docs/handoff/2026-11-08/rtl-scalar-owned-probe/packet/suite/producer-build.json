@@ -1,0 +1,41 @@
+{
+  "manifestVersion": 1,
+  "revision": "b7536f19e92cdea55384ba40471af700622d798e",
+  "dirty": false,
+  "qualificationTarget": "unreleased034source",
+  "opfVersion": "0.33.0",
+  "node": "v24.20.0",
+  "nativeAcceptance": false,
+  "date": "2026-11-08",
+  "fontRoute": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "scripts": "auto",
+    "userFonts": []
+  },
+  "decks": [
+    {
+      "id": "rtl-scalar-owned-07",
+      "source": "source.opf.json",
+      "sourceSha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "input.pptx",
+          "ok": true,
+          "sha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713"
+        }
+      ]
+    }
+  ]
+}

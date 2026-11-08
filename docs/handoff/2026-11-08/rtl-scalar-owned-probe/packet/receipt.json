@@ -1,0 +1,160 @@
+{
+  "producerHead": "b7536f19e92cdea55384ba40471af700622d798e",
+  "node": "v24.20.0",
+  "source": {
+    "bytes": 206,
+    "sha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a"
+  },
+  "archive": {
+    "bytes": 100943,
+    "sha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713"
+  },
+  "originalArchive": {
+    "bytes": 100893,
+    "sha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8",
+    "producerHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8"
+  },
+  "preview": {
+    "bytes": 16076,
+    "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b"
+  },
+  "originalPreview": {
+    "bytes": 16076,
+    "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b"
+  },
+  "canonicalSourcePreimportExact": true,
+  "onlyChangedPart": "ppt/tags/opfSlide1.xml",
+  "nativeDrawingProofingWordsFontsGeometryNumberingExact": true,
+  "sourceAndSevenRuntimePackagesUnchanged": true,
+  "workerUnchanged": true,
+  "slides": 1,
+  "topLevelShapes": 2,
+  "bounds": {
+    "slides": 3,
+    "topLevelShapes": 30,
+    "timeoutSeconds": 60
+  },
+  "reports": [
+    {
+      "kind": "png",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-scalar-owned-export-01\\preview\\slide-1.png",
+          "sha256": "bb7d8f4e82a9fe31ad498d0bdb101e32f5c372b7fd5680dfcf6cd522de58649b",
+          "bytes": 16076,
+          "mediaType": "image/png",
+          "slide": 1,
+          "width": 1280,
+          "height": 720
+        }
+      ]
+    },
+    {
+      "kind": "pptx",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Aptos",
+            "Aptos Display"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-scalar-owned-export-01\\input.pptx",
+          "sha256": "be3ea579b65e24cd0818472304539ee4ef646f962ce7244eb756184196a7b713",
+          "bytes": 100943,
+          "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
+    }
+  ],
+  "officeStarted": false,
+  "nativeAcceptance": false,
+  "suite": {
+    "bytes": 4029,
+    "sha256": "0ce6fb8a1b88d5ed719f6f026ae541fcb3d1d22d2b706b32d58c2d069eeeda80"
+  }
+}

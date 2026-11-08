@@ -1,0 +1,15 @@
+{
+  "args": [
+    "packages/cli/dist/index.js",
+    "convert",
+    "C:\\opf-work\\rtl-scalar-owned-export-01\\source.opf.json",
+    "C:/opf-work/rtl-scalar-owned-export-01/preview/slide-{n}.png",
+    "--date",
+    "2026-11-08",
+    "--keep-slides",
+    "--include-hidden"
+  ],
+  "cwd": "C:/opf-work/rr105-tag-ownership",
+  "status": 0,
+  "signal": null
+}
