@@ -25,6 +25,11 @@ $inputs = @($inputFiles | ForEach-Object {
   if (-not (Test-Path -LiteralPath $_ -PathType Leaf)) { throw "Missing witness input: $_" }
   @{ source = $_; sha256 = (Get-OpfFileSha256 $_) }
 })
+# Keep the Open argument outside PowerShell's automatic $input pipeline variable, and cast it before invoking COM.
+function Open-OpfWitnessInput {
+  param($Application, [Parameter(Mandatory=$true)][string]$OwnedPath)
+  return $Application.Presentations.Open([string]$OwnedPath,-1,0,0)
+}
 if ($PlanOnly) { @{ out=$Out; inputs=$inputs; treeCases=@('org:k1','org:chain4','org:roots2','org:assistant','hierarchy:k1','hierarchy:chain4','hierarchy:roots2','venn:5','venn:6','venn:7'); scope='Plan only: no directory, process or COM object created.' } | ConvertTo-Json -Depth 6; return }
 if (Get-Process POWERPNT -ErrorAction SilentlyContinue) { throw 'PowerPoint is already running. Close it yourself; no COM object was created.' }
 [void](New-Item -ItemType Directory -Path $Out)
@@ -81,7 +86,7 @@ try {
   $app=Invoke-OpfNativeStage $latch 'create-app' { New-Object -ComObject PowerPoint.Application }
   Invoke-OpfNativeStage $latch 'empty-app' { if($app.Presentations.Count -ne 0) { throw 'PowerPoint acquired an open presentation; refusing this attempt.' } } | Out-Null
   if (-not $BaselineOnly) {
-  $seed=Invoke-OpfNativeStage $latch 'open-seed-copy' { $app.Presentations.Open($inputs[0].copy,-1,0,0) }
+  $seed=Invoke-OpfNativeStage $latch 'open-seed-copy' { Open-OpfWitnessInput -Application $app -OwnedPath ([string]$inputs[0].copy) }
   Invoke-OpfNativeStage $latch 'seed-identity' { if([IO.Path]::GetFullPath([string]$seed.FullName) -ne $inputs[0].copy) {throw 'Seed identity mismatch.'} } | Out-Null
   $pres=Invoke-OpfNativeStage $latch 'create-owned' { $app.Presentations.Add(0) }
   Invoke-OpfNativeStage $latch 'save-owned' { $pres.SaveAs($owned,24) } | Out-Null
@@ -111,18 +116,18 @@ try {
   Invoke-OpfNativeStage $latch 'close-seed' { [void](Close-OpfOwnedPresentation $seed $inputs[0].copy) } | Out-Null; $seed=$null
   }
   for($i=1;$i -lt $inputs.Count;$i++) {
-    $input=$inputs[$i]
-    $opened=Invoke-OpfNativeStage $latch "open-control-$i" {$app.Presentations.Open($input.copy,-1,0,0)}
+    $witnessInput=$inputs[$i]
+    $opened=Invoke-OpfNativeStage $latch "open-control-$i" {Open-OpfWitnessInput -Application $app -OwnedPath ([string]$witnessInput.copy)}
     Invoke-OpfNativeStage $latch "control-$i" {
-      if([IO.Path]::GetFullPath([string]$opened.FullName) -ne $input.copy) {throw 'Control identity mismatch.'}
+      if([IO.Path]::GetFullPath([string]$opened.FullName) -ne $witnessInput.copy) {throw 'Control identity mismatch.'}
       $slide=$opened.Slides.Item(1); $controlShapes=$slide.Shapes
-      $controls.Add(@{source=$input.source;shapes=@(for($k=1;$k -le $controlShapes.Count;$k++) {$shape=$controlShapes.Item($k);if($shape.HasSmartArt -eq -1){Read-SmartArt $shape}elseif($shape.HasTextFrame -eq -1 -and $shape.TextFrame2.HasText -eq -1){Read-TextShape $shape}})})
+      $controls.Add(@{source=$witnessInput.source;shapes=@(for($k=1;$k -le $controlShapes.Count;$k++) {$shape=$controlShapes.Item($k);if($shape.HasSmartArt -eq -1){Read-SmartArt $shape}elseif($shape.HasTextFrame -eq -1 -and $shape.TextFrame2.HasText -eq -1){Read-TextShape $shape}})})
     } | Out-Null
-    Invoke-OpfNativeStage $latch "close-control-$i" {[void](Close-OpfOwnedPresentation $opened $input.copy)} | Out-Null
+    Invoke-OpfNativeStage $latch "close-control-$i" {[void](Close-OpfOwnedPresentation $opened $witnessInput.copy)} | Out-Null
   }
   Invoke-OpfNativeStage $latch 'quit-empty-owned-app' {if($app.Presentations.Count -eq 0){$app.Quit()}} | Out-Null
 } finally {
   # A failed stage closes the latch: no cleanup Office calls after failure. Preserve the exact evidence and leave the unknown state alone.
-  foreach($input in $inputs) {$input.sha256After=Get-OpfFileSha256 $input.source; $input.unchanged=($input.sha256After -eq $input.sha256)}
+  foreach($witnessInput in $inputs) {$witnessInput.sha256After=Get-OpfFileSha256 $witnessInput.source; $witnessInput.unchanged=($witnessInput.sha256After -eq $witnessInput.sha256)}
   @{passed=((-not $latch.failed) -and @($inputs | Where-Object {-not $_.unchanged}).Count -eq 0);failure=$latch.reason;stages=@($latch.stages.ToArray());inputs=$inputs;trees=@($rows.ToArray());controls=@($controls.ToArray())} | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath (Join-Path $Out 'witness.json') -Encoding UTF8
 }
