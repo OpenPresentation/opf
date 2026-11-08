@@ -86,6 +86,8 @@ export interface ArrangementNode {
   beside?: true;
   /** SH-17: the shape is mirrored (a chevron pointing left, in a right-to-left deck). */
   flip?: true;
+  /** The downward pyramid mirrors only its trapezoid, never its text. */
+  flipV?: true;
 }
 
 const round = (value: number) => Math.round(value * 1000) / 1000;
@@ -98,7 +100,8 @@ export function pyramidFrame(area: Box): Box {
 }
 
 /** The levels of a pyramid of `count` entries in `frame`, the apex first (PowerPoint's Basic Pyramid). */
-export function pyramidNodes(frame: Box, count: number): ArrangementNode[] {
+export function pyramidNodes(frame: Box, count: number, direction: 'up' | 'down' = 'up'): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidNodes(frame, count), frame);
   const n = Math.max(1, Math.floor(count)), height = frame.height / n, step = frame.width / (2 * n);
   return Array.from({ length: n }, (_, index) => {
     const width = frame.width * (index + 1) / n, x = frame.x + (frame.width - width) / 2, y = frame.y + index * height;
@@ -110,6 +113,13 @@ export function pyramidNodes(frame: Box, count: number): ArrangementNode[] {
       textBox: roundBox({ x: x + (width - textWidth) / 2, y, width: textWidth, height }),
     };
   });
+}
+
+/** Reflect the geometry and reverse the node mapping so authored order remains top to bottom, widest first. */
+function invertedPyramid(nodes: ArrangementNode[], frame: Box): ArrangementNode[] {
+  const box = (area: Box): Box => roundBox({...area, y: 2 * frame.y + frame.height - area.y - area.height});
+  return [...nodes].reverse().map((node, index) => ({...node, index, box: box(node.box), textBox: box(node.textBox),
+    ...(node.points ? {points: node.points.map(([x, y]) => [x, round(2 * frame.y + frame.height - y)] as [number, number]), flipV: true as const} : {})}));
 }
 
 /** The square of a matrix in `frame` (its diamond's box). */
@@ -143,7 +153,8 @@ export const PYRAMID_STEPS_SHARE = .4, PYRAMID_STEPS_ASPECT = 1.6;
  * rounded bars at the start of `area` (level i of n is i/n of the steps' width, centered on one axis, `gap` apart), and each entry's
  * text beside its level, in one column across the rest of the area, vertically centered on its level.
  */
-export function pyramidSteps(area: Box, count: number, gap: number, radius: number): ArrangementNode[] {
+export function pyramidSteps(area: Box, count: number, gap: number, radius: number, direction: 'up' | 'down' = 'up'): ArrangementNode[] {
+  if (direction === 'down') return invertedPyramid(pyramidSteps(area, count, gap, radius), area);
   const n = Math.max(1, Math.floor(count)), width = Math.min(area.width * PYRAMID_STEPS_SHARE, area.height * PYRAMID_STEPS_ASPECT);
   const height = (area.height - (n - 1) * gap) / n, axis = area.x + width / 2, column = area.x + width + 2 * gap;
   return Array.from({ length: n }, (_, index) => {
@@ -181,7 +192,7 @@ export function nodeWidthAt(node: ArrangementNode, y: number): number {
   if (node.preset === 'ellipse') return ellipseWidthAt(box, y);
   if (node.preset === 'trapezoid') {
     const step = node.points ? node.points[0]![0] - box.x : 0;
-    return Math.max(0, box.width - 2 * step * (1 - t));
+    return Math.max(0, box.width - 2 * step * (node.flipV ? t : 1 - t));
   }
   const radius = node.radius ?? 0, from = Math.min(y - box.y, box.y + box.height - y);
   if (from >= radius) return box.width;
@@ -492,6 +503,7 @@ export function smartArtScript(texts: readonly string[]): { rtl: boolean; script
 /** The facts of one composed arrangement the domain is checked on (ComposedArrangement.smartArt, the frame and the text). */
 export interface SmartArtCandidate {
   kind: Arrangement;
+  pyramidDirection?: 'up' | 'down';
   count: number;
   frame: Box;
   /** Per entry: the lines it wraps to, and whether its breaks hold within SMART_ART_DOMAIN.slack of its width. */
@@ -513,6 +525,7 @@ export interface SmartArtCandidate {
  */
 export function smartArtUnavailable(candidate: SmartArtCandidate): string | undefined {
   const { kind, count, frame, nodes } = candidate, domain = SMART_ART_DOMAIN;
+  if (kind === 'pyramid' && candidate.pyramidDirection === 'down') return 'the inverted pyramid has no qualified live SmartArt domain';
   if (count < 1 || count > domain.count[kind]) return `a ${kind} of ${count} entries is outside the compared 1 to ${domain.count[kind]}`;
   const aspect = frame.width / frame.height, range = domain.aspect[kind];
   if (!(aspect >= range.min - 1e-6 && aspect <= range.max + 1e-6)) return `its frame's proportions (${aspect.toFixed(2)} : 1) are outside the compared ${range.min} to ${range.max}`;

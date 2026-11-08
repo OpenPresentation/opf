@@ -130,6 +130,8 @@
     "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs",
     "native:prepare": "node scripts/native-acceptance/prepare.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
+    "check:libreoffice": "node --test scripts/libreoffice/*.test.mjs",
+    "qualify:libreoffice": "node scripts/libreoffice/run.mjs",
     "native:compare:tables": "node scripts/native-acceptance/compare-tables.mjs",
     "check:preview-packaging": "node --test scripts/ecosystem-preview-plan.test.mjs",
     "check:workspace-pack": "node --test scripts/workspace-pack.test.mjs"

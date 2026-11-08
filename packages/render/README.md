@@ -350,7 +350,7 @@ useEffect(() => { defineOpfDeck(); }, []);
 // ...and render <opf-deck src="/deck.opf.json" fonts="/opf-fonts/" />.
 ```
 
-Entry points (package `exports`): `/element` (`defineOpfDeck`, `getOpfDeckElement`, `toHtml`, `loadPreviewFonts`), `/element/define` (importing it registers the tag; the only file with a side effect), `/player` (`present`), `/preview-fonts` (the font root layout and `loadPreviewFonts`) and `/preview-fonts-node` (`copyPreviewFonts`, also the `opf-preview-fonts` command). The element loads the player on first use, so a page that only embeds decks does not carry slideshow code.
+Entry points (package `exports`): `/element` (`defineOpfDeck`, `getOpfDeckElement`, `toHtml`, `loadPreviewFonts`), `/element/define` (importing it registers the tag; the only file with a side effect), `/player` (`present`), `/preview-fonts` (the font root layout and `loadPreviewFonts`) and `/preview-fonts-node` (`copyPreviewFonts`, `fontconfigAliases` and `fontconfigConf`, also the `opf-preview-fonts` command). The element loads the player on first use, so a page that only embeds decks does not carry slideshow code.
 
 ### Fonts: one self-hosted directory
 
@@ -360,6 +360,8 @@ Layout is estimated and text uses the visitor's system sans-serif until you give
 npx opf-preview-fonts public/opf-fonts                  # base and vendored faces (about 34 MiB), every SHA-256 verified
 npx opf-preview-fonts public/opf-fonts --scripts Jpan,Arab   # plus Noto script faces (large; `all` for every script)
 ```
+
+`--fontconfig <file>` also writes a fontconfig file that names the directory and adds one alias per font-policy replacement (Aptos to Intos, Calibri to Carlito, Arial to Arimo, ...). On Linux, `npx opf-preview-fonts ~/.local/share/fonts/opf --scripts all --fontconfig ~/.config/fontconfig/conf.d/60-opf-fonts.conf` gives every app that resolves fonts through fontconfig, LibreOffice among them, the faces OPF measures with, so an exported PPTX keeps its line breaks there ([LibreOffice interoperability](https://github.com/OpenPresentation/opf/blob/main/docs/libreoffice.md#fonts)). The same file comes from `fontconfigConf()` and `fontconfigAliases()` of `/preview-fonts-node`. An alias replaces a family even where it is installed, so use it on machines that lack the originals.
 
 ```
 <root>/base/<package>/<file>       the eager Office and base faces (Roboto Regular loads at startup, the rest on demand)

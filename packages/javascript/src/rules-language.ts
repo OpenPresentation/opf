@@ -30,6 +30,11 @@ export const languageTagRules: ValidationRule[] = [
 			if (typeof language === 'string') {
 				if (!isEnUk(language)) report(context, language, '/language');
 			} else if (language !== undefined && !isEnUk(rec(language).bcp47)) report(context, rec(language).bcp47, '/language/bcp47');
+			for (const slide of context.slides) {
+				const language = slide.slide.language;
+				if (typeof language === 'string') report(context, language, `${slide.path}/language`, slide);
+				else if (language !== undefined) report(context, rec(language).bcp47, `${slide.path}/language/bcp47`, slide);
+			}
 			for (const slide of context.slides)
 				for (const tv of slide.texts)
 					if (typeof tv.value !== 'string') for (const run of runsOf(tv)) report(context, run.style.lang, `${run.path}/lang`, slide);
