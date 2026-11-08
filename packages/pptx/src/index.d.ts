@@ -40,7 +40,7 @@ export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; p
 export interface NativeBodyFallbackDiagnostic {
   code: "native-body-fallback";
   path: string;
-  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow";
+  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow" | "tight-wrap" | "font-metrics";
   message: string;
 }
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
