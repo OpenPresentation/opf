@@ -46,21 +46,21 @@ export function planScriptFonts(presentation, report, {catalogs} = {}) {
 
 /**
  * FA-13: the OOXML tag a run's own `lang` (TextRun.lang) is written with: core's curated tag for the language (fr becomes
- * fr-FR), or undefined when it is the deck language (the run then follows the deck). Without a plan the tag is written as given.
+ * fr-FR), or undefined when it is the effective slide language. Without a plan the tag is written as given.
  */
-export function runLanguageTag(plan, tag) {
+export function runLanguageTag(plan, tag, slideIndex = 0) {
   if (typeof tag !== "string" || !tag) return undefined;
   if (!plan) return tag.toLowerCase() === "en-us" ? undefined : tag;
-  const cache = plan.runLanguages ??= new Map();
-  if (!cache.has(tag)) {
+  const cache = plan.runLanguages ??= new Map(), key = `${slideIndex}|${tag}`;
+  if (!cache.has(key)) {
     let lang = tag;
     try {
-      const resolved = resolver(plan.presentation, {language: tag}, plan.catalogs);
+      const resolved = resolver(plan.presentation, {slideIndex, language: tag}, plan.catalogs);
       if (resolved.languageSource !== "default") lang = resolved.lang;
     } catch { /* an unresolvable tag is written as given */ }
-    cache.set(tag, lang.toLowerCase() === String(plan.lang).toLowerCase() ? undefined : lang);
+    cache.set(key, lang.toLowerCase() === String(plan.slides?.[slideIndex]?.lang ?? plan.lang).toLowerCase() ? undefined : lang);
   }
-  return cache.get(tag);
+  return cache.get(key);
 }
 
 /**

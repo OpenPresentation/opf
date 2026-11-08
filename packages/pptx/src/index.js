@@ -2841,7 +2841,7 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
     || Math.abs(resolved.dimensions.heightInches - baseContext.dimensions.heightInches) > 1e-6) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
-  const slideContext = { ...baseContext, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
+  const slideContext = { ...baseContext, slideIndex, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
   // RR-96: a slide whose variant differs from the deck's writes its own clrMapOvr (accent order included).
   if (resolved.roles.map && baseContext.clrMap) {
     const attributes = clrMapAttributes(resolved.roles.map);
@@ -4765,7 +4765,7 @@ function chosenFamilyMeasurement(measurement) {
 
 // FA-13: TextRun.lang as the run's own proofing language (a:rPr lang), when it differs from the deck language.
 function langOptions(context, tag) {
-  const lang = runLanguageTag(context.scriptFonts, tag);
+  const lang = runLanguageTag(context.scriptFonts, tag, context.slideIndex ?? 0);
   return lang ? {lang} : {};
 }
 
