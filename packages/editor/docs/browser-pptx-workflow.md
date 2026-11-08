@@ -1,6 +1,6 @@
 # Local browser PowerPoint workflow
 
-> Current status: `test/native-playground.ps1` is retired and refuses before any effect. The native paragraph below records historical evidence, not current run instructions. See [retirement and replacement requirements](native-harness-retirement.md).
+> Current status: `test/native-playground.ps1` is the bounded owned-copy workflow (RR-87): it edits a fresh copy in a bounded worker and never opens the fixture. It has had no Office run yet; see [the workflow and its offline controls](native-harness-retirement.md). The native paragraph below records the earlier fixed-path evidence.
 
 The playground now imports `.pptx` through the existing preview/insert/open dialog and exports editable `.pptx` through the PowerPoint button. The current canvas draft is committed before export. Conversion uses a snapshot and the same font measurement provider as preview, with strict asset handling. Export notes/errors remain visible; stale asynchronous results are discarded after closing. Import is a validated single undoable transaction. OPF download and clipboard transfer remain available.
 

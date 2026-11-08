@@ -1,3 +1,5 @@
+Current continuation: [2026-11-08 release recovery and next steps](../2026-11-08/README.md). The original rules and evidence below remain historical context.
+
 # Handoff of 2026-11-07: v0.33.0 and v0.34.0
 
 This is the entry point for whoever continues this work. A supervisor session coordinated about a dozen agents on 2026-11-07 while the owner was away. All of their work is on GitHub: in open PRs, on pushed branches, in the evidence branch `handoff/review-sheets-2026-11-07`, and in this folder. Nothing exists only on the old machine. Start with [KICKOFF.md](KICKOFF.md), which is the one prompt to give the next agent.
@@ -10,6 +12,8 @@ Files in this folder:
 - [com-job-sh-08.md](com-job-sh-08.md), [com-job-sh-live-extras.md](com-job-sh-live-extras.md): the SmartArt COM jobs.
 
 Review sheets (before/after PNGs) for every output-changing PR are on the evidence-only branch `handoff/review-sheets-2026-11-07` (never merged): `git fetch origin handoff/review-sheets-2026-11-07`, or browse it on GitHub.
+
+Latest continuation: [v0.33.0 checkpoint](release-033-resume.md) (goldens reviewed; blocker fixes folded; final combined gate next).
 
 ## State at handoff
 
@@ -114,3 +118,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - D2 is recommended against (it waits for the owner).
 - Whether to promote LibreOffice from "experimental" (RR-106; the results are in `docs/programs/release-readiness/qualification-0.33-libreoffice.md`, on #1084).
 - Every entry in [decisions.md](decisions.md) is vetoable.
+
+- Current033merge hold: [dispatched FullCI gate correction](fullci-gate.md). The macOS completion test and shared gate are being corrected in derived branches before the next integration batch.

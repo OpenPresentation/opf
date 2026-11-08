@@ -1,0 +1,40 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: SmartArt Japanese",
+  "description": "v0.33 qualification: arrangements in Japanese.",
+  "language": "ja",
+  "slides": [
+    {
+      "id": "matrix-ja",
+      "layout": "matrix",
+      "title": "私たちの戦略",
+      "items": [
+        "ビジョン",
+        "目標と計画",
+        "プログラム",
+        "チームと基盤"
+      ]
+    },
+    {
+      "id": "chevrons-ja",
+      "layout": "chevrons",
+      "title": "私たちの進め方",
+      "items": [
+        "ビジョン",
+        "目標と計画",
+        "プログラム",
+        "チームと基盤"
+      ]
+    },
+    {
+      "id": "vertical-flow-ja",
+      "layout": "vertical-flow",
+      "title": "三つの段階",
+      "items": [
+        "ビジョン",
+        "目標と計画",
+        "プログラム"
+      ]
+    }
+  ]
+}

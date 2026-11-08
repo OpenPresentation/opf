@@ -1,0 +1,219 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: SmartArt arrangements",
+  "description": "v0.33 qualification: every arrangement (pyramid, matrix, cycle, chevrons, flow, vertical-flow) where PowerPoint's own SmartArt layout holds the entries (live built-in), where OPF's own design draws them as live SmartArt on an OPF layout definition (SH-19), and where OPF's design stays native shapes.",
+  "language": "en-US",
+  "slides": [
+    {
+      "id": "pyramid-3-short",
+      "layout": "pyramid",
+      "title": "Our priorities",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ]
+    },
+    {
+      "id": "pyramid-6-long",
+      "layout": "pyramid",
+      "title": "What the plan rests on",
+      "items": [
+        "Why we exist and who we serve",
+        "The few goals that matter this year",
+        "How teams plan, decide and ship",
+        "The reviews that keep plans honest",
+        "Data everyone can see and trust",
+        "Feedback loops measured in days"
+      ]
+    },
+    {
+      "id": "matrix-4-short",
+      "layout": "matrix",
+      "title": "Four quadrants",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ]
+    },
+    {
+      "id": "matrix-3-medium",
+      "layout": "matrix",
+      "title": "Three operating habits",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits"
+      ]
+    },
+    {
+      "id": "cycle-5-short",
+      "layout": "cycle",
+      "title": "The review loop",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn"
+      ]
+    },
+    {
+      "id": "cycle-7-long",
+      "layout": "cycle",
+      "title": "How the year repeats",
+      "items": [
+        "Why we exist and who we serve",
+        "The few goals that matter this year",
+        "How teams plan, decide and ship",
+        "The reviews that keep plans honest",
+        "Data everyone can see and trust",
+        "Feedback loops measured in days",
+        "Releases that land every single week"
+      ]
+    },
+    {
+      "id": "chevrons-4-short",
+      "layout": "chevrons",
+      "title": "From idea to release",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ]
+    },
+    {
+      "id": "chevrons-8-medium",
+      "layout": "chevrons",
+      "title": "Eight stages of delivery",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback",
+        "Steady delivery",
+        "Happy customers"
+      ]
+    },
+    {
+      "id": "flow-4-short",
+      "layout": "flow",
+      "title": "How a request moves",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship"
+      ]
+    },
+    {
+      "id": "flow-7-medium",
+      "layout": "flow",
+      "title": "Seven steps to a habit",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback",
+        "Steady delivery"
+      ]
+    },
+    {
+      "id": "vertical-flow-3-short",
+      "layout": "vertical-flow",
+      "title": "Three steps",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ]
+    },
+    {
+      "id": "vertical-flow-6-medium",
+      "layout": "vertical-flow",
+      "title": "Six steps to steady delivery",
+      "items": [
+        "Clear purpose",
+        "Shared goals",
+        "Team habits",
+        "Weekly reviews",
+        "Open roadmap",
+        "Fast feedback"
+      ]
+    },
+    {
+      "id": "pyramid-7-short",
+      "layout": "pyramid",
+      "title": "Seven layers",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale"
+      ]
+    },
+    {
+      "id": "matrix-3-short",
+      "layout": "matrix",
+      "title": "Three habits",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build"
+      ]
+    },
+    {
+      "id": "chevrons-8-short",
+      "layout": "chevrons",
+      "title": "Eight stages",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale",
+        "Serve"
+      ]
+    },
+    {
+      "id": "flow-8-short",
+      "layout": "flow",
+      "title": "Eight steps",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow",
+        "Scale",
+        "Serve"
+      ]
+    },
+    {
+      "id": "vertical-flow-6-short",
+      "layout": "vertical-flow",
+      "title": "Six steps",
+      "items": [
+        "Vision",
+        "Plan",
+        "Build",
+        "Ship",
+        "Learn",
+        "Grow"
+      ]
+    }
+  ]
+}

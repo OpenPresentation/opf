@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {drawingIdCollisions} from './helpers/drawing-id-collisions.mjs';
 import {examples} from '@openpresentation/opf/examples';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
@@ -41,8 +42,8 @@ for(const {file,deck} of examples){
     for (const value of Object.values(node)) if (typeof value === 'object') visit(value);
    };
    visit(parsed);
-   const ids=[...xml.matchAll(/<p:cNvPr\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
-   if(new Set(ids).size!==ids.length)report.duplicates.push({file,part,ids});
+   const ids=drawingIdCollisions(xml);
+   if(ids.length)report.duplicates.push({file,part,ids});
    for(const match of xml.matchAll(/<a:(?:off|ext)\b[^>]*\/>/g))for(const attr of match[0].matchAll(/(?:x|y|cx|cy)="([^"]+)"/g))if(!Number.isFinite(Number(attr[1])))report.invalidGeometry.push({file,part,value:attr[1]});
   }
   const imported=await fromPptx(bytes);
