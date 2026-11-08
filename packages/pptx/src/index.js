@@ -34,6 +34,7 @@ import {attachHeadingTags,importHeadingGroups} from './heading-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 import {attachPlainTextTags,importPlainTextGroups} from './text-provenance.js';
 import {attachTimelineTags,timelineManifest,importTimelineGroups} from './timeline-provenance.js';
+import {attachImageCalloutTags,importImageCallouts} from './image-callout-provenance.js';
 import {attachQuoteTags,quoteManifest,importQuoteGroups,quotePhotoName} from './quote-provenance.js';
 import {attachFurnitureTags, furnitureManifest, importFurniture, logoShape, staticDateFallback, stampFurnitureImageKeys} from './furniture-provenance.js';
 import {restoreRunColors} from './run-colors.js';
@@ -332,6 +333,7 @@ export async function toPptx(input, options = {}) {
   // opf-pptx#221: the placeholder panels written as one native group, and the OPF_IMAGE_PLACEHOLDER_V1 records of image blocks.
   context.imagePlaceholderGroups = new Set();
   context.imagePlaceholderTags = new Map();
+  context.imageCalloutTags = new Map();
   context.tableHeaders = new Map();
   context.tableCells = new Map();
   // FA-23: every exported image picture (image blocks, the alt-text form of an image background, timeline pictures) and
@@ -1060,6 +1062,9 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     }
   }
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
+  const callouts = importImageCallouts({shapes: nativeContext.shapes, paragraphs: nativeContext.paragraphs, pictures: nativeContext.pictures, relationships, entries, validPictures: images.blocks, report: diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.image.callouts`})});
+  for (const index of callouts.consumed) images.consumedShapes.add(index);
+  nativeContext.imageCallouts = callouts.values;
   nativeContext.imageBlocks = images.blocks;
   nativeContext.imageSources = images.sources;
   nativeContext.imagePictures = images.consumed;
@@ -1389,6 +1394,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment), ...(nativeContext.imageSources?.has(index) ? {image: {...item.payload.image, src: nativeContext.imageSources.get(index)}} : {})};
     else if (item?.nativeStretch) { item.payload.fit='stretch'; item.inferredStretch=true; }
     else if (item?.nativeFitUnsupported) report({code:'unsupported-image-fit',message:'Native picture tiling or an offset stretch fill is not represented by the imported image block; review the reflowed image.'});
+    if (item?.payload && nativeContext.imageCallouts?.has(index)) item.payload.image = {...item.payload.image, callouts: nativeContext.imageCallouts.get(index)};
     if (item) items.push({...item, sources: [`pic:${index}`]});
   }
 
@@ -3261,10 +3267,29 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
       const fields = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
       context.imagePlaceholderTags.set(panel, {v: 1, slide: `slides.${slideIndex}`, path: item.path, image: structuredClone(item.value), ...(Object.keys(fields).length ? {treatment: fields} : {})});
     }
+    // Unavailable pixels have no trustworthy native picture owner. Keep labels as ordinary editable text, without stale source restoration.
+    const recorded = context.imagePlaceholderTags.get(panel);
+    if (recorded?.image && typeof recorded.image === 'object') delete recorded.image.callouts;
+    addImageCalloutItems(slide, item, undefined, context, options);
     return panel;
   }
   if (image.overlay) addImageOverlay(slide, image.overlay, structuredClone(block.overlay), imageOverlayName(name), name, { ...context, slidePath: `slides.${slideIndex}` }, effects);
+  addImageCalloutItems(slide, item, name, context, options);
   return name;
+}
+
+// Text panels are independent native rectangles and measured line boxes, painted above the picture mask/overlay.
+function addImageCalloutItems(slide, item, owner, context, options) {
+  for (const [index, callout] of (item.image.callouts ?? []).entries()) {
+    const objectName = `OPF image callout ${owner ?? item.path} ${index}`;
+    const box = callout.box;
+    slide.addShape('rect', {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96, fill: {color: pptxColor(context.colors.background)}, line: {transparency: 100}, objectName});
+    if (owner) {
+      const source = item.value.callouts[index];
+      context.imageCalloutTags.set(objectName, {v: 1, owner, index, total: item.image.callouts.length, role: 'panel', frame: {x: source.x, y: source.y, width: source.width, height: source.height}, lines: callout.fit.lines.length});
+    }
+    addMeasuredPayloadText(slide, callout.text, callout.textBox, context, options, {color: context.colors.text, path: callout.path + '.text', fit: callout.fit, textStyle: callout.textStyle, align: 'center', keepEmpty: true, diagnosticsHandled: true, objectName, ...(owner ? {imageCallout: {owner, index}} : {})});
+  }
 }
 
 // The palette a diagram is painted in: core's diagramPalette from the slide's resolved design, with the inputs opf-render's
@@ -4063,7 +4088,8 @@ function addMeasuredPayloadText(slide, text, box, context, options, config) {
     const sourceLine=fit.sourceLines?.[index],boundary=sourceLine?{boundary:sourceLine.boundary,separator:String(text).slice(sourceLine.end,sourceLine.nextStart)}:{};
     const headingLine=(config.headingLines?.offset??0)+index,headingBoundary=config.headingLines?.join&&index===fit.lines.length-1?config.headingLines.join:boundary;
     const objectName=config.heading?`OPF heading ${config.path} line ${headingLine}`:config.timeline?`OPF timeline ${config.timeline.group} part ${config.timeline.part} line ${index}`:config.quote?`OPF quote ${config.quote.group} part ${config.quote.part} line ${index}`:config.sourceText?`OPF text ${config.path} line ${index}`:config.objectName?`${config.objectName} line ${index}`:undefined;
-    if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
+    if(config.imageCallout)context.imageCalloutTags.set(objectName,{v:1,...config.imageCallout,role:'text',line:index,count:fit.lines.length,...boundary});
+    else if(config.heading)context.headingTags.set(objectName,{v:1,group:config.path,field:config.heading,line:headingLine,count:config.headingLines?.count??fit.lines.length,...headingBoundary});
     else if(config.timeline)context.timelineTags.set(objectName,{v:1,role:'text',group:config.timeline.group,part:config.timeline.part,line:index,count:fit.lines.length,...boundary,...(config.timeline.part===0&&index===0?{anchor:config.timeline.anchor}:{})});
     else if(config.quote)context.quoteTags.set(objectName,{v:1,role:'text',group:config.quote.group,part:config.quote.part,line:index,count:fit.lines.length,...boundary,...(config.quote.part===0&&index===0?{anchor:config.quote.anchor}:{})});
     else if(config.furniture){
@@ -5346,6 +5372,7 @@ async function normalizePptxZip(raw, context) {
   attachHeadingTags(entries,context.headingTags);
   attachPlainTextTags(entries,context.plainTextTags);
   attachTimelineTags(entries,context.timelineTags);
+  attachImageCalloutTags(entries,context.imageCalloutTags);
   attachChartMarkTags(entries,context.chartMarkTags);
   attachStepTags(entries,context.stepTags);
   // SH-09: the trapezoids' adjustments, the arrangement shapes' tags, then each tagged SmartArt placeholder becomes its frame and parts.

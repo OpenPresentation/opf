@@ -13,7 +13,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `text` | `text` | Plain string or `TextRun[]`. |
 | `bullets` | `text` | Prose bullets: plain talking points, usually `string[]`. |
 | `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
-| `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
+| `image` | `image` | Asset string shorthand or an image object with `src`, optional metadata and `callouts` (plain text panels over the picture). |
 | `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |

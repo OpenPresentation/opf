@@ -743,7 +743,14 @@ export interface ComposedPlacement {
  * only, then the `border` on the shape outline, then the `overlay`. This is the paint order and the treatment code
  * 0.14's slide image used.
  */
+export interface ComposedImageCallout {
+  path: string; text: string; box: LayoutBox; textBox: LayoutBox; textStyle: TextStyle; fit: TextFit | RichTextFit;
+}
 export interface ComposedImage {
+  /** LH-34: text over the visible frame; physical coordinates, independent of pixel masks and RTL. */
+  callouts?: ComposedImageCallout[];
+  /** Visible contained picture bounds when known, else its composed frame. */
+  calloutFrame?: LayoutBox;
   /** Allocated region, equal to the item's box: the flow cell (after any card padding and caption band) or the placement band. */
   region: LayoutBox;
   /** Picture frame inside the region: the band inside the slide padding for an inset placement, then the largest centered box with `aspectRatio` (a circle uses 1). */
@@ -1249,7 +1256,7 @@ function diagramMeasure(measurement: TextMeasurement | undefined, body: string, 
  * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
-function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFitOption; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor; calloutDiagnostics: LayoutDiagnostic[]; callout?: (text: string, box: LayoutBox, path: string) => ComposedImageCallout }): ComposedImage {
   const kindName = isPresetShape(host.shape) ? host.shape : 'rect';
   const { scale } = context;
   const requested: ImageFitOption = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
@@ -1291,6 +1298,18 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
   if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
+  const callouts = record(host.image).callouts;
+  if (callouts !== undefined && context.callout) {
+    if (!Array.isArray(callouts)) throw new TypeError('Image callouts must be an array at ' + hostPath);
+    const frame = fit === 'contain' && result.picture ? result.picture.image : box;
+    if (callouts.length) result.calloutFrame = { ...frame };
+    result.callouts = callouts.map((value: unknown, index: number) => {
+      const source = record(value), path = `${hostPath}.image.callouts.${index}`;
+      if (typeof source.text !== 'string' || ['x','y','width','height'].some(key => typeof source[key] !== 'number' || !Number.isFinite(source[key]) || source[key] < 0 || source[key] > 1) || source.width <= 0 || source.height <= 0) throw new TypeError('Callouts need plain text, unit coordinates and positive unit width and height at ' + path);
+      if (source.x + source.width > 1 + 1e-9 || source.y + source.height > 1 + 1e-9) context.calloutDiagnostics.push({ code: 'text-overflow', path, message: 'The image callout extends beyond its visible image frame; move or resize the panel. Its text is preserved without clipping.' });
+      return context.callout!(source.text, roundBox({ x: frame.x + frame.width * source.x, y: frame.y + frame.height * source.y, width: frame.width * source.width, height: frame.height * source.height }), path);
+    });
+  }
   return result;
 }
 
@@ -6004,7 +6023,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const annotationFit = (value: RichText, box: LayoutBox, requestedSize: number, minFontSize: number, fitPath: string, alignment: 'left'|'center'|'right') =>
     fitPlacedText('text', value, annotationText(value), box, requestedSize, minFontSize, fitPath, alignment);
   const annotationOptions = { scale, minFontSize: minSize, fit: annotationFit, textStyle: (fitPath: string) => styleFor('text', fitPath) };
-  const imageDiagnostics: LayoutDiagnostic[] = [];
+  const imageDiagnostics: LayoutDiagnostic[] = [], imageCalloutDiagnostics: LayoutDiagnostic[] = [];
   // A right-to-left deck mirrors placements and edge overlays: `left` is the start side, drawn at the right.
   const mirrorSide = (side: string): string => !rtl ? side : side === 'left' ? 'right' : side === 'right' ? 'left' : side;
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, options.layout, width, height, path, mirrorSide, imageDiagnostics);
@@ -6012,7 +6031,27 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   const assets = record(options.presentation).assets;
   // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
   // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
-  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor) => ({ fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
+  const fitImageCallout = (text: string, box: LayoutBox, calloutPath: string, settings: Composition): ComposedImageCallout => {
+    const inset = 10 * scale, floor = Math.max(contentNominalSize('text'), settings.minFontSize ?? 16) * scale;
+    const available = { x: box.x + inset, y: box.y + inset, width: Math.max(scale, box.width - 2 * inset), height: Math.max(scale, box.height - 2 * inset) };
+    const limit = Math.max(floor, Math.min(2 * floor, (settings.maxFontSize ?? Infinity) * scale));
+    const areaAt = (fontSize: number): LayoutBox => { const width = Math.min(available.width, 32 * fontSize); return { ...available, x: available.x + (available.width - width) / 2, width }; };
+    let area = areaAt(floor);
+    let fit = fitPlacedText('text', text, text, area, floor, floor, calloutPath, 'center');
+    if (!fit.overflow) for (let grown = floor + 2 * scale; grown <= limit + 1e-9; grown += 2 * scale) {
+      const candidateArea = areaAt(grown);
+      const candidate = fitPlacedText('text', text, text, candidateArea, grown, grown, calloutPath, 'center');
+      if (candidate.overflow) break;
+      area = candidateArea; fit = candidate;
+    }
+    // A readable panel never shrinks to fit. Small boxes keep every word and report their overflow.
+    if (fit.overflow || box.width < 2 * inset || box.height < 2 * inset) imageCalloutDiagnostics.push({ code: 'text-overflow', path: calloutPath, message: 'The image callout cannot fit at its body size; enlarge the panel or shorten the text.' });
+    const textHeight = 'height' in fit ? fit.height : fit.lines.length * fit.lineHeight;
+    const dy = Math.max(0, (available.height - textHeight) / 2);
+    area = { ...area, y: area.y + dy }; fit = translateTextFit(fit, dy);
+    return { path: calloutPath, text, box, textBox: area, fit, textStyle: styleFor('text', calloutPath) };
+  };
+  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor, settings: Composition = composition) => ({ calloutDiagnostics: imageCalloutDiagnostics, callout: (text: string, box: LayoutBox, at: string) => fitImageCallout(text, box, at, settings), fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
   // FA-22 placement. The top-level image nodes are the image blocks of `blocks` (not groups) or the root image; promoted
   // regions have none. The n-th takes its own placement, else the n-th layout image placeholder's (FA-26: image regions are
   // counted in reading order through placeholder groups, and only a top-level one carries a placement). Each band takes its
@@ -6137,7 +6176,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let frameArea: LayoutBox = placement.inset ? { x: region.x + padding, y: region.y + padding, width: Math.max(scale, region.width - 2 * padding), height: Math.max(scale, region.height - 2 * padding) } : { ...region };
     const caption = host.caption !== undefined && entry.block !== undefined ? layoutCaption(host.caption, roundBox(frameArea), `${hostPath}.caption`, { ...annotationOptions, nameDetail: true }) : undefined;
     if (caption) { frameArea = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
-    const image = composeImage(host, hostPath, region, frameArea, imageContext(placement));
+    const image = composeImage(host, hostPath, region, frameArea, imageContext(placement, undefined, { ...composition, ...record(host.composition) }));
     const type = host.type ?? 'image';
     items.push({ path: `${hostPath}.image`, field: 'image', type, value: host.image, payload: imagePayload(host), box: { ...region }, image,
       textStyle: styleFor('image', `${hostPath}.image`), composition, alignment: alignmentFor('image'), ...(caption ? { caption } : {}) });
@@ -7520,10 +7559,10 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     let imageHost: Record<string, any> = portraitHosts.get(node.path) ?? node.host ?? {};
     if (node.field === 'image' && !portraitHosts.has(node.path) && !personPictures.has(node.path) && cards && frameBox && !onSurface && !caption && !imageHost.aspectRatio && imageHost.adjust === undefined && (imageHost.shape === undefined || imageHost.shape === 'rect') && (imageHost.stroke === undefined || imageHost.stroke === 'none' || record(imageHost.stroke).width === 0)) {
       const radius = Math.min(.5, CARD_RADIUS * scale / Math.max(scale, Math.min(frameBox.width, frameBox.height))), host = { ...imageHost, shape: 'roundRect', adjust: { adj: radius } };
-      const context = { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
-      if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [] }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
+      const context = { ...imageContext(undefined, anchor, settings), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) };
+      if (composeImage(host, node.hostPath ?? node.path, frameBox, frameBox, { ...context, diagnostics: [], callout: undefined }).fit === 'cover') { imageHost = host; box = frameBox; frameBox = undefined; }
     }
-    const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
+    const image = node.field === 'image' ? composeImage(imageHost, node.hostPath ?? node.path, box, box, { ...imageContext(undefined, anchor, settings), ...(coverPictures.has(node) ? { fit: 'cover' as const } : {}) }) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     const diagram = node.field === 'diagram' ? composeDiagram(node, box, settings, anchor) : undefined;
@@ -10380,6 +10419,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     }
   }
   for (const group of groups) for (const box of [group.box, group.contentBox]) for (const key of ["x", "y", "width", "height"] as const) box[key] = round(box[key]);
+  diagnostics.push(...imageCalloutDiagnostics);
   const strictPaths = new Set(items.filter(item => item.composition.overflow === "error").map(item => item.path));
   const failures = diagnostics.filter(diagnostic => {
     if(composition.overflow==='error')return true;
