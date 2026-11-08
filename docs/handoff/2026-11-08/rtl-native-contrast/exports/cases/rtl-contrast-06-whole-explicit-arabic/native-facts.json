@@ -1,0 +1,73 @@
+[
+  {
+    "part": "ppt/slides/slide1.xml",
+    "topLevelShapes": 2,
+    "autofitTags": [],
+    "textShapes": [
+      {
+        "name": "OPF heading slides.0.title line 0",
+        "paragraphs": [
+          {
+            "direction": "1",
+            "runs": [
+              {
+                "text": "نص عربي صريح",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos Display",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "4050",
+                  "@b": "1",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.items line 0",
+        "paragraphs": [
+          {
+            "direction": "1",
+            "runs": [
+              {
+                "text": "البند: Bonjour 1",
+                "lang": "ar-SA",
+                "altLang": "en-US",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "a:cs": {
+                    "@typeface": "Arabic Typesetting"
+                  },
+                  "@lang": "ar-SA",
+                  "@altLang": "en-US",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-10-non-ascii-digits\\source.opf.json",
+    "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+    "bytes": 519
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-10-non-ascii-digits\\slide-1.png",
+      "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3",
+      "bytes": 31586,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Arabic Typesetting",
+        "resolved": "Noto Naskh Arabic",
+        "compatibility": "visual"
+      }
+    ],
+    "scripts": {
+      "detected": [
+        "Arab"
+      ],
+      "scripts": [
+        "Arab"
+      ],
+      "unavailable": [],
+      "packages": [
+        "@expo-google-fonts/noto-sans-arabic",
+        "@expo-google-fonts/noto-naskh-arabic",
+        "@expo-google-fonts/noto-nastaliq-urdu"
+      ],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

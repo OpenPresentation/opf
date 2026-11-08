@@ -1,0 +1,31 @@
+rtl-contrast-01-ar-inherited-list: 1slide; 5topshapes; canonical EXACT
+rtl-contrast-02-he-inherited-list: 1slide; 3topshapes; canonical EXACT
+rtl-contrast-03-nfd-inherited-body: 1slide; 2topshapes; canonical EXACT
+rtl-contrast-04-mixed-explicit-french: 1slide; 2topshapes; canonical EXACT
+rtl-contrast-05-mixed-explicit-arabic: 1slide; 2topshapes; canonical EXACT
+rtl-contrast-06-whole-explicit-arabic: 1slide; 2topshapes; canonical EXACT
+rtl-contrast-07-mixed-inherited: 1slide; 2topshapes; canonical DIFF
+rtl-contrast-08-mixed-explicit-english: 1slide; 2topshapes; canonical EXACT
+rtl-contrast-09-long-explicit-arabic: 1slide; 3topshapes; canonical EXACT
+rtl-contrast-10-non-ascii-digits: 1slide; 8topshapes; canonical EXACT
+rtl-contrast-11-long-explicit-french: 1slide; 3topshapes; canonical EXACT
+{
+  "out": "C:/opf-work/rtl-native-contrast-export-01",
+  "summary": {
+    "producerHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+    "cases": 11,
+    "slides": 11,
+    "originalEightCanonicalExact": 7,
+    "allCanonicalExact": 10,
+    "maximumTopLevelShapes": 8,
+    "sourceAndRuntimeUnchanged": true,
+    "workerUnchanged": true,
+    "officeStarted": false,
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  },
+  "suite": {
+    "bytes": 18333,
+    "sha256": "f8b3fb7d9e3809395be7e38eeb08c4a5359e786e1ab3fb5f5db83144ad7a5fd4"
+  }
+}

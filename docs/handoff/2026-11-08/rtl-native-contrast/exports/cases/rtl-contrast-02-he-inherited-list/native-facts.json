@@ -1,0 +1,99 @@
+[
+  {
+    "part": "ppt/slides/slide1.xml",
+    "topLevelShapes": 3,
+    "autofitTags": [],
+    "textShapes": [
+      {
+        "name": "OPF heading slides.0.title line 0",
+        "paragraphs": [
+          {
+            "direction": "1",
+            "runs": [
+              {
+                "text": "רשימה בעברית",
+                "lang": "he-IL",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos Display",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "he-IL",
+                  "@sz": "4050",
+                  "@b": "1",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.items line 0",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+                "lang": "en-US",
+                "altLang": "he-IL",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "en-US",
+                  "@altLang": "he-IL",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.items line 1",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "around the customer journey.",
+                "lang": "he-IL",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "he-IL",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

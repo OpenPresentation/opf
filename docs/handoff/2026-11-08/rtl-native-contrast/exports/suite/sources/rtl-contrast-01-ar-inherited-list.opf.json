@@ -1,0 +1,13 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "title": "قائمة عربية",
+      "items": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around the customer journey.",
+        "Item 2: Customers told us onboarding took too long, so we rebuilt it around the customer journey."
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

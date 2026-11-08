@@ -1,0 +1,18 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "title": "لغة إنجليزية صريحة",
+      "items": [
+        [
+          "البند: ",
+          {
+            "text": "Hello 1",
+            "lang": "en-US"
+          }
+        ]
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

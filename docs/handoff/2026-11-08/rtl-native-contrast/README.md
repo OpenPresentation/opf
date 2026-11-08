@@ -1,0 +1,13 @@
+# RTL native contrasts: held producer evidence
+
+Never merge this evidence-only branch. The evidence repository starts from fresh main9545016583ccfa151077cda4d51043ac6505a140; it is storage, not the export producer. Shipped CLI/runtime producer is the clean frozen qualification checkout473d3fff623bda3f191ae2669824f1b02a5d90f8. The unchanged native suite/worker repositories remaince92ccc65d8cb40cc6532b2d9082e12202d6c283 with exact file hashes verified before and after. No Office operation, source edit, build, release, golden or lock update occurred.
+
+Eleven complete one-slide cases produced11PNG and11PPTX exports through Node24, date2026-11-08,keep-slides and PNGinclude-hidden. Default office/visual/scriptsauto/no user fonts route is recorded in raw CLI reports. Maximum actual top-level shapes is8, within the original16-shape declaration and global3-slide/30-shape caps. Native acceptance remains false. The compatible owned-copy suite is exports/suite/suite.json; every action plan is exactly[].
+
+Strict source/import identity is held: original eight pass7/8; all eleven pass10/11. Case7 imports the one plain item string as two adjacent plain strings. Exact words, source language and styling are unchanged, but the structural difference is retained and causes producer exit1. No assertion or input is normalized to hide it. Extra9explicit ar-SA and11explicitfr-FR retain every actual body run language and alternate marker; extra10uses both exact Arabic-Indic/Persian focused strings in text and items and passes strict identity.
+
+Vetoable choices: project each of the eight original slides as a complete one-slide document retaining all deck/per-slide metadata and Unicode; use canonical language tags for the two extra authored-language cases; cover both digit forms in both inherited text/list blocks in case10; preserve the stricter existing16-shape guard. Reference PNGs9/10/11 were inspected as producer output only; their presence is not a PowerPoint glyph/font qualification.
+
+Raw inputs, outputs, stdout/stderr, findings, exit statuses, import comparisons, actual native XML metadata, full file hashes and before/after runtime seals are under exports. The producer refuses an existing output and does not resume or overwrite an earlier attempt. Run instructions are the fixed constants in producer.mjs; reproduction requires a new reviewed output path and new attempt.
+
+Raw console logs and the exact executed producer retain their original line-ending bytes; packet-local attributes disable line conversion and textual diff for those files. All other structured evidence remains directly readable, with exact-byte inventories preserved.

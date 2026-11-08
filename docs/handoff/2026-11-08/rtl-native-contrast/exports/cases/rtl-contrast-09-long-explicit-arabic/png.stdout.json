@@ -1,0 +1,85 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-09-long-explicit-arabic\\source.opf.json",
+    "sha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+    "bytes": 371
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-09-long-explicit-arabic\\slide-1.png",
+      "sha256": "127608f4fda60dbe284f7c4ea25caa6ad6a3c63763453e15a09a76f434ddc8dd",
+      "bytes": 30278,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Arabic Typesetting",
+        "resolved": "Noto Naskh Arabic",
+        "compatibility": "visual"
+      }
+    ],
+    "scripts": {
+      "detected": [
+        "Arab"
+      ],
+      "scripts": [
+        "Arab"
+      ],
+      "unavailable": [],
+      "packages": [
+        "@expo-google-fonts/noto-sans-arabic",
+        "@expo-google-fonts/noto-naskh-arabic",
+        "@expo-google-fonts/noto-nastaliq-urdu"
+      ],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

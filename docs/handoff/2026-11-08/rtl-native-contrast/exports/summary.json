@@ -1,0 +1,13 @@
+{
+  "producerHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "cases": 11,
+  "slides": 11,
+  "originalEightCanonicalExact": 7,
+  "allCanonicalExact": 10,
+  "maximumTopLevelShapes": 8,
+  "sourceAndRuntimeUnchanged": true,
+  "workerUnchanged": true,
+  "officeStarted": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

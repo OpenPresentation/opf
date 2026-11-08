@@ -1,0 +1,84 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-02-he-inherited-list\\source.opf.json",
+    "sha256": "18d0990a5d10ea5dfd57b60da40dacb349d8274bdbbf7e4606f02868d6e156f1",
+    "bytes": 288
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-02-he-inherited-list\\slide-1.png",
+      "sha256": "4682b861cd07e901b8fe455027be64831cb648fea628a68e167a03cdb681c57f",
+      "bytes": 29076,
+      "mediaType": "image/png",
+      "slide": 1,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "findings": [],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "format": "png",
+  "opfVersion": "0.33.0",
+  "cli": "0.33.0",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.33.0"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      },
+      {
+        "requested": "David",
+        "resolved": "Noto Serif Hebrew",
+        "compatibility": "visual"
+      }
+    ],
+    "scripts": {
+      "detected": [
+        "Hebr"
+      ],
+      "scripts": [
+        "Hebr"
+      ],
+      "unavailable": [],
+      "packages": [
+        "@expo-google-fonts/noto-sans-hebrew",
+        "@expo-google-fonts/noto-serif-hebrew"
+      ],
+      "notInstalled": []
+    }
+  },
+  "skippedHidden": [],
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "not-checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

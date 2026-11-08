@@ -1,0 +1,7 @@
+{
+  "sourceHead": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "originalPath": "C:/opf-work/release-033-artifacts/qualification-q-d3-build-01.log",
+  "bytes": 14859,
+  "sha256": "bdc01995fb27420962a9a76014899f192c16bb3cf0670331cdb06321b9109bae",
+  "successAuthority": "Coordinator confirmed the completed frozen-head build; producer neither rebuilds nor infers success from text."
+}

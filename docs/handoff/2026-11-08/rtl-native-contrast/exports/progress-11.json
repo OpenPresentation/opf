@@ -1,0 +1,168 @@
+{
+  "id": "rtl-contrast-11-long-explicit-french",
+  "origin": {
+    "path": "packages/pptx/test/rr-105-ltr-latin-native.mjs",
+    "bytes": 15119,
+    "sha256": "7e43ac94b1c5e033af38ef634deb0d70691b08f00a09051db6ff143267ff2524",
+    "form": "Canonical explicit-language rich list; exact existing long sentence"
+  },
+  "source": {
+    "path": "cases/rtl-contrast-11-long-explicit-french/source.opf.json",
+    "bytes": 373,
+    "sha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303"
+  },
+  "strictIdentityRequired": true,
+  "reports": [
+    {
+      "kind": "png",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-11-long-explicit-french\\slide-1.png",
+          "sha256": "c1a826ac2c7a2eee94651360bed136d14c9f5d8a40b26ead0f9159682f767492",
+          "bytes": 30522,
+          "mediaType": "image/png",
+          "slide": 1,
+          "width": 1280,
+          "height": 720
+        }
+      ]
+    },
+    {
+      "kind": "pptx",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Aptos",
+            "Aptos Display"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-11-long-explicit-french\\input.pptx",
+          "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990",
+          "bytes": 101016,
+          "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
+    }
+  ],
+  "canonicalImportDifferences": [],
+  "canonicalImportExact": true,
+  "actualSlideCaps": [
+    {
+      "part": "ppt/slides/slide1.xml",
+      "topLevelShapes": 3,
+      "autofitTags": []
+    }
+  ],
+  "importDiagnostics": [
+    {
+      "code": "mixed-run-languages",
+      "path": "language",
+      "message": "Runs use 2 languages (fr-FR x2, ar-SA x1). The presentation uses ar-SA; slides with another predominant language declare it, and individual rich-text runs keep their own lang."
+    }
+  ],
+  "archive": {
+    "bytes": 101016,
+    "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+  },
+  "explicitProofing": {
+    "expected": "fr-FR",
+    "runs": [
+      {
+        "text": "Item 1: Customers told us onboarding took too long, so we rebuilt it ",
+        "lang": "fr-FR",
+        "altLang": "en-US"
+      },
+      {
+        "text": "around the customer journey.",
+        "lang": "fr-FR",
+        "altLang": "en-US"
+      }
+    ],
+    "exact": true
+  }
+}

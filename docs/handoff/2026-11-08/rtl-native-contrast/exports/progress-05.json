@@ -1,0 +1,153 @@
+{
+  "id": "rtl-contrast-05-mixed-explicit-arabic",
+  "origin": {
+    "path": "docs/handoff/2026-11-08/rr105-ltr-latin-native/qualification-controls.opf.json",
+    "bytes": 1854,
+    "sha256": "a48d5e41fe772fc4263b0afd487a1d6f2734710cb579af36a6e433dc37aca667",
+    "slide": 5,
+    "projection": "All deck metadata and complete selected slide preserved exactly"
+  },
+  "source": {
+    "path": "cases/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+    "bytes": 289,
+    "sha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc"
+  },
+  "strictIdentityRequired": true,
+  "reports": [
+    {
+      "kind": "png",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-05-mixed-explicit-arabic\\slide-1.png",
+          "sha256": "0996ca44623ff207ca58bc890f6af6939d2e23bec8b827248c6216bb874a783e",
+          "bytes": 12169,
+          "mediaType": "image/png",
+          "slide": 1,
+          "width": 1280,
+          "height": 720
+        }
+      ]
+    },
+    {
+      "kind": "pptx",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Aptos",
+            "Aptos Display"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-05-mixed-explicit-arabic\\input.pptx",
+          "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197",
+          "bytes": 100906,
+          "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
+    }
+  ],
+  "canonicalImportDifferences": [],
+  "canonicalImportExact": true,
+  "actualSlideCaps": [
+    {
+      "part": "ppt/slides/slide1.xml",
+      "topLevelShapes": 2,
+      "autofitTags": []
+    }
+  ],
+  "importDiagnostics": [
+    {
+      "code": "unsupported-body-font",
+      "message": "Script-specific native faces cannot be represented by one OPF run font family; the Latin face and current text were retained.",
+      "path": "slides.0.shapes.1.paragraphs.0.runs.1"
+    }
+  ],
+  "archive": {
+    "bytes": 100906,
+    "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+  }
+}

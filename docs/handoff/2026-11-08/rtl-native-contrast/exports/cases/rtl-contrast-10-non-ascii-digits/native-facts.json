@@ -1,0 +1,282 @@
+[
+  {
+    "part": "ppt/slides/slide1.xml",
+    "topLevelShapes": 8,
+    "autofitTags": [],
+    "textShapes": [
+      {
+        "name": "OPF heading slides.0.title line 0",
+        "paragraphs": [
+          {
+            "direction": "1",
+            "runs": [
+              {
+                "text": "أرقام عربية وفارسية",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos Display",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "4050",
+                  "@b": "1",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF text slides.0.blocks.0.text line 0",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "Item ١:",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@b": "1",
+                  "@dirty": "0"
+                }
+              },
+              {
+                "text": " Arabic-Indic ",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF text slides.0.blocks.0.text line 1",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "number",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF text slides.0.blocks.1.text line 0",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "Item ۱:",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@b": "1",
+                  "@dirty": "0"
+                }
+              },
+              {
+                "text": " Persian number",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.blocks.2.items line 0",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "Item ١: Arabic-Indic ",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.blocks.2.items line 1",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "number",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.blocks.2.items line 2",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "Item ۱: Persian ",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "OPF list slides.0.blocks.2.items line 3",
+        "paragraphs": [
+          {
+            "direction": "0",
+            "runs": [
+              {
+                "text": "number",
+                "lang": "ar-SA",
+                "properties": {
+                  "a:solidFill": {
+                    "a:schemeClr": {
+                      "@val": "tx1"
+                    }
+                  },
+                  "a:latin": {
+                    "@typeface": "Aptos",
+                    "@pitchFamily": "34",
+                    "@charset": "0"
+                  },
+                  "@lang": "ar-SA",
+                  "@sz": "2775",
+                  "@dirty": "0"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

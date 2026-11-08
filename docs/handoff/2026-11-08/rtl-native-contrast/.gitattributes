@@ -1,0 +1,3 @@
+* -text
+*.log -diff
+producer.mjs -diff

@@ -1,0 +1,146 @@
+{
+  "id": "rtl-contrast-10-non-ascii-digits",
+  "origin": {
+    "path": "packages/pptx/test/rr-105-ltr-latin-native.mjs",
+    "bytes": 15119,
+    "sha256": "7e43ac94b1c5e033af38ef634deb0d70691b08f00a09051db6ff143267ff2524",
+    "form": "Exact focused Arabic-Indic/Persian strings in inherited text and items"
+  },
+  "source": {
+    "path": "cases/rtl-contrast-10-non-ascii-digits/source.opf.json",
+    "bytes": 519,
+    "sha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb"
+  },
+  "strictIdentityRequired": true,
+  "reports": [
+    {
+      "kind": "png",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\preview\\rtl-contrast-10-non-ascii-digits\\slide-1.png",
+          "sha256": "f6a0f398d87015c8046209201c16b869d3a82acb878c1a5dc9f9641e2ca111a3",
+          "bytes": 31586,
+          "mediaType": "image/png",
+          "slide": 1,
+          "width": 1280,
+          "height": 720
+        }
+      ]
+    },
+    {
+      "kind": "pptx",
+      "fonts": {
+        "pack": "office",
+        "substitutionPolicy": "visual",
+        "userFonts": [],
+        "substitutions": [
+          {
+            "requested": "Aptos Display",
+            "resolved": "Intos Display",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Aptos",
+            "resolved": "Intos",
+            "compatibility": "metric"
+          },
+          {
+            "requested": "Arabic Typesetting",
+            "resolved": "Noto Naskh Arabic",
+            "compatibility": "visual"
+          }
+        ],
+        "scripts": {
+          "detected": [
+            "Arab"
+          ],
+          "scripts": [
+            "Arab"
+          ],
+          "unavailable": [],
+          "packages": [
+            "@expo-google-fonts/noto-sans-arabic",
+            "@expo-google-fonts/noto-naskh-arabic",
+            "@expo-google-fonts/noto-nastaliq-urdu"
+          ],
+          "notInstalled": []
+        }
+      },
+      "findings": [
+        {
+          "ruleId": "pptx/typeface-not-office-safe",
+          "severity": "info",
+          "category": "pptx",
+          "path": "",
+          "scope": "document",
+          "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+          "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+          "families": [
+            "Aptos",
+            "Aptos Display"
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "file": "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-10-non-ascii-digits\\input.pptx",
+          "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2",
+          "bytes": 102481,
+          "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+        }
+      ]
+    }
+  ],
+  "canonicalImportDifferences": [],
+  "canonicalImportExact": true,
+  "actualSlideCaps": [
+    {
+      "part": "ppt/slides/slide1.xml",
+      "topLevelShapes": 8,
+      "autofitTags": []
+    }
+  ],
+  "importDiagnostics": [],
+  "archive": {
+    "bytes": 102481,
+    "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "manifestVersion": 1,
+  "revision": "473d3fff623bda3f191ae2669824f1b02a5d90f8",
+  "dirty": false,
+  "qualificationTarget": "unreleased034source",
+  "opfVersion": "0.33.0",
+  "node": "v24.20.0",
+  "nativeAcceptance": false,
+  "date": "2026-11-08",
+  "fontRoute": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "scripts": "auto",
+    "userFonts": []
+  },
+  "decks": [
+    {
+      "id": "rtl-contrast-01-ar-inherited-list",
+      "source": "cases/rtl-contrast-01-ar-inherited-list/source.opf.json",
+      "sourceSha256": "6709d683eaaadc0c325814c48d6a924249b10b54f7c4775abc98b5a5841a830d",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-01-ar-inherited-list/input.pptx",
+          "ok": true,
+          "sha256": "ff342ed396498781e2c8d4021f13a2f9d1160da57587f7728935ed3025b1545b"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-02-he-inherited-list",
+      "source": "cases/rtl-contrast-02-he-inherited-list/source.opf.json",
+      "sourceSha256": "18d0990a5d10ea5dfd57b60da40dacb349d8274bdbbf7e4606f02868d6e156f1",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-02-he-inherited-list/input.pptx",
+          "ok": true,
+          "sha256": "486c8caca8b2ae447e15af202394ad78a161021d4a4ab4487727b80982a92c20"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-03-nfd-inherited-body",
+      "source": "cases/rtl-contrast-03-nfd-inherited-body/source.opf.json",
+      "sourceSha256": "1f82de53e4eeb8b2285c1ed3f96a53eafb9fe076a973990baa32966fc70715cd",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-03-nfd-inherited-body/input.pptx",
+          "ok": true,
+          "sha256": "ef6533da8927255f579830bc144001343e0dbabb6ee1989548e21b855b8eb5bc"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-04-mixed-explicit-french",
+      "source": "cases/rtl-contrast-04-mixed-explicit-french/source.opf.json",
+      "sourceSha256": "a3589d43b4ce4015bf60a6b153b142d1316f00c097905478d95934751e5b3eca",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-04-mixed-explicit-french/input.pptx",
+          "ok": true,
+          "sha256": "a773ff63e6eeb4af8a2a14dcabfc9bee2b075ee8b3ae9827e93f96ea402b493b"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-05-mixed-explicit-arabic",
+      "source": "cases/rtl-contrast-05-mixed-explicit-arabic/source.opf.json",
+      "sourceSha256": "7346e9ed1f79c4cbf125b52138a80382bfa744c33554bfa9cffc0a9eebbf0dcc",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-05-mixed-explicit-arabic/input.pptx",
+          "ok": true,
+          "sha256": "36eed20266a3bd72cb540dae927e90f4a633bd2725eafd568c6e7e34cc881197"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-06-whole-explicit-arabic",
+      "source": "cases/rtl-contrast-06-whole-explicit-arabic/source.opf.json",
+      "sourceSha256": "c91b4632baf1f35fbe3e5e9c28ecb4e22588ed6d52c3d35b92d0b6abe5ff6923",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-06-whole-explicit-arabic/input.pptx",
+          "ok": true,
+          "sha256": "f9e5031acd60439a34a08744b853a822c098493d071c7a2c2f8f4b0882c0e331"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-07-mixed-inherited",
+      "source": "cases/rtl-contrast-07-mixed-inherited/source.opf.json",
+      "sourceSha256": "97451f1a570432ebdfa3744b5dcd7a82e4f9937fedf299922f6f2b3ec4d16e6a",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-07-mixed-inherited/input.pptx",
+          "ok": true,
+          "sha256": "e6b961eaebe0132faf83db3f9395f8c5d4dd2b710748a6320dc388f149e980e8"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-08-mixed-explicit-english",
+      "source": "cases/rtl-contrast-08-mixed-explicit-english/source.opf.json",
+      "sourceSha256": "0e5ec20ff293f72625005cfabe9ecd0f1a6785d0ca5d70d2db3fc089a76078f1",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-08-mixed-explicit-english/input.pptx",
+          "ok": true,
+          "sha256": "5d380f17eee6bf4af9fb9825dee65629ef31865290d0e86c6a68ccadef45d38f"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-09-long-explicit-arabic",
+      "source": "cases/rtl-contrast-09-long-explicit-arabic/source.opf.json",
+      "sourceSha256": "16064a74fd25c95544df46dc4f340829280caef7ef7324d117f492bb4284f15c",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-09-long-explicit-arabic/input.pptx",
+          "ok": true,
+          "sha256": "4b9d084f5ddccd23f553cc0a030ad8a43bca6e120de89d13cfca34b4163f06e2"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-10-non-ascii-digits",
+      "source": "cases/rtl-contrast-10-non-ascii-digits/source.opf.json",
+      "sourceSha256": "69ad66eae58f2d7d7a075a78d8cc64d70b8900032f31e97d9e87748ecf85ecbb",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-10-non-ascii-digits/input.pptx",
+          "ok": true,
+          "sha256": "cafc2b51654e5e64d2a4ce5d173a23dad5efa16d34edcb2cd38331128bc442a2"
+        }
+      ]
+    },
+    {
+      "id": "rtl-contrast-11-long-explicit-french",
+      "source": "cases/rtl-contrast-11-long-explicit-french/source.opf.json",
+      "sourceSha256": "63b092c6c0274414db0252cab65d5751a8d80fae27d4f7ea4a99ed1399d50303",
+      "sourceFullPresentation": true,
+      "sourcePages": [
+        1
+      ],
+      "previewOk": true,
+      "previewSlides": 1,
+      "declaredTopLevelShapes": 16,
+      "variants": [
+        {
+          "name": "default",
+          "flags": [
+            "--keep-slides"
+          ],
+          "pptx": "cases/rtl-contrast-11-long-explicit-french/input.pptx",
+          "ok": true,
+          "sha256": "fcfdce33558fc8a2fd7351198d64c84020d496d960b7c1aa6bf7028d9ad62990"
+        }
+      ]
+    }
+  ]
+}

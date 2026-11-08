@@ -1,0 +1,13 @@
+{
+  "language": "ar-SA",
+  "slides": [
+    {
+      "language": "he-IL",
+      "title": "רשימה בעברית",
+      "items": [
+        "Item 1: Customers told us onboarding took too long, so we rebuilt it around the customer journey."
+      ],
+      "numbering": "arabic"
+    }
+  ]
+}

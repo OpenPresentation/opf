@@ -1,0 +1,14 @@
+{
+  "args": [
+    "packages/cli/dist/index.js",
+    "convert",
+    "C:\\opf-work\\rtl-native-contrast-export-01\\cases\\rtl-contrast-11-long-explicit-french\\source.opf.json",
+    "C:/opf-work/rtl-native-contrast-export-01/cases/rtl-contrast-11-long-explicit-french/input.pptx",
+    "--date",
+    "2026-11-08",
+    "--keep-slides"
+  ],
+  "cwd": "C:/opf-work/rr105-sh26-rtl",
+  "status": 0,
+  "signal": null
+}
