@@ -1,0 +1,52 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "batch-06-s48",
+  "language": "en",
+  "design": {
+    "background": "light1"
+  },
+  "slides": [
+    {
+      "title": "Execution Timeline",
+      "composition": {
+        "mode": "auto"
+      },
+      "blocks": [
+        {
+          "table": {
+            "columns": [
+              "Workstream",
+              "Owner",
+              "Status",
+              "Decision"
+            ],
+            "rows": [
+              [
+                "Community college",
+                "Program lead",
+                "At risk",
+                "Continue"
+              ],
+              [
+                "Data and reporting",
+                "Analytics",
+                "On track",
+                "Tighten metric definitions"
+              ],
+              [
+                "Field adoption",
+                "Operations",
+                "Watch",
+                "Add weekly office hours"
+              ]
+            ]
+          }
+        },
+        {
+          "text": "Metro Technical College should focus the next cycle on connect employer demand to short-cycle training capacity while making the operating tradeoffs clear to community college stakeholders."
+        }
+      ],
+      "id": "s48"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+﻿{
+    "scope":  "Cleanup only of exact process38740 and its one owned read-only hierarchy5 copy after a failed observation; no Office process termination",
+    "inputSha256":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9",
+    "inputSha256After":  "57fd639895bf72fc6adbf72eb4c3a15f4a247f17b05c0a52edaa8c1b70a06ca9",
+    "quitEmpty":  true,
+    "closed":  true
+}

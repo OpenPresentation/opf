@@ -52,6 +52,7 @@ const keyFor = (key) => key.replace(/^Mod\+/, `${mod}+`).replace(/\+Mod\+/, `+${
 // ---- the page -------------------------------------------------------------------------------------------------------------------
 export async function startKeyboardSuite({ viewport = { width: 1200, height: 800 } } = {}) {
   const server = createServer(async (req, res) => {
+    if (req.url === '/favicon.ico') { res.writeHead(204).end(); return; }
     try {
       const url = new URL(req.url, 'http://localhost');
       const target = path.resolve(root, `.${decodeURIComponent(url.pathname)}`);

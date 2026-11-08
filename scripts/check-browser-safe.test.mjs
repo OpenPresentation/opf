@@ -52,7 +52,7 @@ test('a root bundle must load the schema engine its conditions name (CE-01)', ()
 test('#schema-engine resolves like a bundler resolves the package imports map', () => {
   const imports = { '#schema-engine': { types: './src/a.ts', workerd: './dist/b.js', 'edge-light': './dist/b.js', default: './dist/a.js' } };
   const entries = { a: 'src/a.ts', b: 'src/b.ts' };
-  const resolve = (...conditions) => schemaEngineSource(conditions, imports, entries).replace(/^.*\/packages\/javascript\//, '');
+  const resolve = (...conditions) => schemaEngineSource(conditions, imports, entries).replaceAll('\\', '/').replace(/^.*\/packages\/javascript\//, '');
   assert.equal(resolve(), 'src/a.ts');
   assert.equal(resolve('browser'), 'src/a.ts');
   assert.equal(resolve('worker', 'workerd'), 'src/b.ts');

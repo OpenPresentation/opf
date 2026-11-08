@@ -1,0 +1,44 @@
+{
+  "source": "e85edd5cf995ba66fe01f6024a57b490e3468c22",
+  "lh73lh75": {
+    "build": "pass",
+    "tests": 23,
+    "fail": 0
+  },
+  "lh110AndSharedCharts": {
+    "build": "pass",
+    "tests": 22,
+    "fail": 0
+  },
+  "actualMain": "afac3f7fc07539667fe9298f8efc08c967aacb0d",
+  "equivalent033Candidate": "5282536c863ec586b88720a16d0e3075022c7f4f",
+  "equivalentTree": "080496ed2e95a0df1d1473377c2cbf4dbe13ffc9",
+  "beforeActualMainMerge": "092424b6862adaf38bfeb79575c91a2357b785d5",
+  "mergeTreeUnchanged": true,
+  "files": [
+    {
+      "file": "integration-034-lh73-75-build.log.gz",
+      "rawSha256": "e572ab3458ea93163baaa9758e088f1a736391a1ae7e9352a0e7038fef951204",
+      "gzipSha256": "24f8e51e05db75f9b7730d80fc837e14b0235b75580b6a1dde35bb4c19327865"
+    },
+    {
+      "file": "integration-034-lh73-75-focused.log.gz",
+      "rawSha256": "8c3d7b5b39b555539e78fbfff3c3288bc8be603484e6b818650ca1e640ea901e",
+      "gzipSha256": "23228440bcb8d1bf1b8cda359e101a8e586329f0c621f9b7d5b706b948815b98"
+    },
+    {
+      "file": "integration-034-lh110-build.log.gz",
+      "rawSha256": "163b122c6c1cd977e0957de3064fe1a465b937a81161b58dcbe50e1ec4d2abfd",
+      "gzipSha256": "7432360ddaffc2baa7778767bc8d2ad381e6e4aaf79f82cdc0aa16e0125b54df"
+    },
+    {
+      "file": "integration-034-lh110-focused.log.gz",
+      "rawSha256": "2db6a8477492082178e860e1a63b31efbb8667af7642c7652e83aab40cec4efa",
+      "gzipSha256": "6ef63c1738d29db0b0526a95fbdccfffbba829b01bd7f0631f311bf7fd0389f3"
+    }
+  ],
+  "limits": [
+    "22native files sealed but not run; final combinedCI/goldens/strict trackers/budgets remain owed.",
+    "033 top-level dry run42462759180 is active; no publication yet."
+  ]
+}
