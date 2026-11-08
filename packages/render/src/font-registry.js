@@ -130,9 +130,9 @@ export function pickFace(faces, family, style, {policy = "none", aliases = new M
     const metricFallback = policy!=="visual" && candidate?.metricModeFallback===true && [400,700].includes(weight);
     const allowVisual = policy==="visual" || metricFallback;
     if (candidate && (allowVisual || tier==="metric")) {
-      // A family that names its weight (Segoe UI Semibold, Arial Black) selects that weight in
-      // the replacement; its bold style link still selects bold (FF-31).
-      const wanted = candidate.weight ? (weight>=600 ? Math.max(candidate.weight,700) : candidate.weight) : weight;
+      // A weight-named family keeps its lighter base weight. Native bold on Light/Semilight
+      // is a modest emphasis, not the Bold face of the parent family (LH-177).
+      const wanted = candidate.weight ? (weight>=600 ? candidate.weight<400 ? 400 : Math.max(candidate.weight,700) : candidate.weight) : weight;
       for (const [index, substitute] of candidate.substitutes.entries()) {
         // Only the declared replacement can carry the row's metric claim; an alternate is visual.
         const substituteTier = index===0 ? tier : "visual";
@@ -258,6 +258,11 @@ export function createFontRegistry(entries, options = {}) {
   const resolveFace = style => resolve(style).face;
   const resolveStyle = style => {
     const {face,resolution}=resolve(style),resolved={...style,fontFamily:face.family,fontWeight:face.weight,italic:face.italic};
+    // A rich run's explicit bold flag must link from the named lightweight family, not its parent replacement.
+    const sourceWeight = fontPolicyFor(resolution.sourceFamily)?.replacement?.weight;
+    if (resolution.substitute && sourceWeight && sourceWeight<400) resolved.sourceFontFamily=resolution.sourceFamily;
+    else if (style.sourceFontFamily && fontPolicyFor(style.sourceFontFamily)?.replacement?.family===face.family) resolved.sourceFontFamily=style.sourceFontFamily;
+    else delete resolved.sourceFontFamily;
     // Never carry a stale selection from a previously resolved style.
     delete resolved.fontFace;
     delete resolved.symbolEncoding;

@@ -1,0 +1,30 @@
+{
+  "language": "fr-FR",
+  "name": "Calendrier du lancement",
+  "design": {
+    "theme": "minimal",
+    "fontScheme": "aptos"
+  },
+  "slides": [
+    {
+      "title": "Du pilote au lancement",
+      "timeline": [
+        {
+          "when": "Janvier",
+          "what": "Pilote validé",
+          "status": "done"
+        },
+        {
+          "when": "Février",
+          "what": "Déploiement régional",
+          "status": "current"
+        },
+        {
+          "when": "Mars",
+          "what": "Ouverture générale",
+          "status": "planned"
+        }
+      ]
+    }
+  ]
+}

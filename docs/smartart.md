@@ -566,3 +566,6 @@ slide's, on top, not a cover's centered over the shapes; a badge on a cover leav
 or imported (`examples/technical/shape-overlays.opf.json` slide 5's title moves to the top).
 
 SH-23: custom layout text algorithms set their LTR/RTL paragraph alignment defaults, so newly added nodes keep the design's alignment without a script changing their formatting after the edit.
+
+SH-23 qualification: five in-domain OPF designs retain an added ninth node and a text edit through SaveCopyAs/reopen, with unchanged font sizes, correct paragraph/first-line alignment and maximum geometry error0.0000876pt. The native text algorithms explicitly preserve start or center alignment for newly added nodes, which have no authored paragraph properties. [Raw qualification and limits](programs/shapes/sh23-2026-11-07/README.md) retain the initial visual failure and all corrected witnesses.
+
