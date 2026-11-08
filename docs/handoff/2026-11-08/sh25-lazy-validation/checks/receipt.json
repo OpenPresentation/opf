@@ -216,8 +216,20 @@
       "sha256": "518eda785fcb27f360af80958d31196ea993bab77301f056c92e05f32712b415",
       "rawBytes": 316,
       "rawSha256": "46b53d6553bb9f9c6fffbff15f0d4ff7487e5681bec90776e908ecca4175a720"
+    },
+    {
+      "file": "logs/text-evidence.log.gz",
+      "bytes": 607,
+      "sha256": "1e8732fe1993bce788925ed0ca0c1fcc5c7280461cbbe62532f9474f6b870955",
+      "rawBytes": 1102,
+      "rawSha256": "89d42ea6ff0889548ed210d93aa0abf2323439c1872d61b73de1f9a2787dffcf"
     }
   ],
   "noOffice": true,
-  "noDrawingChange": true
+  "noDrawingChange": true,
+  "finalEvidenceText": {
+    "valid": true,
+    "files": 11612,
+    "compressedText": 279
+  }
 }
