@@ -1,0 +1,104 @@
+✖ inherited Latin numbered list with ASCII digits is protected on deck ar-SA (302.6923ms)
+✖ inherited Latin numbered list with ASCII digits is protected on slide ar-SA (63.5863ms)
+✖ inherited Latin numbered list with ASCII digits is protected on deck he-IL (61.1636ms)
+✖ inherited Latin numbered list with ASCII digits is protected on slide he-IL (54.877ms)
+✖ plain and styled Latin paragraph fragments share protected numeric shaping on an RTL slide (68.2424ms)
+✔ explicit run proofing languages win, including an override equal to the Arabic base (162.7381ms)
+✔ Arabic and mixed-script content retain their native direction and Arabic runs (112.6042ms)
+✔ unqualified non-ASCII digits and Latin text without digits retain their existing proofing route (162.3984ms)
+✔ ordinary LTR source keeps its default native language without an automatic override (42.3157ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 4
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1376.6975
+
+✖ failing tests:
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:20:2
+✖ inherited Latin numbered list with ASCII digits is protected on deck ar-SA (302.6923ms)
+  AssertionError [ERR_ASSERTION]: native shaping must not inherit Arabic/Hebrew proofing for Latin digits
+  
+  'ar-SA' !== 'en-US'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:30:12)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'ar-SA',
+    expected: 'en-US',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:20:2
+✖ inherited Latin numbered list with ASCII digits is protected on slide ar-SA (63.5863ms)
+  AssertionError [ERR_ASSERTION]: native shaping must not inherit Arabic/Hebrew proofing for Latin digits
+  
+  'ar-SA' !== 'en-US'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:30:12)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'ar-SA',
+    expected: 'en-US',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:20:2
+✖ inherited Latin numbered list with ASCII digits is protected on deck he-IL (61.1636ms)
+  AssertionError [ERR_ASSERTION]: native shaping must not inherit Arabic/Hebrew proofing for Latin digits
+  
+  'he-IL' !== 'en-US'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:30:12)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'he-IL',
+    expected: 'en-US',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:20:2
+✖ inherited Latin numbered list with ASCII digits is protected on slide he-IL (54.877ms)
+  AssertionError [ERR_ASSERTION]: native shaping must not inherit Arabic/Hebrew proofing for Latin digits
+  
+  'he-IL' !== 'en-US'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:30:12)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'he-IL',
+    expected: 'en-US',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:41:1
+✖ plain and styled Latin paragraph fragments share protected numeric shaping on an RTL slide (68.2424ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'ar-SA' !== 'en-US'
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:47:43)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ar-SA',
+    expected: 'en-US',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

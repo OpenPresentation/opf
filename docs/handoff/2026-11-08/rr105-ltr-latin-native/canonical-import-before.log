@@ -1,0 +1,37 @@
+✖ canonical explicit list-language fixtures preserve complete authored rich items (414.2357ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 768.9292
+
+✖ failing tests:
+
+test at packages\pptx\test\rr-105-ltr-latin-native.mjs:134:1
+✖ canonical explicit list-language fixtures preserve complete authored rich items (414.2357ms)
+  AssertionError [ERR_ASSERTION]: canonical authored run identity and characters survive unchanged
+  + actual - expected
+  
+    [
+  +   'Item 1: authored proofing choice.'
+  -   [
+  -     {
+  -       lang: 'ar-SA',
+  -       text: 'Item 1: authored proofing choice.'
+  -     }
+  -   ]
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/opf-work/rr-105-ltr-latin-native/packages/pptx/test/rr-105-ltr-latin-native.mjs:138:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Item 1: authored proofing choice.' ],
+    expected: [ [ [Object] ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

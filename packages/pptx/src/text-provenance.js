@@ -1,5 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
+import {NATIVE_LANGUAGE_TAG} from './native-language-provenance.js';
 const TAG='OPF_TEXT_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -34,7 +35,7 @@ export function importPlainTextGroups(shapes,paragraphs,relationships,entries,re
   for(const tag of tags.filter(tag=>tag.name?.toUpperCase()===TAG))try {
    const data=decodeTextTag(tag.val);
    if(data?.v!==1||typeof data.group!=='string'||data.group.length>4096||!/^slides\.\d+(?:\.[A-Za-z0-9_:+-]+)*\.text$/.test(data.group))throw Error('Invalid plain text identity.');
-   const group=groups.get(data.group)??[];group.push({shape,index,data,ambiguous:unreadable||tags.filter(tag=>/^OPF_/i.test(tag.name)).length!==1});groups.set(data.group,group);
+   const group=groups.get(data.group)??[];group.push({shape,index,data,ambiguous:unreadable||tags.filter(tag=>/^OPF_/i.test(tag.name)&&String(tag.name).toUpperCase()!==NATIVE_LANGUAGE_TAG).length!==1});groups.set(data.group,group);
   }catch{report({code:'invalid-text-provenance',message:'Invalid plain text tags; ordinary import retains current native text.'});}
  }
  for(const group of groups.values())try {

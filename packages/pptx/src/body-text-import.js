@@ -99,7 +99,8 @@ function bodyRunStyle(properties, context, relationships, report, extras = {}) {
   }
   const style = nativeRunStyle(supported, context, relationships, report, 'body');
   const lang = properties.lang;
-  if (extras.deckLang && typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && lang.toLowerCase() !== extras.deckLang.toLowerCase()) style.lang = lang;
+  // A native explicit override remains authored even when no unprotected base run votes, or when it equals the base.
+  if (typeof lang === 'string' && RUN_LANG.test(lang) && !/^(?:und|zxx)(?:-|$)/i.test(lang) && (properties.altLang === 'en-US' || extras.deckLang && lang.toLowerCase() !== extras.deckLang.toLowerCase())) style.lang = lang;
   const family = typeof style.fontFamily === 'string' ? style.fontFamily.trim().toLowerCase() : undefined;
   if (family && extras.codeFamily && family === extras.codeFamily.trim().toLowerCase()
     && !['a:majorFont', 'a:minorFont'].some(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase() === family)) {
