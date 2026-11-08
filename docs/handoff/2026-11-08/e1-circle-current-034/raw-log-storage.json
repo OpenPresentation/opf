@@ -1,0 +1,55 @@
+{
+  "lossless": true,
+  "rows": [
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/check-changed.log.gz",
+      "originalBytes": 1023,
+      "originalSha256": "8bcbe05aebdb083ee529662335933e8f56d9dcce7e0bf46684a91d82db4ac653"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01.log.gz",
+      "originalBytes": 1977,
+      "originalSha256": "7036efa3f3e6292bc8b3dba866024c1abc2bf1d97ccdf0db5d227a7eb953644f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/biome.log.gz",
+      "originalBytes": 689,
+      "originalSha256": "f3bcd6ea93a87e08d563e0e638cfee5cdfb507f3576280a9bdc5e71c7f19cee5"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/build.log.gz",
+      "originalBytes": 14422,
+      "originalSha256": "14be2a3836b32f91a0d4aac1c94493d2afdb704d2bd8136fef1df2a7b2de4add"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/install.log.gz",
+      "originalBytes": 4409,
+      "originalSha256": "920f40ba4465ff0e64598dba17ad5ac75f5c5fd060a5b20981affa7d80a57d58"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_changes.log.gz",
+      "originalBytes": 2633,
+      "originalSha256": "180ecbbf84ab2dcd138a49fb0b33da1355c5d69c94d027d09367abcbc0be5b6f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_gallery-tracker.log.gz",
+      "originalBytes": 1992,
+      "originalSha256": "9c32f1c533b82f509db25116588da18ac336475d4191a37d509e7c04e74a97b2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_release-report.log.gz",
+      "originalBytes": 811,
+      "originalSha256": "4569454b400d77fde41697ec49286c59f8182229668cd612f21c88d19aec5898"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "originalBytes": 1037,
+      "originalSha256": "d015fc5ccc6d43c585a6fddd8b1dcdca16e6b3e48476ed525346096cab1eceba"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_text.log.gz",
+      "originalBytes": 964,
+      "originalSha256": "d24a13495da1d0c582b68e96ee78673e09752a617c3e01f45611a690e9f9d048"
+    }
+  ]
+}

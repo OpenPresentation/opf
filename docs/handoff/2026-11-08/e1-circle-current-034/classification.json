@@ -1,0 +1,74 @@
+{
+  "candidateHead": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+  "productionSource": "513156a982397eaa0033808215fbb86dd284745b",
+  "fullRuntimeFilesSealed": 205,
+  "currentSourceClean": true,
+  "allFourFresh033PngsEqualImmutable": true,
+  "allFourCurrent034PngsEqual033": true,
+  "cases": [
+    {
+      "id": "batch-11/s13",
+      "explicitGrid": true,
+      "chartHeight": 169.39,
+      "bodyHeight": 514.92,
+      "allocatedBodyHeights": [
+        {
+          "type": "metric",
+          "height": 169.39
+        },
+        {
+          "type": "chart",
+          "height": 169.39
+        },
+        {
+          "type": "table",
+          "height": 183.75
+        },
+        {
+          "type": "quote",
+          "height": 113.78
+        }
+      ],
+      "titleFontSize": 54,
+      "metricFontSize": 76,
+      "quoteFontSize": 32,
+      "selectedRenderWarnings": 0
+    },
+    {
+      "id": "batch-12/s19",
+      "explicitGrid": false,
+      "chartHeight": 187.57,
+      "bodyHeight": 514.92,
+      "allocatedBodyHeights": [
+        {
+          "type": "metric",
+          "height": 187.57
+        },
+        {
+          "type": "chart",
+          "height": 187.57
+        },
+        {
+          "type": "table",
+          "height": 187.57
+        },
+        {
+          "type": "quote",
+          "height": 91.78
+        }
+      ],
+      "titleFontSize": 54,
+      "metricFontSize": 76,
+      "quoteFontSize": 32,
+      "selectedRenderWarnings": 0
+    }
+  ],
+  "confirmedNewProductDefects": 0,
+  "reason": "Small circular plots are reproduced, but b11/s13 authors grid and b12/s19 fully allocates514.92px body height. No free-height/no-pin defect or retained-size better arrangement has been established. Do not infer all visual quality accepted from byte equality.",
+  "vetoableDecision": "Keep as an explicit allocation/style observation; do not delay the combined final golden batch for a speculative change. A proposed alternative needs same-content/same-or-larger-type proof before product code.",
+  "productEdits": 0,
+  "office": false,
+  "coordinatorReviewedActualComparison": true,
+  "coordinatorAcceptedNegativeClassification": true,
+  "productFixNotProposed": true
+}

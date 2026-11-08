@@ -120,3 +120,5 @@ After v0.34.0 is published, merge the pptx.gallery browsers draft [Data-Advantag
 - Every entry in [decisions.md](decisions.md) is vetoable.
 
 - Current033merge hold: [dispatched FullCI gate correction](fullci-gate.md). The macOS completion test and shared gate are being corrected in derived branches before the next integration batch.
+
+- 2026-11-08 evidence-only E1 circle comparison: actual combined0.34 two-case/two-control output equals genuine0.33 byte-for-byte,205 dist files sealed; no underfilled-body defect established. [Exact scope and vetoable classification](../2026-11-08/e1-circle-current-034.md). Never merge evidence branch.

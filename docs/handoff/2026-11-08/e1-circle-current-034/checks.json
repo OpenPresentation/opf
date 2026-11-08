@@ -1,0 +1,21 @@
+{
+  "node": "v24.20.0",
+  "checkChanged": {
+    "steps": 9,
+    "selected": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 1,
+    "seconds": 44.3
+  },
+  "allSelectedChecksPass": true,
+  "imagesRendered": 9,
+  "fixedHistoricalImagesCopied": 4,
+  "sourceInputMutations": 0,
+  "productEdits": 0,
+  "office": false,
+  "registryCalls": 0,
+  "githubMetadataCalls": 0,
+  "ciObserver": false,
+  "coordinatorAcceptedNegativeClassification": true
+}

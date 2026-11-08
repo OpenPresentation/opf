@@ -1,0 +1,182 @@
+{
+  "evidenceOnly": true,
+  "neverMerge": true,
+  "branch": "codex/rr-20-e1-circle-034",
+  "base": "9545016583ccfa151077cda4d51043ac6505a140",
+  "candidateHead": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+  "productionSource": "513156a982397eaa0033808215fbb86dd284745b",
+  "sourceEvidenceCommit": "29ba0ae536b019ada68623d44850d6cb3b7a6350",
+  "hashBasis": "Canonical staged Git blobs; raw logs lossless gzip",
+  "files": [
+    {
+      "file": "docs/handoff/2026-11-07/README.md",
+      "bytes": 11212,
+      "sha256": "586f3dc9ba7a55b7e78f76d72525fb5aec48fbdee49b724dfea930479cb08452"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034.md",
+      "bytes": 3667,
+      "sha256": "5c9e2fc1357c8889356b75a9eba558d7912ee460763389d4689cdbbcc111ac6b"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/check-changed.log.gz",
+      "bytes": 378,
+      "sha256": "0d8d3481edf9ee2a66858a752beb372938c6a5cfec86f3185c04042423d5af33"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/check-fixtures.json",
+      "bytes": 318,
+      "sha256": "bd978bd2edc539bac46ec2df6fbcb02ad55499d503995cbac241a6fa6ee454d5"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/checks.json",
+      "bytes": 444,
+      "sha256": "7bbed07e114aacdb2c37bcd3ceb2fcb76d6ca1594c83e5644c4ede640a48b5af"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/classification.json",
+      "bytes": 2181,
+      "sha256": "978680b51f8fc79899166bb6e6d5ac59f425cd824c48837d7ab263c8111ecd0d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/compare.mjs",
+      "bytes": 8287,
+      "sha256": "ae12b45a95a3b7f88a22793ad9285afe3ffc0c9fc43b78f9e62b5cda8fc13c8d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01.log.gz",
+      "bytes": 357,
+      "sha256": "5aca72f0443bc4160680adc78bcbc353e886178d2086c0ff2786e58befb58e8f"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-11-s13-after-current-034.png",
+      "bytes": 33875,
+      "sha256": "cc8ab4c6adaa4e35c1d41bd8c33bf4b4a740df8de2a8351d44557e1a9027e578"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-11-s13-before-033.png",
+      "bytes": 33875,
+      "sha256": "cc8ab4c6adaa4e35c1d41bd8c33bf4b4a740df8de2a8351d44557e1a9027e578"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-11-s13-claude-fixed.png",
+      "bytes": 80318,
+      "sha256": "e2fa6d8846987092f20d60aefd901ba152ea2a051ae681359cc9e0fda943bc69"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s03-after-current-034.png",
+      "bytes": 16820,
+      "sha256": "e2c3d7f98b4ae223c0c807be04ae12b494758ef88dd0a293036e1fd6d830e972"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s03-before-033.png",
+      "bytes": 16820,
+      "sha256": "e2c3d7f98b4ae223c0c807be04ae12b494758ef88dd0a293036e1fd6d830e972"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s03-claude-fixed.png",
+      "bytes": 35629,
+      "sha256": "7a90d123fd42103460c6c11dbf3e1def54678c45f494dbba1f763fcacc5af690"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s19-after-current-034.png",
+      "bytes": 36970,
+      "sha256": "69bef24aca9cb55820597c7ca4be550630efb431ad99d0afe54a31a25f482b9a"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s19-before-033.png",
+      "bytes": 36970,
+      "sha256": "69bef24aca9cb55820597c7ca4be550630efb431ad99d0afe54a31a25f482b9a"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s19-claude-fixed.png",
+      "bytes": 76482,
+      "sha256": "d6af221ad8d07a3238a28ca42633eb868faa899904ee3832bbdc0dadd228d9d4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s30-after-current-034.png",
+      "bytes": 26306,
+      "sha256": "58504746c7d2d9b1644cf51eb2edbc5dbee72a2cb97011eae26e580ac9a116a2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s30-before-033.png",
+      "bytes": 26306,
+      "sha256": "58504746c7d2d9b1644cf51eb2edbc5dbee72a2cb97011eae26e580ac9a116a2"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/batch-12-s30-claude-fixed.png",
+      "bytes": 50466,
+      "sha256": "9d3516acc371b05d771de679169c9691d7881a49e276d5231c02ef176cc90cdd"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/candidate-before.json",
+      "bytes": 36404,
+      "sha256": "e8e8e05184f2cf85d6be29d6bc36af76925e15566d9f7b1dfa5d16d14214f150"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/comparison.png",
+      "bytes": 370349,
+      "sha256": "a70162f5cbe72fa8881821cbecc0db27f367c50b7949171ba65256434e5a0586"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/comparison.svg",
+      "bytes": 629982,
+      "sha256": "f051c7263f64b64972c4221f1c4f7fe0c71cb2501dc3b545e828cb7d19c37d03"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/execution-01/receipt.json",
+      "bytes": 140986,
+      "sha256": "9a951b0f70688cebb5b882f4b247315e8f794a32e0e97666a404601e75c069e1"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/biome.log.gz",
+      "bytes": 322,
+      "sha256": "30a43564102e720602e916e9c953ce37b52778e3fce2f171c5f7e5e91fdbaa55"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/build.log.gz",
+      "bytes": 2999,
+      "sha256": "f5f4e365df85da34301f1e82f9c8efff36ce528573ed5671666e5a8ef3e77097"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/install.log.gz",
+      "bytes": 575,
+      "sha256": "38195132cd56ce99e4c9f1972d4bf28299eeba0accc856006069fd71f9c1d84d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_changes.log.gz",
+      "bytes": 1163,
+      "sha256": "a431e71d4a3705be3270af67860b5d6e26c6c4bb0faa3334ac0300f324148439"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_gallery-tracker.log.gz",
+      "bytes": 1064,
+      "sha256": "5d45e4a30038b295cc9edab460d15cff6b89470f130702faf1c8cd7b18e6404d"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_release-report.log.gz",
+      "bytes": 466,
+      "sha256": "949dba0e00197128efb721a1335484e361679c5685b5c0032ae539f9fdb7baa6"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_skill-commands.log.gz",
+      "bytes": 583,
+      "sha256": "72889539e208385644aa0292adbb6bf8db94199dc4fd4cd838e14054219750df"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/mapped-checks/pnpm_run_check_text.log.gz",
+      "bytes": 552,
+      "sha256": "fdf2440d45c084729dc992634f508ad912ec4658d454068b2a5d49e5b0ab93f4"
+    },
+    {
+      "file": "docs/handoff/2026-11-08/e1-circle-current-034/raw-log-storage.json",
+      "bytes": 2360,
+      "sha256": "38647863d06740ce2abdff7d8cb634f38b5c8466c0cdb3b8d3cac1df9538ff6e"
+    },
+    {
+      "file": "docs/programs/release-readiness/burndown.md",
+      "bytes": 345243,
+      "sha256": "5c9cbde1154b96ac2da6a93d7b6affefea55515d0de92f9ed5ed5987c0321021"
+    }
+  ]
+}

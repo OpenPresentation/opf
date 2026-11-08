@@ -1,0 +1,4051 @@
+{
+  "scope": "Exactly two observed no-warning circular chart cases and two same-family controls; actual combined candidate source, not a published034 package or native/registry acceptance",
+  "complete": true,
+  "node": "v24.20.0",
+  "candidate": {
+    "head": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+    "productionSourceReference": "513156a982397eaa0033808215fbb86dd284745b",
+    "status": "",
+    "productionChangesFrom513": "",
+    "packageVersion": "0.33.0",
+    "beforeRuntime": [
+      {
+        "file": "packages/gallery/dist/icon-sets.d.ts",
+        "bytes": 1036,
+        "sha256": "21f7c2185eabb1cd60282267fedc309fcc87e14739192ab31b28e72473013070"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets.js",
+        "bytes": 645,
+        "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/icon-set.d.ts",
+        "bytes": 1218,
+        "sha256": "701a5665b8da753eda82ba593b8384015c9b6991e7a87e1c5fd8387645da93c4"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/lucide.js",
+        "bytes": 757487,
+        "sha256": "5d05b96f4f6b908a3a115e23b326ed54489a39dec627680e4c3b9884d0d5bbd1"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/tabler.js",
+        "bytes": 1700906,
+        "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+      },
+      {
+        "file": "packages/gallery/dist/index.d.ts",
+        "bytes": 4208,
+        "sha256": "0351071f62b30d8db227f0e67bb6e3d1d8d5e72dae7429723455c7fc7c8dfce7"
+      },
+      {
+        "file": "packages/gallery/dist/index.js",
+        "bytes": 345133,
+        "sha256": "c88a18675185023b55f67271a5331854cd2b8b03141a3966de00b5222cc795e4"
+      },
+      {
+        "file": "packages/gallery/dist/previews.d.ts",
+        "bytes": 1692,
+        "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364"
+      },
+      {
+        "file": "packages/gallery/dist/previews.js",
+        "bytes": 190931,
+        "sha256": "3d5b36fcddb1196de0a5966e47a9e143ba4a1d96b873ea61c4c66d418529efb8"
+      },
+      {
+        "file": "packages/javascript/dist/browser.js",
+        "bytes": 4410,
+        "sha256": "abbb48f170cede757b4fa50c986e60f6c34ab827f9c55a1d42db90318511a83e"
+      },
+      {
+        "file": "packages/javascript/dist/catalog-refs-BacOFTcg.d.ts",
+        "bytes": 7729,
+        "sha256": "1a354bba8c6ab8ee04b98659e4291288e8bc3ebfe8d6b554fb62a8e9c4f86595"
+      },
+      {
+        "file": "packages/javascript/dist/catalog-schemas-CiEafJRf.d.ts",
+        "bytes": 1738,
+        "sha256": "73b46fbd317941de642cc7fe5bfd8ee6a582a24416e8623d585659cea6b1392d"
+      },
+      {
+        "file": "packages/javascript/dist/chart-data-oIZQlFGi.d.ts",
+        "bytes": 11234,
+        "sha256": "2ab91c1aaf4e654984b3b25d256827b1f78dc20f47d4e54ab36c82c897b70a22"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-43JWUIGF.js",
+        "bytes": 203,
+        "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-466I5SCB.js",
+        "bytes": 63844,
+        "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-4DC3EFLX.js",
+        "bytes": 28142,
+        "sha256": "21e79f013d00c7815e2095f0930ee0adc9c2f97f019824ee845d42b8a46b9e19"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-5GNOT73M.js",
+        "bytes": 6461,
+        "sha256": "c8f9be6e232e6842486b37c34951e9dee23f58f5a5a84b943bf54b8a7c4c0168"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-5RZF5INH.js",
+        "bytes": 1396514,
+        "sha256": "6b68034b82f7c486a5d3521b122370e57600015e0274d9d7cee7e1508eb99e22"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-67BR2ZG6.js",
+        "bytes": 15552,
+        "sha256": "544ef025fac4dd3992655eb04d93605edb26985ab6a7163f5c6708e4a7f52e6d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-CLJRDCRL.js",
+        "bytes": 5033,
+        "sha256": "c74efac047363d08a05c2657a0068b0025f106e8ec547bf668338f5645004ae1"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-DGSXVN5C.js",
+        "bytes": 44620,
+        "sha256": "53b2e134b11d3fb8c7ec3e9422e844a2793c2262bf88e24530f567edbca8f027"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-DWVU2DOM.js",
+        "bytes": 10267,
+        "sha256": "5d4e9c3a3252ea6e5faf00ed57fc22911922e9fc8ef049450d4de216463815c7"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-E4B3I63R.js",
+        "bytes": 32288,
+        "sha256": "6f997f41e6f55e06dc03e0ab73f4db05cb1993fcab416e0d538b24bc1b7c44ca"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-EHZSGHEK.js",
+        "bytes": 31311,
+        "sha256": "feddcc2f2fc0428e88ba480ff93d949618a081e19231d8ad34334759e335509b"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-FK5XG742.js",
+        "bytes": 157304,
+        "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-GWUYRLMI.js",
+        "bytes": 3788,
+        "sha256": "e2928553a5391756c74bdccd4a4a85b6229160cf2e007ba06f578fc18ec0152f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-IJXKVM4W.js",
+        "bytes": 10945,
+        "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-INIMUBSE.js",
+        "bytes": 286,
+        "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-JBARNYFR.js",
+        "bytes": 776,
+        "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-PRXZD2II.js",
+        "bytes": 463,
+        "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-Q3GR6VSX.js",
+        "bytes": 494662,
+        "sha256": "0738593caf013b97f31ba26e34a425527e9bc49f3f555b57713c90c51f975a5f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-QGK2G2OB.js",
+        "bytes": 4798,
+        "sha256": "fe4bab4a30e50af7c22a98762f4d9efffb0dc245848a562c6143ba37dc9d94f5"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-RWPUU322.js",
+        "bytes": 31234,
+        "sha256": "effec410ddb35debd2326ea8885e37cc9c6ac9bc0462e7f62258486244a508a8"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-RYZPBJLB.js",
+        "bytes": 302,
+        "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-SFREIW6V.js",
+        "bytes": 452189,
+        "sha256": "2c0cd9ebc9101101fb0e9765c089a54ad470fbb2e7c9bee4a90eabc545ade123"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-VE4LOSIR.js",
+        "bytes": 1847504,
+        "sha256": "b6f9bfa9bf062b4f2fbf723dd5dadee17053a29878794efe36a1df940fd719c6"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-W24RLCM7.js",
+        "bytes": 48416,
+        "sha256": "5bd53fa5d612ff629166b135ed96b489e74755d83aa8b34c186749d0ddd1bb7d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-W4DYDRV2.js",
+        "bytes": 6363,
+        "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-XGYOSDRJ.js",
+        "bytes": 56369,
+        "sha256": "7c778ca8eeb626ed3308ba474992b1e58946b9e2ff2fc5747fff309d3896c922"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YA5V2OTR.js",
+        "bytes": 72070,
+        "sha256": "a831292fea6a7763f0e8cb87dabcde37f49f78d8fac4818ff7e0bf3ac4374e4d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YYEIDFA4.js",
+        "bytes": 3008,
+        "sha256": "2b20fdd3033a6eee241441b0bd78324e882c188e26069e9ba44fc0a8972fd3c2"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YYT6N7AI.js",
+        "bytes": 267856,
+        "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+      },
+      {
+        "file": "packages/javascript/dist/composition-DUdz50HU.d.ts",
+        "bytes": 480160,
+        "sha256": "727b9d745b247b19d45f22abb645f4b6350f403ea8b5b6efc21d4c9cdccf0287"
+      },
+      {
+        "file": "packages/javascript/dist/composition.d.ts",
+        "bytes": 26135,
+        "sha256": "3902de328ed950db8dc7841b393a4b96b7310981d954aac89b5a80ba8bed915f"
+      },
+      {
+        "file": "packages/javascript/dist/composition.js",
+        "bytes": 13204,
+        "sha256": "86535aae593aedeba7ca3c565a999f8f7e536d4f3c8e92290c9f5769f2b95223"
+      },
+      {
+        "file": "packages/javascript/dist/conversion-jafjSTFK.d.ts",
+        "bytes": 32735,
+        "sha256": "6671a0075f6ea67ea5eb836f8a0d764734256cad941d450f63db5e82fa8e20b8"
+      },
+      {
+        "file": "packages/javascript/dist/conversion-TO25RBRZ.js",
+        "bytes": 835,
+        "sha256": "825208ce2962d93df9006e5652ec60e26bc525df054174d860708db1556a9f0d"
+      },
+      {
+        "file": "packages/javascript/dist/convert.d.ts",
+        "bytes": 15040,
+        "sha256": "895e07c4d39717056ed5a58f8627bd2d5d4273f6d3ffb95c65ac4f5a68302650"
+      },
+      {
+        "file": "packages/javascript/dist/convert.js",
+        "bytes": 61383,
+        "sha256": "257cec5b512265340d1aaa5ad4ce5b07ea3e47d8d93ddf6ef58746e5694f5943"
+      },
+      {
+        "file": "packages/javascript/dist/data.d.ts",
+        "bytes": 2609,
+        "sha256": "163c2fea6fb262a7dc11dd366c55e9d1cb756de413bb1e455ed6cd2839a78118"
+      },
+      {
+        "file": "packages/javascript/dist/data.js",
+        "bytes": 443,
+        "sha256": "d10188522cb0dc8cc94d466c3321a28505b1fb0dfed0396f093e0300ed80200a"
+      },
+      {
+        "file": "packages/javascript/dist/deck-report-C6eBVmWR.d.ts",
+        "bytes": 2414,
+        "sha256": "0b809447714773054b7a5f4855a90f4af504822739eefa2722a135557a3254be"
+      },
+      {
+        "file": "packages/javascript/dist/deck.d.ts",
+        "bytes": 2964,
+        "sha256": "a300d88e989a787489b0d807f7ba1f354614126bf458062969d71349128e24ad"
+      },
+      {
+        "file": "packages/javascript/dist/deck.js",
+        "bytes": 474,
+        "sha256": "ceb6d340af4b3c1bab5516eb0889a60e774f02338e07d98522ff10598abc4e6e"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-engine-eager.js",
+        "bytes": 360,
+        "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-engine-lazy.js",
+        "bytes": 430,
+        "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-plantuml-ZZYMHBHZ.js",
+        "bytes": 87,
+        "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+      },
+      {
+        "file": "packages/javascript/dist/diff.d.ts",
+        "bytes": 5944,
+        "sha256": "9310bd7aaa538370e43d6d4879a7ac0676021df5b8495f61be4be1cf7e3e0d14"
+      },
+      {
+        "file": "packages/javascript/dist/diff.js",
+        "bytes": 271,
+        "sha256": "e999faef6778ac68f15b49f9cfa35004da8b3cab99a20d10e2a5981e9f3a86b2"
+      },
+      {
+        "file": "packages/javascript/dist/docs.d.ts",
+        "bytes": 682,
+        "sha256": "7a3737469cc71abe1ae87c951f46657168a142b88118c97a651ee783903db6f1"
+      },
+      {
+        "file": "packages/javascript/dist/docs.js",
+        "bytes": 1898425,
+        "sha256": "e8e468680c2ba27b92a9fc8b59cc7b15b5dbf3ab9770501ce5f5e73f8acc677a"
+      },
+      {
+        "file": "packages/javascript/dist/examples.d.ts",
+        "bytes": 2126,
+        "sha256": "966cd6a4a161b3822aba2038671e28f207b7d058c3434fc1ed8c10370b5f9164"
+      },
+      {
+        "file": "packages/javascript/dist/examples.js",
+        "bytes": 9329935,
+        "sha256": "69eacf69d3d0b10cb661610b27eb9ee891e6c23da07f21f598daa6b0d9663d9b"
+      },
+      {
+        "file": "packages/javascript/dist/explain-iZeNOUc6.d.ts",
+        "bytes": 3979,
+        "sha256": "805cc0e5e2ea25a92a498a5fb5b0d81379d431f6bcb96bbfe4779a67da8c39bb"
+      },
+      {
+        "file": "packages/javascript/dist/finding-l9dlQ2NF.d.ts",
+        "bytes": 7413,
+        "sha256": "c129e210603a48ad0f305c8600ea99d7b58a324a717d2feb37e00491adafbaf9"
+      },
+      {
+        "file": "packages/javascript/dist/font-policy.d.ts",
+        "bytes": 7904,
+        "sha256": "76ecc80cf6c34910ec09e14b972bdca923d59475e274f6d23d07ca62292b6ff2"
+      },
+      {
+        "file": "packages/javascript/dist/font-policy.js",
+        "bytes": 151,
+        "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+      },
+      {
+        "file": "packages/javascript/dist/format.d.ts",
+        "bytes": 951,
+        "sha256": "f8e4861f53c2b9156485c893394f8160553f5b77ac59f49ab9485e9ac13b96a5"
+      },
+      {
+        "file": "packages/javascript/dist/format.js",
+        "bytes": 157,
+        "sha256": "c891519be219a52d8efdc4b485fc39f151816c9f18dbda749cdab6e52cd4d1f9"
+      },
+      {
+        "file": "packages/javascript/dist/ids.d.ts",
+        "bytes": 6870,
+        "sha256": "5a4c9c081e42fd9b3edfc790665b9a6a72cee42302ac9886c99ed5a1d254c5b3"
+      },
+      {
+        "file": "packages/javascript/dist/ids.js",
+        "bytes": 339,
+        "sha256": "05d3dd7103cc4d88bb03724a760039a4ec7dfa075b1cede9e3f6c2fbb2a35e32"
+      },
+      {
+        "file": "packages/javascript/dist/index.d.ts",
+        "bytes": 40223,
+        "sha256": "2f0422972c2d657185437842f6304e7bdc098701d0e0a3b0f28042f35199590d"
+      },
+      {
+        "file": "packages/javascript/dist/index.js",
+        "bytes": 5540,
+        "sha256": "111d443185d19af0a49efafdd43b37fc3a9367bf1e6c0c2bc3eb0dd7540f9800"
+      },
+      {
+        "file": "packages/javascript/dist/json-BFSdESOE.d.ts",
+        "bytes": 827,
+        "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78"
+      },
+      {
+        "file": "packages/javascript/dist/markdown.d.ts",
+        "bytes": 5142,
+        "sha256": "8ac232cabb3c29efff76479af1313b2fd9d7158913fa864afa542c291c4aaba7"
+      },
+      {
+        "file": "packages/javascript/dist/markdown.js",
+        "bytes": 390,
+        "sha256": "f9f575b25ca57df8df6da1025591ad171e2bb7df62c1ee24818d58ef600913b0"
+      },
+      {
+        "file": "packages/javascript/dist/node-engine.d.ts",
+        "bytes": 11170,
+        "sha256": "e408cf79f7ab6bf0eebc817820fd36fb4546d030bb7f81b58ca50ee398416b49"
+      },
+      {
+        "file": "packages/javascript/dist/node-engine.js",
+        "bytes": 2915,
+        "sha256": "dd23b428bb20eddfbaac3b0821e7ca82fa14f4728689e379a2e855d0a4d6b222"
+      },
+      {
+        "file": "packages/javascript/dist/pagination-DTzigzsv.d.ts",
+        "bytes": 13756,
+        "sha256": "1319e7f1feb7aac44be07e6c5e6ec835803f40da742b1e10ebfa6356c6812296"
+      },
+      {
+        "file": "packages/javascript/dist/pagination.d.ts",
+        "bytes": 540,
+        "sha256": "b8c1515dbe5ecba0c60636afe046e085b421e9a5137b4bfda71abb3d04f7229d"
+      },
+      {
+        "file": "packages/javascript/dist/pagination.js",
+        "bytes": 282,
+        "sha256": "a99732d38a096e5430c7e99792ae413434f6a7e3fe6cce52d1414e77efcea5c5"
+      },
+      {
+        "file": "packages/javascript/dist/patch.d.ts",
+        "bytes": 10686,
+        "sha256": "676307d0fc64c3e7f8493a77fcb0a85624538c20197d93db8c9fdcbebde911eb"
+      },
+      {
+        "file": "packages/javascript/dist/patch.js",
+        "bytes": 536,
+        "sha256": "8dedb8e0424050c90e3d01fe1356518872ff08b45ac42ef9bed53d6d78cee8f2"
+      },
+      {
+        "file": "packages/javascript/dist/precompiled.d.ts",
+        "bytes": 13,
+        "sha256": "4bd5186f89b856606fcd365feda2e5daa184651613339dcbc297e371b26dd169"
+      },
+      {
+        "file": "packages/javascript/dist/precompiled.js",
+        "bytes": 231,
+        "sha256": "73e1235b786ce79f010de1562bcf88793b7540df398a5c9b827b70be8be37b13"
+      },
+      {
+        "file": "packages/javascript/dist/presentation-D_7a4Mdi.d.ts",
+        "bytes": 294342,
+        "sha256": "b07029efb5aacf82adb4c4372fdb68c1d4f39f322c3d5be8805e19b3ff64cfd1"
+      },
+      {
+        "file": "packages/javascript/dist/repo-readme.d.ts",
+        "bytes": 139,
+        "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+      },
+      {
+        "file": "packages/javascript/dist/repo-readme.js",
+        "bytes": 19933,
+        "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+      },
+      {
+        "file": "packages/javascript/dist/schema-engine-ajv.js",
+        "bytes": 1179,
+        "sha256": "9c017392c25c98d36f9708f347c87f8117db62313947ff74ab49c39fe772fd3b"
+      },
+      {
+        "file": "packages/javascript/dist/schema-engine-precompiled.js",
+        "bytes": 131,
+        "sha256": "f62a84ef227c91c41ece856db8f70082e757c22dc50c8268c3eb94f6e24da62f"
+      },
+      {
+        "file": "packages/javascript/dist/schema.d.ts",
+        "bytes": 9555,
+        "sha256": "ba30c3b7dd7d67f38437bb81a5c85fcc14dd23e8b846cef1900732ea05f74191"
+      },
+      {
+        "file": "packages/javascript/dist/schema.js",
+        "bytes": 396,
+        "sha256": "073ebe0192e052557cad7b4a5d37c364dda97e2fdd5d3264737cd397e7dbdc7c"
+      },
+      {
+        "file": "packages/javascript/dist/schemas.d.ts",
+        "bytes": 14589,
+        "sha256": "5b2eebd4d66609c102828f9c23da5f400b3d320c66b28c6f20e9316783656352"
+      },
+      {
+        "file": "packages/javascript/dist/schemas.js",
+        "bytes": 241,
+        "sha256": "41a3498fed74d01b1d7d66cf3545d8ebfc07fff84f29ae096a2c119952bb5238"
+      },
+      {
+        "file": "packages/javascript/dist/shape-catalog.d.ts",
+        "bytes": 4600,
+        "sha256": "27442f3b79ae5979bc0d45450298174d3a352405bdecfcc6025b88a92a667999"
+      },
+      {
+        "file": "packages/javascript/dist/shape-catalog.js",
+        "bytes": 14977,
+        "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-eager.js",
+        "bytes": 323,
+        "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-lazy.js",
+        "bytes": 308,
+        "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-module-BK7JNEUV.js",
+        "bytes": 308,
+        "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+      },
+      {
+        "file": "packages/javascript/dist/shape-geometry.d.ts",
+        "bytes": 7580,
+        "sha256": "9b2f42b5e25d44e99a9c1d3080b2b00fa6fb54761713a8aa2d9d5f41ae366bd5"
+      },
+      {
+        "file": "packages/javascript/dist/shape-geometry.js",
+        "bytes": 229,
+        "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+      },
+      {
+        "file": "packages/javascript/dist/source.d.ts",
+        "bytes": 16598,
+        "sha256": "de235e53f7d2476b7e7a48676e67a3e73c6a9c1dff338aea353383e79361b6cf"
+      },
+      {
+        "file": "packages/javascript/dist/source.js",
+        "bytes": 23245,
+        "sha256": "af9efbf46f53d27994424bdecb00b2087ce91e243dd8eef2f728da109df83678"
+      },
+      {
+        "file": "packages/javascript/dist/spec-files.d.ts",
+        "bytes": 1629,
+        "sha256": "0d11b1d24d33398abf30a63aaf8f85bfaa172e71a16ff40e9aed9d7785ca3276"
+      },
+      {
+        "file": "packages/javascript/dist/spec-files.js",
+        "bytes": 115,
+        "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+      },
+      {
+        "file": "packages/javascript/dist/spec/openapi.yaml",
+        "bytes": 24151,
+        "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79"
+      },
+      {
+        "file": "packages/javascript/dist/spec/README.md",
+        "bytes": 5985,
+        "sha256": "3697401941147266a208924fc0418f8d86b87f9c9866e4a855c984be1d9841b2"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/engine-defaults.json",
+        "bytes": 1341,
+        "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/engine-vocabularies.json",
+        "bytes": 37175,
+        "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/font-policy.json",
+        "bytes": 153842,
+        "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/font-policy.schema.json",
+        "bytes": 10295,
+        "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/preset-geometry.json",
+        "bytes": 318701,
+        "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/preset-geometry.schema.json",
+        "bytes": 5271,
+        "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.json",
+        "bytes": 318426,
+        "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.schema.json",
+        "bytes": 7451,
+        "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/audience.schema.json",
+        "bytes": 6240,
+        "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/catalog-index.schema.json",
+        "bytes": 4861,
+        "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/catalog-manifest.schema.json",
+        "bytes": 3787,
+        "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/chart-type.schema.json",
+        "bytes": 9736,
+        "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/color-scheme.schema.json",
+        "bytes": 7408,
+        "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/finding.schema.json",
+        "bytes": 10374,
+        "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/font-scheme.schema.json",
+        "bytes": 10211,
+        "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/icon-set.schema.json",
+        "bytes": 4896,
+        "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/language.schema.json",
+        "bytes": 7329,
+        "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/layout-preview-index.schema.json",
+        "bytes": 2563,
+        "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/layout.schema.json",
+        "bytes": 32341,
+        "sha256": "47084e6b0d622f690149ece4cfda9b809f0383ae37971c433a01fbfcef08daab"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/narrative.schema.json",
+        "bytes": 8651,
+        "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/opf.schema.json",
+        "bytes": 290696,
+        "sha256": "818278d68ee86bf02ebf04967d6470cf30bf26306e9a86a171ad4e5fd21913f3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/purpose.schema.json",
+        "bytes": 4191,
+        "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/social-platform.schema.json",
+        "bytes": 5925,
+        "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/theme.schema.json",
+        "bytes": 10948,
+        "sha256": "7ccc6a5d6155ab5946f81464cee44c3cb51fef76be987c4bcc6ea0fb22befa0e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/tone.schema.json",
+        "bytes": 5750,
+        "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+      },
+      {
+        "file": "packages/javascript/dist/symbol-font-encodings.d.ts",
+        "bytes": 5692,
+        "sha256": "2b80f418cd25ce395a5d87a0d40aa40facf9607bf41123171553f19122fde207"
+      },
+      {
+        "file": "packages/javascript/dist/symbol-font-encodings.js",
+        "bytes": 424031,
+        "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+      },
+      {
+        "file": "packages/javascript/dist/types.d.ts",
+        "bytes": 76101,
+        "sha256": "8079eb2d4fb6f967141da9c11b6c59dcc3dffb476b40de205e94c7d2bf896cf9"
+      },
+      {
+        "file": "packages/javascript/dist/types.js",
+        "bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "file": "packages/javascript/dist/validation-types-BUiwvmcn.d.ts",
+        "bytes": 15510,
+        "sha256": "3b62f19e620dad3f9065e2c1d071b472e6e14d68ed7c9eec2a5b751f7f1a51dd"
+      },
+      {
+        "file": "packages/javascript/dist/validator.d.ts",
+        "bytes": 5119,
+        "sha256": "ceaff980232411d2d44768fbb8d441b4a9218cca85f4c54465626460354d6208"
+      },
+      {
+        "file": "packages/javascript/dist/validator.js",
+        "bytes": 368,
+        "sha256": "2d855b2e896e82bebc8984254993532581c5174c2ad9dd57cc0cf0e25c70433f"
+      },
+      {
+        "file": "packages/javascript/dist/yaml.d.ts",
+        "bytes": 6023,
+        "sha256": "9f61f71cb4a4b0095e3dd4b6aef9b8eb0c673a520fd09915229ca5387ffe93b3"
+      },
+      {
+        "file": "packages/javascript/dist/yaml.js",
+        "bytes": 390,
+        "sha256": "859b00ff312520d7cae3e16eeb536280f8b1771caff1c4df40b66ad078f85251"
+      },
+      {
+        "file": "packages/render/dist/annotations.js",
+        "bytes": 4097,
+        "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+      },
+      {
+        "file": "packages/render/dist/chart-options.js",
+        "bytes": 10447,
+        "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+      },
+      {
+        "file": "packages/render/dist/charts.js",
+        "bytes": 121430,
+        "sha256": "93caff20aa041241e1e34fab81202eae9abc72a126dbdfabb1978936509a1d0b"
+      },
+      {
+        "file": "packages/render/dist/color-fonts.js",
+        "bytes": 2435,
+        "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+      },
+      {
+        "file": "packages/render/dist/converters.js",
+        "bytes": 2679,
+        "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+      },
+      {
+        "file": "packages/render/dist/deck-runtime.js",
+        "bytes": 23518,
+        "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+      },
+      {
+        "file": "packages/render/dist/drawn-faces.js",
+        "bytes": 2865,
+        "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+      },
+      {
+        "file": "packages/render/dist/effects.js",
+        "bytes": 18498,
+        "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+      },
+      {
+        "file": "packages/render/dist/element-define.d.ts",
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      {
+        "file": "packages/render/dist/element-define.js",
+        "bytes": 314,
+        "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+      },
+      {
+        "file": "packages/render/dist/element.d.ts",
+        "bytes": 5683,
+        "sha256": "81cc9c65c1fe092c497b1debc86e00856a982b95ced661df4a8002e864c93153"
+      },
+      {
+        "file": "packages/render/dist/element.js",
+        "bytes": 38903,
+        "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+      },
+      {
+        "file": "packages/render/dist/export-browser.d.ts",
+        "bytes": 3787,
+        "sha256": "f8bfd3a7bc4e44eea75ed3cdc610b63e246472c931797f0b638264fc15f36c40"
+      },
+      {
+        "file": "packages/render/dist/export-browser.js",
+        "bytes": 15104,
+        "sha256": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8"
+      },
+      {
+        "file": "packages/render/dist/font-compatibility.js",
+        "bytes": 9574,
+        "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+      },
+      {
+        "file": "packages/render/dist/font-fstype.js",
+        "bytes": 3542,
+        "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+      },
+      {
+        "file": "packages/render/dist/font-manifest.js",
+        "bytes": 110526,
+        "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+      },
+      {
+        "file": "packages/render/dist/font-registry.js",
+        "bytes": 33455,
+        "sha256": "0402fa8c0373406153e284f1955f6f1a91f7aeeac420ef385792300d89e7aab0"
+      },
+      {
+        "file": "packages/render/dist/font-subset.js",
+        "bytes": 9956,
+        "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+      },
+      {
+        "file": "packages/render/dist/fonts-browser.d.ts",
+        "bytes": 14599,
+        "sha256": "57ec7eb44de4054cfba02409a7590c3a8b12517b127a93382b2d403fb45b10d0"
+      },
+      {
+        "file": "packages/render/dist/fonts-browser.js",
+        "bytes": 25371,
+        "sha256": "7c96c843ba87fe7db8943455b0d1dcbce8c35e54ad12f11dd6fd5142a20d4917"
+      },
+      {
+        "file": "packages/render/dist/fonts-node.d.ts",
+        "bytes": 8629,
+        "sha256": "2c80c2c811ce76a8a4922bd26c1b76272e3da4eadebbf00958f6a3c7180d5faa"
+      },
+      {
+        "file": "packages/render/dist/fonts-node.js",
+        "bytes": 24759,
+        "sha256": "9e99ae8aa21e5927bc9ede011fb3bb7dbbb43a049372b6f4d836c85c8e4ed049"
+      },
+      {
+        "file": "packages/render/dist/fonts.d.ts",
+        "bytes": 14914,
+        "sha256": "8b5d2cb3922e7f07f2b285cfae7806fe32299c467843ae2cc801746e2456889f"
+      },
+      {
+        "file": "packages/render/dist/fonts.js",
+        "bytes": 1409,
+        "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+      },
+      {
+        "file": "packages/render/dist/hb-shape.js",
+        "bytes": 7333,
+        "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+      },
+      {
+        "file": "packages/render/dist/index.d.ts",
+        "bytes": 22154,
+        "sha256": "5bb6c4f72b1110324fe9aeeaf745b244de8dbca36b8d7edd673fd601940593c6"
+      },
+      {
+        "file": "packages/render/dist/index.js",
+        "bytes": 237,
+        "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+      },
+      {
+        "file": "packages/render/dist/lazy-font-list.js",
+        "bytes": 4834,
+        "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+      },
+      {
+        "file": "packages/render/dist/lazy-fonts.js",
+        "bytes": 22706,
+        "sha256": "5ff9ca5aa9c50a2f464edd49e47b7b00f24015201ec69465a8336d4ef3e2080d"
+      },
+      {
+        "file": "packages/render/dist/measure-pictures-node.js",
+        "bytes": 1311,
+        "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+      },
+      {
+        "file": "packages/render/dist/measure-pictures.js",
+        "bytes": 10875,
+        "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+      },
+      {
+        "file": "packages/render/dist/node-resolve.js",
+        "bytes": 1796,
+        "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+      },
+      {
+        "file": "packages/render/dist/pdf-fonts.js",
+        "bytes": 16436,
+        "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+      },
+      {
+        "file": "packages/render/dist/pdf-style.js",
+        "bytes": 26153,
+        "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+      },
+      {
+        "file": "packages/render/dist/pdf-subset.js",
+        "bytes": 8232,
+        "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+      },
+      {
+        "file": "packages/render/dist/pdf-text.js",
+        "bytes": 17334,
+        "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+      },
+      {
+        "file": "packages/render/dist/pdf-vector.js",
+        "bytes": 72285,
+        "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+      },
+      {
+        "file": "packages/render/dist/pdf-writer.js",
+        "bytes": 6009,
+        "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+      },
+      {
+        "file": "packages/render/dist/pdf-xml.js",
+        "bytes": 3847,
+        "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+      },
+      {
+        "file": "packages/render/dist/pdf.d.ts",
+        "bytes": 112,
+        "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1"
+      },
+      {
+        "file": "packages/render/dist/pdf.js",
+        "bytes": 448,
+        "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+      },
+      {
+        "file": "packages/render/dist/player.d.ts",
+        "bytes": 5783,
+        "sha256": "e17b92ca0c538fcfc340c426086da5edf803e4e36032304f9f1bf0d3f993d6d3"
+      },
+      {
+        "file": "packages/render/dist/player.js",
+        "bytes": 42455,
+        "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+      },
+      {
+        "file": "packages/render/dist/png.d.ts",
+        "bytes": 84,
+        "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b"
+      },
+      {
+        "file": "packages/render/dist/png.js",
+        "bytes": 345,
+        "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-cli.js",
+        "bytes": 2219,
+        "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-node.d.ts",
+        "bytes": 1848,
+        "sha256": "8c4696cb164b1010a27e8a8e976c538ab19b4de088076d92683df30c92934524"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-node.js",
+        "bytes": 7956,
+        "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts.d.ts",
+        "bytes": 1569,
+        "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts.js",
+        "bytes": 4587,
+        "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+      },
+      {
+        "file": "packages/render/dist/raster-images.js",
+        "bytes": 5367,
+        "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+      },
+      {
+        "file": "packages/render/dist/raster-text.js",
+        "bytes": 34635,
+        "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+      },
+      {
+        "file": "packages/render/dist/raster.js",
+        "bytes": 12058,
+        "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+      },
+      {
+        "file": "packages/render/dist/script-font-pack.js",
+        "bytes": 20650,
+        "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+      },
+      {
+        "file": "packages/render/dist/script-fonts.js",
+        "bytes": 51715,
+        "sha256": "f625910027dedbfacef97d86e138fc9eddbeacaf871b015789d4f87306610a46"
+      },
+      {
+        "file": "packages/render/dist/sha256.js",
+        "bytes": 3035,
+        "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+      },
+      {
+        "file": "packages/render/dist/shapes.js",
+        "bytes": 25718,
+        "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+      },
+      {
+        "file": "packages/render/dist/slide-sources.js",
+        "bytes": 2976,
+        "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+      },
+      {
+        "file": "packages/render/dist/svg-internals.js",
+        "bytes": 248,
+        "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+      },
+      {
+        "file": "packages/render/dist/svg.d.ts",
+        "bytes": 15054,
+        "sha256": "198cd8cea7f32d54d2a90ead4c66e87cd34fd9083f10cfe80cdccc9652c5b59e"
+      },
+      {
+        "file": "packages/render/dist/svg.js",
+        "bytes": 180648,
+        "sha256": "5ce6c0471e4c38c6aea60e3ea01ff470c2d8e32065b9847190b609b713e991f7"
+      },
+      {
+        "file": "packages/render/dist/symbol-fonts.js",
+        "bytes": 3986,
+        "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+      },
+      {
+        "file": "packages/render/dist/text-paths.js",
+        "bytes": 20837,
+        "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+      }
+    ],
+    "headAfter": "545067d7be36df86b82be9c38b324ddf1bb2e887",
+    "statusAfter": "",
+    "afterRuntime": [
+      {
+        "file": "packages/gallery/dist/icon-sets.d.ts",
+        "bytes": 1036,
+        "sha256": "21f7c2185eabb1cd60282267fedc309fcc87e14739192ab31b28e72473013070"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets.js",
+        "bytes": 645,
+        "sha256": "7cbf177a16dbbc5723313492c5cda76c8dc66d7e8ab02d22b211aa81d0ea1b6c"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/icon-set.d.ts",
+        "bytes": 1218,
+        "sha256": "701a5665b8da753eda82ba593b8384015c9b6991e7a87e1c5fd8387645da93c4"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/lucide.js",
+        "bytes": 757487,
+        "sha256": "5d05b96f4f6b908a3a115e23b326ed54489a39dec627680e4c3b9884d0d5bbd1"
+      },
+      {
+        "file": "packages/gallery/dist/icon-sets/tabler.js",
+        "bytes": 1700906,
+        "sha256": "f5ba61f1850d2044106fa3ca2c4a8f0efff98fb2805c8602411d795dd2060b3b"
+      },
+      {
+        "file": "packages/gallery/dist/index.d.ts",
+        "bytes": 4208,
+        "sha256": "0351071f62b30d8db227f0e67bb6e3d1d8d5e72dae7429723455c7fc7c8dfce7"
+      },
+      {
+        "file": "packages/gallery/dist/index.js",
+        "bytes": 345133,
+        "sha256": "c88a18675185023b55f67271a5331854cd2b8b03141a3966de00b5222cc795e4"
+      },
+      {
+        "file": "packages/gallery/dist/previews.d.ts",
+        "bytes": 1692,
+        "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364"
+      },
+      {
+        "file": "packages/gallery/dist/previews.js",
+        "bytes": 190931,
+        "sha256": "3d5b36fcddb1196de0a5966e47a9e143ba4a1d96b873ea61c4c66d418529efb8"
+      },
+      {
+        "file": "packages/javascript/dist/browser.js",
+        "bytes": 4410,
+        "sha256": "abbb48f170cede757b4fa50c986e60f6c34ab827f9c55a1d42db90318511a83e"
+      },
+      {
+        "file": "packages/javascript/dist/catalog-refs-BacOFTcg.d.ts",
+        "bytes": 7729,
+        "sha256": "1a354bba8c6ab8ee04b98659e4291288e8bc3ebfe8d6b554fb62a8e9c4f86595"
+      },
+      {
+        "file": "packages/javascript/dist/catalog-schemas-CiEafJRf.d.ts",
+        "bytes": 1738,
+        "sha256": "73b46fbd317941de642cc7fe5bfd8ee6a582a24416e8623d585659cea6b1392d"
+      },
+      {
+        "file": "packages/javascript/dist/chart-data-oIZQlFGi.d.ts",
+        "bytes": 11234,
+        "sha256": "2ab91c1aaf4e654984b3b25d256827b1f78dc20f47d4e54ab36c82c897b70a22"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-43JWUIGF.js",
+        "bytes": 203,
+        "sha256": "2b229ad6f7d6b7005f4a974dad1538fc515ff0e3ad09bfde1ccfd74be82198f7"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-466I5SCB.js",
+        "bytes": 63844,
+        "sha256": "bf5dfe9d9fda8b9578df7f60e35a827c194f59a8de2783b54697772f2a046d9f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-4DC3EFLX.js",
+        "bytes": 28142,
+        "sha256": "21e79f013d00c7815e2095f0930ee0adc9c2f97f019824ee845d42b8a46b9e19"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-5GNOT73M.js",
+        "bytes": 6461,
+        "sha256": "c8f9be6e232e6842486b37c34951e9dee23f58f5a5a84b943bf54b8a7c4c0168"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-5RZF5INH.js",
+        "bytes": 1396514,
+        "sha256": "6b68034b82f7c486a5d3521b122370e57600015e0274d9d7cee7e1508eb99e22"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-67BR2ZG6.js",
+        "bytes": 15552,
+        "sha256": "544ef025fac4dd3992655eb04d93605edb26985ab6a7163f5c6708e4a7f52e6d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-CLJRDCRL.js",
+        "bytes": 5033,
+        "sha256": "c74efac047363d08a05c2657a0068b0025f106e8ec547bf668338f5645004ae1"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-DGSXVN5C.js",
+        "bytes": 44620,
+        "sha256": "53b2e134b11d3fb8c7ec3e9422e844a2793c2262bf88e24530f567edbca8f027"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-DWVU2DOM.js",
+        "bytes": 10267,
+        "sha256": "5d4e9c3a3252ea6e5faf00ed57fc22911922e9fc8ef049450d4de216463815c7"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-E4B3I63R.js",
+        "bytes": 32288,
+        "sha256": "6f997f41e6f55e06dc03e0ab73f4db05cb1993fcab416e0d538b24bc1b7c44ca"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-EHZSGHEK.js",
+        "bytes": 31311,
+        "sha256": "feddcc2f2fc0428e88ba480ff93d949618a081e19231d8ad34334759e335509b"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-FK5XG742.js",
+        "bytes": 157304,
+        "sha256": "e6c95820b6e93c78a61ca11817144781d996dbd77ca7e8c36f39353f53b88fc3"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-GWUYRLMI.js",
+        "bytes": 3788,
+        "sha256": "e2928553a5391756c74bdccd4a4a85b6229160cf2e007ba06f578fc18ec0152f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-IJXKVM4W.js",
+        "bytes": 10945,
+        "sha256": "675f49f7235e76248dab49255a12e1ecb8c9147e116ea8b7e3230da12038f3e0"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-INIMUBSE.js",
+        "bytes": 286,
+        "sha256": "7e65e95fc14a6d806c7e0335feb620b07034bc137ada002eb5353dc660550494"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-JBARNYFR.js",
+        "bytes": 776,
+        "sha256": "4a48db67e16a9cc9c607a561c0df043f8ffd1b9139b2773401696c1c7a7854bc"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-PRXZD2II.js",
+        "bytes": 463,
+        "sha256": "46ee4d93f7064a623e4e3203658539c4a48bed40a8e3edef9acf32c1d41a1a66"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-Q3GR6VSX.js",
+        "bytes": 494662,
+        "sha256": "0738593caf013b97f31ba26e34a425527e9bc49f3f555b57713c90c51f975a5f"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-QGK2G2OB.js",
+        "bytes": 4798,
+        "sha256": "fe4bab4a30e50af7c22a98762f4d9efffb0dc245848a562c6143ba37dc9d94f5"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-RWPUU322.js",
+        "bytes": 31234,
+        "sha256": "effec410ddb35debd2326ea8885e37cc9c6ac9bc0462e7f62258486244a508a8"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-RYZPBJLB.js",
+        "bytes": 302,
+        "sha256": "648bfbc96d7f5326515b99e812fdfcc90663e86ca78104aa7c2c16946a112747"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-SFREIW6V.js",
+        "bytes": 452189,
+        "sha256": "2c0cd9ebc9101101fb0e9765c089a54ad470fbb2e7c9bee4a90eabc545ade123"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-VE4LOSIR.js",
+        "bytes": 1847504,
+        "sha256": "b6f9bfa9bf062b4f2fbf723dd5dadee17053a29878794efe36a1df940fd719c6"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-W24RLCM7.js",
+        "bytes": 48416,
+        "sha256": "5bd53fa5d612ff629166b135ed96b489e74755d83aa8b34c186749d0ddd1bb7d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-W4DYDRV2.js",
+        "bytes": 6363,
+        "sha256": "a946040e039d89cc24489d2eb4ed06e95e2eb1962a38a2b0913d3124e4167526"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-XGYOSDRJ.js",
+        "bytes": 56369,
+        "sha256": "7c778ca8eeb626ed3308ba474992b1e58946b9e2ff2fc5747fff309d3896c922"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YA5V2OTR.js",
+        "bytes": 72070,
+        "sha256": "a831292fea6a7763f0e8cb87dabcde37f49f78d8fac4818ff7e0bf3ac4374e4d"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YYEIDFA4.js",
+        "bytes": 3008,
+        "sha256": "2b20fdd3033a6eee241441b0bd78324e882c188e26069e9ba44fc0a8972fd3c2"
+      },
+      {
+        "file": "packages/javascript/dist/chunk-YYT6N7AI.js",
+        "bytes": 267856,
+        "sha256": "02f442c34a80d1bf48776bc704e35649c8e366c09f4ee8a47405598407d9eb06"
+      },
+      {
+        "file": "packages/javascript/dist/composition-DUdz50HU.d.ts",
+        "bytes": 480160,
+        "sha256": "727b9d745b247b19d45f22abb645f4b6350f403ea8b5b6efc21d4c9cdccf0287"
+      },
+      {
+        "file": "packages/javascript/dist/composition.d.ts",
+        "bytes": 26135,
+        "sha256": "3902de328ed950db8dc7841b393a4b96b7310981d954aac89b5a80ba8bed915f"
+      },
+      {
+        "file": "packages/javascript/dist/composition.js",
+        "bytes": 13204,
+        "sha256": "86535aae593aedeba7ca3c565a999f8f7e536d4f3c8e92290c9f5769f2b95223"
+      },
+      {
+        "file": "packages/javascript/dist/conversion-jafjSTFK.d.ts",
+        "bytes": 32735,
+        "sha256": "6671a0075f6ea67ea5eb836f8a0d764734256cad941d450f63db5e82fa8e20b8"
+      },
+      {
+        "file": "packages/javascript/dist/conversion-TO25RBRZ.js",
+        "bytes": 835,
+        "sha256": "825208ce2962d93df9006e5652ec60e26bc525df054174d860708db1556a9f0d"
+      },
+      {
+        "file": "packages/javascript/dist/convert.d.ts",
+        "bytes": 15040,
+        "sha256": "895e07c4d39717056ed5a58f8627bd2d5d4273f6d3ffb95c65ac4f5a68302650"
+      },
+      {
+        "file": "packages/javascript/dist/convert.js",
+        "bytes": 61383,
+        "sha256": "257cec5b512265340d1aaa5ad4ce5b07ea3e47d8d93ddf6ef58746e5694f5943"
+      },
+      {
+        "file": "packages/javascript/dist/data.d.ts",
+        "bytes": 2609,
+        "sha256": "163c2fea6fb262a7dc11dd366c55e9d1cb756de413bb1e455ed6cd2839a78118"
+      },
+      {
+        "file": "packages/javascript/dist/data.js",
+        "bytes": 443,
+        "sha256": "d10188522cb0dc8cc94d466c3321a28505b1fb0dfed0396f093e0300ed80200a"
+      },
+      {
+        "file": "packages/javascript/dist/deck-report-C6eBVmWR.d.ts",
+        "bytes": 2414,
+        "sha256": "0b809447714773054b7a5f4855a90f4af504822739eefa2722a135557a3254be"
+      },
+      {
+        "file": "packages/javascript/dist/deck.d.ts",
+        "bytes": 2964,
+        "sha256": "a300d88e989a787489b0d807f7ba1f354614126bf458062969d71349128e24ad"
+      },
+      {
+        "file": "packages/javascript/dist/deck.js",
+        "bytes": 474,
+        "sha256": "ceb6d340af4b3c1bab5516eb0889a60e774f02338e07d98522ff10598abc4e6e"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-engine-eager.js",
+        "bytes": 360,
+        "sha256": "bdda69c4a470ab218074b33edc5c162b40bd1e664e365271faa15fa1747d6fc3"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-engine-lazy.js",
+        "bytes": 430,
+        "sha256": "21c9b614eaecd2abd1792b607ab8c8b19818641d3626d4be20482ebf179c5ce8"
+      },
+      {
+        "file": "packages/javascript/dist/diagram-plantuml-ZZYMHBHZ.js",
+        "bytes": 87,
+        "sha256": "25f6b1cd4ee537704db65ffdc2d1bf09841ac212d6268ddf4d1576e5b2c068a3"
+      },
+      {
+        "file": "packages/javascript/dist/diff.d.ts",
+        "bytes": 5944,
+        "sha256": "9310bd7aaa538370e43d6d4879a7ac0676021df5b8495f61be4be1cf7e3e0d14"
+      },
+      {
+        "file": "packages/javascript/dist/diff.js",
+        "bytes": 271,
+        "sha256": "e999faef6778ac68f15b49f9cfa35004da8b3cab99a20d10e2a5981e9f3a86b2"
+      },
+      {
+        "file": "packages/javascript/dist/docs.d.ts",
+        "bytes": 682,
+        "sha256": "7a3737469cc71abe1ae87c951f46657168a142b88118c97a651ee783903db6f1"
+      },
+      {
+        "file": "packages/javascript/dist/docs.js",
+        "bytes": 1898425,
+        "sha256": "e8e468680c2ba27b92a9fc8b59cc7b15b5dbf3ab9770501ce5f5e73f8acc677a"
+      },
+      {
+        "file": "packages/javascript/dist/examples.d.ts",
+        "bytes": 2126,
+        "sha256": "966cd6a4a161b3822aba2038671e28f207b7d058c3434fc1ed8c10370b5f9164"
+      },
+      {
+        "file": "packages/javascript/dist/examples.js",
+        "bytes": 9329935,
+        "sha256": "69eacf69d3d0b10cb661610b27eb9ee891e6c23da07f21f598daa6b0d9663d9b"
+      },
+      {
+        "file": "packages/javascript/dist/explain-iZeNOUc6.d.ts",
+        "bytes": 3979,
+        "sha256": "805cc0e5e2ea25a92a498a5fb5b0d81379d431f6bcb96bbfe4779a67da8c39bb"
+      },
+      {
+        "file": "packages/javascript/dist/finding-l9dlQ2NF.d.ts",
+        "bytes": 7413,
+        "sha256": "c129e210603a48ad0f305c8600ea99d7b58a324a717d2feb37e00491adafbaf9"
+      },
+      {
+        "file": "packages/javascript/dist/font-policy.d.ts",
+        "bytes": 7904,
+        "sha256": "76ecc80cf6c34910ec09e14b972bdca923d59475e274f6d23d07ca62292b6ff2"
+      },
+      {
+        "file": "packages/javascript/dist/font-policy.js",
+        "bytes": 151,
+        "sha256": "80bafd517897185dc55223e253256ed0fdb59ab37dd37aebf54b6b300002ca7e"
+      },
+      {
+        "file": "packages/javascript/dist/format.d.ts",
+        "bytes": 951,
+        "sha256": "f8e4861f53c2b9156485c893394f8160553f5b77ac59f49ab9485e9ac13b96a5"
+      },
+      {
+        "file": "packages/javascript/dist/format.js",
+        "bytes": 157,
+        "sha256": "c891519be219a52d8efdc4b485fc39f151816c9f18dbda749cdab6e52cd4d1f9"
+      },
+      {
+        "file": "packages/javascript/dist/ids.d.ts",
+        "bytes": 6870,
+        "sha256": "5a4c9c081e42fd9b3edfc790665b9a6a72cee42302ac9886c99ed5a1d254c5b3"
+      },
+      {
+        "file": "packages/javascript/dist/ids.js",
+        "bytes": 339,
+        "sha256": "05d3dd7103cc4d88bb03724a760039a4ec7dfa075b1cede9e3f6c2fbb2a35e32"
+      },
+      {
+        "file": "packages/javascript/dist/index.d.ts",
+        "bytes": 40223,
+        "sha256": "2f0422972c2d657185437842f6304e7bdc098701d0e0a3b0f28042f35199590d"
+      },
+      {
+        "file": "packages/javascript/dist/index.js",
+        "bytes": 5540,
+        "sha256": "111d443185d19af0a49efafdd43b37fc3a9367bf1e6c0c2bc3eb0dd7540f9800"
+      },
+      {
+        "file": "packages/javascript/dist/json-BFSdESOE.d.ts",
+        "bytes": 827,
+        "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78"
+      },
+      {
+        "file": "packages/javascript/dist/markdown.d.ts",
+        "bytes": 5142,
+        "sha256": "8ac232cabb3c29efff76479af1313b2fd9d7158913fa864afa542c291c4aaba7"
+      },
+      {
+        "file": "packages/javascript/dist/markdown.js",
+        "bytes": 390,
+        "sha256": "f9f575b25ca57df8df6da1025591ad171e2bb7df62c1ee24818d58ef600913b0"
+      },
+      {
+        "file": "packages/javascript/dist/node-engine.d.ts",
+        "bytes": 11170,
+        "sha256": "e408cf79f7ab6bf0eebc817820fd36fb4546d030bb7f81b58ca50ee398416b49"
+      },
+      {
+        "file": "packages/javascript/dist/node-engine.js",
+        "bytes": 2915,
+        "sha256": "dd23b428bb20eddfbaac3b0821e7ca82fa14f4728689e379a2e855d0a4d6b222"
+      },
+      {
+        "file": "packages/javascript/dist/pagination-DTzigzsv.d.ts",
+        "bytes": 13756,
+        "sha256": "1319e7f1feb7aac44be07e6c5e6ec835803f40da742b1e10ebfa6356c6812296"
+      },
+      {
+        "file": "packages/javascript/dist/pagination.d.ts",
+        "bytes": 540,
+        "sha256": "b8c1515dbe5ecba0c60636afe046e085b421e9a5137b4bfda71abb3d04f7229d"
+      },
+      {
+        "file": "packages/javascript/dist/pagination.js",
+        "bytes": 282,
+        "sha256": "a99732d38a096e5430c7e99792ae413434f6a7e3fe6cce52d1414e77efcea5c5"
+      },
+      {
+        "file": "packages/javascript/dist/patch.d.ts",
+        "bytes": 10686,
+        "sha256": "676307d0fc64c3e7f8493a77fcb0a85624538c20197d93db8c9fdcbebde911eb"
+      },
+      {
+        "file": "packages/javascript/dist/patch.js",
+        "bytes": 536,
+        "sha256": "8dedb8e0424050c90e3d01fe1356518872ff08b45ac42ef9bed53d6d78cee8f2"
+      },
+      {
+        "file": "packages/javascript/dist/precompiled.d.ts",
+        "bytes": 13,
+        "sha256": "4bd5186f89b856606fcd365feda2e5daa184651613339dcbc297e371b26dd169"
+      },
+      {
+        "file": "packages/javascript/dist/precompiled.js",
+        "bytes": 231,
+        "sha256": "73e1235b786ce79f010de1562bcf88793b7540df398a5c9b827b70be8be37b13"
+      },
+      {
+        "file": "packages/javascript/dist/presentation-D_7a4Mdi.d.ts",
+        "bytes": 294342,
+        "sha256": "b07029efb5aacf82adb4c4372fdb68c1d4f39f322c3d5be8805e19b3ff64cfd1"
+      },
+      {
+        "file": "packages/javascript/dist/repo-readme.d.ts",
+        "bytes": 139,
+        "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+      },
+      {
+        "file": "packages/javascript/dist/repo-readme.js",
+        "bytes": 19933,
+        "sha256": "c0a3317bd4cc0adf95a985fee7c2c937b16ce56406354634ef37e1069896b51c"
+      },
+      {
+        "file": "packages/javascript/dist/schema-engine-ajv.js",
+        "bytes": 1179,
+        "sha256": "9c017392c25c98d36f9708f347c87f8117db62313947ff74ab49c39fe772fd3b"
+      },
+      {
+        "file": "packages/javascript/dist/schema-engine-precompiled.js",
+        "bytes": 131,
+        "sha256": "f62a84ef227c91c41ece856db8f70082e757c22dc50c8268c3eb94f6e24da62f"
+      },
+      {
+        "file": "packages/javascript/dist/schema.d.ts",
+        "bytes": 9555,
+        "sha256": "ba30c3b7dd7d67f38437bb81a5c85fcc14dd23e8b846cef1900732ea05f74191"
+      },
+      {
+        "file": "packages/javascript/dist/schema.js",
+        "bytes": 396,
+        "sha256": "073ebe0192e052557cad7b4a5d37c364dda97e2fdd5d3264737cd397e7dbdc7c"
+      },
+      {
+        "file": "packages/javascript/dist/schemas.d.ts",
+        "bytes": 14589,
+        "sha256": "5b2eebd4d66609c102828f9c23da5f400b3d320c66b28c6f20e9316783656352"
+      },
+      {
+        "file": "packages/javascript/dist/schemas.js",
+        "bytes": 241,
+        "sha256": "41a3498fed74d01b1d7d66cf3545d8ebfc07fff84f29ae096a2c119952bb5238"
+      },
+      {
+        "file": "packages/javascript/dist/shape-catalog.d.ts",
+        "bytes": 4600,
+        "sha256": "27442f3b79ae5979bc0d45450298174d3a352405bdecfcc6025b88a92a667999"
+      },
+      {
+        "file": "packages/javascript/dist/shape-catalog.js",
+        "bytes": 14977,
+        "sha256": "92e97d7c769114b1d00a56908e91cce2eb8be279a3c9bb5ff561320f7086288c"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-eager.js",
+        "bytes": 323,
+        "sha256": "56141eac3331bbd00f6a37c790f4f1b707f4c33ee27c2cc39edd1add2055a788"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-lazy.js",
+        "bytes": 308,
+        "sha256": "50e91c640653fd45a180cf9604329ca4407478b22652e10e2c349f19bcc4bb2c"
+      },
+      {
+        "file": "packages/javascript/dist/shape-engine-module-BK7JNEUV.js",
+        "bytes": 308,
+        "sha256": "9085c04cb0378b469ac753ed79c0288f2d41e99bc2d819cfda9c3f9ecb4c0608"
+      },
+      {
+        "file": "packages/javascript/dist/shape-geometry.d.ts",
+        "bytes": 7580,
+        "sha256": "9b2f42b5e25d44e99a9c1d3080b2b00fa6fb54761713a8aa2d9d5f41ae366bd5"
+      },
+      {
+        "file": "packages/javascript/dist/shape-geometry.js",
+        "bytes": 229,
+        "sha256": "eaef14b1f91d6893844e4c05eade8313f5f7283d332401b76ce24e14f861f24a"
+      },
+      {
+        "file": "packages/javascript/dist/source.d.ts",
+        "bytes": 16598,
+        "sha256": "de235e53f7d2476b7e7a48676e67a3e73c6a9c1dff338aea353383e79361b6cf"
+      },
+      {
+        "file": "packages/javascript/dist/source.js",
+        "bytes": 23245,
+        "sha256": "af9efbf46f53d27994424bdecb00b2087ce91e243dd8eef2f728da109df83678"
+      },
+      {
+        "file": "packages/javascript/dist/spec-files.d.ts",
+        "bytes": 1629,
+        "sha256": "0d11b1d24d33398abf30a63aaf8f85bfaa172e71a16ff40e9aed9d7785ca3276"
+      },
+      {
+        "file": "packages/javascript/dist/spec-files.js",
+        "bytes": 115,
+        "sha256": "36600b703f46fd680b88f63b91bc21f8afe8a401237ffb1848ab29611d9dd7d9"
+      },
+      {
+        "file": "packages/javascript/dist/spec/openapi.yaml",
+        "bytes": 24151,
+        "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79"
+      },
+      {
+        "file": "packages/javascript/dist/spec/README.md",
+        "bytes": 5985,
+        "sha256": "3697401941147266a208924fc0418f8d86b87f9c9866e4a855c984be1d9841b2"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/engine-defaults.json",
+        "bytes": 1341,
+        "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/engine-vocabularies.json",
+        "bytes": 37175,
+        "sha256": "362f598ee3eabb4b76314dceeee2358f46c1589c39e855f2bc7c8fada4fa2ae4"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/font-policy.json",
+        "bytes": 153842,
+        "sha256": "de84a4926670b0423f07e7aea90f7f19e5191a60bd12575f71ebe081b4d0cffd"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/font-policy.schema.json",
+        "bytes": 10295,
+        "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/preset-geometry.json",
+        "bytes": 318701,
+        "sha256": "1b6fdad7c83022df2187e1874313dbfb38db164f5fca7dade842f395aa08b773"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/preset-geometry.schema.json",
+        "bytes": 5271,
+        "sha256": "a9e5928d47f4d13a84150fe0148b0c48c15748ab9802d289710624d824efeb9e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.json",
+        "bytes": 318426,
+        "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+      },
+      {
+        "file": "packages/javascript/dist/spec/reference/symbol-font-encodings.schema.json",
+        "bytes": 7451,
+        "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/audience.schema.json",
+        "bytes": 6240,
+        "sha256": "bdeedc46884063b955a54d61f4647368644cee6eba60f369cf88ac319decc939"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/catalog-index.schema.json",
+        "bytes": 4861,
+        "sha256": "c4249cd003aedb5cf6eb822528ecf9b1fe7853809dd480ae5fcd77beb827221e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/catalog-manifest.schema.json",
+        "bytes": 3787,
+        "sha256": "e2b1df4de499f9f87b12ff67cc8644c25738e2b108e256c9f6890406a567369d"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/chart-type.schema.json",
+        "bytes": 9736,
+        "sha256": "2a602878e5422ea34f49af6f7bd1da3ce8652b60a06bd9fd304c4aa07360b579"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/color-scheme.schema.json",
+        "bytes": 7408,
+        "sha256": "daaef7a0d1ad6e416ab0aa86f10f9b64c47a442a1560c20d17ef4853ec0df6da"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/finding.schema.json",
+        "bytes": 10374,
+        "sha256": "a3d5b2800fbcba3a47acad73b7565fbec1c701657b7ca6d7651e298eee41e31b"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/font-scheme.schema.json",
+        "bytes": 10211,
+        "sha256": "3c576adeac4d5a39238b9e7be4baa4f566b76cd68851fc54f004a52aa0aea707"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/icon-set.schema.json",
+        "bytes": 4896,
+        "sha256": "3008c5d917ff3f0ec73ba46b609aa987a6399e9121f465b32fbf3a4af635c5df"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/language.schema.json",
+        "bytes": 7329,
+        "sha256": "254da39754e210a2bd4d5b0976fa12af3f8fae51f341273544f8c4ff3c1ef7a3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/layout-preview-index.schema.json",
+        "bytes": 2563,
+        "sha256": "96e52b4a3caf390bfc3bf73559cfbc460060243e718b101bdae1d6e1363f31b2"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/layout.schema.json",
+        "bytes": 32341,
+        "sha256": "47084e6b0d622f690149ece4cfda9b809f0383ae37971c433a01fbfcef08daab"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/narrative.schema.json",
+        "bytes": 8651,
+        "sha256": "1a40f4ea8f15477dcae349275bfbb1bfd75b27ec663f16e13cc59abdb2cd28b3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/opf.schema.json",
+        "bytes": 290696,
+        "sha256": "818278d68ee86bf02ebf04967d6470cf30bf26306e9a86a171ad4e5fd21913f3"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/purpose.schema.json",
+        "bytes": 4191,
+        "sha256": "83f4c3a9d577e658d9d6b4a28a4995068de64c9f77d4899c706005eebecc96d9"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/social-platform.schema.json",
+        "bytes": 5925,
+        "sha256": "f94d4789ab382bd9e4aafecd8bc2aeb94375117e82ff507f5d75e04379a11a00"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/theme.schema.json",
+        "bytes": 10948,
+        "sha256": "7ccc6a5d6155ab5946f81464cee44c3cb51fef76be987c4bcc6ea0fb22befa0e"
+      },
+      {
+        "file": "packages/javascript/dist/spec/schemas/tone.schema.json",
+        "bytes": 5750,
+        "sha256": "7fbbf17e0985dff85606bb9ffdf7776d06e0dac9668f95ac994eeb826808e22b"
+      },
+      {
+        "file": "packages/javascript/dist/symbol-font-encodings.d.ts",
+        "bytes": 5692,
+        "sha256": "2b80f418cd25ce395a5d87a0d40aa40facf9607bf41123171553f19122fde207"
+      },
+      {
+        "file": "packages/javascript/dist/symbol-font-encodings.js",
+        "bytes": 424031,
+        "sha256": "46bc0d34dc11b68a694055aa8b06899a941cd0331fced2fa56338993e629fb75"
+      },
+      {
+        "file": "packages/javascript/dist/types.d.ts",
+        "bytes": 76101,
+        "sha256": "8079eb2d4fb6f967141da9c11b6c59dcc3dffb476b40de205e94c7d2bf896cf9"
+      },
+      {
+        "file": "packages/javascript/dist/types.js",
+        "bytes": 1,
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "file": "packages/javascript/dist/validation-types-BUiwvmcn.d.ts",
+        "bytes": 15510,
+        "sha256": "3b62f19e620dad3f9065e2c1d071b472e6e14d68ed7c9eec2a5b751f7f1a51dd"
+      },
+      {
+        "file": "packages/javascript/dist/validator.d.ts",
+        "bytes": 5119,
+        "sha256": "ceaff980232411d2d44768fbb8d441b4a9218cca85f4c54465626460354d6208"
+      },
+      {
+        "file": "packages/javascript/dist/validator.js",
+        "bytes": 368,
+        "sha256": "2d855b2e896e82bebc8984254993532581c5174c2ad9dd57cc0cf0e25c70433f"
+      },
+      {
+        "file": "packages/javascript/dist/yaml.d.ts",
+        "bytes": 6023,
+        "sha256": "9f61f71cb4a4b0095e3dd4b6aef9b8eb0c673a520fd09915229ca5387ffe93b3"
+      },
+      {
+        "file": "packages/javascript/dist/yaml.js",
+        "bytes": 390,
+        "sha256": "859b00ff312520d7cae3e16eeb536280f8b1771caff1c4df40b66ad078f85251"
+      },
+      {
+        "file": "packages/render/dist/annotations.js",
+        "bytes": 4097,
+        "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+      },
+      {
+        "file": "packages/render/dist/chart-options.js",
+        "bytes": 10447,
+        "sha256": "cfe252a79fcda709bbbcb41cf988f8fc2ccd324cb5afcab6ecd167268e1d6780"
+      },
+      {
+        "file": "packages/render/dist/charts.js",
+        "bytes": 121430,
+        "sha256": "93caff20aa041241e1e34fab81202eae9abc72a126dbdfabb1978936509a1d0b"
+      },
+      {
+        "file": "packages/render/dist/color-fonts.js",
+        "bytes": 2435,
+        "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+      },
+      {
+        "file": "packages/render/dist/converters.js",
+        "bytes": 2679,
+        "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+      },
+      {
+        "file": "packages/render/dist/deck-runtime.js",
+        "bytes": 23518,
+        "sha256": "f813c3b2a1d5ca7b3f108b1793955008a01e45fc787a9a02b10b065206f12441"
+      },
+      {
+        "file": "packages/render/dist/drawn-faces.js",
+        "bytes": 2865,
+        "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+      },
+      {
+        "file": "packages/render/dist/effects.js",
+        "bytes": 18498,
+        "sha256": "8e36bbdb90c128f81875046f76e109b4ac7d6aebcb664360085a374540491453"
+      },
+      {
+        "file": "packages/render/dist/element-define.d.ts",
+        "bytes": 11,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      {
+        "file": "packages/render/dist/element-define.js",
+        "bytes": 314,
+        "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+      },
+      {
+        "file": "packages/render/dist/element.d.ts",
+        "bytes": 5683,
+        "sha256": "81cc9c65c1fe092c497b1debc86e00856a982b95ced661df4a8002e864c93153"
+      },
+      {
+        "file": "packages/render/dist/element.js",
+        "bytes": 38903,
+        "sha256": "b279575209023ed10aea0731d2ff5cab82164465af2c2f5ed7f126908d55e37b"
+      },
+      {
+        "file": "packages/render/dist/export-browser.d.ts",
+        "bytes": 3787,
+        "sha256": "f8bfd3a7bc4e44eea75ed3cdc610b63e246472c931797f0b638264fc15f36c40"
+      },
+      {
+        "file": "packages/render/dist/export-browser.js",
+        "bytes": 15104,
+        "sha256": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8"
+      },
+      {
+        "file": "packages/render/dist/font-compatibility.js",
+        "bytes": 9574,
+        "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+      },
+      {
+        "file": "packages/render/dist/font-fstype.js",
+        "bytes": 3542,
+        "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+      },
+      {
+        "file": "packages/render/dist/font-manifest.js",
+        "bytes": 110526,
+        "sha256": "aca1e2890753d57b75c8661c188cad9595d296151749b4e4e2ae3193d1f0bb9b"
+      },
+      {
+        "file": "packages/render/dist/font-registry.js",
+        "bytes": 33455,
+        "sha256": "0402fa8c0373406153e284f1955f6f1a91f7aeeac420ef385792300d89e7aab0"
+      },
+      {
+        "file": "packages/render/dist/font-subset.js",
+        "bytes": 9956,
+        "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+      },
+      {
+        "file": "packages/render/dist/fonts-browser.d.ts",
+        "bytes": 14599,
+        "sha256": "57ec7eb44de4054cfba02409a7590c3a8b12517b127a93382b2d403fb45b10d0"
+      },
+      {
+        "file": "packages/render/dist/fonts-browser.js",
+        "bytes": 25371,
+        "sha256": "7c96c843ba87fe7db8943455b0d1dcbce8c35e54ad12f11dd6fd5142a20d4917"
+      },
+      {
+        "file": "packages/render/dist/fonts-node.d.ts",
+        "bytes": 8629,
+        "sha256": "2c80c2c811ce76a8a4922bd26c1b76272e3da4eadebbf00958f6a3c7180d5faa"
+      },
+      {
+        "file": "packages/render/dist/fonts-node.js",
+        "bytes": 24759,
+        "sha256": "9e99ae8aa21e5927bc9ede011fb3bb7dbbb43a049372b6f4d836c85c8e4ed049"
+      },
+      {
+        "file": "packages/render/dist/fonts.d.ts",
+        "bytes": 14914,
+        "sha256": "8b5d2cb3922e7f07f2b285cfae7806fe32299c467843ae2cc801746e2456889f"
+      },
+      {
+        "file": "packages/render/dist/fonts.js",
+        "bytes": 1409,
+        "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+      },
+      {
+        "file": "packages/render/dist/hb-shape.js",
+        "bytes": 7333,
+        "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+      },
+      {
+        "file": "packages/render/dist/index.d.ts",
+        "bytes": 22154,
+        "sha256": "5bb6c4f72b1110324fe9aeeaf745b244de8dbca36b8d7edd673fd601940593c6"
+      },
+      {
+        "file": "packages/render/dist/index.js",
+        "bytes": 237,
+        "sha256": "b49c1708765dc46fb2a7d66b2dfbcc9b1b677c03d3cba16af102e9ae98cc34e4"
+      },
+      {
+        "file": "packages/render/dist/lazy-font-list.js",
+        "bytes": 4834,
+        "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+      },
+      {
+        "file": "packages/render/dist/lazy-fonts.js",
+        "bytes": 22706,
+        "sha256": "5ff9ca5aa9c50a2f464edd49e47b7b00f24015201ec69465a8336d4ef3e2080d"
+      },
+      {
+        "file": "packages/render/dist/measure-pictures-node.js",
+        "bytes": 1311,
+        "sha256": "2f68f6940bac8a69ef2c154d2b33e73d70d186a04ea8f033447c20e7d7b83052"
+      },
+      {
+        "file": "packages/render/dist/measure-pictures.js",
+        "bytes": 10875,
+        "sha256": "2a61cbaaf490e040aede2ad0d795951c3c5cb91ea683f11e168a46317168474f"
+      },
+      {
+        "file": "packages/render/dist/node-resolve.js",
+        "bytes": 1796,
+        "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+      },
+      {
+        "file": "packages/render/dist/pdf-fonts.js",
+        "bytes": 16436,
+        "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+      },
+      {
+        "file": "packages/render/dist/pdf-style.js",
+        "bytes": 26153,
+        "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+      },
+      {
+        "file": "packages/render/dist/pdf-subset.js",
+        "bytes": 8232,
+        "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+      },
+      {
+        "file": "packages/render/dist/pdf-text.js",
+        "bytes": 17334,
+        "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+      },
+      {
+        "file": "packages/render/dist/pdf-vector.js",
+        "bytes": 72285,
+        "sha256": "a3b101658fb84a009beab2b7dbe02a115c6a22934a0a2569cdb52a883a8385df"
+      },
+      {
+        "file": "packages/render/dist/pdf-writer.js",
+        "bytes": 6009,
+        "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+      },
+      {
+        "file": "packages/render/dist/pdf-xml.js",
+        "bytes": 3847,
+        "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+      },
+      {
+        "file": "packages/render/dist/pdf.d.ts",
+        "bytes": 112,
+        "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1"
+      },
+      {
+        "file": "packages/render/dist/pdf.js",
+        "bytes": 448,
+        "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+      },
+      {
+        "file": "packages/render/dist/player.d.ts",
+        "bytes": 5783,
+        "sha256": "e17b92ca0c538fcfc340c426086da5edf803e4e36032304f9f1bf0d3f993d6d3"
+      },
+      {
+        "file": "packages/render/dist/player.js",
+        "bytes": 42455,
+        "sha256": "a4ba133549e24f7e299056b63dc46131348dccbff69f4b82bc1f5c4f1b576c68"
+      },
+      {
+        "file": "packages/render/dist/png.d.ts",
+        "bytes": 84,
+        "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b"
+      },
+      {
+        "file": "packages/render/dist/png.js",
+        "bytes": 345,
+        "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-cli.js",
+        "bytes": 2219,
+        "sha256": "53f540f653d9389074f4a21f0a5897b339be8209a4a8a5b2f6823603b012625c"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-node.d.ts",
+        "bytes": 1848,
+        "sha256": "8c4696cb164b1010a27e8a8e976c538ab19b4de088076d92683df30c92934524"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts-node.js",
+        "bytes": 7956,
+        "sha256": "e37634fdcd22384d167fd23b25e7573887ef2b297220b61124a9e9c38ff0799c"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts.d.ts",
+        "bytes": 1569,
+        "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572"
+      },
+      {
+        "file": "packages/render/dist/preview-fonts.js",
+        "bytes": 4587,
+        "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+      },
+      {
+        "file": "packages/render/dist/raster-images.js",
+        "bytes": 5367,
+        "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+      },
+      {
+        "file": "packages/render/dist/raster-text.js",
+        "bytes": 34635,
+        "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+      },
+      {
+        "file": "packages/render/dist/raster.js",
+        "bytes": 12058,
+        "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+      },
+      {
+        "file": "packages/render/dist/script-font-pack.js",
+        "bytes": 20650,
+        "sha256": "c3d8016bd2632e40707fbc1c7aa3098d946c463fe74b16a4404d1eb2e21c5d15"
+      },
+      {
+        "file": "packages/render/dist/script-fonts.js",
+        "bytes": 51715,
+        "sha256": "f625910027dedbfacef97d86e138fc9eddbeacaf871b015789d4f87306610a46"
+      },
+      {
+        "file": "packages/render/dist/sha256.js",
+        "bytes": 3035,
+        "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+      },
+      {
+        "file": "packages/render/dist/shapes.js",
+        "bytes": 25718,
+        "sha256": "f3190b2c8c778e576c6c83ad4a388d284cfc326a368e807b88de1e7546860267"
+      },
+      {
+        "file": "packages/render/dist/slide-sources.js",
+        "bytes": 2976,
+        "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+      },
+      {
+        "file": "packages/render/dist/svg-internals.js",
+        "bytes": 248,
+        "sha256": "9a99be96460e6b3ed04d1c37b9ca001a67eb705f3e6f115f657cd115d18c35cc"
+      },
+      {
+        "file": "packages/render/dist/svg.d.ts",
+        "bytes": 15054,
+        "sha256": "198cd8cea7f32d54d2a90ead4c66e87cd34fd9083f10cfe80cdccc9652c5b59e"
+      },
+      {
+        "file": "packages/render/dist/svg.js",
+        "bytes": 180648,
+        "sha256": "5ce6c0471e4c38c6aea60e3ea01ff470c2d8e32065b9847190b609b713e991f7"
+      },
+      {
+        "file": "packages/render/dist/symbol-fonts.js",
+        "bytes": 3986,
+        "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+      },
+      {
+        "file": "packages/render/dist/text-paths.js",
+        "bytes": 20837,
+        "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+      }
+    ],
+    "stableDuringExecution": true
+  },
+  "publishedFontVersion": "0.33.0",
+  "sourceEvidenceCommit": "29ba0ae536b019ada68623d44850d6cb3b7a6350",
+  "imagesRendered": 9,
+  "copiedHistoricalImages": 4,
+  "pngOutputFiles": 13,
+  "immutableInputsMutated": 0,
+  "allFresh033PngsEqualImmutableAfter02": true,
+  "comparison": {
+    "file": "comparison.png",
+    "sha256": "a70162f5cbe72fa8881821cbecc0db27f367c50b7949171ba65256434e5a0586",
+    "width": 1936,
+    "height": 1578
+  },
+  "rows": [
+    {
+      "deck": "batch-11",
+      "id": "s13",
+      "ordinal": 13,
+      "control": false,
+      "sourceSha256": "81b69db2d6e1b01d062150a582fc89fd311c30f2146b74caed2e3aae8edf483f",
+      "authored": {
+        "title": "Decision Options",
+        "composition": {
+          "mode": "grid"
+        },
+        "blocks": [
+          {
+            "metric": {
+              "value": "18%",
+              "label": "Primary signal",
+              "description": "Combine video proof and business case in a compact sales deck",
+              "trend": "up"
+            }
+          },
+          {
+            "chart": {
+              "type": "filled-radar",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    24,
+                    21
+                  ],
+                  [
+                    "Q2",
+                    28,
+                    23
+                  ],
+                  [
+                    "Q3",
+                    31,
+                    25
+                  ],
+                  [
+                    "Q4",
+                    35,
+                    27
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "table": {
+              "columns": [
+                "Workstream",
+                "Owner",
+                "Status",
+                "Decision"
+              ],
+              "rows": [
+                [
+                  "Student affairs",
+                  "Program lead",
+                  "On track",
+                  "Continue"
+                ],
+                [
+                  "Data and reporting",
+                  "Analytics",
+                  "Watch",
+                  "Tighten metric definitions"
+                ],
+                [
+                  "Field adoption",
+                  "Operations",
+                  "At risk",
+                  "Add weekly office hours"
+                ]
+              ]
+            }
+          },
+          {
+            "quote": {
+              "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+              "attribution": "Investor relations working group",
+              "source": "Stakeholder interview"
+            }
+          }
+        ],
+        "id": "s13"
+      },
+      "deckDesign": {
+        "background": "light1"
+      },
+      "conversion": {
+        "format": "png",
+        "scale": 0.5,
+        "date": "2026-11-08",
+        "paginate": false,
+        "includeHidden": true,
+        "slides": "13",
+        "fontHandle": "one genuine published033 office/visual/auto handle per deck, same object for both core versions, measurement and rendering",
+        "catalogs": "respective published033 and built current034 Gallery"
+      },
+      "before": {
+        "sha256": "cc8ab4c6adaa4e35c1d41bd8c33bf4b4a740df8de2a8351d44557e1a9027e578",
+        "bytes": 33875,
+        "matchesImmutableAfter02": true,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/8/blocks/3/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/8/blocks/3/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 8,
+            "slideId": "s09"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/30/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/30/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 30,
+            "slideId": "s31"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/39/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/39/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 39,
+            "slideId": "s40"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/43/blocks/8/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/43/blocks/8/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 43,
+            "slideId": "s44"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/45/blocks/1/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/45/blocks/1/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 45,
+            "slideId": "s46"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {
+            "mode": "grid"
+          },
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.12.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.12.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Decision Options"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.12.blocks.0.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 169.39
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.12.blocks.0.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 76,
+              "lineHeight": 92.72,
+              "lines": [
+                "18%"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.12.blocks.1.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 652,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 169.39
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.12.blocks.1.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.12.blocks.2.table",
+              "field": "table",
+              "type": "table",
+              "box": {
+                "x": 57.6,
+                "y": 340.87,
+                "width": 1164.8,
+                "height": 183.75
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.12.blocks.2.table",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.12.blocks.3.quote",
+              "field": "quote",
+              "type": "quote",
+              "box": {
+                "x": 57.6,
+                "y": 548.62,
+                "width": 1164.8,
+                "height": 113.78
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.12.blocks.3.quote.text",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 32,
+              "lineHeight": 39.04,
+              "lines": [
+                "“The path is workable if we keep the metric simple and the decision owner visible.”"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "after": {
+        "sha256": "cc8ab4c6adaa4e35c1d41bd8c33bf4b4a740df8de2a8351d44557e1a9027e578",
+        "bytes": 33875,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/8/blocks/3/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/8/blocks/3/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 8,
+            "slideId": "s09"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/30/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/30/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 30,
+            "slideId": "s31"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/39/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/39/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 39,
+            "slideId": "s40"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/43/blocks/8/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/43/blocks/8/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 43,
+            "slideId": "s44"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/45/blocks/1/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/45/blocks/1/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 45,
+            "slideId": "s46"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {
+            "mode": "grid"
+          },
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.12.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.12.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Decision Options"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.12.blocks.0.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 169.39
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.12.blocks.0.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 76,
+              "lineHeight": 92.72,
+              "lines": [
+                "18%"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.12.blocks.1.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 652,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 169.39
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.12.blocks.1.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.12.blocks.2.table",
+              "field": "table",
+              "type": "table",
+              "box": {
+                "x": 57.6,
+                "y": 340.87,
+                "width": 1164.8,
+                "height": 183.75
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.12.blocks.2.table",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.12.blocks.3.quote",
+              "field": "quote",
+              "type": "quote",
+              "box": {
+                "x": 57.6,
+                "y": 548.62,
+                "width": 1164.8,
+                "height": 113.78
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.12.blocks.3.quote.text",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 32,
+              "lineHeight": 39.04,
+              "lines": [
+                "“The path is workable if we keep the metric simple and the decision owner visible.”"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "claude": {
+        "asset": "batch-11/claude/s13.png",
+        "sha256": "e2fa6d8846987092f20d60aefd901ba152ea2a051ae681359cc9e0fda943bc69",
+        "bytes": 80318
+      },
+      "sameInputObject": true,
+      "sourceUnchanged": true
+    },
+    {
+      "deck": "batch-12",
+      "id": "s19",
+      "ordinal": 19,
+      "control": false,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "title": "The Ask",
+        "blocks": [
+          {
+            "metric": {
+              "value": "11 days",
+              "label": "Primary signal",
+              "description": "Shorten recovery time after weather-driven network disruption",
+              "trend": "up"
+            }
+          },
+          {
+            "chart": {
+              "type": "doughnut",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    23,
+                    20
+                  ],
+                  [
+                    "Q2",
+                    27,
+                    22
+                  ],
+                  [
+                    "Q3",
+                    30,
+                    24
+                  ],
+                  [
+                    "Q4",
+                    34,
+                    26
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "table": {
+              "columns": [
+                "Workstream",
+                "Owner",
+                "Status",
+                "Decision"
+              ],
+              "rows": [
+                [
+                  "Advancement",
+                  "Program lead",
+                  "At risk",
+                  "Continue"
+                ],
+                [
+                  "Data and reporting",
+                  "Analytics",
+                  "On track",
+                  "Tighten metric definitions"
+                ],
+                [
+                  "Field adoption",
+                  "Operations",
+                  "Watch",
+                  "Add weekly office hours"
+                ]
+              ]
+            }
+          },
+          {
+            "quote": {
+              "text": "The path is workable if we keep the metric simple and the decision owner visible.",
+              "attribution": "Corporate strategy working group",
+              "source": "Stakeholder interview"
+            }
+          }
+        ],
+        "id": "s19"
+      },
+      "deckDesign": {
+        "background": "light1"
+      },
+      "conversion": {
+        "format": "png",
+        "scale": 0.5,
+        "date": "2026-11-08",
+        "paginate": false,
+        "includeHidden": true,
+        "slides": "19",
+        "fontHandle": "one genuine published033 office/visual/auto handle per deck, same object for both core versions, measurement and rendering",
+        "catalogs": "respective published033 and built current034 Gallery"
+      },
+      "before": {
+        "sha256": "69bef24aca9cb55820597c7ca4be550630efb431ad99d0afe54a31a25f482b9a",
+        "bytes": 36970,
+        "matchesImmutableAfter02": true,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 399.14
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.18.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.18.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "The Ask"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.18.blocks.0.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.18.blocks.0.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 76,
+              "lineHeight": 92.72,
+              "lines": [
+                "11 days"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.18.blocks.1.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 652,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.18.blocks.1.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.18.blocks.2.table",
+              "field": "table",
+              "type": "table",
+              "box": {
+                "x": 57.6,
+                "y": 359.05,
+                "width": 1164.8,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.18.blocks.2.table",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.18.blocks.3.quote",
+              "field": "quote",
+              "type": "quote",
+              "box": {
+                "x": 57.6,
+                "y": 570.62,
+                "width": 1164.8,
+                "height": 91.78
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.18.blocks.3.quote.text",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fontSize": 32,
+              "lineHeight": 39.04,
+              "lines": [
+                "“The path is workable if we keep the metric simple and the decision owner visible.”"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "after": {
+        "sha256": "69bef24aca9cb55820597c7ca4be550630efb431ad99d0afe54a31a25f482b9a",
+        "bytes": 36970,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 399.14
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.18.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.18.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "The Ask"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.18.blocks.0.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.18.blocks.0.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 76,
+              "lineHeight": 92.72,
+              "lines": [
+                "11 days"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.18.blocks.1.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 652,
+                "y": 147.48,
+                "width": 570.4,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.18.blocks.1.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.18.blocks.2.table",
+              "field": "table",
+              "type": "table",
+              "box": {
+                "x": 57.6,
+                "y": 359.05,
+                "width": 1164.8,
+                "height": 187.57
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.18.blocks.2.table",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.18.blocks.3.quote",
+              "field": "quote",
+              "type": "quote",
+              "box": {
+                "x": 57.6,
+                "y": 570.62,
+                "width": 1164.8,
+                "height": 91.78
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.18.blocks.3.quote.text",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": false,
+                  "italic": false
+                }
+              },
+              "fontSize": 32,
+              "lineHeight": 39.04,
+              "lines": [
+                "“The path is workable if we keep the metric simple and the decision owner visible.”"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "claude": {
+        "asset": "batch-12/claude/s19.png",
+        "sha256": "d6af221ad8d07a3238a28ca42633eb868faa899904ee3832bbdc0dadd228d9d4",
+        "bytes": 76482
+      },
+      "sameInputObject": true,
+      "sourceUnchanged": true
+    },
+    {
+      "deck": "batch-12",
+      "id": "s03",
+      "ordinal": 3,
+      "control": true,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "layout": "dashboard",
+        "title": "Signal Trend",
+        "blocks": [
+          {
+            "chart": {
+              "type": "radar",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    28,
+                    25
+                  ],
+                  [
+                    "Q2",
+                    32,
+                    27
+                  ],
+                  [
+                    "Q3",
+                    35,
+                    29
+                  ],
+                  [
+                    "Q4",
+                    39,
+                    31
+                  ]
+                ]
+              }
+            }
+          }
+        ],
+        "id": "s03"
+      },
+      "deckDesign": {
+        "background": "light1"
+      },
+      "conversion": {
+        "format": "png",
+        "scale": 0.5,
+        "date": "2026-11-08",
+        "paginate": false,
+        "includeHidden": true,
+        "slides": "3",
+        "fontHandle": "one genuine published033 office/visual/auto handle per deck, same object for both core versions, measurement and rendering",
+        "catalogs": "respective published033 and built current034 Gallery"
+      },
+      "before": {
+        "sha256": "e2c3d7f98b4ae223c0c807be04ae12b494758ef88dd0a293036e1fd6d830e972",
+        "bytes": 16820,
+        "matchesImmutableAfter02": true,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.2.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.2.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Signal Trend"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.2.blocks.0.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 1164.8,
+                "height": 514.92
+              },
+              "region": "charts",
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.2.blocks.0.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "after": {
+        "sha256": "e2c3d7f98b4ae223c0c807be04ae12b494758ef88dd0a293036e1fd6d830e972",
+        "bytes": 16820,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.2.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.2.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Signal Trend"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.2.blocks.0.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 1164.8,
+                "height": 514.92
+              },
+              "region": "charts",
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.2.blocks.0.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "claude": {
+        "asset": "batch-12/claude/s03.png",
+        "sha256": "7a90d123fd42103460c6c11dbf3e1def54678c45f494dbba1f763fcacc5af690",
+        "bytes": 35629
+      },
+      "sameInputObject": true,
+      "sourceUnchanged": true
+    },
+    {
+      "deck": "batch-12",
+      "id": "s30",
+      "ordinal": 30,
+      "control": true,
+      "sourceSha256": "19673c987216c361b756d5f7c524465706e2aec098df1b89898157d526012b9a",
+      "authored": {
+        "layout": "dashboard",
+        "title": "Decision Options",
+        "blocks": [
+          {
+            "chart": {
+              "type": "doughnut",
+              "data": {
+                "columns": [
+                  "Quarter",
+                  "Current",
+                  "Baseline"
+                ],
+                "rows": [
+                  [
+                    "Q1",
+                    20,
+                    17
+                  ],
+                  [
+                    "Q2",
+                    24,
+                    19
+                  ],
+                  [
+                    "Q3",
+                    27,
+                    21
+                  ],
+                  [
+                    "Q4",
+                    31,
+                    23
+                  ]
+                ]
+              }
+            }
+          },
+          {
+            "metric": {
+              "value": 11,
+              "unit": "days",
+              "delta": "-3 days",
+              "trend": "down",
+              "label": "Illustrative result"
+            }
+          }
+        ],
+        "id": "s30"
+      },
+      "deckDesign": {
+        "background": "light1"
+      },
+      "conversion": {
+        "format": "png",
+        "scale": 0.5,
+        "date": "2026-11-08",
+        "paginate": false,
+        "includeHidden": true,
+        "slides": "30",
+        "fontHandle": "one genuine published033 office/visual/auto handle per deck, same object for both core versions, measurement and rendering",
+        "catalogs": "respective published033 and built current034 Gallery"
+      },
+      "before": {
+        "sha256": "58504746c7d2d9b1644cf51eb2edbc5dbee72a2cb97011eae26e580ac9a116a2",
+        "bytes": 26306,
+        "matchesImmutableAfter02": true,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.29.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.29.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Decision Options"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.29.blocks.0.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 764.336,
+                "height": 514.92
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.29.blocks.0.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.29.blocks.1.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 845.936,
+                "y": 147.48,
+                "width": 376.464,
+                "height": 514.92
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.29.blocks.1.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 160,
+              "lineHeight": 195.2,
+              "lines": [
+                "11"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "after": {
+        "sha256": "58504746c7d2d9b1644cf51eb2edbc5dbee72a2cb97011eae26e580ac9a116a2",
+        "bytes": 26306,
+        "findings": [
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/16/blocks/0/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/16/blocks/0/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 16,
+            "slideId": "s17"
+          },
+          {
+            "ruleId": "opf/numbering-start-ignored",
+            "severity": "warning",
+            "category": "format",
+            "scope": "document",
+            "path": "/slides/34/blocks/2/items",
+            "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+            "help": "Add a 'numbering' field to the payload, or remove 'start'.",
+            "definition": "packages/javascript/src/schema-check.ts",
+            "lookup": [
+              "opf",
+              "schema",
+              "presentation",
+              ""
+            ],
+            "validation": {
+              "path": "/slides/34/blocks/2/items",
+              "message": "'start' on items entries has no effect without a 'numbering' field on the payload",
+              "keyword": "opf",
+              "schemaPath": "#/x-opf-semantics",
+              "params": {
+                "code": "numbering-start-ignored"
+              }
+            },
+            "slide": 34,
+            "slideId": "s35"
+          }
+        ],
+        "geometry": {
+          "width": 1280,
+          "height": 720,
+          "composition": {},
+          "contentBox": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          },
+          "diagnostics": [],
+          "items": [
+            {
+              "path": "slides.29.title",
+              "field": "title",
+              "type": "text",
+              "box": {
+                "x": 57.6,
+                "y": 57.6,
+                "width": 1164.8,
+                "height": 65.88
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "path": "slides.29.title",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 54,
+              "lineHeight": 65.88,
+              "lines": [
+                "Decision Options"
+              ],
+              "overflow": false
+            },
+            {
+              "path": "slides.29.blocks.0.chart",
+              "field": "chart",
+              "type": "chart",
+              "box": {
+                "x": 57.6,
+                "y": 147.48,
+                "width": 764.336,
+                "height": 514.92
+              },
+              "textStyle": {
+                "fontFamily": "Intos",
+                "fontWeight": 400,
+                "path": "slides.29.blocks.0.chart",
+                "italic": false,
+                "fontFace": {
+                  "family": "Intos",
+                  "bold": false,
+                  "italic": false
+                }
+              }
+            },
+            {
+              "path": "slides.29.blocks.1.metric",
+              "field": "metric",
+              "type": "metric",
+              "box": {
+                "x": 845.936,
+                "y": 147.48,
+                "width": 376.464,
+                "height": 514.92
+              },
+              "textStyle": {
+                "fontFamily": "Intos Display",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.29.blocks.1.metric.value",
+                "fontFace": {
+                  "family": "Intos Display",
+                  "bold": true,
+                  "italic": false
+                }
+              },
+              "fontSize": 160,
+              "lineHeight": 195.2,
+              "lines": [
+                "11"
+              ],
+              "overflow": false
+            }
+          ]
+        },
+        "selectedFindings": []
+      },
+      "claude": {
+        "asset": "batch-12/claude/s30.png",
+        "sha256": "9d3516acc371b05d771de679169c9691d7881a49e276d5231c02ef176cc90cdd",
+        "bytes": 50466
+      },
+      "sameInputObject": true,
+      "sourceUnchanged": true
+    }
+  ],
+  "findingsScope": "Full input format/reference findings retain unrelated source numbering warnings; selectedFindings binds explicit slideId first, else actual JSON-pointer index. Public convert returns files/findings, not font-summary metadata; the same loaded Fonts object is supplied explicitly and fresh033 images match immutable default-policy outputs."
+}
