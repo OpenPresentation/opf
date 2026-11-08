@@ -320,29 +320,53 @@ function Apply-FurnitureAction($Presentation,$Action,[int]$Number) {
         'duplicate-shape' { Assert-ShapeNameAvailable $slide $Action.newName $prefix; $range=Invoke-FurnitureCom "$prefix.duplicate" { return ,$shape.Duplicate() }; $count=Invoke-FurnitureCom "$prefix.duplicateRange.count.get" { $range.Count }; if($count -ne 1) { throw "$prefix expected one duplicated shape; observed $count" }; $duplicate=Invoke-FurnitureCom "$prefix.duplicateRange.item-1.get" { $range.Item(1) }; Invoke-FurnitureCom "$prefix.duplicate.name.set" { $duplicate.Name=$Action.newName } }
     }
 }
+function Assert-FurnitureOfficeIdle {
+    if(Get-Process -Name POWERPNT -ErrorAction SilentlyContinue) { throw 'POWERPNT.EXE is already running; do not attach to another session' }
+}
+function Stop-FurnitureLifecycle([string]$Message) {
+    $script:officeOperationsStopped=$true; $script:cleanupConfirmed=$false
+    throw $Message
+}
+function Open-OwnedFurniture($Application,[string]$Path,[string]$Phase) {
+    Assert-PresentationNotOpen $Application $Path "$Phase.preflight"
+    $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$Path; Write-FurnitureReport
+    $presentations=Invoke-FurnitureCom "$Phase.presentations.get" { return ,$Application.Presentations }
+    $script:presentation=Invoke-FurnitureCom "$Phase.presentation.open" { $presentations.Open($Path,-1,0,-1) }
+    $actual=Invoke-FurnitureCom "$Phase.presentation.fullName.get" { $script:presentation.FullName }
+    if($actual -ine $Path) { Stop-FurnitureLifecycle "Opened presentation path differs from exact owned path: $actual" }
+    $readonly=Invoke-FurnitureCom "$Phase.presentation.readOnly.get" { $script:presentation.ReadOnly }
+    if($readonly -ne -1) { Stop-FurnitureLifecycle 'Owned presentation did not open read-only' }
+}
+function Save-OwnedFurnitureCopy([string]$ExpectedPath,[string]$CopyPath) {
+    if($CopyPath -ieq $ExpectedPath -or (Test-Path -LiteralPath $CopyPath)) { Stop-FurnitureLifecycle 'SaveCopyAs requires a fresh derivative separate from the owned input' }
+    $actual=Invoke-FurnitureCom 'edited.presentation.fullName.get' { $script:presentation.FullName }
+    if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle 'Refusing to copy a presentation whose exact identity is not owned' }
+    Invoke-FurnitureCom 'edited.presentation.saveCopyAs' { $script:presentation.SaveCopyAs($CopyPath,24) }
+    $after=Invoke-FurnitureCom 'edited.presentation.fullName.afterCopy.get' { $script:presentation.FullName }
+    if($after -ine $ExpectedPath) { Stop-FurnitureLifecycle 'SaveCopyAs changed the owned input identity' }
+}
 function Close-OwnedFurniture([string]$Phase,[string]$ExpectedPath) {
-    $actual=Invoke-FurnitureCom "$Phase.fullName.get" { $script:presentation.FullName }; if($actual -ine $ExpectedPath) { throw "Refusing to close a presentation whose exact saved path is not owned: $actual" }
+    $actual=Invoke-FurnitureCom "$Phase.fullName.get" { $script:presentation.FullName }; if($actual -ine $ExpectedPath -or $script:ownedPresentationPath -ine $ExpectedPath) { Stop-FurnitureLifecycle "Refusing to close a presentation whose exact path is not owned: $actual" }
+    # SaveCopyAs preserved the edited derivative. Discard only this verified owned in-memory state without a save prompt.
+    Invoke-FurnitureCom "$Phase.discardChanges" { $script:presentation.Saved=-1 }
     Invoke-FurnitureCom "$Phase.close" { $script:presentation.Close() }; $script:presentation=$null; $script:ownedPresentationPath=$null; $script:cleanupConfirmed=$true; Write-FurnitureStage "$Phase.cleanup" 'success'
 }
 
 Write-FurnitureReport; Write-FurnitureStage 'worker.initialize' 'success'
 try {
+    Assert-FurnitureOfficeIdle
     $app=Invoke-FurnitureCom 'application.create' { New-Object -ComObject PowerPoint.Application }
     $officeVersion=Invoke-FurnitureCom 'application.version.get' { $app.Version }; $officeDirectory=Invoke-FurnitureCom 'application.path.get' { $app.Path }; $officeExecutable=Join-Path $officeDirectory 'POWERPNT.EXE'
     $report.environment.powerPointVersion=$officeVersion; $report.environment.powerPointExecutable=$officeExecutable; $report.environment.powerPointBuild=(Get-Item -LiteralPath $officeExecutable).VersionInfo.FileVersion; $report.environment.powerPointExecutableSha256=Get-FurnitureSha256 $officeExecutable; Write-FurnitureReport
-    Assert-PresentationNotOpen $app $sourceSnapshot 'input.preflight'; Assert-PresentationNotOpen $app $savedPath 'output.preflight'
-    $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$sourceSnapshot; Write-FurnitureReport
-    $presentations=Invoke-FurnitureCom 'input.presentations.get' { return ,$app.Presentations }; $script:presentation=Invoke-FurnitureCom 'input.presentation.open' { $presentations.Open($sourceSnapshot,0,0,-1) }
+    Assert-PresentationNotOpen $app $savedPath 'output.preflight'
+    Open-OwnedFurniture $app $sourceSnapshot 'input'
     $report.phases.original=Read-FurnitureState $script:presentation 'original'; Write-FurnitureReport
-    Invoke-FurnitureCom 'owned-copy.saveAs' { $script:presentation.SaveAs($savedPath,24) }; $script:ownedPresentationPath=$savedPath; Write-FurnitureReport
     for($index=0;$index -lt $actions.Count;$index++) { Apply-FurnitureAction $script:presentation $actions[$index] ($index+1); $report.actionPlan.completed+=@([ordered]@{index=$index+1;op=$actions[$index].op;status='success'}) }
     Write-FurnitureReport
-    Invoke-FurnitureCom 'edited.presentation.save' { $script:presentation.Save() }
+    Save-OwnedFurnitureCopy $sourceSnapshot $savedPath
     $report.phases.edited=Read-FurnitureState $script:presentation 'edited'; Write-FurnitureReport
-    Close-OwnedFurniture 'edited.presentation' $savedPath; $report.saved.sha256=Get-FurnitureSha256 $savedPath; Write-FurnitureReport
-    Assert-PresentationNotOpen $app $savedPath 'reopen.preflight'; $script:cleanupConfirmed=$false; $script:ownedPresentationPath=$savedPath; Write-FurnitureReport
-    $presentations=Invoke-FurnitureCom 'reopen.presentations.get' { return ,$app.Presentations }; $script:presentation=Invoke-FurnitureCom 'reopen.presentation.open' { $presentations.Open($savedPath,-1,0,-1) }
-    $reopenedPath=Invoke-FurnitureCom 'reopen.presentation.fullName.get' { $script:presentation.FullName }; if($reopenedPath -ine $savedPath) { throw "Reopened presentation path differs from exact saved path: $reopenedPath" }
+    Close-OwnedFurniture 'edited.presentation' $sourceSnapshot; $report.saved.sha256=Get-FurnitureSha256 $savedPath; Write-FurnitureReport
+    Open-OwnedFurniture $app $savedPath 'reopen'
     $report.phases.reopened=Read-FurnitureState $script:presentation 'reopened'; Write-FurnitureReport
     Close-OwnedFurniture 'reopened.presentation' $savedPath; $report.reopened.sha256=Get-FurnitureSha256 $savedPath
     if((Get-FurnitureSha256 $sourcePath) -cne $sourceHash -or (Get-FurnitureSha256 $sourceSnapshot) -cne $sourceHash) { throw 'Requested source or its snapshot changed during the native lifecycle' }
