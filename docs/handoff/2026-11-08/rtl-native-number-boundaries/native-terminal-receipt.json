@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "frozenRejectedSource": "cc587ac337d92f645360aecf469039b4d297d0ec",
+  "sourceProbesEvidence": "83d83dff3f48829737c0908ff98d0b166f4fbed7",
+  "ownedNativeBatch": 77672,
+  "nativeExecutionExit": 0,
+  "cleanupConfirmed": true,
+  "strictReviewExit": 1,
+  "nativeAcceptance": false,
+  "overallAccepted": false,
+  "conclusion": "REJECTED: all five candidate original PNGs are byte-identical to their corresponding old09/05/06/10/11 native baseline images; neither glyph reversal nor digit relocation changed.",
+  "observations": {
+    "originalSaveReopenPngStatesExact": true,
+    "namedStatesExact": true,
+    "noShrink": true,
+    "slides": 5,
+    "caseShapes": [
+      [
+        3,
+        2,
+        2
+      ],
+      [
+        8
+      ],
+      [
+        3
+      ]
+    ],
+    "explicitArabicExportImport": "Full JSON before fails; actual Office SaveCopy coalesces native pieces and saved import matches authored source. Five before-to-saved differences retained.",
+    "frenchSavedLanguage": "Known old11 saved-language loss remains, not repaired or waived."
+  },
+  "nextBoundaryProvenanceWork": "Not warranted because the shaping hypothesis did not work.",
+  "archives": [
+    {
+      "path": "native-numeric-3-cases-5-slides.zip",
+      "files": 451,
+      "bytes": 1061400,
+      "rawBytes": 3579085,
+      "sha256": "fce093232f730f9efa9310af1121bacc040dad3cfc6a9bc7ae01067b01f62efd",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "native-numeric-terminal-review.zip",
+      "files": 7,
+      "bytes": 191823,
+      "rawBytes": 398583,
+      "sha256": "74159971a9223ba8fdd04f368db71e7f806a011c42794d32dcc443f238dcdaf2",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    },
+    {
+      "path": "native-numeric-executed.zip",
+      "files": 5,
+      "bytes": 7874,
+      "rawBytes": 17382,
+      "sha256": "64efa34614a5494f6d919bf339fbb4639a1fe96e5293aa1df13bbd769212d5c6",
+      "losslessVerified": true,
+      "credentialSignatureScan": "passed"
+    }
+  ]
+}

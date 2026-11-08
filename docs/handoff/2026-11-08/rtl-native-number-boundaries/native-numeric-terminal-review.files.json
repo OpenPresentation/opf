@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "path": "baseline-native-png-comparison.json",
+      "bytes": 1688,
+      "sha256": "456ef8baf14c2b460273e9d064bad306e6ad9af6020642c5ec00fc55c425f06b"
+    },
+    {
+      "path": "numeric-arabic-indic-persian-imports.json.gz",
+      "bytes": 321,
+      "sha256": "75c406957681f9d1604969c0f51846481301142dfc970201049e00a1aba083fc"
+    },
+    {
+      "path": "numeric-explicit-arabic-imports.json.gz",
+      "bytes": 733,
+      "sha256": "3b954bf5ca299bf352a898df5bba7f80fdccaf2fb34df65f2087d408cdf9b84c"
+    },
+    {
+      "path": "numeric-french-negative-imports.json.gz",
+      "bytes": 847,
+      "sha256": "6e8942926b83653c5cf44d611de1f00097008c4ca7c9dafb5c9b8655287882bc"
+    },
+    {
+      "path": "review.json",
+      "bytes": 23914,
+      "sha256": "4499df93caa3ffc9911b64e70c057e72a0cb94d1178f036af37a3dc4006d7a11"
+    },
+    {
+      "path": "sheet-01.png",
+      "bytes": 203610,
+      "sha256": "7757e68827815afa3e5b3dd8083cd84ec081c07ff1d2d653c43e0c1ffcff6696"
+    },
+    {
+      "path": "sheet-02.png",
+      "bytes": 167470,
+      "sha256": "787cc2d3d954a14b1ce782f97a0980f1682e3f755a8c78081babd48435749c44"
+    }
+  ]
+}

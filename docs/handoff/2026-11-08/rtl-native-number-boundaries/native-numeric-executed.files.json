@@ -1,0 +1,29 @@
+{
+  "records": [
+    {
+      "path": "run-rtl-numeric-native-01.ps1",
+      "bytes": 3306,
+      "sha256": "73f44f9605799662a638ee5bab73f601ff29cd12b572ebf52353414b3410b26a"
+    },
+    {
+      "path": "rtl-numeric-native-01.log",
+      "bytes": 262,
+      "sha256": "3127799724e89525f5c2a794a0465d34757e9d1eb1e1a327d143ffa4009bc559"
+    },
+    {
+      "path": "review-rtl-numeric-native-01.mjs",
+      "bytes": 7041,
+      "sha256": "3c36cadb06db21cf46eb1fe1d28536c880b494dfb496a343ebf2a6e68b313d96"
+    },
+    {
+      "path": "rtl-numeric-native-review-01.log",
+      "bytes": 1758,
+      "sha256": "6d25306f2eec890a0223ff1d076b046454fcbdddf1ac00dd2b5d5d806fbd12a7"
+    },
+    {
+      "path": "archive-producer.mjs",
+      "bytes": 5015,
+      "sha256": "6200eaf917df176ba85ee1bf68dbb3e1ae8bfce0629e80b5ddc8492d91902537"
+    }
+  ]
+}
