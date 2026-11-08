@@ -28,9 +28,11 @@ test('SH21: long labels use complete readable cards with a finding instead of sh
  const items=Array.from({length:7},(_,i)=>'Set '+(i+1)+': '+text),g=composition(items),a=g.arrangements[0];assert.ok(a);assert.equal(a.design,'cards');assert.equal(a.layout,undefined);assert.ok(g.diagnostics.some(d=>d.code==='arrangement-adapted'&&/editable cards/.test(d.message)));assert.deepEqual(g.items.find(i=>i.field==='items').value,items);assert.ok(g.items.find(i=>i.field==='items').listColumns.every(c=>!c.text.overflow));
  for(const column of g.items.find(i=>i.field==='items').listColumns)for(const entry of column.text.listEntries)assert.ok(entry.text.richLines.every(line=>line.fragments.map(f=>f.text).join('').trim().length<=70));
 });
-test('SH21: very long labels retain the whole full-size list when cards also cannot hold it',()=>{
+test('SH21: very long labels retain the whole full-size list and refuse an unfit reading measure',()=>{
  const text='Planning and operational support for participants across several teams with regular training reviews and shared measurement of progress during the pilot. ';
- const items=Array.from({length:7},(_,i)=>'Set '+(i+1)+': '+text),g=composition(items),item=g.items.find(i=>i.field==='items');assert.equal(g.arrangements?.length??0,0);assert.deepEqual(item.value,items);assert.equal(item.text.overflow,false);assert.ok(g.diagnostics.some(d=>d.code==='arrangement-adapted'&&/drawn as a list/.test(d.message)));
+ const items=Array.from({length:7},(_,i)=>'Set '+(i+1)+': '+text),g=composition(items),item=g.items.find(i=>i.field==='items');assert.equal(g.arrangements?.length??0,0);assert.deepEqual(item.value,items);assert.equal(item.text.overflow,true);assert.ok(g.diagnostics.some(d=>d.code==='arrangement-adapted'&&/drawn as a list/.test(d.message)));
+ assert.ok(g.diagnostics.some(d=>d.code==='text-overflow'&&/70 characters/.test(d.message)));
+ const strict={language:'en-US',slides:[{layout:'venn',title:'Overlapping sets',items,composition:{overflow:'error'}}]},contextStrict=resolveSlideContext(strict,0,{catalogs:[gallery]});assert.throws(()=>composeSlide(contextStrict.slide,contextStrict.options),{name:'OPFCompositionError'});
  const plain=structuredClone(gallery.layouts.venn);for(const region of plain.regions)delete region.arrangement;
  const deck={language:'en-US',catalogs:{custom:{layouts:{plain}}},slides:[{layout:'custom:plain',title:'Overlapping sets',items}]},context=resolveSlideContext(deck,0,{catalogs:[gallery]}),baseline=composeSlide(context.slide,context.options).items.find(i=>i.field==='items');assert.ok(item.text.fontSize>=baseline.text.fontSize,'the complete-list fallback does not shrink the pre-arrangement fit');
 });

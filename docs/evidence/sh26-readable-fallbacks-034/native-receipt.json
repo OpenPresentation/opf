@@ -1,0 +1,2165 @@
+{
+  "producer": "975ced9f289f076cabfbecf1a0f7db53789a5fc7",
+  "primary": "C:/opf-work/sh26-after-cli-05",
+  "selectionRoute": "Complete paginated OPF slide derivatives; ordinary shipped CLI convert; no PPTX/XML mutation",
+  "sourceDelta": "diff --git a/packages/javascript/src/composition.ts b/packages/javascript/src/composition.ts\nindex b0bc807e6..b829abfb8 100644\n--- a/packages/javascript/src/composition.ts\n+++ b/packages/javascript/src/composition.ts\n@@ -11212,7 +11212,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide\n       if (readable(current)) continue;\n       const values = item.value as ListValue[], area = fallbackListAreas.get(item.path) ?? item.box, ownColumns = item.payload.columns;\n       const mode = ownColumns === 'auto' || ownColumns === 1 || ownColumns === 2 || ownColumns === 3 ? ownColumns : region ? regionColumns.get(region.name) : undefined;\n-      const counts = typeof mode === 'number' ? [mode] : options.recompose === false ? [1] : [1, 2, 3].filter(count => count <= values.length);\n+      const counts = typeof mode === 'number' ? [mode] : [1, 2, 3].filter(count => count <= values.length);\n       // Like listColumnsFor, slicing a multi-entry list must not promote a one-entry chunk into a new heading.\n       // A genuinely single described heading retains its original listOptionsFor role.\n       const listOptions = {...listOptionsFor(item.field, item.path, item.payload.numbering, values), ...(values.length > 1 ? {heading: false} : {})}, numbering = listOptions.numbering;",
+  "rows": [
+    {
+      "id": "inverted-pyramid-continuation-1-3",
+      "primaryId": "inverted-pyramid-continuation",
+      "source": {
+        "bytes": 2809,
+        "sha256": "5fb0e64b48b1281e9add1edac6ac68d92ddc54dca4875c7943b0bcaea17f930c"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/inverted-pyramid-continuation/paginated.opf.json",
+        "bytes": 3291,
+        "sha256": "84fee579f3eba5de51f1028c2b76f17a8ac2cb8aec316ecfad7cfbd65dcdfc77"
+      },
+      "selectedZeroBasedPages": [
+        0,
+        1,
+        2
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 0,
+          "sha256": "41a56499ba44ac441dd6d14dcc9405df95e912aae1163654ad05102515eac068",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 1,
+          "sha256": "a76ef80974b41614f644ea32bad5880d912c8f74f4843b71dfaf27da7f0814f6",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 2,
+          "sha256": "9f0b7055f5291e58ea390585470e50424b58746fc03fc9ee7a1eb59f790ad53c",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        1,
+        2,
+        3
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 1,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\inverted-pyramid-continuation-1-3\\selected\\slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/inverted-pyramid-continuation-1-3/slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 2,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\inverted-pyramid-continuation-1-3\\selected\\slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/inverted-pyramid-continuation-1-3/slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 3,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\inverted-pyramid-continuation-1-3\\selected\\slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/inverted-pyramid-continuation-1-3/slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 115150,
+        "sha256": "ac395e14475622e16e8964a241961b333f368242794af3df744e4b6f214a8f34"
+      }
+    },
+    {
+      "id": "inverted-pyramid-continuation-4",
+      "primaryId": "inverted-pyramid-continuation",
+      "source": {
+        "bytes": 1620,
+        "sha256": "897964e07aa774c893fac470d8d58641f918f24a50a7d21c36f73c5bb245bd56"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/inverted-pyramid-continuation/paginated.opf.json",
+        "bytes": 3291,
+        "sha256": "84fee579f3eba5de51f1028c2b76f17a8ac2cb8aec316ecfad7cfbd65dcdfc77"
+      },
+      "selectedZeroBasedPages": [
+        3
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 3,
+          "sha256": "c0da806b32be48f7a1171380fa3ed630c27f771fe902cb12726a7f2e83f986b6",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        4
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 4,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\inverted-pyramid-continuation-4\\selected\\slide-1.png",
+            "bytes": 35520,
+            "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/inverted-pyramid-continuation/slide-4.png",
+            "bytes": 35520,
+            "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/inverted-pyramid-continuation-4/slide-1.png",
+            "bytes": 35520,
+            "sha256": "934f197bcf04996d6a73da42453aa24fc589c96c9324ae2d56d8bc5e03dd3e15"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 103850,
+        "sha256": "add6a8781ddf2aea013bb7866ac4b79def9af4d63da8b269b007078b717cf7ba"
+      }
+    },
+    {
+      "id": "org-chart-continuation-1-3",
+      "primaryId": "org-chart-continuation",
+      "source": {
+        "bytes": 2817,
+        "sha256": "51e36ee4c27f344706931b620668428c841ebd8d63039bcd55cdb3d1dfe16cad"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/org-chart-continuation/paginated.opf.json",
+        "bytes": 3294,
+        "sha256": "e8726205979a7d0e21507e5eada779a6a49962a11a6ba00f6c38acb204d25d7e"
+      },
+      "selectedZeroBasedPages": [
+        0,
+        1,
+        2
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 0,
+          "sha256": "709f4f118b0f47bebeebc8ea446cffc5439a099edd25af84c670cc71b17c55ec",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 1,
+          "sha256": "41f6f045b4031d1e5846bd96d2ee9a42a3ec1d8907baf0ad68a60e585bd0fe54",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 2,
+          "sha256": "0f35fd53e2ba3b2a2ab7b4f37a239cbb8de6bff78b7331e0b90b6afc63180b10",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        1,
+        2,
+        3
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 1,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\org-chart-continuation-1-3\\selected\\slide-1.png",
+            "bytes": 50422,
+            "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-1.png",
+            "bytes": 50422,
+            "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/org-chart-continuation-1-3/slide-1.png",
+            "bytes": 50422,
+            "sha256": "2ca5edd84831ec34087a47f1a45b905c6b9ec22cdaeee80762ae5465bdeb8bab"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 2,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\org-chart-continuation-1-3\\selected\\slide-2.png",
+            "bytes": 50488,
+            "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-2.png",
+            "bytes": 50488,
+            "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/org-chart-continuation-1-3/slide-2.png",
+            "bytes": 50488,
+            "sha256": "153689e875401e0fb3f9876fe55a2e821f17f2f203f8b8978a7bb9f023158a6d"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 3,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\org-chart-continuation-1-3\\selected\\slide-3.png",
+            "bytes": 50538,
+            "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-3.png",
+            "bytes": 50538,
+            "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/org-chart-continuation-1-3/slide-3.png",
+            "bytes": 50538,
+            "sha256": "2cccc7d72f0fb0345844dd5d5885cf705de928ae351d7619568c6dff085502e0"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 115276,
+        "sha256": "f851a84c0f00334eb860e765312fd0ae55cb351dafcaa79212518a625fb18b43"
+      }
+    },
+    {
+      "id": "org-chart-continuation-4",
+      "primaryId": "org-chart-continuation",
+      "source": {
+        "bytes": 1638,
+        "sha256": "3a1830e0f146b76991dbdff6574c4411f204fe6886d1646dcbe4ff96a83cbaf8"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/org-chart-continuation/paginated.opf.json",
+        "bytes": 3294,
+        "sha256": "e8726205979a7d0e21507e5eada779a6a49962a11a6ba00f6c38acb204d25d7e"
+      },
+      "selectedZeroBasedPages": [
+        3
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 3,
+          "sha256": "d7ffcb4fd4642f189c90f5ab3688084f16c2bba3dc3ddc7f557b9051ee78b823",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        4
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 4,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\org-chart-continuation-4\\selected\\slide-1.png",
+            "bytes": 36229,
+            "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/org-chart-continuation/slide-4.png",
+            "bytes": 36229,
+            "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/org-chart-continuation-4/slide-1.png",
+            "bytes": 36229,
+            "sha256": "ce518f3cf1e176ab9836e79daaa9613dab64841df0f24f8628fb57c16e7b06fe"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 103928,
+        "sha256": "f5983d48e83103d1aa46b204d89a368047de14e2cf4c8ee82af7792420f23bc2"
+      }
+    },
+    {
+      "id": "hierarchy-continuation-1-3",
+      "primaryId": "hierarchy-continuation",
+      "source": {
+        "bytes": 2804,
+        "sha256": "eaf86b44974a9720f34e9933a21b59666c7ec9f180135ec238304fe69750a637"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/hierarchy-continuation/paginated.opf.json",
+        "bytes": 3271,
+        "sha256": "c320c0b0741abf1029b82f7d5d7f10cde028fc8dab2096c800e6a9a26e89a720"
+      },
+      "selectedZeroBasedPages": [
+        0,
+        1,
+        2
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 0,
+          "sha256": "badef19efcd64fcb24169c582b1077c743cbcd3c99c24e431dce4ed59f801908",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 1,
+          "sha256": "4726fe01af70d39bda42147a0220a24c72d67fc6b2c848f26f41739a3f1b2cf0",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 2,
+          "sha256": "86e94cbd63ad5d9a75f78580348e749774b807252dc214c2b5583ab2696b0aae",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        1,
+        2,
+        3
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 1,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\hierarchy-continuation-1-3\\selected\\slide-1.png",
+            "bytes": 49313,
+            "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-1.png",
+            "bytes": 49313,
+            "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/hierarchy-continuation-1-3/slide-1.png",
+            "bytes": 49313,
+            "sha256": "afd502335b86a512b5def0a9a9e69d66296eda8c6a6609f68810e55a4cc0cd28"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 2,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\hierarchy-continuation-1-3\\selected\\slide-2.png",
+            "bytes": 49409,
+            "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-2.png",
+            "bytes": 49409,
+            "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/hierarchy-continuation-1-3/slide-2.png",
+            "bytes": 49409,
+            "sha256": "a701f7c92fa16e41da802557168be9f21571ad46c6334c71a879c12702ebbba5"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 3,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\hierarchy-continuation-1-3\\selected\\slide-3.png",
+            "bytes": 49466,
+            "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-3.png",
+            "bytes": 49466,
+            "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/hierarchy-continuation-1-3/slide-3.png",
+            "bytes": 49466,
+            "sha256": "2a0fb6110704be662d707af789182e67ae4322f9397761d2918b8b34eec86ffd"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 113964,
+        "sha256": "35ccac9dee25b7d99e84734540bd3e166e1c5e3f3ab288c6076057c0905bcd78"
+      }
+    },
+    {
+      "id": "hierarchy-continuation-4",
+      "primaryId": "hierarchy-continuation",
+      "source": {
+        "bytes": 1644,
+        "sha256": "c7938c23c79e594faf6970f35ef69791ad729baebcaae2c018bc69e47bcc30a8"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/hierarchy-continuation/paginated.opf.json",
+        "bytes": 3271,
+        "sha256": "c320c0b0741abf1029b82f7d5d7f10cde028fc8dab2096c800e6a9a26e89a720"
+      },
+      "selectedZeroBasedPages": [
+        3
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 3,
+          "sha256": "bb228dcfa514cb3d8555818cd6b3903d903e1de1e9f07487c3a4f98da937d061",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        4
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 4,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\hierarchy-continuation-4\\selected\\slide-1.png",
+            "bytes": 35248,
+            "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/hierarchy-continuation/slide-4.png",
+            "bytes": 35248,
+            "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/hierarchy-continuation-4/slide-1.png",
+            "bytes": 35248,
+            "sha256": "218e5bd828e3e3a06de90cf44e1621f4d22e06ad9c4e11bd4695e912330cc4ac"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 103517,
+        "sha256": "0a85b6e8c53cd5f0f67448cc36e83eaac04b1ede6ddb489f6f7cdb0f6371cab6"
+      }
+    },
+    {
+      "id": "venn-continuation-1-3",
+      "primaryId": "venn-continuation",
+      "source": {
+        "bytes": 2716,
+        "sha256": "73cbb51f87c1e98397a60af4405f298d7676fc73eed0dc4e56cfc5f8d1858dfd"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/venn-continuation/paginated.opf.json",
+        "bytes": 3172,
+        "sha256": "1a69998d8d99b47402b12a489fd2b162a66d6b2c398a56ce21c76add1c4e218a"
+      },
+      "selectedZeroBasedPages": [
+        0,
+        1,
+        2
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 0,
+          "sha256": "dbe8662096bfae3ef03636ab9a2e20c15e3287a9896dd5e832e244352ffd714a",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 1,
+          "sha256": "3a70b305fb5a54ae1d615a6045d4001a4e9f2ea1c56989d2a1ef94bc9f7b031a",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 2,
+          "sha256": "a873270054a81815da9eca0077e4578bff8cd729e6190a8ccb16f05bd0cbe746",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        1,
+        2,
+        3
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 1,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\venn-continuation-1-3\\selected\\slide-1.png",
+            "bytes": 49813,
+            "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-1.png",
+            "bytes": 49813,
+            "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/venn-continuation-1-3/slide-1.png",
+            "bytes": 49813,
+            "sha256": "3c34b2cd01bea8976bee71411980c798408dab26bfbb3a9bb35e58c1fa6d9780"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 2,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\venn-continuation-1-3\\selected\\slide-2.png",
+            "bytes": 49892,
+            "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-2.png",
+            "bytes": 49892,
+            "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/venn-continuation-1-3/slide-2.png",
+            "bytes": 49892,
+            "sha256": "93faf886da923d73fbb2c3d0b9fc6c2fec89d7c100574a97df6a9f3b6d8d17c6"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 3,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\venn-continuation-1-3\\selected\\slide-3.png",
+            "bytes": 49916,
+            "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-3.png",
+            "bytes": 49916,
+            "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/venn-continuation-1-3/slide-3.png",
+            "bytes": 49916,
+            "sha256": "5878508214fa39d55734aa93308b9ce3bb6e3d4b195bbb740be9e9968824ec33"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 113674,
+        "sha256": "a8a70e1f5b8291b4955031a66f09fc82cc7e63ddd0c7550dd51adc230dd5d2f0"
+      }
+    },
+    {
+      "id": "venn-continuation-4",
+      "primaryId": "venn-continuation",
+      "source": {
+        "bytes": 1577,
+        "sha256": "6ba1b453ac601f738216ea7da8c2adee781c83add54aedbf50757a69ba6f40e4"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/cases/venn-continuation/paginated.opf.json",
+        "bytes": 3172,
+        "sha256": "1a69998d8d99b47402b12a489fd2b162a66d6b2c398a56ce21c76add1c4e218a"
+      },
+      "selectedZeroBasedPages": [
+        3
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 3,
+          "sha256": "d8b1841955918d7c38b615396d1766bd019987c723976829e5cd2632a87de3f5",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        4
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 4,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\venn-continuation-4\\selected\\slide-1.png",
+            "bytes": 35584,
+            "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/venn-continuation/slide-4.png",
+            "bytes": 35584,
+            "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/venn-continuation-4/slide-1.png",
+            "bytes": 35584,
+            "sha256": "3c46c61aabdac3d26838fbbd2732ef36917e0643f960838a187bbfd822bcbe08"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 103335,
+        "sha256": "a236a5450fe7a7756c4aa40c9b78a912ec3dd40df18d98d6f197aaa3bafb6396"
+      }
+    },
+    {
+      "id": "supplemental-controls-1-3",
+      "primaryId": "supplemental-controls",
+      "source": {
+        "bytes": 6905,
+        "sha256": "08b4d561885a2d985b376ede606d75c9c7371d4916f8857bb44aafcec9bf7b55"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/native-controls/source.opf.json",
+        "bytes": 13069,
+        "sha256": "14f528e62399324bd0a9c4ce80d835b4ac6ad09c040bb8370e91cfc55cf75589"
+      },
+      "selectedZeroBasedPages": [
+        0,
+        1,
+        2
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 0,
+          "sha256": "41a56499ba44ac441dd6d14dcc9405df95e912aae1163654ad05102515eac068",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 1,
+          "sha256": "a76ef80974b41614f644ea32bad5880d912c8f74f4843b71dfaf27da7f0814f6",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 2,
+          "sha256": "9f0b7055f5291e58ea390585470e50424b58746fc03fc9ee7a1eb59f790ad53c",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        1,
+        2,
+        3
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 1,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-1-3\\selected\\slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-01.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-1-3/slide-1.png",
+            "bytes": 49730,
+            "sha256": "f36be97f1791a02e08e4b6d03950e5c6d2a3df3b23ebecf1512a763a88e906fe"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 2,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-1-3\\selected\\slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-02.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-1-3/slide-2.png",
+            "bytes": 49799,
+            "sha256": "cbcb5ec65e7136da31c873c509ae2eb48590b911fff9efe9689429acf7469846"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 3,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-1-3\\selected\\slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-03.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-1-3/slide-3.png",
+            "bytes": 49849,
+            "sha256": "73cf4060bac57891cd9d29a1cf0d7acfb1c3157ed4b0fdd1374f664371b0b812"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 125013,
+        "sha256": "c2ceedcb514f25a6953cf598a7e0e3635dc7e467b48129ac81119b47c0547713"
+      }
+    },
+    {
+      "id": "supplemental-controls-4-6",
+      "primaryId": "supplemental-controls",
+      "source": {
+        "bytes": 7064,
+        "sha256": "fee5e92c8ce37b3e20da4821b09613aea943d973950299e547dd8752ce4a8ee4"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/native-controls/source.opf.json",
+        "bytes": 13069,
+        "sha256": "14f528e62399324bd0a9c4ce80d835b4ac6ad09c040bb8370e91cfc55cf75589"
+      },
+      "selectedZeroBasedPages": [
+        3,
+        4,
+        5
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 3,
+          "sha256": "64f0fd831507fb26574d6145726982dc75704822419b6b8cf179b87f25bf32ae",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 4,
+          "sha256": "5ff8dfb578eaec4204ffa224ceee4ac3b00cf8fb9d207f26146bdce6d0f71efd",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 5,
+          "sha256": "4955bc2ee5e2876c20578cc0e6078e5eddb64061b65f99a3450210ccf9d056a4",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        4,
+        5,
+        6
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 4,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-4-6\\selected\\slide-1.png",
+            "bytes": 57515,
+            "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-04.png",
+            "bytes": 57515,
+            "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-4-6/slide-1.png",
+            "bytes": 57515,
+            "sha256": "4196b4cf74d1966267d242b1e3f355b36dd6114bab5589d2bfb781906d294ca1"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 5,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-4-6\\selected\\slide-2.png",
+            "bytes": 57600,
+            "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-05.png",
+            "bytes": 57600,
+            "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-4-6/slide-2.png",
+            "bytes": 57600,
+            "sha256": "f9bf296ab703a3ed114a4a9d144db494c710e4d773deb449f52c2587defa7505"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 6,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-4-6\\selected\\slide-3.png",
+            "bytes": 50252,
+            "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-06.png",
+            "bytes": 50252,
+            "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-4-6/slide-3.png",
+            "bytes": 50252,
+            "sha256": "9e2cbf6e8d29ae3d27c4d55af6dbaafe436c23993b152b9da7b2b186b8575b08"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 224349,
+        "sha256": "6bbbd27c2f11a3e096c30e2a0f3f8a7b7facf14ce74f56278afa6dc2b69aa2a3"
+      }
+    },
+    {
+      "id": "supplemental-controls-7-9",
+      "primaryId": "supplemental-controls",
+      "source": {
+        "bytes": 7288,
+        "sha256": "15f91115065f6479f896192c968324b271782d1f538e08e5190be617c4363c29"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/native-controls/source.opf.json",
+        "bytes": 13069,
+        "sha256": "14f528e62399324bd0a9c4ce80d835b4ac6ad09c040bb8370e91cfc55cf75589"
+      },
+      "selectedZeroBasedPages": [
+        6,
+        7,
+        8
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 6,
+          "sha256": "1af70184e0feb9e2403a3bbe7f94394e0539fbd9e605a8efee1b20e19c27fe31",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 7,
+          "sha256": "968160a51664499f156d3e6308d7452507059531fe593e68ccd896544d3221b6",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 8,
+          "sha256": "0c500e1e357c2025cd70c6021bf5928199395ef28c2b42a2aac75c82eb1c1e47",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        7,
+        8,
+        9
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 7,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-7-9\\selected\\slide-1.png",
+            "bytes": 50673,
+            "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-07.png",
+            "bytes": 50673,
+            "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-7-9/slide-1.png",
+            "bytes": 50673,
+            "sha256": "3b991613a55fe4165a9dd954e94bd4aa5a240579101f2cfa3192bc9a928a7a2e"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 8,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-7-9\\selected\\slide-2.png",
+            "bytes": 50884,
+            "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-08.png",
+            "bytes": 50884,
+            "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-7-9/slide-2.png",
+            "bytes": 50884,
+            "sha256": "38c57174036c7b8e2e3526124f345c614aebc1955ed10b09c8265f11046373a5"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 9,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-7-9\\selected\\slide-3.png",
+            "bytes": 36227,
+            "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-09.png",
+            "bytes": 36227,
+            "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-7-9/slide-3.png",
+            "bytes": 36227,
+            "sha256": "df3b69646a2d5d8a5e6ed779ab68e7a464ba2ff1f5036259a4c96d0a9590d061"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 125327,
+        "sha256": "4ad8478ff1a04de5b5ae49a650af096fb0b8d82b6864a6e19414c90ef2cd1871"
+      }
+    },
+    {
+      "id": "supplemental-controls-10-12",
+      "primaryId": "supplemental-controls",
+      "source": {
+        "bytes": 6656,
+        "sha256": "7313283f681a5e78526fe9d94c5d117ddb798dbb3cd9b6fdb50e3e91f443c9d9"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/native-controls/source.opf.json",
+        "bytes": 13069,
+        "sha256": "14f528e62399324bd0a9c4ce80d835b4ac6ad09c040bb8370e91cfc55cf75589"
+      },
+      "selectedZeroBasedPages": [
+        9,
+        10,
+        11
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 9,
+          "sha256": "4c261e3f729acdc502f7cd4211a77fe114f0f502f06fc6a7fbb1d4f8a2e5467e",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 10,
+          "sha256": "70860d4d853c860f5c17f3eead89674080cef2718dbfb841236b77fe118ab858",
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "originalZeroBasedPage": 11,
+          "sha256": "26add45414b31408ecf7ed3af67991e0e2d4464ec267564264754d317233c2ae",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        10,
+        11,
+        12
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/2/blocks/0/items",
+              "scope": "document",
+              "message": "The venn is exported as native shapes, not live SmartArt: Basic Venn text and edits are awaiting native qualification.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "Basic Venn text and edits are awaiting native qualification"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 10,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-10-12\\selected\\slide-1.png",
+            "bytes": 102335,
+            "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-10.png",
+            "bytes": 102335,
+            "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-10-12/slide-1.png",
+            "bytes": 102335,
+            "sha256": "7650c97f926d2ac0dd1049c294e799cc1a95c248af0780740bc453b8c71d2b1f"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 11,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-10-12\\selected\\slide-2.png",
+            "bytes": 35314,
+            "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-11.png",
+            "bytes": 35314,
+            "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-10-12/slide-2.png",
+            "bytes": 35314,
+            "sha256": "b3d3362f4865f22eb120d8eae693a7f4c50e6bfb79acfbbc56d213c58f319abb"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 3,
+          "sourcePage": 12,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-10-12\\selected\\slide-3.png",
+            "bytes": 40386,
+            "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-12.png",
+            "bytes": 40386,
+            "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-10-12/slide-3.png",
+            "bytes": 40386,
+            "sha256": "d052137bf634d098a8859c527f79d5a4251f942be61225ed13e4c5a123905cc3"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 173872,
+        "sha256": "bdcc08f01c819ae34e2373b60f27976e29cdc79107d8754bc137c86d75540ee2"
+      }
+    },
+    {
+      "id": "supplemental-controls-13-14",
+      "primaryId": "supplemental-controls",
+      "source": {
+        "bytes": 6092,
+        "sha256": "6aebdcc651979ff1b5235ef423cba1fdaf75ef8747910149415c3a4dbf9b312a"
+      },
+      "originalSource": {
+        "path": "C:/opf-work/sh26-after-cli-05/native-controls/source.opf.json",
+        "bytes": 13069,
+        "sha256": "14f528e62399324bd0a9c4ce80d835b4ac6ad09c040bb8370e91cfc55cf75589"
+      },
+      "selectedZeroBasedPages": [
+        12,
+        13
+      ],
+      "slideEquivalence": [
+        {
+          "nativePage": 1,
+          "originalZeroBasedPage": 12,
+          "sha256": "837f4b56acddbebf0b5c6c7253147ced89ec14fed3a5b973620c14ca457e3dfe",
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "originalZeroBasedPage": 13,
+          "sha256": "68cda696a90dd3e4087631aa22d4b4f55533e4fa092d3d601fd0667881d0c9e4",
+          "exact": true
+        }
+      ],
+      "sourcePages": [
+        13,
+        14
+      ],
+      "sourceFullPresentation": false,
+      "reports": [
+        {
+          "kind": "png",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": []
+        },
+        {
+          "kind": "pptx",
+          "fontRoute": {
+            "pack": "office",
+            "substitutionPolicy": "visual",
+            "userFonts": [],
+            "substitutions": [
+              {
+                "requested": "Aptos Display",
+                "resolved": "Intos Display",
+                "compatibility": "metric"
+              },
+              {
+                "requested": "Aptos",
+                "resolved": "Intos",
+                "compatibility": "metric"
+              }
+            ],
+            "scripts": {
+              "detected": [],
+              "scripts": [],
+              "unavailable": [],
+              "packages": [],
+              "notInstalled": []
+            }
+          },
+          "findings": [
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/0/blocks/0/items",
+              "scope": "document",
+              "message": "The org-chart is exported as native shapes, not live SmartArt: Organization Chart text and edits are awaiting native qualification.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "Organization Chart text and edits are awaiting native qualification"
+            },
+            {
+              "ruleId": "pptx/smartart-unavailable",
+              "severity": "info",
+              "category": "pptx",
+              "path": "/slides/1/blocks/0/items",
+              "scope": "document",
+              "message": "The hierarchy is exported as native shapes, not live SmartArt: Hierarchy text and edits are awaiting native qualification.",
+              "help": "The pyramid, matrix or cycle is exported as editable native shapes, which look the same; live SmartArt is written only where PowerPoint draws it exactly as the preview (docs/smartart.md). Shorten the entries named in the message, or give the region other proportions, to get live SmartArt. When the message names the fallback picture, install @openpresentation/opf-render: every live SmartArt carries OPF's picture of it for apps without SmartArt.",
+              "reason": "Hierarchy text and edits are awaiting native qualification"
+            },
+            {
+              "ruleId": "pptx/typeface-not-office-safe",
+              "severity": "info",
+              "category": "pptx",
+              "path": "",
+              "scope": "document",
+              "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+              "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+              "families": [
+                "Aptos",
+                "Aptos Display"
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": [
+        {
+          "nativePage": 1,
+          "sourcePage": 13,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-13-14\\selected\\slide-1.png",
+            "bytes": 28334,
+            "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-13.png",
+            "bytes": 28334,
+            "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-13-14/slide-1.png",
+            "bytes": 28334,
+            "sha256": "c48befc6c62dd24d63241c379bbde3da1797e63da71e7ee7a5bef3b2555eac85"
+          },
+          "exact": true
+        },
+        {
+          "nativePage": 2,
+          "sourcePage": 14,
+          "cliOriginal": {
+            "path": "C:\\opf-work\\sh26-native-chunks-02\\cases\\supplemental-controls-13-14\\selected\\slide-2.png",
+            "bytes": 33735,
+            "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+          },
+          "primary": {
+            "path": "C:/opf-work/sh26-after-cli-05/preview/supplemental-controls/slide-14.png",
+            "bytes": 33735,
+            "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+          },
+          "qualification": {
+            "path": "C:/opf-work/sh26-native-chunks-02/preview/supplemental-controls-13-14/slide-2.png",
+            "bytes": 33735,
+            "sha256": "3cd49a5f77a89b947529126aa0e8c9349d0e14d8d29df5f2f35cb768d4c1af0c"
+          },
+          "exact": true
+        }
+      ],
+      "importedEffectiveBlocksAndNumbersExact": true,
+      "pptx": {
+        "bytes": 126909,
+        "sha256": "e402c62976370c8524834ea35635d3023b1d8ac74bb940b6fd7e9d010b34edb0"
+      }
+    }
+  ]
+}
