@@ -3,7 +3,8 @@ import {arrangementTree} from './tree-arrangement.js';
 interface Box {x:number;y:number;width:number;height:number}
 export type NativeTreeKind='org-chart'|'hierarchy';
 export interface NativeTreeNode {index:number;level:number;parent?:number;box:Box;background?:Box}
-export interface NativeTreeGeometry {ok:true;nodes:NativeTreeNode[]}
+export interface NativeTreeConnector {parent:number;child:number;box:Box;points:readonly [number,number][]}
+export interface NativeTreeGeometry {ok:true;nodes:NativeTreeNode[];connectors:NativeTreeConnector[]}
 export type NativeTreeGeometryResult=NativeTreeGeometry|{ok:false;reason:string;index?:number};
 interface Position {index:number;x:number;row:number}
 interface Model {root:number;nodes:Position[]}
@@ -47,5 +48,20 @@ export function nativeTreeGeometry(kind:NativeTreeKind,frame:Box,entries:readonl
   const back={x:x0+node.x*low,y:y0+node.row*stride*low,width:(org?2:1)*low,height:height*low};
   return{index:node.index,level:semantic.level,...(semantic.parent===undefined?{}:{parent:semantic.parent}),box:org?back:{...back,x:back.x+frontX*low,y:back.y+frontY*low},...(org?{}:{background:back})};
  }).sort((a,b)=>a.index-b.index);
- return{ok:true,nodes};
+ const connectors:NativeTreeConnector[]=[];
+ for(const child of nodes){
+  if(child.parent===undefined)continue;
+  const parent=nodes[child.parent],semantic=tree.nodes[child.parent];if(!parent||!semantic)return{ok:false,index:child.index,reason:'A connector lost its semantic parent.'};
+  const p=parent.background??parent.box,c=child.background??child.box;
+  const hanging=org&&parent.index!==0&&semantic.children.every(index=>tree.nodes[index]?.children.length===0);
+  const from:[number,number]=hanging?[p.x+.2*low,p.y+p.height]:[p.x+p.width/2,p.y+p.height];
+  const to:[number,number]=hanging?[c.x,c.y+c.height/2]:[c.x+c.width/2,c.y];
+  const width=Math.abs(to[0]-from[0]),straight=width<1e-6;
+  // PowerPoint gives a vertical zero-width connector a fixed0.1in bounding box (7.2pt), independent of frame scale.
+  const box={x:straight?from[0]-4.8:Math.min(from[0],to[0]),y:from[1],width:straight?9.6:width,height:to[1]-from[1]};
+  const middle=(from[1]+to[1])/2;
+  const points:readonly [number,number][]=hanging?[from,[from[0],to[1]],to]:[from,[from[0],middle],[to[0],middle],to];
+  connectors.push({parent:parent.index,child:child.index,box,points});
+ }
+ return{ok:true,nodes,connectors};
 }

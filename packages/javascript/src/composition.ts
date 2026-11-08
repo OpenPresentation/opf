@@ -1,4 +1,4 @@
-export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
+export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
 export {arrangementTree,type ArrangementTreeNode,type ArrangementTreeResult} from './tree-arrangement.js';
 export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
 import {tableGrid,type TableCellStyle} from './table.js';
