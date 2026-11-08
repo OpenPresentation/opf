@@ -1,0 +1,110 @@
+{
+  "rows": [
+    {
+      "deck": "overview",
+      "ordinal": 31,
+      "id": "layout-pyramid",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-08.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 32,
+      "id": "layout-matrix",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-08.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 33,
+      "id": "layout-cycle",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 34,
+      "id": "layout-chevrons",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 35,
+      "id": "layout-flow",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 36,
+      "id": "layout-vertical-flow",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 27,
+      "id": "s27",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-11/review-07.png"
+    },
+    {
+      "deck": "batch-13",
+      "ordinal": 29,
+      "id": "s29",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-13/review-08.png"
+    },
+    {
+      "deck": "batch-17",
+      "ordinal": 4,
+      "id": "s04",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-17/review-01.png"
+    }
+  ],
+  "viewed": [
+    {
+      "file": "sheets/overview/review-01.png",
+      "bytes": 177012,
+      "sha256": "ab200f66c8d7dac0b7d7f8d4fadd9ec3fb0f800fc5280aa6f066d518c12f6c5a"
+    },
+    {
+      "file": "sheets/overview/review-08.png",
+      "bytes": 202004,
+      "sha256": "010494f958a73c8fb469002a9a4a52b7b4c04c52a32a6756308398fecf3ecd39"
+    },
+    {
+      "file": "sheets/overview/review-09.png",
+      "bytes": 108846,
+      "sha256": "3af1006cc89804079cb8af9cb26e7bec04b44c2d2ebb1b7a2e7d03eec3097d7c"
+    },
+    {
+      "file": "sheets/batch-11/review-07.png",
+      "bytes": 426047,
+      "sha256": "7557734cfaeb152158e1ce603d5befcb499fe807215e022a006394c2dccd727f"
+    },
+    {
+      "file": "sheets/batch-13/review-08.png",
+      "bytes": 477902,
+      "sha256": "0a13471fb08a8a4588b41139f5ad471f2afc0a7eda11eb6fb1d170fdd76bb88b"
+    },
+    {
+      "file": "sheets/batch-17/review-01.png",
+      "bytes": 315643,
+      "sha256": "f55c3ccede1c6982b6364be2bf24de1785fa9f1be3da958d992692f5fb5ab944"
+    }
+  ],
+  "complete": true,
+  "scope": "Exact absent fixed panels only; all existing fixed PNGs remain hash-verified"
+}

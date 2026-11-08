@@ -1,0 +1,826 @@
+{
+  "scope": "Re-tiled unchanged existing PNG bytes for bounded warning/measure review, not a new slide export or visual acceptance",
+  "source": "34ae758d71abb77845d6b3feb08d2d53308f3a99",
+  "fontRoute": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "scripts": "auto"
+  },
+  "rows": [
+    {
+      "deck": "batch-03",
+      "ordinal": 27,
+      "id": "s27",
+      "title": "Why This Matters",
+      "layout": "timeline",
+      "tags": [
+        "layout",
+        "timeline",
+        "n6",
+        "short"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "text",
+        "timeline",
+        "text",
+        "timeline",
+        "text"
+      ],
+      "findings": 1,
+      "messages": [
+        "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+      ],
+      "paths": [
+        "/slides/26/blocks/1/text"
+      ],
+      "afterSha256": "7a6d66fdc7db2ec1e26bc6ac729acb21e5f850b5baeb1d2194eb111605dc6297",
+      "beforeSha256": "6c0f0d7739359be13f5119a25a001e534019976404495c99edcc3fdef710a13f",
+      "claudeSha256": "1eba580483f93be7fd2cd0b389fb23ef37bc4a9992d3c46d273c7b440e87eaa0",
+      "derivedSheet": "triage-01.png"
+    },
+    {
+      "deck": "batch-04",
+      "ordinal": 14,
+      "id": "s14",
+      "title": "Grant Equity Review: grant equity review",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n5",
+        "long"
+      ],
+      "blocks": 5,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/13/blocks/0/code/source",
+        "/slides/13/blocks/2/code/source",
+        "/slides/13/blocks/4/code/source"
+      ],
+      "afterSha256": "4080a91c3856f0461f93e3ab6ff1fd865cb778a7a0947106fdc23becc8ef7d93",
+      "beforeSha256": "1599f3de834ac91c9ddcbd89c07d7c28f59aa4324907c492901e6da03660a900",
+      "claudeSha256": "596ee47af1e68b6bf14758b3a3dcdbbee08bb27813a0ccf8b14da683d9380a8a",
+      "derivedSheet": "triage-01.png"
+    },
+    {
+      "deck": "batch-04",
+      "ordinal": 42,
+      "id": "s42",
+      "title": "Housing Zoning Council Brief: decision and follow through",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code",
+        "text"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/41/blocks/0/code/source",
+        "/slides/41/blocks/2/code/source",
+        "/slides/41/blocks/4/code/source"
+      ],
+      "afterSha256": "9f03fbeb8ca4e40af17fa5c9b800e43e9e9734afd98c1e782cdb52f398a9b1c6",
+      "beforeSha256": "cf31298b624262c8d60dd1e59d23c6eaa0d4218b006e8be5124b68567165e27d",
+      "claudeSha256": "fa20361e6346e6f638fd7d08dc25beb44214c96d600d9b2a2fa8219632dc7678",
+      "derivedSheet": "triage-01.png"
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 12,
+      "id": "s12",
+      "title": "Why This Matters",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n6",
+        "short"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 5,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/11/blocks/0/timeline/events/3/description",
+        "/slides/11/blocks/1/timeline/events/3/description",
+        "/slides/11/blocks/2/timeline/events/3/description",
+        "/slides/11/blocks/3/timeline/events/3/description",
+        "/slides/11/blocks/4/timeline/events/3/description"
+      ],
+      "afterSha256": "83f592d856e24d0bd0021f3195a488a41fbf2ed9c269d164cc42d1fc7c1b1dff",
+      "beforeSha256": "e2cbb21bcf5ee1be11604afae3ac08568cd0ceaba3986fa177efb06514da3d61",
+      "claudeSha256": "92dec00bc80eeac2747e87ffd5027314e96dc2cca81fd34c0848d3b5cb9478bb",
+      "derivedSheet": "triage-01.png"
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 40,
+      "id": "s40",
+      "title": "Signal Trend",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n7",
+        "short"
+      ],
+      "blocks": 7,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 9,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/39/blocks/0/timeline/events/3/description",
+        "/slides/39/blocks/1/timeline/events/3/description",
+        "/slides/39/blocks/2/timeline/events/3/description",
+        "/slides/39/blocks/3/timeline/events/3/description",
+        "/slides/39/blocks/4/timeline/events/3/description",
+        "/slides/39/blocks/5/timeline/events/3/description",
+        "/slides/39/blocks/6/timeline/events/0/description",
+        "/slides/39/blocks/6/timeline/events/1/description",
+        "/slides/39/blocks/6/timeline/events/3/description"
+      ],
+      "afterSha256": "5a904ce0f5b55361cb21f48ae2d08c66251d32d943e86dc08708eb97dff78e86",
+      "beforeSha256": "b4e72d782abdcf30bbec231608d3247137410fd68194ac8dbb2651f1e493fee7",
+      "claudeSha256": "497a37a2f7fbc78c0a67ba38641d3aff6f8c2ed812b71a5309cb2eedb431bca9",
+      "derivedSheet": "triage-02.png"
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 45,
+      "id": "s45",
+      "title": "Executive Workshop Facilitation: why this matters",
+      "layout": "timeline",
+      "tags": [
+        "layout",
+        "timeline",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "text",
+        "timeline",
+        "text",
+        "timeline",
+        "text"
+      ],
+      "findings": 12,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/44/blocks/0/timeline/events/0/description",
+        "/slides/44/blocks/0/timeline/events/1/description",
+        "/slides/44/blocks/0/timeline/events/2/description",
+        "/slides/44/blocks/0/timeline/events/3/description",
+        "/slides/44/blocks/2/timeline/events/0/description",
+        "/slides/44/blocks/2/timeline/events/1/description",
+        "/slides/44/blocks/2/timeline/events/2/description",
+        "/slides/44/blocks/2/timeline/events/3/description",
+        "/slides/44/blocks/4/timeline/events/0/description",
+        "/slides/44/blocks/4/timeline/events/1/description",
+        "/slides/44/blocks/4/timeline/events/2/description",
+        "/slides/44/blocks/4/timeline/events/3/description"
+      ],
+      "afterSha256": "68764b014c7069b5d213c3cd81a770f8d70ed2ce7d9466f5f531fdfa9a71944e",
+      "beforeSha256": "618b4fdec590286966b2b5c626f6f78455cb6261290a196517f10e840b44a805",
+      "claudeSha256": "fe062753310d7ab31bc10008d5ea9ea92439258cc0c263d067318e394e0bbf91",
+      "derivedSheet": "triage-02.png"
+    },
+    {
+      "deck": "batch-07",
+      "ordinal": 18,
+      "id": "s18",
+      "title": "Next Steps",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "short"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 24,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/17/blocks/0/timeline/events/0/description",
+        "/slides/17/blocks/0/timeline/events/1/description",
+        "/slides/17/blocks/0/timeline/events/2/description",
+        "/slides/17/blocks/0/timeline/events/3/description",
+        "/slides/17/blocks/1/timeline/events/0/description",
+        "/slides/17/blocks/1/timeline/events/1/description",
+        "/slides/17/blocks/1/timeline/events/2/description",
+        "/slides/17/blocks/1/timeline/events/3/description",
+        "/slides/17/blocks/2/timeline/events/0/description",
+        "/slides/17/blocks/2/timeline/events/1/description",
+        "/slides/17/blocks/2/timeline/events/2/description",
+        "/slides/17/blocks/2/timeline/events/3/description",
+        "/slides/17/blocks/3/timeline/events/0/description",
+        "/slides/17/blocks/3/timeline/events/1/description",
+        "/slides/17/blocks/3/timeline/events/2/description",
+        "/slides/17/blocks/3/timeline/events/3/description",
+        "/slides/17/blocks/5/timeline/events/0/description",
+        "/slides/17/blocks/5/timeline/events/1/description",
+        "/slides/17/blocks/5/timeline/events/2/description",
+        "/slides/17/blocks/5/timeline/events/3/description",
+        "/slides/17/blocks/6/timeline/events/0/description",
+        "/slides/17/blocks/6/timeline/events/1/description",
+        "/slides/17/blocks/6/timeline/events/2/description",
+        "/slides/17/blocks/6/timeline/events/3/description"
+      ],
+      "afterSha256": "f0e995289a3bfbce9d13e029699abb19afa9a765afaa5eb36b7eebf77f1f1b7d",
+      "beforeSha256": "2b1a9136ed423de0130ce8f1d84f8074c7afbe4509138f2d41864908524a05b2",
+      "claudeSha256": "4b983c2a5b833470812a327d61c3cf5060b0b6a1a45453cbdb8c1e49cc1620a3",
+      "derivedSheet": "triage-02.png"
+    },
+    {
+      "deck": "batch-07",
+      "ordinal": 46,
+      "id": "s46",
+      "title": "Execution Timeline",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n9",
+        "short"
+      ],
+      "blocks": 9,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 36,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/45/blocks/0/timeline/events/0/description",
+        "/slides/45/blocks/0/timeline/events/1/description",
+        "/slides/45/blocks/0/timeline/events/2/description",
+        "/slides/45/blocks/0/timeline/events/3/description",
+        "/slides/45/blocks/1/timeline/events/0/description",
+        "/slides/45/blocks/1/timeline/events/1/description",
+        "/slides/45/blocks/1/timeline/events/2/description",
+        "/slides/45/blocks/1/timeline/events/3/description",
+        "/slides/45/blocks/2/timeline/events/0/description",
+        "/slides/45/blocks/2/timeline/events/1/description",
+        "/slides/45/blocks/2/timeline/events/2/description",
+        "/slides/45/blocks/2/timeline/events/3/description",
+        "/slides/45/blocks/3/timeline/events/0/description",
+        "/slides/45/blocks/3/timeline/events/1/description",
+        "/slides/45/blocks/3/timeline/events/2/description",
+        "/slides/45/blocks/3/timeline/events/3/description",
+        "/slides/45/blocks/4/timeline/events/0/description",
+        "/slides/45/blocks/4/timeline/events/1/description",
+        "/slides/45/blocks/4/timeline/events/2/description",
+        "/slides/45/blocks/4/timeline/events/3/description",
+        "/slides/45/blocks/5/timeline/events/0/description",
+        "/slides/45/blocks/5/timeline/events/1/description",
+        "/slides/45/blocks/5/timeline/events/2/description",
+        "/slides/45/blocks/5/timeline/events/3/description",
+        "/slides/45/blocks/6/timeline/events/0/description",
+        "/slides/45/blocks/6/timeline/events/1/description",
+        "/slides/45/blocks/6/timeline/events/2/description",
+        "/slides/45/blocks/6/timeline/events/3/description",
+        "/slides/45/blocks/7/timeline/events/0/description",
+        "/slides/45/blocks/7/timeline/events/1/description",
+        "/slides/45/blocks/7/timeline/events/2/description",
+        "/slides/45/blocks/7/timeline/events/3/description",
+        "/slides/45/blocks/8/timeline/events/0/description",
+        "/slides/45/blocks/8/timeline/events/1/description",
+        "/slides/45/blocks/8/timeline/events/2/description",
+        "/slides/45/blocks/8/timeline/events/3/description"
+      ],
+      "afterSha256": "27d867b874e30270aa46509fbdf11b5b2ea1ee594344ce47ef68d0a90d7686a0",
+      "beforeSha256": "ab192322e9d5ab9ad54ee6f3d1fe1b9bc916a5d115939cefb321d76700e1918f",
+      "claudeSha256": "d9883d1e737bc3af023800dc0f9f5f6c67c32810b44d8de436c4aab3a0123380",
+      "derivedSheet": "triage-02.png"
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 12,
+      "id": "s12",
+      "title": "Rural Broadband Expansion Proposal: signal trend",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 6,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/11/blocks/0/timeline/events/3/description",
+        "/slides/11/blocks/1/timeline/events/3/description",
+        "/slides/11/blocks/2/timeline/events/3/description",
+        "/slides/11/blocks/3/timeline/events/3/description",
+        "/slides/11/blocks/4/timeline/events/3/description",
+        "/slides/11/blocks/5/timeline/events/3/description"
+      ],
+      "afterSha256": "50aa9cddabaa4b6e17b968eb03cf1e0cd985962ee524ba05bf7c16f5a5108f9d",
+      "beforeSha256": "8a842f216328bf5bcf00f3499c15a1caf5ea02df229ca287eeb3cc730292185b",
+      "claudeSha256": "27879670c8e49ce403270b0601c547730f66a2f1d7b741f8234c623e4340b276",
+      "derivedSheet": "triage-03.png"
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 39,
+      "id": "s39",
+      "title": "Satellite Maintenance Readiness Review: the ask",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n7",
+        "long"
+      ],
+      "blocks": 7,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 28,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/38/blocks/0/timeline/events/0/description",
+        "/slides/38/blocks/0/timeline/events/1/description",
+        "/slides/38/blocks/0/timeline/events/2/description",
+        "/slides/38/blocks/0/timeline/events/3/description",
+        "/slides/38/blocks/1/timeline/events/0/description",
+        "/slides/38/blocks/1/timeline/events/1/description",
+        "/slides/38/blocks/1/timeline/events/2/description",
+        "/slides/38/blocks/1/timeline/events/3/description",
+        "/slides/38/blocks/2/timeline/events/0/description",
+        "/slides/38/blocks/2/timeline/events/1/description",
+        "/slides/38/blocks/2/timeline/events/2/description",
+        "/slides/38/blocks/2/timeline/events/3/description",
+        "/slides/38/blocks/3/timeline/events/0/description",
+        "/slides/38/blocks/3/timeline/events/1/description",
+        "/slides/38/blocks/3/timeline/events/2/description",
+        "/slides/38/blocks/3/timeline/events/3/description",
+        "/slides/38/blocks/4/timeline/events/0/description",
+        "/slides/38/blocks/4/timeline/events/1/description",
+        "/slides/38/blocks/4/timeline/events/2/description",
+        "/slides/38/blocks/4/timeline/events/3/description",
+        "/slides/38/blocks/5/timeline/events/0/description",
+        "/slides/38/blocks/5/timeline/events/1/description",
+        "/slides/38/blocks/5/timeline/events/2/description",
+        "/slides/38/blocks/5/timeline/events/3/description",
+        "/slides/38/blocks/6/timeline/events/0/description",
+        "/slides/38/blocks/6/timeline/events/1/description",
+        "/slides/38/blocks/6/timeline/events/2/description",
+        "/slides/38/blocks/6/timeline/events/3/description"
+      ],
+      "afterSha256": "b4d2a2cad9edc8e619899dc8668b73446d601688e67ec70ee33bf67fc77fb2ee",
+      "beforeSha256": "c52dd50cbb231a538f3b8e547a250aa147b1b50e1d9083f60b39d32bf49a6518",
+      "claudeSha256": "d34d91ba0a495d2fd93ca2e2a24483f0896807ebbae9e2bd60922b845f962c87",
+      "derivedSheet": "triage-03.png"
+    },
+    {
+      "deck": "batch-12",
+      "ordinal": 16,
+      "id": "s16",
+      "title": "Streaming Churn Winback Strategy: streaming churn winback strategy",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "long"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 32,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/15/blocks/0/timeline/events/0/description",
+        "/slides/15/blocks/0/timeline/events/1/description",
+        "/slides/15/blocks/0/timeline/events/2/description",
+        "/slides/15/blocks/0/timeline/events/3/description",
+        "/slides/15/blocks/1/timeline/events/0/description",
+        "/slides/15/blocks/1/timeline/events/1/description",
+        "/slides/15/blocks/1/timeline/events/2/description",
+        "/slides/15/blocks/1/timeline/events/3/description",
+        "/slides/15/blocks/2/timeline/events/0/description",
+        "/slides/15/blocks/2/timeline/events/1/description",
+        "/slides/15/blocks/2/timeline/events/2/description",
+        "/slides/15/blocks/2/timeline/events/3/description",
+        "/slides/15/blocks/3/timeline/events/0/description",
+        "/slides/15/blocks/3/timeline/events/1/description",
+        "/slides/15/blocks/3/timeline/events/2/description",
+        "/slides/15/blocks/3/timeline/events/3/description",
+        "/slides/15/blocks/4/timeline/events/0/description",
+        "/slides/15/blocks/4/timeline/events/1/description",
+        "/slides/15/blocks/4/timeline/events/2/description",
+        "/slides/15/blocks/4/timeline/events/3/description",
+        "/slides/15/blocks/5/timeline/events/0/description",
+        "/slides/15/blocks/5/timeline/events/1/description",
+        "/slides/15/blocks/5/timeline/events/2/description",
+        "/slides/15/blocks/5/timeline/events/3/description",
+        "/slides/15/blocks/6/timeline/events/0/description",
+        "/slides/15/blocks/6/timeline/events/1/description",
+        "/slides/15/blocks/6/timeline/events/2/description",
+        "/slides/15/blocks/6/timeline/events/3/description",
+        "/slides/15/blocks/7/timeline/events/0/description",
+        "/slides/15/blocks/7/timeline/events/1/description",
+        "/slides/15/blocks/7/timeline/events/2/description",
+        "/slides/15/blocks/7/timeline/events/3/description"
+      ],
+      "afterSha256": "1dc42d52049e524e6b19534f76a6147427ae5d26f1605270c63640d58abca895",
+      "beforeSha256": "b71f328898d63a8f092cb838421745eecc61f6e9d5da34c57373d98bdc2e2a90",
+      "claudeSha256": "3cb0dbc76abac6b650c42acea04b796844fb1ce3f618147fe2ad5dcefee40d8a",
+      "derivedSheet": "triage-03.png"
+    },
+    {
+      "deck": "batch-12",
+      "ordinal": 43,
+      "id": "s43",
+      "title": "Tailings Monitoring Investment Brief: why this matters",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n9",
+        "long"
+      ],
+      "blocks": 9,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 44,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/42/blocks/0/timeline/events/0/description",
+        "/slides/42/blocks/0/timeline/events/1/description",
+        "/slides/42/blocks/0/timeline/events/2/description",
+        "/slides/42/blocks/0/timeline/events/3/description",
+        "/slides/42/blocks/1/timeline/events/0/description",
+        "/slides/42/blocks/1/timeline/events/1/description",
+        "/slides/42/blocks/1/timeline/events/2/description",
+        "/slides/42/blocks/1/timeline/events/3/description",
+        "/slides/42/blocks/2/timeline/events/0/description",
+        "/slides/42/blocks/2/timeline/events/1/description",
+        "/slides/42/blocks/2/timeline/events/2/description",
+        "/slides/42/blocks/2/timeline/events/3/description",
+        "/slides/42/blocks/3/timeline/events/0/description",
+        "/slides/42/blocks/3/timeline/events/1/description",
+        "/slides/42/blocks/3/timeline/events/2/description",
+        "/slides/42/blocks/3/timeline/events/3/description",
+        "/slides/42/blocks/4/timeline/events/0/description",
+        "/slides/42/blocks/4/timeline/events/1/description",
+        "/slides/42/blocks/4/timeline/events/2/description",
+        "/slides/42/blocks/4/timeline/events/3/description",
+        "/slides/42/blocks/5/timeline/events/0/description",
+        "/slides/42/blocks/5/timeline/events/1/description",
+        "/slides/42/blocks/5/timeline/events/2/description",
+        "/slides/42/blocks/5/timeline/events/3/description",
+        "/slides/42/blocks/6/timeline/events/0/description",
+        "/slides/42/blocks/6/timeline/events/1/description",
+        "/slides/42/blocks/6/timeline/events/2/description",
+        "/slides/42/blocks/6/timeline/events/3/description",
+        "/slides/42/blocks/7/timeline/events/0/description",
+        "/slides/42/blocks/7/timeline/events/1/description",
+        "/slides/42/blocks/7/timeline/events/2/description",
+        "/slides/42/blocks/7/timeline/events/3/description",
+        "/slides/42/blocks/8/timeline/events/0/when",
+        "/slides/42/blocks/8/timeline/events/0/what",
+        "/slides/42/blocks/8/timeline/events/0/description",
+        "/slides/42/blocks/8/timeline/events/1/when",
+        "/slides/42/blocks/8/timeline/events/1/what",
+        "/slides/42/blocks/8/timeline/events/1/description",
+        "/slides/42/blocks/8/timeline/events/2/when",
+        "/slides/42/blocks/8/timeline/events/2/what",
+        "/slides/42/blocks/8/timeline/events/2/description",
+        "/slides/42/blocks/8/timeline/events/3/when",
+        "/slides/42/blocks/8/timeline/events/3/what",
+        "/slides/42/blocks/8/timeline/events/3/description"
+      ],
+      "afterSha256": "20a2bf24d0027d4fcb3033386b7ae9d01b409dadadaee46162fd87b4ceb9929f",
+      "beforeSha256": "eca338849e26dd0aa7587c0d64873b9706f86bcf227009b7fea82a7175477c62",
+      "claudeSha256": "4fefdaed20f9f87755dfda3315da96e8295937af057553e271b1ee00920d3090",
+      "derivedSheet": "triage-03.png"
+    },
+    {
+      "deck": "batch-15",
+      "ordinal": 2,
+      "id": "s02",
+      "title": "Next Steps",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "short",
+        "dark"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 24,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/1/blocks/0/timeline/events/0/description",
+        "/slides/1/blocks/0/timeline/events/1/description",
+        "/slides/1/blocks/0/timeline/events/2/description",
+        "/slides/1/blocks/0/timeline/events/3/description",
+        "/slides/1/blocks/1/timeline/events/0/description",
+        "/slides/1/blocks/1/timeline/events/1/description",
+        "/slides/1/blocks/1/timeline/events/2/description",
+        "/slides/1/blocks/1/timeline/events/3/description",
+        "/slides/1/blocks/2/timeline/events/0/description",
+        "/slides/1/blocks/2/timeline/events/1/description",
+        "/slides/1/blocks/2/timeline/events/2/description",
+        "/slides/1/blocks/2/timeline/events/3/description",
+        "/slides/1/blocks/3/timeline/events/0/description",
+        "/slides/1/blocks/3/timeline/events/1/description",
+        "/slides/1/blocks/3/timeline/events/2/description",
+        "/slides/1/blocks/3/timeline/events/3/description",
+        "/slides/1/blocks/5/timeline/events/0/description",
+        "/slides/1/blocks/5/timeline/events/1/description",
+        "/slides/1/blocks/5/timeline/events/2/description",
+        "/slides/1/blocks/5/timeline/events/3/description",
+        "/slides/1/blocks/6/timeline/events/0/description",
+        "/slides/1/blocks/6/timeline/events/1/description",
+        "/slides/1/blocks/6/timeline/events/2/description",
+        "/slides/1/blocks/6/timeline/events/3/description"
+      ],
+      "afterSha256": "c7c4a2a94b6fa1f684a7fba8444a2cf2c878938271f759ffe54fa4e8645bad18",
+      "beforeSha256": "5c7f46b9985eeed127bada8d711e122a34c02f084a851c2af741a6ec8e63c7b9",
+      "claudeSha256": "5932b84a13efc5ca2deea4950dbead05ebdc135c35f0580e7b24696d870f930c",
+      "derivedSheet": "triage-04.png"
+    },
+    {
+      "deck": "batch-15",
+      "ordinal": 29,
+      "id": "s29",
+      "title": "Streaming Churn Winback Strategy: streaming churn winback strategy",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "long",
+        "dark"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 32,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/28/blocks/0/timeline/events/0/description",
+        "/slides/28/blocks/0/timeline/events/1/description",
+        "/slides/28/blocks/0/timeline/events/2/description",
+        "/slides/28/blocks/0/timeline/events/3/description",
+        "/slides/28/blocks/1/timeline/events/0/description",
+        "/slides/28/blocks/1/timeline/events/1/description",
+        "/slides/28/blocks/1/timeline/events/2/description",
+        "/slides/28/blocks/1/timeline/events/3/description",
+        "/slides/28/blocks/2/timeline/events/0/description",
+        "/slides/28/blocks/2/timeline/events/1/description",
+        "/slides/28/blocks/2/timeline/events/2/description",
+        "/slides/28/blocks/2/timeline/events/3/description",
+        "/slides/28/blocks/3/timeline/events/0/description",
+        "/slides/28/blocks/3/timeline/events/1/description",
+        "/slides/28/blocks/3/timeline/events/2/description",
+        "/slides/28/blocks/3/timeline/events/3/description",
+        "/slides/28/blocks/4/timeline/events/0/description",
+        "/slides/28/blocks/4/timeline/events/1/description",
+        "/slides/28/blocks/4/timeline/events/2/description",
+        "/slides/28/blocks/4/timeline/events/3/description",
+        "/slides/28/blocks/5/timeline/events/0/description",
+        "/slides/28/blocks/5/timeline/events/1/description",
+        "/slides/28/blocks/5/timeline/events/2/description",
+        "/slides/28/blocks/5/timeline/events/3/description",
+        "/slides/28/blocks/6/timeline/events/0/description",
+        "/slides/28/blocks/6/timeline/events/1/description",
+        "/slides/28/blocks/6/timeline/events/2/description",
+        "/slides/28/blocks/6/timeline/events/3/description",
+        "/slides/28/blocks/7/timeline/events/0/description",
+        "/slides/28/blocks/7/timeline/events/1/description",
+        "/slides/28/blocks/7/timeline/events/2/description",
+        "/slides/28/blocks/7/timeline/events/3/description"
+      ],
+      "afterSha256": "1c7c5195d5e9e5a87eb5f5d58926a91edcbb08844f0e963221de297c00480b8a",
+      "beforeSha256": "fb95b2975b91736658266c887b015f83e131c0430157de111fd52261e5449659",
+      "claudeSha256": "2ed2a49b07a98f0c74f8762d41bb7184529ee8b276c45b67fc6539cbe1730b9d",
+      "derivedSheet": "triage-04.png"
+    },
+    {
+      "deck": "batch-17",
+      "ordinal": 24,
+      "id": "s24",
+      "title": "Grant Equity Review: grant equity review",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n5",
+        "long",
+        "dark"
+      ],
+      "blocks": 5,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/23/blocks/0/code/source",
+        "/slides/23/blocks/2/code/source",
+        "/slides/23/blocks/4/code/source"
+      ],
+      "afterSha256": "1ae8c225e11a65be11169c614ef62255d9458537f2a5483d37415dfb53720e61",
+      "beforeSha256": "fd75c992c6ed9cab367ba5fea980752fcfd2395cc40cb10c9729139272a681ec",
+      "claudeSha256": "ff87d50479599db6b41d4890ca08bf383d9e958144764823f938978a20a46df8",
+      "derivedSheet": "triage-04.png"
+    },
+    {
+      "deck": "batch-13",
+      "id": "s32",
+      "ordinal": 32,
+      "tags": [
+        "mixed composition",
+        "visible reading-measure check"
+      ],
+      "findings": 0,
+      "afterSha256": "e5f031ac4fe7e049671cfffc9b359b59dd98f5f72ac42a673e1b5d72d6f8e3d1",
+      "beforeSha256": "ea72cd06bc27cd6c6e38a27128f4808b1a9700578a0d60579543e4fcdab719ae",
+      "claudeSha256": "1b233ae9441ce1beb1b9ffdb1a35119314382c1d0b1a775ea7bc83abe9dbd01b",
+      "derivedSheet": "triage-04.png"
+    }
+  ],
+  "files": [
+    {
+      "file": "triage-01.png",
+      "bytes": 613150,
+      "sha256": "8489be45b39539e480f3607b97f20edfa81158f216836e572c489c00934e65f9"
+    },
+    {
+      "file": "triage-01.svg",
+      "bytes": 1214832,
+      "sha256": "4251bb54a6ca3f16db4634e3829ecc414e0dbb23152a807de6c467218ec71893"
+    },
+    {
+      "file": "triage-02.png",
+      "bytes": 627949,
+      "sha256": "03bd3bd9b171f066b17c390bac95cc43549464125027bb0b9839d36752a9dace"
+    },
+    {
+      "file": "triage-02.svg",
+      "bytes": 1309235,
+      "sha256": "827a4f744d5e06c2963b2697ab3b1ed81114c19e4a9e5c1c9a4e49f0ab7a1108"
+    },
+    {
+      "file": "triage-03.png",
+      "bytes": 636926,
+      "sha256": "88bd8757f54875a03e9ca8eff7481a091a7c799a22b986ca7a1ced14233d77fc"
+    },
+    {
+      "file": "triage-03.svg",
+      "bytes": 1325919,
+      "sha256": "89363c5fdcd32a1ab723327489f59898f668814dbecb219045b3e6600f6ffe05"
+    },
+    {
+      "file": "triage-04.png",
+      "bytes": 793478,
+      "sha256": "df7e178db09e79b3ba3ffe41a1dee6437267260bd40f48cb4c63d11040cfe453"
+    },
+    {
+      "file": "triage-04.svg",
+      "bytes": 1168842,
+      "sha256": "c9618ae65fd1ea7d509a56200def3880dbfedd97edda850eab5a29c4369d7a0f"
+    }
+  ]
+}

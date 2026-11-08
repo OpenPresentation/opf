@@ -1,0 +1,1007 @@
+{
+  "scope": "Bounded independent visual triage of all15 overflow-warning slides, all9 unmatched controls, and one unwarned reading-measure candidate. Not full936-slide acceptance.",
+  "rawFindings": {
+    "error": 0,
+    "warning": 427,
+    "byRuleId": {
+      "opf/numbering-start-ignored": 31,
+      "render/layout-unplaced": 132,
+      "render/small-cell": 2,
+      "render/text-overflow": 262
+    }
+  },
+  "uniqueSlides": {
+    "numberingStartIgnored": 30,
+    "layoutUnplaced": 68,
+    "smallCell": 1,
+    "textOverflow": 15
+  },
+  "unmatched": [
+    {
+      "deck": "overview",
+      "ordinal": 31,
+      "id": "layout-pyramid",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-08.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 32,
+      "id": "layout-matrix",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-08.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 33,
+      "id": "layout-cycle",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 34,
+      "id": "layout-chevrons",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 35,
+      "id": "layout-flow",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "overview",
+      "ordinal": 36,
+      "id": "layout-vertical-flow",
+      "before": false,
+      "claude": false,
+      "sheet": "sheets/overview/review-09.png"
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 27,
+      "id": "s27",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-11/review-07.png"
+    },
+    {
+      "deck": "batch-13",
+      "ordinal": 29,
+      "id": "s29",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-13/review-08.png"
+    },
+    {
+      "deck": "batch-17",
+      "ordinal": 4,
+      "id": "s04",
+      "before": false,
+      "claude": true,
+      "sheet": "sheets/batch-17/review-01.png"
+    }
+  ],
+  "unmatchedSheetsViewed": [
+    {
+      "file": "sheets/overview/review-01.png",
+      "bytes": 177012,
+      "sha256": "ab200f66c8d7dac0b7d7f8d4fadd9ec3fb0f800fc5280aa6f066d518c12f6c5a"
+    },
+    {
+      "file": "sheets/overview/review-08.png",
+      "bytes": 202004,
+      "sha256": "010494f958a73c8fb469002a9a4a52b7b4c04c52a32a6756308398fecf3ecd39"
+    },
+    {
+      "file": "sheets/overview/review-09.png",
+      "bytes": 108846,
+      "sha256": "3af1006cc89804079cb8af9cb26e7bec04b44c2d2ebb1b7a2e7d03eec3097d7c"
+    },
+    {
+      "file": "sheets/batch-11/review-07.png",
+      "bytes": 426047,
+      "sha256": "7557734cfaeb152158e1ce603d5befcb499fe807215e022a006394c2dccd727f"
+    },
+    {
+      "file": "sheets/batch-13/review-08.png",
+      "bytes": 477902,
+      "sha256": "0a13471fb08a8a4588b41139f5ad471f2afc0a7eda11eb6fb1d170fdd76bb88b"
+    },
+    {
+      "file": "sheets/batch-17/review-01.png",
+      "bytes": 315643,
+      "sha256": "f55c3ccede1c6982b6364be2bf24de1785fa9f1be3da958d992692f5fb5ab944"
+    }
+  ],
+  "fixedControlObservation": {
+    "asset": "pilot/claude/layout-cover.png",
+    "observation": "Present fixed Claude cover is image-only without the authored title; its exact historical bytes are retained. No replacement panel was invented.",
+    "newRegressionClaim": false
+  },
+  "overflowSlides": [
+    {
+      "deck": "batch-03",
+      "ordinal": 27,
+      "id": "s27",
+      "title": "Why This Matters",
+      "layout": "timeline",
+      "tags": [
+        "layout",
+        "timeline",
+        "n6",
+        "short"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "text",
+        "timeline",
+        "text",
+        "timeline",
+        "text"
+      ],
+      "findings": 1,
+      "messages": [
+        "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+      ],
+      "paths": [
+        "/slides/26/blocks/1/text"
+      ],
+      "visualDisposition": "Nested timeline/text body uses visibly tiny cells; two small-cell findings and one paragraph overflow remain. Fixed before also overlaps/clips; current readability acceptance is not granted."
+    },
+    {
+      "deck": "batch-04",
+      "ordinal": 14,
+      "id": "s14",
+      "title": "Grant Equity Review: grant equity review",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n5",
+        "long"
+      ],
+      "blocks": 5,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/13/blocks/0/code/source",
+        "/slides/13/blocks/2/code/source",
+        "/slides/13/blocks/4/code/source"
+      ],
+      "visualDisposition": "Current code spills outside panel bottoms; the same failure is visible in fixed before. Acceptance remains open; new introduction is not established."
+    },
+    {
+      "deck": "batch-04",
+      "ordinal": 42,
+      "id": "s42",
+      "title": "Housing Zoning Council Brief: decision and follow through",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code",
+        "text"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/41/blocks/0/code/source",
+        "/slides/41/blocks/2/code/source",
+        "/slides/41/blocks/4/code/source"
+      ],
+      "visualDisposition": "Current code spills outside panel bottoms; the same failure is visible in fixed before. Acceptance remains open; new introduction is not established."
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 12,
+      "id": "s12",
+      "title": "Why This Matters",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n6",
+        "short"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 5,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/11/blocks/0/timeline/events/3/description",
+        "/slides/11/blocks/1/timeline/events/3/description",
+        "/slides/11/blocks/2/timeline/events/3/description",
+        "/slides/11/blocks/3/timeline/events/3/description",
+        "/slides/11/blocks/4/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 40,
+      "id": "s40",
+      "title": "Signal Trend",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n7",
+        "short"
+      ],
+      "blocks": 7,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 9,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/39/blocks/0/timeline/events/3/description",
+        "/slides/39/blocks/1/timeline/events/3/description",
+        "/slides/39/blocks/2/timeline/events/3/description",
+        "/slides/39/blocks/3/timeline/events/3/description",
+        "/slides/39/blocks/4/timeline/events/3/description",
+        "/slides/39/blocks/5/timeline/events/3/description",
+        "/slides/39/blocks/6/timeline/events/0/description",
+        "/slides/39/blocks/6/timeline/events/1/description",
+        "/slides/39/blocks/6/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-06",
+      "ordinal": 45,
+      "id": "s45",
+      "title": "Executive Workshop Facilitation: why this matters",
+      "layout": "timeline",
+      "tags": [
+        "layout",
+        "timeline",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "text",
+        "timeline",
+        "text",
+        "timeline",
+        "text"
+      ],
+      "findings": 12,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/44/blocks/0/timeline/events/0/description",
+        "/slides/44/blocks/0/timeline/events/1/description",
+        "/slides/44/blocks/0/timeline/events/2/description",
+        "/slides/44/blocks/0/timeline/events/3/description",
+        "/slides/44/blocks/2/timeline/events/0/description",
+        "/slides/44/blocks/2/timeline/events/1/description",
+        "/slides/44/blocks/2/timeline/events/2/description",
+        "/slides/44/blocks/2/timeline/events/3/description",
+        "/slides/44/blocks/4/timeline/events/0/description",
+        "/slides/44/blocks/4/timeline/events/1/description",
+        "/slides/44/blocks/4/timeline/events/2/description",
+        "/slides/44/blocks/4/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-07",
+      "ordinal": 18,
+      "id": "s18",
+      "title": "Next Steps",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "short"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 24,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/17/blocks/0/timeline/events/0/description",
+        "/slides/17/blocks/0/timeline/events/1/description",
+        "/slides/17/blocks/0/timeline/events/2/description",
+        "/slides/17/blocks/0/timeline/events/3/description",
+        "/slides/17/blocks/1/timeline/events/0/description",
+        "/slides/17/blocks/1/timeline/events/1/description",
+        "/slides/17/blocks/1/timeline/events/2/description",
+        "/slides/17/blocks/1/timeline/events/3/description",
+        "/slides/17/blocks/2/timeline/events/0/description",
+        "/slides/17/blocks/2/timeline/events/1/description",
+        "/slides/17/blocks/2/timeline/events/2/description",
+        "/slides/17/blocks/2/timeline/events/3/description",
+        "/slides/17/blocks/3/timeline/events/0/description",
+        "/slides/17/blocks/3/timeline/events/1/description",
+        "/slides/17/blocks/3/timeline/events/2/description",
+        "/slides/17/blocks/3/timeline/events/3/description",
+        "/slides/17/blocks/5/timeline/events/0/description",
+        "/slides/17/blocks/5/timeline/events/1/description",
+        "/slides/17/blocks/5/timeline/events/2/description",
+        "/slides/17/blocks/5/timeline/events/3/description",
+        "/slides/17/blocks/6/timeline/events/0/description",
+        "/slides/17/blocks/6/timeline/events/1/description",
+        "/slides/17/blocks/6/timeline/events/2/description",
+        "/slides/17/blocks/6/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-07",
+      "ordinal": 46,
+      "id": "s46",
+      "title": "Execution Timeline",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n9",
+        "short"
+      ],
+      "blocks": 9,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 36,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/45/blocks/0/timeline/events/0/description",
+        "/slides/45/blocks/0/timeline/events/1/description",
+        "/slides/45/blocks/0/timeline/events/2/description",
+        "/slides/45/blocks/0/timeline/events/3/description",
+        "/slides/45/blocks/1/timeline/events/0/description",
+        "/slides/45/blocks/1/timeline/events/1/description",
+        "/slides/45/blocks/1/timeline/events/2/description",
+        "/slides/45/blocks/1/timeline/events/3/description",
+        "/slides/45/blocks/2/timeline/events/0/description",
+        "/slides/45/blocks/2/timeline/events/1/description",
+        "/slides/45/blocks/2/timeline/events/2/description",
+        "/slides/45/blocks/2/timeline/events/3/description",
+        "/slides/45/blocks/3/timeline/events/0/description",
+        "/slides/45/blocks/3/timeline/events/1/description",
+        "/slides/45/blocks/3/timeline/events/2/description",
+        "/slides/45/blocks/3/timeline/events/3/description",
+        "/slides/45/blocks/4/timeline/events/0/description",
+        "/slides/45/blocks/4/timeline/events/1/description",
+        "/slides/45/blocks/4/timeline/events/2/description",
+        "/slides/45/blocks/4/timeline/events/3/description",
+        "/slides/45/blocks/5/timeline/events/0/description",
+        "/slides/45/blocks/5/timeline/events/1/description",
+        "/slides/45/blocks/5/timeline/events/2/description",
+        "/slides/45/blocks/5/timeline/events/3/description",
+        "/slides/45/blocks/6/timeline/events/0/description",
+        "/slides/45/blocks/6/timeline/events/1/description",
+        "/slides/45/blocks/6/timeline/events/2/description",
+        "/slides/45/blocks/6/timeline/events/3/description",
+        "/slides/45/blocks/7/timeline/events/0/description",
+        "/slides/45/blocks/7/timeline/events/1/description",
+        "/slides/45/blocks/7/timeline/events/2/description",
+        "/slides/45/blocks/7/timeline/events/3/description",
+        "/slides/45/blocks/8/timeline/events/0/description",
+        "/slides/45/blocks/8/timeline/events/1/description",
+        "/slides/45/blocks/8/timeline/events/2/description",
+        "/slides/45/blocks/8/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 12,
+      "id": "s12",
+      "title": "Rural Broadband Expansion Proposal: signal trend",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n6",
+        "long"
+      ],
+      "blocks": 6,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 6,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/11/blocks/0/timeline/events/3/description",
+        "/slides/11/blocks/1/timeline/events/3/description",
+        "/slides/11/blocks/2/timeline/events/3/description",
+        "/slides/11/blocks/3/timeline/events/3/description",
+        "/slides/11/blocks/4/timeline/events/3/description",
+        "/slides/11/blocks/5/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-11",
+      "ordinal": 39,
+      "id": "s39",
+      "title": "Satellite Maintenance Readiness Review: the ask",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n7",
+        "long"
+      ],
+      "blocks": 7,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 28,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/38/blocks/0/timeline/events/0/description",
+        "/slides/38/blocks/0/timeline/events/1/description",
+        "/slides/38/blocks/0/timeline/events/2/description",
+        "/slides/38/blocks/0/timeline/events/3/description",
+        "/slides/38/blocks/1/timeline/events/0/description",
+        "/slides/38/blocks/1/timeline/events/1/description",
+        "/slides/38/blocks/1/timeline/events/2/description",
+        "/slides/38/blocks/1/timeline/events/3/description",
+        "/slides/38/blocks/2/timeline/events/0/description",
+        "/slides/38/blocks/2/timeline/events/1/description",
+        "/slides/38/blocks/2/timeline/events/2/description",
+        "/slides/38/blocks/2/timeline/events/3/description",
+        "/slides/38/blocks/3/timeline/events/0/description",
+        "/slides/38/blocks/3/timeline/events/1/description",
+        "/slides/38/blocks/3/timeline/events/2/description",
+        "/slides/38/blocks/3/timeline/events/3/description",
+        "/slides/38/blocks/4/timeline/events/0/description",
+        "/slides/38/blocks/4/timeline/events/1/description",
+        "/slides/38/blocks/4/timeline/events/2/description",
+        "/slides/38/blocks/4/timeline/events/3/description",
+        "/slides/38/blocks/5/timeline/events/0/description",
+        "/slides/38/blocks/5/timeline/events/1/description",
+        "/slides/38/blocks/5/timeline/events/2/description",
+        "/slides/38/blocks/5/timeline/events/3/description",
+        "/slides/38/blocks/6/timeline/events/0/description",
+        "/slides/38/blocks/6/timeline/events/1/description",
+        "/slides/38/blocks/6/timeline/events/2/description",
+        "/slides/38/blocks/6/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-12",
+      "ordinal": 16,
+      "id": "s16",
+      "title": "Streaming Churn Winback Strategy: streaming churn winback strategy",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "long"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 32,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/15/blocks/0/timeline/events/0/description",
+        "/slides/15/blocks/0/timeline/events/1/description",
+        "/slides/15/blocks/0/timeline/events/2/description",
+        "/slides/15/blocks/0/timeline/events/3/description",
+        "/slides/15/blocks/1/timeline/events/0/description",
+        "/slides/15/blocks/1/timeline/events/1/description",
+        "/slides/15/blocks/1/timeline/events/2/description",
+        "/slides/15/blocks/1/timeline/events/3/description",
+        "/slides/15/blocks/2/timeline/events/0/description",
+        "/slides/15/blocks/2/timeline/events/1/description",
+        "/slides/15/blocks/2/timeline/events/2/description",
+        "/slides/15/blocks/2/timeline/events/3/description",
+        "/slides/15/blocks/3/timeline/events/0/description",
+        "/slides/15/blocks/3/timeline/events/1/description",
+        "/slides/15/blocks/3/timeline/events/2/description",
+        "/slides/15/blocks/3/timeline/events/3/description",
+        "/slides/15/blocks/4/timeline/events/0/description",
+        "/slides/15/blocks/4/timeline/events/1/description",
+        "/slides/15/blocks/4/timeline/events/2/description",
+        "/slides/15/blocks/4/timeline/events/3/description",
+        "/slides/15/blocks/5/timeline/events/0/description",
+        "/slides/15/blocks/5/timeline/events/1/description",
+        "/slides/15/blocks/5/timeline/events/2/description",
+        "/slides/15/blocks/5/timeline/events/3/description",
+        "/slides/15/blocks/6/timeline/events/0/description",
+        "/slides/15/blocks/6/timeline/events/1/description",
+        "/slides/15/blocks/6/timeline/events/2/description",
+        "/slides/15/blocks/6/timeline/events/3/description",
+        "/slides/15/blocks/7/timeline/events/0/description",
+        "/slides/15/blocks/7/timeline/events/1/description",
+        "/slides/15/blocks/7/timeline/events/2/description",
+        "/slides/15/blocks/7/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-12",
+      "ordinal": 43,
+      "id": "s43",
+      "title": "Tailings Monitoring Investment Brief: why this matters",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n9",
+        "long"
+      ],
+      "blocks": 9,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 44,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/42/blocks/0/timeline/events/0/description",
+        "/slides/42/blocks/0/timeline/events/1/description",
+        "/slides/42/blocks/0/timeline/events/2/description",
+        "/slides/42/blocks/0/timeline/events/3/description",
+        "/slides/42/blocks/1/timeline/events/0/description",
+        "/slides/42/blocks/1/timeline/events/1/description",
+        "/slides/42/blocks/1/timeline/events/2/description",
+        "/slides/42/blocks/1/timeline/events/3/description",
+        "/slides/42/blocks/2/timeline/events/0/description",
+        "/slides/42/blocks/2/timeline/events/1/description",
+        "/slides/42/blocks/2/timeline/events/2/description",
+        "/slides/42/blocks/2/timeline/events/3/description",
+        "/slides/42/blocks/3/timeline/events/0/description",
+        "/slides/42/blocks/3/timeline/events/1/description",
+        "/slides/42/blocks/3/timeline/events/2/description",
+        "/slides/42/blocks/3/timeline/events/3/description",
+        "/slides/42/blocks/4/timeline/events/0/description",
+        "/slides/42/blocks/4/timeline/events/1/description",
+        "/slides/42/blocks/4/timeline/events/2/description",
+        "/slides/42/blocks/4/timeline/events/3/description",
+        "/slides/42/blocks/5/timeline/events/0/description",
+        "/slides/42/blocks/5/timeline/events/1/description",
+        "/slides/42/blocks/5/timeline/events/2/description",
+        "/slides/42/blocks/5/timeline/events/3/description",
+        "/slides/42/blocks/6/timeline/events/0/description",
+        "/slides/42/blocks/6/timeline/events/1/description",
+        "/slides/42/blocks/6/timeline/events/2/description",
+        "/slides/42/blocks/6/timeline/events/3/description",
+        "/slides/42/blocks/7/timeline/events/0/description",
+        "/slides/42/blocks/7/timeline/events/1/description",
+        "/slides/42/blocks/7/timeline/events/2/description",
+        "/slides/42/blocks/7/timeline/events/3/description",
+        "/slides/42/blocks/8/timeline/events/0/when",
+        "/slides/42/blocks/8/timeline/events/0/what",
+        "/slides/42/blocks/8/timeline/events/0/description",
+        "/slides/42/blocks/8/timeline/events/1/when",
+        "/slides/42/blocks/8/timeline/events/1/what",
+        "/slides/42/blocks/8/timeline/events/1/description",
+        "/slides/42/blocks/8/timeline/events/2/when",
+        "/slides/42/blocks/8/timeline/events/2/what",
+        "/slides/42/blocks/8/timeline/events/2/description",
+        "/slides/42/blocks/8/timeline/events/3/when",
+        "/slides/42/blocks/8/timeline/events/3/what",
+        "/slides/42/blocks/8/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-15",
+      "ordinal": 2,
+      "id": "s02",
+      "title": "Next Steps",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "short",
+        "dark"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 24,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/1/blocks/0/timeline/events/0/description",
+        "/slides/1/blocks/0/timeline/events/1/description",
+        "/slides/1/blocks/0/timeline/events/2/description",
+        "/slides/1/blocks/0/timeline/events/3/description",
+        "/slides/1/blocks/1/timeline/events/0/description",
+        "/slides/1/blocks/1/timeline/events/1/description",
+        "/slides/1/blocks/1/timeline/events/2/description",
+        "/slides/1/blocks/1/timeline/events/3/description",
+        "/slides/1/blocks/2/timeline/events/0/description",
+        "/slides/1/blocks/2/timeline/events/1/description",
+        "/slides/1/blocks/2/timeline/events/2/description",
+        "/slides/1/blocks/2/timeline/events/3/description",
+        "/slides/1/blocks/3/timeline/events/0/description",
+        "/slides/1/blocks/3/timeline/events/1/description",
+        "/slides/1/blocks/3/timeline/events/2/description",
+        "/slides/1/blocks/3/timeline/events/3/description",
+        "/slides/1/blocks/5/timeline/events/0/description",
+        "/slides/1/blocks/5/timeline/events/1/description",
+        "/slides/1/blocks/5/timeline/events/2/description",
+        "/slides/1/blocks/5/timeline/events/3/description",
+        "/slides/1/blocks/6/timeline/events/0/description",
+        "/slides/1/blocks/6/timeline/events/1/description",
+        "/slides/1/blocks/6/timeline/events/2/description",
+        "/slides/1/blocks/6/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-15",
+      "ordinal": 29,
+      "id": "s29",
+      "title": "Streaming Churn Winback Strategy: streaming churn winback strategy",
+      "layout": "process",
+      "tags": [
+        "layout",
+        "process",
+        "n8",
+        "long",
+        "dark"
+      ],
+      "blocks": 8,
+      "contentKinds": [
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline",
+        "timeline"
+      ],
+      "findings": 32,
+      "messages": [
+        "Timeline field extends outside its cell; increase the cell or paginate events."
+      ],
+      "paths": [
+        "/slides/28/blocks/0/timeline/events/0/description",
+        "/slides/28/blocks/0/timeline/events/1/description",
+        "/slides/28/blocks/0/timeline/events/2/description",
+        "/slides/28/blocks/0/timeline/events/3/description",
+        "/slides/28/blocks/1/timeline/events/0/description",
+        "/slides/28/blocks/1/timeline/events/1/description",
+        "/slides/28/blocks/1/timeline/events/2/description",
+        "/slides/28/blocks/1/timeline/events/3/description",
+        "/slides/28/blocks/2/timeline/events/0/description",
+        "/slides/28/blocks/2/timeline/events/1/description",
+        "/slides/28/blocks/2/timeline/events/2/description",
+        "/slides/28/blocks/2/timeline/events/3/description",
+        "/slides/28/blocks/3/timeline/events/0/description",
+        "/slides/28/blocks/3/timeline/events/1/description",
+        "/slides/28/blocks/3/timeline/events/2/description",
+        "/slides/28/blocks/3/timeline/events/3/description",
+        "/slides/28/blocks/4/timeline/events/0/description",
+        "/slides/28/blocks/4/timeline/events/1/description",
+        "/slides/28/blocks/4/timeline/events/2/description",
+        "/slides/28/blocks/4/timeline/events/3/description",
+        "/slides/28/blocks/5/timeline/events/0/description",
+        "/slides/28/blocks/5/timeline/events/1/description",
+        "/slides/28/blocks/5/timeline/events/2/description",
+        "/slides/28/blocks/5/timeline/events/3/description",
+        "/slides/28/blocks/6/timeline/events/0/description",
+        "/slides/28/blocks/6/timeline/events/1/description",
+        "/slides/28/blocks/6/timeline/events/2/description",
+        "/slides/28/blocks/6/timeline/events/3/description",
+        "/slides/28/blocks/7/timeline/events/0/description",
+        "/slides/28/blocks/7/timeline/events/1/description",
+        "/slides/28/blocks/7/timeline/events/2/description",
+        "/slides/28/blocks/7/timeline/events/3/description"
+      ],
+      "visualDisposition": "Current nested multi-event timelines have tiny descriptions and/or collisions with adjacent tracks. Fixed before clips low content; exact old producer is unrecovered. Treat as a located current readability failure, not proof every warning is a newly introduced regression."
+    },
+    {
+      "deck": "batch-17",
+      "ordinal": 24,
+      "id": "s24",
+      "title": "Grant Equity Review: grant equity review",
+      "layout": "code",
+      "tags": [
+        "layout",
+        "code",
+        "n5",
+        "long",
+        "dark"
+      ],
+      "blocks": 5,
+      "contentKinds": [
+        "code",
+        "text",
+        "code",
+        "text",
+        "code"
+      ],
+      "findings": 3,
+      "messages": [
+        "Code body exceeds its space at the readability floor; increase its space or change the arrangement."
+      ],
+      "paths": [
+        "/slides/23/blocks/0/code/source",
+        "/slides/23/blocks/2/code/source",
+        "/slides/23/blocks/4/code/source"
+      ],
+      "visualDisposition": "Current code spills outside panel bottoms; the same failure is visible in fixed before. Acceptance remains open; new introduction is not established."
+    }
+  ],
+  "lowerCountTableCapacity": {
+    "findings": 10,
+    "uniqueSlides": 6,
+    "rows": [
+      {
+        "deck": "batch-05",
+        "id": "s43",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n3",
+          "short"
+        ],
+        "path": "/slides/42/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-06",
+        "id": "s49",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "short"
+        ],
+        "path": "/slides/48/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-06",
+        "id": "s49",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "short"
+        ],
+        "path": "/slides/48/blocks/4",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-09",
+        "id": "s11",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n3",
+          "long"
+        ],
+        "path": "/slides/10/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-10",
+        "id": "s17",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "long"
+        ],
+        "path": "/slides/16/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-10",
+        "id": "s17",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "long"
+        ],
+        "path": "/slides/16/blocks/4",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-16",
+        "id": "s18",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "short",
+          "dark"
+        ],
+        "path": "/slides/17/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-16",
+        "id": "s18",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "short",
+          "dark"
+        ],
+        "path": "/slides/17/blocks/4",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-16",
+        "id": "s36",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "long",
+          "dark"
+        ],
+        "path": "/slides/35/blocks/2",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      },
+      {
+        "deck": "batch-16",
+        "id": "s36",
+        "layout": "table-beside",
+        "tags": [
+          "layout",
+          "table-beside",
+          "n5",
+          "long",
+          "dark"
+        ],
+        "path": "/slides/35/blocks/4",
+        "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+      }
+    ],
+    "followup": "Recheck accepted LH73 on final0.34 source; do not repair immutable source decks or add unrelated scope."
+  },
+  "readingMeasureCandidate": {
+    "deck": "batch-13",
+    "id": "s32",
+    "layout": "two-column",
+    "sourceParagraph": "Meridian Cloud should focus the next cycle on help regional partners explain the new integration story while making the operating tradeoffs clear to partnerships stakeholders.",
+    "observedFirstLine": "Meridian Cloud should focus the next cycle on help regional partners explain the new",
+    "characters": 84,
+    "method": "Transcribed from the actual paired PNG; exact source prefix verified, not inferred from a new renderer.",
+    "observation": "Current gray paragraph card is full width with an84-character first line, while fixed before uses a narrower column. This is an unwarned candidate against the owner's about70-character direction. Exact before font/engine producer is unknown, so no numeric font-size shrink is asserted.",
+    "followup": "Coordinator assess/recheck the same source on final0.34 before visual acceptance."
+  },
+  "allUnmatchedControlsInspected": true,
+  "allOverflowWarningSlidesInspected": true,
+  "all936SlidesVisuallyAccepted": false,
+  "underlyingSlideExportsForTriage": 0,
+  "derivativeSheets": 4,
+  "metadataCorrections": [
+    "Archive collector initially used code instead of public ruleId; only derived summary corrected, raw reports unchanged.",
+    "Initial evidence-only triage tiler used a Windows path as an ESM specifier and refused before any output; corrected to file URL. No slide was exported again."
+  ]
+}
