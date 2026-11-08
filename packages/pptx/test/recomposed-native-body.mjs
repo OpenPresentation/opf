@@ -11,7 +11,9 @@ import {defaultCatalog, fromPptx, toPptx} from './helpers/default-catalog.mjs';
 const options = {seed: 991, timestamp: '2026-11-02T00:00:00Z', zipDate: '2026-11-02T00:00:00Z'};
 const agenda = (count, extra = {}) => ({layout: 'agenda-split', title: 'Six workstreams to align before the next budget cycle', ...extra,
   blocks: Array.from({length: count}, (_, index) => ({items: Array.from({length: 6}, (_, item) => `Workstream ${index + 1}, step ${item + 1}: agree the owner, the reporting cadence and the first readout`)}))});
-const deck = {slides: [agenda(3, {id: 'recomposed'}), agenda(1, {id: 'layout'})]};
+// LH-186: slide 2's five entries are short enough to fit its numbered region near the list's role size, so the slide keeps its layout
+// and its step badges (long entries set two steps under the role size move to the automatic grid before they shrink).
+const deck = {slides: [agenda(3, {id: 'recomposed'}), {...agenda(1, {id: 'layout'}), blocks: [{items: Array.from({length: 5}, (_, item) => `Workstream ${item + 1}: agree the owner and the reporting cadence`)}]}]};
 assert.ok(composeSlide(deck.slides[0], {layout: defaultCatalog.layouts['agenda-split']}).recomposed, 'slide 1 is recomposed at the floor');
 assert.equal(composeSlide(deck.slides[1], {layout: defaultCatalog.layouts['agenda-split']}).recomposed, undefined, 'slide 2 keeps its layout');
 

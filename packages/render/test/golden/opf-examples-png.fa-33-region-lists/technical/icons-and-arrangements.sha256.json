@@ -1,0 +1,45 @@
+{
+  "deck": "technical/icons-and-arrangements.opf.json",
+  "entries": {
+    "technical/icons-and-arrangements.opf.json#0": {
+      "sha256": "ccd288caff81a09969c75424705b3007df675bdffc300aae2fc10a351ee7f582",
+      "bytes": 11832
+    },
+    "technical/icons-and-arrangements.opf.json#1": {
+      "sha256": "fede791ea76c791e6a6abcb96b0ecdf3d83fca74b4ab573d4e1bc2b5fe40b931",
+      "bytes": 9160
+    },
+    "technical/icons-and-arrangements.opf.json#2": {
+      "sha256": "625d8efedb1d1ebdb0feec4c60d1fa0a10fdf8c50f773c0712a3939d56b40329",
+      "bytes": 6250
+    },
+    "technical/icons-and-arrangements.opf.json#3": {
+      "sha256": "1dea1d623c4991e53f7b7a959986d77cef73cf2a055d6116d1a3a232541215c2",
+      "bytes": 6661
+    },
+    "technical/icons-and-arrangements.opf.json#4": {
+      "sha256": "1042cec0fe0ccf458125f45c7328f888e82ae299009f68398dc4bfed926ae330",
+      "bytes": 7290
+    },
+    "technical/icons-and-arrangements.opf.json#5": {
+      "sha256": "2fd401c98014e3d887db5c0b073b8d1e5a4dc17465ee8dfa2f13658c942dd637",
+      "bytes": 8040
+    },
+    "technical/icons-and-arrangements.opf.json#6": {
+      "sha256": "32de7464ce16cf12bc825136615ed96f96661df42308898f67bf53cc80131941",
+      "bytes": 4194
+    },
+    "technical/icons-and-arrangements.opf.json#7": {
+      "sha256": "0a1dd0e2194000c84ea535ed9997584a0672c983baa7d4b336f426cf4b1897a5",
+      "bytes": 6174
+    },
+    "technical/icons-and-arrangements.opf.json#8": {
+      "sha256": "4df30b5e2b6ed4baf1fcffd81d345599e7bdf715c3bfa96fc69d32c7f0933451",
+      "bytes": 9293
+    },
+    "technical/icons-and-arrangements.opf.json#9": {
+      "sha256": "4f877d1054775cdc0ed40306c963e518446a7d693017fc5436ff7b25632e97c8",
+      "bytes": 9157
+    }
+  }
+}

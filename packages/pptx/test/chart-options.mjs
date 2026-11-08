@@ -61,12 +61,13 @@ const seriesBlocks = xml => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map
 
 // 1. A chart without options writes its type's defaults: no axis titles; the LH-81 header legend (top, at core's position) on the
 // column, bar, line and area charts and a right legend on the others; value labels only on the LH-03 small charts (a clustered column,
-// or line chart of two series of four points here; two series of horizontal bars are too thin for a label beside each). Import writes
+// bar or line chart of two series of four points here; LH-176: two series of horizontal bars, as thick as PowerPoint draws them, hold a label
+// beside each). Import writes
 // none of these defaults back.
 // LH-105: a line chart of two to four series names its series at the line ends (no legend, and its small-chart value labels give way),
 // and a pie or doughnut names its slices (no legend).
 // LH-109: a stacked column chart prints its segment values and names its series beside its last column (no legend).
-const SMALL = new Set(['column', 'stacked-column']), HEADER = new Set(['column', 'bar', 'area', 'stacked-column']), DIRECT = new Set(['line', 'pie', 'doughnut', 'stacked-column']);
+const SMALL = new Set(['column', 'bar', 'stacked-column']), HEADER = new Set(['column', 'bar', 'area', 'stacked-column']), DIRECT = new Set(['line', 'pie', 'doughnut', 'stacked-column']);
 for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter', 'radar', 'stacked-column']) {
   const result = await exportDeck({type, data: dataOf(type)});
   assert.doesNotMatch(result.classic, /<c:(?:catAx|valAx)>(?:(?!<\/c:(?:catAx|valAx)>)[\s\S])*<c:title>/, `${type}: no axis title by default`);
@@ -217,7 +218,7 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
   const axes = [...waterfall.chartex.matchAll(/<cx:axis id="(\d)">([\s\S]*?)<\/cx:axis>/g)];
   // Native check 2026-10-01: PowerPoint empties cx:txData/cx:v text without a cx:f formula, so titles are rich text.
   assert.match(axes.find(axis => axis[1] === '0')[2], /^<cx:catScaling[^>]*\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Step<\/a:t>[\s\S]*<\/cx:rich><\/cx:tx><\/cx:title><cx:tickLabels\/>/);
-  assert.match(axes.find(axis => axis[1] === '1')[2], /^<cx:valScaling\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Delta<\/a:t>/);
+  assert.match(axes.find(axis => axis[1] === '1')[2], /^<cx:valScaling max="50" min="0" majorUnit="10"\/><cx:title><cx:tx><cx:rich>[\s\S]*<a:t>Delta<\/a:t>/);
   assert.doesNotMatch(waterfall.chartex, /<cx:txData><cx:v>(Step|Delta)/, 'no title is written as cached formula text');
   // The importer reads both forms: this exporter's rich text, and txData/cx:v as an earlier build (or Excel) wrote it.
   {

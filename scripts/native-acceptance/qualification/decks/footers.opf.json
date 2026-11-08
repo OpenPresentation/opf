@@ -1,0 +1,51 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Qualification: header and footer fields",
+  "description": "v0.33 qualification (RR-102): a footer with words around the slide number and the slide count, a date and text, and a slide that hides the footer; PowerPoint renumbers the live fields and its Header and Footer settings match.",
+  "language": "en-US",
+  "design": {
+    "footer": {
+      "left": {
+        "text": "Northwind Logistics"
+      },
+      "center": {
+        "text": "Page {{slide.number}} of {{deck.slideCount}}"
+      },
+      "right": {
+        "date": "2026-11-07"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "one",
+      "title": "First slide",
+      "text": "The footer reads Page 1 of 4."
+    },
+    {
+      "id": "two",
+      "title": "Second slide",
+      "text": "The footer reads Page 2 of 4."
+    },
+    {
+      "id": "three",
+      "title": "Third slide",
+      "text": "This slide hides its footer.",
+      "design": {
+        "footer": false
+      }
+    },
+    {
+      "id": "four",
+      "title": "Fourth slide",
+      "text": "The footer reads 4 / 4.",
+      "design": {
+        "footer": {
+          "center": {
+            "text": "{{slide.number}} / {{deck.slideCount}}"
+          }
+        }
+      }
+    }
+  ]
+}

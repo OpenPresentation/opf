@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {resolvePresentation, toSvg} from '../dist/svg.js';
-import {CHART_TYPES,chartSeriesPalette,resolveChartType,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
-import {niceScale,stackCategoryValues} from '@openpresentation/opf/composition';
+import {CHART_TYPES,chartSeriesPalette,resolveChartType,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
+import {chartBarGeometry,niceScale,stackCategoryValues} from '@openpresentation/opf/composition';
 // RR-96: the connector and axis lines are the deck's scheme-derived axis neutral (core roles.neutrals).
 const AXIS=resolvePresentation({slides:[{chart:{type:'column',data:{columns:['A','B'],rows:[['x',1]]}}}]}).slides[0].design.roles.neutrals.axisLine.hex;
 
@@ -62,8 +62,13 @@ for(const id of ['column','stacked-column','100pct-stacked-column','bar','stacke
   const bars=marks(render('bar'),'rect',point),y=path=>Number(bars.find(r=>r['data-opf-path']===`${PATH}.data.rows.${path}`).y);
   assert.ok(y('0.1')<y('3.1'),'first category at the top');
   assert.ok(y('0.1')<y('0.2'),'first series highest in its cluster');
-  const band=100;assert.deepEqual(barGeometry(band,2,'clustered'),{group:40,width:20,offset:30,clustered:true});
-  assert.deepEqual(barGeometry(band,2,'stacked').width,band/1.5);
+  // LH-176: PowerPoint's gap width is a share of one bar: two clustered series and a 150% gap fill a band of 3.5 bar widths.
+  const band=100,two=chartBarGeometry(band,2,'clustered');
+  assert.ok(Math.abs(two.width-band/3.5)<1e-9&&Math.abs(two.group-2*band/3.5)<1e-9&&Math.abs(two.offset-0.75*band/3.5)<1e-9&&two.clustered);
+  assert.equal(chartBarGeometry(band,1,'clustered').width,band/2.5);
+  assert.equal(chartBarGeometry(band,2,'stacked').width,band/1.5);
+  const columns=marks(render('column'),'rect',/rows\.0\.\d$/).map(r=>Number(r.width));
+  assert.ok(columns.every(w=>Math.abs(w-columns[0])<0.01),'one width per clustered column');
   checks++;
 }
 

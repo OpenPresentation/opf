@@ -68,7 +68,7 @@ Code pagination preserves exact body fragments and repeats filename/language, re
 
 ## Vertical budget
 
-How much one slide holds is measured, not guessed. The numbers below come from `composeSlide` on a default 16:9 slide (1280×720 reference pixels, the default theme and layout, a one-line title, no `fontSize` set), with the portable text estimate: they are estimates, and a real font changes them a little. Sizes are reference pixels (points are 0.75 of that). "Full" is the size the engine starts at; the engine shrinks the whole block together when it does not fit, down to the readability floor, and reports `overflow` below it.
+How much one slide holds is measured, not guessed. The numbers below come from `composeSlide` on a default 16:9 slide (1280×720 reference pixels, the default theme and layout, a one-line title, no `fontSize` set), with the portable text estimate: they are estimates, and a real font changes them a little. Sizes are reference pixels (points are 0.75 of that). "Full" is the size the engine starts at; when it does not fit, the engine first tries an arrangement that keeps it larger (a long list in two or three columns, a layout's content as the automatic grid, kept only when that sets it at least one step of the type scale larger), then sets the whole block smaller together, down to the readability floor, and reports `overflow` below it.
 
 | Content in one block | Starts at | Still full size | Shrunk to a readable size | At the floor or over |
 | --- | --- | --- | --- | --- |
@@ -83,7 +83,7 @@ Reading it as an author:
 - A talk to a room wants the **full** column, which is a ceiling and not a target: about 6 list entries, 4 `items` with descriptions, 8 table rows and 3 paragraphs. Past the full column the slide still fits, but its text is smaller than the slide beside it and the audience reads less of it.
 - A list or table that sits in the shrunk column is a signal to split the slide (two ideas make two slides), move the detail to a handout or the speaker notes, or turn it into a structure that shows it (a table into a chart, entries into `pillars`).
 - A two-line title costs body space: 10 one-line entries stay at 32, but 12 fall from 29 to 25 and 14 from 24 to 21. Keep the title to one line (about 40 characters) before you count.
-- Nothing is dropped or cropped: the floor is `composition.minFontSize` (16 by default), and under it the engine reports `opf/text-overflow` (`opf validate` shows it as a warning) instead of cutting text. Lowering `minFontSize` to make a slide pass is not a repair.
+- Nothing is dropped or cropped and no text is set smaller while an arrangement holds it larger: the floor is `composition.minFontSize` (16 by default), and under it the engine reports `opf/text-overflow` (`opf validate` shows it as a warning) instead of cutting text. Lowering `minFontSize` to make a slide pass is not a repair.
 
 To measure your own content, compose it and read the fitted size, or let the engine split what does not fit:
 
@@ -133,4 +133,4 @@ Lists whose text has no authored font size start at 32 reference pixels (24 poin
 starts at 28 reference pixels (21 points; the subtitle too, a table keeps 25, a quote body asks for 40 and fits down, a code body for 22). The shared fit can reduce a dense list to its explicit readability floor or use
 list columns; it keeps numbering, nesting and every source entry. Rich-run `fontSize` is expressed in points:
 an explicit 24-point run starts at 24 points, independently of the unspecified-list starting size.
-When it fits, that size is preserved; dense content can still shrink under the shared fitting and floor rules.
+When it fits, that size is preserved; dense content can still shrink under the shared fitting and floor rules, after the arrangements that keep text larger (columns, the automatic grid).

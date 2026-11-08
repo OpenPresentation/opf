@@ -1,0 +1,157 @@
+{
+  "inputs": [
+    {
+      "source": "C:\\opf-work\\release-033-artifacts\\qualification-final2\\pptx\\layout-harvest.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\waterfall-metrics-02\\result\\before.pptx",
+      "unchanged": true,
+      "name": "before",
+      "hashAfter": "359e09898e2a5bf2c48cc9ead237711e3f385a26238adbd562770b172bf3a359",
+      "hash": "359e09898e2a5bf2c48cc9ead237711e3f385a26238adbd562770b172bf3a359"
+    },
+    {
+      "source": "C:\\opf-work\\rr-105-waterfall-axis\\artifacts\\waterfall-axis\\layout-harvest.pptx",
+      "copy": "C:\\opf-work\\release-033-artifacts\\waterfall-metrics-02\\result\\after.pptx",
+      "unchanged": true,
+      "name": "after",
+      "hashAfter": "d88cf1f7cb75b3d2106c85779d60fa0189adc5d1dcb5a9300b4f1cbf52263669",
+      "hash": "d88cf1f7cb75b3d2106c85779d60fa0189adc5d1dcb5a9300b4f1cbf52263669"
+    }
+  ],
+  "stages": [
+    "create-app:ok",
+    "empty-owned-app:ok",
+    "before-open:ok",
+    "before-measure:ok",
+    "before-close:ok",
+    "after-open:ok",
+    "after-measure:ok",
+    "after-close:ok",
+    "quit-empty:ok"
+  ],
+  "metrics": [
+    {
+      "name": "before",
+      "axis": {
+        "major": {
+          "value": null
+        },
+        "min": {
+          "value": 0
+        },
+        "max": {
+          "value": 9000000
+        }
+      },
+      "plot": {
+        "insideTop": {
+          "value": 1.4000000953674316
+        },
+        "width": {
+          "value": 0
+        },
+        "insideWidth": {
+          "value": 0
+        },
+        "insideHeight": {
+          "value": 0
+        },
+        "height": {
+          "value": 0
+        },
+        "top": {
+          "value": 1.4000000953674316
+        },
+        "left": {
+          "value": 1.4000000953674316
+        },
+        "insideLeft": {
+          "value": 1.4000000953674316
+        }
+      },
+      "type": 119,
+      "title": {
+        "left": {
+          "value": 1.4000000953674316
+        },
+        "width": {
+          "value": 0
+        },
+        "top": {
+          "value": 1.4000000953674316
+        },
+        "height": {
+          "value": 0
+        }
+      },
+      "frame": [
+        43.2,
+        110.61,
+        873.6,
+        386.19
+      ]
+    },
+    {
+      "name": "after",
+      "axis": {
+        "major": {
+          "value": null
+        },
+        "min": {
+          "value": 0
+        },
+        "max": {
+          "value": 10000000
+        }
+      },
+      "plot": {
+        "insideTop": {
+          "value": 1.4000000953674316
+        },
+        "width": {
+          "value": 0
+        },
+        "insideWidth": {
+          "value": 0
+        },
+        "insideHeight": {
+          "value": 0
+        },
+        "height": {
+          "value": 0
+        },
+        "top": {
+          "value": 1.4000000953674316
+        },
+        "left": {
+          "value": 1.4000000953674316
+        },
+        "insideLeft": {
+          "value": 1.4000000953674316
+        }
+      },
+      "type": 119,
+      "title": {
+        "left": {
+          "value": 1.4000000953674316
+        },
+        "width": {
+          "value": 0
+        },
+        "top": {
+          "value": 1.4000000953674316
+        },
+        "height": {
+          "value": 0
+        }
+      },
+      "frame": [
+        43.2,
+        110.61,
+        873.6,
+        386.19
+      ]
+    }
+  ],
+  "failure": null,
+  "passed": true
+}

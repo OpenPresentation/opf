@@ -1,21 +1,21 @@
 # gallery
 
-The default catalog for Open Presentation: layouts, themes, colour schemes and font schemes for OPF decks, published as
+The default catalog for Open Presentation: layouts, themes, color schemes and font schemes for OPF decks, published as
 [`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) and previewed at
 [pptx.gallery](https://www.pptx.gallery).
 
-It holds every layout, theme, colour scheme, font scheme, narrative, audience, purpose and tone that
+It holds every layout, theme, color scheme, font scheme, narrative, audience, purpose and tone that
 [OPF](https://openpresentation.org) decks name by id (`layout: "pillars"`, `design: { theme: "minimal" }`). Engines
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
 
-**2.x is the catalog of OPF 0.19.** Its layouts are the 36 OPF 0.19 layouts named by intent, written as templates
+**2.x is the catalog of OPF 0.19.** Its layouts are the 30 OPF 0.19 layouts named by intent, written as templates
 (`opf-layout/v2`). 1.x holds the 278 OPF 0.18 layouts. 2.0.0 changed the layouts with no migration path: see
 [Layouts](#layouts) and the [changelog](CHANGELOG.md).
 
 Gallery 5.x advances the overall catalog compatibility contract to `4`: a layout record is `direction` and one ordered
 list of `regions`, nested for two dimensions, and `areas`, `columns`, `rows` and the `regions` map are gone (FA-33, no
-migration path). The engine packages follow their separate release process. The per-kind layout schema version remains
+migration path). Those versions predate the shared OPF release line. The per-kind layout schema version remains
 `2` and its URI remains `opf-layout/v2`; those identifiers are distinct from the overall catalog contract.
 
 ## Use
@@ -52,6 +52,19 @@ registers later.
 content in every region by the pinned `@openpresentation/opf-render`, a self-contained `<svg>` with a 16:9 viewBox. The
 package has no dependency, not even for its types: `GalleryCatalog` has the shape of core's `Catalog`, so `gallery` is
 assignable to it.
+
+## Icon sets
+
+`@openpresentation/gallery/icon-sets` exports `galleryIconSets`, a catalog of two icon sets that decks name as `<set>:<name>` in an `icon` field: `lucide:truck` ([Lucide](https://lucide.dev), ISC, 2,020 icons, the default set) and `tabler:rocket` ([Tabler outline](https://tabler.io/icons), MIT, 5,203 icons). Each set is a module of its own (`@openpresentation/gallery/icon-sets/<id>`), so a host loads only the sets a deck uses. Register it beside `gallery`:
+
+```js
+import { gallery } from "@openpresentation/gallery";
+import { galleryIconSets } from "@openpresentation/gallery/icon-sets";
+
+const catalogs = [gallery, galleryIconSets];
+```
+
+The licenses are in `THIRD-PARTY-NOTICES.md`. See [icons](https://github.com/OpenPresentation/opf/blob/main/docs/icons.md).
 
 ## Layouts
 
@@ -145,7 +158,7 @@ Core compiles the list to the grid its engine uses, so the same layout draws the
 ## Versions
 
 The gallery is released with the other OPF packages under one shared version (core, the CLI, the renderer, the PPTX exporter,
-the editor and this package; from 0.26.0). The gallery's earlier line (1.0.0 to 5.0.0) is not continued: those versions stay
+the editor and this package from 0.26.0, with MCP joining in 0.27.0). The gallery's earlier line (1.0.0 to 5.0.0) is not continued: those versions stay
 on npm, and `latest` points at the shared line, so `^5` consumers keep 5.0.0 and get no further catalog fixes. While the
 shared version is 0.x, a breaking change is a minor bump.
 

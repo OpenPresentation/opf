@@ -90,7 +90,7 @@ let checked = 0;
   assert.equal(bar.min, '0');
   assert.ok(bar.majorUnit && bar.max);
   const scatter = axis(await chartXml({type: 'scatter', data: {columns: ['X', 'Y'], rows: [[1, 2], [2, 3]]}}));
-  assert.equal(scatter.majorUnit, undefined, 'a scatter chart keeps the application axis');
+  assert.deepEqual(scatter, {min: '0', max: '2.5', majorUnit: '0.5'}, 'the scatter X axis keeps the shared numeric scale');
   checked += 6;
 }
 
