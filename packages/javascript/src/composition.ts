@@ -3433,6 +3433,8 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
   return fitAtSizes(balance?balanced:layout,size,minimum,step,snap);
 }
 
+/** LH-101: an internal measured trial for an under-filled mixed panel; public code role/display policies are unchanged. */
+const MIXED_CODE_SIZE = Symbol('opf.mixedCodeSize');
 /** Shared filename/language/body allocation. Consumers must reuse the accepted fits and styles. */
 export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLayoutOptions={}):CodeLayout {
   const shorthand=typeof value==='string',code=shorthand?{source:value}:value;
@@ -3444,12 +3446,13 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
     throw new RangeError('Code dimensions, scale and minimum font size must be finite and positive.');
   }
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid code overflow policy.');
+  const displaySize=(options as Record<symbol, unknown>)[MIXED_CODE_SIZE] as number | undefined;
   const path=options.path??'code',inner={x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-36};
   const parts:CodeTextPart[]=[],diagnostics:CodeLayoutDiagnostic[]=[];
   const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
     const requestedStyle:TextStyle={fontFamily:options.fontFamilies?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
     const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
-      requestedFontSize:gridFontSize((role==='body'?grownRoleSize(CODE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.code):grownRoleSize(14,options.growth,LONE_DISPLAY_SIZES.codeHeader))*scale,minimum),minFontSize:minimum,requestedStyle,
+      requestedFontSize:gridFontSize((role==='body'?(displaySize??grownRoleSize(CODE_NOMINAL_SIZE,options.growth,LONE_DISPLAY_SIZES.code)):grownRoleSize(14,options.growth,LONE_DISPLAY_SIZES.codeHeader))*scale,minimum),minFontSize:minimum,requestedStyle,
       style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     parts.push(part);return part;
   };
@@ -3466,7 +3469,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
     // would break `function` from its name): the earlier size is taken when it wraps fewer lines and fits.
     const wraps=(value:CodeTextFit)=>value.sourceLines.filter(line=>line.boundary==='soft').length;
     const legacy=gridFontSize(LEGACY_CODE_NOMINAL_SIZE*scale,minimum);
-    if (part.role!=='body'||part.requestedFontSize<=legacy||!wraps(wanted)) return wanted;
+    if (part.role!=='body'||displaySize!==undefined||part.requestedFontSize<=legacy||!wraps(wanted)) return wanted;
     const earlier=fitCodeText(part.text,area,legacy,floor,scale,measureCode);
     return !earlier.overflow&&wraps(earlier)<wraps(wanted)?earlier:wanted;
   };
@@ -4963,8 +4966,45 @@ function readableTimelineNotes(input: unknown, options: ComposeSlideOptions, res
   }
   return result;
 }
+/** LH-101: a short code panel beside prose may grow inside its settled frame; every other item stays byte-for-byte the same. */
+function growMixedCode(input: unknown, options: ComposeSlideOptions, result: SlideComposition): SlideComposition {
+  const slide = record(input), own = record(slide.composition), blocks = slide.blocks;
+  if (options.fill === false || result.composition.maxFontSize !== undefined || result.composition.minFontSize !== undefined || result.regions || slide.layout !== undefined || Object.keys(record(options.layout)).length > 0 || overflowCount(result) || !Array.isArray(blocks) || blocks.length !== 2 || own.minFontSize !== undefined || own.maxFontSize !== undefined) return result;
+  if (blocks.some(block => ['region', 'placement', 'blocks', 'composition', 'fontSize', 'fill'].some(key => record(block)[key] !== undefined))) return result;
+  const body = result.items.filter(item => !headings.has(item.field) && !item.eyebrow), panel = body.find(item => item.codeLayout), note = body.find(item => item.field === 'text');
+  if (body.length !== 2 || !panel?.codeLayout || !note?.text || panel.caption || note.caption || panel.codeLayout.overflow || ownRunSizes(panel.value)) return result;
+  if (!(panel.box.x + panel.box.width <= note.box.x + .01 || note.box.x + note.box.width <= panel.box.x + .01)) return result;
+  const code = panel.codeLayout.parts.find(part => part.role === 'body');
+  if (!code?.fit || code.fit.lines.length * code.fit.lineHeight >= LONE_FILL * panel.box.height) return result;
+  const scale = Math.min(result.width, result.height) / 720, floor = result.composition.minFontSize ?? 16;
+  // Keep the public 32px code ceiling. This otherwise unfilled mixed panel can use the existing 56px body-display policy,
+  // only at an observed fitting size and without introducing even punctuation-only splits inside a whitespace-delimited token.
+  const sizes: number[] = [], cap = LONE_DISPLAY_SIZES.quote * scale;
+  for (let size = code.fit.fontSize, step = 0; step < 64; step++) {
+    const next = typeScaleAbove(size, floor, scale);
+    if (next > cap + FONT_GRID_EPSILON || next <= size + FONT_GRID_EPSILON) break;
+    sizes.push(next); size = next;
+  }
+  const cuts = (part: CodeTextPart) => new Set(part.fit!.sourceLines.filter(line => line.boundary === 'soft' && /\S/u.test(part.text[line.end - 1] ?? '') && /\S/u.test(part.text[line.end] ?? '')).map(line => line.end));
+  const beforeCuts = new Map(panel.codeLayout.parts.map(part => [part.path, cuts(part)]));
+  for (const size of sizes.reverse()) {
+    const settings = {scale, minFontSize: floor, fontFamilies: {code: code.requestedStyle.fontFamily}, textMeasurement: options.textMeasurement, path: panel.path, [MIXED_CODE_SIZE]: size / scale} as CodeLayoutOptions;
+    const natural = layoutCode(panel.value as string | CodeContent, {...panel.box, height: 1e6}, settings);
+    if (natural.overflow || natural.bounds.height > panel.box.height + .01) continue;
+    const placed = layoutCode(panel.value as string | CodeContent, {...panel.box, y: panel.box.y + (panel.box.height - natural.bounds.height) / 2, height: natural.bounds.height}, settings);
+    const source = placed.parts.find(part => part.role === 'body');
+    if (placed.overflow || !source?.fit || source.fit.fontSize < size - FONT_GRID_EPSILON) continue;
+    if (!panel.codeLayout.parts.every(was => {
+      const now = placed.parts.find(part => part.path === was.path);
+      return !!now?.fit && now.text === was.text && JSON.stringify(now.sources) === JSON.stringify(was.sources) && JSON.stringify(now.style) === JSON.stringify(was.style) && now.fit.fontSize >= was.fit!.fontSize - FONT_GRID_EPSILON && [...cuts(now)].every(cut => beforeCuts.get(was.path)!.has(cut));
+    })) continue;
+    const next = {...result, items: result.items.map(item => item === panel ? {...panel, codeLayout: placed, text: source.fit, textStyle: source.style} : item)};
+    if (!shrinks(next, result, options)) return next;
+  }
+  return result;
+}
 export function composeSlide(input: unknown, options: ComposeSlideOptions = {}): SlideComposition {
-  const result = readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options)));
+  const result = growMixedCode(input, options, readableProse(input, options, readableTimelineNotes(input, options, composeSlideBody(input, options))));
   if (options.messageSurface) result.surface = options.messageSurface;
   // SH-04: the overlay goes on the slide's final composition (every arrangement, growth and recomposition settled), so it never moves
   // content and follows the blocks it is attached to; its text is fitted by the slide's own fitter (composeLayout's overlay pass).

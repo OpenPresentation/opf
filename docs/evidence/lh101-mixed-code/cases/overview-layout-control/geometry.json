@@ -1,0 +1,506 @@
+{
+  "source": "c949a49b293ecd51ec70a17704343d8fd8486387",
+  "items": [
+    {
+      "path": "slides.0.title",
+      "field": "title",
+      "type": "text",
+      "value": "Keep the implementation easy to inspect",
+      "payload": {
+        "text": "Keep the implementation easy to inspect"
+      },
+      "box": {
+        "x": 57.6,
+        "y": 57.6,
+        "width": 1164.8,
+        "height": 65.88
+      },
+      "text": {
+        "lines": [
+          "Keep the implementation easy to inspect"
+        ],
+        "sourceLines": [
+          {
+            "start": 0,
+            "end": 39,
+            "nextStart": 39,
+            "boundary": "end",
+            "width": 931.2099609375,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 0,
+                "end": 39,
+                "x": 0,
+                "width": 931.2099609375
+              }
+            ]
+          }
+        ],
+        "fontSize": 54,
+        "lineHeight": 65.88,
+        "tabSize": 4,
+        "tabWidth": 41.66015625,
+        "overflow": false,
+        "placement": {
+          "alignment": "left",
+          "rasterPadding": 1,
+          "lines": [
+            {
+              "x": 57.6,
+              "y": 57.6,
+              "baseline": 111.6,
+              "height": 65.88,
+              "width": 931.2099609375,
+              "outline": {
+                "x": 61.1068359375,
+                "y": 75.687890625,
+                "width": 927.2548828125,
+                "height": 45.5361328125
+              }
+            }
+          ],
+          "height": 65.88,
+          "overflow": false
+        }
+      },
+      "textStyle": {
+        "fontFamily": "Intos Display",
+        "fontWeight": 700,
+        "path": "slides.0.title",
+        "italic": false,
+        "fontFace": {
+          "family": "Intos Display",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "composition": {},
+      "alignment": "left"
+    },
+    {
+      "path": "slides.0.blocks.0.code",
+      "field": "code",
+      "type": "code",
+      "value": {
+        "language": "javascript",
+        "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+      },
+      "payload": {
+        "type": "code",
+        "code": {
+          "language": "javascript",
+          "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+        }
+      },
+      "box": {
+        "x": 57.6,
+        "y": 327.421563,
+        "width": 684.48,
+        "height": 148.04
+      },
+      "text": {
+        "lines": [
+          "const total = items.reduce((sum, item) => sum + ",
+          "item.value, 0);",
+          "console.log(total);"
+        ],
+        "sourceLines": [
+          {
+            "start": 0,
+            "end": 48,
+            "nextStart": 48,
+            "boundary": "soft",
+            "width": 633.703125,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 0,
+                "end": 48,
+                "x": 0,
+                "width": 633.703125
+              }
+            ]
+          },
+          {
+            "start": 48,
+            "end": 63,
+            "nextStart": 64,
+            "boundary": "hard",
+            "width": 198.0322265625,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 48,
+                "end": 63,
+                "x": 0,
+                "width": 198.0322265625
+              }
+            ]
+          },
+          {
+            "start": 64,
+            "end": 83,
+            "nextStart": 83,
+            "boundary": "end",
+            "width": 250.8408203125,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 64,
+                "end": 83,
+                "x": 0,
+                "width": 250.8408203125
+              }
+            ]
+          }
+        ],
+        "fontSize": 22,
+        "lineHeight": 26.84,
+        "tabSize": 4,
+        "tabWidth": 52.80859375,
+        "overflow": false
+      },
+      "textStyle": {
+        "fontFamily": "Roboto Mono",
+        "fontWeight": 400,
+        "italic": false,
+        "path": "slides.0.blocks.0.code.source",
+        "fontFace": {
+          "family": "Roboto Mono",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "composition": {},
+      "alignment": "left",
+      "codeLayout": {
+        "bounds": {
+          "x": 57.6,
+          "y": 327.421563,
+          "width": 684.48,
+          "height": 148.03999999999996
+        },
+        "algorithm": "code-flow-v1",
+        "textMeasurement": "provided",
+        "parts": [
+          {
+            "role": "language",
+            "path": "slides.0.blocks.0.code.language",
+            "text": "javascript",
+            "sources": [
+              {
+                "path": "slides.0.blocks.0.code.language",
+                "start": 0,
+                "end": 10
+              }
+            ],
+            "generated": false,
+            "box": {
+              "x": 75.6,
+              "y": 345.421563,
+              "width": 648.48,
+              "height": 19.52
+            },
+            "requestedFontSize": 16,
+            "minFontSize": 16,
+            "requestedStyle": {
+              "fontFamily": "Roboto Mono",
+              "fontWeight": 700,
+              "italic": false,
+              "path": "slides.0.blocks.0.code.language"
+            },
+            "style": {
+              "fontFamily": "Roboto Mono",
+              "fontWeight": 700,
+              "italic": false,
+              "path": "slides.0.blocks.0.code.language",
+              "fontFace": {
+                "family": "Roboto Mono",
+                "bold": true,
+                "italic": false
+              }
+            },
+            "fit": {
+              "lines": [
+                "javascript"
+              ],
+              "sourceLines": [
+                {
+                  "start": 0,
+                  "end": 10,
+                  "nextStart": 10,
+                  "boundary": "end",
+                  "width": 96.015625,
+                  "segments": [
+                    {
+                      "kind": "text",
+                      "start": 0,
+                      "end": 10,
+                      "x": 0,
+                      "width": 96.015625
+                    }
+                  ]
+                }
+              ],
+              "fontSize": 16,
+              "lineHeight": 19.52,
+              "tabSize": 4,
+              "tabWidth": 38.40625,
+              "overflow": false
+            }
+          },
+          {
+            "role": "body",
+            "path": "slides.0.blocks.0.code.source",
+            "text": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);",
+            "sources": [
+              {
+                "path": "slides.0.blocks.0.code.source",
+                "start": 0,
+                "end": 83
+              }
+            ],
+            "generated": false,
+            "box": {
+              "x": 75.6,
+              "y": 376.941563,
+              "width": 648.48,
+              "height": 80.52
+            },
+            "requestedFontSize": 22,
+            "minFontSize": 16,
+            "requestedStyle": {
+              "fontFamily": "Roboto Mono",
+              "fontWeight": 400,
+              "italic": false,
+              "path": "slides.0.blocks.0.code.source"
+            },
+            "style": {
+              "fontFamily": "Roboto Mono",
+              "fontWeight": 400,
+              "italic": false,
+              "path": "slides.0.blocks.0.code.source",
+              "fontFace": {
+                "family": "Roboto Mono",
+                "bold": false,
+                "italic": false
+              }
+            },
+            "fit": {
+              "lines": [
+                "const total = items.reduce((sum, item) => sum + ",
+                "item.value, 0);",
+                "console.log(total);"
+              ],
+              "sourceLines": [
+                {
+                  "start": 0,
+                  "end": 48,
+                  "nextStart": 48,
+                  "boundary": "soft",
+                  "width": 633.703125,
+                  "segments": [
+                    {
+                      "kind": "text",
+                      "start": 0,
+                      "end": 48,
+                      "x": 0,
+                      "width": 633.703125
+                    }
+                  ]
+                },
+                {
+                  "start": 48,
+                  "end": 63,
+                  "nextStart": 64,
+                  "boundary": "hard",
+                  "width": 198.0322265625,
+                  "segments": [
+                    {
+                      "kind": "text",
+                      "start": 48,
+                      "end": 63,
+                      "x": 0,
+                      "width": 198.0322265625
+                    }
+                  ]
+                },
+                {
+                  "start": 64,
+                  "end": 83,
+                  "nextStart": 83,
+                  "boundary": "end",
+                  "width": 250.8408203125,
+                  "segments": [
+                    {
+                      "kind": "text",
+                      "start": 64,
+                      "end": 83,
+                      "x": 0,
+                      "width": 250.8408203125
+                    }
+                  ]
+                }
+              ],
+              "fontSize": 22,
+              "lineHeight": 26.84,
+              "tabSize": 4,
+              "tabWidth": 52.80859375,
+              "overflow": false
+            }
+          }
+        ],
+        "diagnostics": [],
+        "overflow": false
+      },
+      "region": "code"
+    },
+    {
+      "path": "slides.0.blocks.1.text",
+      "field": "text",
+      "type": "text",
+      "value": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero.",
+      "payload": {
+        "type": "text",
+        "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+      },
+      "box": {
+        "x": 766.08,
+        "y": 327.421563,
+        "width": 456.32,
+        "height": 151.04
+      },
+      "text": {
+        "lines": [
+          "The reducer adds each item’s value to ",
+          "a running sum. Starting at zero also ",
+          "makes an empty list return zero."
+        ],
+        "sourceLines": [
+          {
+            "start": 0,
+            "end": 38,
+            "nextStart": 38,
+            "boundary": "soft",
+            "width": 453.509765625,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 0,
+                "end": 38,
+                "x": 0,
+                "width": 459.197265625
+              }
+            ]
+          },
+          {
+            "start": 38,
+            "end": 75,
+            "nextStart": 75,
+            "boundary": "soft",
+            "width": 426.658203125,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 38,
+                "end": 75,
+                "x": 0,
+                "width": 426.658203125
+              }
+            ]
+          },
+          {
+            "start": 75,
+            "end": 107,
+            "nextStart": 107,
+            "boundary": "end",
+            "width": 382.607421875,
+            "segments": [
+              {
+                "kind": "text",
+                "start": 75,
+                "end": 107,
+                "x": 0,
+                "width": 382.607421875
+              }
+            ]
+          }
+        ],
+        "fontSize": 28,
+        "lineHeight": 34.16,
+        "tabSize": 4,
+        "tabWidth": 22.75,
+        "overflow": false,
+        "placement": {
+          "alignment": "left",
+          "rasterPadding": 1,
+          "lines": [
+            {
+              "x": 766.8339062499999,
+              "y": 327.42156250000005,
+              "baseline": 355.42156250000005,
+              "height": 34.16,
+              "width": 453.509765625,
+              "outline": {
+                "x": 767.0799999999999,
+                "y": 336.95085937500005,
+                "width": 451.85546875,
+                "height": 19.072265625
+              }
+            },
+            {
+              "x": 766.0799999999999,
+              "y": 361.5815625,
+              "baseline": 389.5815625,
+              "height": 34.16,
+              "width": 426.658203125,
+              "outline": {
+                "x": 767.6659374999999,
+                "y": 370.933125,
+                "width": 417.9765625,
+                "height": 23.802734375
+              }
+            },
+            {
+              "x": 766.0799999999999,
+              "y": 395.74156250000004,
+              "baseline": 423.74156250000004,
+              "height": 34.16,
+              "width": 382.607421875,
+              "outline": {
+                "x": 768.2811718749999,
+                "y": 405.27085937500004,
+                "width": 378.1640625,
+                "height": 23.4609375
+              }
+            }
+          ],
+          "height": 102.48000000000002,
+          "overflow": false
+        }
+      },
+      "textStyle": {
+        "fontFamily": "Intos",
+        "fontWeight": 400,
+        "path": "slides.0.blocks.1.text",
+        "italic": false,
+        "fontFace": {
+          "family": "Intos",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "composition": {},
+      "alignment": "left",
+      "region": "notes"
+    }
+  ],
+  "contentBox": {
+    "x": 57.6,
+    "y": 57.6,
+    "width": 1164.8,
+    "height": 600.803125
+  },
+  "diagnostics": []
+}
