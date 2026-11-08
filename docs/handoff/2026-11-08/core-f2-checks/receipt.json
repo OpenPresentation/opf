@@ -1,0 +1,121 @@
+{
+  "base": "abfff8050d0101cd194e63dc68f5d009bd400463",
+  "command": "pnpm check:changed --base abfff8050d0101cd194e63dc68f5d009bd400463",
+  "node": "v24.20.0",
+  "OPF_TRACKER_STALE": "unset (strict)",
+  "result": "exit1: two of15steps failed;11pass,2not applicable",
+  "failures": [
+    {
+      "check": "catalog-free",
+      "measuredCompositionGzip": 256898,
+      "budget": 256668,
+      "scope": "inherited approved034 composition/source; documentation-only delta changes no runtime bytes"
+    },
+    {
+      "check": "gallery-tracker",
+      "committedItems": 105,
+      "computedItems": 110,
+      "scope": "inherited generated tracker mismatch; existing RR20 row updated, no new row or generated source changes"
+    }
+  ],
+  "files": [
+    {
+      "file": "mapped-run.log.gz",
+      "rawBytes": 5492,
+      "rawSha256": "5789a877a2834a96f4edc851bc4dba00adb6f9a0ca0fd1688ebbf5af057b6085",
+      "gzipBytes": 2103,
+      "gzipSha256": "7e83b1e304429f7f19d66bafea12309bcfcc3e453e0983a5e34e88890c67efdc"
+    },
+    {
+      "file": "build.log.gz",
+      "rawBytes": 14545,
+      "rawSha256": "81d42a8e2b4783f264d4cc0616fc03317829890e4da992dc34da0eb58ec38884",
+      "gzipBytes": 3033,
+      "gzipSha256": "7658fbbae6ff42fa4d3c6861d040f9bf51a6f763868e0d5057a94de008a6eb9f"
+    },
+    {
+      "file": "install.log.gz",
+      "rawBytes": 4183,
+      "rawSha256": "320ffe79bf94e31671a6291803c2e70c73b27b4d7eae4e808f340137aea88a14",
+      "gzipBytes": 558,
+      "gzipSha256": "23d9206c155b8a5b145b1eae705c5acb60bb80a1df38fb32c6c9edc225f7b904"
+    },
+    {
+      "file": "pnpm_run_check_browser-safe.log.gz",
+      "rawBytes": 1141,
+      "rawSha256": "82c036813220071d1635138b0f579b821a094c25ce8edf9ae9f7306bb5a25dc7",
+      "gzipBytes": 595,
+      "gzipSha256": "3e4fa223048c7348a42fce9e5d5220d9e6d75d5dcfb4584e91b8008e2c1c2ba7"
+    },
+    {
+      "file": "pnpm_run_check_catalog-free.log.gz",
+      "rawBytes": 303,
+      "rawSha256": "dc29befd15f918fb41febc6502dfc5da013e298c25a444aa03195aced320c55b",
+      "gzipBytes": 239,
+      "gzipSha256": "20bc44276c13986e5d7affc140c2c2b866ed9bc9a6d36fb48adc001892b9d3fd"
+    },
+    {
+      "file": "pnpm_run_check_changes.log.gz",
+      "rawBytes": 2633,
+      "rawSha256": "2c4a415b5aecedbe9e0e19ba0e25a2811cfa0756b6048b3d922635e8cd9a8d85",
+      "gzipBytes": 1165,
+      "gzipSha256": "3123fe94bc03d6177f1580b73cacec23d9e69740c986b3a0241d4a7afbfbb7f6"
+    },
+    {
+      "file": "pnpm_run_check_diagram-doc-images.log.gz",
+      "rawBytes": 163,
+      "rawSha256": "44be15b7b331e62a52b71e95490147c4eac6368a26e74e48bae1dc6c54be9011",
+      "gzipBytes": 137,
+      "gzipSha256": "4471e424760d8b717a0492de61d64ae79b520e5a2573fc21da49daebec9b4c62"
+    },
+    {
+      "file": "pnpm_run_check_font-hotlinks.log.gz",
+      "rawBytes": 877,
+      "rawSha256": "aaf3a89720cedad7a8aab5ce19af57433689a14d68ceaf7870dd05bce7ccb98c",
+      "gzipBytes": 527,
+      "gzipSha256": "b0954ffee20256a383c0025bb250cf2ca0f9758d89331afc3d7f48c7dbfd0b75"
+    },
+    {
+      "file": "pnpm_run_check_gallery-tracker.log.gz",
+      "rawBytes": 3005,
+      "rawSha256": "3c908185389c9d8331f4e28b5b1a872a059c51289a9f0fed3fcbcc946bc504e9",
+      "gzipBytes": 1440,
+      "gzipSha256": "aa75e74339ff9016def9055613a96651746309ee5eb6fa38545d70ee6a8b2688"
+    },
+    {
+      "file": "pnpm_run_check_release-report.log.gz",
+      "rawBytes": 804,
+      "rawSha256": "4bf12efd3d7d9517abf63a44ddfb9201a0b0e9e530a9fa0fec7fc2f84c26dd42",
+      "gzipBytes": 459,
+      "gzipSha256": "27d57e2253ceff0ccc6de324f9624671804880baed835d123c19688ba9da612c"
+    },
+    {
+      "file": "pnpm_run_check_skill-commands.log.gz",
+      "rawBytes": 1030,
+      "rawSha256": "d1268f594951bbb879039fa946c500539bce3766b1d26b6c527b66c6bf2d72ca",
+      "gzipBytes": 577,
+      "gzipSha256": "49bf07512bb375c9cec08c9e9fe00cd500be9b6f5cbeb30269ce0d6881269395"
+    },
+    {
+      "file": "pnpm_run_check_skill-glossary.log.gz",
+      "rawBytes": 407,
+      "rawSha256": "64b4301e2d9ca8b96125e28dbd8f1830ff1bd55ca402a67c654e337029a60aa3",
+      "gzipBytes": 284,
+      "gzipSha256": "62ce2d6639d0d494abd2033936ed189bd8c0f20b57cd835573d2e3c9348f448e"
+    },
+    {
+      "file": "pnpm_run_check_stability.log.gz",
+      "rawBytes": 3608,
+      "rawSha256": "8e6a1794d465140995da86f9fe8ace1ff6b5d64581d16ba8d7b0db8cb95e5611",
+      "gzipBytes": 1406,
+      "gzipSha256": "449058b817f780bfb07464af19e4c5b78ce7b850bfc22f6e0c635903796f2e2b"
+    },
+    {
+      "file": "pnpm_run_check_text.log.gz",
+      "rawBytes": 1059,
+      "rawSha256": "677ce42cc92891627ff11fbc2f1a786f0a9957e876281a8b1db46a2ee8f93510",
+      "gzipBytes": 590,
+      "gzipSha256": "804fec8c1b607402b2589388065b9a2ed4ea81a74d1b4592b4328a7e0b4d099f"
+    }
+  ]
+}

@@ -14,7 +14,7 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `bullets` | `text` | Prose bullets: plain talking points, usually `string[]`. |
 | `items` | `list` | Structured list: entries that share a shape or carry a `description`; `string[]` or `ListItem[]`. See [items versus bullets](#items-versus-bullets). |
 | `image` | `image` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
-| `video` | `video` | Asset string shorthand or `Asset` object with `src` and optional metadata. |
+| `video` | `video` | Asset reference shown as a media placeholder; an HTTP(S) source links from the PPTX. No embedded playback. See [Video references](#video-references). |
 | `chart` | `chart` | Chart object with `type` and tabular `data`. |
 | `table` | `table` | Table object with optional `columns` and required `rows`. |
 | `code` | `code` | String shorthand or `Code` object with `source`, `language`, `filename`, and `highlight`. |
@@ -22,6 +22,10 @@ The optional payload `type` can make intent explicit, but OPF should usually inf
 | `quote` | `quote` | String shorthand or `Quote` object with `text` (string or `TextRun[]`), `attribution`, `role`, `photo`, and `source`. |
 | `timeline` | `timeline` | Array shorthand or `Timeline` object with `name`, `description`, and `events`. |
 | `diagram` | `diagram` | Mermaid source string shorthand or `Diagram` object with `source`, `syntax` and `alt`. See [Diagram](#diagram). |
+
+## Video references
+
+A `video` accepts an asset string or an `Asset` object with `src` and optional metadata. The preview draws a media placeholder with a play badge and a caption, not a player. PPTX export writes the same editable shapes and caption, with a hyperlink when the resolved source is HTTP(S); local references remain captions. It does not fetch or embed a video file or create a YouTube/Vimeo player. MP4/WebM sources are references, not playable media inside the exported deck. Keep that limitation beside any video example.
 
 ## Items versus bullets
 
