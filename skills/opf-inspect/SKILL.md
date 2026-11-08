@@ -30,7 +30,7 @@ node skills/opf-inspect/scripts/opf-inspect.mjs validate custom-layout.json layo
 - **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
 - **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
 - **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
-- **Reflow**: text wrapping again when its box or size changes. OPF computes line breaks itself; PPTX export writes each wrapped line as its own text box, so text edited in PowerPoint or Keynote does not reflow.
+- **Reflow**: text wrapping again when its box or size changes. OPF computes preview line breaks. Default PPTX export keeps each wrapped line in its own box; opt-in native paragraph export lets supported text re-wrap in the application, while fallback content stays measured.
 - **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
 <!-- glossary:end -->
 
