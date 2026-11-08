@@ -1,0 +1,1 @@
+Gallery tracker is stale: docs/programs/release-readiness/gallery-tracker.json, docs/programs/release-readiness/gallery-tracker.md. Run pnpm build:gallery-tracker and commit the result.

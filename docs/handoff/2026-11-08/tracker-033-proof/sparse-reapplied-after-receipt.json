@@ -1,0 +1,27 @@
+{
+  "source": "8ac0cc792ff540b0438cc6a069958aeb76c1f17c",
+  "botCommit": "90f645535c02d2aab2373503ca220faf2ad5f287",
+  "OPF_TRACKER_STALE": "unset (strict default)",
+  "node": "v24.20.0",
+  "commands": [
+    {
+      "name": "after-all18",
+      "args": [
+        "--test",
+        "scripts/build-gallery-tracker.test.mjs",
+        "scripts/tracker-staleness.test.mjs"
+      ],
+      "status": 1,
+      "signal": null
+    },
+    {
+      "name": "after-strict",
+      "args": [
+        "scripts/build-gallery-tracker.mjs",
+        "--check"
+      ],
+      "status": 1,
+      "signal": null
+    }
+  ]
+}

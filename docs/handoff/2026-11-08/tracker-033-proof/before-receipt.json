@@ -1,0 +1,24 @@
+{
+  "OPF_TRACKER_STALE": "unset (strict default)",
+  "node": "v24.20.0",
+  "commands": [
+    {
+      "name": "before-tests",
+      "args": [
+        "--test",
+        "scripts/build-gallery-tracker.test.mjs"
+      ],
+      "status": 1,
+      "signal": null
+    },
+    {
+      "name": "before-check",
+      "args": [
+        "scripts/build-gallery-tracker.mjs",
+        "--check"
+      ],
+      "status": 1,
+      "signal": null
+    }
+  ]
+}

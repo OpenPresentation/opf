@@ -1,0 +1,24 @@
+diff --git a/docs/programs/release-readiness/gallery-tracker.json b/docs/programs/release-readiness/gallery-tracker.json
+index f795d65a6..f111df7a8 100644
+--- a/docs/programs/release-readiness/gallery-tracker.json
++++ b/docs/programs/release-readiness/gallery-tracker.json
+@@ -113,7 +113,7 @@
+     },
+     "burndown": {
+       "file": "docs/programs/release-readiness/burndown.md",
+-      "items": 103
++      "items": 105
+     },
+     "overrides": {
+       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
+diff --git a/docs/programs/release-readiness/gallery-tracker.md b/docs/programs/release-readiness/gallery-tracker.md
+index a2a1c116c..d1c095de8 100644
+--- a/docs/programs/release-readiness/gallery-tracker.md
++++ b/docs/programs/release-readiness/gallery-tracker.md
+@@ -415,5 +415,5 @@ Historical measured verdicts below retain their original input scope; an additio
+ | Native evidence | `docs/evidence`: json and md files under a path segment naming native or PowerPoint; a value counts as exercised when such a file names it |
+ | Native run (RR-42) | `docs/evidence/rr-42-native-20261002/values.json` (881 values; per-value verdict of the gated checks: verified or failed) |
+ | Native run (RR-42) | `docs/evidence/rr-17-viet-supplement-native-20261002/values.json` (2 values; per-value verdict of the gated checks: verified or failed) |
+-| Links | `docs/programs/release-readiness/burndown.md` (103 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
++| Links | `docs/programs/release-readiness/burndown.md` (105 items) and 8 rules in `docs/programs/release-readiness/gallery-tracker.overrides.json` |
+ 

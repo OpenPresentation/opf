@@ -1,0 +1,26 @@
+✔ every catalog record and every gallery item is exactly one record (11.7918ms)
+✔ statuses, gaps and the addressed flag are consistent (2.3367ms)
+✔ columns use their documented values and unknown where nothing measured (2.366ms)
+✔ the committed tracker follows the configured freshness policy (301.0019ms)
+✔ rules match by gap, type, id and detail; links resolve against the burndown (0.4204ms)
+✔ native evidence counts only native or PowerPoint folders (4.9044ms)
+✔ the gallery and editor snapshots read pages, previews, published ids, teasers and switch dimensions (7.3374ms)
+✔ a stale tracker, an unused rule and an unknown RR link fail the build (229.5951ms)
+✔ Pareto limitation preserves measured verdicts and remains an open data-preservation gap (118.3307ms)
+✔ input limitations reject unknown records, duplicate scopes and missing evidence (138.6865ms)
+✔ offline catalog snapshot rejects missing and modified evidence (36.9253ms)
+✔ v2 layout identity never inherits historical same-name measurements (284.5224ms)
+✔ offline snapshot rejects wrong integrity, version and gitHead (105.3815ms)
+✔ old passing and failing audit/native channels cannot certify any schema2 layout (426.4432ms)
+✔ slide-size fallback retains the general gap without requiring a dedicated preset result (84.3102ms)
+✔ a stale tracker fails by default, so main, the merge queue, releases and a local pnpm test stay strict (0.9256ms)
+✔ OPF_TRACKER_STALE=warn turns the failure into a warning annotation (0.1544ms)
+✔ any other value is an error rather than a silent pass (0.2145ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1841.0916
