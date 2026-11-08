@@ -485,18 +485,12 @@ describe("the bundled sources", () => {
 		}
 		assert.ok(sources.examples.length >= 100);
 		const bytes = sources.docs.reduce((total, doc) => total + Buffer.byteLength(doc.markdown), 0);
-		// LH-14 added docs/icons.md and three rules to docs/validate.md. LH wave 7 together (LH-158's and LH-132's image treatments, LH-09's and
-		// LH-155's layout templates, the portrait key and the icon rules in the references) is 1,027,190 bytes; the lean Worker stays in bounds.
-		// SH-02 added docs/shapes.md (the property map and the 187 presets) and the shape vocabulary of the schema reference: 1,077,362 bytes;
-		// with PowerPoint's gradient and sketch behavior and the lazy shape engine documented, about 1,093,000. Wave 8 and shapes phase 1 together
-		// (SH-03's docs/shape-effects.md, now a served page, LH-165's, LH-169's, LH-164's and LH-63's rules, the engines that load on demand) are 1,120,756 bytes.
-		// Shapes phase 2 together (SH-04's overlay shapes and connectors, SH-05's import, SH-06's editor and search_shapes, SH-07's native
-		// diagrams, in docs/shapes.md, docs/diagrams.md and the schema reference, and the integration's one shapes page) is 1,158,205 bytes,
-		// budgeted once at 1,170,000 (SH-04's 1,160,000 left 1.8 KB). SH-09 (the pyramid and matrix layouts, live SmartArt, the
-		// arrangement-adapted rule) is 1,174,552 bytes. The OPF viewer's sections of docs/mcp.md (show_deck, the hosted mode, the .mcpb
-		// extension, fonts for a hosted viewer) add about 11 KB to that. SH-18 (the cycle layout and arrangement, list-block entries) is
-		// 1,197,594 bytes; the budget leaves room for SH-17's three linear arrangements (about 22 KB).
-		assert.ok(bytes < 1_225_000, `${bytes} bytes of documentation`);
+		// Serve the exact checked-in public pages; byte growth must not be hidden by trimming documentation.
+		for (const doc of sources.docs) assert.equal(doc.markdown, readFileSync(path.join(root, "docs", doc.slug + ".md"), "utf8").replaceAll("\r\n", "\n"), doc.slug);
+		// Reviewed v0.33 refresh: 1,197,594 at e3ff9 to 1,231,117 at d260; combined final 1,231,624, all 42 pages retained.
+		// SmartArt adds 22,940 bytes; chart/layout/shape guides account for the remainder. No maintainer page was added.
+		// Source/page deltas and explicit headroom: docs/handoff/2026-11-07/mcp-size-budget-033.md.
+		assert.ok(bytes < 1_240_000, `${bytes} bytes of documentation`);
 	});
 });
 
