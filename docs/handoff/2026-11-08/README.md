@@ -4,9 +4,19 @@ This is the current handoff for the two-release goal: v0.33.0, then v0.34.0. [Un
 
 ## Current release gate
 
-v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are now active; owner-only deployment stays reserved. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
+v0.33.0 is PUBLISHED AND VERIFIED. Real Release42465429345 completed SUCCESS, including all slow gates, commit/tag, trusted publish follow and all three site-bump jobs. Release commit26fd4de9cee7e57f9e0620eddcad2dcef04e00e3; public GitHub release published2026-11-08T09:56:21Z. Independent fresh registry check at10:00:03UTC confirms all seven latest versions0.33.0, exact gitHead, integrity and provenance metadata. Final maintained publish observer91249 exited0; no release watcher remains. Source033 is frozen. Genuine site/consumer updates are active; the owner now authorizes agent deployments and native Wrangler Previews under the current CI/CD contract. Parent native qualification hold is lifted with fresh process preflight and owned pinned-font setup.
 
 034 integration now normally folds actual033mainfef5, reviewed1189/1190/1191, no-force workflow1193(09bb), native-name tooling1192(d534), retained-font reading-measure1194(ac7d) and actual literal-name importer1195(c914). Folded source heads are permanently frozen. All33current chart PPTX inputs exactly match qualified native inputs;172/172points pass unchanged4px,33saved-current imports exact. Original160-point125/35fail packet and all new corrections/failures are durable. Seven new reading-measure cases and one actual-name reflow have completed ownednative lifecycles; parent finalimport/visual review and rebuilt combined source remain open. Timeline capacity/readability, F1/F3currency, nine-archive tool resolution, finalarchives/goldens/stricttrackers/budgets/CI,033siteownerrollout and034release remain open.
+
+## Current coordinator checkpoint: 2026-11-08T17:08:01.272Z
+
+Pushed product integration remains519740e2f17e6f1787590f913916a17de0668e8c. The first pinned golden run42498350968 succeeded. All62 changed example PNGs are actually viewed and hash-bound in [evidence8714dc6d9](https://github.com/OpenPresentation/opf/tree/8714dc6d95514102fe6577010d265b7dee2b0c4d/docs/handoff/2026-11-08/golden034-example-review.md), evidence-only/never merge. A rejected French quarter-scale false candidate is retained with exact reproduction/full-size proof. Arabic/Japanese no-explicit-font producer glyph limits are explicit; these images do not establish readable font fidelity.
+
+All112 template images were separately reviewed at evidence4af124c70b454b6aeb06325322c1c9197e13d88c. Forty-nine clean continuation fallbacks need narrower lines and better body use. SH-26 WIP3ed8f1354a415acc259db3725e1f9f44847cfb08 preserves or grows settled24/26/28px in all49captured cases;36focused controls pass. Root review requested an additional authored region-column constraint control. Whole-case CLI sheets, combined checks/native review and a second pinned golden pass remain gates. No final golden or release acceptance is claimed.
+
+NEW owner request is a separate proposal-first chart reference-line task. New agent chart_reference_proposal inspected freshmain9545016583ccfa151077cda4d51043ac6505a140 in a clean isolated worktree; no tracked chart/schema/example/test files changed. Representation, native-series/drawing tradeoffs and import limits are presented for owner review before implementation. No release is authorized by that task; reconcile the decision before final034acceptance.
+
+Native Cloudflare preview/production workflow source continues in separate site worktrees. DEV WIP01044e6e3500985e44d44712b36a71c4791d9543 is pushed with51Node+39semantic/runtimecontrols passing; final qualification remains owed. Gallery Preview has no productionR2 binding, using a fixed-origin publicGET/HEADproxy with realworkerd controls. Exact source-only automatic workflow edit was initially rejected under the obsolete deploy ban and approved on re-review using the later owner authorization; no deployment/deletion occurred. [Unified checklist checkpoint](https://github.com/OpenPresentation/opf/issues/1139#issuecomment-6724428854).
 
 ## Coordinator checkpoint: 2026-11-08 14:47 UTC
 
@@ -44,7 +54,7 @@ Every new feature still needs its final source/sheet/native acceptance, assemble
 
 ## Owner-only
 
-D2; LibreOffice promotion; adding the hosted connector in Claude; uninstalling the local .mcpb; any deploy, DNS change or login. Prepare concrete verified PRs before requesting these actions, and continue independent authorized work. Site main merges can deploy and remain reserved for the owner step.
+D2; LibreOffice promotion; adding the hosted connector in Claude; uninstalling the local .mcpb; new logins, DNS changes, account-plan purchases and repository visibility changes. The owner explicitly superseded the earlier deploy restriction: agents may create deployments and native Wrangler Previews. Follow [the current CI/CD contract](../../ci-cd.md); qualify the native replacement before deleting only legacy Worker pptx-dev-preview, and preserve its R2 bucket/data.
 
 Never force-push, push folded source branches, merge evidence-only branches, rewrite raster goldens locally, terminate Office, attach to the owner's Office instance, or introduce a new CI polling loop.
 

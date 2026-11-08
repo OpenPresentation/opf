@@ -49,7 +49,7 @@ During workflow bootstrap, a missing qualified Preview is an explicit production
 
 Use Cloudflare's native `previews` configuration, with assets and compatibility settings at the top level and explicit Preview variables/data bindings. Review each site's binding policy in its own `docs/cloudflare.md`.
 
-Org and gallery previews are public read-only product previews. Do not expose private data or production secrets. Org keeps a Preview-specific rate-limit namespace. Gallery's published-media binding is allowed only through its existing GET/HEAD-only public wrapper; omit production analytics writes.
+Org and gallery previews are public read-only product previews. Do not expose private data or production secrets. Org keeps a Preview-specific rate-limit namespace. Gallery Previews have no production R2 binding. Use only a fixed-origin public GET/HEAD media proxy with validated keys, an explicit header allowlist and redirects refused, or a genuinely isolated Preview bucket. Omit production analytics writes; production media behavior remains unchanged.
 
 Do not copy `WORKER_SELF_REFERENCE` into a Preview when that service would call production. Prefer preview-local same-Worker calls where supported, or omit the binding only after proving the site's required flows work without it. Dev uses its explicitly qualified development Clerk/Convex configuration and separate Preview data. A reachable URL does not prove binding isolation or authentication.
 
