@@ -1,3 +1,7 @@
+import {nativeTreeGeometry,type NativeTreeConnector} from './native-tree-arrangement.js';
+import {arrangementTree} from './tree-arrangement.js';
+import {vennNodes} from './venn-arrangement.js';
+import {presetTextRect} from './smart-art-layout.js';
 export {nativeTreeGeometry,type NativeTreeKind,type NativeTreeNode,type NativeTreeConnector,type NativeTreeGeometry,type NativeTreeGeometryResult} from './native-tree-arrangement.js';
 export {arrangementTree,type ArrangementTreeNode,type ArrangementTreeResult} from './tree-arrangement.js';
 export {vennNodes,type VennBox,type VennNode} from './venn-arrangement.js';
@@ -539,6 +543,7 @@ export interface ComposedArrangement {
   /** SH-17: the text insets (left, top, right, bottom) where they differ by side (a chevron's start); absent: `textMargin` on every side. */
   margins?: [number, number, number, number];
   lineWidth: number;
+  connectors?: NativeTreeConnector[];
   smartArt: { lines: number[]; stable: boolean[]; fill?: number; ink?: number; widest?: number };
   /**
    * SH-19: OPF's own design (`opf`, `cards`): the inputs that draw it for any count (smart-art-layout.ts opfLayoutGeometry), from which the
@@ -9976,15 +9981,17 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   //   each entry beside its level (start-aligned), or four quadrants filling the region (centered);
   // - `cards`: a matrix of other than four entries is a grid of cards (cardGridColumns), start-aligned, reported `arrangement-adapted`.
   // When none holds the entries at the floor, the list stays as it was and `arrangement-adapted` says so. Each entry is a list column.
-  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe };
+  type ArrangementDesign = { design: ComposedArrangement['design']; frame: LayoutBox; nodes: ArrangementNode[]; margin: number; align: 'center' | 'start'; paint: 'primary' | 'card'; text: 'node' | 'slide'; background?: LayoutBox; lineWidth: number; margins?: [number, number, number, number]; arrows?: ArrangementArrow[]; connectors?: NativeTreeConnector[]; largest?: true; last?: true; refit?: (need: number) => { nodes: ArrangementNode[]; arrows: ArrangementArrow[] } | undefined; layout?: OpfLayoutRecipe };
   const arrangedList = (item: ComposedItem, kind: Arrangement, area: LayoutBox): ComposedArrangement | undefined => {
     const values = item.value as ListValue[], fit = item.text as ListFit, base = fit.fontSize, count = values.length;
+    const tree=kind==='org-chart'||kind==='hierarchy',measured=tree||kind==='venn';
     const listOptions: ListFitOptions = { ...richOptions(styleFor(item.field, item.path)), bullet: 'none' };
     const single = (index: number, box: LayoutBox, size: number): ListFit => {
       const own0 = `${item.path}.0`, ownPath = `${item.path}.${index}`, marker = listOptions.citationMarker;
       const entryOptions: ListFitOptions = marker ? { ...listOptions, citationMarker: (run: string) => marker(run === own0 || run.startsWith(`${own0}.`) ? ownPath + run.slice(own0.length) : run) } : listOptions;
-      const own = fitList([values[index]!], box, size, size, entryOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
-      return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, textPath: `${item.path}.${index}${object ? '.text' : ''}` })) };
+      const value=tree&&typeof values[index]==='object'&&!Array.isArray(values[index])?{...record(values[index]),level:0}:values[index]!;
+      const own = fitList([value as ListValue], box, size, size, entryOptions), object = typeof values[index] === 'object' && !Array.isArray(values[index]);
+      return { ...own, listEntries: own.listEntries.map(entry => ({ ...entry, index, ...(tree?{level:Number(record(values[index]).level??0)}:{}), textPath: `${item.path}.${index}${object ? '.text' : ''}` })) };
     };
     // Where each line starts in the entry's runs: the same breaks at another width give the same string.
     const breaks = (entry: ListEntryLayout | undefined) => entry?.text.richLines.map(line => line.fragments.length ? `${line.fragments[0]!.runIndex}:${line.fragments[0]!.start}` : '-').join(',');
@@ -10037,7 +10044,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const widest = Math.max(0, ...columns.flatMap(column => column.text.listEntries[0]!.text.richLines.map(line => line.width)));
       return { columns, margin, margins: [left, top, right, bottom] as [number, number, number, number], lines, stable, fill, ink, widest };
     };
-    const role = LIST_NOMINAL_SIZE * scale, floor = Math.min(base, role), step = 4 / 3 * scale, top = Math.max(base, snapFontSizeDown(role * ARRANGEMENT_GROWTH));
+    const role = LIST_NOMINAL_SIZE * scale, floor = measured ? base : Math.min(base, role), step = 4 / 3 * scale, top = Math.max(base, snapFontSizeDown(role * ARRANGEMENT_GROWTH));
     // The largest size at which a design holds every entry; for the SmartArt design one whose line breaks all hold (PowerPoint breaks them
     // alike) when there is one.
     const sized = (design: ArrangementDesign) => {
@@ -10055,6 +10062,13 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       const frame = pyramidFrame(area);
       designs.push({ design: 'smartart', frame, nodes: pyramidNodes(frame, count), margin: ARRANGEMENT_TEXT_MARGIN.pyramid, align: 'center', paint: 'primary', text: 'node', lineWidth: primaryLine });
       designs.push({ design: 'opf', frame: area, nodes: pyramidSteps(area, count, gap / 2, radius), margin: 0, align: 'start', paint: 'primary', text: 'slide', lineWidth: primaryLine, layout: { design: 'pyramid-steps', area, gap: gap / 2, radius } });
+    } else if(kind==='org-chart'||kind==='hierarchy'){
+      const geometry=nativeTreeGeometry(kind,area,values);
+      if(!geometry.ok){diagnostics.push({code:'arrangement-adapted',path:item.path,message:geometry.reason+' The complete authored list is retained.'});return undefined;}
+      const nodes:ArrangementNode[]=geometry.nodes.map(node=>{const preset=kind==='hierarchy'?'roundRect' as const:'rect' as const,adjust=kind==='hierarchy'?10000:0;return{index:node.index,box:node.box,preset,adjust,textBox:presetTextRect(preset,node.box,adjust),...(kind==='hierarchy'?{radius:.1*Math.min(node.box.width,node.box.height),background:node.background}: {})};});
+      designs.push({design:'smartart',frame:area,nodes,connectors:geometry.connectors,margin:ARRANGEMENT_TEXT_MARGIN[kind],align:'center',paint:'primary',text:kind==='hierarchy'?'slide':'node',lineWidth:primaryLine});
+    } else if(kind==='venn'){
+      designs.push({design:'smartart',frame:area,nodes:vennNodes(area,count),margin:ARRANGEMENT_TEXT_MARGIN.venn,align:'center',paint:'primary',text:'slide',lineWidth:primaryLine});
     } else if (kind === 'cycle') {
       // SH-18: PowerPoint's Basic Cycle in a frame of its own proportion (cycleFrame), then OPF's two designs filling the region (rounded
       // rectangles on a ring, and a loop of two rows), of which the one that holds the entries larger is kept (the ring when they tie).
@@ -10124,7 +10138,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
     const textPaths = placed.columns.map(column => column.text.listEntries[0]!.textPath!);
     return { kind, design: design.design, region: item.region ?? '', path: item.path, frame: { ...design.frame }, ...(design.background ? { background: design.background } : {}),
       nodes: design.nodes.map((node, index) => ({ ...node, ...(textPaths[index] !== undefined ? { path: textPaths[index] } : {}) })), fontSize: size, textMargin: placed.margin,
-      ...(design.margins ? { margins: placed.margins } : {}), ...(design.arrows ? { arrows: design.arrows } : {}),
+      ...(design.margins ? { margins: placed.margins } : {}), ...(design.arrows ? { arrows: design.arrows } : {}), ...(design.connectors?{connectors:design.connectors}:{}),
       align: design.align, paint: design.paint, text: design.text, lineWidth: design.lineWidth, ...(design.layout ? { layout: design.layout } : {}), smartArt: { lines: placed.lines, stable: placed.stable, ...(isLinearArrangement(kind) || design.layout ? { fill: +placed.fill.toFixed(4), ink: +placed.ink.toFixed(4) } : {}), widest: +placed.widest.toFixed(2) }, ...(design.design === 'opf' && skipped ? { instead: skipped } : {}) };
   };
   // SH-18 review: a region whose arrangement holds two or more list blocks (each block an entry of its own, a list inside it) draws the
@@ -10240,7 +10254,7 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       // SH-18 review: two or more list blocks are the entries themselves (arrangedBlocks).
       // A region whose lists overflow keeps its composition, which pagination splits (the arrangement never sets them smaller).
       const lists = members.filter(member => (member.field === 'items' || member.field === 'bullets') && !member.listColumns && !member.caption && member.text && 'listEntries' in member.text && !member.text.overflow);
-      if (members.length > 1 && lists.length === members.length && members.length <= (region.arrangement === 'matrix' ? ARRANGEMENT_CARDS_MAX : ARRANGEMENT_MAX[region.arrangement])) {
+      if (members.length > 1 && !['org-chart','hierarchy','venn'].includes(region.arrangement) && lists.length === members.length && members.length <= (region.arrangement === 'matrix' ? ARRANGEMENT_CARDS_MAX : ARRANGEMENT_MAX[region.arrangement])) {
         const arranged = arrangedBlocks(members, region.arrangement, templateRegions.find(entry => entry.name === region.name)?.box ?? members[0]!.box);
         if (arranged) result.push(arranged);
         continue;
@@ -10248,7 +10262,9 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
       if (!item || (item.field !== 'items' && item.field !== 'bullets') || item.listColumns || item.caption || item.frameBox || !item.text || !('listEntries' in item.text)) continue;
       const values = Array.isArray(item.value) ? item.value as unknown[] : [];
       if (!values.length) continue;
-      const reason = item.payload.numbering !== undefined ? 'a numbered list' : values.some(value => (record(value).level ?? 0) !== 0) ? 'nested entries'
+      const tree=region.arrangement==='org-chart'||region.arrangement==='hierarchy';
+      const topology=tree?arrangementTree(values):undefined;
+      const reason = topology&&!topology.ok?topology.reason:item.payload.numbering !== undefined ? 'a numbered list' : !tree&&values.some(value => (record(value).level ?? 0) !== 0) ? 'nested entries'
         : values.some(value => record(value).description !== undefined) ? 'descriptions' : values.some(value => record(value).icon !== undefined) ? 'icons'
           : region.arrangement !== 'matrix' && values.length > ARRANGEMENT_MAX[region.arrangement] ? `more than ${ARRANGEMENT_MAX[region.arrangement]} ${SMART_ART_NAMES[region.arrangement].nodes}` : values.length > ARRANGEMENT_CARDS_MAX ? `more than ${ARRANGEMENT_CARDS_MAX} entries` : undefined;
       if (reason) { diagnostics.push({ code: 'arrangement-adapted', path: item.path, message: `${region.arrangement === 'chevrons' ? 'A row of chevrons' : `A ${region.arrangement.replace('-', ' ')}`} draws a list of one level of short entries; this list has ${reason}, so it is drawn as a list.` }); continue; }

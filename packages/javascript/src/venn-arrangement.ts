@@ -14,12 +14,19 @@ const OUTSIDE: Readonly<Record<5 | 6 | 7, { width: number; circles: readonly Rec
   7: { width: 543.6, circles: [[234.768,101.84,130.464,130.48],[273.0374,120.24,130.464,130.48],[282.4417,161.64,130.464,130.48],[255.9684,194.84,130.464,130.48],[213.5676,194.84,130.464,130.48],[187.0943,161.64,130.464,130.48],[196.4985,120.24,130.464,130.48]],
     labels: [[225.255,0,149.49,80],[419.592,76,141.336,88],[433.182,188,138.618,94],[373.386,314,149.49,86],[77.124,314,149.49,86],[28.2,188,138.618,94],[39.072,76,141.336,88]] },
 };
+/** Native text slots inside each circle, as fractions of its diameter; independently measured from the seven-count saved witness. */
+const INSIDE:Readonly<Record<1|2|3|4,readonly Rect[]>>={
+ 1:[[(1-Math.SQRT1_2)/2,(1-Math.SQRT1_2)/2,Math.SQRT1_2,Math.SQRT1_2]],
+ 2:[[.13963963963963963,.11792130713390558,.5765765765765766,.7641569128183301],[.2837837837837838,.11792130713390558,.5765765765765766,.7641569128183301]],
+ 3:[[2/15,.175,11/15,.45],[.30583333333333335,31/120,.6,.55],[.09416666666666666,31/120,.6,.55]],
+ 4:[[3/26,7/52,10/13,33/104],[7/13,3/26,5/13,10/13],[3/26,57/104,10/13,33/104],[1/13,3/26,5/13,10/13]],
+};
 /** PowerPoint's Basic Venn nodes in any nonempty frame; counts outside the measured 1–7 domain are refused. */
 export function vennNodes(frame: VennBox, count: number): VennNode[] {
   if (!Number.isInteger(count) || count < 1 || count > 7) throw new RangeError('Basic Venn geometry is measured for 1 to 7 entries');
   if (![frame.x, frame.y, frame.width, frame.height].every(Number.isFinite) || frame.width <= 0 || frame.height <= 0) throw new RangeError('Venn frame must be finite with positive width and height');
   const cx = frame.x + frame.width / 2, cy = frame.y + frame.height / 2;
-  const inside = (index: number, x: number, y: number, diameter: number): VennNode => { const box = { x, y, width: diameter, height: diameter }; return { index, box, textBox: { ...box }, preset: 'ellipse', adjust: 0 }; };
+  const inside = (index: number, x: number, y: number, diameter: number): VennNode => { const box = { x, y, width: diameter, height: diameter },text=INSIDE[count as 1|2|3|4][index]; if(!text)throw new Error('Missing measured Venn text rectangle');return { index, box, textBox:{x:x+text[0]*diameter,y:y+text[1]*diameter,width:text[2]*diameter,height:text[3]*diameter}, preset: 'ellipse', adjust: 0 }; };
   if (count === 1) { const d = Math.min(frame.width, frame.height); return [inside(0, cx - d / 2, cy - d / 2, d)]; }
   if (count === 2) { const w = Math.min(frame.width, 1.792 * frame.height), d = .555 * w; return [-1, 1].map((side, index) => inside(index, cx + side * .2 * w - d / 2, cy - d / 2, d)); }
   if (count === 3) { const h = Math.min(frame.height, frame.width / 1.033), d = .6 * h; return [[0,-.4875],[.2165,-.1125],[-.2165,-.1125]].map(([x,y],index) => inside(index,cx + x! * h - d / 2,cy + y! * h,d)); }
