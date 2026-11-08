@@ -240,7 +240,7 @@ export function promoteImage(slide: unknown, path: SlidePath, to: ImageTarget, o
   const design: Obj = isRecord(next.design) ? next.design : {};
   if (design[to] !== undefined && design[to] !== false && !options.replace) throw refuse(`This slide already sets its ${to}. Choose to replace it, or remove it first.`, { slot: to });
   const loss = new Loss();
-  const extras = ["title", "description", "mediaType", "format"].filter((key) => asset[key] !== undefined);
+  const extras = ["title", "description", "mediaType", "format", "callouts"].filter((key) => asset[key] !== undefined);
   const alt = typeof asset.alt === "string" && asset.alt !== "" ? asset.alt : undefined;
   const kept = to === "background" ? BACKGROUND_KEYS.filter((key) => treatments[key] !== undefined) : [];
   const dropped = Object.keys(treatments).filter((key) => !(kept as readonly string[]).includes(key));

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "inverted-pyramid",
+  "name": "Inverted pyramid",
+  "summary": "Levels that narrow to a point, with the widest first.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "levels",
+      "accepts": [
+        "list"
+      ],
+      "role": "primary",
+      "flow": "none",
+      "arrangement": "pyramid",
+      "pyramidDirection": "down"
+    }
+  ],
+  "description": "Show 1 to 8 levels narrowing from the broad top (the many, the starting pool) to the tip below (the selected few, the result). Write one short list entry per level in top-to-bottom order. Export uses editable native shapes; live Inverted Pyramid SmartArt is not yet qualified.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/inverted-pyramid.svg"
+  }
+}

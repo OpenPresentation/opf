@@ -1,0 +1,181 @@
+{
+  "base": "7d316476c65ba11720d1a639988f00252d641acc",
+  "node": "v24.20.0",
+  "realFixtureGeneration": false,
+  "nativeRun": false,
+  "fixturePromotion": false,
+  "productionSourceTreesUnchanged": [
+    "packages/javascript/src",
+    "packages/gallery/catalog",
+    "packages/render/src",
+    "packages/pptx/src",
+    "spec",
+    "examples"
+  ],
+  "fixtures": [
+    {
+      "file": "packages/pptx/test/fixtures/chartex-fallback-main.json",
+      "workingTreeSha256": "091830fe3593631790c37822dfbda3cfe3bd1790b172f070954fdef2e087f5cd",
+      "gitBlobSha256": "091830fe3593631790c37822dfbda3cfe3bd1790b172f070954fdef2e087f5cd",
+      "unchangedGitText": true
+    },
+    {
+      "file": "packages/pptx/test/fixtures/rr-54-unchanged.json",
+      "workingTreeSha256": "c005a990dc7cb510060a5b4b497c71ff026742a57abbda0879e634215b5bea25",
+      "gitBlobSha256": "c005a990dc7cb510060a5b4b497c71ff026742a57abbda0879e634215b5bea25",
+      "unchangedGitText": true
+    },
+    {
+      "file": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+      "workingTreeSha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e",
+      "gitBlobSha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e",
+      "unchangedGitText": true
+    }
+  ],
+  "code": [
+    {
+      "file": "packages/pptx/scripts/chartex-fallback-archives.mjs",
+      "sha256": "0df30ba2452dc281788b616f05c13002c3600f0e6f305c51d2049d4b468cebf3"
+    },
+    {
+      "file": "packages/pptx/scripts/review-chartex-fallback-archives.mjs",
+      "sha256": "060a8e1f48aad78c275901075583908ae91c258981d6b9de913e476c3ffa6c49"
+    },
+    {
+      "file": "packages/pptx/test/helpers/chartex-fallback-decks.mjs",
+      "sha256": "89683cebe66de61607ca520af8e940d0b2b15431da05099ed47814efe13fa087"
+    },
+    {
+      "file": "packages/pptx/test/chartex-fallback-archive-review.mjs",
+      "sha256": "85663565d7d55b0f11e2b76354c3c39075eb62424c5c2fca25c9aa6a129475ef"
+    }
+  ],
+  "focused": "Pass: authoritative .txt/JSON deck equality; every baseline field; exact caller and ordered diagnostics; full/nested added/removed ZIP differences; unchanged entries; producer movement; old evidence preservation; real command synthetic Git/runtime success plus dirty-producer refusal.",
+  "requiredChangedScope": {
+    "command": "pnpm check:changed --base 7d316476c65ba11720d1a639988f00252d641acc",
+    "seconds": 125.1,
+    "pass": 8,
+    "fail": 2,
+    "typecheck": "unselected",
+    "pptx": {
+      "filesPassed": 23,
+      "failed": "chartex.mjs:433 strict treemap-category SHA",
+      "unrun": 229,
+      "actual": "54a212bf70b3bd8cdd20454315fbdf42fa021344d49c91ce3631727ebc61c3b1",
+      "locked": "8434325bbaf1c97c4efc4fe2977a679b72023a986e807f8e5b02f63998c0b125"
+    },
+    "tracker": "Initial sparse-input failures retained. After restoring exact direct inputs,17/18 controls pass; strict freshness remains failing. No warn-mode override or generated tracker change."
+  },
+  "finalRefinements": "After required run: compact history identity and pre-publication producer seal plus focused unchanged-entry, raw-XML and real synthetic-command controls. Final focused test passes; no redundant broad run.",
+  "logs": [
+    {
+      "file": "check-changed.log.gz",
+      "sha256": "4fdacaeed0a5c8718462f2662a1d3561eca87dcb261e1893df345634e544cd58",
+      "bytes": 3117,
+      "rawSha256": "885f7be714bf8f85ecb134a1e85f35b4584ef14fb22b7d0b60c5c4cb682f7884",
+      "rawBytes": 9736
+    },
+    {
+      "file": "tracker-restored.log.gz",
+      "sha256": "9029bd8358a5ccb9529ff5485065b639530df0497b5702eeaa9dfc8101035d97",
+      "bytes": 1460,
+      "rawSha256": "a6bb68caf0b6b852bf830d4c278ccbf0088b560c50452c44d6b7fc45cb3d455c",
+      "rawBytes": 3097
+    },
+    {
+      "file": "focused-final.log.gz",
+      "sha256": "bac16bb023a69200ebe892b1aee8d2335476326f490ce09cc5d94e9e1b7efbcf",
+      "bytes": 177,
+      "rawSha256": "b760dd7c955225105ee33eceaf21a93a96b169f62ebda9cbd75467a1cc484f58",
+      "rawBytes": 219
+    },
+    {
+      "file": "mapped-biome.log.gz",
+      "sha256": "16ebd80b026dbd069918873d0b6c0ebf3f790243ae3e2babfb9c99c035b8917a",
+      "bytes": 339,
+      "rawSha256": "c6a01984c9cfe837b591ada6a03c42684d178a8a40299a9965bfc7a12b6db6c4",
+      "rawBytes": 663
+    },
+    {
+      "file": "mapped-build.log.gz",
+      "sha256": "dd1e63d95646ae83730ee7185062252cc184acb557f99e3c02db1cd423085209",
+      "bytes": 3047,
+      "rawSha256": "1627dce22f9d7c0dfcdd0e7527b604389ccda1454406dda093416c06a88ef2eb",
+      "rawBytes": 14649
+    },
+    {
+      "file": "mapped-pnpm_run_check_changes.log.gz",
+      "sha256": "b56e60fb5fbc4bdc53e15d5ed9aaae3fe73c3efeb3b3ff96bacfe1579b22df28",
+      "bytes": 1174,
+      "rawSha256": "43da82cfb4259dc7ff99d8bde0d81d40834c87893fc9bf0059294864f64047f4",
+      "rawBytes": 2652
+    },
+    {
+      "file": "mapped-pnpm_run_check_font-hotlinks.log.gz",
+      "sha256": "67efb9cbffb91d1d54fb36cfe1583f5644bc92d3858b8b6fee23707dc8170c06",
+      "bytes": 541,
+      "rawSha256": "f2db67185d823dadbdcdc5df245c0dc1259963d579c9337d5854a5e99dcf69de",
+      "rawBytes": 897
+    },
+    {
+      "file": "mapped-pnpm_run_check_gallery-tracker.log.gz",
+      "sha256": "98f89eacc802cb0ded14f570a531ec9e77f6c666a3410e9845a24346295d55d5",
+      "bytes": 1762,
+      "rawSha256": "cb44319c366cb62a40f3b41b4a22228edb15a135d52bb80ea0ebd59b54c31d4e",
+      "rawBytes": 12934
+    },
+    {
+      "file": "mapped-pnpm_run_check_release-report.log.gz",
+      "sha256": "4d06479380c4bd657d1716e85699ed07539d98887e0440bc128114bfd35624c4",
+      "bytes": 472,
+      "rawSha256": "ccadab549981007ca45b8655a5358dfc5ada670b94ade71e30fde27950754648",
+      "rawBytes": 826
+    },
+    {
+      "file": "mapped-pnpm_run_check_skill-commands.log.gz",
+      "sha256": "e8137cf1d21c972d650f17d036c8d3f4fe2b33ffa3f2f731eff5a7235bb85e0c",
+      "bytes": 595,
+      "rawSha256": "b39e54ab80d5c407f466f45a74d94eb6a06eb45c23349cad996367e53a2f1860",
+      "rawBytes": 1050
+    },
+    {
+      "file": "mapped-pnpm_run_check_stability.log.gz",
+      "sha256": "cec46fb631d37becb6daefdacc96caf12b6ac77dbbd6405fe452793810f15c9a",
+      "bytes": 1420,
+      "rawSha256": "7fe048e1a7d045f5b0c91bc9743c717e2cada8aa59da80cea837ef739f0aa158",
+      "rawBytes": 3630
+    },
+    {
+      "file": "mapped-pnpm_run_check_text.log.gz",
+      "sha256": "b43f64974bb2d3cf691520583e9b6d4b08dc5c905a8242a47f094191273343d3",
+      "bytes": 601,
+      "rawSha256": "9dd8e69398787ceaf30b3d8b4e6052b215174654630207cce3d1107745a91925",
+      "rawBytes": 1079
+    },
+    {
+      "file": "mapped-tests_pptx.log.gz",
+      "sha256": "bc5c54297931cd39c93c08ae446f01b3c20e681c31cf685e652760afe12fddf6",
+      "bytes": 3824,
+      "rawSha256": "1123ac2c131a921c22742dbaf818197b12104104c92ce41591e829933efa31c6",
+      "rawBytes": 11433
+    },
+    {
+      "file": "text-final.log.gz",
+      "sha256": "3bc789828b668ef793c16b795308134cc69c8717cf86efe92778febfbf70c179",
+      "bytes": 611,
+      "rawSha256": "720e992e331d04aa455cc0db0d9fa5fe041ad8bf49b2f9766a2a6bd2e1d7d09a",
+      "rawBytes": 1107
+    },
+    {
+      "file": "changes-final.log.gz",
+      "sha256": "7ef66d1e009417f785addb21f4ab05c9aefb1f330a4f73b333e2a08bd96689ab",
+      "bytes": 1190,
+      "rawSha256": "5a5fa5496e11c2b4692af3dd5961591c2939a2fae9a1adb55287b018b0f585af",
+      "rawBytes": 2687
+    }
+  ],
+  "finalCheapChecks": {
+    "text": "pass:6966files/50compressed reports",
+    "changes": "pass:112fragments"
+  }
+}
