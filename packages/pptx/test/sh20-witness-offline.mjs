@@ -40,11 +40,18 @@ $result=& { 1 | ForEach-Object { Open-OpfWitnessInput -Application $app -OwnedPa
 `);
     const opened=JSON.parse(execFileSync('powershell',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',probe,'-Witness',script,'-Seeds',seed,'-Sweep',sweep,'-Out',out,'-Helpers',helpers],{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']}));
     assert.equal(opened.result,'owned-fake');assert.equal(opened.calls.length,1);assert.equal(opened.calls[0].path,seed);assert.equal(opened.calls[0].type,'System.String');assert.equal(opened.calls[0].readOnly,-1);assert.equal(opened.calls[0].untitled,0);assert.equal(opened.calls[0].window,-1);assert.match(opened.powershell,/^5\./);
+    const seedScript=fileURLToPath(new URL('../../../tools/shapes/sh-21/seed-readonly.ps1',import.meta.url));
+    const seedArgs=['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',seedScript,'-Seeds',seed,'-Out',out,'-NativeHelpersPath',helpers,'-PlanOnly'];
+    const runSeed=()=>execFileSync('powershell',seedArgs,{encoding:'utf8',timeout:10000,stdio:['ignore','pipe','pipe']});
+    const seedPlan=JSON.parse(runSeed().replace(/^\uFEFF/,''));
+    assert.equal(seedPlan.sha256,before);assert.deepEqual(seedPlan.jobs.map(job=>[job.kind,job.slide]),[['orgChart1',14],['hierarchy1',15],['venn1',12]]);assert.equal(existsSync(out),false);
     mkdirSync(out);const marker=path.join(out,'prior-evidence');writeFileSync(marker,'preserve');
     assert.throws(run,error=>/Preserve prior evidence/.test(error.stderr));
+    assert.throws(runSeed,error=>/Preserve existing evidence/.test(error.stderr));
     assert.equal(readFileSync(marker,'utf8'),'preserve');
     rmSync(out,{recursive:true});rmSync(seed);
     assert.throws(run,error=>/Missing witness input/.test(error.stderr));
+    assert.throws(runSeed,error=>/Seed deck does not exist/.test(error.stderr));
     assert.equal(existsSync(out),false,'a missing input creates no attempt directory');
     console.log('SH20 witness offline controls pass: plan never crosses Office boundary, source hashes unchanged, existing evidence and missing inputs refused.');
   } finally {rmSync(root,{recursive:true,force:true});}

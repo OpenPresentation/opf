@@ -97,3 +97,9 @@ The coordinator's [spacing attempt](native/sh20-spacing-01/) safely passed its s
 | Arabic matrix | 1.90 / 4.78 px | 1.90 / 4.78 px |
 
 All three continue to pass shape rectangle, rotation, size and preview-geometry checks and fail the unchanged native pixel/text check. Single spacing moves Latin toward the preview but away from the accepted native control, and worsens Japanese strongly; Arabic's horizontal mismatch persists. Therefore no production change or domain adjustment follows from this experiment. Keep exact pitch and derive the shared first-line placement/font geometry before another targeted diagnostic. Per-locale magic offsets and lower thresholds are not accepted.
+
+### Read-only SH-21 seed diagnostic
+
+[seed-readonly.ps1](../../../../tools/shapes/sh-21/seed-readonly.ps1) reads the existing org-chart, hierarchy and Venn seeds after Export materialization, without creating a presentation, adding/synchronizing/editing nodes, changing layout, or saving. It records node parent/level/type/child counts and every materialized native shape, including unnamed Venn outlines. All COM collections are indexed; source and owned copy hashes are retained, the output must be fresh, and the existing failure latch prevents later Office calls after a failure. The coordinator must review and run it in the bounded owned worker. [Plan](sh21-seed-readonly-plan.json) and Windows PowerShell 5 offline evidence-preservation controls pass; no new native result is claimed.
+
+[marker-variant.mjs](../../../../tools/shapes/sh-20/marker-variant.mjs) is a separate unrun diagnostic: ordinary native text controls write an explicit end-paragraph size/language while live SmartArt lacks that marker. It adds only that style to active data/cached drawing, retaining exact line pitch. No source default or eligibility is changed. This hypothesis needs a coordinator-owned native run before any conclusion.
