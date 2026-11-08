@@ -4,7 +4,7 @@ import{unzipSync,strFromU8}from'fflate';
 import{toPptx,fromPptx}from'../dist/index.js';
 import{loadFonts}from'@openpresentation/opf-render/fonts-node';
 import{resolveSlideContext,paginate}from'@openpresentation/opf';
-import{composeSlide}from'@openpresentation/opf/composition';
+import{composeSlide,measureTextOutline}from'@openpresentation/opf/composition';
 import{gallery}from'@openpresentation/gallery';
 const medium='Planning and operational support for participants across several teams';
 const long=medium+' with regular training reviews and shared measurement of progress during the pilot. ';
@@ -39,7 +39,7 @@ const assertStrictRefusal = doc => {
  });
 };
 // A multi-column item's outer box is the union, not the width of its physical text columns.
-const boundedPhysicalColumns = (after, before) => {
+const boundedPhysicalColumns = (after, before, measurement) => {
  const columns = after.item.listColumns ?? [];
  for (const column of columns) {
   const box = column.box, outer = after.item.box;
@@ -48,7 +48,15 @@ const boundedPhysicalColumns = (after, before) => {
   for (const entry of column.text.listEntries) {
    const text = entry.textBox;
    assert.ok(text.width > 0 && text.x >= box.x - 1e-6 && text.x + text.width <= box.x + box.width + 1e-6, 'each entry text width stays inside its own column');
-   for (const line of entry.text.richLines) for (const fragment of line.fragments) assert.ok(text.x + fragment.x + fragment.width <= box.x + box.width + 1e-6, 'measured text does not cross its physical column');
+   for (const line of entry.text.richLines) {
+    // RR17: canonical line.width excludes hanging blanks; a raw fragment advance includes them.
+    assert.ok(Number.isFinite(line.width) && line.width >= 0 && text.x + line.width <= box.x + box.width + 1e-6, 'canonical measured line width stays inside its own column');
+    for (const fragment of line.fragments) if (/\S/u.test(fragment.text)) {
+     const ink = measureTextOutline(fragment.text, fragment.fontSize, fragment.style, measurement);
+     assert.ok(ink, 'the same resolved font supplies visible outline bounds');
+     assert.ok(text.x + fragment.x + ink.x >= box.x - 1e-6 && text.x + fragment.x + ink.x + ink.width <= box.x + box.width + 1e-6, 'visible glyphs stay inside their physical column');
+    }
+   }
   }
  }
  for (let left = 0; left < columns.length; left++) for (let right = left + 1; right < columns.length; right++) {
@@ -60,7 +68,17 @@ const boundedPhysicalColumns = (after, before) => {
 const assertWholeWords = (after, sourceItems) => {
  for (const text of after.texts) for (const entry of text.listEntries) {
   const source = sourceItems[entry.index], lines = entry.text.richLines.map(line => line.fragments.map(fragment => fragment.text).join(''));
-  assert.equal(lines.join(''), source, 'every source character, including spaces, remains in the drawn fragments');
+  assert.equal(entry.value, source, 'the complete source entry, including spaces, stays exact');
+  let cursor = 0, previousLine = -1;
+  for (const [lineIndex, line] of entry.text.richLines.entries()) for (const fragment of line.fragments) {
+   assert.equal(fragment.runIndex, 0, 'the authored fixture is one exact source run');
+   assert.equal(fragment.run.text, source, 'the full authored run retains every source codepoint');
+   assert.ok(Number.isInteger(fragment.start) && Number.isInteger(fragment.end) && fragment.start >= cursor && fragment.end >= fragment.start && fragment.end <= source.length);
+   if (fragment.start > cursor) assert.ok(previousLine >= 0 && lineIndex > previousLine && /^ +$/u.test(source.slice(cursor, fragment.start)), 'only original ASCII-space gaps may occur at real soft line boundaries');
+   assert.equal(fragment.text, source.slice(fragment.start, fragment.end), 'every drawn fragment equals its exact source slice');
+   cursor = fragment.end; previousLine = lineIndex;
+  }
+  assert.equal(cursor, source.length, 'the drawn source ranges reach the original run end');
   assert.deepEqual(lines.flatMap(line => line.trim().split(/\s+/u).filter(Boolean)), source.trim().split(/\s+/u), 'line boundaries never split or change a whole word');
  }
 };
@@ -70,7 +88,18 @@ for(const[name,text,oldSize]of[['medium',medium,104/3],['long',long,80/3]])test(
  // Composition/pagination floors are bounded at32 by the existing schema. Check observed sizes as well as that supported floor.
  const paged=paginate(doc,{catalogs:[gallery],fonts,minFontSize:Math.min(32,before.size)}).presentation;assert.equal(paged.slides.length,2);assert.deepEqual(paged.slides.flatMap(slide=>slide.items),doc.slides[0].items);
  let boundedWrap=false;for(let index=0;index<paged.slides.length;index++){
-  const page=compose(paged,index),after=details(page);assert.ok(after.size>=before.size-1e-6);assert.ok(after.lines.every(line=>line.length<=70));assert.ok(after.texts.every(t=>!t.overflow));assert.ok(!page.diagnostics.some(d=>d.code==='text-overflow'));assertWholeWords(after,paged.slides[index].items);const physicalWrap=boundedPhysicalColumns(after,before);boundedWrap||=!page.arrangements?.length&&(after.item.box.width<before.item.box.width||physicalWrap);
+  const page=compose(paged,index),after=details(page);assert.ok(after.size>=before.size-1e-6);assert.ok(after.lines.every(line=>line.length<=70));assert.ok(after.texts.every(t=>!t.overflow));assert.ok(!page.diagnostics.some(d=>d.code==='text-overflow'));assertWholeWords(after,paged.slides[index].items);const measurement=resolveSlideContext(paged,index,{catalogs:[gallery],fonts}).options.textMeasurement??fonts.textMeasurement;const physicalWrap=boundedPhysicalColumns(after,before,measurement);
+  if(name==='medium'&&index===0){
+   const missing=structuredClone(after),fragment=missing.texts[0].listEntries[0].text.richLines[1].fragments[0];fragment.start++;fragment.text=fragment.text.slice(1);
+   assert.throws(()=>assertWholeWords(missing,paged.slides[index].items),/only original ASCII-space gaps/,'an actual nonspace source gap is refused');
+   const lost=structuredClone(after);lost.texts[0].listEntries[0].text.richLines[0].fragments[0].text=lost.texts[0].listEntries[0].text.richLines[0].fragments[0].text.replace('Planning','');
+   assert.throws(()=>assertWholeWords(lost,paged.slides[index].items),/exact source slice/,'a lost source token is refused');
+  }
+  if(name==='long'&&index===0){
+   const outside=structuredClone(after);outside.item.listColumns[0].text.listEntries[0].text.richLines[0].fragments[0].text='W'.repeat(90);
+   assert.throws(()=>boundedPhysicalColumns(outside,before,measurement),/visible glyphs stay inside/,'visible ink overflow is refused even when stored line width and physical boxes look valid');
+  }
+  boundedWrap||=!page.arrangements?.length&&(after.item.box.width<before.item.box.width||physicalWrap);
  }
  if(name==='long')assert.ok(boundedWrap,'the full-word bounded-width success path is exercised, not just the refusal');
  const bytes=new Uint8Array(await toPptx(paged,{catalogs:[gallery],fonts})),parts=unzipSync(bytes);assert.ok(!Object.keys(parts).some(file=>file.startsWith('ppt/diagrams/')));for(const[file,part]of Object.entries(parts))if(/^ppt\/slides\/slide\d+\.xml$/.test(file))assert.ok(!/<a:(?:normAutofit|spAutoFit)\b/.test(strFromU8(part)));
