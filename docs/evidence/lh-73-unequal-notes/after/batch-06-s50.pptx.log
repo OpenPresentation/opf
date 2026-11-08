@@ -1,0 +1,86 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\lh73-bounded-scan\\cases\\batch-06-s50.opf.json",
+    "sha256": "81b535e3c34bef1e06b01ba602d90aa0a57b88ac150b519a2e8debcea263e7f1",
+    "bytes": 2511
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\lh73-cli-review\\after\\batch-06-s50.pptx",
+      "sha256": "a579a520d2c21f61af6373c6e7a94bb318eb01824216b83e7e4454020bde2ca6",
+      "bytes": 103646,
+      "mediaType": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "pptx/typeface-not-office-safe",
+      "severity": "info",
+      "category": "pptx",
+      "path": "",
+      "scope": "document",
+      "message": "The PPTX names Aptos, Aptos Display, which are not on every Windows and macOS machine or not measured exactly by OPF. A viewer without them substitutes another font, and lines can break differently from the preview.",
+      "help": "Export with --typefaces safe (typefaces: \"safe\") to write Office-safe families and lay the text out with them, or install the fonts on the machines that open the file.",
+      "families": [
+        "Aptos",
+        "Aptos Display"
+      ]
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 0,
+    "info": 1
+  },
+  "format": "pptx",
+  "opfVersion": "0.32.1",
+  "cli": "0.32.1",
+  "renderer": {
+    "package": "@openpresentation/opf-render",
+    "version": "0.32.1"
+  },
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.32.1"
+  },
+  "fonts": {
+    "pack": "office",
+    "substitutionPolicy": "visual",
+    "userFonts": [],
+    "substitutions": [
+      {
+        "requested": "Aptos Display",
+        "resolved": "Intos Display",
+        "compatibility": "visual"
+      },
+      {
+        "requested": "Aptos",
+        "resolved": "Intos",
+        "compatibility": "metric"
+      }
+    ],
+    "scripts": {
+      "detected": [],
+      "scripts": [],
+      "unavailable": [],
+      "packages": [],
+      "notInstalled": []
+    }
+  },
+  "checks": {
+    "syntax": "not-applicable",
+    "schema": "checked",
+    "references": "checked",
+    "policy": "not-run",
+    "accessibility": "not-run",
+    "content": "not-run",
+    "layout": "measured",
+    "backgroundPixels": "not-read",
+    "imageBytes": "embedded-only",
+    "nativeExport": "checked",
+    "fonts": "checked"
+  },
+  "written": true
+}

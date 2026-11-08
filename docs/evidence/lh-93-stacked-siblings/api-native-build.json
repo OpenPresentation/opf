@@ -1,0 +1,76 @@
+{
+  "revision": "65694b403467aa4b7ee8390b00cbd7d76d8f638d",
+  "opfVersion": "0.34.0-preparation",
+  "fontProvider": "Identical fonts handle from loadFonts({pack:office, substitutionPolicy:visual}) is passed to preview and PPTX; authored Arial has metric-compatible Arimo measurement.",
+  "decks": [
+    {
+      "id": "stacked",
+      "source": "C:/opf-work/lh-93-stacked-siblings/docs/evidence/lh-93-stacked-siblings/after.pptx",
+      "sourceCommit": "65694b403467aa4b7ee8390b00cbd7d76d8f638d",
+      "previewOk": true,
+      "previewSlides": 7,
+      "width": 1280,
+      "height": 720,
+      "previewDirectory": "preview/stacked",
+      "previews": [
+        {
+          "slide": 1,
+          "path": "preview/stacked/slide-1.png",
+          "sha256": "95e74e4c1f2d783116fe3853c893f54b5cb215a29b8384999fba34702ed4b1a2",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 2,
+          "path": "preview/stacked/slide-2.png",
+          "sha256": "24a62e49c212a33eb5d7db70f7e9ba67f0964e8bd52c1d7d53046487b429ce64",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 3,
+          "path": "preview/stacked/slide-3.png",
+          "sha256": "5b09a40853076d9717bfe9ee95ba3e6466a7fc5342e3e99d96ca001708287d92",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 4,
+          "path": "preview/stacked/slide-4.png",
+          "sha256": "3b4683e956d59536fac1fd2714c95cc0070db0ca59a76e8eae95907462259d5c",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 5,
+          "path": "preview/stacked/slide-5.png",
+          "sha256": "03a6a32c1fc468c1bdcc8879d6af48539815d70f3ff7080d303807d310081608",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 6,
+          "path": "preview/stacked/slide-6.png",
+          "sha256": "7032ce209e0e22b1696851ce7eb25a2df7bb09275400209521370c88cb67345a",
+          "width": 640,
+          "height": 360
+        },
+        {
+          "slide": 7,
+          "path": "preview/stacked/slide-7.png",
+          "sha256": "30a28dea7936db9e03111e264f82c7eb0b11a3d8b6a9acdac2f2e1f0913841fd",
+          "width": 640,
+          "height": 360
+        }
+      ],
+      "variants": [
+        {
+          "name": "default",
+          "pptx": "pptx/stacked.pptx",
+          "ok": true,
+          "sha256": "01770c76c42daf1f1f8a024d23f8eecfe871ea5e7c5f5bd145649ce6f0c95324"
+        }
+      ]
+    }
+  ]
+}

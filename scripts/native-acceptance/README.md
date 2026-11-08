@@ -53,6 +53,13 @@ The existing one-case Windows runner can retain its ordinary observations for a 
 
 ## Run on Windows
 
+For the separately qualified mixed-code cases, use the bounded
+[Roboto Mono profile procedure](../../docs/handoff/2026-11-08/rr105-roboto-mono-profile.md).
+It prepares only the renderer-pinned 400/700 upright faces and leaves the
+existing seven-face Roboto helper and its cleanup identity unchanged. Input
+generation and mocked lifecycle tests do not install fonts or establish
+native acceptance; only the supervisor performs registration and Office runs.
+
 Follow [the Windows runner instructions](WINDOWS.md). Only the supervisor runs
 Office. The runner checks the selected source revision and all generated hashes,
 runs the Office-free worker checks, and performs one explicitly selected case.

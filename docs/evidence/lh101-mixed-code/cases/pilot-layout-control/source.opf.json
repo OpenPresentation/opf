@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout sampler",
+  "language": "en",
+  "description": "One slide for each of the 30 default layouts, then 13 dynamic compositions (no layout record), all on one fictional six-week pilot story. The layout slides use the editorial example content of the gallery layout previews. Used to compare layouts with other designers and to review layout changes before and after.",
+  "design": {
+    "background": "light1",
+    "footer": {
+      "left": {
+        "text": "Illustrative example • fictional data"
+      },
+      "right": {
+        "text": "{{slide.number}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "layout-code",
+      "layout": "code",
+      "title": "Keep the implementation easy to inspect",
+      "blocks": [
+        {
+          "region": "code",
+          "code": {
+            "language": "javascript",
+            "source": "const total = items.reduce((sum, item) => sum + item.value, 0);\nconsole.log(total);"
+          }
+        },
+        {
+          "region": "notes",
+          "text": "The reducer adds each item’s value to a running sum. Starting at zero also makes an empty list return zero."
+        }
+      ]
+    }
+  ]
+}

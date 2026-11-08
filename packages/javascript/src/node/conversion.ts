@@ -72,7 +72,7 @@ export interface ConvertedFile {
 export interface ConvertResult {
 	/** The files, in slide order: written when an output path was given, otherwise only returned. */
 	files: ConvertedFile[];
-	/** The findings of every step: the import (`import/` rules), the format and references check, and the export engines (`render/`, `pptx/`, `pdf/`, `fonts/`, `cli/`). Errors throw instead. */
+	/** The findings of every step: the import (`import/` rules), the format and references check, selected chart data advisories for drawings, and the export engines (`render/`, `pptx/`, `pdf/`, `fonts/`, `cli/`). Errors throw instead. */
 	findings: Finding[];
 	/** With `signals: true` and a `.pptx` input. */
 	signals?: { version?: number };

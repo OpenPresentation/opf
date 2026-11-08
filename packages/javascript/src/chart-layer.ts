@@ -372,11 +372,13 @@ export function chartHeader(chart: unknown, data: ResolvedChartData, geometry: C
   }
   if (!rows) return undefined;
   const caption = text ? {text, box: {x: left, y: box.y + pad, width: captionWidth, height: lineHeight}} : undefined;
-  // Right to left, every part mirrors inside the chart box.
+  // RTL mirrors the caption and overall legend box. Native chart legends keep authored series order inside that box,
+  // including wrapped rows; mirroring each entry separately reverses the preview while PowerPoint retains source order.
   const mirror = (part: Box): Box => rtl ? {...part, x: box.x + box.width - (part.x - box.x) - part.width} : part;
+  const legendBox = legend ? mirror(legend.box) : undefined;
   return {
     ...(caption ? {caption: {text: caption.text, box: mirror(caption.box)}} : {}),
-    ...(legend ? {legend: {box: mirror(legend.box), entries: legend.entries.map(entry => ({...entry, box: mirror(entry.box)}))}} : {}),
+    ...(legend && legendBox ? {legend: {box: legendBox, entries: legend.entries.map(entry => ({...entry, box: rtl ? {...entry.box, x: legendBox.x + entry.box.x - legend.box.x} : entry.box}))}} : {}),
     height: pad + rows * lineHeight,
   };
 }
@@ -411,6 +413,14 @@ export function chartBarGeometry(band: number, seriesCount: number, grouping: st
   const width = band / (bars + (clustered ? CHART_BAR_GAP_WIDTH.clustered : CHART_BAR_GAP_WIDTH.stacked) / 100);
   const group = width * bars;
   return {width, group, offset: (band - group) / 2, clustered};
+}
+
+/**
+ * LH-176/SH-25: source series within one native bar cluster. A reversed vertical category axis also reverses the physical
+ * left-to-right series slots; horizontal categories keep their top-to-bottom series order. Stacks occupy one slot in either direction.
+ */
+export function chartBarSeriesOffset(bar: ChartBarGeometry, series: number, count: number, reversedColumn = false): number {
+  return bar.clustered ? (reversedColumn ? count - 1 - series : series) * bar.width : 0;
 }
 
 /**

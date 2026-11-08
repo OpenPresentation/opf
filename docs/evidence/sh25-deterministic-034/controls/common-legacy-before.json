@@ -1,0 +1,22 @@
+{
+    "source":  "e0bc1ad9880a6c1477d7659cc772055a51043b16 plus point-only strict guards",
+    "officeCalls":  0,
+    "legacySingletonArrayDefects":  [
+                                        {
+                                            "field":  "op",
+                                            "singletonArrayAccepted":  true
+                                        },
+                                        {
+                                            "field":  "slideIndex",
+                                            "singletonArrayAccepted":  true
+                                        },
+                                        {
+                                            "field":  "shapeName",
+                                            "singletonArrayAccepted":  true
+                                        },
+                                        {
+                                            "field":  "text",
+                                            "singletonArrayAccepted":  true
+                                        }
+                                    ]
+}
