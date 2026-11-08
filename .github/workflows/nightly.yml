@@ -707,6 +707,7 @@ jobs:
         run: pnpm run build
 
       - name: Repeat the suites
+        shell: bash
         env:
           REPEAT: ${{ inputs.repeat || '5' }}
           DIR: ${{ matrix.dir }}
