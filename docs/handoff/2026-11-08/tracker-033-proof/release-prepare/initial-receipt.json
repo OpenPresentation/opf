@@ -1,0 +1,12 @@
+{
+  "args": [
+    "scripts/release.mjs",
+    "prepare",
+    "0.33.0",
+    "--dry-run"
+  ],
+  "status": 1,
+  "signal": null,
+  "node": "v24.20.0",
+  "OPF_TRACKER_STALE": "unset (strict default)"
+}

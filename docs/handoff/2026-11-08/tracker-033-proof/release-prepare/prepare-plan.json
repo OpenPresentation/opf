@@ -1,0 +1,187 @@
+{
+  "version": "0.33.0",
+  "previous": "0.32.1",
+  "bump": "minor",
+  "reasons": [
+    "declared drawing change: layouts:statement, layouts:closing, layouts:text, layouts:process, layouts:team, layouts:comparison, layouts:metrics, layouts:pillars, layouts:section"
+  ],
+  "tag": "v0.33.0",
+  "distTag": "latest",
+  "notes": [
+    "gallery: 12 fragment(s)",
+    "opf: 56 fragment(s)",
+    "render: 27 fragment(s)",
+    "pptx: 36 fragment(s)",
+    "editor: 13 fragment(s)",
+    "cli: 6 fragment(s)",
+    "mcp: 12 fragment(s)"
+  ],
+  "remove": [
+    "changes\\academy-chart-art.md",
+    "changes\\docs-0-33-surfaces.md",
+    "changes\\editor-source-worker-icon-sets.md",
+    "changes\\example-data-story-academy.md",
+    "changes\\fix-editor-compose-date-surface.md",
+    "changes\\golden-new-decks.md",
+    "changes\\integration-033.md",
+    "changes\\lh-09-statements.md",
+    "changes\\lh-132-portraits.md",
+    "changes\\lh-14-icons.md",
+    "changes\\lh-153-chart-follow-ups.md",
+    "changes\\lh-155-closing.md",
+    "changes\\lh-156-small-fixes.md",
+    "changes\\lh-158-picture-bands.md",
+    "changes\\lh-160-chart-labels.md",
+    "changes\\lh-164-message-surface.md",
+    "changes\\lh-165-icon-cards.md",
+    "changes\\lh-166-editor-icons.md",
+    "changes\\lh-168-stepper-numbering-warning.md",
+    "changes\\lh-168-steppers.md",
+    "changes\\lh-169-figure-rows.md",
+    "changes\\lh-171-172-sibling-columns.md",
+    "changes\\lh-173-174-list-markers.md",
+    "changes\\lh-175-pareto-columns.md",
+    "changes\\lh-176-bar-gap.md",
+    "changes\\lh-18-heading-tracks.md",
+    "changes\\lh-180-181-surface-and-run-in-editing.md",
+    "changes\\lh-182-doughnut-hole.md",
+    "changes\\lh-184-columns-largest.md",
+    "changes\\lh-185-diagram-direction.md",
+    "changes\\lh-186-layout-before-shrink.md",
+    "changes\\lh-187-team-rows.md",
+    "changes\\lh-63-run-in-quotes.md",
+    "changes\\lh-75-note-growth.md",
+    "changes\\lh-75-table-note-grids.md",
+    "changes\\lh-75-table-note-wrapped-cells.md",
+    "changes\\lh-93-horizontal-siblings.md",
+    "changes\\lh-wave-7-integration.md",
+    "changes\\lh-wave-8-integration.md",
+    "changes\\mcp-deck-viewer.md",
+    "changes\\mcp-windows-build-path.md",
+    "changes\\presenter-exit-attribution.md",
+    "changes\\rr-102-header-footer-dialog.md",
+    "changes\\rr-103-no-vendor-names.md",
+    "changes\\rr-104-no-autofit.md",
+    "changes\\rr-105-chartex-scale.md",
+    "changes\\rr-105-completion-readiness.md",
+    "changes\\rr-105-fullci-gate.md",
+    "changes\\rr-105-mcp-size-audit.md",
+    "changes\\rr-105-native-chart-axes.md",
+    "changes\\rr-105-smartart-text-color.md",
+    "changes\\rr-105-waterfall-numeric-axis.md",
+    "changes\\rr-87-owned-save-copy.md",
+    "changes\\sh-01-geometry.md",
+    "changes\\sh-02-shape-block.md",
+    "changes\\sh-03-effects.md",
+    "changes\\sh-04-overlays-connectors.md",
+    "changes\\sh-05-shape-import.md",
+    "changes\\sh-06-editor-overlays.md",
+    "changes\\sh-06-editor-shapes.md",
+    "changes\\sh-07-native-diagrams.md",
+    "changes\\sh-09-smartart-tier1.md",
+    "changes\\sh-10-shape-text-growth.md",
+    "changes\\sh-11-shape-text-match.md",
+    "changes\\sh-16-smartart-fallback.md",
+    "changes\\sh-17-linear-smartart.md",
+    "changes\\sh-18-cycle-smartart.md",
+    "changes\\sh-19-smartart-layouts.md",
+    "changes\\sh-flip-text-rectangle.md",
+    "changes\\sh-phase-2-integration.md"
+  ],
+  "writes": [
+    {
+      "file": "packages/gallery/package.json",
+      "bytes": 2713,
+      "sha256": "a63bf5f6d58bdfcddd9121e01427b60cf879b16707eacdc944e29fda5f06f637"
+    },
+    {
+      "file": "packages/javascript/package.json",
+      "bytes": 7090,
+      "sha256": "71b011cc61e67bbb7ffb2b6d5235d27311375b8a2fbc48391785d3b5c05da0fe"
+    },
+    {
+      "file": "packages/render/package.json",
+      "bytes": 15524,
+      "sha256": "a2546b881d2688f54e63351a840c8d65a1537201245a6b76a5dda7a00e710181"
+    },
+    {
+      "file": "packages/pptx/package.json",
+      "bytes": 4783,
+      "sha256": "fb059631a456a1b9e75baf538360fed8f5a8121564f1cc4fed824c3b56ceb473"
+    },
+    {
+      "file": "packages/editor/package.json",
+      "bytes": 19257,
+      "sha256": "90f0aca9801f9ac7012b782160106726bbc06a2f32e51194d43d686a42ca01b1"
+    },
+    {
+      "file": "packages/cli/package.json",
+      "bytes": 2346,
+      "sha256": "e21b6f2f48f684976d21dc789778c2a59462565726ad91e8e6fd95ef84265bad"
+    },
+    {
+      "file": "packages/mcp/package.json",
+      "bytes": 2793,
+      "sha256": "1c05079346e77c9496c84f829d5d412335a214742382f2ec07ce58533f3bf112"
+    },
+    {
+      "file": "packages/javascript/src/node/peers.ts",
+      "bytes": 14009,
+      "sha256": "0ff72f607aca27a17aca74da41814d05e0cf579300b8c3357b40a726b24147b7"
+    },
+    {
+      "file": "packages\\gallery\\CHANGELOG.md",
+      "bytes": 72823,
+      "sha256": "37d1ce41cfc1616f0c37f1f3c2138203076e1fdbd0fef1a1f8b52fc72af08134"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "bytes": 450104,
+      "sha256": "d800709bc02382fe87d433b94db121ad5265ba7bc375dba0696cf80fb6870daa"
+    },
+    {
+      "file": "packages\\render\\CHANGELOG.md",
+      "bytes": 309136,
+      "sha256": "090e760b2091d3c9a19d555f3381211a79e262b37b56de871c9d20e1b630a3e5"
+    },
+    {
+      "file": "packages\\pptx\\CHANGELOG.md",
+      "bytes": 337239,
+      "sha256": "0f3a961f79bfff9eaf46e16adf378d10be5ce060af52b9887ae84faa15707f37"
+    },
+    {
+      "file": "packages\\editor\\CHANGELOG.md",
+      "bytes": 191839,
+      "sha256": "c46ea792f4437d4f4883354aa8930c7ec820948415664a3f3e93b3dc24ebe971"
+    },
+    {
+      "file": "packages\\cli\\CHANGELOG.md",
+      "bytes": 100354,
+      "sha256": "707def7936efe8c9624c2e372bb1ee250edd631b48f84795a398054061150fb2"
+    },
+    {
+      "file": "packages\\mcp\\CHANGELOG.md",
+      "bytes": 24095,
+      "sha256": "6a78bd79f7d3f5f7e019cad0021f5697d6a5d77bfaa9214250f0a9c09c8cdeed"
+    },
+    {
+      "file": "packages/gallery/release-drawing.json",
+      "bytes": 251,
+      "sha256": "4ad7dd0d09a75269360038fb8a3fd5a295e40656b0a55cd288cd468f33f55542"
+    }
+  ],
+  "releaseDrawing": {
+    "version": "0.33.0",
+    "drawing": [
+      "layouts:closing",
+      "layouts:comparison",
+      "layouts:metrics",
+      "layouts:pillars",
+      "layouts:process",
+      "layouts:section",
+      "layouts:statement",
+      "layouts:team",
+      "layouts:text"
+    ]
+  }
+}

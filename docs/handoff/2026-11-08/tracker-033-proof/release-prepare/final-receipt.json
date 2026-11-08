@@ -1,0 +1,16 @@
+{
+  "head": "00690ada0e2bec3dfad88ec00951b003f695a05a",
+  "args": [
+    "prepare",
+    "0.33.0",
+    "--dry-run"
+  ],
+  "entrypoint": "scripts/release.mjs exported main with unchanged defaultDeps; runStability return recorded without substitution",
+  "started": "2026-11-08T07:28:01.593Z",
+  "finished": "2026-11-08T07:28:25.279Z",
+  "node": "v24.20.0",
+  "OPF_TRACKER_STALE": "unset (strict default)",
+  "status": 0,
+  "trackedUnchanged": true,
+  "stabilityPresent": true
+}

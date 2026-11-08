@@ -1,0 +1,171 @@
+{
+  "baseline": {
+    "version": "0.32.1",
+    "source": "cache"
+  },
+  "result": {
+    "previous": "0.32.1",
+    "candidate": "0.32.1",
+    "schema": {
+      "previous": 4,
+      "candidate": 4
+    },
+    "schemaChanged": false,
+    "engines": {
+      "render": "0.32.1"
+    },
+    "kinds": {
+      "layouts": {
+        "compared": 30,
+        "changed": [
+          {
+            "id": "statement",
+            "slides": [
+              1,
+              2
+            ],
+            "pixels": 66005
+          },
+          {
+            "id": "closing",
+            "slides": [
+              1,
+              2
+            ],
+            "pixels": 104192
+          }
+        ],
+        "removed": [],
+        "added": [
+          "pyramid",
+          "matrix",
+          "cycle",
+          "chevrons",
+          "flow",
+          "vertical-flow"
+        ]
+      },
+      "themes": {
+        "compared": 3,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "colorSchemes": {
+        "compared": 14,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "fontSchemes": {
+        "compared": 89,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "narratives": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "audiences": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "purposes": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "tones": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "chartTypes": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "languages": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      },
+      "socialPlatforms": {
+        "compared": 0,
+        "changed": [],
+        "removed": [],
+        "added": []
+      }
+    },
+    "content": {
+      "narratives": [],
+      "audiences": [],
+      "purposes": [],
+      "tones": []
+    },
+    "renders": 272,
+    "ms": 16081
+  },
+  "verdict": {
+    "ok": true,
+    "problems": [],
+    "warnings": [
+      "layouts:text: declared in changes/lh-164-message-surface.md but it did not change against 0.32.1",
+      "layouts:process: declared in changes/lh-168-steppers.md but it did not change against 0.32.1",
+      "layouts:team: declared in changes/lh-187-team-rows.md but it did not change against 0.32.1",
+      "layouts:comparison: declared in changes/lh-wave-8-integration.md but it did not change against 0.32.1",
+      "layouts:metrics: declared in changes/lh-wave-8-integration.md but it did not change against 0.32.1",
+      "layouts:pillars: declared in changes/lh-wave-8-integration.md but it did not change against 0.32.1",
+      "layouts:section: declared in changes/lh-wave-8-integration.md but it did not change against 0.32.1"
+    ],
+    "changes": [
+      {
+        "key": "layouts:statement",
+        "removed": false,
+        "how": "slides 1, 2 draw differently (66005 pixels differ at 960 px wide)"
+      },
+      {
+        "key": "layouts:closing",
+        "removed": false,
+        "how": "slides 1, 2 draw differently (104192 pixels differ at 960 px wide)"
+      }
+    ],
+    "undeclared": [],
+    "stale": [
+      "layouts:text",
+      "layouts:process",
+      "layouts:team",
+      "layouts:comparison",
+      "layouts:metrics",
+      "layouts:pillars",
+      "layouts:section"
+    ],
+    "declared": [
+      "layouts:statement",
+      "layouts:closing",
+      "layouts:text",
+      "layouts:process",
+      "layouts:team",
+      "layouts:comparison",
+      "layouts:metrics",
+      "layouts:pillars",
+      "layouts:section"
+    ],
+    "baseline": false
+  },
+  "bump": {
+    "bump": "minor",
+    "reasons": [
+      "declared drawing change: layouts:statement, layouts:closing, layouts:text, layouts:process, layouts:team, layouts:comparison, layouts:metrics, layouts:pillars, layouts:section"
+    ]
+  }
+}

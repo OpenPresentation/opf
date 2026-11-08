@@ -1,0 +1,14 @@
+[
+  {
+    "file": "scripts/release.mjs",
+    "sha256": "2621d13eb1af2d2d8522ebef1c9d747a4fe79755db1320881445ecd57f59b604"
+  },
+  {
+    "file": "scripts/gallery-stability.mjs",
+    "sha256": "f461894371088896071f2dc1f41be62a9aea68816a8c956e6e67a7aca644c8c9"
+  },
+  {
+    "file": "docs/handoff/2026-11-08/tracker-033-proof/release-prepare/run-preflight.mjs",
+    "sha256": "ee28a678e6c158a81b6ce5a491c03787f08994eaa64ad1d3989503d6f4c75ae5"
+  }
+]
