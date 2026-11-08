@@ -55,13 +55,12 @@ test('the original positive-first request and opposite inner edge refuse to shri
   const doc=make(language),copy=structuredClone(doc);assert.throws(()=>request(doc,boundary,delta),error=>error.code==='studio-refused');assert.deepEqual(doc,copy);
  }
 });
-test('current display-tile compositions cannot convert stale shorter flow tracks into smaller text',()=>{
- const doc=make('en',4),before=scene(doc),s=before.scene,c=s.node(s.slideKey).container;
- assert.equal(before.geometry.items.filter(i=>i.field==='text').length,4);
- const a=c.tracks[0],b=c.tracks[1],rest=prepareSceneTrackResize(doc,s,s.slideKey,0,a.length/(a.length+b.length));
- assert.equal(rest.changed,false);assert.deepEqual(scene(rest.presentation).geometry.items,before.geometry.items);
- let prepared;try{prepared=request(doc,0,-.1).prepared;}catch(error){assert.equal(error.code,'studio-refused');}
- if(prepared)assert.ok(typeSizes(scene(prepared.presentation).geometry).every((size,index)=>size>=typeSizes(before.geometry)[index]),'future corrected track metadata must still preserve current type');
+test('four authored column rows expose actual displayed frames and allow outer-slack resizing without smaller type',()=>{
+ const doc=make('en',4),before=scene(doc),s=before.scene,c=s.node(s.slideKey).container,items=before.geometry.items.filter(i=>i.field==='text'),flow=s.flowOf(s.slideKey);
+ assert.equal(items.length,4);assert.equal(new Set(items.map(i=>i.box.x)).size,1);assert.equal(new Set(items.map(i=>i.box.y)).size,4);assert.equal(flow.rows.length,4);
+ for(let i=0;i<items.length;i++){const top=flow.box.y+flow.rows[i].offset;assert.equal(items[i].text.fontSize,56);assert.ok(items[i].box.y>=top-1e-5&&items[i].box.y+items[i].box.height<=top+flow.rows[i].size+1e-5);}
+ for(let boundary=0;boundary<3;boundary++){const a=c.tracks[boundary],b=c.tracks[boundary+1],rest=prepareSceneTrackResize(doc,s,s.slideKey,boundary,a.length/(a.length+b.length));assert.equal(rest.changed,false);assert.deepEqual(rest.presentation,doc);assert.deepEqual(scene(rest.presentation).geometry.items,before.geometry.items);}
+ for(const[boundary,delta]of[[0,-.1],[2,.1]]){const{prepared}=request(doc,boundary,delta),after=scene(prepared.presentation);assert.equal(prepared.changed,true);assert.deepEqual(typeSizes(after.geometry),typeSizes(before.geometry));assert.deepEqual(prepared.presentation.slides[0].blocks,doc.slides[0].blocks);const old=dividers(c),next=dividers(after.scene.node(after.scene.slideKey).container);assert.ok((next[boundary]-old[boundary])*Math.sign(delta)>0);for(let i=0;i<old.length;i++)if(i!==boundary)assert.ok(Math.abs(next[i]-old[i])<.004);}
 });
 test('physical gap midpoint maps to the logical first share for actual LTR and RTL weighted rows',()=>{
  for(const language of ['en','ar']){const doc={language,slides:[{composition:{mode:'row',weights:[2,1]},blocks:[{text:'One'},{text:'Two'}]}]},s=scene(doc).scene,c=s.node(s.slideKey).container,[a,b]=c.tracks,pair=trackPairBounds(a,b),fraction=(pair.at-pair.pairStart)/pair.pairLength;

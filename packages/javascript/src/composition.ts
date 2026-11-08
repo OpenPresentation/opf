@@ -4726,6 +4726,8 @@ const DRAWING_RULES: readonly GuardedRule[] = ['featured-card', 'delta-pill', 'c
 const NO_DRAWING = Symbol('opf.noDrawing');
 /** LH-165, LH-162, LH-69: icon cards, text tiles and placed tiles, tried on top of the rules the guard keeps (withCards). */
 const CARD_RULES: readonly GuardedRule[] = ['icon-cards', 'text-tiles', 'placed-tiles'];
+// The same authored-track eligibility controls tile placement and its growth exclusion.
+const permitsTextTiles = (composition: Composition): boolean => (composition.mode === undefined || composition.mode === 'auto') && composition.columns === undefined && !composition.weights?.length;
 /** LH-39: the rules a slide is first composed with: every one but `metric-figure`, which is tried on top of the rules the guard keeps (guardedCompose), and LH-165's CARD_RULES (withCards). */
 const CORE_RULES: ReadonlySet<GuardedRule> = new Set(GUARDED_RULES.filter(rule => rule !== 'metric-figure' && !CARD_RULES.includes(rule)));
 /** LH-39: the rules (and seeds) a guarded composition was kept with, for the figure trial on top of them. */
@@ -4878,7 +4880,7 @@ function growBody(input: unknown, options: ComposeSlideOptions, result: SlideCom
     // stays out of the sibling body's growth. Each step keeps the body's arrangement: as many
     // columns and rows as the three steps left.
     const blocks = record(input).blocks, drawn = JSON.stringify(input).includes('"icon"') || (result.steps !== undefined && !PLACED_TILES.has(result))
-      || (Array.isArray(blocks) && (blocks.some(block => Array.isArray(record(block).blocks)) || (blocks.length >= TEXT_TILE_MIN && blocks.length <= TEXT_TILE_MAX)));
+      || (Array.isArray(blocks) && (blocks.some(block => Array.isArray(record(block).blocks)) || (blocks.length >= TEXT_TILE_MIN && blocks.length <= TEXT_TILE_MAX && permitsTextTiles(result.composition))));
     if (result.regions || !reached || reached.fill >= LONE_FILL || drawn || (options as Record<symbol, unknown>)[NO_STEPS] === true) return done(grown);
     const shapeOf = (composed: SlideComposition) => { const body = composed.items.filter(item => !headings.has(item.field) && !item.eyebrow); return `${new Set(body.map(item => Math.round(item.box.x / 4))).size}:${new Set(body.map(item => Math.round(item.box.y / 4))).size}`; };
     const shape = shapeOf(grown), further = climb(result, { [GRID_GROW]: true }, COMPACT_GRID_STEPS, next => shapeOf(next) === shape);
@@ -10907,6 +10909,8 @@ function composeLayout(input: unknown, options: ComposeSlideOptions = {}): Slide
   // body (gridFill, LH-48's fill: one line of a short text fills little of its tile); the grid is the one where they are largest (then on
   // the fewest lines). Held by the same guard as icon cards.
   const textTiles = (): ComposedSteps | undefined => {
+    // A decorative tile grid must not replace authored track direction, column caps or shares.
+    if (!permitsTextTiles(composition)) return undefined;
     if (!ruleOn('text-tiles') || useTemplate || (options as Record<symbol, unknown>)[LAYOUT_MASTER] === true || surface) return undefined;
     const body = items.filter(item => !headings.has(item.field));
     if (body.length < TEXT_TILE_MIN || body.length > TEXT_TILE_MAX || body.some(item => item.eyebrow)) return undefined;
