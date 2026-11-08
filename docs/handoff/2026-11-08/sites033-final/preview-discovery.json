@@ -1,0 +1,101 @@
+{
+  "scope": "Bounded read-only search for existing exact-head previews, following the owner instruction to find and verify. This is discovery evidence, not a claim that no Cloudflare preview can exist outside GitHub metadata.",
+  "sites": [
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "pr": 202,
+      "head": "eb16870c6f03148535298c4bd4b0751b6558ec86",
+      "deployments": [],
+      "legacyStatuses": [],
+      "checkApps": [
+        "github-actions"
+      ],
+      "checks": [
+        {
+          "name": "site",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128777575204"
+        },
+        {
+          "name": "cloudflare-build",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774249241"
+        },
+        {
+          "name": "videos",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643664/job/128774211181"
+        },
+        {
+          "name": "e2e (3/3)",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774211148"
+        },
+        {
+          "name": "changes",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774211093"
+        },
+        {
+          "name": "e2e (1/3)",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774211051"
+        },
+        {
+          "name": "e2e (2/3)",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774210983"
+        },
+        {
+          "name": "checks",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/actions/runs/42494643550/job/128774210822"
+        }
+      ],
+      "comments": "One existing owner-authored evidence correction; no preview-bot URL",
+      "workflow": {
+        "path": ".github/workflows/cloudflare-deploy.yml",
+        "sha256": "e21a6a8123eb3a0e87fb71e294efa94ffeee2a4ee4ddb607848662c8c0d8a488",
+        "observation": "Push/main and workflow_dispatch only; manual execution refuses non-main; no PR deployment trigger. Existing docs assign branch previews to CF-17."
+      }
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "pr": 172,
+      "head": "8a476459cd6d9cbba412ef4450401b702d63c8bb",
+      "deployments": [],
+      "legacyStatuses": [],
+      "checkApps": [
+        "github-actions"
+      ],
+      "checks": [
+        {
+          "name": "verify",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/actions/runs/42476640506/job/128719361157"
+        },
+        {
+          "name": "build-and-smoke",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/actions/runs/42476639988/job/128719360131"
+        },
+        {
+          "name": "worker-build",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/actions/runs/42476639951/job/128719359913"
+        }
+      ],
+      "comments": "One existing owner-authored audit/evidence comment; no preview-bot URL",
+      "workflow": {
+        "path": ".github/workflows/cloudflare-deploy.yml",
+        "sha256": "b7443eb8537afca5b3f00391a8c957b1f25f0bcb4050f943f895d25ae834c606",
+        "observation": "Push/main and workflow_dispatch only; manual execution refuses non-main; no PR deployment trigger. Existing docs assign branch previews to CF-17."
+      }
+    }
+  ],
+  "githubCallBudget": {
+    "maximum": 12,
+    "used": 9,
+    "breakdown": "2 exact-head deployment requests; 1 malformed GraphQL attempt refused before execution; 2 check-run requests; 2 legacy status requests; 2 bounded PR-comment pages. No loops or repeated status monitoring."
+  },
+  "cloudflareTools": "No general Cloudflare connector exposed in ALL_TOOLS. Only Sites-specific Cloudflare functions were present; those do not address these repository Workers.",
+  "wrangler": {
+    "versionRoute": "Installed node_modules/wrangler/bin/wrangler.js",
+    "command": "node node_modules/wrangler/bin/wrangler.js whoami --json",
+    "observedAt": "2026-11-08T15:57:00Z",
+    "exitCode": 1,
+    "stderr": "Not logged in. Your auth token has expired and could not be refreshed, and the environment is non-interactive. Run wrangler login in an interactive terminal or set a CLOUDFLARE_API_TOKEN.",
+    "action": "No login or credential mutation attempted; account/version APIs could not be queried."
+  },
+  "continuation": "Coordinator exclusively owns existing Cloudflare browser dashboard discovery. This agent made no UI call and is waiting for observed exact-head URLs to perform read-only verification.",
+  "unchanged": "Final all-three required-all gate remains green and terminal. No source push, CI observer, deployment, login, DNS change or default merge was initiated."
+}
