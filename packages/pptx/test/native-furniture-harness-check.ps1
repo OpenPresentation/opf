@@ -11,7 +11,7 @@ if(Test-Path -LiteralPath $planRoot) { throw 'Preserve the existing plan control
 $tokens=$null; $parseErrors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($ScriptPath,[ref]$tokens,[ref]$parseErrors)
 if($parseErrors.Count -ne 0) { throw ($parseErrors | Out-String) }
-$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','New-FurniturePointProbe','Read-FurnitureSlicePoint','Read-FurnitureChartPoint')
+$names=@('Test-Integer','Require-Property','Assert-String','Read-AndValidateActionPlan','Invoke-FurnitureCom','Set-FurnitureTextStyle','Get-ExactShape','Read-FurnitureProperty','Read-FurnitureTextFont','Assert-PresentationNotOpen','Assert-FurnitureOfficeIdle','Stop-FurnitureLifecycle','Open-OwnedFurniture','Save-OwnedFurnitureCopy','Close-OwnedFurniture','Assert-OwnedFurnitureApplication','Quit-OwnedFurnitureApplication','Get-ExactSlide','Read-FurnitureFiniteNumber','New-FurniturePointProbe','Read-FurnitureSlicePoint','Get-FurnitureCurvedSliceBounds','Read-FurnitureChartPoint')
 foreach($name in $names) {
     $functionAst=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $functionAst) { throw "Missing reviewed function: $name" }
@@ -370,6 +370,9 @@ $coordinateCases=@(
 )
 foreach($spec in $coordinateCases) {
     $nativeFixture=New-ChartPointFixture $spec[0]
+    # Top/bottom mocks now supply actual circular arcs instead of assuming the unrelated endpoint box is a curve.
+    if($spec[0] -eq 'slice' -and $spec[1] -eq 'top') {$nativeFixture.point.SliceCoordinates=@{1=@(10,40);2=@(30,20);3=@(50,40);4=@(40,40)}}
+    if($spec[0] -eq 'slice' -and $spec[1] -eq 'bottom') {$nativeFixture.point.SliceCoordinates=@{1=@(50,30);2=@(30,50);3=@(10,30);4=@(20,30)}}
     $action=[pscustomobject]@{slideIndex=1;shapeName='Native ring';chartName='Native chart';seriesIndex=1;pointIndex=1;chartKind=$spec[0];edge=$spec[1];valueSign=$spec[2]}
     $nativeFixture.overlay.Left=$spec[3]-5; $nativeFixture.overlay.Top=$spec[4]-5
     $observed=Read-FurnitureChartPoint $nativeFixture.presentation $action 'chart-probe'

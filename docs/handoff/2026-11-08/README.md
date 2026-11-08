@@ -88,3 +88,7 @@ LH16original1150is folded/frozen. NEW1179at7315b344c1e32b5dd629d09a639769e7a2798
 
 
 033genuine documentation/registry-consumer PR1170passed allchecks twice and merged through maintainedgate asd00888a0560cb0ad59fc5c887e8bdd9d4fcbf30b at10:40:17UTC after markingthe reviewed draftready. This normal main merge retains034F2diagramwording plus exact137/36published facts and all receipts; no package/site deploy occurs.1179and1180are nowfolded/frozen.
+
+## SH25 curved native measurement continuation
+
+[The new tooling-only probe correction](sh25-curved-probe.md) preserves the actual endpoint-box failures and unchanged product rings. Independent native arc bounds replace that proxy only after all required coordinates are observed; new API availability and actual4px acceptance remain parent-owned and pending. The 26analytic controls and all existing guarded mocks pass without Office.
